@@ -11,10 +11,15 @@
   --paper: #f4f4f5;
   --snow: #ffffff;
   --ember: #ff5a00;
+  --ember-hover: #e64f00;
+  --ember-soft: #fff0e8;
   --magenta-spark: #fe45e2;
   --success: #166534;
+  --success-soft: #dcfce7;
   --warning: #854d0e;
+  --warning-soft: #fef3c7;
   --destructive: #b91c1c;
+  --destructive-soft: #fee2e2;
   --background: var(--paper);
   --foreground: var(--obsidian);
   --card: var(--snow);
@@ -26,6 +31,8 @@
   --muted: var(--paper);
   --muted-foreground: var(--fog);
   --accent: var(--ember);
+  --accent-hover: var(--ember-hover);
+  --accent-soft: var(--ember-soft);
   --accent-foreground: var(--obsidian);
   --border: var(--cloud);
   --ring: var(--ember);
@@ -34,6 +41,7 @@
   --radius-pill: 9999px;
   --container: 75rem;
   --section-gap: 5rem;
+  --header-background: rgba(244, 244, 245, 0.94);
 }
 
 .dark {
@@ -48,8 +56,10 @@
   --muted: var(--slate);
   --muted-foreground: var(--ash);
   --accent: var(--ember);
+  --accent-hover: var(--ember-hover);
+  --accent-soft: var(--iron);
   --accent-foreground: var(--obsidian);
   --border: var(--iron);
   --ring: var(--ember);
+  --header-background: rgba(9, 9, 11, 0.94);
 }
-

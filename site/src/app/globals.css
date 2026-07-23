@@ -19,6 +19,17 @@ body {
   font-family: var(--font-dm-sans), sans-serif;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -27,6 +38,25 @@ a {
 :focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.editorial-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: calc(100% / 12) 100%, 100% 4rem;
+}
+
+.text-balance {
+  text-wrap: balance;
 }
 
 ::selection {
@@ -44,4 +74,3 @@ a {
     animation-iteration-count: 1 !important;
   }
 }
-
