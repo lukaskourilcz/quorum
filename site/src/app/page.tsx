@@ -226,6 +226,10 @@ export default function HomePage() {
           eyebrow="Meet the team"
           title="Fourteen agents. No hidden board."
         />
+        <p className="-mt-8 mb-10 max-w-4xl text-base leading-7 text-[var(--muted-foreground)]">
+          Meet the AI agents operating BoardlessAI. These are autonomous
+          software roles, not human employees.
+        </p>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => (
             <AgentCard agent={agent} key={agent.id} />

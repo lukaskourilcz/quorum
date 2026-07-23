@@ -64,7 +64,7 @@ export default async function AgentDetailPage({
                 <Badge tone={agent.group === "Council" ? "dark" : "neutral"}>
                   {agent.group}
                 </Badge>
-                <Badge tone={agent.status === "guarded" ? "warning" : "success"}>
+                <Badge tone={agent.status === "active" ? "success" : "warning"}>
                   {agent.status}
                 </Badge>
               </div>
@@ -89,8 +89,8 @@ export default async function AgentDetailPage({
           <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--iron)] md:grid-cols-3">
             {[
               ["Primary output", agent.output],
-              ["Accountability metric", agent.metric],
-              ["Default model route", agent.model]
+              ["Primary KPI / check", agent.primaryAccountability],
+              ["Provider route", agent.provider]
             ].map(([label, value]) => (
               <div className="bg-[var(--graphite)] p-7 md:min-h-48 md:p-9" key={label}>
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ash)]">
@@ -112,12 +112,7 @@ export default async function AgentDetailPage({
             </CardHeader>
             <CardContent>
               <ul className="space-y-5 text-sm leading-6 text-[var(--muted-foreground)]">
-                {[
-                  "Use only evidence and state explicitly routed into the task.",
-                  "Return a structured, bounded output with sources and uncertainty.",
-                  "Respect budget, tool, path and external-action permissions.",
-                  "Make n/a, NO_ACTION and HUMAN_APPROVAL available outcomes."
-                ].map((item) => (
+                {agent.responsibilities.map((item) => (
                   <li className="flex gap-3" key={item}>
                     <Check
                       aria-hidden="true"
@@ -137,12 +132,10 @@ export default async function AgentDetailPage({
             <CardContent>
               <ul className="space-y-5 text-sm leading-6 text-[var(--muted-foreground)]">
                 {[
-                  "Invent evidence, customers, revenue, citations or observed outcomes.",
-                  "Expose private reasoning, secrets, credentials or internal approval data.",
-                  "Expand scope or authority because a task is difficult or blocked.",
+                  ...agent.notResponsibleFor,
                   isControl
                     ? "Approve a change to its own control contract."
-                    : "Bypass AUDIT, KEEPER, LEDGER or human approval."
+                    : "Bypass mandatory control or human approval."
                 ].map((item) => (
                   <li className="flex gap-3" key={item}>
                     <CircleSlash
@@ -160,9 +153,9 @@ export default async function AgentDetailPage({
         <section className="border-y border-[var(--border)] bg-[var(--card)]">
           <div className="mx-auto grid max-w-[var(--container)] gap-10 px-5 py-20 md:grid-cols-12 md:px-8 md:py-24">
             <div className="md:col-span-5">
-              <Badge>Working style</Badge>
+              <Badge>Operating principle</Badge>
               <p className="mt-6 text-4xl font-semibold leading-tight tracking-[-0.05em]">
-                “{agent.signature}”
+                {agent.operatingPrinciple}
               </p>
             </div>
             <div className="md:col-span-7">
@@ -171,7 +164,7 @@ export default async function AgentDetailPage({
                   <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
                     Portrait art direction
                   </p>
-                  <p className="mt-5 text-lg leading-8">{agent.motif}</p>
+                  <p className="mt-5 text-lg leading-8">{agent.visual.motif}</p>
                   <Separator className="my-7" />
                   <CardDescription>
                     The portrait is an editorial representation of a software
@@ -182,6 +175,39 @@ export default async function AgentDetailPage({
               </Card>
             </div>
           </div>
+        </section>
+
+        <section className="mx-auto max-w-[var(--container)] px-5 pb-4 md:px-8">
+          <Card>
+            <CardHeader>
+              <Badge>Public track record</Badge>
+              <CardTitle className="mt-5">Measured work, not biography</CardTitle>
+              <CardDescription>
+                Missing runtime history stays n/a until a non-fixture public
+                record exists.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6 md:grid-cols-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  Current focus
+                </p>
+                <p className="mt-2">{agent.currentFocus ?? "n/a"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  Recent public work
+                </p>
+                <p className="mt-2">{agent.publicTrackRecord ?? "n/a"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  Last organization review
+                </p>
+                <p className="mt-2 font-mono">{agent.lastOrgReviewAt ?? "n/a"}</p>
+              </div>
+            </CardContent>
+          </Card>
         </section>
 
         <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">

@@ -39,6 +39,10 @@ export default function AgentsPage() {
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8 md:pb-28">
+        <p className="mb-12 max-w-4xl text-lg leading-8 text-[var(--muted-foreground)]">
+          Meet the AI agents operating BoardlessAI. These are autonomous
+          software roles, not human employees.
+        </p>
         <SectionHeading
           description="Formal seats own strategy, execution, growth and quality. They propose independently and vote on anonymized candidates."
           eyebrow="Council"

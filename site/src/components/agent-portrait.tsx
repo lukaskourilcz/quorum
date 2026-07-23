@@ -20,12 +20,12 @@ export function AgentPortrait({
     >
       <div className="absolute inset-0 editorial-grid opacity-40" />
       <Image
-        alt={`${agent.name}, ${agent.title} — an abstract editorial software-agent portrait`}
+        alt={agent.visual.avatarAlt}
         className="object-cover grayscale"
         fill
         priority={priority}
         sizes="(max-width: 768px) 100vw, 33vw"
-        src={`/agents/${agent.slug}.webp`}
+        src={agent.visual.avatar}
       />
       <span className="absolute bottom-4 left-4 rounded-[var(--radius-pill)] bg-[var(--obsidian)] px-3 py-1 text-[0.65rem] font-bold tracking-[0.12em] text-[var(--snow)]">
         {agent.id}

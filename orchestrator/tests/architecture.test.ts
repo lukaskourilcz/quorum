@@ -1,0 +1,135 @@
+import { readFile, readdir } from "node:fs/promises";
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+import { validateAgentAvatars } from "../src/brand/avatars.js";
+import { loadAgentRegistry } from "../src/org/registry.js";
+import { repoRoot } from "../src/paths.js";
+
+const expectedSkills = [
+  "agent-identity",
+  "boardroom-routing",
+  "brand-identity",
+  "business-validation",
+  "financial-operations",
+  "organization-operations",
+  "page-publishing",
+  "safe-release",
+  "social-operations"
+] as const;
+
+const expectedPrompts = [
+  "_shared.md",
+  "audit.md",
+  "channel-agent-template.md",
+  "digest.md",
+  "forge.md",
+  "founding.md",
+  "instagram.md",
+  "keeper.md",
+  "ledger.md",
+  "lens.md",
+  "people.md",
+  "pulse.md",
+  "quill.md",
+  "radar.md",
+  "retro.md",
+  "scout.md",
+  "scribe.md",
+  "threads.md",
+  "vize.md"
+] as const;
+
+async function directoryNames(directory: string): Promise<string[]> {
+  return (await readdir(directory, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+}
+
+describe("agent architecture", () => {
+  it("keeps the nine Claude and Codex skills byte-identical", async () => {
+    const claudeRoot = path.join(repoRoot, ".claude", "skills");
+    const codexRoot = path.join(repoRoot, ".agents", "skills");
+
+    expect(await directoryNames(claudeRoot)).toEqual(expectedSkills);
+    expect(await directoryNames(codexRoot)).toEqual(expectedSkills);
+
+    for (const skill of expectedSkills) {
+      const claudeBytes = await readFile(path.join(claudeRoot, skill, "SKILL.md"));
+      const codexBytes = await readFile(path.join(codexRoot, skill, "SKILL.md"));
+      expect(codexBytes.equals(claudeBytes), `${skill} mirror differs`).toBe(true);
+    }
+  });
+
+  it("ships every council and specialist prompt", async () => {
+    const promptNames = (await readdir(path.join(repoRoot, "orchestrator", "prompts")))
+      .filter((name) => name.endsWith(".md"))
+      .sort();
+
+    expect(promptNames).toEqual(expectedPrompts);
+    for (const name of promptNames) {
+      const prompt = await readFile(
+        path.join(repoRoot, "orchestrator", "prompts", name),
+        "utf8"
+      );
+      expect(prompt.trim().length, `${name} is empty`).toBeGreaterThan(80);
+    }
+  });
+
+  it("keeps registry capabilities aligned with deterministic routing", async () => {
+    const registry = await loadAgentRegistry();
+    const routing = JSON.parse(
+      await readFile(path.join(repoRoot, "config", "agent-routing.json"), "utf8")
+    ) as {
+      agents: Record<string, { capabilities: string[]; status: string }>;
+    };
+
+    expect(Object.keys(routing.agents).sort()).toEqual(
+      registry.agents.map((agent) => agent.id).sort()
+    );
+    for (const agent of registry.agents) {
+      expect(routing.agents[agent.id]?.capabilities).toEqual(agent.capabilityTags);
+      expect(routing.agents[agent.id]?.status).toBe(agent.status);
+    }
+  });
+
+  it("matches the identity manifest to optimized public assets", async () => {
+    const registry = await loadAgentRegistry();
+    const checks = await validateAgentAvatars(registry);
+    const manifest = JSON.parse(
+      await readFile(
+        path.join(repoRoot, "state", "agent-identities", "manifest.json"),
+        "utf8"
+      )
+    ) as {
+      budget: {
+        maxSetUsd: number;
+        apiEquivalentTotalEstimateUsd: number;
+        actualProjectApiUsd: number | null;
+      };
+      assets: Array<{
+        agentId: string;
+        publicPath: string;
+        sha256: string;
+        width: number;
+        height: number;
+        qa: string;
+      }>;
+    };
+
+    expect(manifest.assets).toHaveLength(14);
+    expect(manifest.budget.apiEquivalentTotalEstimateUsd).toBeLessThanOrEqual(
+      manifest.budget.maxSetUsd
+    );
+    expect(manifest.budget.actualProjectApiUsd).toBeNull();
+
+    for (const check of checks) {
+      const asset = manifest.assets.find((candidate) => candidate.agentId === check.agentId);
+      expect(asset?.publicPath).toBe(check.path);
+      expect(asset?.sha256).toBe(check.sha256);
+      expect(asset?.width).toBe(1024);
+      expect(asset?.height).toBe(1024);
+      expect(asset?.qa.startsWith("pass")).toBe(true);
+    }
+  });
+});

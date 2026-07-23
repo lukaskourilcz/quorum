@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "shared": "Serious institutional editorial identity portrait of a clearly non-human AI software role; restrained high-contrast monochrome paper-and-photographic collage; zinc-gray studio, white field and one very small Ember orange punctuation; centered head-and-shoulders profile composition; one role-specific geometric motif; premium annual-report art direction matching an editorial zinc grid. Keep the same camera, crop, light, background, material language and fine paper grain across the series. No text, letters, numbers, logo, photoreal human, skin, celebrity, robot, android, 3D render, cyberpunk, neon, blue, green, purple gradient, glowing eyes, fantasy armor, cartoon or stock-photo office. Square, opaque background.",
+  "negative": "No readable or pseudo-readable glyphs. No extra colored accents. No UI, charts, screenshots, badges, labels, watermarks or signatures.",
+  "roles": {
+    "VIZE": "Chief Strategy Agent. Motif: horizon and compass cut. Responsibility: thesis, opportunity and stage direction.",
+    "FORGE": "Chief Building Agent. Motif: architectural planes and joinery. Responsibility: implementation, reliability and release.",
+    "PULSE": "Chief Marketing Agent. Motif: measured signal waves. Responsibility: distribution, offer, calendar and gross profit.",
+    "AUDIT": "Chief Audit Agent. Motif: faceted lens and balance. Responsibility: evidence, risk, veto and quality.",
+    "SCOUT": "Market Intelligence Agent. Motif: radar rings and distant point. Responsibility: source coverage and market signals.",
+    "SCRIBE": "Communications Agent. Motif: folded page and ordered abstract lines with no glyphs. Responsibility: clear public and administrative summaries.",
+    "LENS": "Analytics Agent. Motif: prism and calibrated grid made only from geometric marks, with no glyphs. Responsibility: trends, attribution and forecast error.",
+    "QUILL": "Editorial Agent. Motif: cut paper and correction mark. Responsibility: voice, claims and information gain.",
+    "RADAR": "Search Intelligence Agent. Motif: connected nodes and search arc. Responsibility: search intent, metadata and discoverability.",
+    "KEEPER": "Compliance Agent. Motif: threshold and shield plane. Responsibility: guardrails, privacy and disclosures.",
+    "THREADS": "Threads Agent. Motif: interwoven dialogue lines. Responsibility: native Threads posts and replies.",
+    "INSTAGRAM": "Visual Social Agent. Motif: aperture and editorial frame. Responsibility: Instagram concepts, captions and media.",
+    "PEOPLE": "People Operations Agent. Motif: role map and calibration marks. Responsibility: role health, routing quality and safe organization evolution.",
+    "LEDGER": "Chief Finance Agent. Motif: balanced ledger columns and reserve mark. Responsibility: daily cost, reconciliation and the twenty-dollar all-in budget plan."
+  },
+  "repairPrompts": {
+    "SCRIBE": "Remove every pseudo-letter, pseudo-number, glyph and readable mark from all page shapes. Preserve the folded-page motif using blank planes and purely abstract parallel rules only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged.",
+    "LENS": "Remove every pseudo-letter, pseudo-number, tick label and readable glyph. Preserve the analytics motif with an unlabeled prism and purely geometric calibration grid only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged."
+  }
+}

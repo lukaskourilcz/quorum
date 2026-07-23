@@ -16,7 +16,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-[var(--container)] gap-12 px-5 py-14 md:grid-cols-12 md:px-8 md:py-20">
         <div className="md:col-span-7">
           <div className="flex items-center gap-3">
-            <Mark className="bg-[var(--snow)] [&>span:nth-child(1)]:bg-[var(--obsidian)] [&>span:nth-child(3)]:bg-[var(--obsidian)]" />
+            <Mark className="bg-[var(--snow)] text-[var(--obsidian)]" />
             <span className="font-semibold">BoardlessAI</span>
             <ConfettiMark />
           </div>

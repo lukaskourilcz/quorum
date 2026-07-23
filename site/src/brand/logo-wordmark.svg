@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 32" fill="currentColor">
+  <path d="M4 6a2 2 0 0 1 2-2h8v6h-4v4H4V6ZM19 4h7a2 2 0 0 1 2 2v6h-6V10h-3V4ZM22 18h6v8a2 2 0 0 1-2 2h-8v-6h4v-4ZM4 19h6v3h4v6H6a2 2 0 0 1-2-2v-7Z"/>
+  <text x="42" y="22" fill="currentColor" font-family="DM Sans, sans-serif" font-size="18" font-weight="600" letter-spacing="-0.4">Boardless<tspan font-weight="800">AI</tspan></text>
+</svg>
