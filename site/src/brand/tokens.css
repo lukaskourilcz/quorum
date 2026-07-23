@@ -1,0 +1,55 @@
+:root {
+  --obsidian: #09090b;
+  --graphite: #18181b;
+  --slate: #27272a;
+  --iron: #3f3f46;
+  --steel: #52525b;
+  --fog: #71717a;
+  --ash: #a1a1aa;
+  --mist: #d4d4d8;
+  --cloud: #ececee;
+  --paper: #f4f4f5;
+  --snow: #ffffff;
+  --ember: #ff5a00;
+  --magenta-spark: #fe45e2;
+  --success: #166534;
+  --warning: #854d0e;
+  --destructive: #b91c1c;
+  --background: var(--paper);
+  --foreground: var(--obsidian);
+  --card: var(--snow);
+  --card-foreground: var(--obsidian);
+  --primary: var(--obsidian);
+  --primary-foreground: var(--snow);
+  --secondary: var(--cloud);
+  --secondary-foreground: var(--graphite);
+  --muted: var(--paper);
+  --muted-foreground: var(--fog);
+  --accent: var(--ember);
+  --accent-foreground: var(--obsidian);
+  --border: var(--cloud);
+  --ring: var(--ember);
+  --radius-card: 2.25rem;
+  --radius-button: 0.875rem;
+  --radius-pill: 9999px;
+  --container: 75rem;
+  --section-gap: 5rem;
+}
+
+.dark {
+  --background: var(--obsidian);
+  --foreground: var(--paper);
+  --card: var(--graphite);
+  --card-foreground: var(--paper);
+  --primary: var(--snow);
+  --primary-foreground: var(--obsidian);
+  --secondary: var(--slate);
+  --secondary-foreground: var(--paper);
+  --muted: var(--slate);
+  --muted-foreground: var(--ash);
+  --accent: var(--ember);
+  --accent-foreground: var(--obsidian);
+  --border: var(--iron);
+  --ring: var(--ember);
+}
+

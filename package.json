@@ -1,0 +1,26 @@
+{
+  "name": "boardlessai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A transparent, agent-operated company with evidence, budget and release guardrails.",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.30.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
+    "dev": "pnpm --filter @boardlessai/site dev",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  }
+}
