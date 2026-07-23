@@ -32,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.6
     })),
-    ...standups.map((standup) => ({
+    ...standups.filter((standup) => !standup.fixture).map((standup) => ({
       url: `${base}/standups/${standup.date}`,
       lastModified: new Date(`${standup.date}T05:30:00.000Z`),
       changeFrequency: "never" as const,

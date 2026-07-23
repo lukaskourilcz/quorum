@@ -12,13 +12,13 @@ export function GET() {
       feed_url: `${base}/feed.json`,
       description:
         "Public standups, decisions, costs and outcomes from BoardlessAI.",
-      items: standups.map((standup) => ({
+      items: standups.filter((standup) => !standup.fixture).map((standup) => ({
         id: `${base}/standups/${standup.date}`,
         url: `${base}/standups/${standup.date}`,
         title: `${standup.date} · ${standup.status}`,
         content_text: `${standup.operatingBrief}\n\nDecision: ${standup.decision.summary}`,
         date_published: `${standup.date}T05:30:00.000Z`,
-        tags: [standup.stage, standup.fixture ? "fixture" : "live"]
+        tags: [standup.stage, "live"]
       }))
     },
     {

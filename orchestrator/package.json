@@ -11,6 +11,7 @@
     "build": "tsc -p tsconfig.build.json",
     "cycle": "tsx src/index.ts",
     "lint": "tsc --noEmit",
+    "social:publish": "tsx src/social/index.ts",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },

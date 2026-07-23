@@ -1,0 +1,37 @@
+name: Production health
+
+on:
+  schedule:
+    - cron: "15 8 * * *"
+      timezone: "Europe/Prague"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-health
+  cancel-in-progress: true
+
+jobs:
+  health:
+    name: Public endpoint smoke test
+    if: ${{ vars.HEALTH_CHECK_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+    steps:
+      - name: Require an explicit HTTPS production URL
+        run: |
+          case "$PUBLIC_SITE_URL" in
+            https://*) ;;
+            *) echo "PUBLIC_SITE_URL must be an explicit HTTPS secret."; exit 1 ;;
+          esac
+
+      - name: Check public routes and feeds
+        run: |
+          curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/"
+          curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/standups"
+          curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/feed.json"
+          curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/robots.txt"

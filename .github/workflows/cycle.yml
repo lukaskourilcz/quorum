@@ -1,0 +1,140 @@
+name: Guarded council cycle
+
+on:
+  schedule:
+    - cron: "30 7 * * *"
+      timezone: "Europe/Prague"
+    - cron: "30 19 * * *"
+      timezone: "Europe/Prague"
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: Council phase
+        required: true
+        default: am
+        type: choice
+        options:
+          - am
+          - pm
+          - founding
+      dry:
+        description: Never call paid APIs or write canonical state
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: guarded-cycle-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  cycle:
+    name: Run bounded council cycle
+    if: ${{ vars.AUTONOMY_KILL_SWITCH != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      MONTHLY_OPERATING_CAP_USD: "20"
+      MAX_CYCLE_BUDGET_USD: "0.20"
+      DAILY_BUDGET_USD: "0.40"
+      MONTHLY_BUDGET_USD: "12"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Honor repository kill switch
+        run: |
+          if test -e state/PAUSED; then
+            echo "state/PAUSED is present; refusing to run."
+            exit 1
+          fi
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Install Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve guarded cycle mode
+        id: mode
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          INPUT_PHASE: ${{ inputs.phase }}
+          INPUT_DRY: ${{ inputs.dry }}
+          HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+          HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+        run: |
+          phase="${INPUT_PHASE:-am}"
+          dry="${INPUT_DRY:-true}"
+          if test "$EVENT_NAME" = "schedule"; then
+            dry=false
+            if test "$EVENT_SCHEDULE" = "30 7 * * *"; then
+              phase=am
+            else
+              phase=pm
+            fi
+          fi
+          if test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; then
+            dry=true
+            echo "One or more council credentials are missing; forcing fixture-only dry mode."
+          fi
+          echo "phase=$phase" >> "$GITHUB_OUTPUT"
+          echo "dry=$dry" >> "$GITHUB_OUTPUT"
+
+      - name: Pre-cycle release gate
+        run: |
+          pnpm agents:validate
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+
+      - name: Run cycle
+        env:
+          PHASE: ${{ steps.mode.outputs.phase }}
+          DRY: ${{ steps.mode.outputs.dry }}
+        run: |
+          args=(--phase "$PHASE" --explain-budget --explain-routing)
+          if test "$DRY" = "true"; then
+            args+=(--dry)
+          fi
+          pnpm cycle -- "${args[@]}"
+
+      - name: Post-cycle release gate
+        run: |
+          pnpm agents:validate
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+          git diff --check
+
+      - name: Commit one atomic runtime cycle
+        if: ${{ steps.mode.outputs.dry != 'true' }}
+        env:
+          CYCLE_NUMBER: ${{ github.run_number }}
+        run: |
+          git add state
+          if git diff --cached --quiet; then
+            echo "Cycle produced no canonical state change."
+            exit 0
+          fi
+          git config user.name "boardlessai-cycle[bot]"
+          git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          git commit -m "cycle(${CYCLE_NUMBER})"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

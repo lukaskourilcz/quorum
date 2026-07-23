@@ -21,6 +21,7 @@
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
     "dev": "pnpm --filter @boardlessai/site dev",
     "lint": "pnpm -r lint",
+    "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck"
   }

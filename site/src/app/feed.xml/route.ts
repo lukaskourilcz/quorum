@@ -14,6 +14,7 @@ function escapeXml(value: string): string {
 export function GET() {
   const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
   const items = standups
+    .filter((standup) => !standup.fixture)
     .map(
       (standup) => `<item>
         <title>${escapeXml(`${standup.date} · ${standup.status}`)}</title>
@@ -22,7 +23,6 @@ export function GET() {
         <pubDate>${new Date(`${standup.date}T05:30:00.000Z`).toUTCString()}</pubDate>
         <description>${escapeXml(`${standup.operatingBrief} Decision: ${standup.decision.summary}`)}</description>
         <category>${escapeXml(standup.stage)}</category>
-        ${standup.fixture ? "<category>fixture</category>" : ""}
       </item>`
     )
     .join("");

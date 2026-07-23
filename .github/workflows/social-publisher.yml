@@ -1,0 +1,91 @@
+name: Guarded social publisher
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+      timezone: "Europe/Prague"
+  workflow_dispatch:
+    inputs:
+      validate_only:
+        description: Validate due queue items without external publishing
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: social-publisher-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Validate or publish approved queue
+    if: ${{ vars.SOCIAL_KILL_SWITCH != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      META_GRAPH_API_VERSION: ${{ vars.META_GRAPH_API_VERSION }}
+      META_THREADS_USER_ID: ${{ vars.META_THREADS_USER_ID }}
+      META_THREADS_ACCESS_TOKEN: ${{ secrets.META_THREADS_ACCESS_TOKEN }}
+      META_INSTAGRAM_IG_USER_ID: ${{ vars.META_INSTAGRAM_IG_USER_ID }}
+      META_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.META_INSTAGRAM_ACCESS_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Honor social kill switch
+        run: |
+          if test -e state/PAUSED || test -e state/SOCIAL_PAUSED; then
+            echo "A repository social pause is present; refusing to run."
+            exit 1
+          fi
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Install Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pre-publish checks
+        run: |
+          pnpm --filter @boardlessai/orchestrator typecheck
+          pnpm --filter @boardlessai/orchestrator test
+
+      - name: Run two-phase publisher
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          VALIDATE_ONLY: ${{ inputs.validate_only }}
+        run: |
+          args=(--dry-if-disabled)
+          if test "$EVENT_NAME" = "workflow_dispatch" && test "$VALIDATE_ONLY" = "true"; then
+            args+=(--validate-only)
+          fi
+          pnpm social:publish -- "${args[@]}"
+
+      - name: Validate publisher state
+        run: |
+          pnpm --filter @boardlessai/orchestrator test
+          git diff --check
+
+      - name: Commit immutable queue state and receipts
+        run: |
+          git add state/social
+          if git diff --cached --quiet; then
+            echo "Publisher produced no state change."
+            exit 0
+          fi
+          git config user.name "boardlessai-social[bot]"
+          git config user.email "boardlessai-social[bot]@users.noreply.github.com"
+          git commit -m "social(${GITHUB_RUN_NUMBER})"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

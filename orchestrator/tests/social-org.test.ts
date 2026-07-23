@@ -8,6 +8,9 @@ import {
   type QueueItem
 } from "../src/social/queue.js";
 import { publishQueueItem } from "../src/social/publish.js";
+import { createMetaPublishAdapter } from "../src/social/meta.js";
+import { queuePayloadHash } from "../src/social/queue.js";
+import { runSocialPublisher } from "../src/social/runner.js";
 
 const channel: Channel = {
   id: "threads",
@@ -80,5 +83,75 @@ describe("social and organization controls", () => {
       status: "approved"
     };
     expect(() => assertOrgChangeApproved(change)).toThrow(/own control/);
+  });
+
+  it("keeps the repository publisher in draft-only mode by default", async () => {
+    const report = await runSocialPublisher({
+      validateOnly: false,
+      dryIfDisabled: true,
+      now: new Date("2026-07-23T09:00:00.000Z"),
+      environment: {}
+    });
+
+    expect(report.status).toBe("draft_only");
+    expect(report.published).toBe(0);
+  });
+
+  it("uses the guarded two-step Threads connector for an approved item", async () => {
+    const content = {
+      text: "A verified operating update.",
+      altText: null,
+      assetUrls: []
+    };
+    const approvedItem: QueueItem = {
+      ...queueItem,
+      payloadHash: queuePayloadHash({
+        id: queueItem.id,
+        channel: queueItem.channel,
+        scheduledAt: queueItem.scheduledAt,
+        content
+      }),
+      content,
+      approval: {
+        pulseSelected: true,
+        quill: "pass",
+        keeper: "pass",
+        deterministic: "pass",
+        approvedAt: "2026-07-23T07:55:00.000Z"
+      }
+    };
+    const responses = [
+      new Response(JSON.stringify({ id: "container-1" }), {
+        status: 200,
+        headers: { "content-type": "application/json" }
+      }),
+      new Response(JSON.stringify({ id: "remote-1" }), {
+        status: 200,
+        headers: { "content-type": "application/json" }
+      })
+    ];
+    const fetchMock = vi.fn<typeof fetch>();
+    fetchMock.mockImplementation(async () => responses.shift()!);
+    const adapter = createMetaPublishAdapter(
+      {
+        META_GRAPH_API_VERSION: "v99.0",
+        META_THREADS_USER_ID: "user-1",
+        META_THREADS_ACCESS_TOKEN: "secret"
+      },
+      fetchMock
+    );
+    const liveChannel: Channel = {
+      ...channel,
+      mode: "autopublish",
+      approvedScopes: ["threads_basic", "threads_content_publish"],
+      enabledByHumanAt: "2026-07-23T07:00:00.000Z"
+    };
+
+    const result = await adapter.publish(liveChannel, approvedItem, "claim-1");
+
+    expect(result.remoteId).toBe("remote-1");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain("/threads");
+    expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/threads_publish");
   });
 });
