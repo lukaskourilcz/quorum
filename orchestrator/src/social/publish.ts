@@ -2,7 +2,11 @@ import { createHash } from "node:crypto";
 import type { Channel } from "./channel-registry.js";
 import { assertLiveChannel } from "./channel-registry.js";
 import type { QueueItem } from "./queue.js";
-import { claimQueueItem, reconcileQueueItem } from "./queue.js";
+import {
+  assertQueueItemPublishable,
+  claimQueueItem,
+  reconcileQueueItem
+} from "./queue.js";
 
 export interface PublishAdapter {
   publish(
@@ -24,11 +28,12 @@ export async function publishQueueItem(
   now = new Date()
 ): Promise<QueueItem> {
   assertLiveChannel(channel, environment);
+  assertQueueItemPublishable(item);
   const idempotencyKey = createHash("sha256")
-    .update(`${item.channel}:${item.id}:${item.payloadHash}`)
+    .update(`${item.channel}:${item.id}:${item.content.contentHash}`)
     .digest("hex");
   const claimed = claimQueueItem(item, idempotencyKey, now);
-  if (claimed.state !== "claimed") {
+  if (claimed.status !== "publishing") {
     return claimed;
   }
   try {

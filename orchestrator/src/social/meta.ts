@@ -97,7 +97,11 @@ export function createMetaPublishAdapter(
         const base = new URL(
           `https://graph.facebook.com/${version}/${encodeURIComponent(userId)}/`
         );
-        const imageUrl = content.assetUrls[0]!;
+        const publicSiteUrl = requiredEnvironment(environment, "PUBLIC_SITE_URL");
+        if (!publicSiteUrl.startsWith("https://")) {
+          throw new Error("PUBLIC_SITE_URL must use HTTPS for Instagram media");
+        }
+        const imageUrl = new URL(content.assetPaths[0]!, publicSiteUrl).toString();
         const creationId = await postForm(fetchImpl, new URL("media", base), {
           image_url: imageUrl,
           caption: content.text,

@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { serverTokens } from "@/brand/tokens";
 import { publicState } from "@/data/fixtures";
 
 export const alt =
@@ -13,8 +14,8 @@ export default function OpenGraphImage() {
   return new ImageResponse(
     <div
       style={{
-        background: "rgb(244 244 245)",
-        color: "rgb(9 9 11)",
+        background: serverTokens.paper,
+        color: serverTokens.obsidian,
         display: "flex",
         flexDirection: "column",
         height: "100%",
@@ -26,7 +27,7 @@ export default function OpenGraphImage() {
       <div style={{ alignItems: "center", display: "flex", gap: 16 }}>
         <div
           style={{
-            background: "rgb(9 9 11)",
+            background: serverTokens.obsidian,
             borderRadius: 12,
             display: "flex",
             height: 48,
@@ -36,7 +37,7 @@ export default function OpenGraphImage() {
         <div style={{ fontSize: 26, fontWeight: 700 }}>BoardlessAI</div>
         <div
           style={{
-            background: "hsl(21 100% 50%)",
+            background: serverTokens.ember,
             borderRadius: 999,
             height: 14,
             width: 14
@@ -57,7 +58,7 @@ export default function OpenGraphImage() {
       </div>
       <div
         style={{
-          borderTop: "2px solid rgb(212 212 216)",
+          borderTop: `2px solid ${serverTokens.mist}`,
           display: "flex",
           fontSize: 22,
           justifyContent: "space-between",

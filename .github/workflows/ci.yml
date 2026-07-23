@@ -49,3 +49,16 @@ jobs:
 
       - name: Production build
         run: pnpm build
+
+      - name: Production route and link smoke
+        run: |
+          pnpm --filter @boardlessai/site start &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm site:smoke

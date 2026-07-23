@@ -3,13 +3,15 @@ import { assertOrgChangeApproved, type OrgChange } from "../src/org/change.js";
 import { assertLiveChannel, type Channel } from "../src/social/channel-registry.js";
 import { planSocialPosts } from "../src/social/plan.js";
 import {
+  assertQueueItemPublishable,
   claimQueueItem,
+  QueueItemSchema,
+  queuePayloadHash,
   reconcileQueueItem,
   type QueueItem
 } from "../src/social/queue.js";
 import { publishQueueItem } from "../src/social/publish.js";
 import { createMetaPublishAdapter } from "../src/social/meta.js";
-import { queuePayloadHash } from "../src/social/queue.js";
 import { runSocialPublisher } from "../src/social/runner.js";
 
 const channel: Channel = {
@@ -26,18 +28,59 @@ const channel: Channel = {
   enabledByHumanAt: null
 };
 
-const queueItem: QueueItem = {
-  id: "POST-001",
-  channel: "threads",
-  payloadHash: "0123456789abcdef",
-  scheduledAt: "2026-07-23T08:00:00.000Z",
-  state: "queued",
-  claimId: null,
-  claimedAt: null,
-  remoteId: null,
-  attemptCount: 0,
-  lastError: null
-};
+function createQueueItem(): QueueItem {
+  const item: QueueItem = {
+    schemaVersion: 1,
+    id: "SOC-20260723-001",
+    campaignId: "CAM-DAILY-STANDUP",
+    experimentId: null,
+    channel: "threads",
+    objective: "trust",
+    audience: "AI company operators",
+    destination: "https://example.invalid/standups/2026-07-23",
+    utm: {
+      source: "threads",
+      medium: "organic_social",
+      campaign: "daily_standup",
+      content: "SOC-20260723-001"
+    },
+    content: {
+      text: "A verified operating update.",
+      altText: null,
+      assetPaths: [],
+      factualClaimRefs: ["FIXTURE-EVIDENCE-001"],
+      contentHash: "0".repeat(64)
+    },
+    publishWindow: {
+      notBefore: "2026-07-23T08:00:00.000Z",
+      notAfter: "2026-07-23T10:00:00.000Z"
+    },
+    status: "queued",
+    checks: {
+      schema: "pass",
+      brand: "pass",
+      claims: "pass",
+      quill: "pass",
+      keeper: "pass",
+      duplicate: "pass",
+      accessibility: "pass",
+      budget: "pass"
+    },
+    selectedBy: "PULSE",
+    createdAt: "2026-07-23T07:55:00.000Z",
+    attempt: null,
+    receiptId: null
+  };
+  return QueueItemSchema.parse({
+    ...item,
+    content: {
+      ...item.content,
+      contentHash: queuePayloadHash(item)
+    }
+  });
+}
+
+const queueItem = createQueueItem();
 
 describe("social and organization controls", () => {
   it("returns NO_POST when no publishable fact exists", () => {
@@ -56,15 +99,29 @@ describe("social and organization controls", () => {
   it("uses two-phase claim and ambiguous reconciliation", () => {
     const claimed = claimQueueItem(
       queueItem,
-      "claim-1",
+      "1".repeat(64),
       new Date("2026-07-23T09:00:00.000Z")
     );
-    expect(claimed.state).toBe("claimed");
+    expect(claimed.status).toBe("publishing");
     const reconciled = reconcileQueueItem(claimed, {
       outcome: "ambiguous",
       error: "Timeout after remote acceptance may have occurred"
     });
-    expect(reconciled.state).toBe("ambiguous");
+    expect(reconciled.status).toBe("needs_reconciliation");
+    expect(reconciled.receiptId).toBe("SOC-20260723-001-attempt-1");
+  });
+
+  it("invalidates approval when immutable publication content changes", () => {
+    const changed = {
+      ...queueItem,
+      content: {
+        ...queueItem.content,
+        text: "Unreviewed replacement copy."
+      }
+    };
+    expect(() => assertQueueItemPublishable(changed)).toThrow(
+      /content hash mismatch/
+    );
   });
 
   it("prevents self-approved control changes", () => {
@@ -98,28 +155,6 @@ describe("social and organization controls", () => {
   });
 
   it("uses the guarded two-step Threads connector for an approved item", async () => {
-    const content = {
-      text: "A verified operating update.",
-      altText: null,
-      assetUrls: []
-    };
-    const approvedItem: QueueItem = {
-      ...queueItem,
-      payloadHash: queuePayloadHash({
-        id: queueItem.id,
-        channel: queueItem.channel,
-        scheduledAt: queueItem.scheduledAt,
-        content
-      }),
-      content,
-      approval: {
-        pulseSelected: true,
-        quill: "pass",
-        keeper: "pass",
-        deterministic: "pass",
-        approvedAt: "2026-07-23T07:55:00.000Z"
-      }
-    };
     const responses = [
       new Response(JSON.stringify({ id: "container-1" }), {
         status: 200,
@@ -147,7 +182,11 @@ describe("social and organization controls", () => {
       enabledByHumanAt: "2026-07-23T07:00:00.000Z"
     };
 
-    const result = await adapter.publish(liveChannel, approvedItem, "claim-1");
+    const result = await adapter.publish(
+      liveChannel,
+      queueItem,
+      "1".repeat(64)
+    );
 
     expect(result.remoteId).toBe("remote-1");
     expect(fetchMock).toHaveBeenCalledTimes(2);

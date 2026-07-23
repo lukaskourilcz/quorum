@@ -44,8 +44,9 @@ describe("generated patch validator", () => {
 
   it("blocks secrets, environment access, network and dynamic code", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-patch-"));
+    const syntheticSecret = ["sk", "proj", "1234567890123456789012345"].join("-");
     for (const content of [
-      "const token = 'sk-proj-1234567890123456789012345'",
+      `const token = '${syntheticSecret}'`,
       "const secret = process.env.OPENAI_API_KEY",
       "fetch('https://not-allowlisted.invalid')",
       "eval('2 + 2')"
@@ -82,4 +83,3 @@ describe("generated patch validator", () => {
     ).rejects.toBeInstanceOf(PatchValidationError);
   });
 });
-

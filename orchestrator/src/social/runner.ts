@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
@@ -41,21 +42,27 @@ async function exists(filePath: string): Promise<boolean> {
 async function writeReceipt(
   item: QueueItem,
   outcome: "published" | "ambiguous",
-  now: Date
+  now: Date,
+  remoteId: string | null
 ): Promise<void> {
+  const attemptCount = item.attempt?.attemptCount;
+  const lastError = item.attempt?.lastError;
+  if (!attemptCount || !item.receiptId) {
+    throw new Error(`Queue item ${item.id} has no reconciled attempt`);
+  }
   await atomicWriteJson(
     stateRoot,
-    `social/posts/${item.id}-attempt-${item.attemptCount}.json`,
+    `social/posts/${item.receiptId}.json`,
     {
       schemaVersion: 1,
-      id: `${item.id}-attempt-${item.attemptCount}`,
+      id: item.receiptId,
       queueItemId: item.id,
       channel: item.channel,
-      contentHash: item.payloadHash,
+      contentHash: item.content.contentHash,
       outcome,
-      remoteId: item.remoteId,
+      remoteId,
       attemptedAt: now.toISOString(),
-      error: item.lastError,
+      error: lastError ?? null,
       sanitizedProviderMetadata: {}
     }
   );
@@ -101,7 +108,8 @@ export async function runSocialPublisher(
     const channels = new Map(registry.channels.map((channel) => [channel.id, channel]));
     const due = entries.filter(
       ({ item }) =>
-        item.state === "queued" && new Date(item.scheduledAt).getTime() <= now.getTime()
+        item.status === "queued" &&
+        new Date(item.publishWindow.notBefore).getTime() <= now.getTime()
     );
     const autopublishDue = due.filter(
       ({ item }) => channels.get(item.channel)?.mode === "autopublish"
@@ -149,12 +157,19 @@ export async function runSocialPublisher(
 
     for (const { name, item } of autopublishDue) {
       const channel = channels.get(item.channel)!;
-      const claimId = `${item.channel}:${item.id}:${item.payloadHash}`;
+      const claimId = createHash("sha256")
+        .update(`${item.channel}:${item.id}:${item.content.contentHash}`)
+        .digest("hex");
       const claimed = claimQueueItem(item, claimId, now);
       await atomicWriteJson(stateRoot, `social/queue/${name}`, claimed);
+      if (claimed.status !== "publishing") {
+        continue;
+      }
       let reconciled: QueueItem;
+      let remoteId: string | null = null;
       try {
         const result = await adapter.publish(channel, claimed, claimId);
+        remoteId = result.remoteId;
         reconciled = reconcileQueueItem(claimed, {
           outcome: "published",
           remoteId: result.remoteId
@@ -170,8 +185,9 @@ export async function runSocialPublisher(
       await atomicWriteJson(stateRoot, `social/queue/${name}`, reconciled);
       await writeReceipt(
         reconciled,
-        reconciled.state === "published" ? "published" : "ambiguous",
-        now
+        reconciled.status === "published" ? "published" : "ambiguous",
+        now,
+        remoteId
       );
     }
 

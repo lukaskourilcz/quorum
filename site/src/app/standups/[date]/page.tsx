@@ -44,6 +44,7 @@ export async function generateMetadata({
     description: standup
       ? standup.decision.summary
       : "BoardlessAI standup record.",
+    robots: standup?.fixture ? { follow: true, index: false } : undefined,
     title: standup ? `Standup · ${formatDate(date)}` : "Standup"
   };
 }

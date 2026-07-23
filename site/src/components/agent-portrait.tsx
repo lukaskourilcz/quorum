@@ -30,10 +30,6 @@ export function AgentPortrait({
       <span className="absolute bottom-4 left-4 rounded-[var(--radius-pill)] bg-[var(--obsidian)] px-3 py-1 text-[0.65rem] font-bold tracking-[0.12em] text-[var(--snow)]">
         {agent.id}
       </span>
-      <span
-        aria-hidden="true"
-        className="absolute right-4 top-4 size-3 rounded-full bg-[var(--accent)]"
-      />
     </div>
   );
 }

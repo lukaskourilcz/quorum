@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -102,6 +103,12 @@ describe("agent architecture", () => {
         "utf8"
       )
     ) as {
+      anchor: {
+        path: string;
+        sha256: string;
+        width: number;
+        height: number;
+      };
       budget: {
         maxSetUsd: number;
         apiEquivalentTotalEstimateUsd: number;
@@ -122,6 +129,13 @@ describe("agent architecture", () => {
       manifest.budget.maxSetUsd
     );
     expect(manifest.budget.actualProjectApiUsd).toBeNull();
+    expect(manifest.anchor.path.startsWith("site/public/")).toBe(false);
+    const anchorBytes = await readFile(path.join(repoRoot, manifest.anchor.path));
+    expect(createHash("sha256").update(anchorBytes).digest("hex")).toBe(
+      manifest.anchor.sha256
+    );
+    expect(manifest.anchor.width).toBe(1024);
+    expect(manifest.anchor.height).toBe(1024);
 
     for (const check of checks) {
       const asset = manifest.assets.find((candidate) => candidate.agentId === check.agentId);

@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { serverTokens } from "@/brand/tokens";
 
 export const size = {
   width: 32,
@@ -11,7 +12,7 @@ export default function Icon() {
     <div
       style={{
         alignItems: "center",
-        background: "rgb(9 9 11)",
+        background: serverTokens.obsidian,
         display: "flex",
         height: "100%",
         justifyContent: "center",
@@ -20,7 +21,7 @@ export default function Icon() {
     >
       <div
         style={{
-          background: "hsl(21 100% 50%)",
+          background: serverTokens.ember,
           borderRadius: 999,
           height: 9,
           width: 9

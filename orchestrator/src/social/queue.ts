@@ -1,56 +1,135 @@
-import { z } from "zod";
 import { createHash } from "node:crypto";
+import { z } from "zod";
+
+const CheckStatusSchema = z.enum(["pending", "pass", "fail"]);
 
 export const QueueContentSchema = z.object({
   text: z.string().min(1).max(2_200),
   altText: z.string().min(1).max(1_000).nullable(),
-  assetUrls: z.array(z.url().refine((url) => url.startsWith("https://"))).max(10)
+  assetPaths: z
+    .array(z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.[a-zA-Z0-9]+$/))
+    .max(10),
+  factualClaimRefs: z.array(z.string().min(1)),
+  contentHash: z.string().regex(/^[a-f0-9]{64}$/)
 });
 
-export const QueueApprovalSchema = z.object({
-  pulseSelected: z.literal(true),
-  quill: z.literal("pass"),
-  keeper: z.literal("pass"),
-  deterministic: z.literal("pass"),
-  approvedAt: z.string().datetime()
+const QueueAttemptSchema = z.object({
+  idempotencyKey: z.string().regex(/^[a-f0-9]{64}$/),
+  claimedAt: z.string().datetime(),
+  attemptCount: z.number().int().positive(),
+  lastError: z.string().nullable()
 });
 
-export const QueueItemSchema = z.object({
-  id: z.string().min(1),
-  channel: z.enum(["threads", "instagram"]),
-  payloadHash: z.string().min(16),
-  scheduledAt: z.string().datetime(),
-  state: z.enum([
-    "queued",
-    "claimed",
-    "published",
-    "failed",
-    "ambiguous",
-    "cancelled"
-  ]),
-  claimId: z.string().nullable(),
-  claimedAt: z.string().datetime().nullable(),
-  remoteId: z.string().nullable(),
-  attemptCount: z.number().int().nonnegative(),
-  lastError: z.string().nullable(),
-  content: QueueContentSchema.optional(),
-  approval: QueueApprovalSchema.optional()
-});
+export const QueueItemSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    id: z.string().min(1),
+    campaignId: z.string().min(1),
+    experimentId: z.string().nullable(),
+    channel: z.enum(["threads", "instagram"]),
+    objective: z.enum([
+      "qualified_visit",
+      "value_action",
+      "opt_in",
+      "monetization_intent",
+      "trust"
+    ]),
+    audience: z.string().min(1),
+    destination: z.url(),
+    utm: z.object({
+      source: z.enum(["threads", "instagram"]),
+      medium: z.literal("organic_social"),
+      campaign: z.string().min(1),
+      content: z.string().min(1)
+    }),
+    content: QueueContentSchema,
+    publishWindow: z.object({
+      notBefore: z.string().datetime(),
+      notAfter: z.string().datetime()
+    }),
+    status: z.enum([
+      "draft",
+      "approved",
+      "queued",
+      "publishing",
+      "published",
+      "failed",
+      "expired",
+      "needs_reconciliation",
+      "cancelled"
+    ]),
+    checks: z.object({
+      schema: CheckStatusSchema,
+      brand: CheckStatusSchema,
+      claims: CheckStatusSchema,
+      quill: CheckStatusSchema,
+      keeper: CheckStatusSchema,
+      duplicate: CheckStatusSchema,
+      accessibility: CheckStatusSchema,
+      budget: CheckStatusSchema
+    }),
+    selectedBy: z.literal("PULSE"),
+    createdAt: z.string().datetime(),
+    attempt: QueueAttemptSchema.nullable(),
+    receiptId: z.string().nullable()
+  })
+  .superRefine((item, context) => {
+    if (
+      new Date(item.publishWindow.notAfter).getTime() <=
+      new Date(item.publishWindow.notBefore).getTime()
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "publishWindow.notAfter must be after notBefore",
+        path: ["publishWindow", "notAfter"]
+      });
+    }
+    if (item.utm.source !== item.channel) {
+      context.addIssue({
+        code: "custom",
+        message: "UTM source must match the channel",
+        path: ["utm", "source"]
+      });
+    }
+  });
+
 export type QueueItem = z.infer<typeof QueueItemSchema>;
 
 export function queuePayloadHash(
-  item: Pick<QueueItem, "id" | "channel" | "scheduledAt" | "content">
+  item: Pick<
+    QueueItem,
+    | "id"
+    | "campaignId"
+    | "experimentId"
+    | "channel"
+    | "objective"
+    | "audience"
+    | "destination"
+    | "utm"
+    | "content"
+    | "publishWindow"
+    | "selectedBy"
+  >
 ): string {
-  if (!item.content) {
-    throw new Error(`Queue item ${item.id} has no publishable content`);
-  }
   return createHash("sha256")
     .update(
       JSON.stringify({
         id: item.id,
+        campaignId: item.campaignId,
+        experimentId: item.experimentId,
         channel: item.channel,
-        scheduledAt: item.scheduledAt,
-        content: item.content
+        objective: item.objective,
+        audience: item.audience,
+        destination: item.destination,
+        utm: item.utm,
+        content: {
+          text: item.content.text,
+          altText: item.content.altText,
+          assetPaths: item.content.assetPaths,
+          factualClaimRefs: item.content.factualClaimRefs
+        },
+        publishWindow: item.publishWindow,
+        selectedBy: item.selectedBy
       })
     )
     .digest("hex");
@@ -58,17 +137,20 @@ export function queuePayloadHash(
 
 export function assertQueueItemPublishable(item: QueueItem): void {
   const parsed = QueueItemSchema.parse(item);
-  if (!parsed.content || !parsed.approval) {
-    throw new Error(`Queue item ${parsed.id} is missing content or approval`);
+  if (!["queued", "publishing"].includes(parsed.status)) {
+    throw new Error(`Queue item ${parsed.id} is not queued for publishing`);
   }
-  if (queuePayloadHash(parsed) !== parsed.payloadHash) {
-    throw new Error(`Queue item ${parsed.id} payload hash mismatch`);
+  if (Object.values(parsed.checks).some((status) => status !== "pass")) {
+    throw new Error(`Queue item ${parsed.id} has incomplete approval checks`);
   }
-  if (parsed.channel === "threads" && parsed.content.assetUrls.length > 0) {
+  if (queuePayloadHash(parsed) !== parsed.content.contentHash) {
+    throw new Error(`Queue item ${parsed.id} content hash mismatch`);
+  }
+  if (parsed.channel === "threads" && parsed.content.assetPaths.length > 0) {
     throw new Error("The guarded Threads connector currently supports text only");
   }
-  if (parsed.channel === "instagram" && parsed.content.assetUrls.length !== 1) {
-    throw new Error("The guarded Instagram connector requires one HTTPS image");
+  if (parsed.channel === "instagram" && parsed.content.assetPaths.length !== 1) {
+    throw new Error("The guarded Instagram connector requires one hosted image");
   }
   if (parsed.channel === "instagram" && !parsed.content.altText) {
     throw new Error("Instagram media requires alt text in the immutable receipt");
@@ -77,22 +159,31 @@ export function assertQueueItemPublishable(item: QueueItem): void {
 
 export function claimQueueItem(
   item: QueueItem,
-  claimId: string,
+  idempotencyKey: string,
   now: Date
 ): QueueItem {
   const parsed = QueueItemSchema.parse(item);
-  if (parsed.state !== "queued") {
+  if (parsed.status !== "queued") {
     return parsed;
   }
-  if (new Date(parsed.scheduledAt) > now) {
+  if (new Date(parsed.publishWindow.notBefore) > now) {
     return parsed;
+  }
+  if (new Date(parsed.publishWindow.notAfter) < now) {
+    return {
+      ...parsed,
+      status: "expired"
+    };
   }
   return {
     ...parsed,
-    state: "claimed",
-    claimId,
-    claimedAt: now.toISOString(),
-    attemptCount: parsed.attemptCount + 1
+    status: "publishing",
+    attempt: {
+      idempotencyKey,
+      claimedAt: now.toISOString(),
+      attemptCount: (parsed.attempt?.attemptCount ?? 0) + 1,
+      lastError: null
+    }
   };
 }
 
@@ -104,23 +195,32 @@ export function reconcileQueueItem(
     | { outcome: "ambiguous"; error: string }
 ): QueueItem {
   const parsed = QueueItemSchema.parse(item);
-  if (parsed.state === "published") {
+  if (parsed.status === "published") {
     return parsed;
   }
-  if (parsed.state !== "claimed") {
-    throw new Error("Only a claimed queue item can be reconciled");
+  if (parsed.status !== "publishing" || !parsed.attempt) {
+    throw new Error("Only a publishing queue item can be reconciled");
   }
+  const receiptId = `${parsed.id}-attempt-${parsed.attempt.attemptCount}`;
   if (result.outcome === "published") {
     return {
       ...parsed,
-      state: "published",
-      remoteId: result.remoteId,
-      lastError: null
+      status: "published",
+      receiptId,
+      attempt: {
+        ...parsed.attempt,
+        lastError: null
+      }
     };
   }
   return {
     ...parsed,
-    state: result.outcome,
-    lastError: result.error
+    status:
+      result.outcome === "ambiguous" ? "needs_reconciliation" : "failed",
+    receiptId,
+    attempt: {
+      ...parsed.attempt,
+      lastError: result.error
+    }
   };
 }

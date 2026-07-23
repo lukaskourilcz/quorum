@@ -117,8 +117,8 @@ Core variables:
   limits.
 - `ADMIN_USER`, `ADMIN_PASSWORD` — required together for `/admin`; missing or
   partial credentials return 503, never an open admin.
-- `PUBLIC_SITE_URL` — canonical production URL used by metadata and health
-  checks.
+- `PUBLIC_SITE_URL` — canonical production URL used by metadata, health checks
+  and hosted Instagram media.
 - `META_GRAPH_API_VERSION`, user IDs and access tokens — used only after the
   corresponding channel is explicitly human-enabled for `autopublish`.
 
@@ -164,15 +164,15 @@ reviewed, human-authorized change:
 3. Store user IDs as GitHub variables and tokens as encrypted GitHub secrets.
 4. Set exactly the approved scopes, `enabledByHumanAt` and
    `mode: "autopublish"` for that channel in `config/channels.json`.
-5. Submit only immutable queue items with PULSE selection, QUILL and KEEPER
-   passes, deterministic pass, HTTPS media and a verified payload hash.
+5. Submit only immutable queue items with PULSE selection, all eight approval
+   checks passing, hosted media and a verified `content.contentHash`.
 6. Run `workflow_dispatch` with `validate_only: true` before allowing the next
    scheduled publisher.
 
 The publisher persists the claim before the external call. Any uncertain
-response becomes `ambiguous`, receives a sanitized receipt and is never blindly
-retried. Paid ads, new scopes, account changes and deletion/correction remain
-separate human-authorized actions.
+response becomes `needs_reconciliation`, receives a sanitized receipt and is
+never blindly retried. Paid ads, new scopes, account changes and
+deletion/correction remain separate human-authorized actions.
 
 ## Agent portraits
 

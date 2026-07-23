@@ -37,7 +37,7 @@
   },
   "anchor": {
     "id": "AVATAR-STYLE-ANCHOR",
-    "publicPath": "/brand/agent-style-anchor.webp",
+    "path": "state/agent-identities/style-anchor.webp",
     "sourceCallId": "call_vNLEOvof5PIpNw2LsY1qoJpM",
     "sha256": "73d74a185ae74ba6b610a6f896f53d4dafaf9d5b869ca2953094999fd4bf034e",
     "bytes": 117380,

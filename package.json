@@ -22,6 +22,7 @@
     "dev": "pnpm --filter @boardlessai/site dev",
     "lint": "pnpm -r lint",
     "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",
+    "site:smoke": "node scripts/smoke-site.mjs",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck"
   }
