@@ -1,0 +1,54 @@
+{
+  "current": "DISCOVERY",
+  "stages": {
+    "DISCOVERY": {
+      "entry": [],
+      "exit": [
+        "selectedOpportunityScore >= 35",
+        "selectedOpportunityMinDimension >= 2",
+        "independentEvidenceCount >= 3",
+        "directProblemOrIntentEvidenceCount >= 1",
+        "reachableChannelDefined == true",
+        "firstExperimentDefined == true"
+      ],
+      "maxWindowsWithoutProgress": 2,
+      "onFail": "continue_or_stop"
+    },
+    "VALIDATION": {
+      "entry": ["DISCOVERY.exit"],
+      "exit": [
+        "eligibleExperimentsReviewed >= 1",
+        "qualifiedValueSignal == true",
+        "distributionMechanismObserved == true"
+      ],
+      "maxWindowsWithoutProgress": 2,
+      "onFail": "pivot_review"
+    },
+    "AUDIENCE": {
+      "entry": ["VALIDATION.exit"],
+      "exit": [
+        "repeatableQualifiedAcquisition == true",
+        "ownedAudienceMechanism == true",
+        "monetizationExperimentDefined == true"
+      ],
+      "maxWindowsWithoutProgress": 2,
+      "onFail": "return_to_validation"
+    },
+    "MONETIZATION": {
+      "entry": ["AUDIENCE.exit"],
+      "exit": [
+        "recognizedRevenue > 0",
+        "unitEconomicsMeasured == true"
+      ],
+      "maxWindowsWithoutProgress": 2,
+      "onFail": "offer_or_pricing_review"
+    },
+    "OPTIMIZATION": {
+      "entry": ["MONETIZATION.exit"],
+      "exit": [],
+      "maxWindowsWithoutProgress": 0,
+      "onFail": "channel_or_offer_review"
+    }
+  }
+}
+

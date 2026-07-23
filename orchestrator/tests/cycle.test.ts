@@ -16,6 +16,23 @@ describe("cycle preflight", () => {
       expect.arrayContaining(["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER"])
     );
     expect(result.skippedAgents).toContain("PEOPLE");
+    expect(result.artifacts).toEqual(
+      expect.arrayContaining([
+        "tmp/dry-run/state/standups/2026-07-23-am.json"
+      ])
+    );
+  });
+
+  it("refuses to found a venture from fixture evidence", async () => {
+    const result = await runCycle({
+      phase: "founding",
+      dry: true,
+      explainBudget: false,
+      explainRouting: false,
+      now: new Date("2026-07-23T05:30:00.000Z")
+    });
+    expect(result.decision).toBe("INSUFFICIENT_EVIDENCE");
+    expect(result.status).toBe("dry_complete");
   });
 
   it("is deterministic for the same cycle identity", async () => {
@@ -37,4 +54,3 @@ describe("cycle preflight", () => {
     expect(second).toEqual(first);
   });
 });
-

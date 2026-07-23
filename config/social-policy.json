@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-07-23",
+  "prohibitedClaims": ["only", "first", "world's first", "no humans", "zero human involvement"],
+  "prohibitedTopics": ["crypto signals", "gambling", "adult", "professional medical advice", "professional financial advice", "professional legal advice"],
+  "requiredDisclosure": {
+    "aiCompany": true,
+    "commercial": true,
+    "affiliateRel": "sponsored"
+  },
+  "utmAllowlist": ["source", "medium", "campaign", "content"],
+  "approvedDestinationHosts": [],
+  "duplicateThreshold": 0.86,
+  "replyPolicy": "draft_only_until_separately_approved",
+  "crisisEscalation": "pause_and_human_approval",
+  "accessibility": {
+    "altTextRequiredForMedia": true,
+    "captionsRequiredForVideo": true
+  },
+  "assets": {
+    "provenanceRequired": true,
+    "maxImageCostUsd": 0.1,
+    "maxVariants": 2,
+    "preferDeterministicComposition": true
+  },
+  "correctionPolicy": "new_audited_action",
+  "deletePolicy": "new_audited_action",
+  "platformConstraints": {
+    "threads": {
+      "sourceUrl": "https://developers.facebook.com/documentation/threads/posts",
+      "verifiedAt": "2026-07-23",
+      "runtimeValidationRequired": true
+    },
+    "instagram": {
+      "sourceUrl": "https://developers.facebook.com/documentation/instagram-platform/content-publishing",
+      "verifiedAt": "2026-07-23",
+      "runtimeValidationRequired": true
+    }
+  }
+}
+

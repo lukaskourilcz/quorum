@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "indexableRequires": {
+    "uniqueIntent": true,
+    "minimumInformationGain": "material",
+    "factualClaimCitationCoverage": 1,
+    "metadataComplete": true,
+    "canonicalPresent": true,
+    "internalLinksMinimum": 1,
+    "updatedWithinDays": 180
+  },
+  "block": [
+    "thin",
+    "duplicate",
+    "keyword_variant",
+    "cannibalizing",
+    "uncited_fact",
+    "fabricated_specificity",
+    "unsupported_commercial_claim"
+  ],
+  "failureStatus": "noindex"
+}
+

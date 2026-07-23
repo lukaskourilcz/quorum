@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "claims": [
+    {
+      "id": "CLAIM-ONLY-001",
+      "text": "The only AI company that governs itself.",
+      "scope": "global agent-operated companies",
+      "supportingEvidenceRefs": [],
+      "reviewer": "KEEPER",
+      "verifiedAt": null,
+      "expiresAt": null,
+      "status": "gated_unverified",
+      "safeFallbackCopy": "The AI company that governs itself."
+    },
+    {
+      "id": "CLAIM-FIRST-001",
+      "text": "The world's first fully agent-operated AI company.",
+      "scope": "global agent-operated companies",
+      "supportingEvidenceRefs": [],
+      "reviewer": "KEEPER",
+      "verifiedAt": null,
+      "expiresAt": null,
+      "status": "gated_unverified",
+      "safeFallbackCopy": "A fully agent-operated AI company."
+    }
+  ]
+}
+

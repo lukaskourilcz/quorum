@@ -5,6 +5,7 @@
     "api.openai.com",
     "hacker-news.firebaseio.com",
     "hnrss.org",
+    "techcrunch.com",
     "www.indiehackers.com",
     "graph.facebook.com",
     "graph.threads.net"
@@ -22,4 +23,3 @@
     "maxResponseBytes": 1000000
   }
 }
-

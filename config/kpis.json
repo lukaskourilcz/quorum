@@ -1,0 +1,245 @@
+{
+  "meta": {
+    "warmupCycles": 4,
+    "retroEvery": 14,
+    "windowCycles": 14,
+    "warnBand": 0.2,
+    "milestones": [
+      {
+        "id": "first_value_experiment",
+        "byCycle": 8
+      },
+      {
+        "id": "first_monetization_experiment",
+        "byCycle": 14
+      },
+      {
+        "id": "first_validation_decision",
+        "byCycle": 14
+      }
+    ]
+  },
+  "kpis": [
+    {
+      "id": "vize.opportunity_quality",
+      "owner": "VIZE",
+      "metric": "selectedOpportunityScore",
+      "target": 35,
+      "dir": "up",
+      "stages": ["DISCOVERY", "VALIDATION"]
+    },
+    {
+      "id": "vize.stage_progress",
+      "owner": "VIZE",
+      "metric": "milestonesOnSchedule",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "vize.forecast_calibration",
+      "owner": "VIZE",
+      "metric": "forecastBrierScore",
+      "target": 0.25,
+      "dir": "down"
+    },
+    {
+      "id": "forge.release_success",
+      "owner": "FORGE",
+      "metric": "releaseSuccessRate",
+      "target": 0.9,
+      "dir": "up"
+    },
+    {
+      "id": "forge.task_completion",
+      "owner": "FORGE",
+      "metric": "taskCompletionRate",
+      "target": 0.8,
+      "dir": "up"
+    },
+    {
+      "id": "forge.change_failure",
+      "owner": "FORGE",
+      "metric": "changeFailureRate",
+      "target": 0.1,
+      "dir": "down"
+    },
+    {
+      "id": "forge.incidents",
+      "owner": "FORGE",
+      "metric": "incidentCount",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "pulse.experiment_velocity",
+      "owner": "PULSE",
+      "metric": "eligibleExperimentsReviewedPerWindow",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "pulse.metadata",
+      "owner": "PULSE",
+      "metric": "metadataCompleteness",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "pulse.qualified_action_rate",
+      "owner": "PULSE",
+      "metric": "qualifiedActionRate",
+      "target": 0.05,
+      "dir": "up",
+      "requires": "analytics"
+    },
+    {
+      "id": "pulse.opt_in_rate",
+      "owner": "PULSE",
+      "metric": "optInRate",
+      "target": 0.02,
+      "dir": "up",
+      "requires": "analytics"
+    },
+    {
+      "id": "pulse.monetization_intent",
+      "owner": "PULSE",
+      "metric": "monetizationIntentCount",
+      "target": 1,
+      "dir": "up",
+      "requires": "analytics",
+      "stages": ["VALIDATION", "AUDIENCE", "MONETIZATION", "OPTIMIZATION"]
+    },
+    {
+      "id": "pulse.gross_profit",
+      "owner": "PULSE",
+      "metric": "grossProfit30d",
+      "target": 0.01,
+      "dir": "up",
+      "stages": ["MONETIZATION", "OPTIMIZATION"]
+    },
+    {
+      "id": "audit.lh_perf",
+      "owner": "AUDIT",
+      "metric": "lighthousePerformance",
+      "target": 90,
+      "dir": "up"
+    },
+    {
+      "id": "audit.lh_seo",
+      "owner": "AUDIT",
+      "metric": "lighthouseSeo",
+      "target": 95,
+      "dir": "up"
+    },
+    {
+      "id": "audit.links",
+      "owner": "AUDIT",
+      "metric": "brokenInternalLinks",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "audit.content_quality",
+      "owner": "AUDIT",
+      "metric": "indexablePageQualityPassRate",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "audit.claim_coverage",
+      "owner": "AUDIT",
+      "metric": "factualClaimCitationCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "audit.security_incidents",
+      "owner": "AUDIT",
+      "metric": "securityIncidentCount",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "audit.json_hygiene",
+      "owner": "AUDIT",
+      "metric": "invalidJsonRate",
+      "target": 0.05,
+      "dir": "down"
+    },
+    {
+      "id": "people.routing_precision",
+      "owner": "PEOPLE",
+      "metric": "relevantParticipantPrecision",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "people.duplicate_work",
+      "owner": "PEOPLE",
+      "metric": "duplicateAgentWorkRate",
+      "target": 0.05,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "people.change_success",
+      "owner": "PEOPLE",
+      "metric": "orgChangesMeetingExpectedDeltaRate",
+      "target": 0.7,
+      "dir": "up",
+      "warmupCycles": 28
+    },
+    {
+      "id": "people.self_approval_incidents",
+      "owner": "PEOPLE",
+      "metric": "orgSelfApprovalIncidentCount",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "ledger.reconciliation",
+      "owner": "LEDGER",
+      "metric": "reconciledCostCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "ledger.budget_variance",
+      "owner": "LEDGER",
+      "metric": "absoluteMonthEndForecastErrorRate",
+      "target": 0.1,
+      "dir": "down",
+      "warmupCycles": 28
+    },
+    {
+      "id": "ledger.over_budget",
+      "owner": "LEDGER",
+      "metric": "overBudgetCommitmentCount",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "ledger.unreviewed_spend",
+      "owner": "LEDGER",
+      "metric": "pastDueSpendReviewCount",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "council.cost_per_learning",
+      "owner": "ALL",
+      "metric": "usdPerValidatedLearning",
+      "target": 0.65,
+      "dir": "down"
+    },
+    {
+      "id": "council.duplicate_rate",
+      "owner": "ALL",
+      "metric": "duplicateProposalRate",
+      "target": 0.05,
+      "dir": "down"
+    }
+  ]
+}
+

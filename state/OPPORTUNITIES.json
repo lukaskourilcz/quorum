@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "fixture": true,
+  "opportunities": [
+    {
+      "id": "FIX-OPP-001",
+      "title": "Release-evidence notebook",
+      "fixture": true,
+      "dimensions": {
+        "audienceReachability": 4,
+        "problemFrequencySeverity": 3,
+        "evidenceQualityIndependence": 2,
+        "willingnessToPay": 1,
+        "distributionChannel": 4,
+        "competitiveGap": 3,
+        "webFeasibility": 5,
+        "longTermMoat": 2,
+        "legalDataFeasibility": 4,
+        "firstMonetizationExperiment": 2
+      },
+      "reachableChannelDefined": true,
+      "firstExperimentDefined": true
+    },
+    {
+      "id": "FIX-OPP-002",
+      "title": "Plain-language policy diff",
+      "fixture": true,
+      "dimensions": {
+        "audienceReachability": 3,
+        "problemFrequencySeverity": 4,
+        "evidenceQualityIndependence": 2,
+        "willingnessToPay": 2,
+        "distributionChannel": 3,
+        "competitiveGap": 3,
+        "webFeasibility": 5,
+        "longTermMoat": 3,
+        "legalDataFeasibility": 4,
+        "firstMonetizationExperiment": 3
+      },
+      "reachableChannelDefined": true,
+      "firstExperimentDefined": true
+    },
+    {
+      "id": "FIX-OPP-003",
+      "title": "Small-team incident brief",
+      "fixture": true,
+      "dimensions": {
+        "audienceReachability": 4,
+        "problemFrequencySeverity": 4,
+        "evidenceQualityIndependence": 3,
+        "willingnessToPay": 2,
+        "distributionChannel": 3,
+        "competitiveGap": 3,
+        "webFeasibility": 5,
+        "longTermMoat": 3,
+        "legalDataFeasibility": 4,
+        "firstMonetizationExperiment": 3
+      },
+      "reachableChannelDefined": true,
+      "firstExperimentDefined": true
+    }
+  ]
+}

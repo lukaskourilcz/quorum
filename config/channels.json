@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "channels": [
+    {
+      "id": "threads",
+      "specialist": "THREADS",
+      "mode": "draft",
+      "connector": "meta_threads",
+      "credentialRef": "META_THREADS_ACCESS_TOKEN",
+      "approvedScopes": [],
+      "nativeFormats": ["text", "image", "carousel"],
+      "maxOrganicPostsPerDay": 2,
+      "minHoursBetweenPosts": 6,
+      "timezone": "Europe/Prague",
+      "enabledByHumanAt": null
+    },
+    {
+      "id": "instagram",
+      "specialist": "INSTAGRAM",
+      "mode": "draft",
+      "connector": "meta_instagram",
+      "credentialRef": "META_INSTAGRAM_ACCESS_TOKEN",
+      "approvedScopes": [],
+      "nativeFormats": ["image", "carousel", "reel"],
+      "maxOrganicPostsPerDay": 1,
+      "minHoursBetweenPosts": 12,
+      "timezone": "Europe/Prague",
+      "enabledByHumanAt": null
+    }
+  ]
+}
+

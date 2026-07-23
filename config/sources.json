@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "hacker-news",
+      "kind": "hn",
+      "name": "Hacker News",
+      "url": "https://hacker-news.firebaseio.com/v0/topstories.json",
+      "enabled": true,
+      "stage": ["DISCOVERY"],
+      "maxItems": 30,
+      "usefulEvidenceRate": null,
+      "lastReviewedAt": null
+    },
+    {
+      "id": "techcrunch-rss",
+      "kind": "rss",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/feed/",
+      "enabled": true,
+      "stage": ["DISCOVERY"],
+      "maxItems": 20,
+      "usefulEvidenceRate": null,
+      "lastReviewedAt": null
+    },
+    {
+      "id": "indie-hackers-rss",
+      "kind": "rss",
+      "name": "Indie Hackers",
+      "url": "https://www.indiehackers.com/feed.xml",
+      "enabled": true,
+      "stage": ["DISCOVERY"],
+      "maxItems": 20,
+      "usefulEvidenceRate": null,
+      "lastReviewedAt": null
+    }
+  ],
+  "disabledByDefault": [
+    {
+      "kind": "authenticated_reddit",
+      "reason": "Requires current authenticated Data API access and HUMAN_APPROVAL"
+    }
+  ]
+}
+

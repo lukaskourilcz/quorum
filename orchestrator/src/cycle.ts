@@ -2,9 +2,19 @@ import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { estimateTextCall } from "./budget.js";
 import { loadRoutingConfig, routeBoardroom } from "./boardroom/router.js";
-import { configRoot, stateRoot } from "./paths.js";
-import { withFileLock } from "./state.js";
-import type { Phase } from "./types.js";
+import { configRoot, repoRoot, stateRoot } from "./paths.js";
+import {
+  parseEvidenceJsonl
+} from "./research/evidence.js";
+import {
+  OpportunitySchema,
+  selectOpportunity,
+  type OpportunityGate
+} from "./research/opportunities.js";
+import { atomicWriteJson, withFileLock } from "./state.js";
+import { publicStandup } from "./standup/public.js";
+import { createOfflineStandup } from "./standup/run.js";
+import type { Phase, Stage } from "./types.js";
 
 export interface CycleOptions {
   phase: Phase;
@@ -19,9 +29,11 @@ export interface CycleResult {
   phase: Phase;
   dry: boolean;
   status: "dry_complete" | "paused" | "preflight_complete";
+  decision: "INSUFFICIENT_EVIDENCE" | "NO_ACTION" | "PAUSED";
   estimatedWorstCaseUsd: number;
   selectedAgents: string[];
   skippedAgents: string[];
+  artifacts: string[];
 }
 
 async function exists(filePath: string): Promise<boolean> {
@@ -42,9 +54,11 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       phase: options.phase,
       dry: options.dry,
       status: "paused",
+      decision: "PAUSED",
       estimatedWorstCaseUsd: 0,
       selectedAgents: [],
-      skippedAgents: []
+      skippedAgents: [],
+      artifacts: []
     };
   }
   const execute = async (): Promise<CycleResult> => {
@@ -103,6 +117,85 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       preset: options.phase === "pm" ? undefined : "daily-standup",
       now
     });
+    const stages = JSON.parse(
+      await readFile(path.join(configRoot, "stages.json"), "utf8")
+    ) as { current: Stage };
+    const evidence = parseEvidenceJsonl(
+      await readFile(path.join(stateRoot, "EVIDENCE.jsonl"), "utf8")
+    );
+    const opportunityState = JSON.parse(
+      await readFile(path.join(stateRoot, "OPPORTUNITIES.json"), "utf8")
+    ) as { opportunities: unknown[] };
+    const opportunityGate: OpportunityGate = selectOpportunity(
+      opportunityState.opportunities.map((value) =>
+        OpportunitySchema.parse(value)
+      ),
+      evidence
+    );
+    const decision =
+      options.phase === "founding"
+        ? opportunityGate.passed
+          ? "NO_ACTION"
+          : "INSUFFICIENT_EVIDENCE"
+        : "NO_ACTION";
+    const standup = createOfflineStandup({
+      cycleId,
+      phase: options.phase,
+      stage: stages.current,
+      fixture: options.dry,
+      status: decision,
+      room,
+      estimatedCycleUsd: estimatedWorstCaseUsd,
+      now,
+      evidenceRefs: opportunityGate.evidenceRefs
+    });
+    const artifactRoot = options.dry
+      ? path.join(repoRoot, "tmp", "dry-run", "state")
+      : stateRoot;
+    const artifacts = [
+      `standups/${standup.date}-${options.phase}.json`,
+      `meetings/${cycleId}.json`,
+      `scorecards/${cycleId}.json`,
+      `decisions/${cycleId}.json`
+    ];
+    await Promise.all([
+      atomicWriteJson(
+        artifactRoot,
+        artifacts[0]!,
+        publicStandup(standup)
+      ),
+      atomicWriteJson(artifactRoot, artifacts[1]!, {
+        schemaVersion: 1,
+        fixture: options.dry,
+        cycleId,
+        room,
+        summary: standup.decision.summary,
+        generatedAt: now.toISOString()
+      }),
+      atomicWriteJson(artifactRoot, artifacts[2]!, {
+        schemaVersion: 1,
+        fixture: options.dry,
+        cycleId,
+        stage: stages.current,
+        opportunityGate,
+        estimatedWorstCaseUsd,
+        actualUsd: options.dry ? 0 : null,
+        socialDecision: "NO_POST",
+        generatedAt: now.toISOString()
+      }),
+      atomicWriteJson(artifactRoot, artifacts[3]!, {
+        schemaVersion: 1,
+        fixture: options.dry,
+        cycleId,
+        outcome: decision,
+        selectedOpportunityId: opportunityGate.passed
+          ? opportunityGate.opportunityId
+          : null,
+        reasons: opportunityGate.reasons,
+        evidenceRefs: opportunityGate.evidenceRefs,
+        generatedAt: now.toISOString()
+      })
+    ]);
     if (options.explainBudget) {
       console.log(
         JSON.stringify(
@@ -143,9 +236,13 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       phase: options.phase,
       dry: options.dry,
       status: options.dry ? "dry_complete" : "preflight_complete",
+      decision,
       estimatedWorstCaseUsd,
       selectedAgents: room.selectedParticipants.map(({ agent }) => agent),
-      skippedAgents: room.skippedParticipants.map(({ agent }) => agent)
+      skippedAgents: room.skippedParticipants.map(({ agent }) => agent),
+      artifacts: artifacts.map((artifact) =>
+        path.relative(repoRoot, path.join(artifactRoot, artifact))
+      )
     };
   };
   if (options.dry) {
@@ -153,4 +250,3 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   }
   return withFileLock(stateRoot, ".lock", execute);
 }
-
