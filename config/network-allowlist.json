@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "runtimeHosts": [
+    "api.anthropic.com",
+    "api.openai.com",
+    "hacker-news.firebaseio.com",
+    "hnrss.org",
+    "www.indiehackers.com",
+    "graph.facebook.com",
+    "graph.threads.net"
+  ],
+  "buildHosts": [
+    "fonts.googleapis.com",
+    "fonts.gstatic.com"
+  ],
+  "rules": {
+    "httpsOnly": true,
+    "blockCredentialsInUrl": true,
+    "blockPrivateAddresses": true,
+    "revalidateEveryRedirect": true,
+    "maxRedirects": 3,
+    "maxResponseBytes": 1000000
+  }
+}
+

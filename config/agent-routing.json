@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "defaults": {
+    "maxRounds": 2,
+    "maxTurns": 6,
+    "maxTotalTokens": 12000,
+    "maxSpecialists": 2,
+    "ttlMinutes": 30
+  },
+  "agents": {
+    "VIZE": {
+      "capabilities": ["strategy", "opportunity", "stage"],
+      "status": "active"
+    },
+    "FORGE": {
+      "capabilities": ["build", "release", "incident"],
+      "status": "active"
+    },
+    "PULSE": {
+      "capabilities": ["growth", "pricing", "social", "campaign"],
+      "status": "active"
+    },
+    "AUDIT": {
+      "capabilities": ["audit", "quality", "risk"],
+      "status": "active"
+    },
+    "SCOUT": {
+      "capabilities": ["evidence", "sources"],
+      "status": "active"
+    },
+    "SCRIBE": {
+      "capabilities": ["summary", "public_projection"],
+      "status": "active"
+    },
+    "LENS": {
+      "capabilities": ["analytics", "forecast"],
+      "status": "active"
+    },
+    "QUILL": {
+      "capabilities": ["copy", "claims"],
+      "status": "active"
+    },
+    "RADAR": {
+      "capabilities": ["seo", "discoverability"],
+      "status": "active"
+    },
+    "KEEPER": {
+      "capabilities": ["compliance", "privacy", "permissions"],
+      "status": "active"
+    },
+    "THREADS": {
+      "capabilities": ["social:threads"],
+      "status": "active"
+    },
+    "INSTAGRAM": {
+      "capabilities": ["social:instagram", "visual_social"],
+      "status": "active"
+    },
+    "PEOPLE": {
+      "capabilities": ["org_review", "role_design", "routing_quality"],
+      "status": "active"
+    },
+    "LEDGER": {
+      "capabilities": ["accounting", "cost", "budget", "unit_economics"],
+      "status": "active"
+    }
+  },
+  "mandatoryWhen": [
+    {
+      "any": ["spend", "pricing", "revenue", "cost"],
+      "include": ["LEDGER"]
+    },
+    {
+      "any": ["external_spend"],
+      "include": ["KEEPER"]
+    },
+    {
+      "any": ["org_change"],
+      "include": ["PEOPLE", "AUDIT", "KEEPER"]
+    },
+    {
+      "any": ["public_claim"],
+      "include": ["QUILL", "AUDIT", "KEEPER"]
+    },
+    {
+      "any": ["public_social"],
+      "include": ["KEEPER"]
+    },
+    {
+      "any": ["security", "incident"],
+      "include": ["AUDIT", "KEEPER", "FORGE"]
+    },
+    {
+      "any": ["social:threads"],
+      "include": ["PULSE", "THREADS", "QUILL"]
+    },
+    {
+      "any": ["social:instagram"],
+      "include": ["PULSE", "INSTAGRAM", "QUILL"]
+    }
+  ],
+  "presets": {
+    "daily-standup": {
+      "required": ["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER"],
+      "optionalByTopic": true
+    },
+    "build-room": {
+      "required": ["FORGE", "AUDIT"],
+      "optionalByTopic": true
+    },
+    "growth-room": {
+      "required": ["PULSE"],
+      "optionalByTopic": true
+    },
+    "evidence-room": {
+      "required": ["VIZE", "SCOUT"],
+      "optionalByTopic": true
+    },
+    "finance-room": {
+      "required": ["LEDGER", "PULSE"],
+      "optionalByTopic": true
+    },
+    "org-review": {
+      "required": ["PEOPLE", "AUDIT", "KEEPER"],
+      "includeAffectedAgent": true
+    },
+    "incident-room": {
+      "required": ["AUDIT", "KEEPER", "FORGE"],
+      "optionalByTopic": true
+    }
+  }
+}
+
