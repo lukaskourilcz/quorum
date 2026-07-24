@@ -178,3 +178,4 @@ autopublishing scope.
 - [ ] Žádné fixture tvrzení není prezentované jako reálný výsledek. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
 - [ ] Vlastník projektu výslovně schválil první živý cyklus. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
 - [ ] **Zapnout Vercel Web Analytics pro tento projekt** — v projektu na Vercelu zapni Web Analytics, aby OwnDashboard v přehledu projektu ukazoval návštěvníky a zobrazení stránek (načítá je přes Vercel API podle tohoto repozitáře). `[imp:2]` `[owner:me]` `[time:15m]` `[kind:setup]`
+- [ ] **Hlásit GitHub Actions crony do OwnDashboardu** — do repository Actions secrets přidej `OWNDASHBOARD_CRON_URL` (URL na `/api/crons/log` v OwnDashboardu) a `OWNDASHBOARD_CRON_TOKEN` (stejná hodnota jako `CRON_REGISTRY_TOKEN` v OwnDashboardu), aby se běhy plánovaných workflow objevily v panelu Crony. `[imp:2]` `[owner:me]` `[time:10m]` `[kind:setup]`
