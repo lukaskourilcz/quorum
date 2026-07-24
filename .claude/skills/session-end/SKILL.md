@@ -18,3 +18,9 @@ Run before **ending** an agentic session on this repo.
 
 `- [ ] **Title** — desc. [imp:1-5] [owner:me|ai] [time:30m] [kind:K]`
 `[kind:K]` ∈ `setup` `deploy` `legal` `content` `decision`.
+
+## Git workflow (every session)
+
+- **Commit frequently** in small, coherent steps — never batch a whole session into one commit.
+- **At the end of every session, push and merge to `main`** so the change redeploys immediately (this project auto-deploys from `main` on Vercel).
+- **Delete the merged / old branch** (local and remote) after merging, to keep the repo clean. Never leave stale branches behind.

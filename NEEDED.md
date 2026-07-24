@@ -177,3 +177,4 @@ autopublishing scope.
 - [ ] Kill switche a rollback byly prakticky vyzkoušené. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
 - [ ] Žádné fixture tvrzení není prezentované jako reálný výsledek. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
 - [ ] Vlastník projektu výslovně schválil první živý cyklus. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
+- [ ] **Zapnout Vercel Web Analytics pro tento projekt** — v projektu na Vercelu zapni Web Analytics, aby OwnDashboard v přehledu projektu ukazoval návštěvníky a zobrazení stránek (načítá je přes Vercel API podle tohoto repozitáře). `[imp:2]` `[owner:me]` `[time:15m]` `[kind:setup]`

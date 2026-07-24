@@ -62,3 +62,9 @@ This repo follows a shared markdown contract (see the `session-start`,
 
 At session start, check `NEEDED.md` for `[owner:ai]` tasks that can now be done;
 at session end, update `NEEDED.md` (finished + newly-needed owner items).
+
+## Git workflow (every session)
+
+- **Commit frequently** in small, coherent steps — never batch a whole session into one commit.
+- **At the end of every session, push and merge to `main`** so the change redeploys immediately (this project auto-deploys from `main` on Vercel).
+- **Delete the merged / old branch** (local and remote) after merging, to keep the repo clean. Never leave stale branches behind.
