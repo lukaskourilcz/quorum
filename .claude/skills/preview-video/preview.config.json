@@ -1,0 +1,13 @@
+{
+  "url": "http://localhost:3000/",
+  "devServer": { "command": "pnpm dev", "port": 3000 },
+  "viewport": { "width": 1280, "height": 800 },
+  "deviceScaleFactor": 2,
+  "fps": 30,
+  "scrollSeconds": "auto",
+  "holdFrames": 20,
+  "hideSelectors": [],
+  "extraCss": "",
+  "waitAfterLoadMs": 1200,
+  "gif": true
+}
