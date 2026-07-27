@@ -48,6 +48,29 @@ Use the `builder` subagent on unchecked tasks in the newest decision file, one
 task per commit, tick checkboxes, update `state/ROADMAP.md`.
 
 
+## Shared skills
+
+Four skills in `.claude/skills/` are vendored verbatim from upstream and kept
+identical across every repository. Each carries an `UPSTREAM.md` with its
+source, pinned commit, and license — re-vendor rather than hand-editing them.
+
+- **`task-observer`** — invoke at the **start of every task-oriented session**,
+  before producing deliverables. It records corrections and workflow friction in
+  an observation log so they can become skill improvements later. Its log lives
+  outside the repo; `.claude/observations/` is git-ignored.
+- **`stop-slop`** — apply to every piece of prose that ships: documentation,
+  `NEEDED.md` entries, UI copy, commit bodies, and pull-request descriptions.
+- **`ui-ux-pro-max`** — consult before visual or interaction decisions. Query
+  the bundled database with
+  `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain>`
+  (domains: `ux`, `style`, `color`, `typography`, `product`, `chart`, `gsap`).
+  It is generic advice. **This repository's own design contract always wins**
+  where the two disagree — never let a generic recommendation override a
+  documented product invariant.
+- **`find-skills`** — use when a capability might already exist as an
+  installable skill instead of hand-rolling one. Its `npx skills` commands need
+  network access; fall back to working directly when that is unavailable.
+
 ## Session routine & markdown conventions
 
 This repo follows a shared markdown contract (see the `session-start`,
