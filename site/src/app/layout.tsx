@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
   display: "swap",
   subsets: ["latin", "latin-ext"],
   variable: "--font-dm-sans"
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  display: "swap",
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-ibm-plex-mono",
+  weight: ["400", "500", "600"]
 });
 
 export const metadata: Metadata = {
@@ -39,7 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={dmSans.variable}>{children}</body>
+      <body className={`${dmSans.variable} ${ibmPlexMono.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }

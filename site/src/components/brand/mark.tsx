@@ -5,7 +5,7 @@ export function Mark({ className }: { className?: string }) {
     <span
       aria-hidden="true"
       className={cn(
-        "inline-grid size-8 place-items-center rounded-[0.45rem] bg-[var(--obsidian)] p-1 text-[var(--snow)]",
+        "inline-grid size-7 place-items-center rounded-[0.4375rem] bg-[var(--accent)] p-1 text-[var(--obsidian)]",
         className
       )}
     >

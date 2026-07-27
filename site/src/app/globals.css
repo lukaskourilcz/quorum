@@ -1,6 +1,31 @@
 @import "tailwindcss";
 @import "../brand/tokens.css";
 
+:root {
+  --background: var(--obsidian);
+  --foreground: var(--paper);
+  --card: color-mix(in srgb, var(--obsidian) 74%, var(--graphite));
+  --card-foreground: var(--paper);
+  --primary: var(--paper);
+  --primary-foreground: var(--obsidian);
+  --secondary: var(--graphite);
+  --secondary-foreground: var(--paper);
+  --muted: var(--graphite);
+  --muted-foreground: var(--ash);
+  --accent-foreground: var(--obsidian);
+  --border: color-mix(in srgb, var(--graphite) 78%, var(--slate));
+  --ring: var(--ember);
+  --radius-card: 1.25rem;
+  --radius-button: 0.625rem;
+  --container: 84rem;
+  --section-gap: 6rem;
+  --header-background: color-mix(in srgb, var(--obsidian) 82%, transparent);
+  --surface: color-mix(in srgb, var(--obsidian) 82%, var(--graphite));
+  --surface-raised: color-mix(in srgb, var(--obsidian) 68%, var(--graphite));
+  --line-strong: color-mix(in srgb, var(--graphite) 40%, var(--slate));
+  --grid-line: color-mix(in srgb, var(--obsidian) 76%, var(--graphite));
+}
+
 * {
   box-sizing: border-box;
 }
@@ -17,6 +42,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-dm-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -27,6 +53,7 @@ select {
 }
 
 img {
+  display: block;
   max-width: 100%;
 }
 
@@ -50,18 +77,149 @@ a {
 
 .editorial-grid {
   background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: calc(100% / 12) 100%, 100% 4rem;
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: calc(100% / 12) 100%, 100% 6rem;
 }
 
 .text-balance {
   text-wrap: balance;
 }
 
+.font-mono {
+  font-family: var(--font-ibm-plex-mono), monospace;
+}
+
+.mono-label {
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.panel-grid {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--border);
+}
+
+.signal-bars {
+  display: flex;
+  height: 3.5rem;
+  align-items: flex-end;
+  gap: 0.3125rem;
+}
+
+.signal-bars > span {
+  min-width: 0;
+  flex: 1;
+  transform-origin: bottom;
+  background: var(--slate);
+  animation: signal-bar 2.6s ease-in-out infinite;
+}
+
+.signal-bars > span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.signal-bars > span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.signal-bars > span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.signal-bars > span:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+.signal-bars > span:nth-child(6) {
+  background: var(--accent);
+  animation: none;
+}
+
+.signal-bars > span:nth-child(7) {
+  animation-delay: 1.2s;
+}
+
+.signal-bars > span:nth-child(8) {
+  animation-delay: 1.4s;
+}
+
+.signal-bars > span:nth-child(9) {
+  animation-delay: 1.6s;
+}
+
+.signal-bars > span:nth-child(10) {
+  animation-delay: 1.8s;
+}
+
+.scan-line {
+  animation: scan-line 11s linear infinite;
+}
+
+.status-pulse {
+  animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+.marquee-track {
+  animation: status-marquee 42s linear infinite;
+}
+
+@keyframes status-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes scan-line {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(900%);
+  }
+}
+
+@keyframes signal-bar {
+  0%,
+  100% {
+    transform: scaleY(0.28);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
 ::selection {
   background: var(--accent);
   color: var(--accent-foreground);
+}
+
+@media (max-width: 767px) {
+  .editorial-grid {
+    background-size: 25% 100%, 100% 5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

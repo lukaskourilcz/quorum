@@ -10,13 +10,13 @@ export function Stat({
   detail?: string;
 }) {
   return (
-    <div className="border-t border-[var(--border)] pt-4">
-      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+    <div className="border-t border-[var(--border)] pt-5">
+      <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
         {label}
       </p>
-      <p className="mt-3 text-3xl font-semibold tracking-[-0.045em]">{value}</p>
+      <p className="mt-3 text-[2.375rem] font-semibold tracking-[-0.05em]">{value}</p>
       {detail ? (
-        <p className="mt-2 text-xs leading-5 text-[var(--muted-foreground)]">
+        <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
           {detail}
         </p>
       ) : null}

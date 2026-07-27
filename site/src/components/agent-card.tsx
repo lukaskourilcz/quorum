@@ -1,69 +1,123 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { AgentPortrait } from "@/components/agent-portrait";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import type { Agent } from "@/data/agents";
+import { cn } from "@/lib/utils";
 
-export function AgentCard({ agent }: { agent: Agent }) {
+export function AgentCard({
+  agent,
+  className
+}: {
+  agent: Agent;
+  className?: string;
+}) {
   return (
-    <Card className="group overflow-hidden">
-      <AgentPortrait
-        agent={agent}
-        className="m-2.5 mb-0 transition-transform duration-300 group-hover:scale-[0.985]"
-      />
-      <CardContent>
-        <div className="flex items-start justify-between gap-5">
-          <div>
-            <div className="flex flex-wrap gap-2">
-              <Badge tone={agent.group === "Council" ? "dark" : "neutral"}>
-                {agent.group}
-              </Badge>
-              <Badge>AI agent</Badge>
-            </div>
-            <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">
-              {agent.name}
-            </h3>
-            <p className="mt-1 text-sm font-medium text-[var(--muted-foreground)]">
-              {agent.title}
-            </p>
-          </div>
-          <Link
-            aria-label={`Open ${agent.name} profile`}
-            className="grid size-11 shrink-0 place-items-center rounded-[var(--radius-button)] border border-[var(--border)] transition-colors hover:bg-[var(--secondary)]"
-            href={`/agents/${agent.slug}`}
-          >
-            <ArrowUpRight aria-hidden="true" className="size-4" />
-          </Link>
+    <Link
+      className={cn(
+        "group block overflow-hidden rounded-[1.125rem] border border-[var(--border)] bg-[var(--card)] transition duration-300 hover:-translate-y-1 hover:border-[var(--accent)]",
+        className
+      )}
+      href={`/agents/${agent.slug}`}
+    >
+      <div className="relative">
+        <AgentPortrait
+          agent={agent}
+          className="transition-transform duration-500 group-hover:scale-[1.025]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--obsidian)] via-transparent to-transparent" />
+        <span className="mono-label absolute left-4 top-4 text-[0.625rem] text-[var(--accent)]">
+          {agent.group === "Council" ? "Council seat" : agent.group}
+        </span>
+        <div className="absolute inset-x-4 bottom-4">
+          <h3 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
+            {agent.name}
+          </h3>
+          <p className="mt-0.5 text-xs text-[var(--ash)]">{agent.title}</p>
         </div>
-        <p className="mt-5 text-sm leading-6 text-[var(--muted-foreground)]">
+      </div>
+      <div className="p-6">
+        <p className="text-[0.84375rem] leading-[1.4375rem] text-[var(--fog)]">
           {agent.mandate}
         </p>
-        <ul className="mt-5 space-y-2 border-t border-[var(--border)] pt-5 text-sm">
-          {agent.responsibilities.slice(0, 3).map((responsibility) => (
-            <li className="flex gap-2" key={responsibility}>
-              <span aria-hidden="true" className="text-[var(--accent)]">
-                /
-              </span>
-              {responsibility}
-            </li>
-          ))}
-        </ul>
-        <dl className="mt-5 grid gap-3 text-xs">
-          <div>
-            <dt className="font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-              Primary KPI / check
-            </dt>
-            <dd className="mt-1 break-words font-mono">{agent.primaryAccountability}</dd>
-          </div>
-          <div>
-            <dt className="font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-              Current focus
-            </dt>
-            <dd className="mt-1">{agent.currentFocus ?? "n/a"}</dd>
-          </div>
-        </dl>
-      </CardContent>
-    </Card>
+        {agent.responsibilities.length ? (
+          <ul className="mt-5 grid gap-2 border-t border-[var(--border)] pt-4 text-[0.8125rem] text-[var(--mist)]">
+            {agent.responsibilities.slice(0, 3).map((responsibility) => (
+              <li className="grid grid-cols-[0.875rem_1fr] gap-2" key={responsibility}>
+                <span aria-hidden="true" className="text-[var(--accent)]">
+                  /
+                </span>
+                {responsibility}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <div className="mt-5 border-t border-[var(--border)] pt-4">
+          <p className="mono-label text-[0.625rem] text-[var(--fog)]">
+            Primary KPI
+          </p>
+          <p className="mt-2 break-words font-mono text-[0.6875rem] leading-[1.125rem] text-[var(--mist)]">
+            {agent.primaryAccountability}
+          </p>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export function AgentRow({
+  agent,
+  compact = false
+}: {
+  agent: Agent;
+  compact?: boolean;
+}) {
+  return (
+    <Link
+      className={cn(
+        "group grid items-center gap-4 border-b border-[var(--border)] px-5 py-4 transition-colors hover:bg-[var(--surface-raised)] md:gap-6 md:px-7 md:py-5",
+        compact
+          ? "grid-cols-[2.75rem_1fr_auto] md:py-4"
+          : "grid-cols-[3.5rem_1fr] md:grid-cols-[4rem_1.1fr_1.6fr_1.2fr]"
+      )}
+      href={`/agents/${agent.slug}`}
+    >
+      <AgentPortrait
+        agent={agent}
+        className={cn(
+          "size-14 rounded-xl",
+          compact && "size-11 rounded-[0.625rem]"
+        )}
+      />
+      <div className="min-w-0">
+        <div className="flex items-center gap-2.5">
+          <p className="text-base font-semibold tracking-[-0.03em]">
+            {agent.id}
+          </p>
+          <span
+            className={cn(
+              "rounded-full border border-[var(--slate)] px-2 py-0.5 font-mono text-[0.59375rem] uppercase tracking-[0.14em] text-[var(--fog)]",
+              agent.group === "Control" && "text-[var(--accent)]"
+            )}
+          >
+            {agent.group}
+          </span>
+        </div>
+        <p className="mt-1 truncate text-xs text-[var(--fog)]">{agent.title}</p>
+      </div>
+      {compact ? null : (
+        <>
+          <p className="col-span-2 text-[0.84375rem] leading-[1.4375rem] text-[var(--ash)] md:col-span-1">
+            {agent.mandate}
+          </p>
+          <p className="col-span-2 break-words font-mono text-[0.6875rem] leading-[1.1875rem] text-[var(--fog)] md:col-span-1">
+            {agent.primaryAccountability}
+          </p>
+        </>
+      )}
+      {compact ? (
+        <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+          {agent.group}
+        </span>
+      ) : null}
+    </Link>
   );
 }

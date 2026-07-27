@@ -17,7 +17,7 @@ export function Progress({
       aria-valuemin={0}
       aria-valuenow={value}
       className={cn(
-        "h-2 overflow-hidden rounded-[var(--radius-pill)] bg-[var(--secondary)]",
+        "h-1.5 overflow-hidden rounded-[var(--radius-pill)] bg-[var(--border)]",
         className
       )}
       role="progressbar"

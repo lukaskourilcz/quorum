@@ -10,14 +10,14 @@ export function Callout({
 }) {
   const tones = {
     neutral: "border-[var(--border)] bg-[var(--card)]",
-    accent: "border-[var(--accent)] bg-[var(--accent-soft)]",
+    accent: "border-[var(--accent)] bg-[var(--surface-raised)]",
     warning: "border-[var(--warning)] bg-[var(--warning-soft)]",
     danger: "border-[var(--destructive)] bg-[var(--destructive-soft)]"
   };
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-button)] border-l-4 p-5 text-sm leading-6",
+        "rounded-[var(--radius-button)] border border-l-[3px] p-5 text-sm leading-6",
         tones[tone],
         className
       )}
