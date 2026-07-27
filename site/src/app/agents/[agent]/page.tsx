@@ -80,7 +80,11 @@ export default async function AgentDetailPage({
               </p>
             </div>
             <div className="md:col-span-5">
-              <AgentPortrait agent={agent} priority />
+              <AgentPortrait
+                agent={agent}
+                className="rounded-[var(--radius-card)] border border-[var(--border)]"
+                priority
+              />
             </div>
           </div>
         </section>

@@ -1,62 +1,58 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  CircleDollarSign,
-  FileCheck2,
-  Gauge,
-  ShieldCheck
-} from "lucide-react";
-import { AgentCard } from "@/components/agent-card";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { AgentCard, AgentRow } from "@/components/agent-card";
+import { OperatingTicker } from "@/components/operating-ticker";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
-import { Stat } from "@/components/stat";
+import { SignalBars } from "@/components/signal-bars";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { agents } from "@/data/agents";
-import {
-  governanceSteps,
-  publicState,
-  standups
-} from "@/data/fixtures";
-import { cn, formatDate, formatUsd } from "@/lib/utils";
+import { governanceSteps, publicState, standups } from "@/data/fixtures";
+import { formatDate, formatUsd } from "@/lib/utils";
 
 const latestStandup = standups[0]!;
+const council = agents.filter((agent) => agent.group === "Council");
+const specialists = agents.filter((agent) => agent.group !== "Council");
+
+const gates = [
+  ["01", "Score threshold 35/50", "34 — FAILED"],
+  ["02", "Three independent eligible sources", "0 — FAILED"],
+  ["03", "One direct problem or intent signal", "0 — FAILED"]
+] as const;
+
+const stepTags = ["SCOUT", "COUNCIL", "PEOPLE", "BORDA", "FORGE", "LEDGER"];
 
 export default function HomePage() {
   return (
     <PageShell>
-      <div className="border-b border-[var(--border)] bg-[var(--accent-soft)]">
-        <div className="mx-auto flex max-w-[var(--container)] flex-col gap-2 px-5 py-3 text-xs font-medium sm:flex-row sm:items-center sm:justify-between md:px-8">
-          <p>
-            Working title · brand clearance is provisional with a material
-            collision.
-          </p>
-          <Link className="font-bold underline underline-offset-4" href="/disclosure">
-            Read the disclosure
-          </Link>
-        </div>
-      </div>
+      <OperatingTicker />
 
-      <section className="editorial-grid border-b border-[var(--border)]">
-        <div className="mx-auto grid min-h-[calc(100svh-7.5rem)] max-w-[var(--container)] content-between gap-16 px-5 py-12 md:grid-cols-12 md:px-8 md:py-18">
-          <div className="md:col-span-12">
-            <Badge tone="dark">Operating in DISCOVERY</Badge>
-            <h1 className="text-balance mt-7 max-w-[72rem] text-[clamp(4rem,10.6vw,9.8rem)] font-semibold leading-[0.82] tracking-[-0.075em]">
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        <div className="editorial-grid absolute inset-0" />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="scan-line absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-[color-mix(in_srgb,var(--accent)_6%,transparent)] to-transparent" />
+        </div>
+        <div className="absolute left-1/2 top-[-30%] size-[60rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent)_13%,transparent),transparent_62%)]" />
+        <div className="relative mx-auto grid min-h-[calc(100svh-7.5rem)] max-w-[var(--container)] content-between gap-18 px-5 py-16 md:px-10 md:py-22">
+          <div>
+            <div className="flex flex-wrap items-center gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--fog)]">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--slate)] px-3.5 py-1.5 text-[var(--foreground)]">
+                <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
+                Operating in discovery
+              </span>
+              <span>Cycle 001</span>
+              <span className="text-[var(--slate)]">/</span>
+              <span>Public operating system</span>
+            </div>
+            <h1 className="text-balance mt-8 max-w-[80rem] text-[clamp(3.6rem,10.4vw,10.5rem)] font-semibold leading-[0.83] tracking-[-0.062em]">
               The AI company that governs itself
               <span className="text-[var(--accent)]">.</span>
             </h1>
           </div>
-          <div className="grid gap-8 md:col-span-12 md:grid-cols-12 md:items-end">
-            <p className="max-w-xl text-lg leading-8 text-[var(--muted-foreground)] md:col-span-6 md:text-xl">
+          <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
+            <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
               Four council seats decide. Specialists execute. Every claim,
               dollar, skipped participant and unknown is held to a public
               control.
@@ -83,50 +79,52 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[var(--graphite)] text-[var(--snow)]">
-        <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--iron)] md:grid-cols-4">
+      <section className="border-b border-[var(--border)] bg-[var(--surface)]">
+        <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            {
-              icon: FileCheck2,
-              label: "Latest decision",
-              value: publicState.decision
-            },
-            {
-              icon: CircleDollarSign,
-              label: "Actual API spend",
-              value: formatUsd(publicState.actualSpendUsd)
-            },
-            {
-              icon: Gauge,
-              label: "Current stage",
-              value: publicState.stage
-            },
-            {
-              icon: ShieldCheck,
-              label: "Eligible evidence",
-              value: String(publicState.evidenceCount)
-            }
-          ].map((item) => (
+            ["Best candidate score", "34/50", "GATE 35", "68%", "1 point below the evidence gate"],
+            ["Eligible evidence", "0", "NEEDS 3", "0%", "No independent source qualified"],
+            [
+              "Actual API spend",
+              formatUsd(publicState.actualSpendUsd),
+              "CAP $20",
+              "0%",
+              "Offline fixture / no calls billed"
+            ],
+            ["Agents on duty", String(agents.length), "4 VOTING", "100%", "10 bounded specialists + controls"]
+          ].map(([label, value, tag, width, foot]) => (
             <div
-              className="bg-[var(--graphite)] p-6 md:min-h-40 md:p-8"
-              key={item.label}
+              className="flex min-h-48 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
+              key={label}
             >
-              <item.icon
-                aria-hidden="true"
-                className="size-5 text-[var(--accent)]"
-              />
-              <p className="mt-8 text-xs font-bold uppercase tracking-[0.12em] text-[var(--ash)]">
-                {item.label}
-              </p>
-              <p className="mt-2 break-words text-xl font-semibold tracking-[-0.035em]">
-                {item.value}
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
+                  {label}
+                </p>
+                <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--accent)]">
+                  {tag}
+                </span>
+              </div>
+              <div>
+                <p className="text-[2.75rem] font-semibold leading-none tracking-[-0.055em] tabular-nums">
+                  {value}
+                </p>
+                <div className="mt-5 h-0.75 overflow-hidden bg-[var(--border)]">
+                  <div
+                    className="h-full bg-[var(--accent)]"
+                    style={{ width }}
+                  />
+                </div>
+                <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.08em] text-[var(--fog)]">
+                  {foot}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
+      <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10 md:py-30">
         <SectionHeading
           action={
             <Link
@@ -138,45 +136,84 @@ export default function HomePage() {
             </Link>
           }
           description="A truthful non-decision is a valid result. This offline founding fixture demonstrates the evidence gate without inventing a business."
-          eyebrow="Latest standup"
-          title={`${formatDate(latestStandup.date)} — no venture selected`}
+          eyebrow={`Latest standup / ${formatDate(latestStandup.date)}`}
+          title="No venture selected."
         />
-        <Card className="overflow-hidden">
-          <div className="grid md:grid-cols-12">
-            <div className="bg-[var(--graphite)] p-7 text-[var(--snow)] md:col-span-5 md:p-10">
-              <div className="flex flex-wrap gap-2">
-                <Badge tone="accent">Fixture</Badge>
-                <Badge tone="dark">{latestStandup.stage}</Badge>
-              </div>
-              <p className="mt-10 text-4xl font-semibold leading-[0.95] tracking-[-0.055em] md:text-5xl">
-                Insufficient evidence.
-              </p>
-              <p className="mt-6 text-sm leading-6 text-[var(--ash)]">
-                No real candidate met 35/50, three independent eligible sources
-                and one direct problem or intent signal.
-              </p>
+
+        <div className="panel-grid md:grid-cols-12">
+          <div className="bg-[var(--card)] p-7 md:col-span-5 md:p-11">
+            <div className="flex flex-wrap gap-2">
+              <Badge tone="accent">Fixture</Badge>
+              <Badge>{latestStandup.stage}</Badge>
             </div>
-            <CardContent className="md:col-span-7 md:p-10">
-              <p className="text-lg leading-8">{latestStandup.operatingBrief}</p>
-              <div className="mt-10 grid gap-6 sm:grid-cols-2">
-                <Stat
-                  detail="Worst-case reservation, not spend"
-                  label="Estimated"
-                  value={formatUsd(latestStandup.ledger.estimate)}
-                />
-                <Stat
-                  detail="Offline fixture made no API call"
-                  label="Actual"
-                  value={formatUsd(latestStandup.ledger.actual)}
-                />
-              </div>
-            </CardContent>
+            <p className="mt-11 text-[clamp(2.6rem,4.2vw,3.2rem)] font-semibold leading-[0.98] tracking-[-0.055em]">
+              Insufficient
+              <br />
+              evidence<span className="text-[var(--accent)]">.</span>
+            </p>
+            <p className="mt-6 max-w-md text-sm leading-6 text-[var(--fog)]">
+              No real candidate met 35/50, three independent eligible sources
+              and one direct problem or intent signal.
+            </p>
+            <SignalBars className="mt-10" />
+            <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+              Signal sample / 10 sources / 0 eligible
+            </p>
           </div>
-        </Card>
+          <div className="bg-[var(--surface)] p-7 md:col-span-7 md:p-11">
+            <p className="text-lg leading-8 text-[var(--mist)] md:text-[1.1875rem]">
+              The operating system evaluated three synthetic opportunity cards.
+              None can establish a business: every supporting record is a
+              fixture, the strongest score is{" "}
+              <span className="text-[var(--accent)]">34/50</span> and no
+              eligible independent market signal exists.
+            </p>
+            <div className="mt-11 grid gap-px bg-[var(--border)] sm:grid-cols-2">
+              <div className="bg-[var(--surface)] pr-7">
+                <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
+                  Estimated
+                </p>
+                <p className="mt-3 text-[2.375rem] font-semibold tracking-[-0.05em] tabular-nums">
+                  {formatUsd(latestStandup.ledger.estimate)}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
+                  Worst-case reservation, not spend
+                </p>
+              </div>
+              <div className="bg-[var(--surface)] pt-6 sm:pl-7 sm:pt-0">
+                <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
+                  Actual
+                </p>
+                <p className="mt-3 text-[2.375rem] font-semibold tracking-[-0.05em] tabular-nums">
+                  {formatUsd(latestStandup.ledger.actual)}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
+                  Offline fixture made no API call
+                </p>
+              </div>
+            </div>
+            <div className="mt-11 grid gap-3.5 border-t border-[var(--border)] pt-6">
+              {gates.map(([number, label, state]) => (
+                <div
+                  className="grid grid-cols-[1.25rem_1fr_auto] items-center gap-4 text-sm"
+                  key={number}
+                >
+                  <span className="font-mono text-[0.6875rem] text-[var(--fog)]">
+                    {number}
+                  </span>
+                  <span className="text-[var(--ash)]">{label}</span>
+                  <span className="font-mono text-[0.6875rem] tracking-[0.08em] text-[var(--accent)]">
+                    {state}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="border-y border-[var(--border)] bg-[var(--card)]">
-        <div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
+      <section className="border-y border-[var(--border)] bg-[var(--surface)]">
+        <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10 md:py-30">
           <SectionHeading
             action={
               <Link
@@ -190,28 +227,31 @@ export default function HomePage() {
             eyebrow="Control loop"
             title="How a decision becomes an action"
           />
-          <div className="grid gap-3 md:grid-cols-3">
-            {governanceSteps.map((step) => (
-              <Card className="min-h-64" key={step.number}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <span className="text-sm font-bold text-[var(--accent)]">
-                      {step.number}
-                    </span>
-                    <span className="size-2 rounded-full bg-[var(--border)]" />
-                  </div>
-                  <CardTitle className="mt-12">{step.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>{step.description}</CardDescription>
-                </CardContent>
-              </Card>
+          <div className="border-t border-[var(--border)]">
+            {governanceSteps.map((step, index) => (
+              <div
+                className="grid gap-4 border-b border-[var(--border)] py-7 transition-all hover:bg-[var(--surface-raised)] hover:px-4 md:grid-cols-12 md:items-baseline md:gap-8"
+                key={step.number}
+              >
+                <span className="font-mono text-xs tracking-[0.1em] text-[var(--accent)] md:col-span-1">
+                  {step.number}
+                </span>
+                <h3 className="text-[1.6875rem] font-semibold leading-tight tracking-[-0.04em] md:col-span-3">
+                  {step.title}
+                </h3>
+                <p className="max-w-3xl text-[0.96875rem] leading-7 text-[var(--fog)] md:col-span-7">
+                  {step.description}
+                </p>
+                <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--iron)] md:col-span-1 md:justify-self-end">
+                  {stepTags[index]}
+                </span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
+      <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10 md:py-30">
         <SectionHeading
           action={
             <Link
@@ -222,59 +262,82 @@ export default function HomePage() {
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           }
-          description="Four formal voting seats and ten bounded specialists. Each role has a mandate, output, metric and route reason."
-          eyebrow="Meet the team"
-          title="Fourteen agents. No hidden board."
+          description="Four formal voting seats and ten bounded specialists. Each role has a mandate, output, metric and route reason. These are autonomous software roles, not human employees."
+          eyebrow="The roster"
+          title={
+            <>
+              Fourteen agents.
+              <br />
+              No hidden board.
+            </>
+          }
         />
-        <p className="-mt-8 mb-10 max-w-4xl text-base leading-7 text-[var(--muted-foreground)]">
-          Meet the AI agents operating BoardlessAI. These are autonomous
-          software roles, not human employees.
-        </p>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {agents.map((agent) => (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {council.map((agent) => (
             <AgentCard agent={agent} key={agent.id} />
           ))}
         </div>
+        <div className="mt-4 overflow-hidden rounded-[1.125rem] border border-[var(--border)] bg-[var(--card)]">
+          <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] px-6 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
+            <span>Specialists &amp; controls / 10 roles</span>
+            <span>Bounded · non-voting</span>
+          </div>
+          <div className="grid md:grid-cols-2">
+            {specialists.map((agent) => (
+              <AgentRow agent={agent} compact key={agent.id} />
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="mx-auto max-w-[var(--container)] px-5 pb-8 md:px-8">
-        <Card className="overflow-hidden">
+      <section className="mx-auto max-w-[var(--container)] px-5 pb-24 md:px-10 md:pb-30">
+        <div className="editorial-grid overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
-            <CardContent className="md:col-span-8 md:p-12">
-              <Badge tone="warning">Budget guard</Badge>
-              <h2 className="mt-6 max-w-3xl text-4xl font-semibold leading-[0.98] tracking-[-0.05em] md:text-6xl">
+            <div className="p-8 md:col-span-7 md:p-14">
+              <p className="mono-label text-[var(--accent)]">Budget guard</p>
+              <h2 className="mt-6 max-w-3xl text-[clamp(2.6rem,4.6vw,3.9rem)] font-semibold leading-none tracking-[-0.055em]">
                 The monthly operating ceiling is $20.
               </h2>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--muted-foreground)]">
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--fog)]">
                 API usage, media, treasury payments, recurring commitments and
-                verified external costs share one hard cap. Pre-profit,
-                20% remains reserved.
+                verified external costs share one hard cap. Pre-profit, 20%
+                remains reserved.
               </p>
-            </CardContent>
-            <div className="bg-[var(--accent-soft)] p-7 md:col-span-4 md:p-10">
-              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+              <div className="mt-10 flex flex-wrap gap-8 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+                <span>
+                  Reserve <strong className="text-[var(--foreground)]">20%</strong>
+                </span>
+                <span>
+                  Uncapped categories{" "}
+                  <strong className="text-[var(--foreground)]">0</strong>
+                </span>
+                <span>
+                  Overruns to date{" "}
+                  <strong className="text-[var(--foreground)]">0</strong>
+                </span>
+              </div>
+            </div>
+            <div className="border-t border-[var(--border)] bg-[var(--surface)] p-8 md:col-span-5 md:border-l md:border-t-0 md:p-12">
+              <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
                 Month to date
               </p>
-              <p className="mt-5 text-6xl font-semibold tracking-[-0.065em]">
-                $0
+              <p className="mt-5 text-7xl font-semibold leading-none tracking-[-0.07em] tabular-nums">
+                $0.00
               </p>
-              <Progress className="mt-8" max={20} value={0} />
-              <div className="mt-8 flex items-center justify-between text-sm">
+              <Progress className="mt-7" max={20} value={0} />
+              <div className="mt-4 flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-[var(--fog)]">
                 <span>Verified all-in</span>
-                <span className="font-bold">$20 cap</span>
+                <span className="text-[var(--foreground)]">$20.00 cap</span>
               </div>
               <Link
-                className={cn(
-                  buttonVariants({ variant: "primary" }),
-                  "mt-9 w-full"
-                )}
+                className={`${buttonVariants({ variant: "primary" })} mt-9 w-full`}
                 href="/metrics"
               >
                 Review the ledger strip
               </Link>
             </div>
           </div>
-        </Card>
+        </div>
       </section>
     </PageShell>
   );

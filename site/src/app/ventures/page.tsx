@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Beaker, CircleSlash2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { opportunities } from "@/data/fixtures";
 
 export const metadata: Metadata = {
@@ -21,129 +13,167 @@ export const metadata: Metadata = {
   title: "Ventures"
 };
 
+const stages = [
+  ["01", "DISCOVERY", "Evidence + opportunity"],
+  ["02", "VALIDATION", "Qualified value signal"],
+  ["03", "AUDIENCE", "Repeatable acquisition"],
+  ["04", "MONETIZATION", "Verified revenue"],
+  ["05", "OPTIMIZATION", "Measured economics"]
+] as const;
+
 export default function VenturesPage() {
   return (
     <PageShell>
       <PageIntro
         aside={
-          <Card className="bg-[var(--graphite)] text-[var(--snow)]">
-            <CardContent>
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ash)]">
-                Selected ventures
-              </p>
-              <p className="mt-5 text-6xl font-semibold tracking-[-0.065em]">
-                0
-              </p>
-              <p className="mt-2 text-sm text-[var(--ash)]">
-                Correct while evidence is insufficient
-              </p>
-            </CardContent>
-          </Card>
+          <div className="rounded-[1rem] border border-[var(--slate)] bg-[var(--card)] p-8">
+            <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
+              Selected ventures
+            </p>
+            <p className="mt-4 text-7xl font-semibold leading-none tracking-[-0.07em]">
+              0
+            </p>
+            <p className="mt-3 text-[0.84375rem] text-[var(--fog)]">
+              Correct while evidence is insufficient
+            </p>
+          </div>
         }
         description="The company operating system exists; a customer venture does not. Candidate cards stay in DISCOVERY until every deterministic gate passes."
         eyebrow="Business portfolio"
         title="No venture by default"
       />
 
-      <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8 md:pb-28">
-        <Card className="mb-12 overflow-hidden border-[var(--accent)]">
+      <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
+        <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)]">
           <div className="grid md:grid-cols-12">
-            <div className="bg-[var(--accent)] p-7 md:col-span-3 md:p-10">
-              <CircleSlash2 aria-hidden="true" className="size-7" />
-              <p className="mt-12 text-3xl font-semibold tracking-[-0.045em]">
+            <div className="bg-[var(--accent)] p-8 text-[var(--obsidian)] md:col-span-4 md:p-10">
+              <p className="mono-label text-[0.65625rem] font-semibold">
+                Council verdict
+              </p>
+              <p className="mt-11 text-[2rem] font-semibold leading-[1.05] tracking-[-0.05em] break-words">
                 INSUFFICIENT_
                 <wbr />
                 EVIDENCE
               </p>
             </div>
-            <CardContent className="md:col-span-9 md:p-10">
-              <CardTitle>The founding fixture declined all candidates.</CardTitle>
-              <CardDescription className="max-w-3xl">
+            <div className="bg-[var(--card)] p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
+                The founding fixture declined all candidates.
+              </h2>
+              <p className="mt-4 max-w-4xl text-base leading-7 text-[var(--fog)]">
                 Fixture signals are useful for testing schemas, not for proving
                 demand. The next valid action is evidence collection—not a
                 manufactured product, launch page or social campaign.
-              </CardDescription>
-            </CardContent>
+              </p>
+              <p className="mt-7 flex items-center gap-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+                <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
+                {opportunities.length} cards evaluated / 0 passed
+              </p>
+            </div>
           </div>
-        </Card>
+        </div>
+      </section>
 
-        <div className="grid gap-4 md:grid-cols-3">
+      <section className="mx-auto max-w-[var(--container)] px-5 py-16 md:px-10 md:pb-24">
+        <div className="grid gap-4 lg:grid-cols-3">
           {opportunities.map((opportunity) => (
-            <Card key={opportunity.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between gap-3">
-                  <Badge>Fixture</Badge>
-                  <span className="text-sm font-bold text-[var(--destructive)]">
-                    {opportunity.status}
-                  </span>
+            <article
+              className="rounded-[1.125rem] border border-[var(--border)] bg-[var(--card)] p-8 transition-colors hover:border-[var(--iron)]"
+              key={opportunity.id}
+            >
+              <div className="flex items-center justify-between gap-3">
+                <Badge>Fixture</Badge>
+                <span className="font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--accent)]">
+                  {opportunity.status}
+                </span>
+              </div>
+              <h2 className="mt-7 text-[1.4375rem] font-semibold leading-tight tracking-[-0.04em]">
+                {opportunity.title}
+              </h2>
+              <div className="mt-8 flex items-end justify-between">
+                <div>
+                  <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
+                    Score
+                  </p>
+                  <p className="mt-2 text-[2.5rem] font-semibold tracking-[-0.055em] tabular-nums">
+                    {opportunity.score}
+                    <span className="text-base text-[var(--fog)]">/50</span>
+                  </p>
                 </div>
-                <CardTitle className="mt-7">{opportunity.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-                      Score
-                    </p>
-                    <p className="mt-2 text-4xl font-semibold tracking-[-0.05em]">
-                      {opportunity.score}
-                      <span className="text-base text-[var(--muted-foreground)]">
-                        /50
-                      </span>
-                    </p>
-                  </div>
-                  <Beaker
-                    aria-hidden="true"
-                    className="size-5 text-[var(--muted-foreground)]"
-                  />
-                </div>
-                <Progress className="mt-5" max={50} value={opportunity.score} />
-                <p className="mt-6 min-h-18 text-sm leading-6 text-[var(--muted-foreground)]">
-                  {opportunity.reason}
-                </p>
-                <Link
-                  className={buttonVariants({ variant: "secondary" })}
-                  href={`/ventures/${opportunity.slug}`}
-                >
-                  Inspect card
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-              </CardContent>
-            </Card>
+                <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+                  Gate 35
+                </span>
+              </div>
+              <div className="relative mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--border)]">
+                <div
+                  className="h-full rounded-full bg-[var(--accent)]"
+                  style={{ width: `${(opportunity.score / 50) * 100}%` }}
+                />
+              </div>
+              <div className="relative mt-2 h-3">
+                <span className="absolute left-[70%] top-0 h-1.5 w-px bg-[var(--iron)]" />
+                <span className="absolute left-[calc(70%+0.375rem)] top-0 font-mono text-[0.59375rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+                  Threshold
+                </span>
+              </div>
+              <p className="mt-6 min-h-18 text-sm leading-6 text-[var(--fog)]">
+                {opportunity.reason}
+              </p>
+              <Link
+                className={buttonVariants({ variant: "secondary" })}
+                href={`/ventures/${opportunity.slug}`}
+              >
+                Inspect card
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </Link>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-[var(--border)] bg-[var(--card)]">
-        <div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-24">
-          <Badge>Stage model</Badge>
-          <h2 className="mt-6 max-w-4xl text-4xl font-semibold tracking-[-0.05em] md:text-6xl">
+      <section className="border-t border-[var(--border)] bg-[var(--surface)]">
+        <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
+          <p className="mono-label text-[var(--accent)]">Stage model</p>
+          <h2 className="mt-5 max-w-4xl text-[clamp(2.4rem,5vw,4.2rem)] font-semibold leading-none tracking-[-0.055em]">
             Progress is earned through gates.
           </h2>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-[var(--border)] md:grid-cols-5">
-            {[
-              ["01", "DISCOVERY", "Evidence + opportunity"],
-              ["02", "VALIDATION", "Qualified value signal"],
-              ["03", "AUDIENCE", "Repeatable acquisition"],
-              ["04", "MONETIZATION", "Verified revenue"],
-              ["05", "OPTIMIZATION", "Measured economics"]
-            ].map(([number, stage, gate], index) => (
+          <div className="panel-grid mt-13 md:grid-cols-5">
+            {stages.map(([number, title, description], index) => (
               <div
                 className={
                   index === 0
-                    ? "bg-[var(--accent-soft)] p-6"
-                    : "bg-[var(--card)] p-6"
+                    ? "flex min-h-45 flex-col justify-between bg-[color-mix(in_srgb,var(--accent)_6%,var(--surface))] p-7"
+                    : "flex min-h-45 flex-col justify-between bg-[var(--surface)] p-7"
                 }
-                key={stage}
+                key={title}
               >
-                <p className="text-xs font-bold text-[var(--accent)]">{number}</p>
-                <p className="mt-10 text-sm font-bold">{stage}</p>
-                <p className="mt-3 text-xs leading-5 text-[var(--muted-foreground)]">
-                  {gate}
+                <p
+                  className={`font-mono text-[0.6875rem] tracking-[0.1em] ${
+                    index === 0
+                      ? "text-[var(--accent)]"
+                      : "text-[var(--iron)]"
+                  }`}
+                >
+                  {number}
                 </p>
+                <div>
+                  <p
+                    className={`text-[0.9375rem] font-bold tracking-[0.02em] ${
+                      index === 0 ? "text-[var(--accent)]" : ""
+                    }`}
+                  >
+                    {title}
+                  </p>
+                  <p className="mt-2.5 text-xs leading-5 text-[var(--fog)]">
+                    {description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
+          <p className="mt-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+            Current stage / 01 discovery — gate not met
+          </p>
         </div>
       </section>
     </PageShell>
