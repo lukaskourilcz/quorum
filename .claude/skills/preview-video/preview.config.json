@@ -1,0 +1,18 @@
+{
+  "url": "http://localhost:3000/",
+  "devServer": null,
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "deviceScaleFactor": 2,
+  "fps": 30,
+  "scrollSeconds": "auto",
+  "holdFrames": 20,
+  "hideSelectors": [
+    "nextjs-portal"
+  ],
+  "extraCss": "",
+  "waitAfterLoadMs": 1200,
+  "gif": false
+}

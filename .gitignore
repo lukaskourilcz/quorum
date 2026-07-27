@@ -16,3 +16,9 @@ state/.lock
 state/.last-commit-msg
 *.log
 *.tsbuildinfo
+
+# claude code: task-observer session log stays local
+.claude/observations/
+
+# claude code: ui-ux-pro-max search script bytecode
+__pycache__/

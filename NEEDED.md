@@ -26,6 +26,16 @@ ověřený podnikatelský záměr, připojené tržby ani produkční deployment
   který může zastavit automatizaci, řešit účty, platby, právní otázky a
   nejednoznačné publikační výsledky.
 
+## Projekt je od 27. 7. 2026 veřejně vidět v portfoliu
+
+BoardlessAI je nově uvedený mezi projekty na lukaskouril.dev, včetně animovaného
+náhledu nahraného ze spuštěného webu. Portfolio popisuje stav pravdivě:
+implementace hotová, venture nezaložený, web běží na označených fixture datech.
+
+- [ ] **Rozhodnout o názvu dřív, než ho portfolio ponese dál.** Název je stále `provisional_high_collision_risk` podle `state/brand-clearance/2026-07-23.md`, ale už je publikovaný na veřejné stránce. Buď riziko vědomě přijměte, nebo schvalte přejmenování — v tom případě je potřeba změnit i položku v portfoliu. `[imp:4]` `[owner:me]` `[time:1h]` `[kind:legal]`
+- [ ] **Dodat veřejnou URL webu, pokud má karta v portfoliu odkazovat.** Repozitář žádnou nasazenou adresu neobsahuje (`PUBLIC_SITE_URL` je jen proměnná prostředí), takže položka v portfoliu je zatím bez odkazu. `[imp:2]` `[owner:me]` `[time:15m]` `[kind:decision]`
+- [ ] **Po každém výrazném redesignu webu nahrát náhled znovu.** Postup je v `.claude/skills/preview-video/SKILL.md`; hotové soubory patří do `nxt-portfolio/public/previews/quorum/`. `[imp:2]` `[owner:ai]` `[time:30m]` `[kind:content]`
+
 ## P1 — GitHub a bezpečnost repozitáře
 
 - [ ] V GitHubu pro `main` zapnout branch protection nebo ruleset: `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
