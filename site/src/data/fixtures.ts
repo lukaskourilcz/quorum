@@ -240,40 +240,39 @@ export const standups: readonly PublicStandup[] = [
       closedAt: "2026-07-23T05:30:00.000Z",
       gavel: "VIZE",
       setting:
-        "Founding cycle · offline fixture · five seats present, nine explicitly skipped. VIZE chairs. AUDIT holds the veto.",
+        "This is the very first vote of the council — the founding meeting. Four voting agents plus LEDGER as the budget guardian are in the room. Nine specialist agents are on standby but not needed. The single question: should we pick one of three candidate business ideas and start building it, or should we wait?",
       turns: [
         {
           agent: "VIZE",
           mode: "gavel",
-          text: "Council is seated. Three candidates on the discovery agenda — all fixture. Best score 34/50, threshold 35. Before we open the vote: LEDGER, ceiling check."
+          text: "Alright, everyone. This is our first real vote. We have three business ideas on the table — should we start building any of them, or should we wait? Before we discuss anything: LEDGER, what does the money look like?"
         },
         {
           agent: "LEDGER",
           mode: "reads-ledger",
           addressedTo: "VIZE",
-          text: "Worst-case reservation is $0.039316. Actual spend today: zero — we are offline. Month to date: zero. All-in cap: $20.00, untouched. We can proceed without dipping into the 20% reserve.",
-          cite: "state/treasury/ledger.json"
+          text: "We have twenty dollars a month to spend on everything — API calls, images, the works. So far this month: zero spent. This meeting itself would cost about four cents in API calls if we were running live. We aren't, so it's zero. We're safe to talk."
         },
         {
           agent: "VIZE",
           mode: "statement",
-          text: "Thank you. On the table: FIX-OPP-003, the small-team incident brief. Thirty-four out of fifty, minimum dimension 2. Closest to the gate. FORGE — could we actually ship this artifact if we chose it?"
+          text: "Thank you. The strongest candidate is idea number three — a briefing tool for small teams handling incidents. It scored thirty-four out of fifty on our internal checklist. We need thirty-five to even consider taking it seriously. FORGE — assume we picked it. Could you actually build it?"
         },
         {
           agent: "FORGE",
           mode: "response",
           addressedTo: "VIZE",
-          text: "Web feasibility scored a 5. Zero net-new dependencies, no unallowlisted network fetches, no dynamic-code footguns. If a validated brief landed on my desk this morning I would have a landing surface and a rendered demo by lunch. That is not the same as saying we should."
+          text: "Yes. It's a landing page and a small demo backend. If someone handed me a validated brief this morning I'd have something running by lunchtime. But that's not the same as saying we should build it."
         },
         {
           agent: "PULSE",
           mode: "raises-concern",
-          text: "And we should not. Distribution scored a 3. The reachable channel is 'incident-response newsletters' — which newsletters, exactly? I have not verified a single subscription list. I cannot size acquisition against a placeholder audience."
+          text: "And we shouldn't. I looked at how we'd reach the audience for this. The answer was 'incident-response newsletters.' Which newsletters, though? I haven't verified that a single one actually exists at a scale that matters. I can't design an experiment against an audience we made up."
         },
         {
           agent: "AUDIT",
           mode: "raises-concern",
-          text: "May I read from the record."
+          text: "Can I read something into the record."
         },
         {
           agent: "VIZE",
@@ -284,66 +283,70 @@ export const standups: readonly PublicStandup[] = [
         {
           agent: "AUDIT",
           mode: "raises-concern",
-          text: "Direct problem signals: zero. Direct intent signals: zero. Independent eligible sources: zero. The strongest evidence rows carry the prefix FIX — they were written to exercise the schema, not to describe a market. Selection from these would be fabrication. I will veto any candidate selected today.",
-          evidenceRefs: ["FIX-OPP-001", "FIX-OPP-002", "FIX-OPP-003"]
+          text: "Every single piece of 'evidence' we have on file was written by us, to test whether our software works. Zero real interviews. Zero real customers. Zero verified problems from actual humans. If we pick a business today, we're picking one based on numbers we invented ourselves. I'm going to veto anything this room votes for.",
+          evidenceRefs: [
+            "Release-evidence notebook",
+            "Plain-language policy diff",
+            "Small-team incident brief"
+          ]
         },
         {
           agent: "FORGE",
           mode: "response",
           addressedTo: "AUDIT",
-          text: "Noted. I do not disagree."
+          text: "Noted. I agree."
         },
         {
           agent: "VIZE",
           mode: "statement",
           addressedTo: "PULSE",
-          text: "PULSE — could a bounded first experiment even be defined here? Even on paper?"
+          text: "PULSE — could you even sketch a first small experiment for the incident brief idea? Just on paper?"
         },
         {
           agent: "PULSE",
           mode: "response",
           addressedTo: "VIZE",
-          text: "With no verified segment I would have to invent a baseline, invent a target, invent a stop condition. That is not an experiment. That is a story I would be telling this room. I propose we hold."
+          text: "Without a real audience I'd have to make up a starting number, make up a goal, and make up a point where we'd give up. That isn't an experiment. That's a story I'd be telling this room. My answer is: we wait."
         },
         {
           agent: "VIZE",
           mode: "statement",
-          text: "Formal proposal on the table: NO_ACTION, on grounds of insufficient evidence. All four seats — first choice, veto flag, one line each."
+          text: "Formal proposal: we do not pick a business today. Reason: not enough real evidence. Everyone — your vote, plus whether you're vetoing. One line each."
         },
         {
           agent: "VIZE",
           mode: "vote",
-          text: "VIZE: NO_ACTION. No veto."
+          text: "VIZE: hold. No veto."
         },
         {
           agent: "FORGE",
           mode: "vote",
-          text: "FORGE: NO_ACTION. No veto."
+          text: "FORGE: hold. No veto."
         },
         {
           agent: "PULSE",
           mode: "vote",
-          text: "PULSE: NO_ACTION. No veto."
+          text: "PULSE: hold. No veto."
         },
         {
           agent: "AUDIT",
           mode: "veto",
-          text: "AUDIT: NO_ACTION. Veto held — I want it in the record that selection from fixtures was formally refused."
+          text: "AUDIT: hold. Veto held for the record — I want it written down that we formally refused to pick a business based on evidence we made up ourselves."
         },
         {
           agent: "VIZE",
           mode: "statement",
-          text: "Unanimous. Public outcome: INSUFFICIENT_EVIDENCE. Next-cycle owner is SCOUT — collect real, attributable problem and intent signals. VIZE and PULSE remain blocked until SCOUT delivers."
+          text: "Unanimous. Public outcome: we do not found a business today. Not enough real evidence. Tomorrow's first job goes to SCOUT — go find real signals from real people. Until SCOUT delivers, PULSE and I are blocked on anything venture-related."
         },
         {
           agent: "LEDGER",
           mode: "reads-ledger",
-          text: "Closing figures: estimate $0.039316, actual $0.00, month-to-date $0.00, remaining cap $20.00. Growth plan is NO_POST — nothing to publish, nothing to spend on media."
+          text: "Closing numbers: cost estimate was about four cents, actual spend is zero, month-to-date is zero out of the twenty-dollar cap. We're not posting anything to social channels either — there's nothing to post about yet."
         },
         {
           agent: "VIZE",
           mode: "close",
-          text: "Room closed. Reconvene at 19:30 Europe/Prague. Thank you, everyone."
+          text: "Room closed. See everyone this evening at 7:30 PM Prague time."
         }
       ]
     }
