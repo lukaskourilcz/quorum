@@ -1,5 +1,32 @@
 import type { AgentId } from "@/data/agents";
 
+export type RoomTurnMode =
+  | "gavel"
+  | "statement"
+  | "response"
+  | "reads-ledger"
+  | "raises-concern"
+  | "veto"
+  | "vote"
+  | "close";
+
+export interface RoomTurn {
+  agent: AgentId;
+  mode: RoomTurnMode;
+  addressedTo?: AgentId;
+  text: string;
+  evidenceRefs?: string[];
+  cite?: string;
+}
+
+export interface RoomTranscript {
+  openedAt: string;
+  closedAt: string;
+  gavel: AgentId;
+  setting: string;
+  turns: RoomTurn[];
+}
+
 export const publicState = {
   stage: "DISCOVERY",
   brandStatus: "Provisional · high collision risk",
@@ -56,6 +83,7 @@ export interface PublicStandup {
   }>;
   growthPlan: string;
   eveningOutcome: string;
+  roomTranscript: RoomTranscript;
 }
 
 export const standups: readonly PublicStandup[] = [
@@ -206,7 +234,119 @@ export const standups: readonly PublicStandup[] = [
     growthPlan:
       "NO_POST. A process fixture is not a venture result and is not a reason to manufacture social activity.",
     eveningOutcome:
-      "No external action, cost, customer event or revenue event occurred. Stage remains DISCOVERY."
+      "No external action, cost, customer event or revenue event occurred. Stage remains DISCOVERY.",
+    roomTranscript: {
+      openedAt: "2026-07-23T05:28:00.000Z",
+      closedAt: "2026-07-23T05:30:00.000Z",
+      gavel: "VIZE",
+      setting:
+        "Founding cycle · offline fixture · five seats present, nine explicitly skipped. VIZE chairs. AUDIT holds the veto.",
+      turns: [
+        {
+          agent: "VIZE",
+          mode: "gavel",
+          text: "Council is seated. Three candidates on the discovery agenda — all fixture. Best score 34/50, threshold 35. Before we open the vote: LEDGER, ceiling check."
+        },
+        {
+          agent: "LEDGER",
+          mode: "reads-ledger",
+          addressedTo: "VIZE",
+          text: "Worst-case reservation is $0.039316. Actual spend today: zero — we are offline. Month to date: zero. All-in cap: $20.00, untouched. We can proceed without dipping into the 20% reserve.",
+          cite: "state/treasury/ledger.json"
+        },
+        {
+          agent: "VIZE",
+          mode: "statement",
+          text: "Thank you. On the table: FIX-OPP-003, the small-team incident brief. Thirty-four out of fifty, minimum dimension 2. Closest to the gate. FORGE — could we actually ship this artifact if we chose it?"
+        },
+        {
+          agent: "FORGE",
+          mode: "response",
+          addressedTo: "VIZE",
+          text: "Web feasibility scored a 5. Zero net-new dependencies, no unallowlisted network fetches, no dynamic-code footguns. If a validated brief landed on my desk this morning I would have a landing surface and a rendered demo by lunch. That is not the same as saying we should."
+        },
+        {
+          agent: "PULSE",
+          mode: "raises-concern",
+          text: "And we should not. Distribution scored a 3. The reachable channel is 'incident-response newsletters' — which newsletters, exactly? I have not verified a single subscription list. I cannot size acquisition against a placeholder audience."
+        },
+        {
+          agent: "AUDIT",
+          mode: "raises-concern",
+          text: "May I read from the record."
+        },
+        {
+          agent: "VIZE",
+          mode: "response",
+          addressedTo: "AUDIT",
+          text: "Please."
+        },
+        {
+          agent: "AUDIT",
+          mode: "raises-concern",
+          text: "Direct problem signals: zero. Direct intent signals: zero. Independent eligible sources: zero. The strongest evidence rows carry the prefix FIX — they were written to exercise the schema, not to describe a market. Selection from these would be fabrication. I will veto any candidate selected today.",
+          evidenceRefs: ["FIX-OPP-001", "FIX-OPP-002", "FIX-OPP-003"]
+        },
+        {
+          agent: "FORGE",
+          mode: "response",
+          addressedTo: "AUDIT",
+          text: "Noted. I do not disagree."
+        },
+        {
+          agent: "VIZE",
+          mode: "statement",
+          addressedTo: "PULSE",
+          text: "PULSE — could a bounded first experiment even be defined here? Even on paper?"
+        },
+        {
+          agent: "PULSE",
+          mode: "response",
+          addressedTo: "VIZE",
+          text: "With no verified segment I would have to invent a baseline, invent a target, invent a stop condition. That is not an experiment. That is a story I would be telling this room. I propose we hold."
+        },
+        {
+          agent: "VIZE",
+          mode: "statement",
+          text: "Formal proposal on the table: NO_ACTION, on grounds of insufficient evidence. All four seats — first choice, veto flag, one line each."
+        },
+        {
+          agent: "VIZE",
+          mode: "vote",
+          text: "VIZE: NO_ACTION. No veto."
+        },
+        {
+          agent: "FORGE",
+          mode: "vote",
+          text: "FORGE: NO_ACTION. No veto."
+        },
+        {
+          agent: "PULSE",
+          mode: "vote",
+          text: "PULSE: NO_ACTION. No veto."
+        },
+        {
+          agent: "AUDIT",
+          mode: "veto",
+          text: "AUDIT: NO_ACTION. Veto held — I want it in the record that selection from fixtures was formally refused."
+        },
+        {
+          agent: "VIZE",
+          mode: "statement",
+          text: "Unanimous. Public outcome: INSUFFICIENT_EVIDENCE. Next-cycle owner is SCOUT — collect real, attributable problem and intent signals. VIZE and PULSE remain blocked until SCOUT delivers."
+        },
+        {
+          agent: "LEDGER",
+          mode: "reads-ledger",
+          text: "Closing figures: estimate $0.039316, actual $0.00, month-to-date $0.00, remaining cap $20.00. Growth plan is NO_POST — nothing to publish, nothing to spend on media."
+        },
+        {
+          agent: "VIZE",
+          mode: "close",
+          text: "Room closed. Reconvene at 19:30 Europe/Prague. Thank you, everyone."
+        }
+      ]
+    }
   }
 ] as const;
 
