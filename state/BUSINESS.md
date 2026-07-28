@@ -1,16 +1,42 @@
 # Business plan (living)
 
+## Project mode
+
+**Hobby / non-commercial** as of 2026-07-28. The owner has decided this
+project is a personal exploration of agent governance, not a venture aiming
+for market launch or revenue.
+
+Consequences:
+- The DISCOVERY stage stays open indefinitely; no gate advance is planned.
+- Real market evidence, paid analytics, payment processors, and channel
+  autopublish are out of scope until the owner explicitly reclassifies the
+  project as commercial.
+- `state/EVIDENCE.jsonl` remains fixture-only; no synthetic evidence is
+  promoted to real.
+- Content, brand, and portfolio presentation continue to describe the state
+  truthfully (implementation done, venture not founded).
+
+## Owner and roles
+
+- Provozovatel (operator): fyzická osoba — Lukas Kouril (kouril.lukas@gmail.com)
+- Incident owner and approver: Lukas Kouril (same person, single-operator setup)
+- Emergency stop: repository variable `AUTONOMY_KILL_SWITCH=true`, manual
+  intervention by the owner
+
+## Budget
+
+Monthly operating hard cap: $20 USD, accepted 2026-07-28.
+Any increase requires a separate change with all guardrails preserved.
+
 ## Stage & decision
 
-Current stage: **DISCOVERY**  
+Current stage: **DISCOVERY** (frozen — see Project mode above)  
 Entered at cycle: 0  
-Next gate: one opportunity scoring at least 35/50 with no dimension below 2,
-three independent evidence items, one direct problem or intent signal, a
-reachable channel and a bounded first experiment.  
+Next gate: not planned while in hobby mode.  
 Thesis confidence: n/a
 
 No opportunity has passed the gate. The system is a research lab, not a launched
-venture.
+venture, and by owner decision remains one.
 
 ## Thesis
 

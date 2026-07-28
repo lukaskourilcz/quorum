@@ -5,21 +5,21 @@ items in place. Lack of response never authorizes an action. -->
 
 ## Pending
 
-- [ ] HUMAN_APPROVAL BRAND-CLEARANCE-001 — The read-only 2026-07-23 screen
-  found an exact-adjacent AI-operated `Boardless, Inc.`, an active Boardless AI
-  jobs product and a registered `boardless.ai` domain. Obtain professional legal
-  clearance and explicitly accept the collision, or authorize a rename. Do not
-  launch, register, buy domains or create handles first.
-  Created: 2026-07-23 · Priority: blocking for public launch · Cost: n/a · Safe
-  fallback: keep BoardlessAI as an internal provisional working title.
-
-- [ ] HUMAN_APPROVAL API-CREDENTIALS-001 — Configure `ANTHROPIC_API_KEY` and
-  `OPENAI_API_KEY` as GitHub Actions secrets before a real founding cycle.
-  Created: 2026-07-23 · Priority: blocking for live council calls · Cost: usage
-  remains inside configured guards · Safe fallback: offline fixtures only.
-  Resolution: add both secrets in repository settings, then mark this line
-  `[x] ... → approved YYYY-MM-DD`.
+None.
 
 ## Resolved
 
-None.
+- [x] HUMAN_APPROVAL BRAND-CLEARANCE-001 — Owner explicitly accepted the
+  collision risk with `Boardless, Inc.` and `boardless.ai` under hobby /
+  non-commercial project mode (see `state/BUSINESS.md`). No commercial launch,
+  no domain purchase, no handle registration, no trademark claim. Name
+  `BoardlessAI` retained as a working title for the personal project. If mode
+  is ever reclassified to commercial, this decision must be revisited with
+  professional legal clearance. → approved 2026-07-28.
+
+- [x] HUMAN_APPROVAL API-CREDENTIALS-001 — Owner provided `ANTHROPIC_API_KEY`
+  and `OPENAI_API_KEY` for local development on 2026-07-28; keys stored in the
+  gitignored `.env` file and loaded by the orchestrator via `src/env.ts`.
+  Owner acknowledged the transcript-leak risk and will rotate the keys.
+  GitHub Actions secrets for CI still pending as a separate step
+  (see MANUAL STEPS.md → task 13). → approved 2026-07-28.
