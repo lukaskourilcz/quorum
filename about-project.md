@@ -5,9 +5,11 @@ AI rolí. Spojuje deterministické rozhodovací a finanční guardraily, evidenc
 pipeline, experimenty, veřejný web, auditovatelný git-backed stav a volitelnou
 automatizaci sociálních sítí.
 
-Aktuální stav je **implementace dokončena, venture nezaloženo**. Projekt je ve
-fázi `DISCOVERY`; obsahuje pouze viditelně označená fixture data. Nejsou
-připojené produkční AI klíče, tržby, sociální účty ani hosting.
+Aktuální stav (od 2026-07-28): **hobby / non-commercial mode**. Implementace
+je hotová, web běží na Vercelu (`https://quorum-site-chi.vercel.app`), ale
+projekt je z rozhodnutí vlastníka trvale osobní explorací, ne založeným
+venture. Fáze `DISCOVERY` zůstává zamčená; obsah obsahuje jen viditelně
+označená fixture data a `EVIDENCE.jsonl` se nesmí měnit na reálná tvrzení.
 
 ## Architektura
 
@@ -138,7 +140,7 @@ Zápisy runtime používají:
 - jeden normální git commit na úspěšný runtime cyklus.
 
 Tento model je vhodný pro nízkou frekvenci a auditovatelnost. Limity a cesta ke
-škálování jsou popsané v `stack-and-scaling.md`.
+škálování jsou popsané v `scaling.md`.
 
 ## Veřejný web
 
@@ -220,13 +222,18 @@ Dry cyklus zapisuje pouze do ignorovaného `tmp/dry-run/state/`.
 
 ## Aktuální omezení
 
-- Název čeká na právní clearance.
-- Neexistuje validovaný venture ani skutečný experiment.
-- Neexistuje produkční hosting nebo doména.
-- Nejsou připojené AI, analytics, revenue ani sociální credentials.
+- Název: kolizní riziko vědomě přijato pod hobby módem; komerční launch by
+  vyžadoval znovuotevření rozhodnutí
+  (`state/brand-clearance/2026-07-28.md`).
+- Neexistuje validovaný venture ani skutečný experiment — a v hobby módu
+  ani nebude.
+- Hosting: Vercel `quorum-site`, doména `quorum-site-chi.vercel.app`.
+- AI credentials: nastaveny jako GitHub secrets 2026-07-28 (dev klíče jsou
+  v gitignored `.env`); analytics, revenue a sociální credentials
+  nepřipojené.
 - Git-backed persistence předpokládá jediného writera.
 - Admin nepodporuje více uživatelů, obnovu hesla ani SSO.
 - Ceny a platformní API kontrakty je nutné před aktivací znovu ověřit.
 
-Konkrétní kroky vlastníka jsou v `NEEDED.md`; finance a škálování v
-`stack-and-scaling.md`.
+Konkrétní kroky vlastníka jsou v `NEEDED.md` a `MANUAL STEPS.md`; finance
+a škálování v `scaling.md`.

@@ -5,14 +5,19 @@ The repository contains a bounded council orchestrator, a transparent public
 site and git-backed state. Four voting agents make formal decisions; ten
 specialists provide routed expertise and independent controls.
 
-Current status: **implementation complete, venture not founded**. The repository
-contains only clearly labelled fixture business data. No real opportunity has
-passed the deterministic DISCOVERY gate, no revenue has been claimed and no
-production deployment or social account connection has been performed.
+Current status: **hobby / non-commercial mode** as of 2026-07-28. The
+implementation is complete and the site is deployed at
+<https://quorum-site-chi.vercel.app>, but the project is not a launched
+venture and by owner decision it stays that way. `state/BUSINESS.md`
+describes the mode; `state/EVIDENCE.jsonl` remains fixture-only. Every
+runtime guardrail (budget, evidence, stage, finance, release) stays active
+and unweakened.
 
-The working corporate name has a documented high collision risk and remains
-blocked for public launch pending human/legal clearance. See
-`state/brand-clearance/2026-07-23.md`.
+The working corporate name has a documented high collision risk. The owner
+has explicitly accepted that risk under the hobby scope (no commercial
+launch, no domain purchase, no handle registration, no trademark claim);
+see `state/brand-clearance/2026-07-28.md` for the revisit triggers if the
+project is ever reclassified as commercial.
 
 ## What is implemented
 
@@ -102,8 +107,9 @@ ignored by git. Canonical state is not mutated.
 
 ## Environment
 
-Copy `.env.example` to `.env.local` only for local use. Never commit populated
-files.
+Copy `.env.example` to `.env` for local use. `orchestrator/src/env.ts`
+preloads `.env` from the repo root via `dotenv` at the top of every
+orchestrator entry point. Never commit populated files.
 
 Core variables:
 
@@ -122,9 +128,11 @@ Core variables:
 - `META_GRAPH_API_VERSION`, user IDs and access tokens — used only after the
   corresponding channel is explicitly human-enabled for `autopublish`.
 
-GitHub repository variables provide independent emergency switches:
-`AUTONOMY_KILL_SWITCH=true` and `SOCIAL_KILL_SWITCH=true`. A committed
-`state/PAUSED` stops both runtimes; `state/SOCIAL_PAUSED` stops publishing only.
+GitHub repository variables provide independent emergency switches. Both are
+currently set to `true` (2026-07-28): `AUTONOMY_KILL_SWITCH=true` and
+`SOCIAL_KILL_SWITCH=true`. `HEALTH_CHECK_ENABLED=false` until an operator
+explicitly opts in. A committed `state/PAUSED` stops both runtimes;
+`state/SOCIAL_PAUSED` stops publishing only.
 
 ## Council cycles
 
@@ -205,20 +213,23 @@ The release gate rejects:
 
 ## Production deployment, health and rollback
 
-No production deployment was performed. No approved hosting target, account or
-credentials were supplied, and the provisional name is blocked for public
-launch. `pnpm build` produces the verified deployable artifact locally.
+Deployed on Vercel as project `quorum-site`
+(`https://quorum-site-chi.vercel.app`), Next.js framework, auto-deploy from
+`main`. GitHub secrets `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` and
+`PUBLIC_SITE_URL` are configured for CI. Vercel environment variables
+(`PUBLIC_SITE_URL`, `ADMIN_USER`, `ADMIN_PASSWORD`) are set in the Vercel
+dashboard rather than the repo. The `Production health` workflow stays off
+(`HEALTH_CHECK_ENABLED=false`) while the operator has not opted in to
+external polling.
 
-When launch is authorized:
+When any commercial-mode requirement is re-opened:
 
-1. Resolve brand clearance and update only the documented name status or approve
-   a separately reviewed rename.
-2. Configure the hosting project, `PUBLIC_SITE_URL`, admin credentials and
-   provider secrets in the hosting secret store.
+1. Reopen the brand-clearance decision using the revisit triggers listed in
+   `state/brand-clearance/2026-07-28.md`.
+2. Confirm the Vercel project, `PUBLIC_SITE_URL`, admin credentials and
+   provider secrets are still current.
 3. Deploy an immutable commit after CI succeeds; never deploy a dirty tree.
-4. Enable the `Production health` workflow with
-   `HEALTH_CHECK_ENABLED=true`. It checks `/`, `/standups`, `/feed.json` and
-   `/robots.txt` over HTTPS.
+4. Flip `HEALTH_CHECK_ENABLED=true` after adding an external uptime monitor.
 5. Confirm admin returns 401 without credentials and 200 only with the approved
    pair.
 
@@ -264,14 +275,14 @@ GitHub Actions are pinned to full immutable commits corresponding to
 
 ## Intentional deviations and blockers
 
-- **No live venture:** provider keys were unavailable, so real founding was not
-  attempted and no business result was fabricated.
-- **No deployment:** there is no authorized production target and brand
-  clearance is unresolved.
-- **No connected social account:** channels remain draft-only; account/OAuth
-  work is HUMAN_APPROVAL.
-- **Provisional name:** the read-only screen found material exact-adjacent name,
-  product and domain collisions. Public launch is blocked.
+- **No live venture, by design.** In hobby mode the DISCOVERY gate stays
+  frozen forever; no real founding is attempted and no business result is
+  fabricated.
+- **No connected social account.** Channels remain draft-only; account/OAuth
+  work is HUMAN_APPROVAL and is out of scope for hobby mode.
+- **Provisional name, risk accepted.** The read-only screen found material
+  exact-adjacent name, product and domain collisions. Public commercial
+  launch would require reopening the decision.
 - **Reference design:** no Refero/Awesomic logo, text, image or proprietary
   asset was copied; only the specified editorial zinc/Ember design language was
   implemented.
@@ -279,5 +290,4 @@ GitHub Actions are pinned to full immutable commits corresponding to
   metadata, so the manifest separates an API-equivalent estimate from actual
   project spend.
 
-License: UNLICENSED. No permission is granted to redistribute the code, brand or
-generated assets.
+License: MIT. See `LICENSE`.

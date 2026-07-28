@@ -1,7 +1,9 @@
 # BoardlessAI — monetizace
 
-Autonomní „venture-builder". Finanční model a rozpočet jsou v `scaling.md`; zde
-jsou možné zdroje příjmů projektu (spekulativní — projekt je před tržbami).
+**Hobby / non-commercial mode** od 2026-07-28. Projekt se aktivně
+nemonetizuje a `state/BUSINESS.md` deklaruje, že to zůstane. Tabulka níže
+je hypotetický přehled pro případ, že by vlastník kdy projekt reklasifikoval
+jako komerční. Finanční model a rozpočet jsou v `scaling.md`.
 
 | Možnost | Pravděpodobnost příjmu | Možný výdělek | Výhody | Nevýhody |
 |---|---|---|---|---|
