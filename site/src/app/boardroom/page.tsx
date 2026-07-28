@@ -108,16 +108,16 @@ export default function BoardroomPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 className={buttonVariants({ variant: "primary" })}
-                href={`/standups/${standup.date}`}
+                href={`/standups/${standup.date}/room`}
               >
-                Open full record
+                Read the room transcript
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link
                 className={buttonVariants({ variant: "secondary" })}
-                href="/governance"
+                href={`/standups/${standup.date}`}
               >
-                Read the protocol
+                Full standup record
               </Link>
             </div>
           </div>

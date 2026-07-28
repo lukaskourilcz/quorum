@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
+  ArrowRight,
   CheckCircle2,
   CircleSlash2,
+  MessageSquareText,
   ShieldAlert
 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
@@ -91,6 +93,16 @@ export default async function StandupDetailPage({
               <span>{formatDate(standup.date)}</span>
               <span>Phase: {standup.phase}</span>
               <span>Public fixture record</span>
+            </div>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link
+                className={buttonVariants({ variant: "primary" })}
+                href={`/standups/${standup.date}/room`}
+              >
+                <MessageSquareText aria-hidden="true" className="size-4" />
+                Read the room transcript
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </Link>
             </div>
           </div>
         </header>
@@ -201,9 +213,9 @@ export default async function StandupDetailPage({
                         aria-hidden="true"
                         className="mt-0.5 size-4 shrink-0 text-[var(--success)]"
                       />
-                      <div>
+                      <div className="min-w-0">
                         <p className="text-sm font-bold">{participant.agent}</p>
-                        <p className="mt-1 text-sm leading-6 text-[var(--muted-foreground)]">
+                        <p className="mt-1 break-words text-sm leading-6 text-[var(--muted-foreground)]">
                           {participant.reason}
                         </p>
                       </div>
@@ -225,9 +237,9 @@ export default async function StandupDetailPage({
                         aria-hidden="true"
                         className="mt-0.5 size-4 shrink-0 text-[var(--muted-foreground)]"
                       />
-                      <div>
+                      <div className="min-w-0">
                         <p className="text-sm font-bold">{participant.agent}</p>
-                        <p className="mt-1 text-xs leading-5 text-[var(--muted-foreground)]">
+                        <p className="mt-1 break-words text-xs leading-5 text-[var(--muted-foreground)]">
                           {participant.reason}
                         </p>
                       </div>
@@ -265,7 +277,9 @@ export default async function StandupDetailPage({
                     {standup.voteMatrix.map((vote) => (
                       <tr key={vote.voter}>
                         <TableCell className="font-bold">{vote.voter}</TableCell>
-                        <TableCell>{vote.firstChoice}</TableCell>
+                        <TableCell className="break-words">
+                          {vote.firstChoice}
+                        </TableCell>
                         <TableCell>{vote.veto ? "Yes" : "No"}</TableCell>
                       </tr>
                     ))}
@@ -309,15 +323,19 @@ export default async function StandupDetailPage({
             <div className="grid gap-0">
               {standup.tasks.map((task, index) => (
                 <div
-                  className="grid gap-3 border-t border-[var(--border)] py-6 sm:grid-cols-12 sm:items-center"
+                  className="grid gap-3 border-t border-[var(--border)] py-6 sm:grid-cols-12 sm:items-start"
                   key={task.summary}
                 >
                   <span className="text-xs font-bold text-[var(--muted-foreground)] sm:col-span-1">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-sm sm:col-span-2">{task.time}</span>
-                  <span className="font-bold sm:col-span-2">{task.agent}</span>
-                  <span className="text-sm leading-6 sm:col-span-5">
+                  <span className="min-w-0 break-words text-sm sm:col-span-2">
+                    {task.time}
+                  </span>
+                  <span className="min-w-0 break-words font-bold sm:col-span-2">
+                    {task.agent}
+                  </span>
+                  <span className="min-w-0 break-words text-sm leading-6 sm:col-span-5">
                     {task.summary}
                   </span>
                   <Badge

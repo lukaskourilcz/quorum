@@ -8,13 +8,13 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] hover:border-[var(--accent)] hover:bg-[var(--accent)]",
+          "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] hover:border-[var(--accent-hover)] hover:bg-[var(--accent-hover)] hover:text-[var(--obsidian)]",
         secondary:
-          "border-[var(--slate)] bg-transparent text-[var(--foreground)] hover:border-[var(--iron)] hover:bg-[var(--secondary)]",
+          "border-[var(--slate)] bg-transparent text-[var(--foreground)] hover:border-[var(--iron)] hover:bg-[var(--secondary)] hover:text-[var(--foreground)]",
         accent:
-          "border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)] hover:-translate-y-px hover:bg-[var(--accent-hover)] hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_35%,transparent)]",
+          "border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-foreground)] hover:-translate-y-px hover:bg-[var(--accent-hover)] hover:text-[var(--obsidian)] hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_35%,transparent)]",
         ghost:
-          "border-transparent bg-transparent text-[var(--foreground)] hover:bg-[var(--secondary)]"
+          "border-transparent bg-transparent text-[var(--foreground)] hover:bg-[var(--secondary)] hover:text-[var(--foreground)]"
       },
       size: {
         default: "min-h-11",

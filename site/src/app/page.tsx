@@ -230,7 +230,7 @@ export default function HomePage() {
           <div className="border-t border-[var(--border)]">
             {governanceSteps.map((step, index) => (
               <div
-                className="grid gap-4 border-b border-[var(--border)] py-7 transition-all hover:bg-[var(--surface-raised)] hover:px-4 md:grid-cols-12 md:items-baseline md:gap-8"
+                className="grid gap-4 border-b border-[var(--border)] px-4 py-7 transition-colors hover:bg-[var(--surface-raised)] md:grid-cols-12 md:items-baseline md:gap-8"
                 key={step.number}
               >
                 <span className="font-mono text-xs tracking-[0.1em] text-[var(--accent)] md:col-span-1">

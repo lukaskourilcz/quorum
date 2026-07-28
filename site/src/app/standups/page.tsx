@@ -146,16 +146,16 @@ export default function StandupsPage() {
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Link
                       className={buttonVariants({ variant: "primary" })}
-                      href="/boardroom"
+                      href={`/standups/${standup.date}/room`}
                     >
-                      Open the room record
+                      Read the room transcript
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
                     <Link
                       className={buttonVariants({ variant: "secondary" })}
-                      href="/ventures"
+                      href={`/standups/${standup.date}`}
                     >
-                      See the declined cards
+                      Full standup record
                     </Link>
                   </div>
                 </div>

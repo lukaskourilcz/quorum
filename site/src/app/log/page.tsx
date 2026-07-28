@@ -74,11 +74,11 @@ export default function LogPage() {
                     {entry.type}
                   </span>
                 </div>
-                <div className="md:col-span-6">
-                  <h3 className="text-[1.1875rem] font-semibold tracking-[-0.03em]">
+                <div className="min-w-0 md:col-span-6">
+                  <h3 className="break-words text-[1.1875rem] font-semibold tracking-[-0.03em]">
                     {entry.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-[var(--fog)]">
+                  <p className="mt-2 break-words text-sm leading-6 text-[var(--fog)]">
                     {entry.detail}
                   </p>
                 </div>
