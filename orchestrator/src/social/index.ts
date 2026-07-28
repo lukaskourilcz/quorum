@@ -1,3 +1,4 @@
+import "../env.js";
 import { runSocialPublisher } from "./runner.js";
 
 const args = process.argv.slice(2);

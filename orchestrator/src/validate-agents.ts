@@ -1,3 +1,4 @@
+import "./env.js";
 import { validateAgentAvatars } from "./brand/avatars.js";
 import { loadAgentRegistry } from "./org/registry.js";
 

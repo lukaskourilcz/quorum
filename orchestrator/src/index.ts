@@ -1,3 +1,4 @@
+import "./env.js";
 import { runCycle } from "./cycle.js";
 import { PhaseSchema, type Phase } from "./types.js";
 
