@@ -9,7 +9,8 @@ export function Badge({
   tone?: "neutral" | "accent" | "success" | "warning" | "danger" | "dark";
 }) {
   const tones = {
-    neutral: "border-[var(--slate)] bg-transparent text-[var(--ash)]",
+    neutral:
+      "border-[var(--steel)] bg-[var(--surface)] text-[var(--mist)]",
     accent:
       "border-[var(--accent)] bg-[var(--accent)] text-[var(--obsidian)]",
     success:
@@ -18,7 +19,7 @@ export function Badge({
       "border-[var(--warning-soft)] bg-[var(--warning-soft)] text-[var(--warning)]",
     danger:
       "border-[var(--destructive-soft)] bg-[var(--destructive-soft)] text-[var(--destructive)]",
-    dark: "border-[var(--slate)] bg-transparent text-[var(--paper)]"
+    dark: "border-[var(--iron)] bg-[var(--graphite)] text-[var(--paper)]"
   };
   return (
     <span

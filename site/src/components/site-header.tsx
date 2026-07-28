@@ -56,7 +56,7 @@ export function SiteHeader() {
         <Link
           aria-current={pathname.startsWith("/log") ? "page" : undefined}
           className={cn(
-            "hidden min-h-8.5 shrink-0 items-center gap-2 rounded-lg border border-[var(--slate)] px-3.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.08em] transition-colors hover:border-[var(--iron)] hover:bg-[var(--secondary)] sm:inline-flex",
+            "hidden min-h-8.5 shrink-0 items-center gap-2 rounded-lg border border-[var(--steel)] bg-[var(--surface)] px-3.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-[var(--foreground)] transition-colors hover:border-[var(--ash)] hover:bg-[var(--surface-raised)] sm:inline-flex",
             pathname.startsWith("/log") &&
               "border-[var(--accent)] text-[var(--accent)]"
           )}
