@@ -9,22 +9,18 @@ ověřený podnikatelský záměr, připojené tržby ani produkční deployment
 
 ## P0 — blokátory před veřejným spuštěním
 
-- [ ] **Vyřešit název BoardlessAI.** Současný název má vysoké kolizní riziko. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-  Nechte provést právní rešerši a buď výslovně schvalte použití názvu, nebo
-  autorizujte přejmenování. Podklady jsou v
-  `state/brand-clearance/2026-07-23.md`.
-- [ ] **Rozhodnout o licenci.** Repozitář je nyní `UNLICENSED`. Před sdílením `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  zdrojového kódu mimo soukromý tým zvolte licenci nebo ponechte výslovně
-  proprietární režim.
-- [ ] **Určit provozovatele projektu.** Rozhodněte, zda bude provozovatelem `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-  fyzická osoba, OSVČ, nebo právnická osoba. Podle toho nastavte fakturaci,
-  účetnictví, daně a vlastnictví domén a účtů.
-- [ ] **Schválit skutečný měsíční rozpočet.** Výchozí hard cap je `$20/měsíc`. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-  Navýšení musí být vědomé, financované a provedené jako samostatná změna
-  konfigurace se zachováním všech guardrailů.
-- [ ] **Určit člověka pro incidenty a schvalování.** Musí existovat vlastník, `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  který může zastavit automatizaci, řešit účty, platby, právní otázky a
-  nejednoznačné publikační výsledky.
+Vyřešeno 2026-07-28 rozhodnutím vlastníka o **hobby / non-commercial** módu
+(viz `state/BUSINESS.md` → Project mode). Původní úkoly ponechány jako
+historický záznam:
+
+- [x] **Vyřešit název BoardlessAI.** Vlastník vědomě přijal kolizní riziko `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
+  pod hobby módem. Podklady: `state/brand-clearance/2026-07-28.md`.
+- [x] **Rozhodnout o licenci.** MIT — přidán `LICENSE` soubor, `package.json` `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
+  aktualizován.
+- [x] **Určit provozovatele projektu.** Fyzická osoba — Lukas Kouril. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
+- [x] **Schválit skutečný měsíční rozpočet.** $20/měsíc přijat. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
+- [x] **Určit člověka pro incidenty a schvalování.** Lukas Kouril `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
+  (single-operator setup).
 
 ## Projekt je od 27. 7. 2026 veřejně vidět v portfoliu
 
@@ -32,54 +28,40 @@ BoardlessAI je nově uvedený mezi projekty na lukaskouril.dev, včetně animova
 náhledu nahraného ze spuštěného webu. Portfolio popisuje stav pravdivě:
 implementace hotová, venture nezaložený, web běží na označených fixture datech.
 
-- [ ] **Rozhodnout o názvu dřív, než ho portfolio ponese dál.** Název je stále `provisional_high_collision_risk` podle `state/brand-clearance/2026-07-23.md`, ale už je publikovaný na veřejné stránce. Buď riziko vědomě přijměte, nebo schvalte přejmenování — v tom případě je potřeba změnit i položku v portfoliu. `[imp:4]` `[owner:me]` `[time:1h]` `[kind:legal]`
+- [x] **Rozhodnout o názvu dřív, než ho portfolio ponese dát dál.** Riziko `[imp:4]` `[owner:me]` `[time:1h]` `[kind:legal]`
+  vědomě přijato pod hobby módem 2026-07-28. Portfolio karta může nést `BoardlessAI`.
 - [ ] **Dodat veřejnou URL webu, pokud má karta v portfoliu odkazovat.** Repozitář žádnou nasazenou adresu neobsahuje (`PUBLIC_SITE_URL` je jen proměnná prostředí), takže položka v portfoliu je zatím bez odkazu. `[imp:2]` `[owner:me]` `[time:15m]` `[kind:decision]`
 - [ ] **Po každém výrazném redesignu webu nahrát náhled znovu.** Postup je v `.claude/skills/preview-video/SKILL.md`; hotové soubory patří do `nxt-portfolio/public/previews/quorum/`. `[imp:2]` `[owner:ai]` `[time:30m]` `[kind:content]`
 
 ## P1 — GitHub a bezpečnost repozitáře
 
-- [ ] V GitHubu pro `main` zapnout branch protection nebo ruleset: `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  - vyžadovat pull request;
-  - vyžadovat úspěšný workflow `CI`;
-  - blokovat force-push a mazání větve;
-  - požadovat vyřešení review vláken;
-  - podle velikosti týmu vyžadovat alespoň jedno schválení.
-- [ ] Zapnout Dependabot security alerts, secret scanning a push protection, `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  pokud je daný tarif repozitáře podporuje.
-- [ ] Omezit oprávnění GitHub Actions na minimum a pravidelně kontrolovat `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  přístupy spolupracovníků a nainstalovaných GitHub Apps.
-- [ ] Nastavit nouzové repository variables: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  - `AUTONOMY_KILL_SWITCH=true`, dokud nejsou připravené živé AI cykly;
-  - `SOCIAL_KILL_SWITCH=true`, dokud nejsou schválené sociální účty.
-- [ ] Nechat `HEALTH_CHECK_ENABLED=false`, dokud neexistuje produkční HTTPS `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  URL.
+- [-] Branch protection ruleset pro `main` — vyžaduje GitHub Pro na privátním `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
+  repu; pro hobby SKIP.
+- [x] Dependabot alerts a automated security fixes zapnuty 2026-07-28. Secret `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+  scanning / push protection nedostupné bez GHAS.
+- [x] Actions permissions omezeny (`read` + zákaz PR approve). Ruční kontrola `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
+  Collaborators a Apps zbývá.
+- [x] Repository variables nastaveny 2026-07-28: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+  `AUTONOMY_KILL_SWITCH=true`, `SOCIAL_KILL_SWITCH=true`.
+- [x] `HEALTH_CHECK_ENABLED=false` nastaveno 2026-07-28. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
 
 ## P1 — AI poskytovatelé
 
-- [ ] Založit nebo vybrat OpenAI projekt a nastavit jeho vlastní billing limit `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  a upozornění.
-- [ ] Založit nebo vybrat Anthropic workspace a nastavit jeho vlastní billing `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  limit a upozornění.
-- [ ] Do GitHub repository secrets vložit: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  - `OPENAI_API_KEY`;
-  - `ANTHROPIC_API_KEY`.
-- [ ] Před prvním živým cyklem znovu ověřit dostupnost modelů a ceny uvedené v `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  `config/models.json` a `orchestrator/src/llm/prices.ts`. Poslední interní
-  ověření je datované `2026-07-23`.
-- [ ] Spustit ruční founding workflow nejprve s `dry=true`; teprve po kontrole `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  rozpočtu, routingu a výstupů povolit jeden ohraničený živý běh.
-- [ ] Po přidání klíčů označit položku `API-CREDENTIALS-001` v `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  `state/INBOX.md` jako schválenou s datem. Samotná existence klíče nenahrazuje
-  schválení.
+- [ ] Nastavit billing limity u OpenAI a Anthropic (dashboardy). `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [x] GitHub secrets `OPENAI_API_KEY` a `ANTHROPIC_API_KEY` vloženy 2026-07-28. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [ ] **Rotovat oba klíče** — pastnuty do transkriptu, leak surface. `[imp:5]` `[owner:me]` `[time:15m]` `[kind:setup]`
+- [ ] Ověřit modely a ceny v `config/models.json` a `orchestrator/src/llm/prices.ts` `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
+  před prvním živým cyklem.
+- [ ] `dry=true` napřed, pak jeden ohraničený živý běh. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [x] `API-CREDENTIALS-001` v `state/INBOX.md` vyřešeno 2026-07-28. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
 
 Bez obou klíčů se plánované cykly bezpečně přepnou do dry režimu.
 
 ## P1 — hosting a doména
 
-- [ ] Až po vyřešení názvu zvolit doménu a hosting s podporou Node.js 22 a `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-  Next.js 16.
-- [ ] Vytvořit produkční projekt z větve `main`. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Nastavit produkční environment variables: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [x] Hosting: Vercel. Doména: `quorum-site-chi.vercel.app`. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
+- [x] Vercel projekt `quorum-site` s `main` jako production branch. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [ ] Nastavit produkční environment variables ve Vercel dashboardu: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]` `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
 
 | Proměnná | Povinná | Účel |
 | --- | --- | --- |
@@ -116,19 +98,18 @@ Bez obou klíčů se plánované cykly bezpečně přepnou do dry režimu.
 
 ## P2 — skutečné založení venture
 
-Projekt nesmí předstírat nalezený business. Nejdříve je potřeba:
+**Neaktivní** v hobby módu (viz `state/BUSINESS.md` → Project mode). Sekce se
+znovu otevře pouze při reklasifikaci projektu na komerční. `FIX-*` záznamy
+zůstávají fixture a nesmí být použity jako obchodní důkaz.
 
-- [ ] Dodat nebo schválit zdroje pro skutečný market research. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [ ] Získat minimálně tři nezávislé reálné důkazní položky. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Získat alespoň jeden přímý signál problému nebo nákupního záměru. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Popsat dosažitelný distribuční kanál. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Definovat první omezený experiment včetně baseline, targetu, maximální `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [-] Dodat nebo schválit zdroje pro skutečný market research. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
+- [-] Získat minimálně tři nezávislé reálné důkazní položky. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [-] Získat alespoň jeden přímý signál problému nebo nákupního záměru. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [-] Popsat dosažitelný distribuční kanál. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [-] Definovat první omezený experiment včetně baseline, targetu, maximální `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
   ceny, maximální ztráty a stop condition.
-- [ ] Nechat deterministický DISCOVERY gate potvrdit skóre alespoň `35/50` a `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+- [-] Nechat deterministický DISCOVERY gate potvrdit skóre alespoň `35/50` a `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
   žádnou dimenzi pod `2`.
-
-Do té doby jsou záznamy `FIX-*` pouze testovací fixture a nesmí být použity
-jako obchodní důkaz.
 
 ## P2 — analytika, tržby a platby
 
