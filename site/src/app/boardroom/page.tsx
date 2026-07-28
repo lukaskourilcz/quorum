@@ -176,9 +176,7 @@ export default function BoardroomPage() {
                     if (!agent) return null;
                     return (
                       <div
-                        className={`grid grid-cols-[2.25rem_1fr] gap-3.5 px-6 py-3.5 ${
-                          group.dimmed ? "opacity-70" : ""
-                        }`}
+                        className="grid grid-cols-[2.25rem_1fr] gap-3.5 px-6 py-3.5"
                         key={participant.agent}
                       >
                         <AgentPortrait

@@ -93,8 +93,8 @@ export default function MetricsPage() {
               {metrics.map((metric) => {
                 const statusColor =
                   metric.status === "Pass"
-                    ? "var(--success)"
-                    : "var(--warning)";
+                    ? "var(--success-soft)"
+                    : "var(--warning-soft)";
                 return (
                   <tr
                     className="transition-colors hover:bg-[var(--surface-raised)]"

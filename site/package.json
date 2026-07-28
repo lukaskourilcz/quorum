@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "start": "next start",
     "test": "vitest run --passWithNoTests",
+    "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -21,6 +22,8 @@
     "tailwind-merge": "3.6.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.62.0",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "22.20.1",
     "@types/react": "19.2.17",
@@ -32,4 +35,3 @@
     "vitest": "4.1.10"
   }
 }
-

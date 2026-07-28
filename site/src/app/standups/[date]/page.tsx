@@ -293,11 +293,11 @@ export default async function StandupDetailPage({
         <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8 md:pb-28">
           <Card className="overflow-hidden border-[var(--accent)]">
             <div className="grid md:grid-cols-12">
-              <div className="bg-[var(--accent)] p-7 md:col-span-3 md:p-10">
+              <div className="bg-[var(--accent)] p-7 text-[var(--obsidian)] md:col-span-3 md:p-10">
                 <p className="text-xs font-bold uppercase tracking-[0.12em]">
                   Decision
                 </p>
-                <p className="mt-8 text-3xl font-semibold leading-tight tracking-[-0.045em]">
+                <p className="mt-8 break-words text-3xl font-semibold leading-tight tracking-[-0.045em]">
                   {standup.decision.outcome}
                 </p>
               </div>

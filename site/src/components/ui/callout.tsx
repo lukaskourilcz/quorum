@@ -9,10 +9,14 @@ export function Callout({
   tone?: "neutral" | "accent" | "warning" | "danger";
 }) {
   const tones = {
-    neutral: "border-[var(--border)] bg-[var(--card)]",
-    accent: "border-[var(--accent)] bg-[var(--surface-raised)]",
-    warning: "border-[var(--warning)] bg-[var(--warning-soft)]",
-    danger: "border-[var(--destructive)] bg-[var(--destructive-soft)]"
+    neutral:
+      "border-[var(--border)] bg-[var(--card)] text-[var(--foreground)]",
+    accent:
+      "border-[var(--accent)] bg-[var(--surface-raised)] text-[var(--foreground)]",
+    warning:
+      "border-[var(--warning)] bg-[var(--warning-soft)] text-[var(--warning)]",
+    danger:
+      "border-[var(--destructive)] bg-[var(--destructive-soft)] text-[var(--destructive)]"
   };
   return (
     <div

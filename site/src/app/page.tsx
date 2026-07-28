@@ -242,7 +242,7 @@ export default function HomePage() {
                 <p className="max-w-3xl text-[0.96875rem] leading-7 text-[var(--fog)] md:col-span-7">
                   {step.description}
                 </p>
-                <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--iron)] md:col-span-1 md:justify-self-end">
+                <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)] md:col-span-1 md:justify-self-end">
                   {stepTags[index]}
                 </span>
               </div>

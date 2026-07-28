@@ -124,7 +124,7 @@ export default async function VentureDetailPage({
                         <div className="mb-2 flex items-center justify-between gap-4">
                           <p className="text-sm font-medium">{dimension}</p>
                           {score < 2 ? (
-                            <span className="text-xs font-bold text-[var(--destructive)]">
+                            <span className="text-xs font-bold text-[var(--destructive-soft)]">
                               Fails floor
                             </span>
                           ) : null}

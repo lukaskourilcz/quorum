@@ -151,7 +151,7 @@ export default function VenturesPage() {
                   className={`font-mono text-[0.6875rem] tracking-[0.1em] ${
                     index === 0
                       ? "text-[var(--accent)]"
-                      : "text-[var(--iron)]"
+                      : "text-[var(--fog)]"
                   }`}
                 >
                   {number}
