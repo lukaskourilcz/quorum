@@ -11,6 +11,12 @@ import {
   type ReplayForecastOption
 } from "@/components/decision-replay";
 import { PageShell } from "@/components/page-shell";
+import { RoomMessageTime } from "@/components/room-message-time";
+import {
+  formatRoomClock,
+  formatRoomDateTime,
+  resolveRoomTurnTiming
+} from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -208,14 +214,6 @@ const modeTone: Record<
   close: "accent"
 };
 
-function formatClockTime(iso: string) {
-  return new Intl.DateTimeFormat("en", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Prague"
-  }).format(new Date(iso));
-}
-
 export default async function StandupRoomPage({
   params
 }: {
@@ -239,13 +237,27 @@ export default async function StandupRoomPage({
       <article>
         <header className="border-b border-[var(--border)] bg-[var(--card)]">
           <div className="mx-auto max-w-[var(--container)] px-5 py-10 md:px-10 md:py-14">
-            <Link
-              className={buttonVariants({ variant: "ghost", size: "small" })}
-              href={`/standups/${standup.date}`}
-            >
-              <ArrowLeft aria-hidden="true" className="size-4" />
-              Back to standup
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                className={buttonVariants({
+                  variant: "ghost",
+                  size: "small"
+                })}
+                href={`/standups/${standup.date}`}
+              >
+                <ArrowLeft aria-hidden="true" className="size-4" />
+                Back to standup
+              </Link>
+              <Link
+                className={buttonVariants({
+                  variant: "secondary",
+                  size: "small"
+                })}
+                href="/boardroom#room-archive"
+              >
+                All boardrooms
+              </Link>
+            </div>
             <div className="mt-8 grid items-end gap-8 md:grid-cols-12">
               <div className="md:col-span-8">
                 <div className="flex flex-wrap gap-2">
@@ -300,7 +312,9 @@ export default async function StandupRoomPage({
               <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--fog)]">
                 The replay uses this transcript without adding dialogue,
                 reactions or hidden reasoning. The fixture label remains
-                visible because no live council call occurred.
+                visible because no live council call occurred. Message times
+                follow the deterministic fixture timeline between room open
+                and close.
               </p>
             </div>
             <aside className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 md:col-span-5 md:p-8">
@@ -310,9 +324,8 @@ export default async function StandupRoomPage({
                     Room roster
                   </p>
                   <p className="mt-3 text-sm text-[var(--mist)]">
-                    {formatDate(standup.date)} ·{" "}
-                    {formatClockTime(transcript.openedAt)} to{" "}
-                    {formatClockTime(transcript.closedAt)}
+                    {formatRoomDateTime(transcript.openedAt)} to{" "}
+                    {formatRoomClock(transcript.closedAt)}
                   </p>
                 </div>
                 <Gavel
@@ -352,6 +365,7 @@ export default async function StandupRoomPage({
                 : turn.mode === "veto" || turn.mode === "vote"
                   ? "accent"
                   : "default";
+              const turnTiming = resolveRoomTurnTiming(transcript, index);
 
               return (
                 <Message key={`${turn.agent}-${index}`}>
@@ -384,19 +398,25 @@ export default async function StandupRoomPage({
                       </p>
                     ) : null}
                     <MessageContent>{turn.text}</MessageContent>
-                    {turn.evidenceRefs?.length ? (
-                      <MessageMeta>
-                        <span>On record:</span>
-                        {turn.evidenceRefs.map((reference) => (
-                          <span
-                            className="rounded-full border border-[var(--slate)] px-2.5 py-0.5 text-[var(--ash)]"
-                            key={reference}
-                          >
-                            {reference}
-                          </span>
-                        ))}
-                      </MessageMeta>
-                    ) : null}
+                    <MessageMeta>
+                      <RoomMessageTime
+                        className="text-[var(--ash)]"
+                        timing={turnTiming}
+                      />
+                      {turn.evidenceRefs?.length ? (
+                        <>
+                          <span>On record:</span>
+                          {turn.evidenceRefs.map((reference) => (
+                            <span
+                              className="rounded-full border border-[var(--slate)] px-2.5 py-0.5 text-[var(--ash)]"
+                              key={reference}
+                            >
+                              {reference}
+                            </span>
+                          ))}
+                        </>
+                      ) : null}
+                    </MessageMeta>
                   </MessageBubble>
                 </Message>
               );
@@ -423,9 +443,9 @@ export default async function StandupRoomPage({
                 </Link>
                 <Link
                   className={buttonVariants({ variant: "primary" })}
-                  href="/boardroom"
+                  href="/boardroom#room-archive"
                 >
-                  Room protocol
+                  All boardrooms
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
               </div>

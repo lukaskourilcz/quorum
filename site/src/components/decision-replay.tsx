@@ -37,6 +37,8 @@ import {
   type ReplayCut,
   type ReplayMoment
 } from "@/components/decision-replay-model";
+import { RoomMessageTime } from "@/components/room-message-time";
+import { resolveRoomTurnTiming } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Agent, AgentId } from "@/data/agents";
@@ -216,6 +218,10 @@ export function DecisionReplay({
   const currentPosition = Math.max(0, playlist.indexOf(currentTurnIndex));
   const lastPlaylistPosition = Math.max(0, playlist.length - 1);
   const currentTurn = transcript.turns[currentTurnIndex]!;
+  const currentTurnTiming = resolveRoomTurnTiming(
+    transcript,
+    currentTurnIndex
+  );
   const currentAgent = getAgent(agents, currentTurn.agent);
   const addressedAgent = currentTurn.addressedTo
     ? getAgent(agents, currentTurn.addressedTo)
@@ -697,7 +703,7 @@ export function DecisionReplay({
     >
       <p aria-live="polite" className="sr-only">
         {hasStarted
-          ? `${selectedCut?.label ?? "Replay"}. Moment ${currentPosition + 1} of ${playlist.length}. Recorded turn ${currentTurnIndex + 1}. ${currentAgent.id} ${modeLabel[currentTurn.mode]}.`
+          ? `${selectedCut?.label ?? "Replay"}. Moment ${currentPosition + 1} of ${playlist.length}. Recorded turn ${currentTurnIndex + 1}. ${currentAgent.id} ${modeLabel[currentTurn.mode]}. Sent ${currentTurnTiming.iso}.`
           : "Decision Replay ready."}
       </p>
 
@@ -976,6 +982,10 @@ export function DecisionReplay({
                           <p className="mt-1 text-xs text-[var(--ash)]">
                             {currentAgent.title}
                           </p>
+                          <RoomMessageTime
+                            className="mt-2 block max-w-xl leading-5 text-[var(--ash)]"
+                            timing={currentTurnTiming}
+                          />
                         </div>
                       </div>
                       <Badge tone={modeTone[currentTurn.mode]}>
