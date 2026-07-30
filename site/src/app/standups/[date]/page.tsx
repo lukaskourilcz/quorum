@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
+import { formatPhaseLabel } from "@/components/standup-countdown-model";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
@@ -45,9 +46,9 @@ export async function generateMetadata({
   return {
     description: standup
       ? standup.decision.summary
-      : "BoardlessAI standup record.",
+      : "BoardlessAI shift episode record.",
     robots: standup?.fixture ? { follow: true, index: false } : undefined,
-    title: standup ? `Standup · ${formatDate(date)}` : "Standup"
+    title: standup ? `Shift episode · ${formatDate(date)}` : "Shift episode"
   };
 }
 
@@ -78,7 +79,7 @@ export default async function StandupDetailPage({
               href="/standups"
             >
               <ArrowLeft aria-hidden="true" className="size-4" />
-              All standups
+              All episodes
             </Link>
             <div className="mt-10 flex flex-wrap gap-2">
               <Badge tone="warning">{standup.status}</Badge>
@@ -86,12 +87,12 @@ export default async function StandupDetailPage({
               <Badge tone="dark">{standup.stage}</Badge>
             </div>
             <h1 className="mt-7 max-w-5xl text-[clamp(3rem,7.5vw,7.2rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
-              Founding standup
+              {formatPhaseLabel(standup.phase)} episode
               <span className="text-[var(--accent)]">.</span>
             </h1>
             <div className="mt-8 flex flex-wrap gap-x-7 gap-y-2 text-sm text-[var(--muted-foreground)]">
               <span>{formatDate(standup.date)}</span>
-              <span>Phase: {standup.phase}</span>
+              <span>Shift: {formatPhaseLabel(standup.phase)}</span>
               <span>Public fixture record</span>
             </div>
             <div className="mt-9 flex flex-wrap gap-3">

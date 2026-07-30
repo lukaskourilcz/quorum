@@ -2,20 +2,23 @@ name: Guarded council cycle
 
 on:
   schedule:
-    - cron: "30 7 * * *"
+    - cron: "0 6 * * *"
       timezone: "Europe/Prague"
-    - cron: "30 19 * * *"
+    - cron: "0 14 * * *"
+      timezone: "Europe/Prague"
+    - cron: "0 22 * * *"
       timezone: "Europe/Prague"
   workflow_dispatch:
     inputs:
       phase:
         description: Council phase
         required: true
-        default: am
+        default: morning
         type: choice
         options:
-          - am
-          - pm
+          - morning
+          - afternoon
+          - night
           - founding
       dry:
         description: Never call paid APIs or write canonical state
@@ -79,15 +82,19 @@ jobs:
           HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
           HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
         run: |
-          phase="${INPUT_PHASE:-am}"
+          phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
           if test "$EVENT_NAME" = "schedule"; then
             dry=false
-            if test "$EVENT_SCHEDULE" = "30 7 * * *"; then
-              phase=am
-            else
-              phase=pm
-            fi
+            case "$EVENT_SCHEDULE" in
+              "0 6 * * *") phase=morning ;;
+              "0 14 * * *") phase=afternoon ;;
+              "0 22 * * *") phase=night ;;
+              *)
+                echo "Unknown cycle schedule; refusing to infer a shift."
+                exit 1
+                ;;
+            esac
           fi
           if test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; then
             dry=true

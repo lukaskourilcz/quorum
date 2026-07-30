@@ -30,8 +30,29 @@ export const StageSchema = z.enum([
 ]);
 export type Stage = z.infer<typeof StageSchema>;
 
-export const PhaseSchema = z.enum(["founding", "am", "pm"]);
+export const LegacyPhaseSchema = z.enum(["am", "pm"]);
+export type LegacyPhase = z.infer<typeof LegacyPhaseSchema>;
+
+export const ShiftPhaseSchema = z.enum(["morning", "afternoon", "night"]);
+export type ShiftPhase = z.infer<typeof ShiftPhaseSchema>;
+
+export const PhaseSchema = z.enum([
+  "founding",
+  "am",
+  "pm",
+  "morning",
+  "afternoon",
+  "night"
+]);
 export type Phase = z.infer<typeof PhaseSchema>;
+
+export const RunnablePhaseSchema = z.enum([
+  "founding",
+  "morning",
+  "afternoon",
+  "night"
+]);
+export type RunnablePhase = z.infer<typeof RunnablePhaseSchema>;
 
 export const TaskTypeSchema = z.enum([
   "research",
@@ -56,4 +77,3 @@ export const EvidenceRefSchema = z
   .min(1)
   .max(120)
   .regex(/^[A-Z][A-Z0-9_-]*$/);
-

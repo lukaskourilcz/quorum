@@ -32,7 +32,8 @@ project is ever reclassified as commercial.
   sanitized public projections.
 - Guarded file patching, network allowlists, external-content sanitization and
   generated-code controls.
-- Daily standup, finance, social, organization and public-projection contracts.
+- Three-shift standup, finance, social, organization and public-projection
+  contracts.
 - Fourteen canonical agent profiles, shared visual identity, generated WebP
   portraits, provenance manifest and deterministic asset checks.
 - Responsive corporate site with all requested routes, feeds, sitemap, metadata
@@ -99,7 +100,9 @@ Useful commands:
 | `pnpm test` | Runs all deterministic unit and policy tests |
 | `pnpm build` | Builds orchestrator output and the production Next app |
 | `pnpm cycle -- --phase founding --dry` | Runs an offline founding fixture |
-| `pnpm cycle -- --phase am --dry --explain-budget --explain-routing` | Explains a bounded dry AM cycle |
+| `pnpm cycle -- --phase morning --dry --explain-budget --explain-routing` | Explains a bounded dry Morning shift |
+| `pnpm cycle -- --phase afternoon --dry` | Runs a bounded dry Afternoon shift |
+| `pnpm cycle -- --phase night --dry` | Runs a bounded dry Night shift |
 | `pnpm social:publish -- --dry-if-disabled --validate-only` | Validates the social queue without publishing |
 
 Dry-cycle artifacts are written only below `tmp/dry-run/state/`, which is
@@ -128,8 +131,9 @@ Core variables:
 - `META_GRAPH_API_VERSION`, user IDs and access tokens — used only after the
   corresponding channel is explicitly human-enabled for `autopublish`.
 
-GitHub repository variables provide independent emergency switches. Both are
-currently set to `true` (2026-07-28): `AUTONOMY_KILL_SWITCH=true` and
+GitHub repository variables provide independent emergency switches. The owner
+authorized the council schedule on 2026-07-30:
+`AUTONOMY_KILL_SWITCH=false`; social publishing remains disabled with
 `SOCIAL_KILL_SWITCH=true`. `HEALTH_CHECK_ENABLED=false` until an operator
 explicitly opts in. A committed `state/PAUSED` stops both runtimes;
 `state/SOCIAL_PAUSED` stops publishing only.
@@ -138,13 +142,17 @@ explicitly opts in. A committed `state/PAUSED` stops both runtimes;
 
 Schedules use the IANA timezone `Europe/Prague`:
 
-- 07:30 — AM cycle
-- 19:30 — PM cycle
+- 06:00 — Morning shift, covering 06:00–14:00
+- 14:00 — Afternoon shift, covering 14:00–22:00
+- 22:00 — Night shift, covering 22:00–06:00
 
-Every run installs from the lockfile, honors the kill switch, runs the complete
-pre-gate, calculates routing and worst-case budget, executes at most the bounded
-cycle, repeats the release gate and then creates at most one normal
-`cycle(N)` commit. There is no force push. A concurrent run cannot overlap.
+Every shift seats VIZE, FORGE, PULSE and AUDIT with LEDGER as the required
+finance control. Specialists enter only when routing rules need them. Each run
+installs from the lockfile, honors the kill switch, runs the complete pre-gate,
+calculates routing and worst-case budget, executes at most the bounded cycle,
+publishes episode and handoff metadata, repeats the release gate and then
+creates at most one normal `cycle(N)` commit. There is no force push. A
+concurrent run cannot overlap.
 
 A live founding cycle is intentionally unavailable until both provider keys are
 configured. With no keys:

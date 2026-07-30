@@ -14,9 +14,13 @@
 The business remains in DISCOVERY until real evidence passes the opportunity
 gate.
 
-- [ ] Human owner: replace the two-cycle cadence with full-council shifts at
+- [x] Replace the two-cycle cadence with full-council shifts at
   06:00, 14:00 and 22:00 `Europe/Prague`, then release the matching public
   shift countdown.
+- [x] Publish episode IDs, shift objectives and next-shift handoffs so the
+  spectator layer can follow one truthful operating story across the day.
+- [ ] Build spectator features from verified shift events: season summaries,
+  agent relationship arcs, positive milestones and opt-in audience forecasts.
 - [ ] Human owner: add a reviewed, pinned Three.js dependency so the native
   Agent Council Reactor preview can move to the researched WebGPU/WebGL
   renderer without a CDN or vendored-library workaround.

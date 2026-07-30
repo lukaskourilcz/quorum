@@ -44,26 +44,27 @@ export function StandupCountdown() {
   }, []);
 
   const accessibleLabel = snapshot
-    ? `Next standup: ${snapshot.occurrence.label}, ${formatStandupOccurrence(snapshot.occurrence)}. Starts in ${snapshot.countdown.days} days, ${snapshot.countdown.hours} hours, ${snapshot.countdown.minutes} minutes and ${snapshot.countdown.seconds} seconds.`
-    : "Loading the next scheduled standup.";
+    ? `Next shift: ${snapshot.occurrence.label}, ${snapshot.occurrence.hours}, ${formatStandupOccurrence(snapshot.occurrence)}. Starts in ${snapshot.countdown.days} days, ${snapshot.countdown.hours} hours, ${snapshot.countdown.minutes} minutes and ${snapshot.countdown.seconds} seconds.`
+    : "Loading the next scheduled shift.";
 
   return (
     <div className="flex w-full flex-wrap items-end gap-x-8 gap-y-4 border-l-2 border-[var(--accent)] pl-4 md:pl-5 xl:w-auto xl:shrink-0 xl:justify-end">
       <div className="min-w-52">
         <p className="mono-label text-[0.65625rem] text-[var(--accent)]">
-          Next standup starts in
+          Next shift starts in
         </p>
         {snapshot ? (
           <time
             className="mt-1.5 block text-sm leading-6 text-[var(--mist)]"
             dateTime={snapshot.occurrence.iso}
           >
-            {snapshot.occurrence.label} ·{" "}
+            {snapshot.occurrence.label} · {snapshot.occurrence.hours}
+            <br />
             {formatStandupOccurrence(snapshot.occurrence)}
           </time>
         ) : (
           <p className="mt-1.5 text-sm leading-6 text-[var(--mist)]">
-            AM / PM council · Prague schedule
+            Morning 06:00 · Afternoon 14:00 · Night 22:00
           </p>
         )}
       </div>

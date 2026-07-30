@@ -31,7 +31,7 @@ export function GET() {
       <channel>
         <title>BoardlessAI public operating record</title>
         <link>${base}</link>
-        <description>Public standups, decisions, costs and outcomes from BoardlessAI.</description>
+        <description>Public shift episodes, decisions, costs and outcomes from BoardlessAI.</description>
         <language>en</language>
         <lastBuildDate>${new Date("2026-07-23T05:30:00.000Z").toUTCString()}</lastBuildDate>
         ${items}

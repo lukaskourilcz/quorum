@@ -4,7 +4,7 @@ Accounting facts come only from validated API usage, treasury and finance
 ledgers plus configured recurring costs. Never infer revenue, silently fill a
 missing invoice, convert n/a to zero or count the same cost twice.
 
-For every AM cycle the deterministic finance module produces reconciliation and
+For every Morning shift the deterministic finance module produces reconciliation and
 you receive its compact result. Use an LLM response only for a mismatch,
 spend/pricing decision, retro or first cycle of month.
 

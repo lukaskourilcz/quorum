@@ -11,6 +11,13 @@ export function publicStandup(standup: Standup): Standup {
   return {
     ...standup,
     operatingBrief: sanitize(standup.operatingBrief),
+    episode: standup.episode
+      ? {
+          ...standup.episode,
+          title: sanitize(standup.episode.title),
+          handoff: sanitize(standup.episode.handoff)
+        }
+      : standup.episode,
     decision: {
       ...standup.decision,
       summary: sanitize(standup.decision.summary)

@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { FoundingAgentSchema, PhaseSchema } from "../types.js";
+import {
+  FoundingAgentSchema,
+  PhaseSchema,
+  ShiftPhaseSchema
+} from "../types.js";
 
 export const StandupParticipantSchema = z.object({
   agent: FoundingAgentSchema,
@@ -12,6 +16,17 @@ export const StandupSchema = z.object({
   cycleId: z.string().min(1),
   date: z.string().date(),
   phase: PhaseSchema,
+  episode: z
+    .object({
+      id: z.string().min(1),
+      shift: ShiftPhaseSchema,
+      title: z.string().min(1),
+      hours: z.string().min(1),
+      nextShift: ShiftPhaseSchema,
+      handoff: z.string().min(1)
+    })
+    .nullable()
+    .optional(),
   fixture: z.boolean(),
   status: z.enum([
     "INSUFFICIENT_EVIDENCE",

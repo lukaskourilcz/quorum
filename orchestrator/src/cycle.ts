@@ -14,10 +14,14 @@ import {
 import { atomicWriteJson, withFileLock } from "./state.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
-import type { Phase, Stage } from "./types.js";
+import {
+  getShiftDefinition,
+  isShiftPhase
+} from "./shifts.js";
+import type { RunnablePhase, Stage } from "./types.js";
 
 export interface CycleOptions {
-  phase: Phase;
+  phase: RunnablePhase;
   dry: boolean;
   explainBudget: boolean;
   explainRouting: boolean;
@@ -26,7 +30,7 @@ export interface CycleOptions {
 
 export interface CycleResult {
   cycleId: string;
-  phase: Phase;
+  phase: RunnablePhase;
   dry: boolean;
   status: "dry_complete" | "paused" | "preflight_complete";
   decision: "INSUFFICIENT_EVIDENCE" | "NO_ACTION" | "PAUSED";
@@ -74,10 +78,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         }
       >;
     };
-    const callRoles =
-      options.phase === "pm"
-        ? ["PULSE", "AUDIT"]
-        : ["VIZE", "FORGE", "PULSE", "AUDIT"];
+    const callRoles = ["VIZE", "FORGE", "PULSE", "AUDIT"];
     const callGraph = callRoles.map((role) => {
       const model = modelConfig.roles[role];
       if (!model) {
@@ -107,14 +108,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       roomId: `ROOM-${cycleId.toUpperCase()}`,
       topicType: "council",
       objective:
-        options.phase === "pm"
-          ? "Review execution health and only reopen strategy for material change"
-          : "Choose up to three evidence-backed operating tasks or NO_ACTION",
+        options.phase === "founding"
+          ? "Choose up to three evidence-backed operating tasks or NO_ACTION"
+          : getShiftDefinition(options.phase).objective,
       evidenceRefs: [],
       decisionNeeded: "NO_ACTION",
       riskTags: [],
       budgetImpactUsd: estimatedWorstCaseUsd,
-      preset: options.phase === "pm" ? undefined : "daily-standup",
+      preset: "daily-standup",
       now
     });
     const stages = JSON.parse(

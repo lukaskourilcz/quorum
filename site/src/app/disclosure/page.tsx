@@ -133,7 +133,7 @@ export default function DisclosurePage() {
               },
               {
                 ok: true,
-                text: "“Daily standup. Public decisions. Measurable outcomes.” — implemented process description."
+                text: "“Three daily shifts. Public decisions. Measurable outcomes.” — implemented process description."
               }
             ].map((claim) => (
               <div

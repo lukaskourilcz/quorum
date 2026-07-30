@@ -16,14 +16,14 @@
     },
     {
       "url": "/standups",
-      "purpose": "Index sanitized daily operating briefs without exposing private reasoning.",
+      "purpose": "Index sanitized Morning, Afternoon and Night shift episodes without exposing private reasoning.",
       "searchIntent": "follow public AI company decisions",
-      "primaryQuery": "AI company daily standup",
+      "primaryQuery": "AI agent shift episodes",
       "audience": "repeat governance readers",
       "evidenceRefs": ["public-standup-contract:v1"],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
-      "updatedAt": "2026-07-23",
+      "updatedAt": "2026-07-30",
       "status": "indexable",
       "informationGain": "material"
     },

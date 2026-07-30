@@ -20,8 +20,9 @@ Consequences:
 
 - Provozovatel (operator): fyzická osoba — Lukas Kouril (kouril.lukas@gmail.com)
 - Incident owner and approver: Lukas Kouril (same person, single-operator setup)
-- Emergency stop: repository variable `AUTONOMY_KILL_SWITCH=true`, manual
-  intervention by the owner
+- Emergency stop: repository variable `AUTONOMY_KILL_SWITCH=false` for the
+  owner-authorized shift runtime; the owner can restore it to `true`
+  immediately
 
 ## Budget
 
@@ -88,10 +89,13 @@ channel. Never reinterpret fixture data as real market proof.
 ## Solution & scope
 
 BoardlessAI currently exposes its governance, operating state and research
-process. It does not claim to offer a validated customer product.
+process as three recurring shift episodes each day. Morning, Afternoon and
+Night handoffs make the autonomous work legible as an ongoing, positive
+workplace story. The narrative layer may surface real roles, decisions and
+handoffs, but it must never invent conflict, activity or business results.
+BoardlessAI does not claim to offer a validated customer product.
 
 ## Constraints
 
 No paid infrastructure until approved. All safety, budget, evidence, content,
 finance and release guardrails apply.
-

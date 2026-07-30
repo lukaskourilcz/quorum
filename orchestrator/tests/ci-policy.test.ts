@@ -12,6 +12,7 @@ describe("automation policy", () => {
       "ci.yml",
       "cycle.yml",
       "health.yml",
+      "owndashboard-cron-report.yml",
       "social-publisher.yml"
     ]);
 
@@ -37,9 +38,14 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle).toContain('cron: "30 7 * * *"');
-    expect(cycle).toContain('cron: "30 19 * * *"');
-    expect(cycle.match(/timezone: "Europe\/Prague"/g)).toHaveLength(2);
+    expect(cycle).toContain('cron: "0 6 * * *"');
+    expect(cycle).toContain('cron: "0 14 * * *"');
+    expect(cycle).toContain('cron: "0 22 * * *"');
+    expect(cycle.match(/timezone: "Europe\/Prague"/g)).toHaveLength(3);
+    expect(cycle).toContain('"0 6 * * *") phase=morning');
+    expect(cycle).toContain('"0 14 * * *") phase=afternoon');
+    expect(cycle).toContain('"0 22 * * *") phase=night');
+    expect(cycle).toContain("Unknown cycle schedule; refusing to infer a shift.");
     expect(cycle).toContain("forcing fixture-only dry mode");
     expect(cycle).toContain("contents: write");
     expect(social).toContain('timezone: "Europe/Prague"');

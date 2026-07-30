@@ -1,70 +1,96 @@
 import { describe, expect, it } from "vitest";
 import {
+  formatPhaseLabel,
   formatStandupOccurrence,
   getNextStandup,
   getStandupCountdown
 } from "./standup-countdown-model";
 
 describe("Standup countdown schedule", () => {
-  it("selects the morning Prague council before 07:30", () => {
-    expect(getNextStandup(new Date("2026-07-30T05:00:00.000Z"))).toEqual({
-      iso: "2026-07-30T05:30:00.000Z",
-      label: "AM council",
-      phase: "am"
+  it("selects the morning shift before 06:00 Prague time", () => {
+    expect(getNextStandup(new Date("2026-07-30T03:59:59.000Z"))).toEqual({
+      hours: "06:00–14:00",
+      iso: "2026-07-30T04:00:00.000Z",
+      label: "Morning shift",
+      phase: "morning"
     });
   });
 
-  it("selects the evening Prague council after the morning slot", () => {
-    expect(getNextStandup(new Date("2026-07-30T12:00:00.000Z"))).toEqual({
-      iso: "2026-07-30T17:30:00.000Z",
-      label: "PM council",
-      phase: "pm"
+  it("keeps the morning occurrence at its exact start time", () => {
+    expect(getNextStandup(new Date("2026-07-30T04:00:00.000Z"))).toEqual({
+      hours: "06:00–14:00",
+      iso: "2026-07-30T04:00:00.000Z",
+      label: "Morning shift",
+      phase: "morning"
     });
   });
 
-  it("moves to tomorrow morning after the evening slot", () => {
-    expect(getNextStandup(new Date("2026-07-30T18:00:00.000Z"))).toEqual({
-      iso: "2026-07-31T05:30:00.000Z",
-      label: "AM council",
-      phase: "am"
+  it("selects the afternoon shift after the morning slot", () => {
+    expect(getNextStandup(new Date("2026-07-30T04:00:01.000Z"))).toEqual({
+      hours: "14:00–22:00",
+      iso: "2026-07-30T12:00:00.000Z",
+      label: "Afternoon shift",
+      phase: "afternoon"
+    });
+  });
+
+  it("selects the night shift after the afternoon slot", () => {
+    expect(getNextStandup(new Date("2026-07-30T12:00:01.000Z"))).toEqual({
+      hours: "22:00–06:00",
+      iso: "2026-07-30T20:00:00.000Z",
+      label: "Night shift",
+      phase: "night"
+    });
+  });
+
+  it("moves to tomorrow morning after the night shift starts", () => {
+    expect(getNextStandup(new Date("2026-07-30T20:00:01.000Z"))).toEqual({
+      hours: "06:00–14:00",
+      iso: "2026-07-31T04:00:00.000Z",
+      label: "Morning shift",
+      phase: "morning"
     });
   });
 
   it("uses the winter Prague offset", () => {
-    expect(getNextStandup(new Date("2026-12-15T18:31:00.000Z"))).toEqual({
-      iso: "2026-12-16T06:30:00.000Z",
-      label: "AM council",
-      phase: "am"
+    expect(getNextStandup(new Date("2026-12-15T21:00:01.000Z"))).toEqual({
+      hours: "06:00–14:00",
+      iso: "2026-12-16T05:00:00.000Z",
+      label: "Morning shift",
+      phase: "morning"
     });
   });
 
   it.each([
-    ["spring", "2026-03-29T05:00:00.000Z", "2026-03-29T05:30:00.000Z"],
-    ["autumn", "2026-10-25T05:00:00.000Z", "2026-10-25T06:30:00.000Z"]
+    ["spring", "2026-03-29T03:59:59.000Z", "2026-03-29T04:00:00.000Z"],
+    ["autumn", "2026-10-25T04:59:59.000Z", "2026-10-25T05:00:00.000Z"]
   ])(
-    "keeps the morning slot at 07:30 through the %s clock change",
+    "keeps the morning slot at 06:00 through the %s clock change",
     (_, now, expected) => {
       expect(getNextStandup(new Date(now))).toEqual({
+        hours: "06:00–14:00",
         iso: expected,
-        label: "AM council",
-        phase: "am"
+        label: "Morning shift",
+        phase: "morning"
       });
     }
   );
 
-  it("keeps the current occurrence at its exact start time", () => {
-    expect(getNextStandup(new Date("2026-07-30T17:30:00.000Z"))).toEqual({
-      iso: "2026-07-30T17:30:00.000Z",
-      label: "PM council",
-      phase: "pm"
+  it("keeps the night occurrence at its exact start time", () => {
+    expect(getNextStandup(new Date("2026-07-30T20:00:00.000Z"))).toEqual({
+      hours: "22:00–06:00",
+      iso: "2026-07-30T20:00:00.000Z",
+      label: "Night shift",
+      phase: "night"
     });
   });
 
   it("splits the remaining time into stable counter units", () => {
     const occurrence = {
+      hours: "06:00–14:00",
       iso: "2026-08-01T10:03:04.000Z",
-      label: "AM council",
-      phase: "am"
+      label: "Morning shift",
+      phase: "morning"
     } as const;
 
     expect(
@@ -84,10 +110,20 @@ describe("Standup countdown schedule", () => {
   it("formats the target in the public Prague schedule", () => {
     expect(
       formatStandupOccurrence({
-        iso: "2026-07-30T17:30:00.000Z",
-        label: "PM council",
-        phase: "pm"
+        hours: "14:00–22:00",
+        iso: "2026-07-30T12:00:00.000Z",
+        label: "Afternoon shift",
+        phase: "afternoon"
       })
-    ).toBe("Jul 30, 2026 · 19:30 · Prague");
+    ).toBe("Jul 30, 2026 · 14:00 · Prague");
+  });
+
+  it("labels current shifts and makes historical AM/PM records explicit", () => {
+    expect(formatPhaseLabel("morning")).toBe("Morning shift");
+    expect(formatPhaseLabel("afternoon")).toBe("Afternoon shift");
+    expect(formatPhaseLabel("night")).toBe("Night shift");
+    expect(formatPhaseLabel("founding")).toBe("Founding");
+    expect(formatPhaseLabel("am")).toBe("AM council · legacy");
+    expect(formatPhaseLabel("pm")).toBe("PM council · legacy");
   });
 });

@@ -246,7 +246,7 @@ export default async function StandupRoomPage({
                 href={`/standups/${standup.date}`}
               >
                 <ArrowLeft aria-hidden="true" className="size-4" />
-                Back to standup
+                Back to episode
               </Link>
               <Link
                 className={buttonVariants({
@@ -439,7 +439,7 @@ export default async function StandupRoomPage({
                   className={buttonVariants({ variant: "secondary" })}
                   href={`/standups/${standup.date}`}
                 >
-                  Full standup record
+                  Full episode record
                 </Link>
                 <Link
                   className={buttonVariants({ variant: "primary" })}

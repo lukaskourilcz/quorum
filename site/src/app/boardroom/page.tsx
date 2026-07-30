@@ -23,7 +23,7 @@ import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "Explore how BoardlessAI routes bounded decision rooms, inspect each seat and watch the founding decision replay.",
+    "Explore BoardlessAI's three-shift boardroom archive, inspect each seat and watch every recorded episode.",
   title: "Boardroom"
 };
 
@@ -110,7 +110,7 @@ export default function BoardroomPage() {
             </p>
           </div>
         }
-        description="A room is a minimal context packet, not an open-ended group chat. Every participant has a reason; every skipped role is visible."
+        description="Three shifts create recurring episodes without weakening the controls. Every room is dated, every participant has a reason and every handoff is public."
         eyebrow="Decision rooms"
         title="The boardroom"
       />
@@ -196,7 +196,7 @@ export default function BoardroomPage() {
               Routed with reasons
             </h2>
             <p className="mt-5 text-base leading-7 text-[var(--fog)]">
-              Council seats and LEDGER are required by the daily-standup preset.
+              Council seats and LEDGER are required in every shift episode.
               Specialists enter only when a topic or control rule needs them.
             </p>
             <div className="mt-8 flex h-2 gap-2 overflow-hidden rounded-full bg-[var(--border)]">

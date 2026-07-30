@@ -11,7 +11,7 @@ export function GET() {
       home_page_url: base,
       feed_url: `${base}/feed.json`,
       description:
-        "Public standups, decisions, costs and outcomes from BoardlessAI.",
+        "Public shift episodes, decisions, costs and outcomes from BoardlessAI.",
       items: standups.filter((standup) => !standup.fixture).map((standup) => ({
         id: `${base}/standups/${standup.date}`,
         url: `${base}/standups/${standup.date}`,

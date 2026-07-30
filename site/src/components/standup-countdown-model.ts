@@ -2,20 +2,30 @@ export const STANDUP_TIME_ZONE = "Europe/Prague";
 
 export const STANDUP_SCHEDULE = [
   {
-    hour: 7,
-    label: "AM council",
-    minute: 30,
-    phase: "am"
+    hour: 6,
+    hours: "06:00–14:00",
+    label: "Morning shift",
+    minute: 0,
+    phase: "morning"
   },
   {
-    hour: 19,
-    label: "PM council",
-    minute: 30,
-    phase: "pm"
+    hour: 14,
+    hours: "14:00–22:00",
+    label: "Afternoon shift",
+    minute: 0,
+    phase: "afternoon"
+  },
+  {
+    hour: 22,
+    hours: "22:00–06:00",
+    label: "Night shift",
+    minute: 0,
+    phase: "night"
   }
 ] as const;
 
 export interface StandupOccurrence {
+  hours: (typeof STANDUP_SCHEDULE)[number]["hours"];
   iso: string;
   label: (typeof STANDUP_SCHEDULE)[number]["label"];
   phase: (typeof STANDUP_SCHEDULE)[number]["phase"];
@@ -135,6 +145,7 @@ export function getNextStandup(now: Date): StandupOccurrence {
     );
     if (target.getTime() >= now.getTime()) {
       return {
+        hours: slot.hours,
         iso: target.toISOString(),
         label: slot.label,
         phase: slot.phase
@@ -151,6 +162,7 @@ export function getNextStandup(now: Date): StandupOccurrence {
   );
 
   return {
+    hours: firstSlot.hours,
     iso: target.toISOString(),
     label: firstSlot.label,
     phase: firstSlot.phase
@@ -182,4 +194,17 @@ export function formatStandupOccurrence(occurrence: StandupOccurrence) {
   );
 
   return `${getPart(parts, "month")} ${getPart(parts, "day")}, ${getPart(parts, "year")} · ${getPart(parts, "hour")}:${getPart(parts, "minute")} · Prague`;
+}
+
+export function formatPhaseLabel(phase: string) {
+  const phaseLabels: Record<string, string> = {
+    afternoon: "Afternoon shift",
+    am: "AM council · legacy",
+    founding: "Founding",
+    morning: "Morning shift",
+    night: "Night shift",
+    pm: "PM council · legacy"
+  };
+
+  return phaseLabels[phase] ?? phase;
 }
