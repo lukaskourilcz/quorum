@@ -148,7 +148,7 @@ export default function StandupsPage() {
                       className={buttonVariants({ variant: "primary" })}
                       href={`/standups/${standup.date}/room`}
                     >
-                      Read the room transcript
+                      Watch Decision Replay
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
                     <Link
