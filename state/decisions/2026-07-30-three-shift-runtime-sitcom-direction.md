@@ -65,3 +65,13 @@ Deterministic dry runs estimate `$0.039316` worst case per shift and
 `$0.117948` for all three, below the `$0.40` daily budget. The owner authorized
 activation of the council workflow. The social publishing kill switch remains
 enabled.
+
+## Activation record
+
+- Runtime release: `09dad6d`
+- `AUTONOMY_KILL_SWITCH=false`
+- `SOCIAL_KILL_SWITCH=true`
+- Remote no-cost verification: Afternoon shift,
+  [GitHub Actions run 30537385372](https://github.com/lukaskourilcz/quorum/actions/runs/30537385372)
+- Result: full pre-gate, shift execution, post-gate and 36-route site smoke
+  passed; the dry run wrote no canonical state and made no paid API call
