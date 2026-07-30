@@ -44,7 +44,7 @@ export function StandupCountdown() {
   }, []);
 
   const accessibleLabel = snapshot
-    ? `Next shift: ${snapshot.occurrence.label}, ${snapshot.occurrence.hours}, ${formatStandupOccurrence(snapshot.occurrence)}. Starts in ${snapshot.countdown.days} days, ${snapshot.countdown.hours} hours, ${snapshot.countdown.minutes} minutes and ${snapshot.countdown.seconds} seconds.`
+    ? `Next shift starts ${formatStandupOccurrence(snapshot.occurrence)}. Starts in ${snapshot.countdown.days} days, ${snapshot.countdown.hours} hours, ${snapshot.countdown.minutes} minutes and ${snapshot.countdown.seconds} seconds.`
     : "Loading the next scheduled shift.";
 
   return (
@@ -58,13 +58,14 @@ export function StandupCountdown() {
             className="mt-1.5 block text-sm leading-6 text-[var(--mist)]"
             dateTime={snapshot.occurrence.iso}
           >
-            {snapshot.occurrence.label} · {snapshot.occurrence.hours}
-            <br />
             {formatStandupOccurrence(snapshot.occurrence)}
           </time>
         ) : (
-          <p className="mt-1.5 text-sm leading-6 text-[var(--mist)]">
-            Morning 06:00 · Afternoon 14:00 · Night 22:00
+          <p
+            aria-hidden="true"
+            className="mt-1.5 text-sm leading-6 text-[var(--mist)]"
+          >
+            &nbsp;
           </p>
         )}
       </div>
