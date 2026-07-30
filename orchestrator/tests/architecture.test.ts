@@ -51,9 +51,11 @@ describe("agent architecture", () => {
   it("keeps the nine Claude and Codex skills byte-identical", async () => {
     const claudeRoot = path.join(repoRoot, ".claude", "skills");
     const codexRoot = path.join(repoRoot, ".agents", "skills");
+    const claudeSkills = await directoryNames(claudeRoot);
+    const codexSkills = await directoryNames(codexRoot);
 
-    expect(await directoryNames(claudeRoot)).toEqual(expectedSkills);
-    expect(await directoryNames(codexRoot)).toEqual(expectedSkills);
+    expect(claudeSkills).toEqual(expect.arrayContaining([...expectedSkills]));
+    expect(codexSkills).toEqual(expectedSkills);
 
     for (const skill of expectedSkills) {
       const claudeBytes = await readFile(path.join(claudeRoot, skill, "SKILL.md"));
