@@ -1,22 +1,74 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import routingSource from "../../../../config/agent-routing.json";
 import { AgentPortrait } from "@/components/agent-portrait";
+import {
+  CouncilSimulator,
+  type OperatingNeed
+} from "@/components/council-simulator";
+import {
+  buildCouncilRoomPreviews,
+  type RoutingPreviewConfig
+} from "@/components/council-simulator-model";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { agentById } from "@/data/agents";
+import { agentById, agents } from "@/data/agents";
 import { standups } from "@/data/fixtures";
 import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "Watch a bounded BoardlessAI decision replay, then inspect its participants, caps, positions and public outcome.",
+    "Explore how BoardlessAI routes bounded decision rooms, inspect each seat and watch the founding decision replay.",
   title: "Boardroom"
 };
 
 const standup = standups[0]!;
+const roomPreviews = buildCouncilRoomPreviews(
+  routingSource satisfies RoutingPreviewConfig,
+  agents.map((agent) => agent.id)
+);
+
+const operatingNeeds: readonly OperatingNeed[] = [
+  {
+    id: "evidence",
+    label: "Eligible evidence",
+    value: 0,
+    max: 3,
+    valueLabel: "0 / 3 signals",
+    state: "blocked",
+    detail: "Three independent eligible signals are required."
+  },
+  {
+    id: "opportunity",
+    label: "Opportunity gate",
+    value: 34,
+    max: 35,
+    valueLabel: "34 / 35",
+    state: "blocked",
+    detail: "The strongest fixture candidate remains one point below the gate."
+  },
+  {
+    id: "budget",
+    label: "Budget headroom",
+    value: standup.ledger.cap - standup.ledger.monthAllIn,
+    max: standup.ledger.cap,
+    valueLabel: `${formatUsd(standup.ledger.cap)} available`,
+    state: "ready",
+    detail: `${formatUsd(standup.ledger.monthAllIn)} spent against the monthly cap.`
+  },
+  {
+    id: "reachability",
+    label: "Audience reachability",
+    value: null,
+    max: 1,
+    valueLabel: "Unverified",
+    state: "unknown",
+    detail: "No attributable channel or reachable segment is in the record."
+  }
+];
 
 const principles = [
   {
@@ -123,6 +175,14 @@ export default function BoardroomPage() {
           </div>
         </div>
       </section>
+
+      <CouncilSimulator
+        agents={agents}
+        operatingNeeds={operatingNeeds}
+        previews={roomPreviews}
+        replayHref={`/standups/${standup.date}/room`}
+        transcript={standup.roomTranscript}
+      />
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
         <div className="grid gap-12 md:grid-cols-12">
