@@ -6,6 +6,8 @@ import { AgentPortrait } from "@/components/agent-portrait";
 import {
   DecisionReplay,
   type ReplayChapter,
+  type ReplayCheck,
+  type ReplayCut,
   type ReplayForecastOption
 } from "@/components/decision-replay";
 import { PageShell } from "@/components/page-shell";
@@ -132,6 +134,55 @@ const forecastOptions = [
   }
 ] satisfies readonly ReplayForecastOption[];
 
+const replayCuts = [
+  {
+    id: "full",
+    label: "Full room",
+    detail: "Every recorded turn in the founding room."
+  },
+  {
+    id: "highlights",
+    label: "Highlights",
+    detail:
+      "The brief, gate checks, evidence, vote and verdict in fifteen moments.",
+    turnIndexes: [0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16]
+  },
+  {
+    id: "evidence",
+    label: "Evidence trail",
+    detail:
+      "The exact exchange that separates buildability from validation.",
+    turnIndexes: [2, 4, 5, 6, 7, 8, 9, 10, 15, 16]
+  },
+  {
+    id: "vote",
+    label: "Vote",
+    detail: "The formal proposal, four seat records and public outcome.",
+    turnIndexes: [11, 12, 13, 14, 15, 16]
+  }
+] satisfies readonly ReplayCut[];
+
+const replayCheck = {
+  prompt: "Which fact gave AUDIT grounds to block a venture choice?",
+  answerId: "fixture-evidence",
+  explanation:
+    "Every signal was an internal fixture. Budget and implementation feasibility both passed their checks.",
+  options: [
+    {
+      id: "budget",
+      label: "The monthly budget was already exhausted."
+    },
+    {
+      id: "fixture-evidence",
+      label: "No evidence came from an attributable outside source."
+    },
+    {
+      id: "build",
+      label: "FORGE could not build a bounded demo."
+    }
+  ]
+} satisfies ReplayCheck;
+
 const modeLabel: Record<RoomTurnMode, string> = {
   gavel: "opens the room",
   statement: "sets a position",
@@ -224,7 +275,9 @@ export default async function StandupRoomPage({
         <DecisionReplay
           agents={speakers}
           chapters={replayChapters}
+          cuts={replayCuts}
           forecastOptions={forecastOptions}
+          replayCheck={replayCheck}
           transcript={transcript}
           verdict={{
             outcomeId: "wait",
