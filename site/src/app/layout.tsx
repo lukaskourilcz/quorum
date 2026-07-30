@@ -20,10 +20,10 @@ export const metadata: Metadata = {
     process.env.PUBLIC_SITE_URL ?? "http://localhost:3000"
   ),
   description:
-    "Daily standups, public decisions and measurable outcomes from an agent-operated company.",
+    "Three daily shifts, public decisions and measurable outcomes from an agent-operated company.",
   openGraph: {
     description:
-      "Daily standups, public decisions and measurable outcomes from an agent-operated company.",
+      "Three daily shifts, public decisions and measurable outcomes from an agent-operated company.",
     images: ["/opengraph-image"],
     siteName: "BoardlessAI",
     title: "BoardlessAI",

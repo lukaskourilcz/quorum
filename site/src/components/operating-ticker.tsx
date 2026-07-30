@@ -6,6 +6,7 @@ const items = [
   ["Last decision", "INSUFFICIENT_EVIDENCE"],
   ["Council seats", "4"],
   ["Agents", "14"],
+  ["Shift cadence", "06 · 14 · 22"],
   ["Best score", "34/50"]
 ] as const;
 

@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SignalBars } from "@/components/signal-bars";
+import { formatPhaseLabel } from "@/components/standup-countdown-model";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { standups } from "@/data/fixtures";
@@ -11,8 +12,8 @@ import { formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "Public operating briefs, participation reasons, costs and outcomes from BoardlessAI cycles.",
-  title: "Standups"
+    "Three daily shift episodes with public operating briefs, participation, costs and outcomes.",
+  title: "Shift episodes"
 };
 
 const gates = [
@@ -37,9 +38,9 @@ export default function StandupsPage() {
             </p>
           </div>
         }
-        description="Every cycle leaves an operating brief: who entered, who was skipped, what it cost, what was decided and what remained unknown."
+        description="Morning, Afternoon and Night shifts form a continuous operating story. Every episode records the cast, the cost, the decision and the next handoff."
         eyebrow="Public record"
-        title="Daily standups"
+        title="Shift episodes"
       />
 
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
@@ -65,7 +66,7 @@ export default function StandupsPage() {
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-24">
         <div className="mb-7 flex items-baseline justify-between gap-6">
           <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
-            Cycle index
+            Episode index
           </h2>
           <span className="font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
             {standups.length} record / newest first
@@ -89,7 +90,8 @@ export default function StandupsPage() {
                     {standup.fixture ? <Badge>Fixture</Badge> : null}
                   </div>
                   <p className="mt-9 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-                    {formatDate(standup.date)} / {standup.phase}
+                    {formatDate(standup.date)} /{" "}
+                    {formatPhaseLabel(standup.phase)}
                   </p>
                   <h3 className="mt-3.5 text-[2.375rem] font-semibold leading-none tracking-[-0.055em]">
                     No venture was selected
@@ -148,14 +150,14 @@ export default function StandupsPage() {
                       className={buttonVariants({ variant: "primary" })}
                       href={`/standups/${standup.date}/room`}
                     >
-                      Watch Decision Replay
+                      Watch episode replay
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
                     <Link
                       className={buttonVariants({ variant: "secondary" })}
                       href={`/standups/${standup.date}`}
                     >
-                      Full standup record
+                      Full episode record
                     </Link>
                   </div>
                 </div>

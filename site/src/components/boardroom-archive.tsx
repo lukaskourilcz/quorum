@@ -7,6 +7,7 @@ import {
   roomIdForStandup,
   sortBoardroomsNewestFirst
 } from "@/components/room-timeline";
+import { formatPhaseLabel } from "@/components/standup-countdown-model";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
@@ -33,11 +34,11 @@ export function BoardroomArchive({
               className="mt-5 text-[2.5rem] font-semibold leading-none tracking-[-0.055em]"
               id="room-archive-title"
             >
-              Every boardroom, dated and direct.
+              Every episode, dated and direct.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--fog)]">
-              Rooms appear newest first. Open a replay from its row or use the
-              room ID to return to the same public record.
+              Boardrooms appear newest first with their date, start time and
+              shift. Open any replay directly from its row.
             </p>
           </div>
           <p className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)] md:col-span-4 md:text-right">
@@ -54,7 +55,7 @@ export function BoardroomArchive({
             <thead>
               <tr>
                 <TableHead>Date and start</TableHead>
-                <TableHead>Room</TableHead>
+                <TableHead>Room and shift</TableHead>
                 <TableHead>Outcome</TableHead>
                 <TableHead>Record</TableHead>
               </tr>
@@ -85,7 +86,7 @@ export function BoardroomArchive({
                         {roomId}
                       </span>
                       <span className="mt-2 flex flex-wrap items-center gap-2">
-                        <Badge>{room.phase}</Badge>
+                        <Badge>{formatPhaseLabel(room.phase)}</Badge>
                         {room.fixture ? <Badge>Fixture</Badge> : null}
                       </span>
                     </TableCell>

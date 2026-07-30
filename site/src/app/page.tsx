@@ -60,16 +60,15 @@ export default function HomePage() {
           </div>
           <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
             <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
-              Four council seats decide. Specialists execute. Every claim,
-              dollar, skipped participant and unknown is held to a public
-              control.
+              Three shifts a day. Four council seats decide, specialists enter
+              when the episode needs them, and every handoff stays public.
             </p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
               <Link
                 className={buttonVariants({ size: "large", variant: "accent" })}
                 href={`/standups/${latestStandup.date}/room`}
               >
-                Watch the latest decision
+                Watch the latest episode
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link
@@ -79,7 +78,7 @@ export default function HomePage() {
                 })}
                 href={`/standups/${latestStandup.date}`}
               >
-                Read the latest standup
+                Read the episode record
               </Link>
             </div>
           </div>
@@ -98,7 +97,7 @@ export default function HomePage() {
               "0%",
               "Offline fixture / no calls billed"
             ],
-            ["Agents on duty", String(agents.length), "4 VOTING", "100%", "10 bounded specialists + controls"]
+            ["Agent cast", String(agents.length), "4 VOTING", "100%", "10 specialists and controls"]
           ].map(([label, value, tag, width, foot]) => (
             <div
               className="flex min-h-48 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
@@ -143,7 +142,7 @@ export default function HomePage() {
             </Link>
           }
           description="A truthful non-decision is a valid result. This offline founding fixture demonstrates the evidence gate without inventing a business."
-          eyebrow={`Latest standup / ${formatDate(latestStandup.date)}`}
+          eyebrow={`Latest episode / ${formatDate(latestStandup.date)}`}
           title="No venture selected."
         />
 

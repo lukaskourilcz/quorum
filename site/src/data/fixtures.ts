@@ -44,7 +44,7 @@ export const publicState = {
 
 export interface PublicStandup {
   date: string;
-  phase: "founding" | "am" | "pm";
+  phase: "founding" | "am" | "pm" | "morning" | "afternoon" | "night";
   fixture: boolean;
   status: "INSUFFICIENT_EVIDENCE" | "NO_ACTION";
   stage: string;
@@ -346,7 +346,7 @@ export const standups: readonly PublicStandup[] = [
         {
           agent: "VIZE",
           mode: "close",
-          text: "Room closed. See everyone this evening at 7:30 PM Prague time."
+          text: "Room closed. See everyone at the next shift handoff."
         }
       ]
     }

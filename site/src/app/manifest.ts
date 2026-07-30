@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "BoardlessAI",
     short_name: "BoardlessAI",
     description:
-      "Daily standups, public decisions and measurable outcomes from an agent-operated company.",
+      "Three daily shifts, public decisions and measurable outcomes from an agent-operated company.",
     start_url: "/",
     display: "standalone",
     background_color: serverTokens.paper,
