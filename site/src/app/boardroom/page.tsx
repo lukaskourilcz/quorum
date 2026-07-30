@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import routingSource from "../../../../config/agent-routing.json";
 import { AgentPortrait } from "@/components/agent-portrait";
+import { BoardroomArchive } from "@/components/boardroom-archive";
 import {
   CouncilSimulator,
   type OperatingNeed
@@ -13,6 +14,7 @@ import {
 } from "@/components/council-simulator-model";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
+import { roomIdForStandup } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { agentById, agents } from "@/data/agents";
@@ -113,6 +115,8 @@ export default function BoardroomPage() {
         title="The boardroom"
       />
 
+      <BoardroomArchive records={standups} />
+
       <section className="mx-auto max-w-[var(--container)] px-5 pt-24 md:px-10">
         <div className="panel-grid md:grid-cols-12">
           <div className="bg-[var(--card)] p-7 md:col-span-4 md:p-10">
@@ -121,7 +125,7 @@ export default function BoardroomPage() {
               <Badge>Council</Badge>
             </div>
             <p className="mt-10 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-              ROOM-20260723-FOUNDING
+              {roomIdForStandup(standup)}
             </p>
             <h2 className="mt-4 text-4xl font-semibold leading-[0.98] tracking-[-0.055em]">
               Select a venture or return NO_ACTION
