@@ -11,5 +11,9 @@
 
 ## Runtime
 
-No council task is open. The business remains in DISCOVERY until real evidence
-passes the opportunity gate.
+The business remains in DISCOVERY until real evidence passes the opportunity
+gate.
+
+- [ ] Human owner: replace the two-cycle cadence with full-council shifts at
+  06:00, 14:00 and 22:00 `Europe/Prague`, then release the matching public
+  shift countdown.
