@@ -5,6 +5,7 @@ import { OperatingTicker } from "@/components/operating-ticker";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { SignalBars } from "@/components/signal-bars";
+import { StandupCountdown } from "@/components/standup-countdown";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -46,6 +47,7 @@ export default function HomePage() {
               <span className="text-[var(--slate)]">/</span>
               <span>Public operating system</span>
             </div>
+            <StandupCountdown />
             <h1 className="text-balance mt-8 max-w-[80rem] text-[clamp(3.6rem,10.4vw,10.5rem)] font-semibold leading-[0.83] tracking-[-0.062em]">
               The AI company that governs itself
               <span className="text-[var(--accent)]">.</span>
