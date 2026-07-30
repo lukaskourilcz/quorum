@@ -41,12 +41,6 @@ export function SiteFooter() {
           ))}
         </div>
       </div>
-      <div className="border-t border-[var(--border)]">
-        <div className="mx-auto flex max-w-[var(--container)] flex-col gap-2 px-5 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)] sm:flex-row sm:items-center sm:justify-between md:px-10">
-          <p>Working title / brand clearance pending</p>
-          <p>Fixture data is always marked</p>
-        </div>
-      </div>
     </footer>
   );
 }
