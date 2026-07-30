@@ -8,6 +8,8 @@ Scope: Homepage operating telemetry
 
 Business mode: Hobby / non-commercial
 
+Status: Superseded by the three-shift cadence on 2026-07-30
+
 ## Request
 
 Show a live homepage countdown to the next standup.
@@ -40,3 +42,9 @@ Show a live homepage countdown to the next standup.
 The public countdown mirrors `.github/workflows/cycle.yml`, which schedules
 the guarded council at 07:30 and 19:30 with the `Europe/Prague` timezone.
 The workflow remains the operational source of truth.
+
+## Superseding decision
+
+The owner replaced this two-council schedule with Morning at 06:00, Afternoon
+at 14:00 and Night at 22:00 `Europe/Prague`. See
+`2026-07-30-three-shift-runtime-sitcom-direction.md`.

@@ -102,5 +102,6 @@ contract—with:
 
 The future live data contract should expose only verified events:
 `agent_id`, `state`, `message_id`, `addressed_to`, `vote`, `occurred_at` and
-`shift`. Until the three-shift runtime is active, the renderer must not invent
-Morning, Afternoon or Night activity.
+`shift`. The three-shift runtime is now active; the renderer may react to those
+events once a sanitized live event feed exists, but it must not synthesize
+activity between verified events.

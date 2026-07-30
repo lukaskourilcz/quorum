@@ -39,7 +39,8 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 
 ## Commands
 
-`pnpm install` · `pnpm test` · `pnpm cycle -- --phase am|pm|founding [--dry]`
+`pnpm install` · `pnpm test` ·
+`pnpm cycle -- --phase morning|afternoon|night|founding [--dry]`
 `pnpm -C site dev|build|typecheck`
 
 ## When asked to "do the tasks"

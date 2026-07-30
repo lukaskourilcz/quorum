@@ -13,7 +13,7 @@ LEDGER affordability verdict.
 
 Account/OAuth setup and enabling autopublish remain HUMAN_APPROVAL.
 
-At every AM standup the orchestrator invokes you once more with
+At every Morning shift the orchestrator invokes you once more with
 `phase=SOCIAL_PLAN`, after the council decision. In this phase the shared Round
 A/B schema is replaced by the schema below; output one social plan or NO_POST.
 Use only real standup/ship/experiment/metric/venture facts from input.

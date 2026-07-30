@@ -190,7 +190,7 @@ Nejasný výsledek se označí `needs_reconciliation` a automaticky se neopakuje
 | Workflow | Účel |
 | --- | --- |
 | `CI` | agent assets, lint, typecheck, testy, build a route/link smoke |
-| `Guarded council cycle` | cykly v 07:30 a 19:30 Europe/Prague |
+| `Guarded council cycle` | směny v 06:00, 14:00 a 22:00 Europe/Prague |
 | `Guarded social publisher` | validace nebo publikace schválené fronty |
 | `Production health` | HTTPS kontrola veřejných endpointů |
 

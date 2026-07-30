@@ -47,7 +47,7 @@ Claim status: `gated_unverified`.
 Safe tagline: “The AI company that governs itself.”  
 Trust line: “No human board. Full accountability.”  
 Campaign line: “The company runs itself.”  
-Proof line: “Daily standup. Public decisions. Measurable outcomes.”
+Proof line: “Three daily shifts. Public decisions. Measurable outcomes.”
 
 ## Visual
 
