@@ -48,10 +48,10 @@ export function StandupCountdown() {
     : "Loading the next scheduled standup.";
 
   return (
-    <div className="mt-7 flex max-w-5xl flex-wrap items-end gap-x-8 gap-y-4 border-l-2 border-[var(--accent)] pl-4 md:pl-5">
+    <div className="flex w-full flex-wrap items-end gap-x-8 gap-y-4 border-l-2 border-[var(--accent)] pl-4 md:pl-5 xl:w-auto xl:shrink-0 xl:justify-end">
       <div className="min-w-52">
         <p className="mono-label text-[0.65625rem] text-[var(--accent)]">
-          Next standup
+          Next standup starts in
         </p>
         {snapshot ? (
           <time

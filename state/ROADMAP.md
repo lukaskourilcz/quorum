@@ -17,3 +17,6 @@ gate.
 - [ ] Human owner: replace the two-cycle cadence with full-council shifts at
   06:00, 14:00 and 22:00 `Europe/Prague`, then release the matching public
   shift countdown.
+- [ ] Human owner: add a reviewed, pinned Three.js dependency so the native
+  Agent Council Reactor preview can move to the researched WebGPU/WebGL
+  renderer without a CDN or vendored-library workaround.
