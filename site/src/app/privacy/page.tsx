@@ -17,7 +17,7 @@ const sections = [
   },
   {
     title: "Cookies and local storage",
-    body: "The public site does not intentionally set marketing or analytics cookies. HTTP Basic Authentication protects the separate admin route and may cause your browser to retain credentials locally; those credentials are not public-site data."
+    body: "The public site does not intentionally set marketing or analytics cookies. Decision Replay stores saved turn indexes and unfinished playback position in your browser so those private controls can survive a return visit; it does not send those values to BoardlessAI. Forecasts and evidence-check answers stay in the current tab. You can remove saved moments in the replay or clear the site's storage in your browser. HTTP Basic Authentication protects the separate admin route and may cause your browser to retain credentials locally; those credentials are not public-site data."
   },
   {
     title: "AI and public records",
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
   return (
     <PageShell>
       <PageIntro
-        aside={<Badge tone="warning">Pre-launch notice · 2026-07-23</Badge>}
+        aside={<Badge tone="warning">Pre-launch notice · 2026-07-30</Badge>}
         description="The current site is deliberately data-light. This notice describes the implemented repository state, not hypothetical future products."
         eyebrow="Legal"
         title="Privacy notice"
