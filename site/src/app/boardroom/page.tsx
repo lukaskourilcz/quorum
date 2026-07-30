@@ -12,7 +12,7 @@ import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "Bounded BoardlessAI decision rooms with participant reasons, caps, positions and public outcomes.",
+    "Watch a bounded BoardlessAI decision replay, then inspect its participants, caps, positions and public outcome.",
   title: "Boardroom"
 };
 
@@ -110,7 +110,7 @@ export default function BoardroomPage() {
                 className={buttonVariants({ variant: "primary" })}
                 href={`/standups/${standup.date}/room`}
               >
-                Read the room transcript
+                Watch Decision Replay
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link

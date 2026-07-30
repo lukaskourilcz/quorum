@@ -60,9 +60,9 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
               <Link
                 className={buttonVariants({ size: "large", variant: "accent" })}
-                href={`/standups/${latestStandup.date}`}
+                href={`/standups/${latestStandup.date}/room`}
               >
-                Read the latest standup
+                Watch the latest decision
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link
@@ -70,9 +70,9 @@ export default function HomePage() {
                   size: "large",
                   variant: "secondary"
                 })}
-                href="/governance"
+                href={`/standups/${latestStandup.date}`}
               >
-                Inspect governance
+                Read the latest standup
               </Link>
             </div>
           </div>
@@ -129,9 +129,9 @@ export default function HomePage() {
           action={
             <Link
               className={buttonVariants({ variant: "secondary" })}
-              href={`/standups/${latestStandup.date}`}
+              href={`/standups/${latestStandup.date}/room`}
             >
-              Full operating brief
+              Replay the room
               <ArrowUpRight aria-hidden="true" className="size-4" />
             </Link>
           }

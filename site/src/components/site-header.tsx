@@ -7,7 +7,7 @@ import { Mark } from "@/components/brand/mark";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/standups", label: "Standups" },
+  { href: "/standups", label: "Watch" },
   { href: "/boardroom", label: "Boardroom" },
   { href: "/agents", label: "Agents" },
   { href: "/ventures", label: "Ventures" },

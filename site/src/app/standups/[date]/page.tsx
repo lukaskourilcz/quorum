@@ -100,7 +100,7 @@ export default async function StandupDetailPage({
                 href={`/standups/${standup.date}/room`}
               >
                 <MessageSquareText aria-hidden="true" className="size-4" />
-                Read the room transcript
+                Watch Decision Replay
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
             </div>
