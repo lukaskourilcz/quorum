@@ -28,7 +28,7 @@
       "informationGain": "material"
     },
     {
-      "url": "/standups/2026-07-23",
+      "url": "/standups/2026-07-23-founding",
       "purpose": "Exercise the standup renderer with visibly synthetic founding data.",
       "searchIntent": "fixture only",
       "primaryQuery": "none",

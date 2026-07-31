@@ -45,7 +45,7 @@ describe("public content inventory", () => {
         .filter(
           (page) =>
             page.url.startsWith("/ventures/") ||
-            page.url === "/standups/2026-07-23" ||
+            page.url === "/standups/2026-07-23-founding" ||
             page.url === "/admin"
         )
         .every((page) => page.status === "noindex")
