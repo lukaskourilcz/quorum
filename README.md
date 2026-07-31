@@ -68,6 +68,7 @@ site/
   src/components/ui/      installed UI primitives
   public/agents/          optimized stable agent portraits
 state/                    git-backed operating source of truth
+  standups/               sanitized, timestamped live shift records
   public/                 sanitized projections only when generated
   agent-identities/       avatar prompt/provenance/QA/cost manifest
 .claude/                  Claude agents, commands and nine operating skills
@@ -147,12 +148,18 @@ Schedules use the IANA timezone `Europe/Prague`:
 - 22:00 — Night shift, covering 22:00–06:00
 
 Every shift seats VIZE, FORGE, PULSE and AUDIT with LEDGER as the required
-finance control. Specialists enter only when routing rules need them. Each run
-installs from the lockfile, honors the kill switch, runs the complete pre-gate,
-calculates routing and worst-case budget, executes at most the bounded cycle,
-publishes episode and handoff metadata, repeats the release gate and then
-creates at most one normal `cycle(N)` commit. There is no force push. A
-concurrent run cannot overlap.
+finance control. Specialists enter only when routing rules need them. An
+owner-authorized, non-dry shift obtains one budget-guarded, structured public
+position from each council seat, then writes a sanitized timestamped transcript
+and exactly one pre-approved internal work item. The queue cannot authorize
+market research, publishing, spend, account changes, credentials, unreviewed
+code changes or a business-stage change.
+
+Each run installs from the lockfile, honors the kill switch, runs the complete
+pre-gate, calculates routing and worst-case budget, executes at most the
+bounded cycle, repeats the release gate and then creates at most one normal
+`cycle(N)` commit. Vercel builds the public archive from those committed state
+records. There is no force push. A concurrent run cannot overlap.
 
 A live founding cycle is intentionally unavailable until both provider keys are
 configured. With no keys:

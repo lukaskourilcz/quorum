@@ -4,7 +4,12 @@ const SECRET_PATTERN =
   /(api[_-]?key|access[_-]?token|authorization|password|secret)\s*[:=]\s*\S+/gi;
 
 function sanitize(value: string): string {
-  return value.replaceAll(SECRET_PATTERN, "$1=[redacted]");
+  return value
+    .replaceAll(SECRET_PATTERN, "$1=[redacted]")
+    .replaceAll(
+      /(chain[- ]of[- ]thought|system prompt|developer message|process\.env|state\/inbox)/gi,
+      "[private detail removed]"
+    );
 }
 
 export function publicStandup(standup: Standup): Standup {
@@ -30,6 +35,14 @@ export function publicStandup(standup: Standup): Standup {
       ...task,
       summary: sanitize(task.summary)
     })),
+    roomTranscript: {
+      ...standup.roomTranscript,
+      setting: sanitize(standup.roomTranscript.setting),
+      turns: standup.roomTranscript.turns.map((turn) => ({
+        ...turn,
+        text: sanitize(turn.text)
+      }))
+    },
     growthPlan: sanitize(standup.growthPlan),
     eveningOutcome: standup.eveningOutcome
       ? sanitize(standup.eveningOutcome)

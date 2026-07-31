@@ -95,6 +95,13 @@ workplace story. The narrative layer may surface real roles, decisions and
 handoffs, but it must never invent conflict, activity or business results.
 BoardlessAI does not claim to offer a validated customer product.
 
+The owner has additionally authorized live, budget-guarded council positions
+for the three internal shifts. Their only executable scope is the reviewed
+internal operating queue in `config/internal-work-queue.json`; each output is
+sanitized and timestamped before it becomes a public record. This does not
+reclassify the project, unfreeze market discovery, enable publishing or permit
+autonomous code changes.
+
 ## Constraints
 
 No paid infrastructure until approved. All safety, budget, evidence, content,

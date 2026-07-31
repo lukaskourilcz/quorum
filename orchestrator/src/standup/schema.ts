@@ -11,6 +11,32 @@ export const StandupParticipantSchema = z.object({
   participated: z.boolean()
 });
 
+const RoomTurnSchema = z.object({
+  agent: FoundingAgentSchema,
+  mode: z.enum([
+    "gavel",
+    "statement",
+    "response",
+    "reads-ledger",
+    "raises-concern",
+    "veto",
+    "vote",
+    "close"
+  ]),
+  addressedTo: FoundingAgentSchema.optional(),
+  sentAt: z.string().datetime().optional(),
+  text: z.string().min(1).max(800),
+  evidenceRefs: z.array(z.string().min(1).max(120)).optional()
+});
+
+const RoomTranscriptSchema = z.object({
+  openedAt: z.string().datetime(),
+  closedAt: z.string().datetime(),
+  gavel: FoundingAgentSchema,
+  setting: z.string().min(1).max(800),
+  turns: z.array(RoomTurnSchema).min(1).max(24)
+});
+
 export const StandupSchema = z.object({
   schemaVersion: z.literal(1),
   cycleId: z.string().min(1),
@@ -79,6 +105,7 @@ export const StandupSchema = z.object({
   ),
   growthPlan: z.string().min(1),
   eveningOutcome: z.string().nullable(),
+  roomTranscript: RoomTranscriptSchema,
   generatedAt: z.string().datetime()
 });
 export type Standup = z.infer<typeof StandupSchema>;
