@@ -28,7 +28,9 @@
             "night",
             "cu-edition",
             "cu-product",
-            "tt-marketing"
+            "tt-marketing",
+            "incubator-scan",
+            "incubator-synthesis"
           ]
         },
         "episode": {
@@ -690,7 +692,9 @@
             "night",
             "cu-edition",
             "cu-product",
-            "tt-marketing"
+            "tt-marketing",
+            "incubator-scan",
+            "incubator-synthesis"
           ]
         },
         "episode": {
@@ -1131,7 +1135,9 @@
           "enum": [
             "cu-edition",
             "cu-product",
-            "tt-marketing"
+            "tt-marketing",
+            "incubator-scan",
+            "incubator-synthesis"
           ]
         },
         "roomTranscript": {

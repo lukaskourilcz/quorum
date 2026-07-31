@@ -22,7 +22,11 @@ export async function getPublicDecisions() {
         ? "Caught Up edition"
         : record.kind === "cu-product"
           ? "Caught Up product"
-          : "Titty Tuesdays marketing",
+          : record.kind === "tt-marketing"
+            ? "Titty Tuesdays marketing"
+            : record.kind === "incubator-scan"
+              ? "Incubator scan"
+              : "Incubator synthesis",
       outcome: record.decision.outcome,
       summary: record.decision.summary,
       costUsd: record.ledger.actual

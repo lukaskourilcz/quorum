@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     description: meeting?.operatingBrief ?? "BoardlessAI venture meeting record.",
     robots: meeting?.fixture ? { follow: true, index: false } : undefined,
-    title: meeting ? `${meeting.kind === "cu-edition" ? "Edition" : meeting.kind === "cu-product" ? "Product" : "Marketing"} room · ${formatDate(meeting.date)}` : "Meeting"
+    title: meeting ? `${meeting.kind === "cu-edition" ? "Edition" : meeting.kind === "cu-product" ? "Product" : meeting.kind === "tt-marketing" ? "Marketing" : meeting.kind === "incubator-scan" ? "Incubator scan" : "Incubator synthesis"} room · ${formatDate(meeting.date)}` : "Meeting"
   };
 }
 
@@ -55,8 +55,8 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
   const meeting = await getPublicMeetingRecord(id);
   if (!meeting) notFound();
   const transcript = meeting.roomTranscript;
-  const roomName = meeting.kind === "cu-edition" ? "Edition room" : meeting.kind === "cu-product" ? "Product room" : "Marketing room";
-  const roomTitle = meeting.kind === "cu-edition" ? "Choose the edition" : meeting.kind === "cu-product" ? "Decide the product idea" : "Shape the season";
+  const roomName = meeting.kind === "cu-edition" ? "Edition room" : meeting.kind === "cu-product" ? "Product room" : meeting.kind === "tt-marketing" ? "Marketing room" : meeting.kind === "incubator-scan" ? "Incubator scan" : "Incubator synthesis";
+  const roomTitle = meeting.kind === "cu-edition" ? "Choose the edition" : meeting.kind === "cu-product" ? "Decide the product idea" : meeting.kind === "tt-marketing" ? "Shape the season" : meeting.kind === "incubator-scan" ? "Find evidenced directions" : "Narrow without founding";
   const speakers = Array.from(new Set(transcript.turns.map((turn) => turn.agent)))
     .map((agent) => agentById.get(agent))
     .filter((agent): agent is NonNullable<typeof agent> => Boolean(agent));

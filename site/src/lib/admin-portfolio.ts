@@ -337,7 +337,7 @@ async function proposalCards(root: string, ventureId: string, ratings: readonly 
       const id = text(proposal?.id, 160);
       const title = text(proposal?.domain, 160);
       const summary = text(proposal?.oneLiner, 1_000);
-      const status = text(proposal?.status, 40);
+      const storedStatus = text(proposal?.status, 40);
       const originMeetingRef = text(proposal?.originMeetingRef, 240);
       const audience = object(proposal?.audienceHypothesis);
       const ageRange = object(audience?.ageRange);
@@ -356,9 +356,18 @@ async function proposalCards(root: string, ventureId: string, ratings: readonly 
         !textArray(audience.genders)?.length || !textArray(audience.interests)?.length || !textArray(audience.platforms)?.length || !text(audience.adTargetingNotes, 800) ||
         !contentShape || !text(contentShape.cadence, 120) || !textArray(contentShape.formats)?.length || !text(contentShape.caughtUpReuseNotes, 500) ||
         !competitionNotes || !validCompetition || !textArray(proposal.risks) || !textArray(proposal.evidenceRefs) ||
-        !status || !["proposed", "rated", "shortlist", "archived"].includes(status) || !originMeetingRef
+        !storedStatus || !["proposed", "rated", "shortlist", "archived"].includes(storedStatus) || !originMeetingRef
       ) throw new Error("invalid");
       const createdAt = text(proposal.createdAt, 80) ?? dateFromReference(originMeetingRef);
+      const history = ratingsFor(ratings, id);
+      const ownerRating = currentRating(history, id);
+      const status = ownerRating?.rating === "perfect"
+        ? "shortlist"
+        : ownerRating?.rating === "bad"
+          ? "archived"
+          : ownerRating?.rating === "good"
+            ? "rated"
+            : storedStatus;
       cards.push({
         id,
         ventureId,
@@ -371,7 +380,7 @@ async function proposalCards(root: string, ventureId: string, ratings: readonly 
         updatedAt: text(proposal.updatedAt, 80) ?? createdAt,
         contentHash: contentHash(raw),
         media: [],
-        ratings: ratingsFor(ratings, id)
+        ratings: history
       });
     } catch {
       unreadable.push(`niche-proposals/${filename}`);

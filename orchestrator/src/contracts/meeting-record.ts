@@ -42,7 +42,7 @@ const CommonFields = {
   schemaVersion: z.literal("meeting-record/2"),
   cycleId: z.string().trim().min(1),
   date: DateSchema,
-  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing"]),
+  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis"]),
   episode: openObject({
     id: z.string().trim().min(1),
     shift: z.enum(["morning", "afternoon", "night"]),
@@ -116,10 +116,18 @@ const VentureMeetingSchema = openObject({
 
 const NamedVentureMeetingSchema = openObject({
   ...CommonFields,
-  kind: z.enum(["cu-edition", "cu-product", "tt-marketing"]),
+  kind: z.enum(["cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis"]),
   roomTranscript: RoomTranscriptSchema(36)
 });
 
-export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMeetingSchema]);
+export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMeetingSchema]).superRefine((record, context) => {
+  const turnCount = record.roomTranscript.turns.length;
+  if (record.kind === "incubator-scan" && turnCount > 12) {
+    context.addIssue({ code: "custom", message: "Incubator scan is capped at 12 turns", path: ["roomTranscript", "turns"] });
+  }
+  if (record.kind === "incubator-synthesis" && turnCount > 18) {
+    context.addIssue({ code: "custom", message: "Incubator synthesis is capped at 18 turns", path: ["roomTranscript", "turns"] });
+  }
+});
 
 export type MeetingRecord = z.infer<typeof MeetingRecordSchema>;

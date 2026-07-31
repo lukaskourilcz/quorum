@@ -585,6 +585,19 @@
       "updatedAt": "2026-08-01",
       "status": "noindex",
       "informationGain": "material"
+    },
+    {
+      "url": "/incubator",
+      "purpose": "Publish the evidence-gated magazine niche hunt, public owner ratings, shortlist and research-only authority boundary.",
+      "searchIntent": "inspect the BoardlessAI magazine incubator",
+      "primaryQuery": "BoardlessAI magazine incubator",
+      "audience": "governance readers and prospective magazine readers",
+      "evidenceRefs": ["state/ventures/incubator/niche-proposals", "state/meetings/2026-08-01-incubator-scan.json", "state/meetings/2026-08-01-incubator-synthesis.json"],
+      "author": "SCRIBE",
+      "reviewer": "AUDIT",
+      "updatedAt": "2026-08-01",
+      "status": "noindex",
+      "informationGain": "material"
     }
   ]
 }

@@ -49,6 +49,7 @@ const expectedRoutes = [
   "/feed.json",
   "/feed.xml",
   "/governance",
+  "/incubator",
   "/icon",
   "/log",
   "/manifest.webmanifest",

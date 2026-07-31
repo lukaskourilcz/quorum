@@ -52,6 +52,16 @@
       "adminTabs": ["plans", "ideas", "visuals"],
       "meetings": [],
       "pendingApproval": "budget-2026-08"
+    },
+    {
+      "id": "incubator",
+      "name": "Magazine Incubator",
+      "status": "exploration",
+      "taste": true,
+      "ledgerNamespace": "incubator",
+      "adminTabs": ["niche-proposals"],
+      "meetings": [],
+      "pendingApproval": "budget-2026-08"
     }
   ]
 }

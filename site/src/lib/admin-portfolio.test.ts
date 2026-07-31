@@ -80,7 +80,7 @@ describe("admin portfolio projection", () => {
       status: "proposed",
       originMeetingRef: "meetings/2026-08-04-incubator-synthesis"
     }));
-    await writeFile(path.join(root, "state", "ratings", "caught-up", "ledger.jsonl"), `${JSON.stringify({
+    const planRating = JSON.stringify({
       schemaVersion: "rating/1",
       id: "r-2026-08-04-abcd",
       ventureId: "caught-up",
@@ -88,7 +88,17 @@ describe("admin portfolio projection", () => {
       objectRef: { id: "plan-001", contentHash: "sha256:abcdef123456" },
       rating: "perfect",
       ratedAt: "2026-08-04T10:00:00.000Z"
-    })}\n`);
+    });
+    const proposalRating = JSON.stringify({
+      schemaVersion: "rating/1",
+      id: "r-2026-08-04-cdef",
+      ventureId: "caught-up",
+      objectKind: "niche-proposal",
+      objectRef: { id: "niche-2026-08-04-abcd", contentHash: "sha256:123456abcdef" },
+      rating: "perfect",
+      ratedAt: "2026-08-04T11:00:00.000Z"
+    });
+    await writeFile(path.join(root, "state", "ratings", "caught-up", "ledger.jsonl"), `${planRating}\n${proposalRating}\n`);
 
     const portfolio = await readAdminPortfolio(root);
     expect(portfolio.ventures[0]?.cards.map((card) => card.kind).sort()).toEqual([
@@ -96,6 +106,7 @@ describe("admin portfolio projection", () => {
       "niche-proposal",
       "plan"
     ]);
+    expect(portfolio.ventures[0]?.cards.find((card) => card.kind === "niche-proposal")?.status).toBe("shortlist");
     await expect(readAdminLaunchBinder("caught-up", root)).resolves.toMatchObject({
       plans: [{ id: "plan-001", rating: { rating: "perfect" } }]
     });

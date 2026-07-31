@@ -69,7 +69,9 @@ function slotKind(phase: (typeof MEETING_CLOCK)[number]["phase"]): CalendarFeed[
 
 function recordReference(record: MeetingRecord): string {
   if (record.kind === "venture") return `meetings/${record.cycleId}`;
-  if (record.kind === "tt-marketing") return `meetings/${record.date}-${record.kind}`;
+  if (record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis") {
+    return `meetings/${record.date}-${record.kind}`;
+  }
   return meetingRef(record.date, record.kind);
 }
 
