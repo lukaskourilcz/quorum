@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260731093403-morning",
+  "room": {
+    "roomId": "ROOM-20260731093403-MORNING",
+    "topicType": "council",
+    "objective": "Set evidence-backed priorities for the next eight hours and name every open question",
+    "owner": "VIZE",
+    "evidenceRefs": [],
+    "decisionNeeded": "NO_ACTION",
+    "riskTags": [],
+    "budgetImpactUsd": 0.026516,
+    "selectedParticipants": [
+      {
+        "agent": "VIZE",
+        "reason": "owns council objective",
+        "mandatoryRule": "preset:daily-standup"
+      },
+      {
+        "agent": "FORGE",
+        "reason": "required by daily-standup preset",
+        "mandatoryRule": "preset:daily-standup"
+      },
+      {
+        "agent": "PULSE",
+        "reason": "required by daily-standup preset",
+        "mandatoryRule": "preset:daily-standup"
+      },
+      {
+        "agent": "AUDIT",
+        "reason": "required by daily-standup preset",
+        "mandatoryRule": "preset:daily-standup"
+      },
+      {
+        "agent": "LEDGER",
+        "reason": "required by daily-standup preset",
+        "mandatoryRule": "preset:daily-standup"
+      }
+    ],
+    "skippedParticipants": [
+      {
+        "agent": "SCOUT",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "SCRIBE",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "LENS",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "QUILL",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "RADAR",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "KEEPER",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "THREADS",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "INSTAGRAM",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      },
+      {
+        "agent": "PEOPLE",
+        "reason": "not relevant to this bounded room",
+        "mandatoryRule": null
+      }
+    ],
+    "maxRounds": 2,
+    "maxTurns": 6,
+    "maxTotalTokens": 12000,
+    "expiresAt": "2026-07-31T10:04:03.366Z"
+  },
+  "summary": "The council approved one bounded internal work item: Verify the public shift record. No external action, business claim or stage change was approved.",
+  "generatedAt": "2026-07-31T09:34:03.366Z"
+}

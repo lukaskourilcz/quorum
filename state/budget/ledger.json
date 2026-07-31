@@ -1,5 +1,69 @@
 {
   "schemaVersion": 1,
-  "entries": []
+  "entries": [
+    {
+      "ts": "2026-07-31T09:34:06.928Z",
+      "cycleId": "20260731093403-morning",
+      "requestHash": "3b90de7e415e401e9f8c81ef8bc9f0c1f25885e99bfcc910ab7dbb5ca58b5d0e",
+      "phase": "morning",
+      "agent": "VIZE",
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "serviceTier": "default",
+      "tokensIn": 630,
+      "cachedTokensIn": 0,
+      "tokensOut": 162,
+      "toolUses": 0,
+      "usd": 0.00288,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-07-31T09:34:09.370Z",
+      "cycleId": "20260731093403-morning",
+      "requestHash": "5bab49a089c82c9b9c5f7db524a794f79cb88170ff1a41fa528cfc73a4a95a1c",
+      "phase": "morning",
+      "agent": "FORGE",
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "serviceTier": "default",
+      "tokensIn": 628,
+      "cachedTokensIn": 0,
+      "tokensOut": 138,
+      "toolUses": 0,
+      "usd": 0.002636,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-07-31T09:34:11.786Z",
+      "cycleId": "20260731093403-morning",
+      "requestHash": "bc1abb1ee4cce70873c455261636924ce1805d938a188de1ae8c8b9032ca6545",
+      "phase": "morning",
+      "agent": "PULSE",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 379,
+      "cachedTokensIn": 0,
+      "tokensOut": 95,
+      "toolUses": 0,
+      "usd": 0.000949,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-07-31T09:34:13.703Z",
+      "cycleId": "20260731093403-morning",
+      "requestHash": "fbe48df20a8043fee29b014d6fe15f396b29eae0d096b69732855198aae66ee8",
+      "phase": "morning",
+      "agent": "AUDIT",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 376,
+      "cachedTokensIn": 0,
+      "tokensOut": 82,
+      "toolUses": 0,
+      "usd": 0.000868,
+      "kind": "text"
+    }
+  ]
 }
-

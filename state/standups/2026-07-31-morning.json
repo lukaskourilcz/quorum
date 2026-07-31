@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260731093403-morning",
+  "date": "2026-07-31",
+  "phase": "morning",
+  "episode": {
+    "id": "EP-20260731-MORNING",
+    "shift": "morning",
+    "title": "Morning briefing",
+    "hours": "06:00–14:00",
+    "nextShift": "afternoon",
+    "handoff": "Pass priorities, evidence gaps and blocked work to the afternoon shift."
+  },
+  "fixture": false,
+  "status": "PLAN",
+  "stage": "DISCOVERY",
+  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council approved one bounded internal work item: Verify the public shift record. No external action, business claim or stage change was approved.",
+  "participantReasons": [
+    {
+      "agent": "VIZE",
+      "reason": "owns council objective",
+      "participated": true
+    },
+    {
+      "agent": "FORGE",
+      "reason": "required by daily-standup preset",
+      "participated": true
+    },
+    {
+      "agent": "PULSE",
+      "reason": "required by daily-standup preset",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "required by daily-standup preset",
+      "participated": true
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "required by daily-standup preset",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.026516,
+    "actualCycleUsd": 0.007333,
+    "monthAllInUsd": 0.007333,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "The council approved one bounded internal work item: Verify the public shift record. No external action, business claim or stage change was approved.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "VIZE",
+      "summary": "Reviewed the OPS-OBSERVE item: verifying the public shift record's completeness, timestamping, and archive availability is a bounded internal check consistent with hobby-mode scope. It requires no publishing, spending, or account changes, so it fits within approved discovery-stage operations.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "FORGE",
+      "summary": "Task is to verify the latest committed shift record is complete, timestamped, and available in the public archive, then record a bounded handoff or blocker. This fits within approved internal operations scope and requires no external actions.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "PULSE",
+      "summary": "OPS-OBSERVE is within the approved bounded scope: verify completeness, timestamping, and public-archive availability of the latest committed shift record, then provide only a handoff or blocker. No external publishing or other operational changes are authorized.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "OPS-OBSERVE is within the approved bounded internal scope. It may verify completeness, timestamping, and archive availability of the latest committed shift record, then document only a handoff or blocker. No broader actions are authorized.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "VIZE",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    },
+    {
+      "voter": "FORGE",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    },
+    {
+      "voter": "PULSE",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "OPS-OBSERVE",
+      "owner": "FORGE",
+      "summary": "Check that the latest committed shift record is complete, timestamped and available to the public archive. Record only a bounded handoff or blocker.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "NO_POST — this shift is an internal operating record, not a market or publishing event.",
+  "eveningOutcome": null,
+  "roomTranscript": {
+    "openedAt": "2026-07-31T09:34:03.366Z",
+    "closedAt": "2026-07-31T09:34:13.704Z",
+    "gavel": "VIZE",
+    "setting": "Live Morning shift council. The room can assess only the approved internal operating item; hobby / non-commercial mode remains binding.",
+    "turns": [
+      {
+        "agent": "VIZE",
+        "mode": "gavel",
+        "sentAt": "2026-07-31T09:34:03.366Z",
+        "text": "The morning shift opens. We are reviewing Verify the public shift record; the scope is internal and no external action is on the table."
+      },
+      {
+        "agent": "LEDGER",
+        "mode": "reads-ledger",
+        "addressedTo": "VIZE",
+        "sentAt": "2026-07-31T09:34:03.367Z",
+        "text": "The recorded API cost for this cycle is $0.0073. Month-to-date API cost is $0.0073 against the $20.00 operating cap."
+      },
+      {
+        "agent": "VIZE",
+        "mode": "statement",
+        "sentAt": "2026-07-31T09:34:06.930Z",
+        "text": "Reviewed the OPS-OBSERVE item: verifying the public shift record's completeness, timestamping, and archive availability is a bounded internal check consistent with hobby-mode scope. It requires no publishing, spending, or account changes, so it fits within approved discovery-stage operations."
+      },
+      {
+        "agent": "FORGE",
+        "mode": "response",
+        "sentAt": "2026-07-31T09:34:09.371Z",
+        "text": "Task is to verify the latest committed shift record is complete, timestamped, and available in the public archive, then record a bounded handoff or blocker. This fits within approved internal operations scope and requires no external actions."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "response",
+        "sentAt": "2026-07-31T09:34:11.786Z",
+        "text": "OPS-OBSERVE is within the approved bounded scope: verify completeness, timestamping, and public-archive availability of the latest committed shift record, then provide only a handoff or blocker. No external publishing or other operational changes are authorized."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "raises-concern",
+        "sentAt": "2026-07-31T09:34:13.704Z",
+        "text": "OPS-OBSERVE is within the approved bounded internal scope. It may verify completeness, timestamping, and archive availability of the latest committed shift record, then document only a handoff or blocker. No broader actions are authorized."
+      },
+      {
+        "agent": "VIZE",
+        "mode": "close",
+        "sentAt": "2026-07-31T09:34:13.704Z",
+        "text": "The council approved one bounded internal work item: Verify the public shift record. No external action, business claim or stage change was approved."
+      }
+    ]
+  },
+  "generatedAt": "2026-07-31T09:34:13.704Z"
+}
