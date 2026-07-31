@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test Feed</title>
+    <link>https://example.com</link>
+    <description>Test fixture</description>
+    <item>
+      <title>First post</title>
+      <link>https://example.com/posts/first</link>
+      <description><![CDATA[<p>Hello <b>world</b>, this is the first post.</p>]]></description>
+      <pubDate>Mon, 11 May 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Second post with a long body</title>
+      <link>https://example.com/posts/second</link>
+      <description><![CDATA[This is a longer body intended to test the summary clamping behaviour. ]]></description>
+      <pubDate>Tue, 12 May 2026 09:30:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Item without a link</title>
+      <description>Should be skipped because it has no link.</description>
+      <pubDate>Tue, 12 May 2026 10:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

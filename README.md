@@ -31,7 +31,7 @@ clear BoardlessAI before accepting a paid sponsorship.
   generated-code controls.
 - Three-shift standup, finance, social, organization and public-projection
   contracts.
-- Fourteen canonical agent profiles, shared visual identity, generated WebP
+- Twenty canonical agent profiles, shared visual identity, generated WebP
   portraits, provenance manifest and deterministic asset checks.
 - Responsive corporate site with all requested routes, feeds, sitemap, metadata
   and a fail-closed Basic Auth admin surface.
@@ -57,6 +57,7 @@ ledgers are never imported into the public site.
 config/                   validated models, stages, agents, routing and policies
 orchestrator/
   prompts/                council and specialist contracts
+  src/sources/adapters/   guarded 11-kind Caught Up source collection
   src/                    cycle, guards, evidence, finance, social and org logic
   tests/                  deterministic safety and end-to-end contract tests
 site/
@@ -101,10 +102,13 @@ Useful commands:
 | `pnpm cycle -- --phase morning --dry --explain-budget --explain-routing` | Explains a bounded dry Morning shift |
 | `pnpm cycle -- --phase afternoon --dry` | Runs a bounded dry Afternoon shift |
 | `pnpm cycle -- --phase night --dry` | Runs a bounded dry Night shift |
+| `pnpm sources:shadow` | Collects the 35-source digest into an unconsumed dry-run artifact |
 | `pnpm social:publish -- --dry-if-disabled --validate-only` | Validates the social queue without publishing |
 
 Dry-cycle artifacts are written only below `tmp/dry-run/state/`, which is
 ignored by git. Canonical state is not mutated.
+Source-shadow artifacts are written below `orchestrator/.dry-run/sources/`,
+also ignored by git, and no edition or public consumer reads them.
 
 ## Environment
 

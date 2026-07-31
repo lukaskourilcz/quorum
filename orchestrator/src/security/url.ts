@@ -2,6 +2,8 @@ import dns from "node:dns/promises";
 import net from "node:net";
 
 const ALLOWED_CONTENT_TYPES = [
+  "application/atom+xml",
+  "application/feed+json",
   "application/json",
   "application/rss+xml",
   "application/xml",
@@ -96,6 +98,9 @@ export async function resolvePublicAddresses(hostname: string): Promise<string[]
 
 export interface SafeFetchOptions {
   allowHosts: readonly string[];
+  method?: "GET" | "POST";
+  headers?: Readonly<Record<string, string>>;
+  body?: string;
   maxBytes?: number;
   maxRedirects?: number;
   timeoutMs?: number;
@@ -112,6 +117,16 @@ export async function safeFetch(
   const maxRedirects = options.maxRedirects ?? 3;
   const maxBytes = options.maxBytes ?? 1_000_000;
   let url = parseSafeHttpsUrl(raw);
+  const method = options.method ?? "GET";
+
+  if (method === "GET" && options.body !== undefined) {
+    throw new UnsafeUrlError("GET requests cannot include a body");
+  }
+  for (const name of Object.keys(options.headers ?? {})) {
+    if (["cookie", "host", "proxy-authorization", "forwarded"].includes(name.toLowerCase())) {
+      throw new UnsafeUrlError(`Forbidden request header: ${name}`);
+    }
+  }
 
   for (let redirect = 0; redirect <= maxRedirects; redirect += 1) {
     if (!options.allowHosts.includes(url.hostname)) {
@@ -128,8 +143,11 @@ export async function safeFetch(
       response = await fetchImpl(url, {
         headers: {
           Accept:
-            "application/json, application/rss+xml, application/xml, text/plain;q=0.9, text/html;q=0.7"
+            "application/json, application/atom+xml, application/rss+xml, application/xml, text/plain;q=0.9, text/html;q=0.7",
+          ...options.headers
         },
+        method,
+        body: options.body,
         redirect: "manual",
         signal: controller.signal
       });
@@ -137,6 +155,9 @@ export async function safeFetch(
       clearTimeout(timer);
     }
     if (response.status >= 300 && response.status < 400) {
+      if (method !== "GET") {
+        throw new UnsafeUrlError("Redirects are forbidden for non-GET requests");
+      }
       const location = response.headers.get("location");
       if (!location || redirect === maxRedirects) {
         throw new UnsafeUrlError("Unsafe or excessive redirect");
@@ -163,4 +184,3 @@ export async function safeFetch(
   }
   throw new UnsafeUrlError("Redirect limit exceeded");
 }
-

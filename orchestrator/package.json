@@ -12,15 +12,19 @@
     "cycle": "tsx src/index.ts",
     "lint": "tsc --noEmit",
     "social:publish": "tsx src/social/index.ts",
+    "sources:shadow": "tsx src/sources/shadow.ts",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.113.0",
+    "cheerio": "^1.2.0",
     "dotenv": "^17.4.2",
-    "fast-xml-parser": "5.10.1",
     "openai": "6.48.0",
+    "rss-parser": "^3.13.0",
     "sharp": "0.35.3",
+    "undici": "^6.28.0",
+    "yaml": "^2.9.0",
     "zod": "4.4.3"
   },
   "devDependencies": {

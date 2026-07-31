@@ -1,59 +1,23 @@
-import { safeFetch } from "../security/url.js";
-import type { SourceConfig } from "./types.js";
+import type { SourceScrapeResult } from "./run.js";
 
-export interface SourceProbe {
-  sourceId: string;
-  ok: boolean;
-  status: "healthy" | "disabled" | "failed";
-  finalUrl: string | null;
-  contentType: string | null;
-  bytes: number;
-  checkedAt: string;
-  error: string | null;
+export interface SourceProbeSummary {
+  healthy: number;
+  skipped: number;
+  failed: number;
+  itemCount: number;
+  failures: Array<{ sourceId: string; errorCode: string | null }>;
 }
 
-export async function probeSource(
-  source: SourceConfig,
-  allowHosts: readonly string[],
-  now = new Date()
-): Promise<SourceProbe> {
-  if (!source.enabled) {
-    return {
-      sourceId: source.id,
-      ok: false,
-      status: "disabled",
-      finalUrl: null,
-      contentType: null,
-      bytes: 0,
-      checkedAt: now.toISOString(),
-      error: null
-    };
-  }
-  try {
-    const response = await safeFetch(source.url, {
-      allowHosts,
-      maxBytes: 1_000_000
-    });
-    return {
-      sourceId: source.id,
-      ok: true,
-      status: "healthy",
-      finalUrl: response.url,
-      contentType: response.contentType,
-      bytes: response.body.byteLength,
-      checkedAt: now.toISOString(),
-      error: null
-    };
-  } catch (error) {
-    return {
-      sourceId: source.id,
-      ok: false,
-      status: "failed",
-      finalUrl: null,
-      contentType: null,
-      bytes: 0,
-      checkedAt: now.toISOString(),
-      error: error instanceof Error ? error.message : String(error)
-    };
-  }
+export function summarizeSourceProbes(
+  results: readonly SourceScrapeResult[]
+): SourceProbeSummary {
+  return {
+    healthy: results.filter(({ status }) => status === "success").length,
+    skipped: results.filter(({ status }) => status === "skipped").length,
+    failed: results.filter(({ status }) => status === "failed").length,
+    itemCount: results.reduce((sum, result) => sum + result.candidateItems, 0),
+    failures: results
+      .filter(({ status }) => status === "failed")
+      .map(({ sourceId, errorCode }) => ({ sourceId, errorCode }))
+  };
 }
