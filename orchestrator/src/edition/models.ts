@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { BudgetError, estimateTextCall } from "../budget.js";
 import { findTextPrice } from "../llm/prices.js";
 import type {
   EditionModelGateway,
@@ -85,5 +86,51 @@ export class AnthropicEditionModelGateway implements EditionModelGateway {
         })
       }
     };
+  }
+}
+
+/** Reserves the worst-case cost of each call before it reaches the provider. */
+export class BudgetedEditionModelGateway implements EditionModelGateway {
+  private measuredUsd = 0;
+
+  constructor(
+    private readonly delegate: EditionModelGateway,
+    private readonly capUsd: number
+  ) {
+    if (!Number.isFinite(capUsd) || capUsd <= 0) {
+      throw new BudgetError("CYCLE_CAP", "Edition production cap must be positive");
+    }
+  }
+
+  async invoke<T>(
+    request: StructuredToolRequest<T>
+  ): Promise<{ value: T; usage: EditionUsage }> {
+    if (!isEditionModel(request.model)) {
+      throw new BudgetError(
+        "UNKNOWN_PRICE",
+        `Edition model is not pinned or priced: ${request.model}`
+      );
+    }
+    const reserve = estimateTextCall({
+      provider: "anthropic",
+      model: request.model,
+      promptChars: request.system.length + request.user.length,
+      maxOutputTokens: request.maxOutputTokens
+    });
+    if (this.measuredUsd + reserve.estimatedUsd > this.capUsd) {
+      throw new BudgetError(
+        "CYCLE_CAP",
+        `Edition call reserve ${reserve.estimatedUsd} would exceed ${this.capUsd}`
+      );
+    }
+    const result = await this.delegate.invoke(request);
+    this.measuredUsd = Number((this.measuredUsd + result.usage.costUsd).toFixed(8));
+    if (this.measuredUsd > this.capUsd) {
+      throw new BudgetError(
+        "CYCLE_CAP",
+        `Measured edition cost ${this.measuredUsd} exceeded ${this.capUsd}`
+      );
+    }
+    return result;
   }
 }

@@ -87,6 +87,9 @@ jobs:
           INPUT_DRY: ${{ inputs.dry }}
           HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
           HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+          HAS_DELIVERY_APP_ID: ${{ secrets.DELIVERY_APP_ID != '' }}
+          HAS_DELIVERY_APP_KEY: ${{ secrets.DELIVERY_APP_PRIVATE_KEY != '' }}
+          CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
@@ -96,9 +99,17 @@ jobs:
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
           fi
-          if test "$phase" = "cu-edition" || test "$phase" = "cu-product"; then
+          if test "$phase" = "cu-product"; then
             dry=true
-            echo "Caught Up phases remain fixture-only until Phase 9 cutover."
+            echo "Caught Up product remains fixture-only until the Phase 10 ledger cutover."
+          fi
+          if test "$phase" = "cu-edition" && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
+            dry=true
+            echo "Caught Up edition live mode awaits the explicit repository-variable approval gate."
+          fi
+          if test "$phase" = "cu-edition" && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
+            dry=true
+            echo "Caught Up delivery credentials are missing; forcing fixture-only dry mode."
           fi
           if test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; then
             dry=true
@@ -153,7 +164,7 @@ jobs:
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add state/budget state/standups state/meetings state/scorecards state/decisions
+          git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/notify
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0
@@ -162,3 +173,151 @@ jobs:
           git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
           git commit -m "cycle(${CYCLE_NUMBER})"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Select the oldest Caught Up delivery
+        id: delivery
+        if: ${{ steps.mode.outputs.phase == 'cu-edition' && steps.mode.outputs.dry != 'true' }}
+        run: pnpm delivery -- next --github-output "$GITHUB_OUTPUT"
+
+      - name: Mint bounded aifirst installation token
+        id: delivery-token
+        if: ${{ steps.delivery.outputs.has_package == 'true' }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
+        with:
+          app-id: ${{ secrets.DELIVERY_APP_ID }}
+          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
+          owner: lukaskourilcz
+          repositories: aifirst
+
+      - name: Deliver package to aifirst main
+        id: target
+        if: ${{ steps.delivery.outputs.has_package == 'true' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.delivery-token.outputs.token }}
+          PACKAGE_PATH: ${{ steps.delivery.outputs.package_path }}
+          PACKAGE_STATUS: ${{ steps.delivery.outputs.package_status }}
+          PACKAGE_DATE: ${{ steps.delivery.outputs.date }}
+          PACKAGE_HASH12: ${{ steps.delivery.outputs.hash12 }}
+          PACKAGE_SLUG: ${{ steps.delivery.outputs.slug }}
+          HAS_HERO: ${{ steps.delivery.outputs.has_hero }}
+        run: |
+          clone_root=""
+          for attempt in 1 2; do
+            candidate="$RUNNER_TEMP/aifirst-delivery-$attempt"
+            if git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/aifirst.git" "$candidate"; then
+              clone_root="$candidate"
+              break
+            fi
+          done
+          if test -z "$clone_root"; then
+            echo "GitHub was unreachable after one retry; the package remains in the outbox."
+            exit 1
+          fi
+          pnpm --dir "$clone_root" install --frozen-lockfile
+          set +e
+          pnpm --dir "$clone_root" consume:edition "$PACKAGE_PATH" "$clone_root" > "$RUNNER_TEMP/delivery-consumer.log" 2>&1
+          consumer_status=$?
+          set -e
+          if test "$consumer_status" -ne 0; then
+            cat "$RUNNER_TEMP/delivery-consumer.log"
+            if grep -q '\[delivery:hash_conflict\]' "$RUNNER_TEMP/delivery-consumer.log"; then
+              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+              echo "failure_code=hash_conflict" >> "$GITHUB_OUTPUT"
+            elif grep -q '\[delivery:content_invalid\]' "$RUNNER_TEMP/delivery-consumer.log"; then
+              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+              echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
+            else
+              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+              echo "failure_code=schema_invalid" >> "$GITHUB_OUTPUT"
+            fi
+            echo "detail_file=$RUNNER_TEMP/delivery-consumer.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          set +e
+          pnpm --dir "$clone_root" check:content > "$RUNNER_TEMP/delivery-content.log" 2>&1
+          content_status=$?
+          set -e
+          if test "$content_status" -ne 0; then
+            cat "$RUNNER_TEMP/delivery-content.log"
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
+            echo "detail_file=$RUNNER_TEMP/delivery-content.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          allowed="^public/data/board/${PACKAGE_DATE}\.json$"
+          if test "$PACKAGE_STATUS" = "edition"; then
+            allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json))$"
+            if test "$HAS_HERO" = "true"; then
+              allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json)|(public/illustrations/${PACKAGE_DATE}\.webp))$"
+            fi
+          fi
+          unexpected="$(git -C "$clone_root" status --porcelain | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
+          if test -n "$unexpected"; then
+            echo "Consumer touched unauthorized paths:"
+            echo "$unexpected"
+            exit 1
+          fi
+          git -C "$clone_root" add \
+            "public/data/board/${PACKAGE_DATE}.json"
+          if test "$PACKAGE_STATUS" = "edition"; then
+            git -C "$clone_root" add \
+              "content/articles/${PACKAGE_DATE}.en.mdx" \
+              "content/articles/${PACKAGE_DATE}.cs.mdx"
+            if test "$HAS_HERO" = "true"; then
+              git -C "$clone_root" add "public/illustrations/${PACKAGE_DATE}.webp"
+            fi
+          fi
+          if ! git -C "$clone_root" diff --cached --quiet; then
+            git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
+            git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+            git -C "$clone_root" commit -m "edition(${PACKAGE_DATE}): ${PACKAGE_SLUG} [package:${PACKAGE_HASH12}]"
+            pushed=false
+            for attempt in 1 2; do
+              if git -C "$clone_root" push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              git -C "$clone_root" fetch --depth 1 origin main
+              if ! git -C "$clone_root" rebase origin/main; then
+                git -C "$clone_root" rebase --abort || true
+                break
+              fi
+            done
+            if test "$pushed" != "true"; then
+              printf '%s\n' "Target push was rejected after one refetch/retry." > "$RUNNER_TEMP/delivery-push.log"
+              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+              echo "failure_code=push_rejected" >> "$GITHUB_OUTPUT"
+              echo "detail_file=$RUNNER_TEMP/delivery-push.log" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "status=delivered" >> "$GITHUB_OUTPUT"
+          echo "target_commit=$(git -C "$clone_root" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Record the delivery transaction
+        if: ${{ steps.delivery.outputs.has_package == 'true' && steps.target.outputs.status != '' }}
+        env:
+          DELIVERY_STATUS: ${{ steps.target.outputs.status }}
+          FAILURE_CODE: ${{ steps.target.outputs.failure_code }}
+          DETAIL_FILE: ${{ steps.target.outputs.detail_file }}
+          PACKAGE_STATE_PATH: ${{ steps.delivery.outputs.package_state_path }}
+          TARGET_COMMIT: ${{ steps.target.outputs.target_commit }}
+          PACKAGE_DATE: ${{ steps.delivery.outputs.date }}
+          PACKAGE_HASH12: ${{ steps.delivery.outputs.hash12 }}
+        run: |
+          args=(record --package "$PACKAGE_STATE_PATH" --status "$DELIVERY_STATUS")
+          if test -n "$FAILURE_CODE"; then args+=(--code "$FAILURE_CODE"); fi
+          if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
+          if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
+          pnpm delivery -- "${args[@]}"
+          git add state/edition state/meetings state/INBOX.md
+          if ! git diff --cached --quiet; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git commit -m "delivery(${PACKAGE_DATE}): ${DELIVERY_STATUS} [package:${PACKAGE_HASH12}]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Fail closed on delivery reconciliation
+        if: ${{ steps.target.outputs.status == 'needs_reconciliation' }}
+        run: exit 1

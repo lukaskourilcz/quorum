@@ -11,6 +11,7 @@
     "build": "tsc -p tsconfig.build.json",
     "cycle": "tsx src/index.ts",
     "cycle:phase": "tsx src/meetings/clock-cli.ts",
+    "delivery": "tsx src/delivery/cli.ts",
     "edition:dry": "tsx src/edition/dry-run.ts",
     "lint": "tsc --noEmit",
     "social:publish": "tsx src/social/index.ts",

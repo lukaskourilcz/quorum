@@ -122,13 +122,13 @@ describe("cycle preflight", () => {
     }
   });
 
-  it("keeps Caught Up live execution disabled before cutover", async () => {
+  it("keeps Caught Up product live execution disabled before the ledger cutover", async () => {
     await expect(runCycle({
-      phase: "cu-edition",
+      phase: "cu-product",
       dry: false,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-04T03:00:00.000Z")
-    })).rejects.toThrow(/remain dry until the Phase 9 cutover/);
+      now: new Date("2026-08-04T15:00:00.000Z")
+    })).rejects.toThrow(/remains dry until the Phase 10 idea-ledger cutover/);
   });
 });

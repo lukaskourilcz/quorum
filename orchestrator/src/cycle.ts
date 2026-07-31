@@ -24,7 +24,13 @@ import {
   writeCalendarFeed
 } from "./meetings/calendar.js";
 import { isCaughtUpPhase } from "./meetings/clock.js";
-import { createOfflineCaughtUpMeeting } from "./meetings/record.js";
+import { pragueClockParts } from "./meetings/clock.js";
+import {
+  createLiveEditionMeeting,
+  createOfflineCaughtUpMeeting,
+  meetingRef
+} from "./meetings/record.js";
+import { appendEditionUsage, runLiveEdition } from "./edition/live.js";
 import {
   buildMeetingEmail,
   MeetingEmailLogSink,
@@ -56,6 +62,7 @@ export interface CycleResult {
     | "INSUFFICIENT_EVIDENCE"
     | "NO_ACTION"
     | "NO_EDITION"
+    | "EDITION"
     | "DEFER"
     | "PLAN"
     | "PAUSED";
@@ -247,6 +254,150 @@ async function runCaughtUpDryCycle(
   };
 }
 
+async function runCaughtUpLiveEditionCycle(
+  options: CycleOptions,
+  cycleId: string,
+  now: Date
+): Promise<CycleResult> {
+  if (options.phase !== "cu-edition" || options.dry) {
+    throw new Error("Live Caught Up edition runner requires a non-dry cu-edition phase");
+  }
+  const [routing, stages] = await Promise.all([
+    loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
+    readFile(path.join(configRoot, "stages.json"), "utf8").then(
+      (raw) => JSON.parse(raw) as { current: Stage }
+    )
+  ]);
+  const meetingBudgetUsd = budgetLimitsFromEnvironment().caughtUpMeetingUsd;
+  const productionBudgetUsd = budgetLimitsFromEnvironment().editionProductionUsd;
+  const estimatedWorstCaseUsd = Number((meetingBudgetUsd + productionBudgetUsd).toFixed(8));
+  const date = pragueClockParts(now).date;
+  const reference = meetingRef(date, "cu-edition");
+  const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
+  const room = routeBoardroom(routing, {
+    roomId: `ROOM-${cycleId.toUpperCase()}`,
+    topicType: "edition",
+    objective: "Review the live digest and select one story or record NO_EDITION",
+    evidenceRefs: [],
+    decisionNeeded: "EDITION",
+    riskTags: [],
+    budgetImpactUsd: estimatedWorstCaseUsd,
+    preset: "edition-room",
+    now
+  });
+  const produced = await runLiveEdition({
+    cycleId,
+    date,
+    now,
+    meetingRef: reference,
+    roomUrl: `${baseUrl}/${reference}`
+  });
+  const monthAllInUsd = await appendEditionUsage(stateRoot, cycleId, now, produced.report);
+  const evidenceRefs = produced.package.status === "edition"
+    ? produced.package.article.en.frontmatter.sources.map(
+        (source) => `source:${source.source_id ?? source.id}`
+      )
+    : produced.sourceRun.sources
+        .filter((source) => source.status === "success")
+        .map((source) => `source:${source.sourceId}`)
+        .slice(0, 12);
+  const record = await createLiveEditionMeeting({
+    cycleId,
+    stage: stages.current,
+    room,
+    now,
+    estimatedCycleUsd: estimatedWorstCaseUsd,
+    monthAllInUsd,
+    editionPackage: produced.package,
+    evidenceRefs
+  });
+  const meetingPath = `meetings/${date}-cu-edition.json`;
+  const decisionPath = `decisions/${cycleId}.json`;
+  const scorecardPath = `scorecards/${cycleId}.json`;
+  const priorRecords = await loadMeetingRecords(stateRoot);
+  const calendar = buildCalendarFeed({
+    weekOf: mondayOfWeek(date),
+    records: [...priorRecords, record],
+    now
+  });
+  const calendarPath = await writeCalendarFeed(stateRoot, calendar);
+  await Promise.all([
+    atomicWriteJson(stateRoot, meetingPath, record),
+    atomicWriteJson(stateRoot, decisionPath, {
+      schemaVersion: 1,
+      fixture: false,
+      cycleId,
+      phase: "cu-edition",
+      outcome: record.decision.outcome,
+      summary: record.decision.summary,
+      evidenceRefs: record.decision.evidenceRefs,
+      editionRef: produced.package.idempotencyKey,
+      generatedAt: record.generatedAt
+    }),
+    atomicWriteJson(stateRoot, scorecardPath, {
+      schemaVersion: 1,
+      fixture: false,
+      cycleId,
+      phase: "cu-edition",
+      estimatedWorstCaseUsd,
+      actualUsd: produced.report.measuredCostUsd ?? 0,
+      participants: room.selectedParticipants.map((participant) => participant.agent),
+      sourceResults: produced.sourceRun.sources,
+      editionStatus: produced.package.status,
+      packageHash: produced.package.idempotencyKey,
+      generatedAt: record.generatedAt
+    })
+  ]);
+  const emailPayload = buildMeetingEmail({ record, boardlessBaseUrl: baseUrl });
+  await sendMeetingEmail({
+    payload: emailPayload,
+    sink: new MeetingEmailLogSink(stateRoot),
+    stateRoot,
+    now
+  });
+  if (options.explainBudget) {
+    console.log(JSON.stringify({
+      cycleId,
+      callGraph: produced.report.usage.map((usage) => ({
+        stage: usage.stage,
+        model: usage.model,
+        measuredUsd: usage.costUsd
+      })),
+      estimatedWorstCaseUsd,
+      measuredUsd: produced.report.measuredCostUsd ?? null
+    }, null, 2));
+  }
+  if (options.explainRouting) {
+    console.log(JSON.stringify({
+      selected: room.selectedParticipants,
+      skipped: room.skippedParticipants,
+      caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
+    }, null, 2));
+  }
+  const artifacts = [
+    meetingPath,
+    decisionPath,
+    scorecardPath,
+    calendarPath,
+    produced.outboxPath,
+    produced.reportPath,
+    `notify/email/${reference.replaceAll("/", "-")}.json`,
+    "notify/health.json",
+    "budget/ledger.json"
+  ];
+  return {
+    cycleId,
+    phase: "cu-edition",
+    dry: false,
+    status: "live_complete",
+    decision: produced.package.status === "edition" ? "EDITION" : "NO_EDITION",
+    estimatedWorstCaseUsd,
+    selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
+    skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
+    artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
+  };
+}
+
 export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   const now = options.now ?? new Date();
   const cycleId = `${now.toISOString().replaceAll(/[-:.TZ]/g, "").slice(0, 14)}-${options.phase}`;
@@ -267,7 +418,13 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
   }
   if (isCaughtUpPhase(options.phase)) {
-    return runCaughtUpDryCycle(options, cycleId, now);
+    if (options.dry) return runCaughtUpDryCycle(options, cycleId, now);
+    if (options.phase === "cu-edition") {
+      return withFileLock(stateRoot, ".lock", () =>
+        runCaughtUpLiveEditionCycle(options, cycleId, now)
+      );
+    }
+    throw new Error("Caught Up product remains dry until the Phase 10 idea-ledger cutover");
   }
   if (options.phase !== "founding" && !isShiftPhase(options.phase)) {
     throw new Error(`Unsupported venture phase: ${options.phase}`);

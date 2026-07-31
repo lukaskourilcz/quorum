@@ -103,6 +103,7 @@ Useful commands:
 | `pnpm cycle -- --phase afternoon --dry` | Runs a bounded dry Afternoon shift |
 | `pnpm cycle -- --phase night --dry` | Runs a bounded dry Night shift |
 | `pnpm edition:dry` | Builds and validates a fixture-backed EditionPackage without paid calls |
+| `pnpm delivery -- next` | Inspects the oldest schema- and content-valid delivery outbox item |
 | `pnpm sources:shadow` | Collects the 35-source digest into an unconsumed dry-run artifact |
 | `pnpm social:publish -- --dry-if-disabled --validate-only` | Validates the social queue without publishing |
 
@@ -123,6 +124,9 @@ Core variables:
 
 - `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` — real council calls. If either is
   missing in scheduled automation, the cycle is forced into dry fixture mode.
+- `DELIVERY_APP_ID`, `DELIVERY_APP_PRIVATE_KEY` — Actions-only credentials for
+  the `boardlessai-delivery` App installed on `lukaskourilcz/aifirst` with
+  repository contents read/write and no broader permission.
 - `MONTHLY_OPERATING_CAP_USD`, `MAX_CYCLE_BUDGET_USD`,
   `DAILY_BUDGET_USD`, `MONTHLY_BUDGET_USD` — hard text/API limits.
 - `MAX_MEDIA_ASSET_USD`, `DAILY_MEDIA_BUDGET_USD`,
@@ -139,7 +143,9 @@ Core variables:
 GitHub repository variables provide independent emergency switches. The owner
 authorized the council schedule on 2026-07-30:
 `AUTONOMY_KILL_SWITCH=false`; social publishing remains disabled with
-`SOCIAL_KILL_SWITCH=true`. `HEALTH_CHECK_ENABLED=false` until an operator
+`SOCIAL_KILL_SWITCH=true`. Caught Up edition production remains dry unless the
+operator explicitly sets `CAUGHT_UP_LIVE_ENABLED=true` after installing the
+delivery App. `HEALTH_CHECK_ENABLED=false` until an operator
 explicitly opts in. A committed `state/PAUSED` stops both runtimes;
 `state/SOCIAL_PAUSED` stops publishing only.
 
@@ -154,10 +160,15 @@ variants for each slot; a shared runtime clock table rejects the wrong variant:
 - 17:00 — Caught Up product room
 - 22:00 — Night shift, covering 22:00–06:00
 
-The two Caught Up phases remain fixture-only until the Phase 9 cutover. Their
-dry runs write MeetingRecord v2, a weekly CalendarFeed, decision and scorecard
-artifacts, plus a MeetingEmail payload to the local log sink. No Resend request
-occurs in this mode.
+The Caught Up edition phase has a live producer behind the explicit repository
+variable and delivery-secret gates. It collects the guarded source registry,
+reserves each Anthropic call against the edition envelope, applies the content
+and STET gates, and commits one package to `state/edition/outbox/`. Delivery
+drains the oldest package, one per cycle, into the four authorized aifirst paths
+with a one-retry, fail-closed GitHub App transaction. Equal hashes are successful
+no-ops; conflicts become `NEEDS_RECONCILIATION`. The product room remains dry
+until the Phase 10 idea ledger is present. Dry rooms still write only fixture
+artifacts and use the local email log sink; Resend is not called yet.
 
 Every shift seats VIZE, FORGE, PULSE and AUDIT with LEDGER as the required
 finance control. Specialists enter only when routing rules need them. An
@@ -169,9 +180,11 @@ code changes or a business-stage change.
 
 Each run installs from the lockfile, honors the kill switch, runs the complete
 pre-gate, calculates routing and worst-case budget, executes at most the
-bounded cycle, repeats the release gate and then creates at most one normal
-`cycle(N)` commit. Vercel builds the public archive from those committed state
-records. There is no force push. A concurrent run cannot overlap.
+bounded cycle, repeats the release gate and then creates one normal `cycle(N)`
+state commit when state changed. A live edition may then create one content-only
+commit in aifirst and one source-repository delivery receipt commit. Vercel
+builds the reader from the independently validated aifirst commit. There is no
+force push. A concurrent run cannot overlap.
 
 A live founding cycle is intentionally unavailable until both provider keys are
 configured. With no keys:

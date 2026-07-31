@@ -4,8 +4,8 @@ import YAML from "yaml";
 
 export function quoteYamlDates(yaml: string): string {
   return yaml.replace(
-    /^(\s*)(date|from|to): (\d{4}-\d{2}-\d{2})$/gm,
-    '$1$2: "$3"'
+    /^(\s*(?:[^\n:#][^\n:]*:\s+|-\s+))(\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2}))?)$/gm,
+    '$1"$2"'
   );
 }
 

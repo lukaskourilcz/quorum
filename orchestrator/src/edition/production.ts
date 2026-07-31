@@ -26,6 +26,7 @@ export interface EditionProductionInput {
   meetingRef: string;
   roomUrl: string;
   whyThisStory: string;
+  deriveWhyThisStory?: boolean;
   mode: "dry_run" | "production";
   config: EditionQualityConfig;
   gateway: EditionModelGateway;
@@ -108,6 +109,13 @@ function noEdition(
   };
 }
 
+function articleRationale(article: WrittenArticle, fallback: string): string {
+  if (!fallback) {
+    return `${article.byLocale.en.title} led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.`.slice(0, 280);
+  }
+  return fallback;
+}
+
 export async function produceEdition(
   input: EditionProductionInput
 ): Promise<EditionProductionResult> {
@@ -147,8 +155,12 @@ export async function produceEdition(
       continue;
     }
 
+    const rationale = articleRationale(
+      article,
+      input.deriveWhyThisStory ? "" : input.whyThisStory
+    );
     const stet = await reporter.stage(`stet_${attempt}`, () =>
-      reviewArticle(article, input.whyThisStory, input.config)
+      reviewArticle(article, rationale, input.config)
     );
     reporter.stet = stet;
     if (!stet.passed) {
@@ -176,7 +188,7 @@ export async function produceEdition(
         buildEditionPackage(article, input.config, {
           meetingRef: input.meetingRef,
           roomUrl: input.roomUrl,
-          whyThisStory: input.whyThisStory,
+          whyThisStory: rationale,
           generatedAt: input.now,
           sourceCandidates: input.items.length,
           signalStrength: metrics.signalStrength,

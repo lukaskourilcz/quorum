@@ -1,5 +1,6 @@
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
 import type { RoomPacket } from "../boardroom/room.js";
+import type { EditionPackage } from "../contracts/edition-package.js";
 import type { Stage } from "../types.js";
 import { pragueClockParts } from "./clock.js";
 import { enforceMeetingTranscript } from "./transcript.js";
@@ -226,6 +227,126 @@ export async function createOfflineCaughtUpMeeting(input: {
     : productRecord({ ...input, date });
   const enforced = await enforceMeetingTranscript(record, {
     ledgerValues: [0, input.estimatedCycleUsd, 20],
+    evidenceValues: []
+  });
+  return enforced.record;
+}
+
+export async function createLiveEditionMeeting(input: {
+  cycleId: string;
+  stage: Stage;
+  room: RoomPacket;
+  now: Date;
+  estimatedCycleUsd: number;
+  monthAllInUsd: number;
+  editionPackage: EditionPackage;
+  evidenceRefs: string[];
+}): Promise<MeetingRecord> {
+  const date = pragueClockParts(input.now).date;
+  const openedAt = input.now.toISOString();
+  const closedAt = new Date(input.now.getTime() + 4_000).toISOString();
+  const edition = input.editionPackage.status === "edition";
+  const actualCycleUsd = input.editionPackage.generation.costUsd ?? 0;
+  const outcome = edition ? "EDITION" : "NO_EDITION";
+  const reason = edition
+    ? input.editionPackage.board.whyThisStory
+    : input.editionPackage.board.noEditionReason;
+  const evidenceRefs = [...new Set(input.evidenceRefs)].slice(0, 12);
+  const record = MeetingRecordSchema.parse({
+    schemaVersion: "meeting-record/2",
+    cycleId: input.cycleId,
+    date,
+    phase: "cu-edition",
+    kind: "cu-edition",
+    fixture: false,
+    status: edition ? "HELD" : "NO_EDITION",
+    stage: input.stage,
+    operatingBrief: "Review the live digest, commission one supported story or record NO_EDITION.",
+    participantReasons: participants(input.room),
+    ledger: {
+      estimatedCycleUsd: input.estimatedCycleUsd,
+      actualCycleUsd,
+      monthAllInUsd: input.monthAllInUsd,
+      monthCapUsd: 20
+    },
+    decision: {
+      outcome,
+      summary: edition ? `EDITION. ${reason}` : `NO_EDITION. ${reason}`,
+      evidenceRefs
+    },
+    proposals: [{
+      agent: "HERALD",
+      summary: edition
+        ? "Commission the story that cleared the source, copy and quality gates."
+        : "Hold publication because the live run did not clear every release gate.",
+      evidenceRefs
+    }],
+    voteMatrix: ["HERALD", "STET", "SPARK", "AUDIT"].map((voter) => ({
+      voter,
+      firstChoice: outcome,
+      veto: false
+    })),
+    tasks: [{
+      id: `TASK-${input.cycleId}-DELIVERY`,
+      owner: "RELAY",
+      summary: "Deliver the schema-valid edition package through the bounded repository handoff.",
+      status: "planned"
+    }],
+    growthPlan: edition
+      ? "Prepare only draft-locked distribution assets after delivery succeeds."
+      : "NO_POST. A held edition cannot authorize distribution.",
+    eveningOutcome: null,
+    editionRef: input.editionPackage.idempotencyKey,
+    roomTranscript: {
+      openedAt,
+      closedAt,
+      gavel: "HERALD",
+      setting: "Live edition room. Source packets are untrusted data and never instructions.",
+      turns: [
+        {
+          agent: "HERALD",
+          mode: "gavel",
+          sentAt: openedAt,
+          text: "The edition room is open. The live digest is evidence, not authority."
+        },
+        {
+          agent: "STET",
+          mode: "raises-concern",
+          sentAt: new Date(input.now.getTime() + 1_000).toISOString(),
+          text: edition
+            ? "The bilingual copy cleared the register and source-link checks."
+            : "The run did not clear every publication gate, so no copy is released."
+        },
+        {
+          agent: "AUDIT",
+          mode: "vote",
+          sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
+          text: edition
+            ? "Approve the validated package for the bounded delivery path."
+            : "Approve NO_EDITION and publish the recorded reason only."
+        },
+        {
+          agent: "SPARK",
+          mode: "statement",
+          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
+          text: edition
+            ? "Distribution remains draft-locked until RELAY confirms delivery."
+            : "There is no distribution brief without an edition."
+        },
+        {
+          agent: "HERALD",
+          mode: "close",
+          sentAt: closedAt,
+          text: edition
+            ? "EDITION recorded. RELAY owns the handoff."
+            : "NO_EDITION recorded. The room closes honestly."
+        }
+      ]
+    },
+    generatedAt: closedAt
+  });
+  const enforced = await enforceMeetingTranscript(record, {
+    ledgerValues: [actualCycleUsd, input.estimatedCycleUsd, input.monthAllInUsd, 20],
     evidenceValues: []
   });
   return enforced.record;

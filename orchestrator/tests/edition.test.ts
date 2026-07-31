@@ -196,8 +196,8 @@ describe("edition dry production", () => {
   });
 
   it("serializes quoted dates and a canonical final newline", () => {
-    expect(quoteYamlDates("date: 2026-08-04\nfrom: 2026-08-01")).toBe(
-      'date: "2026-08-04"\nfrom: "2026-08-01"'
+    expect(quoteYamlDates("date: 2026-08-04\ngenerated_at: 2026-08-04T03:55:00.000Z")).toBe(
+      'date: "2026-08-04"\ngenerated_at: "2026-08-04T03:55:00.000Z"'
     );
     expect(serializeMdx({ date: "2026-08-04", title: "Issue" }, "Body")).toBe(
       '---\ndate: "2026-08-04"\ntitle: Issue\n---\n\nBody\n'

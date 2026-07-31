@@ -37,6 +37,8 @@ blokátory integrace a zachovaný provozní checklist.
   not fabricated; the API-equivalent estimate is $1.70172 within the specified
   $1.80 envelope. [imp:2] [owner:me] [time:5m] [kind:decision]
 - [ ] **Approve go-live of the two new cron phases** — flip after phase 9 review.
+  Set the quorum repository variable `CAUGHT_UP_LIVE_ENABLED=true` only after the
+  delivery App secrets are present; the workflow otherwise fails closed to dry mode.
   [imp:5] [owner:me] [time:10m] [kind:deploy]
 - [ ] **Review first three delivered editions + first social packs in the queue** —
   quality gate before considering any channel unlock, which stays a separate future
