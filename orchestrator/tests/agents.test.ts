@@ -9,14 +9,14 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains 21 active roles and six portrait-gated proposed roles", async () => {
+  it("contains 27 active roles with complete portfolio portraits", async () => {
     const registry = await loadAgentRegistry();
 
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
     expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(27);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(21);
-    expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(6);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(27);
+    expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
       13
     );
@@ -45,8 +45,8 @@ describe("agent registry and identity assets", () => {
     const registry = await loadAgentRegistry();
     const avatars = await validateAgentAvatars(registry);
 
-    expect(avatars).toHaveLength(21);
-    expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(21);
+    expect(avatars).toHaveLength(27);
+    expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
     expect(avatars.every((avatar) => avatar.height === 1024)).toBe(true);
   });

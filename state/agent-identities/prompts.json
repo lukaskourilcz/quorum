@@ -23,12 +23,19 @@
     "SPARK": "Product Growth Agent, Caught Up. Motif: struck match and flint spark. Responsibility: one ledger-checked idea, approved growth experiments and outcome reports.",
     "VAULT": "Idea Ledger Custodian. Motif: keyed archive drawer and layered memory compartments. Responsibility: duplicate adjudication, revival evidence and idea-index freshness.",
     "FRAME": "Visual Production Agent. Motif: crop marks and an empty editorial frame. Responsibility: deterministic composition, asset QA, provenance and alt text.",
-    "RELAY": "Delivery and Notifications Agent. Motif: relay baton crossing a junction node. Responsibility: package validation, delivery-to-live status, email and calendar truth."
+    "RELAY": "Delivery and Notifications Agent. Motif: relay baton crossing a junction node. Responsibility: package validation, delivery-to-live status, email and calendar truth.",
+    "ANGLE": "Positioning and Messaging Strategist. Motif: decisive viewpoint cut and positioning axis. Responsibility: positioning documents, campaign briefs and niche framing.",
+    "COHORT": "Audience Targeting Analyst. Motif: segmented concentric rings and a firm adult-audience threshold. Responsibility: privacy-safe audience specifications and platform fit.",
+    "FUNNEL": "Performance and Online Marketing Agent. Motif: broad channel narrowing into a measured conversion passage. Responsibility: cost-labeled channel plans and measurement design.",
+    "PALATE": "Taste Custodian. Motif: calibrated tasting grid, textured swatches and a single weighting bar. Responsibility: evidence-linked taste memory and bounded visual weights.",
+    "SCENE": "Scene and Competitor Scout. Motif: street-map fragments and source pins. Responsibility: sourced streetwear, skate and lifestyle signals.",
+    "STUNT": "Guerrilla Marketing Lead. Motif: unlettered approval stamp and measured burst. Responsibility: permission-aware activations with explicit cost, platform and success checks."
   },
   "repairPrompts": {
     "SCRIBE": "Remove every pseudo-letter, pseudo-number, glyph and readable mark from all page shapes. Preserve the folded-page motif using blank planes and purely abstract parallel rules only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged.",
     "LENS": "Remove every pseudo-letter, pseudo-number, tick label and readable glyph. Preserve the analytics motif with an unlabeled prism and purely geometric calibration grid only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged.",
     "STET": "Change only the color treatment. Recolor the large diagonal orange proofreader bar to charcoal-black paper, remove the separate orange circle, and retain exactly one very small Ember orange tab at the bar tip. Preserve every other shape, crop, texture, background and composition.",
-    "VAULT": "Replace the literal metallic lock and dimensional file drawer with layered flat geometric paper compartments and one small abstract key-notch shape. Preserve the silhouette, crop, monochrome palette, paper grain, background and tiny Ember orange dot."
+    "VAULT": "Replace the literal metallic lock and dimensional file drawer with layered flat geometric paper compartments and one small abstract key-notch shape. Preserve the silhouette, crop, monochrome palette, paper grain, background and tiny Ember orange dot.",
+    "PALATE": "Remove only the large Ember orange circle in the upper-right background by replacing it with the surrounding warm-white paper background. Preserve every other shape, texture, crop, shadow, proportion, grayscale value and composition. Retain the small Ember orange slider dot as the only colored accent."
   }
 }

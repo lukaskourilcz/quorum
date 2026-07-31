@@ -148,6 +148,10 @@ describe("agent architecture", () => {
           maxUsd: number;
           apiEquivalentTotalEstimateUsd: number;
         };
+        portfolioExtension: {
+          maxUsd: number;
+          apiEquivalentTotalEstimateUsd: number;
+        };
       };
       assets: Array<{
         agentId: string;
@@ -159,13 +163,16 @@ describe("agent architecture", () => {
       }>;
     };
 
-    expect(manifest.assets).toHaveLength(21);
+    expect(manifest.assets).toHaveLength(27);
     expect(
       manifest.budget.caughtUpExtension.apiEquivalentTotalEstimateUsd
     ).toBeLessThanOrEqual(manifest.budget.caughtUpExtension.maxUsd);
     expect(manifest.budget.caughtUpExtension.maxUsd).toBeLessThanOrEqual(
       manifest.budget.maxSetUsd
     );
+    expect(
+      manifest.budget.portfolioExtension.apiEquivalentTotalEstimateUsd
+    ).toBeLessThanOrEqual(manifest.budget.portfolioExtension.maxUsd);
     expect(manifest.budget.actualProjectApiUsd).toBeNull();
     expect(manifest.anchor.path.startsWith("site/public/")).toBe(false);
     const anchorBytes = await readFile(path.join(repoRoot, manifest.anchor.path));

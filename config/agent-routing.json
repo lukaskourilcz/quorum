@@ -94,27 +94,27 @@
     },
     "ANGLE": {
       "capabilities": ["strategy:positioning", "campaign:brief", "niche:analysis"],
-      "status": "proposed"
+      "status": "active"
     },
     "COHORT": {
       "capabilities": ["audience:spec", "targeting:public", "privacy:audience"],
-      "status": "proposed"
+      "status": "active"
     },
     "FUNNEL": {
       "capabilities": ["marketing:performance", "campaign:plan", "cost:estimate"],
-      "status": "proposed"
+      "status": "active"
     },
     "PALATE": {
       "capabilities": ["taste:memory", "ratings:distill", "visual:weights"],
-      "status": "proposed"
+      "status": "active"
     },
     "SCENE": {
       "capabilities": ["scene:research", "competition:evidence", "streetwear:signals"],
-      "status": "proposed"
+      "status": "active"
     },
     "STUNT": {
       "capabilities": ["marketing:guerrilla", "legality:note", "platform:safety"],
-      "status": "proposed"
+      "status": "active"
     }
   },
   "mandatoryWhen": [
