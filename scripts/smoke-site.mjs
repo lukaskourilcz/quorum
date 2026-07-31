@@ -129,15 +129,23 @@ for (const result of linkedResults) {
 }
 
 const jsonFeed = results.find((result) => result.pathname === "/feed.json");
-if (jsonFeed) {
+if (!jsonFeed) {
+  failures.push("/feed.json: missing result");
+} else {
   const feed = JSON.parse(jsonFeed.body);
-  if (!Array.isArray(feed.items) || feed.items.length !== 0) {
+  if (!Array.isArray(feed.items)) {
+    failures.push("/feed.json: items must be an array");
+  } else if (
+    feed.items.some((item) =>
+      String(item.url ?? "").includes("/standups/2026-07-23-founding")
+    )
+  ) {
     failures.push("/feed.json: fixture records must be excluded");
   }
 }
 
 const xmlFeed = results.find((result) => result.pathname === "/feed.xml");
-if (xmlFeed?.body.includes("<item>")) {
+if (xmlFeed?.body.includes("/standups/2026-07-23-founding")) {
   failures.push("/feed.xml: fixture records must be excluded");
 }
 
@@ -168,7 +176,9 @@ if (failures.length > 0) {
         expectedRoutes: results.length,
         internalLinks: linkedResults.length,
         adminStatus: admin.response.status,
-        fixtureFeedItems: 0
+        publishedFeedItems: jsonFeed
+          ? JSON.parse(jsonFeed.body).items?.length ?? 0
+          : 0
       },
       null,
       2
