@@ -102,6 +102,7 @@ Useful commands:
 | `pnpm cycle -- --phase morning --dry --explain-budget --explain-routing` | Explains a bounded dry Morning shift |
 | `pnpm cycle -- --phase afternoon --dry` | Runs a bounded dry Afternoon shift |
 | `pnpm cycle -- --phase night --dry` | Runs a bounded dry Night shift |
+| `pnpm edition:dry` | Builds and validates a fixture-backed EditionPackage without paid calls |
 | `pnpm sources:shadow` | Collects the 35-source digest into an unconsumed dry-run artifact |
 | `pnpm social:publish -- --dry-if-disabled --validate-only` | Validates the social queue without publishing |
 
@@ -109,6 +110,8 @@ Dry-cycle artifacts are written only below `tmp/dry-run/state/`, which is
 ignored by git. Canonical state is not mutated.
 Source-shadow artifacts are written below `orchestrator/.dry-run/sources/`,
 also ignored by git, and no edition or public consumer reads them.
+Edition dry-run packages, reports and bilingual MDX build artifacts are written
+below `orchestrator/.dry-run/editions/`; delivery does not consume them.
 
 ## Environment
 

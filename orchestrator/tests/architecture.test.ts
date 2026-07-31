@@ -15,7 +15,18 @@ const expectedSkills = [
   "organization-operations",
   "page-publishing",
   "safe-release",
-  "social-operations"
+  "social-operations",
+  "stop-slop"
+] as const;
+
+const stopSlopFiles = [
+  "LICENSE",
+  "SKILL.md",
+  "UPSTREAM.md",
+  "references/caught-up-registers.md",
+  "references/examples.md",
+  "references/phrases.md",
+  "references/structures.md"
 ] as const;
 
 const expectedPrompts = [
@@ -54,7 +65,7 @@ async function directoryNames(directory: string): Promise<string[]> {
 }
 
 describe("agent architecture", () => {
-  it("keeps the nine Claude and Codex skills byte-identical", async () => {
+  it("keeps the ten Claude and Codex skills byte-identical", async () => {
     const claudeRoot = path.join(repoRoot, ".claude", "skills");
     const codexRoot = path.join(repoRoot, ".agents", "skills");
     const claudeSkills = await directoryNames(claudeRoot);
@@ -67,6 +78,11 @@ describe("agent architecture", () => {
       const claudeBytes = await readFile(path.join(claudeRoot, skill, "SKILL.md"));
       const codexBytes = await readFile(path.join(codexRoot, skill, "SKILL.md"));
       expect(codexBytes.equals(claudeBytes), `${skill} mirror differs`).toBe(true);
+    }
+    for (const file of stopSlopFiles) {
+      const claudeBytes = await readFile(path.join(claudeRoot, "stop-slop", file));
+      const codexBytes = await readFile(path.join(codexRoot, "stop-slop", file));
+      expect(codexBytes.equals(claudeBytes), `stop-slop/${file} mirror differs`).toBe(true);
     }
   });
 

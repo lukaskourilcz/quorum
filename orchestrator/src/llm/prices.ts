@@ -80,6 +80,30 @@ export const TEXT_PRICES: readonly TextPrice[] = [
   },
   {
     provider: "anthropic",
+    model: "claude-opus-4-7",
+    serviceTier: "default",
+    effectiveFrom: "2026-07-21",
+    effectiveTo: null,
+    inputUsdPerMillion: 5,
+    cachedInputUsdPerMillion: 0.5,
+    outputUsdPerMillion: 25,
+    sourceUrl: ANTHROPIC_PRICING,
+    verifiedAt: "2026-07-21"
+  },
+  {
+    provider: "anthropic",
+    model: "claude-sonnet-4-6",
+    serviceTier: "default",
+    effectiveFrom: "2026-07-21",
+    effectiveTo: null,
+    inputUsdPerMillion: 3,
+    cachedInputUsdPerMillion: 0.3,
+    outputUsdPerMillion: 15,
+    sourceUrl: ANTHROPIC_PRICING,
+    verifiedAt: "2026-07-21"
+  },
+  {
+    provider: "anthropic",
     model: "claude-sonnet-5",
     serviceTier: "default",
     effectiveFrom: "2026-06-09",
@@ -177,4 +201,3 @@ export function findTextPrice(
     ) ?? null
   );
 }
-

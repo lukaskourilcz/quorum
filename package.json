@@ -21,6 +21,7 @@
     "build": "pnpm -r build",
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
     "dev": "pnpm --filter @boardlessai/site dev",
+    "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
     "lint": "pnpm -r lint",
     "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",
     "sources:shadow": "pnpm --filter @boardlessai/orchestrator sources:shadow",

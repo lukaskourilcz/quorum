@@ -1,0 +1,294 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-04",
+  "idempotencyKey": "743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-opus-4-7"
+    },
+    "costUsd": 0.194
+  },
+  "reason": "cu-edition decision meetings/2026-08-04-cu-edition",
+  "status": "edition",
+  "article": {
+    "en": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Production inference gets a cheaper price tag",
+        "slug": "2026-08-04-production-inference-price-cut",
+        "date": "2026-08-04",
+        "lang": "en",
+        "dek": "Four providers and research teams published lower rates, with limits that matter for production budgets.",
+        "alternative_headlines": [
+          "API price cuts change the inference budget",
+          "Lower model prices arrive with throughput limits"
+        ],
+        "tags": [
+          "models",
+          "pricing"
+        ],
+        "sources": [
+          {
+            "id": "item-01",
+            "url": "https://www.anthropic.com/news/example-price-update",
+            "title": "Anthropic publishes lower production API prices",
+            "source_id": "anthropic-news",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:00:00.000Z",
+            "supports": [
+              "Anthropic published a lower production price."
+            ]
+          },
+          {
+            "id": "item-02",
+            "url": "https://openai.com/index/example-api-pricing",
+            "title": "OpenAI updates its API price table",
+            "source_id": "openai-blog",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:05:00.000Z",
+            "supports": [
+              "OpenAI changed its public API price table."
+            ]
+          },
+          {
+            "id": "item-03",
+            "url": "https://deepmind.google/blog/example-inference-tier/",
+            "title": "Google DeepMind details a new inference tier",
+            "source_id": "deepmind-blog",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:10:00.000Z",
+            "supports": [
+              "DeepMind documented the limits of a lower-cost inference tier."
+            ]
+          },
+          {
+            "id": "item-04",
+            "url": "https://research.google/blog/example-serving-costs/",
+            "title": "Google Research measures serving costs",
+            "source_id": "google-research",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:15:00.000Z",
+            "supports": [
+              "The research post supplies measured serving-cost context."
+            ]
+          }
+        ],
+        "illustration": {
+          "prompt": "A clean editorial still life of four paper price tables beside a calculator, no text or logos",
+          "alt": "Four paper price tables arranged beside a calculator"
+        },
+        "signal_strength": 91,
+        "why_it_matters": [
+          "Teams running production inference can recalculate their monthly model bill.",
+          "Throughput limits may erase the saving for latency-sensitive workloads."
+        ],
+        "what_changed": [
+          "Providers published lower API rates and one new inference tier.",
+          "Researchers added measured serving-cost context."
+        ],
+        "uncertainty": [
+          "The providers did not publish the duration of the new rates.",
+          "Enterprise contract terms remain private."
+        ],
+        "generation": {
+          "generated_at": "2026-08-04T03:55:00.000Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-opus-4-7"
+          },
+          "source_candidates": 10,
+          "cited_sources": 4,
+          "image_provider": "none",
+          "cost": {
+            "amount": 0.194,
+            "currency": "USD"
+          },
+          "package_hash": "743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768"
+        },
+        "translation_of": "2026-08-04-production-inference-price-cut",
+        "dispatches": [
+          {
+            "title": "Anthropic updates its rate card",
+            "body": "Anthropic published a lower production price and described the affected API use.",
+            "source_url": "https://www.anthropic.com/news/example-price-update",
+            "topic": "pricing"
+          },
+          {
+            "title": "DeepMind sets throughput limits",
+            "body": "DeepMind attached explicit throughput limits to its lower-cost inference tier.",
+            "source_url": "https://deepmind.google/blog/example-inference-tier/",
+            "topic": "inference"
+          }
+        ],
+        "wire": [
+          {
+            "title": "Developers compare the new model prices",
+            "url": "https://feeds.arstechnica.com/example-price-comparison",
+            "source": "Ars Technica"
+          },
+          {
+            "title": "A model vendor changes its developer plan",
+            "url": "https://www.theverge.com/example-developer-plan",
+            "source": "The Verge"
+          },
+          {
+            "title": "An AI startup releases a batch endpoint",
+            "url": "https://techcrunch.com/example-batch-endpoint/",
+            "source": "TechCrunch"
+          },
+          {
+            "title": "Researchers audit inference efficiency claims",
+            "url": "https://www.technologyreview.com/example-efficiency-audit/",
+            "source": "MIT Technology Review"
+          }
+        ],
+        "type": "daily"
+      },
+      "body": "## The published change\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) and [OpenAI](https://openai.com/index/example-api-pricing) posted lower production prices. Each provider controls its own rate card, so teams need to recalculate against their workload.\n\n## The limits\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) tied its lower-cost tier to throughput limits. [Google Research](https://research.google/blog/example-serving-costs/) supplied measured context for the serving costs. Buyers can compare the published claims with their own latency targets.\n\n## The open question\n\nThe sources do not show how long the prices will hold or whether large customers receive separate terms."
+    },
+    "cs": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Produkční inference dostává nižší cenu",
+        "slug": "2026-08-04-production-inference-price-cut",
+        "date": "2026-08-04",
+        "lang": "cs",
+        "dek": "Čtyři poskytovatelé a výzkumné týmy zveřejnili nižší sazby s limity důležitými pro produkční rozpočty.",
+        "alternative_headlines": [
+          "Nižší ceny API mění rozpočet inference",
+          "Levnější modely přicházejí s limity propustnosti"
+        ],
+        "tags": [
+          "models",
+          "pricing"
+        ],
+        "sources": [
+          {
+            "id": "item-01",
+            "url": "https://www.anthropic.com/news/example-price-update",
+            "title": "Anthropic publishes lower production API prices",
+            "source_id": "anthropic-news",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:00:00.000Z",
+            "supports": [
+              "Anthropic published a lower production price."
+            ]
+          },
+          {
+            "id": "item-02",
+            "url": "https://openai.com/index/example-api-pricing",
+            "title": "OpenAI updates its API price table",
+            "source_id": "openai-blog",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:05:00.000Z",
+            "supports": [
+              "OpenAI changed its public API price table."
+            ]
+          },
+          {
+            "id": "item-03",
+            "url": "https://deepmind.google/blog/example-inference-tier/",
+            "title": "Google DeepMind details a new inference tier",
+            "source_id": "deepmind-blog",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:10:00.000Z",
+            "supports": [
+              "DeepMind documented the limits of a lower-cost inference tier."
+            ]
+          },
+          {
+            "id": "item-04",
+            "url": "https://research.google/blog/example-serving-costs/",
+            "title": "Google Research measures serving costs",
+            "source_id": "google-research",
+            "classification": "primary",
+            "published_at": "2026-08-04T01:15:00.000Z",
+            "supports": [
+              "The research post supplies measured serving-cost context."
+            ]
+          }
+        ],
+        "illustration": {
+          "prompt": "A clean editorial still life of four paper price tables beside a calculator, no text or logos",
+          "alt": "Čtyři papírové ceníky položené vedle kalkulačky"
+        },
+        "signal_strength": 91,
+        "why_it_matters": [
+          "Týmy s produkční inferencí mohou přepočítat měsíční účet za modely.",
+          "Limity propustnosti mohou zrušit úsporu u aplikací citlivých na odezvu."
+        ],
+        "what_changed": [
+          "Poskytovatelé zveřejnili nižší sazby API a jeden nový tarif inference.",
+          "Výzkumníci doplnili naměřený kontext provozních nákladů."
+        ],
+        "uncertainty": [
+          "Poskytovatelé nezveřejnili dobu platnosti nových sazeb.",
+          "Podmínky podnikových smluv zůstávají neveřejné."
+        ],
+        "generation": {
+          "generated_at": "2026-08-04T03:55:00.000Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-opus-4-7"
+          },
+          "source_candidates": 10,
+          "cited_sources": 4,
+          "image_provider": "none",
+          "cost": {
+            "amount": 0.194,
+            "currency": "USD"
+          },
+          "package_hash": "743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768"
+        },
+        "translation_of": "2026-08-04-production-inference-price-cut",
+        "dispatches": [
+          {
+            "title": "Anthropic mění ceník",
+            "body": "Anthropic zveřejnil nižší produkční cenu a popsal dotčené použití API.",
+            "source_url": "https://www.anthropic.com/news/example-price-update",
+            "topic": "pricing"
+          },
+          {
+            "title": "DeepMind stanovuje limity propustnosti",
+            "body": "DeepMind připojil k levnějšímu tarifu inference jasné limity propustnosti.",
+            "source_url": "https://deepmind.google/blog/example-inference-tier/",
+            "topic": "inference"
+          }
+        ],
+        "wire": [
+          {
+            "title": "Developers compare the new model prices",
+            "url": "https://feeds.arstechnica.com/example-price-comparison",
+            "source": "Ars Technica"
+          },
+          {
+            "title": "A model vendor changes its developer plan",
+            "url": "https://www.theverge.com/example-developer-plan",
+            "source": "The Verge"
+          },
+          {
+            "title": "An AI startup releases a batch endpoint",
+            "url": "https://techcrunch.com/example-batch-endpoint/",
+            "source": "TechCrunch"
+          },
+          {
+            "title": "Researchers audit inference efficiency claims",
+            "url": "https://www.technologyreview.com/example-efficiency-audit/",
+            "source": "MIT Technology Review"
+          }
+        ],
+        "type": "daily"
+      },
+      "body": "## Zveřejněná změna\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) a [OpenAI](https://openai.com/index/example-api-pricing) zveřejnily nižší produkční ceny. Každý poskytovatel ovládá vlastní ceník, takže týmy musí přepočítat náklady podle své zátěže.\n\n## Limity\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) spojil levnější tarif s limity propustnosti. [Google Research](https://research.google/blog/example-serving-costs/) doplnil naměřený kontext nákladů na provoz. Zákazníci mohou porovnat zveřejněná tvrzení se svými požadavky na odezvu.\n\n## Otevřená otázka\n\nZdroje neuvádějí, jak dlouho ceny vydrží ani zda velcí zákazníci dostávají jiné podmínky."
+    }
+  },
+  "board": {
+    "meetingRef": "meetings/2026-08-04-cu-edition",
+    "roomUrl": "https://boardless.example/meetings/2026-08-04-cu-edition",
+    "whyThisStory": "Four independent sources document a price cut that changes production budgets."
+  },
+  "socialPackRef": "state/social/packs/2026-08-04.json"
+}

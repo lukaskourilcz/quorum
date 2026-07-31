@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "brand": {
+    "name": "Caught Up"
+  },
+  "quality": {
+    "minimumSignalStrength": 45,
+    "minimumSuccessfulSources": 10,
+    "minimumCandidateItems": 10,
+    "minimumCitedSources": 3,
+    "maximumSingleSourceShare": 0.5,
+    "minimumSourceDiversity": 0.5,
+    "maximumDuplicateStorySimilarity": 0.85,
+    "maximumRepeatedTopicFrequency": 0.6,
+    "requirePrimarySourceWhenRelevant": true,
+    "maximumUnsupportedWatchlistItems": 0,
+    "enforcement": "enforce",
+    "failureAction": "no_edition"
+  },
+  "article": {
+    "targetWords": 1100,
+    "briefsMaximum": 4,
+    "watchlistMaximum": 6,
+    "maximumOutputTokens": 8000,
+    "maximumCurationCandidates": 80
+  },
+  "models": {
+    "curation": "claude-sonnet-4-6",
+    "writing": "claude-opus-4-7"
+  },
+  "budgets": {
+    "warningCostPerRun": 0.6,
+    "hardCostPerRun": 1.5,
+    "monthlyWarning": 20,
+    "monthlyHardLimit": 40,
+    "editionProductionUsd": 0.35,
+    "maximumRegenerationAttemptsPerDate": 2
+  },
+  "stet": {
+    "maximumRewriteAttempts": 1,
+    "minimumScore": 35
+  }
+}

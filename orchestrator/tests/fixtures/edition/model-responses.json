@@ -1,0 +1,157 @@
+[
+  {
+    "tool": "emit_brief",
+    "value": {
+      "headline": "Model providers cut the cost of production inference",
+      "angle": "Four primary sources show lower published prices and the limits attached to them.",
+      "picks": [
+        {
+          "index": 0,
+          "why": "Anthropic published a lower production price.",
+          "evidence": "company_claim",
+          "topic": "pricing"
+        },
+        {
+          "index": 1,
+          "why": "OpenAI changed its public API price table.",
+          "evidence": "confirmed_fact",
+          "topic": "pricing"
+        },
+        {
+          "index": 2,
+          "why": "DeepMind documented the limits of a lower-cost inference tier.",
+          "evidence": "company_claim",
+          "topic": "inference"
+        },
+        {
+          "index": 3,
+          "why": "The research post supplies measured serving-cost context.",
+          "evidence": "analysis",
+          "topic": "inference"
+        }
+      ]
+    },
+    "usage": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 6000,
+      "outputTokens": 1200,
+      "cacheReadTokens": 10000,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.044
+    }
+  },
+  {
+    "tool": "emit_article",
+    "value": {
+      "slug": "2026-08-04-production-inference-price-cut",
+      "tags": ["models", "pricing"],
+      "illustration_prompt": "A clean editorial still life of four paper price tables beside a calculator, no text or logos",
+      "wire": [
+        {
+          "title": "Developers compare the new model prices",
+          "url": "https://feeds.arstechnica.com/example-price-comparison",
+          "source": "Ars Technica"
+        },
+        {
+          "title": "A model vendor changes its developer plan",
+          "url": "https://www.theverge.com/example-developer-plan",
+          "source": "The Verge"
+        },
+        {
+          "title": "An AI startup releases a batch endpoint",
+          "url": "https://techcrunch.com/example-batch-endpoint/",
+          "source": "TechCrunch"
+        },
+        {
+          "title": "Researchers audit inference efficiency claims",
+          "url": "https://www.technologyreview.com/example-efficiency-audit/",
+          "source": "MIT Technology Review"
+        }
+      ],
+      "en": {
+        "title": "Production inference gets a cheaper price tag",
+        "dek": "Four providers and research teams published lower rates, with limits that matter for production budgets.",
+        "alternative_headlines": [
+          "API price cuts change the inference budget",
+          "Lower model prices arrive with throughput limits"
+        ],
+        "body_mdx": "## The published change\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) and [OpenAI](https://openai.com/index/example-api-pricing) posted lower production prices. Each provider controls its own rate card, so teams need to recalculate against their workload.\n\n## The limits\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) tied its lower-cost tier to throughput limits. [Google Research](https://research.google/blog/example-serving-costs/) supplied measured context for the serving costs. Buyers can compare the published claims with their own latency targets.\n\n## The open question\n\nThe sources do not show how long the prices will hold or whether large customers receive separate terms.",
+        "illustration_alt": "Four paper price tables arranged beside a calculator",
+        "why_it_matters": [
+          "Teams running production inference can recalculate their monthly model bill.",
+          "Throughput limits may erase the saving for latency-sensitive workloads."
+        ],
+        "what_changed": [
+          "Providers published lower API rates and one new inference tier.",
+          "Researchers added measured serving-cost context."
+        ],
+        "uncertainty": [
+          "The providers did not publish the duration of the new rates.",
+          "Enterprise contract terms remain private."
+        ],
+        "dispatches": [
+          {
+            "title": "Anthropic updates its rate card",
+            "body": "Anthropic published a lower production price and described the affected API use.",
+            "source_url": "https://www.anthropic.com/news/example-price-update",
+            "topic": "pricing"
+          },
+          {
+            "title": "DeepMind sets throughput limits",
+            "body": "DeepMind attached explicit throughput limits to its lower-cost inference tier.",
+            "source_url": "https://deepmind.google/blog/example-inference-tier/",
+            "topic": "inference"
+          }
+        ]
+      },
+      "cs": {
+        "title": "Produkční inference dostává nižší cenu",
+        "dek": "Čtyři poskytovatelé a výzkumné týmy zveřejnili nižší sazby s limity důležitými pro produkční rozpočty.",
+        "alternative_headlines": [
+          "Nižší ceny API mění rozpočet inference",
+          "Levnější modely přicházejí s limity propustnosti"
+        ],
+        "body_mdx": "## Zveřejněná změna\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) a [OpenAI](https://openai.com/index/example-api-pricing) zveřejnily nižší produkční ceny. Každý poskytovatel ovládá vlastní ceník, takže týmy musí přepočítat náklady podle své zátěže.\n\n## Limity\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) spojil levnější tarif s limity propustnosti. [Google Research](https://research.google/blog/example-serving-costs/) doplnil naměřený kontext nákladů na provoz. Zákazníci mohou porovnat zveřejněná tvrzení se svými požadavky na odezvu.\n\n## Otevřená otázka\n\nZdroje neuvádějí, jak dlouho ceny vydrží ani zda velcí zákazníci dostávají jiné podmínky.",
+        "illustration_alt": "Čtyři papírové ceníky položené vedle kalkulačky",
+        "why_it_matters": [
+          "Týmy s produkční inferencí mohou přepočítat měsíční účet za modely.",
+          "Limity propustnosti mohou zrušit úsporu u aplikací citlivých na odezvu."
+        ],
+        "what_changed": [
+          "Poskytovatelé zveřejnili nižší sazby API a jeden nový tarif inference.",
+          "Výzkumníci doplnili naměřený kontext provozních nákladů."
+        ],
+        "uncertainty": [
+          "Poskytovatelé nezveřejnili dobu platnosti nových sazeb.",
+          "Podmínky podnikových smluv zůstávají neveřejné."
+        ],
+        "dispatches": [
+          {
+            "title": "Anthropic mění ceník",
+            "body": "Anthropic zveřejnil nižší produkční cenu a popsal dotčené použití API.",
+            "source_url": "https://www.anthropic.com/news/example-price-update",
+            "topic": "pricing"
+          },
+          {
+            "title": "DeepMind stanovuje limity propustnosti",
+            "body": "DeepMind připojil k levnějšímu tarifu inference jasné limity propustnosti.",
+            "source_url": "https://deepmind.google/blog/example-inference-tier/",
+            "topic": "inference"
+          }
+        ]
+      }
+    },
+    "usage": {
+      "provider": "anthropic",
+      "model": "claude-opus-4-7",
+      "stage": "write",
+      "inputTokens": 8000,
+      "outputTokens": 4000,
+      "cacheReadTokens": 20000,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.15
+    }
+  }
+]
