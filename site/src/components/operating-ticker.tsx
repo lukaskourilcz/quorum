@@ -1,16 +1,28 @@
-const items = [
-  ["Stage", "DISCOVERY"],
-  ["Actual spend", "$0.00"],
+function itemsFor(input: {
+  actualSpend: string;
+  decision: string;
+  stage: string;
+}) {
+  return [
+  ["Stage", input.stage],
+  ["Actual spend", input.actualSpend],
   ["All-in cap", "$20.00"],
   ["Eligible evidence", "0"],
-  ["Last decision", "INSUFFICIENT_EVIDENCE"],
+  ["Last decision", input.decision],
   ["Council seats", "4"],
   ["Agents", "14"],
   ["Shift cadence", "06 · 14 · 22"],
   ["Best score", "34/50"]
-] as const;
+  ] as const;
+}
 
-function TickerItems({ hidden = false }: { hidden?: boolean }) {
+function TickerItems({
+  hidden = false,
+  items
+}: {
+  hidden?: boolean;
+  items: ReturnType<typeof itemsFor>;
+}) {
   return (
     <div
       aria-hidden={hidden || undefined}
@@ -39,12 +51,17 @@ function TickerItems({ hidden = false }: { hidden?: boolean }) {
   );
 }
 
-export function OperatingTicker() {
+export function OperatingTicker(input: {
+  actualSpend: string;
+  decision: string;
+  stage: string;
+}) {
+  const items = itemsFor(input);
   return (
     <div className="overflow-hidden border-b border-[var(--border)] bg-[var(--surface)]">
       <div className="marquee-track flex w-max">
-        <TickerItems />
-        <TickerItems hidden />
+        <TickerItems items={items} />
+        <TickerItems hidden items={items} />
       </div>
     </div>
   );

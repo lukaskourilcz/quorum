@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { logEntries } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -23,7 +24,21 @@ const formatDay = new Intl.DateTimeFormat("en", {
   year: "numeric"
 });
 
-export default function LogPage() {
+export default async function LogPage() {
+  const standups = await getPublicStandups();
+  const liveEntries = standups
+    .filter((standup) => !standup.fixture)
+    .map((standup) => ({
+      at: standup.generatedAt ?? standup.roomTranscript.closedAt,
+      cost: standup.ledger.actual,
+      detail: standup.decision.summary,
+      title: `${standup.phase} shift · ${standup.decision.outcome}`,
+      type: "Shift record"
+    }));
+  const entries = [...liveEntries, ...logEntries].sort(
+    (left, right) => new Date(right.at).getTime() - new Date(left.at).getTime()
+  );
+  const totalActual = entries.reduce((total, entry) => total + entry.cost, 0);
   return (
     <PageShell>
       <PageIntro
@@ -44,11 +59,11 @@ export default function LogPage() {
             Event stream
           </h2>
           <span className="font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-            {logEntries.length} events / UTC-local
+            {entries.length} events / UTC-local
           </span>
         </div>
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
-          {logEntries.map((entry, index) => {
+          {entries.map((entry, index) => {
             const occurredAt = new Date(entry.at);
             return (
               <article
@@ -95,7 +110,7 @@ export default function LogPage() {
           })}
           <div className="flex flex-col gap-2 px-8 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)] sm:flex-row sm:items-center sm:justify-between">
             <span>End of stream</span>
-            <span>Total actual $0.00</span>
+            <span>Total actual {formatUsd(totalActual)}</span>
           </div>
         </div>
       </section>

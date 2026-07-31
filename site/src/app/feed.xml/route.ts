@@ -1,4 +1,4 @@
-import { standups } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 
 export const dynamic = "force-static";
 
@@ -11,16 +11,17 @@ function escapeXml(value: string): string {
     .replaceAll("'", "&apos;");
 }
 
-export function GET() {
+export async function GET() {
   const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const standups = await getPublicStandups();
   const items = standups
     .filter((standup) => !standup.fixture)
     .map(
       (standup) => `<item>
         <title>${escapeXml(`${standup.date} · ${standup.status}`)}</title>
-        <link>${base}/standups/${standup.date}</link>
-        <guid isPermaLink="true">${base}/standups/${standup.date}</guid>
-        <pubDate>${new Date(`${standup.date}T05:30:00.000Z`).toUTCString()}</pubDate>
+        <link>${base}/standups/${standup.id}</link>
+        <guid isPermaLink="true">${base}/standups/${standup.id}</guid>
+        <pubDate>${new Date(standup.generatedAt ?? `${standup.date}T05:30:00.000Z`).toUTCString()}</pubDate>
         <description>${escapeXml(`${standup.operatingBrief} Decision: ${standup.decision.summary}`)}</description>
         <category>${escapeXml(standup.stage)}</category>
       </item>`
@@ -33,7 +34,7 @@ export function GET() {
         <link>${base}</link>
         <description>Public shift episodes, decisions, costs and outcomes from BoardlessAI.</description>
         <language>en</language>
-        <lastBuildDate>${new Date("2026-07-23T05:30:00.000Z").toUTCString()}</lastBuildDate>
+        <lastBuildDate>${new Date(standups[0]?.generatedAt ?? "2026-07-23T05:30:00.000Z").toUTCString()}</lastBuildDate>
         ${items}
       </channel>
     </rss>`;

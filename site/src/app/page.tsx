@@ -11,10 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { agents } from "@/data/agents";
-import { governanceSteps, publicState, standups } from "@/data/fixtures";
+import { governanceSteps } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 import { formatDate, formatUsd } from "@/lib/utils";
 
-const latestStandup = standups[0]!;
 const council = agents.filter((agent) => agent.group === "Council");
 const specialists = agents.filter((agent) => agent.group !== "Council");
 const signalAgents = agents.map(({ group, id }) => ({ group, id }));
@@ -27,10 +27,16 @@ const gates = [
 
 const stepTags = ["SCOUT", "COUNCIL", "PEOPLE", "BORDA", "FORGE", "LEDGER"];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const standups = await getPublicStandups();
+  const latestStandup = standups[0]!;
   return (
     <PageShell>
-      <OperatingTicker />
+      <OperatingTicker
+        actualSpend={formatUsd(latestStandup.ledger.monthAllIn)}
+        decision={latestStandup.decision.outcome}
+        stage={latestStandup.stage}
+      />
 
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <div className="editorial-grid absolute inset-0" />
@@ -45,9 +51,9 @@ export default function HomePage() {
               <div className="flex flex-wrap items-center gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--fog)]">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[var(--slate)] px-3.5 py-1.5 text-[var(--foreground)]">
                   <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
-                  Operating in discovery
+                  Operating in {latestStandup.stage.toLowerCase()}
                 </span>
-                <span>Cycle 001</span>
+                <span>Cycle {String(standups.length).padStart(3, "0")}</span>
                 <span className="text-[var(--slate)]">/</span>
                 <span>Public operating system</span>
               </div>
@@ -66,7 +72,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
               <Link
                 className={buttonVariants({ size: "large", variant: "accent" })}
-                href={`/standups/${latestStandup.date}/room`}
+                href={`/standups/${latestStandup.id}/room`}
               >
                 Watch the latest episode
                 <ArrowRight aria-hidden="true" className="size-4" />
@@ -76,7 +82,7 @@ export default function HomePage() {
                   size: "large",
                   variant: "secondary"
                 })}
-                href={`/standups/${latestStandup.date}`}
+                href={`/standups/${latestStandup.id}`}
               >
                 Read the episode record
               </Link>
@@ -92,10 +98,10 @@ export default function HomePage() {
             ["Eligible evidence", "0", "NEEDS 3", "0%", "No independent source qualified"],
             [
               "Actual API spend",
-              formatUsd(publicState.actualSpendUsd),
+              formatUsd(latestStandup.ledger.monthAllIn),
               "CAP $20",
               "0%",
-              "Offline fixture / no calls billed"
+              latestStandup.fixture ? "Offline fixture / no calls billed" : "Live guarded council record"
             ],
             ["Agent cast", String(agents.length), "4 VOTING", "100%", "10 specialists and controls"]
           ].map(([label, value, tag, width, foot]) => (
@@ -135,7 +141,7 @@ export default function HomePage() {
           action={
             <Link
               className={buttonVariants({ variant: "secondary" })}
-              href={`/standups/${latestStandup.date}/room`}
+              href={`/standups/${latestStandup.id}/room`}
             >
               Replay the room
               <ArrowUpRight aria-hidden="true" className="size-4" />

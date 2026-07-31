@@ -29,11 +29,11 @@ import {
   TableHead
 } from "@/components/ui/table";
 import { agentById } from "@/data/agents";
-import { standups } from "@/data/fixtures";
+import { getPublicStandup, getPublicStandups } from "@/lib/standup-records";
 import { formatDate, formatUsd } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return standups.map((standup) => ({ date: standup.date }));
+export async function generateStaticParams() {
+  return (await getPublicStandups()).map((standup) => ({ date: standup.id }));
 }
 
 export async function generateMetadata({
@@ -42,13 +42,15 @@ export async function generateMetadata({
   params: Promise<{ date: string }>;
 }): Promise<Metadata> {
   const { date } = await params;
-  const standup = standups.find((item) => item.date === date);
+  const standup = await getPublicStandup(date);
   return {
     description: standup
       ? standup.decision.summary
       : "BoardlessAI shift episode record.",
     robots: standup?.fixture ? { follow: true, index: false } : undefined,
-    title: standup ? `Shift episode · ${formatDate(date)}` : "Shift episode"
+    title: standup
+      ? `Shift episode · ${formatDate(standup.date)}`
+      : "Shift episode"
   };
 }
 
@@ -58,7 +60,7 @@ export default async function StandupDetailPage({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params;
-  const standup = standups.find((item) => item.date === date);
+  const standup = await getPublicStandup(date);
   if (!standup) {
     notFound();
   }
@@ -93,12 +95,12 @@ export default async function StandupDetailPage({
             <div className="mt-8 flex flex-wrap gap-x-7 gap-y-2 text-sm text-[var(--muted-foreground)]">
               <span>{formatDate(standup.date)}</span>
               <span>Shift: {formatPhaseLabel(standup.phase)}</span>
-              <span>Public fixture record</span>
+              <span>{standup.fixture ? "Public fixture record" : "Live public record"}</span>
             </div>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 className={buttonVariants({ variant: "primary" })}
-                href={`/standups/${standup.date}/room`}
+                href={`/standups/${standup.id}/room`}
               >
                 <MessageSquareText aria-hidden="true" className="size-4" />
                 Watch Decision Replay
@@ -116,10 +118,10 @@ export default async function StandupDetailPage({
                 {standup.operatingBrief}
               </p>
             </div>
-            <Callout className="self-end md:col-span-4" tone="warning">
-              This is synthetic, schema-valid fixture data. It demonstrates the
-              controls and does not claim market validation, customers or
-              revenue.
+            <Callout className="self-end md:col-span-4" tone={standup.fixture ? "warning" : "neutral"}>
+              {standup.fixture
+                ? "This is synthetic, schema-valid fixture data. It demonstrates the controls and does not claim market validation, customers or revenue."
+                : "This is a live, sanitized internal operating record. It does not claim market validation, customers, revenue or external activity."}
             </Callout>
           </div>
         </section>
@@ -148,7 +150,7 @@ export default async function StandupDetailPage({
           <SectionHeading
             description="Every formal seat supplied a bounded position. These are decision summaries, not private reasoning transcripts."
             eyebrow="Council"
-            title="Four seats. One non-decision."
+            title={standup.fixture ? "Four seats. One non-decision." : "Four seats. One bounded decision."}
           />
           <div className="grid gap-4 md:grid-cols-2">
             {standup.proposals.map((proposal) => {

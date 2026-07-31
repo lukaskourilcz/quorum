@@ -7,7 +7,7 @@ import { SignalBars } from "@/components/signal-bars";
 import { formatPhaseLabel } from "@/components/standup-countdown-model";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { standups } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 import { formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -22,7 +22,9 @@ const gates = [
   ["03", "One direct problem or intent signal", "0 — FAILED"]
 ] as const;
 
-export default function StandupsPage() {
+export default async function StandupsPage() {
+  const standups = await getPublicStandups();
+  const actualCost = standups.reduce((total, standup) => total + standup.ledger.actual, 0);
   return (
     <PageShell>
       <PageIntro
@@ -47,8 +49,8 @@ export default function StandupsPage() {
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Cycles recorded", String(standups.length)],
-            ["Decisions", "NO_ACTION"],
-            ["Actual cost to date", "$0.00"],
+            ["Latest decision", standups[0]?.decision.outcome ?? "n/a"],
+            ["Actual cost to date", formatUsd(actualCost)],
             ["Tasks evaluated", String(standups[0]?.tasks.length ?? 0)]
           ].map(([label, value]) => (
             <div className="bg-[var(--surface)] p-7 md:px-8" key={label}>
@@ -82,7 +84,7 @@ export default function StandupsPage() {
             return (
               <article
                 className="panel-grid md:grid-cols-12"
-                key={`${standup.date}-${standup.phase}`}
+                key={standup.id}
               >
                 <div className="bg-[var(--card)] p-7 md:col-span-4 md:p-10">
                   <div className="flex flex-wrap gap-2">
@@ -94,7 +96,7 @@ export default function StandupsPage() {
                     {formatPhaseLabel(standup.phase)}
                   </p>
                   <h3 className="mt-3.5 text-[2.375rem] font-semibold leading-none tracking-[-0.055em]">
-                    No venture was selected
+                    {standup.fixture ? "No venture was selected" : standup.decision.outcome}
                   </h3>
                   <SignalBars className="mt-9 h-11" />
                   <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
@@ -103,11 +105,7 @@ export default function StandupsPage() {
                 </div>
                 <div className="bg-[var(--surface)] p-7 md:col-span-8 md:p-10">
                   <p className="text-lg leading-8 text-[var(--mist)]">
-                    The operating system evaluated three synthetic opportunity
-                    cards. None can establish a business: every supporting
-                    record is a fixture, the strongest score is{" "}
-                    <span className="text-[var(--accent)]">34/50</span> and no
-                    eligible independent market signal exists.
+                    {standup.operatingBrief}
                   </p>
                   <div className="mt-9 grid grid-cols-2 gap-6 border-t border-[var(--border)] pt-6 sm:grid-cols-4">
                     {[
@@ -130,7 +128,13 @@ export default function StandupsPage() {
                     ))}
                   </div>
                   <div className="mt-8 grid gap-3.5 border-t border-[var(--border)] pt-6">
-                    {gates.map(([number, label, state]) => (
+                    {(standup.fixture
+                      ? gates
+                      : [
+                          ["01", "Project mode", "HOBBY / INTERNAL"],
+                          ["02", "External action", "NOT APPROVED"],
+                          ["03", "Public record", "TIMESTAMPED"]
+                        ]).map(([number, label, state]) => (
                       <div
                         className="grid grid-cols-[1.5rem_1fr_auto] items-center gap-4 text-sm"
                         key={number}
@@ -148,14 +152,14 @@ export default function StandupsPage() {
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Link
                       className={buttonVariants({ variant: "primary" })}
-                      href={`/standups/${standup.date}/room`}
+                      href={`/standups/${standup.id}/room`}
                     >
                       Watch episode replay
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
                     <Link
                       className={buttonVariants({ variant: "secondary" })}
-                      href={`/standups/${standup.date}`}
+                      href={`/standups/${standup.id}`}
                     >
                       Full episode record
                     </Link>

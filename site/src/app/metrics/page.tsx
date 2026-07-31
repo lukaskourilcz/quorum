@@ -3,7 +3,8 @@ import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
-import { metrics, publicState } from "@/data/fixtures";
+import { metrics } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -18,7 +19,8 @@ function metricValue(metric: (typeof metrics)[number]) {
   return metric.value;
 }
 
-export default function MetricsPage() {
+export default async function MetricsPage() {
+  const latestStandup = (await getPublicStandups())[0]!;
   return (
     <PageShell>
       <PageIntro
@@ -44,10 +46,10 @@ export default function MetricsPage() {
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Stage", publicState.stage, "Gate not met", "text-[var(--foreground)]"],
+            ["Stage", latestStandup.stage, "Gate not met", "text-[var(--foreground)]"],
             ["Eligible evidence", "0", "Fixture records excluded", "text-[var(--accent)]"],
             ["Recognized revenue", "n/a", "No source connected", "text-[var(--fog)]"],
-            ["Month all-in", formatUsd(publicState.actualSpendUsd), "$20 hard cap", "text-[var(--foreground)]"]
+            ["Month all-in", formatUsd(latestStandup.ledger.monthAllIn), "$20 hard cap", "text-[var(--foreground)]"]
           ].map(([label, value, foot, color]) => (
             <div
               className="flex min-h-42 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
@@ -149,7 +151,7 @@ export default function MetricsPage() {
           <div className="panel-grid md:grid-cols-3">
             {[
               ["Recognized revenue", "n/a", "No verified payment source connected", true],
-              ["Verified operating cost", "$0.00", "API + treasury + other; no double count", false],
+              ["Verified operating cost", formatUsd(latestStandup.ledger.monthAllIn), "API + treasury + other; no double count", false],
               ["Gross profit", "n/a", "Unavailable until revenue source exists", true]
             ].map(([label, value, foot, muted]) => (
               <div
