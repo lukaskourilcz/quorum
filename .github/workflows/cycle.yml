@@ -149,7 +149,7 @@ jobs:
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add state
+          git add state/budget state/standups state/meetings state/scorecards state/decisions
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0

@@ -14,6 +14,7 @@ site/.next/
 orchestrator/.dry-run/
 state/.lock
 state/.last-commit-msg
+state/cycles/
 *.log
 *.tsbuildinfo
 
