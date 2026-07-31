@@ -18,6 +18,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { usePreservePageScroll } from "@/components/use-preserve-page-scroll";
 import type { Agent, AgentId } from "@/data/agents";
 import type { RoomTranscript } from "@/data/fixtures";
 import { cn } from "@/lib/utils";
@@ -77,6 +78,7 @@ export function CouncilSimulator({
   );
   const [urlReady, setUrlReady] = useState(false);
   const [actionStatus, setActionStatus] = useState("");
+  const preservePageScroll = usePreservePageScroll();
 
   const selectedScenario =
     previews.find((scenario) => scenario.id === selectedScenarioId) ??
@@ -150,6 +152,7 @@ export function CouncilSimulator({
       aria-labelledby="council-simulator-title"
       className="border-y border-[var(--border)] bg-[var(--surface)]"
       id="council-simulator"
+      onClickCapture={preservePageScroll}
     >
       <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,0.58fr)] lg:items-end">

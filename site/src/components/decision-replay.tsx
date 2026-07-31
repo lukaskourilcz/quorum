@@ -41,6 +41,7 @@ import { RoomMessageTime } from "@/components/room-message-time";
 import { resolveRoomTurnTiming } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { usePreservePageScroll } from "@/components/use-preserve-page-scroll";
 import type { Agent, AgentId } from "@/data/agents";
 import type {
   RoomTranscript,
@@ -169,6 +170,7 @@ export function DecisionReplay({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const replayRef = useRef<HTMLElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
+  const preservePageScroll = usePreservePageScroll();
 
   const lastTurnIndex = transcript.turns.length - 1;
   const bookmarkStorageKey = `boardlessai:replay:bookmarks:${transcript.openedAt}`;
@@ -698,6 +700,8 @@ export function DecisionReplay({
       aria-label="Decision Replay"
       className="border-b border-[var(--border)] bg-[var(--graphite)] text-[var(--snow)]"
       id="decision-replay"
+      onChangeCapture={preservePageScroll}
+      onClickCapture={preservePageScroll}
       ref={replayRef}
       tabIndex={-1}
     >

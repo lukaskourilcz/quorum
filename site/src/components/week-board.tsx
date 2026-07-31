@@ -48,8 +48,8 @@ export function WeekBoard({
   const next = weekIndex >= 0 && weekIndex < availableWeeks.length - 1 ? availableWeeks[weekIndex + 1] : null;
   const navigation = (
     <div className="flex gap-2">
-      {previous ? <Link aria-label="Previous calendar week" className={buttonVariants({ size: "small", variant: "secondary" })} href={`/calendar/${previous}`}><ArrowLeft aria-hidden="true" className="size-4" /> Previous</Link> : null}
-      {next ? <Link aria-label="Next calendar week" className={buttonVariants({ size: "small", variant: "secondary" })} href={`/calendar/${next}`}>Next <ArrowRight aria-hidden="true" className="size-4" /></Link> : null}
+      {previous ? <Link aria-label="Previous calendar week" className={buttonVariants({ size: "small", variant: "secondary" })} href={`/calendar/${previous}`} scroll={false}><ArrowLeft aria-hidden="true" className="size-4" /> Previous</Link> : null}
+      {next ? <Link aria-label="Next calendar week" className={buttonVariants({ size: "small", variant: "secondary" })} href={`/calendar/${next}`} scroll={false}>Next <ArrowRight aria-hidden="true" className="size-4" /></Link> : null}
     </div>
   );
   const board = (

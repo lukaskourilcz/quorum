@@ -112,3 +112,17 @@ for (const route of routes) {
     expect(violations).toEqual([]);
   });
 }
+
+test("every app button declares its behavior", async ({ page }) => {
+  test.setTimeout(120_000);
+  const failures: string[] = [];
+
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: "networkidle" });
+    const implicitButtons = page.locator("main button:not([type])");
+    const count = await implicitButtons.count();
+    if (count > 0) failures.push(`${route}: ${count} implicit button(s)`);
+  }
+
+  expect(failures).toEqual([]);
+});

@@ -42,9 +42,9 @@ export default async function IdeasPage({
       />
       <section className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-24">
         <div aria-label="Filter ideas by status" className="flex flex-wrap gap-2">
-          <Link className={buttonVariants({ size: "small", variant: selected ? "secondary" : "accent" })} href="/ideas">All</Link>
+          <Link className={buttonVariants({ size: "small", variant: selected ? "secondary" : "accent" })} href="/ideas" scroll={false}>All</Link>
           {ideaStatuses.map((ideaStatus) => (
-            <Link className={buttonVariants({ size: "small", variant: selected === ideaStatus ? "accent" : "secondary" })} href={`/ideas?status=${ideaStatus}`} key={ideaStatus}>{ideaStatus.replaceAll("_", " ")}</Link>
+            <Link className={buttonVariants({ size: "small", variant: selected === ideaStatus ? "accent" : "secondary" })} href={`/ideas?status=${ideaStatus}`} key={ideaStatus} scroll={false}>{ideaStatus.replaceAll("_", " ")}</Link>
           ))}
         </div>
 
