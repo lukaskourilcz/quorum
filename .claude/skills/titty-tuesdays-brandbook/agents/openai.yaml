@@ -1,0 +1,4 @@
+interface:
+  display_name: "Titty Tuesdays Brandbook"
+  short_description: "Create on-brand, platform-safe TT work"
+  default_prompt: "Use $titty-tuesdays-brandbook to review this Titty Tuesdays artifact for brand and platform safety."

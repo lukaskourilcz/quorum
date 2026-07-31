@@ -68,9 +68,9 @@ function slotKind(phase: (typeof MEETING_CLOCK)[number]["phase"]): CalendarFeed[
 }
 
 function recordReference(record: MeetingRecord): string {
-  return record.kind === "venture"
-    ? `meetings/${record.cycleId}`
-    : meetingRef(record.date, record.kind);
+  if (record.kind === "venture") return `meetings/${record.cycleId}`;
+  if (record.kind === "tt-marketing") return `meetings/${record.date}-${record.kind}`;
+  return meetingRef(record.date, record.kind);
 }
 
 export function buildCalendarFeed(input: {

@@ -61,6 +61,7 @@ const expectedRoutes = [
   "/standups/2026-07-23-founding/room",
   "/ventures",
   "/ventures/caught-up",
+  "/ventures/titty-tuesdays",
   ...ventureSlugs.map((slug) => `/ventures/${slug}`)
 ];
 

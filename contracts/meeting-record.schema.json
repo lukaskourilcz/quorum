@@ -27,7 +27,8 @@
             "afternoon",
             "night",
             "cu-edition",
-            "cu-product"
+            "cu-product",
+            "tt-marketing"
           ]
         },
         "episode": {
@@ -688,7 +689,8 @@
             "afternoon",
             "night",
             "cu-edition",
-            "cu-product"
+            "cu-product",
+            "tt-marketing"
           ]
         },
         "episode": {
@@ -1128,7 +1130,8 @@
           "type": "string",
           "enum": [
             "cu-edition",
-            "cu-product"
+            "cu-product",
+            "tt-marketing"
           ]
         },
         "roomTranscript": {

@@ -44,9 +44,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const meeting = await getPublicMeetingRecord(id);
   return {
-    description: meeting?.operatingBrief ?? "BoardlessAI Caught Up meeting record.",
+    description: meeting?.operatingBrief ?? "BoardlessAI venture meeting record.",
     robots: meeting?.fixture ? { follow: true, index: false } : undefined,
-    title: meeting ? `${meeting.kind === "cu-edition" ? "Edition" : "Product"} room · ${formatDate(meeting.date)}` : "Meeting"
+    title: meeting ? `${meeting.kind === "cu-edition" ? "Edition" : meeting.kind === "cu-product" ? "Product" : "Marketing"} room · ${formatDate(meeting.date)}` : "Meeting"
   };
 }
 
@@ -55,6 +55,8 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
   const meeting = await getPublicMeetingRecord(id);
   if (!meeting) notFound();
   const transcript = meeting.roomTranscript;
+  const roomName = meeting.kind === "cu-edition" ? "Edition room" : meeting.kind === "cu-product" ? "Product room" : "Marketing room";
+  const roomTitle = meeting.kind === "cu-edition" ? "Choose the edition" : meeting.kind === "cu-product" ? "Decide the product idea" : "Shape the season";
   const speakers = Array.from(new Set(transcript.turns.map((turn) => turn.agent)))
     .map((agent) => agentById.get(agent))
     .filter((agent): agent is NonNullable<typeof agent> => Boolean(agent));
@@ -69,12 +71,12 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
             <div className="mt-9 grid items-end gap-8 md:grid-cols-12">
               <div className="md:col-span-8">
                 <div className="flex flex-wrap gap-2">
-                  <Badge tone="accent">{meeting.kind === "cu-edition" ? "Edition room" : "Product room"}</Badge>
+                  <Badge tone="accent">{roomName}</Badge>
                   <Badge>{meeting.fixture ? "Offline fixture" : "Recorded"}</Badge>
                   <Badge tone={meeting.status === "HELD" ? "success" : meeting.status === "NEEDS_RECONCILIATION" ? "danger" : "warning"}>{meeting.status}</Badge>
                 </div>
                 <h1 className="mt-6 max-w-5xl text-[clamp(3rem,7vw,7rem)] font-semibold leading-[0.88] tracking-[-0.065em]">
-                  {meeting.kind === "cu-edition" ? "Choose the edition" : "Decide the product idea"}<span className="text-[var(--magenta-spark)]">.</span>
+                  {roomTitle}<span className="text-[var(--magenta-spark)]">.</span>
                 </h1>
               </div>
               <div className="md:col-span-4">

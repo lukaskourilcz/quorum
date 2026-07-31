@@ -42,7 +42,7 @@ const CommonFields = {
   schemaVersion: z.literal("meeting-record/2"),
   cycleId: z.string().trim().min(1),
   date: DateSchema,
-  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product"]),
+  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing"]),
   episode: openObject({
     id: z.string().trim().min(1),
     shift: z.enum(["morning", "afternoon", "night"]),
@@ -114,12 +114,12 @@ const VentureMeetingSchema = openObject({
   roomTranscript: RoomTranscriptSchema(24)
 });
 
-const CaughtUpMeetingSchema = openObject({
+const NamedVentureMeetingSchema = openObject({
   ...CommonFields,
-  kind: z.enum(["cu-edition", "cu-product"]),
+  kind: z.enum(["cu-edition", "cu-product", "tt-marketing"]),
   roomTranscript: RoomTranscriptSchema(36)
 });
 
-export const MeetingRecordSchema = z.union([VentureMeetingSchema, CaughtUpMeetingSchema]);
+export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMeetingSchema]);
 
 export type MeetingRecord = z.infer<typeof MeetingRecordSchema>;

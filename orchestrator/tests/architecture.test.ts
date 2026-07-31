@@ -16,7 +16,8 @@ const expectedSkills = [
   "page-publishing",
   "safe-release",
   "social-operations",
-  "stop-slop"
+  "stop-slop",
+  "titty-tuesdays-brandbook"
 ] as const;
 
 const stopSlopFiles = [
@@ -27,6 +28,12 @@ const stopSlopFiles = [
   "references/examples.md",
   "references/phrases.md",
   "references/structures.md"
+] as const;
+
+const tittyTuesdaysBrandbookFiles = [
+  "SKILL.md",
+  "agents/openai.yaml",
+  "references/platform-policy.md"
 ] as const;
 
 const expectedPrompts = [
@@ -90,6 +97,11 @@ describe("agent architecture", () => {
       const claudeBytes = await readFile(path.join(claudeRoot, "stop-slop", file));
       const codexBytes = await readFile(path.join(codexRoot, "stop-slop", file));
       expect(codexBytes.equals(claudeBytes), `stop-slop/${file} mirror differs`).toBe(true);
+    }
+    for (const file of tittyTuesdaysBrandbookFiles) {
+      const claudeBytes = await readFile(path.join(claudeRoot, "titty-tuesdays-brandbook", file));
+      const codexBytes = await readFile(path.join(codexRoot, "titty-tuesdays-brandbook", file));
+      expect(codexBytes.equals(claudeBytes), `titty-tuesdays-brandbook/${file} mirror differs`).toBe(true);
     }
   });
 

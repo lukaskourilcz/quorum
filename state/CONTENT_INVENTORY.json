@@ -572,6 +572,19 @@
       "updatedAt": "2026-08-01",
       "status": "indexable",
       "informationGain": "material"
+    },
+    {
+      "url": "/ventures/titty-tuesdays",
+      "purpose": "Publish the pre-commerce Titty Tuesdays brand, concept season, recorded spend and pending authority gates.",
+      "searchIntent": "inspect Titty Tuesdays venture governance",
+      "primaryQuery": "Titty Tuesdays venture",
+      "audience": "governance readers and future customers",
+      "evidenceRefs": ["state/ventures/titty-tuesdays/BRAND.md", "state/ventures/titty-tuesdays/season-001.md"],
+      "author": "SCRIBE",
+      "reviewer": "STET",
+      "updatedAt": "2026-08-01",
+      "status": "noindex",
+      "informationGain": "material"
     }
   ]
 }

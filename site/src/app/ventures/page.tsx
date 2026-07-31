@@ -31,16 +31,16 @@ export default function VenturesPage() {
               Selected ventures
             </p>
             <p className="mt-4 text-7xl font-semibold leading-none tracking-[-0.07em]">
-              1
+              2
             </p>
             <p className="mt-3 text-[0.84375rem] text-[var(--fog)]">
-              Caught Up · venture 001
+              Caught Up · 001 / Titty Tuesdays · 002
             </p>
           </div>
         }
-        description="Caught Up is the first adopted venture and operates in VALIDATION. Rejected fixture candidates remain visible as the historical evidence gate."
+        description="Caught Up and Titty Tuesdays are owner-adopted ventures in VALIDATION. Rejected fixture candidates remain visible as the historical evidence gate."
         eyebrow="Business portfolio"
-        title="One venture, earned through gates"
+        title="Two ventures, bounded by gates"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
@@ -55,6 +55,20 @@ export default function VenturesPage() {
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One consequential AI story a day—or an honest no-edition record.</h2>
               <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI now governs the source digest, edition room, delivery checks and product-idea ledger while the existing Caught Up reader remains the publication surface.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/caught-up">Open venture record <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[color-mix(in_srgb,var(--accent)_10%,var(--surface))] p-8 md:col-span-4 md:p-10">
+              <Badge tone="warning">Venture 002</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--accent)]">VALIDATION · PRE-COMMERCE</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Titty Tuesdays</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One crop-top proposition, built in public before an eshop exists.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Season concepts, taste memory and marketing plans can develop now. Publishing, paid campaigns, inventory and commerce remain blocked.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/titty-tuesdays">Open venture record <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
         </article>
@@ -189,7 +203,7 @@ export default function VenturesPage() {
             ))}
           </div>
           <p className="mt-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-            Current venture stage / 02 validation — Caught Up
+            Current venture stage / 02 validation — Caught Up + Titty Tuesdays
           </p>
         </div>
       </section>

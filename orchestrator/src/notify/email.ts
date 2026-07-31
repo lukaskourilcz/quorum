@@ -56,6 +56,9 @@ export function buildMeetingEmail(input: {
   const cost = input.record.ledger.actualCycleUsd;
   if (cost === null) throw new Error("Meeting email requires a measured meeting cost");
   const kind = input.record.kind;
+  if (kind === "tt-marketing") {
+    throw new Error("Titty Tuesdays meetings use the daily portfolio digest, not per-meeting email");
+  }
   const reference = kind === "venture"
     ? `standups/${input.record.cycleId}`
     : meetingRef(input.record.date, kind);

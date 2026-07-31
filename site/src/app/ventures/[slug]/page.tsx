@@ -16,13 +16,14 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { CaughtUpVenturePage } from "@/components/caught-up-venture-page";
+import { TittyTuesdaysVenturePage } from "@/components/titty-tuesdays-venture-page";
 import {
   opportunities,
   opportunityDimensions
 } from "@/data/fixtures";
 
 export function generateStaticParams() {
-  return [{ slug: "caught-up" }, ...opportunities.map((opportunity) => ({ slug: opportunity.slug }))];
+  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, ...opportunities.map((opportunity) => ({ slug: opportunity.slug }))];
 }
 
 export async function generateMetadata({
@@ -35,6 +36,13 @@ export async function generateMetadata({
     return {
       description: "Caught Up is BoardlessAI venture 001: one consequential AI story a day, governed in public.",
       title: "Caught Up"
+    };
+  }
+  if (slug === "titty-tuesdays") {
+    return {
+      description: "Titty Tuesdays is BoardlessAI venture 002: one crop-top proposition, developed in public before commerce.",
+      robots: { follow: true, index: false },
+      title: "Titty Tuesdays"
     };
   }
   const opportunity = opportunities.find((item) => item.slug === slug);
@@ -52,6 +60,7 @@ export default async function VentureDetailPage({
 }) {
   const { slug } = await params;
   if (slug === "caught-up") return <CaughtUpVenturePage />;
+  if (slug === "titty-tuesdays") return <TittyTuesdaysVenturePage />;
   const opportunity = opportunities.find((item) => item.slug === slug);
   if (!opportunity) {
     notFound();
