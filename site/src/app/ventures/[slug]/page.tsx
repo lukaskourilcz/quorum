@@ -15,13 +15,14 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { CaughtUpVenturePage } from "@/components/caught-up-venture-page";
 import {
   opportunities,
   opportunityDimensions
 } from "@/data/fixtures";
 
 export function generateStaticParams() {
-  return opportunities.map((opportunity) => ({ slug: opportunity.slug }));
+  return [{ slug: "caught-up" }, ...opportunities.map((opportunity) => ({ slug: opportunity.slug }))];
 }
 
 export async function generateMetadata({
@@ -30,6 +31,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  if (slug === "caught-up") {
+    return {
+      description: "Caught Up is BoardlessAI venture 001: one consequential AI story a day, governed in public.",
+      title: "Caught Up"
+    };
+  }
   const opportunity = opportunities.find((item) => item.slug === slug);
   return {
     description: opportunity?.reason ?? "BoardlessAI opportunity card.",
@@ -44,6 +51,7 @@ export default async function VentureDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (slug === "caught-up") return <CaughtUpVenturePage />;
   const opportunity = opportunities.find((item) => item.slug === slug);
   if (!opportunity) {
     notFound();

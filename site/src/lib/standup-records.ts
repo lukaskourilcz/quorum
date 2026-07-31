@@ -157,7 +157,12 @@ function parseRecord(value: unknown): PublicStandup | null {
         const item = object(proposal);
         const id = item ? agent(item.agent) : null;
         const summary = item ? text(item.summary) : null;
-        return id && summary ? [{ agent: id, summary, evidenceRefs: [] }] : [];
+        const evidenceRefs = item && Array.isArray(item.evidenceRefs)
+          ? item.evidenceRefs.map((reference) => text(reference, 160)).filter(
+              (reference): reference is string => Boolean(reference)
+            )
+          : [];
+        return id && summary ? [{ agent: id, summary, evidenceRefs }] : [];
       })
     : [];
   const voteMatrix = Array.isArray(record.voteMatrix)
@@ -182,7 +187,12 @@ function parseRecord(value: unknown): PublicStandup | null {
           : [];
       })
     : [];
-  if (participants.length === 0 || proposals.length !== 4 || voteMatrix.length !== 4) {
+  const proposalCountValid = proposals.length === 4 || (
+    phase === "morning" &&
+    proposals.length === 5 &&
+    proposals.filter((proposal) => proposal.agent === "SPARK").length === 1
+  );
+  if (participants.length === 0 || !proposalCountValid || voteMatrix.length !== 4) {
     return null;
   }
   return {
@@ -201,6 +211,9 @@ function parseRecord(value: unknown): PublicStandup | null {
     tasks,
     growthPlan: text(record.growthPlan) ?? "NO_POST — no public distribution event was recorded.",
     eveningOutcome: typeof record.eveningOutcome === "string" ? record.eveningOutcome : null,
+    ...(text(record.caughtUpIdeaRef, 160)
+      ? { caughtUpIdeaRef: text(record.caughtUpIdeaRef, 160)! }
+      : {}),
     roomTranscript: { openedAt, closedAt, gavel, setting, turns },
     generatedAt
   };

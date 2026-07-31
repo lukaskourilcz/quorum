@@ -1,16 +1,8 @@
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
+import { escapeXml, rssResponse } from "@/lib/rss";
 
 export const dynamic = "force-static";
-
-function escapeXml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-}
 
 export async function GET() {
   const base = getPublicSiteUrl();
@@ -39,10 +31,5 @@ export async function GET() {
         ${items}
       </channel>
     </rss>`;
-  return new Response(xml, {
-    headers: {
-      "Cache-Control": "public, max-age=300, s-maxage=3600",
-      "Content-Type": "application/rss+xml; charset=utf-8"
-    }
-  });
+  return rssResponse(xml);
 }

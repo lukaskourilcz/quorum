@@ -7,6 +7,15 @@ import {
 } from "./standup-countdown-model";
 
 describe("Standup countdown schedule", () => {
+  it("selects the edition room before 05:00 Prague time", () => {
+    expect(getNextStandup(new Date("2026-07-30T02:59:59.000Z"))).toEqual({
+      hours: "05:00 · daily",
+      iso: "2026-07-30T03:00:00.000Z",
+      label: "Caught Up edition room",
+      phase: "cu-edition"
+    });
+  });
+
   it("selects the morning shift before 06:00 Prague time", () => {
     expect(getNextStandup(new Date("2026-07-30T03:59:59.000Z"))).toEqual({
       hours: "06:00–14:00",
@@ -34,8 +43,17 @@ describe("Standup countdown schedule", () => {
     });
   });
 
-  it("selects the night shift after the afternoon slot", () => {
+  it("selects the product room after the afternoon slot", () => {
     expect(getNextStandup(new Date("2026-07-30T12:00:01.000Z"))).toEqual({
+      hours: "17:00 · daily",
+      iso: "2026-07-30T15:00:00.000Z",
+      label: "Caught Up product room",
+      phase: "cu-product"
+    });
+  });
+
+  it("selects the night shift after the product room", () => {
+    expect(getNextStandup(new Date("2026-07-30T15:00:01.000Z"))).toEqual({
       hours: "22:00–06:00",
       iso: "2026-07-30T20:00:00.000Z",
       label: "Night shift",
@@ -43,21 +61,21 @@ describe("Standup countdown schedule", () => {
     });
   });
 
-  it("moves to tomorrow morning after the night shift starts", () => {
+  it("moves to tomorrow's edition room after the night shift starts", () => {
     expect(getNextStandup(new Date("2026-07-30T20:00:01.000Z"))).toEqual({
-      hours: "06:00–14:00",
-      iso: "2026-07-31T04:00:00.000Z",
-      label: "Morning shift",
-      phase: "morning"
+      hours: "05:00 · daily",
+      iso: "2026-07-31T03:00:00.000Z",
+      label: "Caught Up edition room",
+      phase: "cu-edition"
     });
   });
 
   it("uses the winter Prague offset", () => {
     expect(getNextStandup(new Date("2026-12-15T21:00:01.000Z"))).toEqual({
-      hours: "06:00–14:00",
-      iso: "2026-12-16T05:00:00.000Z",
-      label: "Morning shift",
-      phase: "morning"
+      hours: "05:00 · daily",
+      iso: "2026-12-16T04:00:00.000Z",
+      label: "Caught Up edition room",
+      phase: "cu-edition"
     });
   });
 
@@ -122,6 +140,8 @@ describe("Standup countdown schedule", () => {
     expect(formatPhaseLabel("morning")).toBe("Morning shift");
     expect(formatPhaseLabel("afternoon")).toBe("Afternoon shift");
     expect(formatPhaseLabel("night")).toBe("Night shift");
+    expect(formatPhaseLabel("cu-edition")).toBe("Caught Up edition room");
+    expect(formatPhaseLabel("cu-product")).toBe("Caught Up product room");
     expect(formatPhaseLabel("founding")).toBe("Founding");
     expect(formatPhaseLabel("am")).toBe("AM council · legacy");
     expect(formatPhaseLabel("pm")).toBe("PM council · legacy");

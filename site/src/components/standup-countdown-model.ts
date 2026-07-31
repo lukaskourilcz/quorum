@@ -2,6 +2,13 @@ export const STANDUP_TIME_ZONE = "Europe/Prague";
 
 export const STANDUP_SCHEDULE = [
   {
+    hour: 5,
+    hours: "05:00 · daily",
+    label: "Caught Up edition room",
+    minute: 0,
+    phase: "cu-edition"
+  },
+  {
     hour: 6,
     hours: "06:00–14:00",
     label: "Morning shift",
@@ -14,6 +21,13 @@ export const STANDUP_SCHEDULE = [
     label: "Afternoon shift",
     minute: 0,
     phase: "afternoon"
+  },
+  {
+    hour: 17,
+    hours: "17:00 · daily",
+    label: "Caught Up product room",
+    minute: 0,
+    phase: "cu-product"
   },
   {
     hour: 22,
@@ -203,6 +217,8 @@ export function formatPhaseLabel(phase: string) {
     founding: "Founding",
     morning: "Morning shift",
     night: "Night shift",
+    "cu-edition": "Caught Up edition room",
+    "cu-product": "Caught Up product room",
     pm: "PM council · legacy"
   };
 

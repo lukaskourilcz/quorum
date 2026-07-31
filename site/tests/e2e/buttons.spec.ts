@@ -8,6 +8,10 @@ const routes = [
   "/boardroom",
   "/agents",
   "/ventures",
+  "/ventures/caught-up",
+  "/meetings/2026-07-30-cu-edition",
+  "/meetings/2026-07-30-cu-product",
+  "/ideas",
   "/metrics",
   "/governance",
   "/log"

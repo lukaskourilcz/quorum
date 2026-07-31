@@ -7,6 +7,7 @@ const footerLinks = [
   { href: "/privacy", label: "Privacy" },
   { href: "/disclosure", label: "Disclosure" },
   { href: "/feed.xml", label: "RSS" },
+  { href: "/decisions.xml", label: "Decisions RSS" },
   { href: "/feed.json", label: "JSON" }
 ];
 

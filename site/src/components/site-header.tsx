@@ -11,6 +11,7 @@ const links = [
   { href: "/boardroom", label: "Boardroom" },
   { href: "/agents", label: "Agents" },
   { href: "/ventures", label: "Ventures" },
+  { href: "/ideas", label: "Ideas" },
   { href: "/metrics", label: "Metrics" },
   { href: "/governance", label: "Governance" }
 ];

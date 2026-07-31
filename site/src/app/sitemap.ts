@@ -2,10 +2,15 @@ import type { MetadataRoute } from "next";
 import { agents } from "@/data/agents";
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
+import { getPublicMeetingRecords } from "@/lib/meeting-records";
+import { calendarStaticWeeks } from "@/lib/calendar-feed-model";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getPublicSiteUrl();
-  const standups = await getPublicStandups();
+  const [standups, meetings] = await Promise.all([
+    getPublicStandups(),
+    getPublicMeetingRecords()
+  ]);
   const updated = new Date("2026-07-23T05:30:00.000Z");
   const core = [
     "",
@@ -14,6 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/governance",
     "/agents",
     "/ventures",
+    "/ventures/caught-up",
+    "/ideas",
     "/metrics",
     "/log",
     "/company",
@@ -39,6 +46,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(standup.generatedAt ?? `${standup.date}T05:30:00.000Z`),
       changeFrequency: "never" as const,
       priority: 0.7
+    })),
+    ...meetings.filter((meeting) => !meeting.fixture).map((meeting) => ({
+      url: `${base}/meetings/${meeting.id}`,
+      lastModified: new Date(meeting.generatedAt),
+      changeFrequency: "never" as const,
+      priority: 0.7
+    })),
+    ...calendarStaticWeeks(new Date()).map((week) => ({
+      url: `${base}/calendar/${week}`,
+      lastModified: updated,
+      changeFrequency: "daily" as const,
+      priority: 0.5
     }))
   ];
 }

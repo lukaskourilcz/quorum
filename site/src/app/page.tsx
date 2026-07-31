@@ -7,12 +7,19 @@ import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { SignalBars } from "@/components/signal-bars";
 import { StandupCountdown } from "@/components/standup-countdown";
+import { WeekBoard } from "@/components/week-board";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { agents } from "@/data/agents";
 import { governanceSteps } from "@/data/fixtures";
 import { getPublicStandups } from "@/lib/standup-records";
+import { getPublicCalendarFeed } from "@/lib/calendar-feed";
+import {
+  calendarStaticWeeks,
+  mondayOfCalendarWeek,
+  pragueCalendarDate
+} from "@/lib/calendar-feed-model";
 import { formatDate, formatUsd } from "@/lib/utils";
 
 const council = agents.filter((agent) => agent.group === "Council");
@@ -28,7 +35,13 @@ const gates = [
 const stepTags = ["SCOUT", "COUNCIL", "PEOPLE", "BORDA", "FORGE", "LEDGER"];
 
 export default async function HomePage() {
-  const standups = await getPublicStandups();
+  const now = new Date();
+  const weekOf = mondayOfCalendarWeek(pragueCalendarDate(now));
+  const [standups, calendarFeed] = await Promise.all([
+    getPublicStandups(),
+    getPublicCalendarFeed(weekOf, now)
+  ]);
+  const availableWeeks = calendarStaticWeeks(now);
   const latestStandup = standups[0]!;
   return (
     <PageShell>
@@ -66,8 +79,8 @@ export default async function HomePage() {
           </div>
           <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
             <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
-              Three shifts a day. Four council seats decide, specialists enter
-              when the episode needs them, and every handoff stays public.
+              Five public rooms a day. Four council seats decide, specialists
+              enter when the episode needs them, and every handoff stays public.
             </p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
               <Link
@@ -94,8 +107,8 @@ export default async function HomePage() {
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Best candidate score", "34/50", "GATE 35", "68%", "1 point below the evidence gate"],
-            ["Eligible evidence", "0", "NEEDS 3", "0%", "No independent source qualified"],
+            ["Active ventures", "1", "CAUGHT UP", "100%", "Venture 001 · VALIDATION"],
+            ["Public rooms / day", "5", "PRAGUE", "100%", "Three venture shifts + two Caught Up rooms"],
             [
               "Actual API spend",
               formatUsd(latestStandup.ledger.monthAllIn),
@@ -103,7 +116,7 @@ export default async function HomePage() {
               "0%",
               latestStandup.fixture ? "Offline fixture / no calls billed" : "Live guarded council record"
             ],
-            ["Agent cast", String(agents.length), "4 VOTING", "100%", "10 specialists and controls"]
+            ["Agent cast", String(agents.length), "4 VOTING", "100%", "16 specialists and controls"]
           ].map(([label, value, tag, width, foot]) => (
             <div
               className="flex min-h-48 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
@@ -136,6 +149,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <WeekBoard availableWeeks={availableWeeks} feed={calendarFeed} />
+
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10 md:py-30">
         <SectionHeading
           action={
@@ -147,38 +162,32 @@ export default async function HomePage() {
               <ArrowUpRight aria-hidden="true" className="size-4" />
             </Link>
           }
-          description="A truthful non-decision is a valid result. This offline founding fixture demonstrates the evidence gate without inventing a business."
-          eyebrow={`Latest episode / ${formatDate(latestStandup.date)}`}
-          title="No venture selected."
+          description={latestStandup.fixture ? "A truthful non-decision is a valid result. This offline fixture demonstrates the gate without inventing an outcome." : "The newest committed venture-room decision, projected through the public record boundary."}
+          eyebrow={`Latest venture episode / ${formatDate(latestStandup.date)}`}
+          title={latestStandup.decision.outcome.replaceAll("_", " ")}
         />
 
         <div className="panel-grid md:grid-cols-12">
           <div className="bg-[var(--card)] p-7 md:col-span-5 md:p-11">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">Fixture</Badge>
+              <Badge tone="accent">{latestStandup.fixture ? "Fixture" : "Recorded"}</Badge>
               <Badge>{latestStandup.stage}</Badge>
             </div>
             <p className="mt-11 text-[clamp(2.6rem,4.2vw,3.2rem)] font-semibold leading-[0.98] tracking-[-0.055em]">
-              Insufficient
-              <br />
-              evidence<span className="text-[var(--accent)]">.</span>
+              {latestStandup.decision.outcome.replaceAll("_", " ")}
+              <span className="text-[var(--accent)]">.</span>
             </p>
             <p className="mt-6 max-w-md text-sm leading-6 text-[var(--fog)]">
-              No real candidate met 35/50, three independent eligible sources
-              and one direct problem or intent signal.
+              {latestStandup.decision.summary}
             </p>
             <SignalBars className="mt-10" />
             <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-              Signal sample / 10 sources / 0 eligible
+              Public record / {latestStandup.status}
             </p>
           </div>
           <div className="bg-[var(--surface)] p-7 md:col-span-7 md:p-11">
             <p className="text-lg leading-8 text-[var(--mist)] md:text-[1.1875rem]">
-              The operating system evaluated three synthetic opportunity cards.
-              None can establish a business: every supporting record is a
-              fixture, the strongest score is{" "}
-              <span className="text-[var(--accent)]">34/50</span> and no
-              eligible independent market signal exists.
+              {latestStandup.operatingBrief}
             </p>
             <div className="mt-11 grid gap-px bg-[var(--border)] sm:grid-cols-2">
               <div className="bg-[var(--surface)] pr-7">
@@ -200,12 +209,12 @@ export default async function HomePage() {
                   {formatUsd(latestStandup.ledger.actual)}
                 </p>
                 <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
-                  Offline fixture made no API call
+                  {latestStandup.fixture ? "Offline fixture made no API call" : "Committed record, not a reservation"}
                 </p>
               </div>
             </div>
             <div className="mt-11 grid gap-3.5 border-t border-[var(--border)] pt-6">
-              {gates.map(([number, label, state]) => (
+              {(latestStandup.fixture ? gates : latestStandup.voteMatrix.map((vote, index) => [String(index + 1).padStart(2, "0"), `${vote.voter} seat`, vote.veto ? "VETO" : vote.firstChoice] as const)).map(([number, label, state]) => (
                 <div
                   className="grid grid-cols-[1.25rem_1fr_auto] items-center gap-4 text-sm"
                   key={number}

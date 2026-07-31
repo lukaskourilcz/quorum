@@ -31,17 +31,34 @@ export default function VenturesPage() {
               Selected ventures
             </p>
             <p className="mt-4 text-7xl font-semibold leading-none tracking-[-0.07em]">
-              0
+              1
             </p>
             <p className="mt-3 text-[0.84375rem] text-[var(--fog)]">
-              Correct while evidence is insufficient
+              Caught Up · venture 001
             </p>
           </div>
         }
-        description="The company operating system exists; a customer venture does not. Candidate cards stay in DISCOVERY until every deterministic gate passes."
+        description="Caught Up is the first adopted venture and operates in VALIDATION. Rejected fixture candidates remain visible as the historical evidence gate."
         eyebrow="Business portfolio"
-        title="No venture by default"
+        title="One venture, earned through gates"
       />
+
+      <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
+        <article className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--magenta-spark)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[color-mix(in_srgb,var(--magenta-spark)_12%,var(--surface))] p-8 md:col-span-4 md:p-10">
+              <Badge tone="accent">Venture 001</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">VALIDATION</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Caught Up</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One consequential AI story a day—or an honest no-edition record.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI now governs the source digest, edition room, delivery checks and product-idea ledger while the existing Caught Up reader remains the publication surface.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/caught-up">Open venture record <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
+      </section>
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)]">
@@ -141,7 +158,7 @@ export default function VenturesPage() {
             {stages.map(([number, title, description], index) => (
               <div
                 className={
-                  index === 0
+                  index === 1
                     ? "flex min-h-45 flex-col justify-between bg-[color-mix(in_srgb,var(--accent)_6%,var(--surface))] p-7"
                     : "flex min-h-45 flex-col justify-between bg-[var(--surface)] p-7"
                 }
@@ -149,7 +166,7 @@ export default function VenturesPage() {
               >
                 <p
                   className={`font-mono text-[0.6875rem] tracking-[0.1em] ${
-                    index === 0
+                    index === 1
                       ? "text-[var(--accent)]"
                       : "text-[var(--fog)]"
                   }`}
@@ -159,7 +176,7 @@ export default function VenturesPage() {
                 <div>
                   <p
                     className={`text-[0.9375rem] font-bold tracking-[0.02em] ${
-                      index === 0 ? "text-[var(--accent)]" : ""
+                      index === 1 ? "text-[var(--accent)]" : ""
                     }`}
                   >
                     {title}
@@ -172,7 +189,7 @@ export default function VenturesPage() {
             ))}
           </div>
           <p className="mt-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-            Current stage / 01 discovery — gate not met
+            Current venture stage / 02 validation — Caught Up
           </p>
         </div>
       </section>

@@ -86,6 +86,7 @@ export interface PublicStandup {
   }>;
   growthPlan: string;
   eveningOutcome: string | null;
+  caughtUpIdeaRef?: string;
   roomTranscript: RoomTranscript;
   generatedAt?: string;
 }
