@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "edition-package/2",
+  "date": "2026-08-04",
+  "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "status": "no_edition",
+  "board": {
+    "meetingRef": "meetings/2026-08-04-cu-edition",
+    "roomUrl": "https://boardless.example/meetings/2026-08-04-cu-edition",
+    "noEditionReason": "Wrong contract major."
+  },
+  "generation": { "models": {} },
+  "reason": "wrong major fixture"
+}

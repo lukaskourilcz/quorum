@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804-cu-edition",
+  "date": "2026-08-04",
+  "phase": "cu-edition",
+  "kind": "cu-edition",
+  "fixture": false,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Choose one sourced story for today's Caught Up edition.",
+  "participantReasons": [
+    { "agent": "HERALD", "reason": "HERALD chairs the edition room.", "participated": true },
+    { "agent": "STET", "reason": "STET holds the copy-quality block.", "participated": true },
+    { "agent": "AUDIT", "reason": "AUDIT retains the veto.", "participated": true }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.03,
+    "monthAllInUsd": 4.2,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "select",
+    "summary": "Select the verified model price change.",
+    "evidenceRefs": ["SOURCE-1"]
+  },
+  "proposals": [
+    { "agent": "HERALD", "summary": "Lead with the verified price change.", "evidenceRefs": ["SOURCE-1"] }
+  ],
+  "voteMatrix": [
+    { "voter": "HERALD", "firstChoice": "price-change", "veto": false },
+    { "voter": "STET", "firstChoice": "price-change", "veto": false },
+    { "voter": "AUDIT", "firstChoice": "price-change", "veto": false }
+  ],
+  "tasks": [],
+  "growthPlan": "SPARK will carry the room link into the product review.",
+  "eveningOutcome": null,
+  "editionRef": "edition/2026-08-04",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T03:00:00.000Z",
+    "closedAt": "2026-08-04T03:18:00.000Z",
+    "gavel": "HERALD",
+    "setting": "The edition room reviews a source digest marked as untrusted data.",
+    "turns": [
+      { "agent": "HERALD", "mode": "gavel", "text": "Three candidates. One has a primary source." },
+      { "agent": "AUDIT", "mode": "vote", "text": "Approve. The price matches SOURCE-1.", "evidenceRefs": ["SOURCE-1"] }
+    ]
+  },
+  "generatedAt": "2026-08-04T03:18:01.000Z"
+}

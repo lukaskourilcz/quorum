@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "meeting-email/1",
+  "meetingRef": "meetings/2026-08-04-cu-edition",
+  "kind": "cu-edition",
+  "subject": "BoardlessAI — Edition room — Story: verified model price change",
+  "decisionLine": "Story: verified model price change",
+  "voteLine": "HERALD approve · STET approve · AUDIT approve · no veto",
+  "summary": "The room selected the only candidate backed by a primary source. Production may proceed inside the edition envelope.",
+  "bestExchange": {
+    "agent": "STET",
+    "text": "Say what changed. Drop the launch poetry."
+  },
+  "links": {
+    "room": "https://boardless.example/meetings/2026-08-04-cu-edition",
+    "edition": "https://caughtup.example/articles/2026-08-04-measured-model-price-cut"
+  },
+  "meetingCostUsd": 0.03
+}

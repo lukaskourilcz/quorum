@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "idea-ledger/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^idea-\\d{4}-\\d{2}-\\d{2}-[a-f0-9]{4,12}$"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "origin": {
+      "type": "object",
+      "properties": {
+        "agent": {
+          "type": "string",
+          "enum": [
+            "VIZE",
+            "FORGE",
+            "PULSE",
+            "AUDIT",
+            "SCOUT",
+            "SCRIBE",
+            "LENS",
+            "QUILL",
+            "RADAR",
+            "KEEPER",
+            "THREADS",
+            "INSTAGRAM",
+            "PEOPLE",
+            "LEDGER",
+            "HERALD",
+            "STET",
+            "SPARK",
+            "VAULT",
+            "FRAME",
+            "RELAY"
+          ]
+        },
+        "meetingRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "agent",
+        "meetingRef"
+      ],
+      "additionalProperties": {}
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "accepted",
+        "in_progress",
+        "shipped",
+        "deferred",
+        "vetoed",
+        "killed",
+        "superseded",
+        "revived"
+      ]
+    },
+    "statusHistory": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "proposed",
+              "accepted",
+              "in_progress",
+              "shipped",
+              "deferred",
+              "vetoed",
+              "killed",
+              "superseded",
+              "revived"
+            ]
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "meetingRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 280
+          }
+        },
+        "required": [
+          "status",
+          "at",
+          "meetingRef",
+          "reason"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "similarTo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^idea-\\d{4}-\\d{2}-\\d{2}-[a-f0-9]{4,12}$"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "duplicate_of",
+              "variant_of"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "score",
+          "verdict"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "deferred": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "until": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            }
+          },
+          "required": [
+            "until"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "condition": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "required": [
+            "condition"
+          ],
+          "additionalProperties": {}
+        }
+      ]
+    },
+    "revival": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "pattern": "^idea-\\d{4}-\\d{2}-\\d{2}-[a-f0-9]{4,12}$"
+        },
+        "evidenceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "from",
+        "evidenceRef"
+      ],
+      "additionalProperties": {}
+    },
+    "supersededBy": {
+      "type": "string",
+      "pattern": "^idea-\\d{4}-\\d{2}-\\d{2}-[a-f0-9]{4,12}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "fingerprint",
+    "title",
+    "summary",
+    "origin",
+    "status",
+    "statusHistory",
+    "similarTo"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/idea-ledger.schema.json"
+}

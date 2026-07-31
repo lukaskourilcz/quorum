@@ -17,6 +17,7 @@
   },
   "scripts": {
     "agents:validate": "pnpm --filter @boardlessai/orchestrator agents:validate",
+    "contracts:export": "pnpm --filter @boardlessai/orchestrator exec tsx src/contracts/export-json-schema.ts",
     "build": "pnpm -r build",
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
     "dev": "pnpm --filter @boardlessai/site dev",

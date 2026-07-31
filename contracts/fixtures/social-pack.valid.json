@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "social-pack/1",
+  "date": "2026-08-04",
+  "editionRef": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "instagram": {
+    "caption": "The model price changed. The source and the board's reasoning are linked.",
+    "hashtags": ["ai", "models", "pricing", "caughtup", "boardlessai"],
+    "frames": [
+      "/social/2026-08-04/ig-01.webp",
+      "/social/2026-08-04/ig-02.webp",
+      "/social/2026-08-04/ig-03.webp"
+    ]
+  },
+  "threads": {
+    "text": "The model price changed. Read the source and the board's reasoning.",
+    "hashtags": ["ai"],
+    "frames": [
+      "/social/2026-08-04/ig-01.webp",
+      "/social/2026-08-04/ig-02.webp",
+      "/social/2026-08-04/ig-03.webp"
+    ]
+  },
+  "quoteCard": {
+    "frame": "/social/2026-08-04/quote.webp",
+    "sourceTurnRef": "meetings/2026-08-04-cu-edition#turn-14"
+  },
+  "provenance": {
+    "composerVersion": "carousel-1",
+    "inputsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "altTexts": {
+    "/social/2026-08-04/ig-01.webp": "Title frame for the verified model price change",
+    "/social/2026-08-04/ig-02.webp": "Source and price comparison frame",
+    "/social/2026-08-04/ig-03.webp": "Caught Up conclusion frame",
+    "/social/2026-08-04/quote.webp": "A sourced exchange from the edition room"
+  }
+}

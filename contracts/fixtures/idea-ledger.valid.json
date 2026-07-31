@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "idea-ledger/1",
+  "id": "idea-2026-08-04-a3f9",
+  "fingerprint": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "title": "Source-linked edition receipts",
+  "summary": "Link each edition to the meeting that selected its lead story.",
+  "origin": {
+    "agent": "SPARK",
+    "meetingRef": "standups/2026-08-04-morning"
+  },
+  "status": "proposed",
+  "statusHistory": [
+    {
+      "status": "proposed",
+      "at": "2026-08-04T04:15:00.000Z",
+      "meetingRef": "standups/2026-08-04-morning",
+      "reason": "SPARK proposed the idea after the morning ledger check."
+    }
+  ],
+  "similarTo": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-04",
+  "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "status": "edition",
+  "article": {
+    "en": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "A measured model price cut",
+        "slug": "2026-08-04-measured-model-price-cut",
+        "date": "2026-08-04",
+        "lang": "en",
+        "dek": "The published price changed, and production economics changed with it.",
+        "tags": ["models", "pricing"],
+        "sources": [
+          {
+            "id": "source-1",
+            "source_id": "provider-news",
+            "url": "https://example.com/source",
+            "title": "Provider pricing update",
+            "classification": "primary"
+          }
+        ],
+        "illustration": {
+          "path": "/illustrations/2026-08-04.webp",
+          "prompt": "",
+          "alt": "Typographic chart showing a verified model price change"
+        },
+        "signal_strength": 72,
+        "why_it_matters": ["Teams can update their production budgets."],
+        "what_changed": ["The provider published a lower API price."],
+        "uncertainty": ["Volume discounts remain unavailable."],
+        "generation": {
+          "generated_at": "2026-08-04T03:55:00.000Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-opus-4-7"
+          },
+          "source_candidates": 42,
+          "cited_sources": 1,
+          "image_provider": "none",
+          "cost": {
+            "amount": 0.21,
+            "currency": "USD"
+          },
+          "package_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "translation_of": "2026-08-04-measured-model-price-cut"
+      },
+      "body": "## The change\n\nThe provider published a new price table."
+    },
+    "cs": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Změna ceny modelu",
+        "slug": "2026-08-04-measured-model-price-cut",
+        "date": "2026-08-04",
+        "lang": "cs",
+        "dek": "Zveřejněná cena se změnila a s ní i ekonomika provozu.",
+        "tags": ["models", "pricing"],
+        "sources": [
+          {
+            "id": "source-1",
+            "source_id": "provider-news",
+            "url": "https://example.com/source",
+            "title": "Provider pricing update",
+            "classification": "primary"
+          }
+        ],
+        "illustration": {
+          "path": "/illustrations/2026-08-04.webp",
+          "prompt": "",
+          "alt": "Typografický graf ověřené změny ceny modelu"
+        },
+        "signal_strength": 72,
+        "why_it_matters": ["Týmy mohou upravit provozní rozpočty."],
+        "what_changed": ["Poskytovatel zveřejnil nižší cenu API."],
+        "uncertainty": ["Množstevní slevy zůstávají nedostupné."],
+        "generation": {
+          "generated_at": "2026-08-04T03:55:00.000Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-opus-4-7"
+          },
+          "source_candidates": 42,
+          "cited_sources": 1,
+          "image_provider": "none",
+          "cost": {
+            "amount": 0.21,
+            "currency": "USD"
+          },
+          "package_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "translation_of": "2026-08-04-measured-model-price-cut"
+      },
+      "body": "## Změna\n\nPoskytovatel zveřejnil nový ceník."
+    }
+  },
+  "hero": {
+    "path": "public/illustrations/2026-08-04.webp",
+    "bytesBase64": "UklGRg==",
+    "alt": "Typographic chart showing a verified model price change",
+    "provenance": {
+      "method": "composed",
+      "composerVersion": "hero-1",
+      "inputsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "board": {
+    "meetingRef": "meetings/2026-08-04-cu-edition",
+    "roomUrl": "https://boardless.example/meetings/2026-08-04-cu-edition",
+    "whyThisStory": "The verified price change affects every team that runs these models."
+  },
+  "socialPackRef": "state/social/packs/2026-08-04.json",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-opus-4-7"
+    },
+    "costUsd": 0.21
+  },
+  "reason": "cu-edition decision meetings/2026-08-04-cu-edition",
+  "futureOptionalField": "accepted within edition-package/1"
+}

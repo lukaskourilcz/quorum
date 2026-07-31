@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804-cu-edition",
+  "date": "2026-08-04",
+  "phase": "cu-edition",
+  "kind": "cu-edition",
+  "fixture": false,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Poison fixture.",
+  "participantReasons": [],
+  "ledger": { "estimatedCycleUsd": 0.06, "actualCycleUsd": null, "monthAllInUsd": 0, "monthCapUsd": 20 },
+  "decision": { "outcome": "hold", "summary": "Reject unknown agent.", "evidenceRefs": [] },
+  "proposals": [],
+  "voteMatrix": [],
+  "tasks": [],
+  "growthPlan": "No plan.",
+  "eveningOutcome": null,
+  "roomTranscript": {
+    "openedAt": "2026-08-04T03:00:00.000Z",
+    "closedAt": "2026-08-04T03:01:00.000Z",
+    "gavel": "HERALD",
+    "setting": "Poison fixture.",
+    "turns": [{ "agent": "UNKNOWN", "mode": "statement", "text": "This agent cannot enter the public record." }]
+  },
+  "generatedAt": "2026-08-04T03:01:01.000Z"
+}

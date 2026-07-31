@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "calendar/1",
+  "weekOf": "2026-08-03",
+  "slots": [
+    {
+      "at": "2026-08-04T05:00:00+02:00",
+      "tz": "UTC",
+      "kind": "cu-edition",
+      "status": "held"
+    }
+  ]
+}

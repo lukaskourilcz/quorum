@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "meeting-email/1"
+    },
+    "meetingRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "venture",
+        "cu-edition",
+        "cu-product"
+      ]
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "decisionLine": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "voteLine": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 900
+    },
+    "bestExchange": {
+      "type": "object",
+      "properties": {
+        "agent": {
+          "type": "string",
+          "enum": [
+            "VIZE",
+            "FORGE",
+            "PULSE",
+            "AUDIT",
+            "SCOUT",
+            "SCRIBE",
+            "LENS",
+            "QUILL",
+            "RADAR",
+            "KEEPER",
+            "THREADS",
+            "INSTAGRAM",
+            "PEOPLE",
+            "LEDGER",
+            "HERALD",
+            "STET",
+            "SPARK",
+            "VAULT",
+            "FRAME",
+            "RELAY"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1600
+        }
+      },
+      "required": [
+        "agent",
+        "text"
+      ],
+      "additionalProperties": {}
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        "edition": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        }
+      },
+      "required": [
+        "room"
+      ],
+      "additionalProperties": {}
+    },
+    "meetingCostUsd": {
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "meetingRef",
+    "kind",
+    "subject",
+    "decisionLine",
+    "voteLine",
+    "summary",
+    "links",
+    "meetingCostUsd"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/meeting-email.schema.json"
+}

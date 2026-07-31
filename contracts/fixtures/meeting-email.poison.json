@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "meeting-email/1",
+  "meetingRef": "meetings/2026-08-04-cu-edition",
+  "kind": "cu-edition",
+  "subject": "Invalid cost",
+  "decisionLine": "Reject this payload.",
+  "voteLine": "No vote.",
+  "summary": "The cost cannot be negative.",
+  "links": { "room": "https://boardless.example/meetings/2026-08-04-cu-edition" },
+  "meetingCostUsd": -0.01
+}

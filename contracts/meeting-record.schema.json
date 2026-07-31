@@ -1,0 +1,1233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "meeting-record/2"
+        },
+        "cycleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "phase": {
+          "type": "string",
+          "enum": [
+            "founding",
+            "am",
+            "pm",
+            "morning",
+            "afternoon",
+            "night",
+            "cu-edition",
+            "cu-product"
+          ]
+        },
+        "episode": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "shift": {
+                  "type": "string",
+                  "enum": [
+                    "morning",
+                    "afternoon",
+                    "night"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "hours": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "nextShift": {
+                  "type": "string",
+                  "enum": [
+                    "morning",
+                    "afternoon",
+                    "night"
+                  ]
+                },
+                "handoff": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "id",
+                "shift",
+                "title",
+                "hours",
+                "nextShift",
+                "handoff"
+              ],
+              "additionalProperties": {}
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fixture": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "INSUFFICIENT_EVIDENCE",
+            "NO_ACTION",
+            "PLAN",
+            "PAUSED",
+            "FAILED",
+            "HELD",
+            "NO_EDITION",
+            "NEEDS_RECONCILIATION"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "DISCOVERY",
+            "VALIDATION",
+            "AUDIENCE",
+            "MONETIZATION",
+            "OPTIMIZATION"
+          ]
+        },
+        "operatingBrief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "participantReasons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "agent": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "participated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "agent",
+              "reason",
+              "participated"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "ledger": {
+          "type": "object",
+          "properties": {
+            "estimatedCycleUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "actualCycleUsd": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "monthAllInUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "monthCapUsd": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "estimatedCycleUsd",
+            "actualCycleUsd",
+            "monthAllInUsd",
+            "monthCapUsd"
+          ],
+          "additionalProperties": {}
+        },
+        "decision": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "type": "string",
+              "minLength": 1
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            }
+          },
+          "required": [
+            "outcome",
+            "summary",
+            "evidenceRefs"
+          ],
+          "additionalProperties": {}
+        },
+        "proposals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "agent": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              }
+            },
+            "required": [
+              "agent",
+              "summary",
+              "evidenceRefs"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "voteMatrix": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "voter": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "firstChoice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "veto": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "voter",
+              "firstChoice",
+              "veto"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "owner": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "planned",
+                  "done",
+                  "blocked",
+                  "skipped"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "owner",
+              "summary",
+              "status"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "growthPlan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eveningOutcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "caughtUpIdeaRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ideaVerdicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ideaId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "accept",
+                  "veto",
+                  "defer",
+                  "supersede"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 280
+              }
+            },
+            "required": [
+              "ideaId",
+              "verdict",
+              "reason"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "editionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "kind": {
+          "type": "string",
+          "const": "venture"
+        },
+        "roomTranscript": {
+          "type": "object",
+          "properties": {
+            "openedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            "closedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            "gavel": {
+              "type": "string",
+              "enum": [
+                "VIZE",
+                "FORGE",
+                "PULSE",
+                "AUDIT",
+                "SCOUT",
+                "SCRIBE",
+                "LENS",
+                "QUILL",
+                "RADAR",
+                "KEEPER",
+                "THREADS",
+                "INSTAGRAM",
+                "PEOPLE",
+                "LEDGER",
+                "HERALD",
+                "STET",
+                "SPARK",
+                "VAULT",
+                "FRAME",
+                "RELAY"
+              ]
+            },
+            "setting": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 800
+            },
+            "turns": {
+              "minItems": 1,
+              "maxItems": 24,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "agent": {
+                    "type": "string",
+                    "enum": [
+                      "VIZE",
+                      "FORGE",
+                      "PULSE",
+                      "AUDIT",
+                      "SCOUT",
+                      "SCRIBE",
+                      "LENS",
+                      "QUILL",
+                      "RADAR",
+                      "KEEPER",
+                      "THREADS",
+                      "INSTAGRAM",
+                      "PEOPLE",
+                      "LEDGER",
+                      "HERALD",
+                      "STET",
+                      "SPARK",
+                      "VAULT",
+                      "FRAME",
+                      "RELAY"
+                    ]
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "gavel",
+                      "statement",
+                      "response",
+                      "reads-ledger",
+                      "raises-concern",
+                      "veto",
+                      "vote",
+                      "close"
+                    ]
+                  },
+                  "addressedTo": {
+                    "type": "string",
+                    "enum": [
+                      "VIZE",
+                      "FORGE",
+                      "PULSE",
+                      "AUDIT",
+                      "SCOUT",
+                      "SCRIBE",
+                      "LENS",
+                      "QUILL",
+                      "RADAR",
+                      "KEEPER",
+                      "THREADS",
+                      "INSTAGRAM",
+                      "PEOPLE",
+                      "LEDGER",
+                      "HERALD",
+                      "STET",
+                      "SPARK",
+                      "VAULT",
+                      "FRAME",
+                      "RELAY"
+                    ]
+                  },
+                  "sentAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 800
+                  },
+                  "evidenceRefs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160
+                    }
+                  }
+                },
+                "required": [
+                  "agent",
+                  "mode",
+                  "text"
+                ],
+                "additionalProperties": {}
+              }
+            }
+          },
+          "required": [
+            "openedAt",
+            "closedAt",
+            "gavel",
+            "setting",
+            "turns"
+          ],
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "cycleId",
+        "date",
+        "phase",
+        "fixture",
+        "status",
+        "stage",
+        "operatingBrief",
+        "participantReasons",
+        "ledger",
+        "decision",
+        "proposals",
+        "voteMatrix",
+        "tasks",
+        "growthPlan",
+        "eveningOutcome",
+        "generatedAt",
+        "kind",
+        "roomTranscript"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "meeting-record/2"
+        },
+        "cycleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "phase": {
+          "type": "string",
+          "enum": [
+            "founding",
+            "am",
+            "pm",
+            "morning",
+            "afternoon",
+            "night",
+            "cu-edition",
+            "cu-product"
+          ]
+        },
+        "episode": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "shift": {
+                  "type": "string",
+                  "enum": [
+                    "morning",
+                    "afternoon",
+                    "night"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "hours": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "nextShift": {
+                  "type": "string",
+                  "enum": [
+                    "morning",
+                    "afternoon",
+                    "night"
+                  ]
+                },
+                "handoff": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "id",
+                "shift",
+                "title",
+                "hours",
+                "nextShift",
+                "handoff"
+              ],
+              "additionalProperties": {}
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fixture": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "INSUFFICIENT_EVIDENCE",
+            "NO_ACTION",
+            "PLAN",
+            "PAUSED",
+            "FAILED",
+            "HELD",
+            "NO_EDITION",
+            "NEEDS_RECONCILIATION"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "DISCOVERY",
+            "VALIDATION",
+            "AUDIENCE",
+            "MONETIZATION",
+            "OPTIMIZATION"
+          ]
+        },
+        "operatingBrief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "participantReasons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "agent": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "participated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "agent",
+              "reason",
+              "participated"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "ledger": {
+          "type": "object",
+          "properties": {
+            "estimatedCycleUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "actualCycleUsd": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "monthAllInUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "monthCapUsd": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "estimatedCycleUsd",
+            "actualCycleUsd",
+            "monthAllInUsd",
+            "monthCapUsd"
+          ],
+          "additionalProperties": {}
+        },
+        "decision": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "type": "string",
+              "minLength": 1
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            }
+          },
+          "required": [
+            "outcome",
+            "summary",
+            "evidenceRefs"
+          ],
+          "additionalProperties": {}
+        },
+        "proposals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "agent": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              }
+            },
+            "required": [
+              "agent",
+              "summary",
+              "evidenceRefs"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "voteMatrix": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "voter": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "firstChoice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "veto": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "voter",
+              "firstChoice",
+              "veto"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "owner": {
+                "type": "string",
+                "enum": [
+                  "VIZE",
+                  "FORGE",
+                  "PULSE",
+                  "AUDIT",
+                  "SCOUT",
+                  "SCRIBE",
+                  "LENS",
+                  "QUILL",
+                  "RADAR",
+                  "KEEPER",
+                  "THREADS",
+                  "INSTAGRAM",
+                  "PEOPLE",
+                  "LEDGER",
+                  "HERALD",
+                  "STET",
+                  "SPARK",
+                  "VAULT",
+                  "FRAME",
+                  "RELAY"
+                ]
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "planned",
+                  "done",
+                  "blocked",
+                  "skipped"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "owner",
+              "summary",
+              "status"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "growthPlan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eveningOutcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "caughtUpIdeaRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ideaVerdicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ideaId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "accept",
+                  "veto",
+                  "defer",
+                  "supersede"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 280
+              }
+            },
+            "required": [
+              "ideaId",
+              "verdict",
+              "reason"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "editionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "cu-edition",
+            "cu-product"
+          ]
+        },
+        "roomTranscript": {
+          "type": "object",
+          "properties": {
+            "openedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            "closedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            "gavel": {
+              "type": "string",
+              "enum": [
+                "VIZE",
+                "FORGE",
+                "PULSE",
+                "AUDIT",
+                "SCOUT",
+                "SCRIBE",
+                "LENS",
+                "QUILL",
+                "RADAR",
+                "KEEPER",
+                "THREADS",
+                "INSTAGRAM",
+                "PEOPLE",
+                "LEDGER",
+                "HERALD",
+                "STET",
+                "SPARK",
+                "VAULT",
+                "FRAME",
+                "RELAY"
+              ]
+            },
+            "setting": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 800
+            },
+            "turns": {
+              "minItems": 1,
+              "maxItems": 36,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "agent": {
+                    "type": "string",
+                    "enum": [
+                      "VIZE",
+                      "FORGE",
+                      "PULSE",
+                      "AUDIT",
+                      "SCOUT",
+                      "SCRIBE",
+                      "LENS",
+                      "QUILL",
+                      "RADAR",
+                      "KEEPER",
+                      "THREADS",
+                      "INSTAGRAM",
+                      "PEOPLE",
+                      "LEDGER",
+                      "HERALD",
+                      "STET",
+                      "SPARK",
+                      "VAULT",
+                      "FRAME",
+                      "RELAY"
+                    ]
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "gavel",
+                      "statement",
+                      "response",
+                      "reads-ledger",
+                      "raises-concern",
+                      "veto",
+                      "vote",
+                      "close"
+                    ]
+                  },
+                  "addressedTo": {
+                    "type": "string",
+                    "enum": [
+                      "VIZE",
+                      "FORGE",
+                      "PULSE",
+                      "AUDIT",
+                      "SCOUT",
+                      "SCRIBE",
+                      "LENS",
+                      "QUILL",
+                      "RADAR",
+                      "KEEPER",
+                      "THREADS",
+                      "INSTAGRAM",
+                      "PEOPLE",
+                      "LEDGER",
+                      "HERALD",
+                      "STET",
+                      "SPARK",
+                      "VAULT",
+                      "FRAME",
+                      "RELAY"
+                    ]
+                  },
+                  "sentAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 800
+                  },
+                  "evidenceRefs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160
+                    }
+                  }
+                },
+                "required": [
+                  "agent",
+                  "mode",
+                  "text"
+                ],
+                "additionalProperties": {}
+              }
+            }
+          },
+          "required": [
+            "openedAt",
+            "closedAt",
+            "gavel",
+            "setting",
+            "turns"
+          ],
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "cycleId",
+        "date",
+        "phase",
+        "fixture",
+        "status",
+        "stage",
+        "operatingBrief",
+        "participantReasons",
+        "ledger",
+        "decision",
+        "proposals",
+        "voteMatrix",
+        "tasks",
+        "growthPlan",
+        "eveningOutcome",
+        "generatedAt",
+        "kind",
+        "roomTranscript"
+      ],
+      "additionalProperties": {}
+    }
+  ],
+  "$id": "https://boardless.ai/contracts/meeting-record.schema.json"
+}

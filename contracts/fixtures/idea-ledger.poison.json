@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "idea-ledger/1",
+  "id": "idea-2026-08-04-a3f9",
+  "fingerprint": "sha256:not-a-hash",
+  "title": "Broken fingerprint",
+  "summary": "This entry must fail before it reaches the ledger.",
+  "origin": { "agent": "SPARK", "meetingRef": "standups/2026-08-04-morning" },
+  "status": "proposed",
+  "statusHistory": [],
+  "similarTo": []
+}
