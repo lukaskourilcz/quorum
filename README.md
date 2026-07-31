@@ -256,8 +256,11 @@ Prompts, call references, hashes, alt text and visual QA are recorded in
 
 `/admin` is dynamic, `noindex` and protected in the Next proxy with constant-time
 credential comparison, bounded failure tracking and security headers. It reads
-state through a server-only allowlist. Public routes never share the admin
-reader.
+state through a server-only allowlist. Its first section is the Caught Up social
+archive: both locale packs, carousel frames, copy buttons, destinations and
+draft queue status. The canonical data remains in `state/social/` and
+`site/public/social/`; the page cannot edit or publish it. Public routes never
+share the admin reader.
 
 The release gate rejects:
 
@@ -273,8 +276,9 @@ Deployed on Vercel as project `quorum-site`
 (`https://quorum-site-chi.vercel.app`), Next.js framework, auto-deploy from
 `main`. GitHub secrets `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` and
 `PUBLIC_SITE_URL` are configured for CI. Vercel environment variables
-(`PUBLIC_SITE_URL`, `ADMIN_USER`, `ADMIN_PASSWORD`) are set in the Vercel
-dashboard rather than the repo. The `Production health` workflow stays off
+belong in the Vercel dashboard rather than the repo. `PUBLIC_SITE_URL` is set;
+`ADMIN_USER` and `ADMIN_PASSWORD` still need to be added because production
+`/admin` returned the fail-closed `503` response on 2026-07-31. The `Production health` workflow stays off
 (`HEALTH_CHECK_ENABLED=false`) while the operator has not opted in to
 external polling.
 

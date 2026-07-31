@@ -474,7 +474,7 @@ async function runCaughtUpLiveEditionCycle(
       try {
         const slug = produced.package.article.en.frontmatter.slug;
         const destinations = {
-          en: new URL(`/en/articles/${slug}`, caughtUpBaseUrl).toString(),
+          en: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString(),
           cs: new URL(`/cs/articles/${slug}`, caughtUpBaseUrl).toString()
         };
         editionUrl = destinations.en;

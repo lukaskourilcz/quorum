@@ -21,7 +21,7 @@ function payload() {
   return buildMeetingEmail({
     record: MeetingRecordSchema.parse(meetingFixture),
     boardlessBaseUrl: "https://boardless.example",
-    editionUrl: "https://caught-up.example/en/articles/a-measured-model-price-cut"
+    editionUrl: "https://caught-up.example/articles/a-measured-model-price-cut"
   });
 }
 

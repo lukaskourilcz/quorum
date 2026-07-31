@@ -37,7 +37,7 @@ function editionRecord(input: {
   estimatedCycleUsd: number;
 }): MeetingRecord {
   const openedAt = input.now.toISOString();
-  const closedAt = new Date(input.now.getTime() + 4_000).toISOString();
+  const closedAt = new Date(input.now.getTime() + 5_000).toISOString();
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.cycleId,
@@ -65,7 +65,7 @@ function editionRecord(input: {
       summary: "Hold publication until a live digest clears the source and quality gates.",
       evidenceRefs: []
     }],
-    voteMatrix: ["HERALD", "STET", "SPARK", "AUDIT"].map((voter) => ({
+    voteMatrix: ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"].map((voter) => ({
       voter,
       firstChoice: "NO_EDITION",
       veto: false
@@ -99,9 +99,15 @@ function editionRecord(input: {
           text: "No draft exists, so the copy desk has nothing to clear."
         },
         {
+          agent: "HACEK",
+          mode: "raises-concern",
+          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
+          text: "No Czech version exists, so the Czech copy desk has nothing to clear."
+        },
+        {
           agent: "AUDIT",
           mode: "vote",
-          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
+          sentAt: new Date(input.now.getTime() + 4_000).toISOString(),
           text: "Approve NO_EDITION. The source instruction changed no vote."
         },
         {
@@ -270,7 +276,7 @@ export async function createLiveEditionMeeting(input: {
 }): Promise<MeetingRecord> {
   const date = pragueClockParts(input.now).date;
   const openedAt = input.now.toISOString();
-  const closedAt = new Date(input.now.getTime() + 4_000).toISOString();
+  const closedAt = new Date(input.now.getTime() + 5_000).toISOString();
   const edition = input.editionPackage.status === "edition";
   const actualCycleUsd = input.editionPackage.generation.costUsd ?? 0;
   const outcome = edition ? "EDITION" : "NO_EDITION";
@@ -307,7 +313,7 @@ export async function createLiveEditionMeeting(input: {
         : "Hold publication because the live run did not clear every release gate.",
       evidenceRefs
     }],
-    voteMatrix: ["HERALD", "STET", "SPARK", "AUDIT"].map((voter) => ({
+    voteMatrix: ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"].map((voter) => ({
       voter,
       firstChoice: outcome,
       veto: false
@@ -340,13 +346,21 @@ export async function createLiveEditionMeeting(input: {
           mode: "raises-concern",
           sentAt: new Date(input.now.getTime() + 1_000).toISOString(),
           text: edition
-            ? "The bilingual copy cleared the register and source-link checks."
-            : "The run did not clear every publication gate, so no copy is released."
+            ? "The English copy cleared its register and source-link checks."
+            : "The English draft did not clear every publication gate, so no copy is released."
+        },
+        {
+          agent: "HACEK",
+          mode: "raises-concern",
+          sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
+          text: edition
+            ? "The Czech version cleared register, natural phrasing and parity checks."
+            : "The Czech version did not clear every publication gate, so no translation is released."
         },
         {
           agent: "AUDIT",
           mode: "vote",
-          sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
+          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
           text: edition
             ? "Approve the validated package for the bounded delivery path."
             : "Approve NO_EDITION and publish the recorded reason only."
@@ -354,7 +368,7 @@ export async function createLiveEditionMeeting(input: {
         {
           agent: "SPARK",
           mode: "statement",
-          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
+          sentAt: new Date(input.now.getTime() + 4_000).toISOString(),
           text: edition
             ? "Distribution remains draft-locked until RELAY confirms delivery."
             : "There is no distribution brief without an edition."

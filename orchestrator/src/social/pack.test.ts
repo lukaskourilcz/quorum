@@ -26,7 +26,7 @@ describe("Caught Up social pack composer", () => {
       editionPackage: EditionPackageSchema.parse(editionFixture),
       meeting: MeetingRecordSchema.parse(meetingFixture),
       destinations: {
-        en: "https://caught-up.example/en/articles/2026-08-04-measured-model-price-cut",
+        en: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
         cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
       },
       repoRoot: root,
@@ -41,7 +41,8 @@ describe("Caught Up social pack composer", () => {
     expect(pack.byLocale.en.instagram.frames).toHaveLength(4);
     expect(pack.byLocale.cs.instagram.frames).toHaveLength(4);
     expect(pack.byLocale.en.instagram.frames).not.toEqual(pack.byLocale.cs.instagram.frames);
-    expect(pack.byLocale.en.destination).toContain("/en/articles/");
+    expect(pack.byLocale.en.destination).toContain("/articles/");
+    expect(pack.byLocale.en.destination).not.toContain("/en/articles/");
     expect(pack.byLocale.cs.destination).toContain("/cs/articles/");
     expect(Object.keys(pack.altTexts)).toHaveLength(9);
     expect(pack.instagram.caption).not.toBe(pack.threads.text);
@@ -75,7 +76,7 @@ describe("Caught Up social pack composer", () => {
       editionPackage: EditionPackageSchema.parse(editionFixture),
       meeting: MeetingRecordSchema.parse(meetingFixture),
       destinations: {
-        en: "https://caught-up.example/en/articles/2026-08-04-measured-model-price-cut",
+        en: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
         cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
       },
       repoRoot: replayRoot,
@@ -107,7 +108,7 @@ describe("Caught Up social pack composer", () => {
       editionPackage: EditionPackageSchema.parse(noEdition),
       meeting: MeetingRecordSchema.parse(meetingFixture),
       destinations: {
-        en: "https://caught-up.example/en/articles/unavailable",
+        en: "https://caught-up.example/articles/unavailable",
         cs: "https://caught-up.example/cs/articles/unavailable"
       },
       repoRoot: root,
@@ -122,7 +123,7 @@ describe("Caught Up social pack composer", () => {
       editionPackage: EditionPackageSchema.parse(editionFixture),
       meeting: MeetingRecordSchema.parse(meetingFixture),
       destinations: {
-        en: "http://caught-up.example/en/articles/unsafe",
+        en: "http://caught-up.example/articles/unsafe",
         cs: "https://caught-up.example/cs/articles/unsafe"
       },
       repoRoot: root,

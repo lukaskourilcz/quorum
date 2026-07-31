@@ -1,224 +1,53 @@
-# Co je potřeba udělat ze strany vlastníka
+# NEEDED — manual owner actions for BoardlessAI
 
-BoardlessAI je od 2026-08-01 v režimu `operating (pre-revenue)` a Caught Up je
-Venture 001 z rozhodnutí vlastníka. Zakládací gate zůstává nesplněný. Níže jsou
-blokátory integrace a zachovaný provozní checklist.
+BoardlessAI is operating pre-revenue and Caught Up is Venture 001. This file
+contains only work that requires the owner’s accounts, secrets, legal judgment
+or explicit go-live decision. Vercel Pro coverage is already confirmed.
 
-> Nikdy nevkládejte tokeny, hesla nebo API klíče do repozitáře. Patří pouze do
-> GitHub Secrets nebo do secret store zvoleného hostingu.
+> Never paste passwords, private keys or API keys into Git, an issue, or chat.
+> Store them in the relevant provider and GitHub/Vercel secret fields.
 
-## Caught Up integration
+## Required before the first live Caught Up edition
 
-- [ ] **Create GitHub App "boardlessai-delivery"** — install on `aifirst` only,
-  `contents: write`; store `DELIVERY_APP_ID` + `DELIVERY_APP_PRIVATE_KEY` in quorum
-  Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
-- [ ] **Resend account + domain** — the official free tier was verified on
-  2026-07-31 at 3,000 emails/month and 100/day, covering one recipient at the
-  expected ~150/month. Verify the sending domain and its SPF/DKIM records; create
-  a sending-only key in the GitHub secret `RESEND_API_KEY`; store recipients in
-  the secret `MEETING_EMAIL_TO`; then set repository variables
-  `MEETING_EMAIL_MODE=resend`, `MEETING_EMAIL_FROM=meetings@<domain>`,
-  `RESEND_FREE_TIER_MONTHLY=3000`, and `RESEND_FREE_TIER_DAILY=100`.
-  Source: <https://resend.com/pricing>. [imp:4] [owner:me] [time:45m]
-  [kind:setup]
-- [ ] **Approve budget changes** — `MONTHLY_BUDGET_USD` 12→15, `DAILY_BUDGET_USD`
-  0.40→0.70, two new envelopes; countersign in the adoption decision record. [imp:5]
-  [owner:me] [time:5m] [kind:decision]
-- [ ] **Migrate source API keys to quorum secrets** — GUARDIAN, NYTIMES, GNEWS,
-  STACKEXCHANGE, FIRECRAWL/JINA (or drop those sources; they self-skip). [imp:3]
-  [owner:me] [time:20m] [kind:setup]
-- [ ] **Supply the Caught Up production domain** — set the quorum repository
-  variable `CAUGHT_UP_SITE_URL` to its canonical HTTPS base URL and add its host
-  to `config/network-allowlist.json` for RELAY's live check, edition email links,
-  and evidence-linked social drafts. [imp:4] [owner:me] [time:5m] [kind:setup]
-- [ ] **Sign the brand-clearance revisit** — acknowledge BoardlessAI collision risk
-  now that scope is commercial-adjacent; confirm the rename-or-clear gate before any
-  paid sponsorship. [imp:4] [owner:me] [time:20m] [kind:legal]
-- [ ] **Run a Caught Up name check** — the product brand now carries the public
-  identity; verify no blocking collision. [imp:3] [owner:me] [time:30m] [kind:legal]
-- [x] **Confirm compliant hosting before revenue** — owner confirmed existing
-  Vercel Pro coverage on 2026-07-31. Reopen the cap decision if either project
-  leaves Pro or invoice allocation changes. [imp:4] [owner:me] [time:15m]
-  [kind:decision]
-- [x] **No billable avatar spend required** — six portraits and two QA repairs
-  used the built-in session image tool. Actual project API cost remains unknown,
-  not fabricated; the API-equivalent estimate is $1.70172 within the specified
-  $1.80 envelope. [imp:2] [owner:me] [time:5m] [kind:decision]
-- [ ] **Approve go-live of the two new cron phases** — flip after phase 9 review.
-  Set the quorum repository variable `CAUGHT_UP_LIVE_ENABLED=true` only after the
-  delivery App secrets are present; the workflow otherwise fails closed to dry mode.
-  [imp:5] [owner:me] [time:10m] [kind:deploy]
-- [ ] **Review first three delivered editions + first social packs in the queue** —
-  quality gate before considering any channel unlock, which stays a separate future
-  HUMAN_APPROVAL. [imp:4] [owner:me] [time:60m] [kind:content]
-- [ ] **Verify assumed external facts** — Resend's 3,000/month and 100/day free
-  tier was verified on 2026-07-31. ⚠ VERIFY model prices vs `prices.ts`, Threads
-  carousel API limits, Instagram carousel limits, and gpt-image-2 per-image cost
-  ≤ $0.30. [imp:3] [owner:me] [time:30m] [kind:setup]
+- [ ] **Configure the protected BoardlessAI admin in Vercel** — add a unique `ADMIN_USER` and long `ADMIN_PASSWORD` to the `quorum-site` Production environment, then redeploy. Production `/admin` returned `503` on 2026-07-31, which correctly means credentials are missing; after setup it must return `401` without credentials and `200` after browser login. [imp:5] [owner:me] [time:15m] [kind:setup]
+- [ ] **Install the `boardlessai-delivery` GitHub App on `lukaskourilcz/aifirst` only** — grant repository contents read/write and no broader permission; add its App ID and private key to Quorum Actions secrets as `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. Neither secret exists yet. [imp:5] [owner:me] [time:30m] [kind:setup]
+- [ ] **Set the Caught Up production URL in Quorum** — add the repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app`. It is currently missing and social-pack composition otherwise skips safely. [imp:5] [owner:me] [time:5m] [kind:setup]
+- [ ] **Countersign the adopted API envelopes** — approve the committed caps of `$15` monthly API, `$0.70` daily API, `$0.08` per Caught Up meeting and `$0.35` per edition in `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
+- [ ] **Rotate the OpenAI and Anthropic keys that were pasted into chat** — replace them in Quorum GitHub Actions secrets and in any local secret store; then set provider-side billing limits below the `$20` all-in project cap. [imp:5] [owner:me] [time:20m] [kind:setup]
+- [ ] **Choose and migrate optional source credentials** — move Guardian, NYTimes, GNews, StackExchange and Firecrawl/Jina keys to Quorum Actions secrets only for sources you want active; unconfigured sources self-skip. [imp:3] [owner:me] [time:20m] [kind:setup]
+- [ ] **Enable live Caught Up phases only after the items above pass** — set the Quorum repository variable `CAUGHT_UP_LIVE_ENABLED=true`, dispatch `cu-edition` once, and leave `SOCIAL_KILL_SWITCH=true`. The workflow currently forces Caught Up phases to dry mode. [imp:5] [owner:me] [time:10m] [kind:deploy]
+- [ ] **Review the first three editions and social packs** — check both article languages, sources, meeting record, delivery receipt and Vercel deployment; then inspect the English/Czech Instagram carousels and Threads copy in `/admin`. [imp:5] [owner:me] [time:60m] [kind:content]
 
-## P0 — blokátory před veřejným spuštěním
+## Optional meeting email
 
-Vyřešeno 2026-07-28 rozhodnutím vlastníka o **hobby / non-commercial** módu
-(viz `state/BUSINESS.md` → Project mode). Původní úkoly ponechány jako
-historický záznam:
+- [ ] **Configure Resend only if meeting emails are useful** — verify a sending domain and SPF/DKIM, create a sending-only key, then set `RESEND_API_KEY` and `MEETING_EMAIL_TO` as secrets plus `MEETING_EMAIL_MODE=resend`, `MEETING_EMAIL_FROM`, `RESEND_FREE_TIER_MONTHLY=3000` and `RESEND_FREE_TIER_DAILY=100` as variables. Without this, meetings remain stored and email uses the safe log sink. [imp:2] [owner:me] [time:45m] [kind:setup]
 
-- [x] **Vyřešit název BoardlessAI.** Vlastník vědomě přijal kolizní riziko `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-  pod hobby módem. Podklady: `state/brand-clearance/2026-07-28.md`.
-- [x] **Rozhodnout o licenci.** MIT — přidán `LICENSE` soubor, `package.json` `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  aktualizován.
-- [x] **Určit provozovatele projektu.** Fyzická osoba — Lukas Kouril. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [x] **Schválit skutečný měsíční rozpočet.** $20/měsíc přijat. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [x] **Určit člověka pro incidenty a schvalování.** Lukas Kouril `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  (single-operator setup).
+## Social publishing
 
-## Projekt je od 27. 7. 2026 veřejně vidět v portfoliu
+No Meta setup is required to store or copy social content. The protected admin
+reads the canonical Git-backed packs and carousel frames. Keep the global social
+kill switch on while reviewing the first three packs.
 
-BoardlessAI je nově uvedený mezi projekty na lukaskouril.dev, včetně animovaného
-náhledu nahraného ze spuštěného webu. Portfolio popisuje stav pravdivě:
-web běží na označených historických datech a Caught Up je owner-adopted Venture
-001 ve fázi VALIDATION.
+- [ ] **Decide whether to post manually or fund carousel publishing support** — current drafts contain four-frame Instagram carousels, while the guarded Meta connector accepts only one Instagram image and text-only Threads posts. Do not enable autopublish until a reviewed connector change supports the intended carousel transaction. [imp:4] [owner:me] [time:15m] [kind:decision]
+- [ ] **Configure Meta only after choosing autopublish** — secure the Instagram/Threads business accounts with 2FA, approve current OAuth scopes and platform terms, then add the Graph version, account IDs and access tokens. First run `validate_only=true`; enable one channel at a time through a separate human approval. [imp:3] [owner:me] [time:90m] [kind:setup]
 
-- [x] **Rozhodnout o názvu dřív, než ho portfolio ponese dát dál.** Riziko `[imp:4]` `[owner:me]` `[time:1h]` `[kind:legal]`
-  vědomě přijato pod hobby módem 2026-07-28. Portfolio karta může nést `BoardlessAI`.
-- [ ] **Dodat veřejnou URL webu, pokud má karta v portfoliu odkazovat.** Repozitář žádnou nasazenou adresu neobsahuje (`PUBLIC_SITE_URL` je jen proměnná prostředí), takže položka v portfoliu je zatím bez odkazu. `[imp:2]` `[owner:me]` `[time:15m]` `[kind:decision]`
-- [ ] **Po každém výrazném redesignu webu nahrát náhled znovu.** Postup je v `.claude/skills/preview-video/SKILL.md`; hotové soubory patří do `nxt-portfolio/public/previews/quorum/`. `[imp:2]` `[owner:ai]` `[time:30m]` `[kind:content]`
+## Before revenue or personal-data collection
 
-## P1 — GitHub a bezpečnost repozitáře
+- [ ] **Clear or rename the BoardlessAI studio name before paid sponsorship** — the documented collision risk remains open. Also run a product-name check for Caught Up before relying on it commercially. [imp:5] [owner:me] [time:60m] [kind:legal]
+- [ ] **Complete privacy and operator disclosures** — have the privacy text reviewed, add real operator/contact details, define retention and data-subject handling, and sign DPAs before collecting analytics, email addresses or other personal data. [imp:4] [owner:me] [time:2h] [kind:legal]
+- [ ] **Prepare commercial terms before taking payment** — approve sponsor disclosures, terms, refunds, invoicing and tax treatment; choose analytics and payment tooling only after the relevant experiment is validated. [imp:4] [owner:me] [time:2h] [kind:legal]
 
-- [-] Branch protection ruleset pro `main` — vyžaduje GitHub Pro na privátním `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  repu; pro hobby SKIP.
-- [x] Dependabot alerts a automated security fixes zapnuty 2026-07-28. Secret `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  scanning / push protection nedostupné bez GHAS.
-- [x] Actions permissions omezeny (`read` + zákaz PR approve). Ruční kontrola `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  Collaborators a Apps zbývá.
-- [x] Repository variables nastaveny: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  `AUTONOMY_KILL_SWITCH=false` po schválení tří směn 2026-07-30;
-  `SOCIAL_KILL_SWITCH=true`.
-- [x] `HEALTH_CHECK_ENABLED=false` nastaveno 2026-07-28. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+## Reliability and optional reporting
 
-## P1 — AI poskytovatelé
+- [ ] **Enable production health monitoring when wanted** — store `PUBLIC_SITE_URL=https://quorum-site-chi.vercel.app` as a GitHub secret, add an independent uptime monitor and alert contact, test rollback, then set `HEALTH_CHECK_ENABLED=true`. [imp:3] [owner:me] [time:60m] [kind:deploy]
+- [ ] **Enable Vercel Web Analytics for `quorum-site` if wanted** — the reader already avoids adding another analytics SDK; complete privacy review before using visitor data. [imp:2] [owner:me] [time:15m] [kind:setup]
+- [ ] **Connect scheduled runs to OwnDashboard only if its receiver exists** — add `OWNDASHBOARD_CRON_URL` and `OWNDASHBOARD_CRON_TOKEN`; do not fabricate a receiver or status. [imp:1] [owner:me] [time:10m] [kind:setup]
 
-- [ ] Nastavit billing limity u OpenAI a Anthropic (dashboardy). `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [x] GitHub secrets `OPENAI_API_KEY` a `ANTHROPIC_API_KEY` vloženy 2026-07-28. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] **Rotovat oba klíče** — pastnuty do transkriptu, leak surface. `[imp:5]` `[owner:me]` `[time:15m]` `[kind:setup]`
-- [ ] Ověřit modely a ceny v `config/models.json` a `orchestrator/src/llm/prices.ts` `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  před prvním živým cyklem.
-- [ ] `dry=true` napřed, pak jeden ohraničený živý běh. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [x] `API-CREDENTIALS-001` v `state/INBOX.md` vyřešeno 2026-07-28. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
+## Confirmed complete
 
-Bez obou klíčů se plánované cykly bezpečně přepnou do dry režimu.
-
-## P1 — hosting a doména
-
-- [x] Hosting: Vercel. Doména: `quorum-site-chi.vercel.app`. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [x] Vercel projekt `quorum-site` s `main` jako production branch. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Nastavit produkční environment variables ve Vercel dashboardu: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]` `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-
-| Proměnná | Povinná | Účel |
-| --- | --- | --- |
-| `PUBLIC_SITE_URL` | ano | Kanonická HTTPS URL, feedy, sitemap, health check a Instagram media |
-| `ADMIN_USER` | ano pro admin | Uživatelské jméno Basic Auth |
-| `ADMIN_PASSWORD` | ano pro admin | Dlouhé unikátní heslo uložené pouze jako secret |
-| `BOARDLESSAI_REPO_ROOT` | dle hostingu | Absolutní kořen repozitáře pro serverový admin reader, pokud jej runtime neurčí správně |
-| `VERCEL_AUTOMATION_BYPASS_SECRET` | pouze při chráněném preview | Bypass ochrany automatizačních kontrol |
-
-- [ ] Ověřit, že: `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  - `/`, `/standups`, `/feed.json` a `/robots.txt` vrací `200`;
-  - `/admin` bez údajů vrací `401`, se správnými údaji `200`;
-  - neúplná konfigurace admina vrací `503`;
-  - produkční URL používá HTTPS;
-  - fixture venture a standup nejsou v sitemapě ani feedech.
-- [ ] Uložit `PUBLIC_SITE_URL` také jako GitHub secret a teprve potom nastavit `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  repository variable `HEALTH_CHECK_ENABLED=true`.
-- [ ] Nastavit monitoring dostupnosti a kontakt pro alerty. GitHub health `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  workflow je základní kontrola, nikoliv plná observabilita.
-- [ ] Ověřit zálohu a rollback posledního známého dobrého deploymentu. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-
-## P1 — právní a provozní minimum
-
-- [ ] Nechat zkontrolovat privacy text a doplnit skutečné identifikační a `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  kontaktní údaje provozovatele.
-- [ ] Před sběrem analytiky, e-mailů nebo jiných osobních údajů zpracovat `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  právní základ, retenční pravidla, DPA se zpracovateli a případný consent
-  mechanismus.
-- [ ] Před placenou nabídkou doplnit obchodní podmínky, reklamační/refund `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  proces, fakturaci a daňové zacházení.
-- [ ] Vytvořit reálný incident-response kontakt a proces pro žádosti subjektů `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  údajů.
-- [ ] Zkontrolovat povinná AI a komerční sdělení pro cílové země. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-
-## P2 — skutečné založení venture
-
-**Neaktivní pro Venture 001.** Caught Up přijal vlastník mimo founding gate.
-`FIX-*` záznamy zůstávají fixture a nesmí být použity jako obchodní důkaz.
-Živý `founding` cyklus zůstává zakázaný.
-
-- [-] Dodat nebo schválit zdroje pro skutečný market research. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [-] Získat minimálně tři nezávislé reálné důkazní položky. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [-] Získat alespoň jeden přímý signál problému nebo nákupního záměru. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [-] Popsat dosažitelný distribuční kanál. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [-] Definovat první omezený experiment včetně baseline, targetu, maximální `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  ceny, maximální ztráty a stop condition.
-- [-] Nechat deterministický DISCOVERY gate potvrdit skóre alespoň `35/50` a `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  žádnou dimenzi pod `2`.
-
-## P2 — analytika, tržby a platby
-
-- [ ] Vybrat privacy-respecting analytiku a přesně definovat: `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  `qualified_visit`, `value_action`, `opt_in`, `monetization_intent` a
-  konverzní okna.
-- [ ] Připojit analytiku až po právní kontrole a doplnit ji do CSP a network `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  allowlistu samostatným review.
-- [ ] Vybrat platební nebo fakturační systém až po validaci nabídky. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-- [ ] Zavést ověřitelný zdroj tržeb, refundů a payment fees. Do první `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  přijaté platby zůstává recognized revenue na měřených `$0`; neznámé fee a
-  refund údaje zůstávají `unavailable`.
-- [ ] Nastavit účetní export a měsíční reconciliation proti `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  `state/finance/ledger.json` a `state/treasury/ledger.json`.
-- [ ] Každý externí výdaj provádí člověk až po položce `HUMAN_APPROVAL` nebo `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  `SPEND`; agent nesmí držet platební údaje ani sám provést platbu.
-
-## P2 — Threads a Instagram, pouze pokud je chcete používat
-
-- [ ] Založit a zabezpečit firemní Meta účty; zapnout 2FA a určit vlastníka. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Nechat schválit konkrétní OAuth scopes a aktuální podmínky platforem. `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-- [ ] Nastavit GitHub variables: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  - `META_GRAPH_API_VERSION`;
-  - `META_THREADS_USER_ID`;
-  - `META_INSTAGRAM_IG_USER_ID`.
-- [ ] Nastavit GitHub secrets: `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-  - `META_THREADS_ACCESS_TOKEN`;
-  - `META_INSTAGRAM_ACCESS_TOKEN`;
-  - `PUBLIC_SITE_URL`.
-- [ ] V samostatném review doplnit přesně schválené scopes a `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-  `enabledByHumanAt` do `config/channels.json`.
-- [ ] Nejprve použít `workflow_dispatch` s `validate_only=true`. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Teprve po ověření přepnout konkrétní kanál z `draft` na `autopublish`. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-
-Nejasný výsledek publikace skončí v `needs_reconciliation` a vyžaduje ruční
-kontrolu. Odpovědi, reklamy, mazání a opravy nejsou součástí běžného
-autopublishing scope.
-
-## Volitelné integrace
-
-- [ ] `PRODUCTHUNT_TOKEN` nastavovat pouze při existenci schváleného Product `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  Hunt procesu; současný runtime jej aktivně nepoužívá.
-- [ ] `MEDIA_PROVIDER` a `MEDIA_MODEL` jsou rezervované konfigurační body; `[imp:3]` `[owner:me]` `[time:1h]` `[kind:content]`
-  nenastavovat je bez implementovaného a otestovaného provider adapteru.
-- [ ] Reddit nebo jiný autentizovaný zdroj přidat jen s aktuálními podmínkami, `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-  schváleným účtem a rozšířením network allowlistu.
-
-## Finální go-live acceptance
-
-- [ ] Brand clearance vyřešen. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] `main` chráněný a CI zelené. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-- [ ] Produkční build je vytvořen z konkrétního commitu. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-- [ ] Secrets nejsou v git historii. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [ ] Rozpočet a provider billing limity jsou nastavené. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [ ] Admin a veřejné security headers jsou ověřené. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-- [ ] Právní texty odpovídají skutečnému provozu. `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
-- [ ] Kill switche a rollback byly prakticky vyzkoušené. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-- [ ] Žádné fixture tvrzení není prezentované jako reálný výsledek. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
-- [x] Vlastník projektu výslovně schválil živé směny 2026-07-30. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
-- [ ] **Zapnout Vercel Web Analytics pro tento projekt** — v projektu na Vercelu zapni Web Analytics, aby OwnDashboard v přehledu projektu ukazoval návštěvníky a zobrazení stránek (načítá je přes Vercel API podle tohoto repozitáře). `[imp:2]` `[owner:me]` `[time:15m]` `[kind:setup]`
-- [ ] **Hlásit GitHub Actions crony do OwnDashboardu** — do repository Actions secrets přidej `OWNDASHBOARD_CRON_URL` (URL na `/api/crons/log` v OwnDashboardu) a `OWNDASHBOARD_CRON_TOKEN` (stejná hodnota jako `CRON_REGISTRY_TOKEN` v OwnDashboardu), aby se běhy plánovaných workflow objevily v panelu Crony. `[imp:2]` `[owner:me]` `[time:10m]` `[kind:setup]`
+- Vercel Pro hosting and `main` production deployment are confirmed for both
+  projects.
+- The Caught Up dry edition meeting, bilingual edition fixture, STET gate,
+  HACEK gate and social composer pass locally without paid calls.
+- Social publishing remains draft-locked and every external payment remains a
+  human action.
