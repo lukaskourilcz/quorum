@@ -59,6 +59,11 @@
                   "type": "string",
                   "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
                 },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
                 "cadence": {
                   "type": "string",
                   "pattern": "^daily@(?:0[5-9]|1\\d|2[0-3]):00$"
@@ -103,13 +108,77 @@
                   "type": "number",
                   "exclusiveMinimum": 0,
                   "maximum": 1
+                },
+                "packet": {
+                  "type": "object",
+                  "properties": {
+                    "topicType": {
+                      "type": "string",
+                      "enum": [
+                        "growth",
+                        "build",
+                        "evidence",
+                        "finance",
+                        "social",
+                        "org",
+                        "incident",
+                        "council",
+                        "edition",
+                        "product"
+                      ]
+                    },
+                    "decisionNeeded": {
+                      "type": "string",
+                      "enum": [
+                        "PLAN",
+                        "NO_ACTION",
+                        "VERDICT",
+                        "MEMO",
+                        "EDITION",
+                        "IDEA_VERDICT"
+                      ]
+                    },
+                    "preset": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "objectives": {
+                      "type": "object",
+                      "properties": {
+                        "dry": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 400
+                        },
+                        "live": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 400
+                        }
+                      },
+                      "required": [
+                        "dry",
+                        "live"
+                      ],
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "topicType",
+                    "decisionNeeded",
+                    "preset",
+                    "objectives"
+                  ],
+                  "additionalProperties": {}
                 }
               },
               "required": [
                 "kind",
+                "label",
                 "cadence",
                 "cast",
-                "envelopeUsd"
+                "envelopeUsd",
+                "packet"
               ],
               "additionalProperties": {}
             }

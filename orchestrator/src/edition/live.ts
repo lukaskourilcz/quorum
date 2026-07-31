@@ -102,6 +102,7 @@ export async function appendEditionUsage(
     cycleId,
     requestHash: requestHash(cycleId, index, usage),
     phase: "cu-edition",
+    ventureId: "caught-up",
     agent: usage.stage === "curate"
       ? "HERALD"
       : usage.stage === "localize" || usage.stage === "localize_rewrite"

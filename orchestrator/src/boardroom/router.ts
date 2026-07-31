@@ -81,6 +81,7 @@ export interface RouteInput {
   riskTags: string[];
   budgetImpactUsd: number;
   preset?: string;
+  requiredParticipants?: readonly FoundingAgent[];
   affectedAgent?: FoundingAgent;
   now?: Date;
 }
@@ -112,6 +113,9 @@ export function routeBoardroom(
   const preset = input.preset ? config.presets[input.preset] : undefined;
   for (const agent of preset?.required ?? []) {
     add(agent, `required by ${input.preset} preset`, `preset:${input.preset}`);
+  }
+  for (const agent of input.requiredParticipants ?? []) {
+    add(agent, "required by venture registry", "venture-registry");
   }
   if (preset?.includeAffectedAgent && input.affectedAgent) {
     add(input.affectedAgent, "affected by the proposed organization change");

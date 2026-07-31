@@ -3,20 +3,14 @@ import {
   ScheduledPhaseSchema,
   type ScheduledPhase
 } from "../types.js";
+import {
+  readVentureRegistry,
+  resolveMeetingClock
+} from "../ventures/registry.js";
 
 export const PRAGUE_TIME_ZONE = "Europe/Prague";
 
-export const MEETING_CLOCK: ReadonlyArray<{
-  phase: ScheduledPhase;
-  hour: number;
-  label: string;
-}> = [
-  { phase: "cu-edition", hour: 5, label: "Caught Up edition room" },
-  { phase: "morning", hour: 6, label: "Venture morning" },
-  { phase: "afternoon", hour: 14, label: "Venture afternoon" },
-  { phase: "cu-product", hour: 17, label: "Caught Up product room" },
-  { phase: "night", hour: 22, label: "Venture night" }
-];
+export const MEETING_CLOCK = resolveMeetingClock(readVentureRegistry());
 
 interface PragueClockParts {
   date: string;

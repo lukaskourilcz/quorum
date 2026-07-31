@@ -13,7 +13,7 @@
           "kind": "cu-edition",
           "label": "Caught Up edition room",
           "cadence": "daily@05:00",
-          "cast": ["HERALD", "STET", "HACEK", "AUDIT"],
+          "cast": ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"],
           "envelopeUsd": 0.08,
           "packet": {
             "topicType": "edition",
@@ -22,6 +22,22 @@
             "objectives": {
               "dry": "Review the overnight digest and select one story or record NO_EDITION",
               "live": "Review the live digest and select one story or record NO_EDITION"
+            }
+          }
+        },
+        {
+          "kind": "cu-product",
+          "label": "Caught Up product room",
+          "cadence": "daily@17:00",
+          "cast": ["HERALD", "SPARK", "VAULT", "AUDIT"],
+          "envelopeUsd": 0.08,
+          "packet": {
+            "topicType": "product",
+            "decisionNeeded": "IDEA_VERDICT",
+            "preset": "product-room",
+            "objectives": {
+              "dry": "Review the morning Caught Up idea and record a ledger verdict",
+              "live": "Review the morning Caught Up idea and record a bounded ledger verdict"
             }
           }
         }

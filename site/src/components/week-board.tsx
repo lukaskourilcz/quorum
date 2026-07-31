@@ -3,7 +3,7 @@ import { CheckCircle2, CircleMinus, Clock3, ArrowLeft, ArrowRight } from "lucide
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { CALENDAR_SLOTS, addCalendarDays, type CalendarKind, type CalendarStatus, type PublicCalendarFeed } from "@/lib/calendar-feed-model";
+import { addCalendarDays, type CalendarKind, type CalendarStatus, type PublicCalendarFeed } from "@/lib/calendar-feed-model";
 
 const dayFormatter = new Intl.DateTimeFormat("en", {
   weekday: "short",
@@ -18,10 +18,6 @@ const timeFormatter = new Intl.DateTimeFormat("en", {
   hourCycle: "h23",
   timeZone: "Europe/Prague"
 });
-
-function kindLabel(kind: CalendarKind) {
-  return CALENDAR_SLOTS.find((slot) => slot.kind === kind)?.label ?? kind;
-}
 
 function statusIcon(status: CalendarStatus) {
   if (status === "held") return <CheckCircle2 aria-hidden="true" className="size-3.5" />;
@@ -42,6 +38,8 @@ export function WeekBoard({
   availableWeeks: readonly string[];
   headingLevel?: "section" | "page";
 }) {
+  const kindLabel = (kind: CalendarKind) =>
+    feed.definitions.find((slot) => slot.kind === kind)?.label ?? kind;
   const days = Array.from({ length: 7 }, (_, index) => addCalendarDays(feed.weekOf, index));
   const weekIndex = availableWeeks.indexOf(feed.weekOf);
   const previous = weekIndex > 0 ? availableWeeks[weekIndex - 1] : null;
@@ -75,7 +73,7 @@ export function WeekBoard({
               </time>
             </div>
           ))}
-          {CALENDAR_SLOTS.map((definition, row) => (
+          {feed.definitions.map((definition, row) => (
             <div className="contents" key={definition.kind}>
               <div className="border-b border-r border-[var(--border)] p-4 last:border-b-0">
                 <p className={isCaughtUp(definition.kind) ? "font-mono text-xs font-semibold uppercase tracking-[0.08em] text-[var(--magenta-spark)]" : "font-mono text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent)]"}>
@@ -84,7 +82,7 @@ export function WeekBoard({
                 <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{definition.label}</p>
               </div>
               {days.map((day, column) => {
-                const slot = feed.slots[column * CALENDAR_SLOTS.length + row]!;
+                const slot = feed.slots[column * feed.definitions.length + row]!;
                 const content = (
                   <>
                     <span className="flex items-center gap-1.5 font-mono text-[0.625rem] uppercase tracking-[0.08em]">

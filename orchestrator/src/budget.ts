@@ -7,12 +7,14 @@ import {
   type ServiceTier
 } from "./llm/prices.js";
 import type { Stage } from "./types.js";
+import { VentureIdSchema } from "./contracts/common.js";
 
 export const BudgetLedgerEntrySchema = z.object({
   ts: z.string().datetime(),
   cycleId: z.string().min(1),
   requestHash: z.string().min(8),
   phase: z.string().min(1),
+  ventureId: z.union([VentureIdSchema, z.literal("global")]).optional(),
   agent: z.string().min(1),
   provider: z.enum(["openai", "anthropic"]),
   model: z.string().min(1),

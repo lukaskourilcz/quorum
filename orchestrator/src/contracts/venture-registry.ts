@@ -3,9 +3,37 @@ import { ContractAgentIdSchema, VentureIdSchema, openObject } from "./common.js"
 
 const VentureMeetingDefinitionSchema = openObject({
   kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  label: z.string().trim().min(1).max(120),
   cadence: z.string().regex(/^daily@(?:0[5-9]|1\d|2[0-3]):00$/),
   cast: z.array(ContractAgentIdSchema).min(1),
-  envelopeUsd: z.number().finite().positive().max(1)
+  envelopeUsd: z.number().finite().positive().max(1),
+  packet: openObject({
+    topicType: z.enum([
+      "growth",
+      "build",
+      "evidence",
+      "finance",
+      "social",
+      "org",
+      "incident",
+      "council",
+      "edition",
+      "product"
+    ]),
+    decisionNeeded: z.enum([
+      "PLAN",
+      "NO_ACTION",
+      "VERDICT",
+      "MEMO",
+      "EDITION",
+      "IDEA_VERDICT"
+    ]),
+    preset: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    objectives: openObject({
+      dry: z.string().trim().min(1).max(400),
+      live: z.string().trim().min(1).max(400)
+    })
+  })
 });
 
 const VentureDefinitionSchema = openObject({

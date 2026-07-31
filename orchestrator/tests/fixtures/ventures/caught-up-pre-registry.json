@@ -1,0 +1,21 @@
+{
+  "clock": [
+    { "phase": "cu-edition", "hour": 5, "label": "Caught Up edition room" },
+    { "phase": "morning", "hour": 6, "label": "Venture morning" },
+    { "phase": "afternoon", "hour": 14, "label": "Venture afternoon" },
+    { "phase": "cu-product", "hour": 17, "label": "Caught Up product room" },
+    { "phase": "night", "hour": 22, "label": "Venture night" }
+  ],
+  "cronPayloads": [
+    { "cron": "0 3 * * *", "phase": "cu-edition" },
+    { "cron": "0 4 * * *", "phase": "cu-edition" },
+    { "cron": "0 4 * * *", "phase": "morning" },
+    { "cron": "0 5 * * *", "phase": "morning" },
+    { "cron": "0 12 * * *", "phase": "afternoon" },
+    { "cron": "0 13 * * *", "phase": "afternoon" },
+    { "cron": "0 15 * * *", "phase": "cu-product" },
+    { "cron": "0 16 * * *", "phase": "cu-product" },
+    { "cron": "0 20 * * *", "phase": "night" },
+    { "cron": "0 21 * * *", "phase": "night" }
+  ]
+}

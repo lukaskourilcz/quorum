@@ -65,6 +65,10 @@ import {
   getShiftDefinition,
   isShiftPhase
 } from "./shifts.js";
+import {
+  composeMeetingRouteDefinition,
+  loadVentureRegistry
+} from "./ventures/registry.js";
 import type { RunnablePhase, Stage } from "./types.js";
 
 export interface CycleOptions {
@@ -211,26 +215,22 @@ async function runCaughtUpDryCycle(
   if (!options.dry) {
     throw new Error("Caught Up scheduled phases remain dry until the Phase 9 cutover");
   }
-  const [routing, stages] = await Promise.all([
+  const [routing, stages, ventureRegistry] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
-    )
+    ),
+    loadVentureRegistry()
   ]);
-  const definition = options.phase === "cu-edition"
-    ? {
-        topicType: "edition" as const,
-        objective: "Review the overnight digest and select one story or record NO_EDITION",
-        decisionNeeded: "EDITION" as const,
-        preset: "edition-room"
-      }
-    : {
-        topicType: "product" as const,
-        objective: "Review the morning Caught Up idea and record a ledger verdict",
-        decisionNeeded: "IDEA_VERDICT" as const,
-        preset: "product-room"
-      };
-  const meetingCap = budgetLimitsFromEnvironment().caughtUpMeetingUsd;
+  const definition = composeMeetingRouteDefinition(
+    ventureRegistry,
+    options.phase,
+    "dry"
+  );
+  const meetingCap = Math.min(
+    definition.envelopeUsd,
+    budgetLimitsFromEnvironment().caughtUpMeetingUsd
+  );
   const estimatedWorstCaseUsd = options.phase === "cu-product"
     ? PRODUCT_ROOM_RESERVE_USD
     : meetingCap;
@@ -246,6 +246,7 @@ async function runCaughtUpDryCycle(
     riskTags: [],
     budgetImpactUsd: estimatedWorstCaseUsd,
     preset: definition.preset,
+    requiredParticipants: definition.requiredParticipants,
     now
   });
   const artifactRoot = path.join(repoRoot, "tmp", "dry-run", "state");
@@ -377,13 +378,22 @@ async function runCaughtUpLiveEditionCycle(
   if (options.phase !== "cu-edition" || options.dry) {
     throw new Error("Live Caught Up edition runner requires a non-dry cu-edition phase");
   }
-  const [routing, stages] = await Promise.all([
+  const [routing, stages, ventureRegistry] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
-    )
+    ),
+    loadVentureRegistry()
   ]);
-  const meetingBudgetUsd = budgetLimitsFromEnvironment().caughtUpMeetingUsd;
+  const definition = composeMeetingRouteDefinition(
+    ventureRegistry,
+    "cu-edition",
+    "live"
+  );
+  const meetingBudgetUsd = Math.min(
+    definition.envelopeUsd,
+    budgetLimitsFromEnvironment().caughtUpMeetingUsd
+  );
   const productionBudgetUsd = budgetLimitsFromEnvironment().editionProductionUsd;
   const estimatedWorstCaseUsd = Number((meetingBudgetUsd + productionBudgetUsd).toFixed(8));
   const date = pragueClockParts(now).date;
@@ -391,13 +401,14 @@ async function runCaughtUpLiveEditionCycle(
   const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${cycleId.toUpperCase()}`,
-    topicType: "edition",
-    objective: "Review the live digest and select one story or record NO_EDITION",
+    topicType: definition.topicType,
+    objective: definition.objective,
     evidenceRefs: [],
-    decisionNeeded: "EDITION",
+    decisionNeeded: definition.decisionNeeded,
     riskTags: [],
     budgetImpactUsd: estimatedWorstCaseUsd,
-    preset: "edition-room",
+    preset: definition.preset,
+    requiredParticipants: definition.requiredParticipants,
     now
   });
   const produced = await runLiveEdition({
@@ -558,16 +569,23 @@ async function runCaughtUpLiveProductCycle(
   if (options.phase !== "cu-product" || options.dry) {
     throw new Error("Live Caught Up product runner requires a non-dry cu-product phase");
   }
-  const [routing, stages] = await Promise.all([
+  const [routing, stages, ventureRegistry] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
-    )
+    ),
+    loadVentureRegistry()
   ]);
+  const definition = composeMeetingRouteDefinition(
+    ventureRegistry,
+    "cu-product",
+    "live"
+  );
   const limits = budgetLimitsFromEnvironment();
-  if (PRODUCT_ROOM_RESERVE_USD > limits.caughtUpMeetingUsd) {
+  const meetingCap = Math.min(definition.envelopeUsd, limits.caughtUpMeetingUsd);
+  if (PRODUCT_ROOM_RESERVE_USD > meetingCap) {
     throw new Error(
-      `Product-room reserve ${PRODUCT_ROOM_RESERVE_USD} exceeds Caught Up meeting cap ${limits.caughtUpMeetingUsd}`
+      `Product-room reserve ${PRODUCT_ROOM_RESERVE_USD} exceeds Caught Up meeting cap ${meetingCap}`
     );
   }
   const date = pragueClockParts(now).date;
@@ -575,13 +593,14 @@ async function runCaughtUpLiveProductCycle(
   const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${cycleId.toUpperCase()}`,
-    topicType: "product",
-    objective: "Review the morning Caught Up idea and record a bounded ledger verdict",
+    topicType: definition.topicType,
+    objective: definition.objective,
     evidenceRefs: [],
-    decisionNeeded: "IDEA_VERDICT",
+    decisionNeeded: definition.decisionNeeded,
     riskTags: [],
     budgetImpactUsd: PRODUCT_ROOM_RESERVE_USD,
-    preset: "product-room",
+    preset: definition.preset,
+    requiredParticipants: definition.requiredParticipants,
     now
   });
   const index = await regenerateIdeaIndex(stateRoot);

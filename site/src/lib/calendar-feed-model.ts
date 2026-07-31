@@ -9,6 +9,12 @@ export type CalendarKind =
   | "venture-night";
 export type CalendarStatus = "scheduled" | "held" | "missed";
 
+export interface CalendarDefinition {
+  hour: number;
+  kind: CalendarKind;
+  label: string;
+}
+
 export interface CalendarSlot {
   at: string;
   tz: "Europe/Prague";
@@ -22,10 +28,11 @@ export interface CalendarSlot {
 export interface PublicCalendarFeed {
   schemaVersion: "calendar/1";
   weekOf: string;
+  definitions: readonly CalendarDefinition[];
   slots: CalendarSlot[];
 }
 
-export const CALENDAR_SLOTS = [
+export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 5, kind: "cu-edition", label: "Edition room" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
@@ -98,8 +105,10 @@ export function buildPublicCalendarFeed(input: {
   now: Date;
   standups: readonly PublicStandup[];
   meetings: readonly PublicMeetingRecord[];
+  definitions?: readonly CalendarDefinition[];
 }): PublicCalendarFeed {
   const weekOf = mondayOfCalendarWeek(input.weekOf);
+  const definitions = input.definitions ?? CALENDAR_SLOTS;
   const records = new Map<string, { href: string; summary: string; fixture: boolean }>();
   for (const standup of input.standups) {
     const kind = ventureKind(standup.phase);
@@ -119,7 +128,7 @@ export function buildPublicCalendarFeed(input: {
   const slots: CalendarSlot[] = [];
   for (let day = 0; day < 7; day += 1) {
     const date = addCalendarDays(weekOf, day);
-    for (const definition of CALENDAR_SLOTS) {
+    for (const definition of definitions) {
       const at = pragueSlotInstant(date, definition.hour);
       const record = records.get(`${date}:${definition.kind}`);
       slots.push({
@@ -135,7 +144,7 @@ export function buildPublicCalendarFeed(input: {
       });
     }
   }
-  return { schemaVersion: "calendar/1", weekOf, slots };
+  return { schemaVersion: "calendar/1", weekOf, definitions, slots };
 }
 
 export function calendarStaticWeeks(now: Date, pastWeeks = 8): string[] {

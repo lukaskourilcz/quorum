@@ -14,11 +14,16 @@ import {
 } from "./cache.js";
 import { AnthropicTextClient } from "./anthropic.js";
 import { OpenAiTextClient, type TextProviderResponse } from "./openai.js";
+import {
+  readVentureRegistry,
+  ventureIdForPhase
+} from "../ventures/registry.js";
 
 export interface GuardedCallInput<T> {
   stateRoot: string;
   cycleId: string;
   phase: string;
+  ventureId?: string;
   agent: string;
   provider: "openai" | "anthropic";
   model: string;
@@ -101,6 +106,10 @@ export async function guardedJsonCall<T>(
       cycleId: request.cycleId,
       requestHash: hash,
       phase: request.phase,
+      ventureId: request.ventureId ?? ventureIdForPhase(
+        readVentureRegistry(),
+        request.phase
+      ),
       agent: request.agent,
       provider: request.provider,
       model: response.model,
