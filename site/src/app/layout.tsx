@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { getPublicSiteUrl } from "@/lib/public-site-url";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -16,9 +17,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(getPublicSiteUrl()),
   description:
     "Three daily shifts, public decisions and measurable outcomes from an agent-operated company.",
   openGraph: {
