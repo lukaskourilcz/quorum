@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "rating/1",
+  "id": "r-2026-08-04-0001",
+  "ventureId": "titty-tuesdays",
+  "objectKind": "visual",
+  "objectRef": {
+    "id": "visual-season-001-a",
+    "contentHash": "sha256:1a2b3c4d5e6f"
+  },
+  "rating": "perfect",
+  "note": "Keep the crop and type scale.",
+  "ratedAt": "2026-08-04T12:00:00+02:00"
+}

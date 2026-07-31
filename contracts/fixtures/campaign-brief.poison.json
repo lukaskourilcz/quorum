@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "campaign-brief/1",
+  "ventureId": "titty-tuesdays",
+  "briefId": "brief-season-001-launch",
+  "author": "PULSE",
+  "positioningLine": "Generic apparel for everyone.",
+  "doThis": ["Make a campaign."],
+  "notThis": [],
+  "deliverables": [
+    { "agent": "FRAME", "artifact": "launch-frame" }
+  ],
+  "activeFrom": "2026-08-01",
+  "activeUntil": "2026-10-30"
+}

@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "marketing-plan/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^plan-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "ventureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "seasonId": {
+      "type": "string",
+      "pattern": "^season-\\d{3}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "tactics": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "guerrilla",
+              "social",
+              "content",
+              "paid",
+              "partnership"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 800
+          },
+          "assetsNeeded": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "estCostUsd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "estimate": {
+            "type": "boolean",
+            "const": true
+          },
+          "platformPolicyNote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "legalityNote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "type",
+          "description",
+          "assetsNeeded",
+          "platformPolicyNote"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "calendar": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "week": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "focus": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        },
+        "required": [
+          "week",
+          "focus"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "audienceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "kpis": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "owner_rated",
+        "approved",
+        "archived"
+      ]
+    },
+    "originMeetingRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "ventureId",
+    "title",
+    "objective",
+    "tactics",
+    "calendar",
+    "audienceRefs",
+    "kpis",
+    "status",
+    "originMeetingRef"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/marketing-plan.schema.json"
+}

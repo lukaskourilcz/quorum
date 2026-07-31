@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "daily-digest/1"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "meetings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ventureId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              {
+                "type": "string",
+                "const": "global"
+              }
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "held": {
+            "type": "boolean"
+          },
+          "bullets": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "roomLink": {
+                  "type": "string",
+                  "pattern": "^\\/meetings\\/.*"
+                }
+              },
+              "required": [
+                "text",
+                "roomLink"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "costUsd": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "ventureId",
+          "kind",
+          "held",
+          "bullets",
+          "costUsd"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "portfolioLine": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "bodyWordCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 400
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "meetings",
+    "portfolioLine",
+    "bodyWordCount"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/daily-digest.schema.json"
+}

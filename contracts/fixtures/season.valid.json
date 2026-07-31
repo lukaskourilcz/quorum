@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "season/1",
+  "ventureId": "titty-tuesdays",
+  "seasonNumber": 1,
+  "startsOn": "2026-08-01",
+  "endsOn": "2026-10-30",
+  "theme": "One line, four treatments",
+  "products": [
+    { "slug": "baseline", "name": "Baseline", "concept": "Straight type on black.", "designDirection": "Wide white grotesk type.", "status": "concept" },
+    { "slug": "registration", "name": "Registration", "concept": "Misregistered print study.", "designDirection": "Ember offset against graphite type.", "status": "concept" },
+    { "slug": "receipt", "name": "Receipt", "concept": "A narrow receipt-like lockup.", "designDirection": "Mono detail with bold headline type.", "status": "concept" },
+    { "slug": "repeat", "name": "Repeat", "concept": "The phrase forms a dense field.", "designDirection": "Small repeated type with one large break.", "status": "concept" }
+  ],
+  "campaignArc": "Introduce the line, test four treatments and retain the owner-rated winner."
+}

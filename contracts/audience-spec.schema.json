@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "audience-spec/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "subjectRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "regions": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80
+      }
+    },
+    "ageRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 18,
+          "maximum": 120
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 18,
+          "maximum": 120
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": {}
+    },
+    "genders": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "women",
+          "men",
+          "nonbinary",
+          "all"
+        ]
+      }
+    },
+    "interests": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "artificial-intelligence",
+          "business",
+          "culture",
+          "design",
+          "digital-media",
+          "ecommerce",
+          "entrepreneurship",
+          "fashion",
+          "news",
+          "skateboarding",
+          "startups",
+          "streetwear",
+          "technology",
+          "womens-fashion"
+        ],
+        "description": "Interest-based public categories only. Never use personal data or custom audiences from data the company does not have."
+      }
+    },
+    "platforms": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "instagram",
+          "threads",
+          "facebook",
+          "tiktok",
+          "youtube",
+          "reddit",
+          "web",
+          "newsletter"
+        ]
+      }
+    },
+    "adTargetingNotes": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "validated",
+        "graduated",
+        "archived"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "subjectRef",
+    "regions",
+    "ageRange",
+    "genders",
+    "interests",
+    "platforms",
+    "adTargetingNotes",
+    "status"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/audience-spec.schema.json"
+}

@@ -141,7 +141,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "reason": {
@@ -250,7 +256,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "summary": {
@@ -302,7 +314,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "firstChoice": {
@@ -353,7 +371,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "summary": {
@@ -479,7 +503,13 @@
                 "SPARK",
                 "VAULT",
                 "FRAME",
-                "RELAY"
+                "RELAY",
+                "ANGLE",
+                "COHORT",
+                "FUNNEL",
+                "PALATE",
+                "SCENE",
+                "STUNT"
               ]
             },
             "setting": {
@@ -517,7 +547,13 @@
                       "SPARK",
                       "VAULT",
                       "FRAME",
-                      "RELAY"
+                      "RELAY",
+                      "ANGLE",
+                      "COHORT",
+                      "FUNNEL",
+                      "PALATE",
+                      "SCENE",
+                      "STUNT"
                     ]
                   },
                   "mode": {
@@ -556,7 +592,13 @@
                       "SPARK",
                       "VAULT",
                       "FRAME",
-                      "RELAY"
+                      "RELAY",
+                      "ANGLE",
+                      "COHORT",
+                      "FUNNEL",
+                      "PALATE",
+                      "SCENE",
+                      "STUNT"
                     ]
                   },
                   "sentAt": {
@@ -760,7 +802,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "reason": {
@@ -869,7 +917,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "summary": {
@@ -921,7 +975,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "firstChoice": {
@@ -972,7 +1032,13 @@
                   "SPARK",
                   "VAULT",
                   "FRAME",
-                  "RELAY"
+                  "RELAY",
+                  "ANGLE",
+                  "COHORT",
+                  "FUNNEL",
+                  "PALATE",
+                  "SCENE",
+                  "STUNT"
                 ]
               },
               "summary": {
@@ -1101,7 +1167,13 @@
                 "SPARK",
                 "VAULT",
                 "FRAME",
-                "RELAY"
+                "RELAY",
+                "ANGLE",
+                "COHORT",
+                "FUNNEL",
+                "PALATE",
+                "SCENE",
+                "STUNT"
               ]
             },
             "setting": {
@@ -1139,7 +1211,13 @@
                       "SPARK",
                       "VAULT",
                       "FRAME",
-                      "RELAY"
+                      "RELAY",
+                      "ANGLE",
+                      "COHORT",
+                      "FUNNEL",
+                      "PALATE",
+                      "SCENE",
+                      "STUNT"
                     ]
                   },
                   "mode": {
@@ -1178,7 +1256,13 @@
                       "SPARK",
                       "VAULT",
                       "FRAME",
-                      "RELAY"
+                      "RELAY",
+                      "ANGLE",
+                      "COHORT",
+                      "FUNNEL",
+                      "PALATE",
+                      "SCENE",
+                      "STUNT"
                     ]
                   },
                   "sentAt": {

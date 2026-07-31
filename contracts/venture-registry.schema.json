@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-registry/1"
+    },
+    "ventures": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "exploration",
+              "operating",
+              "paused"
+            ]
+          },
+          "taste": {
+            "type": "boolean"
+          },
+          "ledgerNamespace": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "adminTabs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ideas",
+                "plans",
+                "visuals",
+                "niche-proposals"
+              ]
+            }
+          },
+          "meetings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "cadence": {
+                  "type": "string",
+                  "pattern": "^daily@(?:0[5-9]|1\\d|2[0-3]):00$"
+                },
+                "cast": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "VIZE",
+                      "FORGE",
+                      "PULSE",
+                      "AUDIT",
+                      "SCOUT",
+                      "SCRIBE",
+                      "LENS",
+                      "QUILL",
+                      "RADAR",
+                      "KEEPER",
+                      "THREADS",
+                      "INSTAGRAM",
+                      "PEOPLE",
+                      "LEDGER",
+                      "HERALD",
+                      "STET",
+                      "HACEK",
+                      "SPARK",
+                      "VAULT",
+                      "FRAME",
+                      "RELAY",
+                      "ANGLE",
+                      "COHORT",
+                      "FUNNEL",
+                      "PALATE",
+                      "SCENE",
+                      "STUNT"
+                    ]
+                  }
+                },
+                "envelopeUsd": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "kind",
+                "cadence",
+                "cast",
+                "envelopeUsd"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "pendingApproval": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "taste",
+          "ledgerNamespace",
+          "adminTabs",
+          "meetings"
+        ],
+        "additionalProperties": {}
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventures"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/venture-registry.schema.json"
+}

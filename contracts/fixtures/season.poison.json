@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "season/1",
+  "ventureId": "titty-tuesdays",
+  "seasonNumber": 1,
+  "startsOn": "2026-08-01",
+  "endsOn": "2026-10-30",
+  "theme": "Three products fail the tuple",
+  "products": [
+    { "slug": "one", "name": "One", "concept": "One.", "designDirection": "Type.", "status": "concept" },
+    { "slug": "two", "name": "Two", "concept": "Two.", "designDirection": "Type.", "status": "concept" },
+    { "slug": "three", "name": "Three", "concept": "Three.", "designDirection": "Type.", "status": "concept" }
+  ],
+  "campaignArc": "Invalid fixture."
+}

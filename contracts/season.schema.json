@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "season/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "titty-tuesdays"
+    },
+    "seasonNumber": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "startsOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "endsOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "theme": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "products": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "concept": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "designDirection": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "concept",
+                "sampled",
+                "live",
+                "retired"
+              ]
+            }
+          },
+          "required": [
+            "slug",
+            "name",
+            "concept",
+            "designDirection",
+            "status"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "concept": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "designDirection": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "concept",
+                "sampled",
+                "live",
+                "retired"
+              ]
+            }
+          },
+          "required": [
+            "slug",
+            "name",
+            "concept",
+            "designDirection",
+            "status"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "concept": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "designDirection": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "concept",
+                "sampled",
+                "live",
+                "retired"
+              ]
+            }
+          },
+          "required": [
+            "slug",
+            "name",
+            "concept",
+            "designDirection",
+            "status"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "concept": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "designDirection": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "concept",
+                "sampled",
+                "live",
+                "retired"
+              ]
+            }
+          },
+          "required": [
+            "slug",
+            "name",
+            "concept",
+            "designDirection",
+            "status"
+          ],
+          "additionalProperties": {}
+        }
+      ]
+    },
+    "campaignArc": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+    },
+    "retroOfPrevious": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "seasonNumber",
+    "startsOn",
+    "endsOn",
+    "theme",
+    "products",
+    "campaignArc"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/season.schema.json"
+}

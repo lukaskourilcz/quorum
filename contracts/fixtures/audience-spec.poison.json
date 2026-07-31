@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "audience-spec/1",
+  "ventureId": "titty-tuesdays",
+  "subjectRef": "campaign-launch-001",
+  "regions": ["Czechia"],
+  "ageRange": { "min": 17, "max": 34 },
+  "genders": ["women"],
+  "interests": ["streetwear"],
+  "platforms": ["instagram"],
+  "adTargetingNotes": "Use public categories.",
+  "status": "draft"
+}

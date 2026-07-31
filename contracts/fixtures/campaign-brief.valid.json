@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "campaign-brief/1",
+  "ventureId": "titty-tuesdays",
+  "briefId": "brief-season-001-launch",
+  "author": "ANGLE",
+  "positioningLine": "One crop top, one line, built for adults who know the joke.",
+  "doThis": ["Lead with type and product detail."],
+  "notThis": [
+    {
+      "instruction": "Do not use suggestive imagery.",
+      "ratingRefs": []
+    }
+  ],
+  "deliverables": [
+    { "agent": "FRAME", "artifact": "launch-frame" }
+  ],
+  "activeFrom": "2026-08-01",
+  "activeUntil": "2026-10-30"
+}

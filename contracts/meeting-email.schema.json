@@ -65,7 +65,13 @@
             "SPARK",
             "VAULT",
             "FRAME",
-            "RELAY"
+            "RELAY",
+            "ANGLE",
+            "COHORT",
+            "FUNNEL",
+            "PALATE",
+            "SCENE",
+            "STUNT"
           ]
         },
         "text": {

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "niche-proposal/1",
+  "id": "niche-2026-08-04-a1b2",
+  "domain": "Independent tool repair",
+  "oneLiner": "A daily briefing for 10000 repair enthusiasts.",
+  "whyPeopleCareDaily": "Parts and manuals change.",
+  "audienceHypothesis": {
+    "regions": ["Europe"],
+    "ageRange": { "min": 25, "max": 60 },
+    "genders": ["all"],
+    "interests": ["technology"],
+    "platforms": ["web"],
+    "adTargetingNotes": "Use public interests."
+  },
+  "contentShape": {
+    "cadence": "Daily",
+    "formats": ["briefing"],
+    "caughtUpReuseNotes": "Reuse the edition pipeline."
+  },
+  "competitionNotes": [],
+  "risks": [],
+  "evidenceRefs": [],
+  "status": "proposed",
+  "originMeetingRef": "2026-08-04-incubator-synthesis"
+}

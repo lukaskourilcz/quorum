@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-season-001-launch",
+  "ventureId": "titty-tuesdays",
+  "seasonId": "season-001",
+  "title": "Season 001 launch plan",
+  "objective": "Build an adult audience before commerce exists.",
+  "tactics": [
+    {
+      "type": "guerrilla",
+      "description": "Place a permission-cleared type installation at a skate event.",
+      "assetsNeeded": ["type-poster"],
+      "estCostUsd": 120,
+      "estimate": true,
+      "platformPolicyNote": "Use product and typography only.",
+      "legalityNote": "Obtain event and property permission before production."
+    }
+  ],
+  "calendar": [
+    { "week": 1, "focus": "Approve the campaign brief and audience spec." }
+  ],
+  "audienceRefs": ["audience-launch-001"],
+  "kpis": ["Owner approves the launch binder before season start."],
+  "status": "draft",
+  "originMeetingRef": "2026-08-04-tt-marketing"
+}

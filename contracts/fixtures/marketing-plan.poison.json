@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-season-001-launch",
+  "ventureId": "titty-tuesdays",
+  "title": "Unlabeled cost plan",
+  "objective": "Test the estimate guard.",
+  "tactics": [
+    {
+      "type": "paid",
+      "description": "Draft a future paid-channel allocation.",
+      "assetsNeeded": [],
+      "estCostUsd": 500,
+      "platformPolicyNote": "Do not activate an ad account."
+    }
+  ],
+  "calendar": [{ "week": 1, "focus": "Planning only." }],
+  "audienceRefs": [],
+  "kpis": ["Estimate reviewed."],
+  "status": "draft",
+  "originMeetingRef": "2026-08-04-tt-marketing"
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "venture-registry/1",
+  "ventures": [
+    {
+      "id": "caught-up",
+      "name": "Caught Up",
+      "status": "operating",
+      "taste": false,
+      "ledgerNamespace": "shared",
+      "adminTabs": [],
+      "meetings": []
+    },
+    {
+      "id": "caught-up",
+      "name": "Duplicate",
+      "status": "paused",
+      "taste": false,
+      "ledgerNamespace": "shared",
+      "adminTabs": [],
+      "meetings": []
+    }
+  ]
+}

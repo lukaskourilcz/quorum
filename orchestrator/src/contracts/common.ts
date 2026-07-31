@@ -21,7 +21,13 @@ export const ContractAgentIdSchema = z.enum([
   "SPARK",
   "VAULT",
   "FRAME",
-  "RELAY"
+  "RELAY",
+  "ANGLE",
+  "COHORT",
+  "FUNNEL",
+  "PALATE",
+  "SCENE",
+  "STUNT"
 ]);
 
 export const DateSchema = z.iso.date();
@@ -31,6 +37,7 @@ export const FingerprintSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
 export const HttpsUrlSchema = z.string().url().regex(/^https:\/\//);
 export const MeetingRefSchema = z.string().min(1).max(160);
 export const EvidenceRefSchema = z.string().min(1).max(160);
+export const VentureIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(80);
 
 export function openObject<T extends z.ZodRawShape>(shape: T) {
   return z.looseObject(shape);

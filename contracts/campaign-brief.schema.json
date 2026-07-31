@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "campaign-brief/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "briefId": {
+      "type": "string",
+      "pattern": "^brief-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "author": {
+      "type": "string",
+      "const": "ANGLE"
+    },
+    "positioningLine": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "doThis": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "notThis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "instruction": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "ratingRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^r-\\d{4}-\\d{2}-\\d{2}-[a-f0-9]{4,12}$"
+            }
+          }
+        },
+        "required": [
+          "instruction",
+          "ratingRefs"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "deliverables": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "agent": {
+            "type": "string",
+            "enum": [
+              "VIZE",
+              "FORGE",
+              "PULSE",
+              "AUDIT",
+              "SCOUT",
+              "SCRIBE",
+              "LENS",
+              "QUILL",
+              "RADAR",
+              "KEEPER",
+              "THREADS",
+              "INSTAGRAM",
+              "PEOPLE",
+              "LEDGER",
+              "HERALD",
+              "STET",
+              "HACEK",
+              "SPARK",
+              "VAULT",
+              "FRAME",
+              "RELAY",
+              "ANGLE",
+              "COHORT",
+              "FUNNEL",
+              "PALATE",
+              "SCENE",
+              "STUNT"
+            ]
+          },
+          "artifact": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "agent",
+          "artifact"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "activeFrom": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "activeUntil": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "briefId",
+    "author",
+    "positioningLine",
+    "doThis",
+    "notThis",
+    "deliverables",
+    "activeFrom",
+    "activeUntil"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/campaign-brief.schema.json"
+}

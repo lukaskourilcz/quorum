@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "daily-digest/1",
+  "date": "2026-08-04",
+  "meetings": [
+    {
+      "ventureId": "titty-tuesdays",
+      "kind": "tt-marketing",
+      "held": true,
+      "bullets": [
+        {
+          "text": "PULSE approved the draft campaign brief.",
+          "roomLink": "/meetings/2026-08-04-tt-marketing"
+        }
+      ],
+      "costUsd": 0.05
+    }
+  ],
+  "portfolioLine": "Today the portfolio used $0.12 of its $0.70 budget.",
+  "bodyWordCount": 15
+}
