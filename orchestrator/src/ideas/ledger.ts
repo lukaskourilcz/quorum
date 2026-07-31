@@ -7,8 +7,32 @@ import {
 import type { Evidence } from "../research/evidence.js";
 import { atomicWriteText, readText } from "../state.js";
 
-export const IDEA_LEDGER_PATH = "ideas/ledger.jsonl";
-export const IDEA_INDEX_PATH = "ideas/INDEX.md";
+export const GLOBAL_IDEA_NAMESPACE = "global";
+export const CAUGHT_UP_IDEA_NAMESPACE = "caught-up";
+export const MAX_IDEA_INDEX_CHARS = 6_000;
+const LEGACY_IDEA_LEDGER_PATH = "ideas/ledger.jsonl";
+const LEGACY_IDEA_INDEX_PATH = "ideas/INDEX.md";
+const IDEA_NAMESPACE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export type IdeaNamespace = string;
+
+function checkedNamespace(namespace: IdeaNamespace): IdeaNamespace {
+  if (!IDEA_NAMESPACE_PATTERN.test(namespace)) {
+    throw new Error(`Invalid idea namespace: ${namespace}`);
+  }
+  return namespace;
+}
+
+export function ideaLedgerPath(namespace: IdeaNamespace = GLOBAL_IDEA_NAMESPACE): string {
+  return `ideas/${checkedNamespace(namespace)}/ledger.jsonl`;
+}
+
+export function ideaIndexPath(namespace: IdeaNamespace = GLOBAL_IDEA_NAMESPACE): string {
+  return `ideas/${checkedNamespace(namespace)}/INDEX.md`;
+}
+
+export const IDEA_LEDGER_PATH = ideaLedgerPath();
+export const IDEA_INDEX_PATH = ideaIndexPath();
 
 export const IDEA_STOPWORDS = [
   "a",
@@ -186,8 +210,7 @@ export function prefilterIdeaCandidates(
     .slice(0, 8);
 }
 
-export async function readIdeaLedger(root: string): Promise<IdeaLedgerEntry[]> {
-  const raw = await readText(root, IDEA_LEDGER_PATH);
+function parseIdeaLedger(raw: string, namespace: IdeaNamespace): IdeaLedgerEntry[] {
   return raw
     .split(/\r?\n/)
     .filter(Boolean)
@@ -195,9 +218,49 @@ export async function readIdeaLedger(root: string): Promise<IdeaLedgerEntry[]> {
       try {
         return IdeaLedgerEntrySchema.parse(JSON.parse(line));
       } catch (error) {
-        throw new Error(`Invalid idea ledger line ${index + 1}: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(`Invalid ${namespace} idea ledger line ${index + 1}: ${error instanceof Error ? error.message : String(error)}`);
       }
     });
+}
+
+export async function readIdeaLedger(
+  root: string,
+  namespace: IdeaNamespace = GLOBAL_IDEA_NAMESPACE
+): Promise<IdeaLedgerEntry[]> {
+  const normalized = checkedNamespace(namespace);
+  const raw = await readText(root, ideaLedgerPath(normalized));
+  const compatibleRaw = !raw && normalized === GLOBAL_IDEA_NAMESPACE
+    ? await readText(root, LEGACY_IDEA_LEDGER_PATH)
+    : raw;
+  return parseIdeaLedger(compatibleRaw, normalized);
+}
+
+export async function readIdeaLedgerScope(
+  root: string,
+  namespace: IdeaNamespace
+): Promise<IdeaLedgerEntry[]> {
+  const normalized = checkedNamespace(namespace);
+  const local = await readIdeaLedger(root, normalized);
+  if (normalized === GLOBAL_IDEA_NAMESPACE) return local;
+  return [...await readIdeaLedger(root, GLOBAL_IDEA_NAMESPACE), ...local];
+}
+
+export async function ensureIdeaInNamespace(
+  root: string,
+  namespace: IdeaNamespace,
+  ideaId: string
+): Promise<IdeaLedgerEntry | null> {
+  const normalized = checkedNamespace(namespace);
+  const local = await readIdeaLedger(root, normalized);
+  const localEntry = currentIdeaEntries(local).find((entry) => entry.id === ideaId);
+  if (localEntry) return localEntry;
+  if (normalized === GLOBAL_IDEA_NAMESPACE) return null;
+  const globalEntry = currentIdeaEntries(
+    await readIdeaLedger(root, GLOBAL_IDEA_NAMESPACE)
+  ).find((entry) => entry.id === ideaId);
+  if (!globalEntry) return null;
+  await appendSnapshots(root, normalized, local, [globalEntry]);
+  return globalEntry;
 }
 
 export function currentIdeaEntries(entries: readonly IdeaLedgerEntry[]): IdeaLedgerEntry[] {
@@ -220,6 +283,7 @@ function validateSnapshot(entry: IdeaLedgerEntry): IdeaLedgerEntry {
 
 async function appendSnapshots(
   root: string,
+  namespace: IdeaNamespace,
   existing: readonly IdeaLedgerEntry[],
   appended: readonly IdeaLedgerEntry[]
 ): Promise<IdeaLedgerEntry[]> {
@@ -227,8 +291,8 @@ async function appendSnapshots(
   const content = snapshots.length
     ? `${snapshots.map((entry) => JSON.stringify(entry)).join("\n")}\n`
     : "";
-  await atomicWriteText(root, IDEA_LEDGER_PATH, content);
-  await atomicWriteText(root, IDEA_INDEX_PATH, renderIdeaIndex(snapshots));
+  await atomicWriteText(root, ideaLedgerPath(namespace), content);
+  await atomicWriteText(root, ideaIndexPath(namespace), renderIdeaIndex(snapshots, namespace));
   return snapshots;
 }
 
@@ -332,16 +396,22 @@ function screeningAgainstDeadIdea(input: {
 
 export async function screenAndRecordIdea(input: {
   root: string;
+  namespace?: IdeaNamespace;
   proposal: IdeaProposal;
   evidence: readonly Evidence[];
   adjudicator: VaultAdjudicator;
 }): Promise<IdeaScreeningResult> {
-  const snapshots = await readIdeaLedger(input.root);
-  const current = currentIdeaEntries(snapshots);
+  const namespace = checkedNamespace(input.namespace ?? GLOBAL_IDEA_NAMESPACE);
+  const snapshots = await readIdeaLedger(input.root, namespace);
+  const current = currentIdeaEntries(await readIdeaLedgerScope(input.root, namespace));
+  const localIds = new Set(currentIdeaEntries(snapshots).map((entry) => entry.id));
   const fingerprint = ideaFingerprint(input.proposal.title, input.proposal.summary);
   const id = ideaId(input.proposal, fingerprint);
   const replay = current.find((entry) => entry.id === id);
   if (replay) {
+    if (!localIds.has(replay.id)) {
+      await appendSnapshots(input.root, namespace, snapshots, [replay]);
+    }
     const link = replay.similarTo[0];
     return {
       entry: replay,
@@ -382,8 +452,10 @@ export async function screenAndRecordIdea(input: {
           verdict: "duplicate_of" as const,
           autoRejected: true
         };
-    await appendSnapshots(input.root, snapshots, [
-      linkedSnapshot(exact, result.entry.id, 1, "duplicate_of"),
+    await appendSnapshots(input.root, namespace, snapshots, [
+      ...(localIds.has(exact.id)
+        ? [linkedSnapshot(exact, result.entry.id, 1, "duplicate_of")]
+        : []),
       result.entry
     ]);
     return {
@@ -407,7 +479,7 @@ export async function screenAndRecordIdea(input: {
       reason: `VAULT novel: ${adjudication.reason}`,
       similarTo: []
     });
-    await appendSnapshots(input.root, snapshots, [entry]);
+    await appendSnapshots(input.root, namespace, snapshots, [entry]);
     return {
       entry,
       verdict: "novel",
@@ -452,8 +524,10 @@ export async function screenAndRecordIdea(input: {
           verdict: "duplicate_of" as const,
           autoRejected: true
         };
-    await appendSnapshots(input.root, snapshots, [
-      linkedSnapshot(candidate.entry, result.entry.id, candidate.score, "duplicate_of"),
+    await appendSnapshots(input.root, namespace, snapshots, [
+      ...(localIds.has(candidate.entry.id)
+        ? [linkedSnapshot(candidate.entry, result.entry.id, candidate.score, "duplicate_of")]
+        : []),
       result.entry
     ]);
     return {
@@ -471,8 +545,10 @@ export async function screenAndRecordIdea(input: {
     reason: `VAULT variant: ${adjudication.reason}`,
     similarTo: [{ id: candidate.entry.id, score: candidate.score, verdict: "variant_of" }]
   });
-  await appendSnapshots(input.root, snapshots, [
-    linkedSnapshot(candidate.entry, entry.id, candidate.score, "variant_of"),
+  await appendSnapshots(input.root, namespace, snapshots, [
+    ...(localIds.has(candidate.entry.id)
+      ? [linkedSnapshot(candidate.entry, entry.id, candidate.score, "variant_of")]
+      : []),
     entry
   ]);
   return {
@@ -493,14 +569,17 @@ function verdictStatus(verdict: IdeaRoomVerdict["verdict"]): IdeaLedgerEntry["st
 
 export async function applyIdeaRoomVerdict(input: {
   root: string;
+  namespace?: IdeaNamespace;
   ideaId: string;
   verdict: IdeaRoomVerdict;
   meetingRef: string;
   at: string;
 }): Promise<IdeaLedgerEntry> {
-  const snapshots = await readIdeaLedger(input.root);
-  const current = currentIdeaEntries(snapshots);
-  const entry = current.find((candidate) => candidate.id === input.ideaId);
+  const namespace = checkedNamespace(input.namespace ?? GLOBAL_IDEA_NAMESPACE);
+  const snapshots = await readIdeaLedger(input.root, namespace);
+  const localCurrent = currentIdeaEntries(snapshots);
+  const current = currentIdeaEntries(await readIdeaLedgerScope(input.root, namespace));
+  const entry = localCurrent.find((candidate) => candidate.id === input.ideaId);
   if (!entry) throw new Error(`Unknown idea ${input.ideaId}`);
   const expectedStatus = verdictStatus(input.verdict.verdict);
   if (
@@ -526,6 +605,7 @@ export async function applyIdeaRoomVerdict(input: {
     supersededBy: undefined
   });
   const appended: IdeaLedgerEntry[] = [];
+  const globalAppended: IdeaLedgerEntry[] = [];
   if (input.verdict.verdict === "supersede") {
     const predecessorId = input.verdict.supersedes
       ?? entry.similarTo.find((link) => link.verdict === "variant_of")?.id;
@@ -533,7 +613,7 @@ export async function applyIdeaRoomVerdict(input: {
     if (!predecessor || predecessor.id === entry.id) {
       throw new Error("A supersede verdict requires a linked predecessor");
     }
-    appended.push(IdeaLedgerEntrySchema.parse({
+    const superseded = IdeaLedgerEntrySchema.parse({
       ...predecessor,
       status: "superseded",
       statusHistory: [...predecessor.statusHistory, {
@@ -543,10 +623,23 @@ export async function applyIdeaRoomVerdict(input: {
         reason: input.verdict.reason
       }],
       supersededBy: entry.id
-    }));
+    });
+    if (namespace !== GLOBAL_IDEA_NAMESPACE && !localCurrent.some((candidate) => candidate.id === predecessor.id)) {
+      globalAppended.push(superseded);
+    } else {
+      appended.push(superseded);
+    }
   }
   appended.push(next);
-  await appendSnapshots(input.root, snapshots, appended);
+  if (globalAppended.length) {
+    await appendSnapshots(
+      input.root,
+      GLOBAL_IDEA_NAMESPACE,
+      await readIdeaLedger(input.root, GLOBAL_IDEA_NAMESPACE),
+      globalAppended
+    );
+  }
+  await appendSnapshots(input.root, namespace, snapshots, appended);
   return next;
 }
 
@@ -559,7 +652,11 @@ function shortTitle(title: string): string {
   return compact(title.split(/\s+/).slice(0, 8).join(" "), 80);
 }
 
-export function renderIdeaIndex(entries: readonly IdeaLedgerEntry[]): string {
+export function renderIdeaIndex(
+  entries: readonly IdeaLedgerEntry[],
+  namespace: IdeaNamespace = GLOBAL_IDEA_NAMESPACE
+): string {
+  const normalized = checkedNamespace(namespace);
   const current = currentIdeaEntries(entries);
   const byNewest = [...current].sort((left, right) =>
     lastHistory(right).at.localeCompare(lastHistory(left).at) || left.id.localeCompare(right.id)
@@ -569,39 +666,70 @@ export function renderIdeaIndex(entries: readonly IdeaLedgerEntry[]): string {
   );
   const active = byNewest
     .filter((entry) => entry.status !== "killed" && entry.status !== "vetoed")
-    .filter((entry) => entry.status !== "superseded")
-    .slice(0, Math.max(0, 200 - killed.length));
+    .filter((entry) => entry.status !== "superseded");
   const supersededCount = current.filter((entry) => entry.status === "superseded").length;
-  const rows = (values: readonly IdeaLedgerEntry[]) => values.length
-    ? values.map((entry) =>
-        `| ${entry.id} | ${shortTitle(entry.title)} | ${entry.status} | ${compact(lastHistory(entry).reason, 120)} |`
-      ).join("\n")
-    : "| — | No ideas recorded | — | — |";
-  return [
-    "# Idea ledger index",
+  const row = (entry: IdeaLedgerEntry) =>
+    `| ${entry.id} | ${shortTitle(entry.title)} | ${entry.status} | ${compact(lastHistory(entry).reason, 120)} |`;
+  let activeRows = active.map(row);
+  let killedRows = killed.map(row);
+  const render = () => [
+    `# Idea ledger index — ${normalized}`,
     "",
-    "> Compact meeting context generated from the append-only ledger. The raw JSONL ledger is never injected into a meeting. Adopt semantic embeddings only after the ledger exceeds 500 current ideas.",
+    `> Compact ${normalized} meeting context generated from the append-only ledger. The raw JSONL ledger is never injected into a meeting. VAULT compares this namespace with global memory.`,
     "",
     "## Current index",
     "",
     "| ID | Title (≤8 words) | Status | Last reason |",
     "| --- | --- | --- | --- |",
-    rows(active),
+    activeRows.length ? activeRows.join("\n") : "| — | No ideas recorded | — | — |",
     "",
+    `Omitted older current entries: ${active.length - activeRows.length}.`,
     `Collapsed superseded entries: ${supersededCount}.`,
     "",
     "## All-time kill list",
     "",
     "| ID | Title (≤8 words) | Current status | Last reason |",
     "| --- | --- | --- | --- |",
-    rows(killed),
+    killedRows.length ? killedRows.join("\n") : "| — | No ideas recorded | — | — |",
+    "",
+    `Omitted older kill-list entries: ${killed.length - killedRows.length}.`,
     ""
   ].join("\n");
+  let rendered = render();
+  while (rendered.length > MAX_IDEA_INDEX_CHARS && (activeRows.length || killedRows.length)) {
+    if (activeRows.length >= killedRows.length && activeRows.length) activeRows = activeRows.slice(0, -1);
+    else killedRows = killedRows.slice(0, -1);
+    rendered = render();
+  }
+  if (rendered.length > MAX_IDEA_INDEX_CHARS) {
+    throw new Error(`Idea index header exceeds ${MAX_IDEA_INDEX_CHARS} characters`);
+  }
+  return rendered;
 }
 
-export async function regenerateIdeaIndex(root: string): Promise<string> {
-  const entries = await readIdeaLedger(root);
-  const rendered = renderIdeaIndex(entries);
-  await atomicWriteText(root, IDEA_INDEX_PATH, rendered);
+export async function regenerateIdeaIndex(
+  root: string,
+  namespace: IdeaNamespace = GLOBAL_IDEA_NAMESPACE
+): Promise<string> {
+  const entries = await readIdeaLedger(root, namespace);
+  const rendered = renderIdeaIndex(entries, namespace);
+  await atomicWriteText(root, ideaIndexPath(namespace), rendered);
   return rendered;
+}
+
+export async function readIdeaIndexSlice(
+  root: string,
+  namespace: IdeaNamespace
+): Promise<string> {
+  const normalized = checkedNamespace(namespace);
+  const fallback = renderIdeaIndex([], normalized);
+  let index = await readText(root, ideaIndexPath(normalized));
+  if (!index && normalized === GLOBAL_IDEA_NAMESPACE) {
+    index = await readText(root, LEGACY_IDEA_INDEX_PATH);
+  }
+  if (!index) return fallback;
+  if (index.length > MAX_IDEA_INDEX_CHARS) {
+    return regenerateIdeaIndex(root, normalized);
+  }
+  return index;
 }

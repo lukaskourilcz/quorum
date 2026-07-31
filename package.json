@@ -24,6 +24,7 @@
     "delivery": "pnpm --filter @boardlessai/orchestrator delivery",
     "dev": "pnpm --filter @boardlessai/site dev",
     "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
+    "ideas:migrate": "pnpm --filter @boardlessai/orchestrator ideas:migrate",
     "lint": "pnpm -r lint",
     "org:maintain": "pnpm --filter @boardlessai/orchestrator org:maintain",
     "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",

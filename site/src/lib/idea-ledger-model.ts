@@ -15,6 +15,7 @@ export const ideaStatuses = [
 export type PublicIdeaStatus = (typeof ideaStatuses)[number];
 
 export interface PublicIdeaEntry {
+  ventureId: string;
   id: string;
   title: string;
   summary: string;
@@ -75,7 +76,10 @@ function strictArray<T>(value: unknown, max: number, parse: (entry: unknown) => 
   return parsed.every((entry): entry is T => entry !== null) ? parsed : null;
 }
 
-export function parsePublicIdeaEntry(value: unknown): PublicIdeaEntry | null {
+export function parsePublicIdeaEntry(
+  value: unknown,
+  ventureId = "global"
+): PublicIdeaEntry | null {
   const entry = object(value);
   if (!entry || entry.schemaVersion !== "idea-ledger/1") return null;
   const id = ideaId(entry.id);
@@ -117,6 +121,7 @@ export function parsePublicIdeaEntry(value: unknown): PublicIdeaEntry | null {
   if ((entry.revival !== undefined && (!revivalFrom || !revivalEvidence)) || (entry.supersededBy !== undefined && !supersededBy)) return null;
 
   return {
+    ventureId,
     id,
     title,
     summary,
@@ -129,12 +134,15 @@ export function parsePublicIdeaEntry(value: unknown): PublicIdeaEntry | null {
   };
 }
 
-export function parsePublicIdeaLedger(raw: string): PublicIdeaEntry[] | null {
+export function parsePublicIdeaLedger(
+  raw: string,
+  ventureId = "global"
+): PublicIdeaEntry[] | null {
   const lines = raw.split(/\r?\n/).filter(Boolean);
   const snapshots: PublicIdeaEntry[] = [];
   for (const line of lines) {
     try {
-      const parsed = parsePublicIdeaEntry(JSON.parse(line));
+      const parsed = parsePublicIdeaEntry(JSON.parse(line), ventureId);
       if (!parsed) return null;
       snapshots.push(parsed);
     } catch {

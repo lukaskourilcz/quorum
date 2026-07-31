@@ -21,7 +21,7 @@ describe("public idea ledger boundary", () => {
       statusHistory: [...entry.statusHistory, { status: "accepted", at: "2026-07-31T15:00:00.000Z", meetingRef: "meetings/2026-07-31-cu-product", reason: "Product room accepted the bounded cue." }]
     };
     expect(parsePublicIdeaLedger(`${JSON.stringify(entry)}\n${JSON.stringify(accepted)}\n`)).toEqual([
-      expect.objectContaining({ id: entry.id, status: "accepted" })
+      expect.objectContaining({ id: entry.id, status: "accepted", ventureId: "global" })
     ]);
   });
 

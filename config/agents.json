@@ -870,7 +870,7 @@
       "mission": "Institutional memory. Keep the idea ledger, rule on duplicates, and make sure nothing dead returns without new evidence.",
       "responsibilities": [
         "Adjudicate every proposed idea against the ledger",
-        "Maintain state/ideas/INDEX.md",
+        "Maintain bounded per-venture and global idea indexes",
         "Rule on revival evidence",
         "Report dedupe misses"
       ],

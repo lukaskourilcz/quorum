@@ -40,9 +40,15 @@ import {
   toIdeaRoomVerdict
 } from "./ideas/live.js";
 import {
+  CAUGHT_UP_IDEA_NAMESPACE,
+  GLOBAL_IDEA_NAMESPACE,
   applyIdeaRoomVerdict,
   currentIdeaEntries,
+  ensureIdeaInNamespace,
+  ideaIndexPath,
+  ideaLedgerPath,
   readIdeaLedger,
+  readIdeaIndexSlice,
   regenerateIdeaIndex
 } from "./ideas/ledger.js";
 import {
@@ -257,12 +263,20 @@ async function runCaughtUpDryCycle(
     const morningRaw = await readText(artifactRoot, `standups/${pragueClockParts(now).date}-morning.json`);
     const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
     if (morning?.caughtUpIdeaRef) {
-      const current = currentIdeaEntries(await readIdeaLedger(artifactRoot));
+      await ensureIdeaInNamespace(
+        artifactRoot,
+        CAUGHT_UP_IDEA_NAMESPACE,
+        morning.caughtUpIdeaRef
+      );
+      const current = currentIdeaEntries(
+        await readIdeaLedger(artifactRoot, CAUGHT_UP_IDEA_NAMESPACE)
+      );
       const morningIdea = current.find((candidate) => candidate.id === morning.caughtUpIdeaRef);
       if (!morningIdea) throw new Error(`Dry morning handoff references unknown idea ${morning.caughtUpIdeaRef}`);
       fixtureVerdict = morningIdea.status === "vetoed" || morningIdea.status === "killed" ? "veto" : "defer";
       fixtureIdea = await applyIdeaRoomVerdict({
         root: artifactRoot,
+        namespace: CAUGHT_UP_IDEA_NAMESPACE,
         ideaId: morningIdea.id,
         verdict: fixtureVerdict === "veto"
           ? { verdict: "veto", reason: "VAULT hard-stopped the fixture duplicate before deliberation." }
@@ -350,7 +364,9 @@ async function runCaughtUpDryCycle(
     calendarPath,
     emailPath,
     "notify/health.json",
-    ...(fixtureIdea ? ["ideas/ledger.jsonl", "ideas/INDEX.md"] : [])
+    ...(fixtureIdea
+      ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
+      : [])
   ];
   return {
     cycleId,
@@ -606,10 +622,22 @@ async function runCaughtUpLiveProductCycle(
     requiredParticipants: definition.requiredParticipants,
     now
   });
-  const index = await regenerateIdeaIndex(stateRoot);
+  const [index, globalIndex] = await Promise.all([
+    regenerateIdeaIndex(stateRoot, CAUGHT_UP_IDEA_NAMESPACE),
+    readIdeaIndexSlice(stateRoot, GLOBAL_IDEA_NAMESPACE)
+  ]);
   const morningRaw = await readText(stateRoot, `standups/${date}-morning.json`);
   const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
-  const ideas = currentIdeaEntries(await readIdeaLedger(stateRoot));
+  if (morning?.caughtUpIdeaRef) {
+    await ensureIdeaInNamespace(
+      stateRoot,
+      CAUGHT_UP_IDEA_NAMESPACE,
+      morning.caughtUpIdeaRef
+    );
+  }
+  const ideas = currentIdeaEntries(
+    await readIdeaLedger(stateRoot, CAUGHT_UP_IDEA_NAMESPACE)
+  );
   const idea = morning?.caughtUpIdeaRef
     ? ideas.find((candidate) => candidate.id === morning.caughtUpIdeaRef) ?? null
     : null;
@@ -621,6 +649,7 @@ async function runCaughtUpLiveProductCycle(
     ? await decideLiveProductRoom({
         context: {
           root: stateRoot,
+          ideaNamespace: CAUGHT_UP_IDEA_NAMESPACE,
           cycleId,
           stage: stages.current,
           now,
@@ -629,12 +658,14 @@ async function runCaughtUpLiveProductCycle(
         },
         idea,
         index,
+        globalIndex,
         yesterdayOutcome: previousOutcome
       })
     : null;
   const recordedIdea = idea && response
     ? await applyIdeaRoomVerdict({
         root: stateRoot,
+        namespace: CAUGHT_UP_IDEA_NAMESPACE,
         ideaId: idea.id,
         verdict: toIdeaRoomVerdict(response),
         meetingRef: reference,
@@ -737,8 +768,8 @@ async function runCaughtUpLiveProductCycle(
     decisionPath,
     scorecardPath,
     calendarPath,
-    "ideas/ledger.jsonl",
-    "ideas/INDEX.md",
+    ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE),
+    ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE),
     `notify/email/${reference.replaceAll("/", "-")}.json`,
     "notify/health.json",
     "budget/ledger.json"
@@ -910,6 +941,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       ? await prepareMorningIdea({
           context: {
             root: artifactRoot,
+            ideaNamespace: CAUGHT_UP_IDEA_NAMESPACE,
             cycleId,
             stage: stages.current,
             now,
@@ -960,7 +992,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       `meetings/${cycleId}.json`,
       `scorecards/${cycleId}.json`,
       `decisions/${cycleId}.json`,
-      ...(caughtUpIdea ? ["ideas/ledger.jsonl", "ideas/INDEX.md"] : [])
+      ...(caughtUpIdea
+        ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
+        : [])
     ];
     await Promise.all([
       atomicWriteJson(

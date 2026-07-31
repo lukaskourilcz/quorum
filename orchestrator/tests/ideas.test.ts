@@ -7,14 +7,20 @@ import { DEFAULT_BUDGET_LIMITS } from "../src/budget.js";
 import type { Evidence } from "../src/research/evidence.js";
 import { atomicWriteText } from "../src/state.js";
 import {
+  GLOBAL_IDEA_NAMESPACE,
   IDEA_STOPWORDS,
+  MAX_IDEA_INDEX_CHARS,
   applyIdeaRoomVerdict,
   canonicalIdeaTokens,
   currentIdeaEntries,
+  ideaIndexPath,
+  ideaLedgerPath,
   ideaFingerprint,
   prefilterIdeaCandidates,
   readIdeaLedger,
+  readIdeaLedgerScope,
   regenerateIdeaIndex,
+  renderIdeaIndex,
   screenAndRecordIdea,
   type VaultAdjudicator
 } from "../src/ideas/ledger.js";
@@ -46,7 +52,7 @@ async function rootWith(entries: readonly IdeaLedgerEntry[] = []): Promise<strin
   const root = await mkdtemp(path.join(os.tmpdir(), "boardless-ideas-"));
   await atomicWriteText(
     root,
-    "ideas/ledger.jsonl",
+    ideaLedgerPath(GLOBAL_IDEA_NAMESPACE),
     entries.length ? `${entries.map((value) => JSON.stringify(value)).join("\n")}\n` : ""
   );
   return root;
@@ -100,6 +106,26 @@ describe("idea canonicalization", () => {
 });
 
 describe("VAULT ledger adjudication", () => {
+  it("dedupes within a venture plus global memory without copying global history", async () => {
+    const prior = entry({
+      id: "idea-2026-08-01-a3f9",
+      title: "A newsletter for developers",
+      summary: "A concise publication for working developers."
+    });
+    const root = await rootWith([prior]);
+    const result = await screenAndRecordIdea({
+      root,
+      namespace: "incubator",
+      proposal: proposal(prior.title, prior.summary),
+      evidence: [],
+      adjudicator: { async adjudicate() { throw new Error("exact matches do not call a model"); } }
+    });
+    expect(result).toMatchObject({ verdict: "duplicate_of", autoRejected: true });
+    expect(await readIdeaLedger(root, GLOBAL_IDEA_NAMESPACE)).toHaveLength(1);
+    expect(await readIdeaLedger(root, "incubator")).toHaveLength(1);
+    expect(await readIdeaLedgerScope(root, "incubator")).toHaveLength(2);
+  });
+
   it("hard-stops exact fingerprints without invoking a model", async () => {
     const prior = entry({
       id: "idea-2026-08-01-a3f9",
@@ -251,10 +277,26 @@ describe("VAULT ledger adjudication", () => {
     expect(snapshots).toHaveLength(2);
     expect(currentIdeaEntries(snapshots)[0]).toMatchObject({ status: "deferred" });
     await regenerateIdeaIndex(root);
-    const index = await readFile(path.join(root, "ideas", "INDEX.md"), "utf8");
+    const index = await readFile(
+      path.join(root, ideaIndexPath(GLOBAL_IDEA_NAMESPACE)),
+      "utf8"
+    );
     expect(index).toContain("The raw JSONL ledger is never injected into a meeting");
     expect(index).toContain("Source reliability card");
     expect(index).toContain("deferred");
+  });
+
+  it("keeps every namespace index within the injection ceiling", () => {
+    const entries = Array.from({ length: 220 }, (_, index) => entry({
+      id: `idea-2026-08-01-${index.toString(16).padStart(4, "0")}`,
+      title: `Bounded portfolio concept ${index}`,
+      summary: `A distinct evidence-backed concept with enough detail to exercise the compact index row limit ${index}.`,
+      status: index % 3 === 0 ? "killed" : "proposed",
+      at: `2026-08-01T${String(index % 24).padStart(2, "0")}:00:00.000Z`
+    }));
+    const index = renderIdeaIndex(entries, "incubator");
+    expect(index.length).toBeLessThanOrEqual(MAX_IDEA_INDEX_CHARS);
+    expect(index).toContain("Omitted older");
   });
 
   it("turns a dead-idea hard stop into a deterministic product-room veto", async () => {

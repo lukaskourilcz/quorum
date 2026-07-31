@@ -133,8 +133,8 @@ describe("cycle preflight", () => {
       now: new Date("2026-08-04T04:00:00.000Z")
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
-      "tmp/dry-run/state/ideas/ledger.jsonl",
-      "tmp/dry-run/state/ideas/INDEX.md"
+      "tmp/dry-run/state/ideas/caught-up/ledger.jsonl",
+      "tmp/dry-run/state/ideas/caught-up/INDEX.md"
     ]));
     const standup = JSON.parse(await readFile(
       path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-04-morning.json"),
