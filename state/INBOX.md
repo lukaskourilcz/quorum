@@ -9,6 +9,12 @@ None.
 
 ## Resolved
 
+- [x] HUMAN_APPROVAL REVENUE-HOSTING-001 — Owner confirmed on 2026-07-31 that
+  both projects use an existing Vercel Pro subscription. Hosting is recorded as
+  $0 incremental project cost. Reopen the cap decision if either project leaves
+  Pro or the invoice allocation changes. Sponsor acceptance remains a separate
+  HUMAN_APPROVAL. → approved 2026-07-31.
+
 - [x] HUMAN_APPROVAL BRAND-CLEARANCE-001 — Owner explicitly accepted the
   collision risk with `Boardless, Inc.` and `boardless.ai` under hobby /
   non-commercial project mode (see `state/BUSINESS.md`). No commercial launch,

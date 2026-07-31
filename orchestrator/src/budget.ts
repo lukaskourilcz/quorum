@@ -32,6 +32,8 @@ export type BudgetLedgerEntry = z.infer<typeof BudgetLedgerEntrySchema>;
 export interface BudgetLimits {
   perTextCallUsd: number;
   maxCycleUsd: number;
+  caughtUpMeetingUsd: number;
+  editionProductionUsd: number;
   dailyUsd: number;
   monthlyApiUsd: number;
   monthlyOperatingUsd: number;
@@ -43,8 +45,10 @@ export interface BudgetLimits {
 export const DEFAULT_BUDGET_LIMITS: BudgetLimits = {
   perTextCallUsd: 0.1,
   maxCycleUsd: 0.2,
-  dailyUsd: 0.4,
-  monthlyApiUsd: 12,
+  caughtUpMeetingUsd: 0.08,
+  editionProductionUsd: 0.35,
+  dailyUsd: 0.7,
+  monthlyApiUsd: 15,
   monthlyOperatingUsd: 20,
   maxMediaAssetUsd: 0.1,
   dailyMediaUsd: 0.1,

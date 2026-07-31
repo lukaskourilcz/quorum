@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "venture": "caught-up",
+  "rings": {
+    "autonomous": {
+      "ring": 1,
+      "actions": [
+        {
+          "id": "story_selection",
+          "description": "Select one sourced daily story or record NO_EDITION within the quality gates."
+        },
+        {
+          "id": "article_content",
+          "description": "Write bilingual edition content that passes sourcing, copy, budget and quality checks."
+        },
+        {
+          "id": "social_drafts",
+          "description": "Compose deterministic social drafts and place them in the draft-locked approval queue."
+        },
+        {
+          "id": "approved_sponsor_slot",
+          "description": "Turn an already approved sponsor slot on or off without accepting money or changing terms."
+        },
+        {
+          "id": "existing_layout_choice",
+          "description": "Choose among existing BoardlessAI layout variants, components and design tokens."
+        }
+      ]
+    },
+    "humanApproval": {
+      "ring": 2,
+      "inboxType": "HUMAN_APPROVAL",
+      "actions": [
+        {
+          "id": "spend_outside_envelope",
+          "description": "Approve any spend outside a recorded operating envelope before commitment."
+        },
+        {
+          "id": "dependency_or_route",
+          "description": "Approve new dependencies, routes, sections, design tokens, CSP rules or headers."
+        },
+        {
+          "id": "cap_or_schedule",
+          "description": "Approve budget-cap, operating-cap or meeting-schedule changes."
+        },
+        {
+          "id": "account_or_scope",
+          "description": "Approve accounts, credentials, OAuth scopes or channel autopublish."
+        },
+        {
+          "id": "sponsor_or_revenue",
+          "description": "Approve each sponsor or revenue event after the hosting and brand gates clear."
+        },
+        {
+          "id": "caught_up_code",
+          "description": "Approve any Caught Up code change; delivery may write content and board data only."
+        }
+      ]
+    },
+    "locked": {
+      "ring": 3,
+      "controls": [
+        {
+          "id": "security_headers",
+          "description": "Security headers and CSP may not be weakened through any board path."
+        },
+        {
+          "id": "bundle_ceiling",
+          "description": "The Caught Up 110 kB page-entry gzip ceiling remains mandatory."
+        },
+        {
+          "id": "accessibility_gates",
+          "description": "Accessibility checks remain mandatory for every public route and asset."
+        },
+        {
+          "id": "honesty_invariants",
+          "description": "Sources, provenance, metrics, review status and costs must remain factual."
+        },
+        {
+          "id": "sanitization_boundary",
+          "description": "Only sanitized projections may reach a public site or delivery package."
+        },
+        {
+          "id": "human_only_payments",
+          "description": "Only the human owner may execute payments or accept money."
+        },
+        {
+          "id": "compatibility_contracts",
+          "description": "Routes, feeds, redirects, locales and the dispatches and wire keys stay compatible."
+        }
+      ]
+    }
+  },
+  "deliveryBoundary": {
+    "codeWritesAllowed": false,
+    "allowedPaths": [
+      "content/articles/<date>.en.mdx",
+      "content/articles/<date>.cs.mdx",
+      "public/illustrations/<date>.webp",
+      "public/data/board/<date>.json"
+    ]
+  },
+  "revenueGate": {
+    "acceptMoneyBeforeApproval": false,
+    "hostingPlan": "vercel-pro",
+    "hostingDecisionStatus": "resolved",
+    "approvalActionId": "sponsor_or_revenue"
+  }
+}

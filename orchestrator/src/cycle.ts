@@ -72,6 +72,14 @@ function budgetLimitsFromEnvironment(): BudgetLimits {
       "MAX_CYCLE_BUDGET_USD",
       DEFAULT_BUDGET_LIMITS.maxCycleUsd
     ),
+    caughtUpMeetingUsd: envNumber(
+      "CU_MEETING_BUDGET_USD",
+      DEFAULT_BUDGET_LIMITS.caughtUpMeetingUsd
+    ),
+    editionProductionUsd: envNumber(
+      "EDITION_PRODUCTION_BUDGET_USD",
+      DEFAULT_BUDGET_LIMITS.editionProductionUsd
+    ),
     dailyUsd: envNumber("DAILY_BUDGET_USD", DEFAULT_BUDGET_LIMITS.dailyUsd),
     monthlyApiUsd: envNumber(
       "MONTHLY_BUDGET_USD",
@@ -106,7 +114,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     };
   }
   if (!options.dry && options.phase === "founding") {
-    throw new Error("A live founding cycle is not permitted in hobby / non-commercial mode");
+    throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
   }
   const execute = async (): Promise<CycleResult> => {
     const modelConfig = JSON.parse(

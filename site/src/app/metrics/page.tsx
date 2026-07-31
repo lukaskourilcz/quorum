@@ -48,7 +48,7 @@ export default async function MetricsPage() {
           {[
             ["Stage", latestStandup.stage, "Gate not met", "text-[var(--foreground)]"],
             ["Eligible evidence", "0", "Fixture records excluded", "text-[var(--accent)]"],
-            ["Recognized revenue", "n/a", "No source connected", "text-[var(--fog)]"],
+            ["Recognized revenue", "$0.00", "No revenue event accepted", "text-[var(--accent)]"],
             ["Month all-in", formatUsd(latestStandup.ledger.monthAllIn), "$20 hard cap", "text-[var(--foreground)]"]
           ].map(([label, value, foot, color]) => (
             <div
@@ -146,11 +146,11 @@ export default async function MetricsPage() {
           <SectionHeading
             description="Financial totals are derived only from verified, uniquely reconciled entries."
             eyebrow="Finance"
-            title="Unknown revenue is not zero revenue"
+            title="Measured revenue and unavailable data stay separate"
           />
           <div className="panel-grid md:grid-cols-3">
             {[
-              ["Recognized revenue", "n/a", "No verified payment source connected", true],
+              ["Recognized revenue", "$0.00", "Operating ledger records no accepted revenue", false],
               ["Verified operating cost", formatUsd(latestStandup.ledger.monthAllIn), "API + treasury + other; no double count", false],
               ["Gross profit", "n/a", "Unavailable until revenue source exists", true]
             ].map(([label, value, foot, muted]) => (

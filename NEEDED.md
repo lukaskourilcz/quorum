@@ -1,11 +1,48 @@
 # Co je potřeba udělat ze strany vlastníka
 
-Tento dokument je praktický checklist pro přechod z bezpečného lokálního
-prototypu do reálného provozu. Aktuálně je projekt ve fázi `DISCOVERY`, nemá
-ověřený podnikatelský záměr, připojené tržby ani produkční deployment.
+BoardlessAI je od 2026-08-01 v režimu `operating (pre-revenue)` a Caught Up je
+Venture 001 z rozhodnutí vlastníka. Zakládací gate zůstává nesplněný. Níže jsou
+blokátory integrace a zachovaný provozní checklist.
 
 > Nikdy nevkládejte tokeny, hesla nebo API klíče do repozitáře. Patří pouze do
 > GitHub Secrets nebo do secret store zvoleného hostingu.
+
+## Caught Up integration
+
+- [ ] **Create GitHub App "boardlessai-delivery"** — install on `aifirst` only,
+  `contents: write`; store `DELIVERY_APP_ID` + `DELIVERY_APP_PRIVATE_KEY` in quorum
+  Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
+- [ ] **Resend account + domain** — verify free tier covers ~150 emails/mo; add
+  SPF/DKIM for `meetings@<domain>`; store `RESEND_API_KEY`. [imp:4] [owner:me]
+  [time:45m] [kind:setup]
+- [ ] **Approve budget changes** — `MONTHLY_BUDGET_USD` 12→15, `DAILY_BUDGET_USD`
+  0.40→0.70, two new envelopes; countersign in the adoption decision record. [imp:5]
+  [owner:me] [time:5m] [kind:decision]
+- [ ] **Migrate source API keys to quorum secrets** — GUARDIAN, NYTIMES, GNEWS,
+  STACKEXCHANGE, FIRECRAWL/JINA (or drop those sources; they self-skip). [imp:3]
+  [owner:me] [time:20m] [kind:setup]
+- [ ] **Supply the Caught Up production domain** — for the allowlist + RELAY's live
+  check + room links. [imp:4] [owner:me] [time:5m] [kind:setup]
+- [ ] **Sign the brand-clearance revisit** — acknowledge BoardlessAI collision risk
+  now that scope is commercial-adjacent; confirm the rename-or-clear gate before any
+  paid sponsorship. [imp:4] [owner:me] [time:20m] [kind:legal]
+- [ ] **Run a Caught Up name check** — the product brand now carries the public
+  identity; verify no blocking collision. [imp:3] [owner:me] [time:30m] [kind:legal]
+- [x] **Confirm compliant hosting before revenue** — owner confirmed existing
+  Vercel Pro coverage on 2026-07-31. Reopen the cap decision if either project
+  leaves Pro or invoice allocation changes. [imp:4] [owner:me] [time:15m]
+  [kind:decision]
+- [ ] **Approve avatar spend ≤ $1.80** — six portraits through the avatar budget.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+- [ ] **Approve go-live of the two new cron phases** — flip after phase 9 review.
+  [imp:5] [owner:me] [time:10m] [kind:deploy]
+- [ ] **Review first three delivered editions + first social packs in the queue** —
+  quality gate before considering any channel unlock, which stays a separate future
+  HUMAN_APPROVAL. [imp:4] [owner:me] [time:60m] [kind:content]
+- [ ] **Verify assumed external facts** — Resend's 3,000/month and 100/day free
+  tier was verified on 2026-07-31. ⚠ VERIFY model prices vs `prices.ts`, Threads
+  carousel API limits, Instagram carousel limits, and gpt-image-2 per-image cost
+  ≤ $0.30. [imp:3] [owner:me] [time:30m] [kind:setup]
 
 ## P0 — blokátory před veřejným spuštěním
 
@@ -26,7 +63,8 @@ historický záznam:
 
 BoardlessAI je nově uvedený mezi projekty na lukaskouril.dev, včetně animovaného
 náhledu nahraného ze spuštěného webu. Portfolio popisuje stav pravdivě:
-implementace hotová, venture nezaložený, web běží na označených fixture datech.
+web běží na označených historických datech a Caught Up je owner-adopted Venture
+001 ve fázi VALIDATION.
 
 - [x] **Rozhodnout o názvu dřív, než ho portfolio ponese dát dál.** Riziko `[imp:4]` `[owner:me]` `[time:1h]` `[kind:legal]`
   vědomě přijato pod hobby módem 2026-07-28. Portfolio karta může nést `BoardlessAI`.
@@ -99,9 +137,9 @@ Bez obou klíčů se plánované cykly bezpečně přepnou do dry režimu.
 
 ## P2 — skutečné založení venture
 
-**Neaktivní** v hobby módu (viz `state/BUSINESS.md` → Project mode). Sekce se
-znovu otevře pouze při reklasifikaci projektu na komerční. `FIX-*` záznamy
-zůstávají fixture a nesmí být použity jako obchodní důkaz.
+**Neaktivní pro Venture 001.** Caught Up přijal vlastník mimo founding gate.
+`FIX-*` záznamy zůstávají fixture a nesmí být použity jako obchodní důkaz.
+Živý `founding` cyklus zůstává zakázaný.
 
 - [-] Dodat nebo schválit zdroje pro skutečný market research. `[imp:3]` `[owner:me]` `[time:30m]` `[kind:decision]`
 - [-] Získat minimálně tři nezávislé reálné důkazní položky. `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`
@@ -120,8 +158,9 @@ zůstávají fixture a nesmí být použity jako obchodní důkaz.
 - [ ] Připojit analytiku až po právní kontrole a doplnit ji do CSP a network `[imp:3]` `[owner:me]` `[time:2h]` `[kind:legal]`
   allowlistu samostatným review.
 - [ ] Vybrat platební nebo fakturační systém až po validaci nabídky. `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-- [ ] Zavést ověřitelný zdroj tržeb, refundů a payment fees. Dokud není `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
-  připojen, musí zůstat revenue a gross profit `n/a`, nikoliv nula.
+- [ ] Zavést ověřitelný zdroj tržeb, refundů a payment fees. Do první `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
+  přijaté platby zůstává recognized revenue na měřených `$0`; neznámé fee a
+  refund údaje zůstávají `unavailable`.
 - [ ] Nastavit účetní export a měsíční reconciliation proti `[imp:3]` `[owner:me]` `[time:1h]` `[kind:deploy]`
   `state/finance/ledger.json` a `state/treasury/ledger.json`.
 - [ ] Každý externí výdaj provádí člověk až po položce `HUMAN_APPROVAL` nebo `[imp:3]` `[owner:me]` `[time:20m]` `[kind:setup]`

@@ -4,7 +4,7 @@ Praktický průvodce úkoly z `NEEDED.md`, které nejde spustit z Claude Code.
 Řeš odshora dolů — bloky P0 blokují cokoliv veřejného, P1 blokují spuštění,
 P2 blokují reálný venture a monetizaci.
 
-Zdroj: `NEEDED.md` k datu 2026-07-28. Když úkol dokončíš, odškrtni ho tady
+Zdroj: `NEEDED.md`, aktualizováno 2026-08-01. Když úkol dokončíš, odškrtni ho tady
 i v `NEEDED.md`.
 
 ---
@@ -16,25 +16,17 @@ po redesignu) byl už splněn v commitu `81dced6`. Jakmile změníš vzhled webu
 řekni "obnov náhled" a agent to spustí — postup je v
 `.claude/skills/preview-video/SKILL.md`.
 
-## Hobby mode — vyřešeno 2026-07-28
+## Reclassification update: 2026-08-01
 
-Vlastník přepnul projekt do **hobby / non-commercial** módu
-(`state/BUSINESS.md` → Project mode). Následující bloky tím padají:
+Vlastník přijal Caught Up jako Venture 001 a přepnul BoardlessAI do režimu
+**operating (pre-revenue)**. Původní hobby rozhodnutí zůstává historickým
+záznamem. Aktuální blokátory jsou v horní části `NEEDED.md`.
 
-- **P0 body 1–6** — hotovo (viz níže, přeškrtnuto).
-- **P2 body 29–34** — neaktivní, DISCOVERY zůstává trvale zavřený, žádný
-  venture se nespouští, žádná fiktivní evidence se nepromuje na reálnou.
-- **P2 body 35–40** (analytika, tržby, platby) — bez smyslu, dokud projekt
-  není komerční. Pokud někdy budeš chtít Vercel Web Analytics (bod 51),
-  klidně, ale je to jen pro tvůj přehled.
-- **P2 body 41–47** (Threads / Instagram) — přeskočit celé, pokud sociální
-  publikaci neplánuješ.
-- **Body 48–50** (Product Hunt, media provider, Reddit) — vynechat.
-- **Právní minimum P1 body 24–28** — pro hobby projekt bez sběru osobních
-  údajů a bez placené nabídky formálně nutné nejsou. Doporučuji doplnit
-  jednoduchý disclaimer do `README.md` a hotovo.
-
-Zbývá tím ze 51 úkolů zhruba **14 aktivních** kroků (viz níže).
+- Founding gate neprošel a živý `founding` cyklus zůstává zakázaný.
+- Fixture evidence se nesmí změnit na live evidence.
+- Tržby jsou měřených $0; neznámé fee a refund údaje zůstávají unavailable.
+- První platbu blokuje hosting a brand clearance.
+- Sociální kanály zůstávají v draft režimu.
 
 ---
 
@@ -240,7 +232,8 @@ Kandidáti: Plausible, Umami self-hosted, Vercel Web Analytics.
 - [ ] Kandidáti: Stripe, Fakturoid, Fakturační portál banky, atd.
 
 ### 38. Ověřitelný zdroj tržeb `[imp:3] [time:1h] [kind:deploy]`
-- [ ] Dokud není napojen, drž revenue a gross profit jako `n/a`, ne `0`.
+- [ ] Dokud není přijata platba, drž recognized revenue na měřených `$0`;
+  neznámé poplatky a refundy nech jako `unavailable`.
 - [ ] Zdroj musí umožnit programové čtení (např. Stripe API).
 
 ### 39. Účetní export a měsíční reconciliation `[imp:3] [time:1h] [kind:deploy]`

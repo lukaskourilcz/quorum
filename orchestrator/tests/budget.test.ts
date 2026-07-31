@@ -3,6 +3,7 @@ import {
   assertImageReservation,
   assertTextReservation,
   BudgetError,
+  DEFAULT_BUDGET_LIMITS,
   estimateImageCall,
   estimateTextCall,
   type BudgetLedgerEntry,
@@ -27,6 +28,21 @@ function context(
 }
 
 describe("budget guard", () => {
+  it("keeps the adopted Caught Up envelopes inside the operating cap", () => {
+    expect(DEFAULT_BUDGET_LIMITS).toMatchObject({
+      maxCycleUsd: 0.2,
+      caughtUpMeetingUsd: 0.08,
+      editionProductionUsd: 0.35,
+      dailyUsd: 0.7,
+      monthlyApiUsd: 15,
+      monthlyMediaUsd: 2,
+      monthlyOperatingUsd: 20
+    });
+    expect(
+      DEFAULT_BUDGET_LIMITS.monthlyApiUsd + DEFAULT_BUDGET_LIMITS.monthlyMediaUsd
+    ).toBeLessThanOrEqual(DEFAULT_BUDGET_LIMITS.monthlyOperatingUsd);
+  });
+
   it("uses the dated promotional Sonnet price before September", () => {
     const promo = estimateTextCall({
       provider: "anthropic",
@@ -121,4 +137,3 @@ describe("budget guard", () => {
     );
   });
 });
-

@@ -623,7 +623,7 @@
       ],
       "successChecks": [
         "Every cost is counted exactly once",
-        "Missing revenue remains n/a and the monthly cap is fail-closed"
+        "Measured zero revenue stays distinct from unavailable data, and the monthly cap fails closed"
       ],
       "capabilityTags": ["accounting", "cost", "budget", "unit_economics"],
       "status": "active",

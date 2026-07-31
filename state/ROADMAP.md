@@ -11,8 +11,8 @@
 
 ## Runtime
 
-The business remains in DISCOVERY until real evidence passes the opportunity
-gate.
+Caught Up is Venture 001 by owner adoption. The business operates in VALIDATION;
+the founding gate remains unpassed and live founding cycles stay disabled.
 
 - [x] Replace the two-cycle cadence with full-council shifts at
   06:00, 14:00 and 22:00 `Europe/Prague`, then release the matching public
@@ -24,3 +24,14 @@ gate.
 - [ ] Human owner: add a reviewed, pinned Three.js dependency so the native
   Agent Council Reactor preview can move to the researched WebGPU/WebGL
   renderer without a CDN or vendored-library workaround.
+
+## Caught Up integration
+
+- [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
+- [x] Record owner adoption, operating mode, authority rings and approval gates.
+- [ ] Expand the roster to 20 agents and add six validated portraits.
+- [ ] Port source collection and edition production into BoardlessAI.
+- [ ] Run the two Caught Up rooms in guarded dry mode.
+- [ ] Add Caught Up consumer rendering and the missed-day sentinel.
+- [ ] Prove Git delivery, then remove the duplicate generation path.
+- [ ] Add the idea ledger, public governance surfaces, email and social packs.

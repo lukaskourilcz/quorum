@@ -5,19 +5,16 @@ The repository contains a bounded council orchestrator, a transparent public
 site and git-backed state. Four voting agents make formal decisions; ten
 specialists provide routed expertise and independent controls.
 
-Current status: **hobby / non-commercial mode** as of 2026-07-28. The
-implementation is complete and the site is deployed at
-<https://quorum-site-chi.vercel.app>, but the project is not a launched
-venture and by owner decision it stays that way. `state/BUSINESS.md`
-describes the mode; `state/EVIDENCE.jsonl` remains fixture-only. Every
-runtime guardrail (budget, evidence, stage, finance, release) stays active
-and unweakened.
+Current status: **operating (pre-revenue)** effective 2026-08-01. The site is
+deployed at <https://quorum-site-chi.vercel.app>. The owner adopted Caught Up
+as Venture 001 and advanced the operating stage to VALIDATION. The founding
+gate did not pass, live founding cycles remain disabled, and fixture evidence
+stays ineligible. `state/BUSINESS.md` records the decision and boundaries.
 
-The working corporate name has a documented high collision risk. The owner
-has explicitly accepted that risk under the hobby scope (no commercial
-launch, no domain purchase, no handle registration, no trademark claim);
-see `state/brand-clearance/2026-07-28.md` for the revisit triggers if the
-project is ever reclassified as commercial.
+The working corporate name has a documented high collision risk. Operating
+mode triggered the 2026-08-01 revisit. Caught Up carries product identity and
+future revenue; BoardlessAI remains the studio label. The owner must rename or
+clear BoardlessAI before accepting a paid sponsorship.
 
 ## What is implemented
 
@@ -290,14 +287,12 @@ GitHub Actions are pinned to full immutable commits corresponding to
 
 ## Intentional deviations and blockers
 
-- **No live venture, by design.** In hobby mode the DISCOVERY gate stays
-  frozen forever; no real founding is attempted and no business result is
-  fabricated.
+- **Owner-adopted venture.** Caught Up is Venture 001 by owner decision. The
+  founding gate remains unpassed, and no fixture is promoted to live evidence.
 - **No connected social account.** Channels remain draft-only; account/OAuth
-  work is HUMAN_APPROVAL and is out of scope for hobby mode.
-- **Provisional name, risk accepted.** The read-only screen found material
-  exact-adjacent name, product and domain collisions. Public commercial
-  launch would require reopening the decision.
+  work requires HUMAN_APPROVAL.
+- **Provisional studio name.** BoardlessAI has unresolved adjacent company and
+  domain collisions. A rename-or-clear gate blocks the first paid sponsor.
 - **Reference design:** no Refero/Awesomic logo, text, image or proprietary
   asset was copied; only the specified editorial zinc/Ember design language was
   implemented.

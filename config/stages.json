@@ -1,5 +1,5 @@
 {
-  "current": "DISCOVERY",
+  "current": "VALIDATION",
   "stages": {
     "DISCOVERY": {
       "entry": [],
@@ -51,4 +51,3 @@
     }
   }
 }
-

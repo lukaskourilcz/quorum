@@ -44,8 +44,10 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       MONTHLY_OPERATING_CAP_USD: "20"
       MAX_CYCLE_BUDGET_USD: "0.20"
-      DAILY_BUDGET_USD: "0.40"
-      MONTHLY_BUDGET_USD: "12"
+      CU_MEETING_BUDGET_USD: "0.08"
+      EDITION_PRODUCTION_BUDGET_USD: "0.35"
+      DAILY_BUDGET_USD: "0.70"
+      MONTHLY_BUDGET_USD: "15"
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

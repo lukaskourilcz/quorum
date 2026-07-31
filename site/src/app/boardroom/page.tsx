@@ -70,7 +70,7 @@ export default async function BoardroomPage() {
       max: 1,
       valueLabel: "Bounded",
       state: "ready",
-      detail: "Current shift work stays inside the hobby / non-commercial boundary."
+      detail: "Current shift work stays inside pre-revenue authority and human approval gates."
     },
     {
       id: "budget",

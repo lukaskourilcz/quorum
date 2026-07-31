@@ -2,107 +2,127 @@
 
 ## Project mode
 
-**Hobby / non-commercial** as of 2026-07-28. The owner has decided this
-project is a personal exploration of agent governance, not a venture aiming
-for market launch or revenue.
+**Operating (pre-revenue)** effective 2026-08-01 by owner decision.
 
-Consequences:
-- The DISCOVERY stage stays open indefinitely; no gate advance is planned.
-- Real market evidence, paid analytics, payment processors, and channel
-  autopublish are out of scope until the owner explicitly reclassifies the
-  project as commercial.
-- `state/EVIDENCE.jsonl` remains fixture-only; no synthetic evidence is
-  promoted to real.
-- Content, brand, and portfolio presentation continue to describe the state
-  truthfully (implementation done, venture not founded).
+Caught Up is Venture 001. The owner adopted it directly; the founding council
+did not discover or approve it. That distinction keeps the founding gate honest:
+
+- Live founding cycles remain disabled and continue to throw.
+- Fixture evidence remains ineligible for business decisions.
+- SCOUT may collect live evidence from approved, allowlisted sources.
+- Recognized revenue is measured at $0 until a real revenue event is accepted.
+- Only the human owner may accept money or execute a payment.
 
 ## Owner and roles
 
-- Provozovatel (operator): fyzická osoba — Lukas Kouril (kouril.lukas@gmail.com)
-- Incident owner and approver: Lukas Kouril (same person, single-operator setup)
+- Operator: Lukas Kouril (kouril.lukas@gmail.com)
+- Incident owner and approver: Lukas Kouril
 - Emergency stop: repository variable `AUTONOMY_KILL_SWITCH=false` for the
-  owner-authorized shift runtime; the owner can restore it to `true`
-  immediately
+  approved runtime; the owner can restore it to `true` at once
 
 ## Budget
 
-Monthly operating hard cap: $20 USD, accepted 2026-07-28.
-Any increase requires a separate change with all guardrails preserved.
+Monthly all-in operating hard cap: $20 USD.
 
-## Stage & decision
+- API monthly cap: $15
+- API daily cap: $0.70
+- Venture standup cap: $0.20 per cycle
+- Caught Up meeting cap: $0.08 per meeting
+- Edition production cap: $0.35 per article run
+- Media monthly cap: $2, with deterministic media costing $0 by default
 
-Current stage: **DISCOVERY** (frozen — see Project mode above)  
-Entered at cycle: 0  
-Next gate: not planned while in hobby mode.  
-Thesis confidence: n/a
+The planned worst month is $15 API plus $2 media, with $0 incremental hosting
+under the owner's existing Vercel Pro subscription and $0 email. If either
+project leaves Pro or the cost allocation changes, the owner must review the cap
+before accepting revenue.
 
-No opportunity has passed the gate. The system is a research lab, not a launched
-venture, and by owner decision remains one.
+## Stage and decision
+
+Current stage: **VALIDATION**
+
+Entered: 2026-08-01 through the `config/stages.json` current-stage mechanism
+
+Next gate: one eligible experiment reviewed, a qualified value signal observed,
+and a distribution mechanism observed
+
+Thesis confidence: owner-adopted, unvalidated
+
+The DISCOVERY gate did not pass. Owner adoption advanced Venture 001 to the
+first post-discovery stage without rewriting the founding record.
 
 ## Thesis
 
-No validated thesis. Candidate cards in `OPPORTUNITIES.md` are demo fixtures used
-only to test the offline governance pipeline.
+Caught Up pairs a bilingual daily AI briefing with BoardlessAI's public decision
+record. The verifiable chain from promise to decision to edition to outcome is
+the product thesis under validation.
 
 ## Evidence
 
-No real market evidence is approved. `FIX-*` records are synthetic fixtures and
-cannot select a business.
+`FIX-*` records remain synthetic fixtures and cannot support a decision. New
+source observations enter `state/EVIDENCE.jsonl` as live records with capture
+dates and references. No live market evidence has been accepted yet.
 
 ## Audience, job and alternatives
 
-n/a
+Primary readers are busy developers, founders, technology leaders, AI
+practitioners and informed professionals who want one bounded daily briefing.
+They currently use newsletters, feeds and social timelines without a public
+record of why each story was selected.
 
-## Offer & pricing hypothesis
+## Offer and pricing hypothesis
 
-n/a
+Caught Up remains free during validation. A first-party, labeled sponsorship is
+a future hypothesis, not an accepted offer. The owner must clear brand and
+sponsor approval gates before the first payment.
 
 ## Distribution
 
-n/a
+Git and MDX remain canonical. Caught Up publishes through its Vercel site after
+a validated repository commit. Social output remains draft-locked.
 
 ## Funnel definitions and targets
 
-Qualified visit → value action → opt-in or lead → monetization intent → verified
-revenue. Exact definitions remain pending a validated opportunity.
+Qualified visit → value action → return or feed subscription → monetization
+intent → recognized revenue. Baselines and targets remain unavailable until the
+first eligible experiment is defined.
 
 ## Unit economics
 
-Recognized revenue: n/a  
-Refunds: n/a  
-Payment fees: n/a  
-API cost: $0.00  
-Treasury cost: $0.00  
-Other cost: $0.00  
-Gross profit: n/a
+Recognized revenue: $0.00
+
+Refunds: unavailable
+
+Payment fees: unavailable
+
+API cost: $0.00
+
+Treasury cost: $0.00
+
+Other cost: $0.00
+
+Gross profit: $0.00 from committed ledger entries as of adoption
+
+Zero revenue is a measured operating fact. Unconnected fee or refund data stays
+unavailable.
 
 ## Active experiment
 
-None.
+None. Adoption starts validation; it does not fabricate an experiment.
 
 ## Stage gates, pivot and kill criteria
 
-Stay in DISCOVERY until the deterministic opportunity gate passes. Stop or
-replace a candidate when it lacks direct problem/intent evidence or a reachable
-channel. Never reinterpret fixture data as real market proof.
+Stay in VALIDATION until an eligible experiment produces a qualified value
+signal and an observed distribution mechanism. Stop an experiment at its written
+cost, loss or evidence threshold. Caught Up adoption does not authorize a second
+venture or a live founding cycle.
 
-## Solution & scope
+## Solution and scope
 
-BoardlessAI currently exposes its governance, operating state and research
-process as three recurring shift episodes each day. Morning, Afternoon and
-Night handoffs make the autonomous work legible as an ongoing, positive
-workplace story. The narrative layer may surface real roles, decisions and
-handoffs, but it must never invent conflict, activity or business results.
-BoardlessAI does not claim to offer a validated customer product.
-
-The owner has additionally authorized live, budget-guarded council positions
-for the three internal shifts. Their only executable scope is the reviewed
-internal operating queue in `config/internal-work-queue.json`; each output is
-sanitized and timestamped before it becomes a public record. This does not
-reclassify the project, unfreeze market discovery, enable publishing or permit
-autonomous code changes.
+BoardlessAI runs the source digest, edition and product rooms, guarded edition
+production, delivery records and public governance surfaces for Caught Up. Caught
+Up keeps a static reader path with Git and MDX as canon.
 
 ## Constraints
 
-No paid infrastructure until approved. All safety, budget, evidence, content,
-finance and release guardrails apply.
+The $20 all-in cap, human-only payments, draft-locked channels, sanitization
+boundary, evidence rules, security controls and release gates remain binding.

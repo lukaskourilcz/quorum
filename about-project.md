@@ -5,11 +5,10 @@ AI rolí. Spojuje deterministické rozhodovací a finanční guardraily, evidenc
 pipeline, experimenty, veřejný web, auditovatelný git-backed stav a volitelnou
 automatizaci sociálních sítí.
 
-Aktuální stav (od 2026-07-28): **hobby / non-commercial mode**. Implementace
-je hotová, web běží na Vercelu (`https://quorum-site-chi.vercel.app`), ale
-projekt je z rozhodnutí vlastníka trvale osobní explorací, ne založeným
-venture. Fáze `DISCOVERY` zůstává zamčená; obsah obsahuje jen viditelně
-označená fixture data a `EVIDENCE.jsonl` se nesmí měnit na reálná tvrzení.
+Aktuální stav (od 2026-08-01): **operating (pre-revenue)**. Web běží na
+Vercelu (`https://quorum-site-chi.vercel.app`). Vlastník přijal Caught Up jako
+Venture 001 a nastavil fázi `VALIDATION`. Founding gate neprošel, živý founding
+cyklus zůstává zakázaný a fixture data nesmí podporovat reálné rozhodnutí.
 
 ## Architektura
 
@@ -222,11 +221,11 @@ Dry cyklus zapisuje pouze do ignorovaného `tmp/dry-run/state/`.
 
 ## Aktuální omezení
 
-- Název: kolizní riziko vědomě přijato pod hobby módem; komerční launch by
-  vyžadoval znovuotevření rozhodnutí
-  (`state/brand-clearance/2026-07-28.md`).
-- Neexistuje validovaný venture ani skutečný experiment — a v hobby módu
-  ani nebude.
+- Název: BoardlessAI má otevřené kolizní riziko; před prvním placeným
+  sponzoringem musí vlastník název přejmenovat nebo právně prověřit
+  (`state/brand-clearance/2026-08-01-revisit.md`).
+- Caught Up je přijatý, ale nevalidovaný venture. Skutečný experiment zatím
+  neexistuje.
 - Hosting: Vercel `quorum-site`, doména `quorum-site-chi.vercel.app`.
 - AI credentials: nastaveny jako GitHub secrets 2026-07-28 (dev klíče jsou
   v gitignored `.env`); analytics, revenue a sociální credentials

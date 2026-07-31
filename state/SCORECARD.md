@@ -14,7 +14,7 @@ No live council, market, funnel or revenue window exists yet. Missing values are
 | Experiments / qualified actions / intent / profit | PULSE | n/a | No live experiment or analytics |
 | Quality / claims / security / JSON | AUDIT | warm-up | Deterministic bootstrap tests green |
 | Routing precision / duplicate work / org changes | PEOPLE | n/a | Minimum 14-cycle window not available |
-| Reconciliation / budget variance / commitments | LEDGER | warm-up | Ledgers reconcile at verified $0; revenue n/a |
+| Reconciliation / budget variance / commitments | LEDGER | warm-up | Ledgers reconcile at verified $0; recognized revenue $0 |
 | Cost per validated learning / duplicate proposals | ALL | n/a | No live council learning window |
 
 ## Active treasury spends
