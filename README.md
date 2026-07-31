@@ -145,11 +145,19 @@ explicitly opts in. A committed `state/PAUSED` stops both runtimes;
 
 ## Council cycles
 
-Schedules use the IANA timezone `Europe/Prague`:
+Five meeting slots use `Europe/Prague` wall time. GitHub receives both UTC DST
+variants for each slot; a shared runtime clock table rejects the wrong variant:
 
+- 05:00 — Caught Up edition room
 - 06:00 — Morning shift, covering 06:00–14:00
 - 14:00 — Afternoon shift, covering 14:00–22:00
+- 17:00 — Caught Up product room
 - 22:00 — Night shift, covering 22:00–06:00
+
+The two Caught Up phases remain fixture-only until the Phase 9 cutover. Their
+dry runs write MeetingRecord v2, a weekly CalendarFeed, decision and scorecard
+artifacts, plus a MeetingEmail payload to the local log sink. No Resend request
+occurs in this mode.
 
 Every shift seats VIZE, FORGE, PULSE and AUDIT with LEDGER as the required
 finance control. Specialists enter only when routing rules need them. An

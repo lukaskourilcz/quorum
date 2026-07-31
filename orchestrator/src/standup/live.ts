@@ -12,6 +12,7 @@ import {
   FoundingAgentSchema,
   type CouncilAgent,
   type RunnablePhase,
+  type ShiftPhase,
   type Stage
 } from "../types.js";
 import { StandupSchema, type Standup } from "./schema.js";
@@ -123,7 +124,7 @@ function monthAllIn(ledger: readonly BudgetLedgerEntry[], now: Date): number {
 
 export async function collectLiveCouncil(input: {
   cycleId: string;
-  phase: Exclude<RunnablePhase, "founding">;
+  phase: ShiftPhase;
   stage: Stage;
   now: Date;
   budgetContext: (ledger: readonly BudgetLedgerEntry[]) => ReserveContext;
@@ -202,7 +203,7 @@ export async function collectLiveCouncil(input: {
 
 export function createLiveStandup(input: {
   cycleId: string;
-  phase: Exclude<RunnablePhase, "founding">;
+  phase: ShiftPhase;
   stage: Stage;
   room: RoomPacket;
   estimatedCycleUsd: number;

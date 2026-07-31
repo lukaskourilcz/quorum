@@ -129,6 +129,10 @@
     {
       "any": ["delivery", "notification", "email", "calendar"],
       "include": ["RELAY"]
+    },
+    {
+      "any": ["source_coverage_low"],
+      "include": ["SCOUT"]
     }
   ],
   "presets": {
@@ -142,6 +146,10 @@
     },
     "edition-room": {
       "required": ["HERALD", "STET", "SPARK", "AUDIT"],
+      "optionalByTopic": true
+    },
+    "product-room": {
+      "required": ["HERALD", "SPARK", "VAULT", "AUDIT"],
       "optionalByTopic": true
     },
     "build-room": {

@@ -20,6 +20,7 @@
     "contracts:export": "pnpm --filter @boardlessai/orchestrator exec tsx src/contracts/export-json-schema.ts",
     "build": "pnpm -r build",
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
+    "cycle:phase": "pnpm --filter @boardlessai/orchestrator cycle:phase",
     "dev": "pnpm --filter @boardlessai/site dev",
     "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
     "lint": "pnpm -r lint",

@@ -118,3 +118,35 @@ export function stetFeedback(review: StetReview): string[] {
     (violation) => `STET ${violation.locale}/${violation.code}: ${violation.message}`
   );
 }
+
+const BOARDROOM_RULES: readonly StetRule[] = [
+  {
+    code: "generated_meta",
+    pattern: /\bas (?:an ai|a language model)\b/i,
+    message: "Remove generated-system meta commentary."
+  },
+  {
+    code: "corporate_filler",
+    pattern: /\b(?:rapidly evolving landscape|delve|leverage|synerg(?:y|ies)|circle back|double-click)\b/i,
+    message: "Use the boardroom register, not corporate filler."
+  },
+  {
+    code: "emoji",
+    pattern: /\p{Extended_Pictographic}/u,
+    message: "Remove emoji from the boardroom register."
+  }
+];
+
+export function reviewBoardroomText(text: string): StetViolation[] {
+  const violations = BOARDROOM_RULES
+    .filter((rule) => rule.pattern.test(text))
+    .map((rule) => ({ code: rule.code, locale: "board" as const, message: rule.message }));
+  if ([...text].filter((character) => character === "!").length > 1) {
+    violations.push({
+      code: "exclamation_inflation",
+      locale: "board",
+      message: "Use one exclamation mark at most in a boardroom turn."
+    });
+  }
+  return violations;
+}

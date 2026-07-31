@@ -17,6 +17,19 @@ import {
   type OpportunityGate
 } from "./research/opportunities.js";
 import { atomicWriteJson, withFileLock } from "./state.js";
+import {
+  buildCalendarFeed,
+  loadMeetingRecords,
+  mondayOfWeek,
+  writeCalendarFeed
+} from "./meetings/calendar.js";
+import { isCaughtUpPhase } from "./meetings/clock.js";
+import { createOfflineCaughtUpMeeting } from "./meetings/record.js";
+import {
+  buildMeetingEmail,
+  MeetingEmailLogSink,
+  sendMeetingEmail
+} from "./notify/email.js";
 import { collectLiveCouncil, createLiveStandup } from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
@@ -39,7 +52,13 @@ export interface CycleResult {
   phase: RunnablePhase;
   dry: boolean;
   status: "dry_complete" | "paused" | "live_complete" | "preflight_complete";
-  decision: "INSUFFICIENT_EVIDENCE" | "NO_ACTION" | "PLAN" | "PAUSED";
+  decision:
+    | "INSUFFICIENT_EVIDENCE"
+    | "NO_ACTION"
+    | "NO_EDITION"
+    | "DEFER"
+    | "PLAN"
+    | "PAUSED";
   estimatedWorstCaseUsd: number;
   selectedAgents: string[];
   skippedAgents: string[];
@@ -97,6 +116,137 @@ function remainingScheduledCycles(now: Date): number {
   return Math.max(1, Math.ceil((endOfMonth - now.getTime()) / (8 * 60 * 60 * 1_000)));
 }
 
+async function runCaughtUpDryCycle(
+  options: CycleOptions,
+  cycleId: string,
+  now: Date
+): Promise<CycleResult> {
+  if (!isCaughtUpPhase(options.phase)) {
+    throw new Error(`Not a Caught Up phase: ${options.phase}`);
+  }
+  if (!options.dry) {
+    throw new Error("Caught Up scheduled phases remain dry until the Phase 9 cutover");
+  }
+  const [routing, stages] = await Promise.all([
+    loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
+    readFile(path.join(configRoot, "stages.json"), "utf8").then(
+      (raw) => JSON.parse(raw) as { current: Stage }
+    )
+  ]);
+  const definition = options.phase === "cu-edition"
+    ? {
+        topicType: "edition" as const,
+        objective: "Review the overnight digest and select one story or record NO_EDITION",
+        decisionNeeded: "EDITION" as const,
+        preset: "edition-room"
+      }
+    : {
+        topicType: "product" as const,
+        objective: "Review the morning Caught Up idea and record a ledger verdict",
+        decisionNeeded: "IDEA_VERDICT" as const,
+        preset: "product-room"
+      };
+  const estimatedWorstCaseUsd = budgetLimitsFromEnvironment().caughtUpMeetingUsd;
+  const room = routeBoardroom(routing, {
+    roomId: `ROOM-${cycleId.toUpperCase()}`,
+    topicType: definition.topicType,
+    objective: definition.objective,
+    evidenceRefs: [],
+    decisionNeeded: definition.decisionNeeded,
+    riskTags: [],
+    budgetImpactUsd: estimatedWorstCaseUsd,
+    preset: definition.preset,
+    now
+  });
+  const record = await createOfflineCaughtUpMeeting({
+    cycleId,
+    phase: options.phase,
+    stage: stages.current,
+    room,
+    now,
+    estimatedCycleUsd: estimatedWorstCaseUsd
+  });
+  const artifactRoot = path.join(repoRoot, "tmp", "dry-run", "state");
+  const meetingPath = `meetings/${record.date}-${options.phase}.json`;
+  const decisionPath = `decisions/${cycleId}.json`;
+  const scorecardPath = `scorecards/${cycleId}.json`;
+  const priorRecords = await loadMeetingRecords(artifactRoot);
+  const calendar = buildCalendarFeed({
+    weekOf: mondayOfWeek(record.date),
+    records: [...priorRecords, record],
+    now
+  });
+  const calendarPath = await writeCalendarFeed(artifactRoot, calendar);
+  await Promise.all([
+    atomicWriteJson(artifactRoot, meetingPath, record),
+    atomicWriteJson(artifactRoot, decisionPath, {
+      schemaVersion: 1,
+      fixture: true,
+      cycleId,
+      phase: options.phase,
+      outcome: record.decision.outcome,
+      summary: record.decision.summary,
+      evidenceRefs: record.decision.evidenceRefs,
+      generatedAt: record.generatedAt
+    }),
+    atomicWriteJson(artifactRoot, scorecardPath, {
+      schemaVersion: 1,
+      fixture: true,
+      cycleId,
+      phase: options.phase,
+      estimatedWorstCaseUsd,
+      actualUsd: record.ledger.actualCycleUsd,
+      participants: room.selectedParticipants.map((participant) => participant.agent),
+      generatedAt: record.generatedAt
+    })
+  ]);
+  const emailPayload = buildMeetingEmail({
+    record,
+    boardlessBaseUrl: "https://boardless.example"
+  });
+  const emailStatus = await sendMeetingEmail({
+    payload: emailPayload,
+    sink: new MeetingEmailLogSink(artifactRoot),
+    stateRoot: artifactRoot,
+    now
+  });
+  if (emailStatus !== "sent") {
+    console.warn(`Meeting email log sink failed for ${emailPayload.meetingRef}`);
+  }
+  if (options.explainBudget) {
+    console.log(JSON.stringify({ cycleId, callGraph: [], estimatedWorstCaseUsd }, null, 2));
+  }
+  if (options.explainRouting) {
+    console.log(JSON.stringify({
+      selected: room.selectedParticipants,
+      skipped: room.skippedParticipants,
+      caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
+    }, null, 2));
+  }
+  const emailPath = `notify/email/${emailPayload.meetingRef.replaceAll("/", "-")}.json`;
+  const artifacts = [
+    meetingPath,
+    decisionPath,
+    scorecardPath,
+    calendarPath,
+    emailPath,
+    "notify/health.json"
+  ];
+  return {
+    cycleId,
+    phase: options.phase,
+    dry: true,
+    status: "dry_complete",
+    decision: options.phase === "cu-edition" ? "NO_EDITION" : "DEFER",
+    estimatedWorstCaseUsd,
+    selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
+    skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
+    artifacts: artifacts.map((artifact) =>
+      path.relative(repoRoot, path.join(artifactRoot, artifact))
+    )
+  };
+}
+
 export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   const now = options.now ?? new Date();
   const cycleId = `${now.toISOString().replaceAll(/[-:.TZ]/g, "").slice(0, 14)}-${options.phase}`;
@@ -116,6 +266,13 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   if (!options.dry && options.phase === "founding") {
     throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
   }
+  if (isCaughtUpPhase(options.phase)) {
+    return runCaughtUpDryCycle(options, cycleId, now);
+  }
+  if (options.phase !== "founding" && !isShiftPhase(options.phase)) {
+    throw new Error(`Unsupported venture phase: ${options.phase}`);
+  }
+  const venturePhase = options.phase;
   const execute = async (): Promise<CycleResult> => {
     const modelConfig = JSON.parse(
       await readFile(path.join(configRoot, "models.json"), "utf8")
@@ -159,14 +316,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       roomId: `ROOM-${cycleId.toUpperCase()}`,
       topicType: "council",
       objective:
-        options.phase === "founding"
+        venturePhase === "founding"
           ? "Choose up to three evidence-backed operating tasks or NO_ACTION"
-          : getShiftDefinition(options.phase).objective,
+          : getShiftDefinition(venturePhase).objective,
       evidenceRefs: [],
       decisionNeeded: "NO_ACTION",
       riskTags: [],
       budgetImpactUsd: estimatedWorstCaseUsd,
-      preset: "daily-standup",
+      preset: venturePhase === "morning" ? "venture-morning" : "daily-standup",
       now
     });
     const stages = JSON.parse(
@@ -185,16 +342,16 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       evidence
     );
     const decision =
-      options.phase === "founding"
+      venturePhase === "founding"
         ? opportunityGate.passed
           ? "NO_ACTION"
           : "INSUFFICIENT_EVIDENCE"
         : "NO_ACTION";
     const standup =
-      options.dry || options.phase === "founding"
+      options.dry || venturePhase === "founding"
         ? createOfflineStandup({
             cycleId,
-            phase: options.phase,
+            phase: venturePhase,
             stage: stages.current,
             fixture: options.dry,
             status: decision,
@@ -205,14 +362,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           })
         : createLiveStandup({
             cycleId,
-            phase: options.phase,
+            phase: venturePhase,
             stage: stages.current,
             room,
             estimatedCycleUsd: estimatedWorstCaseUsd,
             now,
             council: await collectLiveCouncil({
               cycleId,
-              phase: options.phase,
+              phase: venturePhase,
               stage: stages.current,
               now,
               budgetContext: (ledger): ReserveContext => ({

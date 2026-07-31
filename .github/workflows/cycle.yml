@@ -2,12 +2,16 @@ name: Guarded council cycle
 
 on:
   schedule:
-    - cron: "0 6 * * *"
-      timezone: "Europe/Prague"
-    - cron: "0 14 * * *"
-      timezone: "Europe/Prague"
-    - cron: "0 22 * * *"
-      timezone: "Europe/Prague"
+    - cron: "0 3 * * *"
+    - cron: "0 4 * * *"
+    - cron: "0 4 * * *"
+    - cron: "0 5 * * *"
+    - cron: "0 12 * * *"
+    - cron: "0 13 * * *"
+    - cron: "0 15 * * *"
+    - cron: "0 16 * * *"
+    - cron: "0 20 * * *"
+    - cron: "0 21 * * *"
   workflow_dispatch:
     inputs:
       phase:
@@ -16,10 +20,11 @@ on:
         default: morning
         type: choice
         options:
+          - cu-edition
           - morning
           - afternoon
+          - cu-product
           - night
-          - founding
       dry:
         description: Never call paid APIs or write canonical state
         required: true
@@ -78,7 +83,6 @@ jobs:
         id: mode
         env:
           EVENT_NAME: ${{ github.event_name }}
-          EVENT_SCHEDULE: ${{ github.event.schedule }}
           INPUT_PHASE: ${{ inputs.phase }}
           INPUT_DRY: ${{ inputs.dry }}
           HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
@@ -88,15 +92,13 @@ jobs:
           dry="${INPUT_DRY:-true}"
           if test "$EVENT_NAME" = "schedule"; then
             dry=false
-            case "$EVENT_SCHEDULE" in
-              "0 6 * * *") phase=morning ;;
-              "0 14 * * *") phase=afternoon ;;
-              "0 22 * * *") phase=night ;;
-              *)
-                echo "Unknown cycle schedule; refusing to infer a shift."
-                exit 1
-                ;;
-            esac
+            phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled)"
+          else
+            phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
+          fi
+          if test "$phase" = "cu-edition" || test "$phase" = "cu-product"; then
+            dry=true
+            echo "Caught Up phases remain fixture-only until Phase 9 cutover."
           fi
           if test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; then
             dry=true

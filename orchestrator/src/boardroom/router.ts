@@ -52,7 +52,9 @@ const OWNER_BY_TOPIC: Record<RoomPacket["topicType"], FoundingAgent> = {
   finance: "LEDGER",
   org: "PEOPLE",
   incident: "AUDIT",
-  council: "VIZE"
+  council: "VIZE",
+  edition: "HERALD",
+  product: "HERALD"
 };
 const DOMAIN_REVIEWER: Partial<Record<RoomPacket["topicType"], FoundingAgent>> = {
   evidence: "SCOUT",
@@ -61,7 +63,9 @@ const DOMAIN_REVIEWER: Partial<Record<RoomPacket["topicType"], FoundingAgent>> =
   social: "QUILL",
   finance: "PULSE",
   org: "AUDIT",
-  incident: "KEEPER"
+  incident: "KEEPER",
+  edition: "STET",
+  product: "VAULT"
 };
 
 export async function loadRoutingConfig(path: string): Promise<RoutingConfig> {
@@ -171,4 +175,3 @@ export function routeBoardroom(
     ).toISOString()
   });
 }
-

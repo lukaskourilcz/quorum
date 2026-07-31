@@ -38,14 +38,15 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle).toContain('cron: "0 6 * * *"');
-    expect(cycle).toContain('cron: "0 14 * * *"');
-    expect(cycle).toContain('cron: "0 22 * * *"');
-    expect(cycle.match(/timezone: "Europe\/Prague"/g)).toHaveLength(3);
-    expect(cycle).toContain('"0 6 * * *") phase=morning');
-    expect(cycle).toContain('"0 14 * * *") phase=afternoon');
-    expect(cycle).toContain('"0 22 * * *") phase=night');
-    expect(cycle).toContain("Unknown cycle schedule; refusing to infer a shift.");
+    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(10);
+    for (const hour of [3, 4, 5, 12, 13, 15, 16, 20, 21]) {
+      expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
+    }
+    expect(cycle.match(/cron: "0 4 \* \* \*"/g)).toHaveLength(2);
+    expect(cycle).not.toContain('timezone: "Europe/Prague"');
+    expect(cycle).toContain("clock-cli.ts --scheduled");
+    expect(cycle).toContain('clock-cli.ts --phase "$phase"');
+    expect(cycle).toContain("Caught Up phases remain fixture-only until Phase 9 cutover.");
     expect(cycle).toContain("forcing fixture-only dry mode");
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain(

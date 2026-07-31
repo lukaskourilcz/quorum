@@ -59,17 +59,45 @@ describe("Boardroom routing", () => {
     );
     const edition = routeBoardroom(config, {
       roomId: "ROOM-CU-EDITION-001",
-      topicType: "council",
+      topicType: "edition",
       objective: "Select one Caught Up story or record NO_EDITION",
       evidenceRefs: ["DIGEST-001"],
-      decisionNeeded: "VERDICT",
+      decisionNeeded: "EDITION",
       riskTags: [],
       budgetImpactUsd: 0.08,
       preset: "edition-room",
       now: new Date("2026-07-31T03:00:00.000Z")
     });
-    expect(edition.selectedParticipants.map(({ agent }) => agent)).toEqual(
-      expect.arrayContaining(["HERALD", "STET", "SPARK", "AUDIT"])
+    expect(edition.selectedParticipants.map(({ agent }) => agent).sort()).toEqual(
+      ["HERALD", "STET", "SPARK", "AUDIT"].sort()
+    );
+
+    const claimsHeavy = routeBoardroom(config, {
+      roomId: "ROOM-CU-EDITION-CLAIMS",
+      topicType: "edition",
+      objective: "Review a claims-heavy shortlist with low source coverage",
+      evidenceRefs: ["DIGEST-002"],
+      decisionNeeded: "EDITION",
+      riskTags: ["public_claim", "source_coverage_low"],
+      budgetImpactUsd: 0.08,
+      preset: "edition-room"
+    });
+    expect(claimsHeavy.selectedParticipants.map(({ agent }) => agent)).toEqual(
+      expect.arrayContaining(["SCOUT", "QUILL", "KEEPER"])
+    );
+
+    const product = routeBoardroom(config, {
+      roomId: "ROOM-CU-PRODUCT-001",
+      topicType: "product",
+      objective: "Record a verdict on the morning Caught Up idea",
+      evidenceRefs: [],
+      decisionNeeded: "IDEA_VERDICT",
+      riskTags: [],
+      budgetImpactUsd: 0.08,
+      preset: "product-room"
+    });
+    expect(product.selectedParticipants.map(({ agent }) => agent).sort()).toEqual(
+      ["HERALD", "SPARK", "VAULT", "AUDIT"].sort()
     );
 
     const morning = routeBoardroom(config, {

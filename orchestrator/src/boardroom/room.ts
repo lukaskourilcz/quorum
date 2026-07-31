@@ -17,12 +17,21 @@ export const RoomPacketSchema = z.object({
     "social",
     "org",
     "incident",
-    "council"
+    "council",
+    "edition",
+    "product"
   ]),
   objective: z.string().min(1).max(400),
   owner: FoundingAgentSchema,
   evidenceRefs: z.array(EvidenceRefSchema),
-  decisionNeeded: z.enum(["PLAN", "NO_ACTION", "VERDICT", "MEMO"]),
+  decisionNeeded: z.enum([
+    "PLAN",
+    "NO_ACTION",
+    "VERDICT",
+    "MEMO",
+    "EDITION",
+    "IDEA_VERDICT"
+  ]),
   riskTags: z.array(z.string().min(1)),
   budgetImpactUsd: z.number().min(0),
   selectedParticipants: z.array(ParticipantSchema).min(1),
@@ -66,4 +75,3 @@ export const RoomDecisionSchema = z.object({
   closedAt: z.string().datetime()
 });
 export type RoomDecision = z.infer<typeof RoomDecisionSchema>;
-
