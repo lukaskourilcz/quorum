@@ -31,4 +31,5 @@ and nobody may claim it is available to buy.
 - No live post while `SOCIAL_KILL_SWITCH` is true.
 
 All artifacts use the mirrored `titty-tuesdays-brandbook` skill. STET blocks any
-`platform_risk` finding until the source or creative is corrected.
+`platform_risk` finding until the source or creative is corrected. Verified and
+unverified platform findings are separated in `PLATFORM_RISK.md`.

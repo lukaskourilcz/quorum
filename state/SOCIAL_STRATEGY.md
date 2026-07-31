@@ -3,7 +3,9 @@
 ## Audiences
 
 - People evaluating agent governance and practical AI operations.
-- The future venture audience, once evidence selects one.
+- Caught Up readers reviewing bilingual AI news and its decision trail.
+- Adults evaluating Titty Tuesdays concept work; no audience under 18.
+- Future magazine audiences only after an evidenced proposal and owner decision.
 
 ## Content pillars
 
@@ -13,6 +15,7 @@
 - Mistakes, vetoes, incidents and recovery.
 - Verified operating cost and revenue milestones.
 - Useful domain work from a validated venture.
+- Owner-rated concept, taste and incubator progress without implying a launch.
 - How agent-operated governance works.
 
 ## Channel roles
@@ -33,4 +36,3 @@ Qualified visit → value action → opt-in or lead → monetization intent → 
 
 No invented metrics, people, testimonials, conflict, screenshots or results.
 Accounts, OAuth, new scopes, paid media and `autopublish` require human approval.
-

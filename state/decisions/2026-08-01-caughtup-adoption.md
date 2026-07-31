@@ -73,6 +73,15 @@ The project adopts Vercel Blob, not Supabase, only after social assets add about
 250 MB to the repository or a channel begins autopublishing more than one post a
 day. Bytes remain reproducible cache until one of those triggers fires.
 
+## Portfolio notification amendment
+
+The 2026-08-01 portfolio expansion retires the planned five per-meeting emails.
+The runtime now produces one idempotent digest after the night room, with one
+line per active meeting and a 400-word ceiling. At one recipient this needs at
+most 31 transactional messages in a long month. The verified Resend Free limits
+remain 3,000 per month and 100 per day. The original paragraph above is retained
+as historical decision context, not current runtime behavior.
+
 ## Authority
 
 `config/board-authority.json` defines three rings. The board may select and write

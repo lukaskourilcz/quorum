@@ -22,10 +22,12 @@ None.
   `BoardlessAI` retained as a working title for the personal project. If mode
   is ever reclassified to commercial, this decision must be revisited with
   professional legal clearance. → approved 2026-07-28.
+  The 2026-08-01 operating transition reopened that commercial clearance gate;
+  the remaining owner action is tracked in `NEEDED.md`.
 
 - [x] HUMAN_APPROVAL API-CREDENTIALS-001 — Owner provided `ANTHROPIC_API_KEY`
   and `OPENAI_API_KEY` for local development on 2026-07-28; keys stored in the
   gitignored `.env` file and loaded by the orchestrator via `src/env.ts`.
   Owner acknowledged the transcript-leak risk and will rotate the keys.
-  GitHub Actions secrets for CI still pending as a separate step
-  (see MANUAL STEPS.md → task 13). → approved 2026-07-28.
+  GitHub Actions secrets now exist, but rotation remains pending in
+  `NEEDED.md`. → approved 2026-07-28.

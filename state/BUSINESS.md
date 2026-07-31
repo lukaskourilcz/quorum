@@ -13,6 +13,12 @@ did not discover or approve it. That distinction keeps the founding gate honest:
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
+Titty Tuesdays is implemented as a proposed Venture 002 in a pre-commerce,
+marketing-first scope. Its live schedule remains disabled until the owner
+countersigns the founding record. The magazine incubator is an exploration
+workspace, not a founded venture, and may only produce research proposals for
+owner rating.
+
 ## Owner and roles
 
 - Operator: Lukas Kouril (kouril.lukas@gmail.com)
@@ -30,6 +36,10 @@ Monthly all-in operating hard cap: $20 USD.
 - Caught Up meeting cap: $0.08 per meeting
 - Edition production cap: $0.35 per article run
 - Media monthly cap: $2, with deterministic media costing $0 by default
+
+The unsigned `budget-2026-08` decision keeps these Shape B caps and omits the
+incubator synthesis room. An exact owner countersignature may select Shape A at
+$18 monthly and $1.00 daily while the $20 all-in hard cap remains unchanged.
 
 The planned worst month is $15 API plus $2 media, with $0 incremental hosting
 under the owner's existing Vercel Pro subscription and $0 email. If either
@@ -118,9 +128,11 @@ venture or a live founding cycle.
 
 ## Solution and scope
 
-BoardlessAI runs the source digest, edition and product rooms, guarded edition
-production, delivery records and public governance surfaces for Caught Up. Caught
-Up keeps a static reader path with Git and MDX as canon.
+BoardlessAI runs the shared venture registry and public clock. For Caught Up it
+owns source collection, edition and product rooms, guarded production, delivery
+records and governance surfaces. For Titty Tuesdays it owns pre-commerce brand,
+season, audience and marketing planning only. The incubator owns research
+proposals only. Caught Up keeps a static reader path with Git and MDX as canon.
 
 ## Constraints
 

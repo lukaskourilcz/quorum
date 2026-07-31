@@ -1,14 +1,13 @@
 # O projektu BoardlessAI
 
-BoardlessAI je transparentní operační systém pro firmu řízenou omezenou radou
-AI rolí. Spojuje deterministické rozhodovací a finanční guardraily, evidence
-pipeline, experimenty, veřejný web, auditovatelný git-backed stav a volitelnou
-automatizaci sociálních sítí.
+BoardlessAI je auditovatelný operační systém pro portfolio řízené omezenou radou
+AI rolí. Spojuje deterministické rozpočtové a bezpečnostní guardraily,
+evidence pipeline, veřejný web, chráněný admin a kanonický stav uložený v Gitu.
 
-Aktuální stav (od 2026-08-01): **operating (pre-revenue)**. Web běží na
-Vercelu (`https://quorum-site-chi.vercel.app`). Vlastník přijal Caught Up jako
-Venture 001 a nastavil fázi `VALIDATION`. Founding gate neprošel, živý founding
-cyklus zůstává zakázaný a fixture data nesmí podporovat reálné rozhodnutí.
+Aktuální stav: **operating, pre-revenue, VALIDATION**. Web běží na Vercel Pro na
+<https://quorum-site-chi.vercel.app>. Caught Up je Venture 001. Titty Tuesdays
+je připravené jako pre-commerce Venture 002 a čeká na podpis vlastníka.
+Magazine Incubator zůstává pouze výzkumný a nesmí sám založit nový produkt.
 
 ## Architektura
 
@@ -17,12 +16,11 @@ GitHub Actions / lokální CLI
             │
             ▼
   TypeScript orchestrátor
-  ├─ budget a treasury gates
-  ├─ evidence a opportunity gate
-  ├─ Boardroom routing a consensus
-  ├─ experimenty, metriky a finance
-  ├─ guarded patch/network/content security
-  └─ draft-first social publisher
+  ├─ portfolio registry a routing
+  ├─ budget, evidence a authority gates
+  ├─ Caught Up, Titty Tuesdays a incubator rooms
+  ├─ taste, ratings a venture ledgers
+  └─ daily digest + draft-only social publisher
             │
             ▼
        state/ v Gitu
@@ -31,170 +29,73 @@ GitHub Actions / lokální CLI
             │
             ▼
        Next.js web
-  ├─ veřejné stránky, feedy a sitemap
-  └─ fail-closed chráněný admin
+  ├─ veřejné stránky, feedy a osmislotový WeekBoard
+  └─ fail-closed chráněný portfolio admin
 ```
 
-Systém má čtyři hlasující council agenty (`VIZE`, `FORGE`, `PULSE`, `AUDIT`) a
-deset směrovaných specialistů. Canonical registry všech 14 rolí je v
-`config/agents.json`.
+Systém má čtyři hlasující agenty (`VIZE`, `FORGE`, `PULSE`, `AUDIT`) a 23
+směrovaných specialistů. Registr všech 27 rolí je v `config/agents.json`.
+Portfolio a jeho meetingy definuje `config/ventures.json`. Lidský popis modelu
+je v `docs/PORTFOLIO.md`.
 
-## Základní technologický stack
+## Technologický stack
 
 | Oblast | Technologie | Verze / režim |
 | --- | --- | --- |
 | Runtime | Node.js | `>=22` |
 | Monorepo | pnpm workspaces | pnpm `10.30.0` |
 | Jazyk | TypeScript | `5.9.3`, strict |
-| Web framework | Next.js App Router | `16.2.11` |
-| UI runtime | React / React DOM | `19.2.8` |
+| Web | Next.js App Router | `16.2.11` |
+| UI | React / React DOM | `19.2.8` |
 | Styling | Tailwind CSS | `4.3.3` |
-| Test runner | Vitest | `4.1.10` |
-| Lint | ESLint + eslint-config-next | `9.39.5` / `16.2.11` |
-| CI/CD | GitHub Actions | pinned action SHAs |
-| Stav | JSON, JSONL a Markdown v Gitu | atomické zápisy a file lock |
-| AI providers | OpenAI API, Anthropic API | pouze přes guarded adaptéry |
-| Sociální API | Meta Threads, Instagram Graph API | výchozí režim `draft` |
-| Obrázky | WebP + Sharp | `sharp 0.35.3` |
+| Validace | Zod | `4.4.3` |
+| Testy | Vitest + Playwright + axe | `4.1.10` + `1.62.0` |
+| AI providers | OpenAI API, Anthropic API | pouze guarded adaptéry |
+| Stav | JSON, JSONL a Markdown v Gitu | validace, atomické zápisy, serializace |
+| CI/CD | GitHub Actions + Vercel Pro | pinned SHA, auto-deploy z `main` |
 
-Verze jsou připnuté v `package.json`, workspace manifestech a
+Web dále používá `class-variance-authority`, `clsx`, `tailwind-merge`,
+`lucide-react` a `server-only`. Orchestrátor používá OpenAI a Anthropic SDK,
+`fast-xml-parser`, `sharp` a `tsx`. Přesné verze jsou zamčené v manifestech a
 `pnpm-lock.yaml`.
 
-## Přímé knihovny webu
+## Portfolio a provoz
 
-| Knihovna | Verze | Použití |
-| --- | ---: | --- |
-| `next` | `16.2.11` | App Router, SSG/SSR, metadata, feedy a Proxy |
-| `react`, `react-dom` | `19.2.8` | Komponentový runtime |
-| `class-variance-authority` | `0.7.1` | Typované varianty UI komponent |
-| `clsx` | `2.1.1` | Podmíněné skládání tříd |
-| `tailwind-merge` | `3.6.0` | Bezpečné slučování Tailwind tříd |
-| `lucide-react` | `1.26.0` | Ikony |
-| `server-only` | `0.0.1` | Ochrana serverového admin readeru |
-| `tailwindcss` | `4.3.3` | Token-based responzivní design |
+- **Caught Up** připravuje anglický a český článek, produktové rozhodnutí a oba
+  jazykové balíčky pro Instagram a Threads. GitHub App smí zapisovat jen do
+  `lukaskourilcz/aifirst`.
+- **Titty Tuesdays** spravuje brand, 91denní season koncepty, publika a
+  marketingové plány. Nemá eshop, sklad, platby, reklamy ani live publishing.
+- **Magazine Incubator** smí vytvořit jen evidencí podložené niche proposals.
+  Owner rating `Perfect` je přesune na shortlist, ale nezaloží venture.
 
-Vizuální systém používá DM Sans, zinc/white paletu a Ember akcent. Kanonické
-hodnoty jsou v `site/src/brand/tokens.css`; komponenty je nesmí obcházet
-hardcoded barvami.
+PALATE před první schůzkou venture destiluje pouze preference citované na
+konkrétní ratingy. Rating poznámky jsou nedůvěryhodná data, ne instrukce.
 
-## Přímé knihovny orchestrátoru
+Společný Prague clock má sloty 05:00, 06:00, 07:00, 11:00, 14:00, 17:00,
+21:00 a 22:00. Registry odmítá kolize pod 60 minut. GitHub Actions mají letní a
+zimní UTC variantu; runtime neaktivní DST variantu přeskočí.
 
-| Knihovna | Verze | Použití |
-| --- | ---: | --- |
-| `openai` | `6.48.0` | OpenAI council/specialist adaptéry |
-| `@anthropic-ai/sdk` | `0.113.0` | Anthropic council/specialist adaptéry |
-| `zod` | `4.4.3` | Runtime validace všech důležitých kontraktů |
-| `fast-xml-parser` | `5.10.1` | Bezpečné zpracování RSS/XML zdrojů |
-| `sharp` | `0.35.3` | Kontrola a kompozice obrazových assetů |
-| `tsx` | `4.23.1` | Spouštění TypeScript CLI |
+Rozhodnutí `budget-2026-08` používá do podpisu Shape B: `$15` měsíčně,
+`$0.70` denně, TT `$0.06` a bez incubator synthesis. Podepsaná Shape A povolí
+`$18`, `$1.00` a všech osm slotů. Hard cap `$20` a platby pouze člověkem se
+nemění.
 
-## Struktura repozitáře
+## Data, admin a bezpečnost
 
-```text
-config/                    modely, role, routing, stages a politiky
-orchestrator/
-  prompts/                 smlouvy council a specialistů
-  src/                     runtime, guardraily a adaptéry
-  tests/                   deterministické a end-to-end testy
-site/
-  src/app/                 veřejné a admin routy
-  src/components/          sdílené komponenty
-  src/brand/               tokeny a SVG identita
-  public/agents/           14 stabilních WebP portrétů
-state/                     kanonický provozní stav a veřejné projekce
-.claude/                   role, příkazy a provozní skills pro Claude
-.agents/skills/            byte-identické Codex varianty skills
-.github/workflows/         CI, cykly, social publisher a health check
-scripts/                   produkční smoke crawler
-```
+Kanonický stav je ve `state/`. Venture ideas, ratings, taste a plány jsou
+namespaced. Veřejný web používá jen defensivně znovu validované projekce.
+Externí text i owner notes jsou data-only. Číselná tvrzení potřebují evidence
+reference.
 
-## Orchestrátor a governance
+`/admin` vrací `503`, pokud nejsou kompletní `ADMIN_USER` a `ADMIN_PASSWORD`, a
+`401` při chybné autentizaci. Úspěšné přihlášené requesty se nepočítají do
+limitu chybných pokusů. Produkční ratingy se zapisují přes fine-grained
+`BOARDLESSAI_GITHUB_TOKEN`; bez něj write path selže zavřeně.
 
-- Každý cyklus má předem spočítaný worst-case rozpočet.
-- Rada používá anonymní návrhy, Borda ranking, `NO_ACTION`, konkrétní veto a
-  opakovanou kontrolu fallback návrhu.
-- Routing přibírá jen relevantní specialisty a povinné kontrolní role.
-- Fáze jsou `DISCOVERY`, `VALIDATION`, `AUDIENCE`, `MONETIZATION` a
-  `OPTIMIZATION`.
-- Fixture evidence nikdy nemůže založit skutečný venture.
-- Externí obsah je považován za nedůvěryhodná data, ne za instrukce.
-- Síťové požadavky jsou HTTPS-only, omezené allowlistem, velikostí odpovědi a
-  kontrolou redirectů.
-- Generované patche mají path, secret, dependency, environment, network a
-  dynamic-code kontroly.
-- Organizace agentů se nemůže sama nekontrolovaně přepisovat.
-
-## Data a persistence
-
-Kanonický stav je uložen v `state/` jako reviewovatelný Git obsah. Citlivé
-interní záznamy se veřejnému webu neposkytují; web smí číst jen fixture data
-nebo sanitizované veřejné projekce.
-
-Zápisy runtime používají:
-
-- Zod validaci schémat;
-- dočasný soubor a atomický rename;
-- file lock proti souběžnému writeru;
-- idempotency klíče a reconciliation;
-- jeden normální git commit na úspěšný runtime cyklus.
-
-Tento model je vhodný pro nízkou frekvenci a auditovatelnost. Limity a cesta ke
-škálování jsou popsané v `scaling.md`.
-
-## Veřejný web
-
-Web obsahuje:
-
-- firemní homepage a vysvětlení governance;
-- seznam a detail všech 20 agentů;
-- Boardroom, metrics, log, standupy a venture routy;
-- privacy a AI disclosure;
-- RSS, JSON Feed, sitemap, robots a web manifest;
-- dynamický admin chráněný Basic Auth.
-
-Fixture venture a standup detail jsou `noindex` a nejsou zahrnuté ve feedech
-ani sitemapě.
-
-## Admin a bezpečnost webu
-
-- Bez kompletního `ADMIN_USER` + `ADMIN_PASSWORD` vrací admin `503`.
-- Bez správného Basic Auth vrací `401`.
-- Porovnání credentialů je constant-time.
-- Pokusy jsou lokálně rate-limitované.
-- Admin má `no-store` a `noindex`.
-- CSP blokuje cizí zdroje, framing, objekty, kamery, mikrofon, geolokaci a
-  payment API.
-- Serverový state reader má explicitní allowlist souborů.
-
-Basic Auth je záměrně malý výchozí mechanismus. Při více administrátorech nebo
-citlivějších datech má být nahrazen identity-aware proxy/SSO s MFA a audit logem.
-
-## Sociální publisher
-
-Threads a Instagram začínají v `draft` režimu bez scopes a bez data lidského
-schválení. Publikace vyžaduje:
-
-1. schema-valid queue item;
-2. výběr agentem PULSE;
-3. všech osm kontrol ve stavu `pass`;
-4. immutable `contentHash`;
-5. publikaci uvnitř schváleného okna;
-6. human-enabled kanál, scope a credential;
-7. dvoufázový claim před externím API requestem.
-
-Nejasný výsledek se označí `needs_reconciliation` a automaticky se neopakuje.
-
-## Automatizace
-
-| Workflow | Účel |
-| --- | --- |
-| `CI` | agent assets, lint, typecheck, testy, build a route/link smoke |
-| `Guarded council cycle` | směny v 06:00, 14:00 a 22:00 Europe/Prague |
-| `Guarded social publisher` | validace nebo publikace schválené fronty |
-| `Production health` | HTTPS kontrola veřejných endpointů |
-
-GitHub Actions jsou časově omezené, mají concurrency guardy a používají
-zamčené dependency instalace. Chybějící AI credentials vynutí dry režim.
+Admin obsahuje globální social archive, per-venture tabs, karty, historii
+ratingů, incubator shortlist a print-ready TT launch binder. Neumí publikovat ani
+vytvořit obchod.
 
 ## Vývoj a ověření
 
@@ -206,33 +107,23 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
-pnpm dev
+pnpm --filter @boardlessai/site test:e2e
 ```
 
-Další důležité příkazy:
-
-```bash
-pnpm cycle -- --phase founding --dry --explain-budget --explain-routing
-pnpm social:publish -- --dry-if-disabled --validate-only
-pnpm site:smoke
-```
-
-Dry cyklus zapisuje pouze do ignorovaného `tmp/dry-run/state/`.
+Dry cykly zapisují jen do ignorovaných temp adresářů. `pnpm site:smoke`
+kontroluje produkční routy a interní odkazy proti spuštěnému buildu.
 
 ## Aktuální omezení
 
-- Název: BoardlessAI má otevřené kolizní riziko; před prvním placeným
-  sponzoringem musí vlastník název přejmenovat nebo právně prověřit
-  (`state/brand-clearance/2026-08-01-revisit.md`).
-- Caught Up je přijatý, ale nevalidovaný venture. Skutečný experiment zatím
-  neexistuje.
-- Hosting: Vercel `quorum-site`, doména `quorum-site-chi.vercel.app`.
-- AI credentials: nastaveny jako GitHub secrets 2026-07-28 (dev klíče jsou
-  v gitignored `.env`); analytics, revenue a sociální credentials
-  nepřipojené.
-- Git-backed persistence předpokládá jediného writera.
-- Admin nepodporuje více uživatelů, obnovu hesla ani SSO.
-- Ceny a platformní API kontrakty je nutné před aktivací znovu ověřit.
+- BoardlessAI má otevřené kolizní riziko názvu před placeným sponzoringem.
+- TT founding, budget shape a cron go-live čekají na vlastníka.
+- Produkční admin, rating persistence, Caught Up delivery, denní e-mail digest a
+  live proměnné vyžadují ruční kroky v `NEEDED.md`.
+- Social output je draft-only. Čtyřsnímkový Instagram carousel současný
+  connector neumí publikovat jako jednu transakci.
+- Neexistuje live experiment, eshop, platba, sklad, reklama ani automatické
+  založení venture.
+- Git-backed persistence předpokládá jednoho serializovaného writera.
 
-Konkrétní kroky vlastníka jsou v `NEEDED.md` a `MANUAL STEPS.md`; finance
-a škálování v `scaling.md`.
+Konkrétní ruční kroky jsou v `NEEDED.md` a `MANUAL STEPS.md`; financování ve
+`scaling.md`, možné příjmy v `monetization.md`.

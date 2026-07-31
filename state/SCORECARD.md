@@ -1,8 +1,8 @@
 # Scorecard
 
-As of: 2026-07-23
-Stage: DISCOVERY
-Window: bootstrap fixture only
+As of: 2026-08-01
+Stage: VALIDATION
+Window: owner-adopted portfolio; dry fixtures only
 
 No live council, market, funnel or revenue window exists yet. Missing values are
 `n/a`; fixture observations do not count toward performance.
@@ -10,10 +10,10 @@ No live council, market, funnel or revenue window exists yet. Missing values are
 | KPI group | Owner | Status | Observation |
 | --- | --- | --- | --- |
 | Opportunity quality / stage / calibration | VIZE | n/a | No selected opportunity or live forecast |
-| Release success / task completion / incidents | FORGE | warm-up | Bootstrap release only; no runtime cycle |
+| Release success / task completion / incidents | FORGE | warm-up | Portfolio release gates pass; no approved live portfolio window |
 | Experiments / qualified actions / intent / profit | PULSE | n/a | No live experiment or analytics |
 | Quality / claims / security / JSON | AUDIT | warm-up | Deterministic bootstrap tests green |
-| Routing precision / duplicate work / org changes | PEOPLE | n/a | Minimum 14-cycle window not available |
+| Routing precision / duplicate work / org changes | PEOPLE | n/a | Twenty-seven roles validate; minimum live window not available |
 | Reconciliation / budget variance / commitments | LEDGER | warm-up | Ledgers reconcile at verified $0; recognized revenue $0 |
 | Cost per validated learning / duplicate proposals | ALL | n/a | No live council learning window |
 

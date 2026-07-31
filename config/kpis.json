@@ -383,12 +383,12 @@
       "warmupCycles": 14
     },
     {
-      "id": "ops.email_delivery_rate",
+      "id": "ops.daily_digest_delivery_rate",
       "owner": "RELAY",
-      "metric": "caughtUpMeetingEmailDeliveryRate",
+      "metric": "portfolioDailyDigestDeliveryRate",
       "target": 0.95,
       "dir": "up",
-      "requires": "email_delivery",
+      "requires": "daily_digest_delivery",
       "warmupCycles": 14
     },
     {

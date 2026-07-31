@@ -8,6 +8,7 @@ schválit konkrétního sponzora a brand clearance. Finanční model je v
 | Možnost | Pravděpodobnost příjmu | Možný výdělek | Výhody | Nevýhody |
 |---|---|---|---|---|
 | **Označený Caught Up sponzoring** | Nízká (nevalidovaná) | unavailable | První strana, bez trackingu | Hosting a brand gate před platbou |
+| **Titty Tuesdays crop tops** | Neznámá; pre-commerce | unavailable | Úzký produkt a výrazná značka | Neexistuje eshop, clearance, sklad, cena ani poptávkový experiment |
 | **Cloud/API kredity a granty** | Nízká | jednorázově | Prodlouží runway | Nejsou to tržby; časově omezené |
 | **Konzultace nad postaveným systémem** | Střední | podle projektu | Využije expertízu | Nemá škálování; čas za peníze |
 | **Founder-funded bootstrap** | n/a (vstup, ne příjem) | — | Plná kontrola | Váže vlastní kapitál |

@@ -969,15 +969,15 @@
       "ventures": "global",
       "department": "Operations",
       "title": "Delivery & Notifications Agent",
-      "mission": "Make the handoff land: own the delivery contract to Caught Up, the meeting emails, the calendar feed, and the reconciliation of anything uncertain.",
+      "mission": "Make the handoff land: own the delivery contract to Caught Up, the one daily portfolio digest, the calendar feed, and the reconciliation of anything uncertain.",
       "responsibilities": [
         "Validate every EditionPackage before commit",
         "Track delivery through build to live",
-        "Own email dispatch health",
+        "Own daily digest dispatch health",
         "Keep the calendar feed truthful"
       ],
       "notResponsibleFor": [
-        "Edition or email content",
+        "Edition or digest content",
         "Code changes to Caught Up",
         "Payments"
       ],
@@ -988,7 +988,7 @@
       "ownedKpiIds": [
         "ops.delivery_success_rate",
         "ops.time_to_publish_min",
-        "ops.email_delivery_rate"
+        "ops.daily_digest_delivery_rate"
       ],
       "successChecks": [
         "Every accepted package validates before delivery",
