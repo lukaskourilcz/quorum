@@ -30,8 +30,10 @@ the founding gate remains unpassed and live founding cycles stay disabled.
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
 - [x] Expand the roster to 20 agents and add six validated portraits.
-- [ ] Port source collection and edition production into BoardlessAI.
-- [ ] Run the two Caught Up rooms in guarded dry mode.
-- [ ] Add Caught Up consumer rendering and the missed-day sentinel.
-- [ ] Prove Git delivery, then remove the duplicate generation path.
-- [ ] Add the idea ledger, public governance surfaces, email and social packs.
+- [x] Port source collection and edition production into BoardlessAI.
+- [x] Run the two Caught Up rooms in guarded dry mode.
+- [x] Add Caught Up consumer rendering and the missed-day sentinel.
+- [x] Remove the duplicate Caught Up generation, promotion and scheduling paths.
+- [x] Add the idea ledger, public governance surfaces, email and social packs.
+- [ ] Prove the first GitHub App delivery after the operator installs the bounded
+  app, then review three editions before enabling unattended live production.
