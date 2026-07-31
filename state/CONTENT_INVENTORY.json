@@ -68,7 +68,7 @@
     },
     {
       "url": "/agents",
-      "purpose": "Disclose all twenty-one stable software roles and their measurable contracts.",
+      "purpose": "Disclose all twenty-seven software roles and their measurable contracts.",
       "searchIntent": "meet BoardlessAI agents",
       "primaryQuery": "BoardlessAI agents",
       "audience": "governance readers and system builders",
@@ -493,6 +493,84 @@
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
       "status": "noindex",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/angle",
+      "purpose": "Publish the ANGLE positioning role contract and its activation state.",
+      "searchIntent": "understand the positioning agent",
+      "primaryQuery": "ANGLE positioning agent",
+      "audience": "governance readers",
+      "evidenceRefs": ["agent-profile:ANGLE:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-01",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/cohort",
+      "purpose": "Publish the COHORT audience role contract and its activation state.",
+      "searchIntent": "understand the audience agent",
+      "primaryQuery": "COHORT audience agent",
+      "audience": "governance readers",
+      "evidenceRefs": ["agent-profile:COHORT:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-01",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/funnel",
+      "purpose": "Publish the FUNNEL performance-marketing role contract and its activation state.",
+      "searchIntent": "understand the performance marketing agent",
+      "primaryQuery": "FUNNEL marketing agent",
+      "audience": "governance readers",
+      "evidenceRefs": ["agent-profile:FUNNEL:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-01",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/palate",
+      "purpose": "Publish the PALATE taste-custodian role contract and its activation state.",
+      "searchIntent": "understand the taste custodian agent",
+      "primaryQuery": "PALATE taste agent",
+      "audience": "governance readers",
+      "evidenceRefs": ["agent-profile:PALATE:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-01",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/scene",
+      "purpose": "Publish the SCENE research role contract and its activation state.",
+      "searchIntent": "understand the scene research agent",
+      "primaryQuery": "SCENE research agent",
+      "audience": "governance readers",
+      "evidenceRefs": ["agent-profile:SCENE:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-01",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/stunt",
+      "purpose": "Publish the STUNT guerrilla-marketing role contract and its activation state.",
+      "searchIntent": "understand the guerrilla marketing agent",
+      "primaryQuery": "STUNT marketing agent",
+      "audience": "governance readers",
+      "evidenceRefs": ["agent-profile:STUNT:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-01",
+      "status": "indexable",
       "informationGain": "material"
     }
   ]

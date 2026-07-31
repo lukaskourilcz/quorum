@@ -21,7 +21,13 @@ export type AgentId =
   | "SPARK"
   | "VAULT"
   | "FRAME"
-  | "RELAY";
+  | "RELAY"
+  | "ANGLE"
+  | "COHORT"
+  | "FUNNEL"
+  | "PALATE"
+  | "SCENE"
+  | "STUNT";
 
 type PublicStatus =
   | "active"
@@ -36,6 +42,7 @@ interface RegistryAgent {
   slug: string;
   kind: "council" | "specialist";
   provider: "OpenAI" | "Anthropic" | "deterministic";
+  ventures: "global" | string[];
   department: string;
   title: string;
   mission: string;
@@ -205,6 +212,42 @@ const profileCopy: Record<
     operatingPrinciple: "A handoff is complete only when the destination confirms it.",
     output: "Validated delivery and reconciliation status",
     currentFocus: "Caught Up delivery and notifications",
+    publicTrackRecord: null
+  },
+  ANGLE: {
+    operatingPrinciple: "Name the reader and the cut-through.",
+    output: "Positioning document and CampaignBrief",
+    currentFocus: "Portfolio positioning",
+    publicTrackRecord: null
+  },
+  COHORT: {
+    operatingPrinciple: "Everyone is not an audience.",
+    output: "Validated AudienceSpec",
+    currentFocus: "Adult public-interest audiences",
+    publicTrackRecord: null
+  },
+  FUNNEL: {
+    operatingPrinciple: "Label the estimate before discussing return.",
+    output: "MarketingPlan and measurement design",
+    currentFocus: "Pre-commerce launch planning",
+    publicTrackRecord: null
+  },
+  PALATE: {
+    operatingPrinciple: "A preference needs a rating reference.",
+    output: "Evidence-linked TASTE update",
+    currentFocus: "Venture taste memory",
+    publicTrackRecord: null
+  },
+  SCENE: {
+    operatingPrinciple: "Bring the source, then the field note.",
+    output: "Evidence-linked SceneReport",
+    currentFocus: "Titty Tuesdays scene research",
+    publicTrackRecord: null
+  },
+  STUNT: {
+    operatingPrinciple: "The idea needs permission and a way to fail.",
+    output: "Costed and permission-aware stunt concept",
+    currentFocus: "Titty Tuesdays guerrilla concepts",
     publicTrackRecord: null
   }
 };

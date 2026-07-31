@@ -24,7 +24,13 @@ export const FOUNDING_AGENT_IDS = [
   "SPARK",
   "VAULT",
   "FRAME",
-  "RELAY"
+  "RELAY",
+  "ANGLE",
+  "COHORT",
+  "FUNNEL",
+  "PALATE",
+  "SCENE",
+  "STUNT"
 ] as const;
 
 const FoundingAgentIdSchema = z.enum(FOUNDING_AGENT_IDS);
@@ -48,6 +54,10 @@ const AgentSchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/),
   kind: z.enum(["council", "specialist"]),
   provider: z.enum(["OpenAI", "Anthropic", "deterministic"]),
+  ventures: z.union([
+    z.literal("global"),
+    z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1)
+  ]),
   department: z.string().min(2).max(60),
   title: z.string().min(4).max(80),
   mission: z.string().min(20).max(220),
@@ -87,7 +97,7 @@ export const AgentRegistrySchema = z
     if (ids.length !== FOUNDING_AGENT_IDS.length || ids.some((id) => !expected.has(id))) {
       context.addIssue({
         code: "custom",
-        message: "registry must contain exactly the 21 operating agent IDs",
+        message: "registry must contain exactly the 27 operating and proposed agent IDs",
         path: ["agents"]
       });
     }

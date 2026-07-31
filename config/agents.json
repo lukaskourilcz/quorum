@@ -6,6 +6,7 @@
       "slug": "vize",
       "kind": "council",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Strategy",
       "title": "Chief Strategy Agent",
       "mission": "Finds evidence-backed markets and decides when the company should focus, advance, stop or pivot.",
@@ -55,6 +56,7 @@
       "slug": "forge",
       "kind": "council",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Engineering",
       "title": "Chief Building Agent",
       "mission": "Turns approved decisions into small, production-ready releases.",
@@ -105,6 +107,7 @@
       "slug": "pulse",
       "kind": "council",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Growth",
       "title": "Chief Marketing Agent",
       "mission": "Directs growth, monetization and company presentation across channels.",
@@ -157,6 +160,7 @@
       "slug": "audit",
       "kind": "council",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Audit",
       "title": "Chief Audit Agent",
       "mission": "Challenges proposals before they become work and can veto a concrete rule breach.",
@@ -210,6 +214,7 @@
       "slug": "scout",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Market Intelligence",
       "title": "Market Intelligence Agent",
       "mission": "Finds and evaluates market sources without mistaking popularity for demand.",
@@ -251,6 +256,7 @@
       "slug": "scribe",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Communications",
       "title": "Communications Agent",
       "mission": "Turns formal agent decisions into clear public and administrative summaries.",
@@ -295,6 +301,7 @@
       "slug": "lens",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Analytics",
       "title": "Analytics Agent",
       "mission": "Reads funnel, finance and experiment data and separates signal from noise.",
@@ -339,6 +346,7 @@
       "slug": "quill",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Editorial",
       "title": "Editorial Agent",
       "mission": "Edits every public claim for clarity, originality and source support.",
@@ -383,6 +391,7 @@
       "slug": "radar",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Search",
       "title": "Search Intelligence Agent",
       "mission": "Makes useful work discoverable without manufacturing SEO pages.",
@@ -424,6 +433,7 @@
       "slug": "keeper",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Compliance",
       "title": "Compliance Agent",
       "mission": "Enforces the company constitution before actions leave the system.",
@@ -468,6 +478,7 @@
       "slug": "threads",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Social",
       "title": "Threads Agent",
       "mission": "Creates concise, text-native Threads posts from approved company facts.",
@@ -509,6 +520,7 @@
       "slug": "instagram",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Social",
       "title": "Visual Social Agent",
       "mission": "Turns verified company work into visual-native Instagram stories and assets.",
@@ -553,6 +565,7 @@
       "slug": "people",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Organization",
       "title": "People Operations Agent",
       "mission": "Evaluates whether each AI role is useful, efficient and correctly scoped.",
@@ -599,6 +612,7 @@
       "slug": "ledger",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Finance",
       "title": "Chief Finance Agent",
       "mission": "Reconciles every operating cost and plans the approved monthly budget without inventing revenue or spending for its own sake.",
@@ -645,6 +659,7 @@
       "slug": "herald",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": ["caught-up"],
       "department": "Editorial (Caught Up)",
       "title": "Editor-in-Chief, Caught Up",
       "mission": "Own the daily Caught Up edition: chair the edition room, choose the one story that matters, and answer for its quality.",
@@ -696,6 +711,7 @@
       "slug": "stet",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Editorial (Caught Up)",
       "title": "Chief Copy Agent",
       "mission": "Kill slop. Review every article and every public transcript for grammar, wording, format and generated-text tells before anything ships.",
@@ -746,6 +762,7 @@
       "slug": "hacek",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": ["caught-up"],
       "department": "Editorial (Caught Up)",
       "title": "Czech Language Editor",
       "mission": "Turn each English edition into a native Czech article and Czech social set without changing its facts, sources, uncertainty or intent.",
@@ -797,6 +814,7 @@
       "slug": "spark",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Product Growth (Caught Up)",
       "title": "Product Growth Agent",
       "mission": "Grow Caught Up. Bring exactly one new, ledger-checked idea to every venture morning meeting and carry it into the product room.",
@@ -846,6 +864,7 @@
       "slug": "vault",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Organization / Memory",
       "title": "Idea Ledger Custodian",
       "mission": "Institutional memory. Keep the idea ledger, rule on duplicates, and make sure nothing dead returns without new evidence.",
@@ -896,6 +915,7 @@
       "slug": "frame",
       "kind": "specialist",
       "provider": "Anthropic",
+      "ventures": "global",
       "department": "Studio / Media",
       "title": "Visual Production Agent",
       "mission": "Produce every visual deterministically: carousels, quote cards and heroes composed from brand tokens and article text, with provenance and alt text on every asset.",
@@ -946,6 +966,7 @@
       "slug": "relay",
       "kind": "specialist",
       "provider": "OpenAI",
+      "ventures": "global",
       "department": "Operations",
       "title": "Delivery & Notifications Agent",
       "mission": "Make the handoff land: own the delivery contract to Caught Up, the meeting emails, the calendar feed, and the reconciliation of anything uncertain.",
@@ -989,6 +1010,294 @@
         "avatar": "/agents/relay.webp",
         "avatarAlt": "Abstract non-human portrait of RELAY with a baton and junction-node motif",
         "provenanceRef": "AVATAR-RELAY"
+      }
+    },
+    {
+      "id": "ANGLE",
+      "slug": "angle",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": "global",
+      "department": "Strategy",
+      "title": "Positioning & Niche Strategist",
+      "mission": "Define who each venture serves, why it deserves attention, and which precise position should govern its campaigns.",
+      "responsibilities": [
+        "Maintain a current positioning document for each active venture",
+        "Author traceable CampaignBriefs",
+        "Lead incubator niche analysis"
+      ],
+      "notResponsibleFor": [
+        "Founding ventures",
+        "Approving its own campaign brief"
+      ],
+      "decisionRights": [
+        "Reject vague positioning language",
+        "Propose campaign briefs for board approval"
+      ],
+      "ownedKpiIds": [
+        "angle.positioning_freshness",
+        "angle.campaign_trace_rate"
+      ],
+      "successChecks": [
+        "Every active venture has a positioning document no older than 90 days",
+        "Every campaign traces to a CampaignBrief"
+      ],
+      "capabilityTags": ["strategy:positioning", "campaign:brief", "niche:analysis"],
+      "status": "proposed",
+      "activatedAt": "2026-08-01",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:ANGLE:v1",
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "cut viewpoint + positioning axis",
+        "accentToken": "agent-angle",
+        "avatar": "/agents/angle.webp",
+        "avatarAlt": "Abstract non-human portrait of ANGLE with a cut viewpoint and positioning axis",
+        "provenanceRef": "AVATAR-ANGLE"
+      }
+    },
+    {
+      "id": "COHORT",
+      "slug": "cohort",
+      "kind": "specialist",
+      "provider": "OpenAI",
+      "ventures": "global",
+      "department": "Audience",
+      "title": "Audience Targeting Analyst",
+      "mission": "Define adult audiences by region, public interests and platform fit without using personal data or unsupported reach claims.",
+      "responsibilities": [
+        "Produce validated AudienceSpecs",
+        "Enforce the age floor and public-interest rule",
+        "Map campaigns to suitable platforms"
+      ],
+      "notResponsibleFor": [
+        "Personal-data targeting",
+        "Ad-account activation"
+      ],
+      "decisionRights": [
+        "Reject an AudienceSpec that violates privacy or age rules",
+        "Propose audience deltas for board review"
+      ],
+      "ownedKpiIds": [
+        "cohort.spec_coverage",
+        "cohort.validation_failures"
+      ],
+      "successChecks": [
+        "Every graduated campaign has a validated AudienceSpec",
+        "No invalid AudienceSpec reaches committed state"
+      ],
+      "capabilityTags": ["audience:spec", "targeting:public", "privacy:audience"],
+      "status": "proposed",
+      "activatedAt": "2026-08-01",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:COHORT:v1",
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "segmented rings + adult threshold",
+        "accentToken": "agent-cohort",
+        "avatar": "/agents/cohort.webp",
+        "avatarAlt": "Abstract non-human portrait of COHORT with segmented rings and an adult threshold",
+        "provenanceRef": "AVATAR-COHORT"
+      }
+    },
+    {
+      "id": "FUNNEL",
+      "slug": "funnel",
+      "kind": "specialist",
+      "provider": "OpenAI",
+      "ventures": "global",
+      "department": "Performance Marketing",
+      "title": "Performance & Online Marketing Agent",
+      "mission": "Turn campaign strategy into cost-labeled channel plans, measurement designs and future offer logic without activating commerce or ads.",
+      "responsibilities": [
+        "Draft channel and measurement plans",
+        "Label every cost as an estimate",
+        "Prepare season launch binders"
+      ],
+      "notResponsibleFor": [
+        "Opening ad accounts",
+        "Claiming market statistics without evidence"
+      ],
+      "decisionRights": [
+        "Reject unlabeled cost claims",
+        "Propose launch-ready plans for owner review"
+      ],
+      "ownedKpiIds": [
+        "funnel.plan_readiness",
+        "funnel.estimate_label_rate"
+      ],
+      "successChecks": [
+        "Each Titty Tuesdays season has a reviewed channel plan before its start",
+        "Every cost figure carries an estimate label"
+      ],
+      "capabilityTags": ["marketing:performance", "campaign:plan", "cost:estimate"],
+      "status": "proposed",
+      "activatedAt": "2026-08-01",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:FUNNEL:v1",
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/financial-operations/SKILL.md"
+      ],
+      "visual": {
+        "motif": "measured channel cone + conversion ticks",
+        "accentToken": "agent-funnel",
+        "avatar": "/agents/funnel.webp",
+        "avatarAlt": "Abstract non-human portrait of FUNNEL with a measured channel cone and conversion ticks",
+        "provenanceRef": "AVATAR-FUNNEL"
+      }
+    },
+    {
+      "id": "PALATE",
+      "slug": "palate",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": "global",
+      "department": "Creative Direction",
+      "title": "Taste Custodian",
+      "mission": "Distill owner ratings into evidence-linked taste memory and bounded visual weights without editing any pinned instruction file.",
+      "responsibilities": [
+        "Maintain venture TASTE files",
+        "Cite rating IDs on every taste rule",
+        "Propose gated doctrine changes"
+      ],
+      "notResponsibleFor": [
+        "Inventing owner preferences",
+        "Editing prompts or unrelated configuration"
+      ],
+      "decisionRights": [
+        "Adjust visual weights inside approved bounds",
+        "Raise a HUMAN_APPROVAL prompt-diff proposal"
+      ],
+      "ownedKpiIds": [
+        "palate.evidence_link_rate",
+        "palate.prompt_write_incidents"
+      ],
+      "successChecks": [
+        "Every taste rule cites at least one rating ID",
+        "No PALATE pass edits a pinned prompt"
+      ],
+      "capabilityTags": ["taste:memory", "ratings:distill", "visual:weights"],
+      "status": "proposed",
+      "activatedAt": "2026-08-01",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:PALATE:v1",
+      "skillRefs": [
+        ".claude/skills/brand-identity/SKILL.md",
+        ".claude/skills/safe-release/SKILL.md"
+      ],
+      "visual": {
+        "motif": "calibrated tasting grid + weighted swatches",
+        "accentToken": "agent-palate",
+        "avatar": "/agents/palate.webp",
+        "avatarAlt": "Abstract non-human portrait of PALATE with a tasting grid and weighted swatches",
+        "provenanceRef": "AVATAR-PALATE"
+      }
+    },
+    {
+      "id": "SCENE",
+      "slug": "scene",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": ["titty-tuesdays"],
+      "department": "Titty Tuesdays",
+      "title": "Scene & Competitor Scout",
+      "mission": "Track evidence-backed streetwear, skate and lifestyle signals for Titty Tuesdays without fabricating a brand, price or example.",
+      "responsibilities": [
+        "File sourced SceneReports",
+        "Track drops, collaborations and tone",
+        "Separate observed practice from inference"
+      ],
+      "notResponsibleFor": [
+        "Copying competitors",
+        "Using unallowlisted sources"
+      ],
+      "decisionRights": [
+        "Reject an unsourced scene claim",
+        "Recommend evidence for the next campaign brief"
+      ],
+      "ownedKpiIds": [
+        "scene.report_coverage",
+        "scene.source_coverage"
+      ],
+      "successChecks": [
+        "Each scene-day produces at least one report",
+        "Every report claim carries a source reference"
+      ],
+      "capabilityTags": ["scene:research", "competition:evidence", "streetwear:signals"],
+      "status": "proposed",
+      "activatedAt": "2026-08-01",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:SCENE:v1",
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "street map fragments + source pins",
+        "accentToken": "agent-scene",
+        "avatar": "/agents/scene.webp",
+        "avatarAlt": "Abstract non-human portrait of SCENE with street map fragments and source pins",
+        "provenanceRef": "AVATAR-SCENE"
+      }
+    },
+    {
+      "id": "STUNT",
+      "slug": "stunt",
+      "kind": "specialist",
+      "provider": "OpenAI",
+      "ventures": ["titty-tuesdays"],
+      "department": "Titty Tuesdays",
+      "title": "Guerrilla Marketing Lead",
+      "mission": "Design low-cost, permission-aware stunts with explicit estimates, platform checks and a test that can prove whether each idea worked.",
+      "responsibilities": [
+        "Draft bounded stunt concepts",
+        "Record legality and permission needs",
+        "Define one falsifiable success measure"
+      ],
+      "notResponsibleFor": [
+        "Trespass or rule-breaking tactics",
+        "Executing spend or live campaigns"
+      ],
+      "decisionRights": [
+        "Reject concepts without permission notes",
+        "Propose up to two concepts for board review"
+      ],
+      "ownedKpiIds": [
+        "stunt.graduated_concepts",
+        "stunt.safety_note_coverage"
+      ],
+      "successChecks": [
+        "Each season graduates at least two stunt concepts",
+        "Every concept states cost, legality and platform risk"
+      ],
+      "capabilityTags": ["marketing:guerrilla", "legality:note", "platform:safety"],
+      "status": "proposed",
+      "activatedAt": "2026-08-01",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:STUNT:v1",
+      "skillRefs": [
+        ".claude/skills/social-operations/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "permission stamp + measured spark",
+        "accentToken": "agent-stunt",
+        "avatar": "/agents/stunt.webp",
+        "avatarAlt": "Abstract non-human portrait of STUNT with a permission stamp and measured spark",
+        "provenanceRef": "AVATAR-STUNT"
       }
     }
   ]

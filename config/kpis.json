@@ -392,6 +392,96 @@
       "warmupCycles": 14
     },
     {
+      "id": "angle.positioning_freshness",
+      "owner": "ANGLE",
+      "metric": "activeVenturePositioningFreshnessRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "angle.campaign_trace_rate",
+      "owner": "ANGLE",
+      "metric": "campaignBriefTraceRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "cohort.spec_coverage",
+      "owner": "COHORT",
+      "metric": "graduatedCampaignAudienceSpecCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "cohort.validation_failures",
+      "owner": "COHORT",
+      "metric": "mergedAudienceSpecValidationFailures",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "funnel.plan_readiness",
+      "owner": "FUNNEL",
+      "metric": "seasonLaunchPlanReadinessRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "funnel.estimate_label_rate",
+      "owner": "FUNNEL",
+      "metric": "estimatedCostLabelCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "palate.evidence_link_rate",
+      "owner": "PALATE",
+      "metric": "tasteRuleRatingReferenceCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "palate.prompt_write_incidents",
+      "owner": "PALATE",
+      "metric": "unauthorizedPromptWriteCount",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "scene.report_coverage",
+      "owner": "SCENE",
+      "metric": "sceneDayReportCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "scene.source_coverage",
+      "owner": "SCENE",
+      "metric": "sceneClaimSourceCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "stunt.graduated_concepts",
+      "owner": "STUNT",
+      "metric": "graduatedStuntConceptsPerSeason",
+      "target": 2,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "stunt.safety_note_coverage",
+      "owner": "STUNT",
+      "metric": "stuntSafetyNoteCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
       "id": "council.cost_per_learning",
       "owner": "ALL",
       "metric": "usdPerValidatedLearning",

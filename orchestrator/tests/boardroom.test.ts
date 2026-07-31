@@ -114,6 +114,35 @@ describe("Boardroom routing", () => {
     expect(morning.selectedParticipants.map(({ agent }) => agent)).toContain("SPARK");
   });
 
+  it("blocks a venture-dedicated agent outside its assignment", async () => {
+    const config = await loadRoutingConfig(
+      path.join(configRoot, "agent-routing.json")
+    );
+    expect(() => routeBoardroom(config, {
+      roomId: "ROOM-TT-HERALD-BLOCK",
+      topicType: "edition",
+      objective: "Attempt to seat the Caught Up editor in another venture",
+      evidenceRefs: [],
+      decisionNeeded: "EDITION",
+      riskTags: [],
+      budgetImpactUsd: 0,
+      preset: "edition-room",
+      ventureId: "titty-tuesdays"
+    })).toThrow(/HERALD outside venture titty-tuesdays/);
+
+    expect(() => routeBoardroom(config, {
+      roomId: "ROOM-TT-GLOBAL-PULSE",
+      topicType: "growth",
+      objective: "Prepare a bounded venture plan",
+      evidenceRefs: [],
+      decisionNeeded: "PLAN",
+      riskTags: [],
+      budgetImpactUsd: 0,
+      preset: "growth-room",
+      ventureId: "titty-tuesdays"
+    })).not.toThrow();
+  });
+
   it("publishes only allowlisted fields and rejects private markers", async () => {
     const config = await loadRoutingConfig(
       path.join(configRoot, "agent-routing.json")

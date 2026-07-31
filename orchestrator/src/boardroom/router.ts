@@ -4,6 +4,7 @@ import {
   FoundingAgentSchema,
   type FoundingAgent
 } from "../types.js";
+import { loadAgentRegistry } from "../org/registry.js";
 import {
   RoomPacketSchema,
   type RoomPacket
@@ -22,7 +23,14 @@ const RoutingConfigSchema = z.object({
     FoundingAgentSchema,
     z.object({
       capabilities: z.array(z.string().min(1)),
-      status: z.literal("active")
+      status: z.enum([
+        "active",
+        "coaching",
+        "restricted",
+        "paused",
+        "proposed",
+        "retired"
+      ])
     })
   ),
   mandatoryWhen: z.array(
@@ -41,7 +49,9 @@ const RoutingConfigSchema = z.object({
   )
 });
 
-type RoutingConfig = z.infer<typeof RoutingConfigSchema>;
+type RoutingConfig = z.infer<typeof RoutingConfigSchema> & {
+  ventureAssignments: Record<FoundingAgent, "global" | string[]>;
+};
 
 const COUNCIL = new Set<FoundingAgent>(["VIZE", "FORGE", "PULSE", "AUDIT"]);
 const OWNER_BY_TOPIC: Record<RoomPacket["topicType"], FoundingAgent> = {
@@ -69,7 +79,18 @@ const DOMAIN_REVIEWER: Partial<Record<RoomPacket["topicType"], FoundingAgent>> =
 };
 
 export async function loadRoutingConfig(path: string): Promise<RoutingConfig> {
-  return RoutingConfigSchema.parse(JSON.parse(await readFile(path, "utf8")));
+  const [routing, registry] = await Promise.all([
+    readFile(path, "utf8").then((source) =>
+      RoutingConfigSchema.parse(JSON.parse(source))
+    ),
+    loadAgentRegistry()
+  ]);
+  return {
+    ...routing,
+    ventureAssignments: Object.fromEntries(
+      registry.agents.map((agent) => [agent.id, agent.ventures])
+    ) as Record<FoundingAgent, "global" | string[]>
+  };
 }
 
 export interface RouteInput {
@@ -80,6 +101,7 @@ export interface RouteInput {
   decisionNeeded: RoomPacket["decisionNeeded"];
   riskTags: string[];
   budgetImpactUsd: number;
+  ventureId?: string;
   preset?: string;
   requiredParticipants?: readonly FoundingAgent[];
   affectedAgent?: FoundingAgent;
@@ -102,6 +124,14 @@ export function routeBoardroom(
   ) => {
     if (config.agents[agent]?.status !== "active") {
       throw new Error(`Routing selected inactive or unknown agent ${agent}`);
+    }
+    const assignment = config.ventureAssignments[agent];
+    if (
+      input.ventureId &&
+      assignment !== "global" &&
+      !assignment?.includes(input.ventureId)
+    ) {
+      throw new Error(`Routing selected ${agent} outside venture ${input.ventureId}`);
     }
     const existing = selected.get(agent);
     selected.set(agent, {

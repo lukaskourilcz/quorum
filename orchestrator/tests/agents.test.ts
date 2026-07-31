@@ -9,19 +9,28 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains exactly the 21 operating roles with stable identities", async () => {
+  it("contains 21 active roles and six portrait-gated proposed roles", async () => {
     const registry = await loadAgentRegistry();
 
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(21);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(27);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.every((agent) => agent.status === "active")).toBe(true);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(21);
+    expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(6);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
-      10
+      13
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(11);
+    ).toHaveLength(14);
+    expect(
+      registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
+    ).toEqual([
+      ["HERALD", ["caught-up"]],
+      ["HACEK", ["caught-up"]],
+      ["SCENE", ["titty-tuesdays"]],
+      ["STUNT", ["titty-tuesdays"]]
+    ]);
 
     const kpiConfig = JSON.parse(
       await readFile(path.join(configRoot, "kpis.json"), "utf8")

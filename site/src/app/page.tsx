@@ -116,7 +116,7 @@ export default async function HomePage() {
               "0%",
               latestStandup.fixture ? "Offline fixture / no calls billed" : "Live guarded council record"
             ],
-            ["Agent cast", String(agents.length), "4 VOTING", "100%", "16 specialists and controls"]
+            ["Agent cast", String(agents.length), "4 VOTING", "100%", `${agents.length - 4} specialists and controls`]
           ].map(([label, value, tag, width, foot]) => (
             <div
               className="flex min-h-48 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"

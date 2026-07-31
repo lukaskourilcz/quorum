@@ -91,6 +91,30 @@
     "RELAY": {
       "capabilities": ["ops:delivery", "ops:notify"],
       "status": "active"
+    },
+    "ANGLE": {
+      "capabilities": ["strategy:positioning", "campaign:brief", "niche:analysis"],
+      "status": "proposed"
+    },
+    "COHORT": {
+      "capabilities": ["audience:spec", "targeting:public", "privacy:audience"],
+      "status": "proposed"
+    },
+    "FUNNEL": {
+      "capabilities": ["marketing:performance", "campaign:plan", "cost:estimate"],
+      "status": "proposed"
+    },
+    "PALATE": {
+      "capabilities": ["taste:memory", "ratings:distill", "visual:weights"],
+      "status": "proposed"
+    },
+    "SCENE": {
+      "capabilities": ["scene:research", "competition:evidence", "streetwear:signals"],
+      "status": "proposed"
+    },
+    "STUNT": {
+      "capabilities": ["marketing:guerrilla", "legality:note", "platform:safety"],
+      "status": "proposed"
     }
   },
   "mandatoryWhen": [

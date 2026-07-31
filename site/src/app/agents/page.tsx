@@ -7,7 +7,7 @@ import { agents } from "@/data/agents";
 
 export const metadata: Metadata = {
   description:
-    "The twenty-one BoardlessAI council, specialist and control role contracts.",
+    "The twenty-seven BoardlessAI council, specialist and control role contracts.",
   title: "Agents"
 };
 

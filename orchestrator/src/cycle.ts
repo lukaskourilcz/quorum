@@ -245,6 +245,7 @@ async function runCaughtUpDryCycle(
     decisionNeeded: definition.decisionNeeded,
     riskTags: [],
     budgetImpactUsd: estimatedWorstCaseUsd,
+    ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: definition.requiredParticipants,
     now
@@ -407,6 +408,7 @@ async function runCaughtUpLiveEditionCycle(
     decisionNeeded: definition.decisionNeeded,
     riskTags: [],
     budgetImpactUsd: estimatedWorstCaseUsd,
+    ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: definition.requiredParticipants,
     now
@@ -599,6 +601,7 @@ async function runCaughtUpLiveProductCycle(
     decisionNeeded: definition.decisionNeeded,
     riskTags: [],
     budgetImpactUsd: PRODUCT_ROOM_RESERVE_USD,
+    ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: definition.requiredParticipants,
     now
