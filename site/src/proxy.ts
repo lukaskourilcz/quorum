@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyBasicAuthorization } from "@/lib/admin-auth";
+import { verifyBasicAuthorization } from "./lib/admin-auth";
 
 const attempts = new Map<string, { count: number; resetAt: number }>();
 const WINDOW_MS = 60_000;
@@ -50,15 +50,6 @@ export function proxy(request: NextRequest) {
   if (!admin) {
     return securityHeaders(NextResponse.next(), false);
   }
-  if (isRateLimited(request)) {
-    return securityHeaders(
-      new NextResponse("Too many authentication attempts.", {
-        status: 429,
-        headers: { "Retry-After": "60" }
-      }),
-      true
-    );
-  }
   const result = verifyBasicAuthorization(
     request.headers.get("authorization"),
     process.env.ADMIN_USER,
@@ -73,6 +64,15 @@ export function proxy(request: NextRequest) {
     );
   }
   if (result !== "ok") {
+    if (isRateLimited(request)) {
+      return securityHeaders(
+        new NextResponse("Too many authentication attempts.", {
+          status: 429,
+          headers: { "Retry-After": "60" }
+        }),
+        true
+      );
+    }
     return securityHeaders(
       new NextResponse("Authentication required.", {
         status: 401,

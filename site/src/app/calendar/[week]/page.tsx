@@ -29,7 +29,7 @@ export default async function CalendarWeekPage({
       <PageIntro
         eyebrow="WeekBoard / Europe/Prague"
         title="The public operating clock"
-        description="Five scheduled rooms per day, projected from committed records at build time—without a browser fetch or hidden calendar service."
+        description="Eight scheduled rooms per day, projected from the shared venture registry and committed records at build time—without a browser fetch or hidden calendar service."
       />
       <section className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-24">
         <WeekBoard availableWeeks={availableWeeks} feed={feed} headingLevel="page" />

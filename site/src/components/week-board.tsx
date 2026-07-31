@@ -29,6 +29,24 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
+function isIncubator(kind: CalendarKind) {
+  return kind === "incubator-scan" || kind === "incubator-synthesis";
+}
+
+function definitionTone(kind: CalendarKind): string {
+  if (isCaughtUp(kind)) return "text-[var(--magenta-spark)]";
+  if (kind === "tt-marketing") return "text-[var(--paper)]";
+  if (isIncubator(kind)) return "text-[var(--ash)]";
+  return "text-[var(--accent)]";
+}
+
+function slotTone(kind: CalendarKind): string {
+  if (isCaughtUp(kind)) return "bg-[color-mix(in_srgb,var(--magenta-spark)_6%,var(--surface))]";
+  if (kind === "tt-marketing") return "bg-[color-mix(in_srgb,var(--paper)_7%,var(--surface))]";
+  if (isIncubator(kind)) return "bg-[color-mix(in_srgb,var(--ash)_5%,var(--surface))]";
+  return "bg-[color-mix(in_srgb,var(--accent)_5%,var(--surface))]";
+}
+
 export function WeekBoard({
   feed,
   availableWeeks,
@@ -55,8 +73,8 @@ export function WeekBoard({
       {headingLevel === "section" ? (
         <SectionHeading
           eyebrow="WeekBoard / Europe/Prague"
-          title="Five rooms, one public clock"
-          description="Built from committed meeting records. A missed slot stays visible; a held slot opens its public room."
+          title="Eight rooms, one public clock"
+          description="Board, venture, marketing and incubator slots share one Prague clock. A missed slot stays visible; a held slot opens its public room."
           action={navigation}
         />
       ) : null}
@@ -76,7 +94,7 @@ export function WeekBoard({
           {feed.definitions.map((definition, row) => (
             <div className="contents" key={definition.kind}>
               <div className="border-b border-r border-[var(--border)] p-4 last:border-b-0">
-                <p className={isCaughtUp(definition.kind) ? "font-mono text-xs font-semibold uppercase tracking-[0.08em] text-[var(--magenta-spark)]" : "font-mono text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent)]"}>
+                <p className={`font-mono text-xs font-semibold uppercase tracking-[0.08em] ${definitionTone(definition.kind)}`}>
                   {String(definition.hour).padStart(2, "0")}:00
                 </p>
                 <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{definition.label}</p>
@@ -93,11 +111,7 @@ export function WeekBoard({
                     {slot.fixture ? <span className="mt-2 block text-[0.625rem] uppercase tracking-[0.08em] text-[var(--fog)]">Offline fixture</span> : null}
                   </>
                 );
-                const className = `min-h-31 border-b border-r border-[var(--border)] p-4 last:border-r-0 ${
-                  isCaughtUp(slot.kind)
-                    ? "bg-[color-mix(in_srgb,var(--magenta-spark)_6%,var(--surface))] text-[var(--mist)]"
-                    : "bg-[color-mix(in_srgb,var(--accent)_5%,var(--surface))] text-[var(--mist)]"
-                } ${slot.meetingHref ? "transition-colors hover:bg-[var(--surface-raised)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
+                const className = `min-h-31 border-b border-r border-[var(--border)] p-4 last:border-r-0 text-[var(--mist)] ${slotTone(slot.kind)} ${slot.meetingHref ? "transition-colors hover:bg-[var(--surface-raised)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
                 return slot.meetingHref ? (
                   <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${slot.status}`} className={className} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
                     {content}
@@ -113,6 +127,8 @@ export function WeekBoard({
       <div className="mt-5 flex flex-wrap gap-4 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
         <span className="text-[var(--accent)]">Venture council</span>
         <span className="text-[var(--magenta-spark)]">Caught Up board</span>
+        <span className="text-[var(--paper)]">Titty Tuesdays</span>
+        <span className="text-[var(--ash)]">Incubator</span>
         <span>✓ held</span><span>− missed</span><span>◷ scheduled</span>
       </div>
     </>

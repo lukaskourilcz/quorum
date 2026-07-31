@@ -9,6 +9,7 @@ export default defineConfig({
   reporter: [["list"]],
   use: {
     baseURL: "http://localhost:3000",
+    httpCredentials: { username: "e2e-owner", password: "e2e-password" },
     trace: "on-first-retry"
   },
   projects: [
@@ -19,6 +20,11 @@ export default defineConfig({
   ],
   webServer: {
     command: "pnpm dev",
+    env: {
+      ADMIN_USER: "e2e-owner",
+      ADMIN_PASSWORD: "e2e-password",
+      BOARDLESSAI_REPO_ROOT: process.cwd().replace(/\/site$/, "")
+    },
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000

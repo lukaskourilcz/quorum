@@ -1,4 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 const axeRoutes = [
@@ -6,8 +8,84 @@ const axeRoutes = [
   "/meetings/2026-07-30-cu-edition",
   "/meetings/2026-07-30-cu-product",
   "/ideas",
-  "/ventures/caught-up"
+  "/ventures/caught-up",
+  "/ventures/titty-tuesdays",
+  "/incubator",
+  "/admin?venture=incubator&tab=niche-proposals",
+  "/admin/ventures/titty-tuesdays/binder"
 ];
+
+const repositoryRoot = path.resolve(process.cwd(), "..");
+const e2ePlanPath = path.join(repositoryRoot, "state", "ventures", "titty-tuesdays", "plans", "e2e-launch-plan.json");
+const e2eProposalPath = path.join(repositoryRoot, "state", "ventures", "incubator", "niche-proposals", "e2e-proposal.json");
+const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "incubator", "ledger.jsonl");
+let originalRatingLedger: string | null = null;
+
+test.beforeAll(async () => {
+  try {
+    originalRatingLedger = await readFile(ratingLedgerPath, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+  await Promise.all([
+    mkdir(path.dirname(e2ePlanPath), { recursive: true }),
+    mkdir(path.dirname(e2eProposalPath), { recursive: true }),
+    mkdir(path.dirname(ratingLedgerPath), { recursive: true })
+  ]);
+  await writeFile(e2ePlanPath, JSON.stringify({
+    schemaVersion: "marketing-plan/1",
+    id: "plan-e2e-launch",
+    ventureId: "titty-tuesdays",
+    seasonId: "season-001",
+    title: "E2E launch binder plan",
+    objective: "Verify the protected launch binder without authorizing commerce or publishing.",
+    tactics: [{
+      type: "content",
+      description: "Prepare a review-only launch note.",
+      assetsNeeded: [],
+      platformPolicyNote: "Draft only; no external action."
+    }],
+    calendar: [{ week: 1, focus: "Owner review." }],
+    audienceRefs: [],
+    kpis: ["owner review complete"],
+    status: "approved",
+    originMeetingRef: "meetings/2026-08-01-tt-marketing"
+  }));
+  await writeFile(e2eProposalPath, JSON.stringify({
+    schemaVersion: "niche-proposal/1",
+    id: "niche-2026-08-04-e2e0",
+    domain: "E2E repair brief",
+    oneLiner: "A temporary proposal used only to verify the protected rating path.",
+    whyPeopleCareDaily: "The test checks persistence and shortlist projection, not a market claim.",
+    audienceHypothesis: {
+      regions: ["Europe"],
+      ageRange: { min: 25, max: 60 },
+      genders: ["all"],
+      interests: ["repair"],
+      platforms: ["web"],
+      adTargetingNotes: "No advertising; test fixture only."
+    },
+    contentShape: {
+      cadence: "weekday",
+      formats: ["brief"],
+      caughtUpReuseNotes: "Reuse the edition contract only after approval."
+    },
+    competitionNotes: [],
+    risks: ["Test fixture must be removed."],
+    evidenceRefs: [],
+    status: "proposed",
+    originMeetingRef: "meetings/2026-08-01-incubator-synthesis"
+  }));
+});
+
+test.afterAll(async () => {
+  await Promise.all([
+    rm(e2ePlanPath, { force: true }),
+    rm(e2eProposalPath, { force: true })
+  ]);
+  if (originalRatingLedger === null) await rm(ratingLedgerPath, { force: true });
+  else await writeFile(ratingLedgerPath, originalRatingLedger);
+});
 
 for (const route of axeRoutes) {
   test(`WCAG AA operating surface — ${route}`, async ({ page }) => {
@@ -26,6 +104,7 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
     "smooth"
   );
   await expect(page.getByTestId("week-board")).toBeVisible();
+  await expect(page.getByTestId("week-board").locator(".contents")).toHaveCount(8);
   const next = page.getByRole("link", { name: "Next calendar week" });
   await expect(next).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
   await next.click();
@@ -33,6 +112,39 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   await expect(page.getByTestId("week-board")).toBeVisible();
   await expect(page.getByRole("link", { name: "Previous calendar week" })).toBeVisible();
 });
+
+test("admin rating persists, feeds the incubator shortlist, and the launch binder renders", async ({ page }) => {
+  await page.goto("/admin?venture=incubator&tab=niche-proposals", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "E2E repair brief" })).toBeVisible();
+  await page.getByLabel("Note (optional)").fill("E2E owner note");
+  await page.getByRole("button", { name: "Perfect", exact: true }).click();
+  await expect(page.getByText("Rating saved to canonical history.")).toBeVisible();
+  await page.reload({ waitUntil: "networkidle" });
+  await expect(page.getByText("Incubator shortlist")).toBeVisible();
+  await expect(page.getByText("E2E repair brief").first()).toBeVisible();
+  await expect(page.getByText("Rating history (1)")).toBeVisible();
+
+  await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
+  await expect(page.getByText("1 ready plans")).toBeVisible();
+});
+
+for (const mode of [
+  { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
+  { name: "landscape", width: 844, height: 390, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
+  { name: "reduced motion", width: 1440, height: 900, colorScheme: "dark" as const, reducedMotion: "reduce" as const }
+]) {
+  test(`portfolio surfaces remain contained in ${mode.name}`, async ({ page }) => {
+    await page.setViewportSize({ width: mode.width, height: mode.height });
+    await page.emulateMedia({ colorScheme: mode.colorScheme, reducedMotion: mode.reducedMotion });
+    for (const route of ["/", "/ventures/titty-tuesdays", "/incubator", "/admin?venture=incubator&tab=niche-proposals"]) {
+      await page.goto(route, { waitUntil: "networkidle" });
+      await expect(page.locator("main")).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
+  });
+}
 
 test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });

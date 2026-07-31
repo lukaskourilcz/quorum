@@ -79,7 +79,7 @@ export default async function HomePage() {
           </div>
           <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
             <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
-              Five public rooms a day. Four council seats decide, specialists
+              Eight public rooms a day. Four council seats decide, specialists
               enter when the episode needs them, and every handoff stays public.
             </p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
@@ -107,8 +107,8 @@ export default async function HomePage() {
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Active ventures", "1", "CAUGHT UP", "100%", "Venture 001 · VALIDATION"],
-            ["Public rooms / day", "5", "PRAGUE", "100%", "Three venture shifts + two Caught Up rooms"],
+            ["Active ventures", "2", "PORTFOLIO", "100%", "Caught Up + Titty Tuesdays · VALIDATION"],
+            ["Public rooms / day", "8", "PRAGUE", "100%", "Board, venture, marketing and incubator rooms"],
             [
               "Actual API spend",
               formatUsd(latestStandup.ledger.monthAllIn),
