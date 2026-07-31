@@ -12,7 +12,7 @@ import {
 import { loadVentureRegistry } from "../src/ventures/registry.js";
 
 describe("Titty Tuesdays bootstrap", () => {
-  it("registers venture 002 without activating a schedule before phase 10", async () => {
+  it("registers venture 002 on the resolved 11:00 Prague schedule", async () => {
     const registry = await loadVentureRegistry();
     const venture = registry.ventures.find((candidate) => candidate.id === "titty-tuesdays");
     expect(venture).toMatchObject({
@@ -21,7 +21,7 @@ describe("Titty Tuesdays bootstrap", () => {
       ledgerNamespace: "titty-tuesdays",
       adminTabs: ["plans", "ideas", "visuals"],
       pendingApproval: "budget-2026-08",
-      meetings: []
+      meetings: [expect.objectContaining({ kind: "tt-marketing", cadence: "daily@11:00", envelopeUsd: 0.08 })]
     });
   });
 

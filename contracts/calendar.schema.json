@@ -32,7 +32,10 @@
               "venture-afternoon",
               "venture-night",
               "cu-edition",
-              "cu-product"
+              "cu-product",
+              "tt-marketing",
+              "incubator-scan",
+              "incubator-synthesis"
             ]
           },
           "status": {

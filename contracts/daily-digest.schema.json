@@ -49,7 +49,7 @@
                 },
                 "roomLink": {
                   "type": "string",
-                  "pattern": "^\\/meetings\\/.*"
+                  "pattern": "^\\/(?:meetings|standups|calendar)\\/"
                 }
               },
               "required": [

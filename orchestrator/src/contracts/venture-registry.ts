@@ -69,6 +69,26 @@ export const VentureRegistrySchema = openObject({
       path: ["ventures"]
     });
   }
+  const starts = [
+    { kind: "venture-morning", hour: 6 },
+    { kind: "venture-afternoon", hour: 14 },
+    { kind: "venture-night", hour: 22 },
+    ...ventures.flatMap((venture) => venture.meetings.map((meeting) => ({
+      kind: meeting.kind,
+      hour: Number(meeting.cadence.slice(6, 8))
+    })))
+  ].sort((left, right) => left.hour - right.hour);
+  for (let index = 1; index < starts.length; index += 1) {
+    const previous = starts[index - 1]!;
+    const current = starts[index]!;
+    if ((current.hour - previous.hour) * 60 < 60) {
+      context.addIssue({
+        code: "custom",
+        message: `Portfolio meetings ${previous.kind} and ${current.kind} must start at least 60 minutes apart`,
+        path: ["ventures"]
+      });
+    }
+  }
 });
 
 export type VentureRegistry = z.infer<typeof VentureRegistrySchema>;

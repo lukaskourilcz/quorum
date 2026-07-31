@@ -94,7 +94,7 @@ describe("cycle preflight", () => {
     expect(() => RunnablePhaseSchema.parse("pm")).toThrow();
   });
 
-  it("runs both Caught Up phases through fixture-only meeting, calendar and email steps", async () => {
+  it("runs both Caught Up phases through fixture-only meeting and calendar steps", async () => {
     const phases = [
       { phase: "cu-edition" as const, now: new Date("2026-08-04T03:00:00.000Z") },
       { phase: "cu-product" as const, now: new Date("2026-08-04T15:00:00.000Z") }
@@ -112,7 +112,6 @@ describe("cycle preflight", () => {
       );
       expect(result.artifacts).toEqual(expect.arrayContaining([
         `tmp/dry-run/state/meetings/2026-08-04-${fixture.phase}.json`,
-        `tmp/dry-run/state/notify/email/meetings-2026-08-04-${fixture.phase}.json`,
         "tmp/dry-run/state/calendar/2026-08-03.json"
       ]));
       const meetingFile = path.join(
@@ -121,6 +120,45 @@ describe("cycle preflight", () => {
       );
       expect(MeetingRecordSchema.parse(JSON.parse(await readFile(meetingFile, "utf8"))).kind)
         .toBe(fixture.phase);
+    }
+  });
+
+  it("runs all three new portfolio phases as bounded dry records without per-meeting email", async () => {
+    const phases = [
+      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT", "FUNNEL", "SPARK"] },
+      { phase: "incubator-scan" as const, now: new Date("2026-08-04T05:00:00.000Z"), cast: ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"] },
+      { phase: "incubator-synthesis" as const, now: new Date("2026-08-04T19:00:00.000Z"), cast: ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"] }
+    ];
+    for (const fixture of phases) {
+      const result = await runCycle({ ...fixture, dry: true, explainBudget: false, explainRouting: false });
+      expect(result.status).toBe("dry_complete");
+      expect(result.artifacts.some((artifact) => artifact.includes("notify/email"))).toBe(false);
+      expect(result.selectedAgents).toEqual(fixture.cast);
+      const date = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(fixture.now);
+      const record = MeetingRecordSchema.parse(JSON.parse(await readFile(path.join(repoRoot, `tmp/dry-run/state/meetings/${date}-${fixture.phase}.json`), "utf8")));
+      expect(record.fixture).toBe(true);
+      expect(record.ledger.actualCycleUsd).toBe(0);
+      expect(record.roomTranscript.turns.length).toBeLessThanOrEqual(fixture.phase === "incubator-scan" ? 12 : fixture.phase === "incubator-synthesis" ? 18 : 22);
+    }
+  });
+
+  it("keeps every new portfolio phase paused in live mode until the owner gate is explicit", async () => {
+    const previous = process.env.PORTFOLIO_LIVE_ENABLED;
+    delete process.env.PORTFOLIO_LIVE_ENABLED;
+    try {
+      for (const phase of ["tt-marketing", "incubator-scan", "incubator-synthesis"] as const) {
+        const result = await runCycle({
+          phase,
+          dry: false,
+          explainBudget: false,
+          explainRouting: false,
+          now: new Date("2026-08-04T19:00:00.000Z")
+        });
+        expect(result).toMatchObject({ status: "paused", decision: "PAUSED", artifacts: [] });
+      }
+    } finally {
+      if (previous === undefined) delete process.env.PORTFOLIO_LIVE_ENABLED;
+      else process.env.PORTFOLIO_LIVE_ENABLED = previous;
     }
   });
 

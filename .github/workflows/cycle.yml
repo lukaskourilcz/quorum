@@ -12,6 +12,12 @@ on:
     - cron: "0 16 * * *"
     - cron: "0 20 * * *"
     - cron: "0 21 * * *"
+    - cron: "0 5 * * *"
+    - cron: "0 6 * * *"
+    - cron: "0 9 * * *"
+    - cron: "0 10 * * *"
+    - cron: "0 19 * * *"
+    - cron: "0 20 * * *"
   workflow_dispatch:
     inputs:
       phase:
@@ -24,6 +30,9 @@ on:
           - morning
           - afternoon
           - cu-product
+          - tt-marketing
+          - incubator-scan
+          - incubator-synthesis
           - night
       dry:
         description: Never call paid APIs or write canonical state
@@ -53,11 +62,12 @@ jobs:
       EDITION_PRODUCTION_BUDGET_USD: "0.35"
       DAILY_BUDGET_USD: "0.70"
       MONTHLY_BUDGET_USD: "15"
+      DIGEST_BUDGET_USD: "0.02"
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
       CAUGHT_UP_SITE_URL: ${{ vars.CAUGHT_UP_SITE_URL }}
-      MEETING_EMAIL_MODE: ${{ vars.MEETING_EMAIL_MODE }}
-      MEETING_EMAIL_FROM: ${{ vars.MEETING_EMAIL_FROM }}
-      MEETING_EMAIL_TO: ${{ secrets.MEETING_EMAIL_TO }}
+      DAILY_DIGEST_EMAIL_MODE: ${{ vars.DAILY_DIGEST_EMAIL_MODE }}
+      DAILY_DIGEST_EMAIL_FROM: ${{ vars.DAILY_DIGEST_EMAIL_FROM }}
+      DAILY_DIGEST_EMAIL_TO: ${{ secrets.DAILY_DIGEST_EMAIL_TO }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       RESEND_FREE_TIER_MONTHLY: ${{ vars.RESEND_FREE_TIER_MONTHLY }}
       RESEND_FREE_TIER_DAILY: ${{ vars.RESEND_FREE_TIER_DAILY }}
@@ -98,6 +108,7 @@ jobs:
           HAS_DELIVERY_APP_ID: ${{ secrets.DELIVERY_APP_ID != '' }}
           HAS_DELIVERY_APP_KEY: ${{ secrets.DELIVERY_APP_PRIVATE_KEY != '' }}
           CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
+          PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
@@ -106,6 +117,29 @@ jobs:
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled)"
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
+          fi
+          skip=false
+          if test "$phase" = "skip"; then
+            skip=true
+            dry=true
+            echo "The inactive DST cron variant has no Prague wall-clock meeting."
+          fi
+          if test "$EVENT_NAME" = "schedule" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis"; }; then
+            if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
+              skip=true
+              echo "Portfolio meeting crons await explicit owner approval."
+            else
+              schedule_json="$(pnpm --filter @boardlessai/orchestrator exec tsx src/portfolio/schedule-cli.ts --phase "$phase")"
+              enabled="$(printf '%s' "$schedule_json" | jq -r '.enabled')"
+              monthly_budget="$(printf '%s' "$schedule_json" | jq -r '.monthlyBudgetUsd')"
+              daily_budget="$(printf '%s' "$schedule_json" | jq -r '.dailyBudgetUsd')"
+              echo "MONTHLY_BUDGET_USD=$monthly_budget" >> "$GITHUB_ENV"
+              echo "DAILY_BUDGET_USD=$daily_budget" >> "$GITHUB_ENV"
+              if test "$enabled" = "false"; then
+                skip=true
+                echo "The countersign-aware budget shape disabled this phase."
+              fi
+            fi
           fi
           if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
             dry=true
@@ -121,8 +155,10 @@ jobs:
           fi
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
 
       - name: Pre-cycle release gate
+        if: ${{ steps.mode.outputs.skip != 'true' }}
         run: |
           pnpm agents:validate
           pnpm lint
@@ -131,6 +167,8 @@ jobs:
           pnpm build
 
       - name: Run cycle
+        id: run
+        if: ${{ steps.mode.outputs.skip != 'true' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           DRY: ${{ steps.mode.outputs.dry }}
@@ -139,9 +177,33 @@ jobs:
           if test "$DRY" = "true"; then
             args+=(--dry)
           fi
+          set +e
           pnpm cycle -- "${args[@]}"
+          cycle_status=$?
+          set -e
+          if test "$cycle_status" -eq 0; then
+            echo "failed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "failed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Send the one daily portfolio digest
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'night' }}
+        env:
+          CYCLE_FAILED: ${{ steps.run.outputs.failed }}
+          DRY: ${{ steps.mode.outputs.dry }}
+        run: |
+          args=()
+          if test "$DRY" = "true"; then args+=(--dry); fi
+          if test "$CYCLE_FAILED" = "true"; then args+=(--final-failed); fi
+          pnpm digest:daily -- "${args[@]}"
+
+      - name: Fail closed after recording the final-cycle failure
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.run.outputs.failed == 'true' }}
+        run: exit 1
 
       - name: Post-cycle release gate
+        if: ${{ steps.mode.outputs.skip != 'true' }}
         run: |
           pnpm agents:validate
           pnpm lint
@@ -151,6 +213,7 @@ jobs:
           git diff --check
 
       - name: Production route and link smoke
+        if: ${{ steps.mode.outputs.skip != 'true' }}
         run: |
           pnpm --filter @boardlessai/site start &
           server_pid=$!
@@ -164,11 +227,11 @@ jobs:
           pnpm site:smoke
 
       - name: Commit one atomic runtime cycle
-        if: ${{ steps.mode.outputs.dry != 'true' }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify state/social state/INBOX.md site/public/social
+          git add config/visual-weights state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify state/social state/taste state/ventures state/INBOX.md site/public/social
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0

@@ -11,7 +11,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes("--help")) {
     console.log(
-      "Usage: pnpm cycle -- --phase founding|cu-edition|morning|afternoon|cu-product|night [--dry] [--explain-budget] [--explain-routing]"
+      "Usage: pnpm cycle -- --phase founding|cu-edition|morning|afternoon|cu-product|tt-marketing|incubator-scan|incubator-synthesis|night [--dry] [--explain-budget] [--explain-routing]"
     );
     return;
   }

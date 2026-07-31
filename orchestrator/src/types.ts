@@ -57,7 +57,10 @@ export const PhaseSchema = z.enum([
   "afternoon",
   "night",
   "cu-edition",
-  "cu-product"
+  "cu-product",
+  "tt-marketing",
+  "incubator-scan",
+  "incubator-synthesis"
 ]);
 export type Phase = z.infer<typeof PhaseSchema>;
 
@@ -67,6 +70,9 @@ export const RunnablePhaseSchema = z.enum([
   "morning",
   "afternoon",
   "cu-product",
+  "tt-marketing",
+  "incubator-scan",
+  "incubator-synthesis",
   "night"
 ]);
 export type RunnablePhase = z.infer<typeof RunnablePhaseSchema>;
@@ -76,6 +82,9 @@ export const ScheduledPhaseSchema = z.enum([
   "morning",
   "afternoon",
   "cu-product",
+  "tt-marketing",
+  "incubator-scan",
+  "incubator-synthesis",
   "night"
 ]);
 export type ScheduledPhase = z.infer<typeof ScheduledPhaseSchema>;

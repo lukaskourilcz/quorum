@@ -38,23 +38,30 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(10);
-    for (const hour of [3, 4, 5, 12, 13, 15, 16, 20, 21]) {
+    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(16);
+    for (const hour of [3, 4, 5, 6, 9, 10, 12, 13, 15, 16, 19, 20, 21]) {
       expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
     }
     expect(cycle.match(/cron: "0 4 \* \* \*"/g)).toHaveLength(2);
+    expect(cycle.match(/cron: "0 5 \* \* \*"/g)).toHaveLength(2);
+    expect(cycle.match(/cron: "0 20 \* \* \*"/g)).toHaveLength(2);
     expect(cycle).not.toContain('timezone: "Europe/Prague"');
     expect(cycle).toContain("clock-cli.ts --scheduled");
     expect(cycle).toContain('clock-cli.ts --phase "$phase"');
     expect(cycle).not.toContain("Caught Up product remains fixture-only until the Phase 10 ledger cutover.");
     expect(cycle).toContain("CAUGHT_UP_LIVE_ENABLED");
+    expect(cycle).toContain("PORTFOLIO_LIVE_ENABLED");
+    expect(cycle).toContain("schedule-cli.ts");
+    expect(cycle).toContain("pnpm digest:daily");
+    expect(cycle).toContain("DAILY_DIGEST_EMAIL_MODE");
+    expect(cycle).not.toContain("MEETING_EMAIL_MODE");
     expect(cycle).toContain('test "$phase" = "morning"');
     expect(cycle).toContain("actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1");
     expect(cycle).toContain("lukaskourilcz/aifirst.git");
     expect(cycle).toContain("forcing fixture-only dry mode");
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain(
-      "git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify"
+      "git add config/visual-weights state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify"
     );
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');

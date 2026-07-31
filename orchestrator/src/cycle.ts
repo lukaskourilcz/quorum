@@ -24,7 +24,7 @@ import {
   mondayOfWeek,
   writeCalendarFeed
 } from "./meetings/calendar.js";
-import { isCaughtUpPhase } from "./meetings/clock.js";
+import { isCaughtUpPhase, isPortfolioPhase } from "./meetings/clock.js";
 import { pragueClockParts } from "./meetings/clock.js";
 import {
   createLiveEditionMeeting,
@@ -51,12 +51,6 @@ import {
   readIdeaIndexSlice,
   regenerateIdeaIndex
 } from "./ideas/ledger.js";
-import {
-  buildMeetingEmail,
-  MeetingEmailLogSink,
-  meetingEmailSinkFromEnvironment,
-  sendMeetingEmail
-} from "./notify/email.js";
 import { MeetingRecordSchema } from "./contracts/meeting-record.js";
 import {
   composeEditionSocialPack,
@@ -76,6 +70,7 @@ import {
   loadVentureRegistry
 } from "./ventures/registry.js";
 import type { RunnablePhase, Stage } from "./types.js";
+import { runPortfolioCycle } from "./portfolio/run.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -124,16 +119,6 @@ function envNumber(name: string, fallback: number): number {
     throw new Error(`${name} must be a positive number`);
   }
   return parsed;
-}
-
-async function liveMeetingEmailSink() {
-  const allowlist = JSON.parse(
-    await readFile(path.join(configRoot, "network-allowlist.json"), "utf8")
-  ) as { runtimeHosts: string[] };
-  return meetingEmailSinkFromEnvironment({
-    stateRoot,
-    allowHosts: allowlist.runtimeHosts
-  });
 }
 
 function budgetLimitsFromEnvironment(): BudgetLimits {
@@ -333,19 +318,6 @@ async function runCaughtUpDryCycle(
       generatedAt: record.generatedAt
     })
   ]);
-  const emailPayload = buildMeetingEmail({
-    record,
-    boardlessBaseUrl: "https://boardless.example"
-  });
-  const emailStatus = await sendMeetingEmail({
-    payload: emailPayload,
-    sink: new MeetingEmailLogSink(artifactRoot),
-    stateRoot: artifactRoot,
-    now
-  });
-  if (emailStatus !== "sent") {
-    console.warn(`Meeting email log sink failed for ${emailPayload.meetingRef}`);
-  }
   if (options.explainBudget) {
     console.log(JSON.stringify({ cycleId, callGraph: [], estimatedWorstCaseUsd }, null, 2));
   }
@@ -356,14 +328,11 @@ async function runCaughtUpDryCycle(
       caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
     }, null, 2));
   }
-  const emailPath = `notify/email/${emailPayload.meetingRef.replaceAll("/", "-")}.json`;
   const artifacts = [
     meetingPath,
     decisionPath,
     scorecardPath,
     calendarPath,
-    emailPath,
-    "notify/health.json",
     ...(fixtureIdea
       ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
       : [])
@@ -493,7 +462,6 @@ async function runCaughtUpLiveEditionCycle(
     })
   ]);
   const socialArtifacts: string[] = [];
-  let editionUrl: string | undefined;
   if (produced.package.status === "edition") {
     const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
     if (!caughtUpBaseUrl) {
@@ -506,7 +474,6 @@ async function runCaughtUpLiveEditionCycle(
           en: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString(),
           cs: new URL(`/cs/articles/${slug}`, caughtUpBaseUrl).toString()
         };
-        editionUrl = destinations.en;
         const social = await composeEditionSocialPack({
           editionPackage: produced.package,
           meeting: record,
@@ -517,24 +484,12 @@ async function runCaughtUpLiveEditionCycle(
         });
         if (social) socialArtifacts.push(...social.artifactPaths);
       } catch (error) {
-        editionUrl = undefined;
         const detail = error instanceof Error ? error.message : "unknown composer failure";
         console.warn(`Caught Up social pack failed: ${detail}`);
         await recordSocialPackFailure(stateRoot, detail);
       }
     }
   }
-  const emailPayload = buildMeetingEmail({
-    record,
-    boardlessBaseUrl: baseUrl,
-    ...(editionUrl ? { editionUrl } : {})
-  });
-  await sendMeetingEmail({
-    payload: emailPayload,
-    sink: await liveMeetingEmailSink(),
-    stateRoot,
-    now
-  });
   if (options.explainBudget) {
     console.log(JSON.stringify({
       cycleId,
@@ -561,8 +516,6 @@ async function runCaughtUpLiveEditionCycle(
     calendarPath,
     produced.outboxPath,
     produced.reportPath,
-    `notify/email/${reference.replaceAll("/", "-")}.json`,
-    "notify/health.json",
     "budget/ledger.json",
     ...socialArtifacts
   ];
@@ -608,7 +561,6 @@ async function runCaughtUpLiveProductCycle(
   }
   const date = pragueClockParts(now).date;
   const reference = meetingRef(date, "cu-product");
-  const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${cycleId.toUpperCase()}`,
     topicType: definition.topicType,
@@ -732,13 +684,6 @@ async function runCaughtUpLiveProductCycle(
       generatedAt: record.generatedAt
     })
   ]);
-  const emailPayload = buildMeetingEmail({ record, boardlessBaseUrl: baseUrl });
-  await sendMeetingEmail({
-    payload: emailPayload,
-    sink: await liveMeetingEmailSink(),
-    stateRoot,
-    now
-  });
   if (options.explainBudget) {
     console.log(JSON.stringify({
       cycleId,
@@ -770,8 +715,6 @@ async function runCaughtUpLiveProductCycle(
     calendarPath,
     ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE),
     ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE),
-    `notify/email/${reference.replaceAll("/", "-")}.json`,
-    "notify/health.json",
     "budget/ledger.json"
   ];
   return {
@@ -816,6 +759,16 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     return withFileLock(stateRoot, ".lock", () =>
       runCaughtUpLiveProductCycle(options, cycleId, now)
     );
+  }
+  if (isPortfolioPhase(options.phase)) {
+    return runPortfolioCycle({
+      phase: options.phase,
+      cycleId,
+      dry: options.dry,
+      explainBudget: options.explainBudget,
+      explainRouting: options.explainRouting,
+      now
+    });
   }
   if (options.phase !== "founding" && !isShiftPhase(options.phase)) {
     throw new Error(`Unsupported venture phase: ${options.phase}`);
@@ -1040,25 +993,6 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         generatedAt: now.toISOString()
       })
     ]);
-    const emailRecord = MeetingRecordSchema.parse({
-      ...standup,
-      schemaVersion: "meeting-record/2",
-      kind: "venture"
-    });
-    const emailPayload = buildMeetingEmail({
-      record: emailRecord,
-      boardlessBaseUrl: (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "")
-    });
-    await sendMeetingEmail({
-      payload: emailPayload,
-      sink: options.dry ? new MeetingEmailLogSink(artifactRoot) : await liveMeetingEmailSink(),
-      stateRoot: artifactRoot,
-      now
-    });
-    artifacts.push(
-      `notify/email/${emailPayload.meetingRef.replaceAll("/", "-")}.json`,
-      "notify/health.json"
-    );
     if (options.explainBudget) {
       console.log(
         JSON.stringify(

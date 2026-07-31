@@ -71,3 +71,9 @@ export function isCaughtUpPhase(
 ): phase is "cu-edition" | "cu-product" {
   return phase === "cu-edition" || phase === "cu-product";
 }
+
+export function isPortfolioPhase(
+  phase: RunnablePhase
+): phase is "tt-marketing" | "incubator-scan" | "incubator-synthesis" {
+  return phase === "tt-marketing" || phase === "incubator-scan" || phase === "incubator-synthesis";
+}

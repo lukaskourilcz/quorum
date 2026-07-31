@@ -6,7 +6,13 @@ function valueAfter(args: string[], flag: string): string | undefined {
 }
 
 const args = process.argv.slice(2);
-const phase = args.includes("--scheduled")
-  ? resolveScheduledPhase(new Date(valueAfter(args, "--at") ?? Date.now()))
-  : resolveManualPhase(valueAfter(args, "--phase") ?? "");
-console.log(phase);
+if (args.includes("--scheduled")) {
+  try {
+    console.log(resolveScheduledPhase(new Date(valueAfter(args, "--at") ?? Date.now())));
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("No scheduled phase")) console.log("skip");
+    else throw error;
+  }
+} else {
+  console.log(resolveManualPhase(valueAfter(args, "--phase") ?? ""));
+}

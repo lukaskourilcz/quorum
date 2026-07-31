@@ -120,5 +120,6 @@
     "meetingCostUsd"
   ],
   "additionalProperties": {},
+  "description": "Retired meeting-email/1 compatibility schema. Runtime delivery uses daily-digest/1.",
   "$id": "https://boardless.ai/contracts/meeting-email.schema.json"
 }

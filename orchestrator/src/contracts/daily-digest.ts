@@ -9,7 +9,7 @@ const DigestBulletSchema = openObject({
   text: z.string().trim().min(1).max(240).refine((text) => countWords(text) <= 20, {
     message: "Digest bullets must stay within 20 words"
   }),
-  roomLink: z.string().startsWith("/meetings/")
+  roomLink: z.string().regex(/^\/(?:meetings|standups|calendar)\//)
 });
 
 export const DailyDigestSchema = openObject({

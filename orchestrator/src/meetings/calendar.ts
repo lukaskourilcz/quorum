@@ -53,7 +53,7 @@ export function pragueSlotInstant(date: string, hour: number): Date {
 }
 
 function recordKind(record: MeetingRecord): CalendarFeed["slots"][number]["kind"] | null {
-  if (record.kind === "cu-edition" || record.kind === "cu-product") return record.kind;
+  if (record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis") return record.kind;
   if (record.phase === "morning") return "venture-morning";
   if (record.phase === "afternoon") return "venture-afternoon";
   if (record.phase === "night") return "venture-night";

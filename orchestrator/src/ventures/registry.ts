@@ -87,6 +87,7 @@ export function composeMeetingRouteDefinition(
   mode: "dry" | "live"
 ) {
   const { ventureId, meeting } = getVentureMeetingDefinition(registry, kind);
+  const venture = registry.ventures.find((candidate) => candidate.id === ventureId)!;
   return {
     ventureId,
     envelopeUsd: meeting.envelopeUsd,
@@ -94,6 +95,7 @@ export function composeMeetingRouteDefinition(
     objective: meeting.packet.objectives[mode],
     decisionNeeded: meeting.packet.decisionNeeded,
     preset: meeting.packet.preset,
+    preSteps: venture.taste && venture.meetings[0]?.kind === meeting.kind ? ["palate"] as const : [] as const,
     requiredParticipants: meeting.cast.map((agent) => FoundingAgentSchema.parse(agent))
   };
 }

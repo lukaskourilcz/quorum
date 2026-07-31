@@ -12,6 +12,7 @@
     "cycle": "tsx src/index.ts",
     "cycle:phase": "tsx src/meetings/clock-cli.ts",
     "delivery": "tsx src/delivery/cli.ts",
+    "digest:daily": "tsx src/notify/digest-cli.ts",
     "edition:dry": "tsx src/edition/dry-run.ts",
     "ideas:migrate": "tsx src/ideas/migrate-cli.ts",
     "lint": "tsc --noEmit",

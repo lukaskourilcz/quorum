@@ -15,13 +15,12 @@ import {
 describe("venture registry migration", () => {
   it("keeps the Caught Up clock and cron payloads byte-equivalent", async () => {
     const registry = await loadVentureRegistry();
-    const clock = resolveMeetingClock(registry).map(({ phase, hour, label }) => ({
-      phase,
-      hour,
-      label
-    }));
+    const legacyPhases = new Set(legacy.clock.map(({ phase }) => phase));
+    const clock = resolveMeetingClock(registry)
+      .filter(({ phase }) => legacyPhases.has(phase))
+      .map(({ phase, hour, label }) => ({ phase, hour, label }));
     expect(JSON.stringify(clock)).toBe(JSON.stringify(legacy.clock));
-    expect(JSON.stringify(cronPayloads(registry))).toBe(
+    expect(JSON.stringify(cronPayloads(registry).filter(({ phase }) => legacyPhases.has(phase)))).toBe(
       JSON.stringify(legacy.cronPayloads)
     );
   });

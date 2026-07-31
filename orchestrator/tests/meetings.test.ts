@@ -1,10 +1,7 @@
-import { mkdtemp, readFile } from "node:fs/promises";
-import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { CalendarFeedSchema } from "../src/contracts/calendar.js";
-import { MeetingEmailSchema } from "../src/contracts/meeting-email.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../src/contracts/meeting-record.js";
 import { reviewBoardroomText } from "../src/edition/stet.js";
 import {
@@ -23,13 +20,6 @@ import {
   enforceMeetingTranscript,
   transcriptViolations
 } from "../src/meetings/transcript.js";
-import {
-  buildMeetingEmail,
-  MeetingEmailLogSink,
-  renderMeetingEmailHtml,
-  sendMeetingEmail,
-  type MeetingEmailSink
-} from "../src/notify/email.js";
 import { configRoot, repoRoot } from "../src/paths.js";
 
 async function caughtUpRecord(
@@ -66,7 +56,11 @@ describe("Prague meeting clock", () => {
 
     expect(resolveScheduledPhase(new Date("2026-07-15T03:00:00.000Z"))).toBe("cu-edition");
     expect(resolveScheduledPhase(new Date("2026-07-15T04:00:00.000Z"))).toBe("morning");
-    expect(() => resolveScheduledPhase(new Date("2026-07-15T05:00:00.000Z"))).toThrow(/No scheduled phase/);
+    expect(resolveScheduledPhase(new Date("2026-07-15T05:00:00.000Z"))).toBe("incubator-scan");
+    expect(resolveScheduledPhase(new Date("2026-01-15T10:00:00.000Z"))).toBe("tt-marketing");
+    expect(resolveScheduledPhase(new Date("2026-07-15T09:00:00.000Z"))).toBe("tt-marketing");
+    expect(resolveScheduledPhase(new Date("2026-01-15T20:00:00.000Z"))).toBe("incubator-synthesis");
+    expect(resolveScheduledPhase(new Date("2026-07-15T19:00:00.000Z"))).toBe("incubator-synthesis");
 
     expect(resolveScheduledPhase(new Date("2026-03-28T04:19:00.000Z"))).toBe("cu-edition");
     expect(resolveScheduledPhase(new Date("2026-03-29T03:20:00.000Z"))).toBe("cu-edition");
@@ -75,6 +69,7 @@ describe("Prague meeting clock", () => {
 
   it("uses the same table for explicit manual phases", () => {
     expect(resolveManualPhase("cu-product")).toBe("cu-product");
+    expect(resolveManualPhase("tt-marketing")).toBe("tt-marketing");
     expect(() => resolveManualPhase("founding")).toThrow();
     expect(pragueClockParts(new Date("2026-08-04T03:00:00.000Z"))).toEqual({
       date: "2026-08-04",
@@ -218,15 +213,15 @@ describe("Caught Up meeting records", () => {
   });
 });
 
-describe("meeting calendar and email", () => {
-  it("builds a 35-slot Prague week with held, missed and scheduled states", async () => {
+describe("meeting calendar", () => {
+  it("builds a 56-slot Prague week with held, missed and scheduled states", async () => {
     const record = await caughtUpRecord("cu-edition");
     const feed = CalendarFeedSchema.parse(buildCalendarFeed({
       weekOf: mondayOfWeek(record.date),
       records: [record],
       now: new Date("2026-08-04T03:10:00.000Z")
     }));
-    expect(feed.slots).toHaveLength(35);
+    expect(feed.slots).toHaveLength(56);
     const edition = feed.slots.find((slot) => slot.kind === "cu-edition" && slot.status === "held");
     expect(edition?.at).toBe("2026-08-04T03:00:00.000Z");
     expect(edition?.meetingRef).toBe("meetings/2026-08-04-cu-edition");
@@ -241,41 +236,4 @@ describe("meeting calendar and email", () => {
       .toBe(true);
   });
 
-  it("writes a contract-valid dark-safe email to the log sink", async () => {
-    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-email-"));
-    const payload = MeetingEmailSchema.parse(buildMeetingEmail({
-      record: await caughtUpRecord("cu-edition"),
-      boardlessBaseUrl: "https://boardless.example"
-    }));
-    expect(renderMeetingEmailHtml(payload)).toContain("background:#09090b");
-    expect(await sendMeetingEmail({
-      payload,
-      sink: new MeetingEmailLogSink(root),
-      stateRoot: root,
-      now: new Date("2026-08-04T03:20:00.000Z")
-    })).toBe("sent");
-    const log = JSON.parse(
-      await readFile(path.join(root, "notify", "email", "meetings-2026-08-04-cu-edition.json"), "utf8")
-    );
-    expect(log).toMatchObject({ mode: "log", consumed: false, payload });
-  });
-
-  it("never throws on delivery failure and raises one inbox item after three", async () => {
-    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-email-fail-"));
-    const payload = buildMeetingEmail({
-      record: await caughtUpRecord("cu-product"),
-      boardlessBaseUrl: "https://boardless.example"
-    });
-    const failing: MeetingEmailSink = {
-      mode: "log",
-      async send() { throw new Error("fixture failure"); }
-    };
-    for (let attempt = 0; attempt < 4; attempt += 1) {
-      expect(await sendMeetingEmail({ payload, sink: failing, stateRoot: root })).toBe("failed");
-    }
-    const health = JSON.parse(await readFile(path.join(root, "notify", "health.json"), "utf8"));
-    expect(health.consecutiveFailures).toBe(4);
-    const inbox = await readFile(path.join(root, "INBOX.md"), "utf8");
-    expect(inbox.match(/EMAIL-DELIVERY-FAILURES/g)).toHaveLength(1);
-  });
 });

@@ -50,7 +50,24 @@
       "taste": true,
       "ledgerNamespace": "titty-tuesdays",
       "adminTabs": ["plans", "ideas", "visuals"],
-      "meetings": [],
+      "meetings": [
+        {
+          "kind": "tt-marketing",
+          "label": "Titty Tuesdays marketing room",
+          "cadence": "daily@11:00",
+          "cast": ["PULSE", "ANGLE", "AUDIT"],
+          "envelopeUsd": 0.08,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "tt-marketing-room",
+            "objectives": {
+              "dry": "Review Season 001 without production, publishing, commerce or spend",
+              "live": "Run the weekday marketing wheel against the current season, taste and approval gates"
+            }
+          }
+        }
+      ],
       "pendingApproval": "budget-2026-08"
     },
     {
@@ -60,7 +77,40 @@
       "taste": true,
       "ledgerNamespace": "incubator",
       "adminTabs": ["niche-proposals"],
-      "meetings": [],
+      "meetings": [
+        {
+          "kind": "incubator-scan",
+          "label": "Incubator evidence scan",
+          "cadence": "daily@07:00",
+          "cast": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "growth",
+            "decisionNeeded": "PLAN",
+            "preset": "incubator-scan-room",
+            "objectives": {
+              "dry": "Return zero candidates without a cited external evidence packet",
+              "live": "Bring cited daily-readable candidate domains and reject repeats without founding anything"
+            }
+          }
+        },
+        {
+          "kind": "incubator-synthesis",
+          "label": "Incubator proposal synthesis",
+          "cadence": "daily@21:00",
+          "cast": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "growth",
+            "decisionNeeded": "PLAN",
+            "preset": "incubator-synthesis-room",
+            "objectives": {
+              "dry": "Return zero proposals when the scan produced no evidenced candidates",
+              "live": "Argue the evidenced scan down to zero, one or two complete niche proposals"
+            }
+          }
+        }
+      ],
       "pendingApproval": "budget-2026-08"
     }
   ]

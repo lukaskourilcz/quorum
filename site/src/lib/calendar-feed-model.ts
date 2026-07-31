@@ -6,6 +6,9 @@ export type CalendarKind =
   | "venture-morning"
   | "venture-afternoon"
   | "cu-product"
+  | "tt-marketing"
+  | "incubator-scan"
+  | "incubator-synthesis"
   | "venture-night";
 export type CalendarStatus = "scheduled" | "held" | "missed";
 
@@ -35,8 +38,11 @@ export interface PublicCalendarFeed {
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 5, kind: "cu-edition", label: "Edition room" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
+  { hour: 7, kind: "incubator-scan", label: "Incubator evidence scan" },
+  { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
   { hour: 17, kind: "cu-product", label: "Product room" },
+  { hour: 21, kind: "incubator-synthesis", label: "Incubator synthesis" },
   { hour: 22, kind: "venture-night", label: "Night shift" }
 ] as const;
 

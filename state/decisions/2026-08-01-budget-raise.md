@@ -20,6 +20,10 @@ The planning estimate adds about $4.80–$6.90 per month. The estimated total re
 below the $20 all-in operating cap but leaves little variance room. These are planning
 estimates, not booked costs.
 
+Email-capacity check (verified 2026-07-31): Resend's official transactional pricing
+lists 3,000 emails per month and 100 per day on Free. One digest per day is inside both
+limits. Source: <https://resend.com/docs/knowledge-base/what-is-resend-pricing>.
+
 ## Automatic fallback shape B
 
 Without a countersignature, retain the current caps. Run one daily incubator meeting,
