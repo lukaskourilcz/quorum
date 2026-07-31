@@ -46,14 +46,15 @@ describe("automation policy", () => {
     expect(cycle).not.toContain('timezone: "Europe/Prague"');
     expect(cycle).toContain("clock-cli.ts --scheduled");
     expect(cycle).toContain('clock-cli.ts --phase "$phase"');
-    expect(cycle).toContain("Caught Up product remains fixture-only until the Phase 10 ledger cutover.");
+    expect(cycle).not.toContain("Caught Up product remains fixture-only until the Phase 10 ledger cutover.");
     expect(cycle).toContain("CAUGHT_UP_LIVE_ENABLED");
+    expect(cycle).toContain('test "$phase" = "morning"');
     expect(cycle).toContain("actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1");
     expect(cycle).toContain("lukaskourilcz/aifirst.git");
     expect(cycle).toContain("forcing fixture-only dry mode");
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain(
-      "git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/notify"
+      "git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify"
     );
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');

@@ -99,13 +99,9 @@ jobs:
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
           fi
-          if test "$phase" = "cu-product"; then
+          if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
             dry=true
-            echo "Caught Up product remains fixture-only until the Phase 10 ledger cutover."
-          fi
-          if test "$phase" = "cu-edition" && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
-            dry=true
-            echo "Caught Up edition live mode awaits the explicit repository-variable approval gate."
+            echo "Caught Up live mode awaits the explicit repository-variable approval gate."
           fi
           if test "$phase" = "cu-edition" && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
             dry=true
@@ -164,7 +160,7 @@ jobs:
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/notify
+          git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0

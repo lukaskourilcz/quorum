@@ -16,6 +16,7 @@ import {
   type Stage
 } from "../types.js";
 import { StandupSchema, type Standup } from "./schema.js";
+import type { IdeaScreeningResult } from "../ideas/ledger.js";
 
 const COUNCIL: readonly CouncilAgent[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
 
@@ -209,6 +210,7 @@ export function createLiveStandup(input: {
   estimatedCycleUsd: number;
   now: Date;
   council: Awaited<ReturnType<typeof collectLiveCouncil>>;
+  caughtUpIdea?: IdeaScreeningResult;
 }): Standup {
   const shift = getShiftDefinition(input.phase);
   const approved =
@@ -240,7 +242,7 @@ export function createLiveStandup(input: {
     fixture: false,
     status: outcome,
     stage: input.stage,
-    operatingBrief: `Four live council positions reviewed the ${shift.label.toLowerCase()} internal work item. ${summary}`,
+    operatingBrief: `Four live council positions reviewed the ${shift.label.toLowerCase()} internal work item. ${summary}${input.caughtUpIdea ? ` SPARK carried one VAULT-screened Caught Up idea: ${input.caughtUpIdea.entry.id}.` : ""}`,
     participantReasons: [
       ...input.room.selectedParticipants.map((participant) => ({
         agent: participant.agent,
@@ -264,11 +266,20 @@ export function createLiveStandup(input: {
       summary,
       evidenceRefs: []
     },
-    proposals: input.council.positions.map((position) => ({
-      agent: position.agent,
-      summary: position.publicSummary,
-      evidenceRefs: []
-    })),
+    proposals: [
+      ...input.council.positions.map((position) => ({
+        agent: position.agent,
+        summary: position.publicSummary,
+        evidenceRefs: []
+      })),
+      ...(input.caughtUpIdea ? [{
+        agent: "SPARK" as const,
+        summary: `${input.caughtUpIdea.entry.title}: ${input.caughtUpIdea.entry.summary}`,
+        evidenceRefs: input.caughtUpIdea.entry.revival
+          ? [input.caughtUpIdea.entry.revival.evidenceRef]
+          : []
+      }] : [])
+    ],
     voteMatrix: input.council.positions.map((position) => ({
       voter: position.agent,
       firstChoice:
@@ -288,6 +299,7 @@ export function createLiveStandup(input: {
       input.phase === "night"
         ? `${approved ? "Approved" : "Held"} internal work item recorded for the next Morning shift.`
         : null,
+    ...(input.caughtUpIdea ? { caughtUpIdeaRef: input.caughtUpIdea.entry.id } : {}),
     roomTranscript: {
       openedAt: gavelAt,
       closedAt: closingAt,
@@ -318,6 +330,18 @@ export function createLiveStandup(input: {
           sentAt: position.sentAt,
           text: position.publicSummary
         })),
+        ...(input.caughtUpIdea ? [{
+          agent: "SPARK" as const,
+          mode: "statement" as const,
+          sentAt: new Date(input.now.getTime() + 2).toISOString(),
+          text: `${input.caughtUpIdea.entry.title}. VAULT recorded ${input.caughtUpIdea.verdict}; ${input.caughtUpIdea.entry.id} is the one Caught Up handoff for the product room.`,
+          evidenceRefs: [
+            input.caughtUpIdea.entry.id,
+            ...(input.caughtUpIdea.entry.revival
+              ? [input.caughtUpIdea.entry.revival.evidenceRef]
+              : [])
+          ]
+        }] : []),
         {
           agent: "VIZE",
           mode: "close",

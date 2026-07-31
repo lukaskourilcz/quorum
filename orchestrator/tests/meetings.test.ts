@@ -18,7 +18,7 @@ import {
   resolveManualPhase,
   resolveScheduledPhase
 } from "../src/meetings/clock.js";
-import { createOfflineCaughtUpMeeting } from "../src/meetings/record.js";
+import { createLiveProductMeeting, createOfflineCaughtUpMeeting } from "../src/meetings/record.js";
 import {
   enforceMeetingTranscript,
   transcriptViolations
@@ -149,6 +149,72 @@ describe("Caught Up meeting records", () => {
     expect(reviewBoardroomText(bad).map((violation) => violation.code)).toEqual(
       expect.arrayContaining(["corporate_filler", "emoji", "exclamation_inflation"])
     );
+  });
+
+  it("builds a bounded live product record from one ledger verdict", async () => {
+    const routing = await loadRoutingConfig(path.join(configRoot, "agent-routing.json"));
+    const now = new Date("2026-08-04T15:00:00.000Z");
+    const room = routeBoardroom(routing, {
+      roomId: "ROOM-LIVE-PRODUCT",
+      topicType: "product",
+      objective: "Record one idea verdict",
+      evidenceRefs: [],
+      decisionNeeded: "IDEA_VERDICT",
+      riskTags: [],
+      budgetImpactUsd: 0.03,
+      preset: "product-room",
+      now
+    });
+    const idea = {
+      schemaVersion: "idea-ledger/1" as const,
+      id: "idea-2026-08-04-a3f9",
+      fingerprint: `sha256:${"a".repeat(64)}`,
+      title: "Reader source-confidence cue",
+      summary: "Show source independence beside each edition.",
+      origin: { agent: "SPARK" as const, meetingRef: "standups/2026-08-04-morning" },
+      status: "proposed" as const,
+      statusHistory: [{
+        status: "proposed" as const,
+        at: "2026-08-04T04:00:00.000Z",
+        meetingRef: "standups/2026-08-04-morning",
+        reason: "VAULT novel: no comparable idea."
+      }],
+      similarTo: []
+    };
+    const record = await createLiveProductMeeting({
+      cycleId: "20260804150000-cu-product",
+      stage: "VALIDATION",
+      room,
+      now,
+      estimatedCycleUsd: 0.03,
+      actualCycleUsd: 0.004,
+      monthAllInUsd: 1.2,
+      idea,
+      response: {
+        verdict: "defer",
+        reason: "Wait for a measurable reader baseline.",
+        deferred: { condition: "A measurable reader baseline exists." },
+        supersedes: null,
+        votes: ["HERALD", "SPARK", "VAULT", "AUDIT"].map((agent) => ({
+          agent: agent as "HERALD" | "SPARK" | "VAULT" | "AUDIT",
+          choice: "defer" as const,
+          veto: false,
+          reason: "A baseline is required."
+        })),
+        summary: "Defer until a measurable reader baseline exists.",
+        bestExchange: { agent: "AUDIT", text: "A baseline must precede a growth claim." }
+      },
+      yesterdayOutcome: "Yesterday's delivery outcome is unavailable."
+    });
+    expect(record.caughtUpIdeaRef).toBe(idea.id);
+    expect(record.ideaVerdicts).toEqual([
+      expect.objectContaining({ ideaId: idea.id, verdict: "defer" })
+    ]);
+    expect(record.roomTranscript.turns).toHaveLength(5);
+    expect(transcriptViolations(record.roomTranscript, {
+      ledgerValues: [0.004, 0.03, 1.2, 20],
+      evidenceValues: []
+    })).toEqual([]);
   });
 });
 

@@ -67,6 +67,7 @@ site/
   public/agents/          optimized stable agent portraits
 state/                    git-backed operating source of truth
   standups/               sanitized, timestamped live shift records
+  ideas/                  append-only idea snapshots + compact VAULT index
   public/                 sanitized projections only when generated
   agent-identities/       avatar prompt/provenance/QA/cost manifest
 .claude/                  Claude agents, commands and nine operating skills
@@ -143,9 +144,10 @@ Core variables:
 GitHub repository variables provide independent emergency switches. The owner
 authorized the council schedule on 2026-07-30:
 `AUTONOMY_KILL_SWITCH=false`; social publishing remains disabled with
-`SOCIAL_KILL_SWITCH=true`. Caught Up edition production remains dry unless the
-operator explicitly sets `CAUGHT_UP_LIVE_ENABLED=true` after installing the
-delivery App. `HEALTH_CHECK_ENABLED=false` until an operator
+`SOCIAL_KILL_SWITCH=true`. The Caught Up edition room, SPARK's morning idea slot
+and the product room remain dry unless the operator explicitly sets
+`CAUGHT_UP_LIVE_ENABLED=true`; edition delivery additionally requires the
+installed delivery App. `HEALTH_CHECK_ENABLED=false` until an operator
 explicitly opts in. A committed `state/PAUSED` stops both runtimes;
 `state/SOCIAL_PAUSED` stops publishing only.
 
@@ -166,9 +168,13 @@ reserves each Anthropic call against the edition envelope, applies the content
 and STET gates, and commits one package to `state/edition/outbox/`. Delivery
 drains the oldest package, one per cycle, into the four authorized aifirst paths
 with a one-retry, fail-closed GitHub App transaction. Equal hashes are successful
-no-ops; conflicts become `NEEDS_RECONCILIATION`. The product room remains dry
-until the Phase 10 idea ledger is present. Dry rooms still write only fixture
-artifacts and use the local email log sink; Resend is not called yet.
+no-ops; conflicts become `NEEDS_RECONCILIATION`. The product room consumes the
+single VAULT-screened morning handoff, receives only the compact idea index,
+and appends its accept, veto, defer or supersede verdict to the idea ledger.
+Exact duplicates stop before a model call; evidence-free dead-idea revivals
+never enter deliberation. Both Caught Up rooms remain behind the explicit live
+repository-variable gate. Dry rooms still write only fixture artifacts and use
+the local email log sink; Resend is not called yet.
 
 Every shift seats VIZE, FORGE, PULSE and AUDIT with LEDGER as the required
 finance control. Specialists enter only when routing rules need them. An

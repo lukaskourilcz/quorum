@@ -9,6 +9,7 @@ import {
   type BudgetLedgerEntry,
   type ReserveContext
 } from "../src/budget.js";
+import { PRODUCT_ROOM_RESERVE_USD } from "../src/ideas/live.js";
 
 function context(
   ledger: BudgetLedgerEntry[] = [],
@@ -41,6 +42,10 @@ describe("budget guard", () => {
     expect(
       DEFAULT_BUDGET_LIMITS.monthlyApiUsd + DEFAULT_BUDGET_LIMITS.monthlyMediaUsd
     ).toBeLessThanOrEqual(DEFAULT_BUDGET_LIMITS.monthlyOperatingUsd);
+    expect(PRODUCT_ROOM_RESERVE_USD).toBe(0.03);
+    expect(PRODUCT_ROOM_RESERVE_USD).toBeLessThanOrEqual(
+      DEFAULT_BUDGET_LIMITS.caughtUpMeetingUsd
+    );
   });
 
   it("uses the dated promotional Sonnet price before September", () => {

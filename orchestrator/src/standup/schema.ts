@@ -105,6 +105,7 @@ export const StandupSchema = z.object({
   ),
   growthPlan: z.string().min(1),
   eveningOutcome: z.string().nullable(),
+  caughtUpIdeaRef: z.string().min(1).optional(),
   roomTranscript: RoomTranscriptSchema,
   generatedAt: z.string().datetime()
 });

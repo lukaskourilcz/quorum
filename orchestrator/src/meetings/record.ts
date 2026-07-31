@@ -1,6 +1,8 @@
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
 import type { RoomPacket } from "../boardroom/room.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
+import type { IdeaLedgerEntry } from "../contracts/idea-ledger.js";
+import type { ProductRoomResponse } from "../ideas/live.js";
 import type { Stage } from "../types.js";
 import { pragueClockParts } from "./clock.js";
 import { enforceMeetingTranscript } from "./transcript.js";
@@ -121,10 +123,16 @@ function productRecord(input: {
   room: RoomPacket;
   now: Date;
   estimatedCycleUsd: number;
+  idea?: IdeaLedgerEntry;
+  verdict?: "veto" | "defer";
 }): MeetingRecord {
   const openedAt = input.now.toISOString();
   const closedAt = new Date(input.now.getTime() + 4_000).toISOString();
-  const ideaId = `IDEA-${input.date}-DRY`;
+  const ideaId = input.idea?.id ?? `IDEA-${input.date}-DRY`;
+  const verdict = input.verdict ?? "defer";
+  const reason = verdict === "veto"
+    ? "VAULT hard-stopped the morning idea before deliberation."
+    : "A dry room records no product authorization.";
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.cycleId,
@@ -143,19 +151,25 @@ function productRecord(input: {
       monthCapUsd: 20
     },
     decision: {
-      outcome: "defer",
-      summary: "Defer the fixture idea until a live morning handoff supplies evidence.",
-      evidenceRefs: []
+      outcome: verdict,
+      summary: verdict === "veto"
+        ? "Veto the duplicate fixture idea before deliberation."
+        : input.idea
+          ? "Defer the VAULT-screened fixture idea without authorizing product action."
+          : "Defer the fixture idea until a live morning handoff supplies evidence.",
+      evidenceRefs: input.idea?.revival ? [input.idea.revival.evidenceRef] : []
     },
     proposals: [{
       agent: "SPARK",
-      summary: "Keep the placeholder idea out of the live ledger until the morning handoff exists.",
-      evidenceRefs: []
+      summary: input.idea
+        ? `${input.idea.title}: ${input.idea.summary}`
+        : "Keep the placeholder idea out of the live ledger until the morning handoff exists.",
+      evidenceRefs: input.idea?.revival ? [input.idea.revival.evidenceRef] : []
     }],
     voteMatrix: ["HERALD", "SPARK", "VAULT", "AUDIT"].map((voter) => ({
       voter,
-      firstChoice: `defer:${ideaId}`,
-      veto: false
+      firstChoice: `${verdict}:${ideaId}`,
+      veto: voter === "AUDIT" && verdict === "veto"
     })),
     tasks: [{
       id: `TASK-${input.cycleId}-LEDGER`,
@@ -164,12 +178,12 @@ function productRecord(input: {
       status: "done"
     }],
     growthPlan: "NO_POST. Product-room fixtures do not authorize public distribution.",
-    eveningOutcome: "The product room recorded a dry defer verdict.",
+    eveningOutcome: `The product room recorded a dry ${verdict} verdict.`,
     caughtUpIdeaRef: ideaId,
     ideaVerdicts: [{
       ideaId,
-      verdict: "defer",
-      reason: "A live morning handoff and attributable evidence are missing."
+      verdict,
+      reason
     }],
     roomTranscript: {
       openedAt,
@@ -181,31 +195,41 @@ function productRecord(input: {
           agent: "HERALD",
           mode: "gavel",
           sentAt: openedAt,
-          text: "The product room is open. SPARK has no live morning handoff."
+          text: input.idea
+            ? "The product room is open for the one VAULT-screened fixture handoff."
+            : "The product room is open. SPARK has no live morning handoff."
         },
         {
           agent: "SPARK",
           mode: "statement",
           sentAt: new Date(input.now.getTime() + 1_000).toISOString(),
-          text: "Defer the placeholder. A missing handoff is not a product case."
+          text: input.idea
+            ? `${input.idea.title}. Keep the fixture bounded and record no external action.`
+            : "Defer the placeholder. A missing handoff is not a product case.",
+          ...(input.idea ? { evidenceRefs: [input.idea.id] } : {})
         },
         {
           agent: "VAULT",
           mode: "reads-ledger",
           sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
-          text: "The fixture has no prior ledger verdict and cannot revive one."
+          text: input.idea
+            ? `The compact index records the handoff as ${input.idea.status}; the raw ledger is not meeting context.`
+            : "The fixture has no prior ledger verdict and cannot revive one.",
+          ...(input.idea ? { evidenceRefs: [input.idea.id] } : {})
         },
         {
           agent: "AUDIT",
           mode: "vote",
           sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
-          text: "Approve defer. No evidence supports accept, veto or supersede."
+          text: verdict === "veto"
+            ? "Record the VAULT hard stop. The room cannot accept an evidence-free duplicate."
+            : "Approve defer. The fixture cannot authorize product action."
         },
         {
           agent: "HERALD",
           mode: "close",
           sentAt: closedAt,
-          text: "Defer recorded. The room closes without external action."
+          text: `${verdict === "veto" ? "Veto" : "Defer"} recorded. The room closes without external action.`
         }
       ]
     },
@@ -220,6 +244,8 @@ export async function createOfflineCaughtUpMeeting(input: {
   room: RoomPacket;
   now: Date;
   estimatedCycleUsd: number;
+  idea?: IdeaLedgerEntry;
+  verdict?: "veto" | "defer";
 }): Promise<MeetingRecord> {
   const date = pragueClockParts(input.now).date;
   const record = input.phase === "cu-edition"
@@ -347,6 +373,142 @@ export async function createLiveEditionMeeting(input: {
   });
   const enforced = await enforceMeetingTranscript(record, {
     ledgerValues: [actualCycleUsd, input.estimatedCycleUsd, input.monthAllInUsd, 20],
+    evidenceValues: []
+  });
+  return enforced.record;
+}
+
+export async function createLiveProductMeeting(input: {
+  cycleId: string;
+  stage: Stage;
+  room: RoomPacket;
+  now: Date;
+  estimatedCycleUsd: number;
+  actualCycleUsd: number;
+  monthAllInUsd: number;
+  idea: IdeaLedgerEntry | null;
+  response: ProductRoomResponse | null;
+  yesterdayOutcome: string;
+}): Promise<MeetingRecord> {
+  const date = pragueClockParts(input.now).date;
+  const openedAt = input.now.toISOString();
+  const closedAt = new Date(input.now.getTime() + 4_000).toISOString();
+  if (Boolean(input.idea) !== Boolean(input.response)) {
+    throw new Error("A live product record requires both an idea and response, or neither");
+  }
+  const idea = input.idea;
+  const response = input.response;
+  const outcome = response?.verdict ?? "defer";
+  const summary = response?.summary
+    ?? "Defer. The morning shift did not leave a VAULT-screened Caught Up idea.";
+  const evidenceRefs = idea?.revival ? [idea.revival.evidenceRef] : [];
+  const voteMatrix = response
+    ? response.votes.map((vote) => ({
+        voter: vote.agent,
+        firstChoice: `${vote.choice}:${idea!.id}`,
+        veto: vote.agent === "AUDIT" && vote.veto
+      }))
+    : ["HERALD", "SPARK", "VAULT", "AUDIT"].map((voter) => ({
+        voter,
+        firstChoice: "defer:NO_MORNING_IDEA",
+        veto: false
+      }));
+  const record = MeetingRecordSchema.parse({
+    schemaVersion: "meeting-record/2",
+    cycleId: input.cycleId,
+    date,
+    phase: "cu-product",
+    kind: "cu-product",
+    fixture: false,
+    status: "HELD",
+    stage: input.stage,
+    operatingBrief: "Review SPARK's morning idea, read VAULT's ledger ruling, record a bounded verdict and inspect yesterday's delivery outcome.",
+    participantReasons: participants(input.room),
+    ledger: {
+      estimatedCycleUsd: input.estimatedCycleUsd,
+      actualCycleUsd: input.actualCycleUsd,
+      monthAllInUsd: input.monthAllInUsd,
+      monthCapUsd: 20
+    },
+    decision: {
+      outcome,
+      summary,
+      evidenceRefs
+    },
+    proposals: idea ? [{
+      agent: "SPARK",
+      summary: `${idea.title}: ${idea.summary}`,
+      evidenceRefs
+    }] : [],
+    voteMatrix,
+    tasks: idea ? [{
+      id: `TASK-${input.cycleId}-LEDGER`,
+      owner: "VAULT",
+      summary: `Append the ${outcome} verdict for ${idea.id} and regenerate the compact index.`,
+      status: "done"
+    }] : [],
+    growthPlan: outcome === "accept" || outcome === "supersede"
+      ? "The ledger accepts the idea only; any spend, code, channel, schedule or external action remains human-gated."
+      : "NO_POST. A product-room verdict does not authorize distribution.",
+    eveningOutcome: input.yesterdayOutcome,
+    ...(idea ? {
+      caughtUpIdeaRef: idea.id,
+      ideaVerdicts: [{ ideaId: idea.id, verdict: outcome, reason: response!.reason }]
+    } : {}),
+    roomTranscript: {
+      openedAt,
+      closedAt,
+      gavel: "HERALD",
+      setting: "Live Caught Up product room. Participants receive the compact idea index, not the raw JSONL ledger.",
+      turns: [
+        {
+          agent: "HERALD",
+          mode: "gavel",
+          sentAt: openedAt,
+          text: idea
+            ? `The product room is open for ${idea.id}. No edition or external action is in scope.`
+            : "The product room is open, but no screened morning idea reached the room.",
+          ...(idea ? { evidenceRefs: [idea.id] } : {})
+        },
+        {
+          agent: "SPARK",
+          mode: "statement",
+          sentAt: new Date(input.now.getTime() + 1_000).toISOString(),
+          text: idea
+            ? `${idea.title}. ${idea.summary}`
+            : "No morning idea is available; defer without inventing one.",
+          ...(idea ? { evidenceRefs: [idea.id, ...evidenceRefs] } : {})
+        },
+        {
+          agent: "VAULT",
+          mode: "reads-ledger",
+          sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
+          text: idea
+            ? `The compact index records ${idea.id} as ${idea.status}; the raw ledger was not injected into this room.`
+            : "The compact index contains no handoff for this room.",
+          ...(idea ? { evidenceRefs: [idea.id] } : {})
+        },
+        {
+          agent: response?.bestExchange.agent ?? "AUDIT",
+          mode: "raises-concern",
+          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
+          text: response?.bestExchange.text
+            ?? "Defer. A missing morning handoff cannot become a product verdict.",
+          ...(idea ? { evidenceRefs: [idea.id, ...evidenceRefs] } : {})
+        },
+        {
+          agent: "HERALD",
+          mode: "close",
+          sentAt: closedAt,
+          text: summary,
+          ...(idea ? { evidenceRefs: [idea.id, ...evidenceRefs] } : {})
+        }
+      ]
+    },
+    generatedAt: closedAt
+  });
+  const enforced = await enforceMeetingTranscript(record, {
+    ledgerValues: [input.actualCycleUsd, input.estimatedCycleUsd, input.monthAllInUsd, 20],
     evidenceValues: []
   });
   return enforced.record;

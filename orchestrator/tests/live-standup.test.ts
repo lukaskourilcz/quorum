@@ -85,4 +85,54 @@ describe("live shift standup", () => {
     expect(standup.tasks[0]?.status).toBe("blocked");
     expect(standup.voteMatrix.find((vote) => vote.voter === "AUDIT")?.veto).toBe(true);
   });
+
+  it("records SPARK's single pre-checked morning handoff", () => {
+    const standup = createLiveStandup({
+      cycleId: "20260731040000-morning",
+      phase: "morning",
+      stage: "DISCOVERY",
+      room,
+      estimatedCycleUsd: 0.04,
+      now: new Date("2026-07-31T04:00:00.000Z"),
+      council: {
+        item: {
+          id: "OPS-OBSERVE",
+          phase: "morning",
+          owner: "FORGE",
+          title: "Verify the public shift record",
+          summary: "Check that the latest committed shift record is complete."
+        },
+        positions: positions(),
+        scope: "Internal only.",
+        actualCycleUsd: 0.0123,
+        monthAllInUsd: 0.0123
+      },
+      caughtUpIdea: {
+        entry: {
+          schemaVersion: "idea-ledger/1",
+          id: "idea-2026-07-31-a3f9",
+          fingerprint: `sha256:${"a".repeat(64)}`,
+          title: "Reader source-confidence cue",
+          summary: "Show source independence beside each edition.",
+          origin: { agent: "SPARK", meetingRef: "standups/2026-07-31-morning" },
+          status: "proposed",
+          statusHistory: [{
+            status: "proposed",
+            at: "2026-07-31T04:00:00.000Z",
+            meetingRef: "standups/2026-07-31-morning",
+            reason: "VAULT novel: no comparable idea."
+          }],
+          similarTo: []
+        },
+        verdict: "novel",
+        reason: "No comparable idea.",
+        modelCalled: true,
+        autoRejected: false,
+        comparedIds: []
+      }
+    });
+    expect(standup.caughtUpIdeaRef).toBe("idea-2026-07-31-a3f9");
+    expect(standup.proposals.filter((proposal) => proposal.agent === "SPARK")).toHaveLength(1);
+    expect(standup.roomTranscript.turns.some((turn) => turn.agent === "SPARK")).toBe(true);
+  });
 });

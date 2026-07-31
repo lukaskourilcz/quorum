@@ -4,6 +4,7 @@ import {
   isShiftPhase
 } from "../shifts.js";
 import type { RunnablePhase, Stage } from "../types.js";
+import type { IdeaScreeningResult } from "../ideas/ledger.js";
 import { StandupSchema, type Standup } from "./schema.js";
 
 export function createOfflineStandup(input: {
@@ -16,6 +17,7 @@ export function createOfflineStandup(input: {
   estimatedCycleUsd: number;
   now: Date;
   evidenceRefs?: string[];
+  caughtUpIdea?: IdeaScreeningResult;
 }): Standup {
   const outcome =
     input.status === "INSUFFICIENT_EVIDENCE" ? "NO_ACTION" : input.status;
@@ -95,7 +97,8 @@ export function createOfflineStandup(input: {
           : "No externally consequential action was approved.",
       evidenceRefs: input.evidenceRefs ?? []
     },
-    proposals: input.room.selectedParticipants
+    proposals: [
+      ...input.room.selectedParticipants
       .filter(({ agent }) => ["VIZE", "FORGE", "PULSE", "AUDIT"].includes(agent))
       .map(({ agent }) => ({
         agent,
@@ -105,6 +108,14 @@ export function createOfflineStandup(input: {
             : "NO_ACTION until a bounded evidence-backed task exists.",
         evidenceRefs: input.evidenceRefs ?? []
       })),
+      ...(input.caughtUpIdea ? [{
+        agent: "SPARK" as const,
+        summary: `${input.caughtUpIdea.entry.title}: ${input.caughtUpIdea.entry.summary}`,
+        evidenceRefs: input.caughtUpIdea.entry.revival
+          ? [input.caughtUpIdea.entry.revival.evidenceRef]
+          : []
+      }] : [])
+    ],
     voteMatrix: input.room.selectedParticipants
       .filter(({ agent }) => ["VIZE", "FORGE", "PULSE", "AUDIT"].includes(agent))
       .map(({ agent }) => ({
@@ -125,6 +136,7 @@ export function createOfflineStandup(input: {
       input.phase === "night"
         ? "Night shift reconciled the record; remain in DISCOVERY."
         : null,
+    ...(input.caughtUpIdea ? { caughtUpIdeaRef: input.caughtUpIdea.entry.id } : {}),
     roomTranscript: {
       openedAt,
       closedAt,
@@ -146,7 +158,19 @@ export function createOfflineStandup(input: {
           mode: "reads-ledger",
           sentAt: closedAt,
           text: `Recorded estimate: $${input.estimatedCycleUsd.toFixed(4)}. ${input.fixture ? "No paid API call occurred." : "No live cost was recorded."}`
-        }
+        },
+        ...(input.caughtUpIdea ? [{
+          agent: "SPARK" as const,
+          mode: "statement" as const,
+          sentAt: closedAt,
+          text: `${input.caughtUpIdea.entry.title}. VAULT recorded ${input.caughtUpIdea.verdict}; carry ${input.caughtUpIdea.entry.id} to the product room.`,
+          evidenceRefs: [
+            input.caughtUpIdea.entry.id,
+            ...(input.caughtUpIdea.entry.revival
+              ? [input.caughtUpIdea.entry.revival.evidenceRef]
+              : [])
+          ]
+        }] : [])
       ]
     },
     generatedAt: input.now.toISOString()

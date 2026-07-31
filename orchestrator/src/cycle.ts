@@ -3,6 +3,7 @@ import path from "node:path";
 import {
   DEFAULT_BUDGET_LIMITS,
   estimateTextCall,
+  type BudgetLedgerEntry,
   type BudgetLimits,
   type ReserveContext
 } from "./budget.js";
@@ -16,7 +17,7 @@ import {
   selectOpportunity,
   type OpportunityGate
 } from "./research/opportunities.js";
-import { atomicWriteJson, withFileLock } from "./state.js";
+import { atomicWriteJson, readJson, readText, withFileLock } from "./state.js";
 import {
   buildCalendarFeed,
   loadMeetingRecords,
@@ -27,10 +28,23 @@ import { isCaughtUpPhase } from "./meetings/clock.js";
 import { pragueClockParts } from "./meetings/clock.js";
 import {
   createLiveEditionMeeting,
+  createLiveProductMeeting,
   createOfflineCaughtUpMeeting,
   meetingRef
 } from "./meetings/record.js";
 import { appendEditionUsage, runLiveEdition } from "./edition/live.js";
+import {
+  PRODUCT_ROOM_RESERVE_USD,
+  decideLiveProductRoom,
+  prepareMorningIdea,
+  toIdeaRoomVerdict
+} from "./ideas/live.js";
+import {
+  applyIdeaRoomVerdict,
+  currentIdeaEntries,
+  readIdeaLedger,
+  regenerateIdeaIndex
+} from "./ideas/ledger.js";
 import {
   buildMeetingEmail,
   MeetingEmailLogSink,
@@ -39,6 +53,7 @@ import {
 import { collectLiveCouncil, createLiveStandup } from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
+import { StandupSchema } from "./standup/schema.js";
 import {
   getShiftDefinition,
   isShiftPhase
@@ -63,6 +78,9 @@ export interface CycleResult {
     | "NO_ACTION"
     | "NO_EDITION"
     | "EDITION"
+    | "ACCEPT"
+    | "VETO"
+    | "SUPERSEDE"
     | "DEFER"
     | "PLAN"
     | "PAUSED";
@@ -123,6 +141,48 @@ function remainingScheduledCycles(now: Date): number {
   return Math.max(1, Math.ceil((endOfMonth - now.getTime()) / (8 * 60 * 60 * 1_000)));
 }
 
+function ledgerSpend(
+  entries: readonly BudgetLedgerEntry[],
+  predicate: (entry: BudgetLedgerEntry) => boolean
+): number {
+  return Number(entries.filter(predicate).reduce((sum, entry) => sum + entry.usd, 0).toFixed(8));
+}
+
+async function currentBudgetLedger(root: string): Promise<BudgetLedgerEntry[]> {
+  return (await readJson<{ entries: BudgetLedgerEntry[] }>(
+    root,
+    "budget/ledger.json",
+    { entries: [] }
+  )).entries;
+}
+
+function previousPragueDate(date: string): string {
+  return new Date(Date.parse(`${date}T12:00:00.000Z`) - 86_400_000).toISOString().slice(0, 10);
+}
+
+async function yesterdayEditionOutcome(root: string, date: string): Promise<string> {
+  const yesterday = previousPragueDate(date);
+  const delivery = await readJson<{
+    status?: string;
+    packageHash?: string;
+  } | null>(root, `edition/deliveries/${yesterday}.json`, null);
+  if (delivery?.status === "delivered") {
+    return "Yesterday's edition has a reconciled delivery receipt; no sentinel flag is recorded in Quorum state.";
+  }
+  const meeting = await readJson<{ status?: string; decision?: { outcome?: string } } | null>(
+    root,
+    `meetings/${yesterday}-cu-edition.json`,
+    null
+  );
+  if (meeting?.status === "NEEDS_RECONCILIATION") {
+    return "Yesterday's edition needs delivery reconciliation; no sentinel flag is recorded in Quorum state.";
+  }
+  if (meeting?.decision?.outcome === "NO_EDITION") {
+    return "Yesterday closed as an honest no-edition outcome; no sentinel flag is recorded in Quorum state.";
+  }
+  return "Yesterday's delivery outcome is unavailable in committed Quorum state; no sentinel flag is recorded here.";
+}
+
 async function runCaughtUpDryCycle(
   options: CycleOptions,
   cycleId: string,
@@ -153,7 +213,13 @@ async function runCaughtUpDryCycle(
         decisionNeeded: "IDEA_VERDICT" as const,
         preset: "product-room"
       };
-  const estimatedWorstCaseUsd = budgetLimitsFromEnvironment().caughtUpMeetingUsd;
+  const meetingCap = budgetLimitsFromEnvironment().caughtUpMeetingUsd;
+  const estimatedWorstCaseUsd = options.phase === "cu-product"
+    ? PRODUCT_ROOM_RESERVE_USD
+    : meetingCap;
+  if (estimatedWorstCaseUsd > meetingCap) {
+    throw new Error(`Caught Up ${options.phase} reserve exceeds the meeting cap`);
+  }
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${cycleId.toUpperCase()}`,
     topicType: definition.topicType,
@@ -165,15 +231,41 @@ async function runCaughtUpDryCycle(
     preset: definition.preset,
     now
   });
+  const artifactRoot = path.join(repoRoot, "tmp", "dry-run", "state");
+  let fixtureIdea = null;
+  let fixtureVerdict: "veto" | "defer" = "defer";
+  if (options.phase === "cu-product") {
+    const morningRaw = await readText(artifactRoot, `standups/${pragueClockParts(now).date}-morning.json`);
+    const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
+    if (morning?.caughtUpIdeaRef) {
+      const current = currentIdeaEntries(await readIdeaLedger(artifactRoot));
+      const morningIdea = current.find((candidate) => candidate.id === morning.caughtUpIdeaRef);
+      if (!morningIdea) throw new Error(`Dry morning handoff references unknown idea ${morning.caughtUpIdeaRef}`);
+      fixtureVerdict = morningIdea.status === "vetoed" || morningIdea.status === "killed" ? "veto" : "defer";
+      fixtureIdea = await applyIdeaRoomVerdict({
+        root: artifactRoot,
+        ideaId: morningIdea.id,
+        verdict: fixtureVerdict === "veto"
+          ? { verdict: "veto", reason: "VAULT hard-stopped the fixture duplicate before deliberation." }
+          : {
+              verdict: "defer",
+              reason: "Dry product rooms cannot authorize product action.",
+              deferred: { condition: "A live bounded product room reviews the idea." }
+            },
+        meetingRef: meetingRef(morning.date, "cu-product"),
+        at: now.toISOString()
+      });
+    }
+  }
   const record = await createOfflineCaughtUpMeeting({
     cycleId,
     phase: options.phase,
     stage: stages.current,
     room,
     now,
-    estimatedCycleUsd: estimatedWorstCaseUsd
+    estimatedCycleUsd: estimatedWorstCaseUsd,
+    ...(fixtureIdea ? { idea: fixtureIdea, verdict: fixtureVerdict } : {})
   });
-  const artifactRoot = path.join(repoRoot, "tmp", "dry-run", "state");
   const meetingPath = `meetings/${record.date}-${options.phase}.json`;
   const decisionPath = `decisions/${cycleId}.json`;
   const scorecardPath = `scorecards/${cycleId}.json`;
@@ -204,6 +296,7 @@ async function runCaughtUpDryCycle(
       estimatedWorstCaseUsd,
       actualUsd: record.ledger.actualCycleUsd,
       participants: room.selectedParticipants.map((participant) => participant.agent),
+      ...(fixtureIdea ? { ideaId: fixtureIdea.id, vaultScreening: fixtureIdea.statusHistory[0]?.reason } : {}),
       generatedAt: record.generatedAt
     })
   ]);
@@ -237,14 +330,19 @@ async function runCaughtUpDryCycle(
     scorecardPath,
     calendarPath,
     emailPath,
-    "notify/health.json"
+    "notify/health.json",
+    ...(fixtureIdea ? ["ideas/ledger.jsonl", "ideas/INDEX.md"] : [])
   ];
   return {
     cycleId,
     phase: options.phase,
     dry: true,
     status: "dry_complete",
-    decision: options.phase === "cu-edition" ? "NO_EDITION" : "DEFER",
+    decision: options.phase === "cu-edition"
+      ? "NO_EDITION"
+      : fixtureVerdict === "veto"
+        ? "VETO"
+        : "DEFER",
     estimatedWorstCaseUsd,
     selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
     skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
@@ -398,6 +496,190 @@ async function runCaughtUpLiveEditionCycle(
   };
 }
 
+async function runCaughtUpLiveProductCycle(
+  options: CycleOptions,
+  cycleId: string,
+  now: Date
+): Promise<CycleResult> {
+  if (options.phase !== "cu-product" || options.dry) {
+    throw new Error("Live Caught Up product runner requires a non-dry cu-product phase");
+  }
+  const [routing, stages] = await Promise.all([
+    loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
+    readFile(path.join(configRoot, "stages.json"), "utf8").then(
+      (raw) => JSON.parse(raw) as { current: Stage }
+    )
+  ]);
+  const limits = budgetLimitsFromEnvironment();
+  if (PRODUCT_ROOM_RESERVE_USD > limits.caughtUpMeetingUsd) {
+    throw new Error(
+      `Product-room reserve ${PRODUCT_ROOM_RESERVE_USD} exceeds Caught Up meeting cap ${limits.caughtUpMeetingUsd}`
+    );
+  }
+  const date = pragueClockParts(now).date;
+  const reference = meetingRef(date, "cu-product");
+  const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
+  const room = routeBoardroom(routing, {
+    roomId: `ROOM-${cycleId.toUpperCase()}`,
+    topicType: "product",
+    objective: "Review the morning Caught Up idea and record a bounded ledger verdict",
+    evidenceRefs: [],
+    decisionNeeded: "IDEA_VERDICT",
+    riskTags: [],
+    budgetImpactUsd: PRODUCT_ROOM_RESERVE_USD,
+    preset: "product-room",
+    now
+  });
+  const index = await regenerateIdeaIndex(stateRoot);
+  const morningRaw = await readText(stateRoot, `standups/${date}-morning.json`);
+  const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
+  const ideas = currentIdeaEntries(await readIdeaLedger(stateRoot));
+  const idea = morning?.caughtUpIdeaRef
+    ? ideas.find((candidate) => candidate.id === morning.caughtUpIdeaRef) ?? null
+    : null;
+  if (morning?.caughtUpIdeaRef && !idea) {
+    throw new Error(`Morning handoff references unknown idea ${morning.caughtUpIdeaRef}`);
+  }
+  const previousOutcome = await yesterdayEditionOutcome(stateRoot, date);
+  const response = idea
+    ? await decideLiveProductRoom({
+        context: {
+          root: stateRoot,
+          cycleId,
+          stage: stages.current,
+          now,
+          limits,
+          remainingScheduledCycles: remainingScheduledCycles(now)
+        },
+        idea,
+        index,
+        yesterdayOutcome: previousOutcome
+      })
+    : null;
+  const recordedIdea = idea && response
+    ? await applyIdeaRoomVerdict({
+        root: stateRoot,
+        ideaId: idea.id,
+        verdict: toIdeaRoomVerdict(response),
+        meetingRef: reference,
+        at: now.toISOString()
+      })
+    : null;
+  const budgetLedger = await currentBudgetLedger(stateRoot);
+  const actualCycleUsd = ledgerSpend(
+    budgetLedger,
+    (entry) => entry.cycleId === cycleId
+  );
+  const month = now.toISOString().slice(0, 7);
+  const monthAllInUsd = ledgerSpend(
+    budgetLedger,
+    (entry) => entry.ts.slice(0, 7) === month
+  );
+  const record = await createLiveProductMeeting({
+    cycleId,
+    stage: stages.current,
+    room,
+    now,
+    estimatedCycleUsd: PRODUCT_ROOM_RESERVE_USD,
+    actualCycleUsd,
+    monthAllInUsd,
+    idea: recordedIdea,
+    response,
+    yesterdayOutcome: previousOutcome
+  });
+  const meetingPath = `meetings/${date}-cu-product.json`;
+  const decisionPath = `decisions/${cycleId}.json`;
+  const scorecardPath = `scorecards/${cycleId}.json`;
+  const priorRecords = await loadMeetingRecords(stateRoot);
+  const calendar = buildCalendarFeed({
+    weekOf: mondayOfWeek(date),
+    records: [...priorRecords, record],
+    now
+  });
+  const calendarPath = await writeCalendarFeed(stateRoot, calendar);
+  await Promise.all([
+    atomicWriteJson(stateRoot, meetingPath, record),
+    atomicWriteJson(stateRoot, decisionPath, {
+      schemaVersion: 1,
+      fixture: false,
+      cycleId,
+      phase: "cu-product",
+      outcome: record.decision.outcome,
+      summary: record.decision.summary,
+      evidenceRefs: record.decision.evidenceRefs,
+      ...(record.caughtUpIdeaRef ? { caughtUpIdeaRef: record.caughtUpIdeaRef } : {}),
+      generatedAt: record.generatedAt
+    }),
+    atomicWriteJson(stateRoot, scorecardPath, {
+      schemaVersion: 1,
+      fixture: false,
+      cycleId,
+      phase: "cu-product",
+      estimatedWorstCaseUsd: PRODUCT_ROOM_RESERVE_USD,
+      actualUsd: actualCycleUsd,
+      participants: room.selectedParticipants.map((participant) => participant.agent),
+      ideaId: recordedIdea?.id ?? null,
+      vaultScreening: recordedIdea?.statusHistory[0]?.reason ?? "missing_morning_handoff",
+      growthIdeaNovelty: recordedIdea?.statusHistory[0]?.reason.includes("hard stop") ? 0 : recordedIdea ? 1 : null,
+      yesterdayOutcome: previousOutcome,
+      generatedAt: record.generatedAt
+    })
+  ]);
+  const emailPayload = buildMeetingEmail({ record, boardlessBaseUrl: baseUrl });
+  await sendMeetingEmail({
+    payload: emailPayload,
+    sink: new MeetingEmailLogSink(stateRoot),
+    stateRoot,
+    now
+  });
+  if (options.explainBudget) {
+    console.log(JSON.stringify({
+      cycleId,
+      callGraph: budgetLedger
+        .filter((entry) => entry.cycleId === cycleId)
+        .map((entry) => ({ agent: entry.agent, model: entry.model, measuredUsd: entry.usd })),
+      estimatedWorstCaseUsd: PRODUCT_ROOM_RESERVE_USD,
+      measuredUsd: actualCycleUsd
+    }, null, 2));
+  }
+  if (options.explainRouting) {
+    console.log(JSON.stringify({
+      selected: room.selectedParticipants,
+      skipped: room.skippedParticipants,
+      caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
+    }, null, 2));
+  }
+  const decision = response?.verdict === "accept"
+    ? "ACCEPT"
+    : response?.verdict === "veto"
+      ? "VETO"
+      : response?.verdict === "supersede"
+        ? "SUPERSEDE"
+        : "DEFER";
+  const artifacts = [
+    meetingPath,
+    decisionPath,
+    scorecardPath,
+    calendarPath,
+    "ideas/ledger.jsonl",
+    "ideas/INDEX.md",
+    `notify/email/${reference.replaceAll("/", "-")}.json`,
+    "notify/health.json",
+    "budget/ledger.json"
+  ];
+  return {
+    cycleId,
+    phase: "cu-product",
+    dry: false,
+    status: "live_complete",
+    decision,
+    estimatedWorstCaseUsd: PRODUCT_ROOM_RESERVE_USD,
+    selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
+    skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
+    artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
+  };
+}
+
 export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   const now = options.now ?? new Date();
   const cycleId = `${now.toISOString().replaceAll(/[-:.TZ]/g, "").slice(0, 14)}-${options.phase}`;
@@ -424,7 +706,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         runCaughtUpLiveEditionCycle(options, cycleId, now)
       );
     }
-    throw new Error("Caught Up product remains dry until the Phase 10 idea-ledger cutover");
+    return withFileLock(stateRoot, ".lock", () =>
+      runCaughtUpLiveProductCycle(options, cycleId, now)
+    );
   }
   if (options.phase !== "founding" && !isShiftPhase(options.phase)) {
     throw new Error(`Unsupported venture phase: ${options.phase}`);
@@ -461,6 +745,26 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         })
       };
     });
+    if (venturePhase === "morning") {
+      for (const [role, configRole, maxOutputTokens] of [
+        ["SPARK", "OPENAI_SPECIALIST", 280],
+        ["VAULT", "DIGEST", 240]
+      ] as const) {
+        const model = modelConfig.roles[configRole];
+        if (!model) throw new Error(`Missing model config for ${configRole}`);
+        callGraph.push({
+          role,
+          model: model.model,
+          estimate: estimateTextCall({
+            provider: model.provider,
+            model: model.model,
+            promptChars: 12_000,
+            maxOutputTokens,
+            at: now
+          })
+        });
+      }
+    }
     const estimatedWorstCaseUsd = Number(
       callGraph
         .reduce((sum, call) => sum + call.estimate.estimatedUsd, 0)
@@ -504,52 +808,83 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           ? "NO_ACTION"
           : "INSUFFICIENT_EVIDENCE"
         : "NO_ACTION";
-    const standup =
-      options.dry || venturePhase === "founding"
-        ? createOfflineStandup({
-            cycleId,
-            phase: venturePhase,
-            stage: stages.current,
-            fixture: options.dry,
-            status: decision,
-            room,
-            estimatedCycleUsd: estimatedWorstCaseUsd,
-            now,
-            evidenceRefs: opportunityGate.evidenceRefs
-          })
-        : createLiveStandup({
-            cycleId,
-            phase: venturePhase,
-            stage: stages.current,
-            room,
-            estimatedCycleUsd: estimatedWorstCaseUsd,
-            now,
-            council: await collectLiveCouncil({
-              cycleId,
-              phase: venturePhase,
-              stage: stages.current,
-              now,
-              budgetContext: (ledger): ReserveContext => ({
-                now,
-                cycleId,
-                stage: stages.current,
-                ledger,
-                allInNonApiSpentUsd: 0,
-                allInCommittedUsd: 0,
-                knownMonthlyForecastUsd: 0,
-                remainingScheduledCycles: remainingScheduledCycles(now),
-                limits: budgetLimitsFromEnvironment()
-              })
-            })
-          });
     const artifactRoot = options.dry
       ? path.join(repoRoot, "tmp", "dry-run", "state")
       : stateRoot;
+    const liveCouncil = !options.dry && venturePhase !== "founding"
+      ? await collectLiveCouncil({
+          cycleId,
+          phase: venturePhase,
+          stage: stages.current,
+          now,
+          budgetContext: (ledger): ReserveContext => ({
+            now,
+            cycleId,
+            stage: stages.current,
+            ledger,
+            allInNonApiSpentUsd: 0,
+            allInCommittedUsd: 0,
+            knownMonthlyForecastUsd: 0,
+            remainingScheduledCycles: remainingScheduledCycles(now),
+            limits: budgetLimitsFromEnvironment()
+          })
+        })
+      : null;
+    const caughtUpIdea = venturePhase === "morning"
+      ? await prepareMorningIdea({
+          context: {
+            root: artifactRoot,
+            cycleId,
+            stage: stages.current,
+            now,
+            limits: budgetLimitsFromEnvironment(),
+            remainingScheduledCycles: remainingScheduledCycles(now)
+          },
+          dry: options.dry,
+          councilSummary: liveCouncil
+            ? liveCouncil.positions.map((position) => position.publicSummary).join(" ")
+            : "Deterministic dry morning fixture; no live council position was called."
+        })
+      : undefined;
+    let measuredCouncil = liveCouncil;
+    if (liveCouncil && caughtUpIdea) {
+      const ledger = await currentBudgetLedger(artifactRoot);
+      const month = now.toISOString().slice(0, 7);
+      measuredCouncil = {
+        ...liveCouncil,
+        actualCycleUsd: ledgerSpend(ledger, (entry) => entry.cycleId === cycleId),
+        monthAllInUsd: ledgerSpend(ledger, (entry) => entry.ts.slice(0, 7) === month)
+      };
+    }
+    const standup = measuredCouncil
+      ? createLiveStandup({
+          cycleId,
+          phase: venturePhase as Exclude<typeof venturePhase, "founding">,
+          stage: stages.current,
+          room,
+          estimatedCycleUsd: estimatedWorstCaseUsd,
+          now,
+          council: measuredCouncil,
+          ...(caughtUpIdea ? { caughtUpIdea } : {})
+        })
+      : createOfflineStandup({
+          cycleId,
+          phase: venturePhase,
+          stage: stages.current,
+          fixture: options.dry,
+          status: decision,
+          room,
+          estimatedCycleUsd: estimatedWorstCaseUsd,
+          now,
+          evidenceRefs: opportunityGate.evidenceRefs,
+          ...(caughtUpIdea ? { caughtUpIdea } : {})
+        });
     const artifacts = [
       `standups/${standup.date}-${options.phase}.json`,
       `meetings/${cycleId}.json`,
       `scorecards/${cycleId}.json`,
-      `decisions/${cycleId}.json`
+      `decisions/${cycleId}.json`,
+      ...(caughtUpIdea ? ["ideas/ledger.jsonl", "ideas/INDEX.md"] : [])
     ];
     await Promise.all([
       atomicWriteJson(
@@ -574,6 +909,11 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         estimatedWorstCaseUsd,
         actualUsd: standup.ledger.actualCycleUsd,
         socialDecision: "NO_POST",
+        ...(caughtUpIdea ? {
+          caughtUpIdeaRef: caughtUpIdea.entry.id,
+          growthIdeaNovelty: caughtUpIdea.autoRejected ? 0 : 1,
+          vaultVerdict: caughtUpIdea.verdict
+        } : {}),
         generatedAt: now.toISOString()
       }),
       atomicWriteJson(artifactRoot, artifacts[3]!, {
@@ -586,6 +926,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           : null,
         reasons: opportunityGate.reasons,
         evidenceRefs: opportunityGate.evidenceRefs,
+        ...(caughtUpIdea ? { caughtUpIdeaRef: caughtUpIdea.entry.id } : {}),
         generatedAt: now.toISOString()
       })
     ]);

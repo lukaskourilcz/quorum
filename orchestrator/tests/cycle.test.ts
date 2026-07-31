@@ -107,7 +107,9 @@ describe("cycle preflight", () => {
         explainRouting: false
       });
       expect(result.status).toBe("dry_complete");
-      expect(result.estimatedWorstCaseUsd).toBe(0.08);
+      expect(result.estimatedWorstCaseUsd).toBe(
+        fixture.phase === "cu-edition" ? 0.08 : 0.03
+      );
       expect(result.artifacts).toEqual(expect.arrayContaining([
         `tmp/dry-run/state/meetings/2026-08-04-${fixture.phase}.json`,
         `tmp/dry-run/state/notify/email/meetings-2026-08-04-${fixture.phase}.json`,
@@ -122,13 +124,39 @@ describe("cycle preflight", () => {
     }
   });
 
-  it("keeps Caught Up product live execution disabled before the ledger cutover", async () => {
-    await expect(runCycle({
+  it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
+    const morning = await runCycle({
+      phase: "morning",
+      dry: true,
+      explainBudget: false,
+      explainRouting: false,
+      now: new Date("2026-08-04T04:00:00.000Z")
+    });
+    expect(morning.artifacts).toEqual(expect.arrayContaining([
+      "tmp/dry-run/state/ideas/ledger.jsonl",
+      "tmp/dry-run/state/ideas/INDEX.md"
+    ]));
+    const standup = JSON.parse(await readFile(
+      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-04-morning.json"),
+      "utf8"
+    )) as { caughtUpIdeaRef?: string };
+    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-04-/);
+
+    const product = await runCycle({
       phase: "cu-product",
-      dry: false,
+      dry: true,
       explainBudget: false,
       explainRouting: false,
       now: new Date("2026-08-04T15:00:00.000Z")
-    })).rejects.toThrow(/remains dry until the Phase 10 idea-ledger cutover/);
+    });
+    expect(product.decision).toBe("VETO");
+    const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
+      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-04-cu-product.json"),
+      "utf8"
+    )));
+    expect(record.caughtUpIdeaRef).toBe(standup.caughtUpIdeaRef);
+    expect(record.ideaVerdicts).toEqual([
+      expect.objectContaining({ ideaId: standup.caughtUpIdeaRef, verdict: "veto" })
+    ]);
   });
 });
