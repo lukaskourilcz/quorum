@@ -69,7 +69,7 @@ describe("Boardroom routing", () => {
       now: new Date("2026-07-31T03:00:00.000Z")
     });
     expect(edition.selectedParticipants.map(({ agent }) => agent).sort()).toEqual(
-      ["HERALD", "STET", "SPARK", "AUDIT"].sort()
+      ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"].sort()
     );
 
     const claimsHeavy = routeBoardroom(config, {

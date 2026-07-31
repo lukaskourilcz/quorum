@@ -71,7 +71,8 @@ function frontmatter(
       human_reviewed: false,
       models: {
         curation: config.models.curation,
-        writing: config.models.writing
+        writing: config.models.writing,
+        localization: config.models.localization
       },
       source_candidates: context.sourceCandidates,
       cited_sources: article.sources.length,
@@ -116,7 +117,8 @@ export function buildEditionPackage(
     generation: {
       models: {
         curation: config.models.curation,
-        writing: config.models.writing
+        writing: config.models.writing,
+        localization: config.models.localization
       },
       ...(context.costUsd === undefined ? {} : { costUsd: context.costUsd })
     },
@@ -150,7 +152,8 @@ export function buildNoEditionPackage(input: {
     generation: {
       models: {
         curation: input.config.models.curation,
-        writing: input.config.models.writing
+        writing: input.config.models.writing,
+        localization: input.config.models.localization
       },
       ...(input.costUsd === undefined ? {} : { costUsd: input.costUsd })
     },

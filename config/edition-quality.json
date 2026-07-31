@@ -22,11 +22,13 @@
     "briefsMaximum": 4,
     "watchlistMaximum": 6,
     "maximumOutputTokens": 8000,
+    "maximumLocalizationOutputTokens": 5000,
     "maximumCurationCandidates": 80
   },
   "models": {
     "curation": "claude-sonnet-4-6",
-    "writing": "claude-opus-4-7"
+    "writing": "claude-opus-4-7",
+    "localization": "claude-sonnet-4-6"
   },
   "budgets": {
     "warningCostPerRun": 0.6,
@@ -37,6 +39,10 @@
     "maximumRegenerationAttemptsPerDate": 2
   },
   "stet": {
+    "maximumRewriteAttempts": 1,
+    "minimumScore": 35
+  },
+  "hacek": {
     "maximumRewriteAttempts": 1,
     "minimumScore": 35
   }

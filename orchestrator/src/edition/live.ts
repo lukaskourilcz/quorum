@@ -102,7 +102,11 @@ export async function appendEditionUsage(
     cycleId,
     requestHash: requestHash(cycleId, index, usage),
     phase: "cu-edition",
-    agent: usage.stage === "curate" ? "HERALD" : "STET",
+    agent: usage.stage === "curate"
+      ? "HERALD"
+      : usage.stage === "localize" || usage.stage === "localize_rewrite"
+        ? "HACEK"
+        : "STET",
     provider: "anthropic",
     model: usage.model,
     serviceTier: "default",
@@ -195,7 +199,7 @@ export async function runLiveEdition(input: {
       recentEditionTags: await recentEditionTags(root),
       meetingRef: input.meetingRef,
       roomUrl: input.roomUrl,
-      whyThisStory: "The live digest cleared source coverage; HERALD commissioned the strongest independently supported story and STET cleared the final copy.",
+      whyThisStory: "The live digest cleared source coverage; HERALD commissioned the strongest independently supported story, STET cleared English and HACEK cleared Czech.",
       deriveWhyThisStory: true,
       mode: "production",
       config,

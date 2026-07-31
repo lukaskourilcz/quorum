@@ -17,6 +17,7 @@ export const ContractAgentIdSchema = z.enum([
   "LEDGER",
   "HERALD",
   "STET",
+  "HACEK",
   "SPARK",
   "VAULT",
   "FRAME",

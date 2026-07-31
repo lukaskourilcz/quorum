@@ -20,6 +20,7 @@ export const FOUNDING_AGENT_IDS = [
   "LEDGER",
   "HERALD",
   "STET",
+  "HACEK",
   "SPARK",
   "VAULT",
   "FRAME",
@@ -86,7 +87,7 @@ export const AgentRegistrySchema = z
     if (ids.length !== FOUNDING_AGENT_IDS.length || ids.some((id) => !expected.has(id))) {
       context.addIssue({
         code: "custom",
-        message: "registry must contain exactly the 20 operating agent IDs",
+        message: "registry must contain exactly the 21 operating agent IDs",
         path: ["agents"]
       });
     }

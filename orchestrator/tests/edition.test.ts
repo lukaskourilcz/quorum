@@ -15,9 +15,16 @@ import {
   FixtureEditionModelGateway,
   type FixtureModelResponse
 } from "../src/edition/fixture.js";
-import { editionUsageCost } from "../src/edition/models.js";
+import {
+  BudgetedEditionModelGateway,
+  editionUsageCost
+} from "../src/edition/models.js";
 import { hasValidEditionPackageHash } from "../src/edition/package.js";
 import { produceEdition, type EditionProductionInput } from "../src/edition/production.js";
+import {
+  CZECH_BENCHMARK_URLS,
+  ENGLISH_BENCHMARK_URLS
+} from "../src/edition/registers.js";
 import {
   computeSignalStrength,
   evaluateEditionQuality,
@@ -25,6 +32,8 @@ import {
   titleSimilarity
 } from "../src/edition/quality.js";
 import { reviewArticleText } from "../src/edition/stet.js";
+import { reviewTranslationParity } from "../src/edition/localize.js";
+import type { LocalizedContent } from "../src/edition/types.js";
 
 const fixtureRoot = path.join(
   repoRoot,
@@ -40,7 +49,8 @@ async function fixtureJson<T>(name: string): Promise<T> {
 
 async function productionInput(
   responses: FixtureModelResponse[],
-  successfulSources = 10
+  successfulSources = 10,
+  enforceBudget = false
 ): Promise<EditionProductionInput> {
   const [rawItems, config, registry] = await Promise.all([
     fixtureJson<unknown[]>("source-items.json"),
@@ -48,6 +58,7 @@ async function productionInput(
     loadSourceRegistry()
   ]);
   const items: SourceItem[] = rawItems.map((item) => SourceItemSchema.parse(item));
+  const fixtureGateway = new FixtureEditionModelGateway(responses);
   return {
     date: "2026-08-04",
     now: new Date("2026-08-04T03:55:00.000Z"),
@@ -67,7 +78,9 @@ async function productionInput(
     whyThisStory: "Four independent sources document a price cut that changes production budgets.",
     mode: "dry_run",
     config,
-    gateway: new FixtureEditionModelGateway(responses)
+    gateway: enforceBudget
+      ? new BudgetedEditionModelGateway(fixtureGateway, 0.35)
+      : fixtureGateway
   };
 }
 
@@ -77,12 +90,14 @@ describe("edition configuration and quality", () => {
     expect(EditionQualityConfigSchema.parse(config).quality.enforcement).toBe("enforce");
     expect(config.models).toEqual({
       curation: "claude-sonnet-4-6",
-      writing: "claude-opus-4-7"
+      writing: "claude-opus-4-7",
+      localization: "claude-sonnet-4-6"
     });
     expect(config.quality.minimumSignalStrength).toBe(45);
     expect(config.budgets.editionProductionUsd).toBe(0.35);
     expect(config.budgets.maximumRegenerationAttemptsPerDate).toBe(2);
     expect(config.stet.maximumRewriteAttempts).toBe(1);
+    expect(config.hacek.maximumRewriteAttempts).toBe(1);
   });
 
   it("ports signal, diversity, similarity and measured-token cost math", async () => {
@@ -104,6 +119,20 @@ describe("edition configuration and quality", () => {
       cacheReadTokens: 1_000_000,
       cacheWriteTokens: 1_000_000
     })).toBe(36.75);
+  });
+
+  it("reserves the English and Czech first-pass call graph inside the production cap", async () => {
+    const responses = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const result = await produceEdition(
+      await productionInput(responses, 10, true)
+    );
+    expect(result.package.status).toBe("edition");
+    expect(result.report.measuredCostUsd).toBe(0.254);
+    expect(result.report.usage.map((usage) => usage.stage)).toEqual([
+      "curate",
+      "write",
+      "localize"
+    ]);
   });
 
   it("regenerates an enforced failure twice, then calls NO_EDITION", async () => {
@@ -131,10 +160,20 @@ describe("edition configuration and quality", () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const rewriteOne = structuredClone(base[1]!);
     const rewriteTwo = structuredClone(base[1]!);
+    const localizationOne = structuredClone(base[2]!);
+    const localizationTwo = structuredClone(base[2]!);
     rewriteOne.usage.stage = "rewrite";
     rewriteTwo.usage.stage = "rewrite";
     const result = await produceEdition(
-      await productionInput([base[0]!, base[1]!, rewriteOne, rewriteTwo], 1)
+      await productionInput([
+        base[0]!,
+        base[1]!,
+        base[2]!,
+        rewriteOne,
+        localizationOne,
+        rewriteTwo,
+        localizationTwo
+      ], 1)
     );
     expect(result.package.status).toBe("no_edition");
     expect(result.report.regenerationAttempts).toBe(2);
@@ -176,12 +215,95 @@ describe("STET article register", () => {
   });
 });
 
+describe("language desk registers and parity", () => {
+  it("pins ten benchmark articles per language without importing outlet copy", () => {
+    expect(CZECH_BENCHMARK_URLS).toHaveLength(10);
+    expect(ENGLISH_BENCHMARK_URLS).toHaveLength(10);
+    expect(new Set(CZECH_BENCHMARK_URLS).size).toBe(10);
+    expect(new Set(ENGLISH_BENCHMARK_URLS).size).toBe(10);
+    expect(CZECH_BENCHMARK_URLS.every((url) => new URL(url).hostname === "cc.cz")).toBe(true);
+    expect(ENGLISH_BENCHMARK_URLS.every((url) => new URL(url).hostname === "techcrunch.com")).toBe(true);
+  });
+
+  it("blocks Czech filler and catches URL, number and section drift", () => {
+    expect(reviewArticleText(
+      "Pojďme se podívat na revoluční řešení, které dává smysl pro firmy.",
+      "cs"
+    ).map((violation) => violation.code)).toEqual(
+      expect.arrayContaining(["throat_clearing", "hype", "literal_calque"])
+    );
+    const english: LocalizedContent = {
+      title: "Vendor cuts price 40%",
+      dek: "The change applies in 2026.",
+      alternativeHeadlines: ["One alternative"],
+      bodyMdx: "## Change\n\nSource: https://example.com/source. Price fell 40%.",
+      illustrationAlt: "A price card",
+      dispatches: [{
+        title: "Rate card",
+        body: "The vendor published the rate.",
+        source_url: "https://example.com/source",
+        topic: "pricing"
+      }],
+      whyItMatters: ["Budgets change."],
+      whatChanged: ["The rate fell."],
+      uncertainty: ["Duration is unknown."]
+    };
+    const czech: LocalizedContent = {
+      ...english,
+      title: "Dodavatel snížil cenu o 30 %",
+      dek: "Změna platí v roce 2027.",
+      bodyMdx: "### Změna\n\nZdroj: https://example.com/other. Cena klesla o 30 %.",
+      dispatches: [{
+        ...english.dispatches[0]!,
+        source_url: "https://example.com/other",
+        topic: "ceny"
+      }]
+    };
+    const codes = reviewTranslationParity(english, czech).violations.map(
+      (violation) => violation.code
+    );
+    expect(codes).toEqual(expect.arrayContaining([
+      "source_url_drift",
+      "number_drift",
+      "section_drift",
+      "dispatch_source_drift",
+      "dispatch_topic_drift"
+    ]));
+  });
+
+  it("allows one Czech repair and blocks a second failed adaptation", async () => {
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const repair = structuredClone(base[2]!);
+    repair.usage.stage = "localize_rewrite";
+    const slop = structuredClone(base[2]!);
+    const slopValue = slop.value as { body_mdx: string };
+    slopValue.body_mdx += "\n\nPojďme se podívat na tuto revoluční změnu.";
+
+    const repaired = await produceEdition(
+      await productionInput([base[0]!, base[1]!, slop, repair])
+    );
+    expect(repaired.package.status).toBe("edition");
+    expect(repaired.report.hacekBlocks).toBe(1);
+
+    const failedRepair = structuredClone(slop);
+    failedRepair.usage.stage = "localize_rewrite";
+    const blocked = await produceEdition(
+      await productionInput([base[0]!, base[1]!, slop, failedRepair])
+    );
+    expect(blocked.package.status).toBe("no_edition");
+    if (blocked.package.status === "no_edition") {
+      expect(blocked.package.board.noEditionReason).toBe("hacek_block_after_rewrite");
+    }
+    expect(blocked.report.hacekBlocks).toBe(2);
+  });
+});
+
 describe("edition dry production", () => {
   it("builds the deterministic golden package without leaking injected instructions", async () => {
     const result = await runEditionDry();
     expect(result.status).toBe("edition");
-    expect(result.packageHash).toBe("743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768");
-    expect(result.report.measuredCostUsd).toBe(0.194);
+    expect(result.packageHash).toBe("98c929ed95bd54a1d9f6854420d343b7931598ee483d01920b895e44da86d43b");
+    expect(result.report.measuredCostUsd).toBe(0.254);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(
       await readFile(

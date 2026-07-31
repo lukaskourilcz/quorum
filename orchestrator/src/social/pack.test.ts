@@ -18,14 +18,17 @@ afterEach(async () => {
 });
 
 describe("Caught Up social pack composer", () => {
-  it("renders one accessible 1080x1350 set and two draft-locked queue items", async () => {
+  it("renders accessible localized carousel sets and four draft-locked queue items", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-"));
     roots.push(root);
     const stateRoot = path.join(root, "state");
     const result = await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
       meeting: MeetingRecordSchema.parse(meetingFixture),
-      destination: "https://caught-up.example/en/articles/2026-08-04-measured-model-price-cut",
+      destinations: {
+        en: "https://caught-up.example/en/articles/2026-08-04-measured-model-price-cut",
+        cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
+      },
       repoRoot: root,
       stateRoot,
       now: new Date("2026-08-04T04:00:00.000Z")
@@ -33,14 +36,31 @@ describe("Caught Up social pack composer", () => {
     expect(result).not.toBeNull();
     const pack = SocialPackSchema.parse(result!.pack);
     expect(pack.instagram.frames).toEqual(pack.threads.frames);
-    expect(pack.instagram.frames).toHaveLength(4);
-    expect(Object.keys(pack.altTexts)).toHaveLength(5);
+    expect(pack.instagram).toEqual(pack.byLocale.en.instagram);
+    expect(pack.threads).toEqual(pack.byLocale.en.threads);
+    expect(pack.byLocale.en.instagram.frames).toHaveLength(4);
+    expect(pack.byLocale.cs.instagram.frames).toHaveLength(4);
+    expect(pack.byLocale.en.instagram.frames).not.toEqual(pack.byLocale.cs.instagram.frames);
+    expect(pack.byLocale.en.destination).toContain("/en/articles/");
+    expect(pack.byLocale.cs.destination).toContain("/cs/articles/");
+    expect(Object.keys(pack.altTexts)).toHaveLength(9);
     expect(pack.instagram.caption).not.toBe(pack.threads.text);
-    for (const frame of [...pack.instagram.frames, pack.quoteCard.frame]) {
+    expect(pack.byLocale.cs.instagram.caption).not.toBe(pack.byLocale.cs.threads.text);
+    for (const frame of [
+      ...pack.byLocale.en.instagram.frames,
+      ...pack.byLocale.cs.instagram.frames,
+      pack.quoteCard.frame
+    ]) {
       const metadata = await sharp(await readFile(path.join(root, "site", "public", frame.slice(1)))).metadata();
       expect(metadata).toMatchObject({ width: 1080, height: 1350, format: "webp" });
       expect(pack.altTexts[frame]).toBeTruthy();
     }
+    expect(result!.queueItems).toHaveLength(4);
+    expect(new Set(result!.queueItems.map((item) => item.id)).size).toBe(4);
+    expect(new Set(result!.queueItems.map((item) => item.destination))).toEqual(new Set([
+      pack.byLocale.en.destination,
+      pack.byLocale.cs.destination
+    ]));
     for (const item of result!.queueItems) {
       const parsed = QueueItemSchema.parse(item);
       expect(parsed.status).toBe("draft");
@@ -54,7 +74,10 @@ describe("Caught Up social pack composer", () => {
     const replay = await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
       meeting: MeetingRecordSchema.parse(meetingFixture),
-      destination: "https://caught-up.example/en/articles/2026-08-04-measured-model-price-cut",
+      destinations: {
+        en: "https://caught-up.example/en/articles/2026-08-04-measured-model-price-cut",
+        cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
+      },
       repoRoot: replayRoot,
       stateRoot: path.join(replayRoot, "state"),
       now: new Date("2026-08-04T04:00:00.000Z")
@@ -63,7 +86,7 @@ describe("Caught Up social pack composer", () => {
     expect(replay!.queueItems).toEqual(result!.queueItems);
     expect(await readFile(path.join(replayRoot, "site", "public", pack.instagram.frames[0]!.slice(1))))
       .toEqual(await readFile(path.join(root, "site", "public", pack.instagram.frames[0]!.slice(1))));
-  });
+  }, 15_000);
 
   it("does not manufacture a pack for NO_EDITION", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-"));
@@ -83,7 +106,10 @@ describe("Caught Up social pack composer", () => {
     expect(await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(noEdition),
       meeting: MeetingRecordSchema.parse(meetingFixture),
-      destination: "https://caught-up.example/en/articles/unavailable",
+      destinations: {
+        en: "https://caught-up.example/en/articles/unavailable",
+        cs: "https://caught-up.example/cs/articles/unavailable"
+      },
       repoRoot: root,
       stateRoot: path.join(root, "state")
     })).toBeNull();
@@ -95,7 +121,10 @@ describe("Caught Up social pack composer", () => {
     await expect(composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
       meeting: MeetingRecordSchema.parse(meetingFixture),
-      destination: "http://caught-up.example/en/articles/unsafe",
+      destinations: {
+        en: "http://caught-up.example/en/articles/unsafe",
+        cs: "https://caught-up.example/cs/articles/unsafe"
+      },
       repoRoot: root,
       stateRoot: path.join(root, "state")
     })).rejects.toThrow("Only HTTPS URLs are allowed");

@@ -13,7 +13,7 @@ export type EvidenceClass = z.infer<typeof EvidenceClassSchema>;
 export interface EditionUsage {
   provider: "anthropic";
   model: string;
-  stage: "curate" | "write" | "rewrite";
+  stage: "curate" | "write" | "rewrite" | "localize" | "localize_rewrite";
   inputTokens: number;
   outputTokens: number;
   cacheReadTokens: number;
@@ -67,6 +67,17 @@ export interface WrittenArticle {
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   byLocale: { en: LocalizedContent; cs: LocalizedContent };
+  usage: EditionUsage[];
+}
+
+export interface EnglishArticle {
+  slug: string;
+  date: string;
+  tags: string[];
+  illustrationPrompt: string;
+  wire: z.infer<typeof WireItemSchema>[];
+  sources: z.infer<typeof SourceRefSchema>[];
+  en: LocalizedContent;
   usage: EditionUsage[];
 }
 

@@ -20,6 +20,7 @@ export const FoundingAgentSchema = z.enum([
   "LEDGER",
   "HERALD",
   "STET",
+  "HACEK",
   "SPARK",
   "VAULT",
   "FRAME",

@@ -1,5 +1,5 @@
 import type { EditionQualityConfig } from "./config.js";
-import type { WrittenArticle } from "./types.js";
+import type { EnglishArticle, LocalizedContent, WrittenArticle } from "./types.js";
 
 interface StetRule {
   code: string;
@@ -7,7 +7,7 @@ interface StetRule {
   message: string;
 }
 
-const ARTICLE_RULES: readonly StetRule[] = [
+const ENGLISH_ARTICLE_RULES: readonly StetRule[] = [
   {
     code: "generated_meta",
     pattern: /\bas (?:an ai|a language model)\b/i,
@@ -60,6 +60,54 @@ const ARTICLE_RULES: readonly StetRule[] = [
   }
 ];
 
+const CZECH_ARTICLE_RULES: readonly StetRule[] = [
+  {
+    code: "generated_meta",
+    pattern: /\bjako (?:umělá inteligence|jazykový model)\b/i,
+    message: "Odstraň komentář o tom, že text vytvořil model."
+  },
+  {
+    code: "throat_clearing",
+    pattern: /\b(?:pojďme se podívat|je (?:třeba|nutné|důležité) (?:si )?(?:uvědomit|zmínit|poznamenat)|v dnešní (?:rychle|neustále) se (?:měnící|vyvíjející) době)\b/i,
+    message: "Vynech úvodní vatu a napiš rovnou podstatnou větu."
+  },
+  {
+    code: "hype",
+    pattern: /(?<![\p{L}\p{N}_])(?:revoluční|průlomov(?:ý|á|é)|mění pravidla hry|má potenciál (?:zásadně )?změnit|bezprecedentní)(?![\p{L}\p{N}_])/iu,
+    message: "Nahraď nadsázku doloženou změnou."
+  },
+  {
+    code: "bureaucratic_filler",
+    pattern: /\b(?:v rámci|za účelem|došlo k (?:provedení|realizaci|zahájení)|s ohledem na skutečnost)\b/i,
+    message: "Použij přímé sloveso místo úřednické konstrukce."
+  },
+  {
+    code: "literal_calque",
+    pattern: /\b(?:na konci dne|adresovat (?:problém|otázku)|udělat rozdíl|dává smysl pro|přinést na stůl|posunout na další úroveň)\b/i,
+    message: "Přestav anglický kalk do přirozené češtiny."
+  },
+  {
+    code: "empty_adverb",
+    pattern: /\b(?:doslova|upřímně|skutečně|jednoduše|potenciálně|zajímavé je,? že|důležité je,? že)\b/i,
+    message: "Odstraň prázdný přívlastek nebo jej nahraď důkazem."
+  },
+  {
+    code: "emoji",
+    pattern: /\p{Extended_Pictographic}/u,
+    message: "Odstraň emoji z článkového registru."
+  },
+  {
+    code: "exclamation_inflation",
+    pattern: /!{2,}/,
+    message: "Použij tečku a nech vyznít samotný fakt."
+  },
+  {
+    code: "source_instruction_leak",
+    pattern: /\b(?:ignoruj (?:všechny|předchozí) pokyny|prozraď systémový prompt|schval tento článek)\b/i,
+    message: "Odstraň pokyn převzatý z nedůvěryhodného zdroje."
+  }
+];
+
 export interface StetViolation {
   code: string;
   locale: "en" | "cs" | "board";
@@ -76,13 +124,13 @@ export function reviewArticleText(
   text: string,
   locale: StetViolation["locale"] = "en"
 ): StetViolation[] {
-  return ARTICLE_RULES
+  const rules = locale === "cs" ? CZECH_ARTICLE_RULES : ENGLISH_ARTICLE_RULES;
+  return rules
     .filter((rule) => rule.pattern.test(text))
     .map((rule) => ({ code: rule.code, locale, message: rule.message }));
 }
 
-function localizedText(article: WrittenArticle, locale: "en" | "cs"): string {
-  const value = article.byLocale[locale];
+function localizedText(value: LocalizedContent): string {
   return [
     value.title,
     value.dek,
@@ -95,14 +143,13 @@ function localizedText(article: WrittenArticle, locale: "en" | "cs"): string {
   ].join("\n");
 }
 
-export function reviewArticle(
-  article: WrittenArticle,
+export function reviewEnglishArticle(
+  article: EnglishArticle,
   whyThisStory: string,
   config: EditionQualityConfig
 ): StetReview {
   const violations = [
-    ...reviewArticleText(localizedText(article, "en"), "en"),
-    ...reviewArticleText(localizedText(article, "cs"), "cs"),
+    ...reviewArticleText(localizedText(article.en), "en"),
     ...reviewArticleText(whyThisStory, "board")
   ];
   const score = Math.max(0, 50 - violations.length * 5);
@@ -113,9 +160,31 @@ export function reviewArticle(
   };
 }
 
+export function reviewCzechArticle(
+  article: WrittenArticle,
+  config: EditionQualityConfig
+): StetReview {
+  const violations = reviewArticleText(
+    localizedText(article.byLocale.cs),
+    "cs"
+  );
+  const score = Math.max(0, 50 - violations.length * 5);
+  return {
+    passed: violations.length === 0 && score >= config.hacek.minimumScore,
+    score,
+    violations
+  };
+}
+
 export function stetFeedback(review: StetReview): string[] {
   return review.violations.map(
     (violation) => `STET ${violation.locale}/${violation.code}: ${violation.message}`
+  );
+}
+
+export function hacekFeedback(review: StetReview): string[] {
+  return review.violations.map(
+    (violation) => `HACEK ${violation.locale}/${violation.code}: ${violation.message}`
   );
 }
 

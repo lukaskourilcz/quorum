@@ -275,6 +275,30 @@
       "requires": "reader_feedback"
     },
     {
+      "id": "localization.register_pass_rate",
+      "owner": "HACEK",
+      "metric": "caughtUpCzechRegisterPassRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "localization.parity_failure_rate",
+      "owner": "HACEK",
+      "metric": "caughtUpCzechParityFailureRate",
+      "target": 0,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "localization.reader_complaints",
+      "owner": "HACEK",
+      "metric": "caughtUpCzechCopyComplaintCount",
+      "target": 0,
+      "dir": "down",
+      "requires": "reader_feedback"
+    },
+    {
       "id": "growth.idea_novelty_rate",
       "owner": "SPARK",
       "metric": "caughtUpIdeaNoveltyRate",

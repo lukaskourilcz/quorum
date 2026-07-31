@@ -472,14 +472,16 @@ async function runCaughtUpLiveEditionCycle(
       console.warn("Caught Up social pack skipped: CAUGHT_UP_SITE_URL is not configured");
     } else {
       try {
-        editionUrl = new URL(
-          `/en/articles/${produced.package.article.en.frontmatter.slug}`,
-          caughtUpBaseUrl
-        ).toString();
+        const slug = produced.package.article.en.frontmatter.slug;
+        const destinations = {
+          en: new URL(`/en/articles/${slug}`, caughtUpBaseUrl).toString(),
+          cs: new URL(`/cs/articles/${slug}`, caughtUpBaseUrl).toString()
+        };
+        editionUrl = destinations.en;
         const social = await composeEditionSocialPack({
           editionPackage: produced.package,
           meeting: record,
-          destination: editionUrl,
+          destinations,
           repoRoot,
           stateRoot,
           now

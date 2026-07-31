@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "appliedAt": "2026-07-31T18:00:00.000Z",
+  "approvalRef": "owner-request:2026-07-31-czech-language-agent",
+  "kind": "new_role",
+  "change": {
+    "id": "ORG-2026-07-31-HACEK",
+    "proposedAt": "2026-07-31T17:00:00.000Z",
+    "proposer": "HUMAN_STEWARD",
+    "subjectAgent": "HACEK",
+    "tier": "C",
+    "change": "Add HACEK as the Czech language editor after STET clears English; HACEK owns Czech article and social adaptation, parity review and one bounded Czech repair.",
+    "expectedMetric": "caughtUpCzechRegisterPassRate",
+    "baseline": null,
+    "expectedDelta": 1,
+    "reviewCycle": 14,
+    "approvers": ["HUMAN_APPROVAL"],
+    "status": "approved"
+  },
+  "current": "One bilingual writer call composes both locales and STET applies a mostly English register to both.",
+  "proposed": "STET clears the English article; HACEK then adapts the Czech article, Instagram carousel and Threads draft under deterministic parity and Czech-register gates.",
+  "evidenceRefs": [
+    "state/decisions/2026-07-31-caught-up-language-desks.md",
+    "owner-request:2026-07-31-czech-language-agent"
+  ],
+  "evaluationWindowCycles": 14,
+  "tests": [
+    "agent registry and avatar validation",
+    "organization maintenance approval and idempotency",
+    "English and Czech register fixtures",
+    "Czech URL, number and section parity",
+    "one bounded Czech repair",
+    "bilingual social pack composition",
+    "edition dry run and budget cap"
+  ],
+  "rollbackRef": "state/decisions/2026-07-31-caught-up-language-desks.md",
+  "affectedFiles": [
+    "config/agents.json",
+    "config/agent-routing.json",
+    "config/kpis.json",
+    "orchestrator/prompts/hacek.md",
+    "orchestrator/src/edition/localize.ts",
+    "site/public/agents/hacek.webp"
+  ],
+  "postconditions": {
+    "agentId": "HACEK",
+    "minimumOwnedKpis": 3,
+    "requiredCapabilities": [
+      "editorial:czech",
+      "translation:fidelity",
+      "social:czech"
+    ],
+    "promptPath": "orchestrator/prompts/hacek.md",
+    "avatarPath": "site/public/agents/hacek.webp"
+  }
+}

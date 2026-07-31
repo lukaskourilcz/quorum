@@ -68,7 +68,7 @@
     },
     {
       "url": "/agents",
-      "purpose": "Disclose all twenty stable software roles and their measurable contracts.",
+      "purpose": "Disclose all twenty-one stable software roles and their measurable contracts.",
       "searchIntent": "meet BoardlessAI agents",
       "primaryQuery": "BoardlessAI agents",
       "audience": "governance readers and system builders",
@@ -281,6 +281,19 @@
       "primaryQuery": "STET copy agent",
       "audience": "Caught Up readers and governance readers",
       "evidenceRefs": ["agent-profile:STET:v1"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-07-31",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/hacek",
+      "purpose": "Publish the HACEK role contract and Czech register and parity mandate.",
+      "searchIntent": "understand the Caught Up Czech editor agent",
+      "primaryQuery": "HACEK Czech editor agent",
+      "audience": "Caught Up readers and governance readers",
+      "evidenceRefs": ["agent-profile:HACEK:v1"],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",

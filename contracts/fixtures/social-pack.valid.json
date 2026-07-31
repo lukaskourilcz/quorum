@@ -2,22 +2,66 @@
   "schemaVersion": "social-pack/1",
   "date": "2026-08-04",
   "editionRef": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "byLocale": {
+    "en": {
+      "destination": "https://caught-up.example/en/articles/2026-08-04-model-price-change",
+      "instagram": {
+        "caption": "The model price changed. The source and the board's reasoning are linked.",
+        "hashtags": ["ai", "models", "pricing", "caughtup", "boardlessai"],
+        "frames": [
+          "/social/2026-08-04/en/ig-01.webp",
+          "/social/2026-08-04/en/ig-02.webp",
+          "/social/2026-08-04/en/ig-03.webp"
+        ]
+      },
+      "threads": {
+        "text": "The model price changed. Read the source and the board's reasoning.",
+        "hashtags": ["ai"],
+        "frames": [
+          "/social/2026-08-04/en/ig-01.webp",
+          "/social/2026-08-04/en/ig-02.webp",
+          "/social/2026-08-04/en/ig-03.webp"
+        ]
+      }
+    },
+    "cs": {
+      "destination": "https://caught-up.example/cs/articles/2026-08-04-model-price-change",
+      "instagram": {
+        "caption": "Cena modelu se změnila. Zdroj i úvaha redakční rady jsou dohledatelné.",
+        "hashtags": ["ai", "modely", "ceny", "caughtup", "technologie"],
+        "frames": [
+          "/social/2026-08-04/cs/ig-01.webp",
+          "/social/2026-08-04/cs/ig-02.webp",
+          "/social/2026-08-04/cs/ig-03.webp"
+        ]
+      },
+      "threads": {
+        "text": "Cena modelu se změnila. Přečtěte si zdroj i úvahu redakční rady.",
+        "hashtags": ["ai"],
+        "frames": [
+          "/social/2026-08-04/cs/ig-01.webp",
+          "/social/2026-08-04/cs/ig-02.webp",
+          "/social/2026-08-04/cs/ig-03.webp"
+        ]
+      }
+    }
+  },
   "instagram": {
     "caption": "The model price changed. The source and the board's reasoning are linked.",
     "hashtags": ["ai", "models", "pricing", "caughtup", "boardlessai"],
     "frames": [
-      "/social/2026-08-04/ig-01.webp",
-      "/social/2026-08-04/ig-02.webp",
-      "/social/2026-08-04/ig-03.webp"
+      "/social/2026-08-04/en/ig-01.webp",
+      "/social/2026-08-04/en/ig-02.webp",
+      "/social/2026-08-04/en/ig-03.webp"
     ]
   },
   "threads": {
     "text": "The model price changed. Read the source and the board's reasoning.",
     "hashtags": ["ai"],
     "frames": [
-      "/social/2026-08-04/ig-01.webp",
-      "/social/2026-08-04/ig-02.webp",
-      "/social/2026-08-04/ig-03.webp"
+      "/social/2026-08-04/en/ig-01.webp",
+      "/social/2026-08-04/en/ig-02.webp",
+      "/social/2026-08-04/en/ig-03.webp"
     ]
   },
   "quoteCard": {
@@ -29,9 +73,12 @@
     "inputsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
   },
   "altTexts": {
-    "/social/2026-08-04/ig-01.webp": "Title frame for the verified model price change",
-    "/social/2026-08-04/ig-02.webp": "Source and price comparison frame",
-    "/social/2026-08-04/ig-03.webp": "Caught Up conclusion frame",
+    "/social/2026-08-04/en/ig-01.webp": "English title frame for the verified model price change",
+    "/social/2026-08-04/en/ig-02.webp": "English source and price comparison frame",
+    "/social/2026-08-04/en/ig-03.webp": "English Caught Up conclusion frame",
+    "/social/2026-08-04/cs/ig-01.webp": "Český titulní snímek k ověřené změně ceny modelu",
+    "/social/2026-08-04/cs/ig-02.webp": "Český snímek se zdrojem a srovnáním cen",
+    "/social/2026-08-04/cs/ig-03.webp": "Český závěrečný snímek Caught Up",
     "/social/2026-08-04/quote.webp": "A sourced exchange from the edition room"
   }
 }

@@ -15,6 +15,180 @@
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
     },
+    "byLocale": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "object",
+          "properties": {
+            "destination": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "instagram": {
+              "type": "object",
+              "properties": {
+                "caption": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2200
+                },
+                "hashtags": {
+                  "minItems": 5,
+                  "maxItems": 10,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9_]+$"
+                  }
+                },
+                "frames": {
+                  "minItems": 3,
+                  "maxItems": 6,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                  }
+                }
+              },
+              "required": [
+                "caption",
+                "hashtags",
+                "frames"
+              ],
+              "additionalProperties": {}
+            },
+            "threads": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "hashtags": {
+                  "maxItems": 2,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9_]+$"
+                  }
+                },
+                "frames": {
+                  "minItems": 3,
+                  "maxItems": 6,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                  }
+                }
+              },
+              "required": [
+                "text",
+                "hashtags",
+                "frames"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "destination",
+            "instagram",
+            "threads"
+          ],
+          "additionalProperties": {}
+        },
+        "cs": {
+          "type": "object",
+          "properties": {
+            "destination": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "instagram": {
+              "type": "object",
+              "properties": {
+                "caption": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2200
+                },
+                "hashtags": {
+                  "minItems": 5,
+                  "maxItems": 10,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9_]+$"
+                  }
+                },
+                "frames": {
+                  "minItems": 3,
+                  "maxItems": 6,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                  }
+                }
+              },
+              "required": [
+                "caption",
+                "hashtags",
+                "frames"
+              ],
+              "additionalProperties": {}
+            },
+            "threads": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "hashtags": {
+                  "maxItems": 2,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9_]+$"
+                  }
+                },
+                "frames": {
+                  "minItems": 3,
+                  "maxItems": 6,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                  }
+                }
+              },
+              "required": [
+                "text",
+                "hashtags",
+                "frames"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "destination",
+            "instagram",
+            "threads"
+          ],
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "en",
+        "cs"
+      ],
+      "additionalProperties": {}
+    },
     "instagram": {
       "type": "object",
       "properties": {
@@ -137,6 +311,7 @@
     "schemaVersion",
     "date",
     "editionRef",
+    "byLocale",
     "instagram",
     "threads",
     "quoteCard",

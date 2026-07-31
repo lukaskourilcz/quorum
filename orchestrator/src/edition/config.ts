@@ -27,11 +27,13 @@ export const EditionQualityConfigSchema = z.object({
     briefsMaximum: z.number().int().min(2).max(4),
     watchlistMaximum: z.number().int().min(4).max(6),
     maximumOutputTokens: z.number().int().positive(),
+    maximumLocalizationOutputTokens: z.number().int().positive(),
     maximumCurationCandidates: z.number().int().positive()
   }),
   models: z.object({
     curation: z.literal("claude-sonnet-4-6"),
-    writing: z.literal("claude-opus-4-7")
+    writing: z.literal("claude-opus-4-7"),
+    localization: z.literal("claude-sonnet-4-6")
   }),
   budgets: z.object({
     warningCostPerRun: z.number().nonnegative(),
@@ -42,6 +44,10 @@ export const EditionQualityConfigSchema = z.object({
     maximumRegenerationAttemptsPerDate: z.number().int().min(0).max(2)
   }),
   stet: z.object({
+    maximumRewriteAttempts: z.literal(1),
+    minimumScore: z.number().int().min(0).max(50)
+  }),
+  hacek: z.object({
     maximumRewriteAttempts: z.literal(1),
     minimumScore: z.number().int().min(0).max(50)
   })

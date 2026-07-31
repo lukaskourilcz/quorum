@@ -94,7 +94,7 @@ describe("Caught Up meeting records", () => {
     expect(product.roomTranscript.turns.length).toBeLessThanOrEqual(36);
     expect(
       edition.participantReasons.filter((participant) => participant.participated).map((participant) => participant.agent).sort()
-    ).toEqual(["AUDIT", "HERALD", "SPARK", "STET"]);
+    ).toEqual(["AUDIT", "HACEK", "HERALD", "SPARK", "STET"]);
     expect(
       product.participantReasons.filter((participant) => participant.participated).map((participant) => participant.agent).sort()
     ).toEqual(["AUDIT", "HERALD", "SPARK", "VAULT"]);

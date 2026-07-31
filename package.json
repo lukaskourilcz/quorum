@@ -25,6 +25,7 @@
     "dev": "pnpm --filter @boardlessai/site dev",
     "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
     "lint": "pnpm -r lint",
+    "org:maintain": "pnpm --filter @boardlessai/orchestrator org:maintain",
     "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",
     "sources:shadow": "pnpm --filter @boardlessai/orchestrator sources:shadow",
     "site:smoke": "node scripts/smoke-site.mjs",

@@ -72,6 +72,10 @@
       "capabilities": ["editorial:copy", "quality:slop"],
       "status": "active"
     },
+    "HACEK": {
+      "capabilities": ["editorial:czech", "translation:fidelity", "social:czech"],
+      "status": "active"
+    },
     "SPARK": {
       "capabilities": ["growth:product", "bridge:venture"],
       "status": "active"
@@ -145,7 +149,7 @@
       "optionalByTopic": true
     },
     "edition-room": {
-      "required": ["HERALD", "STET", "SPARK", "AUDIT"],
+      "required": ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"],
       "optionalByTopic": true
     },
     "product-room": {

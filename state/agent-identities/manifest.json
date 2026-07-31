@@ -22,10 +22,10 @@
     "maxSetUsd": 5,
     "initialCalls": 21,
     "repairCalls": 4,
-    "totalCalls": 25,
+    "totalCalls": 26,
     "apiEquivalentWorstCasePerCallUsd": 0.212715,
     "apiEquivalentInitialEstimateUsd": 4.467015,
-    "apiEquivalentTotalEstimateUsd": 5.317875,
+    "apiEquivalentTotalEstimateUsd": 5.53059,
     "caughtUpExtension": {
       "maxUsd": 1.8,
       "initialCalls": 6,
@@ -33,9 +33,16 @@
       "totalCalls": 8,
       "apiEquivalentTotalEstimateUsd": 1.70172
     },
+    "languageDeskExtension": {
+      "maxUsd": 0.3,
+      "initialCalls": 1,
+      "repairCalls": 0,
+      "totalCalls": 1,
+      "apiEquivalentTotalEstimateUsd": 0.212715
+    },
     "chargedToProjectApi": false,
     "actualProjectApiUsd": null,
-    "ledgerNote": "No project API key or project billing route was used, so no fabricated spend was booked. The six-portrait Caught Up extension, including two visual-QA repairs, stayed within its specified $1.80 envelope; cumulative API-equivalent session estimates are retained separately for auditability."
+    "ledgerNote": "No project API key or project billing route was used, so no fabricated spend was booked. The six-portrait Caught Up extension, including two visual-QA repairs, stayed within its specified $1.80 envelope; HACEK's single-call language-desk extension stayed within its $0.30 envelope. Cumulative API-equivalent session estimates are retained separately for auditability."
   },
   "prompts": {
     "source": "state/agent-identities/prompts.json",
@@ -337,6 +344,23 @@
       "moderation": "passed_by_tool",
       "qa": "pass_after_targeted_color_balance_repair",
       "repairs": 1
+    },
+    {
+      "id": "AVATAR-HACEK",
+      "agentId": "HACEK",
+      "publicPath": "/agents/hacek.webp",
+      "sourceCallId": "imagegen:exec-aba04e04-4931-488c-8c39-cab8747b6d3f",
+      "promptHash": "6e924420c704a869ee601543dfca9306b23fb4f4d5e423dca1e481faa9b9b2b3",
+      "referenceHash": "bd4ee206aff71f0a9c15051a7103790d73fe9bd250573c9513561761ce3aaff4",
+      "sha256": "718f3fda98d3a2bdef3d6be6e586f9ba3ae4626fa0e4af1f12ba3eaf81a2e8ab",
+      "bytes": 100618,
+      "width": 1024,
+      "height": 1024,
+      "format": "webp",
+      "altText": "Abstract non-human portrait of HACEK with a diacritic caron and paired translation pages",
+      "moderation": "passed_by_tool",
+      "qa": "pass",
+      "repairs": 0
     },
     {
       "id": "AVATAR-SPARK",

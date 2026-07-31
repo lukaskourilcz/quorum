@@ -16,19 +16,43 @@ function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
-function hashtags(tags: readonly string[]): string[] {
+type SocialLocale = "en" | "cs";
+
+function hashtags(tags: readonly string[], locale: SocialLocale): string[] {
   const normalized = tags
     .map((tag) => tag.normalize("NFKC").toLowerCase().replaceAll(/[^a-z0-9_]+/g, ""))
     .filter(Boolean);
-  return [...new Set([...normalized, "ai", "artificialintelligence", "aitech", "aifirst", "caughtup"])].slice(0, 10);
+  const defaults = locale === "cs"
+    ? ["ai", "umelainteligence", "technologie", "aitech", "caughtup"]
+    : ["ai", "artificialintelligence", "aitech", "technews", "caughtup"];
+  return [...new Set([...normalized, ...defaults])].slice(0, 10);
 }
 
-function queueAltText(pack: SocialPack): string {
-  return pack.instagram.frames.map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`).join(" ").slice(0, 1_000);
+function boundedCopy(body: string, suffix: string, maximum: number): string {
+  const complete = `${body}${suffix}`;
+  if (complete.length <= maximum) return complete;
+  const room = maximum - suffix.length - 1;
+  if (room < 40) throw new Error("Social destination and required labels exceed the copy limit");
+  const candidate = body.slice(0, room).trimEnd();
+  const sentenceBoundary = candidate.lastIndexOf(". ");
+  const wordBoundary = candidate.lastIndexOf(" ");
+  const boundary = sentenceBoundary >= Math.floor(room * 0.6)
+    ? sentenceBoundary + 1
+    : wordBoundary;
+  const clipped = candidate.slice(0, Math.max(1, boundary)).trimEnd();
+  return `${clipped}…${suffix}`;
+}
+
+function queueAltText(pack: SocialPack, locale: SocialLocale): string {
+  return pack.byLocale[locale].instagram.frames
+    .map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`)
+    .join(" ")
+    .slice(0, 1_000);
 }
 
 function queueItem(input: {
   pack: SocialPack;
+  locale: SocialLocale;
   channel: "instagram" | "threads";
   destination: string;
   evidenceRefs: string[];
@@ -36,25 +60,26 @@ function queueItem(input: {
 }): QueueItem {
   const notBefore = input.now.toISOString();
   const notAfter = new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString();
-  const platform = input.pack[input.channel];
+  const localized = input.pack.byLocale[input.locale];
+  const platform = localized[input.channel];
   const base = {
     schemaVersion: 1 as const,
-    id: `caught-up-${input.pack.date}-${input.channel}`,
-    campaignId: `caught-up-${input.pack.date}`,
+    id: `caught-up-${input.pack.date}-${input.locale}-${input.channel}`,
+    campaignId: `caught-up-${input.pack.date}-${input.locale}`,
     experimentId: null,
     channel: input.channel,
     objective: "trust" as const,
-    audience: "Caught Up readers",
+    audience: `Caught Up readers (${input.locale})`,
     destination: input.destination,
     utm: {
       source: input.channel,
       medium: "organic_social" as const,
-      campaign: `caught-up-${input.pack.date}`,
-      content: "edition-carousel"
+      campaign: `caught-up-${input.pack.date}-${input.locale}`,
+      content: `edition-carousel-${input.locale}`
     },
     content: {
-      text: input.channel === "instagram" ? input.pack.instagram.caption : input.pack.threads.text,
-      altText: queueAltText(input.pack),
+      text: input.channel === "instagram" ? localized.instagram.caption : localized.threads.text,
+      altText: queueAltText(input.pack, input.locale),
       assetPaths: platform.frames,
       factualClaimRefs: input.evidenceRefs,
       contentHash: "0".repeat(64)
@@ -84,62 +109,81 @@ function queueItem(input: {
 
 export interface SocialPackComposition {
   pack: SocialPack;
-  queueItems: [QueueItem, QueueItem];
+  queueItems: [QueueItem, QueueItem, QueueItem, QueueItem];
   artifactPaths: string[];
 }
 
 export async function composeEditionSocialPack(input: {
   editionPackage: EditionPackage;
   meeting: MeetingRecord;
-  destination: string;
+  destinations: Record<SocialLocale, string>;
   repoRoot: string;
   stateRoot: string;
   now?: Date;
 }): Promise<SocialPackComposition | null> {
-  if (input.editionPackage.status !== "edition") return null;
+  const editionPackage = input.editionPackage;
+  if (editionPackage.status !== "edition") return null;
   if (input.meeting.kind !== "cu-edition" || input.meeting.date !== input.editionPackage.date) {
     throw new Error("Social pack requires the matching Caught Up edition meeting");
   }
-  const destination = parseSafeHttpsUrl(input.destination);
-  const article = input.editionPackage.article.en.frontmatter;
+  const destinations = {
+    en: parseSafeHttpsUrl(input.destinations.en).toString(),
+    cs: parseSafeHttpsUrl(input.destinations.cs).toString()
+  };
   const bestTurnIndex = input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET") >= 0
     ? input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET")
     : Math.max(0, input.meeting.roomTranscript.turns.findIndex((turn) => turn.mode === "raises-concern"));
   const bestTurn = input.meeting.roomTranscript.turns[bestTurnIndex] ?? input.meeting.roomTranscript.turns[0]!;
-  const frameInputs = [
-    { eyebrow: "Today’s signal", title: article.title, body: article.dek },
-    { eyebrow: "What changed", title: "The change", body: article.what_changed[0]! },
-    { eyebrow: "Why it matters", title: "The consequence", body: article.why_it_matters[0]! },
-    { eyebrow: "What remains open", title: "The uncertainty", body: article.uncertainty[0]! }
-  ];
+  const frameInputs = {
+    en: [
+      { eyebrow: "Today’s signal", title: editionPackage.article.en.frontmatter.title, body: editionPackage.article.en.frontmatter.dek },
+      { eyebrow: "What changed", title: "The change", body: editionPackage.article.en.frontmatter.what_changed[0]! },
+      { eyebrow: "Why it matters", title: "The consequence", body: editionPackage.article.en.frontmatter.why_it_matters[0]! },
+      { eyebrow: "What remains open", title: "The uncertainty", body: editionPackage.article.en.frontmatter.uncertainty[0]! }
+    ],
+    cs: [
+      { eyebrow: "Dnešní signál", title: editionPackage.article.cs.frontmatter.title, body: editionPackage.article.cs.frontmatter.dek },
+      { eyebrow: "Co se změnilo", title: "Změna", body: editionPackage.article.cs.frontmatter.what_changed[0]! },
+      { eyebrow: "Proč na tom záleží", title: "Důsledek", body: editionPackage.article.cs.frontmatter.why_it_matters[0]! },
+      { eyebrow: "Co zůstává otevřené", title: "Nejistota", body: editionPackage.article.cs.frontmatter.uncertainty[0]! }
+    ]
+  };
   const inputHash = sha256(JSON.stringify({
     composerVersion: COMPOSER_VERSION,
     editionRef: input.editionPackage.idempotencyKey,
     meetingRef: input.editionPackage.board.meetingRef,
+    destinations,
     frameInputs,
     quote: { agent: bestTurn.agent, text: bestTurn.text }
   }));
   const relativeDirectory = `site/public/social/${input.editionPackage.date}`;
   const publicDirectory = `/social/${input.editionPackage.date}`;
-  const framePaths: string[] = [];
+  const framePaths: Record<SocialLocale, string[]> = { en: [], cs: [] };
   const frameHashes: Record<string, string> = {};
   const altTexts: Record<string, string> = {};
-  for (const [index, frameInput] of frameInputs.entries()) {
-    const publicPath = `${publicDirectory}/frame-${String(index + 1).padStart(2, "0")}.webp`;
-    const bytes = await composeCarouselFrame({
-      date: input.editionPackage.date,
-      ...frameInput,
-      index: index + 1,
-      total: FRAME_COUNT
-    });
-    const validation = await validateSocialImage(bytes);
-    if (validation.width !== 1080 || validation.height !== 1350) {
-      throw new Error(`Social frame ${publicPath} must be 1080x1350`);
+  for (const locale of ["en", "cs"] as const) {
+    for (const [index, frameInput] of frameInputs[locale].entries()) {
+      const name = `frame-${String(index + 1).padStart(2, "0")}.webp`;
+      const publicPath = `${publicDirectory}/${locale}/${name}`;
+      const bytes = await composeCarouselFrame({
+        date: input.editionPackage.date,
+        ...frameInput,
+        index: index + 1,
+        total: FRAME_COUNT
+      });
+      const validation = await validateSocialImage(bytes);
+      if (validation.width !== 1080 || validation.height !== 1350) {
+        throw new Error(`Social frame ${publicPath} must be 1080x1350`);
+      }
+      await atomicWriteBuffer(
+        input.repoRoot,
+        `${relativeDirectory}/${locale}/${name}`,
+        bytes
+      );
+      framePaths[locale].push(publicPath);
+      frameHashes[publicPath] = sha256(bytes);
+      altTexts[publicPath] = `${frameInput.eyebrow}: ${frameInput.title}. ${frameInput.body}`.slice(0, 300);
     }
-    await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/frame-${String(index + 1).padStart(2, "0")}.webp`, bytes);
-    framePaths.push(publicPath);
-    frameHashes[publicPath] = sha256(bytes);
-    altTexts[publicPath] = `${frameInput.eyebrow}: ${frameInput.title}. ${frameInput.body}`.slice(0, 300);
   }
   const quotePath = `${publicDirectory}/quote.webp`;
   const quoteBytes = await composeQuoteCard({
@@ -155,21 +199,40 @@ export async function composeEditionSocialPack(input: {
   frameHashes[quotePath] = sha256(quoteBytes);
   altTexts[quotePath] = `Quote from ${bestTurn.agent} in the edition room: ${bestTurn.text}`.slice(0, 300);
 
-  const tagList = hashtags(article.tags);
+  const buildLocalePack = (locale: SocialLocale) => {
+      const article = editionPackage.article[locale].frontmatter;
+      const tagList = hashtags(article.tags, locale);
+      const readLabel = locale === "cs" ? "Celý článek" : "Read the edition";
+      const openLabel = locale === "cs" ? "Otevřené zůstává" : "Still open";
+      const instagramBody = `${article.title}\n\n${article.dek}\n\n${article.what_changed[0]}\n\n${article.why_it_matters[0]}\n\n${openLabel}: ${article.uncertainty[0]}`;
+      const instagramSuffix = `\n\n${readLabel}: ${destinations[locale]}\n\n${tagList.map((tag) => `#${tag}`).join(" ")}`;
+      const threadsBody = `${article.title}\n\n${article.why_it_matters[0]}\n\n${openLabel}: ${article.uncertainty[0]}`;
+      const threadsSuffix = `\n\n${destinations[locale]}`;
+      return {
+        destination: destinations[locale],
+        instagram: {
+          caption: boundedCopy(instagramBody, instagramSuffix, 2_200),
+          hashtags: tagList,
+          frames: framePaths[locale]
+        },
+        threads: {
+          text: boundedCopy(threadsBody, threadsSuffix, 500),
+          hashtags: [],
+          frames: framePaths[locale]
+        }
+      };
+  };
+  const localePacks = {
+    en: buildLocalePack("en"),
+    cs: buildLocalePack("cs")
+  };
   const pack = SocialPackSchema.parse({
     schemaVersion: "social-pack/1",
     date: input.editionPackage.date,
     editionRef: input.editionPackage.idempotencyKey,
-    instagram: {
-      caption: `${article.title}\n\n${article.dek}\n\n${article.why_it_matters[0]}\n\nRead the edition: ${destination.toString()}\n\n${tagList.map((tag) => `#${tag}`).join(" ")}`,
-      hashtags: tagList,
-      frames: framePaths
-    },
-    threads: {
-      text: `${article.title}\n\n${article.why_it_matters[0]}\n\n${destination.toString()}`,
-      hashtags: [],
-      frames: framePaths
-    },
+    byLocale: localePacks,
+    instagram: localePacks.en.instagram,
+    threads: localePacks.en.threads,
     quoteCard: {
       frame: quotePath,
       sourceTurnRef: `${input.editionPackage.board.meetingRef}#turn-${bestTurnIndex + 1}`
@@ -177,10 +240,13 @@ export async function composeEditionSocialPack(input: {
     provenance: { composerVersion: COMPOSER_VERSION, inputsHash: inputHash },
     altTexts
   });
-  const evidenceRefs = article.sources.map((source) => `source:${source.source_id ?? source.id}`);
+  const evidenceRefs = editionPackage.article.en.frontmatter.sources
+    .map((source) => `source:${source.source_id ?? source.id}`);
   const now = input.now ?? new Date();
-  const instagram = queueItem({ pack, channel: "instagram", destination: destination.toString(), evidenceRefs, now });
-  const threads = queueItem({ pack, channel: "threads", destination: destination.toString(), evidenceRefs, now });
+  const enInstagram = queueItem({ pack, locale: "en", channel: "instagram", destination: destinations.en, evidenceRefs, now });
+  const enThreads = queueItem({ pack, locale: "en", channel: "threads", destination: destinations.en, evidenceRefs, now });
+  const csInstagram = queueItem({ pack, locale: "cs", channel: "instagram", destination: destinations.cs, evidenceRefs, now });
+  const csThreads = queueItem({ pack, locale: "cs", channel: "threads", destination: destinations.cs, evidenceRefs, now });
   await Promise.all([
     atomicWriteJson(input.stateRoot, `social/packs/${input.editionPackage.date}.json`, pack),
     atomicWriteJson(input.stateRoot, `social/assets/${input.editionPackage.date}.json`, {
@@ -192,18 +258,22 @@ export async function composeEditionSocialPack(input: {
       height: 1350,
       format: "webp"
     }),
-    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-instagram.json`, instagram),
-    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-threads.json`, threads)
+    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-en-instagram.json`, enInstagram),
+    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-en-threads.json`, enThreads),
+    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-cs-instagram.json`, csInstagram),
+    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-cs-threads.json`, csThreads)
   ]);
   return {
     pack,
-    queueItems: [instagram, threads],
+    queueItems: [enInstagram, enThreads, csInstagram, csThreads],
     artifactPaths: [
       `social/packs/${input.editionPackage.date}.json`,
       `social/assets/${input.editionPackage.date}.json`,
-      `social/queue/${input.editionPackage.date}-instagram.json`,
-      `social/queue/${input.editionPackage.date}-threads.json`,
-      ...framePaths.map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
+      `social/queue/${input.editionPackage.date}-en-instagram.json`,
+      `social/queue/${input.editionPackage.date}-en-threads.json`,
+      `social/queue/${input.editionPackage.date}-cs-instagram.json`,
+      `social/queue/${input.editionPackage.date}-cs-threads.json`,
+      ...Object.values(framePaths).flat().map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
       path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))
     ]
   };

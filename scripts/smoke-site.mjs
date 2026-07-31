@@ -24,7 +24,14 @@ const agentSlugs = [
   "threads",
   "instagram",
   "people",
-  "ledger"
+  "ledger",
+  "herald",
+  "stet",
+  "hacek",
+  "spark",
+  "vault",
+  "frame",
+  "relay"
 ];
 const ventureSlugs = [
   "release-evidence-notebook",
@@ -53,6 +60,7 @@ const expectedRoutes = [
   "/standups/2026-07-23-founding",
   "/standups/2026-07-23-founding/room",
   "/ventures",
+  "/ventures/caught-up",
   ...ventureSlugs.map((slug) => `/ventures/${slug}`)
 ];
 

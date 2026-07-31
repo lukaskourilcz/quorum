@@ -14,6 +14,7 @@
     "delivery": "tsx src/delivery/cli.ts",
     "edition:dry": "tsx src/edition/dry-run.ts",
     "lint": "tsc --noEmit",
+    "org:maintain": "tsx src/org/maintenance.ts",
     "social:publish": "tsx src/social/index.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
     "test": "vitest run --passWithNoTests",

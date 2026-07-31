@@ -12,9 +12,25 @@ import {
   type QualityMetrics
 } from "./quality.js";
 import { EditionRunReporter, type EditionRunReport } from "./report.js";
-import { reviewArticle, stetFeedback } from "./stet.js";
-import type { CuratedBrief, EditionModelGateway, WrittenArticle } from "./types.js";
+import {
+  hacekFeedback,
+  reviewCzechArticle,
+  reviewEnglishArticle,
+  stetFeedback,
+  type StetReview
+} from "./stet.js";
+import type {
+  CuratedBrief,
+  EditionModelGateway,
+  EnglishArticle,
+  WrittenArticle
+} from "./types.js";
 import { write } from "./write.js";
+import {
+  localizeToCzech,
+  parityFeedback,
+  reviewTranslationParity
+} from "./localize.js";
 
 export interface EditionProductionInput {
   date: string;
@@ -109,9 +125,9 @@ function noEdition(
   };
 }
 
-function articleRationale(article: WrittenArticle, fallback: string): string {
+function articleRationale(article: EnglishArticle, fallback: string): string {
   if (!fallback) {
-    return `${article.byLocale.en.title} led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.`.slice(0, 280);
+    return `${article.en.title} led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.`.slice(0, 280);
   }
   return fallback;
 }
@@ -139,12 +155,12 @@ export async function produceEdition(
     attempt <= input.config.budgets.maximumRegenerationAttemptsPerDate;
     attempt += 1
   ) {
-    let article: WrittenArticle;
+    let english: EnglishArticle;
     try {
-      article = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
+      english = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
         write(brief, input.items, input.config, input.gateway, feedback)
       );
-      article.usage.forEach((usage) => reporter.addUsage(usage));
+      english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {
       reporter.warn(`content_invalid:${error instanceof Error ? error.message : "unknown"}`);
       if (attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate) {
@@ -156,11 +172,11 @@ export async function produceEdition(
     }
 
     const rationale = articleRationale(
-      article,
+      english,
       input.deriveWhyThisStory ? "" : input.whyThisStory
     );
     const stet = await reporter.stage(`stet_${attempt}`, () =>
-      reviewArticle(article, rationale, input.config)
+      reviewEnglishArticle(english, rationale, input.config)
     );
     reporter.stet = stet;
     if (!stet.passed) {
@@ -175,6 +191,77 @@ export async function produceEdition(
       reporter.regenerationAttempts += 1;
       feedback = stetFeedback(stet);
       continue;
+    }
+
+    let article: WrittenArticle | null = null;
+    let localizationFeedback: string[] = [];
+    for (
+      let localizationAttempt = 0;
+      localizationAttempt <= input.config.hacek.maximumRewriteAttempts;
+      localizationAttempt += 1
+    ) {
+      let localized: WrittenArticle;
+      try {
+        localized = await reporter.stage(
+          localizationAttempt === 0 ? `hacek_${attempt}` : `hacek_${attempt}_rewrite`,
+          () => localizeToCzech(
+            english,
+            input.config,
+            input.gateway,
+            localizationFeedback
+          )
+        );
+        localized.usage.forEach((usage) => reporter.addUsage(usage));
+      } catch (error) {
+        reporter.warn(`hacek_invalid:${error instanceof Error ? error.message : "unknown"}`);
+        reporter.hacekBlocks += 1;
+        if (localizationAttempt >= input.config.hacek.maximumRewriteAttempts) {
+          return noEdition(input, reporter, "hacek_invalid_after_rewrite");
+        }
+        localizationFeedback = [
+          "Return a complete schema-valid Czech adaptation of every English field."
+        ];
+        continue;
+      }
+
+      const czech = await reporter.stage(
+        `hacek_register_${attempt}_${localizationAttempt}`,
+        () => reviewCzechArticle(localized, input.config)
+      );
+      const parity = await reporter.stage(
+        `hacek_parity_${attempt}_${localizationAttempt}`,
+        () => reviewTranslationParity(localized.byLocale.en, localized.byLocale.cs)
+      );
+      const parityViolations = parity.violations.map((violation) => ({
+        code: violation.code,
+        locale: "cs" as const,
+        message: violation.message
+      }));
+      const hacek: StetReview = {
+        passed: czech.passed && parity.passed,
+        score: Math.max(0, czech.score - parityViolations.length * 5),
+        violations: [...czech.violations, ...parityViolations]
+      };
+      reporter.hacek = hacek;
+      if (!hacek.passed) {
+        reporter.hacekBlocks += 1;
+        hacek.violations.forEach((violation) =>
+          reporter.warn(`hacek:${violation.code}`)
+        );
+        if (localizationAttempt >= input.config.hacek.maximumRewriteAttempts) {
+          return noEdition(input, reporter, "hacek_block_after_rewrite");
+        }
+        localizationFeedback = [
+          ...hacekFeedback(czech),
+          ...parityFeedback(parity)
+        ];
+        continue;
+      }
+      article = localized;
+      break;
+    }
+    if (!article) {
+      return noEdition(input, reporter, "hacek_missing_adaptation");
     }
 
     const metrics = qualityMetrics(article, input, reporter.totalCostUsd());

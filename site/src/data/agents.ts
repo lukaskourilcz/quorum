@@ -17,6 +17,7 @@ export type AgentId =
   | "LEDGER"
   | "HERALD"
   | "STET"
+  | "HACEK"
   | "SPARK"
   | "VAULT"
   | "FRAME"
@@ -174,6 +175,12 @@ const profileCopy: Record<
     operatingPrinciple: "Nothing is poised. Say what happened.",
     output: "Blocking copy verdict and one rewrite request",
     currentFocus: "Caught Up copy quality",
+    publicTrackRecord: null
+  },
+  HACEK: {
+    operatingPrinciple: "Překlad není převod slov, ale přesný český článek.",
+    output: "Czech article, carousel copy and Threads draft",
+    currentFocus: "Caught Up Czech edition",
     publicTrackRecord: null
   },
   SPARK: {

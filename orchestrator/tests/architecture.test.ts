@@ -37,6 +37,7 @@ const expectedPrompts = [
   "forge.md",
   "founding.md",
   "frame.md",
+  "hacek.md",
   "herald.md",
   "instagram.md",
   "keeper.md",
@@ -152,7 +153,7 @@ describe("agent architecture", () => {
       }>;
     };
 
-    expect(manifest.assets).toHaveLength(20);
+    expect(manifest.assets).toHaveLength(21);
     expect(
       manifest.budget.caughtUpExtension.apiEquivalentTotalEstimateUsd
     ).toBeLessThanOrEqual(manifest.budget.caughtUpExtension.maxUsd);

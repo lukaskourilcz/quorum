@@ -1,13 +1,14 @@
 {
   "schemaVersion": "edition-package/1",
   "date": "2026-08-04",
-  "idempotencyKey": "743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768",
+  "idempotencyKey": "98c929ed95bd54a1d9f6854420d343b7931598ee483d01920b895e44da86d43b",
   "generation": {
     "models": {
       "curation": "claude-sonnet-4-6",
-      "writing": "claude-opus-4-7"
+      "writing": "claude-opus-4-7",
+      "localization": "claude-sonnet-4-6"
     },
-    "costUsd": 0.194
+    "costUsd": 0.254
   },
   "reason": "cu-edition decision meetings/2026-08-04-cu-edition",
   "status": "edition",
@@ -96,16 +97,17 @@
           "human_reviewed": false,
           "models": {
             "curation": "claude-sonnet-4-6",
-            "writing": "claude-opus-4-7"
+            "writing": "claude-opus-4-7",
+            "localization": "claude-sonnet-4-6"
           },
           "source_candidates": 10,
           "cited_sources": 4,
           "image_provider": "none",
           "cost": {
-            "amount": 0.194,
+            "amount": 0.254,
             "currency": "USD"
           },
-          "package_hash": "743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768"
+          "package_hash": "98c929ed95bd54a1d9f6854420d343b7931598ee483d01920b895e44da86d43b"
         },
         "translation_of": "2026-08-04-production-inference-price-cut",
         "dispatches": [
@@ -232,16 +234,17 @@
           "human_reviewed": false,
           "models": {
             "curation": "claude-sonnet-4-6",
-            "writing": "claude-opus-4-7"
+            "writing": "claude-opus-4-7",
+            "localization": "claude-sonnet-4-6"
           },
           "source_candidates": 10,
           "cited_sources": 4,
           "image_provider": "none",
           "cost": {
-            "amount": 0.194,
+            "amount": 0.254,
             "currency": "USD"
           },
-          "package_hash": "743fa97ffaf2b2bc0526025771038d27a0ab43dd14a5ac9317a92e49c5796768"
+          "package_hash": "98c929ed95bd54a1d9f6854420d343b7931598ee483d01920b895e44da86d43b"
         },
         "translation_of": "2026-08-04-production-inference-price-cut",
         "dispatches": [

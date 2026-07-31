@@ -25,10 +25,12 @@ export interface EditionRunReport {
   stages: EditionStageReport[];
   regenerationAttempts: number;
   stetBlocks: number;
+  hacekBlocks: number;
   usage: EditionUsage[];
   measuredCostUsd?: number;
   quality?: { metrics: QualityMetrics; result: QualityResult };
   stet?: StetReview;
+  hacek?: StetReview;
   packageStatus?: EditionPackage["status"];
   warnings: string[];
 }
@@ -40,8 +42,10 @@ export class EditionRunReporter {
   readonly warnings: string[] = [];
   regenerationAttempts = 0;
   stetBlocks = 0;
+  hacekBlocks = 0;
   quality?: { metrics: QualityMetrics; result: QualityResult };
   stet?: StetReview;
+  hacek?: StetReview;
 
   constructor(
     readonly date: string,
@@ -95,10 +99,12 @@ export class EditionRunReporter {
       stages: [...this.stages],
       regenerationAttempts: this.regenerationAttempts,
       stetBlocks: this.stetBlocks,
+      hacekBlocks: this.hacekBlocks,
       usage: [...this.usage],
       ...(measuredCostUsd === undefined ? {} : { measuredCostUsd }),
       ...(this.quality ? { quality: this.quality } : {}),
       ...(this.stet ? { stet: this.stet } : {}),
+      ...(this.hacek ? { hacek: this.hacek } : {}),
       ...(packageStatus ? { packageStatus } : {}),
       warnings: [...this.warnings]
     };
