@@ -31,7 +31,13 @@ const agentSlugs = [
   "spark",
   "vault",
   "frame",
-  "relay"
+  "relay",
+  "angle",
+  "cohort",
+  "funnel",
+  "palate",
+  "scene",
+  "stunt"
 ];
 const ventureSlugs = [
   "release-evidence-notebook",
