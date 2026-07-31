@@ -32,8 +32,10 @@ blokátory integrace a zachovaný provozní checklist.
   Vercel Pro coverage on 2026-07-31. Reopen the cap decision if either project
   leaves Pro or invoice allocation changes. [imp:4] [owner:me] [time:15m]
   [kind:decision]
-- [ ] **Approve avatar spend ≤ $1.80** — six portraits through the avatar budget.
-  [imp:2] [owner:me] [time:5m] [kind:decision]
+- [x] **No billable avatar spend required** — six portraits and two QA repairs
+  used the built-in session image tool. Actual project API cost remains unknown,
+  not fabricated; the API-equivalent estimate is $1.70172 within the specified
+  $1.80 envelope. [imp:2] [owner:me] [time:5m] [kind:decision]
 - [ ] **Approve go-live of the two new cron phases** — flip after phase 9 review.
   [imp:5] [owner:me] [time:10m] [kind:deploy]
 - [ ] **Review first three delivered editions + first social packs in the queue** —

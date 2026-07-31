@@ -1,26 +1,43 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { validateAgentAvatars } from "../src/brand/avatars.js";
 import {
   FOUNDING_AGENT_IDS,
   loadAgentRegistry
 } from "../src/org/registry.js";
+import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains exactly the 14 founding roles with stable identities", async () => {
+  it("contains exactly the 20 operating roles with stable identities", async () => {
     const registry = await loadAgentRegistry();
 
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(14);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(20);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
     expect(registry.agents.every((agent) => agent.status === "active")).toBe(true);
+    expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
+      10
+    );
+    expect(
+      registry.agents.filter((agent) => agent.provider === "Anthropic")
+    ).toHaveLength(10);
+
+    const kpiConfig = JSON.parse(
+      await readFile(path.join(configRoot, "kpis.json"), "utf8")
+    ) as { kpis: Array<{ id: string }> };
+    const kpiIds = new Set(kpiConfig.kpis.map(({ id }) => id));
+    expect(
+      registry.agents.flatMap((agent) => agent.ownedKpiIds).every((id) => kpiIds.has(id))
+    ).toBe(true);
   });
 
   it("validates every optimized portrait and rejects duplicate content", async () => {
     const registry = await loadAgentRegistry();
     const avatars = await validateAgentAvatars(registry);
 
-    expect(avatars).toHaveLength(14);
-    expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(14);
+    expect(avatars).toHaveLength(20);
+    expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(20);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
     expect(avatars.every((avatar) => avatar.height === 1024)).toBe(true);
   });

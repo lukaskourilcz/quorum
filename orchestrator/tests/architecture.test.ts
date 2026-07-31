@@ -25,6 +25,8 @@ const expectedPrompts = [
   "digest.md",
   "forge.md",
   "founding.md",
+  "frame.md",
+  "herald.md",
   "instagram.md",
   "keeper.md",
   "ledger.md",
@@ -33,10 +35,14 @@ const expectedPrompts = [
   "pulse.md",
   "quill.md",
   "radar.md",
+  "relay.md",
   "retro.md",
   "scout.md",
   "scribe.md",
+  "spark.md",
+  "stet.md",
   "threads.md",
+  "vault.md",
   "vize.md"
 ] as const;
 
@@ -115,6 +121,10 @@ describe("agent architecture", () => {
         maxSetUsd: number;
         apiEquivalentTotalEstimateUsd: number;
         actualProjectApiUsd: number | null;
+        caughtUpExtension: {
+          maxUsd: number;
+          apiEquivalentTotalEstimateUsd: number;
+        };
       };
       assets: Array<{
         agentId: string;
@@ -126,8 +136,11 @@ describe("agent architecture", () => {
       }>;
     };
 
-    expect(manifest.assets).toHaveLength(14);
-    expect(manifest.budget.apiEquivalentTotalEstimateUsd).toBeLessThanOrEqual(
+    expect(manifest.assets).toHaveLength(20);
+    expect(
+      manifest.budget.caughtUpExtension.apiEquivalentTotalEstimateUsd
+    ).toBeLessThanOrEqual(manifest.budget.caughtUpExtension.maxUsd);
+    expect(manifest.budget.caughtUpExtension.maxUsd).toBeLessThanOrEqual(
       manifest.budget.maxSetUsd
     );
     expect(manifest.budget.actualProjectApiUsd).toBeNull();

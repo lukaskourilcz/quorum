@@ -92,7 +92,7 @@ Useful commands:
 
 | Command | Result |
 | --- | --- |
-| `pnpm agents:validate` | Validates the 14 registry entries and all portrait files |
+| `pnpm agents:validate` | Validates the 20 registry entries and all portrait files |
 | `pnpm lint` | Runs TypeScript lint checks and Next ESLint |
 | `pnpm typecheck` | Typechecks both workspaces |
 | `pnpm test` | Runs all deterministic unit and policy tests |
@@ -196,15 +196,18 @@ deletion/correction remain separate human-authorized actions.
 
 ## Agent portraits
 
-The 14 portraits and one style anchor were generated as one coherent square
+The 20 portraits and one style anchor were generated as one coherent square
 series through the built-in ChatGPT Images capability. Public files are
 1024×1024 WebP. The implementation validates magic bytes, dimensions, file
 size, exact slug set and duplicate hashes.
 
 The session tool did not use the project's API key, so actual project API cost
 is truthfully `null`, not `$0` or an invented charge. The verified
-`gpt-image-2` high-quality API-equivalent estimate is `$3.616155` for 17 calls
-(anchor, 14 finals and two targeted repairs), below the `$5` set limit.
+`gpt-image-2` high-quality API-equivalent estimate for the original set was
+`$3.616155`. The six-portrait Caught Up extension used eight session calls,
+including two targeted repairs, for a `$1.70172` API-equivalent estimate below
+its specified `$1.80` envelope. The cumulative session-only equivalent is
+`$5.317875`; no project API spend was booked.
 Prompts, call references, hashes, alt text and visual QA are recorded in
 `state/agent-identities/`.
 

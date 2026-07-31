@@ -53,6 +53,39 @@ describe("Boardroom routing", () => {
     expect(selected).not.toContain("INSTAGRAM");
   });
 
+  it("routes the fixed Caught Up edition cast and morning product bridge", async () => {
+    const config = await loadRoutingConfig(
+      path.join(configRoot, "agent-routing.json")
+    );
+    const edition = routeBoardroom(config, {
+      roomId: "ROOM-CU-EDITION-001",
+      topicType: "council",
+      objective: "Select one Caught Up story or record NO_EDITION",
+      evidenceRefs: ["DIGEST-001"],
+      decisionNeeded: "VERDICT",
+      riskTags: [],
+      budgetImpactUsd: 0.08,
+      preset: "edition-room",
+      now: new Date("2026-07-31T03:00:00.000Z")
+    });
+    expect(edition.selectedParticipants.map(({ agent }) => agent)).toEqual(
+      expect.arrayContaining(["HERALD", "STET", "SPARK", "AUDIT"])
+    );
+
+    const morning = routeBoardroom(config, {
+      roomId: "ROOM-VENTURE-MORNING-001",
+      topicType: "council",
+      objective: "Choose the morning venture action and hear one Caught Up idea",
+      evidenceRefs: [],
+      decisionNeeded: "PLAN",
+      riskTags: [],
+      budgetImpactUsd: 0,
+      preset: "venture-morning",
+      now: new Date("2026-07-31T04:00:00.000Z")
+    });
+    expect(morning.selectedParticipants.map(({ agent }) => agent)).toContain("SPARK");
+  });
+
   it("publishes only allowlisted fields and rejects private markers", async () => {
     const config = await loadRoutingConfig(
       path.join(configRoot, "agent-routing.json")
@@ -113,4 +146,3 @@ describe("Boardroom routing", () => {
     ).toThrowError(/private/);
   });
 });
-

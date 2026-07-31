@@ -274,11 +274,11 @@ export default async function HomePage() {
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           }
-          description="Four formal voting seats and ten bounded specialists. Each role has a mandate, output, metric and route reason. These are autonomous software roles, not human employees."
+          description="Four formal voting seats and sixteen bounded specialists. Each role has a mandate, output, metric and route reason. These are autonomous software roles, not human employees."
           eyebrow="The roster"
           title={
             <>
-              Fourteen agents.
+              Twenty agents.
               <br />
               No hidden board.
             </>

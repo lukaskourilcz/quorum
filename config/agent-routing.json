@@ -63,6 +63,30 @@
     "LEDGER": {
       "capabilities": ["accounting", "cost", "budget", "unit_economics"],
       "status": "active"
+    },
+    "HERALD": {
+      "capabilities": ["edition:chair", "editorial:selection"],
+      "status": "active"
+    },
+    "STET": {
+      "capabilities": ["editorial:copy", "quality:slop"],
+      "status": "active"
+    },
+    "SPARK": {
+      "capabilities": ["growth:product", "bridge:venture"],
+      "status": "active"
+    },
+    "VAULT": {
+      "capabilities": ["memory:ledger", "org:memory"],
+      "status": "active"
+    },
+    "FRAME": {
+      "capabilities": ["media:compose", "media:qa"],
+      "status": "active"
+    },
+    "RELAY": {
+      "capabilities": ["ops:delivery", "ops:notify"],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -97,11 +121,27 @@
     {
       "any": ["social:instagram"],
       "include": ["PULSE", "INSTAGRAM", "QUILL"]
+    },
+    {
+      "any": ["visual", "media:compose"],
+      "include": ["FRAME"]
+    },
+    {
+      "any": ["delivery", "notification", "email", "calendar"],
+      "include": ["RELAY"]
     }
   ],
   "presets": {
     "daily-standup": {
       "required": ["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER"],
+      "optionalByTopic": true
+    },
+    "venture-morning": {
+      "required": ["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER", "SPARK"],
+      "optionalByTopic": true
+    },
+    "edition-room": {
+      "required": ["HERALD", "STET", "SPARK", "AUDIT"],
       "optionalByTopic": true
     },
     "build-room": {
@@ -130,4 +170,3 @@
     }
   }
 }
-

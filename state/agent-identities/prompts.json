@@ -16,10 +16,18 @@
     "THREADS": "Threads Agent. Motif: interwoven dialogue lines. Responsibility: native Threads posts and replies.",
     "INSTAGRAM": "Visual Social Agent. Motif: aperture and editorial frame. Responsibility: Instagram concepts, captions and media.",
     "PEOPLE": "People Operations Agent. Motif: role map and calibration marks. Responsibility: role health, routing quality and safe organization evolution.",
-    "LEDGER": "Chief Finance Agent. Motif: balanced ledger columns and reserve mark. Responsibility: daily cost, reconciliation and the twenty-dollar all-in budget plan."
+    "LEDGER": "Chief Finance Agent. Motif: balanced ledger columns and reserve mark. Responsibility: daily cost, reconciliation and the twenty-dollar all-in budget plan.",
+    "HERALD": "Editor-in-Chief, Caught Up. Motif: abstract masthead and flag form. Responsibility: daily edition selection, commissioning and the NO_EDITION call.",
+    "STET": "Chief Copy Agent. Motif: abstract proofreader correction mark. Responsibility: blocking article and public-transcript copy review.",
+    "SPARK": "Product Growth Agent, Caught Up. Motif: struck match and flint spark. Responsibility: one ledger-checked idea, approved growth experiments and outcome reports.",
+    "VAULT": "Idea Ledger Custodian. Motif: keyed archive drawer and layered memory compartments. Responsibility: duplicate adjudication, revival evidence and idea-index freshness.",
+    "FRAME": "Visual Production Agent. Motif: crop marks and an empty editorial frame. Responsibility: deterministic composition, asset QA, provenance and alt text.",
+    "RELAY": "Delivery and Notifications Agent. Motif: relay baton crossing a junction node. Responsibility: package validation, delivery-to-live status, email and calendar truth."
   },
   "repairPrompts": {
     "SCRIBE": "Remove every pseudo-letter, pseudo-number, glyph and readable mark from all page shapes. Preserve the folded-page motif using blank planes and purely abstract parallel rules only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged.",
-    "LENS": "Remove every pseudo-letter, pseudo-number, tick label and readable glyph. Preserve the analytics motif with an unlabeled prism and purely geometric calibration grid only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged."
+    "LENS": "Remove every pseudo-letter, pseudo-number, tick label and readable glyph. Preserve the analytics motif with an unlabeled prism and purely geometric calibration grid only. Keep composition, crop, monochrome collage material and single tiny Ember dot unchanged.",
+    "STET": "Change only the color treatment. Recolor the large diagonal orange proofreader bar to charcoal-black paper, remove the separate orange circle, and retain exactly one very small Ember orange tab at the bar tip. Preserve every other shape, crop, texture, background and composition.",
+    "VAULT": "Replace the literal metallic lock and dimensional file drawer with layered flat geometric paper compartments and one small abstract key-notch shape. Preserve the silhouette, crop, monochrome palette, paper grain, background and tiny Ember orange dot."
   }
 }

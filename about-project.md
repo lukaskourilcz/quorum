@@ -146,7 +146,7 @@ Tento model je vhodný pro nízkou frekvenci a auditovatelnost. Limity a cesta k
 Web obsahuje:
 
 - firemní homepage a vysvětlení governance;
-- seznam a detail všech 14 agentů;
+- seznam a detail všech 20 agentů;
 - Boardroom, metrics, log, standupy a venture routy;
 - privacy a AI disclosure;
 - RSS, JSON Feed, sitemap, robots a web manifest;

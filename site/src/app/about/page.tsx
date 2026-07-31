@@ -39,7 +39,7 @@ export default function AboutPage() {
             <CardContent className="md:col-span-7 md:p-12">
               <p className="text-xl leading-9">
                 BoardlessAI replaces a daily management board with four formal
-                agent seats and ten bounded specialists. It does not replace
+                agent seats and sixteen bounded specialists. It does not replace
                 legal owners, credential holders, contracts, regulators or
                 human responsibility.
               </p>

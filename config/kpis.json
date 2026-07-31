@@ -227,6 +227,147 @@
       "dir": "down"
     },
     {
+      "id": "edition.on_time_rate",
+      "owner": "HERALD",
+      "metric": "caughtUpEditionOnTimeRate",
+      "target": 0.95,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "edition.no_edition_rate",
+      "owner": "HERALD",
+      "metric": "caughtUpNoEditionRate",
+      "target": 0.2,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "edition.signal_strength_avg",
+      "owner": "HERALD",
+      "metric": "caughtUpEditionSignalStrengthAverage",
+      "target": 35,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "copy.slop_block_rate",
+      "owner": "STET",
+      "metric": "caughtUpSlopBlockRate",
+      "target": 0.2,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "copy.rewrite_pass_rate",
+      "owner": "STET",
+      "metric": "caughtUpRewritePassRate",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "copy.reader_complaints",
+      "owner": "STET",
+      "metric": "caughtUpCopyComplaintCount",
+      "target": 0,
+      "dir": "down",
+      "requires": "reader_feedback"
+    },
+    {
+      "id": "growth.idea_novelty_rate",
+      "owner": "SPARK",
+      "metric": "caughtUpIdeaNoveltyRate",
+      "target": 0.8,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "growth.idea_shipped_rate",
+      "owner": "SPARK",
+      "metric": "caughtUpAcceptedIdeaShippedRate",
+      "target": 0.5,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "growth.reader_growth",
+      "owner": "SPARK",
+      "metric": "caughtUpReaderGrowthRate",
+      "target": 0.01,
+      "dir": "up",
+      "requires": "analytics"
+    },
+    {
+      "id": "memory.dupe_catch_rate",
+      "owner": "VAULT",
+      "metric": "caughtUpDuplicateCatchRate",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "memory.false_kill_rate",
+      "owner": "VAULT",
+      "metric": "caughtUpFalseDuplicateKillRate",
+      "target": 0.05,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "memory.index_freshness",
+      "owner": "VAULT",
+      "metric": "caughtUpIdeaIndexFreshnessRate",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "media.asset_qa_pass_rate",
+      "owner": "FRAME",
+      "metric": "caughtUpMediaAssetQaPassRate",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "media.cost_usd",
+      "owner": "FRAME",
+      "metric": "caughtUpMediaCostUsd",
+      "target": 0,
+      "dir": "down"
+    },
+    {
+      "id": "media.alt_text_coverage",
+      "owner": "FRAME",
+      "metric": "caughtUpMediaAltTextCoverage",
+      "target": 1,
+      "dir": "up"
+    },
+    {
+      "id": "ops.delivery_success_rate",
+      "owner": "RELAY",
+      "metric": "caughtUpDeliverySuccessRate",
+      "target": 0.95,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "ops.time_to_publish_min",
+      "owner": "RELAY",
+      "metric": "caughtUpTimeToPublishMinutes",
+      "target": 60,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "ops.email_delivery_rate",
+      "owner": "RELAY",
+      "metric": "caughtUpMeetingEmailDeliveryRate",
+      "target": 0.95,
+      "dir": "up",
+      "requires": "email_delivery",
+      "warmupCycles": 14
+    },
+    {
       "id": "council.cost_per_learning",
       "owner": "ALL",
       "metric": "usdPerValidatedLearning",
@@ -242,4 +383,3 @@
     }
   ]
 }
-

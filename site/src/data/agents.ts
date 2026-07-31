@@ -14,7 +14,13 @@ export type AgentId =
   | "THREADS"
   | "INSTAGRAM"
   | "PEOPLE"
-  | "LEDGER";
+  | "LEDGER"
+  | "HERALD"
+  | "STET"
+  | "SPARK"
+  | "VAULT"
+  | "FRAME"
+  | "RELAY";
 
 type PublicStatus =
   | "active"
@@ -156,6 +162,42 @@ const profileCopy: Record<
     operatingPrinciple: "If it is not reconciled, it is not booked.",
     output: "Cost strip, profit view and spend verdict",
     currentFocus: null,
+    publicTrackRecord: null
+  },
+  HERALD: {
+    operatingPrinciple: "One consequential story, or no edition.",
+    output: "Commissioned edition or NO_EDITION record",
+    currentFocus: "Caught Up daily edition",
+    publicTrackRecord: null
+  },
+  STET: {
+    operatingPrinciple: "Nothing is poised. Say what happened.",
+    output: "Blocking copy verdict and one rewrite request",
+    currentFocus: "Caught Up copy quality",
+    publicTrackRecord: null
+  },
+  SPARK: {
+    operatingPrinciple: "Bring one idea worth shipping, not someday.",
+    output: "Ledger-checked growth idea and outcome report",
+    currentFocus: "Caught Up product growth",
+    publicTrackRecord: null
+  },
+  VAULT: {
+    operatingPrinciple: "A prior failure is evidence until something changes.",
+    output: "Binding idea-ledger verdict and fresh index",
+    currentFocus: "Caught Up institutional memory",
+    publicTrackRecord: null
+  },
+  FRAME: {
+    operatingPrinciple: "Measure every pixel and preserve its provenance.",
+    output: "Deterministic visual asset with QA and alt text",
+    currentFocus: "Caught Up visual production",
+    publicTrackRecord: null
+  },
+  RELAY: {
+    operatingPrinciple: "A handoff is complete only when the destination confirms it.",
+    output: "Validated delivery and reconciliation status",
+    currentFocus: "Caught Up delivery and notifications",
     publicTrackRecord: null
   }
 };

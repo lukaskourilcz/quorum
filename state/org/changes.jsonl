@@ -1,2 +1,2 @@
 {"changeId":"FIX-ORG-000","fixture":true,"status":"no_change","reason":"Bootstrap marker; not an applied organization change.","createdAt":"2026-07-23T00:00:00.000Z"}
-
+{"id":"ORG-2026-07-31-ROSTER-20","proposedAt":"2026-07-31T12:00:00.000Z","proposer":"HUMAN_STEWARD","subjectAgent":"OPERATING_ROSTER","tier":"C","change":"Add HERALD, STET, SPARK, VAULT, FRAME and RELAY as six active specialists for the Caught Up operating model, including contracts, routing, KPIs, public profiles and identity assets.","expectedMetric":"operatingRoleCoverage","baseline":14,"expectedDelta":6,"reviewCycle":14,"approvers":["HUMAN_APPROVAL"],"status":"applied"}

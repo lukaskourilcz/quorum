@@ -29,7 +29,7 @@ the founding gate remains unpassed and live founding cycles stay disabled.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [ ] Expand the roster to 20 agents and add six validated portraits.
+- [x] Expand the roster to 20 agents and add six validated portraits.
 - [ ] Port source collection and edition production into BoardlessAI.
 - [ ] Run the two Caught Up rooms in guarded dry mode.
 - [ ] Add Caught Up consumer rendering and the missed-day sentinel.

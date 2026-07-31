@@ -17,7 +17,13 @@ export const FOUNDING_AGENT_IDS = [
   "THREADS",
   "INSTAGRAM",
   "PEOPLE",
-  "LEDGER"
+  "LEDGER",
+  "HERALD",
+  "STET",
+  "SPARK",
+  "VAULT",
+  "FRAME",
+  "RELAY"
 ] as const;
 
 const FoundingAgentIdSchema = z.enum(FOUNDING_AGENT_IDS);
@@ -80,7 +86,7 @@ export const AgentRegistrySchema = z
     if (ids.length !== FOUNDING_AGENT_IDS.length || ids.some((id) => !expected.has(id))) {
       context.addIssue({
         code: "custom",
-        message: "registry must contain exactly the 14 founding agent IDs",
+        message: "registry must contain exactly the 20 operating agent IDs",
         path: ["agents"]
       });
     }
