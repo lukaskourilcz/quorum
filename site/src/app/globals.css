@@ -234,3 +234,29 @@ img {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+
+  body,
+  .print-binder,
+  .print-binder * {
+    background: white !important;
+    box-shadow: none !important;
+    color: #111 !important;
+  }
+
+  .print-binder * {
+    border-color: #bbb !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break {
+    break-before: page;
+  }
+}

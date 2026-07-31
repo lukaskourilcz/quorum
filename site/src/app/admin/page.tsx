@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Database, Images, LockKeyhole, RefreshCw } from "lucide-react";
+import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, RefreshCw } from "lucide-react";
 import { CopySocialText } from "@/components/admin/copy-social-text";
+import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
+import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
+import { publicMeetingHref } from "@/lib/idea-ledger-model";
+import { getPublicStandups } from "@/lib/standup-records";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -164,8 +168,36 @@ function StatePanel({ title, content }: { title: string; content: string }) {
   );
 }
 
-export default async function AdminPage() {
-  const state = await readAdminSnapshot();
+const cardKindByTab = {
+  ideas: "idea",
+  plans: "plan",
+  visuals: "visual",
+  "niche-proposals": "niche-proposal"
+} as const;
+
+export default async function AdminPage({
+  searchParams
+}: {
+  searchParams: Promise<{ venture?: string; tab?: string }>;
+}) {
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups] = await Promise.all([
+    searchParams,
+    readAdminSnapshot(),
+    readAdminPortfolio(),
+    getPublicStandups()
+  ]);
+  const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
+  const selectedTab = selectedVenture
+    ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
+      ? requestedTab as AdminVentureTab
+      : selectedVenture.tabs[0] ?? null
+    : null;
+  const visibleCards = selectedVenture && selectedTab
+    ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])
+    : [];
+  const shortlist = selectedVenture?.id === "incubator"
+    ? selectedVenture.cards.filter((card) => card.kind === "niche-proposal" && card.status === "shortlist")
+    : [];
   return (
     <main className="min-h-screen">
       <header className="border-b border-[var(--border)] bg-[var(--card)]">
@@ -173,10 +205,10 @@ export default async function AdminPage() {
           <div className="flex items-center gap-3">
             <Mark />
             <span className="font-semibold">BoardlessAI Admin</span>
-            <Badge tone="warning">Protected</Badge>
+            <Badge className="hidden sm:inline-flex" tone="warning">Protected</Badge>
           </div>
           <Link
-            className={buttonVariants({ variant: "ghost", size: "small" })}
+            className={buttonVariants({ variant: "ghost" })}
             href="/"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
@@ -193,13 +225,13 @@ export default async function AdminPage() {
               <Badge>noindex</Badge>
             </div>
             <h1 className="mt-6 text-5xl font-semibold tracking-[-0.06em] md:text-7xl">
-              Social desk
+              Portfolio desk
               <span className="text-[var(--accent)]">.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--muted-foreground)]">
-              Review and copy Caught Up’s English and Czech social drafts from
-              their canonical Git-backed archive. Mutations still happen
-              through reviewed workflows, never through this page.
+              Review canonical venture artifacts, rate the work that should shape
+              tomorrow’s meetings, and keep the existing global social queue in
+              one protected, Git-backed operating view.
             </p>
           </div>
           <div className="grid gap-3 md:col-span-4">
@@ -221,31 +253,119 @@ export default async function AdminPage() {
         </div>
       </section>
 
-      <SocialArchive {...state.socialArchive} />
+      <nav aria-label="Admin workspaces" className="mx-auto max-w-[var(--container)] px-5 pb-8 md:px-8">
+        <div className="flex flex-wrap gap-2 border-b border-[var(--border)] pb-5">
+          <Link
+            aria-current={!selectedVenture ? "page" : undefined}
+            className={buttonVariants({ variant: !selectedVenture ? "accent" : "secondary" })}
+            href="/admin?venture=global"
+            scroll={false}
+          >
+            <Database aria-hidden="true" className="size-4" />
+            Global queue
+          </Link>
+          {portfolio.ventures.map((venture) => (
+            <Link
+              aria-current={selectedVenture?.id === venture.id ? "page" : undefined}
+              className={buttonVariants({ variant: selectedVenture?.id === venture.id ? "accent" : "secondary" })}
+              href={`/admin?venture=${venture.id}`}
+              key={venture.id}
+              scroll={false}
+            >
+              <Layers3 aria-hidden="true" className="size-4" />
+              {venture.name}
+            </Link>
+          ))}
+        </div>
+      </nav>
 
-      <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
-        <div className="mb-6 flex items-center gap-3">
-          <Database
-            aria-hidden="true"
-            className="size-5 text-[var(--accent)]"
-          />
-          <p className="text-xs font-bold uppercase tracking-[0.12em]">
-            Canonical state files
-          </p>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <StatePanel content={state.inbox} title="Human approval inbox" />
-          <StatePanel content={state.business} title="Business" />
-          <StatePanel content={state.brand} title="Brand" />
-          <StatePanel content={state.opportunities} title="Opportunities" />
-          <StatePanel content={state.experiments} title="Experiments" />
-          <StatePanel content={state.finance} title="Finance" />
-          <StatePanel content={state.social} title="Social strategy" />
-          <StatePanel content={state.budgetLedger} title="API budget ledger" />
-          <StatePanel content={state.financeLedger} title="Finance ledger" />
-          <StatePanel content={state.treasuryLedger} title="Treasury ledger" />
-        </div>
-      </section>
+      {!selectedVenture ? (
+        <>
+          <SocialArchive {...state.socialArchive} />
+          <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
+            <div className="mb-6 flex items-center gap-3">
+              <Database aria-hidden="true" className="size-5 text-[var(--accent)]" />
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">Canonical state files</p>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <StatePanel content={state.inbox} title="Human approval inbox" />
+              <StatePanel content={state.business} title="Business" />
+              <StatePanel content={state.brand} title="Brand" />
+              <StatePanel content={state.opportunities} title="Opportunities" />
+              <StatePanel content={state.experiments} title="Experiments" />
+              <StatePanel content={state.finance} title="Finance" />
+              <StatePanel content={state.social} title="Social strategy" />
+              <StatePanel content={state.budgetLedger} title="API budget ledger" />
+              <StatePanel content={state.financeLedger} title="Finance ledger" />
+              <StatePanel content={state.treasuryLedger} title="Treasury ledger" />
+            </div>
+          </section>
+        </>
+      ) : (
+        <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
+          <div className="flex flex-wrap items-start justify-between gap-5">
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge tone="dark">{selectedVenture.status}</Badge>
+                <Badge>{selectedVenture.cards.length} review cards</Badge>
+              </div>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em]">{selectedVenture.name}</h2>
+            </div>
+            {selectedVenture.tabs.includes("plans") ? (
+              <Link className={buttonVariants({ variant: "secondary" })} href={`/admin/ventures/${selectedVenture.id}/binder`}>
+                <BookOpen aria-hidden="true" className="size-4" />
+                Launch binder
+              </Link>
+            ) : null}
+          </div>
+
+          <nav aria-label={`${selectedVenture.name} admin sections`} className="mt-7 flex flex-wrap gap-2">
+            {selectedVenture.tabs.map((tab) => (
+              <Link
+                aria-current={selectedTab === tab ? "page" : undefined}
+                className={buttonVariants({ variant: selectedTab === tab ? "accent" : "secondary" })}
+                href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
+                key={tab}
+                scroll={false}
+              >
+                {tab.replaceAll("-", " ")}
+              </Link>
+            ))}
+          </nav>
+
+          {selectedVenture.unreadableFiles.length ? (
+            <Callout className="mt-6" tone="warning">
+              {selectedVenture.unreadableFiles.length} canonical file {selectedVenture.unreadableFiles.length === 1 ? "is" : "are"} malformed or unreadable: {selectedVenture.unreadableFiles.join(", ")}.
+            </Callout>
+          ) : null}
+
+          {shortlist.length ? (
+            <aside className="mt-8 rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--surface)] p-6" aria-labelledby="shortlist-heading">
+              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Owner pick-list</p>
+              <h3 className="mt-2 text-2xl font-semibold" id="shortlist-heading">Incubator shortlist</h3>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {shortlist.map((card) => <Badge key={card.id} tone="success">{card.title}</Badge>)}
+              </div>
+            </aside>
+          ) : null}
+
+          {visibleCards.length ? (
+            <div className="mt-8 grid gap-5 xl:grid-cols-2">
+              {visibleCards.map((card) => (
+                <PortfolioCard
+                  card={card}
+                  key={`${card.kind}-${card.id}`}
+                  originHref={card.originMeetingRef ? publicMeetingHref(card.originMeetingRef, standups) : null}
+                />
+              ))}
+            </div>
+          ) : (
+            <Callout className="mt-8">
+              No {selectedTab?.replaceAll("-", " ")} cards are stored for {selectedVenture.name} yet. The admin does not invent demonstration records.
+            </Callout>
+          )}
+        </section>
+      )}
     </main>
   );
 }
