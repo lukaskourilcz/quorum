@@ -104,7 +104,7 @@ export function BoardroomArchive({
                           size: "small",
                           variant: "secondary"
                         })}
-                        href={`/standups/${room.date}/room`}
+                        href={`/standups/${room.id}/room`}
                       >
                         Open replay
                         <ArrowRight aria-hidden="true" className="size-4" />

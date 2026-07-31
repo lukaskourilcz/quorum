@@ -50,7 +50,8 @@ const expectedRoutes = [
   "/robots.txt",
   "/sitemap.xml",
   "/standups",
-  "/standups/2026-07-23",
+  "/standups/2026-07-23-founding",
+  "/standups/2026-07-23-founding/room",
   "/ventures",
   ...ventureSlugs.map((slug) => `/ventures/${slug}`)
 ];
@@ -142,7 +143,7 @@ if (xmlFeed?.body.includes("<item>")) {
 
 const sitemap = results.find((result) => result.pathname === "/sitemap.xml");
 if (
-  sitemap?.body.includes("/standups/2026-07-23") ||
+  sitemap?.body.includes("/standups/2026-07-23-founding") ||
   ventureSlugs.some((slug) => sitemap?.body.includes(`/ventures/${slug}`))
 ) {
   failures.push("/sitemap.xml: noindex fixture routes must be excluded");

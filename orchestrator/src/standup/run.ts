@@ -42,6 +42,8 @@ export function createOfflineStandup(input: {
         owner: "SCOUT" as const,
         summary: "Collect real, attributable problem and intent signals."
       };
+  const openedAt = input.now.toISOString();
+  const closedAt = new Date(input.now.getTime() + 2_000).toISOString();
 
   return StandupSchema.parse({
     schemaVersion: 1,
@@ -123,6 +125,30 @@ export function createOfflineStandup(input: {
       input.phase === "night"
         ? "Night shift reconciled the record; remain in DISCOVERY."
         : null,
+    roomTranscript: {
+      openedAt,
+      closedAt,
+      gavel: "VIZE",
+      setting: input.fixture
+        ? "Deterministic offline fixture. No live council call occurred."
+        : "Bounded operating record without a live council call.",
+      turns: [
+        {
+          agent: "VIZE",
+          mode: "gavel",
+          sentAt: openedAt,
+          text: input.fixture
+            ? "This fixture opens a deterministic review. No live agent position is being presented."
+            : "The bounded operating review opens."
+        },
+        {
+          agent: "LEDGER",
+          mode: "reads-ledger",
+          sentAt: closedAt,
+          text: `Recorded estimate: $${input.estimatedCycleUsd.toFixed(4)}. ${input.fixture ? "No paid API call occurred." : "No live cost was recorded."}`
+        }
+      ]
+    },
     generatedAt: input.now.toISOString()
   });
 }

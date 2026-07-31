@@ -37,7 +37,7 @@ function createQueueItem(): QueueItem {
     channel: "threads",
     objective: "trust",
     audience: "AI company operators",
-    destination: "https://example.invalid/standups/2026-07-23",
+    destination: "https://example.invalid/standups/2026-07-23-founding",
     utm: {
       source: "threads",
       medium: "organic_social",

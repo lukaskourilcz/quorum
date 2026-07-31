@@ -1,9 +1,10 @@
-import { standups } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 
 export const dynamic = "force-static";
 
-export function GET() {
+export async function GET() {
   const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const standups = await getPublicStandups();
   return Response.json(
     {
       version: "https://jsonfeed.org/version/1.1",
@@ -13,11 +14,11 @@ export function GET() {
       description:
         "Public shift episodes, decisions, costs and outcomes from BoardlessAI.",
       items: standups.filter((standup) => !standup.fixture).map((standup) => ({
-        id: `${base}/standups/${standup.date}`,
-        url: `${base}/standups/${standup.date}`,
+        id: `${base}/standups/${standup.id}`,
+        url: `${base}/standups/${standup.id}`,
         title: `${standup.date} · ${standup.status}`,
         content_text: `${standup.operatingBrief}\n\nDecision: ${standup.decision.summary}`,
-        date_published: `${standup.date}T05:30:00.000Z`,
+        date_published: standup.generatedAt ?? `${standup.date}T05:30:00.000Z`,
         tags: [standup.stage, "live"]
       }))
     },

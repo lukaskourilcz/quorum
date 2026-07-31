@@ -75,6 +75,13 @@ export async function guardedJsonCall<T>(
           maxOutputTokens: request.maxOutputTokens
         });
   const value = request.parse(response.text);
+  const actual = estimateTextCall({
+    provider: request.provider,
+    model: request.model,
+    promptChars: response.tokensIn * 3.5,
+    maxOutputTokens: response.tokensOut,
+    cachedInputTokens: response.cachedTokensIn
+  });
   await writeCachedResponse(
     request.stateRoot,
     request.cycleId,
@@ -89,13 +96,6 @@ export async function guardedJsonCall<T>(
     { entries: [] }
   );
   if (!hasLedgerEntry(ledger.entries, request.cycleId, hash)) {
-    const actual = estimateTextCall({
-      provider: request.provider,
-      model: request.model,
-      promptChars: response.tokensIn * 3.5,
-      maxOutputTokens: response.tokensOut,
-      cachedInputTokens: response.cachedTokensIn
-    });
     const entry = BudgetLedgerEntrySchema.parse({
       ts: new Date().toISOString(),
       cycleId: request.cycleId,
@@ -117,5 +117,5 @@ export async function guardedJsonCall<T>(
       entries: [...ledger.entries, entry]
     });
   }
-  return { value, cached: false, usd: estimate.estimatedUsd };
+  return { value, cached: false, usd: actual.estimatedUsd };
 }

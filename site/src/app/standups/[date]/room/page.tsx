@@ -31,12 +31,12 @@ import {
   MessageRole
 } from "@/components/ui/message";
 import { agentById } from "@/data/agents";
-import { standups } from "@/data/fixtures";
+import { getPublicStandup, getPublicStandups } from "@/lib/standup-records";
 import type { RoomTurnMode } from "@/data/fixtures";
 import { formatDate } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return standups.map((standup) => ({ date: standup.date }));
+export async function generateStaticParams() {
+  return (await getPublicStandups()).map((standup) => ({ date: standup.id }));
 }
 
 export async function generateMetadata({
@@ -45,13 +45,17 @@ export async function generateMetadata({
   params: Promise<{ date: string }>;
 }): Promise<Metadata> {
   const { date } = await params;
-  const standup = standups.find((item) => item.date === date);
+  const standup = await getPublicStandup(date);
   return {
     description: standup
-      ? `Replay the ${formatDate(date)} BoardlessAI council decision, make a private forecast and read every recorded turn.`
+      ? standup.fixture
+        ? `Replay the ${formatDate(standup.date)} BoardlessAI council decision, make a private forecast and read every recorded turn.`
+        : `Replay the ${formatDate(standup.date)} BoardlessAI live shift record and read every timestamped public turn.`
       : "BoardlessAI decision replay.",
     robots: standup?.fixture ? { follow: true, index: false } : undefined,
-    title: standup ? `Decision Replay · ${formatDate(date)}` : "Decision Replay"
+    title: standup
+      ? `Decision Replay · ${formatDate(standup.date)}`
+      : "Decision Replay"
   };
 }
 
@@ -220,7 +224,7 @@ export default async function StandupRoomPage({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params;
-  const standup = standups.find((item) => item.date === date);
+  const standup = await getPublicStandup(date);
   if (!standup) {
     notFound();
   }
@@ -243,7 +247,7 @@ export default async function StandupRoomPage({
                   variant: "ghost",
                   size: "small"
                 })}
-                href={`/standups/${standup.date}`}
+                href={`/standups/${standup.id}`}
               >
                 <ArrowLeft aria-hidden="true" className="size-4" />
                 Back to episode
@@ -284,20 +288,22 @@ export default async function StandupRoomPage({
           </div>
         </header>
 
-        <DecisionReplay
-          agents={speakers}
-          chapters={replayChapters}
-          cuts={replayCuts}
-          forecastOptions={forecastOptions}
-          replayCheck={replayCheck}
-          transcript={transcript}
-          verdict={{
-            outcomeId: "wait",
-            label: "Wait for real evidence",
-            summary:
-              "The council refused to found a venture from fixture data. SCOUT must return with attributable outside signals before another selection vote."
-          }}
-        />
+        {standup.fixture ? (
+          <DecisionReplay
+            agents={speakers}
+            chapters={replayChapters}
+            cuts={replayCuts}
+            forecastOptions={forecastOptions}
+            replayCheck={replayCheck}
+            transcript={transcript}
+            verdict={{
+              outcomeId: "wait",
+              label: "Wait for real evidence",
+              summary:
+                "The council refused to found a venture from fixture data. SCOUT must return with attributable outside signals before another selection vote."
+            }}
+          />
+        ) : null}
 
         <section
           className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-26"
@@ -311,10 +317,9 @@ export default async function StandupRoomPage({
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--fog)]">
                 The replay uses this transcript without adding dialogue,
-                reactions or hidden reasoning. The fixture label remains
-                visible because no live council call occurred. Message times
-                follow the deterministic fixture timeline between room open
-                and close.
+                reactions or hidden reasoning. {standup.fixture
+                  ? "The fixture label remains visible because no live council call occurred. Message times follow the deterministic fixture timeline between room open and close."
+                  : "Each message time was recorded when the live council response was received."}
               </p>
             </div>
             <aside className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 md:col-span-5 md:p-8">
@@ -430,14 +435,13 @@ export default async function StandupRoomPage({
                   Recorded outcome
                 </p>
                 <p className="mt-3 text-xl font-semibold leading-8 tracking-[-0.025em] md:text-2xl">
-                  The council chose to wait. Fixture data could test the
-                  software, but it could not choose a business.
+                  {standup.decision.summary}
                 </p>
               </div>
               <div className="flex flex-wrap gap-3 md:col-span-4 md:justify-end">
                 <Link
                   className={buttonVariants({ variant: "secondary" })}
-                  href={`/standups/${standup.date}`}
+                  href={`/standups/${standup.id}`}
                 >
                   Full episode record
                 </Link>

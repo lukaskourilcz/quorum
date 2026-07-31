@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { agents } from "@/data/agents";
-import { standups } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const standups = await getPublicStandups();
   const updated = new Date("2026-07-23T05:30:00.000Z");
   const core = [
     "",
@@ -33,8 +34,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6
     })),
     ...standups.filter((standup) => !standup.fixture).map((standup) => ({
-      url: `${base}/standups/${standup.date}`,
-      lastModified: new Date(`${standup.date}T05:30:00.000Z`),
+      url: `${base}/standups/${standup.id}`,
+      lastModified: new Date(standup.generatedAt ?? `${standup.date}T05:30:00.000Z`),
       changeFrequency: "never" as const,
       priority: 0.7
     }))

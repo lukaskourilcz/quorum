@@ -1,6 +1,11 @@
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";
-import { estimateTextCall } from "./budget.js";
+import {
+  DEFAULT_BUDGET_LIMITS,
+  estimateTextCall,
+  type BudgetLimits,
+  type ReserveContext
+} from "./budget.js";
 import { loadRoutingConfig, routeBoardroom } from "./boardroom/router.js";
 import { configRoot, repoRoot, stateRoot } from "./paths.js";
 import {
@@ -12,6 +17,7 @@ import {
   type OpportunityGate
 } from "./research/opportunities.js";
 import { atomicWriteJson, withFileLock } from "./state.js";
+import { collectLiveCouncil, createLiveStandup } from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
 import {
@@ -32,8 +38,8 @@ export interface CycleResult {
   cycleId: string;
   phase: RunnablePhase;
   dry: boolean;
-  status: "dry_complete" | "paused" | "preflight_complete";
-  decision: "INSUFFICIENT_EVIDENCE" | "NO_ACTION" | "PAUSED";
+  status: "dry_complete" | "paused" | "live_complete" | "preflight_complete";
+  decision: "INSUFFICIENT_EVIDENCE" | "NO_ACTION" | "PLAN" | "PAUSED";
   estimatedWorstCaseUsd: number;
   selectedAgents: string[];
   skippedAgents: string[];
@@ -47,6 +53,40 @@ async function exists(filePath: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+function envNumber(name: string, fallback: number): number {
+  const value = process.env[name];
+  if (value === undefined || value.trim() === "") return fallback;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error(`${name} must be a positive number`);
+  }
+  return parsed;
+}
+
+function budgetLimitsFromEnvironment(): BudgetLimits {
+  return {
+    ...DEFAULT_BUDGET_LIMITS,
+    maxCycleUsd: envNumber(
+      "MAX_CYCLE_BUDGET_USD",
+      DEFAULT_BUDGET_LIMITS.maxCycleUsd
+    ),
+    dailyUsd: envNumber("DAILY_BUDGET_USD", DEFAULT_BUDGET_LIMITS.dailyUsd),
+    monthlyApiUsd: envNumber(
+      "MONTHLY_BUDGET_USD",
+      DEFAULT_BUDGET_LIMITS.monthlyApiUsd
+    ),
+    monthlyOperatingUsd: envNumber(
+      "MONTHLY_OPERATING_CAP_USD",
+      DEFAULT_BUDGET_LIMITS.monthlyOperatingUsd
+    )
+  };
+}
+
+function remainingScheduledCycles(now: Date): number {
+  const endOfMonth = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
+  return Math.max(1, Math.ceil((endOfMonth - now.getTime()) / (8 * 60 * 60 * 1_000)));
 }
 
 export async function runCycle(options: CycleOptions): Promise<CycleResult> {
@@ -64,6 +104,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       skippedAgents: [],
       artifacts: []
     };
+  }
+  if (!options.dry && options.phase === "founding") {
+    throw new Error("A live founding cycle is not permitted in hobby / non-commercial mode");
   }
   const execute = async (): Promise<CycleResult> => {
     const modelConfig = JSON.parse(
@@ -91,7 +134,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           provider: model.provider,
           model: model.model,
           promptChars: 8_000,
-          maxOutputTokens: Math.min(model.maxOutputTokens, 800),
+          maxOutputTokens: Math.min(model.maxOutputTokens, 400),
           at: now
         })
       };
@@ -139,17 +182,44 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           ? "NO_ACTION"
           : "INSUFFICIENT_EVIDENCE"
         : "NO_ACTION";
-    const standup = createOfflineStandup({
-      cycleId,
-      phase: options.phase,
-      stage: stages.current,
-      fixture: options.dry,
-      status: decision,
-      room,
-      estimatedCycleUsd: estimatedWorstCaseUsd,
-      now,
-      evidenceRefs: opportunityGate.evidenceRefs
-    });
+    const standup =
+      options.dry || options.phase === "founding"
+        ? createOfflineStandup({
+            cycleId,
+            phase: options.phase,
+            stage: stages.current,
+            fixture: options.dry,
+            status: decision,
+            room,
+            estimatedCycleUsd: estimatedWorstCaseUsd,
+            now,
+            evidenceRefs: opportunityGate.evidenceRefs
+          })
+        : createLiveStandup({
+            cycleId,
+            phase: options.phase,
+            stage: stages.current,
+            room,
+            estimatedCycleUsd: estimatedWorstCaseUsd,
+            now,
+            council: await collectLiveCouncil({
+              cycleId,
+              phase: options.phase,
+              stage: stages.current,
+              now,
+              budgetContext: (ledger): ReserveContext => ({
+                now,
+                cycleId,
+                stage: stages.current,
+                ledger,
+                allInNonApiSpentUsd: 0,
+                allInCommittedUsd: 0,
+                knownMonthlyForecastUsd: 0,
+                remainingScheduledCycles: remainingScheduledCycles(now),
+                limits: budgetLimitsFromEnvironment()
+              })
+            })
+          });
     const artifactRoot = options.dry
       ? path.join(repoRoot, "tmp", "dry-run", "state")
       : stateRoot;
@@ -180,7 +250,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         stage: stages.current,
         opportunityGate,
         estimatedWorstCaseUsd,
-        actualUsd: options.dry ? 0 : null,
+        actualUsd: standup.ledger.actualCycleUsd,
         socialDecision: "NO_POST",
         generatedAt: now.toISOString()
       }),
@@ -236,8 +306,13 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       cycleId,
       phase: options.phase,
       dry: options.dry,
-      status: options.dry ? "dry_complete" : "preflight_complete",
-      decision,
+      status: options.dry ? "dry_complete" : "live_complete",
+      decision:
+        standup.status === "PLAN"
+          ? "PLAN"
+          : standup.status === "INSUFFICIENT_EVIDENCE"
+            ? "INSUFFICIENT_EVIDENCE"
+            : "NO_ACTION",
       estimatedWorstCaseUsd,
       selectedAgents: room.selectedParticipants.map(({ agent }) => agent),
       skippedAgents: room.skippedParticipants.map(({ agent }) => agent),

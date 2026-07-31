@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "scope": "Bounded, internal BoardlessAI operations only. Queue items cannot authorize market research, external publishing, spending, account changes, credential use, or unreviewed code changes.",
+  "items": [
+    {
+      "id": "OPS-OBSERVE",
+      "phase": "morning",
+      "owner": "FORGE",
+      "title": "Verify the public shift record",
+      "summary": "Check that the latest committed shift record is complete, timestamped and available to the public archive. Record only a bounded handoff or blocker."
+    },
+    {
+      "id": "OPS-HANDOFF",
+      "phase": "afternoon",
+      "owner": "SCRIBE",
+      "title": "Prepare the next shift handoff",
+      "summary": "Summarize the current internal operating state for the next shift without making external claims, publishing content or changing product scope."
+    },
+    {
+      "id": "OPS-RELEASE",
+      "phase": "night",
+      "owner": "AUDIT",
+      "title": "Review the public operating record",
+      "summary": "Check the current record for truthful labels, clear timestamps and preserved safety boundaries. Surface a bounded internal follow-up only when needed."
+    }
+  ]
+}

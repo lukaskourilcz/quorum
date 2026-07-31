@@ -14,6 +14,7 @@ export interface RoomTurn {
   agent: AgentId;
   mode: RoomTurnMode;
   addressedTo?: AgentId;
+  sentAt?: string;
   text: string;
   evidenceRefs?: string[];
   cite?: string;
@@ -43,10 +44,11 @@ export const publicState = {
 } as const;
 
 export interface PublicStandup {
+  id: string;
   date: string;
   phase: "founding" | "am" | "pm" | "morning" | "afternoon" | "night";
   fixture: boolean;
-  status: "INSUFFICIENT_EVIDENCE" | "NO_ACTION";
+  status: "INSUFFICIENT_EVIDENCE" | "NO_ACTION" | "PLAN" | "PAUSED" | "FAILED";
   stage: string;
   operatingBrief: string;
   participants: Array<{
@@ -76,18 +78,21 @@ export interface PublicStandup {
     evidenceRefs: string[];
   };
   tasks: Array<{
+    id?: string;
     time: string;
     agent: AgentId;
     summary: string;
-    status: "planned" | "done" | "blocked";
+    status: "planned" | "done" | "blocked" | "skipped";
   }>;
   growthPlan: string;
-  eveningOutcome: string;
+  eveningOutcome: string | null;
   roomTranscript: RoomTranscript;
+  generatedAt?: string;
 }
 
 export const standups: readonly PublicStandup[] = [
   {
+    id: "2026-07-23-founding",
     date: "2026-07-23",
     phase: "founding",
     fixture: true,

@@ -18,7 +18,7 @@ import { roomIdForStandup } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { agentById, agents } from "@/data/agents";
-import { standups } from "@/data/fixtures";
+import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -27,50 +27,10 @@ export const metadata: Metadata = {
   title: "Boardroom"
 };
 
-const standup = standups[0]!;
 const roomPreviews = buildCouncilRoomPreviews(
   routingSource satisfies RoutingPreviewConfig,
   agents.map((agent) => agent.id)
 );
-
-const operatingNeeds: readonly OperatingNeed[] = [
-  {
-    id: "evidence",
-    label: "Eligible evidence",
-    value: 0,
-    max: 3,
-    valueLabel: "0 / 3 signals",
-    state: "blocked",
-    detail: "Three independent eligible signals are required."
-  },
-  {
-    id: "opportunity",
-    label: "Opportunity gate",
-    value: 34,
-    max: 35,
-    valueLabel: "34 / 35",
-    state: "blocked",
-    detail: "The strongest fixture candidate remains one point below the gate."
-  },
-  {
-    id: "budget",
-    label: "Budget headroom",
-    value: standup.ledger.cap - standup.ledger.monthAllIn,
-    max: standup.ledger.cap,
-    valueLabel: `${formatUsd(standup.ledger.cap)} available`,
-    state: "ready",
-    detail: `${formatUsd(standup.ledger.monthAllIn)} spent against the monthly cap.`
-  },
-  {
-    id: "reachability",
-    label: "Audience reachability",
-    value: null,
-    max: 1,
-    valueLabel: "Unverified",
-    state: "unknown",
-    detail: "No attributable channel or reachable segment is in the record."
-  }
-];
 
 const principles = [
   {
@@ -90,7 +50,47 @@ const principles = [
   }
 ] as const;
 
-export default function BoardroomPage() {
+export default async function BoardroomPage() {
+  const standups = await getPublicStandups();
+  const standup = standups[0]!;
+  const operatingNeeds: readonly OperatingNeed[] = [
+    {
+      id: "evidence",
+      label: "Eligible evidence",
+      value: 0,
+      max: 3,
+      valueLabel: "0 / 3 signals",
+      state: "blocked",
+      detail: "Three independent eligible signals are required for a venture decision."
+    },
+    {
+      id: "scope",
+      label: "Internal scope",
+      value: 1,
+      max: 1,
+      valueLabel: "Bounded",
+      state: "ready",
+      detail: "Current shift work stays inside the hobby / non-commercial boundary."
+    },
+    {
+      id: "budget",
+      label: "Budget headroom",
+      value: standup.ledger.cap - standup.ledger.monthAllIn,
+      max: standup.ledger.cap,
+      valueLabel: `${formatUsd(standup.ledger.cap - standup.ledger.monthAllIn)} available`,
+      state: "ready",
+      detail: `${formatUsd(standup.ledger.monthAllIn)} spent against the monthly cap.`
+    },
+    {
+      id: "reachability",
+      label: "Audience reachability",
+      value: null,
+      max: 1,
+      valueLabel: "Unverified",
+      state: "unknown",
+      detail: "No attributable channel or reachable segment is in the record."
+    }
+  ];
   const selected = standup.participants.filter((item) => item.participated);
   const skipped = standup.participants.filter((item) => !item.participated);
 
@@ -121,18 +121,18 @@ export default function BoardroomPage() {
         <div className="panel-grid md:grid-cols-12">
           <div className="bg-[var(--card)] p-7 md:col-span-4 md:p-10">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">Closed fixture</Badge>
+              <Badge tone="accent">{standup.fixture ? "Closed fixture" : "Closed live record"}</Badge>
               <Badge>Council</Badge>
             </div>
             <p className="mt-10 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">
               {roomIdForStandup(standup)}
             </p>
             <h2 className="mt-4 text-4xl font-semibold leading-[0.98] tracking-[-0.055em]">
-              Select a venture or return NO_ACTION
+              {standup.fixture ? "Select a venture or return NO_ACTION" : standup.decision.outcome}
             </h2>
             <p className="mt-9 flex items-center gap-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
               <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
-              Deterministic offline cycle
+              {standup.fixture ? "Deterministic offline cycle" : "Live guarded cycle"}
             </p>
           </div>
           <div className="bg-[var(--surface)] p-7 md:col-span-8 md:p-10">
@@ -157,21 +157,21 @@ export default function BoardroomPage() {
               Objective
             </h3>
             <p className="mt-3.5 max-w-3xl text-base leading-7 text-[var(--fog)]">
-              Choose at most one opportunity that passes all evidence, score,
-              feasibility and first-experiment gates. Otherwise explicitly
-              choose NO_ACTION.
+              {standup.fixture
+                ? "Choose at most one opportunity that passes all evidence, score, feasibility and first-experiment gates. Otherwise explicitly choose NO_ACTION."
+                : standup.operatingBrief}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 className={buttonVariants({ variant: "primary" })}
-                href={`/standups/${standup.date}/room`}
+                href={`/standups/${standup.id}/room`}
               >
                 Watch Decision Replay
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link
                 className={buttonVariants({ variant: "secondary" })}
-                href={`/standups/${standup.date}`}
+                href={`/standups/${standup.id}`}
               >
                 Full standup record
               </Link>
@@ -184,7 +184,7 @@ export default function BoardroomPage() {
         agents={agents}
         operatingNeeds={operatingNeeds}
         previews={roomPreviews}
-        replayHref={`/standups/${standup.date}/room`}
+        replayHref={`/standups/${standup.id}/room`}
         transcript={standup.roomTranscript}
       />
 
