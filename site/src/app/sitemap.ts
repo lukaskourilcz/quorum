@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { agents } from "@/data/agents";
 import { getPublicStandups } from "@/lib/standup-records";
+import { getPublicSiteUrl } from "@/lib/public-site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = getPublicSiteUrl();
   const standups = await getPublicStandups();
   const updated = new Date("2026-07-23T05:30:00.000Z");
   const core = [

@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
+import { getPublicSiteUrl } from "@/lib/public-site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = getPublicSiteUrl();
   return {
     rules: [
       {

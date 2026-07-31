@@ -1,4 +1,5 @@
 import { getPublicStandups } from "@/lib/standup-records";
+import { getPublicSiteUrl } from "@/lib/public-site-url";
 
 export const dynamic = "force-static";
 
@@ -12,7 +13,7 @@ function escapeXml(value: string): string {
 }
 
 export async function GET() {
-  const base = process.env.PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = getPublicSiteUrl();
   const standups = await getPublicStandups();
   const items = standups
     .filter((standup) => !standup.fixture)
