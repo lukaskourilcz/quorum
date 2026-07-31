@@ -62,6 +62,25 @@ export async function atomicWriteText(
   }
 }
 
+export async function atomicWriteBuffer(
+  root: string,
+  relativePath: string,
+  content: Uint8Array
+): Promise<void> {
+  const target = resolveStatePath(root, relativePath);
+  await mkdir(path.dirname(target), { recursive: true });
+  const temp = path.join(
+    path.dirname(target),
+    `.${path.basename(target)}.${process.pid}.${randomUUID()}.tmp`
+  );
+  try {
+    await writeFile(temp, content, { mode: 0o600 });
+    await rename(temp, target);
+  } finally {
+    await rm(temp, { force: true });
+  }
+}
+
 export async function atomicWriteJson(
   root: string,
   relativePath: string,
@@ -105,4 +124,3 @@ export async function withFileLock<T>(
     await rm(lockPath, { force: true });
   }
 }
-

@@ -12,17 +12,25 @@ blokátory integrace a zachovaný provozní checklist.
 - [ ] **Create GitHub App "boardlessai-delivery"** — install on `aifirst` only,
   `contents: write`; store `DELIVERY_APP_ID` + `DELIVERY_APP_PRIVATE_KEY` in quorum
   Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
-- [ ] **Resend account + domain** — verify free tier covers ~150 emails/mo; add
-  SPF/DKIM for `meetings@<domain>`; store `RESEND_API_KEY`. [imp:4] [owner:me]
-  [time:45m] [kind:setup]
+- [ ] **Resend account + domain** — the official free tier was verified on
+  2026-07-31 at 3,000 emails/month and 100/day, covering one recipient at the
+  expected ~150/month. Verify the sending domain and its SPF/DKIM records; create
+  a sending-only key in the GitHub secret `RESEND_API_KEY`; store recipients in
+  the secret `MEETING_EMAIL_TO`; then set repository variables
+  `MEETING_EMAIL_MODE=resend`, `MEETING_EMAIL_FROM=meetings@<domain>`,
+  `RESEND_FREE_TIER_MONTHLY=3000`, and `RESEND_FREE_TIER_DAILY=100`.
+  Source: <https://resend.com/pricing>. [imp:4] [owner:me] [time:45m]
+  [kind:setup]
 - [ ] **Approve budget changes** — `MONTHLY_BUDGET_USD` 12→15, `DAILY_BUDGET_USD`
   0.40→0.70, two new envelopes; countersign in the adoption decision record. [imp:5]
   [owner:me] [time:5m] [kind:decision]
 - [ ] **Migrate source API keys to quorum secrets** — GUARDIAN, NYTIMES, GNEWS,
   STACKEXCHANGE, FIRECRAWL/JINA (or drop those sources; they self-skip). [imp:3]
   [owner:me] [time:20m] [kind:setup]
-- [ ] **Supply the Caught Up production domain** — for the allowlist + RELAY's live
-  check + room links. [imp:4] [owner:me] [time:5m] [kind:setup]
+- [ ] **Supply the Caught Up production domain** — set the quorum repository
+  variable `CAUGHT_UP_SITE_URL` to its canonical HTTPS base URL and add its host
+  to `config/network-allowlist.json` for RELAY's live check, edition email links,
+  and evidence-linked social drafts. [imp:4] [owner:me] [time:5m] [kind:setup]
 - [ ] **Sign the brand-clearance revisit** — acknowledge BoardlessAI collision risk
   now that scope is commercial-adjacent; confirm the rename-or-clear gate before any
   paid sponsorship. [imp:4] [owner:me] [time:20m] [kind:legal]

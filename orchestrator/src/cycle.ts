@@ -48,8 +48,15 @@ import {
 import {
   buildMeetingEmail,
   MeetingEmailLogSink,
+  meetingEmailSinkFromEnvironment,
   sendMeetingEmail
 } from "./notify/email.js";
+import { MeetingRecordSchema } from "./contracts/meeting-record.js";
+import {
+  composeEditionSocialPack,
+  recordMissingSocialPackConfiguration,
+  recordSocialPackFailure
+} from "./social/pack.js";
 import { collectLiveCouncil, createLiveStandup } from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
@@ -107,6 +114,16 @@ function envNumber(name: string, fallback: number): number {
     throw new Error(`${name} must be a positive number`);
   }
   return parsed;
+}
+
+async function liveMeetingEmailSink() {
+  const allowlist = JSON.parse(
+    await readFile(path.join(configRoot, "network-allowlist.json"), "utf8")
+  ) as { runtimeHosts: string[] };
+  return meetingEmailSinkFromEnvironment({
+    stateRoot,
+    allowHosts: allowlist.runtimeHosts
+  });
 }
 
 function budgetLimitsFromEnvironment(): BudgetLimits {
@@ -446,10 +463,44 @@ async function runCaughtUpLiveEditionCycle(
       generatedAt: record.generatedAt
     })
   ]);
-  const emailPayload = buildMeetingEmail({ record, boardlessBaseUrl: baseUrl });
+  const socialArtifacts: string[] = [];
+  let editionUrl: string | undefined;
+  if (produced.package.status === "edition") {
+    const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
+    if (!caughtUpBaseUrl) {
+      await recordMissingSocialPackConfiguration(stateRoot);
+      console.warn("Caught Up social pack skipped: CAUGHT_UP_SITE_URL is not configured");
+    } else {
+      try {
+        editionUrl = new URL(
+          `/en/articles/${produced.package.article.en.frontmatter.slug}`,
+          caughtUpBaseUrl
+        ).toString();
+        const social = await composeEditionSocialPack({
+          editionPackage: produced.package,
+          meeting: record,
+          destination: editionUrl,
+          repoRoot,
+          stateRoot,
+          now
+        });
+        if (social) socialArtifacts.push(...social.artifactPaths);
+      } catch (error) {
+        editionUrl = undefined;
+        const detail = error instanceof Error ? error.message : "unknown composer failure";
+        console.warn(`Caught Up social pack failed: ${detail}`);
+        await recordSocialPackFailure(stateRoot, detail);
+      }
+    }
+  }
+  const emailPayload = buildMeetingEmail({
+    record,
+    boardlessBaseUrl: baseUrl,
+    ...(editionUrl ? { editionUrl } : {})
+  });
   await sendMeetingEmail({
     payload: emailPayload,
-    sink: new MeetingEmailLogSink(stateRoot),
+    sink: await liveMeetingEmailSink(),
     stateRoot,
     now
   });
@@ -481,7 +532,8 @@ async function runCaughtUpLiveEditionCycle(
     produced.reportPath,
     `notify/email/${reference.replaceAll("/", "-")}.json`,
     "notify/health.json",
-    "budget/ledger.json"
+    "budget/ledger.json",
+    ...socialArtifacts
   ];
   return {
     cycleId,
@@ -628,7 +680,7 @@ async function runCaughtUpLiveProductCycle(
   const emailPayload = buildMeetingEmail({ record, boardlessBaseUrl: baseUrl });
   await sendMeetingEmail({
     payload: emailPayload,
-    sink: new MeetingEmailLogSink(stateRoot),
+    sink: await liveMeetingEmailSink(),
     stateRoot,
     now
   });
@@ -930,6 +982,25 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         generatedAt: now.toISOString()
       })
     ]);
+    const emailRecord = MeetingRecordSchema.parse({
+      ...standup,
+      schemaVersion: "meeting-record/2",
+      kind: "venture"
+    });
+    const emailPayload = buildMeetingEmail({
+      record: emailRecord,
+      boardlessBaseUrl: (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "")
+    });
+    await sendMeetingEmail({
+      payload: emailPayload,
+      sink: options.dry ? new MeetingEmailLogSink(artifactRoot) : await liveMeetingEmailSink(),
+      stateRoot: artifactRoot,
+      now
+    });
+    artifacts.push(
+      `notify/email/${emailPayload.meetingRef.replaceAll("/", "-")}.json`,
+      "notify/health.json"
+    );
     if (options.explainBudget) {
       console.log(
         JSON.stringify(

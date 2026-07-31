@@ -53,6 +53,14 @@ jobs:
       EDITION_PRODUCTION_BUDGET_USD: "0.35"
       DAILY_BUDGET_USD: "0.70"
       MONTHLY_BUDGET_USD: "15"
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+      CAUGHT_UP_SITE_URL: ${{ vars.CAUGHT_UP_SITE_URL }}
+      MEETING_EMAIL_MODE: ${{ vars.MEETING_EMAIL_MODE }}
+      MEETING_EMAIL_FROM: ${{ vars.MEETING_EMAIL_FROM }}
+      MEETING_EMAIL_TO: ${{ secrets.MEETING_EMAIL_TO }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      RESEND_FREE_TIER_MONTHLY: ${{ vars.RESEND_FREE_TIER_MONTHLY }}
+      RESEND_FREE_TIER_DAILY: ${{ vars.RESEND_FREE_TIER_DAILY }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -160,7 +168,7 @@ jobs:
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify
+          git add state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify state/social state/INBOX.md site/public/social
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0

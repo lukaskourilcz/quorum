@@ -1,5 +1,99 @@
 import sharp from "sharp";
 
+const WIDTH = 1080;
+const HEIGHT = 1350;
+const BACKGROUND = "#09090b";
+const SURFACE = "#18181b";
+const FOREGROUND = "#f4f4f5";
+const MUTED = "#a1a1aa";
+const ACCENT = "#ff5a00";
+const CAUGHT_UP_ACCENT = "#fe45e2";
+
+function escapeXml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+function wrap(value: string, maxCharacters: number, maxLines: number): string[] {
+  const words = value.replaceAll(/\s+/g, " ").trim().split(" ").filter(Boolean);
+  const lines: string[] = [];
+  for (const rawWord of words) {
+    const word = rawWord.length > maxCharacters ? `${rawWord.slice(0, maxCharacters - 1)}…` : rawWord;
+    const current = lines.at(-1);
+    if (!current || `${current} ${word}`.length > maxCharacters) {
+      if (lines.length === maxLines) {
+        lines[maxLines - 1] = `${lines[maxLines - 1]!.replace(/…$/, "").slice(0, maxCharacters - 1)}…`;
+        break;
+      }
+      lines.push(word);
+    } else {
+      lines[lines.length - 1] = `${current} ${word}`;
+    }
+  }
+  return lines;
+}
+
+function textLines(input: {
+  lines: readonly string[];
+  x: number;
+  y: number;
+  lineHeight: number;
+  fontSize: number;
+  weight?: number;
+  fill: string;
+}): string {
+  return `<text x="${input.x}" y="${input.y}" fill="${input.fill}" font-family="Arial, Helvetica, sans-serif" font-size="${input.fontSize}" font-weight="${input.weight ?? 400}">${input.lines.map((line, index) => `<tspan x="${input.x}" dy="${index === 0 ? 0 : input.lineHeight}">${escapeXml(line)}</tspan>`).join("")}</text>`;
+}
+
+function shell(content: string, accent = CAUGHT_UP_ACCENT): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
+    <rect width="${WIDTH}" height="${HEIGHT}" fill="${BACKGROUND}"/>
+    <rect x="58" y="58" width="964" height="1234" rx="36" fill="${SURFACE}" stroke="#3f3f46" stroke-width="2"/>
+    <circle cx="930" cy="150" r="18" fill="${accent}"/>
+    <rect x="110" y="1190" width="760" height="14" rx="7" fill="${ACCENT}"/>
+    ${content}
+  </svg>`;
+}
+
+async function webp(svg: string): Promise<Buffer> {
+  return sharp(Buffer.from(svg)).webp({ quality: 90, effort: 6 }).toBuffer();
+}
+
+export async function composeCarouselFrame(input: {
+  date: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  index: number;
+  total: number;
+}): Promise<Buffer> {
+  const title = wrap(input.title, 23, 5);
+  const body = wrap(input.body, 40, 7);
+  return webp(shell(`
+    ${textLines({ lines: ["CAUGHT UP", input.eyebrow.toUpperCase()], x: 110, y: 150, lineHeight: 42, fontSize: 26, weight: 700, fill: CAUGHT_UP_ACCENT })}
+    ${textLines({ lines: title, x: 110, y: 370, lineHeight: 92, fontSize: 78, weight: 700, fill: FOREGROUND })}
+    ${textLines({ lines: body, x: 110, y: 900, lineHeight: 54, fontSize: 38, fill: MUTED })}
+    ${textLines({ lines: [input.date], x: 110, y: 1250, lineHeight: 0, fontSize: 24, weight: 700, fill: FOREGROUND })}
+    ${textLines({ lines: [`${String(input.index).padStart(2, "0")} / ${String(input.total).padStart(2, "0")}`], x: 830, y: 1250, lineHeight: 0, fontSize: 24, weight: 700, fill: FOREGROUND })}
+  `));
+}
+
+export async function composeQuoteCard(input: {
+  date: string;
+  agent: string;
+  quote: string;
+}): Promise<Buffer> {
+  return webp(shell(`
+    ${textLines({ lines: ["FROM THE EDITION ROOM"], x: 110, y: 160, lineHeight: 0, fontSize: 26, weight: 700, fill: CAUGHT_UP_ACCENT })}
+    ${textLines({ lines: ["“", ...wrap(input.quote, 30, 8), "”"], x: 110, y: 355, lineHeight: 78, fontSize: 58, weight: 700, fill: FOREGROUND })}
+    ${textLines({ lines: [input.agent, input.date], x: 110, y: 1130, lineHeight: 42, fontSize: 28, weight: 700, fill: MUTED })}
+  `, ACCENT));
+}
+
 export async function composeDeterministicSocialCard(input: {
   width?: number;
   height?: number;
@@ -9,17 +103,6 @@ export async function composeDeterministicSocialCard(input: {
 }): Promise<void> {
   const width = input.width ?? 1080;
   const height = input.height ?? 1080;
-  const background = input.background ?? "#f6f5f2";
-  const accent = input.accent ?? "#f05a28";
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-    <rect width="100%" height="100%" fill="${background}"/>
-    <rect x="${Math.round(width * 0.07)}" y="${Math.round(height * 0.07)}"
-      width="${Math.round(width * 0.86)}" height="${Math.round(height * 0.86)}"
-      rx="${Math.round(width * 0.035)}" fill="#ffffff"/>
-    <circle cx="${Math.round(width * 0.84)}" cy="${Math.round(height * 0.16)}"
-      r="${Math.round(width * 0.018)}" fill="${accent}"/>
-    <path d="M ${Math.round(width * 0.12)} ${Math.round(height * 0.76)}
-      H ${Math.round(width * 0.88)}" stroke="#18181b" stroke-width="${Math.round(width * 0.012)}"/>
-  </svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="${input.background ?? BACKGROUND}"/><rect x="${Math.round(width * 0.07)}" y="${Math.round(height * 0.07)}" width="${Math.round(width * 0.86)}" height="${Math.round(height * 0.86)}" rx="${Math.round(width * 0.035)}" fill="${SURFACE}"/><circle cx="${Math.round(width * 0.84)}" cy="${Math.round(height * 0.16)}" r="${Math.round(width * 0.018)}" fill="${input.accent ?? ACCENT}"/></svg>`;
   await sharp(Buffer.from(svg)).webp({ quality: 88 }).toFile(input.output);
 }

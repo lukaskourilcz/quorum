@@ -138,6 +138,13 @@ Core variables:
   partial credentials return 503, never an open admin.
 - `PUBLIC_SITE_URL` — canonical production URL used by metadata, health checks
   and hosted Instagram media.
+- `CAUGHT_UP_SITE_URL` — canonical HTTPS base URL used for delivered-edition
+  links and deterministic Caught Up social drafts.
+- `MEETING_EMAIL_MODE=resend`, `MEETING_EMAIL_FROM`, `MEETING_EMAIL_TO`,
+  `RESEND_API_KEY`, `RESEND_FREE_TIER_MONTHLY` and
+  `RESEND_FREE_TIER_DAILY` — explicitly enable meeting email only after the
+  sender domain and no-cost tier are verified. The default mode writes a local
+  notification artifact and sends nothing.
 - `META_GRAPH_API_VERSION`, user IDs and access tokens — used only after the
   corresponding channel is explicitly human-enabled for `autopublish`.
 

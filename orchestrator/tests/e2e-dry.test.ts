@@ -54,7 +54,7 @@ describe("end-to-end dry founding cycle", () => {
     expect(first).toEqual(second);
     expect(first.status).toBe("dry_complete");
     expect(first.decision).toBe("INSUFFICIENT_EVIDENCE");
-    expect(first.artifacts).toHaveLength(4);
+    expect(first.artifacts).toHaveLength(6);
     expect(
       first.artifacts.every((artifact) => artifact.startsWith("tmp/dry-run/state/"))
     ).toBe(true);

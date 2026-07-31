@@ -6,7 +6,6 @@ export default defineConfig({
       reporter: ["text", "json-summary"]
     },
     environment: "node",
-    include: ["tests/**/*.test.ts"]
+    include: ["tests/**/*.test.ts", "src/**/*.test.ts"]
   }
 });
-

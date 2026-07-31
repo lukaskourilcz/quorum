@@ -247,7 +247,7 @@ describe("meeting calendar and email", () => {
       record: await caughtUpRecord("cu-edition"),
       boardlessBaseUrl: "https://boardless.example"
     }));
-    expect(renderMeetingEmailHtml(payload)).toContain("color:#241f1a");
+    expect(renderMeetingEmailHtml(payload)).toContain("background:#09090b");
     expect(await sendMeetingEmail({
       payload,
       sink: new MeetingEmailLogSink(root),
@@ -267,6 +267,7 @@ describe("meeting calendar and email", () => {
       boardlessBaseUrl: "https://boardless.example"
     });
     const failing: MeetingEmailSink = {
+      mode: "log",
       async send() { throw new Error("fixture failure"); }
     };
     for (let attempt = 0; attempt < 4; attempt += 1) {
