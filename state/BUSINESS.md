@@ -14,7 +14,7 @@ did not discover or approve it. That distinction keeps the founding gate honest:
 - Only the human owner may accept money or execute a payment.
 
 Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. FightAIQ
-is implemented in data-only mode for UFC, KSW and Oktagon. MMA Files is a private
+is implemented in data-only mode for UFC and Oktagon. MMA Files is a private
 bilingual newsroom whose public site does not exist yet. Their live schedules remain
 behind the recorded signatures and independent switches. The Magazine Incubator may
 only produce research proposals for owner rating.

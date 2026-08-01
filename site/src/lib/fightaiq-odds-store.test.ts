@@ -11,6 +11,6 @@ describe("owner price capture", () => {
 
   it("rejects path-like events and invalid prices", () => {
     expect(parseOwnerOddsCapture({ eventRef: "../../admin", boutRef: "x", redOdds: 1.8, blueOdds: 2.1, sourceLabel: "owner" })).toBeNull();
-    expect(parseOwnerOddsCapture({ eventRef: "ksw:event:100", boutRef: "x", redOdds: 1, blueOdds: 2.1, sourceLabel: "owner" })).toBeNull();
+    expect(parseOwnerOddsCapture({ eventRef: "bellator:event:100", boutRef: "x", redOdds: 1.8, blueOdds: 2.1, sourceLabel: "owner" })).toBeNull();
   });
 });

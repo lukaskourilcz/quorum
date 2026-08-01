@@ -6,7 +6,7 @@ Status: waiting for verified historical inputs
 
 The calibration harness is implemented and tested against fixed fixtures. A real
 backtest is intentionally not published yet: no approved historical dataset covering
-UFC, KSW and Oktagon is stored in the repository, and the regional source terms still
+UFC and Oktagon is stored in the repository, and the regional source terms still
 need owner review.
 
 The first real report must name the model version and input hash, keep each organization

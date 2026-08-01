@@ -8,13 +8,12 @@
     },
     "id": {
       "type": "string",
-      "pattern": "^(ufc|ksw|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$"
+      "pattern": "^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "org": {
       "type": "string",
       "enum": [
         "ufc",
-        "ksw",
         "oktagon"
       ]
     },
@@ -64,11 +63,11 @@
           },
           "red": {
             "type": "string",
-            "pattern": "^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+            "pattern": "^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
           "blue": {
             "type": "string",
-            "pattern": "^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+            "pattern": "^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
           "division": {
             "type": "string",

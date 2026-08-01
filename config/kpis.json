@@ -500,7 +500,7 @@
     {
       "id": "spotter.t3_readiness",
       "owner": "SPOTTER",
-      "metric": "kswBoutDossierReadinessAtT3",
+      "metric": "oktagonBoutDossierReadinessAtT3",
       "target": 0.9,
       "dir": "up",
       "warmupCycles": 14
@@ -508,7 +508,7 @@
     {
       "id": "spotter.weighin_coverage",
       "owner": "SPOTTER",
-      "metric": "kswWeighInOutcomeCoverage",
+      "metric": "oktagonWeighInOutcomeCoverage",
       "target": 1,
       "dir": "up",
       "warmupCycles": 14

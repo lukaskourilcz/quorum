@@ -13,9 +13,9 @@ import { displayFieldValue } from "@/lib/fightaiq-glossary";
 import { fighterName, getPublicFighters, type MmaOrg, type PublicFighter } from "@/lib/fightaiq-records";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "MMA fighter database", description: "Sourced UFC, KSW and Oktagon fighter files, with gaps and disagreements left visible." };
+export const metadata: Metadata = { title: "MMA fighter database", description: "Sourced UFC and Oktagon fighter files, with gaps and disagreements left visible." };
 
-const orgNames: Record<MmaOrg, string> = { ufc: "UFC", ksw: "KSW", oktagon: "Oktagon" };
+const orgNames: Record<MmaOrg, string> = { ufc: "UFC", oktagon: "Oktagon" };
 const field = (fighter: PublicFighter, key: string) => fighter.fields[key] ? displayFieldValue(key, fighter.fields[key].value) : "Still gathering";
 const activity = (fighter: PublicFighter) => fighter.fields.daysSinceLastFight ? `${displayFieldValue("daysSinceLastFight", fighter.fields.daysSinceLastFight.value)} days` : "Still gathering";
 const percentage = (value: number) => `${Math.round(value * 100)}%`;
@@ -29,7 +29,7 @@ function orgHref(org: MmaOrg, query: string) {
 
 export default async function FightersPage({ searchParams }: { searchParams: Promise<{ org?: string; q?: string }> }) {
   const [{ org: rawOrg, q: rawQuery }, snapshot] = await Promise.all([searchParams, getPublicFighters()]);
-  const org: MmaOrg = rawOrg === "ksw" || rawOrg === "oktagon" ? rawOrg : "ufc";
+  const org: MmaOrg = rawOrg === "oktagon" ? rawOrg : "ufc";
   const query = rawQuery?.trim().slice(0, 80) ?? "";
   const fighters = snapshot.fighters.filter((fighter) => fighter.org === org && (!query || fighterName(fighter).toLocaleLowerCase().includes(query.toLocaleLowerCase())));
   const divisions = fighters.reduce((groups, fighter) => {
@@ -38,7 +38,7 @@ export default async function FightersPage({ searchParams }: { searchParams: Pro
     return groups;
   }, new Map<string, PublicFighter[]>());
   return <PageShell>
-    <PageIntro eyebrow="FightAIQ / Sourced fighter files" title="Fighters" description="One open database for UFC, KSW and Oktagon. Every value shows where it came from; important facts need two agreeing sources before the model can use them." aside={<div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7"><ShieldCheck className="size-5 text-[var(--accent)]" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">{snapshot.fighters.length}</p><p className="mt-2 text-sm text-[var(--fog)]">verified public fighter files</p></div>} />
+    <PageIntro eyebrow="FightAIQ / Sourced fighter files" title="Fighters" description="One open database for UFC and Oktagon. Every value shows where it came from; important facts need two agreeing sources before the model can use them." aside={<div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7"><ShieldCheck className="size-5 text-[var(--accent)]" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">{snapshot.fighters.length}</p><p className="mt-2 text-sm text-[var(--fog)]">verified public fighter files</p></div>} />
     <section className="mx-auto max-w-[var(--container)] px-5 py-12 md:px-10 md:py-16">
       <nav aria-label="Organization" className="flex flex-wrap gap-2">
         {(Object.keys(orgNames) as MmaOrg[]).map((item) => <Link aria-current={org === item ? "page" : undefined} className={buttonVariants({ variant: org === item ? "accent" : "secondary" })} href={orgHref(item, query)} key={item} scroll={false}>{orgNames[item]}</Link>)}

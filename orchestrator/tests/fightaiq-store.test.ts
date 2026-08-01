@@ -31,7 +31,7 @@ describe("FightAIQ canonical stores", () => {
 
   it("uses Prague calendar days and orders overlapping fight weeks by proximity then organization", () => {
     const base = publicEventMirror(event);
-    const make = (org: "ufc" | "ksw" | "oktagon", day: string) => ({
+    const make = (org: "ufc" | "oktagon", day: string) => ({
       ...base,
       id: `${org}:event:fixture-${day}`,
       org,
@@ -39,8 +39,8 @@ describe("FightAIQ canonical stores", () => {
       startsAtUtc: `${day}T18:00:00.000Z`,
       bouts: base.bouts.map((bout, index) => ({ ...bout, id: `${org}-bout-${index}`, red: `${org}:red-example`, blue: `${org}:blue-example` }))
     });
-    const focus = fightWeekFocus([make("ufc", "2026-10-25"), make("oktagon", "2026-10-24"), make("ksw", "2026-10-25")] as typeof base[], new Date("2026-10-22T22:30:00.000Z"));
-    expect(focus.map((item) => item.org)).toEqual(["oktagon", "ksw", "ufc"]);
+    const focus = fightWeekFocus([make("ufc", "2026-10-25"), make("oktagon", "2026-10-24")] as typeof base[], new Date("2026-10-22T22:30:00.000Z"));
+    expect(focus.map((item) => item.org)).toEqual(["oktagon", "ufc"]);
   });
 
   it("stores one source proposal per normalized URL and never wires a forbidden source", async () => {

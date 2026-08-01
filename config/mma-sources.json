@@ -54,7 +54,7 @@
       "credentialEnv": "ODDSPAPI_API_KEY",
       "freeLimit": "250 requests per month",
       "termsVerdict": "allowed-with-account",
-      "termsNote": "UFC coverage is documented. KSW and Oktagon coverage remains unverified, so no runtime adapter is enabled.",
+      "termsNote": "UFC coverage is documented. Oktagon coverage remains unverified, so no runtime adapter is enabled.",
       "evidenceUrl": "https://oddspapi.io/en/legal/terms"
     },
     {
@@ -75,7 +75,7 @@
       "name": "Tapology",
       "tier": "C",
       "host": "www.tapology.com",
-      "coverage": ["ufc", "ksw", "oktagon", "cards", "records"],
+      "coverage": ["ufc", "oktagon", "cards", "records"],
       "access": "html",
       "state": "blocked",
       "freeLimit": "$0",
@@ -88,7 +88,7 @@
       "name": "Sherdog",
       "tier": "C",
       "host": "www.sherdog.com",
-      "coverage": ["ufc", "ksw", "oktagon", "records"],
+      "coverage": ["ufc", "oktagon", "records"],
       "access": "html",
       "state": "proposed",
       "freeLimit": "$0",
@@ -110,30 +110,17 @@
       "evidenceUrl": "https://oktagonmma.com/robots.txt"
     },
     {
-      "id": "ksw-official",
-      "name": "KSW",
-      "tier": "C",
-      "host": "www.kswmma.com",
-      "coverage": ["ksw", "events", "roster", "results"],
-      "access": "html",
-      "state": "proposed",
-      "freeLimit": "$0",
-      "termsVerdict": "unclear",
-      "termsNote": "The robots path returned a redirect page rather than rules. Runtime collection remains disabled.",
-      "evidenceUrl": "https://www.kswmma.com/robots.txt"
-    },
-    {
       "id": "regional-reporting",
-      "name": "Regional fight reporting group",
+      "name": "Czech fight reporting group",
       "tier": "C",
-      "host": "www.mmarocks.pl",
-      "coverage": ["ksw", "oktagon", "weigh-ins", "results", "context"],
+      "host": "www.fights.cz",
+      "coverage": ["oktagon", "weigh-ins", "results", "context"],
       "access": "html",
       "state": "proposed",
       "freeLimit": "$0",
       "termsVerdict": "unclear",
-      "termsNote": "MMARocks, Fight Live, Fights.cz, 7sport, zawodtyper and mmawyniki need individual terms review. They may inform the style study through manual reading, not automated model input.",
-      "evidenceUrl": "https://www.mmarocks.pl/robots.txt"
+      "termsNote": "Fights.cz and 7sport need individual terms review. They may inform the style study through manual reading, not automated model input.",
+      "evidenceUrl": "https://www.fights.cz/robots.txt"
     }
   ]
 }

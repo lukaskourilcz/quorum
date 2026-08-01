@@ -49,7 +49,7 @@ function fighterPath(reference: string): string {
 }
 
 function linkedFighterLabels(body: string): string[] {
-  return [...body.matchAll(/\[([^\]]+)\]\(\/fighters\/(?:ufc|ksw|oktagon)\/[a-z0-9-]+\)/giu)]
+  return [...body.matchAll(/\[([^\]]+)\]\(\/fighters\/(?:ufc|oktagon)\/[a-z0-9-]+\)/giu)]
     .map((match) => match[1]!)
     .sort();
 }

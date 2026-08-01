@@ -29,14 +29,14 @@ describe("FightAIQ deterministic model", () => {
   it("rejects ineligible and cross-organization inputs", async () => {
     const config = await loadMmaModelConfig();
     expect(() => runMmaModel({ config, bouts: [{ boutRef: "bad", red: fighter("red", { modelEligible: false }), blue: fighter("blue"), eventStartsAt: "2026-08-08T18:00:00Z" }], createdAt: "2026-08-01T10:00:00Z" })).toThrow(/without corroborated/);
-    expect(() => runMmaModel({ config, bouts: [{ boutRef: "bad", red: fighter("red"), blue: fighter("blue", { org: "ksw" }), eventStartsAt: "2026-08-08T18:00:00Z" }], createdAt: "2026-08-01T10:00:00Z" })).toThrow(/Cross-organization/);
+    expect(() => runMmaModel({ config, bouts: [{ boutRef: "bad", red: fighter("red"), blue: fighter("blue", { org: "oktagon" }), eventStartsAt: "2026-08-08T18:00:00Z" }], createdAt: "2026-08-01T10:00:00Z" })).toThrow(/Cross-organization/);
   });
 
   it("reproduces calibration and keeps rating pools separate", () => {
     expect(calibration([{ probability: 0.7, outcome: 1 }, { probability: 0.4, outcome: 0 }])).toEqual({ sampleSize: 2, brier: 0.125, logLoss: 0.43375028 });
-    const ratings = seedRatings([{ org: "ufc", red: "alex", blue: "sam", outcome: "red", happenedAt: "2026-01-01" }, { org: "ksw", red: "alex", blue: "sam", outcome: "blue", happenedAt: "2026-01-02" }]);
+    const ratings = seedRatings([{ org: "ufc", red: "alex", blue: "sam", outcome: "red", happenedAt: "2026-01-01" }, { org: "oktagon", red: "alex", blue: "sam", outcome: "blue", happenedAt: "2026-01-02" }]);
     expect(ratings["ufc:alex"]?.rating).toBeGreaterThan(1500);
-    expect(ratings["ksw:alex"]?.rating).toBeLessThan(1500);
+    expect(ratings["oktagon:alex"]?.rating).toBeLessThan(1500);
     expect(ratings["ufc:alex"]?.deviation).toBeLessThan(350);
     expect(bridgeCrossoverRating({ rating: 1700, deviation: 90 })).toEqual({ rating: 1600, deviation: 250 });
   });

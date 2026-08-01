@@ -39,7 +39,7 @@ export const OrgMaintenancePlanSchema = z.object({
     minimumOwnedKpis: z.number().int().positive(),
     requiredCapabilities: z.array(z.string().min(1)).min(1),
     promptPath: RelativePathSchema,
-    avatarPath: RelativePathSchema
+    avatarPath: RelativePathSchema.nullable()
   })
 }).superRefine((plan, context) => {
   if (plan.kind === "new_role" && plan.change.tier !== "C") {
@@ -68,12 +68,11 @@ async function verifyPlanPostconditions(
   plan: OrgMaintenancePlan,
   root: string
 ): Promise<void> {
-  const [registryRaw, routingRaw, kpisRaw, prompt, avatar] = await Promise.all([
+  const [registryRaw, routingRaw, kpisRaw, prompt] = await Promise.all([
     readFile(path.join(root, "config/agents.json"), "utf8"),
     readFile(path.join(root, "config/agent-routing.json"), "utf8"),
     readFile(path.join(root, "config/kpis.json"), "utf8"),
-    readFile(path.join(root, plan.postconditions.promptPath), "utf8"),
-    readFile(path.join(root, plan.postconditions.avatarPath))
+    readFile(path.join(root, plan.postconditions.promptPath), "utf8")
   ]);
   const registry = AgentRegistrySchema.parse(JSON.parse(registryRaw) as unknown);
   const agent = registry.agents.find(
@@ -107,8 +106,13 @@ async function verifyPlanPostconditions(
   if (prompt.trim().length < 80) {
     throw new Error("org-maintenance: role prompt is missing or too short");
   }
-  if (avatar.byteLength === 0) {
-    throw new Error("org-maintenance: role avatar is empty");
+  if (plan.postconditions.avatarPath) {
+    const avatar = await readFile(path.join(root, plan.postconditions.avatarPath));
+    if (avatar.byteLength === 0) {
+      throw new Error("org-maintenance: role avatar is empty");
+    }
+  } else if (agent.visual.avatar !== null) {
+    throw new Error("org-maintenance: active role avatar is missing from the plan");
   }
   await Promise.all(
     plan.affectedFiles.map((file) => readFile(path.join(root, file)))

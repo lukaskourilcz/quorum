@@ -47,7 +47,7 @@ Open every link in `docs/LIVE-PROOF.md`. Fixture labels must remain visible. The
 
 - confirm the Caught Up delivery App is installed on `aifirst` and ready for the first
   live package;
-- capture one full UFC, KSW and Oktagon event, including two-source fighter facts,
+- capture one full UFC and Oktagon event, including two-source fighter facts,
   T-3/T-1/closing prices and results;
 - confirm the committed bet types match markets you can actually capture;
 - review the first private MMA Files article and its English/Czech social drafts.

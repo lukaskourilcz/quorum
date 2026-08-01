@@ -12,8 +12,8 @@ import { displayFieldValue } from "@/lib/fightaiq-glossary";
 import { fighterName, getFightAiQMode, getPublicEvents, getPublicFighters, getPublicPredictions, type MmaOrg, type PublicFighter } from "@/lib/fightaiq-records";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Upcoming MMA fights", description: "Sourced UFC, KSW and Oktagon pairings with plain tale-of-the-tape fields." };
-const orgNames: Record<MmaOrg, string> = { ufc: "UFC", ksw: "KSW", oktagon: "Oktagon" };
+export const metadata: Metadata = { title: "Upcoming MMA fights", description: "Sourced UFC and Oktagon pairings with plain tale-of-the-tape fields." };
+const orgNames: Record<MmaOrg, string> = { ufc: "UFC", oktagon: "Oktagon" };
 const display = (fighter: PublicFighter | undefined, key: string) => fighter?.fields[key] ? displayFieldValue(key, fighter.fields[key].value) : "Still gathering";
 
 function clockLabel(startsAt: string, complete: boolean): string {
@@ -26,7 +26,7 @@ function clockLabel(startsAt: string, complete: boolean): string {
 
 export default async function UpcomingFightsPage({ searchParams }: { searchParams: Promise<{ org?: string }> }) {
   const [{ org: rawOrg }, eventSnapshot, fighterSnapshot, mode, predictionRecords] = await Promise.all([searchParams, getPublicEvents(), getPublicFighters(), getFightAiQMode(), getPublicPredictions()]);
-  const org: MmaOrg = rawOrg === "ksw" || rawOrg === "oktagon" ? rawOrg : "ufc";
+  const org: MmaOrg = rawOrg === "oktagon" ? rawOrg : "ufc";
   const events = eventSnapshot.events.filter((event) => event.org === org);
   const fighters = new Map(fighterSnapshot.fighters.map((fighter) => [fighter.id, fighter]));
   const predictions = new Map(predictionRecords.map((prediction) => [prediction.boutRef, prediction]));

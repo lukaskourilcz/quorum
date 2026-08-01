@@ -571,14 +571,14 @@ const profileCopy: Record<
   },
   CORNER: {
     operatingPrinciple: "A useful fighter file earns every field twice.",
-    output: "Sourced UFC and Oktagon fighter and event records",
-    currentFocus: "UFC and Oktagon cards",
+    output: "Sourced UFC fighter and event records",
+    currentFocus: "UFC cards",
     publicTrackRecord: null
   },
   SPOTTER: {
-    operatingPrinciple: "Read the Polish report before filling the field.",
-    output: "Sourced KSW fighter, weigh-in and event records",
-    currentFocus: "KSW cards and weigh-ins",
+    operatingPrinciple: "Read the regional report before filling the field.",
+    output: "Sourced Oktagon fighter, weigh-in and event records",
+    currentFocus: "Oktagon cards and weigh-ins",
     publicTrackRecord: null
   },
   TAPE: {

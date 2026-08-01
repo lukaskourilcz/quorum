@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "appliedAt": "2026-08-01T14:30:00.000Z",
+  "approvalRef": "owner-request:2026-08-01-ufc-oktagon-only",
+  "kind": "responsibility",
+  "change": {
+    "id": "ORG-2026-08-01-FIGHTAIQ-SCOUTING",
+    "proposedAt": "2026-08-01T14:20:00.000Z",
+    "proposer": "HUMAN_STEWARD",
+    "subjectAgent": "SPOTTER",
+    "tier": "C",
+    "change": "Split FightAIQ scouting by active organization: CORNER owns UFC and SPOTTER owns Oktagon.",
+    "expectedMetric": "activeOrganizationScoutingCoverage",
+    "baseline": null,
+    "expectedDelta": 1,
+    "reviewCycle": 14,
+    "approvers": ["HUMAN_APPROVAL"],
+    "status": "approved"
+  },
+  "current": "CORNER covered UFC and Oktagon while SPOTTER covered the retired third promotion, which left the new two-organization scope uneven.",
+  "proposed": "CORNER owns UFC. SPOTTER owns Oktagon. Both use the same two-source and discrepancy rules.",
+  "evidenceRefs": [
+    "state/decisions/2026-08-01-fightaiq-mma-files-scope.md",
+    "owner-request:2026-08-01-ufc-oktagon-only"
+  ],
+  "evaluationWindowCycles": 14,
+  "tests": [
+    "agent registry validation",
+    "organization maintenance approval and idempotency",
+    "FightAIQ routing and contract fixtures",
+    "FightAIQ intake dry run",
+    "MMA Files article dry run"
+  ],
+  "rollbackRef": "state/decisions/2026-08-01-fightaiq-mma-files-scope.md",
+  "affectedFiles": [
+    "config/agents.json",
+    "config/agent-routing.json",
+    "config/kpis.json",
+    "orchestrator/prompts/corner.md",
+    "orchestrator/prompts/spotter.md",
+    "site/src/data/agents.ts",
+    "site/src/components/agent-language.ts"
+  ],
+  "postconditions": {
+    "agentId": "SPOTTER",
+    "minimumOwnedKpis": 2,
+    "requiredCapabilities": [
+      "mma:scouting",
+      "mma:oktagon",
+      "language:czech"
+    ],
+    "promptPath": "orchestrator/prompts/spotter.md",
+    "avatarPath": null
+  }
+}

@@ -27,6 +27,17 @@ async function plan() {
   );
 }
 
+async function fightAiQScoutingPlan() {
+  return OrgMaintenancePlanSchema.parse(
+    JSON.parse(
+      await readFile(
+        path.join(repoRoot, "state/org/proposals/ORG-2026-08-01-FIGHTAIQ-SCOUTING.json"),
+        "utf8"
+      )
+    ) as unknown
+  );
+}
+
 describe("declarative organization maintenance", () => {
   it("applies the approved Tier C role once and records an idempotent change", async () => {
     const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-org-maintenance-"));
@@ -64,5 +75,17 @@ describe("declarative organization maintenance", () => {
       repoRoot,
       stateRoot: path.join(os.tmpdir(), "boardless-org-maintenance-refused")
     })).rejects.toThrow(/HUMAN_APPROVAL/);
+  });
+
+  it("validates an approved role change that keeps the text portrait fallback", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-org-maintenance-fightaiq-"));
+    roots.push(stateRoot);
+    const approved = await fightAiQScoutingPlan();
+    const result = await applyOrgMaintenancePlan({ plan: approved, repoRoot, stateRoot });
+    expect(result.applied).toBe(true);
+    expect(JSON.parse((await readFile(path.join(stateRoot, "org/changes.jsonl"), "utf8")).trim())).toMatchObject({
+      id: "ORG-2026-08-01-FIGHTAIQ-SCOUTING",
+      status: "applied"
+    });
   });
 });

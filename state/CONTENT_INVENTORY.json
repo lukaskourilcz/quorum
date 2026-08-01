@@ -757,7 +757,7 @@
     },
     {
       "url": "/fighters",
-      "purpose": "Publish sourced UFC, KSW and Oktagon fighter files with visible gaps.",
+      "purpose": "Publish sourced UFC and Oktagon fighter files with visible gaps.",
       "searchIntent": "browse sourced MMA fighter records",
       "primaryQuery": "MMA fighter database",
       "audience": "adult fight fans",

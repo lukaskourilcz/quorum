@@ -43,7 +43,7 @@ rolí pro MMA používá textovou náhradu, dokud majitel neschválí tvorbu dal
   platby, reklamy ani automatické zveřejňování.
 - **Magazine Incubator** hledá podložené nápady na publikace. Hodnocení majitele může
   nápad uložit do užšího výběru, ale samo nezaloží nový projekt.
-- **FightAIQ** spravuje zdrojovaná data o UFC, KSW a Oktagonu a počítá analýzy v kódu.
+- **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Je v režimu pouze pro data: neumí sázet, otevírat sázkové účty ani slibovat výhru.
 - **MMA Files** je zatím soukromá anglicko-česká redakce v administraci. Každý den má
   dva článkové sloty a čtyři návrhy pro sociální sítě. Veřejný magazín zatím neexistuje.

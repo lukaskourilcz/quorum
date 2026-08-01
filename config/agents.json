@@ -1309,10 +1309,10 @@
         "fightaiq"
       ],
       "department": "FightAIQ",
-      "title": "UFC and Oktagon Fight Scout",
-      "mission": "Builds and maintains sourced UFC and Oktagon fighter and event records, with corroboration and discrepancy checks before model use.",
+      "title": "UFC Fight Scout",
+      "mission": "Builds and maintains sourced UFC fighter and event records, with two-source and disagreement checks before model use.",
       "responsibilities": [
-        "Maintain UFC and Oktagon fighter records",
+        "Maintain UFC fighter records",
         "Track announced cards and post-event results",
         "Propose resolutions for source discrepancies"
       ],
@@ -1329,19 +1329,18 @@
         "corner.citation_coverage"
       ],
       "successChecks": [
-        "Every announced UFC and Oktagon bout has both dossiers ready by T-3",
+        "Every announced UFC bout has both dossiers ready by T-3",
         "Every stored field carries a source reference"
       ],
       "capabilityTags": [
         "mma:scouting",
-        "mma:ufc",
-        "mma:oktagon"
+        "mma:ufc"
       ],
       "status": "active",
       "activatedAt": "2026-08-01",
-      "profileVersion": 1,
-      "lastOrgReviewAt": null,
-      "descriptionRef": "agent-profile:CORNER:v1",
+      "profileVersion": 2,
+      "lastOrgReviewAt": "2026-08-01",
+      "descriptionRef": "agent-profile:CORNER:v2",
       "skillRefs": [
         ".claude/skills/business-validation/SKILL.md",
         ".claude/skills/boardroom-routing/SKILL.md"
@@ -1363,39 +1362,39 @@
         "fightaiq"
       ],
       "department": "FightAIQ",
-      "title": "KSW Fight Scout",
-      "mission": "Maintains sourced KSW fighter, event, weigh-in and result records from Polish and official reporting without translating names or figures.",
+      "title": "Oktagon Fight Scout",
+      "mission": "Maintains sourced Oktagon fighter, event, weigh-in and result records from official and regional reporting.",
       "responsibilities": [
-        "Maintain KSW fighter and event records",
-        "Capture KSW weigh-in outcomes",
-        "File KSW results after events"
+        "Maintain Oktagon fighter and event records",
+        "Capture Oktagon weigh-in outcomes",
+        "File Oktagon results after events"
       ],
       "notResponsibleFor": [
         "Filling gaps from memory",
         "Changing the shared scouting rubric alone"
       ],
       "decisionRights": [
-        "Mark KSW fields provisional or disputed",
-        "Propose KSW source corrections"
+        "Mark Oktagon fields provisional or disputed",
+        "Propose Oktagon source corrections"
       ],
       "ownedKpiIds": [
         "spotter.t3_readiness",
         "spotter.weighin_coverage"
       ],
       "successChecks": [
-        "Every announced KSW bout has both dossiers ready by T-3",
-        "Every KSW weigh-in has a sourced outcome"
+        "Every announced Oktagon bout has both dossiers ready by T-3",
+        "Every Oktagon weigh-in has a sourced outcome"
       ],
       "capabilityTags": [
         "mma:scouting",
-        "mma:ksw",
-        "language:polish"
+        "mma:oktagon",
+        "language:czech"
       ],
       "status": "active",
       "activatedAt": "2026-08-01",
-      "profileVersion": 1,
-      "lastOrgReviewAt": null,
-      "descriptionRef": "agent-profile:SPOTTER:v1",
+      "profileVersion": 2,
+      "lastOrgReviewAt": "2026-08-01",
+      "descriptionRef": "agent-profile:SPOTTER:v2",
       "skillRefs": [
         ".claude/skills/business-validation/SKILL.md",
         ".claude/skills/boardroom-routing/SKILL.md"

@@ -2,7 +2,7 @@ import "server-only";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
-export type MmaOrg = "ufc" | "ksw" | "oktagon";
+export type MmaOrg = "ufc" | "oktagon";
 export type SourcedValue = string | number | boolean | null | Array<string | number | boolean>;
 
 export interface PublicFighterField {
@@ -55,7 +55,7 @@ export interface PublicTrackRecord {
 }
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
-const orgs = new Set<MmaOrg>(["ufc", "ksw", "oktagon"]);
+const orgs = new Set<MmaOrg>(["ufc", "oktagon"]);
 const safeText = (value: unknown, maximum = 500): string | null => typeof value === "string" && value.trim().length > 0 && value.length <= maximum ? value.trim() : null;
 const safeDate = (value: unknown): string | null => {
   const text = safeText(value, 80);
@@ -244,7 +244,7 @@ export function fighterName(fighter: PublicFighter): string {
 }
 
 export function fighterHref(ref: string): string | null {
-  const match = /^(ufc|ksw|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(ref);
+  const match = /^(ufc|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(ref);
   return match ? `/fighters/${match[1]}/${match[2]}` : null;
 }
 

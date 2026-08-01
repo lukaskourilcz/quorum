@@ -8,7 +8,7 @@
     },
     "id": {
       "type": "string",
-      "pattern": "^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+      "pattern": "^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "slug": {
       "type": "string",
@@ -18,7 +18,6 @@
       "type": "string",
       "enum": [
         "ufc",
-        "ksw",
         "oktagon"
       ]
     },

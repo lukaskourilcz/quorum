@@ -1,6 +1,6 @@
 # FightAIQ
 
-FightAIQ is BoardlessAI’s sourced UFC, KSW and Oktagon data and analysis project.
+FightAIQ is BoardlessAI’s sourced UFC and Oktagon data and analysis project.
 Its current mode is `data-only`. It may collect facts, run deterministic models,
 show fixture-labeled dry proof and let the owner review records. It may not place a
 bet, open a bookmaker account, publish affiliate links or present gambling as income.
@@ -17,7 +17,7 @@ bet, open a bookmaker account, publish affiliate links or present gambling as in
 5. Model configuration is hash-coupled to its version. Meeting text containing a
    quantified fight probability fails validation without a ModelRun reference.
 
-Ratings use Glicko-2 in separate UFC, KSW and Oktagon pools. A crossover fighter gets
+Ratings use Glicko-2 in separate UFC and Oktagon pools. A crossover fighter gets
 a conservative bridge rating with wider uncertainty. The output includes win, method
 and round distributions, an uncertainty label, optional market comparison and exact
 input references.
@@ -29,7 +29,7 @@ only credentialed live adapters. Tapology and Sherdog are not scraped; prohibite
 unclear sources cannot silently become wired. The Odds API adapter reads the quota
 headers and refuses another request when remaining credits reach zero.
 
-The owner can enter UFC, KSW or Oktagon prices in `/admin`. This stores an auditable
+The owner can enter UFC or Oktagon prices in `/admin`. This stores an auditable
 snapshot only; no code logs in to a bookmaker or places a wager. Missing closing odds
 mean CLV is unknown, never guessed.
 
@@ -48,6 +48,6 @@ prices, slates and source terms.
 ## Moving beyond data-only
 
 The owner must countersign `state/decisions/2026-08-02-fightaiq-founding.md`, review one
-complete UFC, KSW and Oktagon event, and record a separate mode-change decision. Only
+complete UFC and Oktagon event, and record a separate mode-change decision. Only
 then may `FIGHTAIQ_ANALYSIS_ENABLED=true` expose live model analysis. The detailed
 manual list is in `NEEDED.md`.

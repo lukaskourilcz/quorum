@@ -59,8 +59,8 @@ async function evidenceFor(slate: EditorialSlate, slot: "am" | "pm"): Promise<Ar
     matches.push({ file, value: JSON.parse(raw) as unknown, raw });
   }
   if (matches.length === 0) return null;
-  const fighterRefs = [...collectStringValues(matches.map(({ value }) => value), /^(?:ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/u)];
-  const eventRef = [...collectStringValues(matches.map(({ value }) => value), /^(?:ufc|ksw|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u)][0];
+  const fighterRefs = [...collectStringValues(matches.map(({ value }) => value), /^(?:ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/u)];
+  const eventRef = [...collectStringValues(matches.map(({ value }) => value), /^(?:ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u)][0];
   const sources = matches.map(({ file }) => ({
     kind: "internal" as const,
     ref: path.relative(repoRoot, file)

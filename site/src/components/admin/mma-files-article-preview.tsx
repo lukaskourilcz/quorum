@@ -9,7 +9,7 @@ import type { AdminMmaArticle } from "@/lib/admin-mma-files";
 function inline(value: string): ReactNode[] {
   const output: ReactNode[] = [];
   let cursor = 0;
-  for (const match of value.matchAll(/\[([^\]]+)\]\((\/fighters\/(?:ufc|ksw|oktagon)\/[a-z0-9-]+)\)/gu)) {
+  for (const match of value.matchAll(/\[([^\]]+)\]\((\/fighters\/(?:ufc|oktagon)\/[a-z0-9-]+)\)/gu)) {
     const index = match.index ?? 0;
     if (index > cursor) output.push(value.slice(cursor, index));
     output.push(<Link className="font-semibold text-[var(--accent)] underline underline-offset-4" href={match[2]!} key={`${match[2]}-${index}`}>{match[1]}</Link>);

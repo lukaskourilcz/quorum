@@ -6,7 +6,7 @@ import {
   openObject
 } from "./common.js";
 
-export const MmaOrgSchema = z.enum(["ufc", "ksw", "oktagon"]);
+export const MmaOrgSchema = z.enum(["ufc", "oktagon"]);
 export const MmaFieldStatusSchema = z.enum(["verified", "provisional", "disputed"]);
 
 const FieldValueSchema = z.union([
@@ -34,7 +34,7 @@ const DiscrepancySchema = openObject({
 
 export const FighterRecordSchema = openObject({
   schemaVersion: z.literal("fighter-record/1"),
-  id: z.string().regex(/^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  id: z.string().regex(/^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   org: MmaOrgSchema,
   fields: z.record(z.string().min(1), SourcedFieldSchema),
@@ -62,11 +62,11 @@ export const FighterRecordSchema = openObject({
   }
 });
 
-const FighterRefSchema = z.string().regex(/^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/);
+const FighterRefSchema = z.string().regex(/^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/);
 
 export const EventCardSchema = openObject({
   schemaVersion: z.literal("event-card/1"),
-  id: z.string().regex(/^(ufc|ksw|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  id: z.string().regex(/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/),
   org: MmaOrgSchema,
   name: z.string().trim().min(1).max(160),
   venue: z.string().trim().min(1).max(160),

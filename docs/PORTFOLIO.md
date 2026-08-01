@@ -12,7 +12,7 @@ checks remain common infrastructure.
 | Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and an article hero | Delivery needs its narrow GitHub App; social production starts off |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and marketing plans | No shop, stock, payments, ads, people imagery or purchase claims |
 | Magazine Incubator | Research only | Finds evidence-backed publication ideas for owner rating | Cannot found a project or build a product |
-| FightAIQ | Operating, data-only | UFC, KSW and Oktagon fighter/event files and deterministic analysis | No live probability publishing, bet placement, affiliate links or bookmaker automation |
+| FightAIQ | Operating, data-only | UFC and Oktagon fighter/event files and deterministic analysis | No live probability publishing, bet placement, affiliate links or bookmaker automation |
 | MMA Files | Operating as a private newsroom | Two daily bilingual article slots with optional social variants | No public magazine route; no paid production without verified FightAIQ input |
 
 `config/ventures.json` stores meeting times, casts, cost limits, saved-item namespaces

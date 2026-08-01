@@ -3,7 +3,7 @@ import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
-const fighterRefPattern = /^(ufc|ksw|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+const fighterRefPattern = /^(ufc|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 
 type JsonValue = string | number | boolean | null | Array<string | number | boolean>;
 

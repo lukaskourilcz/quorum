@@ -127,7 +127,7 @@ odstavců, neobratné neskloňování a citaci bez zdroje.
 2. <https://www.fights.cz/ceska-scena/po-rozhovoru-s-novotnym-uz-me-do-oktagonu-vubec-nic-netahne-smeje-se-pirat-635969>
 3. <https://www.fights.cz/ceska-scena/sef-oktagonu-uz-vybral-soupere-pro-kincla-zminil-i-penaze-652134>
 4. <https://www.fights.cz/ceska-scena/oktagon-na-prazskem-hrade-ondrej-novotny-promluvil-o-specialni-akci-688772>
-5. <https://www.fights.cz/ceska-scena/ksw-zabiji-muj-potencial-cesky-talent-reaguje-na-prisna-slova-sefa-oktagonu-647185>
+5. <https://www.fights.cz/ceska-scena/oktagon-84-vysledky-a-nejlepsi-momenty-622890>
 6. <https://www.fights.cz/ceska-scena/na-mma-jsem-zavisly-v-oktagonu-se-chci-dostat-co-nejvys-hlasi-rytir-garba-pred-sobotni-zkouskou-636936>
 7. <https://www.fights.cz/ceska-scena/jde-to-za-mnou-sef-oktagonu-vysvetluje-proc-cesti-bojovnici-pohoreli-na-turnaji-v-ostrave-623460>
 8. <https://www.fights.cz/ceska-scena/oktagon-87-vysledky-a-nejlepsi-momenty-639593>

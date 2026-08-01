@@ -134,8 +134,8 @@
             "decisionNeeded": "PLAN",
             "preset": "mma-intake-room",
             "objectives": {
-              "dry": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC, KSW and Oktagon",
-              "live": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC, KSW and Oktagon"
+              "dry": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC and Oktagon",
+              "live": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
             }
           }
         },

@@ -23,7 +23,6 @@
             "type": "string",
             "enum": [
               "ufc",
-              "ksw",
               "oktagon"
             ]
           },
@@ -108,7 +107,6 @@
             "type": "string",
             "enum": [
               "ufc",
-              "ksw",
               "oktagon"
             ]
           },

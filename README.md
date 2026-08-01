@@ -21,7 +21,7 @@ passes the existing owner, budget, evidence, security and release gates.
 | Caught Up | Bilingual daily AI briefing and product board | Live delivery needs owner gates and a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
 | Magazine Incubator | Evidence-backed niche research for owner rating | No product creation or autonomous founding |
-| FightAIQ | Sourced UFC, KSW and Oktagon data plus deterministic analysis | Data-only until one reviewed event per organization and a signed mode change; no bet placement |
+| FightAIQ | Sourced UFC and Oktagon data plus deterministic analysis | Data-only until one reviewed event per organization and a signed mode change; no bet placement |
 | MMA Files | Two-slot bilingual MMA newsroom and social draft archive | Private admin newsroom only; live jobs require verified FightAIQ input and signed budget |
 
 The common registry is `config/ventures.json`. It defines cadence, routing,
@@ -127,7 +127,7 @@ Useful commands:
 | `pnpm cycle -- --phase tt-marketing --dry` | Runs the weekday Titty Tuesdays fixture room |
 | `pnpm cycle -- --phase incubator-scan --dry` | Runs the research scan with no provider calls |
 | `pnpm cycle -- --phase incubator-synthesis --dry` | Proves empty input creates no niche proposal |
-| `pnpm cycle -- --phase mma-intake --dry` | Checks all three FightAIQ organizations without live calls |
+| `pnpm cycle -- --phase mma-intake --dry` | Checks UFC and Oktagon without live calls |
 | `pnpm cycle -- --phase mma-analysis --dry` | Reviews the fixture model state within the data-only gate |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
 | `pnpm cycle -- --phase mag-desk --dry` | Reviews the private bilingual newsroom queue |

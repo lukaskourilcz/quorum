@@ -70,9 +70,9 @@ source accounts, approval records and project switches below are connected.
 
 ## FightAIQ data and launch gate
 
-- [ ] **Create the free source keys** — add `THE_ODDS_API_KEY` (the-odds-api.com) and `CITO_API_KEY` to Actions secrets. The live intake now stores their daily snapshot and stops requesting The Odds API after it reports zero remaining monthly credits. Verify whether its EU MMA feed includes KSW; if not, use the same manual price form used for Oktagon. [imp:5] [owner:me] [time:25m] [kind:setup]
+- [ ] **Create the UFC source keys** — add `THE_ODDS_API_KEY` (the-odds-api.com) and `CITO_API_KEY` to Actions secrets. The live intake stores their daily snapshot and stops requesting The Odds API after it reports zero remaining monthly credits. Use the owner form for Oktagon prices until an approved source is connected. [imp:5] [owner:me] [time:25m] [kind:setup]
 - [ ] **Review the betting types against your actual books** — trim the committed catalog to markets you can really capture. Do not add bookmaker scraping or account automation. [imp:4] [owner:me] [time:20m] [kind:content]
-- [ ] **Review one complete event per organization** — collect UFC, KSW and Oktagon cards, two-source fighter facts, T-3/T-1/closing prices, results and calibration. Then record a separate owner decision before changing FightAIQ from `data-only` to `live-analysis`. [imp:5] [owner:me] [time:3h] [kind:decision]
+- [ ] **Review one complete event per organization** — collect one UFC and one Oktagon card, two-source fighter facts, T-3/T-1/closing prices, results and calibration. Then record a separate owner decision before changing FightAIQ from `data-only` to `live-analysis`. [imp:5] [owner:me] [time:2h] [kind:decision]
 - [ ] **Enable FightAIQ only after that decision** — set `FIGHTAIQ_LIVE_ENABLED=true` for live data rooms and `FIGHTAIQ_ANALYSIS_ENABLED=true` only when public/model analysis is approved. These variables are currently missing. [imp:5] [owner:me] [time:10m] [kind:deploy]
 - [ ] **Clear both spellings before promotion** — run legal/domain checks for `FightAIQ` and `Fight AIQ`, plus age-gating and gambling-content rules in the intended countries. [imp:5] [owner:me] [time:90m] [kind:legal]
 

@@ -47,7 +47,7 @@ export async function generateMetadata({
       title: "Titty Tuesdays"
     };
   }
-  if (slug === "fightaiq") return { title: "FightAIQ", description: "Sourced UFC, KSW and Oktagon fighter files with a public model track record." };
+  if (slug === "fightaiq") return { title: "FightAIQ", description: "Sourced UFC and Oktagon fighter files with a public model track record." };
   const opportunity = opportunities.find((item) => item.slug === slug);
   return {
     description: opportunity?.reason ?? "BoardlessAI test idea.",

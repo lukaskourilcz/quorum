@@ -95,7 +95,7 @@ export default function VenturesPage() {
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">FightAIQ</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Sourced UFC, KSW and Oktagon files, with estimates made by code rather than guesswork.</h2>
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Sourced UFC and Oktagon files, with estimates made by code rather than guesswork.</h2>
               <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The public can inspect verified records. Live probabilities stay hidden until the owner reviews one full event per organization.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/fightaiq">Open FightAIQ <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>

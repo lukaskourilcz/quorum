@@ -21,11 +21,11 @@ const slate = EditorialSlateSchema.parse({
   date: "2026-08-01",
   slots: [
     { slot: "am", format: "fight-week-preview", subjectRefs: ["ufc:event:fixture-prague"], rationale: "The verified card is close enough for a sourced preview.", assignedWriter: "JAB", status: "assigned" },
-    { slot: "pm", format: "fighter-profile", subjectRefs: ["ksw:ewa-example"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "QUILL", status: "assigned" }
+    { slot: "pm", format: "fighter-profile", subjectRefs: ["oktagon:eva-example"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "QUILL", status: "assigned" }
   ],
   vaultVerdicts: [
     { subjectRef: "ufc:event:fixture-prague", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#1" },
-    { subjectRef: "ksw:ewa-example", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#2" }
+    { subjectRef: "oktagon:eva-example", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#2" }
   ]
 });
 

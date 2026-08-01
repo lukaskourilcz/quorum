@@ -174,12 +174,12 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+        "pattern": "^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
       }
     },
     "eventRef": {
       "type": "string",
-      "pattern": "^(ufc|ksw|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$"
+      "pattern": "^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "modelVersion": {
       "type": "string",

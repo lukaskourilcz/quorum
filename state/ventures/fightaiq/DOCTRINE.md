@@ -1,8 +1,8 @@
 # FightAIQ doctrine
 
-FightAIQ is a sourced fight-analysis desk for UFC, KSW and Oktagon. It starts with
+FightAIQ is a sourced fight-analysis desk for UFC and Oktagon. It starts with
 data, keeps each organization’s ratings separate and earns the right to show live
-analysis only after the owner reviews one full event cycle for all three.
+analysis only after the owner reviews one full event cycle for both organizations.
 
 ## What the desk does
 
@@ -18,7 +18,7 @@ analysis only after the owner reviews one full event cycle for all three.
 - Place a bet, sign into a bookmaker or publish a bookmaker or affiliate link.
 - Call anything certain, risk-free, guaranteed or a route to income.
 - Hide a losing record, disagreement, missing source or model change.
-- Mix ratings between UFC, KSW and Oktagon.
+- Mix ratings between UFC and Oktagon.
 - Let a narrative adjustment move a probability by more than three percentage points.
 - Use a source whose access rules have not been cleared.
 

@@ -128,7 +128,7 @@ function buildRecord(input: {
     ? `AUDIT vetoed the room output: ${veto.summary}`
     : isFightDesk
       ? input.phase === "mma-intake"
-        ? "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability."
+        ? "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
         : "Reviewed the versioned analysis state within the data-only gate. No probability was published."
     : input.phase === "mag-editorial" && input.editorialSlate
       ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
@@ -196,13 +196,13 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       readJson<{ evidenceRefs?: string[] }>(root, `ventures/fightaiq/source-snapshots/${date}.json`, {})
     ]);
     const day = new Date(`${date}T12:00:00Z`).getUTCDay();
-    const leadOrg = ["ufc", "ksw", "oktagon"][day % 3];
+    const leadOrg = ["ufc", "oktagon"][day % 2];
     const focus = fightWeekFocus(events, new Date(`${date}T12:00:00Z`));
     const focusPacket = focus.length
       ? `Fight-week cards, nearest first. Work only these bouts:\n${JSON.stringify(focus)}`
-      : "No verified card is inside the three-day fight-week window. Continue breadth-first file work across all three organizations.";
+      : "No verified card is inside the three-day fight-week window. Continue file work across UFC and Oktagon.";
     return {
-      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${focusPacket}\n\nLatest guarded API snapshot:\n${sourceSnapshot}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
+      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Check UFC and Oktagon.\n\n${focusPacket}\n\nLatest guarded API snapshot:\n${sourceSnapshot}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
       evidenceRefs: [
         ...bridgeEvidenceRefs(bridge),
         ...focus.map((event) => `event:${event.id}`),

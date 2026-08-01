@@ -30,7 +30,7 @@ export function parseOwnerOddsCapture(value: unknown, now = new Date()): OwnerOd
   const evidenceLabel = bounded(input.sourceLabel, 240);
   const redOdds = typeof input.redOdds === "string" || typeof input.redOdds === "number" ? Number(input.redOdds) : Number.NaN;
   const blueOdds = typeof input.blueOdds === "string" || typeof input.blueOdds === "number" ? Number(input.blueOdds) : Number.NaN;
-  if (!eventRef || !/^(ufc|ksw|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/.test(eventRef) || !boutRef || !evidenceLabel || !Number.isFinite(redOdds) || !Number.isFinite(blueOdds) || redOdds <= 1 || blueOdds <= 1 || redOdds > 1_000 || blueOdds > 1_000) return null;
+  if (!eventRef || !/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/.test(eventRef) || !boutRef || !evidenceLabel || !Number.isFinite(redOdds) || !Number.isFinite(blueOdds) || redOdds <= 1 || blueOdds <= 1 || redOdds > 1_000 || blueOdds > 1_000) return null;
   const capturedAt = now.toISOString();
   return {
     id: `owner-odds-${capturedAt.slice(0, 10)}-${randomUUID().slice(0, 8)}`,
