@@ -13,7 +13,7 @@ No live council, market, funnel or revenue window exists yet. Missing values are
 | Release success / task completion / incidents | FORGE | warm-up | Portfolio release gates pass; no approved live portfolio window |
 | Experiments / qualified actions / intent / profit | PULSE | n/a | No live experiment or analytics |
 | Quality / claims / security / JSON | AUDIT | warm-up | Deterministic bootstrap tests green |
-| Routing precision / duplicate work / org changes | PEOPLE | n/a | Twenty-seven roles validate; minimum live window not available |
+| Routing precision / duplicate work / org changes | PEOPLE | n/a | Thirty-eight roles validate; minimum live window not available |
 | Reconciliation / budget variance / commitments | LEDGER | warm-up | Ledgers reconcile at verified $0; recognized revenue $0 |
 | Cost per validated learning / duplicate proposals | ALL | n/a | No live council learning window |
 

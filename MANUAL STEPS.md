@@ -1,90 +1,73 @@
-# Manual steps — BoardlessAI portfolio
+# Manual steps — from dry proof to live work
 
-`NEEDED.md` is the canonical checklist. Use this shorter runbook to move from
-the shipped dry portfolio to live operation.
+`NEEDED.md` is the complete owner checklist. This is the recommended order.
 
-## 1. Make `/admin` writable and private
-
-In Vercel → `quorum-site` → Settings → Environment Variables, add Production
-values for:
-
-- `ADMIN_USER`
-- `ADMIN_PASSWORD`
-- `BOARDLESSAI_GITHUB_TOKEN` — fine-grained, Contents read/write, limited to
-  `lukaskourilcz/quorum`
-
-The repository and branch default to `lukaskourilcz/quorum` and `main`. Override
-them only with `BOARDLESSAI_GITHUB_REPOSITORY` and
-`BOARDLESSAI_GITHUB_BRANCH` when the canonical target changes. Redeploy, then
-verify that `/admin` returns `401` without credentials and `200` after browser
-login. A `503` means authentication or rating persistence is still incomplete.
-
-Ratings and optional notes are committed public state. Do not enter private
-information.
-
-## 2. Sign the portfolio decisions
+## 1. Sign the boundaries
 
 Review and countersign:
 
-1. `state/decisions/2026-08-01-titty-tuesdays-founding.md` for Venture 002’s
-   pre-commerce planning scope.
-2. `state/decisions/2026-08-01-budget-raise.md`, choosing either Shape A or
-   Shape B.
+1. `state/decisions/2026-08-04-budget-fifty.md`
+2. `state/decisions/2026-08-02-fightaiq-founding.md`
+3. `state/decisions/2026-08-01-titty-tuesdays-founding.md`
+4. the approval reference in `state/decisions/2026-08-01-caughtup-adoption.md`
 
-An unsigned budget decision uses Shape B: `$15` monthly, `$0.70` daily,
-Titty Tuesdays capped at `$0.06`, and no incubator synthesis meeting. This is a
-safe operating choice, not an error.
+Do not edit old decisions to imply a later approval. Fill the intended signature area
+or add a superseding record. Until the `$50` decision is signed, the older `$20`
+fallback remains correct and MMA Files live work stays off.
 
-## 3. Configure the one daily digest
+## 2. Rotate and add secrets
 
-Verify a Resend sending domain, then add Actions secrets:
+- Rotate `ANTHROPIC_API_KEY` and `OPENAI_API_KEY`; replace the GitHub Actions secrets.
+- Add `THE_ODDS_API_KEY` and `CITO_API_KEY` for FightAIQ.
+- Verify a Resend domain; add `RESEND_API_KEY` and `DAILY_DIGEST_EMAIL_TO`.
+- Install a Contents-only GitHub App on `lukaskourilcz/aifirst`; add
+  `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`.
 
-- `RESEND_API_KEY`
-- `DAILY_DIGEST_EMAIL_TO`
+Set repository variables for the Resend sender/tier and
+`CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app`. Keep every live switch absent or
+false during this step.
 
-Add repository variables:
+## 3. Make `/admin` private and writable
 
-- `DAILY_DIGEST_EMAIL_MODE=resend`
-- `DAILY_DIGEST_EMAIL_FROM`
-- `RESEND_FREE_TIER_MONTHLY=3000`
-- `RESEND_FREE_TIER_DAILY=100`
+In Vercel Production add:
 
-The workflow sends at most one digest per Prague date after the night room. It
-does not send per-meeting email. Without Resend configuration, the digest uses
-the safe log sink.
+- `ADMIN_USER`
+- `ADMIN_PASSWORD`
+- `BOARDLESSAI_GITHUB_TOKEN` — fine-grained Contents read/write on
+  `lukaskourilcz/quorum` only
 
-## 4. Prove delivery and run dry portfolio rooms
+Redeploy. Confirm `401` without credentials, `200` after login, a saved rating, a
+manual FightAIQ price and an MMA Files metrics entry. A `503` means setup is incomplete.
+Do not store personal or confidential text in admin notes because writes become
+repository history.
 
-Create the `boardlessai-delivery` GitHub App with repository Contents read/write
-only, install it only on `lukaskourilcz/aifirst`, and add its App ID and private
-key to Quorum Actions secrets. Add
-`CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app` as a repository variable.
+## 4. Review proof and real inputs
 
-Before any live switch, dispatch these phases with `dry=true` and review their
-meeting records:
+Open every link in `docs/LIVE-PROOF.md`. Fixture labels must remain visible. Then:
 
-- `cu-edition`
-- `tt-marketing`
-- `incubator-scan`
-- `incubator-synthesis`
+- deliver one reviewed Caught Up edition to `aifirst`;
+- capture one full UFC, KSW and Oktagon event, including two-source fighter facts,
+  T-3/T-1/closing prices and results;
+- confirm the committed bet types match markets you can actually capture;
+- review the first private MMA Files article and its English/Czech social drafts.
 
-Keep `SOCIAL_KILL_SWITCH=true`.
+Record a separate owner mode-change decision before FightAIQ live analysis.
 
-## 5. Enable one runtime at a time
+## 5. Enable one switch at a time
 
-After Caught Up delivery checks pass, set `CAUGHT_UP_LIVE_ENABLED=true`. After
-the portfolio decisions, dry rooms and digest are reviewed, set
-`PORTFOLIO_LIVE_ENABLED=true`. Do not enable both for the first time in the same
-change window.
+1. `CAUGHT_UP_LIVE_ENABLED=true`
+2. `PORTFOLIO_LIVE_ENABLED=true`
+3. `FIGHTAIQ_LIVE_ENABLED=true`
+4. `FIGHTAIQ_ANALYSIS_ENABLED=true` only after the event review and decision
+5. `MMA_FILES_LIVE_ENABLED=true` only after the signed `$50` limit
 
-Review the first three Caught Up editions and the first portfolio week in
-`/admin`. Check bilingual articles, citations, social drafts, ratings, taste
-distillation, incubator shortlist behavior, per-venture cost and the daily
-digest. Rate at least 10 cards before judging PALATE’s usefulness.
+Review a full day after each change. Keep `SOCIAL_KILL_SWITCH=true`. The magazine has
+no public destination yet, and the Instagram path does not publish the required
+four-frame set automatically.
 
-## 6. Keep external actions locked
+## 6. Do the human/legal work before promotion
 
-Manual social posting needs no Meta credentials. Automatic publishing stays off
-until a separate reviewed implementation supports the full Instagram carousel.
-The eshop, inventory, payment, ads, new accounts and founding an incubator winner
-are future owner-approved projects, not latent capabilities in this repository.
+Clear BoardlessAI, Caught Up, Titty Tuesdays, FightAIQ/Fight AIQ and MMA Files for the
+intended countries and uses. Add the real operator/privacy details before collecting
+personal data. Approve sponsorship, payment, tax and refund terms before money moves.
+No current live switch authorizes these activities.

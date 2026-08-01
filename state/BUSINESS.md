@@ -4,7 +4,7 @@
 
 **Operating (pre-revenue)** effective 2026-08-01 by owner decision.
 
-Caught Up is Venture 001. The owner adopted it directly; the founding council
+Caught Up is the first project. The owner adopted it directly; the founding council
 did not discover or approve it. That distinction keeps the founding gate honest:
 
 - Live founding cycles remain disabled and continue to throw.
@@ -13,11 +13,11 @@ did not discover or approve it. That distinction keeps the founding gate honest:
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
-Titty Tuesdays is implemented as a proposed Venture 002 in a pre-commerce,
-marketing-first scope. Its live schedule remains disabled until the owner
-countersigns the founding record. The magazine incubator is an exploration
-workspace, not a founded venture, and may only produce research proposals for
-owner rating.
+Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. FightAIQ
+is implemented in data-only mode for UFC, KSW and Oktagon. MMA Files is a private
+bilingual newsroom whose public site does not exist yet. Their live schedules remain
+behind the recorded signatures and independent switches. The Magazine Incubator may
+only produce research proposals for owner rating.
 
 ## Owner and roles
 
@@ -28,7 +28,7 @@ owner rating.
 
 ## Budget
 
-Monthly all-in operating hard cap: $20 USD.
+Effective unsigned fallback all-in hard cap: $20 USD.
 
 - API monthly cap: $15
 - API daily cap: $0.70
@@ -37,14 +37,13 @@ Monthly all-in operating hard cap: $20 USD.
 - Edition production cap: $0.35 per article run
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
-The unsigned `budget-2026-08` decision keeps these Shape B caps and omits the
-incubator synthesis room. An exact owner countersignature may select Shape A at
-$18 monthly and $1.00 daily while the $20 all-in hard cap remains unchanged.
+The pending `budget-2026-08d` record proposes one $50 all-in limit, a $42 model
+share and a $2.20 daily pace for all five projects. Until the owner countersigns
+that exact record, these older fallback limits remain and live MMA Files work is off.
 
-The planned worst month is $15 API plus $2 media, with $0 incremental hosting
-under the owner's existing Vercel Pro subscription and $0 email. If either
-project leaves Pro or the cost allocation changes, the owner must review the cap
-before accepting revenue.
+Hosting has $0 incremental project cost under the owner's existing Vercel Pro
+subscription. If that allocation changes, the owner must review the limit before
+accepting revenue.
 
 ## Stage and decision
 
@@ -57,7 +56,7 @@ and a distribution mechanism observed
 
 Thesis confidence: owner-adopted, unvalidated
 
-The DISCOVERY gate did not pass. Owner adoption advanced Venture 001 to the
+The DISCOVERY gate did not pass. Owner adoption advanced Caught Up to the
 first post-discovery stage without rewriting the founding record.
 
 ## Thesis
@@ -128,13 +127,16 @@ venture or a live founding cycle.
 
 ## Solution and scope
 
-BoardlessAI runs the shared venture registry and public clock. For Caught Up it
+BoardlessAI runs the shared project registry and public clock. For Caught Up it
 owns source collection, edition and product rooms, guarded production, delivery
 records and governance surfaces. For Titty Tuesdays it owns pre-commerce brand,
-season, audience and marketing planning only. The incubator owns research
-proposals only. Caught Up keeps a static reader path with Git and MDX as canon.
+season, audience and marketing planning only. FightAIQ owns sourced fighter/event
+records and code-generated analysis without betting. MMA Files owns private bilingual
+article and social drafts. The incubator owns research proposals only. Caught Up keeps
+a static reader path with Git and MDX as canon.
 
 ## Constraints
 
-The $20 all-in cap, human-only payments, draft-locked channels, sanitization
-boundary, evidence rules, security controls and release gates remain binding.
+The effective unsigned $20 fallback, human-only payments, draft-locked channels,
+sanitization boundary, evidence rules, security controls and release gates remain
+binding. Only a countersigned `budget-2026-08d` changes the limit to $50.

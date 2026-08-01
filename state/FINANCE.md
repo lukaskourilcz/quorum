@@ -1,7 +1,9 @@
 # Finance
 
 Currency: USD  
-Monthly all-in operating cap: $20.00
+Effective unsigned monthly all-in cap: $20.00
+
+Pending owner decision: $50.00 under `budget-2026-08d`
 
 | Metric | Value |
 | --- | ---: |
@@ -17,3 +19,5 @@ Operating mode began with no accepted revenue event and no committed cost, so
 recognized revenue and gross profit are measured zeros as of 2026-08-01. Refund
 and payment-fee data remains unavailable until a payment source exists. Verified
 entries in `finance/ledger.json`, API usage and treasury entries reconcile once.
+The $50 proposal is not effective until countersigned; the runtime therefore keeps
+the $20 fallback and blocks live MMA Files spend.

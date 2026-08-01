@@ -11,7 +11,7 @@
 
 ## Runtime
 
-Caught Up is Venture 001 by owner adoption. The business operates in VALIDATION;
+Caught Up is the first project by owner adoption. The business operates in VALIDATION;
 the founding gate remains unpassed and live founding cycles stay disabled.
 
 - [x] Replace the two-cycle cadence with full-council shifts at
@@ -26,7 +26,7 @@ work. They require a fresh owner scope before implementation.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [x] Expand the shared roster to 27 agents, including the Caught Up language desks and portfolio specialists, with validated portraits.
+- [x] Expand the shared roster to 38 agents across five projects; validate 27 existing portraits and explicit fallbacks for the 11 new MMA roles.
 - [x] Port source collection and edition production into BoardlessAI.
 - [x] Run the two Caught Up rooms in guarded dry mode.
 - [x] Add Caught Up consumer rendering and the missed-day sentinel.
@@ -45,4 +45,7 @@ work. They require a fresh owner scope before implementation.
 - [x] Ship the research-only magazine incubator and zero-proposal dry proof.
 - [x] Resolve the collision-free 07:00, 11:00 and 21:00 Prague slots.
 - [x] Replace per-meeting email with one idempotent daily portfolio digest.
+- [x] Add FightAIQ contracts, source controls, two-source fighter records, deterministic Glicko-2 analysis, owner prices, private review and public data pages.
+- [x] Add the MMA Files private newsroom, two daily evidence-first slots, English/Czech packages, four social variants and manual metrics.
+- [x] Expand the shared Prague clock to 14 collision-free slots and prove all 12 room kinds with fixture labels.
 - [ ] Complete the owner approvals and week-one review listed in `NEEDED.md`.

@@ -1,87 +1,98 @@
-# BoardlessAI portfolio model
+# BoardlessAI project model
 
-BoardlessAI is one operating system with shared controls and venture-specific
-context. It does not clone an orchestrator for every product. The public site,
-budget ledger, agent registry, meeting record, calendar, admin authentication
-and release gates remain common infrastructure.
+BoardlessAI is one operating system with shared safety rules and five project
+workspaces. It does not clone an orchestrator for each project. The public site,
+budget history, agent list, meeting records, calendar, private login and release
+checks remain common infrastructure.
 
-## Portfolio
+## Projects
 
-| Workspace | Status | Purpose | External boundary |
+| Project | State | What it does | Hard boundary |
 | --- | --- | --- | --- |
-| Caught Up | Operating in validation | Bilingual AI briefing, product decisions and draft social packs | Delivery needs the bounded GitHub App; publishing stays gated |
-| Titty Tuesdays | Pre-commerce; owner countersign pending | Brand, concept seasons, audience work and marketing plans | No eshop, stock, payment, ads, people imagery or purchase claims |
-| Magazine Incubator | Research-only exploration | Evidence-backed daily publication niches for owner rating | Cannot found a venture or create a product |
+| Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and social drafts | Delivery needs its narrow GitHub App; social publishing stays off |
+| Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and marketing plans | No shop, stock, payments, ads, people imagery or purchase claims |
+| Magazine Incubator | Research only | Finds evidence-backed publication ideas for owner rating | Cannot found a project or build a product |
+| FightAIQ | Operating, data-only | UFC, KSW and Oktagon fighter/event files and deterministic analysis | No live probability publishing, bet placement, affiliate links or bookmaker automation |
+| MMA Files | Operating as a private newsroom | Two daily bilingual article slots and four social variants per article | No public magazine route; no paid production without verified FightAIQ input |
 
-The registry in `config/ventures.json` defines each workspace, meeting cadence,
-cast, routing preset, idea namespace, taste flag and admin tabs. Caught Up’s
-behavior is preserved through that registry rather than a special scheduler.
+`config/ventures.json` is the machine-readable source for meeting times, casts,
+cost limits, saved-item namespaces and admin tabs. The site calls these “projects”
+because that is clearer to visitors; internal contracts retain `venture` for
+backward compatibility.
 
-## Agents and authority
+## People and authority
 
-The four council seats—VIZE, FORGE, PULSE and AUDIT—retain portfolio authority.
-Global specialists are routed only when their contract is relevant. ANGLE,
-COHORT, FUNNEL and PALATE serve the portfolio; SCENE and STUNT are assigned to
-Titty Tuesdays. Caught Up retains its language and editorial desks.
+The four council seats—VIZE, FORGE, PULSE and AUDIT—keep company-wide authority.
+Thirty-four specialists join only when their role is needed. The registry has 38
+agents: 20 Anthropic and 18 OpenAI. Twenty-seven have validated portraits; the 11
+new MMA roles use a deliberate fallback until the owner approves image generation.
 
-PULSE chairs the new rooms and AUDIT retains veto. PALATE is a pre-meeting taste
-pass, not a voter or cron. Owner ratings are evidence for taste, never
-instructions. Prompt-doctrine changes, spend, accounts, credentials, scopes,
-publishing and stage changes remain owner-only.
+PULSE chairs the project rooms and AUDIT keeps its veto. Owner ratings teach format
+and taste; they are not instructions. Agents cannot approve their own spending,
+credentials, account access, publishing, stage changes or governing prompts.
 
 ## One Prague clock
 
-The shared schedule has eight daily wall-clock slots:
-
-| Prague | Room |
+| Prague | Work |
 | ---: | --- |
 | 05:00 | Caught Up edition |
-| 06:00 | Portfolio morning board |
+| 06:00 | Board morning |
 | 07:00 | Incubator evidence scan |
+| 08:00 | FightAIQ data check |
+| 09:00 | MMA Files story meeting |
+| 10:00 | MMA Files morning article slot |
 | 11:00 | Titty Tuesdays marketing |
-| 14:00 | Portfolio afternoon board |
-| 17:00 | Caught Up product |
+| 14:00 | Board afternoon |
+| 17:00 | Caught Up product meeting |
+| 18:00 | MMA Files evening article slot |
+| 19:00 | FightAIQ model check |
+| 20:00 | MMA Files desk review |
 | 21:00 | Incubator synthesis |
-| 22:00 | Portfolio night board |
+| 22:00 | Board night |
 
-Each slot receives summer and winter UTC cron variants. The runtime rejects the
-inactive daylight-saving variant, and the registry rejects starts less than 60
-minutes apart. The WeekBoard uses the same resolved schedule.
+Each slot receives summer and winter UTC cron entries. The runtime rejects the
+inactive daylight-saving entry, and schedule validation rejects starts less than
+60 minutes apart. The public calendar reads the same resolved table.
 
-## Budget behavior
+## Spending behavior
 
-The owner budget record controls two shapes. Shape A uses `$18` monthly and
-`$1.00` daily API caps and includes both incubator rooms. Until an exact
-countersignature selects it, Shape B keeps `$15` and `$0.70`, caps Titty
-Tuesdays at `$0.06`, and omits incubator synthesis.
+`budget-2026-08d` proposes one `$50` all-in monthly limit, including model calls,
+images, services and other outside cost. Its model share is `$42` per month with a
+`$2.20` daily pace. Until the owner countersigns that exact record, the safe fallback
+remains `$20` all-in, `$15` for model calls and `$0.70` per day; live MMA Files jobs
+remain off.
 
-Headroom degradation is automatic: below `$3` synthesis is removed; below
-`$1.50` the incubator pauses and Titty Tuesdays becomes minimal; below `$0.50`
-Titty Tuesdays pauses. Caught Up survives the final portfolio rung. The `$20`
-all-in cap and human-only payments do not change.
+At 80% the daily summary warns the owner with a project breakdown. At 100%, or
+after three days in a row exhaust the daily pace, further spend stops and one
+approval item is opened. The runtime cannot borrow from next month or raise its own
+limit. Payments remain human-only.
 
-## State and review
+## Saved work and review
 
-Ideas live under `state/ideas/<venture>/`; ratings under
-`state/ratings/<venture>/`; taste under `state/taste/<venture>/`; and visual
-weights under `config/visual-weights/<venture>.json`. The admin reads these
-files through its existing Basic Auth boundary. Production ratings persist to
-GitHub through a repository-scoped token and append immutable history.
+Ideas live under `state/ideas/<project>/`; ratings under
+`state/ratings/<project>/`; learned style under `state/taste/<project>/`; and image
+preferences under `config/visual-weights/<project>.json`. The private admin reads
+these files through Basic Auth. In production, approved forms write through a
+repository-scoped GitHub token.
 
-Perfect moves an incubator proposal to the owner shortlist. Good records signal
-without founding anything. Bad archives the proposal with its history intact.
-The Titty Tuesdays binder includes approved plans and owner-rated Perfect plans
-for future use; it does not imply a store exists.
+The admin includes Caught Up social drafts, Titty Tuesdays plans, incubator ideas,
+FightAIQ fighters/events/slates/sources and MMA Files articles/calendar/social lab.
+Perfect, Good and Bad ratings keep their full history; no project is founded or
+published merely because a card was rated.
 
-After the night room, the workflow builds one digest for the Prague date. Each
-meeting receives one line, skipped rooms stay visible, and a final-cycle failure
-becomes a failure line. The body is capped at 400 words and a replay is
-idempotent. Per-meeting email no longer exists.
+After the night room, one summary is built for the Prague date. Each held meeting
+gets one line, skipped rooms stay visible, and final-cycle failures are reported.
+The body is capped at 400 words and replay is idempotent.
 
-## Go-live rule
+## Live switches
 
-`CAUGHT_UP_LIVE_ENABLED` and `PORTFOLIO_LIVE_ENABLED` are independent repository
-variables. Missing variables keep their runtimes dry or skipped. Titty Tuesdays
-also needs its founding countersignature; Shape A needs its own exact budget
-countersignature. Social publishing and commerce remain outside these switches.
-The owner checklist is `NEEDED.md`; the ordered runbook is `MANUAL STEPS.md`.
+- `CAUGHT_UP_LIVE_ENABLED` — live edition and product rooms after delivery checks.
+- `PORTFOLIO_LIVE_ENABLED` — shared Titty Tuesdays/incubator runtime.
+- `FIGHTAIQ_LIVE_ENABLED` — live source/data rooms.
+- `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the recorded data-only
+  mode change.
+- `MMA_FILES_LIVE_ENABLED` — live private newsroom after the signed budget.
+- `SOCIAL_KILL_SWITCH=true` — keeps social work in draft mode.
+
+Missing variables deny the action. The exact owner checklist is `NEEDED.md`; the
+ordered setup path is `MANUAL STEPS.md`.

@@ -1,21 +1,21 @@
-# BoardlessAI — financování a škálování
+# BoardlessAI — financování a růst
 
 Operating (pre-revenue) režim platí od 2026-08-01 (viz `state/BUSINESS.md`).
-Stack je v `about-project.md`; účetnictví žije v `state/finance/` a
+Technický přehled je v `about-project.md`; účetnictví je v `state/finance/` a
 `state/treasury/`.
 
 ## Peníze teď
 
-- Ověřený spend: **$0.00**. Hard cap: **$20 / měsíc**. Nepodepsaná Shape B drží API cap $15 / měsíc a $0.70 / den; media cap je $2.
-- Podepsaná Shape A může zvýšit API cap na $18 / měsíc a $1.00 / den. Tím se rezerva pod hard capem zmenší; scheduler proto zachovává headroom degradation a nejdřív vypíná incubator a TT.
+- Ověřené náklady: **$0.00**. Dokud majitel nepodepíše `budget-2026-08d`, platí bezpečný celkový limit **$20 / měsíc**, z toho $15 pro modely a $0.70 denně.
+- Podepsané rozhodnutí `budget-2026-08d` zvýší jeden společný limit na **$50 / měsíc**, z toho $42 pro modely a $2.20 denně. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví.
 - Každý externí výdaj schvaluje člověk (položka `HUMAN_APPROVAL` / `SPEND`); agent nedrží platební údaje.
-- Deterministická media a jeden denní e-mail digest mají plánovaný náklad $0. Projekty používají
-  existující Vercel Pro subscription, proto je inkrementální hostingový náklad
-  $0. Odchod z Pro nebo změna alokace faktury znovu otevře kontrolu capu.
+- Obrázky vytvářené přímo v kódu a jeden denní e-mailový souhrn mají plánovaný
+  náklad $0. Projekty používají existující Vercel Pro, proto je jejich dodatečný
+  náklad na hosting $0. Změna tarifu nebo rozdělení faktury znovu otevře kontrolu limitu.
 
 ## Odkud brát peníze
 
-- Founder-funded bootstrap (výchozí), cloud/API kredity a granty, customer-funded revenue po validaci nabídky, případně externí kapitál.
+- Vlastní peníze zakladatele (výchozí), cloud/API kredity a granty, platby zákazníků po ověření nabídky, případně externí kapitál.
 
 ## Kdy škálovat (a finanční dopad)
 
@@ -25,4 +25,4 @@ Stack je v `about-project.md`; účetnictví žije v `state/finance/` a
 
 ## Kontrola nákladů
 
-Týdně sledovat ledger; před větším výdajem nebo fundraisingem projít kontrolní body a hard cap.
+Týdně kontrolovat historii nákladů; před větším výdajem nebo hledáním investora projít schválení a společný limit.
