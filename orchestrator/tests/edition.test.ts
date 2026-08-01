@@ -407,7 +407,7 @@ describe("edition dry production", () => {
   it("builds the deterministic golden package without leaking injected instructions", async () => {
     const result = await runEditionDry();
     expect(result.status).toBe("edition");
-    expect(result.packageHash).toBe("23bd3aef795d6da70ee523bc7e781290f2dc918052c3592d8c1b08bc2c97451e");
+    expect(result.packageHash).toBe("a228c755075cc700f01c623777b2c179cd31a3ddaee7393c2abeed275aa41ed0");
     expect(result.report.measuredCostUsd).toBe(0.194);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(

@@ -11,22 +11,26 @@ const dryGateway: MmaFilesEditorialGateway = {
     return slot === "am" ? {
       title: "Alex Example meets Sam Example in the fixture card",
       dek: "The dry run checks a bilingual article without claiming a real event exists.",
-      bodyMDX: "## Fixture matchup\n\n[Alex Example](/fighters/ufc/alex-example) carries a 12-2 fixture record. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) carries a 10-3 fixture record. [^source-1]"
+      bodyMDX: "## Fixture matchup\n\n[Alex Example](/fighters/ufc/alex-example) carries a 12-2 fixture record. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) carries a 10-3 fixture record. [^source-1]",
+      imageAlt: "A typographic fixture card for Alex Example and Sam Example"
     } : {
       title: "Eva Example enters the fixture fighter file",
       dek: "This dry profile checks the same evidence rules as a live newsroom slot.",
-      bodyMDX: "## Fixture profile\n\n[Eva Example](/fighters/oktagon/eva-example) carries an 8-1 fixture record. [^source-1]\n\n[Anna Example](/fighters/oktagon/anna-example) carries a 7-2 fixture record. [^source-1]"
+      bodyMDX: "## Fixture profile\n\n[Eva Example](/fighters/oktagon/eva-example) carries an 8-1 fixture record. [^source-1]\n\n[Anna Example](/fighters/oktagon/anna-example) carries a 7-2 fixture record. [^source-1]",
+      imageAlt: "A typographic fixture fighter file for Eva Example"
     };
   },
   async localizeCzech({ slot }) {
     return slot === "am" ? {
       title: "Alex Example se na zkušební kartě utká se Samem Examplem",
       dek: "Suchý běh kontroluje dvojjazyčný článek a netvrdí, že skutečný turnaj existuje.",
-      bodyMDX: "## Zkušební zápas\n\n[Alex Example](/fighters/ufc/alex-example) má zkušební bilanci 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) má zkušební bilanci 10-3. [^source-1]"
+      bodyMDX: "## Zkušební zápas\n\n[Alex Example](/fighters/ufc/alex-example) má zkušební bilanci 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) má zkušební bilanci 10-3. [^source-1]",
+      imageAlt: "Typografická zkušební karta pro Alexe Examplea a Sama Examplea"
     } : {
       title: "Eva Example vstupuje do zkušebního profilu bojovnice",
       dek: "Suchý profil hlídá stejná pravidla pro zdroje jako živá redakce.",
-      bodyMDX: "## Zkušební profil\n\n[Eva Example](/fighters/oktagon/eva-example) má zkušební bilanci 8-1. [^source-1]\n\n[Anna Example](/fighters/oktagon/anna-example) má zkušební bilanci 7-2. [^source-1]"
+      bodyMDX: "## Zkušební profil\n\n[Eva Example](/fighters/oktagon/eva-example) má zkušební bilanci 8-1. [^source-1]\n\n[Anna Example](/fighters/oktagon/anna-example) má zkušební bilanci 7-2. [^source-1]",
+      imageAlt: "Typografický zkušební profil Evy Example"
     };
   }
 };

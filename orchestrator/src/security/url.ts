@@ -7,6 +7,9 @@ const ALLOWED_CONTENT_TYPES = [
   "application/json",
   "application/rss+xml",
   "application/xml",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
   "text/html",
   "text/plain",
   "text/xml"

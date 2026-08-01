@@ -164,13 +164,64 @@
                       "properties": {
                         "path": {
                           "type": "string",
-                          "pattern": "^\\/illustrations\\/[a-zA-Z0-9/_-]+\\.webp$"
+                          "pattern": "^\\/(?:images\\/[a-z0-9][a-z0-9/_-]*\\.(?:webp|png|svg)|illustrations\\/[a-zA-Z0-9/_-]+\\.webp)$"
+                        },
+                        "thumbnail_path": {
+                          "type": "string",
+                          "pattern": "^\\/images\\/[a-z0-9][a-z0-9/_-]*\\.(?:webp|png|svg)$"
                         },
                         "prompt": {
                           "type": "string"
                         },
                         "alt": {
-                          "type": "string"
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        },
+                        "width": {
+                          "type": "integer",
+                          "minimum": 640,
+                          "maximum": 4000
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 360,
+                          "maximum": 3000
+                        },
+                        "origin": {
+                          "type": "string",
+                          "enum": [
+                            "photo",
+                            "svg"
+                          ]
+                        },
+                        "attribution": {
+                          "type": "object",
+                          "properties": {
+                            "license": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "author": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "source_url": {
+                              "type": "string",
+                              "pattern": "^https:\\/\\/"
+                            },
+                            "text": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "license",
+                            "author",
+                            "source_url",
+                            "text"
+                          ],
+                          "additionalProperties": {}
                         }
                       },
                       "required": [
@@ -593,13 +644,64 @@
                       "properties": {
                         "path": {
                           "type": "string",
-                          "pattern": "^\\/illustrations\\/[a-zA-Z0-9/_-]+\\.webp$"
+                          "pattern": "^\\/(?:images\\/[a-z0-9][a-z0-9/_-]*\\.(?:webp|png|svg)|illustrations\\/[a-zA-Z0-9/_-]+\\.webp)$"
+                        },
+                        "thumbnail_path": {
+                          "type": "string",
+                          "pattern": "^\\/images\\/[a-z0-9][a-z0-9/_-]*\\.(?:webp|png|svg)$"
                         },
                         "prompt": {
                           "type": "string"
                         },
                         "alt": {
-                          "type": "string"
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        },
+                        "width": {
+                          "type": "integer",
+                          "minimum": 640,
+                          "maximum": 4000
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 360,
+                          "maximum": 3000
+                        },
+                        "origin": {
+                          "type": "string",
+                          "enum": [
+                            "photo",
+                            "svg"
+                          ]
+                        },
+                        "attribution": {
+                          "type": "object",
+                          "properties": {
+                            "license": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "author": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "source_url": {
+                              "type": "string",
+                              "pattern": "^https:\\/\\/"
+                            },
+                            "text": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "license",
+                            "author",
+                            "source_url",
+                            "text"
+                          ],
+                          "additionalProperties": {}
                         }
                       },
                       "required": [

@@ -458,7 +458,8 @@ async function runCaughtUpLiveEditionCycle(
     now,
     meetingRef: reference,
     roomUrl: `${baseUrl}/${reference}`,
-    socialPackEnabled: caughtUpSocialProductionEnabled(agentControls)
+    socialPackEnabled: caughtUpSocialProductionEnabled(agentControls),
+    licensedImageSearchEnabled: true
   });
   const monthAllInUsd = await appendEditionUsage(stateRoot, cycleId, now, produced.report);
   const evidenceRefs = produced.package.status === "edition"

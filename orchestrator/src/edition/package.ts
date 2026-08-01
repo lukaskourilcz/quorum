@@ -55,7 +55,8 @@ function frontmatter(
   article: WrittenArticle,
   locale: "en" | "cs",
   config: EditionQualityConfig,
-  context: EditionPackageContext
+  context: EditionPackageContext,
+  image: ArticleImage
 ): ArticleFrontmatterV2 {
   const localized = article.byLocale[locale];
   return {
@@ -69,9 +70,19 @@ function frontmatter(
     tags: article.tags,
     sources: article.sources,
     illustration: {
-      ...(context.hero ? { path: `/illustrations/${article.date}.webp` } : {}),
+      path: image.hero_path.replace(/^public/u, ""),
+      thumbnail_path: image.thumb_path.replace(/^public/u, ""),
       prompt: article.illustrationPrompt,
-      alt: localized.illustrationAlt
+      alt: locale === "en" ? image.alt_en : image.alt_cs,
+      width: image.width,
+      height: image.height,
+      origin: image.origin,
+      attribution: {
+        license: image.license.name,
+        author: image.license.author,
+        source_url: image.license.source_url,
+        text: image.license.attribution_html
+      }
     },
     signal_strength: context.signalStrength,
     why_it_matters: localized.whyItMatters,
@@ -87,7 +98,7 @@ function frontmatter(
       },
       source_candidates: context.sourceCandidates,
       cited_sources: article.sources.length,
-      image_provider: context.hero ? "BoardlessAI deterministic composer" : "none",
+      image_provider: image.origin === "photo" ? image.license.name : "BoardlessAI FRAME",
       ...(context.costUsd === undefined
         ? {}
         : { cost: { amount: context.costUsd, currency: "USD" as const } })
@@ -119,11 +130,11 @@ export function buildEditionPackage(
     image,
     article: {
       en: {
-        frontmatter: frontmatter(article, "en", config, context),
+        frontmatter: frontmatter(article, "en", config, context, image),
         body: article.byLocale.en.bodyMdx
       },
       cs: {
-        frontmatter: frontmatter(article, "cs", config, context),
+        frontmatter: frontmatter(article, "cs", config, context, image),
         body: article.byLocale.cs.bodyMdx
       }
     },

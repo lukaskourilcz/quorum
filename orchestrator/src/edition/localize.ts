@@ -159,6 +159,9 @@ export async function localizeToCzech(
     illustrationPrompt: article.illustrationPrompt,
     wire: article.wire,
     sources: article.sources,
+    ...(article.selectedImageCandidateIndex === undefined
+      ? {}
+      : { selectedImageCandidateIndex: article.selectedImageCandidateIndex }),
     byLocale: {
       en: article.en,
       cs: localized(response.value)

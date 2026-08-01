@@ -37,12 +37,30 @@ export function validateEditionForDelivery(value: unknown): EditionPackage {
   ) {
     errors.push("localized package_hash differs from idempotencyKey");
   }
-  if (editionPackage.hero) {
-    if (editionPackage.hero.path !== `public/illustrations/${editionPackage.date}.webp`) {
-      errors.push("hero path is outside the authorized date path");
+  const expectedHeroPath = editionPackage.image.hero_path.replace(/^public/u, "");
+  const expectedThumbPath = editionPackage.image.thumb_path.replace(/^public/u, "");
+  for (const [locale, localized] of [["en", en], ["cs", cs]] as const) {
+    const deliveredPath = localized.frontmatter.illustration.path;
+    const legacyPath = deliveredPath?.startsWith("/illustrations/") && Boolean(editionPackage.hero);
+    if (deliveredPath && deliveredPath !== expectedHeroPath && !legacyPath) {
+      errors.push(`${locale} illustration path differs from the delivered image`);
     }
-  } else if (en.frontmatter.illustration.path || cs.frontmatter.illustration.path) {
-    errors.push("frontmatter illustration path requires a delivered hero");
+    if (localized.frontmatter.illustration.thumbnail_path && localized.frontmatter.illustration.thumbnail_path !== expectedThumbPath) {
+      errors.push(`${locale} thumbnail path differs from the delivered image`);
+    }
+    if (localized.frontmatter.illustration.origin && localized.frontmatter.illustration.origin !== editionPackage.image.origin) {
+      errors.push(`${locale} illustration origin differs from the delivered image`);
+    }
+    if (localized.frontmatter.illustration.attribution?.source_url && localized.frontmatter.illustration.attribution.source_url !== editionPackage.image.license.source_url) {
+      errors.push(`${locale} attribution source differs from the delivered image`);
+    }
+    const expectedAlt = locale === "en" ? editionPackage.image.alt_en : editionPackage.image.alt_cs;
+    if (localized.frontmatter.illustration.origin && localized.frontmatter.illustration.alt !== expectedAlt) {
+      errors.push(`${locale} illustration alt text differs from the delivered image`);
+    }
+  }
+  if (editionPackage.hero && editionPackage.hero.path !== `public/illustrations/${editionPackage.date}.webp`) {
+    errors.push("legacy hero path is outside the authorized date path");
   }
   try {
     for (const [locale, article] of [["en", en], ["cs", cs]] as const) {

@@ -30,6 +30,11 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 40000
+            },
+            "imageAlt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
             }
           },
           "required": [
@@ -56,6 +61,11 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 40000
+            },
+            "imageAlt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
             }
           },
           "required": [

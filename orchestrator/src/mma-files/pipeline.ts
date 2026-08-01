@@ -1,12 +1,14 @@
 import { ArticlePackageSchema, type ArticlePackage, type EditorialSlate } from "../contracts/mma-files.js";
 import { articlePackageHash } from "./hash.js";
-import { renderArticleHero, renderSocialVariants } from "./frame.js";
+import { renderSocialVariants } from "./frame.js";
 import { buildSocialVariantPack } from "./social.js";
 import { loadStylebook, reviewArticle, stylebookPacket, validateStylebook, type CopyViolation } from "./style.js";
 import { storeArticleMedia, storeArticlePackage, storeSocialVariantPack } from "./store.js";
 import { deterministicArticleImage } from "../images/article-image.js";
+import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
 
 type Localization = ArticlePackage["localizations"]["en"];
+type EnglishDraft = Localization & { imageCandidateIndex?: number };
 type ArticleSource = ArticlePackage["sources"][number];
 
 export interface ArticleEvidencePacket {
@@ -24,7 +26,8 @@ export interface MmaFilesEditorialGateway {
     slot: "am" | "pm";
     stylebook: string;
     evidence: ArticleEvidencePacket;
-  }): Promise<Localization>;
+    imageCandidates: readonly LicensedPhotoCandidate[];
+  }): Promise<EnglishDraft>;
   localizeCzech(input: {
     english: Localization;
     slate: EditorialSlate;
@@ -54,6 +57,7 @@ export async function produceMmaFilesArticle(input: {
   gateway: MmaFilesEditorialGateway;
   stylebookRaw?: string;
   socialProductionEnabled?: boolean;
+  imageCandidates?: readonly LicensedPhotoCandidate[];
 }): Promise<ArticleProductionResult> {
   const assignment = input.slate.slots.find((slot) => slot.slot === input.slot);
   if (!assignment) throw new Error(`Editorial slate has no ${input.slot} slot`);
@@ -65,27 +69,47 @@ export async function produceMmaFilesArticle(input: {
     slate: input.slate,
     slot: input.slot,
     stylebook: stylebookPacket(stylebook, "en"),
-    evidence: input.evidence
+    evidence: input.evidence,
+    imageCandidates: input.imageCandidates ?? []
   });
-  const cs = await input.gateway.localizeCzech({
-    english: en,
+  const { imageCandidateIndex, imageAlt: enImageAlt, ...enLocalization } = en;
+  const localizedCzech = await input.gateway.localizeCzech({
+    english: enLocalization,
     slate: input.slate,
     slot: input.slot,
     stylebook: stylebookPacket(stylebook, "cs"),
     evidence: input.evidence
   });
+  const { imageAlt: csImageAlt, imageCandidateIndex: _ignoredCzechSelection, ...csLocalization } = localizedCzech;
+  const candidate = imageCandidateIndex === undefined
+    ? undefined
+    : input.imageCandidates?.[Math.min(imageCandidateIndex, (input.imageCandidates?.length ?? 1) - 1)];
+  let articleImage;
+  if (candidate) {
+    try {
+      articleImage = await materializeLicensedPhoto({
+        candidate,
+        venture: "mma-files",
+        slug: input.slug,
+        altEn: enImageAlt ?? `Editorial cover for ${enLocalization.title}`,
+        altCs: csImageAlt ?? `Redakční obrázek k článku ${csLocalization.title}`
+      });
+    } catch {
+      articleImage = undefined;
+    }
+  }
   const content = {
     schemaVersion: "article/1" as const,
     slug: input.slug,
-    localizations: { en, cs },
+    localizations: { en: enLocalization, cs: csLocalization },
     format: assignment.format,
     sources: input.evidence.sources,
-    image: deterministicArticleImage({
+    image: articleImage ?? deterministicArticleImage({
       venture: "mma-files",
       slug: input.slug,
-      title: en.title,
-      altEn: `Editorial cover for ${en.title}`,
-      altCs: `Redakční obrázek k článku ${cs.title}`
+      title: enLocalization.title,
+      altEn: `Editorial cover for ${enLocalization.title}`,
+      altCs: `Redakční obrázek k článku ${csLocalization.title}`
     }),
     heroSpec: input.evidence.heroSpec,
     fighterRefs: input.evidence.fighterRefs,
@@ -107,7 +131,6 @@ export async function produceMmaFilesArticle(input: {
   const mediaPaths = await storeArticleMedia(
     input.root,
     article,
-    renderArticleHero(article),
     socialPack ? renderSocialVariants(socialPack, article) : []
   );
   return { article, violations, articlePath: stored.path, socialPath, mediaPaths, idempotent: stored.idempotent };

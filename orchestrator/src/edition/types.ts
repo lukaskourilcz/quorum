@@ -66,6 +66,7 @@ export interface WrittenArticle {
   illustrationPrompt: string;
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
+  selectedImageCandidateIndex?: number;
   byLocale: { en: LocalizedContent; cs: LocalizedContent };
   usage: EditionUsage[];
 }
@@ -77,6 +78,7 @@ export interface EnglishArticle {
   illustrationPrompt: string;
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
+  selectedImageCandidateIndex?: number;
   en: LocalizedContent;
   usage: EditionUsage[];
 }

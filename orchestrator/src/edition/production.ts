@@ -25,6 +25,8 @@ import type {
   EnglishArticle,
   WrittenArticle
 } from "./types.js";
+import type { LicensedPhotoCandidate } from "../images/licensed.js";
+import { materializeLicensedPhoto } from "../images/licensed.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
 import {
@@ -32,11 +34,6 @@ import {
   parityFeedback,
   reviewTranslationParity
 } from "./localize.js";
-import { createHash } from "node:crypto";
-import {
-  ARTICLE_HERO_COMPOSER_VERSION,
-  composeArticleHero
-} from "../social/media/compose.js";
 
 export interface EditionProductionInput {
   date: string;
@@ -55,6 +52,7 @@ export interface EditionProductionInput {
   reporter?: EditionRunReporter;
   socialPackEnabled?: boolean;
   heroEnabled?: boolean;
+  imageCandidates?: readonly LicensedPhotoCandidate[];
 }
 
 export interface EditionProductionResult {
@@ -166,7 +164,7 @@ export async function produceEdition(
     let english: EnglishArticle;
     try {
       english = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
-        write(brief, input.items, input.config, input.gateway, feedback)
+        write(brief, input.items, input.config, input.gateway, feedback, input.imageCandidates)
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {
@@ -283,19 +281,23 @@ export async function produceEdition(
     quality.violations.forEach((violation) => reporter.warn(`quality:${violation}`));
     if (quality.passed) {
       const editionPackage = await reporter.stage("assemble_package", async () => {
-        const heroInputs = JSON.stringify({
-          composerVersion: ARTICLE_HERO_COMPOSER_VERSION,
-          date: article.date,
-          title: article.byLocale.en.title,
-          dek: article.byLocale.en.dek
-        });
-        const heroBytes = input.heroEnabled === false
-          ? null
-          : await composeArticleHero({
-              date: article.date,
-              title: article.byLocale.en.title,
-              dek: article.byLocale.en.dek
+        const candidate = article.selectedImageCandidateIndex === undefined
+          ? undefined
+          : input.imageCandidates?.[article.selectedImageCandidateIndex];
+        let image;
+        if (candidate) {
+          try {
+            image = await materializeLicensedPhoto({
+              candidate,
+              venture: "caught-up",
+              slug: article.slug,
+              altEn: article.byLocale.en.illustrationAlt,
+              altCs: article.byLocale.cs.illustrationAlt
             });
+          } catch (error) {
+            reporter.warn(`licensed_image_fallback:${error instanceof Error ? error.message : "unknown"}`);
+          }
+        }
         return buildEditionPackage(article, input.config, {
           meetingRef: input.meetingRef,
           roomUrl: input.roomUrl,
@@ -305,16 +307,7 @@ export async function produceEdition(
           signalStrength: metrics.signalStrength,
           costUsd: reporter.totalCostUsd(),
           socialPackEnabled: input.socialPackEnabled,
-          ...(heroBytes
-            ? {
-                hero: {
-                  bytes: heroBytes,
-                  alt: article.byLocale.en.illustrationAlt,
-                  composerVersion: ARTICLE_HERO_COMPOSER_VERSION,
-                  inputsHash: createHash("sha256").update(heroInputs).digest("hex")
-                }
-              }
-            : {})
+          ...(image ? { image } : {})
         });
       });
       EditionPackageSchema.parse(editionPackage);

@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { ArticlePackageSchema, SocialVariantPackSchema, type ArticlePackage, type SocialVariantPack } from "../contracts/mma-files.js";
-import { atomicWriteJson } from "../state.js";
+import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
 import { atomicWriteText } from "../state.js";
 import { articleRef, hasValidArticlePackageHash } from "./hash.js";
 import type { SocialRender } from "./frame.js";
@@ -56,14 +56,20 @@ export async function storeSocialVariantPack(
 export async function storeArticleMedia(
   root: string,
   article: ArticlePackage,
-  heroSvg: string,
   socialRenders: readonly SocialRender[]
 ): Promise<string[]> {
   const base = `ventures/mma-files/media/${article.publishAt.slice(0, 10)}-${article.slot}-${article.slug}`;
-  const paths = [`${base}/hero.svg`, ...socialRenders.map((render) => `${base}/social-${render.key}.svg`)];
+  const heroExtension = article.image.hero_path.split(".").at(-1) ?? "webp";
+  const thumbExtension = article.image.thumb_path.split(".").at(-1) ?? "webp";
+  const paths = [
+    `${base}/hero.${heroExtension}`,
+    `${base}/thumb.${thumbExtension}`,
+    ...socialRenders.map((render) => `${base}/social-${render.key}.svg`)
+  ];
   await Promise.all([
-    atomicWriteText(root, paths[0]!, heroSvg),
-    ...socialRenders.map((render, index) => atomicWriteText(root, paths[index + 1]!, render.svg))
+    atomicWriteBuffer(root, paths[0]!, Buffer.from(article.image.hero_bytes_base64, "base64")),
+    atomicWriteBuffer(root, paths[1]!, Buffer.from(article.image.thumb_bytes_base64, "base64")),
+    ...socialRenders.map((render, index) => atomicWriteText(root, paths[index + 2]!, render.svg))
   ]);
   return paths;
 }

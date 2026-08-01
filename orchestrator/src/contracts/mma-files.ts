@@ -11,7 +11,8 @@ export const ArticleFormatSchema = z.enum([
 const LocalizationSchema = openObject({
   title: z.string().trim().min(1).max(160),
   dek: z.string().trim().min(1).max(320),
-  bodyMDX: z.string().trim().min(1).max(40_000)
+  bodyMDX: z.string().trim().min(1).max(40_000),
+  imageAlt: z.string().trim().min(1).max(300).optional()
 });
 
 const ArticleSourceSchema = z.discriminatedUnion("kind", [

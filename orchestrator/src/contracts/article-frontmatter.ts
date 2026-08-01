@@ -44,9 +44,19 @@ export const ArticleFrontmatterV2Schema = openObject({
   tags: z.array(NonEmptyStringSchema).min(1),
   sources: z.array(SourceRefSchema),
   illustration: openObject({
-    path: z.string().regex(/^\/illustrations\/[a-zA-Z0-9/_-]+\.webp$/).optional(),
+    path: z.string().regex(/^\/(?:images\/[a-z0-9][a-z0-9/_-]*\.(?:webp|png|svg)|illustrations\/[a-zA-Z0-9/_-]+\.webp)$/).optional(),
+    thumbnail_path: z.string().regex(/^\/images\/[a-z0-9][a-z0-9/_-]*\.(?:webp|png|svg)$/).optional(),
     prompt: z.string(),
-    alt: z.string()
+    alt: z.string().trim().min(1).max(300),
+    width: z.number().int().min(640).max(4_000).optional(),
+    height: z.number().int().min(360).max(3_000).optional(),
+    origin: z.enum(["photo", "svg"]).optional(),
+    attribution: openObject({
+      license: NonEmptyStringSchema,
+      author: NonEmptyStringSchema,
+      source_url: HttpsUrlSchema,
+      text: NonEmptyStringSchema
+    }).optional()
   }),
   signal_strength: z.number().finite().min(0).max(100).optional(),
   why_it_matters: z.array(NonEmptyStringSchema).min(1).max(3),

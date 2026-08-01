@@ -11,6 +11,7 @@ import type {
 } from "./types.js";
 import { DispatchSchema, WireItemSchema } from "./types.js";
 import { ENGLISH_EDITORIAL_REGISTER } from "./registers.js";
+import type { LicensedPhotoCandidate } from "../images/licensed.js";
 
 export const LocalizedOutputSchema = z.object({
   title: z.string().trim().min(1),
@@ -41,6 +42,7 @@ const ToolOutputSchema = z.object({
   slug: z.string().trim().min(1),
   tags: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1).max(6),
   illustration_prompt: z.string().trim().min(1),
+  image_candidate_index: z.number().int().min(0).max(3).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
   en: LocalizedOutputSchema
 });
@@ -118,6 +120,7 @@ const toolInputSchema = {
       items: { type: "string" }
     },
     illustration_prompt: { type: "string" },
+    image_candidate_index: { type: "integer", minimum: 0, maximum: 3 },
     wire: {
       type: "array",
       minItems: 4,
@@ -287,7 +290,8 @@ function verifiedWire(
 function sourcePacket(
   brief: CuratedBrief,
   pickedItems: readonly SourceItem[],
-  runnerUpItems: readonly SourceItem[]
+  runnerUpItems: readonly SourceItem[],
+  imageCandidates: readonly LicensedPhotoCandidate[]
 ): string {
   const picked = pickedItems.map((item) => {
     const selection = brief.picks.find((pick) => pick.itemId === item.externalId);
@@ -308,9 +312,20 @@ function sourcePacket(
     title: item.title,
     url: item.url
   }));
+  const images = imageCandidates.slice(0, 4).map((candidate, index) => ({
+    index,
+    provider: candidate.provider,
+    title: candidate.title,
+    thumbnail_url: candidate.thumbnailUrl,
+    width: candidate.width,
+    height: candidate.height,
+    license: candidate.license,
+    author: candidate.author,
+    source_url: candidate.sourceUrl
+  }));
   return wrapUntrustedData(
     "caught-up-writing-packet",
-    JSON.stringify({ brief, picked, runnerUps: runners })
+    JSON.stringify({ brief, picked, runnerUps: runners, licensedImageCandidates: images })
   );
 }
 
@@ -319,7 +334,8 @@ export async function write(
   items: readonly SourceItem[],
   config: EditionQualityConfig,
   gateway: EditionModelGateway,
-  feedback: readonly string[] = []
+  feedback: readonly string[] = [],
+  imageCandidates: readonly LicensedPhotoCandidate[] = []
 ): Promise<EnglishArticle> {
   const byId = new Map(items.map((item) => [item.externalId, item]));
   const pickedItems = brief.picks
@@ -349,11 +365,12 @@ Trusted URL rules:
 - If a claim has no approved URL, omit the claim instead of adding a citation.
 - The \`en\` field must be a JSON object, never a Markdown string or serialized JSON.
 - Every Watchlist item must come from \`runnerUps\`, never from the selected lead-story sources.
+- If licensedImageCandidates is non-empty, set image_candidate_index to the best factual, non-misleading visual fit. Use only its numeric index; do not copy its URLs into article copy.
 
 Approved URLs (exact strings):
 ${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
 
-${sourcePacket(brief, pickedItems, runnerUpItems)}`,
+${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates)}`,
     tool: {
       name: "emit_article",
       description: "Emit the English Caught Up feature and supplied-source watchlist.",
@@ -393,6 +410,9 @@ ${sourcePacket(brief, pickedItems, runnerUpItems)}`,
         ...(pick?.why ? { supports: [pick.why] } : {})
       };
     }),
+    ...(imageCandidates.length > 0
+      ? { selectedImageCandidateIndex: Math.min(response.value.image_candidate_index ?? 0, imageCandidates.length - 1) }
+      : {}),
     en: localized(response.value.en),
     usage: [response.usage]
   };

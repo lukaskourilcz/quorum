@@ -10,13 +10,14 @@ import { EditionRunReporter, type EditionRunReport } from "./report.js";
 import type { EditionModelGateway } from "./types.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import { validateEditionForDelivery } from "../delivery/validate.js";
-import { configRoot, stateRoot } from "../paths.js";
+import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { runScrapersDetailed, type ScrapeRunResult } from "../sources/run.js";
 import { createDigest } from "../sources/digest.js";
 import { loadSourceRegistry } from "../sources/registry.js";
 import type { SourceRegistry } from "../sources/types.js";
-import { atomicWriteJson, readJson } from "../state.js";
+import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
+import { discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -147,6 +148,7 @@ export async function runLiveEdition(input: {
   root?: string;
   dependencies?: LiveEditionDependencies;
   socialPackEnabled?: boolean;
+  licensedImageSearchEnabled?: boolean;
 }): Promise<LiveEditionResult> {
   const root = input.root ?? stateRoot;
   const [registry, allowlist, config, ledger] = await Promise.all([
@@ -199,6 +201,25 @@ export async function runLiveEdition(input: {
     });
     report = reporter.build("no_edition", "no_edition");
   } else {
+    let imageCandidates: LicensedPhotoCandidate[] = [];
+    if (input.licensedImageSearchEnabled) {
+      const imageSearch = await discoverLicensedPhotos({
+        query: digest.slice(0, 3).map((item) => item.title).join(" ").slice(0, 100),
+        pexelsKey: process.env.PEXELS_API_KEY,
+        pixabayKey: process.env.PIXABAY_API_KEY
+      });
+      imageCandidates = imageSearch.candidates;
+      if (imageSearch.skippedProviders.length > 0) {
+        const relative = "NEEDS_YOUR_HELP_NOW.md";
+        const current = await readText(repoRoot, relative, "# Needs your help now\n");
+        const additions = imageSearch.skippedProviders
+          .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
+          .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
+        if (additions.length > 0) {
+          await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
+        }
+      }
+    }
     const gateway = new BudgetedEditionModelGateway(
       input.dependencies?.gateway ?? new AnthropicEditionModelGateway(),
       productionCap
@@ -218,7 +239,8 @@ export async function runLiveEdition(input: {
       config,
       gateway,
       reporter,
-      socialPackEnabled: input.socialPackEnabled
+      socialPackEnabled: input.socialPackEnabled,
+      imageCandidates
     });
     editionPackage = produced.package;
     report = produced.report;

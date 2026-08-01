@@ -35,14 +35,16 @@ const gateway: MmaFilesEditorialGateway = {
     return {
       title: "Alex Example meets Sam Example in Prague",
       dek: "The verified files show two different routes through the matchup.",
-      bodyMDX: "## The matchup\n\n[Alex Example](/fighters/ufc/alex-example) brings a 12-2 record. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) brings a 10-3 record. [^source-1]"
+      bodyMDX: "## The matchup\n\n[Alex Example](/fighters/ufc/alex-example) brings a 12-2 record. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) brings a 10-3 record. [^source-1]",
+      imageAlt: "A fixture matchup card for Alex Example and Sam Example"
     };
   },
   async localizeCzech() {
     return {
       title: "Alex Example se v Praze utká se Samem Examplem",
       dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
-      bodyMDX: "## Zápas\n\n[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3. [^source-1]"
+      bodyMDX: "## Zápas\n\n[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3. [^source-1]",
+      imageAlt: "Zkušební karta zápasu Alexe Examplea se Samem Examplem"
     };
   }
 };
@@ -106,7 +108,7 @@ describe("MMA Files bilingual production", () => {
     expect(first.violations).toEqual([]);
     expect(hasValidArticlePackageHash(first.article)).toBe(true);
     expect(first.socialPath).toMatch(/social\/packs/);
-    expect(first.mediaPaths).toHaveLength(5);
+    expect(first.mediaPaths).toHaveLength(6);
     expect(replay.idempotent).toBe(true);
     expect(replay.article.packageHash).toBe(first.article.packageHash);
     expect(await loadArticlePackages(root)).toEqual([first.article]);
@@ -117,7 +119,7 @@ describe("MMA Files bilingual production", () => {
     const bad: MmaFilesEditorialGateway = {
       ...gateway,
       async writeEnglish() {
-        return { title: "An epic showdown", dek: "Fans are in for a treat.", bodyMDX: "> A quote with no source\n\nAlex has 14 wins." };
+        return { title: "An epic showdown", dek: "Fans are in for a treat.", bodyMDX: "> A quote with no source\n\nAlex has 14 wins.", imageAlt: "A generic fight graphic" };
       }
     };
     const result = await production(root, bad);
