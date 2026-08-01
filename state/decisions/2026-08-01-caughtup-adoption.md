@@ -88,3 +88,11 @@ as historical decision context, not current runtime behavior.
 editions inside its gates. The owner approves money, accounts, scopes, new code
 surface and Caught Up code. Security, honesty, compatibility, accessibility,
 sanitization and human-only payments remain locked.
+
+## Owner approval reference
+
+Name: Lukas Kouril
+
+Date: 2026-08-01
+
+Signature / explicit approval reference: Owner approval recorded in Codex task on 2026-08-01: "I countersign the 50 budget per month and I approve all of the founding and approval references."

@@ -4,7 +4,7 @@ Date: 2026-08-02
 
 Decider: Lukas Kouril, owner
 
-Status: pending owner countersignature
+Status: countersigned
 
 Decision id: `fightaiq-founding`
 
@@ -30,8 +30,8 @@ and private admin tools may ship. Scheduled live calls and public probabilities 
 
 ## Owner countersignature
 
-Name: ____________________
+Name: Lukas Kouril
 
-Date: ____________________
+Date: 2026-08-01
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Owner approval recorded in Codex task on 2026-08-01: "I countersign the 50 budget per month and I approve all of the founding and approval references."

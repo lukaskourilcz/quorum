@@ -4,7 +4,7 @@ Date: 2026-08-04
 
 Decider: Lukas Kouril, owner
 
-Status: pending owner countersignature
+Status: countersigned
 
 Decision id: `budget-2026-08d`
 
@@ -40,8 +40,8 @@ can be built, tested and run dry, but its live meetings and production jobs rema
 
 ## Owner countersignature
 
-Name: ____________________
+Name: Lukas Kouril
 
-Date: ____________________
+Date: 2026-08-01
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Owner approval recorded in Codex task on 2026-08-01: "I countersign the 50 budget per month and I approve all of the founding and approval references."
