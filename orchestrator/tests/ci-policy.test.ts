@@ -72,6 +72,7 @@ describe("automation policy", () => {
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
     expect(cycle).toContain('git add -A -- "$runtime_path"');
+    expect(cycle).toContain("status --porcelain --untracked-files=all");
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");

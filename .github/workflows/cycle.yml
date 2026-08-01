@@ -375,7 +375,7 @@ jobs:
               allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json)|(public/illustrations/${PACKAGE_DATE}\.webp))$"
             fi
           fi
-          unexpected="$(git -C "$clone_root" status --porcelain | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
+          unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
           if test -n "$unexpected"; then
             echo "Consumer touched unauthorized paths:"
             echo "$unexpected"
