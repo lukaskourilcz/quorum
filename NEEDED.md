@@ -36,14 +36,15 @@ source accounts, approval records and project switches below are connected.
 5. Set `PORTFOLIO_LIVE_ENABLED=true`; run `incubator-scan` before
    `incubator-synthesis`. The scan now saves a guarded source packet, so synthesis can
    keep source-backed ideas. Then run `tt-marketing`.
-6. Add `THE_ODDS_API_KEY` and `CITO_API_KEY`, set `FIGHTAIQ_LIVE_ENABLED=true`, then run
-   `mma-intake`. The room saves a guarded daily API snapshot and automatically sends the
-   latest FightAIQ content file to MMA Files. It will not promote a one-source claim into
-   a verified fighter file; complete the second-source review in admin. Keep
-   `FIGHTAIQ_ANALYSIS_ENABLED=false` until the separate mode-change decision.
-7. After the repository-app and MMA Files Vercel steps below, set
-   `MMA_FILES_LIVE_ENABLED=true` and run `mag-editorial`, `article-am`, `article-pm`, then
-   `mag-desk`. Each published article is delivered to MMA Files automatically. Missing
+6. Complete the repository-app and MMA Files Vercel steps below. Add
+   `THE_ODDS_API_KEY` and `CITO_API_KEY`, set `FIGHTAIQ_LIVE_ENABLED=true` and
+   `MMA_FILES_LIVE_ENABLED=true`, then run `mma-intake`. The room saves a guarded,
+   normalized UFC snapshot and sends the latest FightAIQ content file to MMA Files. It
+   will not promote a one-source claim into a verified fighter file; complete the
+   second-source review in admin. Keep `FIGHTAIQ_ANALYSIS_ENABLED=false` until the
+   separate mode-change decision.
+7. With `MMA_FILES_LIVE_ENABLED=true`, run `mag-editorial`, `article-am`, `article-pm`,
+   then `mag-desk`. Each published article is delivered to MMA Files automatically. Missing
    evidence correctly kills an article slot at $0. A delivery retry can use dry off plus
    **delivery only on** for the matching article phase and makes no model call.
 8. Once each manual live run has produced and pushed the expected canonical artifacts,
@@ -69,7 +70,7 @@ source accounts, approval records and project switches below are connected.
 - [x] **Install the delivery GitHub App on `lukaskourilcz/aifirst`** — the owner configured `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`, and the workflow minted a repository-scoped token successfully on 2026-08-01. Keep Contents read/write as its only write permission. [imp:5] [owner:me] [time:30m] [kind:setup]
 - [x] **Set the reader URL** — repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app` is configured. [imp:5] [owner:me] [time:5m] [kind:setup]
 - [x] **Confirm Caught Up’s adopted limits** — the owner approval reference is recorded in `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
-- [ ] **Enable Caught Up for one reviewed delivery** — set `CAUGHT_UP_LIVE_ENABLED=true`, dispatch `cu-edition` with dry off, then verify the bilingual package, delivery receipt, `aifirst` checks and deployment. Set the switch back to `false` on any failure. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
+- [ ] **Complete one reviewed Caught Up delivery** — `CAUGHT_UP_LIVE_ENABLED=true` is already set. Dispatch `cu-edition` with dry off, then verify the bilingual package, delivery receipt, `aifirst` checks and deployment. Set the switch back to `false` on any failure. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Review the first three editions** — check both articles, citations, Czech and English tone, the hero image and the Caught Up render. Social drafts stay off until you turn THREADS, INSTAGRAM and FRAME on in `/admin`. [imp:5] [owner:me] [time:90m] [kind:content]
 
 ## FightAIQ data and launch gate
