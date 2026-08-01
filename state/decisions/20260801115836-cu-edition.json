@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260801115836-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "NO_EDITION",
+  "summary": "NO_EDITION. content_invalid_after_regeneration",
+  "evidenceRefs": [
+    "source:404-media",
+    "source:anthropic-news",
+    "source:ars-technica",
+    "source:arxiv-cs-ai",
+    "source:arxiv-cs-lg",
+    "source:bluesky-language-models",
+    "source:deepmind-blog",
+    "source:digiday",
+    "source:github-ai-releases",
+    "source:google-research",
+    "source:hf-blog",
+    "source:hn-frontpage"
+  ],
+  "editionRef": "9e0e66f2b181626f3e2dcecc1475fb9b56b95ba5364fde94aeac0958f9dd26f7",
+  "generatedAt": "2026-08-01T11:58:41.782Z"
+}

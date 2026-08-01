@@ -342,17 +342,15 @@
       "at": "2026-07-31T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "held",
-      "meetingRef": "meetings/2026-07-31-cu-edition",
-      "decisionOneLiner": "NO_EDITION. The dry room has no live digest to commission."
+      "status": "missed"
     },
     {
       "at": "2026-07-31T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
       "status": "held",
-      "meetingRef": "meetings/20260731170351-morning",
-      "decisionOneLiner": "No externally consequential action was approved."
+      "meetingRef": "meetings/20260731093403-morning",
+      "decisionOneLiner": "The council approved one bounded internal work item: Verify the public shift record. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-07-31T05:00:00.000Z",
@@ -388,15 +386,15 @@
       "at": "2026-07-31T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "missed"
+      "status": "held",
+      "meetingRef": "meetings/20260731134924-afternoon",
+      "decisionOneLiner": "The council approved one bounded internal work item: Prepare the next shift handoff. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-07-31T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "held",
-      "meetingRef": "meetings/2026-07-31-cu-product",
-      "decisionOneLiner": "Veto the duplicate fixture idea before deliberation."
+      "status": "missed"
     },
     {
       "at": "2026-07-31T16:00:00.000Z",
@@ -434,7 +432,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-01-cu-edition",
-      "decisionOneLiner": "NO_EDITION. The dry room has no live digest to commission."
+      "decisionOneLiner": "NO_EDITION. content_invalid_after_regeneration"
     },
     {
       "at": "2026-08-01T04:00:00.000Z",
@@ -450,7 +448,7 @@
       "kind": "incubator-scan",
       "status": "held",
       "meetingRef": "meetings/2026-08-01-incubator-scan",
-      "decisionOneLiner": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      "decisionOneLiner": "Record zero candidate domains because the dry packet contains no external evidence. The next scan must bring cited observations."
     },
     {
       "at": "2026-08-01T06:00:00.000Z",
@@ -480,7 +478,7 @@
       "kind": "tt-marketing",
       "status": "held",
       "meetingRef": "meetings/2026-08-01-tt-marketing",
-      "decisionOneLiner": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      "decisionOneLiner": "Record One Good Day as a four-concept planning season. All products remain concepts and no external action is authorized."
     },
     {
       "at": "2026-08-01T12:00:00.000Z",
@@ -502,7 +500,7 @@
       "at": "2026-08-01T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-pm",
-      "status": "missed"
+      "status": "scheduled"
     },
     {
       "at": "2026-08-01T17:00:00.000Z",
@@ -526,13 +524,15 @@
       "kind": "incubator-synthesis",
       "status": "held",
       "meetingRef": "meetings/2026-08-01-incubator-synthesis",
-      "decisionOneLiner": "Recorded zero niche proposals because no candidate cleared the evidence and duplication gates."
+      "decisionOneLiner": "Synthesize zero NicheProposal records because the dry scan returned no evidenced candidate. No founding brief or registry change is authorized."
     },
     {
       "at": "2026-08-01T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/20260801200000-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-02T03:00:00.000Z",
