@@ -308,7 +308,23 @@ jobs:
           git config user.name "boardlessai-cycle[bot]"
           git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
           git commit -m "cycle(${CYCLE_NUMBER})"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          pushed=false
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              pushed=true
+              break
+            fi
+            echo "Runtime push raced with a newer ${GITHUB_REF_NAME}; refetching before retry ${attempt}."
+            git fetch origin "$GITHUB_REF_NAME"
+            if ! git rebase "origin/$GITHUB_REF_NAME"; then
+              git rebase --abort || true
+              break
+            fi
+          done
+          if test "$pushed" != "true"; then
+            echo "Runtime state could not be pushed after two refetches. The existing cycle commit was not regenerated."
+            exit 1
+          fi
 
       - name: Select the oldest Caught Up delivery
         id: delivery
@@ -451,7 +467,23 @@ jobs:
             git config user.name "boardlessai-cycle[bot]"
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git commit -m "delivery(${PACKAGE_DATE}): ${DELIVERY_STATUS} [package:${PACKAGE_HASH12}]"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+                pushed=true
+                break
+              fi
+              echo "Delivery receipt push raced with a newer ${GITHUB_REF_NAME}; refetching before retry ${attempt}."
+              git fetch origin "$GITHUB_REF_NAME"
+              if ! git rebase "origin/$GITHUB_REF_NAME"; then
+                git rebase --abort || true
+                break
+              fi
+            done
+            if test "$pushed" != "true"; then
+              echo "Delivery receipt could not be pushed after two refetches."
+              exit 1
+            fi
           fi
 
       - name: Fail closed on delivery reconciliation
