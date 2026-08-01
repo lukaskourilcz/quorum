@@ -137,6 +137,23 @@ describe("Caught Up meeting records", () => {
     expect(result.record.roomTranscript.turns).toHaveLength(2);
   });
 
+  it("rejects freehand fight probabilities without a ModelRun reference", async () => {
+    const base = await caughtUpRecord("cu-edition");
+    const mmaRecord = {
+      ...base,
+      kind: "mma-intake",
+      phase: "mma-intake",
+      sharperData: { outcome: "nothing-new", summary: "No source-backed improvement was found.", evidenceRefs: [] },
+      roomTranscript: {
+        ...base.roomTranscript,
+        turns: [{ ...base.roomTranscript.turns[0]!, text: "Red has a 62% win probability.", evidenceRefs: [] as string[] }]
+      }
+    };
+    expect(MeetingRecordSchema.safeParse(mmaRecord).success).toBe(false);
+    mmaRecord.roomTranscript.turns[0]!.evidenceRefs = ["model-run:fixture-2026-08-01"];
+    expect(MeetingRecordSchema.safeParse(mmaRecord).success).toBe(true);
+  });
+
   it("applies the boardroom register fixtures", () => {
     const good = "The dek says \"poised to reshape the industry.\" Nothing is poised. It shipped or it didn't.";
     const bad = "Great point! We should leverage our synergies to delve into this rapidly evolving landscape! 🚀";

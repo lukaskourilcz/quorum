@@ -2,7 +2,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { getPublicEvents, getPublicFighters, type PublicEvent, type PublicFighter } from "./fightaiq-records";
+import { getPublicEvents, getPublicFighters, type PublicEvent, type PublicFighter, type SourcedValue } from "./fightaiq-records";
 import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -33,8 +33,17 @@ export interface AdminMmaSlate {
   ratings: RatingRecord[];
 }
 
+export interface AdminFighter extends PublicFighter {
+  discrepancyDetails: Array<{
+    field: string;
+    status: "open" | "resolved";
+    resolution: string | null;
+    values: Array<{ value: SourcedValue; sourceRef: string }>;
+  }>;
+}
+
 export interface AdminFightAiQSnapshot {
-  fighters: PublicFighter[];
+  fighters: AdminFighter[];
   events: PublicEvent[];
   slates: AdminMmaSlate[];
   sources: AdminMmaSource[];
@@ -45,6 +54,36 @@ const object = (value: unknown): Record<string, unknown> | null => typeof value 
 const text = (value: unknown, maximum = 1_000): string | null => typeof value === "string" && value.trim().length > 0 && value.length <= maximum ? value.trim() : null;
 const texts = (value: unknown): string[] | null => Array.isArray(value) && value.every((entry) => text(entry, 240)) ? value as string[] : null;
 const hash = (raw: string) => `sha256:${createHash("sha256").update(raw).digest("hex").slice(0, 12)}`;
+
+function sourcedValue(value: unknown): SourcedValue | undefined {
+  if (value === null || typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) return value;
+  if (Array.isArray(value) && value.every((entry) => typeof entry === "string" || typeof entry === "boolean" || (typeof entry === "number" && Number.isFinite(entry)))) return value as Array<string | number | boolean>;
+  return undefined;
+}
+
+function parseDiscrepancyDetails(raw: string): { id: string; details: AdminFighter["discrepancyDetails"] } | null {
+  let value: unknown;
+  try { value = JSON.parse(raw); } catch { return null; }
+  const record = object(value);
+  const id = text(record?.id, 160);
+  if (!id || !Array.isArray(record?.discrepancies)) return null;
+  const details = record.discrepancies.flatMap((value) => {
+    const item = object(value);
+    const field = text(item?.field, 80);
+    const status: AdminFighter["discrepancyDetails"][number]["status"] | null =
+      item?.status === "open" || item?.status === "resolved" ? item.status : null;
+    const resolution = text(item?.resolution, 280);
+    const rawValues = Array.isArray(item?.values) ? item.values : null;
+    const values = rawValues?.flatMap((value) => {
+      const entry = object(value);
+      const parsedValue = sourcedValue(entry?.value);
+      const sourceRef = text(entry?.sourceRef, 240);
+      return parsedValue !== undefined && sourceRef ? [{ value: parsedValue, sourceRef }] : [];
+    });
+    return field && status && values && values.length === rawValues?.length ? [{ field, status, resolution, values }] : [];
+  });
+  return details.length === record.discrepancies.length ? { id, details } : null;
+}
 
 async function files(directory: string): Promise<string[]> {
   try {
@@ -117,6 +156,7 @@ export async function readAdminFightAiQ(root = repositoryRoot): Promise<AdminFig
   const [fighterSnapshot, eventSnapshot, sourceRecords, ratingState] = await Promise.all([
       getPublicFighters(root), getPublicEvents(root), sourceSnapshot(root), ratings(root)
     ]);
+    const fighterRoot = path.join(root, "state", "ventures", "fightaiq", "fighters");
     const slateRoot = path.join(root, "state", "ventures", "fightaiq", "slates");
     const slates: AdminMmaSlate[] = [];
     const unreadable: string[] = [
@@ -128,5 +168,17 @@ export async function readAdminFightAiQ(root = repositoryRoot): Promise<AdminFig
       const parsed = parseSlate(await readFile(file, "utf8"), ratingState.records);
       if (parsed) slates.push(parsed); else unreadable.push(`slates/${path.relative(slateRoot, file)}`);
     }
-  return { fighters: fighterSnapshot.fighters, events: eventSnapshot.events, slates, sources: sourceRecords, unreadable };
+    const detailById = new Map<string, AdminFighter["discrepancyDetails"]>();
+    for (const file of await files(fighterRoot)) {
+      const parsed = parseDiscrepancyDetails(await readFile(file, "utf8"));
+      if (parsed) detailById.set(parsed.id, parsed.details);
+      else unreadable.push(`fighters/${path.relative(fighterRoot, file)}: disagreement details`);
+    }
+  return {
+    fighters: fighterSnapshot.fighters.map((fighter) => ({ ...fighter, discrepancyDetails: detailById.get(fighter.id) ?? [] })),
+    events: eventSnapshot.events,
+    slates,
+    sources: sourceRecords,
+    unreadable
+  };
 }

@@ -127,6 +127,19 @@ const NamedVentureMeetingSchema = openObject({
   roomTranscript: RoomTranscriptSchema(36)
 });
 
+const QuantifiedProbabilityPattern = /(?:\b(?:probability|chance|edge|win(?:ning)?(?: chance| probability)?)\b[^.\n]{0,48}(?:\d+(?:\.\d+)?\s*%|\b0(?:\.\d+)?\b|\b1(?:\.0+)?\b)|\b\d+(?:\.\d+)?\s*%[^.\n]{0,48}\b(?:probability|chance|edge|win(?:ning)?)\b)/i;
+const ModelRunEvidencePattern = /(?:^|[/:])model-runs?(?:[/:]|$)/i;
+
+function freehandProbabilityPaths(value: unknown, path: Array<string | number> = [], inheritedModelRef = false): Array<Array<string | number>> {
+  if (typeof value === "string") return QuantifiedProbabilityPattern.test(value) && !inheritedModelRef ? [path] : [];
+  if (Array.isArray(value)) return value.flatMap((entry, index) => freehandProbabilityPaths(entry, [...path, index], inheritedModelRef));
+  if (typeof value !== "object" || value === null) return [];
+  const objectValue = value as Record<string, unknown>;
+  const localRefs = Array.isArray(objectValue.evidenceRefs) ? objectValue.evidenceRefs : [];
+  const hasModelRef = inheritedModelRef || localRefs.some((ref) => typeof ref === "string" && ModelRunEvidencePattern.test(ref));
+  return Object.entries(objectValue).flatMap(([key, entry]) => key === "evidenceRefs" ? [] : freehandProbabilityPaths(entry, [...path, key], hasModelRef));
+}
+
 export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMeetingSchema]).superRefine((record, context) => {
   const turnCount = record.roomTranscript.turns.length;
   if (record.kind === "incubator-scan" && turnCount > 12) {
@@ -140,6 +153,11 @@ export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMe
   }
   if ((record.kind === "mma-intake" || record.kind === "mma-analysis") && !record.sharperData) {
     context.addIssue({ code: "custom", message: "MMA rooms must close with a sharper-data outcome", path: ["sharperData"] });
+  }
+  if (record.kind === "mma-intake" || record.kind === "mma-analysis") {
+    for (const path of freehandProbabilityPaths(record)) {
+      context.addIssue({ code: "custom", message: "Fight probabilities require a ModelRun evidence reference", path });
+    }
   }
   if (record.kind === "mag-editorial" && turnCount > 14) {
     context.addIssue({ code: "custom", message: "Editorial room is bounded to 14 turns", path: ["transcript"] });
