@@ -121,20 +121,252 @@ export async function fetchOddsApiMma(input: {
 
 export interface CitoFighterSummary {
   id: string;
+  slug: string;
   name: string;
   record: string | null;
+  division: string | null;
+  stance: string | null;
+  heightCm: number | null;
+  reachCm: number | null;
+}
+
+type JsonObject = Record<string, unknown>;
+
+function jsonObject(value: unknown): JsonObject | null {
+  return typeof value === "object" && value !== null && !Array.isArray(value) ? value as JsonObject : null;
+}
+
+function nestedRows(value: unknown, keys: readonly string[]): unknown[] {
+  if (Array.isArray(value)) return value;
+  const object = jsonObject(value);
+  if (!object) return [];
+  for (const key of keys) {
+    const candidate = object[key];
+    if (Array.isArray(candidate)) return candidate;
+    const nested = jsonObject(candidate);
+    if (!nested) continue;
+    for (const nestedKey of keys) {
+      if (Array.isArray(nested[nestedKey])) return nested[nestedKey];
+    }
+  }
+  return [];
+}
+
+function firstValue(object: JsonObject, keys: readonly string[]): unknown {
+  for (const key of keys) {
+    const value = object[key];
+    if (value !== undefined && value !== null) return value;
+  }
+  return undefined;
+}
+
+function textValue(value: unknown): string | null {
+  if (typeof value === "string" && value.trim()) return value.trim();
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  const object = jsonObject(value);
+  if (!object) return null;
+  return textValue(firstValue(object, ["name", "label", "title", "value", "displayName", "fullName"]));
+}
+
+function slugValue(value: unknown): string | null {
+  const text = textValue(value);
+  if (!text) return null;
+  const slug = text
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gu, "-")
+    .replace(/^-+|-+$/gu, "");
+  return slug || null;
+}
+
+function recordValue(value: unknown): string | null {
+  const direct = textValue(value);
+  if (direct && /^\d+\s*[-–]\s*\d+(?:\s*[-–]\s*\d+)?(?:\s*\(\d+\s*NC\))?$/iu.test(direct)) {
+    const parts = direct.match(/^\s*(\d+)\s*[-–]\s*(\d+)(?:\s*[-–]\s*(\d+))?(?:\s*\((\d+)\s*NC\))?\s*$/iu);
+    return parts ? `${parts[1]}-${parts[2]}-${parts[3] ?? "0"}${parts[4] ? ` (${parts[4]} NC)` : ""}` : null;
+  }
+  const object = jsonObject(value);
+  if (!object) return null;
+  const wins = Number(firstValue(object, ["wins", "win"]));
+  const losses = Number(firstValue(object, ["losses", "loss"]));
+  const draws = Number(firstValue(object, ["draws", "draw"]) ?? 0);
+  const noContests = Number(firstValue(object, ["noContests", "no_contests", "nc"]) ?? 0);
+  if (![wins, losses, draws, noContests].every(Number.isSafeInteger) || wins < 0 || losses < 0 || draws < 0 || noContests < 0) return null;
+  return `${wins}-${losses}-${draws}${noContests ? ` (${noContests} NC)` : ""}`;
+}
+
+function centimetres(object: JsonObject, keys: readonly string[]): number | null {
+  const value = firstValue(object, keys);
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) return Number(value.toFixed(2));
+  if (typeof value !== "string") return null;
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)\s*cm$/iu);
+  return match ? Number(Number(match[1]).toFixed(2)) : null;
 }
 
 export function projectCitoFighters(value: unknown): CitoFighterSummary[] {
-  const rows = Array.isArray(value) ? value : z.object({ data: z.array(z.unknown()) }).safeParse(value).data?.data ?? [];
+  const rows = nestedRows(value, ["data", "fighters", "results", "items"]);
   return rows.flatMap((row) => {
-    const parsed = z.object({ id: z.union([z.string(), z.number()]), name: z.string().trim().min(1), record: z.string().trim().optional() }).safeParse(row);
-    return parsed.success ? [{ id: String(parsed.data.id), name: parsed.data.name, record: parsed.data.record ?? null }] : [];
+    const object = jsonObject(row);
+    if (!object) return [];
+    const name = textValue(firstValue(object, ["name", "fullName", "displayName", "fighterName"]));
+    const slug = slugValue(firstValue(object, ["slug", "fighterSlug", "fighter_slug"]) ?? name);
+    const id = textValue(firstValue(object, ["id", "fighterId", "fighter_id", "_id"])) ?? slug;
+    if (!id || !name || !slug) return [];
+    return [{
+      id,
+      slug,
+      name,
+      record: recordValue(firstValue(object, ["record", "proRecord", "pro_record"])),
+      division: textValue(firstValue(object, ["division", "weightClass", "weight_class"])),
+      stance: textValue(firstValue(object, ["stance"])),
+      heightCm: centimetres(object, ["heightCm", "height_cm"]),
+      reachCm: centimetres(object, ["reachCm", "reach_cm"])
+    }];
   });
 }
 
-export async function fetchCitoFighters(input: { apiKey: string; context: SourceFetchContext }): Promise<CitoFighterSummary[]> {
+interface CitoFighterRef {
+  id: string | null;
+  slug: string;
+  name: string;
+}
+
+export interface CitoBoutSummary {
+  id: string;
+  red: CitoFighterRef;
+  blue: CitoFighterRef;
+  division: string | null;
+  scheduledRounds: 3 | 5 | null;
+  status: "announced" | "weigh-in" | "complete" | "cancelled";
+}
+
+export interface CitoEventSummary {
+  id: string;
+  slug: string;
+  name: string;
+  venue: string | null;
+  startsAt: string | null;
+  timeZone: string | null;
+  bouts: CitoBoutSummary[];
+}
+
+function fighterReference(value: unknown, fallbackObject: JsonObject, prefix: string): CitoFighterRef | null {
+  const object = jsonObject(value);
+  const name = object
+    ? textValue(firstValue(object, ["name", "fullName", "displayName", "fighterName"]))
+    : textValue(value) ?? textValue(firstValue(fallbackObject, [`${prefix}Name`, `${prefix}_name`]));
+  const slug = slugValue(object
+    ? firstValue(object, ["slug", "fighterSlug", "fighter_slug"]) ?? name
+    : firstValue(fallbackObject, [`${prefix}Slug`, `${prefix}_slug`]) ?? name);
+  if (!name || !slug) return null;
+  return {
+    id: object ? textValue(firstValue(object, ["id", "fighterId", "fighter_id", "_id"])) : null,
+    slug,
+    name
+  };
+}
+
+function boutStatus(value: unknown): CitoBoutSummary["status"] {
+  const normalized = textValue(value)?.toLowerCase().replace(/[_\s]+/gu, "-");
+  if (normalized === "complete" || normalized === "completed" || normalized === "final") return "complete";
+  if (normalized === "cancelled" || normalized === "canceled") return "cancelled";
+  if (normalized === "weigh-in" || normalized === "weighin" || normalized === "confirmed") return "weigh-in";
+  return "announced";
+}
+
+function projectCitoBout(row: unknown, index: number): CitoBoutSummary | null {
+  const object = jsonObject(row);
+  if (!object) return null;
+  const red = fighterReference(firstValue(object, ["red", "redFighter", "red_fighter", "fighter1", "fighterA", "homeFighter"]), object, "red");
+  const blue = fighterReference(firstValue(object, ["blue", "blueFighter", "blue_fighter", "fighter2", "fighterB", "awayFighter"]), object, "blue");
+  if (!red || !blue || red.slug === blue.slug) return null;
+  const rawRounds = Number(firstValue(object, ["scheduledRounds", "scheduled_rounds", "rounds", "numberOfRounds"]));
+  const scheduledRounds = rawRounds === 3 || rawRounds === 5 ? rawRounds : null;
+  const id = textValue(firstValue(object, ["id", "boutId", "bout_id", "fightId", "fight_id", "_id"]))
+    ?? `${red.slug}-vs-${blue.slug}-${index + 1}`;
+  return {
+    id,
+    red,
+    blue,
+    division: textValue(firstValue(object, ["division", "weightClass", "weight_class"])),
+    scheduledRounds,
+    status: boutStatus(firstValue(object, ["status", "state"]))
+  };
+}
+
+export function projectCitoBouts(value: unknown): CitoBoutSummary[] {
+  return nestedRows(value, ["data", "bouts", "fights", "results", "items"])
+    .map(projectCitoBout)
+    .filter((bout): bout is CitoBoutSummary => Boolean(bout));
+}
+
+function venueValue(object: JsonObject): string | null {
+  const venue = textValue(firstValue(object, ["venue", "arena"]));
+  if (venue) return venue;
+  const location = firstValue(object, ["location"]);
+  const direct = textValue(location);
+  if (direct) return direct;
+  const nested = jsonObject(location);
+  if (!nested) return null;
+  const parts = [textValue(nested.venue), textValue(nested.city), textValue(nested.country)].filter((part): part is string => Boolean(part));
+  return parts.length ? [...new Set(parts)].join(", ") : null;
+}
+
+export function projectCitoEvents(value: unknown): CitoEventSummary[] {
+  const rows = nestedRows(value, ["data", "events", "results", "items"]);
+  return rows.flatMap((row) => {
+    const object = jsonObject(row);
+    if (!object) return [];
+    const name = textValue(firstValue(object, ["name", "title", "eventName", "event_name"]));
+    const slug = slugValue(firstValue(object, ["slug", "eventSlug", "event_slug"]) ?? name);
+    const id = textValue(firstValue(object, ["id", "eventId", "event_id", "_id"])) ?? slug;
+    if (!name || !slug || !id) return [];
+    const embeddedBouts = projectCitoBouts(firstValue(object, ["bouts", "fights", "fightCard", "fight_card"]));
+    return [{
+      id,
+      slug,
+      name,
+      venue: venueValue(object),
+      startsAt: textValue(firstValue(object, ["startsAt", "starts_at", "startTime", "start_time", "eventDate", "event_date", "date"])),
+      timeZone: textValue(firstValue(object, ["timeZone", "timezone", "time_zone"])),
+      bouts: embeddedBouts
+    }];
+  });
+}
+
+interface CitoFetchOptions {
+  fetchImpl?: SafeFetchOptions["fetchImpl"];
+  resolveImpl?: SafeFetchOptions["resolveImpl"];
+}
+
+export async function fetchCitoFighters(input: { apiKey: string; context: SourceFetchContext } & CitoFetchOptions): Promise<CitoFighterSummary[]> {
   if (!input.apiKey.trim()) return [];
-  const value = await fetchJson<unknown>("https://api.citoapi.com/api/v1/ufc/fighters", input.context, { headers: { "x-api-key": input.apiKey } });
+  const value = await fetchJson<unknown>("https://api.citoapi.com/api/v1/ufc/fighters?page=1&limit=50", input.context, {
+    headers: { "x-api-key": input.apiKey },
+    fetchImpl: input.fetchImpl,
+    resolveImpl: input.resolveImpl
+  });
   return projectCitoFighters(value);
+}
+
+export async function fetchCitoUpcomingEvents(input: { apiKey: string; context: SourceFetchContext } & CitoFetchOptions): Promise<CitoEventSummary[]> {
+  if (!input.apiKey.trim()) return [];
+  const options = {
+    headers: { "x-api-key": input.apiKey },
+    fetchImpl: input.fetchImpl,
+    resolveImpl: input.resolveImpl
+  };
+  const value = await fetchJson<unknown>("https://api.citoapi.com/api/v1/ufc/events/upcoming?page=1&limit=3", input.context, options);
+  const events = projectCitoEvents(value);
+  return Promise.all(events.map(async (event) => {
+    if (event.bouts.length > 0) return event;
+    const key = encodeURIComponent(event.slug || event.id);
+    try {
+      const boutValue = await fetchJson<unknown>(`https://api.citoapi.com/api/v1/ufc/events/${key}/bouts`, input.context, options);
+      return { ...event, bouts: projectCitoBouts(boutValue) };
+    } catch {
+      return event;
+    }
+  }));
 }

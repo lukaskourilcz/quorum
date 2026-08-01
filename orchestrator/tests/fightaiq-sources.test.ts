@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchOddsApiMma, loadMmaSourceRegistry, projectCitoFighters, projectOddsApiEvents } from "../src/fightaiq/sources.js";
+import { fetchOddsApiMma, loadMmaSourceRegistry, projectCitoBouts, projectCitoEvents, projectCitoFighters, projectOddsApiEvents } from "../src/fightaiq/sources.js";
 
 describe("FightAIQ source controls", () => {
   it("wires only verified APIs and blocks Tapology", async () => {
@@ -42,7 +42,45 @@ describe("FightAIQ source controls", () => {
     expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 
-  it("drops malformed Cito rows", () => {
-    expect(projectCitoFighters({ data: [{ id: 1, name: "Alex Example", record: "12-2-0" }, { id: 2 }] })).toEqual([{ id: "1", name: "Alex Example", record: "12-2-0" }]);
+  it("projects documented Cito envelopes and drops malformed rows", () => {
+    expect(projectCitoFighters({ data: { fighters: [
+      { id: 1, slug: "alex-example", name: "Alex Example", record: { wins: 12, losses: 2, draws: 0 }, weightClass: "Light Heavyweight", stance: "Orthodox", height_cm: "190 cm", reach_cm: 198 },
+      { id: 2 }
+    ] } })).toEqual([{
+      id: "1",
+      slug: "alex-example",
+      name: "Alex Example",
+      record: "12-2-0",
+      division: "Light Heavyweight",
+      stance: "Orthodox",
+      heightCm: 190,
+      reachCm: 198
+    }]);
+
+    const bouts = projectCitoBouts({ data: { bouts: [{
+      id: "bout-1",
+      redFighter: { id: "f1", slug: "alex-example", name: "Alex Example" },
+      blueFighter: { id: "f2", slug: "blair-example", name: "Blair Example" },
+      weightClass: "Light Heavyweight",
+      scheduledRounds: 5,
+      status: "confirmed"
+    }] } });
+    expect(bouts).toEqual([{
+      id: "bout-1",
+      red: { id: "f1", slug: "alex-example", name: "Alex Example" },
+      blue: { id: "f2", slug: "blair-example", name: "Blair Example" },
+      division: "Light Heavyweight",
+      scheduledRounds: 5,
+      status: "weigh-in"
+    }]);
+    expect(projectCitoEvents({ data: { events: [{
+      id: "event-1",
+      slug: "ufc-example",
+      name: "UFC Example",
+      venue: "Example Arena",
+      startsAt: "2026-08-03T18:00:00Z",
+      timezone: "UTC",
+      bouts
+    }] } })).toMatchObject([{ id: "event-1", slug: "ufc-example", name: "UFC Example", bouts }]);
   });
 });

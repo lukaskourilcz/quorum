@@ -6,7 +6,8 @@ import { createDigest } from "../sources/digest.js";
 import { loadSourceRegistry } from "../sources/registry.js";
 import { runScrapersDetailed } from "../sources/run.js";
 import type { SourceFetchContext } from "../sources/types.js";
-import { fetchCitoFighters, fetchOddsApiMma, loadMmaSourceRegistry } from "../fightaiq/sources.js";
+import { fetchCitoFighters, fetchCitoUpcomingEvents, fetchOddsApiMma, loadMmaSourceRegistry, type ApiBoutOdds, type CitoEventSummary, type CitoFighterSummary } from "../fightaiq/sources.js";
+import { materializeFightAiQSources } from "../fightaiq/intake.js";
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -86,6 +87,9 @@ export async function refreshFightAiQEvidence(input: {
   const oddsKey = process.env.THE_ODDS_API_KEY?.trim() ?? "";
   const citoKey = process.env.CITO_API_KEY?.trim() ?? "";
   const results: FightSourceResult[] = [];
+  let oddsEvents: ApiBoutOdds[] = [];
+  let citoFighters: CitoFighterSummary[] = [];
+  let citoEvents: CitoEventSummary[] = [];
 
   if (!wired.has("the-odds-api")) {
     results.push({ sourceId: "the-odds-api", status: "skipped", reason: "Source is not wired.", items: [] });
@@ -98,6 +102,7 @@ export async function refreshFightAiQEvidence(input: {
         context,
         remainingCredits: priorQuota.month === month ? priorQuota.remainingCredits : null
       });
+      oddsEvents = odds.events;
       results.push({
         sourceId: "the-odds-api",
         status: odds.events.length > 0 ? "success" : "skipped",
@@ -127,12 +132,19 @@ export async function refreshFightAiQEvidence(input: {
     results.push({ sourceId: "cito-ufc", status: "skipped", reason: "CITO_API_KEY is unavailable.", items: [] });
   } else {
     try {
-      const fighters = await fetchCitoFighters({ apiKey: citoKey, context });
+      [citoFighters, citoEvents] = await Promise.all([
+        fetchCitoFighters({ apiKey: citoKey, context }),
+        fetchCitoUpcomingEvents({ apiKey: citoKey, context })
+      ]);
+      const items = [
+        ...citoFighters.map((fighter) => ({ kind: "fighter", ...fighter })),
+        ...citoEvents.map((event) => ({ kind: "event", ...event }))
+      ];
       results.push({
         sourceId: "cito-ufc",
-        status: fighters.length > 0 ? "success" : "skipped",
-        reason: fighters.length > 0 ? null : "No UFC fighter summaries were returned.",
-        items: fighters
+        status: items.length > 0 ? "success" : "skipped",
+        reason: items.length > 0 ? null : "No UFC fighter or upcoming-event records were returned.",
+        items
       });
     } catch (error) {
       results.push({ sourceId: "cito-ufc", status: "failed", reason: cleanFailure(error), items: [] });
@@ -150,8 +162,15 @@ export async function refreshFightAiQEvidence(input: {
     evidenceRefs,
     sources: results
   });
+  const normalizedPaths = await materializeFightAiQSources({
+    root: input.root,
+    retrievedAt: input.now,
+    citoFighters,
+    citoEvents,
+    odds: oddsEvents
+  });
   return {
-    artifactPaths: [artifactPath, ...(results.some((result) => result.quota) ? [quotaPath] : [])],
+    artifactPaths: [artifactPath, ...(results.some((result) => result.quota) ? [quotaPath] : []), ...normalizedPaths],
     evidenceRefs
   };
 }
