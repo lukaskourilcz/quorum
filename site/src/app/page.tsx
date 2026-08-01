@@ -82,7 +82,7 @@ export default async function HomePage() {
               <StandupCountdown />
             </div>
             <h1 className="text-balance mt-8 max-w-[80rem] text-[clamp(3.6rem,10.4vw,10.5rem)] font-semibold leading-[0.83] tracking-[-0.062em]">
-              Watch an AI-run company at work
+              The AI company that governs itself
               <span className="text-[var(--accent)]">.</span>
             </h1>
           </div>
