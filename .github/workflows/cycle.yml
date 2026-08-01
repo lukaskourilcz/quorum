@@ -212,6 +212,10 @@ jobs:
               echo "The selected phase has no repository delivery queue." >&2
               exit 1
             fi
+            if test "$phase" != "cu-edition" && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
+              echo "MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true." >&2
+              exit 1
+            fi
           fi
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
@@ -498,7 +502,7 @@ jobs:
 
       - name: Select pending MMA Files delivery
         id: mma-delivery
-        if: ${{ steps.mode.outputs.dry != 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
+        if: ${{ steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
         run: |
@@ -625,7 +629,12 @@ jobs:
           if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
           if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
           pnpm mma:delivery -- "${args[@]}"
-          git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries
+          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries)
+          for receipt_path in "${receipt_paths[@]}"; do
+            if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
+              git add -A -- "$receipt_path"
+            fi
+          done
           if ! git diff --cached --quiet; then
             git config user.name "boardlessai-cycle[bot]"
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"

@@ -78,6 +78,10 @@ describe("automation policy", () => {
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
     expect(cycle).toContain('git add -A -- "$runtime_path"');
+    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries)");
+    expect(cycle).toContain('git add -A -- "$receipt_path"');
+    expect(cycle).not.toContain("git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries");
+    expect(cycle).toContain("MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true.");
     expect(cycle).toContain("status --porcelain --untracked-files=all");
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
