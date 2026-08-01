@@ -20,7 +20,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T03:59:59.000Z"))).toEqual({
       hours: "06:00–14:00",
       iso: "2026-07-30T04:00:00.000Z",
-      label: "Morning shift",
+      label: "Morning company meeting",
       phase: "morning"
     });
   });
@@ -29,7 +29,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T04:00:00.000Z"))).toEqual({
       hours: "06:00–14:00",
       iso: "2026-07-30T04:00:00.000Z",
-      label: "Morning shift",
+      label: "Morning company meeting",
       phase: "morning"
     });
   });
@@ -38,7 +38,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T04:00:01.000Z"))).toEqual({
       hours: "14:00–22:00",
       iso: "2026-07-30T12:00:00.000Z",
-      label: "Afternoon shift",
+      label: "Afternoon company meeting",
       phase: "afternoon"
     });
   });
@@ -56,7 +56,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T15:00:01.000Z"))).toEqual({
       hours: "22:00–06:00",
       iso: "2026-07-30T20:00:00.000Z",
-      label: "Night shift",
+      label: "Night company meeting",
       phase: "night"
     });
   });
@@ -88,7 +88,7 @@ describe("Standup countdown schedule", () => {
       expect(getNextStandup(new Date(now))).toEqual({
         hours: "06:00–14:00",
         iso: expected,
-        label: "Morning shift",
+        label: "Morning company meeting",
         phase: "morning"
       });
     }
@@ -98,7 +98,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T20:00:00.000Z"))).toEqual({
       hours: "22:00–06:00",
       iso: "2026-07-30T20:00:00.000Z",
-      label: "Night shift",
+      label: "Night company meeting",
       phase: "night"
     });
   });
@@ -107,7 +107,7 @@ describe("Standup countdown schedule", () => {
     const occurrence = {
       hours: "06:00–14:00",
       iso: "2026-08-01T10:03:04.000Z",
-      label: "Morning shift",
+      label: "Morning company meeting",
       phase: "morning"
     } as const;
 
@@ -130,16 +130,16 @@ describe("Standup countdown schedule", () => {
       formatStandupOccurrence({
         hours: "14:00–22:00",
         iso: "2026-07-30T12:00:00.000Z",
-        label: "Afternoon shift",
+        label: "Afternoon company meeting",
         phase: "afternoon"
       })
     ).toBe("Jul 30, 2026 · 14:00 · Prague");
   });
 
   it("labels current shifts and makes historical AM/PM records explicit", () => {
-    expect(formatPhaseLabel("morning")).toBe("Morning shift");
-    expect(formatPhaseLabel("afternoon")).toBe("Afternoon shift");
-    expect(formatPhaseLabel("night")).toBe("Night shift");
+    expect(formatPhaseLabel("morning")).toBe("Morning company meeting");
+    expect(formatPhaseLabel("afternoon")).toBe("Afternoon company meeting");
+    expect(formatPhaseLabel("night")).toBe("Night company meeting");
     expect(formatPhaseLabel("cu-edition")).toBe("Caught Up edition meeting");
     expect(formatPhaseLabel("cu-product")).toBe("Caught Up product meeting");
     expect(formatPhaseLabel("founding")).toBe("Founding");

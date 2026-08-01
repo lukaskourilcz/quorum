@@ -90,7 +90,7 @@ export default async function StandupDetailPage({
               <Badge tone="dark">{publicStageLabel(standup.stage)}</Badge>
             </div>
             <h1 className="mt-7 max-w-5xl text-[clamp(3rem,7.5vw,7.2rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
-              {formatPhaseLabel(standup.phase)} meeting
+              {formatPhaseLabel(standup.phase)}
               <span className="text-[var(--accent)]">.</span>
             </h1>
             <div className="mt-8 flex flex-wrap gap-x-7 gap-y-2 text-sm text-[var(--muted-foreground)]">
