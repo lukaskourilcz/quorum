@@ -1,37 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Gavel, ShieldAlert } from "lucide-react";
+import { ArrowLeft, ArrowRight, Gavel } from "lucide-react";
 import { AgentPortrait } from "@/components/agent-portrait";
-import { publicAgentText, publicAgentTitle, publicReferenceLabel } from "@/components/agent-language";
+import { publicAgentText, publicAgentTitle } from "@/components/agent-language";
 import {
   DecisionReplay,
   type ReplayChapter,
   type ReplayCut
 } from "@/components/decision-replay";
 import { PageShell } from "@/components/page-shell";
-import { RoomMessageTime } from "@/components/room-message-time";
-import {
-  formatRoomClock,
-  formatRoomDateTime,
-  resolveRoomTurnTiming
-} from "@/components/room-timeline";
+import { formatRoomClock, formatRoomDateTime } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Message,
-  MessageAvatar,
-  MessageBubble,
-  MessageContent,
-  MessageHeader,
-  MessageList,
-  MessageMeta,
-  MessageName,
-  MessageRole
-} from "@/components/ui/message";
 import { agentById } from "@/data/agents";
 import { getPublicStandup, getPublicStandups } from "@/lib/standup-records";
-import type { RoomTurnMode } from "@/data/fixtures";
 import { formatDate } from "@/lib/utils";
 
 export async function generateStaticParams() {
@@ -152,31 +135,6 @@ const replayCuts = [
     turnIndexes: [11, 12, 13, 14, 15, 16]
   }
 ] satisfies readonly ReplayCut[];
-
-const modeLabel: Record<RoomTurnMode, string> = {
-  gavel: "opens the meeting",
-  statement: "sets a position",
-  response: "responds",
-  "reads-ledger": "checks the budget record",
-  "raises-concern": "tests the case",
-  veto: "records a veto",
-  vote: "casts a vote",
-  close: "closes the meeting"
-};
-
-const modeTone: Record<
-  RoomTurnMode,
-  "neutral" | "accent" | "warning" | "success" | "dark"
-> = {
-  gavel: "accent",
-  statement: "neutral",
-  response: "neutral",
-  "reads-ledger": "dark",
-  "raises-concern": "warning",
-  veto: "accent",
-  vote: "success",
-  close: "accent"
-};
 
 export default async function StandupRoomPage({
   params
@@ -312,77 +270,6 @@ export default async function StandupRoomPage({
               </ul>
             </aside>
           </div>
-
-          <MessageList className="mt-12">
-            {transcript.turns.map((turn, index) => {
-              const speaker = agentById.get(turn.agent);
-              if (!speaker) return null;
-              const listener = turn.addressedTo
-                ? agentById.get(turn.addressedTo)
-                : null;
-              const isAudit = turn.agent === "AUDIT";
-              const bubbleEmphasis = isAudit
-                ? "control"
-                : turn.mode === "veto" || turn.mode === "vote"
-                  ? "accent"
-                  : "default";
-              const turnTiming = resolveRoomTurnTiming(transcript, index);
-
-              return (
-                <Message key={`${turn.agent}-${index}`}>
-                  <MessageAvatar>
-                    <AgentPortrait
-                      agent={speaker}
-                      className="size-11 rounded-full md:size-12"
-                    />
-                    <span className="font-mono text-[0.625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                      #{String(index + 1).padStart(2, "0")}
-                    </span>
-                  </MessageAvatar>
-                  <MessageBubble emphasis={bubbleEmphasis}>
-                    <MessageHeader>
-                      <MessageName>{publicAgentTitle(speaker)}</MessageName>
-                      <MessageRole>· AI role</MessageRole>
-                      {isAudit ? (
-                        <ShieldAlert
-                          aria-label="Safety reviewer"
-                          className="size-4 shrink-0 text-[var(--accent)]"
-                        />
-                      ) : null}
-                      <Badge className="ml-auto" tone={modeTone[turn.mode]}>
-                        {modeLabel[turn.mode]}
-                      </Badge>
-                    </MessageHeader>
-                    {listener ? (
-                      <p className="mb-2 font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-                        To {publicAgentTitle(listener)}
-                      </p>
-                    ) : null}
-                    <MessageContent>{publicAgentText(turn.text)}</MessageContent>
-                    <MessageMeta>
-                      <RoomMessageTime
-                        className="text-[var(--ash)]"
-                        timing={turnTiming}
-                      />
-                      {turn.evidenceRefs?.length ? (
-                        <>
-                          <span>On record:</span>
-                          {turn.evidenceRefs.map((reference) => (
-                            <span
-                              className="rounded-full border border-[var(--slate)] px-2.5 py-0.5 text-[var(--ash)]"
-                              key={reference}
-                            >
-                              {publicReferenceLabel(reference)}
-                            </span>
-                          ))}
-                        </>
-                      ) : null}
-                    </MessageMeta>
-                  </MessageBubble>
-                </Message>
-              );
-            })}
-          </MessageList>
 
           <div className="mt-10 rounded-[var(--radius-card)] border border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_8%,var(--card))] p-6 md:p-8">
             <div className="grid items-end gap-6 md:grid-cols-12">
