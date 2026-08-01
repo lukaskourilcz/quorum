@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "runId": "f2cb8944-7ad4-438f-8ce5-0796ee141b98",
+  "date": "2026-08-01",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-01T12:27:11.181Z",
+  "completedAt": "2026-08-01T12:28:53.847Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-01T12:27:11.183Z",
+      "completedAt": "2026-08-01T12:27:43.640Z",
+      "durationMs": 32457
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-01T12:27:43.640Z",
+      "completedAt": "2026-08-01T12:28:53.845Z",
+      "durationMs": 70205,
+      "errorCode": "Error",
+      "errorMessage": "write: output cited an unsupplied URL: https://variety.com/"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-08-01T12:28:53.845Z",
+      "completedAt": "2026-08-01T12:28:53.846Z",
+      "durationMs": 1,
+      "errorCode": "BudgetError",
+      "errorMessage": "Edition call reserve 0.22625 would exceed 0.35"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-08-01T12:28:53.846Z",
+      "completedAt": "2026-08-01T12:28:53.846Z",
+      "durationMs": 0,
+      "errorCode": "BudgetError",
+      "errorMessage": "Edition call reserve 0.22625 would exceed 0.35"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11767,
+      "outputTokens": 1332,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.055281
+    }
+  ],
+  "measuredCostUsd": 0.055281,
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: output cited an unsupplied URL: https://variety.com/",
+    "content_invalid:Edition call reserve 0.22625 would exceed 0.35"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
