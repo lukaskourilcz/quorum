@@ -18,6 +18,10 @@ on:
     - cron: "0 10 * * *"
     - cron: "0 19 * * *"
     - cron: "0 20 * * *"
+    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
+    - cron: "0 17 * * *"
+    - cron: "0 18 * * *"
   workflow_dispatch:
     inputs:
       phase:
@@ -33,6 +37,8 @@ on:
           - tt-marketing
           - incubator-scan
           - incubator-synthesis
+          - mma-intake
+          - mma-analysis
           - night
       dry:
         description: Never call paid APIs or write canonical state
@@ -109,6 +115,8 @@ jobs:
           HAS_DELIVERY_APP_KEY: ${{ secrets.DELIVERY_APP_PRIVATE_KEY != '' }}
           CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
           PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
+          FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
+          FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
@@ -139,6 +147,16 @@ jobs:
                 skip=true
                 echo "The countersign-aware budget shape disabled this phase."
               fi
+            fi
+          fi
+          if test "$EVENT_NAME" = "schedule" && test "$phase" = "mma-intake" && test "$FIGHTAIQ_LIVE_ENABLED" != "true"; then
+            skip=true
+            echo "FightAIQ intake awaits the signed founding decision and live gate."
+          fi
+          if test "$EVENT_NAME" = "schedule" && test "$phase" = "mma-analysis"; then
+            if test "$FIGHTAIQ_LIVE_ENABLED" != "true" || test "$FIGHTAIQ_ANALYSIS_ENABLED" != "true"; then
+              skip=true
+              echo "FightAIQ analysis awaits the founding and budget approval gates."
             fi
           fi
           if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then

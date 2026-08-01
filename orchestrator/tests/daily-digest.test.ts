@@ -38,13 +38,14 @@ async function fixtureDigest(finalMeetingFailed = false) {
 }
 
 describe("one daily portfolio digest", () => {
-  it("groups the full eight-slot schedule and records missed meetings in one line", async () => {
+  it("groups the full ten-slot schedule and records missed meetings in one line", async () => {
     const digest = await fixtureDigest();
-    expect(digest.meetings).toHaveLength(8);
+    expect(digest.meetings).toHaveLength(10);
     expect(digest.meetings.filter((meeting) => !meeting.held).length).toBeGreaterThan(0);
     expect(digest.meetings.every((meeting) => meeting.bullets.length === 1)).toBe(true);
     expect(digest.bodyWordCount).toBeLessThanOrEqual(400);
     expect(renderDailyDigestText(digest)).toContain("Skipped:");
+    expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("mma-")).every((meeting) => meeting.ventureId === "fightaiq")).toBe(true);
     expect(renderDailyDigestHtml(digest, renderDailyDigestText(digest))).toContain("background:#09090b");
   });
 

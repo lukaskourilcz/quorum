@@ -38,8 +38,8 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(16);
-    for (const hour of [3, 4, 5, 6, 9, 10, 12, 13, 15, 16, 19, 20, 21]) {
+    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(20);
+    for (const hour of [3, 4, 5, 6, 7, 9, 10, 12, 13, 15, 16, 17, 18, 19, 20, 21]) {
       expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
     }
     expect(cycle.match(/cron: "0 4 \* \* \*"/g)).toHaveLength(2);
@@ -51,6 +51,8 @@ describe("automation policy", () => {
     expect(cycle).not.toContain("Caught Up product remains fixture-only until the Phase 10 ledger cutover.");
     expect(cycle).toContain("CAUGHT_UP_LIVE_ENABLED");
     expect(cycle).toContain("PORTFOLIO_LIVE_ENABLED");
+    expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
+    expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
     expect(cycle).toContain("schedule-cli.ts");
     expect(cycle).toContain("pnpm digest:daily");
     expect(cycle).toContain("DAILY_DIGEST_EMAIL_MODE");

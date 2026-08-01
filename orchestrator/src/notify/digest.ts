@@ -27,6 +27,8 @@ function ventureId(record: MeetingRecord | undefined, phase: string): string {
   if (record?.kind === "venture" || ["morning", "afternoon", "night"].includes(phase)) return "global";
   if (phase.startsWith("cu-")) return "caught-up";
   if (phase === "tt-marketing") return "titty-tuesdays";
+  if (phase.startsWith("mma-")) return "fightaiq";
+  if (phase.startsWith("mag-") || phase.startsWith("article-")) return "mma-files";
   return "incubator";
 }
 
