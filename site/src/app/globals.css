@@ -24,6 +24,18 @@
   --surface-raised: color-mix(in srgb, var(--obsidian) 68%, var(--graphite));
   --line-strong: color-mix(in srgb, var(--graphite) 40%, var(--slate));
   --grid-line: color-mix(in srgb, var(--obsidian) 76%, var(--graphite));
+  --show-paper: var(--paper);
+  --show-card: color-mix(in srgb, var(--surface-raised) 84%, var(--ember));
+  --show-ink: var(--paper);
+  --show-muted: var(--ash);
+  --show-line: color-mix(in srgb, var(--slate) 52%, var(--ash));
+  --show-accent-soft: color-mix(in srgb, var(--accent) 24%, transparent);
+  --show-face: color-mix(in srgb, var(--paper) 78%, var(--ember));
+  --show-face-shadow: color-mix(in srgb, var(--show-face) 78%, var(--graphite));
+  --show-hair: color-mix(in srgb, var(--graphite) 82%, var(--paper));
+  --show-jacket: color-mix(in srgb, var(--slate) 62%, var(--magenta-spark));
+  --show-lead-jacket: color-mix(in srgb, var(--graphite) 66%, var(--ember));
+  --show-shadow: 0 24px 80px color-mix(in srgb, var(--obsidian) 72%, transparent);
 }
 
 * {
@@ -82,6 +94,16 @@ img {
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: calc(100% / 12) 100%, 100% 6rem;
+}
+
+.workplace-stage {
+  background:
+    radial-gradient(circle at 78% 16%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 34rem),
+    linear-gradient(155deg, color-mix(in srgb, var(--surface) 72%, var(--show-card)), var(--background) 70%);
+}
+
+.episode-card {
+  box-shadow: var(--show-shadow);
 }
 
 .text-balance {

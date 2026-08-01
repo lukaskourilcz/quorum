@@ -18,6 +18,7 @@ import {
   readVentureRegistry,
   ventureIdForPhase
 } from "../ventures/registry.js";
+import { assertAgentPacketPresentationBarrier } from "../security/presentation-barrier.js";
 
 export interface GuardedCallInput<T> {
   stateRoot: string;
@@ -38,6 +39,10 @@ export interface GuardedCallInput<T> {
 export async function guardedJsonCall<T>(
   request: GuardedCallInput<T>
 ): Promise<{ value: T; cached: boolean; usd: number }> {
+  assertAgentPacketPresentationBarrier({
+    input: request.input,
+    system: request.system
+  });
   const hash = requestHash({
     provider: request.provider,
     model: request.model,

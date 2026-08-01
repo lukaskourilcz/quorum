@@ -32,6 +32,7 @@ import {
   type CalendarStatus,
   type PublicCalendarFeed
 } from "@/lib/calendar-feed-model";
+import { episodeLabel, seasonLabel } from "@/show/config";
 
 const weekdayFormatter = new Intl.DateTimeFormat("en", {
   weekday: "short",
@@ -302,10 +303,13 @@ export function WeekBoard({
         />
       ) : null}
       {headingLevel === "page" ? <div className="mb-6 flex justify-end">{navigation}</div> : null}
+      <p className="mb-4 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--show-muted)]">
+        {seasonLabel(today)} · five scheduled episodes
+      </p>
       <p className="mb-3 flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)] md:hidden">
         Scroll sideways to see later days <ArrowRight aria-hidden="true" className="size-3.5" />
       </p>
-      <div aria-label="Five-day meeting calendar" className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--line-strong)] bg-[var(--surface)]" data-horizontal-scroll data-testid="week-board" role="region" tabIndex={0}>
+      <div aria-label="Five-day meeting calendar" className="episode-card overflow-x-auto rounded-[var(--radius-card)] border border-[var(--line-strong)] bg-[var(--surface)]" data-horizontal-scroll data-testid="week-board" role="region" tabIndex={0}>
         <div className="grid min-w-[56rem] grid-cols-[13rem_repeat(5,minmax(8.5rem,1fr))]">
           <div className="flex items-center border-b border-r border-[var(--line-strong)] bg-[var(--surface-raised)] px-4 py-3">
             <Badge tone="accent">5-day view</Badge>
@@ -325,6 +329,9 @@ export function WeekBoard({
               <time className="mt-1 block text-base font-semibold tabular-nums text-[var(--foreground)]" dateTime={day}>
                 {dateFormatter.format(new Date(`${day}T12:00:00Z`))}
               </time>
+              <span className="mt-1 block font-mono text-[0.625rem] uppercase tracking-[0.08em] text-[var(--show-muted)]">
+                {episodeLabel(day)}
+              </span>
             </div>
           ))}
           {feed.definitions.map((definition) => (

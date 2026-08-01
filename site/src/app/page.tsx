@@ -22,6 +22,7 @@ import {
   pragueCalendarDate
 } from "@/lib/calendar-feed-model";
 import { formatDate, formatUsd } from "@/lib/utils";
+import { ShowLabel } from "@/show/show-label";
 
 const council = agents.filter((agent) => agent.group === "Council");
 const specialists = agents.filter((agent) => agent.group !== "Council");
@@ -69,15 +70,13 @@ export default async function HomePage() {
         stage={publicStageLabel(latestStandup.stage)}
       />
 
-      <section className="relative overflow-hidden border-b border-[var(--border)]">
+      <section className="workplace-stage relative overflow-hidden border-b border-[var(--border)]">
         <div className="editorial-grid absolute inset-0" />
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="scan-line absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-[color-mix(in_srgb,var(--accent)_6%,transparent)] to-transparent" />
-        </div>
         <div aria-hidden="true" className="absolute left-1/2 top-[-30%] size-[60rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent)_13%,transparent),transparent_62%)]" data-viewport-decoration />
         <AgentSignalField agents={signalAgents} />
         <div className="relative z-10 mx-auto grid min-h-[calc(100svh-7.5rem)] max-w-[var(--container)] content-between gap-18 px-5 py-16 md:px-10 md:py-22">
           <div>
+            <ShowLabel date={today} />
             <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
               <div className="flex flex-wrap items-center gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--fog)]">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[var(--slate)] px-3.5 py-1.5 text-[var(--foreground)]">
