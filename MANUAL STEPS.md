@@ -57,7 +57,9 @@ Record a separate owner mode-change decision before FightAIQ live analysis.
 ## 5. Enable one switch at a time
 
 1. Set `CAUGHT_UP_LIVE_ENABLED=true`, manually run `cu-edition` with dry off, review the
-   delivered bilingual edition, and switch it back off if delivery fails.
+   delivered bilingual edition, and switch it back off if delivery fails. Then run
+   `morning` with dry off before `cu-product`; the morning room creates the canonical
+   product idea that the later room reviews. Run `afternoon` and `night` once too.
 2. Set `PORTFOLIO_LIVE_ENABLED=true`, then run `incubator-scan` before
    `incubator-synthesis`; the scan supplies the source packet required for real ideas.
 3. Set `FIGHTAIQ_LIVE_ENABLED=true`, then run `mma-intake`; the configured API sources

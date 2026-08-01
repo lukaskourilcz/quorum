@@ -29,7 +29,9 @@ source accounts, approval records and project switches below are connected.
 4. Start Caught Up by setting `CAUGHT_UP_LIVE_ENABLED=true`, then run `cu-edition` with
    dry off. Review the new `cycle(...)` commit, EditionPackage, delivery receipt,
    bilingual articles and `aifirst` deployment. Set the switch back to `false` if any
-   check fails.
+   check fails. Then run `morning` with dry off so SPARK can create the canonical
+   Caught Up product idea, followed by `cu-product` so the product room can decide it.
+   Run `afternoon` and `night` once as the final company-room check.
 5. Set `PORTFOLIO_LIVE_ENABLED=true`; run `incubator-scan` before
    `incubator-synthesis`. The scan now saves a guarded source packet, so synthesis can
    keep source-backed ideas. Then run `tt-marketing`.
