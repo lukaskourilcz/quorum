@@ -62,7 +62,7 @@ source accounts, approval records and project switches below are connected.
 ## Caught Up delivery
 
 - [ ] **Install the delivery GitHub App on `lukaskourilcz/aifirst` only** — grant Contents read/write and no broader permission; add `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY` to Quorum Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
-- [ ] **Set the reader URL** — add repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app`. It is currently missing. [imp:5] [owner:me] [time:5m] [kind:setup]
+- [x] **Set the reader URL** — repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app` is configured. [imp:5] [owner:me] [time:5m] [kind:setup]
 - [x] **Confirm Caught Up’s adopted limits** — the owner approval reference is recorded in `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
 - [ ] **Enable Caught Up for one reviewed delivery** — set `CAUGHT_UP_LIVE_ENABLED=true`, dispatch `cu-edition` with dry off, then verify the bilingual package, delivery receipt, `aifirst` checks and deployment. Set the switch back to `false` on any failure. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Review the first three editions** — check both articles, citations, Czech and English tone, four-frame carousels, Instagram captions and Threads drafts in `/admin`. [imp:5] [owner:me] [time:90m] [kind:content]
