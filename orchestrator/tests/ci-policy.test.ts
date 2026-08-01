@@ -38,16 +38,13 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(28);
+    expect(cycle.match(/- cron: "0 \d+ \* \* \*"/g)).toHaveLength(17);
     for (const hour of [3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 15, 16, 17, 18, 19, 20, 21]) {
       expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
     }
-    expect(cycle.match(/cron: "0 4 \* \* \*"/g)).toHaveLength(2);
-    expect(cycle.match(/cron: "0 5 \* \* \*"/g)).toHaveLength(2);
-    expect(cycle.match(/cron: "0 20 \* \* \*"/g)).toHaveLength(2);
-    expect(cycle.match(/cron: "0 8 \* \* \*"/g)).toHaveLength(2);
-    expect(cycle.match(/cron: "0 17 \* \* \*"/g)).toHaveLength(2);
-    expect(cycle.match(/cron: "0 18 \* \* \*"/g)).toHaveLength(2);
+    for (const hour of [4, 5, 8, 17, 18, 20]) {
+      expect(cycle.match(new RegExp(`cron: "0 ${hour} \\* \\* \\*"`, "g"))).toHaveLength(1);
+    }
     expect(cycle).not.toContain('timezone: "Europe/Prague"');
     expect(cycle).toContain("clock-cli.ts --scheduled");
     expect(cycle).toContain('clock-cli.ts --phase "$phase"');

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "meeting-agenda-queue/1",
+  "agendas": [
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-0123456789abcdef",
+      "ventureId": "titty-tuesdays",
+      "phase": "tt-marketing",
+      "requestedBy": "PULSE",
+      "sourcePhase": "morning",
+      "sourceMeetingRef": "standups/2026-08-01-morning",
+      "summary": "Compare one bounded campaign question against the current season and taste record.",
+      "evidenceRefs": [
+        "state/ventures/titty-tuesdays/season-001.md"
+      ],
+      "requestedAt": "2026-08-01T04:00:00.000Z",
+      "notBefore": "2026-08-01",
+      "expiresAt": "2026-08-04T23:59:59.000Z",
+      "status": "pending"
+    }
+  ],
+  "updatedAt": "2026-08-01T04:00:00.000Z"
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "meeting-agenda-queue/1",
+  "agendas": [
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-not-a-hash",
+      "ventureId": "titty-tuesdays",
+      "phase": "tt-marketing",
+      "requestedBy": "PULSE",
+      "sourcePhase": "morning",
+      "sourceMeetingRef": "standups/2026-08-01-morning",
+      "summary": "",
+      "evidenceRefs": [],
+      "requestedAt": "2026-08-01T04:00:00.000Z",
+      "notBefore": "2026-08-01",
+      "expiresAt": "2026-08-04T23:59:59.000Z",
+      "status": "consumed"
+    }
+  ],
+  "updatedAt": "2026-08-01T04:00:00.000Z"
+}
