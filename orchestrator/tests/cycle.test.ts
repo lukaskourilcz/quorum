@@ -140,6 +140,14 @@ describe("cycle preflight", () => {
       expect(record.fixture).toBe(true);
       expect(record.ledger.actualCycleUsd).toBe(0);
       expect(record.roomTranscript.turns.length).toBeLessThanOrEqual(fixture.phase === "incubator-scan" ? 12 : fixture.phase === "incubator-synthesis" ? 18 : 22);
+      if (fixture.phase === "tt-marketing") {
+        const planId = `plan-${date}-campaign-notes`;
+        const plan = JSON.parse(await readFile(path.join(repoRoot, `tmp/dry-run/state/ventures/titty-tuesdays/plans/${planId}.json`), "utf8"));
+        const markdown = await readFile(path.join(repoRoot, `tmp/dry-run/state/ventures/titty-tuesdays/plans/${planId}.md`), "utf8");
+        expect(plan.summary).toMatch(/permission-first/i);
+        expect(markdown).toContain("## Campaign ideas");
+        expect(markdown).toContain("does not authorize publishing");
+      }
     }
   });
 

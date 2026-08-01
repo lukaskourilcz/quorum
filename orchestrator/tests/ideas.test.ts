@@ -13,6 +13,7 @@ import {
   applyIdeaRoomVerdict,
   canonicalIdeaTokens,
   currentIdeaEntries,
+  ideaDetailPath,
   ideaIndexPath,
   ideaLedgerPath,
   ideaFingerprint,
@@ -284,6 +285,12 @@ describe("VAULT ledger adjudication", () => {
     expect(index).toContain("The raw JSONL ledger is never injected into a meeting");
     expect(index).toContain("Source reliability card");
     expect(index).toContain("deferred");
+    const detail = await readFile(
+      path.join(root, ideaDetailPath(GLOBAL_IDEA_NAMESPACE, prior.id)),
+      "utf8"
+    );
+    expect(detail).toContain("> Show source independence beside each edition.");
+    expect(detail).toContain("## Decision history");
   });
 
   it("keeps every namespace index within the injection ceiling", () => {

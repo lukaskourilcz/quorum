@@ -21,6 +21,7 @@
     "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
     "fightaiq:backfill": "pnpm --filter @boardlessai/orchestrator fightaiq:backfill",
     "ideas:migrate": "pnpm --filter @boardlessai/orchestrator ideas:migrate",
+    "mma:delivery": "pnpm --filter @boardlessai/orchestrator mma:delivery",
     "lint": "pnpm -r lint",
     "org:maintain": "pnpm --filter @boardlessai/orchestrator org:maintain",
     "proof:rooms": "pnpm --filter @boardlessai/orchestrator proof:rooms",

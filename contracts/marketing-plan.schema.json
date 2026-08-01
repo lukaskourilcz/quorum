@@ -24,6 +24,11 @@
       "minLength": 1,
       "maxLength": 120
     },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
     "objective": {
       "type": "string",
       "minLength": 1,
@@ -147,6 +152,7 @@
     "id",
     "ventureId",
     "title",
+    "summary",
     "objective",
     "tactics",
     "calendar",

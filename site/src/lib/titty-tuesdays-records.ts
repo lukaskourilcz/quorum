@@ -26,7 +26,8 @@ export interface TittyTuesdaysSnapshot {
 }
 
 function repositoryRoot(): string {
-  return process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
+  return process.env.BOARDLESSAI_REPO_ROOT
+    ?? (path.basename(process.cwd()) === "site" ? path.resolve(process.cwd(), "..") : process.cwd());
 }
 
 function requiredText(value: unknown, maximum: number): string {

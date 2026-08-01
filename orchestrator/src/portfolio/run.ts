@@ -11,11 +11,12 @@ import {
 import { loadRoutingConfig, routeBoardroom } from "../boardroom/router.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
 import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
+import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { NicheProposalSchema, type NicheProposal } from "../contracts/niche-proposal.js";
 import { guardedJsonCall } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
-import { atomicWriteJson, readJson, readText } from "../state.js";
+import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
 import type { FoundingAgent, Stage } from "../types.js";
 import { loadVentureRegistry, composeMeetingRouteDefinition } from "../ventures/registry.js";
@@ -34,6 +35,7 @@ import {
   resolveEffectivePortfolioSchedule,
   signedOwnerDecision
 } from "./schedule.js";
+import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
 
 export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
@@ -43,7 +45,8 @@ const ContributionSchema = z.object({
   evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12),
   task: z.object({ summary: z.string().trim().min(1).max(240) }).nullable(),
   nicheProposals: z.array(z.unknown()).max(2).default([]),
-  editorialSlate: z.unknown().nullable().default(null)
+  editorialSlate: z.unknown().nullable().default(null),
+  marketingPlan: z.unknown().nullable().default(null)
 }).superRefine((value, context) => {
   if (/(?:\d|%|\$|€|£)/.test(value.summary) && value.evidenceRefs.length === 0) {
     context.addIssue({ code: "custom", message: "Numeric contribution claims require evidenceRefs", path: ["evidenceRefs"] });
@@ -67,6 +70,40 @@ export interface PortfolioCycleResult {
 function parseJson(text: string): unknown {
   const normalized = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
   return JSON.parse(normalized);
+}
+
+function renderNicheProposalMarkdown(proposal: NicheProposal): string {
+  return [
+    `# ${proposal.domain}`,
+    "",
+    `> ${proposal.oneLiner}`,
+    "",
+    "## Why readers would care",
+    "",
+    proposal.whyPeopleCareDaily,
+    "",
+    "## Audience",
+    "",
+    `- Regions: ${proposal.audienceHypothesis.regions.join(", ")}`,
+    `- Ages: ${proposal.audienceHypothesis.ageRange.min}–${proposal.audienceHypothesis.ageRange.max}`,
+    `- Interests: ${proposal.audienceHypothesis.interests.join(", ")}`,
+    `- Platforms: ${proposal.audienceHypothesis.platforms.join(", ")}`,
+    "",
+    "## Publication shape",
+    "",
+    `- Cadence: ${proposal.contentShape.cadence}`,
+    `- Formats: ${proposal.contentShape.formats.join(", ")}`,
+    `- Caught Up reuse: ${proposal.contentShape.caughtUpReuseNotes}`,
+    "",
+    "## Risks",
+    "",
+    ...(proposal.risks.length ? proposal.risks.map((risk) => `- ${risk}`) : ["- None recorded"]),
+    "",
+    "## Evidence",
+    "",
+    ...(proposal.evidenceRefs.length ? proposal.evidenceRefs.map((reference) => `- ${reference}`) : ["- None recorded"]),
+    ""
+  ].join("\n");
 }
 
 function modelFor(
@@ -335,14 +372,14 @@ export async function runPortfolioCycle(input: {
   let estimatedWorstCaseUsd = 0;
   if (input.dry) {
     const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
-    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null }));
+    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null }));
   } else {
     const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null|{"schemaVersion":"editorial-slate/1","date":"YYYY-MM-DD","slots":[...],"vaultVerdicts":[...]}}. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null|{"schemaVersion":"editorial-slate/1","date":"YYYY-MM-DD","slots":[...],"vaultVerdicts":[...]},"marketingPlan":null|{"schemaVersion":"marketing-plan/1","title":"...","summary":"<=280 chars","objective":"...","tactics":[...],"calendar":[...],"audienceRefs":[...],"kpis":[...]}}. Only ANGLE may return one detailed marketingPlan during tt-marketing. It must describe future campaign ideas only; no publishing, image production, paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM slot; kill a slot when its source-backed subject is missing or repeated.`;
       const prompt = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({ phase: input.phase, objective: definition.objective, allowedEvidenceRefs: context.evidenceRefs, context: context.text }));
       const estimate = estimateTextCall({ provider: model.provider, model: model.model, promptChars: system.length + prompt.length, maxOutputTokens: model.maxOutputTokens, at: input.now });
       return { agent, model, system, prompt, estimate };
@@ -378,6 +415,44 @@ export async function runPortfolioCycle(input: {
   const proposals = proposalCandidates.map((proposal) => NicheProposalSchema.parse(proposal))
     .filter((proposal) => proposal.evidenceRefs.length > 0 && proposal.evidenceRefs.every((reference) => context.evidenceRefs.includes(reference)))
     .slice(0, 2);
+  let marketingPlan: MarketingPlan | null = null;
+  if (input.phase === "tt-marketing") {
+    const meetingRef = `${date}-tt-marketing`;
+    const rawPlan = input.dry
+      ? JSON.parse(await readFile(path.join(repoRoot, "contracts", "fixtures", "marketing-plan.valid.json"), "utf8")) as Record<string, unknown>
+      : contributions.find((contribution) => contribution.agent === "ANGLE")?.marketingPlan;
+    const parsedPlan = rawPlan && typeof rawPlan === "object"
+      ? MarketingPlanSchema.safeParse({
+          ...rawPlan,
+          schemaVersion: "marketing-plan/1",
+          id: `plan-${date}-campaign-notes`,
+          ventureId: "titty-tuesdays",
+          seasonId: "season-001",
+          status: "draft",
+          originMeetingRef: meetingRef
+        })
+      : null;
+    marketingPlan = parsedPlan?.success ? parsedPlan.data : MarketingPlanSchema.parse({
+      schemaVersion: "marketing-plan/1",
+      id: `plan-${date}-campaign-notes`,
+      ventureId: "titty-tuesdays",
+      seasonId: "season-001",
+      title: `Campaign notes for ${date}`,
+      summary: contributions.find((contribution) => contribution.agent === "ANGLE")?.summary ?? "The room kept a short list of future campaign directions for owner review.",
+      objective: "Keep a detailed record of future marketing ideas without producing assets or taking any public action.",
+      tactics: contributions.map((contribution) => ({
+        type: "content" as const,
+        description: contribution.summary,
+        assetsNeeded: ["owner-approved campaign brief"],
+        platformPolicyNote: "Planning only. Do not publish, generate social images or contact anyone."
+      })),
+      calendar: [{ week: 1, focus: "Owner reads the notes and decides whether any direction deserves a separate brief." }],
+      audienceRefs: [],
+      kpis: ["The owner can understand and rate each proposed direction without opening the meeting transcript."],
+      status: "draft",
+      originMeetingRef: meetingRef
+    });
+  }
   let editorialSlate: EditorialSlate | null = null;
   if (input.phase === "mag-editorial") {
     if (input.dry) {
@@ -424,16 +499,26 @@ export async function runPortfolioCycle(input: {
   const priorRecords = await loadMeetingRecords(root);
   const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({ weekOf: mondayOfWeek(date), records: [...priorRecords, record], now: input.now }));
   const proposalPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.json`);
+  const proposalMarkdownPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.md`);
   const editorialSlatePath = editorialSlate ? `ventures/mma-files/slates/${date}.json` : null;
+  const marketingPlanPath = marketingPlan ? `ventures/titty-tuesdays/plans/${marketingPlan.id}.json` : null;
+  const marketingPlanMarkdownPath = marketingPlan ? `ventures/titty-tuesdays/plans/${marketingPlan.id}.md` : null;
   await Promise.all([
     atomicWriteJson(root, meetingPath, record),
     atomicWriteJson(root, decisionPath, { schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: input.phase, outcome: record.decision.outcome, summary: record.decision.summary, evidenceRefs: record.decision.evidenceRefs, generatedAt: record.generatedAt }),
     atomicWriteJson(root, scorecardPath, { schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: input.phase, estimatedWorstCaseUsd, actualUsd: actualCycleUsd, participants: selected, generatedAt: record.generatedAt }),
     ...(editorialSlatePath && editorialSlate ? [atomicWriteJson(root, editorialSlatePath, editorialSlate)] : []),
-    ...proposals.map((proposal, index) => atomicWriteJson(root, proposalPaths[index]!, proposal))
+    ...(marketingPlan && marketingPlanPath && marketingPlanMarkdownPath ? [
+      atomicWriteJson(root, marketingPlanPath, marketingPlan),
+      atomicWriteText(root, marketingPlanMarkdownPath, renderMarketingPlanMarkdown(marketingPlan))
+    ] : []),
+    ...proposals.flatMap((proposal, index) => [
+      atomicWriteJson(root, proposalPaths[index]!, proposal),
+      atomicWriteText(root, proposalMarkdownPaths[index]!, renderNicheProposalMarkdown(proposal))
+    ])
   ]);
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

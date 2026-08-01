@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { DateSchema, DateTimeSchema, HttpsUrlSchema, Sha256Schema, openObject } from "./common.js";
+import { EdgeReportSchema, EventCardSchema, FighterRecordSchema, ModelRunSchema, OddsSnapshotSchema, SlipOfTenSchema, TrackRecordSchema } from "./mma.js";
 
 export const ArticleFormatSchema = z.enum([
   "fight-week-preview", "post-event-recap", "fighter-profile",
@@ -119,8 +120,22 @@ export const EditorialSlateSchema = openObject({
   }
 });
 
+export const FightAiQDeliverySchema = openObject({
+  schemaVersion: z.literal("fightaiq-delivery/1"),
+  generatedAt: DateTimeSchema,
+  fighters: z.array(FighterRecordSchema),
+  events: z.array(EventCardSchema),
+  odds: z.array(OddsSnapshotSchema),
+  modelRuns: z.array(ModelRunSchema),
+  edgeReports: z.array(EdgeReportSchema),
+  slips: z.array(SlipOfTenSchema),
+  trackRecord: TrackRecordSchema.nullable(),
+  packageHash: Sha256Schema
+});
+
 export type ArticlePackage = z.infer<typeof ArticlePackageSchema>;
 export type SocialVariantPack = z.infer<typeof SocialVariantPackSchema>;
 export type MetricsCapture = z.infer<typeof MetricsCaptureSchema>;
 export type DesignFinding = z.infer<typeof DesignFindingSchema>;
 export type EditorialSlate = z.infer<typeof EditorialSlateSchema>;
+export type FightAiQDelivery = z.infer<typeof FightAiQDeliverySchema>;

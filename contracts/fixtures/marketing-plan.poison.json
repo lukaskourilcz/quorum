@@ -3,6 +3,7 @@
   "id": "plan-season-001-launch",
   "ventureId": "titty-tuesdays",
   "title": "Unlabeled cost plan",
+  "summary": "Keep the deliberately invalid cost estimate available for contract testing.",
   "objective": "Test the estimate guard.",
   "tactics": [
     {

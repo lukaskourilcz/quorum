@@ -17,6 +17,7 @@
     "edition:dry": "tsx src/edition/dry-run.ts",
     "fightaiq:backfill": "tsx src/fightaiq/backfill-cli.ts",
     "ideas:migrate": "tsx src/ideas/migrate-cli.ts",
+    "mma:delivery": "tsx src/mma-files/publish-cli.ts",
     "lint": "tsc --noEmit",
     "org:maintain": "tsx src/org/maintenance.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",

@@ -58,7 +58,7 @@ on:
         default: true
         type: boolean
       delivery_only:
-        description: Deliver the oldest Caught Up package without generating a new edition
+        description: Deliver pending content for the selected Caught Up or MMA phase without paid model calls
         required: true
         default: false
         type: boolean
@@ -195,17 +195,23 @@ jobs:
             dry=true
             echo "Caught Up live mode awaits the explicit repository-variable approval gate."
           fi
-          if test "$phase" = "cu-edition" && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
+          if { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
             dry=true
-            echo "Caught Up delivery credentials are missing; forcing fixture-only dry mode."
+            echo "Repository delivery credentials are missing; forcing fixture-only dry mode."
           fi
-          if test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; then
+          if test "$delivery_only" != "true" && { test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; }; then
             dry=true
             echo "One or more council credentials are missing; forcing fixture-only dry mode."
           fi
-          if test "$delivery_only" = "true" && { test "$EVENT_NAME" != "workflow_dispatch" || test "$phase" != "cu-edition" || test "$dry" = "true"; }; then
-            echo "Delivery-only mode requires a manual cu-edition dispatch with dry=false and all Caught Up gates open." >&2
-            exit 1
+          if test "$delivery_only" = "true"; then
+            if test "$EVENT_NAME" != "workflow_dispatch" || test "$dry" = "true"; then
+              echo "Delivery-only mode requires a manual dispatch with dry=false and all matching gates open." >&2
+              exit 1
+            fi
+            if ! { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; }; then
+              echo "The selected phase has no repository delivery queue." >&2
+              exit 1
+            fi
           fi
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
@@ -488,4 +494,160 @@ jobs:
 
       - name: Fail closed on delivery reconciliation
         if: ${{ steps.target.outputs.status == 'needs_reconciliation' }}
+        run: exit 1
+
+      - name: Select pending MMA Files delivery
+        id: mma-delivery
+        if: ${{ steps.mode.outputs.dry != 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
+        env:
+          PHASE: ${{ steps.mode.outputs.phase }}
+        run: |
+          package_kind=article
+          if test "$PHASE" = "mma-intake" || test "$PHASE" = "mma-analysis"; then
+            package_kind=fightaiq
+          fi
+          pnpm mma:delivery -- next --kind "$package_kind" --github-output "$GITHUB_OUTPUT"
+
+      - name: Mint bounded MMA Files installation token
+        id: mma-delivery-token
+        if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
+        with:
+          app-id: ${{ secrets.DELIVERY_APP_ID }}
+          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
+          owner: lukaskourilcz
+          repositories: mma-files
+
+      - name: Deliver package to MMA Files main
+        id: mma-target
+        if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.mma-delivery-token.outputs.token }}
+          PACKAGE_KIND: ${{ steps.mma-delivery.outputs.package_kind }}
+          PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
+          PACKAGE_HASH12: ${{ steps.mma-delivery.outputs.package_hash12 }}
+          PACKAGE_LABEL: ${{ steps.mma-delivery.outputs.package_label }}
+        run: |
+          clone_root=""
+          for attempt in 1 2; do
+            candidate="$RUNNER_TEMP/mma-files-delivery-$attempt"
+            if git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/mma-files.git" "$candidate"; then
+              clone_root="$candidate"
+              break
+            fi
+          done
+          if test -z "$clone_root"; then
+            printf '%s\n' "GitHub was unreachable after one retry." > "$RUNNER_TEMP/mma-delivery-error.log"
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            echo "failure_code=unreachable" >> "$GITHUB_OUTPUT"
+            echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          npm --prefix "$clone_root" ci
+          set +e
+          npm --prefix "$clone_root" run consume:boardless -- "$PACKAGE_PATH" "$clone_root" > "$RUNNER_TEMP/mma-consumer.log" 2>&1
+          consumer_status=$?
+          set -e
+          if test "$consumer_status" -ne 0; then
+            cat "$RUNNER_TEMP/mma-consumer.log"
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            if grep -q '\[delivery:hash_conflict\]' "$RUNNER_TEMP/mma-consumer.log"; then
+              echo "failure_code=hash_conflict" >> "$GITHUB_OUTPUT"
+            elif grep -q '\[delivery:content_invalid\]' "$RUNNER_TEMP/mma-consumer.log"; then
+              echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
+            else
+              echo "failure_code=schema_invalid" >> "$GITHUB_OUTPUT"
+            fi
+            echo "detail_file=$RUNNER_TEMP/mma-consumer.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          allowed='^data/boardless/articles\.json$'
+          if test "$PACKAGE_KIND" = "fightaiq"; then
+            allowed='^data/boardless/fightaiq\.json$'
+          fi
+          unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
+          if test -n "$unexpected"; then
+            printf '%s\n%s\n' "Consumer touched unauthorized paths:" "$unexpected" > "$RUNNER_TEMP/mma-delivery-error.log"
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
+            echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          npm --prefix "$clone_root" run test
+          npm --prefix "$clone_root" run typecheck
+          NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app NEXT_PUBLIC_DEMO_MODE=false npm --prefix "$clone_root" run build
+          if test "$PACKAGE_KIND" = "article"; then
+            git -C "$clone_root" add data/boardless/articles.json
+          else
+            git -C "$clone_root" add data/boardless/fightaiq.json
+          fi
+          if ! git -C "$clone_root" diff --cached --quiet; then
+            git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
+            git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+            git -C "$clone_root" commit -m "delivery(${PACKAGE_KIND}): ${PACKAGE_LABEL} [package:${PACKAGE_HASH12}]"
+            pushed=false
+            for attempt in 1 2; do
+              if git -C "$clone_root" push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              git -C "$clone_root" fetch --depth 1 origin main
+              if ! git -C "$clone_root" rebase origin/main; then
+                git -C "$clone_root" rebase --abort || true
+                break
+              fi
+            done
+            if test "$pushed" != "true"; then
+              printf '%s\n' "Target push was rejected after one refetch/retry." > "$RUNNER_TEMP/mma-delivery-error.log"
+              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+              echo "failure_code=push_rejected" >> "$GITHUB_OUTPUT"
+              echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "status=delivered" >> "$GITHUB_OUTPUT"
+          echo "target_commit=$(git -C "$clone_root" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Record MMA Files delivery transaction
+        if: ${{ steps.mma-delivery.outputs.has_package == 'true' && steps.mma-target.outputs.status != '' }}
+        env:
+          DELIVERY_STATUS: ${{ steps.mma-target.outputs.status }}
+          FAILURE_CODE: ${{ steps.mma-target.outputs.failure_code }}
+          DETAIL_FILE: ${{ steps.mma-target.outputs.detail_file }}
+          PACKAGE_KIND: ${{ steps.mma-delivery.outputs.package_kind }}
+          PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
+          PACKAGE_HASH: ${{ steps.mma-delivery.outputs.package_hash }}
+          PACKAGE_HASH12: ${{ steps.mma-delivery.outputs.package_hash12 }}
+          TARGET_COMMIT: ${{ steps.mma-target.outputs.target_commit }}
+        run: |
+          args=(record --kind "$PACKAGE_KIND" --package "$PACKAGE_PATH" --hash "$PACKAGE_HASH" --status "$DELIVERY_STATUS")
+          if test -n "$FAILURE_CODE"; then args+=(--code "$FAILURE_CODE"); fi
+          if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
+          if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
+          pnpm mma:delivery -- "${args[@]}"
+          git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries
+          if ! git diff --cached --quiet; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git commit -m "delivery(mma-files): ${DELIVERY_STATUS} [package:${PACKAGE_HASH12}]"
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+                pushed=true
+                break
+              fi
+              git fetch origin "$GITHUB_REF_NAME"
+              if ! git rebase "origin/$GITHUB_REF_NAME"; then
+                git rebase --abort || true
+                break
+              fi
+            done
+            if test "$pushed" != "true"; then
+              echo "MMA Files delivery receipt could not be pushed after two refetches."
+              exit 1
+            fi
+          fi
+
+      - name: Fail closed on MMA Files delivery reconciliation
+        if: ${{ steps.mma-target.outputs.status == 'needs_reconciliation' }}
         run: exit 1

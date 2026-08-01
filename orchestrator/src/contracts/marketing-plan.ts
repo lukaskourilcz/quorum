@@ -25,6 +25,7 @@ export const MarketingPlanSchema = openObject({
   ventureId: VentureIdSchema,
   seasonId: z.string().regex(/^season-\d{3}$/).optional(),
   title: z.string().trim().min(1).max(120),
+  summary: z.string().trim().min(1).max(280),
   objective: z.string().trim().min(1).max(500),
   tactics: z.array(MarketingTacticSchema).min(1),
   calendar: z.array(openObject({

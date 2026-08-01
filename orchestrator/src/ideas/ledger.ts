@@ -31,6 +31,16 @@ export function ideaIndexPath(namespace: IdeaNamespace = GLOBAL_IDEA_NAMESPACE):
   return `ideas/${checkedNamespace(namespace)}/INDEX.md`;
 }
 
+export function ideaDetailPath(
+  namespace: IdeaNamespace,
+  ideaId: string
+): string {
+  if (!/^idea-\d{4}-\d{2}-\d{2}-[a-f0-9]{4,12}$/.test(ideaId)) {
+    throw new Error(`Invalid idea id: ${ideaId}`);
+  }
+  return `ideas/${checkedNamespace(namespace)}/details/${ideaId}.md`;
+}
+
 export const IDEA_LEDGER_PATH = ideaLedgerPath();
 export const IDEA_INDEX_PATH = ideaIndexPath();
 
@@ -293,6 +303,9 @@ async function appendSnapshots(
     : "";
   await atomicWriteText(root, ideaLedgerPath(namespace), content);
   await atomicWriteText(root, ideaIndexPath(namespace), renderIdeaIndex(snapshots, namespace));
+  await Promise.all(currentIdeaEntries(snapshots).map((entry) =>
+    atomicWriteText(root, ideaDetailPath(namespace, entry.id), renderIdeaDetail(entry))
+  ));
   return snapshots;
 }
 
@@ -650,6 +663,36 @@ function compact(value: string, max: number): string {
 
 function shortTitle(title: string): string {
   return compact(title.split(/\s+/).slice(0, 8).join(" "), 80);
+}
+
+export function renderIdeaDetail(entry: IdeaLedgerEntry): string {
+  const history = entry.statusHistory.map((item) => [
+    `### ${item.status.replaceAll("_", " ")} — ${item.at}`,
+    "",
+    item.reason,
+    "",
+    `Meeting: ${item.meetingRef}`
+  ].join("\n")).join("\n\n");
+  return [
+    `# ${entry.title}`,
+    "",
+    `> ${entry.summary}`,
+    "",
+    `Current status: ${entry.status.replaceAll("_", " ")}`,
+    `First proposed by: ${entry.origin.agent}`,
+    `Source meeting: ${entry.origin.meetingRef}`,
+    "",
+    "## Decision history",
+    "",
+    history,
+    "",
+    "## Similar ideas",
+    "",
+    ...(entry.similarTo.length
+      ? entry.similarTo.map((item) => `- ${item.verdict.replaceAll("_", " ")}: ${item.id} (${Math.round(item.score * 100)}% lexical similarity)`)
+      : ["- No linked duplicate or variant."]),
+    ""
+  ].join("\n");
 }
 
 export function renderIdeaIndex(
