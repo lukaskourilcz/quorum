@@ -34,6 +34,7 @@ import {
 import { reviewArticleText } from "../src/edition/stet.js";
 import { reviewTranslationParity } from "../src/edition/localize.js";
 import type { LocalizedContent } from "../src/edition/types.js";
+import { removeEmptyEnglishAdverbs } from "../src/edition/write.js";
 
 const fixtureRoot = path.join(
   repoRoot,
@@ -270,6 +271,29 @@ describe("STET article register", () => {
     const bad = "This rapidly evolving landscape could potentially be a game-changer for developers everywhere.";
     expect(reviewArticleText(bad).map((violation) => violation.code)).toEqual(
       expect.arrayContaining(["hype", "corporate_filler", "empty_adverb"])
+    );
+  });
+
+  it("removes a recoverable empty adverb before the English release review", async () => {
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const writer = structuredClone(base[1]!);
+    const value = writer.value as { en: { dek: string; dispatches: Array<{ body: string }> } };
+    value.en.dek = "This actually changes the budget for smaller teams.";
+    value.en.dispatches[0]!.body = "Importantly, the source document is public.";
+
+    const result = await produceEdition(
+      await productionInput([base[0]!, writer, base[2]!])
+    );
+
+    expect(result.package.status).toBe("edition");
+    expect(result.report.stet?.passed).toBe(true);
+    if (result.package.status === "edition") {
+      expect(result.package.article.en.frontmatter.dek).toBe(
+        "This changes the budget for smaller teams."
+      );
+    }
+    expect(removeEmptyEnglishAdverbs("Actually, this is really useful.")).toBe(
+      "this is useful."
     );
   });
 

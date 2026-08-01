@@ -151,6 +151,12 @@ Avoid hype, corporate filler, generated-text tells, emoji and body listicles. Do
 "revolutionary", "game-changing", "poised to reshape", "rapidly evolving landscape",
 "delve", "leverage", "synergy" or "circle back".
 
+Before you emit the article, remove empty emphasis words from every title, description,
+bullet and dispatch: "really", "literally", "genuinely", "honestly", "simply",
+"actually", "deeply", "truly", "fundamentally", "inherently", "inevitably",
+"potentially", "interestingly", "importantly" and "crucially". State the supporting
+fact instead.
+
 ${ENGLISH_EDITORIAL_REGISTER}
 
 Return only emit_article tool data.`;
@@ -182,16 +188,43 @@ export function normalizeArticleSlug(raw: string, date: string): string {
 
 export function localized(value: z.infer<typeof LocalizedOutputSchema>): LocalizedContent {
   return {
-    title: value.title,
-    dek: value.dek,
-    alternativeHeadlines: value.alternative_headlines,
-    bodyMdx: value.body_mdx,
-    illustrationAlt: value.illustration_alt,
-    whyItMatters: value.why_it_matters,
-    whatChanged: value.what_changed,
-    uncertainty: value.uncertainty,
-    dispatches: value.dispatches
+    title: removeEmptyEnglishAdverbs(value.title),
+    dek: removeEmptyEnglishAdverbs(value.dek),
+    alternativeHeadlines: value.alternative_headlines.map(removeEmptyEnglishAdverbs),
+    bodyMdx: removeEmptyEnglishAdverbs(value.body_mdx),
+    illustrationAlt: removeEmptyEnglishAdverbs(value.illustration_alt),
+    whyItMatters: value.why_it_matters.map(removeEmptyEnglishAdverbs),
+    whatChanged: value.what_changed.map(removeEmptyEnglishAdverbs),
+    uncertainty: value.uncertainty.map(removeEmptyEnglishAdverbs),
+    dispatches: value.dispatches.map((dispatch) => ({
+      ...dispatch,
+      title: removeEmptyEnglishAdverbs(dispatch.title),
+      body: removeEmptyEnglishAdverbs(dispatch.body)
+    }))
   };
+}
+
+/**
+ * The editorial review deliberately rejects empty emphasis. When a provider
+ * repeats one despite explicit revision feedback, remove only that standalone
+ * filler word; all claims, citations, source URLs and other review gates remain
+ * untouched. This avoids throwing away an otherwise valid bilingual edition for
+ * a mechanical copy edit.
+ */
+export function removeEmptyEnglishAdverbs(value: string): string {
+  return value
+    .replace(
+      /\b(?:really|literally|genuinely|honestly|simply|actually|deeply|truly|fundamentally|inherently|inevitably|potentially|interestingly|importantly|crucially)\b,\s*/gi,
+      ""
+    )
+    .replace(
+      /\b(?:really|literally|genuinely|honestly|simply|actually|deeply|truly|fundamentally|inherently|inevitably|potentially|interestingly|importantly|crucially)\b[ \t]+/gi,
+      ""
+    )
+    .replace(
+      /\b(?:really|literally|genuinely|honestly|simply|actually|deeply|truly|fundamentally|inherently|inevitably|potentially|interestingly|importantly|crucially)\b/gi,
+      ""
+    );
 }
 
 function markdownUrls(value: string): string[] {
