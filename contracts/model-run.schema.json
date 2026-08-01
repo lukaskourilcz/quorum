@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "model-run/1"
+    },
+    "modelVersion": {
+      "type": "string",
+      "pattern": "^mma-\\d+\\.\\d+\\.\\d+\\+[a-f0-9]{8}$"
+    },
+    "inputsHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "configHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "bouts": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "boutRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "probabilities": {
+            "type": "object",
+            "properties": {
+              "redWin": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "blueWin": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "method": {
+                "type": "object",
+                "properties": {
+                  "koTko": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "submission": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "decision": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "koTko",
+                  "submission",
+                  "decision"
+                ],
+                "additionalProperties": {}
+              },
+              "uncertainty": {
+                "type": "string",
+                "enum": [
+                  "clear-lean",
+                  "lean",
+                  "coin-flip",
+                  "divergence"
+                ]
+              },
+              "marketRedWin": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "blendedRedWin": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "redWin",
+              "blueWin",
+              "method",
+              "uncertainty",
+              "blendedRedWin"
+            ],
+            "additionalProperties": {}
+          },
+          "adjustmentsApplied": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "schemaVersion": {
+                  "type": "string",
+                  "const": "adjustment-entry/1"
+                },
+                "boutRef": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "author": {
+                  "type": "string",
+                  "const": "TAPE"
+                },
+                "deltaPct": {
+                  "type": "number",
+                  "minimum": -3,
+                  "maximum": 3
+                },
+                "direction": {
+                  "type": "string",
+                  "enum": [
+                    "red",
+                    "blue"
+                  ]
+                },
+                "evidenceRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                }
+              },
+              "required": [
+                "schemaVersion",
+                "boutRef",
+                "author",
+                "deltaPct",
+                "direction",
+                "evidenceRef",
+                "expiresAt"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "excludedInputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "boutRef",
+          "probabilities",
+          "adjustmentsApplied",
+          "excludedInputs"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "modelVersion",
+    "inputsHash",
+    "configHash",
+    "bouts",
+    "createdAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/model-run.schema.json"
+}

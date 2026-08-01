@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "bet-type-catalog/1",
+  "types": [
+    {
+      "id": "moneyline",
+      "label": "Fight winner",
+      "plainExplanation": "Which fighter wins the bout.",
+      "ownerVerified": false
+    }
+  ],
+  "verifiedAt": null
+}

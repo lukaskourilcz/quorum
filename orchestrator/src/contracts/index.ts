@@ -9,6 +9,7 @@ export * from "./idea-ledger.js";
 export * from "./marketing-plan.js";
 export * from "./meeting-email.js";
 export * from "./meeting-record.js";
+export * from "./mma.js";
 export * from "./niche-proposal.js";
 export * from "./rating.js";
 export * from "./season.js";

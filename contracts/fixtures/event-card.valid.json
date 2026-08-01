@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:prague-1",
+  "org": "ufc",
+  "name": "UFC Prague",
+  "venue": "Prague Arena",
+  "startsAtLocal": "2026-08-08T20:00:00+02:00",
+  "timeZone": "Europe/Prague",
+  "startsAtUtc": "2026-08-08T18:00:00Z",
+  "sourceRefs": [
+    "https://example.com/event"
+  ],
+  "bouts": [
+    {
+      "id": "bout-1",
+      "red": "ufc:alex-example",
+      "blue": "ufc:sam-example",
+      "division": "Lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-08-01T10:00:00.000Z"
+}

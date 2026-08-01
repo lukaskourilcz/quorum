@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bet-type-catalog/1"
+    },
+    "types": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "moneyline",
+              "ko_tko",
+              "submission",
+              "decision",
+              "round_exact",
+              "ends_before_round",
+              "over_under_rounds",
+              "goes_distance"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "plainExplanation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ownerVerified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "plainExplanation",
+          "ownerVerified"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "verifiedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "types",
+    "verifiedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/bet-type-catalog.schema.json"
+}

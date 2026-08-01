@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "source-proposal/1"
+    },
+    "author": {
+      "type": "string",
+      "const": "SONAR"
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "coverage": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "dataOffered": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "accessMethod": {
+      "type": "string",
+      "enum": [
+        "api",
+        "html",
+        "rss",
+        "dataset"
+      ]
+    },
+    "tosVerdict": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "allowed",
+            "forbidden",
+            "unclear"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400
+        }
+      },
+      "required": [
+        "status",
+        "rationale"
+      ],
+      "additionalProperties": {}
+    },
+    "costUsd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "overlapNotes": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "corroborationValue": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "approved",
+        "rejected",
+        "wired"
+      ]
+    },
+    "checkedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "author",
+    "url",
+    "coverage",
+    "dataOffered",
+    "accessMethod",
+    "tosVerdict",
+    "costUsd",
+    "overlapNotes",
+    "corroborationValue",
+    "status",
+    "checkedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/source-proposal.schema.json"
+}

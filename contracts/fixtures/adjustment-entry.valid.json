@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "adjustment-entry/1",
+  "boutRef": "bout-1",
+  "author": "TAPE",
+  "deltaPct": 2,
+  "direction": "red",
+  "evidenceRef": "meeting:2026-08-01-mma-intake",
+  "expiresAt": "2026-08-08T18:00:00Z"
+}

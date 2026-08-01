@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "source-proposal/1",
+  "author": "SONAR",
+  "url": "https://example.com/mma-data",
+  "coverage": "Regional event cards and results.",
+  "dataOffered": [
+    "event cards",
+    "bout results"
+  ],
+  "accessMethod": "html",
+  "tosVerdict": {
+    "status": "unclear",
+    "rationale": "The terms require owner review before an adapter is enabled."
+  },
+  "costUsd": 0,
+  "overlapNotes": "Could corroborate official cards.",
+  "corroborationValue": "Adds an independent regional result source.",
+  "status": "proposed",
+  "checkedAt": "2026-08-01T10:00:00.000Z"
+}

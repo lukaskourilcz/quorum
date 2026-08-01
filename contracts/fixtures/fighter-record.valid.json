@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "fighter-record/1",
+  "id": "ufc:alex-example",
+  "slug": "alex-example",
+  "org": "ufc",
+  "fields": {
+    "name": {
+      "value": "Alex Example",
+      "sourceRefs": [
+        "https://example.com/fighter",
+        "https://example.org/fighter"
+      ],
+      "retrievedAt": "2026-08-01T10:00:00.000Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "Lightweight",
+      "sourceRefs": [
+        "https://example.com/fighter",
+        "https://example.org/fighter"
+      ],
+      "retrievedAt": "2026-08-01T10:00:00.000Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "record": {
+      "value": "12-2-0",
+      "sourceRefs": [
+        "https://example.com/fighter",
+        "https://example.org/fighter"
+      ],
+      "retrievedAt": "2026-08-01T10:00:00.000Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "reachCm": {
+      "value": 184,
+      "sourceRefs": [
+        "https://example.com/fighter"
+      ],
+      "retrievedAt": "2026-08-01T10:00:00.000Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "completeness": 0.5,
+  "corroboration": 0.75,
+  "modelEligible": true,
+  "modelVersion": "mma-1.0.0+aaaaaaaa",
+  "updatedAt": "2026-08-01T10:00:00.000Z"
+}

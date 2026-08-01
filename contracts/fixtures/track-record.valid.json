@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "track-record/1",
+  "picks": [
+    {
+      "id": "pick-1",
+      "modelVersion": "mma-1.0.0+aaaaaaaa",
+      "org": "ufc",
+      "predicted": 0.58,
+      "closing": 0.56,
+      "result": "pending",
+      "clv": 0.02,
+      "brierContribution": null,
+      "publishedAt": "2026-08-01T10:00:00.000Z"
+    }
+  ],
+  "rollups": [
+    {
+      "modelVersion": "mma-1.0.0+aaaaaaaa",
+      "org": "ufc",
+      "picks": 1,
+      "brier": null,
+      "meanClv": 0.02
+    }
+  ],
+  "updatedAt": "2026-08-01T10:00:00.000Z"
+}

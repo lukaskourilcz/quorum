@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "track-record/1"
+    },
+    "picks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "modelVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "org": {
+            "type": "string",
+            "enum": [
+              "ufc",
+              "ksw",
+              "oktagon"
+            ]
+          },
+          "predicted": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "closing": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "win",
+              "loss",
+              "void",
+              "pending"
+            ]
+          },
+          "clv": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "brierContribution": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          }
+        },
+        "required": [
+          "id",
+          "modelVersion",
+          "org",
+          "predicted",
+          "closing",
+          "result",
+          "clv",
+          "brierContribution",
+          "publishedAt"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "rollups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "modelVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "org": {
+            "type": "string",
+            "enum": [
+              "ufc",
+              "ksw",
+              "oktagon"
+            ]
+          },
+          "picks": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "brier": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meanClv": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "modelVersion",
+          "org",
+          "picks",
+          "brier",
+          "meanClv"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "picks",
+    "rollups",
+    "updatedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/track-record.schema.json"
+}

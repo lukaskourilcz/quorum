@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "slip-of-ten/1",
+  "eventRefs": [
+    "ufc:event-prague-1"
+  ],
+  "modelRunRefs": [
+    "model-run:fixture"
+  ],
+  "legs": [
+    {
+      "boutRef": "bout-1",
+      "betType": "moneyline",
+      "pick": "Fighter 1",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-2",
+      "betType": "moneyline",
+      "pick": "Fighter 2",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-3",
+      "betType": "moneyline",
+      "pick": "Fighter 3",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-4",
+      "betType": "moneyline",
+      "pick": "Fighter 4",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-5",
+      "betType": "moneyline",
+      "pick": "Fighter 5",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-6",
+      "betType": "moneyline",
+      "pick": "Fighter 6",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-7",
+      "betType": "moneyline",
+      "pick": "Fighter 7",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-8",
+      "betType": "moneyline",
+      "pick": "Fighter 8",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-9",
+      "betType": "moneyline",
+      "pick": "Fighter 9",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    },
+    {
+      "boutRef": "bout-10",
+      "betType": "moneyline",
+      "pick": "Fighter 10",
+      "modelProb": 0.58,
+      "fairOdds": 1.724,
+      "note": "A measured model lean with uncertainty shown.",
+      "coverage": "single"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "A",
+      "picks": [
+        {
+          "boutRef": "bout-1",
+          "betType": "moneyline",
+          "pick": "Fighter 1",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-2",
+          "betType": "moneyline",
+          "pick": "Fighter 2",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-3",
+          "betType": "moneyline",
+          "pick": "Fighter 3",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-4",
+          "betType": "moneyline",
+          "pick": "Fighter 4",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-5",
+          "betType": "moneyline",
+          "pick": "Fighter 5",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-6",
+          "betType": "moneyline",
+          "pick": "Fighter 6",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-7",
+          "betType": "moneyline",
+          "pick": "Fighter 7",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-8",
+          "betType": "moneyline",
+          "pick": "Fighter 8",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-9",
+          "betType": "moneyline",
+          "pick": "Fighter 9",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        },
+        {
+          "boutRef": "bout-10",
+          "betType": "moneyline",
+          "pick": "Fighter 10",
+          "modelProb": 0.58,
+          "fairOdds": 1.724
+        }
+      ],
+      "combinedFairProbability": 0.0043,
+      "combinedFairOdds": 232.56
+    }
+  ],
+  "expectedLossLine": "A $3 total stake has an expected loss; this is entertainment, not income.",
+  "stakeGuidance": "Entertainment only. Keep the total stake to a few dollars and never chase a loss.",
+  "generatedAt": "2026-08-01T10:00:00.000Z"
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "model-run/1",
+  "modelVersion": "mma-1.0.0+aaaaaaaa",
+  "inputsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "bouts": [
+    {
+      "boutRef": "bout-1",
+      "probabilities": {
+        "redWin": 0.58,
+        "blueWin": 0.42,
+        "method": {
+          "koTko": 0.35,
+          "submission": 0.2,
+          "decision": 0.45
+        },
+        "uncertainty": "lean",
+        "marketRedWin": 0.55,
+        "blendedRedWin": 0.57
+      },
+      "adjustmentsApplied": [
+        {
+          "schemaVersion": "adjustment-entry/1",
+          "boutRef": "bout-1",
+          "author": "TAPE",
+          "deltaPct": 2,
+          "direction": "red",
+          "evidenceRef": "meeting:2026-08-01-mma-intake",
+          "expiresAt": "2026-08-08T18:00:00Z"
+        }
+      ],
+      "excludedInputs": []
+    }
+  ],
+  "createdAt": "2026-08-01T10:00:00.000Z"
+}

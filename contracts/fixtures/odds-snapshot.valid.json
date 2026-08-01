@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "odds-snapshot/1",
+  "boutRef": "bout-1",
+  "phase": "t3",
+  "source": "owner-entry",
+  "market": "moneyline",
+  "prices": [
+    {
+      "pick": "Alex Example",
+      "decimal": 1.8
+    },
+    {
+      "pick": "Sam Example",
+      "decimal": 2.1
+    }
+  ],
+  "capturedAt": "2026-08-01T10:00:00.000Z"
+}

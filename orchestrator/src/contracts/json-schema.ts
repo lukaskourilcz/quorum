@@ -8,6 +8,18 @@ import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
+import {
+  AdjustmentEntrySchema,
+  BetTypeCatalogSchema,
+  EdgeReportSchema,
+  EventCardSchema,
+  FighterRecordSchema,
+  ModelRunSchema,
+  OddsSnapshotSchema,
+  SlipOfTenSchema,
+  SourceProposalSchema,
+  TrackRecordSchema
+} from "./mma.js";
 import { NicheProposalSchema } from "./niche-proposal.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
@@ -25,6 +37,16 @@ export const ContractSchemas = {
   "marketing-plan": MarketingPlanSchema,
   "meeting-email": MeetingEmailSchema,
   "meeting-record": MeetingRecordSchema,
+  "adjustment-entry": AdjustmentEntrySchema,
+  "bet-type-catalog": BetTypeCatalogSchema,
+  "edge-report": EdgeReportSchema,
+  "event-card": EventCardSchema,
+  "fighter-record": FighterRecordSchema,
+  "model-run": ModelRunSchema,
+  "odds-snapshot": OddsSnapshotSchema,
+  "slip-of-ten": SlipOfTenSchema,
+  "source-proposal": SourceProposalSchema,
+  "track-record": TrackRecordSchema,
   "niche-proposal": NicheProposalSchema,
   "rating": RatingRecordSchema,
   "season": SeasonFileSchema,

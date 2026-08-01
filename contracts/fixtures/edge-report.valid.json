@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "edge-report/1",
+  "eventRef": "ufc:event-prague-1",
+  "modelRunRef": "model-run:fixture",
+  "bouts": [
+    {
+      "boutRef": "bout-1",
+      "modelProbability": 0.58,
+      "marketProbability": 0.55,
+      "divergence": 0.03,
+      "recommendation": "Small model edge; uncertainty remains material."
+    }
+  ],
+  "calibrationContext": "Fixture model has no live calibration record yet.",
+  "generatedAt": "2026-08-01T10:00:00.000Z"
+}

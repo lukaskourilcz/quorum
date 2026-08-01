@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "slip-of-ten/1"
+    },
+    "eventRefs": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "modelRunRefs": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "legs": {
+      "minItems": 10,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "boutRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "betType": {
+            "type": "string",
+            "enum": [
+              "moneyline",
+              "ko_tko",
+              "submission",
+              "decision",
+              "round_exact",
+              "ends_before_round",
+              "over_under_rounds",
+              "goes_distance"
+            ]
+          },
+          "pick": {
+            "type": "string",
+            "minLength": 1
+          },
+          "modelProb": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1
+          },
+          "fairOdds": {
+            "type": "number",
+            "exclusiveMinimum": 1
+          },
+          "bookOdds": {
+            "type": "number",
+            "exclusiveMinimum": 1
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "coverage": {
+            "type": "string",
+            "enum": [
+              "single",
+              "both-corners"
+            ]
+          },
+          "secondPick": {
+            "type": "object",
+            "properties": {
+              "pick": {
+                "type": "string",
+                "minLength": 1
+              },
+              "modelProb": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 1
+              },
+              "fairOdds": {
+                "type": "number",
+                "exclusiveMinimum": 1
+              },
+              "bookOdds": {
+                "type": "number",
+                "exclusiveMinimum": 1
+              }
+            },
+            "required": [
+              "pick",
+              "modelProb",
+              "fairOdds"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "boutRef",
+          "betType",
+          "pick",
+          "modelProb",
+          "fairOdds",
+          "note",
+          "coverage"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "tickets": {
+      "minItems": 1,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "picks": {
+            "minItems": 10,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "boutRef": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "betType": {
+                  "type": "string",
+                  "enum": [
+                    "moneyline",
+                    "ko_tko",
+                    "submission",
+                    "decision",
+                    "round_exact",
+                    "ends_before_round",
+                    "over_under_rounds",
+                    "goes_distance"
+                  ]
+                },
+                "pick": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "modelProb": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "fairOdds": {
+                  "type": "number",
+                  "exclusiveMinimum": 1
+                },
+                "bookOdds": {
+                  "type": "number",
+                  "exclusiveMinimum": 1
+                }
+              },
+              "required": [
+                "boutRef",
+                "betType",
+                "pick",
+                "modelProb",
+                "fairOdds"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "combinedFairProbability": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1
+          },
+          "combinedFairOdds": {
+            "type": "number",
+            "exclusiveMinimum": 1
+          }
+        },
+        "required": [
+          "id",
+          "picks",
+          "combinedFairProbability",
+          "combinedFairOdds"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "expectedLossLine": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "stakeGuidance": {
+      "type": "string",
+      "const": "Entertainment only. Keep the total stake to a few dollars and never chase a loss."
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "eventRefs",
+    "modelRunRefs",
+    "legs",
+    "tickets",
+    "expectedLossLine",
+    "stakeGuidance",
+    "generatedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/slip-of-ten.schema.json"
+}
