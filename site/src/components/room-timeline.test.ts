@@ -68,7 +68,7 @@ describe("Boardroom timeline", () => {
 
   it("formats an unambiguous Prague date and time", () => {
     expect(formatRoomDateTime("2026-07-23T05:28:00.000Z")).toBe(
-      "Jul 23, 2026 · 07:28:00 · Europe/Prague"
+      "Jul 23, 2026 · 07:28:00 Prague time"
     );
   });
 

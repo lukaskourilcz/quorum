@@ -5,6 +5,7 @@ import { RatingWidget } from "@/components/admin/rating-widget";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { AdminCard } from "@/lib/admin-portfolio";
+import { formatDate, formatDateTime } from "@/lib/utils";
 
 function statusTone(status: string): "neutral" | "accent" | "success" | "warning" | "danger" {
   if (["approved", "accepted", "published", "shortlist", "shipped"].includes(status)) return "success";
@@ -16,10 +17,7 @@ function statusTone(status: string): "neutral" | "accent" | "success" | "warning
 
 function timestamp(value: string | null): string {
   if (!value) return "Not recorded";
-  const parsed = Date.parse(value);
-  return Number.isNaN(parsed)
-    ? value
-    : new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: value.includes("T") ? "short" : undefined }).format(parsed);
+  return value.includes("T") ? formatDateTime(value) : formatDate(value);
 }
 
 export function PortfolioCard({ card, originHref }: { card: AdminCard; originHref: string | null }) {

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { getIncubatorSnapshot, type IncubatorProposalStatus, type PublicIncubatorProposal } from "@/lib/incubator-records";
-import { formatUsd } from "@/lib/utils";
+import { formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description: "Magazine ideas BoardlessAI is researching, the sources behind them and the owner's ratings.",
@@ -54,7 +54,7 @@ function ProposalCard({ proposal }: { proposal: PublicIncubatorProposal }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Badge tone={tone(proposal.status)}>{statusLabel(proposal.status)}</Badge>
         <p className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-          {proposal.rating ? `Your rating ${proposal.rating.value} · ${proposal.rating.ratedAt.slice(0, 10)}` : "You have not rated this yet"}
+          {proposal.rating ? <>Your rating {proposal.rating.value} · <time dateTime={proposal.rating.ratedAt}>{formatDate(proposal.rating.ratedAt)}</time></> : "You have not rated this yet"}
         </p>
       </div>
       <h3 className="mt-6 text-3xl font-semibold tracking-[-0.045em]">{proposal.domain}</h3>

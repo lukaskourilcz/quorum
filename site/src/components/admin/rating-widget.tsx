@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { formatDateTime } from "@/lib/utils";
 import type {
   RatingObjectKind,
   RatingRecord,
@@ -136,7 +137,7 @@ export function RatingWidget({
           <ol className="mt-2 grid gap-3 border-l border-[var(--border)] pl-4">
             {history.map((rating) => (
               <li key={rating.id}>
-                <p><strong className="capitalize text-[var(--foreground)]">{rating.rating}</strong> · <time dateTime={rating.ratedAt}>{new Date(rating.ratedAt).toLocaleString()}</time></p>
+                <p><strong className="capitalize text-[var(--foreground)]">{rating.rating}</strong> · <time dateTime={rating.ratedAt}>{formatDateTime(rating.ratedAt)}</time></p>
                 {rating.note ? <p className="mt-1 leading-5">{rating.note}</p> : null}
               </li>
             ))}

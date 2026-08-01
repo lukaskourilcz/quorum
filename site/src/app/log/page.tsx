@@ -4,26 +4,13 @@ import { publicAgentText, publicDecisionLabel } from "@/components/agent-languag
 import { PageShell } from "@/components/page-shell";
 import { logEntries } from "@/data/fixtures";
 import { getPublicStandups } from "@/lib/standup-records";
-import { formatUsd } from "@/lib/utils";
+import { formatClock, formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
     "A dated public list of BoardlessAI changes, decisions and costs.",
   title: "Updates"
 };
-
-const formatTime = new Intl.DateTimeFormat("en", {
-  hour: "numeric",
-  minute: "2-digit",
-  timeZone: "Europe/Prague"
-});
-
-const formatDay = new Intl.DateTimeFormat("en", {
-  day: "2-digit",
-  month: "short",
-  timeZone: "Europe/Prague",
-  year: "numeric"
-});
 
 export default async function LogPage() {
   const standups = await getPublicStandups();
@@ -73,10 +60,10 @@ export default async function LogPage() {
               >
                 <div className="md:col-span-2">
                   <p className="font-mono text-[0.71875rem] tracking-[0.06em]">
-                    {formatTime.format(occurredAt)}
+                    {formatClock(occurredAt)}
                   </p>
                   <p className="mt-1.5 font-mono text-[0.65625rem] uppercase tracking-[0.08em] text-[var(--fog)]">
-                    {formatDay.format(occurredAt)}
+                    {formatDate(occurredAt)}
                   </p>
                 </div>
                 <div className="md:col-span-2">

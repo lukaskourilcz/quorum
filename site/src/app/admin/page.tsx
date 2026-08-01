@@ -19,6 +19,7 @@ import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicStandups } from "@/lib/standup-records";
+import { formatDate, formatDateTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -158,7 +159,7 @@ function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; u
                 <div className="mb-8 flex flex-wrap items-start justify-between gap-4 border-b border-[var(--border)] pb-5">
                   <div>
                     <p className="font-mono text-xs uppercase tracking-[0.12em] text-[var(--fog)]">Edition</p>
-                    <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">{pack.date}</h2>
+                    <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]"><time dateTime={pack.date}>{formatDate(pack.date)}</time></h2>
                   </div>
                   <div className="text-right font-mono text-[0.6875rem] leading-5 text-[var(--fog)]">
                     <p>Edition file {pack.editionRef.slice(0, 12)}…</p>
@@ -291,7 +292,7 @@ export default async function AdminPage({
                 aria-hidden="true"
                 className="size-4 text-[var(--accent)]"
               />
-              Updated {new Date(state.generatedAt).toISOString()}
+              Updated <time dateTime={state.generatedAt}>{formatDateTime(state.generatedAt)}</time>
             </div>
           </div>
         </div>

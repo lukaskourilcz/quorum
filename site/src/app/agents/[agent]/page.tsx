@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { agentBySlug, agents } from "@/data/agents";
+import { formatDate } from "@/lib/utils";
 
 export function generateStaticParams() {
   return agents.map((agent) => ({ agent: agent.slug }));
@@ -154,7 +155,7 @@ export default async function AgentDetailPage({
                           {route.estimatedCostLabel}
                         </p>
                         <p className="mt-2 text-xs leading-5 text-[var(--muted-foreground)]">
-                          {route.estimateBasis}. Price checked {route.priceVerifiedAt}. Actual billing changes with the tokens used.
+                          {route.estimateBasis}. Price checked <time dateTime={route.priceVerifiedAt}>{formatDate(route.priceVerifiedAt)}</time>. Actual billing changes with the tokens used.
                         </p>
                       </div>
                     </li>
@@ -268,7 +269,7 @@ export default async function AgentDetailPage({
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
                   Last team review
                 </p>
-                <p className="mt-2 font-mono">{agent.lastOrgReviewAt ?? "n/a"}</p>
+                <p className="mt-2 font-mono">{agent.lastOrgReviewAt ? <time dateTime={agent.lastOrgReviewAt}>{formatDate(agent.lastOrgReviewAt)}</time> : "n/a"}</p>
               </div>
             </CardContent>
           </Card>

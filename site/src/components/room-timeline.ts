@@ -1,53 +1,31 @@
 import type { PublicStandup, RoomTranscript } from "@/data/fixtures";
+import {
+  DISPLAY_TIME_ZONE_LABEL,
+  formatClock,
+  formatDate,
+  formatDateTime
+} from "../lib/utils";
 
-export const BOARDROOM_TIME_ZONE = "Europe/Prague";
+export const BOARDROOM_TIME_ZONE = DISPLAY_TIME_ZONE_LABEL;
 
 export interface RoomTurnTiming {
   iso: string;
   source: "recorded" | "fixture-sequence";
 }
 
-const dateTimeFormatter = new Intl.DateTimeFormat("en", {
-  day: "2-digit",
-  hour: "2-digit",
-  hourCycle: "h23",
-  minute: "2-digit",
-  month: "short",
-  second: "2-digit",
-  timeZone: BOARDROOM_TIME_ZONE,
-  year: "numeric"
-});
-
-function dateTimeParts(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return Object.fromEntries(
-    dateTimeFormatter
-      .formatToParts(date)
-      .filter((part) => part.type !== "literal")
-      .map((part) => [part.type, part.value])
-  );
-}
-
 export function formatRoomDate(value: string) {
-  const parts = dateTimeParts(value);
-  if (!parts) return "Unknown date";
-  return `${parts.month} ${parts.day}, ${parts.year}`;
+  const result = formatDate(value);
+  return result === "Date unavailable" ? "Unknown date" : result;
 }
 
 export function formatRoomClock(value: string) {
-  const parts = dateTimeParts(value);
-  if (!parts) return "Unknown time";
-  return `${parts.hour}:${parts.minute}:${parts.second}`;
+  const result = formatClock(value, true);
+  return result === "Time unavailable" ? "Unknown time" : result;
 }
 
 export function formatRoomDateTime(value: string) {
-  const date = formatRoomDate(value);
-  const time = formatRoomClock(value);
-  if (date === "Unknown date" || time === "Unknown time") {
-    return "Unknown date and time";
-  }
-  return `${date} · ${time} · ${BOARDROOM_TIME_ZONE}`;
+  const result = formatDateTime(value, true);
+  return result === "Date and time unavailable" ? "Unknown date and time" : result;
 }
 
 export function roomIdForStandup(
