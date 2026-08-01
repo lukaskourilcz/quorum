@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "mma-model/1",
+  "release": "1.0.0",
+  "baseRating": 1500,
+  "baseDeviation": 350,
+  "marketBlendWeight": 0.25,
+  "splitLegBand": 0.05,
+  "divergenceTolerance": 0.04,
+  "features": {
+    "agePeakStart": 27,
+    "agePeakEnd": 32,
+    "ageDeclinePerYearPct": 0.35,
+    "layoffThresholdDays": 365,
+    "layoffPenaltyPct": 1.25,
+    "reachPerFiveCmPct": 0.4,
+    "shortNoticePenaltyPct": 1.5,
+    "missedWeightPenaltyPct": 0.75,
+    "recentKoLossPenaltyPct": 1.25,
+    "homeRegionPct": 0.6,
+    "featureTotalCapPct": 5
+  },
+  "methodPrior": 1,
+  "isotonicMinimumResolvedBouts": 150,
+  "notes": {
+    "age": "A small decline adjustment starts after the configured peak band.",
+    "layoff": "A layoff adjustment starts only after one year without a bout.",
+    "reach": "Reach is a small matchup input, not a result claim.",
+    "context": "Short notice, missed weight, recent knockout loss and home region are bounded context inputs."
+  }
+}
