@@ -53,12 +53,14 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
   }
 
   const quality = [
-    ["Verifier pass", percent(initial.quality.verifierPassRate)],
-    ["First pass", percent(initial.quality.firstPassRate)],
-    ["Retry", percent(initial.quality.retryRate)],
-    ["Source agreement", percent(initial.quality.sourceAgreementRate)],
-    ["Veto", percent(initial.quality.vetoRate)]
+    ["Releases that passed", percent(initial.quality.verifierPassRate)],
+    ["Passed first time", percent(initial.quality.firstPassRate)],
+    ["Needed a retry", percent(initial.quality.retryRate)],
+    ["Sources agreed", percent(initial.quality.sourceAgreementRate)],
+    ["Work stopped by checks", percent(initial.quality.vetoRate)]
   ];
+  const socialStatus = (status: string) => status === "enabled" ? "Ready" : status === "paused" ? "Paused" : "Waiting";
+  const priorityStatus = (status: string) => status === "selected" ? "Chosen" : status === "why-not" ? "Skipped" : status === "archived" ? "Archived" : "Open";
 
   return (
     <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8" aria-labelledby="autonomy-heading">
@@ -75,16 +77,16 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
       </div>
 
       <div className="mt-5 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">
-        <div className="flex items-center gap-3"><RadioTower aria-hidden="true" className="size-5 text-[var(--accent)]" /><div><h3 className="text-xl font-semibold">Automatic social release</h3><p className="mt-1 text-sm text-[var(--fog)]">Each project unlocks separately after its delivery checks pass. The global kill switch can still stop all posting.</p></div></div>
+        <div className="flex items-center gap-3"><RadioTower aria-hidden="true" className="size-5 text-[var(--accent)]" /><div><h3 className="text-xl font-semibold">When social posting turns on</h3><p className="mt-1 text-sm text-[var(--fog)]">Each project becomes ready separately after its delivery or campaign checks pass. The global stop can still block all posting.</p></div></div>
         <div className="mt-5 grid gap-3 md:grid-cols-3">
           {initial.social.length ? initial.social.map((item) => (
             <article className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={item.venture}>
-              <div className="flex items-center justify-between gap-3"><h4 className="font-semibold capitalize">{item.venture.replaceAll("-", " ")}</h4><Badge tone={item.status === "enabled" ? "success" : item.status === "paused" ? "danger" : "neutral"}>{item.status}</Badge></div>
+              <div className="flex items-center justify-between gap-3"><h4 className="font-semibold capitalize">{item.venture.replaceAll("-", " ")}</h4><Badge tone={item.status === "enabled" ? "success" : item.status === "paused" ? "danger" : "neutral"}>{socialStatus(item.status)}</Badge></div>
               <p className="mt-3 text-2xl font-semibold">{item.counter}/{item.required}</p>
               <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{item.reason}</p>
               <p className="mt-3 font-mono text-[0.625rem] text-[var(--fog)]">Checked {formatDateTime(item.updatedAt)}</p>
             </article>
-          )) : <Callout>Social health counters will appear after the next guarded publisher check.</Callout>}
+          )) : <Callout>Social readiness will appear after the next safe posting check.</Callout>}
         </div>
       </div>
 
@@ -117,7 +119,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
           <div className="mt-5 grid gap-3">
             {priorities.length ? priorities.map((item) => (
               <article className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={item.id}>
-                <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Badge tone={item.status === "selected" ? "success" : item.status === "why-not" ? "warning" : "neutral"}>{item.status}</Badge><Badge>{item.venture}</Badge></div>{item.status === "open" ? <Button disabled={pending} onClick={() => save({ action: "archive", itemId: item.id })} size="small" type="button" variant="ghost"><Archive aria-hidden="true" className="size-4" />Archive</Button> : null}</div>
+                <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Badge tone={item.status === "selected" ? "success" : item.status === "why-not" ? "warning" : "neutral"}>{priorityStatus(item.status)}</Badge><Badge>{item.venture}</Badge></div>{item.status === "open" ? <Button disabled={pending} onClick={() => save({ action: "archive", itemId: item.id })} size="small" type="button" variant="ghost"><Archive aria-hidden="true" className="size-4" />Archive</Button> : null}</div>
                 <h4 className="mt-3 text-base font-semibold">{item.question}</h4>
                 <p className="mt-2 text-sm leading-6"><span className="text-[var(--fog)]">Decision:</span> {item.decisionAtStake}</p>
                 {item.whyNotReason ? <p className="mt-2 text-sm leading-6 text-[var(--fog)]">Why not: {item.whyNotReason}</p> : null}

@@ -34,7 +34,7 @@ export async function FightAiQVenturePage() {
           <ol className="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-[var(--iron)] md:grid-cols-3">
             {[
               ["01", "Collect", "FightAIQ stores sourced fighter, event and price files."],
-              ["02", "Check", "The runtime rejects unsupported fields, stale data and records outside UFC or Oktagon."],
+              ["02", "Check", "The system rejects unsupported fields, stale data and records outside UFC or Oktagon."],
               ["03", "Deliver", "MMA Files tests and builds the exact package before its main branch accepts it."],
             ].map(([number, title, text]) => (
               <li className="bg-[var(--graphite)] p-7" key={number}>

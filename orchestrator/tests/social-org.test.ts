@@ -1,4 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
+import { mkdtemp, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { assertOrgChangeApproved, type OrgChange } from "../src/org/change.js";
 import { assertLiveChannel, type Channel } from "../src/social/channel-registry.js";
 import { planSocialPosts } from "../src/social/plan.js";
@@ -147,15 +150,23 @@ describe("social and organization controls", () => {
   });
 
   it("keeps the repository publisher paused unless the supreme kill switch is explicitly off", async () => {
-    const report = await runSocialPublisher({
-      validateOnly: false,
-      dryIfDisabled: true,
-      now: new Date("2026-07-23T09:00:00.000Z"),
-      environment: {}
-    });
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-paused-"));
+    try {
+      const report = await runSocialPublisher({
+        validateOnly: false,
+        dryIfDisabled: true,
+        now: new Date("2026-07-23T09:00:00.000Z"),
+        environment: {},
+        repoRoot: root,
+        stateRoot: path.join(root, "state"),
+        configRoot: path.join(root, "config")
+      });
 
-    expect(report.status).toBe("paused");
-    expect(report.published).toBe(0);
+      expect(report.status).toBe("paused");
+      expect(report.published).toBe(0);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 
   it("uses the guarded two-step Threads connector for an approved item", async () => {

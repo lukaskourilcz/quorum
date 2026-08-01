@@ -29,8 +29,8 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   při skutečné změně zdrojových dat. Nepotřebný čas stojí $0.
 - GitHub Actions používá 17 jedinečných UTC spuštění místo 28 překrývajících se
   letních a zimních záznamů. To snižuje počet zbytečných běhů bez vlivu na obsah.
-- Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální role jsou teď vypnuté pro Caught Up a MMA Files.
-- Karusely, sociální obrázky a hero obrázky vznikají deterministicky v kódu a nestojí žádné API peníze. Jejich vypnutí šetří místo v repozitáři a čas, ne modelové poplatky.
+- Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
+- Sociální obrázky a náhradní hero obrázky vznikají deterministicky v kódu a nestojí žádné API peníze. Licencované fotografie se pouze stáhnou, zkontrolují, zmenší a uloží; chybějící Pexels/Pixabay klíč neblokuje náhradní grafiku.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 

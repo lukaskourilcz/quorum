@@ -9,9 +9,9 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 
 | Project | State | What it does | Hard boundary |
 | --- | --- | --- | --- |
-| Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and an article hero | Content-only delivery needs its narrow GitHub App; social roles start off |
+| Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
-| Magazine Incubator | Research only | Finds evidence-backed publication ideas for owner rating | Cannot found a project, build a product or invent demand |
+| Magazine Incubator | Research and fenced founding | Finds evidence-backed publication ideas and can create a template-compliant content project | Anything needing a new account, more than `$0.15/day`, commerce, legal or personal-data work stops for the owner |
 | FightAIQ | Operating, data-only | UFC and Oktagon fighter/event files and deterministic analysis | No live probability publishing, bet placement, affiliate links or bookmaker automation |
 | MMA Files | Operating public magazine | Two daily bilingual article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
@@ -24,20 +24,26 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
 Thirty-four specialists do bounded work only when a service path or due agenda needs
-their domain. The registry has 38 agents: 20 Anthropic and 18 OpenAI. Twenty-seven
-have validated portraits; 11 MMA roles use a safe text fallback until image work is
-approved.
+their domain. The registry has 38 agents: 20 Anthropic and 18 OpenAI. Every role has a
+deterministic illustrated character portrait on the public presentation layer; those
+visuals never enter model prompts or meeting packets.
 
 PULSE chairs project rooms and AUDIT keeps its rule-based veto. Owner ratings teach
 format and taste; they are not commands. Agents cannot approve their own spending,
-credentials, account access, publishing, stage changes or governing prompts.
+credentials, account access, stage changes or governing prompts. Content release and
+pre-scoped social posting are agent-owned only inside the recorded contracts and
+health gates.
 
 ## Decision room, service paths and specialist agendas
 
-The 06:00 morning board is the paid company decision room. It may issue one bounded,
-allowlisted specialist agenda. A specialist room may request one follow-up room; the
+The 06:00 morning board is the paid company decision room. It chooses only from the
+open priority queue and may issue one bounded, allowlisted specialist agenda. A
+specialist room may request one follow-up room; the
 request goes back into the queue and still has to satisfy its live, evidence and
-budget gates. Pending agendas expire after three days and the queue is bounded to 24.
+budget gates. Pending agendas expire after three days, the queue is bounded to 24 and
+each project can hold at most eight pending items. Any project without a consumed
+agenda for seven days becomes a mandatory board item with either a commission or a
+saved `why-not` reason.
 
 Not every clock entry is a meeting:
 
@@ -102,10 +108,12 @@ approved writes use a repository-scoped GitHub token in production.
 The admin includes short summaries with full-record expansion, agent switches,
 Caught Up work, Titty Tuesdays plans, incubator ideas, FightAIQ data and MMA Files
 articles. Perfect, Good and Bad ratings keep their full history. A rating cannot found
-a project or publish an item.
+a project or publish an item. The queue and its archive are editable by the owner, but
+owner input is optional.
 
 At 22:00 the runtime builds one idempotent, 400-word maximum summary for the Prague
-date. Held, paused, failed and not-needed windows remain distinguishable.
+date. Held, paused, failed and not-needed windows remain distinguishable. The summary
+also lists delivery receipts, deploy proofs, failures and each social unlock counter.
 
 ## Delivery boundaries
 
@@ -124,7 +132,10 @@ date. Held, paused, failed and not-needed windows remain distinguishable.
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
-- `SOCIAL_KILL_SWITCH=true` — prevents posting; social production roles also start off.
+- `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
+  still needs its own proof/campaign counter, account credentials and safety gate.
+- `METRICS_INGESTION_ENABLED=false` — keeps all visitor, reader and engagement
+  measurement out of state; SPLIT stays idle.
 
 Missing variables deny the action. The exact owner checklist is `NEEDED.md`; the
 ordered setup path is `MANUAL STEPS.md`.

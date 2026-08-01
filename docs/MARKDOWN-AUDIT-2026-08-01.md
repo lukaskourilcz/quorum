@@ -1,7 +1,7 @@
 # Markdown audit — 2026-08-01
 
-Scope: all 171 Markdown files tracked at the start of the audit, plus the two current
-documents created by it. Ignored dry-run files under `tmp/` were checked only as
+Scope: all 180 Markdown files tracked after the Autonomy Build. Ignored dry-run files
+under `tmp/` were checked only as
 generated fixture output; they are not documentation and are not committed.
 Relative-link validation found no broken repository links.
 
@@ -21,13 +21,13 @@ Verdicts mean:
 | `AGENTS.md` | Current | Repository-wide agent instructions remain applicable. |
 | `CLAUDE.md` | Current | Local operating instructions match the current repository. |
 | `GOVERNANCE.md` | Updated | Records the signed `$50` limit and bounded specialist-agenda authority. |
-| `MANUAL STEPS.md` | Updated | Removed completed signatures/key rotation and private-MMA assumptions; now gives the remaining live-proof order. |
-| `NEEDED.md` | Updated | Separates completed owner decisions from genuine manual setup and explains agenda/manual-run behavior. |
-| `NEEDS_YOUR_HELP_NOW.md` | Updated | Reduced to the actual remaining owner gates. |
-| `README.md` | Updated | Correct domain, public MMA Files, signed budget, 17 wake-ups, session admin and agenda behavior. |
-| `about-project.md` | Updated | Plain Czech explanation now matches the decision-room/service/agenda design. |
+| `MANUAL STEPS.md` | Updated | Now covers account plumbing and automatic proof; no owner content-approval gate remains. |
+| `NEEDED.md` | Updated | Reduced to social accounts, optional image keys, MMA App/Vercel confirmation and exact failed-closed secrets. |
+| `NEEDS_YOUR_HELP_NOW.md` | Updated | Matches the four owner-plumbing items required by the Autonomy Build. |
+| `README.md` | Updated | Added agent-owned release, proof, licensed images, priority queue, template founding, project social gates and show barrier. |
+| `about-project.md` | Updated | Plain Czech explanation now includes automatic proof, template founding, deterministic portraits and no reader metrics. |
 | `monetization.md` | Current | Clearly labels every revenue path as a hypothesis and keeps recognized revenue at zero. |
-| `scaling.md` | Updated | Adds call-avoidance savings and explains why publication-quality models were retained. |
+| `scaling.md` | Updated | Clarifies that social captions reuse article calls and licensed-image processing adds no image-model charge. |
 
 ## Product and architecture documents
 
@@ -35,11 +35,11 @@ Verdicts mean:
 | --- | --- | --- |
 | `docs/FIGHTAIQ.md` | Current | UFC/Oktagon-only data and analysis boundary remains accurate. |
 | `docs/LIVE-PROOF.md` | Updated historical | Old fixture proof is labelled historical and links use the current BoardlessAI domain. |
-| `docs/MMA-FILES.md` | Updated | Replaced the obsolete private/future-site model with the public, content-only delivery architecture. |
-| `docs/PORTFOLIO.md` | Updated | Rewritten around decision, service, agenda, change and checkpoint behavior. |
+| `docs/MMA-FILES.md` | Updated | Adds licensed images, post-deploy proof, automatic social gate and the Phase 3 measurement ban. |
+| `docs/PORTFOLIO.md` | Updated | Adds priority/starvation policy, template founding, automatic proof, social counters and the metrics gate. |
 | `docs/REVIEW-2026-08.md` | Historical | Added a prominent snapshot banner; original findings remain unchanged for provenance. |
-| `docs/FABLE-ECOSYSTEM-GUIDE.md` | New current | Detailed end-to-end operating and brainstorming reference. |
-| `docs/MARKDOWN-AUDIT-2026-08-01.md` | New current | This audit trail. |
+| `docs/FABLE-ECOSYSTEM-GUIDE.md` | Updated current | Detailed end-to-end reference now includes every Phase 1/2 Autonomy Build behavior. |
+| `docs/MARKDOWN-AUDIT-2026-08-01.md` | Updated current | This 180-file audit trail. |
 
 ## Active state documents
 
@@ -51,9 +51,9 @@ Verdicts mean:
 | `state/FINANCE.md` | Current | Matches the countersigned limit and recorded `$0.52` API use. |
 | `state/INBOX.md` | Current | Canonical runtime inbox, not explanatory copy. |
 | `state/OPPORTUNITIES.md` | Current | No unsupported opportunity was promoted. |
-| `state/ROADMAP.md` | Updated | Three paid councils are superseded by one decision room and two checkpoints; agenda work is complete. |
+| `state/ROADMAP.md` | Updated | Marks release proof, image contracts, queue/founding, social gates and the Phase 3 hold complete. |
 | `state/SCORECARD.md` | Current | Warm-up/unavailable metrics remain honestly labelled. |
-| `state/SOCIAL_STRATEGY.md` | Current | Draft-only social policy and human approval boundary remain correct. |
+| `state/SOCIAL_STRATEGY.md` | Updated | Replaces manual approval/results with per-project activation, post proof and no engagement collection. |
 | `state/brand-clearance/2026-07-23.md` | Historical | Original clearance observation preserved. |
 | `state/brand-clearance/2026-07-28.md` | Historical | Follow-up clearance snapshot preserved. |
 | `state/brand-clearance/2026-08-01-revisit.md` | Historical/current gate | Latest recorded review remains an owner action, not a code task. |
@@ -73,9 +73,9 @@ Verdicts mean:
 | `state/ventures/fightaiq/README.md` | Current | UFC/Oktagon source and storage map remains accurate. |
 | `state/ventures/incubator/niche-proposals/README.md` | Current | Research-only proposal contract. |
 | `state/ventures/mma-files/STYLEBOOK.md` | Current | English/Czech structural learnings without copied prose. |
-| `state/ventures/mma-files/social/ASSIGNMENT.md` | Current dormant capability | Honest comparison assignment; roles remain off until explicitly enabled. |
+| `state/ventures/mma-files/social/ASSIGNMENT.md` | Updated | Documents deterministic A/B assignment, automatic gated posting and the no-metrics rule. |
 | `state/ventures/titty-tuesdays/BRAND.md` | Current | Pre-commerce brand boundary. |
-| `state/ventures/titty-tuesdays/PLATFORM_RISK.md` | Current | Relevant risk record even while social production is off. |
+| `state/ventures/titty-tuesdays/PLATFORM_RISK.md` | Current | Relevant KEEPER safety input for guarded Tuesday posting. |
 | `state/ventures/titty-tuesdays/season-001.md` | Current | Active season and planning inputs; no commerce claim. |
 
 ## Historical decisions
@@ -98,6 +98,13 @@ must not be edited to make the historical record look current.
 | `state/decisions/2026-07-30-threejs-agent-reactor-handoff.md` | Historical |
 | `state/decisions/2026-07-31-caught-up-language-desks.md` | Historical/current foundation |
 | `state/decisions/2026-07-31-live-shift-record-projection.md` | Historical/current foundation |
+| `state/decisions/2026-08-01-autonomy-content-release.md` | Historical/current agent-owned release decision |
+| `state/decisions/2026-08-01-autonomy-licensed-images.md` | Historical/current licensed-image decision |
+| `state/decisions/2026-08-01-autonomy-metrics-deferred.md` | Historical/current Phase 3 hold |
+| `state/decisions/2026-08-01-autonomy-sitcom-skin.md` | Historical/current presentation-only decision |
+| `state/decisions/2026-08-01-autonomy-social-activation.md` | Historical/current automatic social-gate decision |
+| `state/decisions/2026-08-01-autonomy-template-founding.md` | Historical/current fenced founding decision |
+| `state/decisions/2026-08-01-autonomy-unchanged-gates.md` | Historical/current human-only boundary decision |
 | `state/decisions/2026-08-01-budget-raise.md` | Historical, superseded budget shape |
 | `state/decisions/2026-08-01-caughtup-adoption.md` | Historical/current approval |
 | `state/decisions/2026-08-01-fightaiq-mma-files-scope.md` | Historical/current scope foundation |
@@ -109,9 +116,9 @@ must not be edited to make the historical record look current.
 
 ## Runtime prompts
 
-Every prompt was checked against registry scope, current project boundaries, the
-social-off decision, UFC/Oktagon-only coverage, public MMA delivery and the shared
-agenda system.
+Every prompt was checked against registry scope, current project boundaries,
+UFC/Oktagon-only coverage, public MMA delivery, the shared agenda system and the
+Phase 3 measurement hold.
 
 | Files | Verdict | Note |
 | --- | --- | --- |
@@ -121,7 +128,7 @@ agenda system.
 | `spark.md`, `vault.md`, `palate.md` | Current | Idea proposal, memory and taste remain distinct. |
 | `corner.md`, `spotter.md`, `tape.md`, `sigma.md`, `vig.md`, `sonar.md`, `pivot.md`, `mma.md` | Current | UFC/Oktagon data, deterministic analysis, newsroom bridge and no betting automation. |
 | `scene.md`, `stunt.md`, `funnel.md` | Current | TT research/campaign expertise without production, ads or commerce. |
-| `threads.md`, `instagram.md`, `frame.md`, `reach.md`, `split.md`, `channel-agent-template.md` | Current dormant capability | Capabilities remain valid but controls keep production agents off and all posting draft-only. |
+| `threads.md`, `instagram.md`, `frame.md`, `reach.md`, `split.md`, `channel-agent-template.md` | Updated/current | Production work is bounded by project activation; SPLIT alone remains idle and refuses measurement. |
 | `ledger.md`, `lens.md`, `keeper.md`, `people.md`, `radar.md`, `relay.md`, `scribe.md`, `digest.md`, `retro.md` | Current | Shared finance, measurement, compliance, organization, delivery and summary methods. |
 
 Exact runtime prompt files checked:
@@ -194,6 +201,13 @@ Exact mirrored/reference paths reviewed:
 - completed key rotation and countersignature work listed as still pending;
 - Caught Up social production described as active;
 - FightAIQ analysis enablement conflated with its already-approved data-only intake.
+- owner review of the first delivery/three editions described as a publication gate;
+- MMA Files manual social-result entry and SPLIT learning;
+- incubator founding described as always owner-blocked;
+- social posting described as permanently manual or draft-only;
+- missing MMA portraits described as an image-generation task;
+- deterministic SVG described as the only article hero instead of the licensed-photo
+  preference and safe fallback.
 
 ## Findings about agent scope
 

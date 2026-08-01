@@ -1,17 +1,18 @@
 # Social variant assignment
 
-Status: draft-only
+Status: guarded automatic posting after project unlock
 
-The owner posts every item by hand. No code in this repository publishes to a social
-network.
+MMA Files prepares English and Czech captions for Instagram and Threads inside the
+existing article-production call. No extra model call is made for social copy.
 
-- On odd-numbered calendar days, variant A is the first Instagram draft and variant B
-  is the first Threads draft. On even-numbered days, swap them.
-- Post the paired comparison at the same local hour on the next comparable day. Do not
-  compare a fight night with a quiet weekday.
-- English and Czech use the same variant letter and design settings. Only the language
-  changes.
-- Capture results after 48 hours and seven days. A missing result stays missing.
-- Eight posts per variant family are required before SPLIT can call a result confirmed.
-- An owner rating can block a design change even when the engagement result points the
-  other way. The conflict must remain visible.
+- PULSE chooses A or B deterministically before queueing; the chosen letter is saved
+  in the immutable post receipt.
+- English and Czech keep the same article facts but use platform-native wording.
+- Instagram uses the deterministic MMA Files image template; Threads is text-native.
+- A post needs ten consecutive passed article release proofs, complete MMA Files
+  account credentials, all queue checks and `SOCIAL_KILL_SWITCH=false`.
+- Each publish has an idempotency key, one retry and a `$0` live-post check. A second
+  failure pauses MMA Files social only and enters the daily digest.
+- No views, clicks, likes, reactions, comments, follows or messages are fetched or
+  stored. Variant history is preparation for Phase 3, not a performance comparison.
+- SPLIT remains idle while `METRICS_INGESTION_ENABLED=false`.

@@ -53,9 +53,9 @@ export default function CompanyPage() {
             },
             {
               icon: FlaskConical,
-              label: "Live market tests",
-              value: "0",
-              note: "None are running yet"
+              label: "Release checks",
+              value: "Auto",
+              note: "Caught Up and MMA Files are checked after every delivery"
             },
             {
               icon: CircleDollarSign,
@@ -104,7 +104,7 @@ export default function CompanyPage() {
               },
               {
                 title: "How people find the work",
-                text: "Caught Up publishes its English and Czech articles. Social drafts can be prepared later when you turn those roles back on."
+                text: "Caught Up publishes in English and Czech. Each project's social posting unlocks only after its delivery or campaign checks pass."
               },
               {
                 title: "Income and costs",
@@ -134,7 +134,7 @@ export default function CompanyPage() {
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
         <SectionHeading
-          description="These steps depend on results, not promised dates."
+          description="These steps depend on saved proof, not promised dates."
           eyebrow="What comes next"
           title="Prove one step before taking the next"
         />
@@ -147,18 +147,18 @@ export default function CompanyPage() {
             ],
             [
               "Next",
-              "Find real sources",
-              "Collect useful information from named sources. Sample test data does not count."
+              "Strengthen the sources",
+              "Add reliable named sources where coverage or agreement is weak. Sample test data does not count."
             ],
             [
               "Then",
-              "Check project demand",
-              "Find people with the problem, a practical way to reach them and a small test that can measure interest."
+              "Prove every delivery",
+              "Let the automatic checker confirm both languages, the content marker, image and attribution after each release."
             ],
             [
               "Then",
-              "Run a small test",
-              "Save the starting number, goal, cost, review date and reason to stop before the test begins."
+              "Prepare the next safe move",
+              "Build FightAIQ readiness files and let the board work only from concrete priority questions."
             ],
             [
               "Later",

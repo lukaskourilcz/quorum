@@ -183,10 +183,6 @@ img {
   animation-delay: 1.8s;
 }
 
-.scan-line {
-  animation: scan-line 11s linear infinite;
-}
-
 .status-pulse {
   animation: status-pulse 1.8s ease-in-out infinite;
 }
@@ -213,15 +209,6 @@ img {
   50% {
     opacity: 0.35;
     transform: scale(0.8);
-  }
-}
-
-@keyframes scan-line {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(900%);
   }
 }
 

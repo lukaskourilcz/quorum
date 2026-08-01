@@ -50,8 +50,8 @@ const agentMay = [
   "Research approved public sources.",
   "Score business ideas and recommend doing nothing when proof is weak.",
   "Edit approved parts of the code after required reviews.",
-  "Prepare tests, pages and social drafts.",
-  "Publish only after passwords, limits and channel approval are in place."
+  "Prepare tests, pages and checked social posts.",
+  "Publish only after account, health, safety and release checks pass."
 ] as const;
 
 const humanOnly = [

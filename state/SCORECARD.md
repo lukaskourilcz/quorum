@@ -1,26 +1,28 @@
-# Scorecard
+# Internal service scorecard
 
 As of: 2026-08-01
+
 Stage: VALIDATION
-Window: owner-adopted portfolio; dry fixtures only
 
-No live council, market, funnel or revenue window exists yet. Missing values are
-`n/a`; fixture observations do not count toward performance.
+Window: owner-adopted projects; fixture records are excluded
 
-| KPI group | Owner | Status | Observation |
+This file reads only internal operating records already stored in Git. Missing values
+are `n/a`; test examples do not count as live proof.
+
+| Area | Responsible role | Status | Current reading |
 | --- | --- | --- | --- |
-| Opportunity quality / stage / calibration | VIZE | n/a | No selected opportunity or live forecast |
-| Release success / task completion / incidents | FORGE | warm-up | Portfolio release gates pass; no approved live portfolio window |
-| Experiments / qualified actions / intent / profit | PULSE | n/a | No live experiment or analytics |
-| Quality / claims / security / JSON | AUDIT | warm-up | Deterministic bootstrap tests green |
-| Routing precision / duplicate work / org changes | PEOPLE | n/a | Thirty-eight roles validate; minimum live window not available |
-| Reconciliation / budget variance / commitments | LEDGER | warm-up | Ledgers reconcile at verified $0; recognized revenue $0 |
-| Cost per validated learning / duplicate proposals | ALL | n/a | No live council learning window |
+| Caught Up delivery cadence and healthy source breadth | HERALD | n/a | Waiting for eligible live delivery proofs |
+| MMA Files evidence-backed slot fill and rendered FightAIQ coverage | CANVAS | n/a | Waiting for eligible live article proofs |
+| FightAIQ event/fighter coverage, source agreement and readiness files | CORNER | n/a | Data-only mode remains active |
+| Titty Tuesdays complete campaign inventory | PULSE | warm-up | Plans are validated against the campaign contract |
+| Incubator evidence-backed proposals | ANGLE | n/a | No live proposal has passed the evidence thesis |
+| Killed-slot reasons, vetoes, retries and release-proof pass rate | AUDIT | warm-up | Deterministic fixture tests pass; fixtures do not count live |
+| Budget difference and commitments | LEDGER | warm-up | Recorded cost stays within the signed limit; recognized revenue is `$0` |
 
-## Active treasury spends
+## Active outside spending
 
 None.
 
-## Warning or failing KPIs
+## Warning or failure
 
-None can be classified before the configured warm-up and required integrations.
+None can be classified before eligible live records exist.

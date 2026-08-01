@@ -47,7 +47,7 @@ prices, slates and source terms.
 
 ## Moving beyond data-only
 
-The owner must countersign `state/decisions/2026-08-02-fightaiq-founding.md`, review one
-complete UFC and Oktagon event, and record a separate mode-change decision. Only
-then may `FIGHTAIQ_ANALYSIS_ENABLED=true` expose live model analysis. The detailed
-manual list is in `NEEDED.md`.
+The founding record is countersigned. A future move beyond data-only still requires
+one completed UFC and Oktagon readiness dossier plus a separate owner mode-change
+decision. Only then may `FIGHTAIQ_ANALYSIS_ENABLED=true` expose live model analysis.
+The owner-account checklist is in `NEEDED.md`.

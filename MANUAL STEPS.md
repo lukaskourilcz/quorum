@@ -1,91 +1,88 @@
-# Manual steps — finish the live setup
+# Manual steps — connect accounts and prove the live paths
 
-`NEEDED.md` is the complete owner checklist. This file gives the safest order.
-The `$50` limit, Caught Up approval, FightAIQ founding and Titty Tuesdays founding
-are already countersigned; do not repeat those steps or rewrite their historical
-predecessors.
+`NEEDED.md` is the complete owner checklist. The decisions, admin credentials, model
+keys and Caught Up App installation are already done. The steps below verify plumbing;
+they are not content-approval gates.
 
-## 1. Finish the protected admin
+## 1. Finish the remaining account connections
 
-In the BoardlessAI Vercel Production environment, add `ADMIN_USER`, a long random
-`ADMIN_PASSWORD` and a fine-grained `BOARDLESSAI_GITHUB_TOKEN` limited to Contents
-read/write on `lukaskourilcz/quorum`. Redeploy, sign in at `/admin`, save one harmless
-rating and confirm the commit appears on `main`. Never put private or personal text in
-an admin note because accepted writes become repository history.
+1. Add MMA Files to the existing delivery GitHub App if it is not already selected.
+   Keep Contents read/write as the only write permission. The App ID and private key
+   remain BoardlessAI Actions secrets; do not copy them into either consumer app.
+2. Confirm MMA Files Vercel production tracks `main`, uses
+   `NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app`, and remains in demo/noindex
+   mode.
+3. Add `PEXELS_API_KEY` and `PIXABAY_API_KEY` if you want their photo libraries in the
+   licensed-image search. Openverse and Commons need no key; missing keys fall back to
+   FRAME art without blocking an article.
+4. Add the three brands’ Instagram and Threads tokens/IDs from `NEEDED.md`. Keep
+   `SOCIAL_KILL_SWITCH=true` during account validation.
 
-The global admin page now shows the specialist meeting-agenda queue. Project pages
-show the optional agent switches. Social production agents start off.
+## 2. Prove Caught Up delivery
 
-## 2. Finish the MMA Files delivery installation
+Run **Guarded council cycle** for `cu-edition` with dry mode off and delivery-only off.
+The mode step must say `dry=false` and `skip=false`. A successful path now:
 
-Add `lukaskourilcz/mma-files` to the existing `boardlessai-delivery` GitHub App
-installation. Keep Contents read/write as its only write permission. The App ID and
-private key stay in BoardlessAI Actions secrets; do not copy them into MMA Files or
-Vercel.
+1. creates the English and Czech article with exactly one licensed photo or FRAME
+   fallback;
+2. commits the two image sizes into `lukaskourilcz/aifirst`;
+3. deploys the newest article as the home-page hero and older ones as thumbnails;
+4. polls CI and both public language routes for up to 30 minutes;
+5. records the content hash, image dimensions and attribution in a release proof.
 
-Connect the MMA Files Vercel project to `main`, set
-`NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app`, keep
-`NEXT_PUBLIC_DEMO_MODE=true` for the first delivery and keep
-`NEXT_PUBLIC_ALLOW_INDEXING=false` through the showcase review.
+If delivery fails after production, rerun the same phase with dry mode off and
+delivery-only on. That retry reuses the package and makes no model call. If the
+automated verifier fails twice, it reverts the target commit and pauses Caught Up.
 
-## 3. Add only the source credentials you intend to use
+Then run `morning` and `cu-product` once with dry mode off to populate the normal
+product path. Afternoon and night are `$0` checkpoints.
 
-Add `THE_ODDS_API_KEY` and `CITO_API_KEY` as BoardlessAI Actions secrets when you
-want live FightAIQ intake. The Odds API quota is recorded and calls stop when its
-reported monthly credits reach zero. Oktagon still needs owner-reviewed inputs until
-an approved adapter exists. Do not add the dropped GNews, Guardian or New York Times
-keys.
+## 3. Prove FightAIQ and MMA Files delivery
 
-The daily email is optional. If wanted, verify a Resend domain and configure the
-exact secret/variable set in `NEEDED.md`; otherwise the digest safely stays in log
-mode.
+Keep `FIGHTAIQ_ANALYSIS_ENABLED=false`. With the data and newsroom switches enabled,
+run:
 
-## 4. Prove Caught Up once
+1. `mma-intake` — saves sourced UFC/Oktagon data and delivers the public FightAIQ file
+   to MMA Files;
+2. `mag-editorial` — assigns or evidence-kills both article slots;
+3. the assigned `article-am` or `article-pm` — produces, delivers and verifies one
+   bilingual article plus its image;
+4. `mag-desk` — exercises the desk room when manually requested.
 
-Run `cu-edition` manually with dry mode off and delivery-only off. In the mode step,
-confirm `dry=false` and `skip=false`. Review the BoardlessAI cycle commit, package,
-delivery receipt, both languages, hero and the Caught Up Vercel deployment. If content
-was produced and only delivery failed, rerun the same phase with dry mode off and
-delivery-only on; that retry makes no model call.
+Missing source evidence must kill the article before a model call. Successful article
+delivery receives the same CI, route, content-hash, image and attribution proof as
+Caught Up. A verifier failure retries once, then reverts and pauses only MMA Files.
 
-Then run `morning` and `cu-product`. Afternoon and night are now deterministic
-checkpoints, so they cost `$0` in model calls. Review the first three real editions
-before treating the pipeline as unattended.
+## 4. Prove every boardroom without spending
 
-## 5. Prove FightAIQ and MMA Files
+Run `pnpm proof:rooms`. It dispatches every room kind with `fixture: true`, saves the
+visible records and labels them as tests. This proves routing, contracts, calendar
+projection and room pages; it does not claim a live provider decision.
 
-Set `PORTFOLIO_LIVE_ENABLED=true`, `FIGHTAIQ_LIVE_ENABLED=true`,
-`MMA_FILES_LIVE_ENABLED=true` and explicitly keep
-`FIGHTAIQ_ANALYSIS_ENABLED=false`. Run:
+Scheduled windows are wake-ups, not guaranteed paid meetings. The 06:00 board chooses
+from the priority queue and may commission a focused specialist room. Empty or
+unsupported work becomes `not-needed`, `NO_EDITION`, a killed slot or a reasoned
+`why-not` at `$0`.
 
-1. `mma-intake` — verify the guarded source snapshot and the content-only FightAIQ
-   delivery in MMA Files.
-2. `mag-editorial` — verify the two-slot editorial slate.
-3. One assigned `article-am` or `article-pm` — verify the bilingual article and hero
-   in MMA Files.
-4. `mag-desk` — use a manual run for the launch check even if no scheduled agenda is
-   pending.
+## 5. Validate social readiness without posting
 
-A missing source packet should kill an article slot before a model call. Keep analysis
-off until one reviewed UFC event and one reviewed Oktagon event support a separate
-mode-change decision.
+Run **Guarded social publisher** with **Validate only** selected. The daily evaluator
+shows these counters in `/admin` and the digest:
 
-## 6. Understand the new meeting behavior
+- Caught Up: seven consecutive passed release proofs; `NO_EDITION` is neutral.
+- MMA Files: ten consecutive passed article proofs with no unresolved failure.
+- Titty Tuesdays: four complete approved campaigns, credentials and the tested safety
+  checker.
 
-Scheduled jobs are wake-ups, not automatic paid meetings. The 06:00 decision room can
-queue one bounded specialist agenda. Titty Tuesdays, both incubator rooms, FightAIQ
-analysis and the MMA Files desk open on schedule only when an agenda is due. FightAIQ
-intake also opens when its source snapshot materially changes. Otherwise the calendar
-shows **Not needed** and records `$0`.
+When the accounts are correct and you want the pre-authorized project gates to post,
+set `SOCIAL_KILL_SWITCH=false`. The global switch remains the immediate owner stop.
+Every post is idempotent, verified live and retried once; a second failure pauses only
+that project. Titty Tuesdays posts on Prague Tuesdays and uses typographic graphics,
+never people photography.
 
-Manual workflow runs intentionally bypass only this agenda check so you can test a
-room. They still require every live switch, credential, evidence and budget gate.
-Keep `SOCIAL_KILL_SWITCH=true`.
+## 6. Leave the human-only boundaries closed
 
-## 7. Complete human and legal review before promotion
-
-Clear BoardlessAI, Caught Up, Titty Tuesdays, FightAIQ/Fight AIQ and MMA Files for the
-countries and uses you intend. Replace the MMA Files corrections placeholder, add the
-real operator/privacy details before personal data is collected, and approve payment,
-tax, sponsorship and refund terms before money moves. No live switch authorizes those
-decisions.
+Do not enable FightAIQ analysis until a separate mode-change decision is signed. Keep
+MMA Files noindex until name, corrections, operator and privacy details are ready.
+Budget raises, commerce, payments, ads, personal data and legal posture remain manual
+owner decisions; no live switch can authorize them.

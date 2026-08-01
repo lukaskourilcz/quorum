@@ -178,12 +178,12 @@ export async function refreshSocialActivation(input: {
     const enabled = gateReady[venture]! && missing[venture]!.length === 0;
     const status = enabled ? "enabled" as const : "locked" as const;
     const reason = enabled
-      ? `Automatic social gate passed under ${SOCIAL_DECISION_REFERENCE}.`
+      ? `Posting checks passed under ${SOCIAL_DECISION_REFERENCE}.`
       : missing[venture]!.length > 0 && gateReady[venture]
-        ? `Health gate passed; missing ${missing[venture]!.join(", ")}.`
+        ? `Delivery or campaign check passed; missing ${missing[venture]!.join(", ")}.`
         : venture === "titty-tuesdays" && input.safetyCheckerReady !== true
           ? "Waiting for the tested Titty Tuesdays safety checker."
-          : `Health counter ${counters[venture]!}/${requirements[venture]!}.`;
+          : `Ready count ${counters[venture]!}/${requirements[venture]!}.`;
     return [venture, {
       status,
       counter: counters[venture]!,

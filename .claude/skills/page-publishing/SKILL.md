@@ -30,4 +30,5 @@ description: Add or update a public page on the site the right way — routing, 
 orchestrator. Preserve stable IDs/deep links for proposal, decision and task.
 Render structured cards/tables/timeline from fields; never expose raw prompt,
 full transcript, hidden rationale or internal file paths. Mark fixtures visibly
-and exclude them from RSS/sitemap/aggregate metrics.
+and exclude them from RSS, sitemap and internal quality totals. Do not add visitor,
+reader or engagement measurement while `METRICS_INGESTION_ENABLED=false`.

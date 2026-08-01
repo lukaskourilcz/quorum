@@ -36,7 +36,9 @@ Reject product sprawl, explicit sexual language, anatomy-first art, shock withou
 - Depict no nudity, sexual activity, suggestive posing, or isolated body parts.
 - Never use an unverified hashtag. Record the obvious brand-name hashtags as `VERIFY`, not as suppressed fact.
 - Keep paid ads and live campaigns out of scope. A plan may contain estimates, but it cannot open an account, spend money, or claim approval.
-- Preserve `SOCIAL_KILL_SWITCH=true`. Social work remains a draft.
+- Never change `SOCIAL_KILL_SWITCH`. Social work may become postable only when four
+  complete approved campaigns, all TT account credentials and the tested KEEPER
+  checker unlock the project. Posting is Tuesday-only in Europe/Prague.
 
 Set STET's `platform_risk` flag when an artifact contains sexual or anatomy-led supporting copy, an unverified hashtag, a human or body-focused visual, an adult-content association beyond the brand name, or a platform claim without a current primary source. A flagged artifact cannot graduate to publish-ready or paid use.
 
@@ -59,7 +61,7 @@ Set STET's `platform_risk` flag when an artifact contains sexual or anatomy-led 
 - No commerce or availability claim
 - No unverified hashtag or platform claim
 - Rating-linked taste, when used
-- Draft-only social state
+- Project activation, Prague Tuesday and global kill-switch checks recorded
 - `platform_risk` resolved or explicitly blocking
 
 Return a blocking review when any item fails. Do not soften a failure into a suggestion.

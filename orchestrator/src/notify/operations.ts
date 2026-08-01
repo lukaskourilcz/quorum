@@ -107,7 +107,7 @@ export async function collectDigestOperations(stateRoot: string, date: string): 
         ventureId: venture,
         type: "social-gate",
         status: gate.status,
-        text: `${venture} social gate ${gate.status}; health counter ${gate.counter}/${gate.required}.`,
+        text: `${venture} social check ${gate.status}; ready count ${gate.counter}/${gate.required}.`,
         ref: "social/activation.json"
       }));
     }

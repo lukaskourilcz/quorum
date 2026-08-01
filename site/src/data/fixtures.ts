@@ -432,14 +432,6 @@ export const metrics = [
     note: "Operating-system release only"
   },
   {
-    owner: "PULSE",
-    label: "Qualified action rate",
-    value: null,
-    target: "≥ 5%",
-    status: "n/a",
-    note: "Analytics not connected"
-  },
-  {
     owner: "AUDIT",
     label: "Security incidents",
     value: 0,

@@ -22,9 +22,10 @@ The system currently runs five workspaces:
    FightAIQ data.
 
 BoardlessAI makes plans and content, records why a decision was made, counts external
-cost, validates outputs and delivers bounded data files. It does not autonomously buy
-anything, open accounts, found a project, publish social posts, place bets or change a
-consumer application's code.
+cost, validates outputs and delivers bounded data files. It can found a new content
+project only inside a pre-signed no-new-account template, and it can publish social
+posts only after the relevant project unlocks. It does not autonomously buy anything,
+open accounts, place bets or change a consumer application's code.
 
 ## 2. Current operating truth
 
@@ -43,7 +44,7 @@ consumer application's code.
 | Public BoardlessAI site | `https://boardless-ai.vercel.app` |
 | Caught Up site | `https://caughtup-ai.vercel.app` |
 | MMA Files site | `https://mma-files.vercel.app` |
-| Social behavior | production roles off; global posting kill switch on |
+| Social behavior | packs built; each project locked by health/credentials; global kill switch is supreme |
 | FightAIQ mode | data-only; model-analysis switch stays off |
 
 The founding evidence gate has not passed. Caught Up entered validation through an
@@ -102,16 +103,18 @@ Only the owner can approve:
 
 - a higher spending limit or an unplanned external expense;
 - credentials, account access or broader repository permissions;
-- project founding, stage changes or a change from data-only to analysis mode;
-- live social publishing, ads, payments, inventory or commerce;
+- project founding outside the pre-signed content template, stage changes or a change
+  from data-only to analysis mode;
+- social accounts/scopes, the global posting override, ads, payments, inventory or commerce;
 - changes to governing prompts, safety policy or legal posture;
 - personal-data collection, commercial terms and public indexing decisions.
 
 ### Board authority
 
-VIZE, FORGE, PULSE and AUDIT can evaluate approved internal work, vote within the
-existing rules and commission a bounded specialist room. AUDIT can veto a concrete
-rule breach. A board vote cannot override a human-only gate.
+VIZE, FORGE, PULSE and AUDIT can evaluate approved internal work, curate the priority
+queue, commission a bounded specialist room and found a content project that passes
+every field of the pre-signed template. AUDIT can veto a concrete rule breach. A board
+vote cannot override a human-only gate.
 
 ### Specialist authority
 
@@ -156,6 +159,14 @@ weakening publication quality.
 The agenda queue lives at `state/meeting-agendas/queue.json` and follows the
 `meeting-agenda/1` contract.
 
+Before an agenda exists, VIZE curates `state/priority-queue.json`. Every open item
+must name the project, question, evidence needed and—most importantly—the concrete
+decision that would change. AUDIT rejects vague research. The 06:00 board may
+commission only an open item; an empty queue is a healthy no-work state. Selected
+items link to the consuming meeting, skipped items retain a `why-not`, and expired
+items archive automatically. The owner can add, remove or archive items in `/admin`
+but is never required to supply work.
+
 An agenda contains:
 
 - the target project and meeting phase;
@@ -175,7 +186,9 @@ Rules:
 - Only VIZE, FORGE or PULSE can make the board request.
 - Every transition is allowlisted in `config/meeting-policy.json`.
 - Identical phase/date requests are idempotent.
-- The queue permits at most 24 pending items.
+- The agenda queue permits at most 24 pending items and at most eight per project.
+- A project with no consumed agenda for seven days becomes a mandatory morning-board
+  item; the board must commission it or save a reasoned `why-not`.
 - Unused requests expire after three days.
 - A due agenda is consumed by the cycle that uses it.
 - A scheduled agenda-gated phase with no request writes `not-needed` at `$0`.
@@ -223,6 +236,25 @@ The envelopes are maximum planning/reservation values, not a promise that each r
 costs that amount. A skipped or evidence-killed phase costs `$0`; actual provider use
 is written to the budget ledger.
 
+### Daily capability and quality reading
+
+The morning packet and `/admin` read business capability from existing Git records at
+`$0`; they do not count visitors:
+
+- **Caught Up:** delivered editions over eligible days (`NO_EDITION` is neutral) and
+  healthy source breadth.
+- **MMA Files:** evidence-backed slot fill plus FightAIQ events/fighters actually
+  rendered in the delivered file.
+- **FightAIQ:** event/fighter coverage, two-source agreement and completed readiness
+  dossiers.
+- **Titty Tuesdays:** count and completeness of launch-ready campaign plans.
+- **Incubator:** evidence-backed proposals that meet the current research thesis.
+
+The same pass aggregates killed-slot reasons, veto rate, first-pass versus retry,
+source agreement and post-deploy verifier pass rate. These signals describe how well
+the service operates. They never include page views, readers, clicks, reactions or
+social engagement. `METRICS_INGESTION_ENABLED=false` and SPLIT remains idle.
+
 ## 8. Agent roster and model routing
 
 The registry keeps 38 stable identities. The identity describes responsibility; model
@@ -242,7 +274,8 @@ Specialist routing:
 - Caught Up curation, long-form writing and Czech localization use the quality path
   `claude-sonnet-4-6`.
 - MMA Files English and Czech article calls use `claude-sonnet-4-6`.
-- Deterministic SVG heroes and social templates make no image-model call.
+- Licensed-photo search, image processing, deterministic SVG fallbacks and social
+  templates make no image-model call.
 
 These are the identifiers pinned in the repository, not a claim about a provider's
 future default catalog.
@@ -262,19 +295,19 @@ future default catalog.
 | --- | --- | --- |
 | SCOUT | market sources and evidence independence | shared research method; project sources stay separated |
 | SCRIBE | plain-language public/admin summaries | one summary craft is enough across projects |
-| LENS | metrics, experiments and signal/noise | shared analysis rules avoid conflicting numbers |
+| LENS | internal operating checks and experiment design | no visitor/reader signal enters while Phase 3 is closed |
 | QUILL | structural editorial clarity and claim support | can review different publications from their own stylebooks |
 | RADAR | discoverability without manufactured pages | shared search standards |
 | KEEPER | compliance with governing rules | a single constitutional interpretation |
-| THREADS | text-native social drafts | currently disabled where content production is paused |
-| INSTAGRAM | visual social concepts | currently disabled where content production is paused |
+| THREADS | text-native social posts | queued only after project health and credential checks |
+| INSTAGRAM | visual social posts | queued only after project health, image and credential checks |
 | PEOPLE | role usefulness, overlap and organizational review | prevents unmeasured agent sprawl |
 | LEDGER | cost reconciliation and budget planning | one source of financial truth |
 | STET | grammar, wording, format and generated-text tells | publication-specific stylebook still applies |
 | HACEK | natural Czech editorial work | shared between Caught Up and MMA Files with separate registers |
 | SPARK | Caught Up product/reader-growth idea | narrow product job despite global infrastructure status |
 | VAULT | duplicate detection and idea memory | common memory rules with project namespaces |
-| FRAME | deterministic visual production | one code-driven studio across brands; starts off where unnecessary |
+| FRAME | deterministic visual production | one code-driven studio for fallback heroes and social templates |
 | RELAY | bounded repository delivery and daily notification | shared protocol, separate target allowlists |
 | ANGLE | positioning and niche definition | useful to TT and incubator through requested rooms |
 | COHORT | adult audience definitions without personal data | shared method, project-specific packets |
@@ -289,9 +322,10 @@ future default catalog.
 | STUNT | low-cost, permission-aware campaign ideas | no ads, spend activation, platform breach or publishing |
 
 The TT room always needs PULSE and AUDIT, normally uses ANGLE, and invites only one
-useful guest from FUNNEL, STUNT, COHORT, SCENE, PALATE, SPARK or VAULT. QUILL,
-THREADS, INSTAGRAM and FRAME start off. This turns the room into campaign thinking,
-not a social-asset factory.
+useful guest from FUNNEL, STUNT, COHORT, SCENE, PALATE, SPARK or VAULT. QUILL is
+currently optional/off. THREADS, INSTAGRAM and FRAME turn an approved plan into
+Tuesday-only caption variants and typographic assets without adding another model
+meeting.
 
 ### FightAIQ specialists
 
@@ -313,10 +347,10 @@ not a social-asset factory.
 | JAB | direct English MMA reporting | no unsupported figures, quotes, odds or hype |
 | HACEK | natural Czech version | preserves facts and uncertainty; not literal translation |
 | QUILL/STET | structure, wording and generated-text review | do not invent facts during cleanup |
-| REACH | bilingual social variants | starts off; drafts only |
-| SPLIT | honest social comparison and sample size | no optimization from invented metrics |
+| REACH | bilingual platform-native social variants | folded into the article call; posting remains gated |
+| SPLIT | Phase 3 measurement guard | stays idle and refuses reader/post metrics while the gate is false |
 | TAPE/PIVOT | data context and desk bridge | no betting instruction or hidden model feedback |
-| FRAME | deterministic hero/social visuals | hero path retained; optional social work starts off |
+| FRAME | deterministic hero/social visuals | photo fallback and social templates; no image-model call |
 
 ## 9. Why no new permanent agents were added
 
@@ -400,10 +434,17 @@ the content; BoardlessAI owns the source, decision and production trail.
 3. AUDIT can veto insufficient evidence; STET can hold low-quality copy.
 4. The quality path curates, writes English and produces natural Czech.
 5. Each language passes its own checks.
-6. A deterministic hero is composed from approved brand tokens and text.
-7. The package is schema-validated and hashed.
-8. RELAY delivers only the agreed content into `lukaskourilcz/aifirst`.
-9. A receipt records the target commit/deployment handoff.
+6. A deterministic search checks Openverse and Commons, then optional Pexels/Pixabay,
+   for a machine-licensed photo; FRAME supplies an SVG if none passes.
+7. The chosen image is stripped, resized into hero/thumbnail variants and stored with
+   localized alt text, license, author, source URL and rendered attribution.
+8. The package is schema-validated and hashed.
+9. RELAY delivers only the agreed content and re-hosted image files into
+   `lukaskourilcz/aifirst`.
+10. A receipt records the target commit, then the release verifier checks CI, both
+    languages, content hash, image dimensions and attribution on production.
+11. A failed proof retries delivery once; a second failure reverts the target commit,
+    pauses Caught Up and enters the digest.
 
 `NO_EDITION` is a valid result. It is preferable to a weak article.
 
@@ -413,25 +454,22 @@ The 06:00 room can produce one VAULT-screened SPARK idea. The 17:00 product room
 accepts, defers, vetoes or supersedes that same idea. It does not invent a second idea
 or authorize code/spend. The idea history remains project-namespaced.
 
-### Current social state
+### Social activation
 
-THREADS, INSTAGRAM and FRAME are disabled for Caught Up social production. The article
-and hero path remain enabled. `SOCIAL_KILL_SWITCH=true` prevents posting even if a
-draft role is later enabled.
-
-### Remaining owner proof
-
-Run one reviewed live delivery, verify both languages/hero/receipt/deployment, then
-review the first three editions before unattended use.
+The existing production call writes English and Czech A/B captions for Threads and
+Instagram. After seven consecutive passed release proofs, complete Caught Up account
+credentials unlock posting automatically. `NO_EDITION` is neutral and a failed proof
+resets the counter. `SOCIAL_KILL_SWITCH=true` remains the immediate owner stop. No
+engagement or reader result is fetched.
 
 ## 12. Titty Tuesdays in detail
 
 ### Promise
 
 Titty Tuesdays is currently a brand and campaign-thinking laboratory. It keeps a
-season, target audience, platform-risk notes and detailed future campaign ideas. It
-does not create social carousels now and cannot sell, advertise, publish or promise
-stock.
+season, adult audience, platform-risk notes and detailed campaign ideas. It can
+prepare Tuesday-only captions and typographic graphics behind its project gate, but
+cannot sell, advertise or promise stock.
 
 ### Inputs
 
@@ -462,7 +500,9 @@ plan can describe a future campaign but cannot represent it as approved or execu
 
 The public Titty Tuesdays application may read a sanitized concept feed. It receives
 no private notes, account data or direct application writes. BoardlessAI does not
-touch Shopify or commerce. Social asset/copy roles are off.
+touch Shopify or commerce. Social posting unlocks only with four complete approved
+campaigns, all brand credentials, the tested KEEPER checker and the global kill
+switch off. Graphics are typographic only; a failed safety check kills the post.
 
 ### Improvement path
 
@@ -474,9 +514,9 @@ increase the archive, not learning.
 
 ### Promise
 
-The incubator finds possible daily-readable publication niches and gives the owner
-evidence-backed proposals to rate. It cannot found a project or treat attention as
-demand.
+The incubator finds possible daily-readable publication niches and produces
+evidence-backed proposals. It may found a new content project only when the proposal
+passes the pre-signed template; it cannot treat attention as demand.
 
 ### Two-room chain
 
@@ -484,7 +524,13 @@ demand.
 2. A scan with no qualifying external evidence returns zero candidates.
 3. A follow-up synthesis agenda may be created from the scan.
 4. Synthesis argues the evidence down to zero, one or two complete proposals.
-5. Owner ratings can narrow the shortlist but cannot launch a project.
+5. A board-approved proposal passes deterministic template compliance.
+6. A compliant proposal receives an existing-roster cast, collision-free calendar,
+   stylebook seed, project state scaffold and decision record automatically.
+7. Any new account, credential, social account, commerce, legal/personal-data surface,
+   unapproved target or daily envelope above `$0.15` stops for the owner instead.
+
+Owner ratings remain optional taste input and never block this contract-driven flow.
 
 This chain is agenda-gated because daily scanning without a current strategic
 question mostly creates duplicates and source costs.
@@ -492,8 +538,8 @@ question mostly creates duplicates and source costs.
 ### Improvement path
 
 The next useful improvement is not another research agent. It is a clear quarterly
-research thesis, source budget and owner definition of what would make a proposal
-worth testing.
+research thesis and source budget, followed by a fixture founding rehearsal that
+proves the generated project can be removed cleanly.
 
 ## 14. FightAIQ in detail
 
@@ -533,6 +579,11 @@ The analysis room needs both a due agenda and
 `FIGHTAIQ_ANALYSIS_ENABLED=true`. That switch must stay false until one reviewed UFC
 event, one reviewed Oktagon event and a separate owner mode-change decision exist.
 
+When a covered UFC or Oktagon event completes, the existing rooms can assemble one
+readiness dossier per event: a data-completeness checklist, source-disagreement log
+and snapshot of deterministic model outputs. These dossiers create the evidence for a
+future owner mode decision; they do not flip the switch themselves.
+
 ### Delivery
 
 Only the sanitized FightAIQ content contract is delivered to
@@ -557,10 +608,13 @@ BoardlessAI remain separate repositories.
 5. JAB writes direct English from the packet.
 6. HACEK creates the Czech article in the Czech combat-sports register.
 7. Local quality checks independently review both languages.
-8. A deterministic SVG hero is generated at `$0` model cost.
-9. The bounded package is hashed and delivered to
+8. A deterministic licensed-image search prefers a relevant real photo and falls back
+   to FRAME SVG; hero/thumbnail variants and attribution are stored in the package.
+9. The bounded package is hashed and delivered with re-hosted assets to
    `data/boardless/articles.json` in the MMA Files repository.
-10. MMA Files validates the data in CI and Vercel deploys `main`.
+10. MMA Files validates the data and image contract in CI and Vercel deploys `main`.
+11. The release verifier checks CI, both languages, content hash, image dimensions and
+    attribution; it retries once, then reverts and pauses on a second failure.
 
 ### Style system
 
@@ -575,17 +629,19 @@ The 20:00 desk is agenda-gated. It opens for a named editorial problem, a FightA
 handoff, a ratings pattern or tomorrow's required follow-up. It does not meet merely
 to restate that two article slots exist.
 
-### Social state
+### Social activation
 
-REACH and FRAME social work start off. SPLIT cannot learn without entered metrics.
-Draft tooling can be re-enabled later, but the posting kill switch remains a separate
-hard gate.
+REACH adds English/Czech, platform-native A/B captions inside the article call and
+FRAME builds deterministic post art. Ten consecutive passed article release proofs
+plus complete MMA Files account credentials unlock posting. The global kill switch is
+still a separate hard stop. SPLIT remains idle and no engagement result is collected.
 
-### Remaining owner proof
+### Remaining owner plumbing
 
-Add the repository to the existing delivery App, confirm Vercel demo/indexing
-settings, deliver one article and one FightAIQ file, review both languages and the
-public routes, then choose corrections/operator/privacy details before indexing.
+Confirm the repository is in the existing delivery App, keep Vercel demo/noindex,
+connect social accounts when wanted, then choose corrections/operator/privacy details
+before indexing. Article quality approval is agent-owned and enforced by release
+proof, not an owner launch gate.
 
 ## 16. State and contract architecture
 
@@ -597,9 +653,10 @@ Git is the canonical audit trail. Important areas:
 | `config/models.json` | centralized provider/model routing |
 | `config/ventures.json` | project rooms, casts and envelopes |
 | `config/venture-agent-controls.json` | optional role switches |
-| `config/meeting-policy.json` | agenda-required/change/service phases and transitions |
+| `config/meeting-policy.json` | agenda rules, per-project cap, starvation interval and transitions |
 | `contracts/` | exported JSON Schemas for cross-repository validation |
 | `state/decisions/` | append-only historical and current human decisions |
+| `state/priority-queue.json` | board questions, decisions at stake and `why-not` history |
 | `state/meeting-agendas/` | specialist request queue |
 | `state/meetings/`, `state/standups/` | canonical operating records |
 | `state/ideas/`, `state/ratings/`, `state/taste/` | learning trail with project isolation |
@@ -620,6 +677,13 @@ notes, credentials or internal approval packets. Its calendar shows one day in t
 past, today and three days ahead. Finished work is green, missed/failed work red, test
 work yellow, future planned work neutral and intentionally unused work `not-needed`.
 
+The visual wrapper presents the company as **The Boardless Office**: quarter-based
+seasons, day-based episode labels, episode cards and deterministic illustrated
+characters generated from the agent registry. All presentation configuration lives
+under `site/src/show/`. A runtime barrier rejects show configuration, site-visitor
+language and reader analytics from every model packet. Marketing-audience evidence
+for the project brands remains valid business input.
+
 The admin uses a username/password login that creates a signed HttpOnly session. It is
 noindex/no-store and fails closed when credentials are missing. Production writes use
 a fine-grained GitHub token limited to the BoardlessAI repository.
@@ -629,9 +693,11 @@ The admin is designed for scanning:
 - short summaries first, with full Markdown/record expansion;
 - project filters and optional agent switches;
 - meeting-agenda queue visibility;
+- priority queue history, `why-not` reasons and owner archive controls;
+- capability growth, internal quality signals and social unlock counters;
 - ratings with complete history;
 - FightAIQ source/manual review tools;
-- MMA Files articles and metrics;
+- MMA Files articles and release proofs;
 - unified human-readable Prague date formatting.
 
 Admin notes enter repository history after saving, so they must contain no secret or
@@ -654,7 +720,11 @@ Delivery uses this pattern:
 7. Validate and commit with an idempotency reference.
 8. Rebase/retry safely if `main` moved.
 9. Push and record a receipt.
-10. Let consumer CI and Vercel render it.
+10. Poll consumer CI and Vercel with cache-busting for up to 30 minutes.
+11. Check both language routes, exact title/slug, content hash, hero dimensions and
+    photo attribution.
+12. On failure, retry delivery once; then revert the delivery commit, pause only that
+    project and report it in the daily digest.
 
 Caught Up accepts its edition contract. MMA Files accepts article and FightAIQ data
 contracts. Titty Tuesdays currently reads a sanitized public feed and is not a write
@@ -669,8 +739,8 @@ The cost strategy now prioritizes call avoidance:
 - TT, incubator, FightAIQ analysis and MMA desk do not call without a due agenda;
 - FightAIQ source checks use a material hash before a specialist call;
 - missing article evidence kills work before writing;
-- social production agents start off;
-- deterministic heroes avoid image API cost;
+- social captions are folded into existing production calls;
+- licensed-photo lookup and deterministic fallback heroes avoid image-model cost;
 - duplicate UTC cron declarations were removed;
 - delivery-only retry reuses an existing package without another model call.
 
@@ -708,7 +778,7 @@ The system prefers an explicit non-result over fabricated activity:
 - zero incubator proposals without external evidence;
 - `not-needed` when no agenda exists;
 - `PAUSED` when a live switch, budget or safety gate blocks work;
-- unavailable data instead of zero when a metric is absent;
+- no visitor/reader/post measurement while the Phase 3 gate is closed;
 - fixture labels on dry proof;
 - data-only FightAIQ output until the analysis decision exists.
 
@@ -718,66 +788,58 @@ safe. Historical decisions are never rewritten to make the present look cleaner.
 
 ## 21. Current manual dependencies
 
-Code completion does not replace these owner actions:
+Code completion does not replace account ownership. The only current plumbing is:
 
-1. Finish BoardlessAI admin credentials and the narrow Git-backed writer; verify one
-   harmless saved rating.
-2. Add `lukaskourilcz/mma-files` to the existing delivery App installation.
-3. Finish the MMA Files Vercel demo/indexing settings.
-4. Add THE_ODDS_API and CITO credentials only when live FightAIQ input is wanted.
-5. Review a complete UFC and Oktagon event before any analysis-mode decision.
-6. Prove one Caught Up edition delivery.
-7. Prove one MMA Files article and one FightAIQ delivery.
-8. Clear names, corrections contact, operator/privacy details and commercial terms
-   before promotion, indexing, data collection or revenue.
+1. Add Instagram and Threads IDs/tokens for Caught Up, MMA Files and Titty Tuesdays.
+2. Add optional Pexels/Pixabay image keys; Openverse/Commons and FRAME already work.
+3. Confirm `lukaskourilcz/mma-files` is in the delivery App and Vercel remains
+   connected to `main` in demo/noindex mode.
+4. Add only another exact secret if a failed-closed workflow records it in
+   `NEEDS_YOUR_HELP_NOW.md`.
+
+Future human-only gates remain budget raises, new accounts/scopes, FightAIQ analysis,
+legal/name posture, indexing, personal data, commerce, payments and ads. They are not
+content-review requirements.
 
 `NEEDED.md` is the exact live checklist. `MANUAL STEPS.md` gives its safe order.
 
 ## 22. Highest-value next improvements
 
-### A. Measure editorial acceptance
+### A. Improve source health before adding volume
 
-Add a small, explicit review dataset across Caught Up and MMA Files: first-pass
-accepted, copy correction, factual correction, Czech-register correction and killed.
-This will show whether the next investment belongs in sources, prompts, validators or
-a new role.
+Use the existing source-health and coverage records to find missing primary sources,
+repeated one-source disagreements and image searches that fall back often. Better
+inputs improve articles without another role or model call.
 
-### B. Give the board a finite priority queue
+### B. Review priority-queue decisions, not activity volume
 
-The morning board should choose from a human-readable queue of at most a few approved
-operating questions. Archive stale questions and show why a specialist room was or
-was not requested. This prevents the board from inventing work to fill its meeting.
+After a meaningful set of board cycles, inspect expired questions, repeated `why-not`
+reasons, starvation interventions and agendas that requested follow-ups. Adjust the
+queue policy only when those records show a recurring failure.
 
-### C. Add agenda outcome review
+### C. Harden release proof around real deployments
 
-After 20 consumed agendas, measure:
+Track first-pass proof versus delivery retry, failed check category and rollback
+success. This is internal service reliability—not reader analytics—and it directly
+shows where the two showcase paths need stronger contracts.
 
-- percentage producing a useful artifact;
-- percentage requesting another meeting;
-- cost per accepted output;
-- owner rating;
-- repeated agenda topics;
-- expired/no-result requests.
+### D. Complete FightAIQ readiness dossiers
 
-Use that evidence to merge, split or retire roles and rooms.
+Build a dossier after each covered UFC/Oktagon event and compare missing facts,
+source disagreements and deterministic output snapshots. Those records should make a
+future analysis-mode decision concrete rather than intuitive.
 
-### D. Close the consumer delivery proof
+### E. Rehearse template founding and removal
 
-Caught Up and MMA Files are the showcase paths. One end-to-end delivery on each is
-more valuable than another internal feature. Capture the target commit, CI result,
-Vercel deployment, public render and owner review as one proof record.
-
-### E. Define one experiment at a time
-
-There is currently no eligible live market experiment. Choose one low-cost,
-reversible test with a real signal and stop threshold. Do not run a portfolio of
-content experiments before there is enough audience/traffic to distinguish noise.
+Run the dummy content-project fixture end to end, verify calendar collision handling,
+state scaffolding and delivery boundaries, then remove it cleanly. This protects the
+portfolio from permanent half-founded projects.
 
 ### F. Make role review evidence-based
 
 PEOPLE should review the roster quarterly or after 20 relevant outputs, not daily.
-Retire or merge a role when it contributes little unique information. Split a role
-only when repeated error categories prove that a missing specialty exists.
+Use killed-slot categories, veto rate, first-pass/retry rate, source agreement and
+owner ratings. Split or add a role only when repeated errors prove a missing specialty.
 
 ## 23. Questions for Fable brainstorming
 
@@ -786,7 +848,7 @@ Fable can use this system as a design brief and challenge it with questions such
 1. How can the 06:00 board choose a genuinely important agenda without becoming a
    generic task generator?
 2. What is the simplest visual explanation of decision room → specialist agenda →
-   artifact → measured outcome?
+   artifact → verified release?
 3. How should the admin compare the short summary, full record, cost and owner rating
    without feeling like a corporate dashboard?
 4. What evidence should trigger a new specialist identity instead of a new mode for an
@@ -798,7 +860,8 @@ Fable can use this system as a design brief and challenge it with questions such
    into an endless idea archive?
 8. How can FightAIQ show source quality, disagreement and model uncertainty clearly to
    a non-technical reader?
-9. Which single real experiment should validate Caught Up's reader promise first?
+9. Which source or editorial reliability problem should Caught Up solve first without
+   introducing visitor measurement?
 10. What proof would justify turning MMA Files from demo/noindex into a promoted
     publication?
 11. How should actual owner corrections feed role/prompt review without allowing one
@@ -814,7 +877,8 @@ Fable can use this system as a design brief and challenge it with questions such
 - Share infrastructure; isolate facts, source policy and taste.
 - Missing evidence produces no output, not a confident approximation.
 - Actual cost comes from measured use, not a meeting label.
-- The owner controls spend, credentials, legal scope and external publishing.
+- The owner controls spend, credentials, new account scopes, the global posting stop
+  and legal posture; pre-scoped content/social release follows deterministic gates.
 - Git history is a public operating trail, so corrections supersede rather than erase.
 - Consumer applications accept bounded content, never orchestration authority.
 - Quality-critical models should change through evidence, not intuition.

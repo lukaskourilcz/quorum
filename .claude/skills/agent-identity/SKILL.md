@@ -1,33 +1,27 @@
 ---
 name: agent-identity
-description: Use when creating or changing agent profiles, Meet the Team UI, OpenAI Images avatars, avatar provenance, or visual identity QA.
+description: Use when creating or changing agent profiles, the AI team UI, deterministic character portraits, or visual identity QA.
 ---
 
 # Agent identity
 
-1. Read master-prompt 0.8, BRAND, `config/agents.json`, current OpenAI image
-   docs/pricing and the avatar manifest. Agent identity is a stable brand
-   system, not daily content.
-2. Preserve the exact role, accountability and disclosure. These are AI
-   software roles, never fictional humans. Do not add biography, age, location,
-   education, emotion, quote or personality lore.
-3. Use one shared Refero/Awesomic-compatible monochrome editorial
-   paper/photographic collage anchor, zinc field, one tiny Ember punctuation and
-   the role motif table. Generate one square final per agent through the
-   available OpenAI/ChatGPT Images capability. No contact sheet, text, logo,
-   photoreal human, robot, 3D render, celebrity, blue/green accent, cyberpunk or
-   generic purple AI aesthetic.
-4. Run cost preflight and reserve worst case before every call. Enforce per
-   avatar/set limits and count failed outputs. Missing capability means a
-   deterministic labeled placeholder plus one deduplicated blocker, not a fake
-   success.
-5. Validate moderation, magic bytes, dimensions, file size, duplicate hash,
-   visual consistency, role motif, artifacts and alt text. One targeted repair
-   only when useful and within the total repair/set limit.
-6. Store optimized public files and a provenance/QA/cost manifest; never store
-   API keys, signed URLs or base64. Do not overwrite an approved avatar without
-   a `brand_asset` decision and before/after gallery.
-7. Meet the Team derives from the registry, separates council/specialists and
-   shows mission, responsibilities, boundary, KPI/success check, current focus
-   and public track record. Missing metrics render n/a.
-8. Run responsive, keyboard, contrast, alt-text, no-JS and performance checks.
+1. Read BRAND, `config/agents.json`, `site/src/show/config.ts` and the existing
+   `AgentPortrait` component. Agent identity is a stable public presentation system,
+   not daily content.
+2. Preserve the exact role, responsibility and disclosure. These are AI software
+   roles, never fictional humans. Do not add biography, age, location, education,
+   emotion, quotes or personality lore.
+3. Build portraits deterministically in SVG/code from shared show tokens. Give council
+   and project leads a consistent lead marker; use bounded variations for the rest.
+   Do not call an image model or create photoreal people, celebrities, robots or lore.
+4. Keep every show/presentation setting below `site/src/show/` or presentation
+   components. Never import it into the orchestrator or include it in an agent packet,
+   prompt, meeting, rating or taste file.
+5. Validate dimensions, contrast, visual consistency, role marker, alt text, keyboard
+   flow and small-screen rendering. Every role needs a safe deterministic portrait;
+   missing capability is not a spending request.
+6. The AI team pages derive from the registry, separate decision-makers and
+   specialists, and show mission, responsibility, boundary, model route, estimated
+   call cost, current focus and public track record.
+7. Run typecheck, component tests, production build and visual inspection before
+   publishing a changed portrait system.

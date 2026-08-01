@@ -1,10 +1,21 @@
 import { describe, expect, it } from "vitest";
+import { readFile, readdir } from "node:fs/promises";
+import path from "node:path";
+import { repoRoot } from "../src/paths.js";
 import {
   assertAgentPacketPresentationBarrier,
   packetCrossesPresentationBarrier
 } from "../src/security/presentation-barrier.js";
 
 describe("public-presentation information barrier", () => {
+  it("keeps the site show namespace out of every orchestrator import", async () => {
+    const sourceRoot = path.join(repoRoot, "orchestrator", "src");
+    const files = (await readdir(sourceRoot, { recursive: true }))
+      .filter((name) => name.endsWith(".ts"));
+    const source = (await Promise.all(files.map((name) => readFile(path.join(sourceRoot, name), "utf8")))).join("\n");
+    expect(source).not.toMatch(/(?:from|import\()[^\n]*(?:site\/src\/show|@\/show)/u);
+  });
+
   it("allows business audience research without leaking the public wrapper", () => {
     expect(() => assertAgentPacketPresentationBarrier({
       agent: "COHORT",

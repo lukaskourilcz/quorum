@@ -22,7 +22,7 @@ passes the existing owner, budget, evidence, security and release gates.
 | --- | --- | --- |
 | Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
-| Magazine Incubator | Evidence-backed niche research for owner rating | No product creation or autonomous founding |
+| Magazine Incubator | Evidence-backed niche research and fenced content-project founding | Can found only projects that pass the pre-signed template; anything else stops for the owner |
 | FightAIQ | Sourced UFC and Oktagon data plus deterministic analysis | Data-only until one reviewed event per organization and a signed mode change; no bet placement |
 | MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
 
@@ -33,48 +33,52 @@ operating model is in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 ## What is implemented
 
 - Four voting council seats and 34 routed specialists in one validated
-  38-agent registry. Twenty-seven portraits are validated; 11 new roles use the
-  explicit text fallback pending owner-approved image generation.
+  38-agent registry, each with a deterministic illustrated character portrait.
 - Anonymous council proposals, Borda ranking, `NO_ACTION`, concrete vetoes and
   fallback rechecks.
 - Fail-closed monthly, daily, meeting, media and all-in budget enforcement.
 - Evidence, opportunity, experiment, stage, finance, treasury, claim and
-  content-quality gates.
+  content-quality gates, plus a priority queue with per-project caps and a seven-day
+  starvation check.
 - Venture-aware routing, ledgers, owner ratings, evidence-linked taste files and
   bounded visual-weight updates.
-- Caught Up source collection, bilingual article production, English/Czech
-  language desks, GitHub App delivery and draft social packs.
+- Caught Up source collection, bilingual article production, licensed-photo-first
+  heroes, English/Czech language desks, verified GitHub App delivery and social packs.
 - Titty Tuesdays agenda-driven campaign rooms, 91-day turnover, platform-risk gate,
   season concepts, public venture page and protected launch binder.
-- Research-only incubator scan and synthesis rooms, complete proposal contract,
-  rating lifecycle and public shortlist.
+- Agenda-led incubator scan and synthesis rooms, complete proposal contract, rating
+  lifecycle, public shortlist and pre-signed content-project template founding.
 - FightAIQ source gates, two-source fighter records, Glicko-2 engine, versioned
   probabilities, owner odds capture, immutable results and public performance view.
 - MMA Files source-first bilingual production, Czech and English style desks,
-  deterministic hero/social art, public content delivery, private previews and manual metrics.
+  licensed-photo-first heroes, public delivery, release proof and guarded social packs.
 - One 14-window Prague calendar, 17 deduplicated UTC wake-ups, correct DST
   resolution and collision validation shared by runtime and WeekBoard. Agenda-gated
   windows record `not-needed` without opening paid rooms.
-- One daily portfolio digest, capped at 400 words and idempotent per Prague
-  date. The retired per-meeting email path is absent.
-- Fail-closed username/password admin session with Git-backed rating persistence, social
-  archive, venture tabs, card history and noindex/no-store headers.
+- One daily portfolio digest, capped at 400 words and idempotent per Prague date,
+  including deliveries, release proofs, failures and social-unlock counters.
+- Fail-closed username/password admin session with Git-backed rating persistence,
+  social archive, project tabs, card history and noindex/no-store headers.
 - Responsive public site, feeds, metadata, accessibility checks, contrast tests
   and scroll-preserving stateful controls.
-- SHA-pinned GitHub Actions with timeouts, concurrency guards and independent
-  Caught Up, portfolio, social and health switches.
+- SHA-pinned GitHub Actions with timeouts, concurrency guards, rebase-first state
+  commits and independent Caught Up, portfolio, social and health switches.
+- A presentation-only workplace-show skin with season/episode labels and an enforced
+  model-packet barrier; no visitor or engagement data is collected.
 
 ## Truth boundary
 
 Public pages consume defensive projections. Raw prompts, private model output,
 credentials, approval queue details and internal ledgers do not cross the
-boundary. Missing measurements render as unavailable; fixtures are labeled and
-excluded from live evidence and aggregate performance.
+boundary. Visitor measurement is disabled by design; operational gaps render as
+unavailable. Fixtures are labeled and excluded from live evidence and internal
+quality signals.
 
 External content and owner notes are untrusted data. Numeric claims require
 evidence. Unknown policy behavior remains marked `VERIFY`. No process may
-self-approve spend, credentials, new scopes, publishing, commerce, stage changes
-or prompt doctrine.
+self-approve spend, credentials, new scopes, commerce, stage changes or prompt
+doctrine. Content and social posting occur only through pre-signed contracts, health
+gates, receipts and kill switches.
 
 ## Repository map
 
@@ -91,7 +95,7 @@ orchestrator/
 site/
   src/app/                  public routes and protected admin
   src/components/           shared UI and operating surfaces
-  public/agents/            27 validated WebP portraits plus safe fallbacks
+  src/show/                 presentation-only workplace-show configuration
 state/
   meetings/                 sanitized meeting records
   meeting-agendas/          bounded specialist-room requests and consumption state
@@ -161,6 +165,8 @@ Core credentials and endpoints:
   the content-only App installed on the approved Caught Up and MMA Files repositories.
 - `THE_ODDS_API_KEY`, `CITO_API_KEY` — guarded FightAIQ data sources. Missing
   credentials skip the adapters; forbidden hosts remain unreachable.
+- `PEXELS_API_KEY`, `PIXABAY_API_KEY` — optional licensed-photo sources. Openverse,
+  Wikimedia Commons and the FRAME fallback work without them.
 - `PUBLIC_SITE_URL`, `CAUGHT_UP_SITE_URL` — canonical BoardlessAI and reader
   origins.
 - `DAILY_DIGEST_EMAIL_MODE=resend`, `DAILY_DIGEST_EMAIL_FROM`,
@@ -179,7 +185,9 @@ Repository variables are independent authorization switches:
   recorded data-only mode change.
 - `MMA_FILES_LIVE_ENABLED=true` permits guarded article production and public
   content delivery after the source packet checks pass.
-- `SOCIAL_KILL_SWITCH=true` keeps all social output draft-only.
+- `SOCIAL_KILL_SWITCH=true` is the supreme manual posting stop. With it set to
+  `false`, each project still remains locked until its own deterministic health and
+  credential gate passes.
 - `HEALTH_CHECK_ENABLED=true` opts into external production polling.
 
 A committed `state/PAUSED` stops council work. `state/SOCIAL_PAUSED` stops the
@@ -210,15 +218,15 @@ stops and one approval item is opened. Only the owner may raise the limit.
 `/admin` is dynamic, noindex, no-store and protected by a constant-time credential
 check plus a signed, HttpOnly session cookie.
 Authenticated traffic is not counted as a failed login; repeated invalid
-credentials are rate-limited. The page displays global social drafts and
-project-specific ideas, plans, visuals, research proposals, meeting agendas, FightAIQ data,
+credentials are rate-limited. The page displays the priority queue, social readiness
+and project-specific ideas, plans, visuals, research proposals, meeting agendas, FightAIQ data,
 agent switches and the MMA Files newsroom. Ratings are
 re-ratable; the latest value governs the UI and prior values remain visible.
 
-Instagram and Threads production starts switched off. The current guarded Instagram path
-does not implement the intended four-frame carousel transaction, so autopublish
-must remain disabled. A separate owner-approved change must verify current Meta
-contracts, scopes and policy before connecting accounts.
+Instagram and Threads posting is pre-authorized within the recorded project scopes.
+It unlocks separately after verified delivery/campaign health, complete brand
+credentials and safety checks. Every post has an idempotency key, live proof and one
+safe retry. No follows, likes, comments, messages or result collection exists.
 
 ## Deployment and rollback
 
@@ -239,17 +247,17 @@ Rollback:
 
 - BoardlessAI has a documented name-collision risk and must be cleared or
   renamed before paid sponsorship.
-- Production admin credentials, Git-backed rating credentials, the MMA Files App
-  installation and some live variables still require the owner steps in
-  `NEEDED.md`.
+- Social account credentials, optional Pexels/Pixabay keys and confirmation of the
+  MMA Files App/Vercel connection remain owner-controlled steps in `NEEDED.md`.
 - No eligible live experiment or accepted market evidence exists yet.
 - Git-backed runtime state assumes one serialized writer.
 - Admin has one username/password identity and signed session, not SSO, MFA or
   per-user audit identity.
 - FightAIQ remains data-only; live public probabilities are not authorized.
-- MMA Files delivery exists, but its first reviewed live article and FightAIQ
-  deliveries are still owner-run launch checks.
-- Commerce, payment, inventory, ads and incubator founding are not implemented.
+- Delivery proof is automated; missing/broken consumer output retries once, then
+  reverts and pauses the affected project.
+- Commerce, payment, inventory and ads are not implemented. Incubator founding is
+  limited to the pre-signed, no-new-account content-project template.
 
 License: MIT. Security-sensitive operation requires the documented human
 approvals and current provider-policy verification.

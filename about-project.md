@@ -32,18 +32,21 @@ GitHub Actions / příkazová řádka
 ```
 
 Systém má 38 rolí: čtyři hlasující členy rady a 34 odborných rolí. Dvacet rolí
-používá Anthropic a 18 OpenAI. Dvacet sedm rolí má hotový ověřený portrét; 11 nových
-rolí pro MMA používá textovou náhradu, dokud majitel neschválí tvorbu dalších obrázků.
+používá Anthropic a 18 OpenAI. Každá role má na veřejném webu vlastní ilustraci
+vytvořenou přímo v kódu. Vzhled seriálu, sezony a epizody se nikdy neposílají modelům
+ani do podkladů porad.
 
 ## Projekty
 
-- **Caught Up** připravuje anglický a český článek a jeden hlavní obrázek. Role pro
-  Instagram a Threads jsou teď vypnuté. Hotový balíček může přes omezenou GitHub App
-  zapsat do `lukaskourilcz/aifirst`.
+- **Caught Up** připravuje anglický a český článek a právě jeden hlavní obrázek z
+  povolené licencované knihovny nebo z bezpečné náhradní grafiky. Hotový balíček přes
+  omezenou GitHub App zapíše do `lukaskourilcz/aifirst` a po nasazení automaticky
+  ověří oba jazyky, obrázek, zdroj fotografie a otisk obsahu.
 - **Titty Tuesdays** připravuje značku, témata a marketing. Nemá e-shop, sklad,
   platby, reklamy ani automatické zveřejňování.
-- **Magazine Incubator** hledá podložené nápady na publikace. Hodnocení majitele může
-  nápad uložit do užšího výběru, ale samo nezaloží nový projekt.
+- **Magazine Incubator** hledá podložené nápady na publikace. Pokud návrh splní
+  předem podepsanou šablonu bez nového účtu, právního rizika, osobních dat a s limitem
+  nejvýše 0,15 dolaru denně, systém může nový obsahový projekt založit sám.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Je v režimu pouze pro data: neumí sázet, otevírat sázkové účty ani slibovat výhru.
 - **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře
@@ -71,8 +74,11 @@ bezpečné části. Chybějící údaj se zobrazí jako nedostupný, ne jako nul
 jsou viditelně označená a nepočítají se jako skutečný výsledek.
 
 `/admin` bez kompletního jména a hesla vrací `503`; bez správného přihlášení `401`.
-V produkci se hodnocení, ručně zadané kurzy, opravy sporů a metriky zapisují přes
+V produkci se hodnocení, ručně zadané kurzy a opravy sporů zapisují přes
 GitHub token omezený jen na tento repozitář. Bez něj zápis bezpečně selže.
+
+Web nesbírá návštěvnost, čtenost ani výsledky příspěvků. Přepínač
+`METRICS_INGESTION_ENABLED` zůstává vypnutý a role SPLIT nepracuje.
 
 ## Vývoj a ověření
 

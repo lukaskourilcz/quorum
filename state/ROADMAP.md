@@ -29,14 +29,14 @@ work. They require a fresh owner scope before implementation.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [x] Expand the shared roster to 38 agents across five projects; validate 27 existing portraits and explicit fallbacks for the 11 new MMA roles.
+- [x] Expand the shared roster to 38 agents across five projects and give every role a deterministic illustrated character portrait.
 - [x] Port source collection and edition production into BoardlessAI.
 - [x] Run the two Caught Up rooms in guarded dry mode.
 - [x] Add Caught Up consumer rendering and the missed-day sentinel.
 - [x] Remove the duplicate Caught Up generation, promotion and scheduling paths.
 - [x] Add the idea ledger, public governance surfaces, one daily digest and social packs.
-- [ ] Prove the first GitHub App delivery after the operator installs the bounded
-  app, then review three editions before enabling unattended live production.
+- [x] Add agent-owned delivery, consumer-side image validation and a deterministic
+  post-deploy verifier with retry, revert and project pause.
 
 ## Portfolio expansion
 
@@ -49,9 +49,14 @@ work. They require a fresh owner scope before implementation.
 - [x] Resolve the collision-free 07:00, 11:00 and 21:00 Prague slots.
 - [x] Replace per-meeting email with one idempotent daily portfolio digest.
 - [x] Add FightAIQ contracts, source controls, two-source fighter records, deterministic Glicko-2 analysis, captured prices and private review.
-- [x] Connect MMA Files as the public bilingual newsroom, with automatic article and FightAIQ data delivery, two daily evidence-first slots and manual metrics.
+- [x] Connect MMA Files as the public bilingual newsroom, with automatic article and FightAIQ data delivery, two daily evidence-first slots and no reader metrics.
 - [x] Retire the duplicate BoardlessAI fighter/event pages so MMA Files is the single public owner.
-- [x] Keep Titty Tuesdays content-only and store detailed future-campaign notes without producing or publishing social assets.
+- [x] Keep Titty Tuesdays pre-commerce, store detailed campaign plans and prepare
+  Tuesday-only typographic social assets behind its health and safety gates.
 - [x] Expand the shared Prague clock to 14 collision-free windows and preserve the
   fixture proof for all 12 room kinds as historical evidence.
-- [ ] Complete the repository-app, Vercel and first-live checks listed in `NEEDED.md`.
+- [x] Add the project priority queue, starvation guard, internal quality signals,
+  growth objectives and pre-signed content-project template founding.
+- [x] Build per-project social unlock counters, Meta adapters, receipts and `$0` post
+  verification while keeping visitor/engagement measurement disabled.
+- [ ] Complete only the account plumbing listed in `NEEDED.md`.

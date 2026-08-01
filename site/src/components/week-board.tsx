@@ -70,35 +70,35 @@ const calendarCostContexts: Partial<
   "venture-morning": {
     VIZE: "Company council meetings",
     FORGE: "Company council meetings",
-    PULSE: "Company and portfolio meetings",
-    AUDIT: "Company and portfolio meetings",
-    SPARK: "Caught Up idea and portfolio rooms",
+    PULSE: "Company and project meetings",
+    AUDIT: "Company and project meetings",
+    SPARK: "Caught Up idea and project meetings",
     VAULT: "Caught Up idea checks"
   },
   "venture-afternoon": {
     VIZE: "Company council meetings",
     FORGE: "Company council meetings",
-    PULSE: "Company and portfolio meetings",
-    AUDIT: "Company and portfolio meetings"
+    PULSE: "Company and project meetings",
+    AUDIT: "Company and project meetings"
   },
   "venture-night": {
     VIZE: "Company council meetings",
     FORGE: "Company council meetings",
-    PULSE: "Company and portfolio meetings",
-    AUDIT: "Company and portfolio meetings"
+    PULSE: "Company and project meetings",
+    AUDIT: "Company and project meetings"
   },
   "cu-edition": {
     HERALD: "Caught Up daily edition curation",
     STET: "Caught Up English edition",
     HACEK: "Caught Up Czech edition",
-    SPARK: "Caught Up idea and portfolio rooms",
-    AUDIT: "Company and portfolio meetings"
+    SPARK: "Caught Up idea and project meetings",
+    AUDIT: "Company and project meetings"
   },
   "cu-product": {
     HERALD: "Caught Up product room",
-    SPARK: "Caught Up idea and portfolio rooms",
+    SPARK: "Caught Up idea and project meetings",
     VAULT: "Caught Up idea checks",
-    AUDIT: "Company and portfolio meetings"
+    AUDIT: "Company and project meetings"
   },
   "mag-editorial": {
     JAB: "MMA Files editorial rooms"
@@ -131,7 +131,7 @@ function calendarCostUsd(kind: CalendarKind): number {
       (contexts?.[agentId]
         ? apiModels.find((model) => model.context === contexts[agentId])
         : undefined) ??
-      apiModels.find((model) => model.context === "Portfolio rooms when selected") ??
+      apiModels.find((model) => model.context === "Project meetings when selected") ??
       apiModels.find((model) => model.context === "Text calls when this role is selected") ??
       apiModels[0];
     return sum + (apiModel?.estimatedCostUsd ?? 0);

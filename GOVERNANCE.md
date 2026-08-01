@@ -10,8 +10,10 @@ pending signature always selects the safer behavior.
 - Specialists can curate evidence, write drafts, produce bounded artifacts and
   request one allowlisted follow-up room. A request enters the agenda queue; it
   does not approve the meeting's output or any external action.
-- Only the owner can approve spend increases, credentials, account access, live
-  publishing, commerce, project founding, mode changes and governing prompt changes.
+- Only the owner can approve spend increases, credentials, new account access/scopes,
+  commerce, project founding outside the pre-signed content template, mode changes
+  and governing prompt changes. Content release and routine social posting inside
+  pre-signed scopes are agent-owned after their deterministic gates pass.
 
 ## Evidence and honesty
 
@@ -36,9 +38,10 @@ bypassing any budget, evidence or live-switch gate.
 ## External actions
 
 Publishing, delivery, email, social networks and GitHub writes have separate switches
-and narrow credentials. A live switch does not waive contract, evidence, budget,
-security or release checks. No project can place a bet, buy a service, create a payment
-or approve its own wider access.
+and narrow credentials. The global social kill switch beats every project unlock. A
+live switch does not waive contract, evidence, budget, security or release checks. No
+project can place a bet, buy a service, create a payment or approve its own wider
+access. Visitor, reader and engagement ingestion remains disabled for Phase 3.
 
 Historical decision records are append-only evidence. If a decision changes, add a
 new superseding record rather than rewriting the old one.

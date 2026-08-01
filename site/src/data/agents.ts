@@ -339,18 +339,18 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   VIZE: [configuredTextModel("VIZE", "Company council meetings", councilMeetingCall)],
   FORGE: [
     configuredTextModel("FORGE", "Company council meetings", councilMeetingCall),
-    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
-  PULSE: [configuredTextModel("PULSE", "Company and portfolio meetings", councilMeetingCall)],
-  AUDIT: [configuredTextModel("AUDIT", "Company and portfolio meetings", councilMeetingCall)],
+  PULSE: [configuredTextModel("PULSE", "Company and project meetings", councilMeetingCall)],
+  AUDIT: [configuredTextModel("AUDIT", "Company and project meetings", councilMeetingCall)],
   HERALD: [
     configuredEditionModel(editionModels.curation, "Caught Up daily edition curation", curationCall),
     configuredTextModel("DIGEST", "Caught Up product room"),
-    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   STET: [
     configuredEditionModel(editionModels.writing, "Caught Up English edition", englishEditionCall),
-    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   HACEK: [
     configuredEditionModel(
@@ -359,14 +359,14 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
       czechEditionCall
     ),
     configuredEditionModel(editionModels.localization, "MMA Files Czech edition", mmaArticleCall),
-    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
-  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and portfolio rooms", sparkMeetingCall)],
+  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and project meetings", sparkMeetingCall)],
   VAULT: [
     configuredTextModel("DIGEST", "Caught Up idea checks", vaultMeetingCall),
-    configuredTextModel("OPENAI_SPECIALIST", "Portfolio rooms when selected")
+    configuredTextModel("OPENAI_SPECIALIST", "Project meetings when selected")
   ],
-  PALATE: [configuredTextModel("ANTHROPIC_SPECIALIST", "Taste and portfolio rooms")],
+  PALATE: [configuredTextModel("ANTHROPIC_SPECIALIST", "Taste and project meetings")],
   JAB: [
     configuredEditionModel(editionModels.localization, "MMA Files English articles", mmaArticleCall),
     configuredTextModel("OPENAI_SPECIALIST", "MMA Files editorial rooms")
@@ -505,19 +505,19 @@ const profileCopy: Record<
   },
   HACEK: {
     operatingPrinciple: "Překlad není převod slov, ale přesný český článek.",
-    output: "Venture-specific Czech article and parity verdict",
+    output: "Project-specific Czech article and language check",
     currentFocus: "Caught Up and MMA Files Czech editions",
     publicTrackRecord: null
   },
   SPARK: {
     operatingPrinciple: "Bring one idea worth shipping, not someday.",
-    output: "Ledger-checked growth idea and outcome report",
+    output: "Budget-checked growth idea and result report",
     currentFocus: "Caught Up product growth",
     publicTrackRecord: null
   },
   VAULT: {
     operatingPrinciple: "A prior failure is evidence until something changes.",
-    output: "Binding idea-ledger verdict and fresh index",
+    output: "Saved idea decision and refreshed index",
     currentFocus: "Caught Up institutional memory",
     publicTrackRecord: null
   },
@@ -536,7 +536,7 @@ const profileCopy: Record<
   ANGLE: {
     operatingPrinciple: "Name the reader and the cut-through.",
     output: "Positioning document and CampaignBrief",
-    currentFocus: "Portfolio positioning",
+    currentFocus: "Project positioning",
     publicTrackRecord: null
   },
   COHORT: {
@@ -554,7 +554,7 @@ const profileCopy: Record<
   PALATE: {
     operatingPrinciple: "A preference needs a rating reference.",
     output: "Evidence-linked TASTE update",
-    currentFocus: "Venture taste memory",
+    currentFocus: "Project taste memory",
     publicTrackRecord: null
   },
   SCENE: {
@@ -630,7 +630,7 @@ const profileCopy: Record<
     publicTrackRecord: null
   },
   PIVOT: {
-    operatingPrinciple: "Carry only the insight whose source can travel with it.",
+    operatingPrinciple: "Carry only the finding whose source can travel with it.",
     output: "Evidence-linked bridge between both MMA desks",
     currentFocus: "FightAIQ and MMA Files handoffs",
     publicTrackRecord: null

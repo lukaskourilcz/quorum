@@ -5,22 +5,26 @@
 **Operating (pre-revenue)** effective 2026-08-01 by owner decision.
 
 Caught Up is the first project. The owner adopted it directly; the founding council
-did not discover or approve it. That distinction keeps the founding gate honest:
+did not discover or approve it. That historical distinction remains visible, while a
+new pre-signed content-project template now permits tightly fenced founding:
 
-- Live founding cycles remain disabled and continue to throw.
+- Only a board-approved proposal that passes every template field can be founded
+  automatically; anything needing new accounts, commerce, legal/personal-data scope,
+  an unapproved target or more than `$0.15/day` stops for the owner.
 - Fixture evidence remains ineligible for business decisions.
 - SCOUT may collect live evidence from approved, allowlisted sources.
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
 Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. Its public
-storefront remains unchanged and BoardlessAI produces planning notes only. FightAIQ
+storefront remains unchanged; BoardlessAI produces plans and guarded Tuesday-only
+social assets, not commerce. FightAIQ
 collects UFC and Oktagon records and captured market data; live model analysis remains
 behind its separate switch. MMA Files is the public bilingual magazine and the sole
 reader-facing home for delivered fighter files, event cards, captured odds and reviewed
 model outputs. Their live schedules remain behind the recorded signatures and
-independent switches. The Magazine Incubator may only produce research proposals for
-owner rating.
+independent switches. The Magazine Incubator may produce research proposals and
+automatically found only template-compliant content projects.
 
 ## Owner and roles
 
@@ -54,8 +58,8 @@ Current stage: **VALIDATION**
 
 Entered: 2026-08-01 through the `config/stages.json` current-stage mechanism
 
-Next gate: one eligible experiment reviewed, a qualified value signal observed,
-and a distribution mechanism observed
+Next gate: Phase 3 remains undefined and closed. No visitor, reader or engagement
+signal is collected while `METRICS_INGESTION_ENABLED=false`.
 
 Thesis confidence: owner-adopted, unvalidated
 
@@ -89,14 +93,17 @@ sponsor approval gates before the first payment.
 
 ## Distribution
 
-Git and MDX remain canonical. Caught Up publishes through its Vercel site after
-a validated repository commit. Social output remains draft-locked.
+Git and MDX remain the saved source. Caught Up publishes through its Vercel site after
+a validated repository commit and automated post-deploy proof. Social posting remains
+locked per project until its health/credential gate passes; the global kill switch can
+stop every post.
 
-## Funnel definitions and targets
+## Phase 3 measurement hold
 
-Qualified visit → value action → return or feed subscription → monetization
-intent → recognized revenue. Baselines and targets remain unavailable until the
-first eligible experiment is defined.
+Visitor paths, readership, social results and experiments are deliberately undefined.
+The placeholder contract contains no fields, `METRICS_INGESTION_ENABLED=false`, and
+SPLIT stays idle until a future owner decision defines a lawful, useful measurement
+scope.
 
 ## Unit economics
 
@@ -123,10 +130,9 @@ None. Adoption starts validation; it does not fabricate an experiment.
 
 ## Stage gates, pivot and kill criteria
 
-Stay in VALIDATION until an eligible experiment produces a qualified value
-signal and an observed distribution mechanism. Stop an experiment at its written
-cost, loss or evidence threshold. Caught Up adoption does not authorize a second
-venture or a live founding cycle.
+Stay in VALIDATION while Phase 3 remains closed. A future experiment must have a
+written cost, loss, evidence and stop threshold. Template-compliant content-project
+founding does not imply market validation or a stage change.
 
 ## Solution and scope
 
@@ -137,14 +143,16 @@ season, audience and marketing planning only. FightAIQ owns sourced fighter/even
 records, captured prices and code-generated analysis without bet placement. MMA Files
 owns the public bilingual articles and the reader-facing FightAIQ data pages. The two
 sites accept only bounded, hash-checked content files through their GitHub repositories;
-BoardlessAI cannot change their application code. Social production is switched off by default.
-The incubator owns research proposals only. Caught Up keeps
+BoardlessAI cannot change their application code. Social packs are built inside
+existing production calls and post only after project health gates. The incubator owns
+research proposals and template compliance/founding. Caught Up keeps
 a static reader path with Git and MDX as canon.
 
 ## Constraints
 
 The countersigned `$50` all-in limit and `$42` model/API share, human-only payments,
-draft-locked channels, sanitization boundary, evidence rules, security controls and
-release gates remain binding. Scheduled specialist windows additionally need a due
+per-project social gates, the global posting stop, sanitization boundary, evidence
+rules, security controls and release gates remain binding. Scheduled specialist
+windows additionally need a due
 agenda; FightAIQ intake may open for a material source change. Caught Up and MMA Files
 receive only bounded, hash-checked content through their approved repositories.

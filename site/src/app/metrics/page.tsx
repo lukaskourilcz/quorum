@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 const metricCopy: Record<string, { label: string; note: string }> = {
   "Selected opportunity score": { label: "Chosen idea score", note: "No idea was chosen from the scored sample set" },
   "Release success rate": { label: "Successful releases", note: "Only the BoardlessAI site release is counted so far" },
-  "Qualified action rate": { label: "Readers taking a useful action", note: "Reader tracking is not connected" },
   "Security incidents": { label: "Security problems", note: "None recorded" },
   "Over-budget commitments": { label: "Times work went over budget", note: "None recorded" },
   "USD per validated learning": { label: "Cost of each useful finding", note: "No useful finding has been confirmed yet" }
@@ -47,7 +46,7 @@ export default async function MetricsPage() {
             </p>
           </div>
         }
-        description="The numbers we can prove for projects, releases, readers, safety, the team and money. Missing data stays marked as missing."
+        description="The numbers we can prove for projects, releases, safety, the team and money. Visitor and engagement measurement is off by design."
         eyebrow="Current results"
         title="Numbers without the spin"
       />
@@ -144,7 +143,7 @@ export default async function MetricsPage() {
             </tbody>
           </Table>
           <div className="flex flex-col gap-2 px-8 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)] sm:flex-row sm:items-center sm:justify-between">
-            <span>6 measures / 2 passing / 4 without data</span>
+            <span>5 measures / 2 passing / 3 without data</span>
             <span>Targets saved in code</span>
           </div>
         </div>
