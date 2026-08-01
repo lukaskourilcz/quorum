@@ -64,7 +64,7 @@ jobs:
     name: Run bounded council cycle
     if: ${{ vars.AUTONOMY_KILL_SWITCH != 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 65
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -73,6 +73,8 @@ jobs:
       JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
       THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
       CITO_API_KEY: ${{ secrets.CITO_API_KEY }}
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
       GITHUB_TOKEN: ${{ github.token }}
       MONTHLY_OPERATING_CAP_USD: "50"
       MAX_CYCLE_BUDGET_USD: "0.20"
@@ -83,6 +85,7 @@ jobs:
       DIGEST_BUDGET_USD: "0.02"
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
       CAUGHT_UP_SITE_URL: ${{ vars.CAUGHT_UP_SITE_URL }}
+      MMA_FILES_SITE_URL: ${{ vars.MMA_FILES_SITE_URL }}
       DAILY_DIGEST_EMAIL_MODE: ${{ vars.DAILY_DIGEST_EMAIL_MODE }}
       DAILY_DIGEST_EMAIL_FROM: ${{ vars.DAILY_DIGEST_EMAIL_FROM }}
       DAILY_DIGEST_EMAIL_TO: ${{ secrets.DAILY_DIGEST_EMAIL_TO }}
@@ -337,7 +340,7 @@ jobs:
         if: ${{ steps.delivery.outputs.has_package == 'true' }}
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
         with:
-          app-id: ${{ secrets.DELIVERY_APP_ID }}
+          client-id: ${{ secrets.DELIVERY_APP_ID }}
           private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
           owner: lukaskourilcz
           repositories: aifirst
@@ -352,7 +355,8 @@ jobs:
           PACKAGE_DATE: ${{ steps.delivery.outputs.date }}
           PACKAGE_HASH12: ${{ steps.delivery.outputs.hash12 }}
           PACKAGE_SLUG: ${{ steps.delivery.outputs.slug }}
-          HAS_HERO: ${{ steps.delivery.outputs.has_hero }}
+          IMAGE_HERO_PATH: ${{ steps.delivery.outputs.image_hero_path }}
+          IMAGE_THUMB_PATH: ${{ steps.delivery.outputs.image_thumb_path }}
         run: |
           clone_root=""
           for attempt in 1 2; do
@@ -399,10 +403,7 @@ jobs:
           fi
           allowed="^public/data/board/${PACKAGE_DATE}\.json$"
           if test "$PACKAGE_STATUS" = "edition"; then
-            allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json))$"
-            if test "$HAS_HERO" = "true"; then
-              allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json)|(public/illustrations/${PACKAGE_DATE}\.webp))$"
-            fi
+            allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json)|(public/images/editions/${PACKAGE_SLUG}/(hero|thumb)\.(webp|png|svg)))$"
           fi
           unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
           if test -n "$unexpected"; then
@@ -415,15 +416,16 @@ jobs:
           if test "$PACKAGE_STATUS" = "edition"; then
             git -C "$clone_root" add \
               "content/articles/${PACKAGE_DATE}.en.mdx" \
-              "content/articles/${PACKAGE_DATE}.cs.mdx"
-            if test "$HAS_HERO" = "true"; then
-              git -C "$clone_root" add "public/illustrations/${PACKAGE_DATE}.webp"
-            fi
+              "content/articles/${PACKAGE_DATE}.cs.mdx" \
+              "$IMAGE_HERO_PATH" \
+              "$IMAGE_THUMB_PATH"
           fi
+          echo "created_commit=false" >> "$GITHUB_OUTPUT"
           if ! git -C "$clone_root" diff --cached --quiet; then
             git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
             git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
             git -C "$clone_root" commit -m "edition(${PACKAGE_DATE}): ${PACKAGE_SLUG} [package:${PACKAGE_HASH12}]"
+            echo "created_commit=true" >> "$GITHUB_OUTPUT"
             pushed=false
             for attempt in 1 2; do
               if git -C "$clone_root" push origin HEAD:main; then
@@ -447,6 +449,58 @@ jobs:
           echo "status=delivered" >> "$GITHUB_OUTPUT"
           echo "target_commit=$(git -C "$clone_root" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      - name: Verify Caught Up production release
+        id: cu-proof
+        if: ${{ steps.delivery.outputs.has_package == 'true' && steps.delivery.outputs.package_status == 'edition' && steps.target.outputs.status == 'delivered' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.delivery-token.outputs.token }}
+          PACKAGE_PATH: ${{ steps.delivery.outputs.package_path }}
+          PACKAGE_HASH: ${{ steps.delivery.outputs.hash }}
+          TARGET_COMMIT: ${{ steps.target.outputs.target_commit }}
+          CREATED_COMMIT: ${{ steps.target.outputs.created_commit }}
+        run: |
+          proof_status=failed
+          for retry in 0 1; do
+            set +e
+            pnpm release:verify -- \
+              --venture caught-up \
+              --package "$PACKAGE_PATH" \
+              --target-commit "$TARGET_COMMIT" \
+              --deployment-url "${CAUGHT_UP_SITE_URL:-https://caughtup-ai.vercel.app}" \
+              --github-token "$DELIVERY_TOKEN" \
+              --retry-count "$retry" \
+              --timeout-ms 900000
+            verifier_status=$?
+            set -e
+            if test "$verifier_status" -eq 0; then
+              proof_status=passed
+              break
+            fi
+            if test "$retry" -eq 0; then
+              retry_root="$RUNNER_TEMP/aifirst-idempotent-retry"
+              git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/aifirst.git" "$retry_root"
+              pnpm --dir "$retry_root" install --frozen-lockfile
+              pnpm --dir "$retry_root" consume:edition "$PACKAGE_PATH" "$retry_root"
+            fi
+          done
+          revert_commit=""
+          if test "$proof_status" != "passed"; then
+            if test "$CREATED_COMMIT" = "true"; then
+              revert_root="$RUNNER_TEMP/aifirst-release-revert"
+              git clone "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/aifirst.git" "$revert_root"
+              git -C "$revert_root" config user.name "boardlessai-delivery[bot]"
+              git -C "$revert_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+              if git -C "$revert_root" revert --no-edit "$TARGET_COMMIT" && git -C "$revert_root" push origin HEAD:main; then
+                revert_commit="$(git -C "$revert_root" rev-parse HEAD)"
+              fi
+            fi
+            fail_args=(fail-closed --venture caught-up --package-hash "$PACKAGE_HASH")
+            if test -n "$revert_commit"; then fail_args+=(--revert-commit "$revert_commit"); fi
+            pnpm release:verify -- "${fail_args[@]}"
+          fi
+          echo "status=$proof_status" >> "$GITHUB_OUTPUT"
+          echo "revert_commit=$revert_commit" >> "$GITHUB_OUTPUT"
+
       - name: Record the delivery transaction
         if: ${{ steps.delivery.outputs.has_package == 'true' && steps.target.outputs.status != '' }}
         env:
@@ -457,13 +511,23 @@ jobs:
           TARGET_COMMIT: ${{ steps.target.outputs.target_commit }}
           PACKAGE_DATE: ${{ steps.delivery.outputs.date }}
           PACKAGE_HASH12: ${{ steps.delivery.outputs.hash12 }}
+          PROOF_STATUS: ${{ steps.cu-proof.outputs.status }}
         run: |
+          if test "$PROOF_STATUS" = "failed"; then
+            DELIVERY_STATUS=needs_reconciliation
+            FAILURE_CODE=post_deploy_verification
+          fi
           args=(record --package "$PACKAGE_STATE_PATH" --status "$DELIVERY_STATUS")
           if test -n "$FAILURE_CODE"; then args+=(--code "$FAILURE_CODE"); fi
           if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
           if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
           pnpm delivery -- "${args[@]}"
-          git add state/edition state/meetings state/INBOX.md
+          receipt_paths=(state/edition state/meetings state/release-proofs state/notify state/ventures/caught-up state/INBOX.md)
+          for receipt_path in "${receipt_paths[@]}"; do
+            if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
+              git add -A -- "$receipt_path"
+            fi
+          done
           if ! git diff --cached --quiet; then
             git config user.name "boardlessai-cycle[bot]"
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
@@ -488,7 +552,7 @@ jobs:
           fi
 
       - name: Fail closed on delivery reconciliation
-        if: ${{ steps.target.outputs.status == 'needs_reconciliation' }}
+        if: ${{ steps.target.outputs.status == 'needs_reconciliation' || steps.cu-proof.outputs.status == 'failed' }}
         run: exit 1
 
       - name: Select pending MMA Files delivery
@@ -508,7 +572,7 @@ jobs:
         if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
         with:
-          app-id: ${{ secrets.DELIVERY_APP_ID }}
+          client-id: ${{ secrets.DELIVERY_APP_ID }}
           private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
           owner: lukaskourilcz
           repositories: mma-files
@@ -522,6 +586,9 @@ jobs:
           PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
           PACKAGE_HASH12: ${{ steps.mma-delivery.outputs.package_hash12 }}
           PACKAGE_LABEL: ${{ steps.mma-delivery.outputs.package_label }}
+          PACKAGE_SLUG: ${{ steps.mma-delivery.outputs.package_slug }}
+          IMAGE_HERO_PATH: ${{ steps.mma-delivery.outputs.image_hero_path }}
+          IMAGE_THUMB_PATH: ${{ steps.mma-delivery.outputs.image_thumb_path }}
         run: |
           clone_root=""
           for attempt in 1 2; do
@@ -556,7 +623,7 @@ jobs:
             echo "detail_file=$RUNNER_TEMP/mma-consumer.log" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          allowed='^data/boardless/articles\.json$'
+          allowed="^((data/boardless/articles\.json)|(public/images/articles/${PACKAGE_SLUG}/(hero|thumb)\.(webp|png|svg)))$"
           if test "$PACKAGE_KIND" = "fightaiq"; then
             allowed='^data/boardless/fightaiq\.json$'
           fi
@@ -572,14 +639,16 @@ jobs:
           npm --prefix "$clone_root" run typecheck
           NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app NEXT_PUBLIC_DEMO_MODE=false npm --prefix "$clone_root" run build
           if test "$PACKAGE_KIND" = "article"; then
-            git -C "$clone_root" add data/boardless/articles.json
+            git -C "$clone_root" add data/boardless/articles.json "$IMAGE_HERO_PATH" "$IMAGE_THUMB_PATH"
           else
             git -C "$clone_root" add data/boardless/fightaiq.json
           fi
+          echo "created_commit=false" >> "$GITHUB_OUTPUT"
           if ! git -C "$clone_root" diff --cached --quiet; then
             git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
             git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
             git -C "$clone_root" commit -m "delivery(${PACKAGE_KIND}): ${PACKAGE_LABEL} [package:${PACKAGE_HASH12}]"
+            echo "created_commit=true" >> "$GITHUB_OUTPUT"
             pushed=false
             for attempt in 1 2; do
               if git -C "$clone_root" push origin HEAD:main; then
@@ -603,6 +672,58 @@ jobs:
           echo "status=delivered" >> "$GITHUB_OUTPUT"
           echo "target_commit=$(git -C "$clone_root" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      - name: Verify MMA Files production article
+        id: mma-proof
+        if: ${{ steps.mma-delivery.outputs.has_package == 'true' && steps.mma-delivery.outputs.package_kind == 'article' && steps.mma-target.outputs.status == 'delivered' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.mma-delivery-token.outputs.token }}
+          PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
+          PACKAGE_HASH: ${{ steps.mma-delivery.outputs.package_hash }}
+          TARGET_COMMIT: ${{ steps.mma-target.outputs.target_commit }}
+          CREATED_COMMIT: ${{ steps.mma-target.outputs.created_commit }}
+        run: |
+          proof_status=failed
+          for retry in 0 1; do
+            set +e
+            pnpm release:verify -- \
+              --venture mma-files \
+              --package "$PACKAGE_PATH" \
+              --target-commit "$TARGET_COMMIT" \
+              --deployment-url "${MMA_FILES_SITE_URL:-https://mma-files.vercel.app}" \
+              --github-token "$DELIVERY_TOKEN" \
+              --retry-count "$retry" \
+              --timeout-ms 900000
+            verifier_status=$?
+            set -e
+            if test "$verifier_status" -eq 0; then
+              proof_status=passed
+              break
+            fi
+            if test "$retry" -eq 0; then
+              retry_root="$RUNNER_TEMP/mma-files-idempotent-retry"
+              git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/mma-files.git" "$retry_root"
+              npm --prefix "$retry_root" ci
+              npm --prefix "$retry_root" run consume:boardless -- "$PACKAGE_PATH" "$retry_root"
+            fi
+          done
+          revert_commit=""
+          if test "$proof_status" != "passed"; then
+            if test "$CREATED_COMMIT" = "true"; then
+              revert_root="$RUNNER_TEMP/mma-files-release-revert"
+              git clone "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/mma-files.git" "$revert_root"
+              git -C "$revert_root" config user.name "boardlessai-delivery[bot]"
+              git -C "$revert_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+              if git -C "$revert_root" revert --no-edit "$TARGET_COMMIT" && git -C "$revert_root" push origin HEAD:main; then
+                revert_commit="$(git -C "$revert_root" rev-parse HEAD)"
+              fi
+            fi
+            fail_args=(fail-closed --venture mma-files --package-hash "$PACKAGE_HASH")
+            if test -n "$revert_commit"; then fail_args+=(--revert-commit "$revert_commit"); fi
+            pnpm release:verify -- "${fail_args[@]}"
+          fi
+          echo "status=$proof_status" >> "$GITHUB_OUTPUT"
+          echo "revert_commit=$revert_commit" >> "$GITHUB_OUTPUT"
+
       - name: Record MMA Files delivery transaction
         if: ${{ steps.mma-delivery.outputs.has_package == 'true' && steps.mma-target.outputs.status != '' }}
         env:
@@ -614,13 +735,18 @@ jobs:
           PACKAGE_HASH: ${{ steps.mma-delivery.outputs.package_hash }}
           PACKAGE_HASH12: ${{ steps.mma-delivery.outputs.package_hash12 }}
           TARGET_COMMIT: ${{ steps.mma-target.outputs.target_commit }}
+          PROOF_STATUS: ${{ steps.mma-proof.outputs.status }}
         run: |
+          if test "$PROOF_STATUS" = "failed"; then
+            DELIVERY_STATUS=needs_reconciliation
+            FAILURE_CODE=post_deploy_verification
+          fi
           args=(record --kind "$PACKAGE_KIND" --package "$PACKAGE_PATH" --hash "$PACKAGE_HASH" --status "$DELIVERY_STATUS")
           if test -n "$FAILURE_CODE"; then args+=(--code "$FAILURE_CODE"); fi
           if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
           if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
           pnpm mma:delivery -- "${args[@]}"
-          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries)
+          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED)
           for receipt_path in "${receipt_paths[@]}"; do
             if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
               git add -A -- "$receipt_path"
@@ -649,5 +775,5 @@ jobs:
           fi
 
       - name: Fail closed on MMA Files delivery reconciliation
-        if: ${{ steps.mma-target.outputs.status == 'needs_reconciliation' }}
+        if: ${{ steps.mma-target.outputs.status == 'needs_reconciliation' || steps.mma-proof.outputs.status == 'failed' }}
         run: exit 1

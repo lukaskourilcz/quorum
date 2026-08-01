@@ -16,6 +16,9 @@ export interface PendingMmaDelivery {
   packagePath: string;
   packageHash: string;
   label: string;
+  slug?: string;
+  imageHeroPath?: string;
+  imageThumbPath?: string;
 }
 
 async function jsonFiles(directory: string): Promise<string[]> {
@@ -111,7 +114,10 @@ export async function nextArticleDelivery(root = stateRoot): Promise<PendingMmaD
       kind: "article",
       packagePath: path.join(root, "ventures", "mma-files", "articles", filename),
       packageHash: article.packageHash,
-      label: `${article.publishAt.slice(0, 10)} ${article.slot.toUpperCase()} ${article.slug}`
+      label: `${article.publishAt.slice(0, 10)} ${article.slot.toUpperCase()} ${article.slug}`,
+      slug: article.slug,
+      imageHeroPath: article.image.hero_path,
+      imageThumbPath: article.image.thumb_path
     };
   }
   return null;

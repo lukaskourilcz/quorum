@@ -9,6 +9,7 @@ const ALLOWED_CONTENT_TYPES = [
   "application/xml",
   "image/jpeg",
   "image/png",
+  "image/svg+xml",
   "image/webp",
   "text/html",
   "text/plain",

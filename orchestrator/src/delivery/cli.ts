@@ -31,7 +31,9 @@ async function main(): Promise<void> {
           hash: pending.package.idempotencyKey,
           hash12: pending.package.idempotencyKey.slice(0, 12),
           package_status: pending.package.status,
-          has_hero: pending.package.status === "edition" && pending.package.hero ? "true" : "false",
+          has_image: pending.package.status === "edition" ? "true" : "false",
+          image_hero_path: pending.package.status === "edition" ? pending.package.image.hero_path : "",
+          image_thumb_path: pending.package.status === "edition" ? pending.package.image.thumb_path : "",
           slug: pending.package.status === "edition"
             ? pending.package.article.en.frontmatter.slug
             : "no edition"

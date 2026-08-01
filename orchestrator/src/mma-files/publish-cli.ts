@@ -32,7 +32,10 @@ async function main(): Promise<void> {
       package_path: pending.packagePath,
       package_hash: pending.packageHash,
       package_hash12: pending.packageHash.slice(0, 12),
-      package_label: pending.label
+      package_label: pending.label,
+      package_slug: pending.slug ?? "",
+      image_hero_path: pending.imageHeroPath ?? "",
+      image_thumb_path: pending.imageThumbPath ?? ""
     } : { has_package: "false" };
     const output = valueAfter(args, "--github-output");
     if (output) await appendFile(output, `${Object.entries(fields).map(([key, value]) => `${key}=${value}`).join("\n")}\n`);
