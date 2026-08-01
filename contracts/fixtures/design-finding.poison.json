@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "design-finding/1",
+  "axis": "color-scheme",
+  "direction": "The darker card may have earned more clicks.",
+  "evidencePostRefs": ["post-1", "post-2", "post-3", "post-4", "post-5", "post-6", "post-7"],
+  "sampleSize": 7,
+  "status": "confirmed",
+  "proposedWeightChange": 0.05
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "article/1",
+  "slug": "fixture-without-czech",
+  "localizations": { "en": { "title": "English only", "dek": "This must not publish.", "bodyMDX": "Missing Czech text." } },
+  "format": "fight-week-preview",
+  "sources": [{ "kind": "internal", "ref": "fixture" }],
+  "heroSpec": { "template": "tale-of-the-tape", "bindings": {} },
+  "fighterRefs": [],
+  "publishAt": "2026-08-01T10:00:00.000Z",
+  "slot": "am",
+  "status": "draft",
+  "packageHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

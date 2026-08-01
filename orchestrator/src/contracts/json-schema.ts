@@ -20,6 +20,7 @@ import {
   SourceProposalSchema,
   TrackRecordSchema
 } from "./mma.js";
+import { ArticlePackageSchema, DesignFindingSchema, EditorialSlateSchema, MetricsCaptureSchema, SocialVariantPackSchema } from "./mma-files.js";
 import { NicheProposalSchema } from "./niche-proposal.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
@@ -47,6 +48,11 @@ export const ContractSchemas = {
   "slip-of-ten": SlipOfTenSchema,
   "source-proposal": SourceProposalSchema,
   "track-record": TrackRecordSchema,
+  "article": ArticlePackageSchema,
+  "social-variant": SocialVariantPackSchema,
+  "metrics-capture": MetricsCaptureSchema,
+  "design-finding": DesignFindingSchema,
+  "editorial-slate": EditorialSlateSchema,
   "niche-proposal": NicheProposalSchema,
   "rating": RatingRecordSchema,
   "season": SeasonFileSchema,

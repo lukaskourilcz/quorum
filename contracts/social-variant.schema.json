@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-variant/1"
+    },
+    "articleRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "variants": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            },
+            "carouselSpec": {
+              "type": "object",
+              "properties": {
+                "template": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "bindings": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "template",
+                "bindings"
+              ],
+              "additionalProperties": {}
+            },
+            "captions": {
+              "type": "object",
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2200
+                },
+                "cs": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2200
+                }
+              },
+              "required": [
+                "en",
+                "cs"
+              ],
+              "additionalProperties": {}
+            },
+            "designAxes": {
+              "type": "object",
+              "properties": {
+                "templateFamily": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "colorScheme": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "headlineFraming": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "captionTone": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                }
+              },
+              "required": [
+                "templateFamily",
+                "colorScheme",
+                "headlineFraming",
+                "captionTone"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "id",
+            "carouselSpec",
+            "captions",
+            "designAxes"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            },
+            "carouselSpec": {
+              "type": "object",
+              "properties": {
+                "template": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "bindings": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "template",
+                "bindings"
+              ],
+              "additionalProperties": {}
+            },
+            "captions": {
+              "type": "object",
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2200
+                },
+                "cs": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2200
+                }
+              },
+              "required": [
+                "en",
+                "cs"
+              ],
+              "additionalProperties": {}
+            },
+            "designAxes": {
+              "type": "object",
+              "properties": {
+                "templateFamily": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "colorScheme": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "headlineFraming": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "captionTone": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                }
+              },
+              "required": [
+                "templateFamily",
+                "colorScheme",
+                "headlineFraming",
+                "captionTone"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "id",
+            "carouselSpec",
+            "captions",
+            "designAxes"
+          ],
+          "additionalProperties": {}
+        }
+      ]
+    },
+    "assignmentProtocolRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "queued",
+        "archived"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "articleRef",
+    "variants",
+    "assignmentProtocolRef",
+    "status"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/social-variant.schema.json"
+}

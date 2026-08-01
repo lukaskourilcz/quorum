@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "editorial-slate/1"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "slots": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "object",
+          "properties": {
+            "slot": {
+              "type": "string",
+              "enum": [
+                "am",
+                "pm"
+              ]
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "fight-week-preview",
+                "post-event-recap",
+                "fighter-profile",
+                "data-story",
+                "weigh-in-report",
+                "desk-notes"
+              ]
+            },
+            "subjectRefs": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "assignedWriter": {
+              "type": "string",
+              "enum": [
+                "JAB",
+                "QUILL"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "assigned",
+                "killed"
+              ]
+            },
+            "killedReason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            }
+          },
+          "required": [
+            "slot",
+            "format",
+            "subjectRefs",
+            "rationale",
+            "assignedWriter",
+            "status"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "slot": {
+              "type": "string",
+              "enum": [
+                "am",
+                "pm"
+              ]
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "fight-week-preview",
+                "post-event-recap",
+                "fighter-profile",
+                "data-story",
+                "weigh-in-report",
+                "desk-notes"
+              ]
+            },
+            "subjectRefs": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "assignedWriter": {
+              "type": "string",
+              "enum": [
+                "JAB",
+                "QUILL"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "assigned",
+                "killed"
+              ]
+            },
+            "killedReason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            }
+          },
+          "required": [
+            "slot",
+            "format",
+            "subjectRefs",
+            "rationale",
+            "assignedWriter",
+            "status"
+          ],
+          "additionalProperties": {}
+        }
+      ]
+    },
+    "vaultVerdicts": {
+      "minItems": 2,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "subjectRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "repeat"
+            ]
+          },
+          "evidenceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        },
+        "required": [
+          "subjectRef",
+          "verdict",
+          "evidenceRef"
+        ],
+        "additionalProperties": {}
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "slots",
+    "vaultVerdicts"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/editorial-slate.schema.json"
+}

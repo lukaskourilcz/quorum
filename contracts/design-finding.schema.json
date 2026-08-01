@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "design-finding/1"
+    },
+    "axis": {
+      "type": "string",
+      "enum": [
+        "template-family",
+        "color-scheme",
+        "headline-framing",
+        "caption-tone"
+      ]
+    },
+    "direction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "evidencePostRefs": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "sampleSize": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "directional",
+        "confirmed"
+      ]
+    },
+    "proposedWeightChange": {
+      "type": "number",
+      "minimum": -0.1,
+      "maximum": 0.1
+    },
+    "tasteConflict": {
+      "type": "object",
+      "properties": {
+        "flag": {
+          "type": "boolean",
+          "const": true
+        },
+        "palateRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        }
+      },
+      "required": [
+        "flag",
+        "palateRef"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "axis",
+    "direction",
+    "evidencePostRefs",
+    "sampleSize",
+    "status"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/design-finding.schema.json"
+}

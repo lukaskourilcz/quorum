@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "design-finding/1",
+  "axis": "template-family",
+  "direction": "The stat-led family earned more saves in this sample.",
+  "evidencePostRefs": ["post-1", "post-2", "post-3", "post-4", "post-5", "post-6", "post-7", "post-8"],
+  "sampleSize": 8,
+  "status": "confirmed",
+  "proposedWeightChange": 0.05
+}

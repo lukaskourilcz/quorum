@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "social-variant/1",
+  "articleRef": "article:2026-08-01:am:fixture-fight-preview",
+  "variants": [
+    { "id": "A", "carouselSpec": { "template": "stat-led", "bindings": { "headline": "The numbers first" } }, "captions": { "en": "A sourced look at the matchup.", "cs": "Zápas podle ověřených čísel." }, "designAxes": { "templateFamily": "stat-led", "colorScheme": "orange-dark", "headlineFraming": "result-first", "captionTone": "plain" } },
+    { "id": "B", "carouselSpec": { "template": "quote-led", "bindings": { "headline": "The matchup first" } }, "captions": { "en": "What separates these two fighters?", "cs": "V čem se oba bojovníci liší?" }, "designAxes": { "templateFamily": "quote-led", "colorScheme": "paper-dark", "headlineFraming": "question", "captionTone": "curious" } }
+  ],
+  "assignmentProtocolRef": "state/ventures/mma-files/social/ASSIGNMENT.md",
+  "status": "draft"
+}

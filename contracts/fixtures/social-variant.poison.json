@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "social-variant/1",
+  "articleRef": "article:fixture",
+  "variants": [
+    { "id": "A", "carouselSpec": { "template": "one", "bindings": {} }, "captions": { "en": "One", "cs": "Jedna" }, "designAxes": { "templateFamily": "one", "colorScheme": "dark", "headlineFraming": "fact", "captionTone": "plain" } },
+    { "id": "A", "carouselSpec": { "template": "two", "bindings": {} }, "captions": { "en": "Two", "cs": "Dvě" }, "designAxes": { "templateFamily": "two", "colorScheme": "light", "headlineFraming": "question", "captionTone": "curious" } }
+  ],
+  "assignmentProtocolRef": "fixture",
+  "status": "draft"
+}

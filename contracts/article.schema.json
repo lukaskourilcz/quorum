@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "article/1"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "localizations": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "dek": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 320
+            },
+            "bodyMDX": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40000
+            }
+          },
+          "required": [
+            "title",
+            "dek",
+            "bodyMDX"
+          ],
+          "additionalProperties": {}
+        },
+        "cs": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "dek": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 320
+            },
+            "bodyMDX": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40000
+            }
+          },
+          "required": [
+            "title",
+            "dek",
+            "bodyMDX"
+          ],
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "en",
+        "cs"
+      ],
+      "additionalProperties": {}
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "fight-week-preview",
+        "post-event-recap",
+        "fighter-profile",
+        "data-story",
+        "weigh-in-report",
+        "desk-notes"
+      ]
+    },
+    "sources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "internal"
+              },
+              "ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "kind",
+              "ref"
+            ],
+            "additionalProperties": {}
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "external"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/"
+              },
+              "retrievedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "kind",
+              "url",
+              "retrievedAt"
+            ],
+            "additionalProperties": {}
+          }
+        ]
+      }
+    },
+    "heroSpec": {
+      "type": "object",
+      "properties": {
+        "template": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "bindings": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "template",
+        "bindings"
+      ],
+      "additionalProperties": {}
+    },
+    "fighterRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(ufc|ksw|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "eventRef": {
+      "type": "string",
+      "pattern": "^(ufc|ksw|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "modelVersion": {
+      "type": "string",
+      "pattern": "^mma-\\d+\\.\\d+\\.\\d+\\+[a-f0-9]{8}$"
+    },
+    "publishAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "slot": {
+      "type": "string",
+      "enum": [
+        "am",
+        "pm"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "blocked",
+        "published",
+        "killed"
+      ]
+    },
+    "packageHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "slug",
+    "localizations",
+    "format",
+    "sources",
+    "heroSpec",
+    "fighterRefs",
+    "publishAt",
+    "slot",
+    "status",
+    "packageHash"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/article.schema.json"
+}
