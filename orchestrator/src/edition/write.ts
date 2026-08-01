@@ -24,7 +24,7 @@ export const LocalizedOutputSchema = z.object({
 });
 
 const ToolOutputSchema = z.object({
-  slug: z.string().regex(/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.string().trim().min(1),
   tags: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1).max(6),
   illustration_prompt: z.string().trim().min(1),
   wire: z.array(WireItemSchema).min(4).max(6),
@@ -141,6 +141,31 @@ ${ENGLISH_EDITORIAL_REGISTER}
 
 Return only emit_article tool data.`;
 
+const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}-?/;
+const SLUG_SUFFIX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/**
+ * Tool calls occasionally use a human-readable title as a slug. The publication
+ * date is trusted runtime input, so normalize only formatting and retain a
+ * deterministic daily URL instead of spending a second call on punctuation.
+ */
+export function normalizeArticleSlug(raw: string, date: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw new Error(`write: invalid publication date for slug: ${date}`);
+  }
+  const normalized = raw
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  const suffix = normalized.replace(DATE_PREFIX, "");
+  if (!suffix || !SLUG_SUFFIX.test(suffix)) {
+    throw new Error("write: slug has no usable ASCII suffix");
+  }
+  return `${date}-${suffix}`;
+}
+
 export function localized(value: z.infer<typeof LocalizedOutputSchema>): LocalizedContent {
   return {
     title: value.title,
@@ -247,7 +272,7 @@ export async function write(
     model: config.models.writing,
     stage: feedback.length ? "rewrite" : "write",
     maxOutputTokens: config.article.maximumOutputTokens,
-    system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} English words.${revision}`,
+    system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} English words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${revision}`,
     user: `Publication date: ${brief.date}\n\n${sourcePacket(brief, pickedItems, runnerUpItems)}`,
     tool: {
       name: "emit_article",
@@ -256,12 +281,10 @@ export async function write(
     },
     parse: (value) => ToolOutputSchema.parse(value)
   });
-  if (!response.value.slug.startsWith(`${brief.date}-`)) {
-    throw new Error(`write: slug must start with ${brief.date}-`);
-  }
+  const slug = normalizeArticleSlug(response.value.slug, brief.date);
   assertSuppliedLinks(response.value, suppliedUrls, runnerUrls);
   return {
-    slug: response.value.slug,
+    slug,
     date: brief.date,
     tags: response.value.tags,
     illustrationPrompt: response.value.illustration_prompt,

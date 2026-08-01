@@ -135,6 +135,26 @@ describe("edition configuration and quality", () => {
     ]);
   });
 
+  it("normalizes a human-readable tool slug without spending a repair call", async () => {
+    const responses = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const writer = structuredClone(responses[1]!);
+    (writer.value as { slug: string }).slug = "OpenAI / pricing — update!";
+    const result = await produceEdition(
+      await productionInput([responses[0]!, writer, responses[2]!], 10, true)
+    );
+    expect(result.package.status).toBe("edition");
+    if (result.package.status === "edition") {
+      expect(result.package.article.en.frontmatter.slug).toBe(
+        "2026-08-04-openai-pricing-update"
+      );
+    }
+    expect(result.report.usage.map((usage) => usage.stage)).toEqual([
+      "curate",
+      "write",
+      "localize"
+    ]);
+  });
+
   it("regenerates an enforced failure twice, then calls NO_EDITION", async () => {
     const config = await loadEditionQualityConfig();
     const metrics = {
