@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -39,7 +40,12 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--warning-soft)]", slotTone: "border-t-[var(--warning-soft)]" },
   incubator: { icon: FlaskConical, label: "Magazine Incubator", tone: "text-[var(--success-soft)]", slotTone: "border-t-[var(--success-soft)]" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotTone: "border-t-[var(--destructive-soft)]" },
-  "mma-files": { icon: FileText, label: "MMA Files", tone: "text-[color-mix(in_srgb,var(--accent)_70%,var(--magenta-spark))]", slotTone: "border-t-[color-mix(in_srgb,var(--accent)_70%,var(--magenta-spark))]" }
+  "mma-files": {
+    icon: FileText,
+    label: "MMA Files",
+    tone: "text-[color-mix(in_srgb,var(--magenta-spark)_58%,var(--paper))]",
+    slotTone: "border-t-[color-mix(in_srgb,var(--magenta-spark)_58%,var(--paper))]"
+  }
 };
 
 function projectForKind(kind: CalendarKind): ProjectKey {
@@ -55,32 +61,45 @@ function displayStatus(status: CalendarStatus, fixture: boolean | undefined): Di
   return fixture ? "test" : status;
 }
 
-function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string; tone: string } {
+function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string; tone: string; surface: CSSProperties } {
   if (status === "test") {
     return {
       icon: Beaker,
       label: "Test meeting",
-      tone: "bg-[var(--warning-soft)] text-[var(--warning)]"
+      tone: "text-[var(--warning)]",
+      surface: {
+        backgroundColor: "var(--warning-soft)",
+        backgroundImage: "repeating-linear-gradient(45deg, color-mix(in srgb, var(--warning) 34%, transparent) 0 2px, transparent 2px 8px), repeating-linear-gradient(-45deg, color-mix(in srgb, var(--warning) 24%, transparent) 0 2px, transparent 2px 8px)"
+      }
     };
   }
   if (status === "held") {
     return {
       icon: CheckCircle2,
       label: "Happened",
-      tone: "bg-[var(--success-soft)] text-[var(--success)]"
+      tone: "text-[var(--success)]",
+      surface: {
+        backgroundColor: "var(--success-soft)",
+        backgroundImage: "repeating-linear-gradient(0deg, color-mix(in srgb, var(--success) 34%, transparent) 0 2px, transparent 2px 8px)"
+      }
     };
   }
   if (status === "missed") {
     return {
       icon: CircleMinus,
       label: "Did not happen",
-      tone: "bg-[var(--destructive-soft)] text-[var(--destructive)]"
+      tone: "text-[var(--destructive)]",
+      surface: {
+        backgroundColor: "var(--destructive-soft)",
+        backgroundImage: "repeating-linear-gradient(135deg, color-mix(in srgb, var(--destructive) 36%, transparent) 0 3px, transparent 3px 10px)"
+      }
     };
   }
   return {
     icon: Clock3,
     label: "Planned",
-    tone: "bg-[var(--surface)] text-[var(--fog)]"
+    tone: "text-[var(--fog)]",
+    surface: { backgroundColor: "var(--surface)" }
   };
 }
 
@@ -187,11 +206,11 @@ export function WeekBoard({
                 const project = projectForKind(slot.kind);
                 const className = `grid min-h-16 place-items-center border-b border-r border-t-4 border-[var(--border)] p-2 last:border-r-0 ${projectSlotTone(slot.kind)} ${status.tone} ${slot.meetingHref ? "transition-[filter] hover:brightness-95 hover:saturate-125 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
                 return slot.meetingHref ? (
-                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
+                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} href={slot.meetingHref} key={`${day}-${slot.kind}`} style={status.surface} title={slot.decisionOneLiner}>
                     {content}
                   </Link>
                 ) : (
-                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} key={`${day}-${slot.kind}`}>{content}</div>
+                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} key={`${day}-${slot.kind}`} style={status.surface}>{content}</div>
                 );
               })}
             </div>
@@ -216,7 +235,7 @@ export function WeekBoard({
             const StatusIcon = details.icon;
             return (
               <span className="flex items-center gap-1.5" key={value}>
-                <span className={`grid size-5 place-items-center rounded-sm ${details.tone}`}><StatusIcon aria-hidden="true" className="size-3" /></span>
+                <span className={`grid size-5 place-items-center rounded-sm ${details.tone}`} style={details.surface}><StatusIcon aria-hidden="true" className="size-3" /></span>
                 {details.label}
               </span>
             );
