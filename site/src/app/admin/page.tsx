@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, RefreshCw } from "lucide-react";
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
+import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
+import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -200,12 +202,13 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
     getPublicStandups(),
-    readAdminFightAiQ()
+    readAdminFightAiQ(),
+    readAdminMmaFiles()
   ]);
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
   const selectedTab = selectedVenture
@@ -219,6 +222,12 @@ export default async function AdminPage({
   const shortlist = selectedVenture?.id === "incubator"
     ? selectedVenture.cards.filter((card) => card.kind === "niche-proposal" && card.status === "shortlist")
     : [];
+  const unreadableFiles = selectedVenture?.id === "mma-files"
+    ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
+    : selectedVenture?.unreadableFiles ?? [];
+  const savedItemCount = selectedVenture?.id === "mma-files"
+    ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
+    : selectedVenture?.cards.length ?? 0;
   return (
     <main className="min-h-screen">
       <header className="border-b border-[var(--border)] bg-[var(--card)]">
@@ -328,7 +337,7 @@ export default async function AdminPage({
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge tone="dark">{selectedVenture.status}</Badge>
-                <Badge>{selectedVenture.cards.length} saved items</Badge>
+                <Badge>{savedItemCount} saved items</Badge>
               </div>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em]">{selectedVenture.name}</h2>
             </div>
@@ -354,9 +363,9 @@ export default async function AdminPage({
             ))}
           </nav>
 
-          {selectedVenture.unreadableFiles.length ? (
+          {unreadableFiles.length ? (
             <Callout className="mt-6" tone="warning">
-              {selectedVenture.unreadableFiles.length} saved {selectedVenture.unreadableFiles.length === 1 ? "file cannot" : "files cannot"} be read: {selectedVenture.unreadableFiles.join(", ")}.
+              {unreadableFiles.length} saved {unreadableFiles.length === 1 ? "file cannot" : "files cannot"} be read: {unreadableFiles.join(", ")}.
             </Callout>
           ) : null}
 
@@ -372,6 +381,8 @@ export default async function AdminPage({
 
           {selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "events", "slates", "sources"].includes(selectedTab) ? (
             <FightAiQAdminPanel snapshot={fightaiq} tab={selectedTab as "fighters" | "events" | "slates" | "sources"} />
+          ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab) ? (
+            <MmaFilesAdminPanel snapshot={mmaFiles} tab={selectedTab as "articles" | "calendar" | "social-lab"} />
           ) : visibleCards.length ? (
             <div className="mt-8 grid gap-5 xl:grid-cols-2">
               {visibleCards.map((card) => (
