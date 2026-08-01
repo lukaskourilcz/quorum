@@ -15,6 +15,9 @@ describe("publicAgentText", () => {
     expect(publicAgentText("First monetization experiment")).toBe(
       "First revenue test"
     );
+    expect(publicAgentText("The editorial slate and ModelRun artifact passed calibration.")).toBe(
+      "The daily article plan and saved calculations passed forecast accuracy."
+    );
   });
 
   it("turns internal decision codes into clear outcomes", () => {

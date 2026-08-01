@@ -37,6 +37,18 @@ const modeLabel: Record<RoomTurnMode, string> = {
   close: "closes the meeting"
 };
 
+const meetingCopy: Record<string, { name: string; title: string }> = {
+  "cu-edition": { name: "Edition meeting", title: "Choose the edition" },
+  "cu-product": { name: "Product meeting", title: "Decide the product idea" },
+  "tt-marketing": { name: "Marketing meeting", title: "Shape the season" },
+  "incubator-scan": { name: "Idea research", title: "Find ideas with real sources" },
+  "incubator-synthesis": { name: "Idea review", title: "Choose ideas without starting a project" },
+  "mma-intake": { name: "FightAIQ data meeting", title: "Check the fight data" },
+  "mma-analysis": { name: "FightAIQ analysis meeting", title: "Review the model without guessing" },
+  "mag-editorial": { name: "MMA Files story meeting", title: "Choose or reject both article slots" },
+  "mag-desk": { name: "MMA Files desk meeting", title: "Check today’s articles and social drafts" }
+};
+
 export async function generateStaticParams() {
   return (await getPublicMeetingRecords()).map((meeting) => ({ id: meeting.id }));
 }
@@ -47,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     description: meeting ? publicAgentText(meeting.operatingBrief) : "BoardlessAI project meeting record.",
     robots: meeting?.fixture ? { follow: true, index: false } : undefined,
-    title: meeting ? `${meeting.kind === "cu-edition" ? "Edition" : meeting.kind === "cu-product" ? "Product" : meeting.kind === "tt-marketing" ? "Marketing" : meeting.kind === "incubator-scan" ? "Idea research" : "Idea review"} meeting · ${formatDate(meeting.date)}` : "Meeting"
+    title: meeting ? `${meetingCopy[meeting.kind]?.name ?? "Project meeting"} · ${formatDate(meeting.date)}` : "Meeting"
   };
 }
 
@@ -56,8 +68,8 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
   const meeting = await getPublicMeetingRecord(id);
   if (!meeting) notFound();
   const transcript = meeting.roomTranscript;
-  const roomName = meeting.kind === "cu-edition" ? "Edition meeting" : meeting.kind === "cu-product" ? "Product meeting" : meeting.kind === "tt-marketing" ? "Marketing meeting" : meeting.kind === "incubator-scan" ? "Idea research" : "Idea review";
-  const roomTitle = meeting.kind === "cu-edition" ? "Choose the edition" : meeting.kind === "cu-product" ? "Decide the product idea" : meeting.kind === "tt-marketing" ? "Shape the season" : meeting.kind === "incubator-scan" ? "Find ideas with real sources" : "Choose ideas without starting a project";
+  const roomName = meetingCopy[meeting.kind]?.name ?? "Project meeting";
+  const roomTitle = meetingCopy[meeting.kind]?.title ?? "Review the work";
   const speakers = Array.from(new Set(transcript.turns.map((turn) => turn.agent)))
     .map((agent) => agentById.get(agent))
     .filter((agent): agent is NonNullable<typeof agent> => Boolean(agent));

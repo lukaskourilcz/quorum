@@ -58,7 +58,7 @@ export default async function MetricsPage() {
             ["Current step", "Testing ideas", "Needs more proof", "text-[var(--foreground)]"],
             ["Real sources", "0", "Sample records do not count", "text-[var(--accent)]"],
             ["Confirmed revenue", "$0.00", "No payment has been recorded", "text-[var(--accent)]"],
-            ["Cost this month", formatUsd(latestStandup.ledger.monthAllIn), "$20 monthly limit", "text-[var(--foreground)]"]
+            ["Cost this month", formatUsd(latestStandup.ledger.monthAllIn), `${formatUsd(latestStandup.ledger.cap)} monthly limit`, "text-[var(--foreground)]"]
           ].map(([label, value, foot, color]) => (
             <div
               className="flex min-h-42 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"

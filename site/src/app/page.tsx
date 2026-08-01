@@ -88,8 +88,8 @@ export default async function HomePage() {
           </div>
           <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
             <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
-              Eight meetings a day. Four AI roles make the decisions, other
-              specialists join when needed, and the work stays open to inspect.
+              Fourteen scheduled work slots a day. Four AI roles make the company
+              decisions, specialists join when needed, and the work stays open to inspect.
             </p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
               <Link
@@ -116,12 +116,12 @@ export default async function HomePage() {
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Current projects", "2", "PROJECTS", "100%", "Caught Up + Titty Tuesdays · TESTING"],
-            ["Meetings each day", "8", "PRAGUE", "100%", "Company, project, marketing and research meetings"],
+            ["Current projects", "5", "PROJECTS", "100%", "Publishing, apparel, research and MMA · TESTING"],
+            ["Scheduled work slots", "14", "PRAGUE", "100%", "12 room types and two article-production times"],
             [
               "AI service cost",
               formatUsd(latestStandup.ledger.monthAllIn),
-              "CAP $20",
+              `CAP ${formatUsd(latestStandup.ledger.cap)}`,
               "0%",
               latestStandup.fixture ? "Test example / no paid calls" : "Saved meeting cost"
             ],
@@ -326,16 +326,16 @@ export default async function HomePage() {
             <div className="p-8 md:col-span-7 md:p-14">
               <p className="mono-label text-[var(--accent)]">Spending limit</p>
               <h2 className="mt-6 max-w-3xl text-[clamp(2.6rem,4.6vw,3.9rem)] font-semibold leading-none tracking-[-0.055em]">
-                The monthly spending limit is $20.
+                The current monthly spending limit is {formatUsd(latestStandup.ledger.cap)}.
               </h2>
               <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--fog)]">
                 AI services, media, payments, subscriptions and other confirmed
-                costs share one firm limit. Until the company earns money, 20%
-                stays untouched.
+                costs share one firm limit. A proposed increase does not count until
+                the owner signs it.
               </p>
               <div className="mt-10 flex flex-wrap gap-8 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
                 <span>
-                  Reserve <strong className="text-[var(--foreground)]">20%</strong>
+                  Current limit <strong className="text-[var(--foreground)]">{formatUsd(latestStandup.ledger.cap)}</strong>
                 </span>
                 <span>
                   Costs outside the limit{" "}
@@ -354,10 +354,10 @@ export default async function HomePage() {
               <p className="mt-5 text-7xl font-semibold leading-none tracking-[-0.07em] tabular-nums">
                 $0.00
               </p>
-              <Progress className="mt-7" max={20} value={0} />
+              <Progress className="mt-7" max={latestStandup.ledger.cap} value={latestStandup.ledger.monthAllIn} />
               <div className="mt-4 flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-[var(--fog)]">
                 <span>Confirmed costs</span>
-                <span className="text-[var(--foreground)]">$20.00 limit</span>
+                <span className="text-[var(--foreground)]">{formatUsd(latestStandup.ledger.cap)} limit</span>
               </div>
               <Link
                 className={`${buttonVariants({ variant: "primary" })} mt-9 w-full`}

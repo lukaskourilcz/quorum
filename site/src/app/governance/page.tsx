@@ -23,7 +23,7 @@ const controls = [
   },
   {
     title: "One monthly spending limit",
-    text: "AI services, media, payments and subscriptions share one $20 monthly limit."
+    text: "AI services, media, payments and subscriptions share one owner-approved monthly limit. A proposed increase does not count until it is signed."
   },
   {
     title: "Some choices belong to people",

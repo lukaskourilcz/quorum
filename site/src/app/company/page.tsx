@@ -29,15 +29,15 @@ export default function CompanyPage() {
             <CardContent>
               <Badge tone="accent">TESTING IDEAS</Badge>
               <p className="mt-7 text-3xl font-semibold tracking-[-0.045em]">
-                Two current projects
+                Five current projects
               </p>
               <p className="mt-3 text-sm leading-6 text-[var(--ash)]">
-                Caught Up and Titty Tuesdays are still early tests.
+                Publishing, apparel, research and MMA work share one set of rules.
               </p>
             </CardContent>
           </Card>
         }
-        description="BoardlessAI is testing two owner-chosen projects in public. Caught Up has a working publishing process. Titty Tuesdays is still planning only. Neither has confirmed revenue."
+        description="BoardlessAI runs five early projects with clear limits. Caught Up publishes, Titty Tuesdays plans, the Incubator researches, FightAIQ is data-only and MMA Files is a private newsroom. None has confirmed revenue."
         eyebrow="Current business plan"
         title="Where the company stands"
       />
@@ -48,8 +48,8 @@ export default function CompanyPage() {
             {
               icon: Building2,
               label: "Current projects",
-              value: "2",
-              note: "Caught Up and Titty Tuesdays"
+              value: "5",
+              note: "Two publications, apparel planning, idea research and fight data"
             },
             {
               icon: FlaskConical,
@@ -96,15 +96,15 @@ export default function CompanyPage() {
             {[
               {
                 title: "Readers and buyers",
-                text: "Caught Up serves people who want one important AI story a day. Titty Tuesdays still needs real buyer research."
+                text: "Caught Up serves people who want one important AI story a day. Titty Tuesdays needs buyer research. FightAIQ and MMA Files need a reviewed MMA audience window."
               },
               {
                 title: "Product and price",
-                text: "Caught Up is a free publication. Titty Tuesdays has no shop, stock or approved price yet."
+                text: "Caught Up is free. Titty Tuesdays has no shop or price. FightAIQ is free entertainment data, and MMA Files has no public site yet."
               },
               {
                 title: "How people find the work",
-                text: "Caught Up can prepare English and Czech posts for Instagram and Threads. Publishing remains a separate approved step."
+                text: "Caught Up and MMA Files prepare English and Czech Instagram and Threads drafts. Publishing remains a separate approved step."
               },
               {
                 title: "Income and costs",
@@ -112,7 +112,7 @@ export default function CompanyPage() {
               },
               {
                 title: "What exists today",
-                text: "Caught Up has a publishing workflow and reader app. Titty Tuesdays has brand, product and campaign plans, but no shop."
+                text: "Caught Up has a reader app. Titty Tuesdays has plans but no shop. FightAIQ has guarded data/model tools. MMA Files has a private newsroom, not a public magazine."
               },
               {
                 title: "When to stop",

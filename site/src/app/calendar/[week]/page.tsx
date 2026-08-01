@@ -29,7 +29,7 @@ export default async function CalendarWeekPage({
       <PageIntro
         eyebrow="Weekly schedule / Prague time"
         title="Every planned meeting"
-        description="Eight meetings are planned each day. This page is built from the saved project schedule and meeting records, with no hidden calendar service."
+        description="Fourteen rooms and article-production times are planned each day. This page comes straight from the saved project schedule and meeting records, with no hidden calendar service."
       />
       <section className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-24">
         <WeekBoard availableWeeks={availableWeeks} feed={feed} headingLevel="page" />

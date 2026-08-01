@@ -162,7 +162,7 @@ const replayCuts = [
     id: "evidence",
     label: "Source trail",
     detail:
-      "The exact exchange that separates buildability from validation.",
+      "The exact exchange that separates what can be built from what has been proven.",
     turnIndexes: [2, 4, 5, 6, 7, 8, 9, 10, 15, 16]
   },
   {

@@ -225,6 +225,7 @@ export default async function AgentDetailPage({
           <Link
             className="group flex items-center justify-between rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7 md:p-10"
             href={`/agents/${next.slug}`}
+            scroll={false}
           >
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">

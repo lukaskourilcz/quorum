@@ -32,16 +32,16 @@ export default function VenturesPage() {
               Current projects
             </p>
             <p className="mt-4 text-7xl font-semibold leading-none tracking-[-0.07em]">
-              2
+              5
             </p>
             <p className="mt-3 text-[0.84375rem] text-[var(--fog)]">
-              Caught Up · 001 / Titty Tuesdays · 002
+              Two publications · apparel planning · idea research · fight data
             </p>
           </div>
         }
-        description="Caught Up and Titty Tuesdays are the two projects chosen by the owner. Both are still being tested. Earlier sample ideas remain visible so you can see why they were rejected."
+        description="Five projects share the same checks for sources, cost and human approval. Some are public, some are planning only, and MMA Files remains a private newsroom."
         eyebrow="Current work"
-        title="Two projects, with clear limits"
+        title="Five projects, with clear limits"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
@@ -70,6 +70,48 @@ export default function VenturesPage() {
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One crop-top idea, developed in public before there is a shop.</h2>
               <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The team can work on product designs, a consistent visual style and launch plans. It cannot publish campaigns, buy stock or sell anything yet.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/titty-tuesdays">Open project <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[var(--surface)] p-8 md:col-span-4 md:p-10">
+              <Badge>Idea research</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--fog)]">IDEAS ONLY</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Magazine Incubator</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Research publication ideas without pretending they are businesses.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The team can collect sources and let the owner rate a complete proposal. It cannot launch a publication by itself.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/incubator">Open idea research <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
+              <Badge tone="warning">Project 003</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--accent)]">DATA ONLY · 18+</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">FightAIQ</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Sourced UFC, KSW and Oktagon files, with estimates made by code rather than guesswork.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The public can inspect verified records. Live probabilities stay hidden until the owner reviews one full event per organization.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/fightaiq">Open FightAIQ <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--magenta-spark)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[color-mix(in_srgb,var(--magenta-spark)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
+              <Badge tone="accent">Project 004</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">PRIVATE NEWSROOM</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">MMA Files</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Two daily English and Czech article slots, with social drafts ready for review.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The newsroom lives in the protected admin. There is no public magazine page, no automatic posting and no article without a verified FightAIQ source packet.</p>
+              <p className="mt-7 text-sm font-semibold text-[var(--fog)]">Private owner access only</p>
             </div>
           </div>
         </article>
@@ -202,7 +244,7 @@ export default function VenturesPage() {
             ))}
           </div>
           <p className="mt-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-            Current step / 02 test the idea · Caught Up + Titty Tuesdays
+            Current step / 02 test the idea · five projects share the same checks
           </p>
         </div>
       </section>
