@@ -1,14 +1,15 @@
 # Historical room proof — 2026-08-01
 
-Every scheduled room kind was dispatched and saved with `fixture: true`. This proves
-routing, contracts, rooms, public projection and the daily summary without claiming a
-live provider decision. A direct non-dry board attempt stopped honestly because no
-local `ANTHROPIC_API_KEY` was configured. GitHub Actions has provider secrets, but
-their use remains gated by the owner decisions and live variables.
+Every scheduled room kind was dispatched and saved. Eleven records use `fixture: true`
+to prove routing, contracts, rooms, public projection and the daily summary without
+claiming a live provider decision. The current Caught Up edition record is a genuine
+provider run (`fixture: false`): it completed with `NO_EDITION` and recorded
+`$0.19983975` of API spend. That result is valid evidence that the paid path works; it
+did not publish an article because the board did not approve an edition in that run.
 
-This is an immutable fixture-era proof record, not a description of the current
-meeting policy. Current scheduled specialist windows can end as `not-needed`, the
-budget is countersigned and MMA Files now has its own public site.
+This is a historical proof record, not a description of the current meeting policy.
+Current scheduled specialist windows can end as `not-needed`, the budget is
+countersigned and MMA Files now has its own public site.
 
 ## Public room links
 
