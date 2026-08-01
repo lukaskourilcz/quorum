@@ -55,6 +55,7 @@ const expectedPrompts = [
   "keeper.md",
   "ledger.md",
   "lens.md",
+  "mma.md",
   "palate.md",
   "people.md",
   "pulse.md",

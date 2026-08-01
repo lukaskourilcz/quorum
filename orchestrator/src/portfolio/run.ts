@@ -110,10 +110,16 @@ function buildRecord(input: {
   fixture: boolean;
   proposals: readonly NicheProposal[];
 }): MeetingRecord {
+  const isMma = input.phase === "mma-intake" || input.phase === "mma-analysis";
+  const chair: FoundingAgent = isMma ? "FORGE" : "PULSE";
   const times = shiftedTimes(input.now, input.contributions.length + 2);
   const veto = input.contributions.find((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
   const summary = veto
     ? `AUDIT vetoed the room output: ${veto.summary}`
+    : isMma
+      ? input.phase === "mma-intake"
+        ? "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability."
+        : "Reviewed the versioned analysis state within the data-only gate. No probability was published."
     : input.phase === "incubator-synthesis"
       ? input.proposals.length
         ? `Recorded ${input.proposals.length} evidenced niche proposal${input.proposals.length === 1 ? "" : "s"} for owner rating. No founding action is authorized.`
@@ -129,23 +135,28 @@ function buildRecord(input: {
     status: input.fixture ? "PLAN" : "HELD",
     stage: input.stage,
     operatingBrief: input.objective,
-    participantReasons: input.cast.map((agent) => ({ agent, reason: agent === "PULSE" ? "chairs the bounded portfolio room" : "serves the registered specialist or veto seat", participated: true })),
+    participantReasons: input.cast.map((agent) => ({ agent, reason: agent === chair ? "chairs the bounded room" : "serves the registered specialist or veto seat", participated: true })),
     ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.actualCycleUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: 20 },
     decision: { outcome: veto ? "VETO" : input.phase === "incubator-synthesis" && input.proposals.length === 0 ? "NO_PROPOSAL" : "PLAN", summary, evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))] },
     proposals: input.contributions.map((contribution) => ({ agent: contribution.agent, summary: contribution.summary, evidenceRefs: contribution.evidenceRefs })),
     voteMatrix: input.contributions.map((contribution) => ({ voter: contribution.agent, firstChoice: contribution.stance, veto: contribution.stance === "veto" })),
     tasks: input.contributions.flatMap((contribution, index) => contribution.task ? [{ id: `TASK-${input.cycleId.toUpperCase()}-${String(index + 1).padStart(2, "0")}`, owner: contribution.agent, summary: contribution.task.summary, status: "planned" as const }] : []),
-    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : "RESEARCH_ONLY. A shortlist does not authorize founding, spend or external action.",
+    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isMma ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : "RESEARCH_ONLY. A shortlist does not authorize founding, spend or external action.",
     eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
+    ...(isMma ? { sharperData: {
+      outcome: "nothing-new" as const,
+      summary: input.fixture ? "Dry review found no new source-backed change to propose today." : "The room found no new source-backed change that cleared the proposal bar today.",
+      evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))]
+    } } : {}),
     roomTranscript: {
       openedAt: times[0],
       closedAt: times.at(-1),
-      gavel: "PULSE",
+      gavel: chair,
       setting: input.fixture ? "Deterministic dry portfolio room; no provider call or external action is represented." : "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
       turns: [
-        { agent: "PULSE", mode: "gavel", sentAt: times[0], text: input.objective },
+        { agent: chair, mode: "gavel", sentAt: times[0], text: input.objective },
         ...input.contributions.map((contribution, index) => ({ agent: contribution.agent, mode: contribution.stance === "veto" ? "veto" as const : "statement" as const, sentAt: times[index + 1], text: contribution.summary, ...(contribution.evidenceRefs.length ? { evidenceRefs: contribution.evidenceRefs } : {}) })),
-        { agent: "PULSE", mode: "close", sentAt: times.at(-1), text: summary }
+        { agent: chair, mode: "close", sentAt: times.at(-1), text: summary }
       ]
     },
     generatedAt: times.at(-1)
@@ -157,6 +168,18 @@ async function canonicalContext(phase: PortfolioPhase, root: string, date: strin
   if (phase === "tt-marketing") {
     const season = await readText(root, "ventures/titty-tuesdays/season-001.md");
     return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
+  }
+  if (phase === "mma-intake" || phase === "mma-analysis") {
+    const [overview, bridge] = await Promise.all([
+      readText(root, "ventures/fightaiq/README.md"),
+      readText(root, "mma/BRIDGE.md")
+    ]);
+    const day = new Date(`${date}T12:00:00Z`).getUTCDay();
+    const leadOrg = ["ufc", "ksw", "oktagon"][day % 3];
+    return {
+      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
+      evidenceRefs: []
+    };
   }
   const evidence = await readJson<{ refs?: string[]; packet?: string }>(root, "ventures/incubator/evidence.json", {});
   const scan = phase === "incubator-synthesis" ? await readText(root, `meetings/${date}-incubator-scan.json`) : "";
@@ -237,7 +260,8 @@ export async function runPortfolioCycle(input: {
   if (input.dry) {
     contributions = selected.map((agent) => ({ agent, stance: agent === "PULSE" ? "plan" : "pass", summary: agent === "PULSE" ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [] }));
   } else {
-    const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", input.phase.startsWith("incubator-") ? "incubator.md" : "pulse.md"), "utf8");
+    const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : "pulse.md";
+    const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
