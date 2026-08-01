@@ -6,6 +6,7 @@ import {
   Beaker,
   Building2,
   CheckCircle2,
+  CircleDollarSign,
   CircleMinus,
   Clock3,
   FileText,
@@ -15,6 +16,12 @@ import {
   Swords,
   type LucideIcon
 } from "lucide-react";
+import ventureRegistrySource from "../../../config/ventures.json";
+import {
+  agentById,
+  type AgentApiModel,
+  type AgentId
+} from "@/data/agents";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -33,6 +40,94 @@ function isCaughtUp(kind: CalendarKind) {
 
 type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "incubator" | "fightaiq" | "mma-files";
 type DisplayStatus = CalendarStatus | "test";
+
+const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
+const articleAuthors: readonly AgentId[] = ["JAB", "HACEK"];
+const configuredMeetingCast = new Map<string, readonly AgentId[]>(
+  ventureRegistrySource.ventures.flatMap((venture) =>
+    venture.meetings.map((meeting) => [
+      meeting.kind,
+      meeting.cast as readonly AgentId[]
+    ] as const)
+  )
+);
+
+const calendarCostContexts: Partial<
+  Record<CalendarKind, Partial<Record<AgentId, AgentApiModel["context"]>>>
+> = {
+  "venture-morning": {
+    VIZE: "Company council meetings",
+    FORGE: "Company council meetings",
+    PULSE: "Company and portfolio meetings",
+    AUDIT: "Company and portfolio meetings"
+  },
+  "venture-afternoon": {
+    VIZE: "Company council meetings",
+    FORGE: "Company council meetings",
+    PULSE: "Company and portfolio meetings",
+    AUDIT: "Company and portfolio meetings"
+  },
+  "venture-night": {
+    VIZE: "Company council meetings",
+    FORGE: "Company council meetings",
+    PULSE: "Company and portfolio meetings",
+    AUDIT: "Company and portfolio meetings"
+  },
+  "cu-edition": {
+    HERALD: "Caught Up daily edition curation",
+    STET: "Caught Up English edition",
+    HACEK: "Caught Up Czech edition",
+    SPARK: "Caught Up idea and portfolio rooms",
+    AUDIT: "Company and portfolio meetings"
+  },
+  "cu-product": {
+    HERALD: "Caught Up product room",
+    SPARK: "Caught Up idea and portfolio rooms",
+    VAULT: "Caught Up idea checks",
+    AUDIT: "Company and portfolio meetings"
+  },
+  "mag-editorial": {
+    JAB: "MMA Files editorial rooms"
+  },
+  "mag-desk": {
+    JAB: "MMA Files editorial rooms"
+  },
+  "article-am": {
+    JAB: "MMA Files English articles",
+    HACEK: "MMA Files Czech edition"
+  },
+  "article-pm": {
+    JAB: "MMA Files English articles",
+    HACEK: "MMA Files Czech edition"
+  }
+};
+
+function calendarParticipants(kind: CalendarKind): readonly AgentId[] {
+  if (kind === "venture-morning" || kind === "venture-afternoon" || kind === "venture-night") {
+    return companyCouncil;
+  }
+  if (kind === "article-am" || kind === "article-pm") return articleAuthors;
+  return configuredMeetingCast.get(kind) ?? [];
+}
+
+function calendarCostUsd(kind: CalendarKind): number {
+  const contexts = calendarCostContexts[kind];
+  return Number(calendarParticipants(kind).reduce((sum, agentId) => {
+    const apiModels = agentById.get(agentId)?.apiModels ?? [];
+    const apiModel =
+      (contexts?.[agentId]
+        ? apiModels.find((model) => model.context === contexts[agentId])
+        : undefined) ??
+      apiModels.find((model) => model.context === "Portfolio rooms when selected") ??
+      apiModels.find((model) => model.context === "Text calls when this role is selected") ??
+      apiModels[0];
+    return sum + (apiModel?.estimatedCostUsd ?? 0);
+  }, 0).toFixed(8));
+}
+
+function calendarCostLabel(kind: CalendarKind): string {
+  return `~$${calendarCostUsd(kind).toFixed(3)}`;
+}
 
 const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone: string; slotTone: string }> = {
   company: { icon: Building2, label: "Company", tone: "text-[var(--accent)]", slotTone: "border-t-[var(--accent)]" },
@@ -190,6 +285,13 @@ export function WeekBoard({
                     {String(definition.hour).padStart(2, "0")}:00
                   </p>
                   <p className="mt-0.5 text-xs leading-4 text-[var(--fog)]">{publicKindLabel(definition.kind)}</p>
+                  <span
+                    aria-label={`Approximate live API cost ${calendarCostLabel(definition.kind)}`}
+                    className="mt-1 flex items-center gap-1 font-mono text-[0.625rem] font-medium tracking-[0.04em] text-[var(--ash)]"
+                  >
+                    <CircleDollarSign aria-hidden="true" className="size-3" />
+                    {calendarCostLabel(definition.kind)}
+                  </span>
                 </div>
               </div>
               {days.map((day, column) => {
