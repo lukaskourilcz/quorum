@@ -190,28 +190,6 @@
       ]
     },
     {
-      "id": "gnews-ai",
-      "kind": "gnews",
-      "name": "GNews · AI",
-      "url": "https://gnews.io/api/v4/search",
-      "weight": 0.6,
-      "tags": [
-        "ai",
-        "news"
-      ],
-      "enabled": true,
-      "stage": [
-        "VALIDATION",
-        "AUDIENCE",
-        "MONETIZATION",
-        "OPTIMIZATION"
-      ],
-      "maxItems": 10,
-      "query": "artificial intelligence",
-      "credentialEnv": "GNEWS_API_KEY",
-      "missingCredential": "skip"
-    },
-    {
       "id": "google-research",
       "kind": "rss",
       "name": "Google Research",
@@ -229,29 +207,6 @@
         "OPTIMIZATION"
       ],
       "maxItems": 10
-    },
-    {
-      "id": "guardian-tech",
-      "kind": "guardian",
-      "name": "The Guardian · Technology",
-      "url": "https://content.guardianapis.com/search",
-      "weight": 0.6,
-      "tags": [
-        "tech",
-        "news"
-      ],
-      "enabled": true,
-      "stage": [
-        "VALIDATION",
-        "AUDIENCE",
-        "MONETIZATION",
-        "OPTIMIZATION"
-      ],
-      "maxItems": 10,
-      "query": "artificial intelligence",
-      "section": "technology",
-      "credentialEnv": "GUARDIAN_API_KEY",
-      "missingCredential": "skip"
     },
     {
       "id": "hf-blog",
@@ -388,28 +343,6 @@
         "OPTIMIZATION"
       ],
       "maxItems": 10
-    },
-    {
-      "id": "nytimes-tech",
-      "kind": "nytimes",
-      "name": "New York Times · AI",
-      "url": "https://api.nytimes.com/svc/search/v2/articlesearch.json",
-      "weight": 0.6,
-      "tags": [
-        "tech",
-        "news"
-      ],
-      "enabled": true,
-      "stage": [
-        "VALIDATION",
-        "AUDIENCE",
-        "MONETIZATION",
-        "OPTIMIZATION"
-      ],
-      "maxItems": 10,
-      "query": "artificial intelligence",
-      "credentialEnv": "NYTIMES_API_KEY",
-      "missingCredential": "skip"
     },
     {
       "id": "openai-blog",

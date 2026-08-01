@@ -47,9 +47,9 @@ source accounts, approval records and project switches below are connected.
 
 ## Do these before any live run
 
-- [ ] **Sign the one $50 limit** — countersign `state/decisions/2026-08-04-budget-fifty.md` (`budget-2026-08d`). Until then the code correctly keeps the older $20 all-in fallback, $15 model monthly limit and $0.70 daily pace; MMA Files live work stays off. [imp:5] [owner:me] [time:5m] [kind:decision]
-- [ ] **Sign the FightAIQ founding record** — countersign `state/decisions/2026-08-02-fightaiq-founding.md`. This approves its data-only scope, not betting, affiliates or live public probabilities. [imp:5] [owner:me] [time:5m] [kind:decision]
-- [ ] **Sign the Titty Tuesdays founding record** — countersign `state/decisions/2026-08-01-titty-tuesdays-founding.md`. This approves planning, not commerce, stock, payments, ads or publishing. [imp:5] [owner:me] [time:5m] [kind:decision]
+- [x] **Sign the one $50 limit** — countersigned in `state/decisions/2026-08-04-budget-fifty.md` (`budget-2026-08d`). The $50 all-in limit, $42 model monthly share and $2.20 daily pace are now recorded. [imp:5] [owner:me] [time:5m] [kind:decision]
+- [x] **Sign the FightAIQ founding record** — countersigned in `state/decisions/2026-08-02-fightaiq-founding.md`. This approves its data-only scope, not betting, affiliates or live public probabilities. [imp:5] [owner:me] [time:5m] [kind:decision]
+- [x] **Sign the Titty Tuesdays founding record** — countersigned in `state/decisions/2026-08-01-titty-tuesdays-founding.md`. This approves planning, not commerce, stock, payments, ads or publishing. [imp:5] [owner:me] [time:5m] [kind:decision]
 - [ ] **Rotate both model keys** — `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` exist in GitHub Actions, but earlier notes say they were shared outside the secret store. Rotate them at the providers, replace the Actions secrets and set provider billing alerts below the signed BoardlessAI limit. The local live-room proof could not call Anthropic because no local key was configured; dry proof passed. [imp:5] [owner:me] [time:20m] [kind:setup]
 - [ ] **Approve the unfinished portraits or leave them blank** — 27 of 38 agents have portraits. The 11 new FightAIQ/MMA Files roles intentionally use the text fallback until you approve the image spend and generation. Never book an unknown image-tool charge as zero. [imp:2] [owner:me] [time:5m] [kind:decision]
 
@@ -63,7 +63,7 @@ source accounts, approval records and project switches below are connected.
 
 - [ ] **Install the delivery GitHub App on `lukaskourilcz/aifirst` only** — grant Contents read/write and no broader permission; add `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY` to Quorum Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
 - [ ] **Set the reader URL** — add repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app`. It is currently missing. [imp:5] [owner:me] [time:5m] [kind:setup]
-- [ ] **Confirm Caught Up’s adopted limits** — add your approval reference to `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
+- [x] **Confirm Caught Up’s adopted limits** — the owner approval reference is recorded in `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
 - [ ] **Enable Caught Up for one reviewed delivery** — set `CAUGHT_UP_LIVE_ENABLED=true`, dispatch `cu-edition` with dry off, then verify the bilingual package, delivery receipt, `aifirst` checks and deployment. Set the switch back to `false` on any failure. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Review the first three editions** — check both articles, citations, Czech and English tone, four-frame carousels, Instagram captions and Threads drafts in `/admin`. [imp:5] [owner:me] [time:90m] [kind:content]
 

@@ -59,7 +59,7 @@ describe("Titty Tuesdays bootstrap", () => {
     expect(weights.adjustments).toEqual([]);
   });
 
-  it("keeps founding, budget, commerce and platform actions pending", async () => {
+  it("records the founding approval while keeping budget, commerce and platform actions pending", async () => {
     const [brand, founding, budget, platform] = await Promise.all([
       readFile(path.join(repoRoot, "state", "ventures", "titty-tuesdays", "BRAND.md"), "utf8"),
       readFile(path.join(repoRoot, "state", "decisions", "2026-08-01-titty-tuesdays-founding.md"), "utf8"),
@@ -67,7 +67,7 @@ describe("Titty Tuesdays bootstrap", () => {
       readFile(path.join(repoRoot, ".claude", "skills", "titty-tuesdays-brandbook", "references", "platform-policy.md"), "utf8")
     ]);
     expect(brand).toContain("No commerce, payment, inventory or availability claims");
-    expect(founding).toContain("Status: pending owner countersignature");
+    expect(founding).toContain("Status: countersigned");
     expect(budget).toContain("Automatic fallback shape B");
     expect(platform).toContain("No primary source found");
   });

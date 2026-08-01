@@ -3,11 +3,8 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { projectBluesky } from "../src/sources/adapters/bluesky.js";
 import { projectReleases } from "../src/sources/adapters/github.js";
-import { projectGnews } from "../src/sources/adapters/gnews.js";
-import { projectGuardian } from "../src/sources/adapters/guardian.js";
 import { projectHnItem } from "../src/sources/adapters/hn.js";
 import { projectHtml } from "../src/sources/adapters/html.js";
-import { projectNytimes } from "../src/sources/adapters/nytimes.js";
 import { linksFromMarkdown } from "../src/sources/adapters/reader.js";
 import { parseRssFeed } from "../src/sources/adapters/rss.js";
 import { projectSpaceflight } from "../src/sources/adapters/spaceflight.js";
@@ -32,11 +29,8 @@ const URLS = {
   arxiv: "https://export.arxiv.org/api/query",
   bluesky: "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
   github: "https://api.github.com/",
-  gnews: "https://gnews.io/api/v4/search",
-  guardian: "https://content.guardianapis.com/search",
   hn: "https://hacker-news.firebaseio.com/v0/topstories.json",
   html: "https://example.com/",
-  nytimes: "https://api.nytimes.com/svc/search/v2/articlesearch.json",
   rss: "https://example.com/feed.xml",
   spaceflight: "https://api.spaceflightnewsapi.net/v4/articles/",
   stackexchange: "https://api.stackexchange.com/2.3/questions"
@@ -51,7 +45,7 @@ function source(
     kind,
     name: `Fixture ${kind}`,
     url: URLS[kind],
-    query: ["arxiv", "bluesky", "gnews", "guardian", "nytimes", "stackexchange"].includes(
+    query: ["arxiv", "bluesky", "stackexchange"].includes(
       kind
     )
       ? "artificial intelligence"
@@ -68,14 +62,14 @@ function source(
 }
 
 describe("Caught Up source registry", () => {
-  it("ports all 35 sources, all 11 adapter kinds and every fetch host", async () => {
+  it("ports all 32 configured sources and every supported adapter kind", async () => {
     const [registry, allowlist] = await Promise.all([
       loadSourceRegistry(),
       readFile(path.join(configRoot, "network-allowlist.json"), "utf8").then(
         (value) => JSON.parse(value) as { runtimeHosts: string[] }
       )
     ]);
-    expect(registry.sources).toHaveLength(35);
+    expect(registry.sources).toHaveLength(32);
     expect(new Set(registry.sources.map(({ kind }) => kind))).toEqual(
       new Set(SOURCE_KINDS)
     );
@@ -183,7 +177,7 @@ describe("ported adapter projections", () => {
     ).toHaveLength(1);
   });
 
-  it("projects GitHub, Guardian, NYT and GNews API responses", () => {
+  it("projects GitHub releases safely", () => {
     expect(
       projectReleases(
         [
@@ -204,61 +198,6 @@ describe("ported adapter projections", () => {
         NOW
       )
     ).toHaveLength(1);
-    expect(
-      projectGuardian(
-        {
-          response: {
-            results: [
-              {
-                id: "guardian-1",
-                webTitle: "Guardian signal",
-                webUrl: "https://www.theguardian.com/technology/signal",
-                webPublicationDate: NOW.toISOString(),
-                fields: { trailText: "Measured summary" }
-              }
-            ]
-          }
-        },
-        source("guardian"),
-        NOW
-      )[0]?.summary
-    ).toBe("Measured summary");
-    expect(
-      projectNytimes(
-        {
-          response: {
-            docs: [
-              {
-                _id: "nyt-1",
-                web_url: "https://www.nytimes.com/2026/07/31/technology/signal.html",
-                headline: { main: "NYT signal" },
-                abstract: "Preferred abstract",
-                snippet: "Fallback snippet",
-                pub_date: NOW.toISOString()
-              }
-            ]
-          }
-        },
-        source("nytimes"),
-        NOW
-      )[0]?.summary
-    ).toBe("Preferred abstract");
-    expect(
-      projectGnews(
-        {
-          articles: [
-            {
-              title: "GNews signal",
-              url: "https://example.com/gnews",
-              description: "GNews summary",
-              publishedAt: NOW.toISOString()
-            }
-          ]
-        },
-        source("gnews"),
-        NOW
-      )[0]?.title
-    ).toBe("GNews signal");
   });
 
   it("projects Spaceflight and Stack Exchange without retaining article bodies", () => {
@@ -303,7 +242,7 @@ describe("source isolation and probe summary", () => {
   it("self-skips missing credentials and isolates one publisher failure", async () => {
     const success = source("rss", { id: "fixture-success" });
     const failed = source("html", { id: "fixture-failed" });
-    const skipped = source("gnews", {
+    const skipped = source("rss", {
       id: "fixture-skipped",
       credentialEnv: "MISSING_SOURCE_FIXTURE_KEY",
       missingCredential: "skip"

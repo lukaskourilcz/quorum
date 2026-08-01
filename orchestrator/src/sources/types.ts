@@ -8,10 +8,7 @@ export const SOURCE_KINDS = [
   "bluesky",
   "spaceflight",
   "github",
-  "stackexchange",
-  "guardian",
-  "nytimes",
-  "gnews"
+  "stackexchange"
 ] as const;
 
 export const SourceKindSchema = z.enum(SOURCE_KINDS);
@@ -40,7 +37,6 @@ export const SourceConfigSchema = z
     url: z.string().url().startsWith("https://"),
     query: z.string().min(1).optional(),
     repos: z.array(z.string().regex(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)).optional(),
-    section: z.string().min(1).optional(),
     site: z.string().min(1).optional(),
     weight: z.number().min(0).max(1),
     tags: z.array(z.string().min(1)).min(1).max(12),
@@ -59,7 +55,7 @@ export const SourceConfigSchema = z
       });
     }
     if (
-      ["arxiv", "bluesky", "stackexchange", "guardian", "nytimes", "gnews"].includes(
+      ["arxiv", "bluesky", "stackexchange"].includes(
         source.kind
       ) &&
       !source.query
@@ -82,7 +78,7 @@ export type SourceConfig = z.infer<typeof SourceConfigSchema>;
 
 export const SourceRegistrySchema = z.object({
   schemaVersion: z.literal(1),
-  sources: z.array(SourceConfigSchema).length(35),
+  sources: z.array(SourceConfigSchema).length(32),
   disabledByDefault: z.array(
     z.object({ kind: z.string().min(1), reason: z.string().min(1) })
   )
