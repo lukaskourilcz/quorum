@@ -74,6 +74,67 @@
         "additionalProperties": {}
       }
     },
+    "operations": {
+      "maxItems": 16,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ventureId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              {
+                "type": "string",
+                "const": "global"
+              }
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "delivery",
+              "release-proof",
+              "failure",
+              "social-gate"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ventureId",
+          "type",
+          "status",
+          "text",
+          "ref"
+        ],
+        "additionalProperties": {}
+      }
+    },
     "portfolioLine": {
       "type": "string",
       "minLength": 1,
@@ -89,6 +150,7 @@
     "schemaVersion",
     "date",
     "meetings",
+    "operations",
     "portfolioLine",
     "bodyWordCount"
   ],

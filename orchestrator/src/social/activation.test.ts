@@ -116,6 +116,24 @@ describe("per-venture social activation", () => {
     expect(checkTittyTuesdaysPost({ ...safe, content: { ...safe.content, assetPaths: ["/social/other/photo.webp"] } }).passed).toBe(false);
   });
 
+  it("refreshes health counters once per Prague day while the global kill switch blocks publishing", async () => {
+    const repoRoot = await root();
+    const stateRoot = path.join(repoRoot, "state");
+    const lockedEnvironment = { ...environment(), SOCIAL_KILL_SWITCH: "true" };
+    const report = await runSocialPublisher({
+      validateOnly: false,
+      dryIfDisabled: true,
+      now: new Date("2026-08-08T09:00:00.000Z"),
+      environment: lockedEnvironment,
+      repoRoot,
+      stateRoot,
+      configRoot: path.join(repoRoot, "config")
+    });
+    expect(report.status).toBe("paused");
+    const activation = JSON.parse(await readFile(path.join(stateRoot, "social", "activation.json"), "utf8"));
+    expect(activation.ventures["caught-up"]).toMatchObject({ counter: 0, required: 7 });
+  });
+
   it("runs fixture post, verification and immutable receipt end to end", async () => {
     const repoRoot = await root();
     const stateRoot = path.join(repoRoot, "state");

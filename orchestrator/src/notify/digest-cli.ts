@@ -17,6 +17,7 @@ import {
   dailyDigestSinkFromEnvironment,
   sendDailyDigest
 } from "./digest.js";
+import { collectDigestOperations } from "./operations.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
   const index = args.indexOf(flag);
@@ -59,6 +60,7 @@ const allInEntries: AllInCostEntry[] = [
 ];
 const allIn = allInBudgetStatus(allInEntries, month, effective.monthlyOperatingUsd);
 const weekOf = mondayOfWeek(date);
+const operations = await collectDigestOperations(stateRoot, date);
 const digest = buildDailyDigest({
   date,
   weekOf,
@@ -66,6 +68,7 @@ const digest = buildDailyDigest({
   schedule,
   dailyBudgetUsd: effective.dailyBudgetUsd,
   allInBudget: allIn,
+  operations,
   finalMeetingFailed: args.includes("--final-failed")
 });
 const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");

@@ -9,6 +9,7 @@ import type { ResolvedMeetingSlot } from "../ventures/registry.js";
 import { safeFetch } from "../security/url.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { budgetWarningLine, type AllInBudgetStatus } from "../finance/budget-alert.js";
+import type { DigestOperation } from "../contracts/daily-digest.js";
 
 const REQUIRED_DIGESTS_PER_MONTH = 31;
 const REQUIRED_DIGESTS_PER_DAY = 1;
@@ -51,6 +52,7 @@ export function buildDailyDigest(input: {
   dailyBudgetUsd: number;
   allInBudget?: AllInBudgetStatus;
   finalMeetingFailed?: boolean;
+  operations?: readonly DigestOperation[];
 }): DailyDigest {
   const meetings = input.schedule.map((slot, index) => {
     const record = slotRecord(input.records, input.date, slot.phase);
@@ -75,14 +77,16 @@ export function buildDailyDigest(input: {
   const spend = meetings.reduce((sum, meeting) => sum + meeting.costUsd, 0);
   const warning = input.allInBudget ? budgetWarningLine(input.allInBudget) : null;
   const portfolioLine = warning ?? `Recorded API spend $${spend.toFixed(4)} against the $${input.dailyBudgetUsd.toFixed(2)} daily budget.`;
+  const operations = [...(input.operations ?? [])];
   const bodyWordCount = countWords(portfolioLine) + meetings.reduce(
     (sum, meeting) => sum + meeting.bullets.reduce((total, bullet) => total + countWords(bullet.text), 0),
     0
-  );
+  ) + operations.reduce((sum, operation) => sum + countWords(operation.text), 0);
   return DailyDigestSchema.parse({
     schemaVersion: "daily-digest/1",
     date: input.date,
     meetings,
+    operations,
     portfolioLine,
     bodyWordCount
   });
@@ -100,7 +104,11 @@ export function renderDailyDigestText(digest: DailyDigest): string {
       ...meetings.flatMap((meeting) => meeting.bullets.map((bullet) =>
         `- ${meeting.held ? "Held" : "Skipped"}: ${bullet.text} ${bullet.roomLink}`
       ))
-    ])
+    ]),
+    "operations",
+    ...digest.operations.map((operation) =>
+      `- ${operation.type}: ${operation.text}${operation.ref ? ` [${operation.ref}]` : ""}`
+    )
   ].join("\n");
 }
 

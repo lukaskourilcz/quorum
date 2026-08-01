@@ -16,6 +16,7 @@ import {
 } from "../src/notify/digest.js";
 import { repoRoot } from "../src/paths.js";
 import { loadVentureRegistry, resolveScheduledClock } from "../src/ventures/registry.js";
+import { DigestOperationSchema } from "../src/contracts/daily-digest.js";
 
 const roots: string[] = [];
 afterEach(async () => {
@@ -56,6 +57,34 @@ describe("one daily portfolio digest", () => {
     const final = digest.meetings.at(-1)!;
     expect(final.held).toBe(false);
     expect(final.bullets[0]?.text).toContain("Final scheduled cycle failed");
+  });
+
+  it("includes deliveries, release proofs, failures and social unlock counters", async () => {
+    const base = await fixtureDigest();
+    const operation = (type: "delivery" | "release-proof" | "failure" | "social-gate", text: string) => DigestOperationSchema.parse({
+      ventureId: "caught-up",
+      type,
+      status: "recorded",
+      text,
+      ref: null
+    });
+    const digest = buildDailyDigest({
+      date: base.date,
+      weekOf: mondayOfWeek(base.date),
+      records: [],
+      schedule: [],
+      dailyBudgetUsd: 0.7,
+      operations: [
+        operation("delivery", "Caught Up delivery recorded."),
+        operation("release-proof", "Caught Up release proof passed."),
+        operation("failure", "No delivery failure was recorded."),
+        operation("social-gate", "Caught Up health counter 4/7.")
+      ]
+    });
+    const text = renderDailyDigestText(digest);
+    expect(text).toContain("release-proof");
+    expect(text).toContain("health counter 4/7");
+    expect(digest.bodyWordCount).toBeLessThanOrEqual(400);
   });
 
   it("replaces the narrow API line with an all-in warning and project breakdown at 80 percent", async () => {

@@ -12,6 +12,16 @@ const DigestBulletSchema = openObject({
   roomLink: z.string().regex(/^\/(?:meetings|standups|calendar)\//)
 });
 
+export const DigestOperationSchema = openObject({
+  ventureId: z.union([VentureIdSchema, z.literal("global")]),
+  type: z.enum(["delivery", "release-proof", "failure", "social-gate"]),
+  status: z.string().trim().min(1).max(40),
+  text: z.string().trim().min(1).max(240).refine((text) => countWords(text) <= 24, {
+    message: "Digest operation lines must stay within 24 words"
+  }),
+  ref: z.string().trim().min(1).max(500).nullable()
+});
+
 export const DailyDigestSchema = openObject({
   schemaVersion: z.literal("daily-digest/1"),
   date: DateSchema,
@@ -22,6 +32,7 @@ export const DailyDigestSchema = openObject({
     bullets: z.array(DigestBulletSchema).min(1),
     costUsd: z.number().finite().nonnegative()
   })),
+  operations: z.array(DigestOperationSchema).max(16),
   portfolioLine: z.string().trim().min(1).max(240),
   bodyWordCount: z.number().int().nonnegative().max(400)
 }).superRefine((digest, context) => {
@@ -31,7 +42,7 @@ export const DailyDigestSchema = openObject({
       0
     ),
     0
-  );
+  ) + digest.operations.reduce((total, operation) => total + countWords(operation.text), 0);
   if (calculated !== digest.bodyWordCount) {
     context.addIssue({
       code: "custom",
@@ -42,3 +53,4 @@ export const DailyDigestSchema = openObject({
 });
 
 export type DailyDigest = z.infer<typeof DailyDigestSchema>;
+export type DigestOperation = z.infer<typeof DigestOperationSchema>;

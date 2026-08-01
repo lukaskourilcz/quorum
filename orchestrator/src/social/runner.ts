@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { SocialPostReceiptSchema } from "../contracts/autonomy.js";
-import { atomicWriteJson, withFileLock } from "../state.js";
+import { SocialActivationSchema, SocialPostReceiptSchema } from "../contracts/autonomy.js";
+import { atomicWriteJson, readJson, withFileLock } from "../state.js";
 import { configRoot as defaultConfigRoot, repoRoot as defaultRepoRoot, stateRoot as defaultStateRoot } from "../paths.js";
+import { pragueClockParts } from "../meetings/clock.js";
 import { refreshSocialActivation, pauseVentureSocial } from "./activation.js";
 import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
 import { createMetaPublishAdapter } from "./meta.js";
@@ -50,18 +51,23 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
   const repoRoot = options.repoRoot ?? defaultRepoRoot;
   const stateRoot = options.stateRoot ?? defaultStateRoot;
   const configRoot = options.configRoot ?? defaultConfigRoot;
-  if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "PAUSED")) || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
+  if (await exists(path.join(stateRoot, "PAUSED"))) {
     return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
   }
 
   return withFileLock(stateRoot, ".social-lock", async () => {
-    const activation = await refreshSocialActivation({
+    const current = SocialActivationSchema.safeParse(await readJson<unknown>(stateRoot, "social/activation.json", null));
+    const checkedToday = current.success && pragueClockParts(new Date(current.data.updatedAt)).date === pragueClockParts(now).date;
+    const activation = checkedToday ? current.data : await refreshSocialActivation({
       repoRoot,
       stateRoot,
       environment,
       now,
       safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
     });
+    if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
+      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
+    }
     const registry = ChannelRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "channels.json"), "utf8")) as unknown);
     const queueDirectory = path.join(stateRoot, "social", "queue");
     const files = await readdir(queueDirectory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : Promise.reject(error));

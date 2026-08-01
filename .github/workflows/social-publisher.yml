@@ -22,7 +22,6 @@ concurrency:
 jobs:
   publish:
     name: Validate or publish approved queue
-    if: ${{ vars.SOCIAL_KILL_SWITCH != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -48,10 +47,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Honor social kill switch
+      - name: Honor repository pause
         run: |
-          if test -e state/PAUSED || test -e state/SOCIAL_PAUSED; then
-            echo "A repository social pause is present; refusing to run."
+          if test -e state/PAUSED; then
+            echo "A repository-wide pause is present; refusing to run."
             exit 1
           fi
 
