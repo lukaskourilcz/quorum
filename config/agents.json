@@ -712,11 +712,11 @@
       "kind": "specialist",
       "provider": "Anthropic",
       "ventures": "global",
-      "department": "Editorial (Caught Up)",
-      "title": "Chief Copy Agent",
-      "mission": "Kill slop. Review every article and every public transcript for grammar, wording, format and generated-text tells before anything ships.",
+      "department": "Editorial Quality",
+      "title": "Portfolio Copy Quality Agent",
+      "mission": "Review Caught Up and MMA Files articles plus public transcripts for grammar, wording, format, register fit and generated-text tells before anything ships.",
       "responsibilities": [
-        "Block copy review of edition drafts",
+        "Block copy review of Caught Up and MMA Files drafts",
         "Run the boardroom-register pass on transcripts",
         "Maintain the banned-construction list with the stop-slop skill",
         "Force one rewrite when quality fails"
@@ -727,8 +727,8 @@
         "Design"
       ],
       "decisionRights": [
-        "Block one edition draft and require one rewrite",
-        "Convert a second quality block into NO_EDITION"
+        "Block one draft and require one rewrite",
+        "Convert a second quality block into NO_EDITION or a killed MMA Files slot"
       ],
       "ownedKpiIds": [
         "copy.slop_block_rate",
@@ -763,13 +763,12 @@
       "kind": "specialist",
       "provider": "Anthropic",
       "ventures": ["caught-up", "mma-files"],
-      "department": "Editorial (Caught Up)",
+      "department": "Czech Editorial",
       "title": "Czech Language Editor",
-      "mission": "Turn each English edition into a natural Czech article without changing its facts, sources, uncertainty or intent.",
+      "mission": "Turn each cleared Caught Up or MMA Files English article into natural Czech without changing its facts, sources, uncertainty or intent.",
       "responsibilities": [
-        "Adapt the cleared English article into natural Czech",
-        "Write Czech Instagram carousel copy and its caption",
-        "Write the Czech Threads draft",
+        "Adapt each cleared English article in the venture-specific Czech register",
+        "Review Czech social copy only when that venture's social production is enabled",
         "Block calques, bureaucratic filler and translation drift"
       ],
       "notResponsibleFor": [
@@ -789,7 +788,7 @@
       "successChecks": [
         "Every Czech article reads as native Czech rather than translated English",
         "Every number, source URL and uncertainty marker survives the adaptation",
-        "Czech carousel and Threads copy clear the same factual parity gate"
+        "Any enabled Czech social draft clears the same factual parity gate"
       ],
       "capabilityTags": ["editorial:czech", "translation:fidelity", "social:czech"],
       "status": "active",

@@ -52,6 +52,7 @@ type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "incubator" | "fi
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
+const morningDecisionRoom: readonly AgentId[] = [...companyCouncil, "SPARK", "VAULT"];
 const articleAuthors: readonly AgentId[] = ["JAB", "HACEK"];
 const configuredMeetingCast = new Map<string, readonly AgentId[]>(
   ventureRegistrySource.ventures.flatMap((venture) =>
@@ -69,7 +70,9 @@ const calendarCostContexts: Partial<
     VIZE: "Company council meetings",
     FORGE: "Company council meetings",
     PULSE: "Company and portfolio meetings",
-    AUDIT: "Company and portfolio meetings"
+    AUDIT: "Company and portfolio meetings",
+    SPARK: "Caught Up idea and portfolio rooms",
+    VAULT: "Caught Up idea checks"
   },
   "venture-afternoon": {
     VIZE: "Company council meetings",
@@ -113,9 +116,8 @@ const calendarCostContexts: Partial<
 };
 
 function calendarParticipants(kind: CalendarKind): readonly AgentId[] {
-  if (kind === "venture-morning" || kind === "venture-afternoon" || kind === "venture-night") {
-    return companyCouncil;
-  }
+  if (kind === "venture-morning") return morningDecisionRoom;
+  if (kind === "venture-afternoon" || kind === "venture-night") return [];
   if (kind === "article-am" || kind === "article-pm") return articleAuthors;
   return configuredMeetingCast.get(kind) ?? [];
 }
@@ -198,6 +200,14 @@ function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string
         backgroundColor: "color-mix(in srgb, var(--destructive) 17%, var(--surface))",
         backgroundImage: "linear-gradient(135deg, color-mix(in srgb, var(--destructive) 10%, transparent), transparent 62%)"
       }
+    };
+  }
+  if (status === "not-needed") {
+    return {
+      icon: CircleMinus,
+      label: "Not needed",
+      tone: "text-[var(--fog)]",
+      surface: { backgroundColor: "color-mix(in srgb, var(--surface) 86%, var(--page))" }
     };
   }
   return {
@@ -379,7 +389,7 @@ export function WeekBoard({
           })}
         </div>
         <div aria-label="Meeting status" className="flex flex-wrap gap-x-4 gap-y-3">
-          {(["held", "missed", "test", "scheduled"] as DisplayStatus[]).map((value) => {
+          {(["held", "missed", "test", "not-needed", "scheduled"] as DisplayStatus[]).map((value) => {
             const details = statusDetails(value);
             const StatusIcon = details.icon;
             return (

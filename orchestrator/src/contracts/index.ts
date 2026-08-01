@@ -8,6 +8,7 @@ export * from "./edition-package.js";
 export * from "./idea-ledger.js";
 export * from "./marketing-plan.js";
 export * from "./meeting-email.js";
+export * from "./meeting-agenda.js";
 export * from "./meeting-record.js";
 export * from "./mma.js";
 export * from "./mma-files.js";

@@ -44,6 +44,7 @@ export interface PublicMeetingRecord {
     reason: string;
   }>;
   editionRef?: string;
+  agendaRef?: string;
   sharperData?: { outcome: "proposal" | "nothing-new"; summary: string; ideaRef?: string; evidenceRefs: string[] };
   roomTranscript: RoomTranscript;
   generatedAt: string;
@@ -230,13 +231,14 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
 
   const caughtUpIdeaRef = record.caughtUpIdeaRef === undefined ? undefined : text(record.caughtUpIdeaRef, 160);
   const editionRef = record.editionRef === undefined ? undefined : text(record.editionRef, 160);
+  const agendaRef = record.agendaRef === undefined ? undefined : text(record.agendaRef, 160);
   const sharper = record.sharperData === undefined ? null : object(record.sharperData);
   const sharperOutcome = sharper?.outcome === "proposal" || sharper?.outcome === "nothing-new" ? sharper.outcome : null;
   const sharperSummary = sharper ? text(sharper.summary, 280) : null;
   const sharperEvidence = sharper ? stringArray(sharper.evidenceRefs) : null;
   const sharperIdeaRef = sharper?.ideaRef === undefined ? undefined : text(sharper.ideaRef, 160);
   const mmaKind = kind === "mma-intake" || kind === "mma-analysis";
-  if ((record.caughtUpIdeaRef !== undefined && !caughtUpIdeaRef) || (record.editionRef !== undefined && !editionRef) || (mmaKind && (!sharper || !sharperOutcome || !sharperSummary || !sharperEvidence)) || (sharper?.ideaRef !== undefined && !sharperIdeaRef)) return null;
+  if ((record.caughtUpIdeaRef !== undefined && !caughtUpIdeaRef) || (record.editionRef !== undefined && !editionRef) || (record.agendaRef !== undefined && !agendaRef) || (mmaKind && (!sharper || !sharperOutcome || !sharperSummary || !sharperEvidence)) || (sharper?.ideaRef !== undefined && !sharperIdeaRef)) return null;
 
   return {
     id: `${meetingDate}-${kind}`,
@@ -258,6 +260,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
     ...(caughtUpIdeaRef ? { caughtUpIdeaRef } : {}),
     ideaVerdicts,
     ...(editionRef ? { editionRef } : {}),
+    ...(agendaRef ? { agendaRef } : {}),
     ...(sharperOutcome && sharperSummary && sharperEvidence ? { sharperData: { outcome: sharperOutcome, summary: sharperSummary, ...(sharperIdeaRef ? { ideaRef: sharperIdeaRef } : {}), evidenceRefs: sharperEvidence } } : {}),
     roomTranscript: { openedAt, closedAt, gavel, setting, turns },
     generatedAt

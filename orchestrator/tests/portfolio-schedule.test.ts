@@ -12,7 +12,8 @@ import {
   composeMeetingRouteDefinition,
   cronPayloads,
   loadVentureRegistry,
-  resolveMeetingClock
+  resolveMeetingClock,
+  scheduledCronExpressions
 } from "../src/ventures/registry.js";
 
 const shapeA = `Status: countersigned
@@ -96,6 +97,7 @@ describe("portfolio schedule and budget gate", () => {
     expect(payloads.filter((item) => item.phase === "article-am").map((item) => item.cron)).toEqual(["0 8 * * *", "0 9 * * *"]);
     expect(payloads.filter((item) => item.phase === "article-pm").map((item) => item.cron)).toEqual(["0 16 * * *", "0 17 * * *"]);
     expect(payloads.filter((item) => item.phase === "mag-desk").map((item) => item.cron)).toEqual(["0 18 * * *", "0 19 * * *"]);
+    expect(scheduledCronExpressions(await loadVentureRegistry())).toHaveLength(17);
   });
 
   it("runs PALATE only as a pre-step on each taste venture's first meeting", async () => {
@@ -109,13 +111,13 @@ describe("portfolio schedule and budget gate", () => {
 
 describe("Titty Tuesdays cadence wheel", () => {
   const cases = [
-    ["2026-08-03", ["FUNNEL", "SPARK"]],
-    ["2026-08-04", ["INSTAGRAM", "THREADS", "QUILL"]],
-    ["2026-08-05", ["STUNT"]],
-    ["2026-08-06", ["COHORT", "FUNNEL"]],
-    ["2026-08-07", ["SCENE", "PALATE"]],
-    ["2026-08-08", ["FRAME", "LENS"]],
-    ["2026-08-09", ["SCRIBE", "FUNNEL"]]
+    ["2026-08-03", ["FUNNEL"]],
+    ["2026-08-04", ["STUNT"]],
+    ["2026-08-05", ["COHORT"]],
+    ["2026-08-06", ["SCENE"]],
+    ["2026-08-07", ["PALATE"]],
+    ["2026-08-08", ["SPARK"]],
+    ["2026-08-09", ["VAULT"]]
   ] as const;
 
   it.each(cases)("seats only the %s weekday guests", (date, guests) => {
@@ -125,7 +127,7 @@ describe("Titty Tuesdays cadence wheel", () => {
     expect(slot.cast.slice(3)).toEqual(guests);
   });
 
-  it("adds QUILL to Saturday only when captions are needed", () => {
+  it("adds QUILL only when a separate caption brief is explicitly needed", () => {
     expect(resolveTittyTuesdaysSlot({ date: "2026-08-08" }).cast).not.toContain("QUILL");
     expect(resolveTittyTuesdaysSlot({ date: "2026-08-08", captionsNeeded: true }).cast).toContain("QUILL");
   });

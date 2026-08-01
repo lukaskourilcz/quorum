@@ -500,13 +500,13 @@ const profileCopy: Record<
   STET: {
     operatingPrinciple: "Nothing is poised. Say what happened.",
     output: "Blocking copy verdict and one rewrite request",
-    currentFocus: "Caught Up copy quality",
+    currentFocus: "Caught Up and MMA Files copy quality",
     publicTrackRecord: null
   },
   HACEK: {
     operatingPrinciple: "Překlad není převod slov, ale přesný český článek.",
-    output: "Czech article, carousel copy and Threads draft",
-    currentFocus: "Caught Up Czech edition",
+    output: "Venture-specific Czech article and parity verdict",
+    currentFocus: "Caught Up and MMA Files Czech editions",
     publicTrackRecord: null
   },
   SPARK: {
@@ -614,7 +614,7 @@ const profileCopy: Record<
   JAB: {
     operatingPrinciple: "Write the new fact first and never fill a gap from memory.",
     output: "Sourced English draft and Czech localization brief",
-    currentFocus: "Bilingual MMA Files articles",
+    currentFocus: "MMA Files English articles",
     publicTrackRecord: null
   },
   REACH: {

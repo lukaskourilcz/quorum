@@ -7,6 +7,7 @@ import { EditionPackageSchema } from "./edition-package.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
+import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
 import {
   AdjustmentEntrySchema,
@@ -37,6 +38,7 @@ export const ContractSchemas = {
   "idea-ledger": IdeaLedgerEntrySchema,
   "marketing-plan": MarketingPlanSchema,
   "meeting-email": MeetingEmailSchema,
+  "meeting-agenda": MeetingAgendaQueueSchema,
   "meeting-record": MeetingRecordSchema,
   "adjustment-entry": AdjustmentEntrySchema,
   "bet-type-catalog": BetTypeCatalogSchema,

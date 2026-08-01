@@ -16,7 +16,7 @@ export type CalendarKind =
   | "article-am"
   | "article-pm"
   | "venture-night";
-export type CalendarStatus = "scheduled" | "held" | "missed";
+export type CalendarStatus = "scheduled" | "held" | "missed" | "not-needed";
 
 export interface CalendarDefinition {
   hour: number;
@@ -127,7 +127,7 @@ export function buildPublicCalendarFeed(input: {
 }): PublicCalendarFeed {
   const weekOf = mondayOfCalendarWeek(input.weekOf);
   const definitions = input.definitions ?? CALENDAR_SLOTS;
-  const records = new Map<string, { href: string; summary: string; fixture: boolean }>();
+  const records = new Map<string, { href: string; summary: string; fixture: boolean; status?: PublicMeetingRecord["status"] }>();
   for (const standup of input.standups) {
     const kind = ventureKind(standup.phase);
     if (kind) records.set(`${standup.date}:${kind}`, {
@@ -140,7 +140,8 @@ export function buildPublicCalendarFeed(input: {
     records.set(`${meeting.date}:${meeting.kind}`, {
       href: `/meetings/${meeting.id}`,
       summary: meeting.decision.summary.slice(0, 180),
-      fixture: meeting.fixture
+      fixture: meeting.fixture,
+      status: meeting.status
     });
   }
   const slots: CalendarSlot[] = [];
@@ -153,7 +154,13 @@ export function buildPublicCalendarFeed(input: {
         at: at.toISOString(),
         tz: "Europe/Prague",
         kind: definition.kind,
-        status: record ? "held" : at.getTime() < input.now.getTime() ? "missed" : "scheduled",
+        status: record?.status === "PAUSED"
+          ? "not-needed"
+          : record
+            ? "held"
+            : at.getTime() < input.now.getTime()
+              ? "missed"
+              : "scheduled",
         ...(record ? {
           meetingHref: record.href,
           decisionOneLiner: record.summary,

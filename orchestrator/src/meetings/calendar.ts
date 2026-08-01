@@ -93,7 +93,13 @@ export function buildCalendarFeed(input: {
       const kind = slotKind(definition.phase);
       const at = pragueSlotInstant(date, definition.hour);
       const record = bySlot.get(`${date}:${kind}`);
-      const status = record ? "held" : at.getTime() < input.now.getTime() ? "missed" : "scheduled";
+      const status = record?.status === "PAUSED"
+        ? "not-needed"
+        : record
+          ? "held"
+          : at.getTime() < input.now.getTime()
+            ? "missed"
+            : "scheduled";
       slots.push({
         at: at.toISOString(),
         tz: PRAGUE_TIME_ZONE,

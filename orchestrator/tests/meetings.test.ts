@@ -102,7 +102,7 @@ describe("Caught Up meeting records", () => {
     expect(record.decision.outcome).toBe("NO_EDITION");
     expect(record.voteMatrix.every((vote) => vote.firstChoice === "NO_EDITION")).toBe(true);
     expect(transcriptViolations(record.roomTranscript, {
-      ledgerValues: [0, 0.08, 20],
+      ledgerValues: [0, 0.08, 50],
       evidenceValues: []
     })).toEqual([]);
   });
@@ -224,7 +224,7 @@ describe("Caught Up meeting records", () => {
     ]);
     expect(record.roomTranscript.turns).toHaveLength(5);
     expect(transcriptViolations(record.roomTranscript, {
-      ledgerValues: [0.004, 0.03, 1.2, 20],
+      ledgerValues: [0.004, 0.03, 1.2, 50],
       evidenceValues: []
     })).toEqual([]);
   });
@@ -245,6 +245,17 @@ describe("meeting calendar", () => {
     expect(feed.slots.some((slot) => slot.status === "missed")).toBe(true);
     expect(feed.slots.some((slot) => slot.status === "scheduled")).toBe(true);
     expect(pragueSlotInstant("2026-01-15", 5).toISOString()).toBe("2026-01-15T04:00:00.000Z");
+  });
+
+  it("marks a scheduler checkpoint as not needed instead of missed or held", async () => {
+    const record = await caughtUpRecord("cu-product");
+    const feed = CalendarFeedSchema.parse(buildCalendarFeed({
+      weekOf: mondayOfWeek(record.date),
+      records: [{ ...record, status: "PAUSED" }],
+      now: new Date("2026-08-04T16:00:00.000Z")
+    }));
+    expect(feed.slots.find((slot) => slot.kind === "cu-product" && slot.meetingRef)?.status)
+      .toBe("not-needed");
   });
 
   it("converts committed legacy venture standups for calendar generation", async () => {

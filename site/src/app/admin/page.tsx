@@ -334,6 +334,7 @@ export default async function AdminPage({
             </div>
             <div className="grid gap-4 lg:grid-cols-2">
               <StatePanel content={state.inbox} title="Things only you can approve" />
+              <StatePanel content={state.meetingAgendas} title="Specialist meeting agendas" />
               <StatePanel content={state.business} title="Business" />
               <StatePanel content={state.brand} title="Brand" />
               <StatePanel content={state.opportunities} title="Business ideas" />

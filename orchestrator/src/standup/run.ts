@@ -18,6 +18,7 @@ export function createOfflineStandup(input: {
   now: Date;
   evidenceRefs?: string[];
   caughtUpIdea?: IdeaScreeningResult;
+  agentsParticipated?: boolean;
 }): Standup {
   const outcome =
     input.status === "INSUFFICIENT_EVIDENCE" ? "NO_ACTION" : input.status;
@@ -46,6 +47,7 @@ export function createOfflineStandup(input: {
       };
   const openedAt = input.now.toISOString();
   const closedAt = new Date(input.now.getTime() + 2_000).toISOString();
+  const agentsParticipated = input.agentsParticipated ?? true;
 
   return StandupSchema.parse({
     schemaVersion: 1,
@@ -74,8 +76,10 @@ export function createOfflineStandup(input: {
     participantReasons: [
       ...input.room.selectedParticipants.map((participant) => ({
         agent: participant.agent,
-        reason: participant.reason,
-        participated: true
+        reason: agentsParticipated
+          ? participant.reason
+          : "registered for the checkpoint but not called because this shift is deterministic",
+        participated: agentsParticipated
       })),
       ...input.room.skippedParticipants.map((participant) => ({
         agent: participant.agent,
@@ -98,7 +102,7 @@ export function createOfflineStandup(input: {
       evidenceRefs: input.evidenceRefs ?? []
     },
     proposals: [
-      ...input.room.selectedParticipants
+      ...(agentsParticipated ? input.room.selectedParticipants : [])
       .filter(({ agent }) => ["VIZE", "FORGE", "PULSE", "AUDIT"].includes(agent))
       .map(({ agent }) => ({
         agent,
@@ -116,7 +120,7 @@ export function createOfflineStandup(input: {
           : []
       }] : [])
     ],
-    voteMatrix: input.room.selectedParticipants
+    voteMatrix: (agentsParticipated ? input.room.selectedParticipants : [])
       .filter(({ agent }) => ["VIZE", "FORGE", "PULSE", "AUDIT"].includes(agent))
       .map(({ agent }) => ({
         voter: agent,
@@ -128,7 +132,7 @@ export function createOfflineStandup(input: {
         id: `TASK-${input.cycleId}-001`,
         owner: shiftTask.owner,
         summary: shiftTask.summary,
-        status: "planned"
+        status: agentsParticipated ? "planned" : "skipped"
       }
     ],
     growthPlan: "NO_POST — there is no evidence-backed venture fact to distribute.",
@@ -151,7 +155,9 @@ export function createOfflineStandup(input: {
           sentAt: openedAt,
           text: input.fixture
             ? "This fixture opens a deterministic review. No live agent position is being presented."
-            : "The bounded operating review opens."
+            : agentsParticipated
+              ? "The bounded operating review opens."
+              : "The deterministic checkpoint records the handoff. No council model was called."
         },
         {
           agent: "LEDGER",

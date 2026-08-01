@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "meeting-agenda-queue/1"
+    },
+    "agendas": {
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "string",
+            "const": "meeting-agenda/1"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^agenda-[a-f0-9]{16}$"
+          },
+          "ventureId": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "tt-marketing",
+              "incubator-scan",
+              "incubator-synthesis",
+              "mma-intake",
+              "mma-analysis",
+              "mag-editorial",
+              "mag-desk"
+            ]
+          },
+          "requestedBy": {
+            "type": "string",
+            "enum": [
+              "VIZE",
+              "FORGE",
+              "PULSE",
+              "AUDIT",
+              "SCOUT",
+              "SCRIBE",
+              "LENS",
+              "QUILL",
+              "RADAR",
+              "KEEPER",
+              "THREADS",
+              "INSTAGRAM",
+              "PEOPLE",
+              "LEDGER",
+              "HERALD",
+              "STET",
+              "HACEK",
+              "SPARK",
+              "VAULT",
+              "FRAME",
+              "RELAY",
+              "ANGLE",
+              "COHORT",
+              "FUNNEL",
+              "PALATE",
+              "SCENE",
+              "STUNT",
+              "CORNER",
+              "SPOTTER",
+              "TAPE",
+              "SIGMA",
+              "VIG",
+              "SONAR",
+              "CANVAS",
+              "JAB",
+              "REACH",
+              "SPLIT",
+              "PIVOT"
+            ]
+          },
+          "sourcePhase": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "sourceMeetingRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 280
+          },
+          "evidenceRefs": {
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "requestedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "notBefore": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "consumed",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "consumedBy": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "consumedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "ventureId",
+          "phase",
+          "requestedBy",
+          "sourcePhase",
+          "sourceMeetingRef",
+          "summary",
+          "evidenceRefs",
+          "requestedAt",
+          "notBefore",
+          "expiresAt",
+          "status"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "agendas",
+    "updatedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/meeting-agenda.schema.json"
+}

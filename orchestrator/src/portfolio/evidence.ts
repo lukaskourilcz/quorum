@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { configRoot } from "../paths.js";
@@ -75,7 +76,7 @@ export async function refreshFightAiQEvidence(input: {
   root: string;
   date: string;
   now: Date;
-}): Promise<{ artifactPaths: string[]; evidenceRefs: string[] }> {
+}): Promise<{ artifactPaths: string[]; evidenceRefs: string[]; contentHash: string; materialChange: boolean }> {
   const [registry, context] = await Promise.all([
     loadMmaSourceRegistry(),
     sourceContext(input.now)
@@ -155,10 +156,31 @@ export async function refreshFightAiQEvidence(input: {
     .filter((result) => result.status === "success")
     .map((result) => `source:${result.sourceId}:${input.date}`);
   const artifactPath = `ventures/fightaiq/source-snapshots/${input.date}.json`;
+  const previousDate = new Date(Date.parse(`${input.date}T12:00:00.000Z`) - 86_400_000)
+    .toISOString()
+    .slice(0, 10);
+  const [sameDaySnapshot, previousSnapshot] = await Promise.all([
+    readJson<{ contentHash?: string }>(input.root, artifactPath, {}),
+    readJson<{ contentHash?: string }>(
+      input.root,
+      `ventures/fightaiq/source-snapshots/${previousDate}.json`,
+      {}
+    )
+  ]);
+  const contentHash = createHash("sha256")
+    .update(JSON.stringify(results.map(({ sourceId, status, items, quota }) => ({
+      sourceId,
+      status,
+      items,
+      ...(quota ? { quota: { exhausted: quota.exhausted } } : {})
+    }))))
+    .digest("hex");
+  const priorContentHash = sameDaySnapshot.contentHash ?? previousSnapshot.contentHash ?? null;
   await atomicWriteJson(input.root, artifactPath, {
     schemaVersion: "fightaiq-source-snapshot/1",
     date: input.date,
     retrievedAt: input.now.toISOString(),
+    contentHash,
     evidenceRefs,
     sources: results
   });
@@ -171,6 +193,8 @@ export async function refreshFightAiQEvidence(input: {
   });
   return {
     artifactPaths: [artifactPath, ...(results.some((result) => result.quota) ? [quotaPath] : []), ...normalizedPaths],
-    evidenceRefs
+    evidenceRefs,
+    contentHash,
+    materialChange: priorContentHash !== contentHash
   };
 }

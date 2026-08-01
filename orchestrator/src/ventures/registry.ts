@@ -125,6 +125,10 @@ export function cronPayloads(registry: VentureRegistry): Array<{
   ]);
 }
 
+export function scheduledCronExpressions(registry: VentureRegistry): string[] {
+  return [...new Set(cronPayloads(registry).map(({ cron }) => cron))];
+}
+
 export function ventureIdForPhase(
   registry: VentureRegistry,
   phase: string

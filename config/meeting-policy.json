@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "meeting-policy/1",
+  "agendaRequiredPhases": [
+    "tt-marketing",
+    "incubator-scan",
+    "incubator-synthesis",
+    "mma-analysis",
+    "mag-desk"
+  ],
+  "changeTriggeredPhases": ["mma-intake"],
+  "servicePhases": ["cu-edition", "cu-product", "mag-editorial", "article-am", "article-pm"],
+  "transitions": {
+    "morning": ["tt-marketing", "incubator-scan", "mma-intake", "mag-editorial", "mag-desk"],
+    "tt-marketing": ["tt-marketing"],
+    "incubator-scan": ["incubator-synthesis"],
+    "incubator-synthesis": ["incubator-scan"],
+    "mma-intake": ["mma-analysis", "mag-editorial", "mag-desk"],
+    "mma-analysis": ["mma-intake", "mag-editorial"],
+    "mag-editorial": ["mag-desk", "mma-intake"],
+    "mag-desk": ["mag-editorial", "mma-intake"]
+  },
+  "maxPending": 24,
+  "maxRequestsPerMeeting": 1,
+  "ttlDays": 3
+}

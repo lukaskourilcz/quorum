@@ -27,6 +27,13 @@ import {
 import { isCaughtUpPhase, isPortfolioPhase } from "./meetings/clock.js";
 import { pragueClockParts } from "./meetings/clock.js";
 import {
+  MEETING_AGENDA_PATH,
+  loadMeetingPolicy,
+  mayRequestMeeting,
+  nextAgendaDate,
+  requestMeetingAgenda
+} from "./meetings/agenda.js";
+import {
   createLiveEditionMeeting,
   createLiveProductMeeting,
   createOfflineCaughtUpMeeting,
@@ -67,7 +74,9 @@ import {
 } from "./shifts.js";
 import {
   composeMeetingRouteDefinition,
-  loadVentureRegistry
+  getVentureMeetingDefinition,
+  loadVentureRegistry,
+  parseCadenceHour
 } from "./ventures/registry.js";
 import {
   caughtUpSocialProductionEnabled,
@@ -804,14 +813,16 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     );
   }
   if (isPortfolioPhase(options.phase)) {
-    return runPortfolioCycle({
-      phase: options.phase,
+    const phase = options.phase;
+    const run = () => runPortfolioCycle({
+      phase,
       cycleId,
       dry: options.dry,
       explainBudget: options.explainBudget,
       explainRouting: options.explainRouting,
       now
     });
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
   }
   if (options.phase === "article-am" || options.phase === "article-pm") {
     if (!options.dry) {
@@ -871,7 +882,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         }
       >;
     };
-    const callRoles = ["VIZE", "FORGE", "PULSE", "AUDIT"];
+    const callRoles = venturePhase === "morning"
+      ? ["VIZE", "FORGE", "PULSE", "AUDIT"]
+      : [];
     const callGraph = callRoles.map((role) => {
       const model = modelConfig.roles[role];
       if (!model) {
@@ -955,7 +968,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const artifactRoot = options.dry
       ? path.join(repoRoot, "tmp", "dry-run", "state")
       : stateRoot;
-    const liveCouncil = !options.dry && venturePhase !== "founding"
+    const liveCouncil = !options.dry && venturePhase === "morning"
       ? await collectLiveCouncil({
           cycleId,
           phase: venturePhase,
@@ -1001,6 +1014,48 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         monthAllInUsd: ledgerSpend(ledger, (entry) => entry.ts.slice(0, 7) === month)
       };
     }
+    const meetingAgendaIds: string[] = [];
+    let meetingAgendaStateChanged = false;
+    if (measuredCouncil && venturePhase === "morning") {
+      const approvals = measuredCouncil.positions.filter((position) => position.recommendation === "approve");
+      const auditApproved = approvals.some((position) => position.agent === "AUDIT");
+      const request = measuredCouncil.positions.find((position) =>
+        position.agent !== "AUDIT" && position.meetingRequest !== null
+      );
+      if (auditApproved && approvals.length >= 3 && request?.meetingRequest) {
+        const [meetingPolicy, ventureRegistry] = await Promise.all([
+          loadMeetingPolicy(),
+          loadVentureRegistry()
+        ]);
+        if (mayRequestMeeting(meetingPolicy, venturePhase, request.meetingRequest.phase)) {
+          const target = getVentureMeetingDefinition(ventureRegistry, request.meetingRequest.phase);
+          const local = pragueClockParts(now);
+          try {
+            const scheduled = await requestMeetingAgenda({
+              root: artifactRoot,
+              policy: meetingPolicy,
+              ventureId: target.ventureId,
+              phase: request.meetingRequest.phase,
+              requestedBy: request.agent,
+              sourcePhase: venturePhase,
+              sourceMeetingRef: `standups/${local.date}-morning`,
+              summary: request.meetingRequest.summary,
+              evidenceRefs: request.meetingRequest.evidenceRefs,
+              notBefore: nextAgendaDate({
+                currentDate: local.date,
+                currentHour: local.hour,
+                targetHour: parseCadenceHour(target.meeting.cadence)
+              }),
+              now
+            });
+            meetingAgendaIds.push(scheduled.agenda.id);
+            meetingAgendaStateChanged = scheduled.created;
+          } catch (error) {
+            console.warn(`Council meeting request was not queued: ${error instanceof Error ? error.message : "unknown scheduler error"}`);
+          }
+        }
+      }
+    }
     const standup = measuredCouncil
       ? createLiveStandup({
           cycleId,
@@ -1022,6 +1077,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           estimatedCycleUsd: estimatedWorstCaseUsd,
           now,
           evidenceRefs: opportunityGate.evidenceRefs,
+          agentsParticipated: options.dry,
           ...(caughtUpIdea ? { caughtUpIdea } : {})
         });
     const artifacts = [
@@ -1031,7 +1087,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       `decisions/${cycleId}.json`,
       ...(caughtUpIdea
         ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
-        : [])
+        : []),
+      ...(meetingAgendaStateChanged ? [MEETING_AGENDA_PATH] : [])
     ];
     await Promise.all([
       atomicWriteJson(
@@ -1061,6 +1118,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           growthIdeaNovelty: caughtUpIdea.autoRejected ? 0 : 1,
           vaultVerdict: caughtUpIdea.verdict
         } : {}),
+        meetingAgendaIds,
         generatedAt: now.toISOString()
       }),
       atomicWriteJson(artifactRoot, artifacts[3]!, {
@@ -1074,6 +1132,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         reasons: opportunityGate.reasons,
         evidenceRefs: opportunityGate.evidenceRefs,
         ...(caughtUpIdea ? { caughtUpIdeaRef: caughtUpIdea.entry.id } : {}),
+        meetingAgendaIds,
         generatedAt: now.toISOString()
       })
     ]);
@@ -1124,8 +1183,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             ? "INSUFFICIENT_EVIDENCE"
             : "NO_ACTION",
       estimatedWorstCaseUsd,
-      selectedAgents: room.selectedParticipants.map(({ agent }) => agent),
-      skippedAgents: room.skippedParticipants.map(({ agent }) => agent),
+      selectedAgents: measuredCouncil || options.dry
+        ? room.selectedParticipants.map(({ agent }) => agent)
+        : [],
+      skippedAgents: measuredCouncil || options.dry
+        ? room.skippedParticipants.map(({ agent }) => agent)
+        : room.selectedParticipants.map(({ agent }) => agent),
       artifacts: artifacts.map((artifact) =>
         path.relative(repoRoot, path.join(artifactRoot, artifact))
       )

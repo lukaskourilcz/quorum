@@ -2,13 +2,13 @@ import type { FoundingAgent } from "../types.js";
 
 const FIXED = ["PULSE", "ANGLE", "AUDIT"] as const;
 const WHEEL: Record<number, readonly FoundingAgent[]> = {
-  1: ["FUNNEL", "SPARK"],
-  2: ["INSTAGRAM", "THREADS", "QUILL"],
-  3: ["STUNT"],
-  4: ["COHORT", "FUNNEL"],
-  5: ["SCENE", "PALATE"],
-  6: ["FRAME", "LENS"],
-  0: ["SCRIBE", "FUNNEL"]
+  1: ["FUNNEL"],
+  2: ["STUNT"],
+  3: ["COHORT"],
+  4: ["SCENE"],
+  5: ["PALATE"],
+  6: ["SPARK"],
+  0: ["VAULT"]
 };
 
 export interface TittyTuesdaysSlot {
@@ -40,7 +40,7 @@ export function resolveTittyTuesdaysSlot(input: {
   }
   const weekday = new Date(`${input.date}T12:00:00.000Z`).getUTCDay();
   const guests = [...(WHEEL[weekday] ?? [])];
-  if (weekday === 6 && input.captionsNeeded) guests.push("QUILL");
+  if (input.captionsNeeded) guests.push("QUILL");
   return {
     kind: "tt-marketing",
     cast: [...FIXED, ...guests],

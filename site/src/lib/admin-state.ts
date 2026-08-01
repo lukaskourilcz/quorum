@@ -215,6 +215,7 @@ export interface AdminSnapshot {
   budgetLedger: string;
   financeLedger: string;
   treasuryLedger: string;
+  meetingAgendas: string;
   socialArchive: AdminSocialArchive;
 }
 
@@ -244,6 +245,7 @@ export async function readAdminSnapshot(root = repositoryRoot): Promise<AdminSna
     budgetLedger,
     financeLedger,
     treasuryLedger,
+    meetingAgendas,
     socialArchive
   ] = await Promise.all([
     readRootStateFile("BRAND.md"),
@@ -256,6 +258,7 @@ export async function readAdminSnapshot(root = repositoryRoot): Promise<AdminSna
     readRootStateFile("budget/ledger.json"),
     readRootStateFile("finance/ledger.json"),
     readRootStateFile("treasury/ledger.json"),
+    readRootStateFile("meeting-agendas/queue.json"),
     readAdminSocialArchive(root)
   ]);
   return {
@@ -270,6 +273,7 @@ export async function readAdminSnapshot(root = repositoryRoot): Promise<AdminSna
     budgetLedger,
     financeLedger,
     treasuryLedger,
+    meetingAgendas,
     socialArchive
   };
 }

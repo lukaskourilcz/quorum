@@ -126,7 +126,7 @@ describe("cycle preflight", () => {
 
   it("runs all three new portfolio phases as bounded dry records without per-meeting email", async () => {
     const phases = [
-      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT", "FUNNEL", "SPARK"] },
+      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT", "FUNNEL"] },
       { phase: "incubator-scan" as const, now: new Date("2026-08-04T05:00:00.000Z"), cast: ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"] },
       { phase: "incubator-synthesis" as const, now: new Date("2026-08-04T19:00:00.000Z"), cast: ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"] }
     ];

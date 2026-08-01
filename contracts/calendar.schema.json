@@ -49,7 +49,8 @@
             "enum": [
               "scheduled",
               "held",
-              "missed"
+              "missed",
+              "not-needed"
             ]
           },
           "meetingRef": {

@@ -27,9 +27,25 @@
         "AUDIT"
       ],
       "switchable": [
-        "ANGLE"
+        "ANGLE",
+        "FUNNEL",
+        "STUNT",
+        "COHORT",
+        "SCENE",
+        "PALATE",
+        "SPARK",
+        "VAULT",
+        "QUILL",
+        "THREADS",
+        "INSTAGRAM",
+        "FRAME"
       ],
-      "disabled": []
+      "disabled": [
+        "QUILL",
+        "THREADS",
+        "INSTAGRAM",
+        "FRAME"
+      ]
     },
     "incubator": {
       "lockedOn": [

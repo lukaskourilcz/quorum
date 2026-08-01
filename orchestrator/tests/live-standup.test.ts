@@ -35,6 +35,7 @@ function positions(audit: "approve" | "hold" = "approve"): RecordedPosition[] {
     publicSummary: `${agent} recorded a bounded public position.`,
     recommendation: agent === "AUDIT" ? audit : "approve",
     risk: "Keep the work inside the internal operating queue.",
+    meetingRequest: null,
     sentAt: new Date(
       Date.parse("2026-07-31T04:00:00.000Z") + index * 1_000
     ).toISOString()

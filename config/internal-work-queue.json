@@ -5,23 +5,23 @@
     {
       "id": "OPS-OBSERVE",
       "phase": "morning",
-      "owner": "FORGE",
-      "title": "Verify the public shift record",
-      "summary": "Check that the latest committed shift record is complete, timestamped and available to the public archive. Record only a bounded handoff or blocker."
+      "owner": "VIZE",
+      "title": "Set today's bounded specialist agendas",
+      "summary": "Review the current operating record and request at most one allowlisted specialist room when a concrete decision or evidence gap needs it. Content-critical service rooms keep their fixed delivery windows."
     },
     {
       "id": "OPS-HANDOFF",
       "phase": "afternoon",
       "owner": "SCRIBE",
-      "title": "Prepare the next shift handoff",
-      "summary": "Summarize the current internal operating state for the next shift without making external claims, publishing content or changing product scope."
+      "title": "Record the deterministic afternoon checkpoint",
+      "summary": "Record completed work and blockers without calling the full council. Do not create a specialist agenda unless the morning decision meeting already authorized it."
     },
     {
       "id": "OPS-RELEASE",
       "phase": "night",
       "owner": "AUDIT",
-      "title": "Review the public operating record",
-      "summary": "Check the current record for truthful labels, clear timestamps and preserved safety boundaries. Surface a bounded internal follow-up only when needed."
+      "title": "Close the deterministic night checkpoint",
+      "summary": "Reconcile the public record and prepare the daily digest without calling the full council or inventing a new agenda."
     }
   ]
 }
