@@ -66,9 +66,12 @@ describe("automation policy", () => {
     expect(cycle).toContain("lukaskourilcz/aifirst.git");
     expect(cycle).toContain("forcing fixture-only dry mode");
     expect(cycle).toContain("contents: write");
+    expect(cycle).toContain("runtime_paths=(");
+    expect(cycle).toContain("state/mma state/notify state/social");
     expect(cycle).toContain(
-      "git add config/visual-weights state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/mma state/notify"
+      'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
+    expect(cycle).toContain('git add -A -- "$runtime_path"');
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");
