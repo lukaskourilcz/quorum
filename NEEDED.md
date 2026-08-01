@@ -18,9 +18,9 @@ source accounts, approval records and project switches below are connected.
 
 ## Exact first-live sequence
 
-1. Countersign the decisions in the next section, commit them to `main`, and rotate the
-   two model keys.
-2. Add the required GitHub Actions **secrets** and **repository variables** below.
+1. The `$50`, Caught Up, FightAIQ and Titty Tuesdays decisions are countersigned and
+   the two model keys are rotated. Preserve those records; do not repeat the work.
+2. Add only the still-missing GitHub Actions **secrets** and **repository variables** below.
    Secrets alone do not authorize a live run; the matching repository switch must
    already be `true`.
 3. Open **Actions → Guarded council cycle → Run workflow**, choose one phase and turn
@@ -32,10 +32,10 @@ source accounts, approval records and project switches below are connected.
    package was created but only delivery failed, rerun `cu-edition` with dry off and
    **delivery only on**; that retry makes no model call. Then run `morning` with dry off
    so SPARK can create the canonical Caught Up product idea, followed by `cu-product`.
-   Run `afternoon` and `night` once as the final company-room check.
-5. Set `PORTFOLIO_LIVE_ENABLED=true`; run `incubator-scan` before
-   `incubator-synthesis`. The scan now saves a guarded source packet, so synthesis can
-   keep source-backed ideas. Then run `tt-marketing`.
+   Afternoon and night are `$0` checkpoints and do not need a paid rehearsal.
+5. Set `PORTFOLIO_LIVE_ENABLED=true`. For the launch check, manual runs may call
+   `incubator-scan`, then `incubator-synthesis`, and `tt-marketing` without a queued
+   agenda. After launch, scheduled specialist rooms open only for a due agenda.
 6. Complete the repository-app and MMA Files Vercel steps below. Add
    `THE_ODDS_API_KEY` and `CITO_API_KEY`, set `FIGHTAIQ_LIVE_ENABLED=true` and
    `MMA_FILES_LIVE_ENABLED=true`, then run `mma-intake`. The room saves a guarded,
@@ -43,12 +43,13 @@ source accounts, approval records and project switches below are connected.
    will not promote a one-source claim into a verified fighter file; complete the
    second-source review in admin. Keep `FIGHTAIQ_ANALYSIS_ENABLED=false` until the
    separate mode-change decision.
-7. With `MMA_FILES_LIVE_ENABLED=true`, run `mag-editorial`, `article-am`, `article-pm`,
+7. With `MMA_FILES_LIVE_ENABLED=true`, run `mag-editorial`, one assigned article job,
    then `mag-desk`. Each published article is delivered to MMA Files automatically. Missing
    evidence correctly kills an article slot at $0. A delivery retry can use dry off plus
    **delivery only on** for the matching article phase and makes no model call.
 8. Once each manual live run has produced and pushed the expected canonical artifacts,
-   leave its switch on for the Prague schedule. Keep `SOCIAL_KILL_SWITCH=true`.
+   leave its switch on for the Prague schedule. A scheduled wake-up can correctly end
+   as `not-needed` at `$0`. Keep `SOCIAL_KILL_SWITCH=true`.
 
 ## Do these before any live run
 
@@ -62,7 +63,7 @@ source accounts, approval records and project switches below are connected.
 
 - [ ] **Configure `/admin` in Vercel Production** — add a unique `ADMIN_USER` and long random `ADMIN_PASSWORD`, redeploy, then confirm `/admin` returns `401` without credentials and `200` after login. Missing config returns `503` on purpose. [imp:5] [owner:me] [time:15m] [kind:setup]
 - [ ] **Give admin a narrow GitHub writer** — create a fine-grained token limited to Contents read/write on `lukaskourilcz/quorum`; store it in Vercel as `BOARDLESSAI_GITHUB_TOKEN`. Production ratings, manual odds, fighter-disagreement reviews and MMA Files metrics fail closed without it. Defaults are `BOARDLESSAI_GITHUB_REPOSITORY=lukaskourilcz/quorum` and `BOARDLESSAI_GITHUB_BRANCH=main`. [imp:5] [owner:me] [time:15m] [kind:setup]
-- [ ] **Open the project agent switches** — after the two admin environment steps above, sign in at `/admin`, choose a project and check its Meeting controls. Optional roles can be turned on or off there. Caught Up starts with THREADS, INSTAGRAM and FRAME off; MMA Files starts with REACH and FRAME off. Locked roles protect writing, translation, delivery and safety. [imp:4] [owner:me] [time:10m] [kind:setup]
+- [ ] **Open the project agent switches** — after the two admin environment steps above, sign in at `/admin`, choose a project and check its Meeting controls. Optional roles can be turned on or off there. Caught Up starts with THREADS, INSTAGRAM and FRAME off; Titty Tuesdays starts with QUILL, THREADS, INSTAGRAM and FRAME off; MMA Files starts with REACH and FRAME off. Locked roles protect writing, translation, delivery and safety. [imp:4] [owner:me] [time:10m] [kind:setup]
 - [ ] **Accept that admin reviews become public repository history** — ratings, notes, price snapshots, fighter resolutions, metrics and derived taste files are committed state. Do not enter personal or confidential information. [imp:4] [owner:me] [time:5m] [kind:decision]
 
 ## Caught Up delivery
@@ -78,7 +79,7 @@ source accounts, approval records and project switches below are connected.
 - [ ] **Create the UFC source keys** — add `THE_ODDS_API_KEY` (the-odds-api.com) and `CITO_API_KEY` to Actions secrets. The live intake stores their daily snapshot and stops requesting The Odds API after it reports zero remaining monthly credits. Use the owner form for Oktagon prices until an approved source is connected. [imp:5] [owner:me] [time:25m] [kind:setup]
 - [ ] **Review the betting types against your actual books** — trim the committed catalog to markets you can really capture. Do not add bookmaker scraping or account automation. [imp:4] [owner:me] [time:20m] [kind:content]
 - [ ] **Review one complete event per organization** — collect one UFC and one Oktagon card, two-source fighter facts, T-3/T-1/closing prices, results and calibration. Then record a separate owner decision before changing FightAIQ from `data-only` to `live-analysis`. [imp:5] [owner:me] [time:2h] [kind:decision]
-- [ ] **Enable FightAIQ only after that decision** — set `FIGHTAIQ_LIVE_ENABLED=true` for live data rooms and `FIGHTAIQ_ANALYSIS_ENABLED=true` only when public/model analysis is approved. These variables are currently missing. [imp:5] [owner:me] [time:10m] [kind:deploy]
+- [ ] **Enable FightAIQ data, not analysis** — set `FIGHTAIQ_LIVE_ENABLED=true` for guarded source and data work. Keep `FIGHTAIQ_ANALYSIS_ENABLED=false` until the reviewed events support a separate analysis-mode decision. [imp:5] [owner:me] [time:10m] [kind:deploy]
 - [ ] **Clear both spellings before promotion** — run legal/domain checks for `FightAIQ` and `Fight AIQ`, plus age-gating and gambling-content rules in the intended countries. [imp:5] [owner:me] [time:90m] [kind:legal]
 
 ## MMA Files public site and repository delivery
@@ -111,7 +112,10 @@ source accounts, approval records and project switches below are connected.
 
 ## Confirmed complete
 
-- Five project workspaces, 38 agents, 14 Prague slots and one daily summary share one guarded runtime.
+- Five project workspaces, 38 agents, 14 Prague windows and one daily summary share one guarded runtime.
+- The 06:00 decision room can assign one bounded specialist agenda; unused scheduled
+  specialist windows record `not-needed` at `$0`, and afternoon/night are `$0` checkpoints.
+- The workflow uses 17 unique UTC wake-ups instead of duplicate summer/winter entries.
 - All 12 room kinds have fixture-labeled public proof; the production build, contracts and tests pass.
 - FightAIQ has deterministic Glicko-2/model output, source controls, manual odds, immutable performance history and private fighter review.
 - MMA Files accepts hash-checked bilingual articles and FightAIQ content files in its own repository, renders them publicly in both languages and deploys from `main`.

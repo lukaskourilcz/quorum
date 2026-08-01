@@ -6,9 +6,11 @@ Git-backed state, shared contracts, guarded automation, and a public/admin
 Next.js site.
 
 Current status: **operating, pre-revenue, VALIDATION**. The public site is
-<https://quorum-site-chi.vercel.app>. Five project workspaces share this runtime:
+<https://boardless-ai.vercel.app>. Five project workspaces share this runtime:
 Caught Up, Titty Tuesdays, the Magazine Incubator, FightAIQ and MMA Files.
-Unsigned founding and budget records keep the relevant live switches off.
+The $50 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
+decisions are countersigned. Separate live switches, evidence checks and delivery
+credentials still decide whether a scheduled wake-up may do work.
 
 The founding evidence gate remains unpassed. Fixture evidence cannot support a
 live decision, live founding cycles remain disabled, and external action always
@@ -18,11 +20,11 @@ passes the existing owner, budget, evidence, security and release gates.
 
 | Workspace | Current role | Boundary |
 | --- | --- | --- |
-| Caught Up | Bilingual daily AI briefing and product board | Live delivery needs owner gates and a repository-scoped GitHub App |
+| Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
 | Magazine Incubator | Evidence-backed niche research for owner rating | No product creation or autonomous founding |
 | FightAIQ | Sourced UFC and Oktagon data plus deterministic analysis | Data-only until one reviewed event per organization and a signed mode change; no bet placement |
-| MMA Files | Two-slot bilingual MMA newsroom and social draft archive | Private admin newsroom only; live jobs require verified FightAIQ input and signed budget |
+| MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
 
 The common registry is `config/ventures.json`. It defines cadence, routing,
 budgets, idea namespaces, taste participation and admin tabs. The human-readable
@@ -42,19 +44,20 @@ operating model is in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   bounded visual-weight updates.
 - Caught Up source collection, bilingual article production, English/Czech
   language desks, GitHub App delivery and draft social packs.
-- Titty Tuesdays weekly marketing wheel, 91-day turnover, platform-risk gate,
+- Titty Tuesdays agenda-driven campaign rooms, 91-day turnover, platform-risk gate,
   season concepts, public venture page and protected launch binder.
 - Research-only incubator scan and synthesis rooms, complete proposal contract,
   rating lifecycle and public shortlist.
 - FightAIQ source gates, two-source fighter records, Glicko-2 engine, versioned
   probabilities, owner odds capture, immutable results and public performance view.
 - MMA Files source-first bilingual production, Czech and English style desks,
-  deterministic hero/social art, private article previews and manual metrics.
-- One 14-slot Prague calendar, correct DST cron pairs and collision
-  validation shared by runtime and WeekBoard.
+  deterministic hero/social art, public content delivery, private previews and manual metrics.
+- One 14-window Prague calendar, 17 deduplicated UTC wake-ups, correct DST
+  resolution and collision validation shared by runtime and WeekBoard. Agenda-gated
+  windows record `not-needed` without opening paid rooms.
 - One daily portfolio digest, capped at 400 words and idempotent per Prague
   date. The retired per-meeting email path is absent.
-- Fail-closed Basic Auth admin with Git-backed rating persistence, social
+- Fail-closed username/password admin session with Git-backed rating persistence, social
   archive, venture tabs, card history and noindex/no-store headers.
 - Responsive public site, feeds, metadata, accessibility checks, contrast tests
   and scroll-preserving stateful controls.
@@ -80,7 +83,7 @@ config/                     agents, ventures, routing, models and policies
 contracts/                  exported JSON Schemas
 docs/PORTFOLIO.md           human portfolio operating model
 docs/FIGHTAIQ.md            data, model and launch boundary
-docs/MMA-FILES.md           private newsroom and publishing boundary
+docs/MMA-FILES.md           public magazine and content-delivery boundary
 orchestrator/
   prompts/                  council and specialist role contracts
   src/                      runtime, gates, sources, ventures and notifications
@@ -91,6 +94,7 @@ site/
   public/agents/            27 validated WebP portraits plus safe fallbacks
 state/
   meetings/                 sanitized meeting records
+  meeting-agendas/          bounded specialist-room requests and consumption state
   ideas/<venture>/          append-only idea history and compact indexes
   ratings/<venture>/        append-only owner ratings when present
   taste/<venture>/          rating-linked taste doctrine
@@ -130,7 +134,7 @@ Useful commands:
 | `pnpm cycle -- --phase mma-intake --dry` | Checks UFC and Oktagon without live calls |
 | `pnpm cycle -- --phase mma-analysis --dry` | Reviews the fixture model state within the data-only gate |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
-| `pnpm cycle -- --phase mag-desk --dry` | Reviews the private bilingual newsroom queue |
+| `pnpm cycle -- --phase mag-desk --dry` | Reviews the bilingual newsroom queue |
 | `pnpm proof:rooms` | Rebuilds fixture-labeled proof for all 12 room kinds |
 | `pnpm fightaiq:backfill -- --input reviewed-history.json` | Seeds ratings from an owner-reviewed, two-source history file |
 | `pnpm digest:daily -- --dry` | Builds the one daily digest through the log sink |
@@ -154,7 +158,7 @@ Core credentials and endpoints:
   production rating history. `BOARDLESSAI_GITHUB_REPOSITORY` and
   `BOARDLESSAI_GITHUB_BRANCH` default to `lukaskourilcz/quorum` and `main`.
 - `DELIVERY_APP_ID`, `DELIVERY_APP_PRIVATE_KEY` — GitHub Actions credentials for
-  the App installed only on `lukaskourilcz/aifirst`.
+  the content-only App installed on the approved Caught Up and MMA Files repositories.
 - `THE_ODDS_API_KEY`, `CITO_API_KEY` — guarded FightAIQ data sources. Missing
   credentials skip the adapters; forbidden hosts remain unreachable.
 - `PUBLIC_SITE_URL`, `CAUGHT_UP_SITE_URL` — canonical BoardlessAI and reader
@@ -173,8 +177,8 @@ Repository variables are independent authorization switches:
 - `FIGHTAIQ_LIVE_ENABLED=true` permits live FightAIQ data rooms;
   `FIGHTAIQ_ANALYSIS_ENABLED=true` separately permits model analysis after the
   recorded data-only mode change.
-- `MMA_FILES_LIVE_ENABLED=true` permits the private newsroom only after the
-  signed budget and source packet checks pass.
+- `MMA_FILES_LIVE_ENABLED=true` permits guarded article production and public
+  content delivery after the source packet checks pass.
 - `SOCIAL_KILL_SWITCH=true` keeps all social output draft-only.
 - `HEALTH_CHECK_ENABLED=true` opts into external production polling.
 
@@ -183,12 +187,17 @@ publisher. Missing approval never authorizes a live action.
 
 ## Prague schedule and budget
 
-The shared schedule is 05:00 Caught Up edition, 06:00 board morning, 07:00
+The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 07:00
 incubator scan, 08:00 FightAIQ intake, 09:00 MMA Files story meeting, 10:00
 article slot, 11:00 Titty Tuesdays, 14:00 board afternoon, 17:00 Caught Up
 product, 18:00 article slot, 19:00 FightAIQ analysis, 20:00 MMA Files desk,
 21:00 incubator synthesis and 22:00 board night. GitHub receives both UTC
-daylight-saving variants; the runtime accepts only the one matching Prague time.
+daylight-saving variants; duplicates are removed and the runtime accepts only the
+one matching Prague time. The morning council may place one bounded specialist
+agenda. Titty Tuesdays, both incubator rooms, FightAIQ analysis and the MMA Files
+desk open on scheduled runs only when an agenda is due. FightAIQ intake also opens
+after a material source change. Manual runs remain available for explicit tests.
+Afternoon and night are zero-model checkpoints.
 
 The owner countersigned `budget-2026-08d`, setting a `$50` all-in monthly limit,
 `$42` model share and `$2.20` daily pace. Project switches and evidence gates
@@ -198,10 +207,11 @@ stops and one approval item is opened. Only the owner may raise the limit.
 
 ## Admin and publishing
 
-`/admin` is dynamic, noindex, no-store and protected by constant-time Basic Auth.
+`/admin` is dynamic, noindex, no-store and protected by a constant-time credential
+check plus a signed, HttpOnly session cookie.
 Authenticated traffic is not counted as a failed login; repeated invalid
 credentials are rate-limited. The page displays global social drafts and
-project-specific ideas, plans, visuals, research proposals, FightAIQ data,
+project-specific ideas, plans, visuals, research proposals, meeting agendas, FightAIQ data,
 agent switches and the MMA Files newsroom. Ratings are
 re-ratable; the latest value governs the UI and prior values remain visible.
 
@@ -229,15 +239,16 @@ Rollback:
 
 - BoardlessAI has a documented name-collision risk and must be cleared or
   renamed before paid sponsorship.
-- Titty Tuesdays and FightAIQ founding plus the `$50` budget await owner signatures.
-- Production admin credentials, Git-backed rating credentials, Caught Up
-  delivery credentials and live variables require the owner steps in
+- Production admin credentials, Git-backed rating credentials, the MMA Files App
+  installation and some live variables still require the owner steps in
   `NEEDED.md`.
 - No eligible live experiment or accepted market evidence exists yet.
 - Git-backed runtime state assumes one serialized writer.
-- Admin has one Basic Auth identity, not SSO, MFA or per-user audit identity.
+- Admin has one username/password identity and signed session, not SSO, MFA or
+  per-user audit identity.
 - FightAIQ remains data-only; live public probabilities are not authorized.
-- MMA Files has no public publication route or destination repository yet.
+- MMA Files delivery exists, but its first reviewed live article and FightAIQ
+  deliveries are still owner-run launch checks.
 - Commerce, payment, inventory, ads and incubator founding are not implemented.
 
 License: MIT. Security-sensitive operation requires the documented human

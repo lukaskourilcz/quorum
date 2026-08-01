@@ -1,80 +1,91 @@
-# Manual steps — from dry proof to live work
+# Manual steps — finish the live setup
 
-`NEEDED.md` is the complete owner checklist. This is the recommended order.
+`NEEDED.md` is the complete owner checklist. This file gives the safest order.
+The `$50` limit, Caught Up approval, FightAIQ founding and Titty Tuesdays founding
+are already countersigned; do not repeat those steps or rewrite their historical
+predecessors.
 
-## 1. Sign the boundaries
+## 1. Finish the protected admin
 
-Review and countersign:
+In the BoardlessAI Vercel Production environment, add `ADMIN_USER`, a long random
+`ADMIN_PASSWORD` and a fine-grained `BOARDLESSAI_GITHUB_TOKEN` limited to Contents
+read/write on `lukaskourilcz/quorum`. Redeploy, sign in at `/admin`, save one harmless
+rating and confirm the commit appears on `main`. Never put private or personal text in
+an admin note because accepted writes become repository history.
 
-1. `state/decisions/2026-08-04-budget-fifty.md`
-2. `state/decisions/2026-08-02-fightaiq-founding.md`
-3. `state/decisions/2026-08-01-titty-tuesdays-founding.md`
-4. the approval reference in `state/decisions/2026-08-01-caughtup-adoption.md`
+The global admin page now shows the specialist meeting-agenda queue. Project pages
+show the optional agent switches. Social production agents start off.
 
-Do not edit old decisions to imply a later approval. Fill the intended signature area
-or add a superseding record. Until the `$50` decision is signed, the older `$20`
-fallback remains correct and MMA Files live work stays off.
+## 2. Finish the MMA Files delivery installation
 
-## 2. Rotate and add secrets
+Add `lukaskourilcz/mma-files` to the existing `boardlessai-delivery` GitHub App
+installation. Keep Contents read/write as its only write permission. The App ID and
+private key stay in BoardlessAI Actions secrets; do not copy them into MMA Files or
+Vercel.
 
-- Rotate `ANTHROPIC_API_KEY` and `OPENAI_API_KEY`; replace the GitHub Actions secrets.
-- Add `THE_ODDS_API_KEY` and `CITO_API_KEY` for FightAIQ.
-- Verify a Resend domain; add `RESEND_API_KEY` and `DAILY_DIGEST_EMAIL_TO`.
-- Install a Contents-only GitHub App on `lukaskourilcz/aifirst`; add
-  `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`.
+Connect the MMA Files Vercel project to `main`, set
+`NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app`, keep
+`NEXT_PUBLIC_DEMO_MODE=true` for the first delivery and keep
+`NEXT_PUBLIC_ALLOW_INDEXING=false` through the showcase review.
 
-Set repository variables for the Resend sender/tier and
-`CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app`. Keep every live switch absent or
-false during this step.
+## 3. Add only the source credentials you intend to use
 
-## 3. Make `/admin` private and writable
+Add `THE_ODDS_API_KEY` and `CITO_API_KEY` as BoardlessAI Actions secrets when you
+want live FightAIQ intake. The Odds API quota is recorded and calls stop when its
+reported monthly credits reach zero. Oktagon still needs owner-reviewed inputs until
+an approved adapter exists. Do not add the dropped GNews, Guardian or New York Times
+keys.
 
-In Vercel Production add:
+The daily email is optional. If wanted, verify a Resend domain and configure the
+exact secret/variable set in `NEEDED.md`; otherwise the digest safely stays in log
+mode.
 
-- `ADMIN_USER`
-- `ADMIN_PASSWORD`
-- `BOARDLESSAI_GITHUB_TOKEN` — fine-grained Contents read/write on
-  `lukaskourilcz/quorum` only
+## 4. Prove Caught Up once
 
-Redeploy. Confirm `401` without credentials, `200` after login, a saved rating, a
-manual FightAIQ price and an MMA Files metrics entry. A `503` means setup is incomplete.
-Do not store personal or confidential text in admin notes because writes become
-repository history.
+Run `cu-edition` manually with dry mode off and delivery-only off. In the mode step,
+confirm `dry=false` and `skip=false`. Review the BoardlessAI cycle commit, package,
+delivery receipt, both languages, hero and the Caught Up Vercel deployment. If content
+was produced and only delivery failed, rerun the same phase with dry mode off and
+delivery-only on; that retry makes no model call.
 
-## 4. Review proof and prepare the first real inputs
+Then run `morning` and `cu-product`. Afternoon and night are now deterministic
+checkpoints, so they cost `$0` in model calls. Review the first three real editions
+before treating the pipeline as unattended.
 
-Open every link in `docs/LIVE-PROOF.md`. Fixture labels must remain visible. Then:
+## 5. Prove FightAIQ and MMA Files
 
-- confirm the Caught Up delivery App is installed on `aifirst` and ready for the first
-  live package;
-- capture one full UFC and Oktagon event, including two-source fighter facts,
-  T-3/T-1/closing prices and results;
-- confirm the committed bet types match markets you can actually capture;
-- review the first private MMA Files article and its English/Czech social drafts.
+Set `PORTFOLIO_LIVE_ENABLED=true`, `FIGHTAIQ_LIVE_ENABLED=true`,
+`MMA_FILES_LIVE_ENABLED=true` and explicitly keep
+`FIGHTAIQ_ANALYSIS_ENABLED=false`. Run:
 
-Record a separate owner mode-change decision before FightAIQ live analysis.
+1. `mma-intake` — verify the guarded source snapshot and the content-only FightAIQ
+   delivery in MMA Files.
+2. `mag-editorial` — verify the two-slot editorial slate.
+3. One assigned `article-am` or `article-pm` — verify the bilingual article and hero
+   in MMA Files.
+4. `mag-desk` — use a manual run for the launch check even if no scheduled agenda is
+   pending.
 
-## 5. Enable one switch at a time
+A missing source packet should kill an article slot before a model call. Keep analysis
+off until one reviewed UFC event and one reviewed Oktagon event support a separate
+mode-change decision.
 
-1. Set `CAUGHT_UP_LIVE_ENABLED=true`, manually run `cu-edition` with dry off, review the
-   delivered bilingual edition, and switch it back off if delivery fails. Then run
-   `morning` with dry off before `cu-product`; the morning room creates the canonical
-   product idea that the later room reviews. Run `afternoon` and `night` once too.
-2. Set `PORTFOLIO_LIVE_ENABLED=true`, then run `incubator-scan` before
-   `incubator-synthesis`; the scan supplies the source packet required for real ideas.
-3. Set `FIGHTAIQ_LIVE_ENABLED=true`, then run `mma-intake`; the configured API sources
-   supply a guarded daily snapshot, while critical fighter fields still need a second
-   agreeing source before model use.
-4. `FIGHTAIQ_ANALYSIS_ENABLED=true` only after the event review and decision
-5. `MMA_FILES_LIVE_ENABLED=true` only after the signed `$50` limit
+## 6. Understand the new meeting behavior
 
-Review a full day after each change. Keep `SOCIAL_KILL_SWITCH=true`. The magazine has
-no public destination yet, and the Instagram path does not publish the required
-four-frame set automatically.
+Scheduled jobs are wake-ups, not automatic paid meetings. The 06:00 decision room can
+queue one bounded specialist agenda. Titty Tuesdays, both incubator rooms, FightAIQ
+analysis and the MMA Files desk open on schedule only when an agenda is due. FightAIQ
+intake also opens when its source snapshot materially changes. Otherwise the calendar
+shows **Not needed** and records `$0`.
 
-## 6. Do the human/legal work before promotion
+Manual workflow runs intentionally bypass only this agenda check so you can test a
+room. They still require every live switch, credential, evidence and budget gate.
+Keep `SOCIAL_KILL_SWITCH=true`.
+
+## 7. Complete human and legal review before promotion
 
 Clear BoardlessAI, Caught Up, Titty Tuesdays, FightAIQ/Fight AIQ and MMA Files for the
-intended countries and uses. Add the real operator/privacy details before collecting
-personal data. Approve sponsorship, payment, tax and refund terms before money moves.
-No current live switch authorizes these activities.
+countries and uses you intend. Replace the MMA Files corrections placeholder, add the
+real operator/privacy details before personal data is collected, and approve payment,
+tax, sponsorship and refund terms before money moves. No live switch authorizes those
+decisions.

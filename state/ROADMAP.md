@@ -14,11 +14,14 @@
 Caught Up is the first project by owner adoption. The business operates in VALIDATION;
 the founding gate remains unpassed and live founding cycles stay disabled.
 
-- [x] Replace the two-cycle cadence with full-council shifts at
-  06:00, 14:00 and 22:00 `Europe/Prague`, then release the matching public
-  shift countdown.
+- [x] Replace three paid full-council shifts with one 06:00 decision room plus
+  deterministic 14:00 and 22:00 checkpoints in `Europe/Prague`.
 - [x] Publish episode IDs, shift objectives and next-shift handoffs so the
   spectator layer can follow one truthful operating story across the day.
+- [x] Add a bounded specialist-agenda queue, allowlisted follow-up requests,
+  three-day expiry and visible `$0` `not-needed` calendar records.
+- [x] Deduplicate the Prague schedule to 17 UTC wake-ups while preserving all
+  14 local windows across summer and winter time.
 Earlier spectator-season and Three.js preview ideas are archived, not active
 work. They require a fresh owner scope before implementation.
 
@@ -49,5 +52,6 @@ work. They require a fresh owner scope before implementation.
 - [x] Connect MMA Files as the public bilingual newsroom, with automatic article and FightAIQ data delivery, two daily evidence-first slots and manual metrics.
 - [x] Retire the duplicate BoardlessAI fighter/event pages so MMA Files is the single public owner.
 - [x] Keep Titty Tuesdays content-only and store detailed future-campaign notes without producing or publishing social assets.
-- [x] Expand the shared Prague clock to 14 collision-free slots and prove all 12 room kinds with fixture labels.
+- [x] Expand the shared Prague clock to 14 collision-free windows and preserve the
+  fixture proof for all 12 room kinds as historical evidence.
 - [ ] Complete the repository-app, Vercel and first-live checks listed in `NEEDED.md`.

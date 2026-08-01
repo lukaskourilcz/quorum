@@ -143,6 +143,8 @@ a static reader path with Git and MDX as canon.
 
 ## Constraints
 
-The effective unsigned $20 fallback, human-only payments, draft-locked channels,
-sanitization boundary, evidence rules, security controls and release gates remain
-binding. Only a countersigned `budget-2026-08d` changes the limit to $50.
+The countersigned `$50` all-in limit and `$42` model/API share, human-only payments,
+draft-locked channels, sanitization boundary, evidence rules, security controls and
+release gates remain binding. Scheduled specialist windows additionally need a due
+agenda; FightAIQ intake may open for a material source change. Caught Up and MMA Files
+receive only bounded, hash-checked content through their approved repositories.

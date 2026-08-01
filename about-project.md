@@ -5,7 +5,7 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://quorum-site-chi.vercel.app>. Systém má pět pracovních projektů: Caught Up,
+<https://boardless-ai.vercel.app>. Systém má pět pracovních projektů: Caught Up,
 Titty Tuesdays, Magazine Incubator, FightAIQ a MMA Files.
 
 ## Jak je systém poskládaný
@@ -15,7 +15,7 @@ GitHub Actions / příkazová řádka
               │
               ▼
      TypeScript řízení porad
-     ├─ rozpis a výběr rolí
+     ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
      ├─ porady všech pěti projektů
      └─ jeden denní souhrn
@@ -37,27 +37,32 @@ rolí pro MMA používá textovou náhradu, dokud majitel neschválí tvorbu dal
 
 ## Projekty
 
-- **Caught Up** připravuje anglický a český článek a návrhy pro Instagram a Threads.
-  Hotový balíček může přes omezenou GitHub App zapsat do `lukaskourilcz/aifirst`.
+- **Caught Up** připravuje anglický a český článek a jeden hlavní obrázek. Role pro
+  Instagram a Threads jsou teď vypnuté. Hotový balíček může přes omezenou GitHub App
+  zapsat do `lukaskourilcz/aifirst`.
 - **Titty Tuesdays** připravuje značku, témata a marketing. Nemá e-shop, sklad,
   platby, reklamy ani automatické zveřejňování.
 - **Magazine Incubator** hledá podložené nápady na publikace. Hodnocení majitele může
   nápad uložit do užšího výběru, ale samo nezaloží nový projekt.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Je v režimu pouze pro data: neumí sázet, otevírat sázkové účty ani slibovat výhru.
-- **MMA Files** je zatím soukromá anglicko-česká redakce v administraci. Každý den má
-  dva článkové sloty a čtyři návrhy pro sociální sítě. Veřejný magazín zatím neexistuje.
+- **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře
+  posílá jen ověřené články a data z FightAIQ; rozepsané texty a interní poznámky
+  zůstávají v chráněné administraci.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 14 časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
+Společný pražský rozpis má 14 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
 11:00, 14:00, 17:00, 18:00, 19:00, 20:00, 21:00 a 22:00. Letní a zimní časy mají
-vlastní spouštění; program přijme jen správnou variantu pro Prahu.
+vlastní spouštění; stejné časy se neopakují a program přijme jen správnou variantu
+pro Prahu. V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba.
+Odpoledne a večer se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays,
+inkubátoru, večerní analýzy FightAIQ a redakční kontrola MMA Files se spustí jen s
+platnou agendou. Kalendář jinak ukáže „nebylo potřeba“, ne zmeškanou poradu.
 
-Čekající rozhodnutí `budget-2026-08d` navrhuje celkový měsíční limit 50 dolarů,
-z toho 42 dolarů pro modely a denní tempo 2,20 dolaru. Dokud ho majitel nepodepíše,
-platí bezpečnější starší limit 20 dolarů, 15 dolarů pro modely a 0,70 dolaru denně.
-Systém si limit nesmí zvýšit sám a platby vždy provádí člověk.
+Podepsané rozhodnutí `budget-2026-08d` stanovuje celkový měsíční limit 50 dolarů,
+z toho nejvýše 42 dolarů pro modely a API a denní tempo 2,20 dolaru. Systém si
+limit nesmí zvýšit sám a platby vždy provádí člověk.
 
 ## Data a soukromá správa
 
