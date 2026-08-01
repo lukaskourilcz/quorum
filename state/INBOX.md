@@ -31,3 +31,7 @@ None.
   Owner acknowledged the transcript-leak risk and will rotate the keys.
   GitHub Actions secrets now exist, but rotation remains pending in
   `NEEDED.md`. → approved 2026-07-28.
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-08-01** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-01-ac4a08fea9cc69b219a48ae2421e8eccc0fa35d1ea14ef58165e86529c323315.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
