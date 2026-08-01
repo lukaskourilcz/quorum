@@ -25,12 +25,32 @@ function statusIcon(status: CalendarStatus) {
   return <Clock3 aria-hidden="true" className="size-3.5" />;
 }
 
+function statusLabel(status: CalendarStatus) {
+  if (status === "held") return "finished";
+  if (status === "missed") return "missed";
+  return "planned";
+}
+
 function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
 function isIncubator(kind: CalendarKind) {
   return kind === "incubator-scan" || kind === "incubator-synthesis";
+}
+
+function publicKindLabel(kind: CalendarKind): string {
+  const labels: Record<CalendarKind, string> = {
+    "cu-edition": "Caught Up edition meeting",
+    "venture-morning": "Morning company meeting",
+    "incubator-scan": "Magazine idea research",
+    "tt-marketing": "Titty Tuesdays marketing meeting",
+    "venture-afternoon": "Afternoon company meeting",
+    "cu-product": "Caught Up product meeting",
+    "incubator-synthesis": "Magazine idea review",
+    "venture-night": "Night company meeting"
+  };
+  return labels[kind];
 }
 
 function definitionTone(kind: CalendarKind): string {
@@ -56,8 +76,7 @@ export function WeekBoard({
   availableWeeks: readonly string[];
   headingLevel?: "section" | "page";
 }) {
-  const kindLabel = (kind: CalendarKind) =>
-    feed.definitions.find((slot) => slot.kind === kind)?.label ?? kind;
+  const kindLabel = (kind: CalendarKind) => publicKindLabel(kind);
   const days = Array.from({ length: 7 }, (_, index) => addCalendarDays(feed.weekOf, index));
   const weekIndex = availableWeeks.indexOf(feed.weekOf);
   const previous = weekIndex > 0 ? availableWeeks[weekIndex - 1] : null;
@@ -72,9 +91,9 @@ export function WeekBoard({
     <>
       {headingLevel === "section" ? (
         <SectionHeading
-          eyebrow="WeekBoard / Europe/Prague"
-          title="Eight rooms, one public clock"
-          description="Board, venture, marketing and incubator slots share one Prague clock. A missed slot stays visible; a held slot opens its public room."
+          eyebrow="Weekly schedule / Prague time"
+          title="Eight meetings on one schedule"
+          description="Company, project, marketing and research meetings share one schedule. Missed meetings stay visible, and finished meetings link to their notes."
           action={navigation}
         />
       ) : null}
@@ -97,27 +116,27 @@ export function WeekBoard({
                 <p className={`font-mono text-xs font-semibold uppercase tracking-[0.08em] ${definitionTone(definition.kind)}`}>
                   {String(definition.hour).padStart(2, "0")}:00
                 </p>
-                <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{definition.label}</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{publicKindLabel(definition.kind)}</p>
               </div>
               {days.map((day, column) => {
                 const slot = feed.slots[column * feed.definitions.length + row]!;
                 const content = (
                   <>
                     <span className="flex items-center gap-1.5 font-mono text-[0.625rem] uppercase tracking-[0.08em]">
-                      {statusIcon(slot.status)} {slot.status}
+                      {statusIcon(slot.status)} {statusLabel(slot.status)}
                     </span>
                     <span className="mt-2 block text-xs font-semibold leading-5">{kindLabel(slot.kind)}</span>
                     <time className="mt-1 block font-mono text-[0.625rem] text-[var(--fog)]" dateTime={slot.at}>{timeFormatter.format(new Date(slot.at))} Prague</time>
-                    {slot.fixture ? <span className="mt-2 block text-[0.625rem] uppercase tracking-[0.08em] text-[var(--fog)]">Offline fixture</span> : null}
+                    {slot.fixture ? <span className="mt-2 block text-[0.625rem] uppercase tracking-[0.08em] text-[var(--fog)]">Test example</span> : null}
                   </>
                 );
                 const className = `min-h-31 border-b border-r border-[var(--border)] p-4 last:border-r-0 text-[var(--mist)] ${slotTone(slot.kind)} ${slot.meetingHref ? "transition-colors hover:bg-[var(--surface-raised)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
                 return slot.meetingHref ? (
-                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${slot.status}`} className={className} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
+                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${statusLabel(slot.status)}`} className={className} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
                     {content}
                   </Link>
                 ) : (
-                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${slot.status}`} className={className} key={`${day}-${slot.kind}`}>{content}</div>
+                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${statusLabel(slot.status)}`} className={className} key={`${day}-${slot.kind}`}>{content}</div>
                 );
               })}
             </div>
@@ -125,11 +144,11 @@ export function WeekBoard({
         </div>
       </div>
       <div className="mt-5 flex flex-wrap gap-4 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-        <span className="text-[var(--accent)]">Venture council</span>
-        <span className="text-[var(--magenta-spark)]">Caught Up board</span>
+        <span className="text-[var(--accent)]">Company meeting</span>
+        <span className="text-[var(--magenta-spark)]">Caught Up</span>
         <span className="text-[var(--paper)]">Titty Tuesdays</span>
-        <span className="text-[var(--ash)]">Incubator</span>
-        <span>✓ held</span><span>− missed</span><span>◷ scheduled</span>
+        <span className="text-[var(--ash)]">New project research</span>
+        <span>✓ finished</span><span>− missed</span><span>◷ planned</span>
       </div>
     </>
   );

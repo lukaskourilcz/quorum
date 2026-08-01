@@ -7,8 +7,8 @@ import { agents } from "@/data/agents";
 
 export const metadata: Metadata = {
   description:
-    "The twenty-seven BoardlessAI council, specialist and control role contracts.",
-  title: "Agents"
+    "The twenty-seven AI roles that research, decide, build, write and check BoardlessAI's work.",
+  title: "AI team"
 };
 
 export default function AgentsPage() {
@@ -30,7 +30,7 @@ export default function AgentsPage() {
             </div>
             <div className="bg-[var(--card)] p-6">
               <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
-                Voting seats
+                Decision makers
               </p>
               <p className="mt-3.5 text-[2.5rem] font-semibold tracking-[-0.06em] text-[var(--accent)]">
                 {council.length}
@@ -38,16 +38,16 @@ export default function AgentsPage() {
             </div>
           </div>
         }
-        description="Each role has one named mandate, a bounded output, a measurable contract and an explicit reason whenever it is skipped. These are autonomous software roles, not human employees."
-        eyebrow="Role contracts"
-        title="Meet the agents"
+        description="Each AI role has one clear job, a result it must produce and a way to check its work. These are software roles, not human employees."
+        eyebrow="The AI team"
+        title="Meet the roles doing the work"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-24 md:px-10">
         <SectionHeading
-          description="Formal seats own strategy, execution, growth and quality. They propose independently and vote on anonymized candidates."
-          eyebrow="Council"
-          title="Four accountable seats"
+          description="These four roles are responsible for strategy, building, growth and quality. They suggest options independently, then vote without seeing who wrote each option."
+          eyebrow="Decision team"
+          title="Four roles make the final call"
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {council.map((agent) => (
@@ -58,17 +58,17 @@ export default function AgentsPage() {
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10 md:py-30">
         <SectionHeading
-          description="Specialists are summoned by capability or mandatory-control rules. Idle roles do not consume a turn."
-          eyebrow="Specialists & controls"
-          title="Expertise enters only when relevant"
+          description="Other roles join only when the meeting needs their skills or a required safety check. Roles that are not needed stay out."
+          eyebrow="Specialists and checking roles"
+          title="The right skills for each meeting"
         />
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
           {specialists.map((agent) => (
             <AgentRow agent={agent} key={agent.id} />
           ))}
           <div className="flex flex-col gap-2 px-7 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)] sm:flex-row sm:items-center sm:justify-between">
-            <span>{specialists.length} bounded roles / non-voting</span>
-            <span>Current focus n/a</span>
+            <span>{specialists.length} roles / do not vote</span>
+            <span>Current work shown on each profile</span>
           </div>
         </div>
       </section>

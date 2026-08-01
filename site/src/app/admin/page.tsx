@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  description: "Protected BoardlessAI social archive and operating state.",
+  description: "Protected BoardlessAI project files, ratings and social post drafts.",
   robots: {
     follow: false,
     index: false,
@@ -32,6 +32,24 @@ function queueTone(status: string): "neutral" | "success" | "warning" | "danger"
   if (["failed", "needs_reconciliation"].includes(status)) return "danger";
   if (["approved", "queued", "publishing"].includes(status)) return "warning";
   return "neutral";
+}
+
+function statusLabel(status: string): string {
+  const labels: Record<string, string> = {
+    needs_reconciliation: "needs checking",
+    in_progress: "being worked on",
+    owner_rated: "rated by you",
+    proposed: "suggested",
+    shortlist: "keep looking at this",
+    archived: "closed"
+  };
+  return labels[status] ?? status.replaceAll("_", " ");
+}
+
+function tabLabel(tab: AdminVentureTab): string {
+  if (tab === "niche-proposals") return "magazine ideas";
+  if (tab === "visuals") return "images";
+  return tab;
 }
 
 function SocialCopy({ label, text }: { label: string; text: string }) {
@@ -59,13 +77,13 @@ function SocialLocalePanel({ pack, locale }: { pack: AdminSocialPack; locale: "e
             {locale === "cs" ? "České vydání" : "English edition"}
           </p>
           <h3 className="mt-1 text-2xl font-semibold" id={`${pack.date}-${locale}`}>
-            {locale.toUpperCase()} social pack
+            {locale.toUpperCase()} social posts
           </h3>
         </div>
         <div className="flex flex-wrap gap-2">
           {queue.map((item) => (
             <Badge key={item.channel} tone={queueTone(item.status)}>
-              {item.channel} · {item.status.replaceAll("_", " ")}
+              {item.channel} · {statusLabel(item.status)}
             </Badge>
           ))}
         </div>
@@ -110,19 +128,19 @@ function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; u
         <Images aria-hidden="true" className="size-5 text-[var(--accent)]" />
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.12em]">Caught Up social archive</p>
-          <p className="mt-1 text-sm text-[var(--fog)]">Bilingual, copy-ready drafts stored in Git with their deterministic carousel images.</p>
+          <p className="mt-1 text-sm text-[var(--fog)]">English and Czech drafts are stored with carousel images that can be recreated from the same text and design settings.</p>
         </div>
       </div>
 
       {unreadableFiles.length > 0 ? (
         <Callout className="mb-5" tone="warning">
-          {unreadableFiles.length} social pack {unreadableFiles.length === 1 ? "file is" : "files are"} malformed or unreadable. Review: {unreadableFiles.join(", ")}.
+          {unreadableFiles.length} social post {unreadableFiles.length === 1 ? "file cannot" : "files cannot"} be read. Check: {unreadableFiles.join(", ")}.
         </Callout>
       ) : null}
 
       {packs.length === 0 ? (
         <Callout>
-          No live social pack has been stored yet. A successful Caught Up edition writes one bilingual pack to <code>state/social/packs/</code>, four draft queue records to <code>state/social/queue/</code>, and the carousel frames to <code>site/public/social/</code>. Nothing is posted automatically while the social kill switch remains on.
+          No social posts have been stored yet. A successful Caught Up edition saves one English and Czech set, four draft publishing records and the carousel images. Nothing is posted automatically while automatic social publishing is turned off.
         </Callout>
       ) : (
         <div className="grid gap-6">
@@ -135,7 +153,7 @@ function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; u
                     <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">{pack.date}</h2>
                   </div>
                   <div className="text-right font-mono text-[0.6875rem] leading-5 text-[var(--fog)]">
-                    <p>Package {pack.editionRef.slice(0, 12)}…</p>
+                    <p>Edition file {pack.editionRef.slice(0, 12)}…</p>
                     <a className="text-[var(--accent)] underline" href={pack.quoteCard.frame} rel="noreferrer" target="_blank">Open quote card</a>
                   </div>
                 </div>
@@ -221,17 +239,17 @@ export default async function AdminPage({
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="dark">Server-side state</Badge>
-              <Badge>noindex</Badge>
+              <Badge tone="dark">Private admin data</Badge>
+              <Badge>Hidden from search</Badge>
             </div>
             <h1 className="mt-6 text-5xl font-semibold tracking-[-0.06em] md:text-7xl">
-              Portfolio desk
+              Project desk
               <span className="text-[var(--accent)]">.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--muted-foreground)]">
-              Review canonical venture artifacts, rate the work that should shape
-              tomorrow’s meetings, and keep the existing global social queue in
-              one protected, Git-backed operating view.
+              Review each project’s saved work, rate what should shape
+              tomorrow’s meetings and find every social draft in one protected
+              view backed by the repository.
             </p>
           </div>
           <div className="grid gap-3 md:col-span-4">
@@ -240,14 +258,14 @@ export default async function AdminPage({
                 aria-hidden="true"
                 className="size-4 text-[var(--accent)]"
               />
-              HTTP Basic Auth · fail closed
+              Protected by username and password
             </div>
             <div className="flex items-center gap-3 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4 text-sm">
               <RefreshCw
                 aria-hidden="true"
                 className="size-4 text-[var(--accent)]"
               />
-              Snapshot {new Date(state.generatedAt).toISOString()}
+              Updated {new Date(state.generatedAt).toISOString()}
             </div>
           </div>
         </div>
@@ -262,7 +280,7 @@ export default async function AdminPage({
             scroll={false}
           >
             <Database aria-hidden="true" className="size-4" />
-            Global queue
+            Social posts and company files
           </Link>
           {portfolio.ventures.map((venture) => (
             <Link
@@ -285,19 +303,19 @@ export default async function AdminPage({
           <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
             <div className="mb-6 flex items-center gap-3">
               <Database aria-hidden="true" className="size-5 text-[var(--accent)]" />
-              <p className="text-xs font-bold uppercase tracking-[0.12em]">Canonical state files</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">Saved source files</p>
             </div>
             <div className="grid gap-4 lg:grid-cols-2">
-              <StatePanel content={state.inbox} title="Human approval inbox" />
+              <StatePanel content={state.inbox} title="Things only you can approve" />
               <StatePanel content={state.business} title="Business" />
               <StatePanel content={state.brand} title="Brand" />
-              <StatePanel content={state.opportunities} title="Opportunities" />
-              <StatePanel content={state.experiments} title="Experiments" />
+              <StatePanel content={state.opportunities} title="Business ideas" />
+              <StatePanel content={state.experiments} title="Tests" />
               <StatePanel content={state.finance} title="Finance" />
-              <StatePanel content={state.social} title="Social strategy" />
-              <StatePanel content={state.budgetLedger} title="API budget ledger" />
-              <StatePanel content={state.financeLedger} title="Finance ledger" />
-              <StatePanel content={state.treasuryLedger} title="Treasury ledger" />
+              <StatePanel content={state.social} title="Social media plan" />
+              <StatePanel content={state.budgetLedger} title="AI service budget history" />
+              <StatePanel content={state.financeLedger} title="Income and cost history" />
+              <StatePanel content={state.treasuryLedger} title="Payment history" />
             </div>
           </section>
         </>
@@ -307,14 +325,14 @@ export default async function AdminPage({
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge tone="dark">{selectedVenture.status}</Badge>
-                <Badge>{selectedVenture.cards.length} review cards</Badge>
+                <Badge>{selectedVenture.cards.length} saved items</Badge>
               </div>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em]">{selectedVenture.name}</h2>
             </div>
             {selectedVenture.tabs.includes("plans") ? (
               <Link className={buttonVariants({ variant: "secondary" })} href={`/admin/ventures/${selectedVenture.id}/binder`}>
                 <BookOpen aria-hidden="true" className="size-4" />
-                Launch binder
+                Launch checklist
               </Link>
             ) : null}
           </div>
@@ -328,21 +346,21 @@ export default async function AdminPage({
                 key={tab}
                 scroll={false}
               >
-                {tab.replaceAll("-", " ")}
+                {tabLabel(tab)}
               </Link>
             ))}
           </nav>
 
           {selectedVenture.unreadableFiles.length ? (
             <Callout className="mt-6" tone="warning">
-              {selectedVenture.unreadableFiles.length} canonical file {selectedVenture.unreadableFiles.length === 1 ? "is" : "are"} malformed or unreadable: {selectedVenture.unreadableFiles.join(", ")}.
+              {selectedVenture.unreadableFiles.length} saved {selectedVenture.unreadableFiles.length === 1 ? "file cannot" : "files cannot"} be read: {selectedVenture.unreadableFiles.join(", ")}.
             </Callout>
           ) : null}
 
           {shortlist.length ? (
             <aside className="mt-8 rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--surface)] p-6" aria-labelledby="shortlist-heading">
-              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Owner pick-list</p>
-              <h3 className="mt-2 text-2xl font-semibold" id="shortlist-heading">Incubator shortlist</h3>
+              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Ideas you liked</p>
+              <h3 className="mt-2 text-2xl font-semibold" id="shortlist-heading">Magazine ideas to keep reviewing</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {shortlist.map((card) => <Badge key={card.id} tone="success">{card.title}</Badge>)}
               </div>
@@ -361,7 +379,7 @@ export default async function AdminPage({
             </div>
           ) : (
             <Callout className="mt-8">
-              No {selectedTab?.replaceAll("-", " ")} cards are stored for {selectedVenture.name} yet. The admin does not invent demonstration records.
+              No {selectedTab ? tabLabel(selectedTab) : "saved"} items are stored for {selectedVenture.name} yet. The admin does not add fake examples.
             </Callout>
           )}
         </section>

@@ -27,6 +27,7 @@ import {
   useState
 } from "react";
 import { AgentPortrait } from "@/components/agent-portrait";
+import { publicAgentText, publicAgentTitle, publicReferenceLabel } from "@/components/agent-language";
 import {
   buildReplayMomentUrl,
   buildReplayPlaylist,
@@ -83,14 +84,14 @@ export interface ReplayCheck {
 export type { ReplayCut } from "@/components/decision-replay-model";
 
 const modeLabel: Record<RoomTurnMode, string> = {
-  gavel: "opens the room",
+  gavel: "opens the meeting",
   statement: "sets a position",
   response: "responds",
-  "reads-ledger": "checks the ledger",
+  "reads-ledger": "checks the budget record",
   "raises-concern": "tests the case",
   veto: "records a veto",
   vote: "casts a vote",
-  close: "closes the room"
+  close: "closes the meeting"
 };
 
 const modeTone: Record<
@@ -177,9 +178,9 @@ export function DecisionReplay({
   const progressStorageKey = `boardlessai:replay:progress:${transcript.openedAt}`;
   const savedCut = useMemo<ReplayCut>(
     () => ({
-      detail: `${bookmarkedTurns.length} saved ${bookmarkedTurns.length === 1 ? "turn" : "turns"} on this device.`,
+      detail: `${bookmarkedTurns.length} saved ${bookmarkedTurns.length === 1 ? "message" : "messages"} on this device.`,
       id: "saved",
-      label: "Saved moments",
+      label: "Saved points",
       turnIndexes: bookmarkedTurns
     }),
     [bookmarkedTurns]
@@ -371,7 +372,7 @@ export function DecisionReplay({
       setFollowedAgent(agentId);
       setCurrentTurnIndex(nextPlaylist[0]!);
       setIsPlaying(false);
-      setActionStatus(agentId ? `Following ${agentId}.` : "Showing all seats.");
+      setActionStatus(agentId ? `Following ${agentId}.` : "Showing everyone.");
     },
     [selectedTurnIndexes, transcript]
   );
@@ -382,7 +383,7 @@ export function DecisionReplay({
         (turn) => turn !== currentTurnIndex
       );
       setBookmarkedTurns(nextSavedTurns);
-      setActionStatus(`Turn ${currentTurnIndex + 1} removed from saved moments.`);
+      setActionStatus(`Message ${currentTurnIndex + 1} removed from saved points.`);
       if (selectedCutId === "saved") {
         if (nextSavedTurns.length) {
           const nextPosition = Math.min(
@@ -401,7 +402,7 @@ export function DecisionReplay({
     setBookmarkedTurns(
       [...bookmarkedTurns, currentTurnIndex].sort((a, b) => a - b)
     );
-    setActionStatus(`Turn ${currentTurnIndex + 1} saved on this device.`);
+    setActionStatus(`Message ${currentTurnIndex + 1} saved on this device.`);
   }, [
     bookmarkedTurns,
     currentPosition,
@@ -417,15 +418,15 @@ export function DecisionReplay({
       turnIndex: currentTurnIndex
     });
     const shareData = {
-      text: `${currentAgent?.id ?? "The council"} ${modeLabel[currentTurn.mode]} in chapter ${activeChapter?.label ?? ""}.`,
-      title: `BoardlessAI Decision Replay · Turn ${currentTurnIndex + 1}`,
+      text: `${currentAgent?.id ?? "The team"} ${modeLabel[currentTurn.mode]} in ${activeChapter?.label ?? "this part"}.`,
+      title: `BoardlessAI meeting replay · Message ${currentTurnIndex + 1}`,
       url
     };
 
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-        setActionStatus(`Turn ${currentTurnIndex + 1} shared.`);
+        setActionStatus(`Message ${currentTurnIndex + 1} shared.`);
         return;
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
@@ -434,7 +435,7 @@ export function DecisionReplay({
 
     try {
       await navigator.clipboard.writeText(url);
-      setActionStatus(`Link to turn ${currentTurnIndex + 1} copied.`);
+      setActionStatus(`Link to message ${currentTurnIndex + 1} copied.`);
     } catch {
       setActionStatus("Sharing is unavailable in this browser.");
     }
@@ -697,7 +698,7 @@ export function DecisionReplay({
 
   return (
     <section
-      aria-label="Decision Replay"
+      aria-label="Meeting replay"
       className="border-b border-[var(--border)] bg-[var(--graphite)] text-[var(--snow)]"
       id="decision-replay"
       onChangeCapture={preservePageScroll}
@@ -707,28 +708,28 @@ export function DecisionReplay({
     >
       <p aria-live="polite" className="sr-only">
         {hasStarted
-          ? `${selectedCut?.label ?? "Replay"}. Moment ${currentPosition + 1} of ${playlist.length}. Recorded turn ${currentTurnIndex + 1}. ${currentAgent.id} ${modeLabel[currentTurn.mode]}. Sent ${currentTurnTiming.iso}.`
-          : "Decision Replay ready."}
+          ? `${selectedCut?.label ?? "View"}. Point ${currentPosition + 1} of ${playlist.length}. Recorded message ${currentTurnIndex + 1}. ${currentAgent.id} ${modeLabel[currentTurn.mode]}. Sent ${currentTurnTiming.iso}.`
+          : "Meeting replay ready."}
       </p>
 
       <div className="mx-auto max-w-[var(--container)] px-5 py-8 md:px-10 md:py-12">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2.5">
-            <Badge tone="accent">Decision Replay</Badge>
+            <Badge tone="accent">Meeting replay</Badge>
             <Badge className="border-[var(--iron)] bg-[var(--graphite)] text-[var(--paper)]">
-              Recorded fixture
+              Saved test meeting
             </Badge>
             <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--ash)]">
               {hasStarted
                 ? `${String(currentTurnIndex + 1).padStart(2, "0")} / ${String(transcript.turns.length).padStart(2, "0")}`
-                : `${transcript.turns.length} turns`}
+                : `${transcript.turns.length} messages`}
             </span>
           </div>
           <a
             className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-button)] px-3 text-sm font-semibold text-[var(--paper)] transition-colors hover:bg-[var(--iron)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             href="#full-transcript"
           >
-            Read the full transcript
+            Read every message
             <ArrowDown aria-hidden="true" className="size-4" />
           </a>
         </div>
@@ -759,21 +760,21 @@ export function DecisionReplay({
                   <h2 className="mt-5 max-w-3xl text-[clamp(2.6rem,6vw,5.6rem)] font-semibold leading-[0.9] tracking-[-0.06em]">
                     Three ideas.
                     <br />
-                    Zero real signals.
+                    Zero real signs.
                     <br />
                     What would you do
                     <span className="text-[var(--accent)]">?</span>
                   </h2>
                   <p className="mt-7 max-w-xl text-base leading-7 text-[var(--ash)] md:text-lg">
-                    Make a private forecast, then watch the council test the
-                    budget, audience and evidence before it votes.
+                    Make a private guess, then watch the AI team check the
+                    budget, audience and sources before it votes.
                   </p>
                 </div>
                 <div className="relative mt-12 grid gap-3 sm:grid-cols-3">
                   {[
-                    ["34/50", "Best idea score", "Gate: 35"],
-                    ["0/3", "Eligible sources", "Gate: 3"],
-                    ["$0.00", "Actual API cost", "Offline run"]
+                    ["34/50", "Best idea score", "Needs 35"],
+                    ["0/3", "Real sources", "Needs 3"],
+                    ["$0.00", "AI service cost", "Test run"]
                   ].map(([value, label, foot]) => (
                     <div
                       className="border-t border-[var(--iron)] pt-4"
@@ -796,7 +797,7 @@ export function DecisionReplay({
                   Your call stays private
                 </p>
                 <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">
-                  What should the council do?
+                  What should the team do?
                 </h3>
                 <div className="mt-7 grid gap-3">
                   {forecastOptions.map((option) => {
@@ -850,14 +851,14 @@ export function DecisionReplay({
                     variant="accent"
                   >
                     <Play aria-hidden="true" className="size-4 fill-current" />
-                    Lock forecast and watch
+                    Save my guess and watch
                   </Button>
                   <Button
                     className="w-full border-[var(--iron)] bg-transparent text-[var(--paper)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
                     onClick={() => startReplay(false)}
                     variant="secondary"
                   >
-                    Step through without a forecast
+                    Watch without making a guess
                   </Button>
                   {resumeMoment ? (
                     <Button
@@ -866,13 +867,13 @@ export function DecisionReplay({
                       variant="ghost"
                     >
                       <RotateCcw aria-hidden="true" className="size-4" />
-                      Continue at turn {resumeMoment.turnIndex + 1}
+                      Continue at message {resumeMoment.turnIndex + 1}
                     </Button>
                   ) : null}
                 </div>
                 <p className="mt-5 text-xs leading-5 text-[var(--fog)]">
-                  No account, points or bet. Your forecast stays in this tab.
-                  Saved moments and unfinished progress stay in this browser.
+                  No account, points or bet. Your guess stays in this tab.
+                  Saved points and unfinished progress stay in this browser.
                 </p>
               </div>
             </div>
@@ -883,10 +884,10 @@ export function DecisionReplay({
                   <div>
                     <p className="inline-flex items-center gap-2 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
                       <ListVideo aria-hidden="true" className="size-3.5" />
-                      Replay cut
+                      Choose a view
                     </p>
                     <div
-                      aria-label="Replay cut"
+                      aria-label="Meeting view"
                       className="mt-3 flex flex-wrap gap-2"
                       role="group"
                     >
@@ -913,7 +914,7 @@ export function DecisionReplay({
                   </div>
 
                   <div
-                    aria-label="Moment tools"
+                    aria-label="Tools for this point"
                     className="flex flex-wrap gap-2"
                     role="group"
                   >
@@ -929,7 +930,7 @@ export function DecisionReplay({
                       ) : (
                         <Bookmark aria-hidden="true" className="size-4" />
                       )}
-                      {isBookmarked ? "Saved" : "Save moment"}
+                      {isBookmarked ? "Saved" : "Save this point"}
                     </Button>
                     <Button
                       className="min-h-11 border-[var(--iron)] bg-[var(--obsidian)] text-[var(--paper)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
@@ -938,7 +939,7 @@ export function DecisionReplay({
                       variant="secondary"
                     >
                       <Share2 aria-hidden="true" className="size-4" />
-                      Share moment
+                      Share this point
                     </Button>
                     {canFullscreen ? (
                       <Button
@@ -981,10 +982,10 @@ export function DecisionReplay({
                         />
                         <div>
                           <p className="font-mono text-sm font-semibold tracking-[-0.01em] text-[var(--paper)]">
-                            {currentAgent.id}
+                            {publicAgentTitle(currentAgent)}
                           </p>
                           <p className="mt-1 text-xs text-[var(--ash)]">
-                            {currentAgent.title}
+                            AI role
                           </p>
                           <RoomMessageTime
                             className="mt-2 block max-w-xl leading-5 text-[var(--ash)]"
@@ -1003,11 +1004,11 @@ export function DecisionReplay({
                     >
                       {addressedAgent ? (
                         <p className="mb-4 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">
-                          To {addressedAgent.id}
+                          To {publicAgentTitle(addressedAgent)}
                         </p>
                       ) : null}
                       <blockquote className="max-w-4xl text-[clamp(1.55rem,3.2vw,3rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[var(--snow)]">
-                        “{currentTurn.text}”
+                        “{publicAgentText(currentTurn.text)}”
                       </blockquote>
                       {currentTurn.evidenceRefs?.length ? (
                         <div className="mt-7 flex flex-wrap gap-2">
@@ -1019,7 +1020,7 @@ export function DecisionReplay({
                               className="rounded-full border border-[var(--steel)] px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.08em] text-[var(--ash)]"
                               key={reference}
                             >
-                              {reference}
+                              {publicReferenceLabel(reference)}
                             </span>
                           ))}
                         </div>
@@ -1027,9 +1028,9 @@ export function DecisionReplay({
                     </div>
 
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[var(--iron)] pt-5 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                      <span>Turn {currentTurnIndex + 1}</span>
+                      <span>Message {currentTurnIndex + 1}</span>
                       <span>
-                        Moment {currentPosition + 1}/{playlist.length}
+                        Point {currentPosition + 1}/{playlist.length}
                       </span>
                       <span>{activeChapter.label}</span>
                       <span>{isPlaying ? `Playing at ${speed}×` : "Paused"}</span>
@@ -1038,7 +1039,7 @@ export function DecisionReplay({
                 </div>
 
                 <aside className="border-t border-[var(--iron)] bg-[var(--graphite)] p-7 md:p-10 lg:col-span-4 lg:border-l lg:border-t-0">
-                  <p className="mono-label text-[var(--accent)]">Now in room</p>
+                  <p className="mono-label text-[var(--accent)]">Current part</p>
                   <h3 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.045em]">
                     {activeChapter.title}
                   </h3>
@@ -1048,24 +1049,24 @@ export function DecisionReplay({
 
                   <div className="mt-8 border-t border-[var(--iron)] pt-6">
                     <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-                      Your forecast
+                      Your guess
                     </p>
                     <p className="mt-3 text-sm font-semibold text-[var(--paper)]">
-                      {selectedForecastOption?.label ?? "No forecast made"}
+                      {selectedForecastOption?.label ?? "No guess made"}
                     </p>
                   </div>
 
                   <div className="mt-8 border-t border-[var(--iron)] pt-6">
                     <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-                      Follow a seat
+                      Follow one role
                     </p>
                     <ul
-                      aria-label="Seat lens"
+                      aria-label="Follow one AI role"
                       className="mt-4 flex flex-wrap gap-2"
                     >
                       <li>
                         <button
-                          aria-label="Show all seats"
+                          aria-label="Show everyone"
                           aria-pressed={followedAgent === null}
                           className={cn(
                             "flex min-h-11 items-center gap-2 rounded-[var(--radius-button)] border px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]",
@@ -1083,7 +1084,7 @@ export function DecisionReplay({
                       {agents.map((agent) => (
                         <li key={agent.id}>
                           <button
-                            aria-label={`Follow ${agent.id}, ${agent.title}`}
+                            aria-label={`Follow ${publicAgentTitle(agent)}`}
                             aria-pressed={followedAgent === agent.id}
                             className={cn(
                               "flex size-11 items-center justify-center rounded-full transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-20",
@@ -1095,7 +1096,7 @@ export function DecisionReplay({
                             )}
                             disabled={!availableSeatIds.has(agent.id)}
                             onClick={() => followSeat(agent.id)}
-                            title={`Follow ${agent.id}`}
+                            title={`Follow ${publicAgentTitle(agent)}`}
                             type="button"
                           >
                             <AgentPortrait
@@ -1109,14 +1110,14 @@ export function DecisionReplay({
                     <p className="mt-3 text-xs leading-5 text-[var(--fog)]">
                       {followedAgent
                         ? `${followedAgent} statements and addressed exchanges.`
-                        : "Every participating seat is shown."}
+                        : "Everyone who took part is shown."}
                     </p>
                   </div>
 
                   {showVerdict ? (
                     <div className="mt-8 rounded-[var(--radius-button)] border border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--graphite))] p-5">
                       <p className="mono-label text-[0.625rem] text-[var(--accent)]">
-                        Recorded verdict
+                        Saved decision
                       </p>
                       <p className="mt-3 text-lg font-semibold text-[var(--paper)]">
                         {verdict.label}
@@ -1133,15 +1134,15 @@ export function DecisionReplay({
                           )}
                         </span>
                         {selectedForecast === null
-                          ? "You watched without a forecast."
+                          ? "You watched without making a guess."
                           : forecastMatched
-                            ? "Your forecast matched the room."
-                            : "The evidence gate changed the call."}
+                            ? "Your guess matched the meeting."
+                            : "The source check changed the decision."}
                       </p>
 
                       <fieldset className="mt-6 border-t border-[var(--iron)] pt-5">
                         <legend className="mono-label text-[0.625rem] text-[var(--fog)]">
-                          Room check
+                          Quick check
                         </legend>
                         <p className="mt-3 text-sm font-semibold leading-6 text-[var(--paper)]">
                           {replayCheck.prompt}
@@ -1185,8 +1186,8 @@ export function DecisionReplay({
                             )}
                             <span>
                               {checkIsCorrect
-                                ? "That is the controlling fact. "
-                                : "The record points to another fact. "}
+                                ? "That is the key fact. "
+                                : "The meeting points to another fact. "}
                               {replayCheck.explanation}
                             </span>
                           </p>
@@ -1207,7 +1208,7 @@ export function DecisionReplay({
                       type="button"
                     >
                       <span className="mono-label text-[0.625rem] text-[var(--fog)]">
-                        Jump to next chapter
+                        Jump to the next part
                       </span>
                       <span className="mt-2 flex items-center justify-between gap-3 text-sm font-semibold text-[var(--paper)]">
                         {
@@ -1225,10 +1226,10 @@ export function DecisionReplay({
                   ) : (
                     <div className="mt-8 rounded-[var(--radius-button)] border border-[var(--iron)] bg-[var(--obsidian)] p-5">
                       <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-                        Lens complete
+                        This view is finished
                       </p>
                       <p className="mt-3 text-sm leading-6 text-[var(--ash)]">
-                        This cut ends before the recorded verdict.
+                        This view ends before the saved decision.
                       </p>
                       <Button
                         className="mt-4 w-full"
@@ -1243,7 +1244,7 @@ export function DecisionReplay({
                         size="small"
                         variant="accent"
                       >
-                        Watch the verdict
+                        Watch the decision
                         <ChevronRight aria-hidden="true" className="size-4" />
                       </Button>
                     </div>
@@ -1253,7 +1254,7 @@ export function DecisionReplay({
 
               <div className="border-t border-[var(--iron)] bg-[var(--graphite)] p-5 md:p-6">
                 <label className="sr-only" htmlFor="replay-progress">
-                  Replay progress
+                  Meeting progress
                 </label>
                 <input
                   className="h-11 w-full cursor-pointer accent-[var(--accent)]"
@@ -1280,7 +1281,7 @@ export function DecisionReplay({
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                   <div className="flex flex-wrap gap-2">
                     <Button
-                      aria-label="Previous turn"
+                      aria-label="Previous message"
                       className="border-[var(--iron)] bg-[var(--obsidian)] text-[var(--paper)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
                       disabled={currentPosition === 0}
                       onClick={() =>
@@ -1316,7 +1317,7 @@ export function DecisionReplay({
                           : "Play"}
                     </Button>
                     <Button
-                      aria-label="Next turn"
+                      aria-label="Next message"
                       className="border-[var(--iron)] bg-[var(--obsidian)] text-[var(--paper)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
                       disabled={currentPosition === lastPlaylistPosition}
                       onClick={() =>
@@ -1370,7 +1371,7 @@ export function DecisionReplay({
                   </p>
                 ) : (
                   <p className="mt-4 text-xs leading-5 text-[var(--fog)]">
-                    Keyboard: left and right arrows change turns. Space pauses
+                    Keyboard: left and right arrows change messages. Space pauses
                     or resumes when focus is outside a control.
                     {isFullscreen ? " Press Escape to exit focus mode." : ""}
                   </p>
@@ -1381,8 +1382,8 @@ export function DecisionReplay({
         </div>
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 font-mono text-[0.625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-          <span>Recorded public turns only</span>
-          <span>No simulated dialogue · private tools stay on device</span>
+          <span>Saved public messages only</span>
+          <span>No invented dialogue · private tools stay on this device</span>
         </div>
       </div>
     </section>

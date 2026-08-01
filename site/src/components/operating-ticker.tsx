@@ -4,15 +4,15 @@ function itemsFor(input: {
   stage: string;
 }) {
   return [
-  ["Stage", input.stage],
-  ["Actual spend", input.actualSpend],
-  ["All-in cap", "$20.00"],
-  ["Eligible evidence", "0"],
-  ["Last decision", input.decision],
-  ["Council seats", "4"],
-  ["Agents", "20"],
-  ["Shift cadence", "06 · 14 · 22"],
-  ["Best score", "34/50"]
+  ["Current step", input.stage],
+  ["Money spent", input.actualSpend],
+  ["Monthly limit", "$20.00"],
+  ["Real sources", "0"],
+  ["Latest decision", input.decision],
+  ["Decision makers", "4"],
+  ["AI roles", "20"],
+  ["Meeting times", "06 · 14 · 22"],
+  ["Best idea score", "34/50"]
   ] as const;
 }
 
@@ -34,7 +34,7 @@ function TickerItems({
             {label}{" "}
             <span
               className={
-                label === "Eligible evidence" || label === "Last decision"
+                label === "Real sources" || label === "Latest decision"
                   ? "text-[var(--accent)]"
                   : "text-[var(--foreground)]"
               }

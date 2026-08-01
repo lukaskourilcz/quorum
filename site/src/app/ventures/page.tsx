@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
+import { publicAgentText, publicDecisionLabel, publicOpportunityTitle } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -9,16 +10,16 @@ import { opportunities } from "@/data/fixtures";
 
 export const metadata: Metadata = {
   description:
-    "Candidate and active BoardlessAI ventures, stage gates, evidence and experiment state.",
-  title: "Ventures"
+    "Current BoardlessAI projects, earlier test ideas, sources and progress.",
+  title: "Projects"
 };
 
 const stages = [
-  ["01", "DISCOVERY", "Evidence + opportunity"],
-  ["02", "VALIDATION", "Qualified value signal"],
-  ["03", "AUDIENCE", "Repeatable acquisition"],
-  ["04", "MONETIZATION", "Verified revenue"],
-  ["05", "OPTIMIZATION", "Measured economics"]
+  ["01", "FIND A REAL PROBLEM", "Talk to people and check sources"],
+  ["02", "TEST THE IDEA", "Look for a clear sign that it helps"],
+  ["03", "REACH PEOPLE", "Find a reliable way to reach readers or buyers"],
+  ["04", "EARN FIRST REVENUE", "Confirm that someone paid"],
+  ["05", "IMPROVE THE NUMBERS", "Keep what works and fix what does not"]
 ] as const;
 
 export default function VenturesPage() {
@@ -28,7 +29,7 @@ export default function VenturesPage() {
         aside={
           <div className="rounded-[1rem] border border-[var(--slate)] bg-[var(--card)] p-8">
             <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
-              Selected ventures
+              Current projects
             </p>
             <p className="mt-4 text-7xl font-semibold leading-none tracking-[-0.07em]">
               2
@@ -38,37 +39,37 @@ export default function VenturesPage() {
             </p>
           </div>
         }
-        description="Caught Up and Titty Tuesdays are owner-adopted ventures in VALIDATION. Rejected fixture candidates remain visible as the historical evidence gate."
-        eyebrow="Business portfolio"
-        title="Two ventures, bounded by gates"
+        description="Caught Up and Titty Tuesdays are the two projects chosen by the owner. Both are still being tested. Earlier sample ideas remain visible so you can see why they were rejected."
+        eyebrow="Current work"
+        title="Two projects, with clear limits"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
         <article className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--magenta-spark)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--magenta-spark)_12%,var(--surface))] p-8 md:col-span-4 md:p-10">
-              <Badge tone="accent">Venture 001</Badge>
-              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">VALIDATION</p>
+              <Badge tone="accent">Project 001</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">TESTING THE IDEA</p>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Caught Up</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One consequential AI story a day—or an honest no-edition record.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI now governs the source digest, edition room, delivery checks and product-idea ledger while the existing Caught Up reader remains the publication surface.</p>
-              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/caught-up">Open venture record <ArrowRight aria-hidden="true" className="size-4" /></Link>
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One important AI story a day, or an honest note when none is strong enough.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI finds the sources, chooses the story, checks each release and keeps the product ideas. The existing Caught Up reader still publishes the finished edition.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/caught-up">Open project <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
         </article>
         <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--accent)_10%,var(--surface))] p-8 md:col-span-4 md:p-10">
-              <Badge tone="warning">Venture 002</Badge>
-              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--accent)]">VALIDATION · PRE-COMMERCE</p>
+              <Badge tone="warning">Project 002</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--accent)]">TESTING · PLANNING ONLY</p>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Titty Tuesdays</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One crop-top proposition, built in public before an eshop exists.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Season concepts, taste memory and marketing plans can develop now. Publishing, paid campaigns, inventory and commerce remain blocked.</p>
-              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/titty-tuesdays">Open venture record <ArrowRight aria-hidden="true" className="size-4" /></Link>
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One crop-top idea, developed in public before there is a shop.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The team can work on product designs, a consistent visual style and launch plans. It cannot publish campaigns, buy stock or sell anything yet.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/titty-tuesdays">Open project <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
         </article>
@@ -79,26 +80,24 @@ export default function VenturesPage() {
           <div className="grid md:grid-cols-12">
             <div className="bg-[var(--accent)] p-8 text-[var(--obsidian)] md:col-span-4 md:p-10">
               <p className="mono-label text-[0.65625rem] font-semibold">
-                Council verdict
+                Earlier test result
               </p>
               <p className="mt-11 text-[2rem] font-semibold leading-[1.05] tracking-[-0.05em] break-words">
-                INSUFFICIENT_
-                <wbr />
-                EVIDENCE
+                NOT ENOUGH REAL SOURCES
               </p>
             </div>
             <div className="bg-[var(--card)] p-8 md:col-span-8 md:p-10">
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
-                The founding fixture declined all candidates.
+                The first test rejected every sample idea.
               </h2>
               <p className="mt-4 max-w-4xl text-base leading-7 text-[var(--fog)]">
-                Fixture signals are useful for testing schemas, not for proving
-                demand. The next valid action is evidence collection—not a
-                manufactured product, launch page or social campaign.
+                Sample data can test the software, but it cannot prove that
+                people want a product. The next step is to find real sources
+                before making a product, launch page or social campaign.
               </p>
               <p className="mt-7 flex items-center gap-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
                 <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
-                {opportunities.length} cards evaluated / 0 passed
+                {opportunities.length} sample ideas checked / 0 passed
               </p>
             </div>
           </div>
@@ -113,13 +112,13 @@ export default function VenturesPage() {
               key={opportunity.id}
             >
               <div className="flex items-center justify-between gap-3">
-                <Badge>Fixture</Badge>
+                <Badge>Test example</Badge>
                 <span className="font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--accent)]">
-                  {opportunity.status}
+                  {publicDecisionLabel(opportunity.status)}
                 </span>
               </div>
               <h2 className="mt-7 text-[1.4375rem] font-semibold leading-tight tracking-[-0.04em]">
-                {opportunity.title}
+                {publicOpportunityTitle(opportunity.title)}
               </h2>
               <div className="mt-8 flex items-end justify-between">
                 <div>
@@ -132,7 +131,7 @@ export default function VenturesPage() {
                   </p>
                 </div>
                 <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                  Gate 35
+                  Needs 35
                 </span>
               </div>
               <div className="relative mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--border)]">
@@ -144,17 +143,17 @@ export default function VenturesPage() {
               <div className="relative mt-2 h-3">
                 <span className="absolute left-[70%] top-0 h-1.5 w-px bg-[var(--iron)]" />
                 <span className="absolute left-[calc(70%+0.375rem)] top-0 font-mono text-[0.59375rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                  Threshold
+                  Minimum
                 </span>
               </div>
               <p className="mt-6 min-h-18 text-sm leading-6 text-[var(--fog)]">
-                {opportunity.reason}
+                {publicAgentText(opportunity.reason)}
               </p>
               <Link
                 className={buttonVariants({ variant: "secondary" })}
                 href={`/ventures/${opportunity.slug}`}
               >
-                Inspect card
+                View test idea
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
             </article>
@@ -164,9 +163,9 @@ export default function VenturesPage() {
 
       <section className="border-t border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
-          <p className="mono-label text-[var(--accent)]">Stage model</p>
+          <p className="mono-label text-[var(--accent)]">How projects move forward</p>
           <h2 className="mt-5 max-w-4xl text-[clamp(2.4rem,5vw,4.2rem)] font-semibold leading-none tracking-[-0.055em]">
-            Progress is earned through gates.
+            Each step needs proof.
           </h2>
           <div className="panel-grid mt-13 md:grid-cols-5">
             {stages.map(([number, title, description], index) => (
@@ -203,7 +202,7 @@ export default function VenturesPage() {
             ))}
           </div>
           <p className="mt-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-            Current venture stage / 02 validation — Caught Up + Titty Tuesdays
+            Current step / 02 test the idea · Caught Up + Titty Tuesdays
           </p>
         </div>
       </section>

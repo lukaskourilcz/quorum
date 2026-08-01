@@ -44,14 +44,14 @@ export function StandupCountdown() {
   }, []);
 
   const accessibleLabel = snapshot
-    ? `Next shift starts ${formatStandupOccurrence(snapshot.occurrence)}. Starts in ${snapshot.countdown.days} days, ${snapshot.countdown.hours} hours, ${snapshot.countdown.minutes} minutes and ${snapshot.countdown.seconds} seconds.`
-    : "Loading the next scheduled shift.";
+    ? `Next meeting starts ${formatStandupOccurrence(snapshot.occurrence)}. Starts in ${snapshot.countdown.days} days, ${snapshot.countdown.hours} hours, ${snapshot.countdown.minutes} minutes and ${snapshot.countdown.seconds} seconds.`
+    : "Loading the next scheduled meeting.";
 
   return (
     <div className="flex w-full flex-wrap items-end gap-x-8 gap-y-4 border-l-2 border-[var(--accent)] pl-4 md:pl-5 xl:w-auto xl:shrink-0 xl:justify-end">
       <div className="min-w-52">
         <p className="mono-label text-[0.65625rem] text-[var(--accent)]">
-          Next shift starts in
+          Next meeting starts in
         </p>
         {snapshot ? (
           <time

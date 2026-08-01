@@ -9,8 +9,17 @@ import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "BoardlessAI KPI status, finance semantics and operating scorecard.",
-  title: "Metrics"
+    "BoardlessAI results, costs and the numbers that are still unknown.",
+  title: "Results"
+};
+
+const metricCopy: Record<string, { label: string; note: string }> = {
+  "Selected opportunity score": { label: "Chosen idea score", note: "No idea was chosen from the scored sample set" },
+  "Release success rate": { label: "Successful releases", note: "Only the BoardlessAI site release is counted so far" },
+  "Qualified action rate": { label: "Readers taking a useful action", note: "Reader tracking is not connected" },
+  "Security incidents": { label: "Security problems", note: "None recorded" },
+  "Over-budget commitments": { label: "Times work went over budget", note: "None recorded" },
+  "USD per validated learning": { label: "Cost of each useful finding", note: "No useful finding has been confirmed yet" }
 };
 
 function metricValue(metric: (typeof metrics)[number]) {
@@ -31,25 +40,25 @@ export default async function MetricsPage() {
             </p>
             <p className="mt-3.5 text-sm leading-6 text-[var(--fog)]">
               <span className="font-mono text-[var(--foreground)]">n/a</span>{" "}
-              means no verified measurement is available.{" "}
+              means no confirmed number is available.{" "}
               <span className="font-mono text-[var(--foreground)]">0</span>{" "}
-              means a connected measurement observed zero. They are never
-              interchangeable.
+              means the system checked and found zero. Those meanings are
+              different.
             </p>
           </div>
         }
-        description="A compact scorecard for strategy, shipping, growth, quality, organization and finance—with warm-up windows and missing instrumentation kept explicit."
-        eyebrow="Operating scorecard"
-        title="Metrics without theatre"
+        description="The numbers we can prove for projects, releases, readers, safety, the team and money. Missing data stays marked as missing."
+        eyebrow="Current results"
+        title="Numbers without the spin"
       />
 
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Stage", latestStandup.stage, "Gate not met", "text-[var(--foreground)]"],
-            ["Eligible evidence", "0", "Fixture records excluded", "text-[var(--accent)]"],
-            ["Recognized revenue", "$0.00", "No revenue event accepted", "text-[var(--accent)]"],
-            ["Month all-in", formatUsd(latestStandup.ledger.monthAllIn), "$20 hard cap", "text-[var(--foreground)]"]
+            ["Current step", "Testing ideas", "Needs more proof", "text-[var(--foreground)]"],
+            ["Real sources", "0", "Sample records do not count", "text-[var(--accent)]"],
+            ["Confirmed revenue", "$0.00", "No payment has been recorded", "text-[var(--accent)]"],
+            ["Cost this month", formatUsd(latestStandup.ledger.monthAllIn), "$20 monthly limit", "text-[var(--foreground)]"]
           ].map(([label, value, foot, color]) => (
             <div
               className="flex min-h-42 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
@@ -75,20 +84,20 @@ export default async function MetricsPage() {
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
         <SectionHeading
-          description="Targets are versioned contracts. Loosening one creates a human-review item instead of quietly making performance look better."
-          eyebrow="KPI registry"
-          title="Current observations"
+          description="Each target is saved in the code. Making a target easier requires a human review, so the team cannot quietly make its results look better."
+          eyebrow="What we track"
+          title="Current measures"
         />
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
           <Table>
             <thead>
               <tr>
-                <TableHead className="pl-8">Owner</TableHead>
-                <TableHead>Metric</TableHead>
+                <TableHead className="pl-8">Role</TableHead>
+                <TableHead>Measure</TableHead>
                 <TableHead>Value</TableHead>
                 <TableHead>Target</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="pr-8">Context</TableHead>
+                <TableHead className="pr-8">Note</TableHead>
               </tr>
             </thead>
             <tbody>
@@ -106,7 +115,7 @@ export default async function MetricsPage() {
                       {metric.owner}
                     </TableCell>
                     <TableCell className="text-[var(--mist)]">
-                      {metric.label}
+                      {metricCopy[metric.label]?.label ?? metric.label}
                     </TableCell>
                     <TableCell className="text-lg font-semibold tabular-nums">
                       {metricValue(metric)}
@@ -127,7 +136,7 @@ export default async function MetricsPage() {
                       </span>
                     </TableCell>
                     <TableCell className="pr-8 text-[var(--fog)]">
-                      {metric.note}
+                      {metricCopy[metric.label]?.note ?? metric.note}
                     </TableCell>
                   </tr>
                 );
@@ -135,8 +144,8 @@ export default async function MetricsPage() {
             </tbody>
           </Table>
           <div className="flex flex-col gap-2 px-8 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)] sm:flex-row sm:items-center sm:justify-between">
-            <span>6 contracts / 2 pass / 4 unmeasured</span>
-            <span>Targets versioned</span>
+            <span>6 measures / 2 passing / 4 without data</span>
+            <span>Targets saved in code</span>
           </div>
         </div>
       </section>
@@ -144,15 +153,15 @@ export default async function MetricsPage() {
       <section className="border-t border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
           <SectionHeading
-            description="Financial totals are derived only from verified, uniquely reconciled entries."
-            eyebrow="Finance"
-            title="Measured revenue and unavailable data stay separate"
+            description="Only confirmed money records count. Duplicate or unmatched entries are left out."
+            eyebrow="Money"
+            title="Confirmed income and unknowns stay separate"
           />
           <div className="panel-grid md:grid-cols-3">
             {[
-              ["Recognized revenue", "$0.00", "Operating ledger records no accepted revenue", false],
-              ["Verified operating cost", formatUsd(latestStandup.ledger.monthAllIn), "API + treasury + other; no double count", false],
-              ["Gross profit", "n/a", "Unavailable until revenue source exists", true]
+              ["Confirmed revenue", "$0.00", "No payment has been accepted", false],
+              ["Confirmed running cost", formatUsd(latestStandup.ledger.monthAllIn), "AI services, payments and other costs, counted once", false],
+              ["Profit before other costs", "n/a", "Cannot be calculated until revenue exists", true]
             ].map(([label, value, foot, muted]) => (
               <div
                 className="flex min-h-56 flex-col justify-between bg-[var(--surface)] p-8 transition-colors hover:bg-[var(--surface-raised)] md:p-10"

@@ -118,9 +118,9 @@ test("admin rating persists, feeds the incubator shortlist, and the launch binde
   await expect(page.getByRole("heading", { name: "E2E repair brief" })).toBeVisible();
   await page.getByLabel("Note (optional)").fill("E2E owner note");
   await page.getByRole("button", { name: "Perfect", exact: true }).click();
-  await expect(page.getByText("Rating saved to canonical history.")).toBeVisible();
+  await expect(page.getByText("Rating saved to the permanent history.")).toBeVisible();
   await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByText("Incubator shortlist")).toBeVisible();
+  await expect(page.getByText("Magazine ideas to keep reviewing")).toBeVisible();
   await expect(page.getByText("E2E repair brief").first()).toBeVisible();
   await expect(page.getByText("Rating history (1)")).toBeVisible();
 
@@ -150,7 +150,7 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
 
   await page.goto("/ideas", { waitUntil: "networkidle" });
-  const accepted = page.getByRole("link", { name: "accepted", exact: true });
+  const accepted = page.getByRole("link", { name: "Approved", exact: true });
   await accepted.scrollIntoViewIfNeeded();
   await page.evaluate(() => window.scrollTo(0, 200));
   const ideasScrollY = await page.evaluate(() => window.scrollY);
@@ -195,17 +195,17 @@ test("Decision Replay controls preserve page scroll", async ({ page }) => {
     waitUntil: "networkidle"
   });
   await page
-    .getByRole("button", { name: "Step through without a forecast" })
+    .getByRole("button", { name: "Watch without making a guess" })
     .click();
 
-  const nextTurn = page.getByRole("button", { name: "Next turn" });
+  const nextTurn = page.getByRole("button", { name: "Next message" });
   await nextTurn.scrollIntoViewIfNeeded();
   const nextScrollY = await page.evaluate(() => window.scrollY);
   expect(nextScrollY).toBeGreaterThan(0);
   await nextTurn.click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(nextScrollY);
 
-  const previousTurn = page.getByRole("button", { name: "Previous turn" });
+  const previousTurn = page.getByRole("button", { name: "Previous message" });
   const previousScrollY = await page.evaluate(() => window.scrollY);
   await previousTurn.click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(previousScrollY);
@@ -216,7 +216,7 @@ test("Council Simulator controls preserve page scroll", async ({ page }) => {
   await page.goto("/boardroom", { waitUntil: "networkidle" });
 
   const templates = page.getByRole("group", {
-    name: "Decision room templates"
+    name: "Meeting topics"
   });
   const nextTemplate = templates.getByRole("button").nth(1);
   await nextTemplate.scrollIntoViewIfNeeded();
@@ -233,7 +233,7 @@ for (const [route, heading] of [
   test(`renders the new room kind at ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: new RegExp(heading) })).toBeVisible();
-    await expect(page.getByText("Every recorded turn")).toBeVisible();
+    await expect(page.getByText("Every saved message")).toBeVisible();
     await expect(page.locator("ol li").first()).toBeVisible();
   });
 }

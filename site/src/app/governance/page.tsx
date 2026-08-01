@@ -2,57 +2,64 @@ import type { Metadata } from "next";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
-import { governanceSteps } from "@/data/fixtures";
-
 export const metadata: Metadata = {
   description:
-    "The evidence, consensus, permission, budget and public-record controls governing BoardlessAI.",
-  title: "Governance"
+    "The source, voting, permission, budget and publishing rules used by BoardlessAI.",
+  title: "Rules"
 };
 
 const controls = [
   {
-    title: "Structured proposals",
-    text: "Every candidate carries a task type, bounded scope, evidence references, owner, expected outcome and cost."
+    title: "Every idea needs the basics",
+    text: "Each idea states the job, its limits, sources, responsible role, expected result and cost."
   },
   {
-    title: "Deterministic consensus",
-    text: "Candidate authorship is hidden; four formal seats use ranked Borda voting with a rotating chair."
+    title: "Voting follows the same rules",
+    text: "The author is hidden while four decision makers rank the choices. A different role chairs each meeting."
   },
   {
-    title: "Independent veto",
-    text: "AUDIT can block unsupported claims, unsafe patches, security risk and control regressions."
+    title: "Safety can stop the work",
+    text: "AUDIT can block unsupported claims, unsafe code changes, security risks and weaker safeguards."
   },
   {
-    title: "All-in budget",
-    text: "Calls, media, treasury payments and commitments share one $20 monthly operating ceiling."
+    title: "One monthly spending limit",
+    text: "AI services, media, payments and subscriptions share one $20 monthly limit."
   },
   {
-    title: "Human authority",
-    text: "Credentials, legal acts, brand clearance, high-impact spend and Tier C organization changes require explicit approval."
+    title: "Some choices belong to people",
+    text: "Passwords, legal acts, brand approval, larger spending and major changes to the system need direct human approval."
   },
   {
-    title: "Truthful unknowns",
-    text: "Unavailable data is n/a, fixture evidence is excluded and no-action decisions remain part of the public record."
+    title: "Unknown means unknown",
+    text: "Missing data is shown as n/a, sample data never counts as proof and decisions to do nothing remain public."
   }
 ] as const;
 
-const stepTags = ["SCOUT", "COUNCIL", "PEOPLE", "BORDA", "FORGE", "LEDGER"];
+const stepTags = ["RESEARCH", "SUGGEST", "CHOOSE TEAM", "DECIDE", "BUILD", "CHECK"];
+
+const decisionSteps = [
+  ["01", "Learn", "The research role gathers information from named public sources that the system is allowed to read."],
+  ["02", "Suggest", "The decision makers suggest clear options with sources, expected cost and a reason to stop."],
+  ["03", "Choose the team", "Only useful specialists join the meeting. Required safety and budget roles cannot be removed."],
+  ["04", "Decide", "Four roles rank the choices. The safety reviewer can block an unsafe action."],
+  ["05", "Do the work", "Approved code changes and queued tasks run within limits for each call, day and month."],
+  ["06", "Check and publish", "The team checks the result and cost, then publishes the useful record without private system data."]
+] as const;
 
 const agentMay = [
-  "Research allowlisted public sources.",
-  "Score opportunities and recommend NO_ACTION.",
-  "Edit allowlisted repository paths through review gates.",
-  "Prepare experiments, pages and social drafts.",
-  "Publish only after credentials, scope and channel approval exist."
+  "Research approved public sources.",
+  "Score business ideas and recommend doing nothing when proof is weak.",
+  "Edit approved parts of the code after required reviews.",
+  "Prepare tests, pages and social drafts.",
+  "Publish only after passwords, limits and channel approval are in place."
 ] as const;
 
 const humanOnly = [
-  "Supply or rotate credentials and secrets.",
+  "Provide or change passwords and secret keys.",
   "Accept terms, sign contracts or form legal entities.",
-  "Clear or rename the company brand.",
-  "Approve external spend outside pre-authorized bounds.",
-  "Make Tier C control or organization changes."
+  "Approve or rename the company brand.",
+  "Approve outside spending beyond the agreed limit.",
+  "Make major changes to permissions, budgets or the AI team."
 ] as const;
 
 export default function GovernancePage() {
@@ -61,13 +68,13 @@ export default function GovernancePage() {
       <PageIntro
         aside={
           <div className="rounded-[0.875rem] border border-l-[3px] border-[var(--accent)] bg-[var(--surface-raised)] p-5 text-sm leading-6 text-[var(--mist)]">
-            Autonomy does not expand authority. Missing credentials, permission
-            or evidence always fails closed.
+            AI roles cannot give themselves more power. Work stops when a
+            password, permission or reliable source is missing.
           </div>
         }
-        description="BoardlessAI delegates operations to agents, not accountability. The system is designed around explicit authority, bounded context and reversible work."
-        eyebrow="Operating constitution"
-        title="Governance by evidence"
+        description="AI roles handle the daily work, but they do not get unlimited authority. Every action has clear limits and should be easy to review or undo."
+        eyebrow="Company rules"
+        title="How the AI team is kept in check"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-24 md:px-10">
@@ -95,24 +102,24 @@ export default function GovernancePage() {
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
         <SectionHeading
-          description="The same loop handles strategy, builds, growth, finance, social, incidents and organization changes."
-          eyebrow="Decision sequence"
-          title="From observation to verified record"
+          description="The same six steps are used for plans, code, marketing, money, social posts, problems and team changes."
+          eyebrow="How a decision is made"
+          title="From a source to a checked result"
         />
         <div className="border-t border-[var(--border)]">
-          {governanceSteps.map((step, index) => (
+          {decisionSteps.map(([number, title, description], index) => (
             <div
               className="grid gap-4 border-b border-[var(--border)] px-4 py-7 transition-colors hover:bg-[var(--surface-raised)] md:grid-cols-12 md:items-baseline md:gap-8"
-              key={step.number}
+              key={number}
             >
               <span className="font-mono text-xs tracking-[0.1em] text-[var(--accent)] md:col-span-1">
-                {step.number}
+                {number}
               </span>
               <h3 className="text-[1.6875rem] font-semibold leading-tight tracking-[-0.04em] md:col-span-3">
-                {step.title}
+                {title}
               </h3>
               <p className="max-w-3xl text-[0.96875rem] leading-7 text-[var(--fog)] md:col-span-7">
-                {step.description}
+                {description}
               </p>
               <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)] md:col-span-1 md:justify-self-end">
                 {stepTags[index]}
@@ -125,22 +132,22 @@ export default function GovernancePage() {
       <section className="border-t border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
           <SectionHeading
-            description="The boundary is deliberate: agents can prepare and execute reversible work, while people retain legal and credential authority."
-            eyebrow="Authority matrix"
-            title="What agents may—and may not—do"
+            description="AI roles can prepare and carry out work that is easy to undo. People keep control of legal decisions, passwords and other sensitive actions."
+            eyebrow="Who can do what"
+            title="What AI roles can and cannot do"
           />
           <div className="grid gap-4 lg:grid-cols-2">
             {[
               {
-                label: "Agent authority",
-                title: "Bounded and reversible",
+                label: "AI role permissions",
+                title: "Limited and easy to undo",
                 items: agentMay,
                 color: "text-[var(--success-soft)]",
                 marker: "+"
               },
               {
-                label: "Human authority",
-                title: "Explicit approval only",
+                label: "Human-only decisions",
+                title: "Needs direct approval",
                 items: humanOnly,
                 color: "text-[var(--accent)]",
                 marker: "—"
@@ -179,17 +186,17 @@ export default function GovernancePage() {
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <p className="mono-label text-[var(--accent)]">
-              Organization changes
+              Changes to the AI team
             </p>
             <h2 className="mt-5 text-4xl font-semibold leading-[1.05] tracking-[-0.05em]">
-              Roles cannot rewrite their own controls.
+              AI roles cannot rewrite their own limits.
             </h2>
           </div>
           <div className="grid gap-4 md:col-span-8 lg:grid-cols-3">
             {[
-              ["Tier A", "Prompt or routing refinement", "PEOPLE", false],
-              ["Tier B", "Mandate or release control", "PEOPLE + AUDIT", false],
-              ["Tier C", "Authority, budget or human boundary", "HUMAN_APPROVAL", true]
+              ["Small", "Wording or meeting assignment change", "PEOPLE", false],
+              ["Medium", "Role responsibility or release check", "PEOPLE + AUDIT", false],
+              ["Major", "Permission, budget or human-only rule", "OWNER APPROVAL", true]
             ].map(([tier, scope, required, critical]) => (
               <div
                 className={`flex min-h-52 flex-col justify-between rounded-[1.125rem] border bg-[var(--card)] p-8 ${
@@ -211,7 +218,7 @@ export default function GovernancePage() {
                 <div>
                   <p className="font-semibold leading-snug">{String(scope)}</p>
                   <p className="mt-4 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-[var(--fog)]">
-                    Required: {String(required)}
+                    Needs: {String(required)}
                   </p>
                 </div>
               </div>
@@ -225,21 +232,21 @@ export default function GovernancePage() {
           <div className="grid md:grid-cols-12">
             <div className="bg-[var(--accent)] p-10 text-[var(--obsidian)] md:col-span-4 md:p-12">
               <p className="mono-label text-[0.65625rem] font-semibold">
-                Consensus fallback
+                Safe fallback
               </p>
               <p className="mt-12 text-[2.875rem] font-semibold tracking-[-0.06em]">
-                NO_ACTION
+                DO NOTHING
               </p>
             </div>
             <div className="bg-[var(--card)] p-10 md:col-span-8 md:p-12">
               <h3 className="text-2xl font-semibold tracking-[-0.04em]">
-                Abstention is an engineered outcome.
+                Doing nothing is a valid decision.
               </h3>
               <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">
-                If proposals are invalid, evidence is missing, costs are unsafe,
-                AUDIT vetoes or the KEEPER recheck fails, the system does
-                nothing externally and records why. It never improvises around
-                a failed control.
+                If an idea is invalid, sources are missing, costs are unsafe,
+                AUDIT blocks it or the final rules check fails, the system takes
+                no outside action and saves the reason. It cannot work around a
+                failed safety check.
               </p>
             </div>
           </div>

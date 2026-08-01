@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "Launch binder · Admin",
+  title: "Launch checklist · Admin",
   robots: { index: false, follow: false, nocache: true }
 };
 
@@ -47,12 +47,12 @@ export default async function LaunchBinderPage({
       <section className="mx-auto max-w-5xl px-5 py-12 md:px-8 md:py-18">
         <div className="border-b border-[var(--border)] pb-8">
           <div className="flex flex-wrap gap-2">
-            <Badge tone="dark">Launch binder</Badge>
+            <Badge tone="dark">Launch checklist</Badge>
             <Badge>{binder.plans.length} ready plans</Badge>
           </div>
           <h1 className="mt-6 text-5xl font-semibold tracking-[-0.06em] md:text-7xl">{binder.venture.name}</h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--fog)]">
-            Approved plans and owner-rated Perfect plans, grouped for launch-day use. Cost figures remain estimates until an owner-approved commerce connection exists.
+            Approved plans and plans you rated Perfect, grouped for launch day. Costs remain estimates until you approve a way to take payments.
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export default async function LaunchBinderPage({
 
                         <div className="mt-7 grid gap-7 lg:grid-cols-2">
                           <section>
-                            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.12em]">Tactics</h4>
+                            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.12em]">Actions</h4>
                             <ol className="mt-3 grid gap-4">
                               {plan.tactics.map((tactic, index) => (
                                 <li className="border-l-2 border-[var(--border)] pl-4" key={`${tactic.type}-${index}`}>
@@ -104,7 +104,7 @@ export default async function LaunchBinderPage({
 
                         {plan.audienceSpecs.length ? (
                           <section className="mt-7 border-t border-[var(--border)] pt-5">
-                            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.12em]">Audience specifications</h4>
+                            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.12em]">Who this is for</h4>
                             <div className="mt-3 grid gap-3 sm:grid-cols-2">
                               {plan.audienceSpecs.map((spec) => (
                                 <div className="rounded-[var(--radius-button)] border border-[var(--border)] p-4" key={spec.ref}>
@@ -118,9 +118,9 @@ export default async function LaunchBinderPage({
                         ) : null}
 
                         <dl className="mt-7 grid gap-4 border-t border-[var(--border)] pt-5 text-sm sm:grid-cols-3">
-                          <div><dt className="text-[var(--fog)]">Audience specs</dt><dd className="mt-1 font-semibold">{plan.audienceRefs.length ? `${plan.audienceSpecs.length}/${plan.audienceRefs.length} resolved` : "None attached"}</dd></div>
-                          <div><dt className="text-[var(--fog)]">KPIs</dt><dd className="mt-1 font-semibold">{plan.kpis.length ? plan.kpis.join(", ") : "None attached"}</dd></div>
-                          <div><dt className="text-[var(--fog)]">Produced assets</dt><dd className="mt-1 font-semibold">{plan.assets.length ? plan.assets.join(", ") : "None attached"}</dd></div>
+                          <div><dt className="text-[var(--fog)]">Audience details</dt><dd className="mt-1 font-semibold">{plan.audienceRefs.length ? `${plan.audienceSpecs.length}/${plan.audienceRefs.length} found` : "None attached"}</dd></div>
+                          <div><dt className="text-[var(--fog)]">Success measures</dt><dd className="mt-1 font-semibold">{plan.kpis.length ? plan.kpis.join(", ") : "None attached"}</dd></div>
+                          <div><dt className="text-[var(--fog)]">Finished files</dt><dd className="mt-1 font-semibold">{plan.assets.length ? plan.assets.join(", ") : "None attached"}</dd></div>
                         </dl>
                       </CardContent>
                     </Card>
@@ -131,7 +131,7 @@ export default async function LaunchBinderPage({
           </div>
         ) : (
           <Callout className="mt-10">
-            No approved or owner-rated Perfect plans are stored yet. Draft plans stay out of the launch binder.
+            No approved plans or plans rated Perfect are stored yet. Drafts stay out of the launch checklist.
           </Callout>
         )}
       </section>

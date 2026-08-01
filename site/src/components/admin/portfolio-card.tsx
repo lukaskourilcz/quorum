@@ -65,10 +65,10 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
         <div className="min-h-11">
           {originHref ? (
             <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--accent)] underline underline-offset-4" href={originHref}>
-              Origin room <ExternalLink aria-hidden="true" className="size-4" />
+              Source meeting <ExternalLink aria-hidden="true" className="size-4" />
             </Link>
           ) : (
-            <p className="content-center text-sm text-[var(--fog)]">Origin room unavailable</p>
+            <p className="content-center text-sm text-[var(--fog)]">Source meeting unavailable</p>
           )}
         </div>
 

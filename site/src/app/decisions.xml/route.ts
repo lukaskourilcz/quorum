@@ -9,7 +9,7 @@ export async function GET() {
   const base = getPublicSiteUrl();
   const decisions = await getPublicDecisions();
   const items = decisions.map((decision) => `<item>
-    <title>${escapeXml(`${decision.kind} — ${decision.outcome}`)}</title>
+    <title>${escapeXml(`${decision.kind} · ${decision.outcome}`)}</title>
     <link>${base}${decision.href}</link>
     <guid isPermaLink="false">${escapeXml(decision.id)}</guid>
     <pubDate>${new Date(decision.at).toUTCString()}</pubDate>

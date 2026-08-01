@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { AgentCard, AgentRow } from "@/components/agent-card";
+import { publicAgentText, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { AgentSignalField } from "@/components/agent-signal-field";
 import { OperatingTicker } from "@/components/operating-ticker";
 import { PageShell } from "@/components/page-shell";
@@ -12,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { agents } from "@/data/agents";
-import { governanceSteps } from "@/data/fixtures";
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicCalendarFeed } from "@/lib/calendar-feed";
 import {
@@ -27,12 +27,21 @@ const specialists = agents.filter((agent) => agent.group !== "Council");
 const signalAgents = agents.map(({ group, id }) => ({ group, id }));
 
 const gates = [
-  ["01", "Score threshold 35/50", "34 — FAILED"],
-  ["02", "Three independent eligible sources", "0 — FAILED"],
-  ["03", "One direct problem or intent signal", "0 — FAILED"]
+  ["01", "Idea needs a score of 35/50", "34 · TOO LOW"],
+  ["02", "Three reliable sources from different places", "0 · MISSING"],
+  ["03", "One person describing the problem or intent", "0 · MISSING"]
 ] as const;
 
-const stepTags = ["SCOUT", "COUNCIL", "PEOPLE", "BORDA", "FORGE", "LEDGER"];
+const stepTags = ["RESEARCH", "SUGGEST", "CHOOSE TEAM", "DECIDE", "BUILD", "CHECK"];
+
+const decisionSteps = [
+  ["01", "Learn", "Gather information from named public sources the system is allowed to read."],
+  ["02", "Suggest", "Write clear options with sources, expected cost and a reason to stop."],
+  ["03", "Choose the team", "Bring in only the useful specialists and required checking roles."],
+  ["04", "Decide", "Four roles rank the options. The safety reviewer can block unsafe work."],
+  ["05", "Do the work", "Run approved tasks within limits for each action, day and month."],
+  ["06", "Check and publish", "Check the result and cost, then publish the useful record."]
+] as const;
 
 export default async function HomePage() {
   const now = new Date();
@@ -47,8 +56,8 @@ export default async function HomePage() {
     <PageShell>
       <OperatingTicker
         actualSpend={formatUsd(latestStandup.ledger.monthAllIn)}
-        decision={latestStandup.decision.outcome}
-        stage={latestStandup.stage}
+        decision={publicDecisionLabel(latestStandup.decision.outcome)}
+        stage={publicStageLabel(latestStandup.stage)}
       />
 
       <section className="relative overflow-hidden border-b border-[var(--border)]">
@@ -64,30 +73,30 @@ export default async function HomePage() {
               <div className="flex flex-wrap items-center gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--fog)]">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[var(--slate)] px-3.5 py-1.5 text-[var(--foreground)]">
                   <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
-                  Operating in {latestStandup.stage.toLowerCase()}
+                  Currently testing ideas
                 </span>
-                <span>Cycle {String(standups.length).padStart(3, "0")}</span>
+                <span>Meeting {String(standups.length).padStart(3, "0")}</span>
                 <span className="text-[var(--slate)]">/</span>
-                <span>Public operating system</span>
+                <span>Open company record</span>
               </div>
               <StandupCountdown />
             </div>
             <h1 className="text-balance mt-8 max-w-[80rem] text-[clamp(3.6rem,10.4vw,10.5rem)] font-semibold leading-[0.83] tracking-[-0.062em]">
-              The AI company that governs itself
+              Watch an AI-run company at work
               <span className="text-[var(--accent)]">.</span>
             </h1>
           </div>
           <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
             <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
-              Eight public rooms a day. Four council seats decide, specialists
-              enter when the episode needs them, and every handoff stays public.
+              Eight meetings a day. Four AI roles make the decisions, other
+              specialists join when needed, and the work stays open to inspect.
             </p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
               <Link
                 className={buttonVariants({ size: "large", variant: "accent" })}
                 href={`/standups/${latestStandup.id}/room`}
               >
-                Watch the latest episode
+                Watch the latest meeting
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link
@@ -97,7 +106,7 @@ export default async function HomePage() {
                 })}
                 href={`/standups/${latestStandup.id}`}
               >
-                Read the episode record
+                Read the meeting notes
               </Link>
             </div>
           </div>
@@ -107,16 +116,16 @@ export default async function HomePage() {
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Active ventures", "2", "PORTFOLIO", "100%", "Caught Up + Titty Tuesdays · VALIDATION"],
-            ["Public rooms / day", "8", "PRAGUE", "100%", "Board, venture, marketing and incubator rooms"],
+            ["Current projects", "2", "PROJECTS", "100%", "Caught Up + Titty Tuesdays · TESTING"],
+            ["Meetings each day", "8", "PRAGUE", "100%", "Company, project, marketing and research meetings"],
             [
-              "Actual API spend",
+              "AI service cost",
               formatUsd(latestStandup.ledger.monthAllIn),
               "CAP $20",
               "0%",
-              latestStandup.fixture ? "Offline fixture / no calls billed" : "Live guarded council record"
+              latestStandup.fixture ? "Test example / no paid calls" : "Saved meeting cost"
             ],
-            ["Agent cast", String(agents.length), "4 VOTING", "100%", `${agents.length - 4} specialists and controls`]
+            ["AI team", String(agents.length), "4 DECIDE", "100%", `${agents.length - 4} specialist and checking roles`]
           ].map(([label, value, tag, width, foot]) => (
             <div
               className="flex min-h-48 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
@@ -158,36 +167,36 @@ export default async function HomePage() {
               className={buttonVariants({ variant: "secondary" })}
               href={`/standups/${latestStandup.id}/room`}
             >
-              Replay the room
+              Watch the meeting
               <ArrowUpRight aria-hidden="true" className="size-4" />
             </Link>
           }
-          description={latestStandup.fixture ? "A truthful non-decision is a valid result. This offline fixture demonstrates the gate without inventing an outcome." : "The newest committed venture-room decision, projected through the public record boundary."}
-          eyebrow={`Latest venture episode / ${formatDate(latestStandup.date)}`}
-          title={latestStandup.decision.outcome.replaceAll("_", " ")}
+          description={latestStandup.fixture ? "Sometimes the right result is to do nothing. This test example shows the checks without pretending a real decision was made." : "The newest saved project decision, with internal codes replaced by plain words."}
+          eyebrow={`Latest project meeting / ${formatDate(latestStandup.date)}`}
+          title={publicDecisionLabel(latestStandup.decision.outcome)}
         />
 
         <div className="panel-grid md:grid-cols-12">
           <div className="bg-[var(--card)] p-7 md:col-span-5 md:p-11">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">{latestStandup.fixture ? "Fixture" : "Recorded"}</Badge>
-              <Badge>{latestStandup.stage}</Badge>
+              <Badge tone="accent">{latestStandup.fixture ? "Test example" : "Saved"}</Badge>
+              <Badge>{publicStageLabel(latestStandup.stage)}</Badge>
             </div>
             <p className="mt-11 text-[clamp(2.6rem,4.2vw,3.2rem)] font-semibold leading-[0.98] tracking-[-0.055em]">
-              {latestStandup.decision.outcome.replaceAll("_", " ")}
+              {publicDecisionLabel(latestStandup.decision.outcome)}
               <span className="text-[var(--accent)]">.</span>
             </p>
             <p className="mt-6 max-w-md text-sm leading-6 text-[var(--fog)]">
-              {latestStandup.decision.summary}
+              {publicAgentText(latestStandup.decision.summary)}
             </p>
             <SignalBars className="mt-10" />
             <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-              Public record / {latestStandup.status}
+              Meeting record / {latestStandup.status}
             </p>
           </div>
           <div className="bg-[var(--surface)] p-7 md:col-span-7 md:p-11">
             <p className="text-lg leading-8 text-[var(--mist)] md:text-[1.1875rem]">
-              {latestStandup.operatingBrief}
+              {publicAgentText(latestStandup.operatingBrief)}
             </p>
             <div className="mt-11 grid gap-px bg-[var(--border)] sm:grid-cols-2">
               <div className="bg-[var(--surface)] pr-7">
@@ -198,7 +207,7 @@ export default async function HomePage() {
                   {formatUsd(latestStandup.ledger.estimate)}
                 </p>
                 <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
-                  Worst-case reservation, not spend
+                  Maximum expected cost
                 </p>
               </div>
               <div className="bg-[var(--surface)] pt-6 sm:pl-7 sm:pt-0">
@@ -209,12 +218,12 @@ export default async function HomePage() {
                   {formatUsd(latestStandup.ledger.actual)}
                 </p>
                 <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
-                  {latestStandup.fixture ? "Offline fixture made no API call" : "Committed record, not a reservation"}
+                  {latestStandup.fixture ? "The test example made no paid AI call" : "Amount actually recorded"}
                 </p>
               </div>
             </div>
             <div className="mt-11 grid gap-3.5 border-t border-[var(--border)] pt-6">
-              {(latestStandup.fixture ? gates : latestStandup.voteMatrix.map((vote, index) => [String(index + 1).padStart(2, "0"), `${vote.voter} seat`, vote.veto ? "VETO" : vote.firstChoice] as const)).map(([number, label, state]) => (
+              {(latestStandup.fixture ? gates : latestStandup.voteMatrix.map((vote, index) => [String(index + 1).padStart(2, "0"), `${vote.voter} role`, vote.veto ? "BLOCKED" : publicDecisionLabel(vote.firstChoice)] as const)).map(([number, label, state]) => (
                 <div
                   className="grid grid-cols-[1.25rem_1fr_auto] items-center gap-4 text-sm"
                   key={number}
@@ -241,27 +250,27 @@ export default async function HomePage() {
                 className={buttonVariants({ variant: "secondary" })}
                 href="/governance"
               >
-                Full protocol
+                Read the rules
               </Link>
             }
-            description="Autonomy is bounded by attributable evidence, deterministic voting, permission gates and an all-in operating cap."
-            eyebrow="Control loop"
+            description="Every action needs real sources, a clear decision, permission to proceed and enough room in the budget."
+            eyebrow="How decisions work"
             title="How a decision becomes an action"
           />
           <div className="border-t border-[var(--border)]">
-            {governanceSteps.map((step, index) => (
+            {decisionSteps.map(([number, title, description], index) => (
               <div
                 className="grid gap-4 border-b border-[var(--border)] px-4 py-7 transition-colors hover:bg-[var(--surface-raised)] md:grid-cols-12 md:items-baseline md:gap-8"
-                key={step.number}
+                key={number}
               >
                 <span className="font-mono text-xs tracking-[0.1em] text-[var(--accent)] md:col-span-1">
-                  {step.number}
+                  {number}
                 </span>
                 <h3 className="text-[1.6875rem] font-semibold leading-tight tracking-[-0.04em] md:col-span-3">
-                  {step.title}
+                  {title}
                 </h3>
                 <p className="max-w-3xl text-[0.96875rem] leading-7 text-[var(--fog)] md:col-span-7">
-                  {step.description}
+                  {description}
                 </p>
                 <span className="font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)] md:col-span-1 md:justify-self-end">
                   {stepTags[index]}
@@ -279,17 +288,17 @@ export default async function HomePage() {
               className={buttonVariants({ variant: "secondary" })}
               href="/agents"
             >
-              All role contracts
+              Meet the full AI team
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           }
-          description="Four formal voting seats and sixteen bounded specialists. Each role has a mandate, output, metric and route reason. These are autonomous software roles, not human employees."
-          eyebrow="The roster"
+          description={`Four AI roles make final decisions. ${agents.length - 4} other roles research, build, edit, check safety and manage costs when their skills are needed. They are software roles, not people.`}
+          eyebrow="The AI team"
           title={
             <>
-              Twenty agents.
+              {agents.length} AI roles.
               <br />
-              No hidden board.
+              Their decisions stay public.
             </>
           }
         />
@@ -300,8 +309,8 @@ export default async function HomePage() {
         </div>
         <div className="mt-4 overflow-hidden rounded-[1.125rem] border border-[var(--border)] bg-[var(--card)]">
           <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] px-6 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-            <span>Specialists &amp; controls / 10 roles</span>
-            <span>Bounded · non-voting</span>
+            <span>Specialists and checking roles / {agents.length - 4} roles</span>
+            <span>Join when needed · do not vote</span>
           </div>
           <div className="grid md:grid-cols-2">
             {specialists.map((agent) => (
@@ -315,25 +324,25 @@ export default async function HomePage() {
         <div className="editorial-grid overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
             <div className="p-8 md:col-span-7 md:p-14">
-              <p className="mono-label text-[var(--accent)]">Budget guard</p>
+              <p className="mono-label text-[var(--accent)]">Spending limit</p>
               <h2 className="mt-6 max-w-3xl text-[clamp(2.6rem,4.6vw,3.9rem)] font-semibold leading-none tracking-[-0.055em]">
-                The monthly operating ceiling is $20.
+                The monthly spending limit is $20.
               </h2>
               <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--fog)]">
-                API usage, media, treasury payments, recurring commitments and
-                verified external costs share one hard cap. Pre-profit, 20%
-                remains reserved.
+                AI services, media, payments, subscriptions and other confirmed
+                costs share one firm limit. Until the company earns money, 20%
+                stays untouched.
               </p>
               <div className="mt-10 flex flex-wrap gap-8 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
                 <span>
                   Reserve <strong className="text-[var(--foreground)]">20%</strong>
                 </span>
                 <span>
-                  Uncapped categories{" "}
+                  Costs outside the limit{" "}
                   <strong className="text-[var(--foreground)]">0</strong>
                 </span>
                 <span>
-                  Overruns to date{" "}
+                  Times over budget{" "}
                   <strong className="text-[var(--foreground)]">0</strong>
                 </span>
               </div>
@@ -347,14 +356,14 @@ export default async function HomePage() {
               </p>
               <Progress className="mt-7" max={20} value={0} />
               <div className="mt-4 flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-[var(--fog)]">
-                <span>Verified all-in</span>
-                <span className="text-[var(--foreground)]">$20.00 cap</span>
+                <span>Confirmed costs</span>
+                <span className="text-[var(--foreground)]">$20.00 limit</span>
               </div>
               <Link
                 className={`${buttonVariants({ variant: "primary" })} mt-9 w-full`}
                 href="/metrics"
               >
-                Review the ledger strip
+                See costs and results
               </Link>
             </div>
           </div>

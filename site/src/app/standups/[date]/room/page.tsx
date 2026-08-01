@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Gavel, ShieldAlert } from "lucide-react";
 import { AgentPortrait } from "@/components/agent-portrait";
+import { publicAgentText, publicAgentTitle, publicReferenceLabel } from "@/components/agent-language";
 import {
   DecisionReplay,
   type ReplayChapter,
@@ -49,13 +50,13 @@ export async function generateMetadata({
   return {
     description: standup
       ? standup.fixture
-        ? `Replay the ${formatDate(standup.date)} BoardlessAI council decision, make a private forecast and read every recorded turn.`
-        : `Replay the ${formatDate(standup.date)} BoardlessAI live shift record and read every timestamped public turn.`
-      : "BoardlessAI decision replay.",
+        ? `Watch the ${formatDate(standup.date)} BoardlessAI test meeting, make a private guess and read every saved message.`
+        : `Watch the ${formatDate(standup.date)} BoardlessAI meeting and read every public message with its time.`
+      : "BoardlessAI meeting replay.",
     robots: standup?.fixture ? { follow: true, index: false } : undefined,
     title: standup
-      ? `Decision Replay · ${formatDate(standup.date)}`
-      : "Decision Replay"
+      ? `Meeting replay · ${formatDate(standup.date)}`
+      : "Meeting replay"
   };
 }
 
@@ -63,25 +64,25 @@ const replayChapters = [
   {
     id: "brief",
     label: "01 · Brief",
-    title: "Three ideas enter the room",
+    title: "Three ideas enter the meeting",
     summary:
-      "VIZE frames one choice: select a candidate today or wait for evidence.",
+      "The strategy lead frames one choice: select an idea today or wait for reliable sources.",
     startTurn: 0
   },
   {
     id: "ledger",
-    label: "02 · Ledger",
-    title: "The four-cent ceiling",
+    label: "02 · Budget",
+    title: "The four-cent limit",
     summary:
-      "LEDGER checks the cost before the council spends a turn on the question.",
+      "The budget keeper checks the cost before the team spends time on the question.",
     startTurn: 1
   },
   {
     id: "feasibility",
     label: "03 · Build",
-    title: "Buildable is not validated",
+    title: "Possible to build does not mean people want it",
     summary:
-      "FORGE can ship the strongest idea by lunch. That does not prove the room should choose it.",
+      "FORGE can build the strongest idea by lunch. That does not prove the team should choose it.",
     startTurn: 2
   },
   {
@@ -94,10 +95,10 @@ const replayChapters = [
   },
   {
     id: "evidence",
-    label: "05 · Evidence",
+    label: "05 · Sources",
     title: "AUDIT reads the record",
     summary:
-      "Every signal came from an internal fixture. The control seat prepares a veto.",
+      "Every sign came from sample data. The safety reviewer prepares to block the idea.",
     startTurn: 5
   },
   {
@@ -105,23 +106,23 @@ const replayChapters = [
     label: "06 · Test",
     title: "No metric without a market",
     summary:
-      "The council tests whether a bounded first experiment can exist without a real segment.",
+      "The team asks whether a small first test can work without a real audience.",
     startTurn: 9
   },
   {
     id: "vote",
     label: "07 · Vote",
-    title: "Four seats make the call",
+    title: "Four roles make the call",
     summary:
-      "VIZE puts a formal hold proposal to the council. Each seat records one line.",
+      "VIZE suggests waiting. Each decision maker records one short reason.",
     startTurn: 11
   },
   {
     id: "verdict",
-    label: "08 · Verdict",
-    title: "The council chooses patience",
+    label: "08 · Decision",
+    title: "The team chooses to wait",
     summary:
-      "The vote closes the venture path until SCOUT returns with attributable outside evidence.",
+      "The project waits until SCOUT returns with reliable information from outside sources.",
     startTurn: 16
   }
 ] satisfies readonly ReplayChapter[];
@@ -134,32 +135,32 @@ const forecastOptions = [
   },
   {
     id: "wait",
-    label: "Wait for real evidence",
-    detail: "Hold the venture decision until outside signals pass the gate."
+    label: "Wait for real sources",
+    detail: "Pause the project decision until outside sources show real interest."
   },
   {
     id: "redirect",
     label: "Change the brief",
-    detail: "Reject the three candidates and send the council another way."
+    detail: "Reject the three ideas and give the team a different question."
   }
 ] satisfies readonly ReplayForecastOption[];
 
 const replayCuts = [
   {
     id: "full",
-    label: "Full room",
-    detail: "Every recorded turn in the founding room."
+    label: "Full meeting",
+    detail: "Every saved message in the first test meeting."
   },
   {
     id: "highlights",
     label: "Highlights",
     detail:
-      "The brief, gate checks, evidence, vote and verdict in fifteen moments.",
+      "The question, required checks, sources, vote and decision in fifteen points.",
     turnIndexes: [0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16]
   },
   {
     id: "evidence",
-    label: "Evidence trail",
+    label: "Source trail",
     detail:
       "The exact exchange that separates buildability from validation.",
     turnIndexes: [2, 4, 5, 6, 7, 8, 9, 10, 15, 16]
@@ -167,16 +168,16 @@ const replayCuts = [
   {
     id: "vote",
     label: "Vote",
-    detail: "The formal proposal, four seat records and public outcome.",
+    detail: "The final suggestion, four votes and public result.",
     turnIndexes: [11, 12, 13, 14, 15, 16]
   }
 ] satisfies readonly ReplayCut[];
 
 const replayCheck = {
-  prompt: "Which fact gave AUDIT grounds to block a venture choice?",
+  prompt: "Which fact gave AUDIT a reason to block a project choice?",
   answerId: "fixture-evidence",
   explanation:
-    "Every signal was an internal fixture. Budget and implementation feasibility both passed their checks.",
+    "Every sign came from sample data. The budget and ability to build both passed their checks.",
   options: [
     {
       id: "budget",
@@ -184,24 +185,24 @@ const replayCheck = {
     },
     {
       id: "fixture-evidence",
-      label: "No evidence came from an attributable outside source."
+      label: "No reliable information came from an outside source."
     },
     {
       id: "build",
-      label: "FORGE could not build a bounded demo."
+      label: "The product builder could not make a small test version."
     }
   ]
 } satisfies ReplayCheck;
 
 const modeLabel: Record<RoomTurnMode, string> = {
-  gavel: "opens the room",
+  gavel: "opens the meeting",
   statement: "sets a position",
   response: "responds",
-  "reads-ledger": "checks the ledger",
+  "reads-ledger": "checks the budget record",
   "raises-concern": "tests the case",
   veto: "records a veto",
   vote: "casts a vote",
-  close: "closes the room"
+  close: "closes the meeting"
 };
 
 const modeTone: Record<
@@ -250,7 +251,7 @@ export default async function StandupRoomPage({
                 href={`/standups/${standup.id}`}
               >
                 <ArrowLeft aria-hidden="true" className="size-4" />
-                Back to episode
+                Back to meeting notes
               </Link>
               <Link
                 className={buttonVariants({
@@ -259,29 +260,29 @@ export default async function StandupRoomPage({
                 })}
                 href="/boardroom#room-archive"
               >
-                All boardrooms
+                All meetings
               </Link>
             </div>
             <div className="mt-8 grid items-end gap-8 md:grid-cols-12">
               <div className="md:col-span-8">
                 <div className="flex flex-wrap gap-2">
-                  <Badge tone="accent">Decision Replay</Badge>
-                  <Badge>{standup.fixture ? "Offline fixture" : "Recorded"}</Badge>
+                  <Badge tone="accent">Meeting replay</Badge>
+                  <Badge>{standup.fixture ? "Test example" : "Saved"}</Badge>
                 </div>
                 <h1 className="mt-6 max-w-5xl text-[clamp(2.8rem,7.4vw,7.4rem)] font-semibold leading-[0.88] tracking-[-0.067em]">
-                  Watch the council make the call
+                  Watch the AI team make the call
                   <span className="text-[var(--accent)]">.</span>
                 </h1>
               </div>
               <div className="md:col-span-4">
                 <p className="text-base leading-7 text-[var(--fog)]">
-                  Make a private forecast. Replay every recorded turn. See
-                  which piece of evidence changes the room.
+                  Make a private guess. Watch every saved message. See which
+                  source changes the decision.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                  <span>{transcript.turns.length} turns</span>
-                  <span>{speakers.length} agents</span>
-                  <span>{replayChapters.length} chapters</span>
+                  <span>{transcript.turns.length} messages</span>
+                  <span>{speakers.length} AI roles</span>
+                  <span>{replayChapters.length} parts</span>
                 </div>
               </div>
             </div>
@@ -298,9 +299,9 @@ export default async function StandupRoomPage({
             transcript={transcript}
             verdict={{
               outcomeId: "wait",
-              label: "Wait for real evidence",
+              label: "Wait for real sources",
               summary:
-                "The council refused to found a venture from fixture data. SCOUT must return with attributable outside signals before another selection vote."
+                "The team refused to start a project from sample data. SCOUT must return with reliable outside sources before another vote."
             }}
           />
         ) : null}
@@ -313,20 +314,19 @@ export default async function StandupRoomPage({
             <div className="md:col-span-7">
               <p className="mono-label text-[var(--accent)]">Public record</p>
               <h2 className="mt-5 text-[clamp(2.5rem,5vw,4.8rem)] font-semibold leading-[0.92] tracking-[-0.06em]">
-                Read every turn.
+                Read every message.
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--fog)]">
-                The replay uses this transcript without adding dialogue,
-                reactions or hidden reasoning. {standup.fixture
-                  ? "The fixture label remains visible because no live council call occurred. Message times follow the deterministic fixture timeline between room open and close."
-                  : "Each message time was recorded when the live council response was received."}
+                This replay does not add dialogue, reactions or private model reasoning. Internal codes are replaced with plain words here; the saved source file keeps the original wording. {standup.fixture
+                  ? "The test label stays visible because no live team decision occurred. Message times follow the saved test timeline."
+                  : "Each message time was saved when the live response arrived."}
               </p>
             </div>
             <aside className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 md:col-span-5 md:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-                    Room roster
+                    Who joined
                   </p>
                   <p className="mt-3 text-sm text-[var(--mist)]">
                     {formatRoomDateTime(transcript.openedAt)} to{" "}
@@ -334,7 +334,7 @@ export default async function StandupRoomPage({
                   </p>
                 </div>
                 <Gavel
-                  aria-label={`${transcript.gavel} chaired the room`}
+                  aria-label={`${transcript.gavel} led the meeting`}
                   className="size-5 text-[var(--accent)]"
                 />
               </div>
@@ -346,9 +346,9 @@ export default async function StandupRoomPage({
                       className="size-10 shrink-0 rounded-full"
                     />
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold">{speaker.id}</p>
+                      <p className="text-sm font-semibold">{publicAgentTitle(speaker)}</p>
                       <p className="mt-0.5 truncate text-xs text-[var(--fog)]">
-                        {speaker.title}
+                        AI role
                       </p>
                     </div>
                   </li>
@@ -385,11 +385,11 @@ export default async function StandupRoomPage({
                   </MessageAvatar>
                   <MessageBubble emphasis={bubbleEmphasis}>
                     <MessageHeader>
-                      <MessageName>{speaker.id}</MessageName>
-                      <MessageRole>· {speaker.title}</MessageRole>
+                      <MessageName>{publicAgentTitle(speaker)}</MessageName>
+                      <MessageRole>· AI role</MessageRole>
                       {isAudit ? (
                         <ShieldAlert
-                          aria-label="Control seat"
+                          aria-label="Safety reviewer"
                           className="size-4 shrink-0 text-[var(--accent)]"
                         />
                       ) : null}
@@ -399,10 +399,10 @@ export default async function StandupRoomPage({
                     </MessageHeader>
                     {listener ? (
                       <p className="mb-2 font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-                        To {listener.id}
+                        To {publicAgentTitle(listener)}
                       </p>
                     ) : null}
-                    <MessageContent>{turn.text}</MessageContent>
+                    <MessageContent>{publicAgentText(turn.text)}</MessageContent>
                     <MessageMeta>
                       <RoomMessageTime
                         className="text-[var(--ash)]"
@@ -416,7 +416,7 @@ export default async function StandupRoomPage({
                               className="rounded-full border border-[var(--slate)] px-2.5 py-0.5 text-[var(--ash)]"
                               key={reference}
                             >
-                              {reference}
+                              {publicReferenceLabel(reference)}
                             </span>
                           ))}
                         </>
@@ -435,7 +435,7 @@ export default async function StandupRoomPage({
                   Recorded outcome
                 </p>
                 <p className="mt-3 text-xl font-semibold leading-8 tracking-[-0.025em] md:text-2xl">
-                  {standup.decision.summary}
+                  {publicAgentText(standup.decision.summary)}
                 </p>
               </div>
               <div className="flex flex-wrap gap-3 md:col-span-4 md:justify-end">
@@ -443,13 +443,13 @@ export default async function StandupRoomPage({
                   className={buttonVariants({ variant: "secondary" })}
                   href={`/standups/${standup.id}`}
                 >
-                  Full episode record
+                  Full meeting notes
                 </Link>
                 <Link
                   className={buttonVariants({ variant: "primary" })}
                   href="/boardroom#room-archive"
                 >
-                  All boardrooms
+                  All meetings
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
               </div>

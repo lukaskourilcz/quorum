@@ -3,7 +3,7 @@ import { serverTokens } from "@/brand/tokens";
 import { publicState } from "@/data/fixtures";
 
 export const alt =
-  "BoardlessAI — the AI company that governs itself. Public decisions and measurable outcomes.";
+  "BoardlessAI. Watch an AI-run company at work through its daily meetings, decisions and results.";
 export const size = {
   width: 1200,
   height: 630
@@ -54,7 +54,7 @@ export default function OpenGraphImage() {
           maxWidth: 960
         }}
       >
-        The AI company that governs itself.
+        Watch an AI-run company at work.
       </div>
       <div
         style={{
@@ -67,7 +67,7 @@ export default function OpenGraphImage() {
       >
         <span>{publicState.stage}</span>
         <span>{publicState.decision}</span>
-        <span>$20 all-in cap</span>
+        <span>$20 monthly limit</span>
       </div>
     </div>,
     size

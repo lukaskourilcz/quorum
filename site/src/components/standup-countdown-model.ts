@@ -4,7 +4,7 @@ export const STANDUP_SCHEDULE = [
   {
     hour: 5,
     hours: "05:00 · daily",
-    label: "Caught Up edition room",
+    label: "Caught Up edition meeting",
     minute: 0,
     phase: "cu-edition"
   },
@@ -25,7 +25,7 @@ export const STANDUP_SCHEDULE = [
   {
     hour: 17,
     hours: "17:00 · daily",
-    label: "Caught Up product room",
+    label: "Caught Up product meeting",
     minute: 0,
     phase: "cu-product"
   },
@@ -213,13 +213,13 @@ export function formatStandupOccurrence(occurrence: StandupOccurrence) {
 export function formatPhaseLabel(phase: string) {
   const phaseLabels: Record<string, string> = {
     afternoon: "Afternoon shift",
-    am: "AM council · legacy",
+    am: "Morning meeting · old label",
     founding: "Founding",
     morning: "Morning shift",
     night: "Night shift",
-    "cu-edition": "Caught Up edition room",
-    "cu-product": "Caught Up product room",
-    pm: "PM council · legacy"
+    "cu-edition": "Caught Up edition meeting",
+    "cu-product": "Caught Up product meeting",
+    pm: "Afternoon meeting · old label"
   };
 
   return phaseLabels[phase] ?? phase;

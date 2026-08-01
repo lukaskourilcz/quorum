@@ -16,19 +16,19 @@ export async function TittyTuesdaysVenturePage() {
       <PageIntro
         aside={
           <div className="rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)] p-8">
-            <Badge tone="warning">Pre-commerce</Badge>
+            <Badge tone="warning">Planning only</Badge>
             <p className="mt-5 text-5xl font-semibold tracking-[-0.06em]">002</p>
             <p className="mt-3 text-sm text-[var(--fog)]">Owner countersign pending</p>
           </div>
         }
-        description="One garment, one line. The venture is building the brand, concepts and launch plans before an eshop exists."
-        eyebrow="Venture 002 / Validation"
+        description="One garment, one line. The project is shaping the brand, product ideas and launch plan before there is an online shop."
+        eyebrow="Project 002 / Testing the idea"
         title="Titty Tuesdays"
       />
 
       <section className="border-y border-[var(--border)] bg-[var(--graphite)] text-[var(--paper)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-24">
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">The proposition</p>
+          <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">The product idea</p>
           <blockquote className="mt-6 max-w-5xl text-[clamp(2.4rem,6vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.06em]">
             “We only sell sexy crop tops with the text TITTY TUESDAYS on it.”
           </blockquote>
@@ -63,29 +63,29 @@ export async function TittyTuesdaysVenturePage() {
 
       <section className="border-y border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28">
-          <SectionHeading eyebrow="Campaign record" title="Plans before promotion" description={snapshot.season.campaignArc} />
+          <SectionHeading eyebrow="Campaign plan" title="Plans before promotion" description={snapshot.season.campaignArc} />
           <div className="grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-[var(--border)] md:grid-cols-3">
             <div className="bg-[var(--card)] p-7"><Shirt aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="mt-8 mono-label text-[var(--fog)]">Product status</p><p className="mt-3 text-xl font-semibold">4 concepts · 0 live</p></div>
             <div className="bg-[var(--card)] p-7"><LockKeyhole aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="mt-8 mono-label text-[var(--fog)]">Distribution</p><p className="mt-3 text-xl font-semibold">Draft only</p></div>
-            <div className="bg-[var(--card)] p-7"><Stamp aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="mt-8 mono-label text-[var(--fog)]">Recorded API spend</p><p className="mt-3 text-xl font-semibold">{formatUsd(snapshot.apiSpendUsd)}</p></div>
+            <div className="bg-[var(--card)] p-7"><Stamp aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="mt-8 mono-label text-[var(--fog)]">Recorded AI service cost</p><p className="mt-3 text-xl font-semibold">{formatUsd(snapshot.apiSpendUsd)}</p></div>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28">
-        <SectionHeading eyebrow="Authority record" title="Three gates remain visible" />
+        <SectionHeading eyebrow="What still needs approval" title="Three limits remain" />
         <div className="grid gap-4 lg:grid-cols-3">
           {[
-            ["Founding", snapshot.foundingStatus, "The planning surface may ship; schedules and external action wait for the owner."],
-            ["Budget", snapshot.budgetStatus, "The scheduler will use the lower-cost fallback until the August decision is signed."],
-            ["Commerce", "future stage", "No eshop, inventory, payment or purchase link exists in this build."]
+            ["Starting the project", snapshot.foundingStatus, "Planning pages can go live, but schedules and anything public outside this site wait for the owner."],
+            ["Budget", snapshot.budgetStatus, "The schedule uses the cheaper option until the August decision is signed."],
+            ["Selling", "later", "There is no online shop, stock, payment system or purchase link in this version."]
           ].map(([title, status, description]) => (
             <Card key={title}><CardContent><Badge tone="warning">{status}</Badge><h3 className="mt-6 text-2xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-[var(--fog)]">{description}</p></CardContent></Card>
           ))}
         </div>
         {snapshot.bootstrapMeetingId ? (
           <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href={`/meetings/${snapshot.bootstrapMeetingId}`}>
-            Read the dry season room <ArrowRight aria-hidden="true" className="size-4" />
+            Read the test meeting <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         ) : null}
       </section>

@@ -11,7 +11,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T02:59:59.000Z"))).toEqual({
       hours: "05:00 · daily",
       iso: "2026-07-30T03:00:00.000Z",
-      label: "Caught Up edition room",
+      label: "Caught Up edition meeting",
       phase: "cu-edition"
     });
   });
@@ -47,7 +47,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T12:00:01.000Z"))).toEqual({
       hours: "17:00 · daily",
       iso: "2026-07-30T15:00:00.000Z",
-      label: "Caught Up product room",
+      label: "Caught Up product meeting",
       phase: "cu-product"
     });
   });
@@ -65,7 +65,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-07-30T20:00:01.000Z"))).toEqual({
       hours: "05:00 · daily",
       iso: "2026-07-31T03:00:00.000Z",
-      label: "Caught Up edition room",
+      label: "Caught Up edition meeting",
       phase: "cu-edition"
     });
   });
@@ -74,7 +74,7 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-12-15T21:00:01.000Z"))).toEqual({
       hours: "05:00 · daily",
       iso: "2026-12-16T04:00:00.000Z",
-      label: "Caught Up edition room",
+      label: "Caught Up edition meeting",
       phase: "cu-edition"
     });
   });
@@ -140,10 +140,10 @@ describe("Standup countdown schedule", () => {
     expect(formatPhaseLabel("morning")).toBe("Morning shift");
     expect(formatPhaseLabel("afternoon")).toBe("Afternoon shift");
     expect(formatPhaseLabel("night")).toBe("Night shift");
-    expect(formatPhaseLabel("cu-edition")).toBe("Caught Up edition room");
-    expect(formatPhaseLabel("cu-product")).toBe("Caught Up product room");
+    expect(formatPhaseLabel("cu-edition")).toBe("Caught Up edition meeting");
+    expect(formatPhaseLabel("cu-product")).toBe("Caught Up product meeting");
     expect(formatPhaseLabel("founding")).toBe("Founding");
-    expect(formatPhaseLabel("am")).toBe("AM council · legacy");
-    expect(formatPhaseLabel("pm")).toBe("PM council · legacy");
+    expect(formatPhaseLabel("am")).toBe("Morning meeting · old label");
+    expect(formatPhaseLabel("pm")).toBe("Afternoon meeting · old label");
   });
 });

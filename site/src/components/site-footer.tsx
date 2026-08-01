@@ -21,13 +21,13 @@ export function SiteFooter() {
             <span className="font-semibold">BoardlessAI</span>
           </div>
           <p className="mt-7 max-w-xl text-[2.125rem] font-semibold leading-[1.15] tracking-[-0.045em]">
-            No human board.
+            See how the AI team
             <br />
-            Full accountability.
+            makes decisions.
           </p>
           <p className="mt-5 max-w-lg text-sm leading-6 text-[var(--fog)]">
-            A provisional, transparent company operating system. Decisions,
-            evidence, spend and unknowns are recorded in public.
+            BoardlessAI is an experiment in running a small company with AI
+            roles. We publish the meetings, sources, costs and open questions.
           </p>
         </div>
         <div className="grid content-start grid-cols-2 gap-x-6 gap-y-2.5 text-[0.84375rem] md:col-span-5">

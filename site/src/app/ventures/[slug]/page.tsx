@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CircleX, ExternalLink } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { publicAgentText, publicDecisionLabel, publicOpportunityTitle } from "@/components/agent-language";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
@@ -34,22 +35,22 @@ export async function generateMetadata({
   const { slug } = await params;
   if (slug === "caught-up") {
     return {
-      description: "Caught Up is BoardlessAI venture 001: one consequential AI story a day, governed in public.",
+      description: "Caught Up is BoardlessAI project 001: one important AI story a day, made in public.",
       title: "Caught Up"
     };
   }
   if (slug === "titty-tuesdays") {
     return {
-      description: "Titty Tuesdays is BoardlessAI venture 002: one crop-top proposition, developed in public before commerce.",
+      description: "Titty Tuesdays is BoardlessAI project 002: one crop-top idea, developed in public before anything is sold.",
       robots: { follow: true, index: false },
       title: "Titty Tuesdays"
     };
   }
   const opportunity = opportunities.find((item) => item.slug === slug);
   return {
-    description: opportunity?.reason ?? "BoardlessAI opportunity card.",
+    description: opportunity?.reason ?? "BoardlessAI test idea.",
     robots: opportunity?.fixture ? { follow: true, index: false } : undefined,
-    title: opportunity?.title ?? "Venture"
+    title: opportunity ? publicOpportunityTitle(opportunity.title) : "Project"
   };
 }
 
@@ -75,22 +76,22 @@ export default async function VentureDetailPage({
             href="/ventures"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
-            Venture register
+            All projects
           </Link>
           <div className="mt-10 grid gap-8 md:grid-cols-12 md:items-end">
             <div className="md:col-span-8">
               <div className="flex flex-wrap gap-2">
-                <Badge>Demo fixture</Badge>
-                <Badge tone="danger">{opportunity.status}</Badge>
+                <Badge>Test example</Badge>
+                <Badge tone="danger">{publicDecisionLabel(opportunity.status)}</Badge>
               </div>
               <h1 className="mt-7 max-w-5xl text-[clamp(3.5rem,8vw,7.5rem)] font-semibold leading-[0.86] tracking-[-0.07em]">
-                {opportunity.title}
+                {publicOpportunityTitle(opportunity.title)}
                 <span className="text-[var(--accent)]">.</span>
               </h1>
             </div>
             <div className="md:col-span-4">
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-                Opportunity score
+                Idea score
               </p>
               <p className="mt-3 text-7xl font-semibold tracking-[-0.07em]">
                 {opportunity.score}
@@ -104,14 +105,14 @@ export default async function VentureDetailPage({
         <section className="border-y border-[var(--border)] bg-[var(--card)]">
           <div className="mx-auto grid max-w-[var(--container)] gap-10 px-5 py-16 md:grid-cols-12 md:px-8 md:py-20">
             <div className="md:col-span-8">
-              <Badge>Gate verdict</Badge>
+              <Badge>Why it stopped</Badge>
               <p className="mt-6 text-3xl font-semibold leading-tight tracking-[-0.04em]">
-                {opportunity.reason}
+                {publicAgentText(opportunity.reason)}
               </p>
             </div>
             <Callout className="md:col-span-4" tone="warning">
-              This page is noindex because it documents a synthetic rejected
-              candidate, not a customer product.
+              This sample idea was created to test the software. It is not a
+              real product and search engines are asked not to list it.
             </Callout>
           </div>
         </section>
@@ -119,13 +120,13 @@ export default async function VentureDetailPage({
         <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
           <div className="grid gap-12 md:grid-cols-12">
             <div className="md:col-span-4">
-              <Badge>Ten dimensions</Badge>
+              <Badge>Ten checks</Badge>
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">
-                Every weak dimension stays visible.
+                Every weak point stays visible.
               </h2>
               <p className="mt-5 text-sm leading-6 text-[var(--muted-foreground)]">
-                Selection needs at least 35/50 and no dimension below 2. Total
-                score cannot hide a fatal weakness.
+                An idea needs at least 35/50, and every check must score 2 or
+                more. One serious weakness can still stop a high-scoring idea.
               </p>
             </div>
             <Card className="md:col-span-8">
@@ -139,10 +140,10 @@ export default async function VentureDetailPage({
                     >
                       <div>
                         <div className="mb-2 flex items-center justify-between gap-4">
-                          <p className="text-sm font-medium">{dimension}</p>
+                          <p className="text-sm font-medium">{publicAgentText(dimension)}</p>
                           {score < 2 ? (
                             <span className="text-xs font-bold text-[var(--destructive-soft)]">
-                              Fails floor
+                              Too low
                             </span>
                           ) : null}
                         </div>
@@ -160,9 +161,9 @@ export default async function VentureDetailPage({
         <section className="bg-[var(--graphite)] text-[var(--snow)]">
           <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--iron)] sm:grid-cols-3">
             {[
-              ["Independent eligible evidence", opportunity.evidence, "≥ 3"],
-              ["Direct problem / intent signals", opportunity.direct, "≥ 1"],
-              ["Minimum dimension", opportunity.minDimension, "≥ 2"]
+              ["Real sources from different places", opportunity.evidence, "≥ 3"],
+              ["People describing the problem or intent", opportunity.direct, "≥ 1"],
+              ["Lowest check score", opportunity.minDimension, "≥ 2"]
             ].map(([label, value, target]) => (
               <div className="bg-[var(--graphite)] p-7 md:p-9" key={label}>
                 <CircleX
@@ -173,7 +174,7 @@ export default async function VentureDetailPage({
                   {label}
                 </p>
                 <p className="mt-3 text-4xl font-semibold">{value}</p>
-                <p className="mt-2 text-xs text-[var(--ash)]">Gate: {target}</p>
+                <p className="mt-2 text-xs text-[var(--ash)]">Minimum: {target}</p>
               </div>
             ))}
           </div>
@@ -182,32 +183,32 @@ export default async function VentureDetailPage({
         <section className="mx-auto grid max-w-[var(--container)] gap-4 px-5 py-20 md:grid-cols-2 md:px-8 md:py-28">
           <Card>
             <CardHeader>
-              <Badge>Evidence</Badge>
-              <CardTitle className="mt-5">No eligible references</CardTitle>
+              <Badge>Sources</Badge>
+              <CardTitle className="mt-5">No real sources</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Three `FIX-E-*` records exercise source normalization and
-                deduplication. Their confidence is zero and `fixture: true`, so
-                the founding gate excludes them.
+                Three sample records test how the software handles and removes
+                duplicate sources. They carry no confidence and do not count as
+                proof that people want this idea.
               </CardDescription>
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
-              <Badge>Experiment</Badge>
-              <CardTitle className="mt-5">Not activatable</CardTitle>
+              <Badge>First test</Badge>
+              <CardTitle className="mt-5">Cannot start yet</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
-                No immutable segment, baseline, target, review cycle and
-                evidence-backed offer can be registered before opportunity
-                selection.
+                Before a test can start, the team must choose who it is for,
+                record the starting point and target, set a review date and
+                support the offer with real sources.
               </CardDescription>
               <Separator className="my-6" />
               <p className="flex items-center gap-2 text-sm font-semibold">
                 <ExternalLink aria-hidden="true" className="size-4" />
-                External action: none
+                Nothing has been published or sent
               </p>
             </CardContent>
           </Card>

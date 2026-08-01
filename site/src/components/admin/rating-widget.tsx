@@ -74,7 +74,7 @@ export function RatingWidget({
       }
       setHistory((current) => [payload.record!, ...current.filter((entry) => entry.id !== payload.record!.id)]);
       setNote("");
-      setMessage("Rating saved to canonical history.");
+      setMessage("Rating saved to the permanent history.");
     } catch (caught) {
       setActive(previous);
       setMessage("");
@@ -88,7 +88,7 @@ export function RatingWidget({
     <div className="border-t border-[var(--border)] pt-5">
       <fieldset>
         <legend className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">
-          Owner rating
+          Your rating
         </legend>
         <div className="mt-3 grid grid-cols-3 gap-2">
           {choices.map((choice) => (
@@ -121,7 +121,7 @@ export function RatingWidget({
           id={noteId}
           maxLength={500}
           onChange={(event) => setNote(event.target.value)}
-          placeholder="What should PALATE learn from this?"
+          placeholder="What should the style reviewer learn from this?"
           value={note}
         />
       </label>

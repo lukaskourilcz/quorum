@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
   description:
-    "Current BoardlessAI business state, thesis status, constraints and roadmap.",
+    "What BoardlessAI is working on now, what is proven and what still needs testing.",
   title: "Company"
 };
 
@@ -27,19 +27,19 @@ export default function CompanyPage() {
         aside={
           <Card className="bg-[var(--graphite)] text-[var(--snow)]">
             <CardContent>
-              <Badge tone="accent">DISCOVERY</Badge>
+              <Badge tone="accent">TESTING IDEAS</Badge>
               <p className="mt-7 text-3xl font-semibold tracking-[-0.045em]">
-                No validated thesis
+                Two current projects
               </p>
               <p className="mt-3 text-sm leading-6 text-[var(--ash)]">
-                Honest state, not a missing marketing paragraph.
+                Caught Up and Titty Tuesdays are still early tests.
               </p>
             </CardContent>
           </Card>
         }
-        description="BoardlessAI is currently a transparent operating system and research lab. It has not selected, launched or monetized a customer venture."
-        eyebrow="Living business plan"
-        title="The company state"
+        description="BoardlessAI is testing two owner-chosen projects in public. Caught Up has a working publishing process. Titty Tuesdays is still planning only. Neither has confirmed revenue."
+        eyebrow="Current business plan"
+        title="Where the company stands"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8 md:pb-28">
@@ -47,21 +47,21 @@ export default function CompanyPage() {
           {[
             {
               icon: Building2,
-              label: "Thesis",
-              value: "n/a",
-              note: "No opportunity passed the founding gate"
+              label: "Current projects",
+              value: "2",
+              note: "Caught Up and Titty Tuesdays"
             },
             {
               icon: FlaskConical,
-              label: "Active experiments",
+              label: "Live market tests",
               value: "0",
-              note: "Observed zero; nothing is registered"
+              note: "None are running yet"
             },
             {
               icon: CircleDollarSign,
-              label: "Recognized revenue",
-              value: "n/a",
-              note: "No verified revenue source connected"
+              label: "Confirmed revenue",
+              value: "$0",
+              note: "No payment has been recorded"
             }
           ].map((item) => (
             <Card key={item.label}>
@@ -88,35 +88,35 @@ export default function CompanyPage() {
       <section className="border-y border-[var(--border)] bg-[var(--card)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
           <SectionHeading
-            description="The plan gets more specific only after the evidence warrants it."
-            eyebrow="Business contract"
-            title="What is known—and unknown"
+            description="The plan becomes more specific when real results support it."
+            eyebrow="What we know"
+            title="Clear facts and open questions"
           />
           <div className="grid gap-4 md:grid-cols-2">
             {[
               {
-                title: "Audience & job",
-                text: "n/a. Candidate descriptions are synthetic fixtures and are not personas or customer discovery."
+                title: "Readers and buyers",
+                text: "Caught Up serves people who want one important AI story a day. Titty Tuesdays still needs real buyer research."
               },
               {
-                title: "Offer & pricing",
-                text: "n/a. No price may be presented as a real offer before a bounded monetization experiment."
+                title: "Product and price",
+                text: "Caught Up is a free publication. Titty Tuesdays has no shop, stock or approved price yet."
               },
               {
-                title: "Distribution",
-                text: "n/a. Threads and Instagram are configured draft-only; no venture fact exists to distribute."
+                title: "How people find the work",
+                text: "Caught Up can prepare English and Czech posts for Instagram and Threads. Publishing remains a separate approved step."
               },
               {
-                title: "Unit economics",
-                text: "n/a revenue and gross profit; verified API, treasury and other costs currently total $0.00."
+                title: "Income and costs",
+                text: "Confirmed revenue is $0.00. Recorded AI service, payment and other costs currently total $0.00."
               },
               {
-                title: "Current product",
-                text: "The public governance and evidence system documented on this site—not a validated customer product."
+                title: "What exists today",
+                text: "Caught Up has a publishing workflow and reader app. Titty Tuesdays has brand, product and campaign plans, but no shop."
               },
               {
-                title: "Kill criterion",
-                text: "Stop or replace candidates without direct intent evidence, a reachable channel or a bounded first experiment."
+                title: "When to stop",
+                text: "Pause or replace an idea when people show no interest, there is no practical way to reach them or a small first test cannot be run safely."
               }
             ].map((item) => (
               <Card key={item.title}>
@@ -134,36 +134,36 @@ export default function CompanyPage() {
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
         <SectionHeading
-          description="Milestones are conditions, not calendar promises."
-          eyebrow="Roadmap"
-          title="Evidence before expansion"
+          description="These steps depend on results, not promised dates."
+          eyebrow="What comes next"
+          title="Prove one step before taking the next"
         />
         <div className="space-y-0">
           {[
             [
               "Now",
-              "Operating system",
-              "Complete safety, evidence, finance, site and automation validation."
+              "Make the system reliable",
+              "Finish checking safety, sources, costs, the website and scheduled work."
             ],
             [
               "Next",
-              "Eligible evidence",
-              "Collect attributable signals from allowed sources without counting fixtures."
-            ],
-            [
-              "Gate",
-              "Venture selection",
-              "Pass 35/50, dimension floor, independence, direct signal, channel and experiment gates."
+              "Find real sources",
+              "Collect useful information from named sources. Sample test data does not count."
             ],
             [
               "Then",
-              "Value experiment",
-              "Register immutable baseline, target, review cycle, cost and stop condition."
+              "Check project demand",
+              "Find people with the problem, a practical way to reach them and a small test that can measure interest."
+            ],
+            [
+              "Then",
+              "Run a small test",
+              "Save the starting number, goal, cost, review date and reason to stop before the test begins."
             ],
             [
               "Later",
-              "Monetization",
-              "Recognize only verified revenue and measure full unit economics."
+              "Earn revenue",
+              "Count only confirmed payments and compare them with every real cost."
             ]
           ].map(([time, title, text], index) => (
             <div
@@ -187,7 +187,7 @@ export default function CompanyPage() {
           className={buttonVariants({ variant: "primary" })}
           href="/ventures"
         >
-          View the candidate register
+          View current projects
           <ArrowRight aria-hidden="true" className="size-4" />
         </Link>
       </section>

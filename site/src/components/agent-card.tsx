@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { AgentPortrait } from "@/components/agent-portrait";
+import {
+  publicAgentCheck,
+  publicAgentGroup,
+  publicAgentMandate,
+  publicAgentText,
+  publicAgentTitle
+} from "@/components/agent-language";
 import type { Agent } from "@/data/agents";
 import { cn } from "@/lib/utils";
 
@@ -25,18 +32,18 @@ export function AgentCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--obsidian)] via-transparent to-transparent" />
         <span className="mono-label absolute left-4 top-4 text-[0.625rem] text-[var(--accent)]">
-          {agent.group === "Council" ? "Council seat" : agent.group}
+          {publicAgentGroup(agent)}
         </span>
         <div className="absolute inset-x-4 bottom-4">
           <h3 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
-            {agent.name}
+            {publicAgentTitle(agent)}
           </h3>
-          <p className="mt-0.5 text-xs text-[var(--ash)]">{agent.title}</p>
+          <p className="mt-0.5 text-xs text-[var(--ash)]">AI role</p>
         </div>
       </div>
       <div className="p-6">
         <p className="text-[0.84375rem] leading-[1.4375rem] text-[var(--fog)]">
-          {agent.mandate}
+          {publicAgentMandate(agent)}
         </p>
         {agent.responsibilities.length ? (
           <ul className="mt-5 grid gap-2 border-t border-[var(--border)] pt-4 text-[0.8125rem] text-[var(--mist)]">
@@ -45,17 +52,17 @@ export function AgentCard({
                 <span aria-hidden="true" className="text-[var(--accent)]">
                   /
                 </span>
-                {responsibility}
+                {publicAgentText(responsibility)}
               </li>
             ))}
           </ul>
         ) : null}
         <div className="mt-5 border-t border-[var(--border)] pt-4">
           <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-            Primary KPI
+            Main success check
           </p>
           <p className="mt-2 break-words font-mono text-[0.6875rem] leading-[1.125rem] text-[var(--mist)]">
-            {agent.primaryAccountability}
+            {publicAgentCheck(agent.primaryAccountability)}
           </p>
         </div>
       </div>
@@ -90,7 +97,7 @@ export function AgentRow({
       <div className="min-w-0">
         <div className="flex items-center gap-2.5">
           <p className="text-base font-semibold tracking-[-0.03em]">
-            {agent.id}
+            {publicAgentTitle(agent)}
           </p>
           <span
             className={cn(
@@ -98,24 +105,24 @@ export function AgentRow({
               agent.group === "Control" && "text-[var(--accent)]"
             )}
           >
-            {agent.group}
+            {publicAgentGroup(agent)}
           </span>
         </div>
-        <p className="mt-1 truncate text-xs text-[var(--fog)]">{agent.title}</p>
+        <p className="mt-1 truncate text-xs text-[var(--fog)]">{publicAgentMandate(agent)}</p>
       </div>
       {compact ? null : (
         <>
           <p className="col-span-2 text-[0.84375rem] leading-[1.4375rem] text-[var(--ash)] md:col-span-1">
-            {agent.mandate}
+            {publicAgentMandate(agent)}
           </p>
           <p className="col-span-2 break-words font-mono text-[0.6875rem] leading-[1.1875rem] text-[var(--fog)] md:col-span-1">
-            {agent.primaryAccountability}
+            {publicAgentCheck(agent.primaryAccountability)}
           </p>
         </>
       )}
       {compact ? (
         <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-          {agent.group}
+          {publicAgentGroup(agent)}
         </span>
       ) : null}
     </Link>

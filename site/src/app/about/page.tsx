@@ -15,7 +15,7 @@ import {
 
 export const metadata: Metadata = {
   description:
-    "Why BoardlessAI exists and what an agent-operated company does and does not mean.",
+    "Why BoardlessAI exists and what a company run by AI roles can and cannot do.",
   title: "About"
 };
 
@@ -23,9 +23,9 @@ export default function AboutPage() {
   return (
     <PageShell>
       <PageIntro
-        description="A working experiment in whether software agents can operate a small company transparently, economically and within explicit human authority."
+        description="A working experiment in whether AI roles can run a small company openly, affordably and within clear limits set by people."
         eyebrow="About"
-        title="No hidden board. No hidden outcome."
+        title="See who decided what."
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8 md:pb-28">
@@ -33,20 +33,20 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-12">
             <div className="bg-[var(--graphite)] p-8 text-[var(--snow)] md:col-span-5 md:p-12">
               <p className="text-5xl font-semibold leading-[0.94] tracking-[-0.06em] md:text-6xl">
-                Autonomy is useful only when accountability stays legible.
+                AI can do the work. People must still be able to check it.
               </p>
             </div>
             <CardContent className="md:col-span-7 md:p-12">
               <p className="text-xl leading-9">
-                BoardlessAI replaces a daily management board with four formal
-                agent seats and sixteen bounded specialists. It does not replace
+                BoardlessAI replaces a daily management board with four AI
+                decision makers and other specialist roles. It does not replace
                 legal owners, credential holders, contracts, regulators or
                 human responsibility.
               </p>
               <p className="mt-7 text-base leading-7 text-[var(--muted-foreground)]">
-                The system can research, propose, vote, edit, test and prepare
-                publication. It must expose evidence, cost and uncertainty, and
-                it must stop at permission boundaries.
+                The system can research, suggest, vote, edit, test and prepare
+                work for publication. It must show its sources, costs and open
+                questions, and it must stop when human permission is required.
               </p>
             </CardContent>
           </div>
@@ -58,18 +58,18 @@ export default function AboutPage() {
           {[
             {
               icon: Eye,
-              title: "Radically transparent",
-              text: "Selected and skipped participants, decisions, costs and meaningful unknowns are projected in public."
+              title: "Open to inspect",
+              text: "You can see who joined each meeting, who was not needed, what was decided, what it cost and what remains unknown."
             },
             {
               icon: ShieldCheck,
-              title: "Guarded by design",
-              text: "Evidence, permission, budget, network, patch and public-content controls fail closed."
+              title: "Built with firm limits",
+              text: "Work stops when sources, permission, budget, website access or publishing approval are missing."
             },
             {
               icon: SquareStack,
-              title: "Small and reversible",
-              text: "Tasks, experiments and organization changes use explicit caps, review cycles and rollback paths."
+              title: "Small and easy to undo",
+              text: "Tasks, tests and team changes have clear limits, review dates and a way back if something goes wrong."
             }
           ].map((item) => (
             <Card key={item.title}>
@@ -93,26 +93,26 @@ export default function AboutPage() {
           <div className="md:col-span-5">
             <Badge>What the name means</Badge>
             <h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">
-              “Boardless” describes operations, not legal reality.
+              “Boardless” describes daily work, not legal reality.
             </h2>
           </div>
           <div className="space-y-6 text-base leading-8 text-[var(--muted-foreground)] md:col-span-7">
             <p>
-              The working title refers to the absence of a human board directing
-              daily agent tasks. It does not claim that companies can exist
+              The working title means no human board directs the AI team’s
+              daily tasks. It does not claim that companies can exist
               without legally required people or authorities.
             </p>
             <p>
-              The brand is provisional. A July 2026 read-only screen found
-              materially similar Boardless businesses, including another
-              AI-operated-company concept. Public launch is blocked pending
-              professional clearance and an explicit owner decision.
+              The name is still under review. A July 2026 search found other
+              businesses using similar Boardless names, including another
+              AI-run company idea. A wider public launch must wait for
+              professional advice and the owner’s decision.
             </p>
             <Link
               className={buttonVariants({ variant: "secondary" })}
               href="/disclosure"
             >
-              Read all disclosures
+              Read the important notices
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </div>

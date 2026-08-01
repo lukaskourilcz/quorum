@@ -10,6 +10,12 @@ import {
 } from "react";
 import { AgentPortrait } from "@/components/agent-portrait";
 import {
+  publicAgentCheck,
+  publicAgentMandate,
+  publicAgentText,
+  publicAgentTitle
+} from "@/components/agent-language";
+import {
   buildCouncilSetupUrl,
   getRecordedRelationships,
   parseCouncilSetup,
@@ -34,10 +40,10 @@ export interface OperatingNeed {
 }
 
 const roleLabels = {
-  owner: "Owner",
+  owner: "Lead",
   reviewer: "Reviewer",
-  preset: "Preset",
-  control: "Control"
+  preset: "Always joins",
+  control: "Safety check"
 } as const;
 
 const needTone = {
@@ -49,7 +55,7 @@ const needTone = {
 const needStateLabel = {
   blocked: "Blocked",
   ready: "Ready",
-  unknown: "Unverified"
+  unknown: "Not confirmed"
 } as const;
 
 function getAgent(agents: readonly Agent[], id: AgentId) {
@@ -99,7 +105,7 @@ export function CouncilSimulator({
       setSelectedScenarioId(scenario.id);
       setSelectedSeatId(scenario.owner);
       setActionStatus(
-        `${scenario.label} preview routed to ${scenario.participants.length} seats.`
+        `${scenario.label} preview uses ${scenario.participants.length} roles.`
       );
     },
     [previews]
@@ -107,7 +113,7 @@ export function CouncilSimulator({
 
   const selectSeat = useCallback((agentId: AgentId) => {
     setSelectedSeatId(agentId);
-    setActionStatus(`${agentId} profile selected.`);
+    setActionStatus(`${agentId} role selected.`);
   }, []);
 
   const copySetup = useCallback(async () => {
@@ -117,7 +123,7 @@ export function CouncilSimulator({
     });
     try {
       await navigator.clipboard.writeText(url);
-      setActionStatus(`${selectedScenario.label} setup link copied.`);
+      setActionStatus(`${selectedScenario.label} meeting link copied.`);
     } catch {
       setActionStatus("Copying is unavailable in this browser.");
     }
@@ -158,18 +164,17 @@ export function CouncilSimulator({
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,0.58fr)] lg:items-end">
           <div>
             <p className="mono-label text-[var(--accent)]">
-              Protocol sandbox
+              Try a meeting setup
             </p>
             <h2
               className="mt-5 max-w-3xl text-[2.5rem] font-semibold leading-none tracking-[-0.055em]"
               id="council-simulator-title"
             >
-              Build a room. Watch the rules route it.
+              Choose a topic. See who joins.
             </h2>
             <p className="mt-5 max-w-3xl text-base leading-7 text-[var(--fog)]">
-              Choose a decision brief. The public protocol assembles its
-              smallest valid roster, exposes each role and keeps every other
-              agent visible on standby.
+              Pick a type of decision. The preview shows the smallest team that
+              can handle it, why each role joins and which roles are not needed.
             </p>
           </div>
           <div className="rounded-[1rem] border border-[var(--border)] bg-[var(--card)] p-6">
@@ -181,8 +186,8 @@ export function CouncilSimulator({
               <div>
                 <p className="text-sm font-semibold">Preview only</p>
                 <p className="mt-1.5 text-sm leading-6 text-[var(--fog)]">
-                  No room opens. No task is sent. This setup cannot change an
-                  agent or a council decision.
+                  Nothing runs and no task is sent. This preview cannot change
+                  an AI role or a company decision.
                 </p>
               </div>
             </div>
@@ -194,10 +199,10 @@ export function CouncilSimulator({
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
-                  Room Builder
+                  Meeting setup
                 </p>
                 <p className="mt-2 text-sm text-[var(--fog)]">
-                  Select a template; required seats cannot be removed.
+                  Choose a topic. Roles required for that meeting stay included.
                 </p>
               </div>
               <Button onClick={copySetup} type="button" variant="secondary">
@@ -210,7 +215,7 @@ export function CouncilSimulator({
               </Button>
             </div>
             <div
-              aria-label="Decision room templates"
+              aria-label="Meeting topics"
               className="mt-5 flex gap-2 overflow-x-auto pb-2"
               role="group"
             >
@@ -237,7 +242,6 @@ export function CouncilSimulator({
             <div className="border-b border-[var(--border)] p-5 md:p-7 lg:border-b-0 lg:border-r">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge tone="accent">{selectedScenario.topicLabel}</Badge>
-                <Badge>{selectedScenario.preset}</Badge>
                 {selectedScenario.riskTags.map((tag) => (
                   <Badge key={tag} tone="warning">
                     {tag.replaceAll("_", " ")}
@@ -253,9 +257,9 @@ export function CouncilSimulator({
 
               <div className="mt-7 grid gap-3 sm:grid-cols-3">
                 {[
-                  ["Routed", `${selectedScenario.participants.length} seats`],
-                  ["Turn cap", `${selectedScenario.caps.maxTurns} turns`],
-                  ["Room TTL", `${selectedScenario.caps.ttlMinutes} min`]
+                  ["Joining", `${selectedScenario.participants.length} roles`],
+                  ["Message limit", `${selectedScenario.caps.maxTurns} messages`],
+                  ["Time limit", `${selectedScenario.caps.ttlMinutes} min`]
                 ].map(([label, value]) => (
                   <div
                     className="rounded-[0.875rem] border border-[var(--border)] bg-[var(--surface)] p-4"
@@ -270,9 +274,9 @@ export function CouncilSimulator({
               </div>
 
               <div className="mt-8 flex items-center justify-between gap-4">
-                <h4 className="text-lg font-semibold">Routed cast</h4>
+                <h4 className="text-lg font-semibold">Who joins</h4>
                 <span className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                  {selectedScenario.standby.length} standby
+                  {selectedScenario.standby.length} not needed
                 </span>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -301,7 +305,7 @@ export function CouncilSimulator({
                         <span className="min-w-0">
                           <span className="flex flex-wrap items-center gap-2">
                             <span className="font-semibold">
-                              {participant.agent}
+                              {publicAgentTitle(agent)}
                             </span>
                             {participant.roles.map((role) => (
                               <span
@@ -324,15 +328,18 @@ export function CouncilSimulator({
 
               <details className="mt-5 rounded-[0.875rem] border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
                 <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">
-                  Show standby agents
+                  Show roles not needed
                 </summary>
                 <p className="pb-2 text-sm leading-6 text-[var(--fog)]">
-                  {selectedScenario.standby.join(" · ")}
+                  {selectedScenario.standby.map((agentId) => {
+                    const agent = getAgent(agents, agentId);
+                    return agent ? publicAgentTitle(agent) : "AI role";
+                  }).join(" · ")}
                 </p>
               </details>
             </div>
 
-            <aside className="p-5 md:p-7" aria-label="Selected seat profile">
+            <aside className="p-5 md:p-7" aria-label="Selected AI role">
               <div className="flex items-start gap-4">
                 <AgentPortrait
                   agent={selectedSeat}
@@ -340,25 +347,25 @@ export function CouncilSimulator({
                 />
                 <div>
                   <p className="mono-label text-[0.65625rem] text-[var(--accent)]">
-                    Seat profile
+                    Role details
                   </p>
                   <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
-                    {selectedSeat.id}
+                    {publicAgentTitle(selectedSeat)}
                   </h3>
                   <p className="mt-1 text-sm text-[var(--fog)]">
-                    {selectedSeat.title}
+                    AI role
                   </p>
                 </div>
               </div>
 
               <dl className="mt-7 space-y-5">
                 {[
-                  ["Long-term mandate", selectedSeat.mandate],
-                  ["Operating trait", selectedSeat.operatingPrinciple],
-                  ["Expected output", selectedSeat.output],
+                  ["Main job", publicAgentMandate(selectedSeat)],
+                  ["Working rule", publicAgentText(selectedSeat.operatingPrinciple)],
+                  ["Expected result", publicAgentText(selectedSeat.output)],
                   [
-                    "Primary accountability",
-                    selectedSeat.primaryAccountability
+                    "How success is checked",
+                    publicAgentCheck(selectedSeat.primaryAccountability)
                   ]
                 ].map(([label, value]) => (
                   <div key={label}>
@@ -372,7 +379,7 @@ export function CouncilSimulator({
 
               <div className="mt-7">
                 <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-                  Capabilities
+                  Skills
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {selectedSeat.capabilityTags.map((capability) => (
@@ -390,40 +397,42 @@ export function CouncilSimulator({
                   aria-hidden="true"
                   className="size-4 text-[var(--accent)]"
                 />
-                <h4 className="font-semibold">Recorded working relationships</h4>
+                <h4 className="font-semibold">Who this role spoke with</h4>
               </div>
               <p className="mt-2 text-sm leading-6 text-[var(--fog)]">
-                {relationshipRecord.speakingTurns} speaking turns in the
-                founding fixture. Counts below include only turns with an
-                explicit addressee.
+                {relationshipRecord.speakingTurns} messages in the first test
+                meeting. The counts below include only messages addressed to a
+                named role.
               </p>
               {relationshipRecord.relationships.length ? (
                 <div className="mt-4 space-y-3">
-                  {relationshipRecord.relationships.map((relationship) => (
-                    <div
+                  {relationshipRecord.relationships.map((relationship) => {
+                    const counterpart = getAgent(agents, relationship.counterpart);
+                    const counterpartTitle = counterpart ? publicAgentTitle(counterpart) : "AI role";
+                    return <div
                       className="rounded-[0.875rem] border border-[var(--border)] bg-[var(--surface)] p-4"
                       key={relationship.counterpart}
                     >
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm font-semibold">
-                          {relationship.counterpart}
+                          {counterpartTitle}
                         </span>
                         <span className="font-mono text-[0.65625rem] text-[var(--fog)]">
-                          {relationship.directExchanges} direct
+                          {relationship.directExchanges} messages
                         </span>
                       </div>
                       <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
                         {relationship.outgoing} addressed by{" "}
-                        {selectedSeat.id} · {relationship.incoming} addressed to{" "}
-                        {selectedSeat.id}
+                        {publicAgentTitle(selectedSeat)} · {relationship.incoming} addressed to{" "}
+                        {publicAgentTitle(selectedSeat)}
                       </p>
-                    </div>
-                  ))}
+                    </div>;
+                  })}
                 </div>
               ) : (
                 <p className="mt-4 rounded-[0.875rem] border border-[var(--border)] bg-[var(--surface)] p-4 text-sm leading-6 text-[var(--fog)]">
-                  No direct exchange for this seat is present in the recorded
-                  fixture.
+                  This role did not speak directly to another named role in the
+                  saved test meeting.
                 </p>
               )}
             </aside>
@@ -433,9 +442,9 @@ export function CouncilSimulator({
         <div className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="mono-label text-[var(--accent)]">Live state</p>
+              <p className="mono-label text-[var(--accent)]">Current checks</p>
               <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
-                Operating needs, not moods
+                What the team needs before it can act
               </h3>
             </div>
             <Link

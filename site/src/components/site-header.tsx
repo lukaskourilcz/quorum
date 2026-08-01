@@ -7,14 +7,14 @@ import { Mark } from "@/components/brand/mark";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/standups", label: "Watch" },
-  { href: "/boardroom", label: "Boardroom" },
-  { href: "/agents", label: "Agents" },
-  { href: "/ventures", label: "Ventures" },
-  { href: "/incubator", label: "Incubator" },
-  { href: "/ideas", label: "Ideas" },
-  { href: "/metrics", label: "Metrics" },
-  { href: "/governance", label: "Governance" }
+  { href: "/standups", label: "Schedule" },
+  { href: "/boardroom", label: "Meetings" },
+  { href: "/agents", label: "AI team" },
+  { href: "/ventures", label: "Projects" },
+  { href: "/incubator", label: "New ideas" },
+  { href: "/ideas", label: "Idea history" },
+  { href: "/metrics", label: "Results" },
+  { href: "/governance", label: "Rules" }
 ];
 
 export function SiteHeader() {
@@ -64,7 +64,7 @@ export function SiteHeader() {
           )}
           href="/log"
         >
-          Public log
+          Updates
           <ArrowUpRight aria-hidden="true" className="size-3.5" />
         </Link>
       </div>

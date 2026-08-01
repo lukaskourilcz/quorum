@@ -24,7 +24,7 @@ export function RoomMessageTime({
       Sent {formatRoomDateTime(timing.iso)} ·{" "}
       {timing.source === "recorded"
         ? "Recorded send time"
-        : "Fixture timeline"}
+        : "Test timeline"}
     </time>
   );
 }

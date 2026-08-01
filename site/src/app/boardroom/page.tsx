@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import routingSource from "../../../../config/agent-routing.json";
 import { AgentPortrait } from "@/components/agent-portrait";
+import { publicAgentText, publicAgentTitle, publicDecisionLabel } from "@/components/agent-language";
 import { BoardroomArchive } from "@/components/boardroom-archive";
 import {
   CouncilSimulator,
@@ -23,8 +24,8 @@ import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "Explore BoardlessAI's three-shift boardroom archive, inspect each seat and watch every recorded episode.",
-  title: "Boardroom"
+    "Read BoardlessAI's daily meetings, see who joined and watch each saved discussion.",
+  title: "Meetings"
 };
 
 const roomPreviews = buildCouncilRoomPreviews(
@@ -35,18 +36,18 @@ const roomPreviews = buildCouncilRoomPreviews(
 const principles = [
   {
     step: "01",
-    title: "Minimal packet",
-    text: "Objective, evidence references, risk tags, cost, owner and required decision."
+    title: "Start with the facts",
+    text: "The meeting begins with the question, sources, risks, cost, responsible role and decision needed."
   },
   {
     step: "02",
-    title: "Bounded positions",
-    text: "Brief summaries and evidence references; no private chain-of-thought is published."
+    title: "Keep each view short",
+    text: "AI roles share concise reasons and source links. Private model reasoning is not published."
   },
   {
     step: "03",
-    title: "Closed memo",
-    text: "Outcome, owner, evidence, actual cost and latency become the public projection."
+    title: "Save the result",
+    text: "The site shows the decision, responsible role, sources, real cost and time taken."
   }
 ] as const;
 
@@ -56,39 +57,39 @@ export default async function BoardroomPage() {
   const operatingNeeds: readonly OperatingNeed[] = [
     {
       id: "evidence",
-      label: "Eligible evidence",
+      label: "Real sources",
       value: 0,
       max: 3,
-      valueLabel: "0 / 3 signals",
+      valueLabel: "0 / 3 sources",
       state: "blocked",
-      detail: "Three independent eligible signals are required for a venture decision."
+      detail: "A project decision needs three reliable sources from different places."
     },
     {
       id: "scope",
-      label: "Internal scope",
+      label: "Work allowed now",
       value: 1,
       max: 1,
-      valueLabel: "Bounded",
+      valueLabel: "Within limits",
       state: "ready",
-      detail: "Current shift work stays inside pre-revenue authority and human approval gates."
+      detail: "Current work stays within the rules for a company that has not earned revenue yet."
     },
     {
       id: "budget",
-      label: "Budget headroom",
+      label: "Budget left",
       value: standup.ledger.cap - standup.ledger.monthAllIn,
       max: standup.ledger.cap,
       valueLabel: `${formatUsd(standup.ledger.cap - standup.ledger.monthAllIn)} available`,
       state: "ready",
-      detail: `${formatUsd(standup.ledger.monthAllIn)} spent against the monthly cap.`
+      detail: `${formatUsd(standup.ledger.monthAllIn)} spent from the monthly limit.`
     },
     {
       id: "reachability",
-      label: "Audience reachability",
+      label: "Known way to reach people",
       value: null,
       max: 1,
-      valueLabel: "Unverified",
+      valueLabel: "Not confirmed",
       state: "unknown",
-      detail: "No attributable channel or reachable segment is in the record."
+      detail: "No reliable source yet shows a practical channel or audience the team can reach."
     }
   ];
   const selected = standup.participants.filter((item) => item.participated);
@@ -100,19 +101,19 @@ export default async function BoardroomPage() {
         aside={
           <div className="rounded-[1rem] border border-[var(--slate)] bg-[var(--card)] p-7">
             <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
-              Hard room caps
+              Meeting limits
             </p>
             <p className="mt-4 text-[2.125rem] font-semibold tracking-[-0.05em]">
-              2 rounds
+              2 discussion rounds
             </p>
             <p className="mt-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-[var(--fog)]">
-              6 turns · 12k tokens · 30 min TTL
+              6 messages · 30 minute limit
             </p>
           </div>
         }
-        description="Three shifts create recurring episodes without weakening the controls. Every room is dated, every participant has a reason and every handoff is public."
-        eyebrow="Decision rooms"
-        title="The boardroom"
+        description="The AI team meets three times a day. Every meeting has a date, every person has a reason for joining and every result is public."
+        eyebrow="Team meetings"
+        title="Meetings and decisions"
       />
 
       <BoardroomArchive records={standups} />
@@ -121,18 +122,18 @@ export default async function BoardroomPage() {
         <div className="panel-grid md:grid-cols-12">
           <div className="bg-[var(--card)] p-7 md:col-span-4 md:p-10">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">{standup.fixture ? "Closed fixture" : "Closed live record"}</Badge>
-              <Badge>Council</Badge>
+              <Badge tone="accent">{standup.fixture ? "Finished test meeting" : "Finished meeting"}</Badge>
+              <Badge>Decision team</Badge>
             </div>
             <p className="mt-10 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">
               {roomIdForStandup(standup)}
             </p>
             <h2 className="mt-4 text-4xl font-semibold leading-[0.98] tracking-[-0.055em]">
-              {standup.fixture ? "Select a venture or return NO_ACTION" : standup.decision.outcome}
+              {standup.fixture ? "Choose a project or do nothing" : publicDecisionLabel(standup.decision.outcome)}
             </h2>
             <p className="mt-9 flex items-center gap-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--fog)]">
               <span className="status-pulse size-1.5 rounded-full bg-[var(--accent)]" />
-              {standup.fixture ? "Deterministic offline cycle" : "Live guarded cycle"}
+              {standup.fixture ? "Repeatable test run" : "Saved live meeting"}
             </p>
           </div>
           <div className="bg-[var(--surface)] p-7 md:col-span-8 md:p-10">
@@ -154,26 +155,26 @@ export default async function BoardroomPage() {
             </div>
             <div className="my-8 h-px bg-[var(--border)]" />
             <h3 className="text-[1.375rem] font-semibold tracking-[-0.035em]">
-              Objective
+              Question
             </h3>
             <p className="mt-3.5 max-w-3xl text-base leading-7 text-[var(--fog)]">
               {standup.fixture
-                ? "Choose at most one opportunity that passes all evidence, score, feasibility and first-experiment gates. Otherwise explicitly choose NO_ACTION."
-                : standup.operatingBrief}
+                ? "Choose no more than one idea that has enough sources, a strong score, a practical plan and a safe first test. Otherwise choose to do nothing."
+                : publicAgentText(standup.operatingBrief)}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 className={buttonVariants({ variant: "primary" })}
                 href={`/standups/${standup.id}/room`}
               >
-                Watch Decision Replay
+                Watch the discussion
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
               <Link
                 className={buttonVariants({ variant: "secondary" })}
                 href={`/standups/${standup.id}`}
               >
-                Full standup record
+                Read the meeting notes
               </Link>
             </div>
           </div>
@@ -191,32 +192,32 @@ export default async function BoardroomPage() {
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
-            <p className="mono-label text-[var(--accent)]">Roster</p>
+            <p className="mono-label text-[var(--accent)]">Who joined</p>
             <h2 className="mt-5 text-[2.5rem] font-semibold leading-none tracking-[-0.055em]">
-              Routed with reasons
+              Every role has a reason
             </h2>
             <p className="mt-5 text-base leading-7 text-[var(--fog)]">
-              Council seats and LEDGER are required in every shift episode.
-              Specialists enter only when a topic or control rule needs them.
+              Four decision makers and the budget keeper join every meeting.
+              Other specialists join only when the topic or a safety rule needs them.
             </p>
             <div className="mt-8 flex h-2 gap-2 overflow-hidden rounded-full bg-[var(--border)]">
               <span className="w-[35.7%] bg-[var(--accent)]" />
               <span className="flex-1 bg-[var(--slate)]" />
             </div>
             <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-              {selected.length} selected / {skipped.length} skipped
+              {selected.length} joined / {skipped.length} not needed
             </p>
           </div>
           <div className="grid gap-4 md:col-span-8 lg:grid-cols-2">
             {[
               {
-                label: "Selected",
+                label: "Joined",
                 people: selected,
                 countClass: "text-[var(--accent)]",
                 dimmed: false
               },
               {
-                label: "Skipped",
+                label: "Not needed",
                 people: skipped,
                 countClass: "text-[var(--fog)]",
                 dimmed: true
@@ -251,10 +252,10 @@ export default async function BoardroomPage() {
                         />
                         <div>
                           <p className="text-[0.84375rem] font-semibold">
-                            {participant.agent}
+                            {publicAgentTitle(agent)}
                           </p>
                           <p className="mt-1 text-xs leading-5 text-[var(--fog)]">
-                            {participant.reason}
+                            {publicAgentText(participant.reason)}
                           </p>
                         </div>
                       </div>

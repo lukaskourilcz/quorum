@@ -9,11 +9,11 @@ export async function GET() {
   return Response.json(
     {
       version: "https://jsonfeed.org/version/1.1",
-      title: "BoardlessAI public operating record",
+      title: "BoardlessAI public work history",
       home_page_url: base,
       feed_url: `${base}/feed.json`,
       description:
-        "Public shift episodes, decisions, costs and outcomes from BoardlessAI.",
+        "Daily meetings, decisions, costs and results from BoardlessAI.",
       items: standups.filter((standup) => !standup.fixture).map((standup) => ({
         id: `${base}/standups/${standup.id}`,
         url: `${base}/standups/${standup.id}`,

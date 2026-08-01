@@ -19,10 +19,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(getPublicSiteUrl()),
   description:
-    "Three daily shifts, public decisions and measurable outcomes from an agent-operated company.",
+    "Follow the daily meetings, decisions and results of a company run by AI agents.",
   openGraph: {
     description:
-      "Three daily shifts, public decisions and measurable outcomes from an agent-operated company.",
+      "Follow the daily meetings, decisions and results of a company run by AI agents.",
     images: ["/opengraph-image"],
     siteName: "BoardlessAI",
     title: "BoardlessAI",

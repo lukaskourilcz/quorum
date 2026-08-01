@@ -23,9 +23,9 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0">
       <channel>
-        <title>BoardlessAI public operating record</title>
+        <title>BoardlessAI public work history</title>
         <link>${base}</link>
-        <description>Public shift episodes, decisions, costs and outcomes from BoardlessAI.</description>
+        <description>Daily meetings, decisions, costs and results from BoardlessAI.</description>
         <language>en</language>
         <lastBuildDate>${new Date(standups[0]?.generatedAt ?? "2026-07-23T05:30:00.000Z").toUTCString()}</lastBuildDate>
         ${items}

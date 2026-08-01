@@ -10,6 +10,7 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { publicAgentGroup, publicAgentText, publicAgentTitle, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { SectionHeading } from "@/components/section-heading";
 import { formatPhaseLabel } from "@/components/standup-countdown-model";
 import { Badge } from "@/components/ui/badge";
@@ -46,11 +47,11 @@ export async function generateMetadata({
   return {
     description: standup
       ? standup.decision.summary
-      : "BoardlessAI shift episode record.",
+      : "BoardlessAI daily meeting record.",
     robots: standup?.fixture ? { follow: true, index: false } : undefined,
     title: standup
-      ? `Shift episode · ${formatDate(standup.date)}`
-      : "Shift episode"
+      ? `Daily meeting · ${formatDate(standup.date)}`
+      : "Daily meeting"
   };
 }
 
@@ -81,21 +82,21 @@ export default async function StandupDetailPage({
               href="/standups"
             >
               <ArrowLeft aria-hidden="true" className="size-4" />
-              All episodes
+              All daily meetings
             </Link>
             <div className="mt-10 flex flex-wrap gap-2">
-              <Badge tone="warning">{standup.status}</Badge>
-              <Badge>{standup.fixture ? "Offline fixture" : "Live"}</Badge>
-              <Badge tone="dark">{standup.stage}</Badge>
+              <Badge tone="warning">{publicDecisionLabel(standup.status)}</Badge>
+              <Badge>{standup.fixture ? "Test example" : "Live"}</Badge>
+              <Badge tone="dark">{publicStageLabel(standup.stage)}</Badge>
             </div>
             <h1 className="mt-7 max-w-5xl text-[clamp(3rem,7.5vw,7.2rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
-              {formatPhaseLabel(standup.phase)} episode
+              {formatPhaseLabel(standup.phase)} meeting
               <span className="text-[var(--accent)]">.</span>
             </h1>
             <div className="mt-8 flex flex-wrap gap-x-7 gap-y-2 text-sm text-[var(--muted-foreground)]">
               <span>{formatDate(standup.date)}</span>
-              <span>Shift: {formatPhaseLabel(standup.phase)}</span>
-              <span>{standup.fixture ? "Public fixture record" : "Live public record"}</span>
+              <span>Time: {formatPhaseLabel(standup.phase)}</span>
+              <span>{standup.fixture ? "Public test record" : "Live public record"}</span>
             </div>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
@@ -103,7 +104,7 @@ export default async function StandupDetailPage({
                 href={`/standups/${standup.id}/room`}
               >
                 <MessageSquareText aria-hidden="true" className="size-4" />
-                Watch Decision Replay
+                Watch the discussion
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
             </div>
@@ -113,15 +114,15 @@ export default async function StandupDetailPage({
         <section className="mx-auto max-w-[var(--container)] px-5 py-16 md:px-8 md:py-24">
           <div className="grid gap-6 md:grid-cols-12">
             <div className="md:col-span-8">
-              <Badge>Operating brief</Badge>
+              <Badge>Meeting summary</Badge>
               <p className="mt-6 text-balance text-3xl font-medium leading-tight tracking-[-0.035em] md:text-5xl">
-                {standup.operatingBrief}
+                {publicAgentText(standup.operatingBrief)}
               </p>
             </div>
             <Callout className="self-end md:col-span-4" tone={standup.fixture ? "warning" : "neutral"}>
               {standup.fixture
-                ? "This is synthetic, schema-valid fixture data. It demonstrates the controls and does not claim market validation, customers or revenue."
-                : "This is a live, sanitized internal operating record. It does not claim market validation, customers, revenue or external activity."}
+                ? "This is sample data that follows the same format as a real meeting. It tests the safety checks and does not claim real demand, customers or revenue."
+                : "This public record removes private system data. It does not claim real demand, customers, revenue or outside activity unless those facts are recorded."}
             </Callout>
           </div>
         </section>
@@ -129,14 +130,14 @@ export default async function StandupDetailPage({
         <section className="bg-[var(--graphite)] text-[var(--snow)]">
           <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--iron)] sm:grid-cols-2 lg:grid-cols-4">
             {[
-              ["Worst-case estimate", formatUsd(standup.ledger.estimate)],
-              ["Actual API cost", formatUsd(standup.ledger.actual)],
-              ["Month all-in", formatUsd(standup.ledger.monthAllIn)],
-              ["Hard cap", formatUsd(standup.ledger.cap)]
+              ["Maximum expected cost", formatUsd(standup.ledger.estimate)],
+              ["Real AI service cost", formatUsd(standup.ledger.actual)],
+              ["Cost this month", formatUsd(standup.ledger.monthAllIn)],
+              ["Monthly limit", formatUsd(standup.ledger.cap)]
             ].map(([label, value]) => (
               <div className="bg-[var(--graphite)] p-7" key={label}>
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ash)]">
-                  LEDGER · {label}
+                  Budget record · {label}
                 </p>
                 <p className="mt-7 text-3xl font-semibold tracking-[-0.04em]">
                   {value}
@@ -148,9 +149,9 @@ export default async function StandupDetailPage({
 
         <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
           <SectionHeading
-            description="Every formal seat supplied a bounded position. These are decision summaries, not private reasoning transcripts."
-            eyebrow="Council"
-            title={standup.fixture ? "Four seats. One non-decision." : "Four seats. One bounded decision."}
+            description="Each decision maker gave a short view. These are summaries of their decisions, not private model reasoning."
+            eyebrow="Decision team"
+            title={standup.fixture ? "Four roles. One decision to wait." : "Four roles. One clear decision."}
           />
           <div className="grid gap-4 md:grid-cols-2">
             {standup.proposals.map((proposal) => {
@@ -160,27 +161,27 @@ export default async function StandupDetailPage({
                   <CardHeader>
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <Badge tone="dark">{proposal.agent}</Badge>
-                        <CardTitle className="mt-5">{agent.title}</CardTitle>
+                        <Badge tone="dark">{publicAgentGroup(agent)}</Badge>
+                        <CardTitle className="mt-5">{publicAgentTitle(agent)}</CardTitle>
                       </div>
                       {proposal.agent === "AUDIT" ? (
                         <ShieldAlert
-                          aria-label="Control seat"
+                          aria-label="Safety reviewer"
                           className="size-5 text-[var(--accent)]"
                         />
                       ) : null}
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription>{proposal.summary}</CardDescription>
+                    <CardDescription>{publicAgentText(proposal.summary)}</CardDescription>
                     <Separator className="my-6" />
                     <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-                      Evidence references
+                      Source links
                     </p>
                     <p className="mt-2 text-sm">
                       {proposal.evidenceRefs.length
                         ? proposal.evidenceRefs.join(", ")
-                        : "None eligible"}
+                        : "No reliable sources"}
                     </p>
                   </CardContent>
                 </Card>
@@ -192,22 +193,24 @@ export default async function StandupDetailPage({
         <section className="border-y border-[var(--border)] bg-[var(--card)]">
           <div className="mx-auto grid max-w-[var(--container)] gap-12 px-5 py-20 md:grid-cols-12 md:px-8 md:py-24">
             <div className="md:col-span-5">
-              <Badge>Routing record</Badge>
+              <Badge>Who joined</Badge>
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">
-                Participation is explained.
+                Every role has a reason.
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--muted-foreground)]">
-                A specialist is not invited by default. Relevance, mandatory
-                controls and route caps determine the room.
+                Specialists join only when their skills are useful. Required
+                safety checks and the meeting size limit decide who else joins.
               </p>
             </div>
             <div className="space-y-8 md:col-span-7">
               <div>
                 <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em]">
-                  Selected · {selected.length}
+                  Joined · {selected.length}
                 </p>
                 <div className="grid gap-3">
-                  {selected.map((participant) => (
+                  {selected.map((participant) => {
+                    const agent = agentById.get(participant.agent);
+                    return (
                     <div
                       className="flex gap-4 rounded-[var(--radius-button)] border border-[var(--border)] p-4"
                       key={participant.agent}
@@ -217,21 +220,24 @@ export default async function StandupDetailPage({
                         className="mt-0.5 size-4 shrink-0 text-[var(--success)]"
                       />
                       <div className="min-w-0">
-                        <p className="text-sm font-bold">{participant.agent}</p>
+                        <p className="text-sm font-bold">{agent ? publicAgentTitle(agent) : "AI role"}</p>
                         <p className="mt-1 break-words text-sm leading-6 text-[var(--muted-foreground)]">
-                          {participant.reason}
+                          {publicAgentText(participant.reason)}
                         </p>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               <div>
                 <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em]">
-                  Explicitly skipped · {skipped.length}
+                  Not needed · {skipped.length}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {skipped.map((participant) => (
+                  {skipped.map((participant) => {
+                    const agent = agentById.get(participant.agent);
+                    return (
                     <div
                       className="flex gap-3 border-t border-[var(--border)] py-4"
                       key={participant.agent}
@@ -241,13 +247,14 @@ export default async function StandupDetailPage({
                         className="mt-0.5 size-4 shrink-0 text-[var(--muted-foreground)]"
                       />
                       <div className="min-w-0">
-                        <p className="text-sm font-bold">{participant.agent}</p>
+                        <p className="text-sm font-bold">{agent ? publicAgentTitle(agent) : "AI role"}</p>
                         <p className="mt-1 break-words text-xs leading-5 text-[var(--muted-foreground)]">
-                          {participant.reason}
+                          {publicAgentText(participant.reason)}
                         </p>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -257,13 +264,13 @@ export default async function StandupDetailPage({
         <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-28">
           <div className="grid gap-12 md:grid-cols-12">
             <div className="md:col-span-5">
-              <Badge>Vote matrix</Badge>
+              <Badge>Votes</Badge>
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">
-                The audit veto held.
+                The safety block held.
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--muted-foreground)]">
-                Candidate identities are anonymized before ranked voting in a
-                live cycle. Here, every seat independently prefers NO_ACTION.
+                The authors of the choices are hidden before voting. Here,
+                every decision maker independently chose to do nothing.
               </p>
             </div>
             <Card className="md:col-span-7">
@@ -279,9 +286,9 @@ export default async function StandupDetailPage({
                   <tbody>
                     {standup.voteMatrix.map((vote) => (
                       <tr key={vote.voter}>
-                        <TableCell className="font-bold">{vote.voter}</TableCell>
+                        <TableCell className="font-bold">{publicAgentTitle(agentById.get(vote.voter)!)}</TableCell>
                         <TableCell className="break-words">
-                          {vote.firstChoice}
+                          {publicDecisionLabel(vote.firstChoice)}
                         </TableCell>
                         <TableCell>{vote.veto ? "Yes" : "No"}</TableCell>
                       </tr>
@@ -301,15 +308,14 @@ export default async function StandupDetailPage({
                   Decision
                 </p>
                 <p className="mt-8 break-words text-3xl font-semibold leading-tight tracking-[-0.045em]">
-                  {standup.decision.outcome}
+                  {publicDecisionLabel(standup.decision.outcome)}
                 </p>
               </div>
               <CardContent className="md:col-span-9 md:p-10">
-                <p className="text-xl leading-8">{standup.decision.summary}</p>
+                <p className="text-xl leading-8">{publicAgentText(standup.decision.summary)}</p>
                 <Separator className="my-7" />
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Eligible evidence refs: none. Fixture records were excluded by
-                  rule.
+                  Reliable sources: none. Sample records do not count as proof.
                 </p>
               </CardContent>
             </div>
@@ -319,8 +325,8 @@ export default async function StandupDetailPage({
         <section className="border-y border-[var(--border)] bg-[var(--card)]">
           <div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-8 md:py-24">
             <SectionHeading
-              description="Downstream tasks remain blocked until their explicit prerequisites exist."
-              eyebrow="Task timeline"
+              description="Later tasks wait until everything they need is available."
+              eyebrow="Next tasks"
               title="What happens next"
             />
             <div className="grid gap-0">
@@ -339,7 +345,7 @@ export default async function StandupDetailPage({
                     {task.agent}
                   </span>
                   <span className="min-w-0 break-words text-sm leading-6 sm:col-span-5">
-                    {task.summary}
+                    {publicAgentText(task.summary)}
                   </span>
                   <Badge
                     className="w-fit sm:col-span-2"
@@ -356,11 +362,11 @@ export default async function StandupDetailPage({
         <section className="mx-auto grid max-w-[var(--container)] gap-4 px-5 py-20 md:grid-cols-2 md:px-8 md:py-28">
           <Card>
             <CardHeader>
-              <Badge>PULSE plan</Badge>
-              <CardTitle className="mt-5">Distribution held</CardTitle>
+              <Badge>Audience plan</Badge>
+              <CardTitle className="mt-5">No public post</CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription>{standup.growthPlan}</CardDescription>
+              <CardDescription>{publicAgentText(standup.growthPlan)}</CardDescription>
             </CardContent>
           </Card>
           <Card className="bg-[var(--graphite)] text-[var(--snow)]">
@@ -370,7 +376,7 @@ export default async function StandupDetailPage({
             </CardHeader>
             <CardContent>
               <p className="text-base leading-7 text-[var(--ash)]">
-                {standup.eveningOutcome}
+                {standup.eveningOutcome ? publicAgentText(standup.eveningOutcome) : "No later result was saved."}
               </p>
             </CardContent>
           </Card>

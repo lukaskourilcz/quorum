@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/page-intro";
+import { publicAgentText, publicDecisionLabel } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
 import { logEntries } from "@/data/fixtures";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -7,8 +8,8 @@ import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "Chronological public change, decision, routing and cost log for BoardlessAI.",
-  title: "Public log"
+    "A dated public list of BoardlessAI changes, decisions and costs.",
+  title: "Updates"
 };
 
 const formatTime = new Intl.DateTimeFormat("en", {
@@ -32,8 +33,8 @@ export default async function LogPage() {
       at: standup.generatedAt ?? standup.roomTranscript.closedAt,
       cost: standup.ledger.actual,
       detail: standup.decision.summary,
-      title: `${standup.phase} shift · ${standup.decision.outcome}`,
-      type: "Shift record"
+      title: `${standup.phase} meeting · ${publicDecisionLabel(standup.decision.outcome)}`,
+      type: "Meeting record"
     }));
   const entries = [...liveEntries, ...logEntries].sort(
     (left, right) => new Date(right.at).getTime() - new Date(left.at).getTime()
@@ -45,21 +46,21 @@ export default async function LogPage() {
         aside={
           <div className="flex items-center gap-2.5 rounded-[0.875rem] border border-[var(--slate)] bg-[var(--card)] p-5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--ash)]">
             <span className="status-pulse size-1.5 rounded-full bg-[var(--success)]" />
-            Append-only public projection
+            Permanent public history
           </div>
         }
-        description="A chronological projection of meaningful system events. Secrets, private reasoning and internal approval material never enter this view."
-        eyebrow="Audit trail"
-        title="The public log"
+        description="A dated list of important events. Secrets, private model reasoning and private approval details never appear here."
+        eyebrow="Change history"
+        title="Public updates"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-24">
         <div className="mb-6 flex items-baseline justify-between gap-6">
           <h2 className="text-[1.375rem] font-semibold tracking-[-0.035em]">
-            Event stream
+            Latest events
           </h2>
           <span className="font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-            {entries.length} events / UTC-local
+            {entries.length} events / Prague time
           </span>
         </div>
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
@@ -86,15 +87,15 @@ export default async function LogPage() {
                         : "text-[var(--ash)]"
                     }`}
                   >
-                    {entry.type}
+                    {publicAgentText(entry.type)}
                   </span>
                 </div>
                 <div className="min-w-0 md:col-span-6">
                   <h3 className="break-words text-[1.1875rem] font-semibold tracking-[-0.03em]">
-                    {entry.title}
+                    {publicAgentText(entry.title)}
                   </h3>
                   <p className="mt-2 break-words text-sm leading-6 text-[var(--fog)]">
-                    {entry.detail}
+                    {publicAgentText(entry.detail)}
                   </p>
                 </div>
                 <div className="md:col-span-2 md:text-right">
@@ -109,8 +110,8 @@ export default async function LogPage() {
             );
           })}
           <div className="flex flex-col gap-2 px-8 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)] sm:flex-row sm:items-center sm:justify-between">
-            <span>End of stream</span>
-            <span>Total actual {formatUsd(totalActual)}</span>
+            <span>End of updates</span>
+            <span>Total real cost {formatUsd(totalActual)}</span>
           </div>
         </div>
       </section>

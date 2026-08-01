@@ -71,10 +71,10 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
   [
     {
       id: "evidence-review",
-      label: "Evidence review",
+      label: "Source check",
       objective:
-        "Test whether the available sources qualify as independent evidence.",
-      topicLabel: "evidence",
+        "Check whether the available sources are reliable and come from different places.",
+      topicLabel: "sources",
       owner: "VIZE",
       reviewer: "SCOUT",
       preset: "evidence-room",
@@ -82,9 +82,9 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
     },
     {
       id: "build-release",
-      label: "Build release",
+      label: "Release check",
       objective:
-        "Decide whether a bounded implementation is verified enough to release.",
+        "Decide whether a small code change has been checked well enough to release.",
       topicLabel: "build",
       owner: "FORGE",
       reviewer: "AUDIT",
@@ -93,9 +93,9 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
     },
     {
       id: "growth-experiment",
-      label: "Growth experiment",
+      label: "Audience test",
       objective:
-        "Review a measurable distribution experiment before activation.",
+        "Review a small audience test with a clear success check before it starts.",
       topicLabel: "growth",
       owner: "PULSE",
       reviewer: "LENS",
@@ -104,9 +104,9 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
     },
     {
       id: "finance-reconciliation",
-      label: "Finance reconciliation",
+      label: "Budget review",
       objective:
-        "Reconcile cost, budget headroom and the decision the numbers support.",
+        "Check the cost, the money left this month and what the numbers support.",
       topicLabel: "finance",
       owner: "LEDGER",
       reviewer: "PULSE",
@@ -115,9 +115,9 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
     },
     {
       id: "public-claim",
-      label: "Public claim",
+      label: "Public wording check",
       objective:
-        "Verify a proposed public statement against evidence and permission controls.",
+        "Check a public statement against its sources and publishing permissions.",
       topicLabel: "social",
       owner: "PULSE",
       reviewer: "QUILL",
@@ -126,9 +126,9 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
     },
     {
       id: "organization-review",
-      label: "Organization review",
+      label: "AI team review",
       objective:
-        "Test whether outcome data justifies changing a role or routing rule.",
+        "Check whether real results support changing a role or its meeting assignments.",
       topicLabel: "organization",
       owner: "PEOPLE",
       reviewer: "AUDIT",
@@ -137,9 +137,9 @@ export const councilScenarioDefinitions: readonly CouncilScenarioDefinition[] =
     },
     {
       id: "incident-response",
-      label: "Incident response",
+      label: "Problem response",
       objective:
-        "Bound a response, protect the release gate and record the control owner.",
+        "Keep the response small, protect the release checks and name the responsible role.",
       topicLabel: "incident",
       owner: "AUDIT",
       reviewer: "KEEPER",
@@ -185,7 +185,7 @@ export function buildCouncilRoomPreviews(
 
     addParticipant(
       scenario.owner,
-      `Owns the ${scenario.topicLabel} decision.`,
+      `Leads the ${scenario.topicLabel} decision.`,
       "owner"
     );
     addParticipant(
@@ -197,7 +197,7 @@ export function buildCouncilRoomPreviews(
     for (const agent of config.presets[scenario.preset]?.required ?? []) {
       addParticipant(
         agent,
-        `Required by the ${scenario.preset} preset.`,
+        `Always joins this kind of meeting.`,
         "preset"
       );
     }
@@ -211,7 +211,7 @@ export function buildCouncilRoomPreviews(
       for (const agent of rule.include) {
         addParticipant(
           agent,
-          `Required when the room carries ${tagLabel}.`,
+          `Required when the meeting involves ${tagLabel}.`,
           "control"
         );
       }
