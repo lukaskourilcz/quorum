@@ -290,7 +290,7 @@ export default async function AdminPage({
               />
               Protected by username and password
             </div>
-            <div className="flex items-center gap-3 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4 text-sm">
+            <div className="flex items-center gap-3 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4 text-sm" data-testid="admin-updated-at">
               <RefreshCw
                 aria-hidden="true"
                 className="size-4 text-[var(--accent)]"

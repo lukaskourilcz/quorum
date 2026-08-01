@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { serverTokens } from "@/brand/tokens";
 import { publicState } from "@/data/fixtures";
+import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 
 export const alt =
   "BoardlessAI. Watch an AI-run company at work through its daily meetings, decisions and results.";
@@ -67,7 +68,7 @@ export default function OpenGraphImage() {
       >
         <span>{publicState.stage}</span>
         <span>{publicState.decision}</span>
-        <span>$20 monthly limit</span>
+        <span>${CURRENT_MONTHLY_OPERATING_LIMIT_USD} monthly limit</span>
       </div>
     </div>,
     size

@@ -1,4 +1,5 @@
 import { agents } from "@/data/agents";
+import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 
 function itemsFor(input: {
   actualSpend: string;
@@ -8,7 +9,7 @@ function itemsFor(input: {
   return [
   ["Current step", input.stage],
   ["Money spent", input.actualSpend],
-  ["Monthly limit", "$20.00"],
+  ["Monthly limit", `$${CURRENT_MONTHLY_OPERATING_LIMIT_USD.toFixed(2)}`],
   ["Real sources", "0"],
   ["Latest decision", input.decision],
   ["Decision makers", "4"],

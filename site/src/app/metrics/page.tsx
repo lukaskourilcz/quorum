@@ -4,6 +4,7 @@ import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 import { metrics } from "@/data/fixtures";
+import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
 
@@ -57,7 +58,7 @@ export default async function MetricsPage() {
             ["Current step", "Testing ideas", "Needs more proof", "text-[var(--foreground)]"],
             ["Real sources", "0", "Sample records do not count", "text-[var(--accent)]"],
             ["Confirmed revenue", "$0.00", "No payment has been recorded", "text-[var(--accent)]"],
-            ["Cost this month", formatUsd(latestStandup.ledger.monthAllIn), `${formatUsd(latestStandup.ledger.cap)} monthly limit`, "text-[var(--foreground)]"]
+            ["Cost this month", formatUsd(latestStandup.ledger.monthAllIn), `${formatUsd(CURRENT_MONTHLY_OPERATING_LIMIT_USD)} monthly limit`, "text-[var(--foreground)]"]
           ].map(([label, value, foot, color]) => (
             <div
               className="flex min-h-42 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"

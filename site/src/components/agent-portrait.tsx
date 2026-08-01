@@ -36,7 +36,7 @@ export function AgentPortrait({
         viewBox="0 0 128 128"
       >
         <rect fill="var(--show-card)" height="128" width="128" />
-        <circle cx={20 + variant * 22} cy={18 + variant * 6} fill="var(--show-accent-soft)" opacity="0.55" r="38" />
+        <circle cx={38 + variant * 13} cy={38 + variant * 5} fill="var(--show-accent-soft)" opacity="0.55" r="38" />
         <path d="M13 128c3-32 21-48 51-48s49 16 52 48Z" fill={isLead ? "var(--show-lead-jacket)" : "var(--show-jacket)"} />
         <path d="M53 77h22v18c-6 7-16 7-22 0Z" fill="var(--show-face-shadow)" />
         <ellipse cx="64" cy="49" fill="var(--show-face)" rx="31" ry="37" />

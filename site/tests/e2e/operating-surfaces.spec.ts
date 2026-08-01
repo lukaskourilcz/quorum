@@ -202,7 +202,7 @@ test("admin login explains errors, starts a session and signs out", async ({ pag
   await page.getByRole("button", { name: "Open project desk" }).click();
   await expect(page).toHaveURL(/\/admin$/);
   await expect(page.getByRole("heading", { name: "Project desk." })).toBeVisible();
-  await expect(page.getByText(/^Updated /)).toHaveText(
+  await expect(page.getByTestId("admin-updated-at")).toHaveText(
     /^Updated [A-Z][a-z]{2} \d{2}, \d{4} · \d{2}:\d{2} Prague time$/
   );
 
