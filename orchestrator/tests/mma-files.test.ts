@@ -4,6 +4,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { EditorialSlateSchema, MetricsCaptureSchema, type ArticlePackage, type MetricsCapture } from "../src/contracts/mma-files.js";
 import { LocalStoreDelivery, shipArticleBacklog, type ArticleDeliveryAdapter } from "../src/mma-files/delivery.js";
+import { runDryArticleProduction } from "../src/mma-files/dry-run.js";
 import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { appendMetricsCapture, buildDesignFinding, parseMetricsLedger, scoreVariants } from "../src/mma-files/metrics.js";
@@ -73,6 +74,23 @@ async function production(root: string, selectedGateway = gateway) {
 }
 
 describe("MMA Files bilingual production", () => {
+  it("replays a dry article slot idempotently throughout the same Prague day", async () => {
+    const root = await tempRoot("mma-files-dry-replay-");
+    const first = await runDryArticleProduction({
+      root,
+      slot: "am",
+      now: new Date("2026-08-01T08:03:00.000Z")
+    });
+    const replay = await runDryArticleProduction({
+      root,
+      slot: "am",
+      now: new Date("2026-08-01T16:45:00.000Z")
+    });
+    expect(first.article.publishAt).toBe("2026-08-01T08:00:00.000Z");
+    expect(replay.idempotent).toBe(true);
+    expect(replay.article.packageHash).toBe(first.article.packageHash);
+  });
+
   it("keeps the style study complete, separated by language and fragment-safe", async () => {
     const stylebook = await loadStylebook(repoRoot);
     expect(validateStylebook(stylebook)).toEqual([]);

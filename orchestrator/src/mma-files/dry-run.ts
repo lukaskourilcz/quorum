@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { EditorialSlateSchema } from "../contracts/mma-files.js";
+import { pragueClockParts } from "../meetings/clock.js";
+import { pragueSlotInstant } from "../meetings/calendar.js";
 import { repoRoot } from "../paths.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "./pipeline.js";
 
@@ -39,12 +41,13 @@ export async function runDryArticleProduction(input: {
     "utf8"
   )));
   const morning = input.slot === "am";
+  const publishAt = pragueSlotInstant(pragueClockParts(input.now).date, morning ? 10 : 18);
   return produceMmaFilesArticle({
     root: input.root,
     slate,
     slot: input.slot,
     slug: morning ? "fixture-fight-preview" : "fixture-fighter-profile",
-    publishAt: input.now,
+    publishAt,
     mode: "data-only",
     evidence: {
       sources: [{ kind: "internal", ref: `FIXTURE:MMA-FILES:${input.slot}` }],

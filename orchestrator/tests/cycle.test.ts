@@ -21,7 +21,7 @@ const shifts: Array<{
 ];
 
 describe("cycle preflight", () => {
-  it("runs three full-council shifts inside the daily budget", async () => {
+  it("runs one decision room and two zero-model checkpoints inside the daily budget", async () => {
     const results = await Promise.all(
       shifts.map(({ phase, now }) =>
         runCycle({
@@ -38,11 +38,20 @@ describe("cycle preflight", () => {
       const shift = shifts[index]!;
       expect(result.status).toBe("dry_complete");
       expect(result.estimatedWorstCaseUsd).toBeLessThanOrEqual(0.12);
-      expect(result.selectedAgents).toEqual(
-        expect.arrayContaining(["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER"])
-      );
-      if (shift.phase === "morning") expect(result.selectedAgents).toContain("SPARK");
-      else expect(result.selectedAgents).not.toContain("SPARK");
+      if (shift.phase === "morning") {
+        expect(result.selectedAgents).toEqual(
+          expect.arrayContaining(["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER", "SPARK"])
+        );
+      } else {
+        expect(result.estimatedWorstCaseUsd).toBe(0);
+        expect(result.selectedAgents).toEqual([]);
+        expect(result.skippedAgents).toEqual(expect.arrayContaining(["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER"]));
+        const standup = JSON.parse(await readFile(
+          path.join(repoRoot, `tmp/dry-run/state/standups/2026-07-23-${shift.phase}.json`),
+          "utf8"
+        )) as { participantReasons: Array<{ participated: boolean }> };
+        expect(standup.participantReasons.every(({ participated }) => !participated)).toBe(true);
+      }
       expect(result.skippedAgents).toContain("PEOPLE");
       expect(result.artifacts).toContain(
         `tmp/dry-run/state/standups/2026-07-23-${shift.phase}.json`

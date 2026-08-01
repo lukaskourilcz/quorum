@@ -869,6 +869,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     throw new Error(`Unsupported venture phase: ${options.phase}`);
   }
   const venturePhase = options.phase;
+  const deterministicCheckpoint = venturePhase === "afternoon" || venturePhase === "night";
   const execute = async (): Promise<CycleResult> => {
     const modelConfig = JSON.parse(
       await readFile(path.join(configRoot, "models.json"), "utf8")
@@ -1056,6 +1057,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         }
       }
     }
+    const agentsParticipated = Boolean(measuredCouncil) || (options.dry && !deterministicCheckpoint);
     const standup = measuredCouncil
       ? createLiveStandup({
           cycleId,
@@ -1077,7 +1079,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           estimatedCycleUsd: estimatedWorstCaseUsd,
           now,
           evidenceRefs: opportunityGate.evidenceRefs,
-          agentsParticipated: options.dry,
+          agentsParticipated,
           ...(caughtUpIdea ? { caughtUpIdea } : {})
         });
     const artifacts = [
@@ -1183,12 +1185,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             ? "INSUFFICIENT_EVIDENCE"
             : "NO_ACTION",
       estimatedWorstCaseUsd,
-      selectedAgents: measuredCouncil || options.dry
+      selectedAgents: agentsParticipated
         ? room.selectedParticipants.map(({ agent }) => agent)
         : [],
-      skippedAgents: measuredCouncil || options.dry
+      skippedAgents: agentsParticipated
         ? room.skippedParticipants.map(({ agent }) => agent)
-        : room.selectedParticipants.map(({ agent }) => agent),
+        : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
       artifacts: artifacts.map((artifact) =>
         path.relative(repoRoot, path.join(artifactRoot, artifact))
       )
