@@ -87,7 +87,7 @@ function parseTurn(value: unknown): PublicStandup["roomTranscript"]["turns"][num
 
 function parseRecord(value: unknown): PublicStandup | null {
   const record = object(value);
-  if (!record || record.fixture !== false) return null;
+  if (!record || typeof record.fixture !== "boolean") return null;
   const cycleId = text(record.cycleId, 120);
   const date = text(record.date, 20);
   const phase = text(record.phase, 20);
@@ -199,7 +199,7 @@ function parseRecord(value: unknown): PublicStandup | null {
     id: cycleId,
     date,
     phase: phase as PublicStandup["phase"],
-    fixture: false,
+    fixture: record.fixture,
     status: status as PublicStandup["status"],
     stage,
     operatingBrief,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calibration, deVig, loadMmaModelConfig, modelVersion, runMmaModel, seedRatings, sha256, type FighterModelInput } from "../src/fightaiq/engine.js";
+import { bridgeCrossoverRating, calibration, deVig, loadMmaModelConfig, modelVersion, runMmaModel, seedRatings, sha256, type FighterModelInput } from "../src/fightaiq/engine.js";
 
 const fighter = (ref: string, overrides: Partial<FighterModelInput> = {}): FighterModelInput => ({
   ref, org: "ufc", rating: 1500, deviation: 120, age: 30, reachCm: 180, layoffDays: 100,
@@ -14,6 +14,7 @@ describe("FightAIQ deterministic model", () => {
     const input = { config, bouts: [{ boutRef: "bout-1", red: fighter("red", { rating: 1570 }), blue: fighter("blue"), marketDecimal: { red: 1.75, blue: 2.1 }, eventStartsAt: "2026-08-08T18:00:00Z" }], createdAt: "2026-08-01T10:00:00Z" };
     expect(JSON.stringify(runMmaModel(input))).toBe(JSON.stringify(runMmaModel(input)));
     expect(runMmaModel(input).configHash).toBe(sha256(config));
+    expect(Object.values(runMmaModel(input).bouts[0]!.probabilities.round as Record<string, number>).reduce((sum, value) => sum + value, 0)).toBeCloseTo(1, 7);
     expect(modelVersion({ ...config, marketBlendWeight: 0.2 })).not.toBe(modelVersion(config));
   });
 
@@ -36,5 +37,7 @@ describe("FightAIQ deterministic model", () => {
     const ratings = seedRatings([{ org: "ufc", red: "alex", blue: "sam", outcome: "red", happenedAt: "2026-01-01" }, { org: "ksw", red: "alex", blue: "sam", outcome: "blue", happenedAt: "2026-01-02" }]);
     expect(ratings["ufc:alex"]?.rating).toBeGreaterThan(1500);
     expect(ratings["ksw:alex"]?.rating).toBeLessThan(1500);
+    expect(ratings["ufc:alex"]?.deviation).toBeLessThan(350);
+    expect(bridgeCrossoverRating({ rating: 1700, deviation: 90 })).toEqual({ rating: 1600, deviation: 250 });
   });
 });

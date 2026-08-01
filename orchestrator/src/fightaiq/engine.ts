@@ -27,6 +27,8 @@ const ModelConfigSchema = z.object({
     featureTotalCapPct: z.number().finite().gt(0).max(8)
   }),
   methodPrior: z.number().finite().positive().max(10),
+  roundPrior: z.number().finite().positive().max(10),
+  glickoTau: z.number().finite().positive().max(1.2),
   isotonicMinimumResolvedBouts: z.number().int().min(150),
   notes: z.record(z.string(), z.string().min(1))
 }).superRefine((config, context) => {
@@ -50,6 +52,7 @@ export interface FighterModelInput {
   recentKoLoss: boolean;
   homeRegion: boolean;
   methodWins: { koTko: number; submission: number; decision: number };
+  roundFinishes?: readonly number[];
   modelEligible: boolean;
 }
 
@@ -131,6 +134,15 @@ function methodDistribution(red: FighterModelInput, blue: FighterModelInput, pri
   return { koTko: values.koTko / total, submission: values.submission / total, decision: values.decision / total };
 }
 
+function roundDistribution(red: FighterModelInput, blue: FighterModelInput, prior: number) {
+  const counts = [1, 2, 3, 4, 5].map((roundNumber) =>
+    (red.roundFinishes ?? []).filter((value) => value === roundNumber).length +
+    (blue.roundFinishes ?? []).filter((value) => value === roundNumber).length + prior
+  );
+  const total = counts.reduce((sum, value) => sum + value, 0);
+  return { r1: counts[0]! / total, r2: counts[1]! / total, r3: counts[2]! / total, r4: counts[3]! / total, r5: counts[4]! / total };
+}
+
 function round(value: number): number {
   return Number(value.toFixed(8));
 }
@@ -161,6 +173,7 @@ export function runMmaModel(input: { config: MmaModelConfig; bouts: BoutModelInp
         redWin: round(raw),
         blueWin: round(1 - raw),
         method: Object.fromEntries(Object.entries(methodDistribution(bout.red, bout.blue, input.config.methodPrior)).map(([key, value]) => [key, round(value)])) as { koTko: number; submission: number; decision: number },
+        round: Object.fromEntries(Object.entries(roundDistribution(bout.red, bout.blue, input.config.roundPrior)).map(([key, value]) => [key, round(value)])) as { r1: number; r2: number; r3: number; r4: number; r5: number },
         uncertainty,
         ...(market ? { marketRedWin: round(market.red) } : {}),
         blendedRedWin: round(blended)
@@ -192,18 +205,66 @@ export function calibration(predictions: Array<{ probability: number; outcome: 0
 
 export interface HistoricalBout { org: z.infer<typeof MmaOrgSchema>; red: string; blue: string; outcome: "red" | "blue"; happenedAt: string }
 
-export function seedRatings(history: HistoricalBout[], baseRating = 1500): Record<string, { rating: number; deviation: number }> {
-  const ratings: Record<string, { rating: number; deviation: number }> = {};
+interface GlickoState { rating: number; deviation: number; volatility: number }
+
+function updateGlicko(player: GlickoState, opponent: GlickoState, score: 0 | 1, tau: number): GlickoState {
+  const scale = 173.7178;
+  const mu = (player.rating - 1500) / scale;
+  const phi = player.deviation / scale;
+  const opponentMu = (opponent.rating - 1500) / scale;
+  const opponentPhi = opponent.deviation / scale;
+  const g = 1 / Math.sqrt(1 + 3 * opponentPhi ** 2 / Math.PI ** 2);
+  const expectation = 1 / (1 + Math.exp(-g * (mu - opponentMu)));
+  const variance = 1 / (g ** 2 * expectation * (1 - expectation));
+  const delta = variance * g * (score - expectation);
+  const a = Math.log(player.volatility ** 2);
+  const f = (x: number) => {
+    const exponential = Math.exp(x);
+    const numerator = exponential * (delta ** 2 - phi ** 2 - variance - exponential);
+    const denominator = 2 * (phi ** 2 + variance + exponential) ** 2;
+    return numerator / denominator - (x - a) / tau ** 2;
+  };
+  let low = a;
+  let high: number;
+  if (delta ** 2 > phi ** 2 + variance) high = Math.log(delta ** 2 - phi ** 2 - variance);
+  else {
+    let step = 1;
+    while (f(a - step * tau) < 0) step += 1;
+    high = a - step * tau;
+  }
+  let fLow = f(low);
+  let fHigh = f(high);
+  while (Math.abs(high - low) > 0.000001) {
+    const next = low + (low - high) * fLow / (fHigh - fLow);
+    const fNext = f(next);
+    if (fNext * fHigh < 0) {
+      low = high;
+      fLow = fHigh;
+    } else fLow /= 2;
+    high = next;
+    fHigh = fNext;
+  }
+  const volatility = Math.exp(low / 2);
+  const preDeviation = Math.sqrt(phi ** 2 + volatility ** 2);
+  const deviation = 1 / Math.sqrt(1 / preDeviation ** 2 + 1 / variance);
+  const updatedMu = mu + deviation ** 2 * g * (score - expectation);
+  return { rating: round(updatedMu * scale + 1500), deviation: round(deviation * scale), volatility: round(volatility) };
+}
+
+export function bridgeCrossoverRating(origin: { rating: number; deviation: number }, baseRating = 1500): { rating: number; deviation: number } {
+  return { rating: round((origin.rating + baseRating) / 2), deviation: round(Math.max(250, origin.deviation)) };
+}
+
+export function seedRatings(history: HistoricalBout[], baseRating = 1500, tau = 0.5): Record<string, { rating: number; deviation: number }> {
+  const ratings: Record<string, GlickoState> = {};
   for (const bout of [...history].sort((left, right) => left.happenedAt.localeCompare(right.happenedAt))) {
     const redKey = `${bout.org}:${bout.red}`;
     const blueKey = `${bout.org}:${bout.blue}`;
-    const red = ratings[redKey] ?? { rating: baseRating, deviation: 350 };
-    const blue = ratings[blueKey] ?? { rating: baseRating, deviation: 350 };
-    const expected = 1 / (1 + 10 ** ((blue.rating - red.rating) / 400));
-    const score = bout.outcome === "red" ? 1 : 0;
-    const change = 24 * (score - expected);
-    ratings[redKey] = { rating: round(red.rating + change), deviation: round(Math.max(60, red.deviation * 0.97)) };
-    ratings[blueKey] = { rating: round(blue.rating - change), deviation: round(Math.max(60, blue.deviation * 0.97)) };
+    const red = ratings[redKey] ?? { rating: baseRating, deviation: 350, volatility: 0.06 };
+    const blue = ratings[blueKey] ?? { rating: baseRating, deviation: 350, volatility: 0.06 };
+    const score: 0 | 1 = bout.outcome === "red" ? 1 : 0;
+    ratings[redKey] = updateGlicko(red, blue, score, tau);
+    ratings[blueKey] = updateGlicko(blue, red, score === 1 ? 0 : 1, tau);
   }
-  return ratings;
+  return Object.fromEntries(Object.entries(ratings).map(([key, value]) => [key, { rating: value.rating, deviation: value.deviation }]));
 }

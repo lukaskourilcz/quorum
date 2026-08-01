@@ -67,6 +67,44 @@
                 ],
                 "additionalProperties": {}
               },
+              "round": {
+                "type": "object",
+                "properties": {
+                  "r1": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "r2": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "r3": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "r4": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "r5": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "r1",
+                  "r2",
+                  "r3",
+                  "r4",
+                  "r5"
+                ],
+                "additionalProperties": {}
+              },
               "uncertainty": {
                 "type": "string",
                 "enum": [
@@ -91,6 +129,7 @@
               "redWin",
               "blueWin",
               "method",
+              "round",
               "uncertainty",
               "blendedRedWin"
             ],

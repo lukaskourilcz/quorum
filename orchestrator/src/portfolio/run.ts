@@ -25,6 +25,7 @@ import { resolveTittyTuesdaysSlot } from "../titty-tuesdays/schedule.js";
 import { composeMeetingTastePacket } from "../taste/packet.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
+import { fightWeekFocus, loadEventCards } from "../fightaiq/store.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
@@ -185,27 +186,34 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
-    const [overview, bridge] = await Promise.all([
+    const [overview, bridge, events] = await Promise.all([
       canonicalStateText(root, "ventures/fightaiq/README.md"),
-      readText(root, "mma/BRIDGE.md")
+      readText(root, "mma/BRIDGE.md"),
+      loadEventCards(path.join(root, "ventures", "fightaiq", "events"))
     ]);
     const day = new Date(`${date}T12:00:00Z`).getUTCDay();
     const leadOrg = ["ufc", "ksw", "oktagon"][day % 3];
+    const focus = fightWeekFocus(events, new Date(`${date}T12:00:00Z`));
+    const focusPacket = focus.length
+      ? `Fight-week cards, nearest first. Work only these bouts:\n${JSON.stringify(focus)}`
+      : "No verified card is inside the three-day fight-week window. Continue breadth-first file work across all three organizations.";
     return {
-      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
-      evidenceRefs: bridgeEvidenceRefs(bridge)
+      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${focusPacket}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
+      evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
     };
   }
   if (phase === "mag-editorial" || phase === "mag-desk") {
-    const [stylebook, bridge, slate, articles] = await Promise.all([
+    const [stylebook, bridge, slate, articles, events] = await Promise.all([
       canonicalStateText(root, "ventures/mma-files/STYLEBOOK.md"),
       readText(root, "mma/BRIDGE.md"),
       canonicalStateText(root, `ventures/mma-files/slates/${date}.json`),
-      canonicalStateText(root, "ventures/mma-files/articles/INDEX.md")
+      canonicalStateText(root, "ventures/mma-files/articles/INDEX.md"),
+      loadEventCards(path.join(root, "ventures", "fightaiq", "events"))
     ]);
+    const focus = fightWeekFocus(events, new Date(`${date}T12:00:00Z`));
     return {
-      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\n${slate}\n\n${articles}`.slice(0, 18_000),
-      evidenceRefs: bridgeEvidenceRefs(bridge)
+      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\nFight-week event priority:\n${JSON.stringify(focus)}\n\n${slate}\n\n${articles}`.slice(0, 18_000),
+      evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
     };
   }
   const evidence = await readJson<{ refs?: string[]; packet?: string }>(root, "ventures/incubator/evidence.json", {});
@@ -248,9 +256,21 @@ export async function runPortfolioCycle(input: {
   const date = pragueClockParts(input.now).date;
   const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
   if (input.phase === "mma-intake") await refreshMmaBridge(root, date);
-  const cast = input.phase === "tt-marketing"
-    ? resolveTittyTuesdaysSlot({ date }).cast
-    : definition.requiredParticipants;
+  const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
+  let cast = input.phase === "tt-marketing"
+    ? [...resolveTittyTuesdaysSlot({ date }).cast]
+    : [...definition.requiredParticipants];
+  if (input.phase === "mma-intake") {
+    cast = cast.filter((agent) => agent !== "SONAR");
+    if (weekday === 2 || weekday === 5) cast.push("SONAR");
+    if (weekday === 0 || weekday === 3) cast.push("SIGMA");
+  }
+  if (input.phase === "mag-editorial") {
+    if (weekday === 4) cast.push("TAPE");
+    if (weekday === 5) cast.push("REACH", "SPLIT");
+  }
+  if (input.phase === "mag-desk" && weekday === 5) cast.push("SPLIT");
+  cast = [...new Set(cast)];
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${input.cycleId.toUpperCase()}`,
     topicType: definition.topicType,
@@ -357,6 +377,20 @@ export async function runPortfolioCycle(input: {
           { subjectRef: `missing:${date}:pm`, verdict: "repeat", evidenceRef: `meeting:${date}-mag-editorial` }
         ]
       });
+      const fightWeekSubject = context.evidenceRefs.find((reference) => reference.startsWith("event:"))?.slice("event:".length);
+      if (fightWeekSubject && !editorialSlate.slots.some((slot) => slot.status === "assigned" && slot.subjectRefs.includes(fightWeekSubject))) {
+        editorialSlate = EditorialSlateSchema.parse({
+          ...editorialSlate,
+          slots: [
+            { slot: "am", format: "fight-week-preview", subjectRefs: [fightWeekSubject], rationale: "The nearest verified card is inside the three-day window and takes one daily slot.", assignedWriter: "JAB", status: "assigned" },
+            editorialSlate.slots[1]
+          ],
+          vaultVerdicts: [
+            ...editorialSlate.vaultVerdicts.filter((verdict) => verdict.subjectRef !== editorialSlate!.slots[0].subjectRefs[0]),
+            { subjectRef: fightWeekSubject, verdict: "fresh", evidenceRef: `event:${fightWeekSubject}` }
+          ]
+        });
+      }
     }
   }
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;

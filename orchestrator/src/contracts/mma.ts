@@ -109,6 +109,13 @@ const ProbabilitySetSchema = openObject({
   redWin: z.number().finite().min(0).max(1),
   blueWin: z.number().finite().min(0).max(1),
   method: openObject({ koTko: z.number().finite().min(0).max(1), submission: z.number().finite().min(0).max(1), decision: z.number().finite().min(0).max(1) }),
+  round: openObject({
+    r1: z.number().finite().min(0).max(1),
+    r2: z.number().finite().min(0).max(1),
+    r3: z.number().finite().min(0).max(1),
+    r4: z.number().finite().min(0).max(1),
+    r5: z.number().finite().min(0).max(1)
+  }),
   uncertainty: z.enum(["clear-lean", "lean", "coin-flip", "divergence"]),
   marketRedWin: z.number().finite().min(0).max(1).optional(),
   blendedRedWin: z.number().finite().min(0).max(1)
@@ -119,6 +126,10 @@ const ProbabilitySetSchema = openObject({
   const methodTotal = probabilities.method.koTko + probabilities.method.submission + probabilities.method.decision;
   if (Math.abs(methodTotal - 1) > 0.000001) {
     context.addIssue({ code: "custom", message: "Method probabilities must sum to one", path: ["method"] });
+  }
+  const roundTotal = probabilities.round.r1 + probabilities.round.r2 + probabilities.round.r3 + probabilities.round.r4 + probabilities.round.r5;
+  if (Math.abs(roundTotal - 1) > 0.000001) {
+    context.addIssue({ code: "custom", message: "Round probabilities must sum to one", path: ["round"] });
   }
 });
 
@@ -248,3 +259,6 @@ export type FighterRecord = z.infer<typeof FighterRecordSchema>;
 export type EventCard = z.infer<typeof EventCardSchema>;
 export type ModelRun = z.infer<typeof ModelRunSchema>;
 export type SlipOfTen = z.infer<typeof SlipOfTenSchema>;
+export type EdgeReport = z.infer<typeof EdgeReportSchema>;
+export type SourceProposal = z.infer<typeof SourceProposalSchema>;
+export type TrackRecord = z.infer<typeof TrackRecordSchema>;

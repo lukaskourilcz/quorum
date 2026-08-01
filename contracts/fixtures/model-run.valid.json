@@ -14,6 +14,13 @@
           "submission": 0.2,
           "decision": 0.45
         },
+        "round": {
+          "r1": 0.28,
+          "r2": 0.24,
+          "r3": 0.2,
+          "r4": 0.16,
+          "r5": 0.12
+        },
         "uncertainty": "lean",
         "marketRedWin": 0.55,
         "blendedRedWin": 0.57

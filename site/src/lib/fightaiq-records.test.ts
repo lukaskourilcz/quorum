@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { fighterHref, parsePublicEvent, parsePublicFighter } from "./fightaiq-records";
+import { fighterHref, parsePublicEvent, parsePublicFighter, parsePublicModelRun, parsePublicTrackRecord } from "./fightaiq-records";
 
 vi.mock("server-only", () => ({}));
 
@@ -14,6 +14,8 @@ describe("FightAIQ public record checks", () => {
     expect(fighter?.id).toBe("ufc:alex-example");
     expect(event?.org).toBe("ufc");
     expect(fighterHref("oktagon:losene-keita")).toBe("/fighters/oktagon/losene-keita");
+    expect(parsePublicModelRun(await fixture("model-run.valid.json"))?.[0]).toMatchObject({ boutRef: "bout-1", modelVersion: "mma-1.0.0+aaaaaaaa" });
+    expect(parsePublicTrackRecord(await fixture("track-record.valid.json"))?.picks[0]).toMatchObject({ closing: 0.56, clv: 0.02, brierContribution: null });
   });
 
   it("hides poisoned and unsafe records", async () => {

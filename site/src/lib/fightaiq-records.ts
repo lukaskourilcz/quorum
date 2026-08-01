@@ -40,6 +40,20 @@ export interface PublicEvent {
   updatedAt: string;
 }
 
+export interface PublicFightPrediction {
+  boutRef: string;
+  redWin: number;
+  uncertainty: "clear-lean" | "lean" | "coin-flip" | "divergence";
+  modelVersion: string;
+  createdAt: string;
+}
+
+export interface PublicTrackRecord {
+  picks: Array<{ id: string; org: MmaOrg; predicted: number; closing: number | null; result: "win" | "loss" | "void" | "pending"; clv: number | null; brierContribution: number | null }>;
+  rollups: Array<{ modelVersion: string; org: MmaOrg; picks: number; brier: number | null; meanClv: number | null }>;
+  updatedAt: string;
+}
+
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const orgs = new Set<MmaOrg>(["ufc", "ksw", "oktagon"]);
 const safeText = (value: unknown, maximum = 500): string | null => typeof value === "string" && value.trim().length > 0 && value.length <= maximum ? value.trim() : null;
@@ -155,6 +169,76 @@ export async function getPublicEvents(rootDirectory = repositoryRoot): Promise<{
   return { events: events.sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc)), unreadable };
 }
 
+export function parsePublicModelRun(value: unknown): PublicFightPrediction[] | null {
+  const run = object(value);
+  const modelVersion = safeText(run?.modelVersion, 80);
+  const createdAt = safeDate(run?.createdAt);
+  if (run?.schemaVersion !== "model-run/1" || !modelVersion || !createdAt || !Array.isArray(run.bouts)) return null;
+  const output = run.bouts.flatMap((value) => {
+    const bout = object(value);
+    const probabilities = object(bout?.probabilities);
+    const boutRef = safeText(bout?.boutRef, 160);
+    const redWin = safeFraction(probabilities?.blendedRedWin);
+    const uncertainty: PublicFightPrediction["uncertainty"] | null = probabilities?.uncertainty === "clear-lean" || probabilities?.uncertainty === "lean" || probabilities?.uncertainty === "coin-flip" || probabilities?.uncertainty === "divergence" ? probabilities.uncertainty : null;
+    return boutRef && redWin !== null && uncertainty ? [{ boutRef, redWin, uncertainty, modelVersion, createdAt }] : [];
+  });
+  return output.length === run.bouts.length ? output : null;
+}
+
+export async function getPublicPredictions(rootDirectory = repositoryRoot): Promise<PublicFightPrediction[]> {
+  const root = path.join(rootDirectory, "state", "ventures", "fightaiq", "model-runs");
+  const latest = new Map<string, PublicFightPrediction>();
+  for (const file of await jsonFiles(root)) {
+    try {
+      for (const prediction of parsePublicModelRun(JSON.parse(await readFile(file, "utf8"))) ?? []) {
+        const current = latest.get(prediction.boutRef);
+        if (!current || current.createdAt < prediction.createdAt) latest.set(prediction.boutRef, prediction);
+      }
+    } catch {
+      // A malformed model run is omitted from the public projection.
+    }
+  }
+  return [...latest.values()].sort((left, right) => left.boutRef.localeCompare(right.boutRef));
+}
+
+export function parsePublicTrackRecord(value: unknown): PublicTrackRecord | null {
+  const record = object(value);
+  const updatedAt = safeDate(record?.updatedAt);
+  if (record?.schemaVersion !== "track-record/1" || !updatedAt || !Array.isArray(record.picks) || !Array.isArray(record.rollups)) return null;
+  const picks = record.picks.flatMap((value) => {
+    const pick = object(value);
+    const id = safeText(pick?.id, 160);
+    const org = orgs.has(pick?.org as MmaOrg) ? pick?.org as MmaOrg : null;
+    const predicted = safeFraction(pick?.predicted);
+    const closing = pick?.closing === null ? null : safeFraction(pick?.closing) ?? undefined;
+    const clv = pick?.clv === null ? null : typeof pick?.clv === "number" && Number.isFinite(pick.clv) ? pick.clv : undefined;
+    const brier = pick?.brierContribution === null ? null : safeFraction(pick?.brierContribution) ?? undefined;
+    const result: PublicTrackRecord["picks"][number]["result"] | null =
+      pick?.result === "win" || pick?.result === "loss" || pick?.result === "void" || pick?.result === "pending"
+        ? pick.result
+        : null;
+    return id && org && predicted !== null && closing !== undefined && clv !== undefined && brier !== undefined && result ? [{ id, org, predicted, closing, result, clv, brierContribution: brier }] : [];
+  });
+  const rollups = record.rollups.flatMap((value) => {
+    const rollup = object(value);
+    const modelVersion = safeText(rollup?.modelVersion, 80);
+    const org = orgs.has(rollup?.org as MmaOrg) ? rollup?.org as MmaOrg : null;
+    const picks = typeof rollup?.picks === "number" && Number.isInteger(rollup.picks) && rollup.picks >= 0 ? rollup.picks : null;
+    const brier = rollup?.brier === null ? null : safeFraction(rollup?.brier) ?? undefined;
+    const meanClv = rollup?.meanClv === null ? null : typeof rollup?.meanClv === "number" && Number.isFinite(rollup.meanClv) ? rollup.meanClv : undefined;
+    return modelVersion && org && picks !== null && brier !== undefined && meanClv !== undefined ? [{ modelVersion, org, picks, brier, meanClv }] : [];
+  });
+  return picks.length === record.picks.length && rollups.length === record.rollups.length ? { picks, rollups, updatedAt } : null;
+}
+
+export async function getPublicTrackRecord(rootDirectory = repositoryRoot): Promise<PublicTrackRecord | null> {
+  try {
+    return parsePublicTrackRecord(JSON.parse(await readFile(path.join(rootDirectory, "state", "ventures", "fightaiq", "track-record.json"), "utf8")));
+  } catch {
+    return null;
+  }
+}
+
 export function fighterName(fighter: PublicFighter): string {
   return typeof fighter.fields.name?.value === "string" ? fighter.fields.name.value : fighter.slug.replaceAll("-", " ");
 }
@@ -164,8 +248,8 @@ export function fighterHref(ref: string): string | null {
   return match ? `/fighters/${match[1]}/${match[2]}` : null;
 }
 
-export async function getFightAiQMode(): Promise<"data-only" | "live-analysis"> {
-  const registry = JSON.parse(await readFile(path.join(repositoryRoot, "config", "ventures.json"), "utf8")) as { ventures?: Array<{ id?: string; mode?: string }> };
+export async function getFightAiQMode(rootDirectory = repositoryRoot): Promise<"data-only" | "live-analysis"> {
+  const registry = JSON.parse(await readFile(path.join(rootDirectory, "config", "ventures.json"), "utf8")) as { ventures?: Array<{ id?: string; mode?: string }> };
   const mode = registry.ventures?.find((venture) => venture.id === "fightaiq")?.mode;
   return mode === "live-analysis" ? mode : "data-only";
 }

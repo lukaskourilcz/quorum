@@ -20,6 +20,8 @@
     "featureTotalCapPct": 5
   },
   "methodPrior": 1,
+  "roundPrior": 1,
+  "glickoTau": 0.5,
   "isotonicMinimumResolvedBouts": 150,
   "notes": {
     "age": "A small decline adjustment starts after the configured peak band.",

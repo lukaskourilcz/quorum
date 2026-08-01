@@ -1,6 +1,7 @@
 import { ExternalLink, ShieldAlert } from "lucide-react";
 import { FightAiQOddsCapture } from "./fightaiq-odds-capture";
 import { RatingWidget } from "./rating-widget";
+import { FighterLink } from "@/components/fighter-link";
 import { Badge } from "@/components/ui/badge";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +14,7 @@ const stateTone = (state: string): "success" | "warning" | "danger" | "neutral" 
 
 export function FightAiQAdminPanel({ snapshot, tab }: { snapshot: AdminFightAiQSnapshot; tab: FightAiQTab }) {
   if (tab === "fighters") return <div className="mt-8">
-    {snapshot.fighters.length ? <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)]"><Table><thead><tr><TableHead>Fighter</TableHead><TableHead>Organization</TableHead><TableHead>Complete</TableHead><TableHead>Checked twice</TableHead><TableHead>Model</TableHead><TableHead>Disagreements</TableHead></tr></thead><tbody>{snapshot.fighters.map((fighter) => <tr key={fighter.id}><TableCell>{fighterName(fighter)}</TableCell><TableCell className="uppercase">{fighter.org}</TableCell><TableCell>{Math.round(fighter.completeness * 100)}%</TableCell><TableCell>{Math.round(fighter.corroboration * 100)}%</TableCell><TableCell><Badge tone={fighter.modelEligible ? "success" : "warning"}>{fighter.modelEligible ? "usable" : "held back"}</Badge></TableCell><TableCell>{fighter.discrepancies.filter((item) => item.status === "open").length}</TableCell></tr>)}</tbody></Table></div> : <Callout>No verified fighter files are stored yet. New imports stay private until the important fields agree across two sources.</Callout>}
+    {snapshot.fighters.length ? <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)]"><Table><thead><tr><TableHead>Fighter</TableHead><TableHead>Organization</TableHead><TableHead>Complete</TableHead><TableHead>Checked twice</TableHead><TableHead>Model</TableHead><TableHead>Disagreements</TableHead></tr></thead><tbody>{snapshot.fighters.map((fighter) => <tr key={fighter.id}><TableCell><FighterLink fighterRef={fighter.id}>{fighterName(fighter)}</FighterLink></TableCell><TableCell className="uppercase">{fighter.org}</TableCell><TableCell>{Math.round(fighter.completeness * 100)}%</TableCell><TableCell>{Math.round(fighter.corroboration * 100)}%</TableCell><TableCell><Badge tone={fighter.modelEligible ? "success" : "warning"}>{fighter.modelEligible ? "usable" : "held back"}</Badge></TableCell><TableCell>{fighter.discrepancies.filter((item) => item.status === "open").length}</TableCell></tr>)}</tbody></Table></div> : <Callout>No verified fighter files are stored yet. New imports stay private until the important fields agree across two sources.</Callout>}
   </div>;
 
   if (tab === "events") return <div className="mt-8 grid gap-6">

@@ -106,12 +106,13 @@ export interface SafeFetchOptions {
   timeoutMs?: number;
   fetchImpl?: typeof fetch;
   resolveImpl?: (hostname: string) => Promise<string[]>;
+  responseHeaderNames?: readonly string[];
 }
 
 export async function safeFetch(
   raw: string,
   options: SafeFetchOptions
-): Promise<{ url: string; contentType: string; body: Uint8Array }> {
+): Promise<{ url: string; contentType: string; body: Uint8Array; headers: Record<string, string> }> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const resolveImpl = options.resolveImpl ?? resolvePublicAddresses;
   const maxRedirects = options.maxRedirects ?? 3;
@@ -125,6 +126,14 @@ export async function safeFetch(
   for (const name of Object.keys(options.headers ?? {})) {
     if (["cookie", "host", "proxy-authorization", "forwarded"].includes(name.toLowerCase())) {
       throw new UnsafeUrlError(`Forbidden request header: ${name}`);
+    }
+  }
+  if ((options.responseHeaderNames?.length ?? 0) > 20) {
+    throw new UnsafeUrlError("Too many response headers requested");
+  }
+  for (const name of options.responseHeaderNames ?? []) {
+    if (!/^[a-z0-9-]+$/i.test(name) || ["set-cookie", "set-cookie2", "www-authenticate", "proxy-authenticate"].includes(name.toLowerCase())) {
+      throw new UnsafeUrlError(`Forbidden response header: ${name}`);
     }
   }
 
@@ -180,7 +189,12 @@ export async function safeFetch(
     if (buffer.byteLength > maxBytes) {
       throw new UnsafeUrlError("Decompressed response is too large");
     }
-    return { url: url.toString(), contentType, body: buffer };
+    const headers: Record<string, string> = {};
+    for (const requestedName of options.responseHeaderNames ?? []) {
+      const value = response.headers.get(requestedName);
+      if (value !== null) headers[requestedName.toLowerCase()] = value.slice(0, 256);
+    }
+    return { url: url.toString(), contentType, body: buffer, headers };
   }
   throw new UnsafeUrlError("Redirect limit exceeded");
 }

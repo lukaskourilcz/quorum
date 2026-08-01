@@ -4,6 +4,7 @@ import path from "node:path";
 import { configRoot } from "../paths.js";
 import { fetchJson } from "../sources/adapters/util.js";
 import type { SourceFetchContext } from "../sources/types.js";
+import { safeFetch, type SafeFetchOptions } from "../security/url.js";
 
 const MmaSourceSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
@@ -73,14 +74,49 @@ export function projectOddsApiEvents(value: unknown): ApiBoutOdds[] {
   });
 }
 
-export async function fetchOddsApiMma(input: { apiKey: string; context: SourceFetchContext }): Promise<ApiBoutOdds[]> {
-  if (!input.apiKey.trim()) return [];
+export interface OddsApiMmaResult {
+  events: ApiBoutOdds[];
+  remainingCredits: number | null;
+  usedCredits: number | null;
+  lastRequestCredits: number | null;
+  exhausted: boolean;
+}
+
+function quotaInteger(value: string | undefined): number | null {
+  if (value === undefined || !/^\d+$/.test(value)) return null;
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+export async function fetchOddsApiMma(input: {
+  apiKey: string;
+  context: SourceFetchContext;
+  remainingCredits?: number | null;
+  fetchImpl?: SafeFetchOptions["fetchImpl"];
+  resolveImpl?: SafeFetchOptions["resolveImpl"];
+}): Promise<OddsApiMmaResult> {
+  if (!input.apiKey.trim() || input.remainingCredits === 0) {
+    return { events: [], remainingCredits: input.remainingCredits ?? null, usedCredits: null, lastRequestCredits: null, exhausted: input.remainingCredits === 0 };
+  }
   const endpoint = new URL("https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds");
   endpoint.searchParams.set("regions", "eu");
   endpoint.searchParams.set("markets", "h2h");
   endpoint.searchParams.set("oddsFormat", "decimal");
   endpoint.searchParams.set("apiKey", input.apiKey);
-  return projectOddsApiEvents(await fetchJson<unknown>(endpoint.toString(), input.context));
+  const response = await safeFetch(endpoint.toString(), {
+    allowHosts: input.context.allowHosts,
+    fetchImpl: input.fetchImpl,
+    resolveImpl: input.resolveImpl,
+    responseHeaderNames: ["x-requests-remaining", "x-requests-used", "x-requests-last"]
+  });
+  const remainingCredits = quotaInteger(response.headers["x-requests-remaining"]);
+  return {
+    events: projectOddsApiEvents(JSON.parse(new TextDecoder().decode(response.body)) as unknown),
+    remainingCredits,
+    usedCredits: quotaInteger(response.headers["x-requests-used"]),
+    lastRequestCredits: quotaInteger(response.headers["x-requests-last"]),
+    exhausted: remainingCredits === 0
+  };
 }
 
 export interface CitoFighterSummary {
