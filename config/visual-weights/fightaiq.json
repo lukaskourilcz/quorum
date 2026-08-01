@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "visual-weights/1",
+  "ventureId": "fightaiq",
+  "updatedAt": "2026-08-01T08:00:00.000Z",
+  "weights": {
+    "fighter-card": 1,
+    "event-pairing": 1,
+    "edge-report": 1
+  },
+  "adjustments": []
+}
