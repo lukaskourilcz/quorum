@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "runId": "6a7f8441-2859-4139-8105-0a31451a1746",
+  "date": "2026-08-01",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-01T13:13:46.533Z",
+  "completedAt": "2026-08-01T13:17:42.869Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-01T13:13:46.535Z",
+      "completedAt": "2026-08-01T13:14:09.630Z",
+      "durationMs": 23095
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-01T13:14:09.630Z",
+      "completedAt": "2026-08-01T13:15:15.907Z",
+      "durationMs": 66277,
+      "errorCode": "ZodError",
+      "errorMessage": "[\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"en\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-08-01T13:15:15.907Z",
+      "completedAt": "2026-08-01T13:16:38.321Z",
+      "durationMs": 82414,
+      "errorCode": "InvalidArticleError",
+      "errorMessage": "write: wire item was not supplied as a runner-up: https://arstechnica.com/tech-policy/2026/08/after-noise-complaints-judge-orders-waymo-to-stop-overnight-charging-in-santa-monica/"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-08-01T13:16:38.321Z",
+      "completedAt": "2026-08-01T13:17:42.867Z",
+      "durationMs": 64546,
+      "errorCode": "InvalidArticleError",
+      "errorMessage": "write: wire item was not supplied as a runner-up: https://arstechnica.com/tech-policy/2026/08/after-noise-complaints-judge-orders-waymo-to-stop-overnight-charging-in-santa-monica/"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11852,
+      "outputTokens": 997,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.050511
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 7738,
+      "outputTokens": 3417,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1109,
+      "costUsd": 0.07862775
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 7738,
+      "outputTokens": 2892,
+      "cacheReadTokens": 1109,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.0669267
+    }
+  ],
+  "measuredCostUsd": 0.19606545,
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:[\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"en\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]",
+    "content_invalid:write: wire item was not supplied as a runner-up: https://arstechnica.com/tech-policy/2026/08/after-noise-complaints-judge-orders-waymo-to-stop-overnight-charging-in-santa-monica/"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

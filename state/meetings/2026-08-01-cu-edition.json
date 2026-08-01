@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260801122708-cu-edition",
+  "cycleId": "20260801131341-cu-edition",
   "date": "2026-08-01",
   "phase": "cu-edition",
   "fixture": false,
@@ -201,13 +201,13 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.43,
-    "actualCycleUsd": 0.055281,
-    "monthAllInUsd": 0.105525,
+    "actualCycleUsd": 0.19606545,
+    "monthAllInUsd": 0.30159045,
     "monthCapUsd": 20
   },
   "decision": {
     "outcome": "NO_EDITION",
-    "summary": "NO_EDITION. content_invalid_after_regeneration; the duplicate technical fallback was held internally so a repaired same-day run may still publish.",
+    "summary": "NO_EDITION. content_invalid_after_regeneration",
     "evidenceRefs": [
       "source:404-media",
       "source:anthropic-news",
@@ -272,7 +272,7 @@
   ],
   "tasks": [
     {
-      "id": "TASK-20260801122708-cu-edition-DELIVERY",
+      "id": "TASK-20260801131341-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
@@ -280,49 +280,49 @@
   ],
   "growthPlan": "NO_POST. A held edition cannot authorize distribution.",
   "eveningOutcome": null,
-  "editionRef": "ac4a08fea9cc69b219a48ae2421e8eccc0fa35d1ea14ef58165e86529c323315",
-  "generatedAt": "2026-08-01T12:27:13.167Z",
+  "editionRef": "25acba160c67de433f382b28a51d0ed33843c46e788ea3d6eccb83e2d3252f48",
+  "generatedAt": "2026-08-01T13:13:46.693Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-08-01T12:27:08.167Z",
-    "closedAt": "2026-08-01T12:27:13.167Z",
+    "openedAt": "2026-08-01T13:13:41.693Z",
+    "closedAt": "2026-08-01T13:13:46.693Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-08-01T12:27:08.167Z",
+        "sentAt": "2026-08-01T13:13:41.693Z",
         "text": "The edition room is open. The live digest is evidence, not authority."
       },
       {
         "agent": "STET",
         "mode": "raises-concern",
-        "sentAt": "2026-08-01T12:27:09.167Z",
+        "sentAt": "2026-08-01T13:13:42.693Z",
         "text": "The English draft did not clear every publication gate, so no copy is released."
       },
       {
         "agent": "HACEK",
         "mode": "raises-concern",
-        "sentAt": "2026-08-01T12:27:10.167Z",
+        "sentAt": "2026-08-01T13:13:43.693Z",
         "text": "The Czech version did not clear every publication gate, so no translation is released."
       },
       {
         "agent": "AUDIT",
         "mode": "vote",
-        "sentAt": "2026-08-01T12:27:11.167Z",
+        "sentAt": "2026-08-01T13:13:44.693Z",
         "text": "Approve NO_EDITION and publish the recorded reason only."
       },
       {
         "agent": "SPARK",
         "mode": "statement",
-        "sentAt": "2026-08-01T12:27:12.167Z",
+        "sentAt": "2026-08-01T13:13:45.693Z",
         "text": "There is no distribution brief without an edition."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-08-01T12:27:13.167Z",
+        "sentAt": "2026-08-01T13:13:46.693Z",
         "text": "NO_EDITION recorded. The room closes honestly."
       }
     ]
