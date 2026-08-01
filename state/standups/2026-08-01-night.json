@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "cycleId": "20260801200000-night",
+  "cycleId": "20260801201444-night",
   "date": "2026-08-01",
   "phase": "night",
   "episode": {
@@ -11,35 +11,35 @@
     "nextShift": "morning",
     "handoff": "Reconcile the day and leave a concise opening brief for the morning shift."
   },
-  "fixture": true,
+  "fixture": false,
   "status": "NO_ACTION",
   "stage": "VALIDATION",
   "operatingBrief": "Night shift reviewed its bounded objective and prepared the next handoff.",
   "participantReasons": [
     {
       "agent": "VIZE",
-      "reason": "owns council objective",
-      "participated": true
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
     },
     {
       "agent": "FORGE",
-      "reason": "required by daily-standup preset",
-      "participated": true
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
     },
     {
       "agent": "PULSE",
-      "reason": "required by daily-standup preset",
-      "participated": true
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
     },
     {
       "agent": "AUDIT",
-      "reason": "required by daily-standup preset",
-      "participated": true
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
     },
     {
       "agent": "LEDGER",
-      "reason": "required by daily-standup preset",
-      "participated": true
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
     },
     {
       "agent": "SCOUT",
@@ -208,89 +208,47 @@
     }
   ],
   "ledger": {
-    "estimatedCycleUsd": 0.026516,
+    "estimatedCycleUsd": 0,
     "actualCycleUsd": 0,
     "monthAllInUsd": 0,
-    "monthCapUsd": 20
+    "monthCapUsd": 50
   },
   "decision": {
     "outcome": "NO_ACTION",
     "summary": "No externally consequential action was approved.",
     "evidenceRefs": []
   },
-  "proposals": [
-    {
-      "agent": "VIZE",
-      "summary": "NO_ACTION until a bounded evidence-backed task exists.",
-      "evidenceRefs": []
-    },
-    {
-      "agent": "FORGE",
-      "summary": "NO_ACTION until a bounded evidence-backed task exists.",
-      "evidenceRefs": []
-    },
-    {
-      "agent": "PULSE",
-      "summary": "NO_ACTION until a bounded evidence-backed task exists.",
-      "evidenceRefs": []
-    },
-    {
-      "agent": "AUDIT",
-      "summary": "Hold the evidence and budget gates.",
-      "evidenceRefs": []
-    }
-  ],
-  "voteMatrix": [
-    {
-      "voter": "VIZE",
-      "firstChoice": "NO_ACTION",
-      "veto": false
-    },
-    {
-      "voter": "FORGE",
-      "firstChoice": "NO_ACTION",
-      "veto": false
-    },
-    {
-      "voter": "PULSE",
-      "firstChoice": "NO_ACTION",
-      "veto": false
-    },
-    {
-      "voter": "AUDIT",
-      "firstChoice": "NO_ACTION",
-      "veto": false
-    }
-  ],
+  "proposals": [],
+  "voteMatrix": [],
   "tasks": [
     {
-      "id": "TASK-20260801200000-night-001",
+      "id": "TASK-20260801201444-night-001",
       "owner": "SCRIBE",
       "summary": "Reconcile the shift record and preserve every open question.",
-      "status": "planned"
+      "status": "skipped"
     }
   ],
   "growthPlan": "NO_POST — there is no evidence-backed venture fact to distribute.",
   "eveningOutcome": "Night shift reconciled the record; remain in DISCOVERY.",
   "roomTranscript": {
-    "openedAt": "2026-08-01T20:00:00.000Z",
-    "closedAt": "2026-08-01T20:00:02.000Z",
+    "openedAt": "2026-08-01T20:14:44.881Z",
+    "closedAt": "2026-08-01T20:14:46.881Z",
     "gavel": "VIZE",
-    "setting": "Deterministic offline fixture. No live council call occurred.",
+    "setting": "Bounded operating record without a live council call.",
     "turns": [
       {
         "agent": "VIZE",
         "mode": "gavel",
-        "sentAt": "2026-08-01T20:00:00.000Z",
-        "text": "This fixture opens a deterministic review. No live agent position is being presented."
+        "sentAt": "2026-08-01T20:14:44.881Z",
+        "text": "The deterministic checkpoint records the handoff. No council model was called."
       },
       {
         "agent": "LEDGER",
         "mode": "reads-ledger",
-        "sentAt": "2026-08-01T20:00:02.000Z",
-        "text": "Recorded estimate: $0.0265. No paid API call occurred."
+        "sentAt": "2026-08-01T20:14:46.881Z",
+        "text": "Recorded estimate: $0.0000. No live cost was recorded."
       }
     ]
   },
-  "generatedAt": "2026-08-01T20:00:00.000Z"
+  "generatedAt": "2026-08-01T20:14:44.881Z"
 }

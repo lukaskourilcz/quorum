@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-08-01",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-08-01",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-edition",
+        "held": true,
+        "bullets": [
+          {
+            "text": "NO_EDITION. stet_block_after_rewrite",
+            "roomLink": "/meetings/2026-08-01-cu-edition"
+          }
+        ],
+        "costUsd": 0.19983975
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260801040000-morning/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "incubator",
+        "kind": "incubator-scan",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Record zero candidate domains because the dry packet contains no external evidence. The next scan must bring cited observations.",
+            "roomLink": "/meetings/2026-08-01-incubator-scan"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-intake",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability.",
+            "roomLink": "/meetings/2026-08-01-mma-intake"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-editorial",
+        "held": true,
+        "bullets": [
+          {
+            "text": "AM: assigned; PM: assigned",
+            "roomLink": "/meetings/2026-08-01-mag-editorial"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-am",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files morning article was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "kind": "tt-marketing",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Record One Good Day as a four-concept planning season. All products remain concepts and no external action is authorized.",
+            "roomLink": "/meetings/2026-08-01-tt-marketing"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "afternoon",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260801120000-afternoon/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-product",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Veto the duplicate fixture idea before deliberation.",
+            "roomLink": "/meetings/2026-08-01-cu-product"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-pm",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files evening article was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-analysis",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Reviewed the versioned analysis state within the data-only gate. No probability was published.",
+            "roomLink": "/meetings/2026-08-01-mma-analysis"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-desk",
+        "held": true,
+        "bullets": [
+          {
+            "text": "The bounded room recorded no action.",
+            "roomLink": "/meetings/2026-08-01-mag-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "night",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260801201444-night/room"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.1998 against the $2.20 daily budget.",
+    "bodyWordCount": 137
+  },
+  "bodyWordCount": 182,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-08-01T20:14:46.004Z"
+}
