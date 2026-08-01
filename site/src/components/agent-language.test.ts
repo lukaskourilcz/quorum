@@ -21,5 +21,7 @@ describe("publicAgentText", () => {
     expect(publicDecisionLabel("EVIDENCE_PACKET_REQUIRED")).toBe(
       "Needs reliable sources"
     );
+    expect(publicDecisionLabel("done")).toBe("Finished");
+    expect(publicAgentText("Current shift")).toBe("Current meeting");
   });
 });

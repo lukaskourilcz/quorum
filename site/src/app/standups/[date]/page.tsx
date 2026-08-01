@@ -330,7 +330,9 @@ export default async function StandupDetailPage({
               title="What happens next"
             />
             <div className="grid gap-0">
-              {standup.tasks.map((task, index) => (
+              {standup.tasks.map((task, index) => {
+                const taskAgent = agentById.get(task.agent);
+                return (
                 <div
                   className="grid gap-3 border-t border-[var(--border)] py-6 sm:grid-cols-12 sm:items-start"
                   key={task.summary}
@@ -339,10 +341,10 @@ export default async function StandupDetailPage({
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span className="min-w-0 break-words text-sm sm:col-span-2">
-                    {task.time}
+                    {publicAgentText(task.time)}
                   </span>
                   <span className="min-w-0 break-words font-bold sm:col-span-2">
-                    {task.agent}
+                    {taskAgent ? publicAgentTitle(taskAgent) : "AI role"}
                   </span>
                   <span className="min-w-0 break-words text-sm leading-6 sm:col-span-5">
                     {publicAgentText(task.summary)}
@@ -351,10 +353,11 @@ export default async function StandupDetailPage({
                     className="w-fit sm:col-span-2"
                     tone={task.status === "planned" ? "accent" : "warning"}
                   >
-                    {task.status}
+                    {publicDecisionLabel(task.status)}
                   </Badge>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
