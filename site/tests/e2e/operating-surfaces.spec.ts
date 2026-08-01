@@ -104,7 +104,7 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
     "smooth"
   );
   await expect(page.getByTestId("week-board")).toBeVisible();
-  await expect(page.getByTestId("week-board").locator(".contents")).toHaveCount(8);
+  await expect(page.getByTestId("week-board").locator(".contents")).toHaveCount(14);
   const next = page.getByRole("link", { name: "Next calendar week" });
   await expect(next).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
   await next.click();
