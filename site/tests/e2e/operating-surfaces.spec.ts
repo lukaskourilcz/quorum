@@ -10,9 +10,23 @@ const axeRoutes = [
   "/ideas",
   "/ventures/caught-up",
   "/ventures/titty-tuesdays",
+  "/ventures/fightaiq",
+  "/ventures/fightaiq/upcoming",
+  "/fighters",
   "/incubator",
   "/admin?venture=incubator&tab=niche-proposals",
-  "/admin/ventures/titty-tuesdays/binder"
+  "/admin/ventures/titty-tuesdays/binder",
+  "/admin?venture=fightaiq&tab=fighters",
+  "/admin?venture=fightaiq&tab=events",
+  "/admin?venture=fightaiq&tab=slates",
+  "/admin?venture=fightaiq&tab=sources",
+  "/admin?venture=mma-files&tab=articles",
+  "/admin?venture=mma-files&tab=calendar",
+  "/admin?venture=mma-files&tab=social-lab",
+  "/meetings/2026-08-01-mma-intake",
+  "/meetings/2026-08-01-mma-analysis",
+  "/meetings/2026-08-01-mag-editorial",
+  "/meetings/2026-08-01-mag-desk"
 ];
 
 const repositoryRoot = path.resolve(process.cwd(), "..");
@@ -130,20 +144,37 @@ test("admin rating persists, feeds the incubator shortlist, and the launch binde
   await expect(page.getByText("1 ready plans")).toBeVisible();
 });
 
+const responsiveRoutes = ["/", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/fightaiq/upcoming", "/fighters", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
+
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
   { name: "landscape", width: 844, height: 390, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
   { name: "reduced motion", width: 1440, height: 900, colorScheme: "dark" as const, reducedMotion: "reduce" as const }
 ]) {
-  test(`portfolio surfaces remain contained in ${mode.name}`, async ({ page }) => {
-    await page.setViewportSize({ width: mode.width, height: mode.height });
-    await page.emulateMedia({ colorScheme: mode.colorScheme, reducedMotion: mode.reducedMotion });
-    for (const route of ["/", "/ventures/titty-tuesdays", "/incubator", "/admin?venture=incubator&tab=niche-proposals"]) {
+  for (const route of responsiveRoutes) {
+    test(`portfolio surface remains contained in ${mode.name} — ${route}`, async ({ page }) => {
+      await page.setViewportSize({ width: mode.width, height: mode.height });
+      await page.emulateMedia({ colorScheme: mode.colorScheme, reducedMotion: mode.reducedMotion });
       await page.goto(route, { waitUntil: "networkidle" });
       await expect(page.locator("main")).toBeVisible();
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
-    }
-  });
+      const viewport = await page.evaluate(() => ({
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+        offenders: Array.from(document.querySelectorAll("body *"))
+          .filter((element) => {
+            const bounds = element.getBoundingClientRect();
+            return bounds.left < -1 || bounds.right > document.documentElement.clientWidth + 1;
+          })
+          .slice(0, 6)
+          .map((element) => ({
+            className: element.getAttribute("class"),
+            tag: element.tagName.toLowerCase(),
+            text: element.textContent?.trim().slice(0, 80)
+          }))
+      }));
+      expect(viewport.scrollWidth, `${route} is wider than its ${viewport.clientWidth}px viewport: ${JSON.stringify(viewport.offenders)}`).toBeLessThanOrEqual(viewport.clientWidth);
+    });
+  }
 }
 
 test("stateful route controls preserve page scroll", async ({ page }) => {
@@ -228,7 +259,11 @@ test("Council Simulator controls preserve page scroll", async ({ page }) => {
 
 for (const [route, heading] of [
   ["/meetings/2026-07-30-cu-edition", "Choose the edition"],
-  ["/meetings/2026-07-30-cu-product", "Decide the product idea"]
+  ["/meetings/2026-07-30-cu-product", "Decide the product idea"],
+  ["/meetings/2026-08-01-mma-intake", "Check the fight data"],
+  ["/meetings/2026-08-01-mma-analysis", "Review the model without guessing"],
+  ["/meetings/2026-08-01-mag-editorial", "Choose or reject both article slots"],
+  ["/meetings/2026-08-01-mag-desk", "Check today’s articles and social drafts"]
 ] as const) {
   test(`renders the new room kind at ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: "networkidle" });

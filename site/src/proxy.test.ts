@@ -32,4 +32,16 @@ describe("admin proxy rate limit", () => {
     }
     expect(proxy(request("203.0.113.41", "wrong")).status).toBe(429);
   });
+
+  it("does not count the browser's credential-free challenge requests", () => {
+    vi.stubEnv("ADMIN_USER", "e2e-owner");
+    vi.stubEnv("ADMIN_PASSWORD", "e2e-password");
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      const challenge = new NextRequest("https://boardless.example/admin", {
+        headers: { "x-forwarded-for": "203.0.113.42" }
+      });
+      expect(proxy(challenge).status).toBe(401);
+    }
+    expect(proxy(request("203.0.113.42")).status).toBe(200);
+  });
 });

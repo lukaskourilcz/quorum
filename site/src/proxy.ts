@@ -50,8 +50,9 @@ export function proxy(request: NextRequest) {
   if (!admin) {
     return securityHeaders(NextResponse.next(), false);
   }
+  const authorization = request.headers.get("authorization");
   const result = verifyBasicAuthorization(
-    request.headers.get("authorization"),
+    authorization,
     process.env.ADMIN_USER,
     process.env.ADMIN_PASSWORD
   );
@@ -64,7 +65,10 @@ export function proxy(request: NextRequest) {
     );
   }
   if (result !== "ok") {
-    if (isRateLimited(request)) {
+    // Browsers first request a Basic Auth page without credentials so they can
+    // receive the challenge. Count only credentials that were actually wrong;
+    // otherwise normal navigation eventually locks out the owner.
+    if (authorization && isRateLimited(request)) {
       return securityHeaders(
         new NextResponse("Too many authentication attempts.", {
           status: 429,

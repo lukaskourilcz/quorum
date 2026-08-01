@@ -6,8 +6,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { agents } from "@/data/agents";
 
 export const metadata: Metadata = {
-  description:
-    "The twenty-seven AI roles that research, decide, build, write and check BoardlessAI's work.",
+  description: `The ${agents.length} AI roles that research, decide, build, write and check BoardlessAI's work.`,
   title: "AI team"
 };
 

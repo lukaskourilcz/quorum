@@ -1,3 +1,5 @@
+import { agents } from "@/data/agents";
+
 function itemsFor(input: {
   actualSpend: string;
   decision: string;
@@ -10,7 +12,7 @@ function itemsFor(input: {
   ["Real sources", "0"],
   ["Latest decision", input.decision],
   ["Decision makers", "4"],
-  ["AI roles", "20"],
+  ["AI roles", String(agents.length)],
   ["Meeting times", "06 · 14 · 22"],
   ["Best idea score", "34/50"]
   ] as const;

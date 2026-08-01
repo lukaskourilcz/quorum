@@ -8,7 +8,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] text-[var(--card-foreground)]",
+        "min-w-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] text-[var(--card-foreground)]",
         className
       )}
       {...props}
@@ -27,7 +27,7 @@ export function CardContent({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-7 md:p-8", className)} {...props} />;
+  return <div className={cn("min-w-0 p-7 md:p-8", className)} {...props} />;
 }
 
 export function CardTitle({
