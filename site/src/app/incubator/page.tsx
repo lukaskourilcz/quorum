@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, FlaskConical, Gavel, Search } from "lucide-react";
+import { publicAgentText } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
