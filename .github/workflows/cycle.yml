@@ -57,6 +57,11 @@ on:
         required: true
         default: true
         type: boolean
+      delivery_only:
+        description: Deliver the oldest Caught Up package without generating a new edition
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -127,6 +132,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_PHASE: ${{ inputs.phase }}
           INPUT_DRY: ${{ inputs.dry }}
+          INPUT_DELIVERY_ONLY: ${{ inputs.delivery_only }}
           HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
           HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
           HAS_DELIVERY_APP_ID: ${{ secrets.DELIVERY_APP_ID != '' }}
@@ -139,6 +145,7 @@ jobs:
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
+          delivery_only="${INPUT_DELIVERY_ONLY:-false}"
           if test "$EVENT_NAME" = "schedule"; then
             dry=false
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled)"
@@ -196,9 +203,14 @@ jobs:
             dry=true
             echo "One or more council credentials are missing; forcing fixture-only dry mode."
           fi
+          if test "$delivery_only" = "true" && { test "$EVENT_NAME" != "workflow_dispatch" || test "$phase" != "cu-edition" || test "$dry" = "true"; }; then
+            echo "Delivery-only mode requires a manual cu-edition dispatch with dry=false and all Caught Up gates open." >&2
+            exit 1
+          fi
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
+          echo "delivery_only=$delivery_only" >> "$GITHUB_OUTPUT"
 
       - name: Pre-cycle release gate
         if: ${{ steps.mode.outputs.skip != 'true' }}
@@ -211,7 +223,7 @@ jobs:
 
       - name: Run cycle
         id: run
-        if: ${{ steps.mode.outputs.skip != 'true' }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           DRY: ${{ steps.mode.outputs.dry }}
@@ -274,7 +286,7 @@ jobs:
           pnpm site:smoke
 
       - name: Commit one atomic runtime cycle
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
