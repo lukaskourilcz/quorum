@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { verifyBasicAuthorization } from "./admin-auth";
+import { verifyAdminCredentials, verifyBasicAuthorization } from "./admin-auth";
 
 describe("admin authorization", () => {
   it("fails closed when credentials are not configured", () => {
@@ -15,5 +15,14 @@ describe("admin authorization", () => {
     expect(verifyBasicAuthorization(invalid, "operator", "correct")).toBe(
       "denied"
     );
+  });
+
+  it("checks form credentials with the same constant-time comparison", () => {
+    expect(
+      verifyAdminCredentials("operator", "correct", "operator", "correct")
+    ).toBe("ok");
+    expect(
+      verifyAdminCredentials("operator", "wrong", "operator", "correct")
+    ).toBe("denied");
   });
 });

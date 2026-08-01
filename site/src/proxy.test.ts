@@ -1,47 +1,69 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
+import {
+  ADMIN_SESSION_COOKIE,
+  createAdminSessionToken
+} from "./lib/admin-session";
 import { proxy } from "./proxy";
 
 afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-function request(ip: string, password = "e2e-password"): NextRequest {
-  return new NextRequest("https://boardless.example/admin", {
-    headers: {
-      Authorization: `Basic ${Buffer.from(`e2e-owner:${password}`).toString("base64")}`,
-      "x-forwarded-for": ip
-    }
+function configure() {
+  vi.stubEnv("ADMIN_USER", "e2e-owner");
+  vi.stubEnv("ADMIN_PASSWORD", "e2e-password");
+}
+
+function authenticated(pathname = "/admin"): NextRequest {
+  const token = createAdminSessionToken("e2e-owner", "e2e-password");
+  return new NextRequest(`https://boardless.example${pathname}`, {
+    headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` }
   });
 }
 
-describe("admin proxy rate limit", () => {
-  it("never counts authenticated admin traffic as failed login attempts", () => {
-    vi.stubEnv("ADMIN_USER", "e2e-owner");
-    vi.stubEnv("ADMIN_PASSWORD", "e2e-password");
-    for (let attempt = 0; attempt < 20; attempt += 1) {
-      expect(proxy(request("203.0.113.40")).status).toBe(200);
-    }
+describe("admin session proxy", () => {
+  it("redirects logged-out page requests to the login screen", () => {
+    configure();
+    const response = proxy(new NextRequest("https://boardless.example/admin"));
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://boardless.example/admin/login?error=expired"
+    );
   });
 
-  it("still rate-limits repeated invalid credentials", () => {
-    vi.stubEnv("ADMIN_USER", "e2e-owner");
-    vi.stubEnv("ADMIN_PASSWORD", "e2e-password");
-    for (let attempt = 0; attempt < 12; attempt += 1) {
-      expect(proxy(request("203.0.113.41", "wrong")).status).toBe(401);
-    }
-    expect(proxy(request("203.0.113.41", "wrong")).status).toBe(429);
+  it("lets a signed session open protected pages", () => {
+    configure();
+    expect(proxy(authenticated()).status).toBe(200);
   });
 
-  it("does not count the browser's credential-free challenge requests", () => {
-    vi.stubEnv("ADMIN_USER", "e2e-owner");
-    vi.stubEnv("ADMIN_PASSWORD", "e2e-password");
-    for (let attempt = 0; attempt < 20; attempt += 1) {
-      const challenge = new NextRequest("https://boardless.example/admin", {
-        headers: { "x-forwarded-for": "203.0.113.42" }
-      });
-      expect(proxy(challenge).status).toBe(401);
-    }
-    expect(proxy(request("203.0.113.42")).status).toBe(200);
+  it("returns JSON instead of a login page for expired API requests", async () => {
+    configure();
+    const response = proxy(
+      new NextRequest("https://boardless.example/admin/api/ratings")
+    );
+    expect(response.status).toBe(401);
+    await expect(response.json()).resolves.toEqual({
+      error: "Your admin session expired. Sign in again."
+    });
+  });
+
+  it("keeps the login screen available when credentials are not configured", () => {
+    expect(
+      proxy(new NextRequest("https://boardless.example/admin/login")).status
+    ).toBe(200);
+    const response = proxy(new NextRequest("https://boardless.example/admin"));
+    expect(response.headers.get("location")).toBe(
+      "https://boardless.example/admin/login?error=config"
+    );
+  });
+
+  it("redirects an authenticated owner away from the login screen", () => {
+    configure();
+    const response = proxy(authenticated("/admin/login"));
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://boardless.example/admin"
+    );
   });
 });

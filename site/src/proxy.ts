@@ -1,28 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyBasicAuthorization } from "./lib/admin-auth";
-
-const attempts = new Map<string, { count: number; resetAt: number }>();
-const WINDOW_MS = 60_000;
-const MAX_ATTEMPTS = 12;
-
-function requestKey(request: NextRequest): string {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
-}
-
-function isRateLimited(request: NextRequest, now = Date.now()): boolean {
-  const key = requestKey(request);
-  const current = attempts.get(key);
-  if (!current || current.resetAt <= now) {
-    attempts.set(key, { count: 1, resetAt: now + WINDOW_MS });
-    return false;
-  }
-  current.count += 1;
-  return current.count > MAX_ATTEMPTS;
-}
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSessionToken
+} from "./lib/admin-session";
 
 function securityHeaders(response: NextResponse, admin: boolean): NextResponse {
   const developmentEval =
@@ -45,48 +25,62 @@ function securityHeaders(response: NextResponse, admin: boolean): NextResponse {
   return response;
 }
 
+function loginUrl(request: NextRequest, error?: "config" | "expired"): URL {
+  const url = new URL("/admin/login", request.url);
+  if (error) url.searchParams.set("error", error);
+  return url;
+}
+
 export function proxy(request: NextRequest) {
-  const admin = request.nextUrl.pathname.startsWith("/admin");
-  if (!admin) {
-    return securityHeaders(NextResponse.next(), false);
-  }
-  const authorization = request.headers.get("authorization");
-  const result = verifyBasicAuthorization(
-    authorization,
+  const pathname = request.nextUrl.pathname;
+  const admin = pathname.startsWith("/admin");
+  if (!admin) return securityHeaders(NextResponse.next(), false);
+
+  const authorization = verifyAdminSessionToken(
+    request.cookies.get(ADMIN_SESSION_COOKIE)?.value,
     process.env.ADMIN_USER,
     process.env.ADMIN_PASSWORD
   );
-  if (result === "missing_config") {
-    return securityHeaders(
-      new NextResponse("Admin authentication is not configured.", {
-        status: 503
-      }),
-      true
-    );
-  }
-  if (result !== "ok") {
-    // Browsers first request a Basic Auth page without credentials so they can
-    // receive the challenge. Count only credentials that were actually wrong;
-    // otherwise normal navigation eventually locks out the owner.
-    if (authorization && isRateLimited(request)) {
+  const loginPage = pathname === "/admin/login";
+  const publicLoginRoute =
+    loginPage || pathname === "/admin/login/submit";
+
+  if (publicLoginRoute) {
+    if (loginPage && authorization === "ok") {
       return securityHeaders(
-        new NextResponse("Too many authentication attempts.", {
-          status: 429,
-          headers: { "Retry-After": "60" }
-        }),
+        NextResponse.redirect(new URL("/admin", request.url)),
+        true
+      );
+    }
+    return securityHeaders(NextResponse.next(), true);
+  }
+
+  if (authorization !== "ok") {
+    if (pathname.startsWith("/admin/api/")) {
+      return securityHeaders(
+        NextResponse.json(
+          {
+            error:
+              authorization === "missing_config"
+                ? "Admin login is not configured."
+                : "Your admin session expired. Sign in again."
+          },
+          { status: authorization === "missing_config" ? 503 : 401 }
+        ),
         true
       );
     }
     return securityHeaders(
-      new NextResponse("Authentication required.", {
-        status: 401,
-        headers: {
-          "WWW-Authenticate": 'Basic realm="BoardlessAI Admin", charset="UTF-8"'
-        }
-      }),
+      NextResponse.redirect(
+        loginUrl(
+          request,
+          authorization === "missing_config" ? "config" : "expired"
+        )
+      ),
       true
     );
   }
+
   return securityHeaders(NextResponse.next(), true);
 }
 

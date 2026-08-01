@@ -1,4 +1,4 @@
-import { verifyBasicAuthorization } from "@/lib/admin-auth";
+import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
 import { parseRatingRecord } from "@/lib/rating-model";
 import {
   appendRating,
@@ -15,24 +15,8 @@ function json(value: unknown, status: number): Response {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  const authorization = verifyBasicAuthorization(
-    request.headers.get("authorization"),
-    process.env.ADMIN_USER,
-    process.env.ADMIN_PASSWORD
-  );
-  if (authorization === "missing_config") {
-    return json({ error: "Admin authentication is not configured." }, 503);
-  }
-  if (authorization !== "ok") {
-    return new Response(JSON.stringify({ error: "Authentication required." }), {
-      status: 401,
-      headers: {
-        "Cache-Control": "no-store, private",
-        "Content-Type": "application/json",
-        "WWW-Authenticate": 'Basic realm="BoardlessAI Admin", charset="UTF-8"'
-      }
-    });
-  }
+  const authorization = verifyAdminRequest(request);
+  if (authorization !== "ok") return adminAuthorizationError(authorization);
   const origin = request.headers.get("origin");
   if (origin && origin !== new URL(request.url).origin) {
     return json({ error: "Cross-origin rating writes are not allowed." }, 403);

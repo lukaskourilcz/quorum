@@ -1,4 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
+import {
+  ADMIN_SESSION_COOKIE,
+  ADMIN_SESSION_MAX_AGE_SECONDS,
+  createAdminSessionToken
+} from "./src/lib/admin-session";
+
+const adminUser = "e2e-owner";
+const adminPassword = "e2e-password";
+const sessionStartedAt = Date.now();
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -9,7 +18,27 @@ export default defineConfig({
   reporter: [["list"]],
   use: {
     baseURL: "http://localhost:3000",
-    httpCredentials: { username: "e2e-owner", password: "e2e-password" },
+    storageState: {
+      cookies: [
+        {
+          domain: "localhost",
+          expires:
+            Math.floor(sessionStartedAt / 1_000) +
+            ADMIN_SESSION_MAX_AGE_SECONDS,
+          httpOnly: true,
+          name: ADMIN_SESSION_COOKIE,
+          path: "/",
+          sameSite: "Strict",
+          secure: false,
+          value: createAdminSessionToken(
+            adminUser,
+            adminPassword,
+            sessionStartedAt
+          )
+        }
+      ],
+      origins: []
+    },
     trace: "on-first-retry"
   },
   projects: [
@@ -21,8 +50,8 @@ export default defineConfig({
   webServer: {
     command: "pnpm dev",
     env: {
-      ADMIN_USER: "e2e-owner",
-      ADMIN_PASSWORD: "e2e-password",
+      ADMIN_USER: adminUser,
+      ADMIN_PASSWORD: adminPassword,
       BOARDLESSAI_REPO_ROOT: process.cwd().replace(/\/site$/, "")
     },
     url: "http://localhost:3000",

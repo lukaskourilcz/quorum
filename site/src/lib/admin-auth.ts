@@ -38,6 +38,16 @@ export function verifyBasicAuthorization(
   }
   const user = decoded.slice(0, separator);
   const password = decoded.slice(separator + 1);
+  return verifyAdminCredentials(user, password, expectedUser, expectedPassword);
+}
+
+export function verifyAdminCredentials(
+  user: string,
+  password: string,
+  expectedUser: string | undefined,
+  expectedPassword: string | undefined
+): "ok" | "missing_config" | "denied" {
+  if (!expectedUser || !expectedPassword) return "missing_config";
   const userMatches = safeEqual(user, expectedUser);
   const passwordMatches = safeEqual(password, expectedPassword);
   return userMatches && passwordMatches ? "ok" : "denied";

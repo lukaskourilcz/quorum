@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, RefreshCw } from "lucide-react";
+import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, LogOut, RefreshCw } from "lucide-react";
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { AgentSwitches } from "@/components/admin/agent-switches";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
@@ -9,7 +9,7 @@ import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
@@ -243,13 +243,21 @@ export default async function AdminPage({
             <span className="font-semibold">BoardlessAI Admin</span>
             <Badge className="hidden sm:inline-flex" tone="warning">Protected</Badge>
           </div>
-          <Link
-            className={buttonVariants({ variant: "ghost" })}
-            href="/"
-          >
-            <ArrowLeft aria-hidden="true" className="size-4" />
-            Public site
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link
+              className={buttonVariants({ variant: "ghost" })}
+              href="/"
+            >
+              <ArrowLeft aria-hidden="true" className="size-4" />
+              <span className="hidden sm:inline">Public site</span>
+            </Link>
+            <form action="/admin/logout" method="post">
+              <Button size="small" type="submit" variant="ghost">
+                <LogOut aria-hidden="true" className="size-4" />
+                Sign out
+              </Button>
+            </form>
+          </div>
         </div>
       </header>
 

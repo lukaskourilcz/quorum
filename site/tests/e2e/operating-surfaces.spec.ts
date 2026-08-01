@@ -176,6 +176,41 @@ test("admin rating persists, feeds the incubator shortlist, and the launch binde
   await expect(page.getByText("1 ready plans")).toBeVisible();
 });
 
+test("admin login explains errors, starts a session and signs out", async ({ page }) => {
+  await page.context().clearCookies();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/admin", { waitUntil: "networkidle" });
+  await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+  await expect(page.getByRole("heading", { name: "Your project desk." })).toBeVisible();
+  const accessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
+
+  await page.getByLabel("Username").fill("e2e-owner");
+  const password = page.locator('input[name="password"]');
+  await password.fill("wrong");
+  await page.getByRole("button", { name: "Show password" }).click();
+  await expect(password).toHaveAttribute("type", "text");
+  await page.getByRole("button", { name: "Hide password" }).click();
+  await expect(password).toHaveAttribute("type", "password");
+  await page.getByRole("button", { name: "Open project desk" }).click();
+  await expect(page).toHaveURL(/\/admin\/login\?error=invalid$/);
+  await expect(page.getByText("Those details did not match")).toBeVisible();
+
+  await page.getByLabel("Username").fill("e2e-owner");
+  await page.locator('input[name="password"]').fill("e2e-password");
+  await page.getByRole("button", { name: "Open project desk" }).click();
+  await expect(page).toHaveURL(/\/admin$/);
+  await expect(page.getByRole("heading", { name: "Project desk." })).toBeVisible();
+
+  await page.getByRole("button", { name: "Sign out" }).click();
+  await expect(page).toHaveURL(/\/admin\/login$/);
+  await page.goto("/admin");
+  await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+});
+
 const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/fightaiq/upcoming", "/fighters", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
 
 for (const mode of [
@@ -259,7 +294,7 @@ test("Decision Replay controls preserve page scroll", async ({ page }) => {
     waitUntil: "networkidle"
   });
   await page
-    .getByRole("button", { name: "Watch without making a guess" })
+    .getByRole("button", { name: "Start chat replay" })
     .click();
 
   const nextTurn = page.getByRole("button", { name: "Next message" });

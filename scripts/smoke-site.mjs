@@ -47,6 +47,7 @@ const ventureSlugs = [
 const expectedRoutes = [
   "/",
   "/about",
+  "/admin/login",
   "/agents",
   ...agentSlugs.map((slug) => `/agents/${slug}`),
   "/boardroom",
@@ -137,9 +138,9 @@ for (const { response, body } of results) {
 
 const linkedResults = await Promise.all([...linkedPaths].sort().map(request));
 for (const result of linkedResults) {
-  if (![200, 401, 503].includes(result.response.status)) {
+  if (![200, 307, 401, 503].includes(result.response.status)) {
     failures.push(
-      `linked ${result.pathname}: expected 200/401/503, received ${result.response.status}`
+      `linked ${result.pathname}: expected 200/307/401/503, received ${result.response.status}`
     );
   }
 }
@@ -174,8 +175,16 @@ if (
 }
 
 const admin = await request("/admin");
-if (![401, 503].includes(admin.response.status)) {
-  failures.push(`/admin: fail-closed status expected, received ${admin.response.status}`);
+if (admin.response.status !== 307) {
+  failures.push(`/admin: login redirect expected, received ${admin.response.status}`);
+}
+const adminLocation = admin.response.headers.get("location");
+if (
+  !adminLocation ||
+  new URL(adminLocation, base).toString() !==
+    new URL("/admin/login?error=config", base).toString()
+) {
+  failures.push("/admin: missing configuration must redirect to the login help state");
 }
 if (!(admin.response.headers.get("x-robots-tag") ?? "").includes("noindex")) {
   failures.push("/admin: missing noindex response header");
