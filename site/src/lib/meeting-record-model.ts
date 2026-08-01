@@ -3,6 +3,8 @@ import type { RoomTranscript, RoomTurnMode } from "../data/fixtures";
 
 export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 export type PublicMeetingStatus =
+  | "INSUFFICIENT_EVIDENCE"
+  | "NO_ACTION"
   | "PLAN"
   | "PAUSED"
   | "FAILED"
@@ -51,6 +53,8 @@ export interface PublicMeetingRecord {
 }
 
 const statuses = new Set<PublicMeetingStatus>([
+  "INSUFFICIENT_EVIDENCE",
+  "NO_ACTION",
   "PLAN",
   "PAUSED",
   "FAILED",
@@ -190,7 +194,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
     return id && reason && typeof entry?.participated === "boolean"
       ? { agent: id, reason, participated: entry.participated }
       : null;
-  }, 20);
+  }, agentById.size);
   const proposals = strictArray(record.proposals, (value) => {
     const entry = object(value);
     const id = entry ? agent(entry.agent) : null;

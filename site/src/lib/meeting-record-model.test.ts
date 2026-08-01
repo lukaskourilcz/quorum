@@ -3,6 +3,7 @@ import valid from "../../../contracts/fixtures/meeting-record.valid.json";
 import tittyTuesdays from "../../../state/meetings/2026-08-01-tt-marketing.json";
 import incubatorScan from "../../../state/meetings/2026-08-01-incubator-scan.json";
 import incubatorSynthesis from "../../../state/meetings/2026-08-01-incubator-synthesis.json";
+import liveCaughtUpEdition from "../../../state/meetings/2026-08-01-cu-edition.json";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 
 function clone(): typeof valid {
@@ -54,6 +55,15 @@ describe("public MeetingRecord v2 boundary", () => {
       kind: "tt-marketing",
       fixture: true,
       status: "PLAN"
+    });
+  });
+
+  it("accepts the genuine Caught Up room with the full registered team", () => {
+    expect(parsePublicMeetingRecord(liveCaughtUpEdition)).toMatchObject({
+      id: "2026-08-01-cu-edition",
+      kind: "cu-edition",
+      fixture: false,
+      status: "NO_EDITION"
     });
   });
 

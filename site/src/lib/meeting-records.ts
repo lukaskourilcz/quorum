@@ -30,7 +30,7 @@ export async function getPublicMeetingRecords(): Promise<readonly PublicMeetingR
   const fallbacks = meetingFixtures
     .map(parsePublicMeetingRecord)
     .filter((record): record is PublicMeetingRecord => Boolean(record))
-    .filter((fixture) => !records.some((record) => record.kind === fixture.kind));
+    .filter((fixture) => !records.some((record) => record.id === fixture.id));
   return [...records, ...fallbacks].sort(
     (left, right) => Date.parse(right.roomTranscript.openedAt) - Date.parse(left.roomTranscript.openedAt)
   );
