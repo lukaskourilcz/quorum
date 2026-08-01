@@ -41,8 +41,7 @@
             }
           }
         }
-      ],
-      "pendingApproval": "budget-2026-08d"
+      ]
     },
     {
       "id": "titty-tuesdays",
@@ -68,8 +67,7 @@
             }
           }
         }
-      ],
-      "pendingApproval": "budget-2026-08d"
+      ]
     },
     {
       "id": "incubator",
@@ -111,8 +109,7 @@
             }
           }
         }
-      ],
-      "pendingApproval": "budget-2026-08d"
+      ]
     },
     {
       "id": "fightaiq",
@@ -155,8 +152,7 @@
             }
           }
         }
-      ],
-      "pendingApproval": "budget-2026-08d"
+      ]
     },
     {
       "id": "mma-files",
@@ -205,8 +201,7 @@
           "cadence": "2x-daily@10:00,18:00",
           "envelopeUsd": 0.16
         }
-      ],
-      "pendingApproval": "budget-2026-08d"
+      ]
     }
   ]
 }

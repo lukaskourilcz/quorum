@@ -85,9 +85,9 @@ export function createOfflineStandup(input: {
     ],
     ledger: {
       estimatedCycleUsd: input.estimatedCycleUsd,
-      actualCycleUsd: input.fixture ? 0 : null,
+      actualCycleUsd: 0,
       monthAllInUsd: 0,
-      monthCapUsd: 20
+      monthCapUsd: 50
     },
     decision: {
       outcome,

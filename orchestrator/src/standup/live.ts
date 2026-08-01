@@ -105,7 +105,7 @@ function positionInput(input: {
       objective: input.shift.objective,
       handoff: input.shift.handoff
     },
-    projectMode: "HOBBY_NON_COMMERCIAL",
+    projectMode: "OPERATING_PRE_REVENUE",
     stage: input.stage,
     approvedWorkItem: input.item,
     queueScope: input.scope,
@@ -259,7 +259,7 @@ export function createLiveStandup(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: input.council.actualCycleUsd,
       monthAllInUsd: input.council.monthAllInUsd,
-      monthCapUsd: 20
+      monthCapUsd: 50
     },
     decision: {
       outcome,
@@ -317,7 +317,7 @@ export function createLiveStandup(input: {
           mode: "reads-ledger",
           sentAt: ledgerAt,
           addressedTo: "VIZE",
-          text: `The recorded API cost for this cycle is $${input.council.actualCycleUsd.toFixed(4)}. Month-to-date API cost is $${input.council.monthAllInUsd.toFixed(4)} against the $20.00 operating cap.`
+          text: `The recorded API cost for this cycle is $${input.council.actualCycleUsd.toFixed(4)}. Month-to-date API cost is $${input.council.monthAllInUsd.toFixed(4)} against the $50.00 all-in operating limit.`
         },
         ...input.council.positions.map((position) => ({
           agent: position.agent,

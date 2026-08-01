@@ -423,7 +423,7 @@ async function runCaughtUpLiveEditionCycle(
     };
   }
   const reference = meetingRef(date, "cu-edition");
-  const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
+  const baseUrl = (process.env.PUBLIC_SITE_URL || "https://boardless-ai.vercel.app").replace(/\/$/, "");
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${cycleId.toUpperCase()}`,
     topicType: definition.topicType,

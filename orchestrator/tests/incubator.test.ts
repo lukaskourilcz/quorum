@@ -44,7 +44,6 @@ describe("magazine incubator", () => {
       taste: true,
       ledgerNamespace: "incubator",
       adminTabs: ["niche-proposals"],
-      pendingApproval: "budget-2026-08d"
     });
     expect(venture?.meetings.map(({ kind, cadence }) => ({ kind, cadence }))).toEqual([
       { kind: "incubator-scan", cadence: "daily@07:00" },

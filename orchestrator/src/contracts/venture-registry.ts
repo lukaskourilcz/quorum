@@ -61,8 +61,7 @@ const VentureDefinitionSchema = openObject({
     cadence: z.string().regex(/^(?:2x-daily@\d{2}:00,\d{2}:00|daily@(?:0[5-9]|1\d|2[0-3]):00)$/),
     envelopeUsd: z.number().finite().positive().max(1)
   })).optional(),
-  meetings: z.array(VentureMeetingDefinitionSchema),
-  pendingApproval: z.string().trim().min(1).max(120).optional()
+  meetings: z.array(VentureMeetingDefinitionSchema)
 });
 
 export const VentureRegistrySchema = openObject({
