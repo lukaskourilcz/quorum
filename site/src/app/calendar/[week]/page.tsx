@@ -4,11 +4,16 @@ import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { WeekBoard } from "@/components/week-board";
 import { getPublicCalendarFeed } from "@/lib/calendar-feed";
-import { calendarStaticWeeks } from "@/lib/calendar-feed-model";
+import {
+  addCalendarDays,
+  calendarStaticWeeks,
+  mondayOfCalendarWeek,
+  pragueCalendarDate
+} from "@/lib/calendar-feed-model";
 
 export const metadata: Metadata = {
-  description: "The weekly schedule for BoardlessAI project and Caught Up meetings.",
-  title: "Weekly schedule"
+  description: "A five-day view of BoardlessAI project meetings and article slots.",
+  title: "Five-day schedule"
 };
 
 export function generateStaticParams() {
@@ -21,18 +26,33 @@ export default async function CalendarWeekPage({
   params: Promise<{ week: string }>;
 }) {
   const { week } = await params;
-  const availableWeeks = calendarStaticWeeks(new Date());
+  const now = new Date();
+  const availableWeeks = calendarStaticWeeks(now);
   if (!availableWeeks.includes(week)) notFound();
-  const feed = await getPublicCalendarFeed(week);
+  const today = pragueCalendarDate(now);
+  const currentWeek = mondayOfCalendarWeek(today);
+  const anchorDate = week === currentWeek ? today : addCalendarDays(week, 2);
+  const visibleWeekStarts = Array.from(new Set([
+    week,
+    mondayOfCalendarWeek(addCalendarDays(anchorDate, -1)),
+    mondayOfCalendarWeek(addCalendarDays(anchorDate, 3))
+  ]));
+  const calendarFeeds = await Promise.all(
+    visibleWeekStarts.map((visibleWeek) => getPublicCalendarFeed(visibleWeek, now))
+  );
+  const feed = calendarFeeds.find((entry) => entry.weekOf === week)!;
+  const adjacentFeeds = calendarFeeds.filter((entry) => entry.weekOf !== week);
   return (
     <PageShell>
       <PageIntro
-        eyebrow="Weekly schedule / Prague time"
-        title="Every planned meeting"
-        description="Fourteen rooms and article-production times are planned each day. This page comes straight from the saved project schedule and meeting records, with no hidden calendar service."
+        eyebrow="Five-day schedule / Prague time"
+        title={week === currentWeek ? "Five days around today" : "Five days from this week"}
+        description={week === currentWeek
+          ? "The calendar shows yesterday, today and the next three days. Saved meeting notes open from completed slots."
+          : "This saved window keeps the same compact five-day layout. Completed slots open their meeting notes."}
       />
       <section className="mx-auto w-full min-w-0 max-w-[var(--container)] overflow-x-clip px-5 py-18 md:px-10 md:py-24">
-        <WeekBoard availableWeeks={availableWeeks} feed={feed} headingLevel="page" />
+        <WeekBoard adjacentFeeds={adjacentFeeds} anchorDate={anchorDate} availableWeeks={availableWeeks} feed={feed} headingLevel="page" today={today} />
       </section>
     </PageShell>
   );

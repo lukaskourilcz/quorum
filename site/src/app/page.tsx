@@ -16,6 +16,7 @@ import { agents } from "@/data/agents";
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicCalendarFeed } from "@/lib/calendar-feed";
 import {
+  addCalendarDays,
   calendarStaticWeeks,
   mondayOfCalendarWeek,
   pragueCalendarDate
@@ -45,11 +46,19 @@ const decisionSteps = [
 
 export default async function HomePage() {
   const now = new Date();
-  const weekOf = mondayOfCalendarWeek(pragueCalendarDate(now));
-  const [standups, calendarFeed] = await Promise.all([
+  const today = pragueCalendarDate(now);
+  const weekOf = mondayOfCalendarWeek(today);
+  const visibleWeekStarts = Array.from(new Set([
+    mondayOfCalendarWeek(addCalendarDays(today, -1)),
+    weekOf,
+    mondayOfCalendarWeek(addCalendarDays(today, 3))
+  ]));
+  const [standups, ...calendarFeeds] = await Promise.all([
     getPublicStandups(),
-    getPublicCalendarFeed(weekOf, now)
+    ...visibleWeekStarts.map((visibleWeek) => getPublicCalendarFeed(visibleWeek, now))
   ]);
+  const calendarFeed = calendarFeeds.find((entry) => entry.weekOf === weekOf)!;
+  const adjacentCalendarFeeds = calendarFeeds.filter((entry) => entry.weekOf !== weekOf);
   const availableWeeks = calendarStaticWeeks(now);
   const latestStandup = standups[0]!;
   return (
@@ -158,7 +167,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <WeekBoard availableWeeks={availableWeeks} feed={calendarFeed} />
+      <WeekBoard adjacentFeeds={adjacentCalendarFeeds} anchorDate={today} availableWeeks={availableWeeks} feed={calendarFeed} today={today} />
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10 md:py-30">
         <SectionHeading

@@ -79,7 +79,7 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
         <header className="border-b border-[var(--border)] bg-[var(--card)]">
           <div className="mx-auto max-w-[var(--container)] px-5 py-12 md:px-10 md:py-18">
             <Link className={buttonVariants({ size: "small", variant: "ghost" })} href="/#week-board">
-              <ArrowLeft aria-hidden="true" className="size-4" /> Weekly schedule
+              <ArrowLeft aria-hidden="true" className="size-4" /> Five-day schedule
             </Link>
             <div className="mt-9 grid items-end gap-8 md:grid-cols-12">
               <div className="md:col-span-8">
