@@ -35,6 +35,7 @@ export function SiteHeader() {
         <nav
           aria-label="Primary"
           className="hide-scrollbar flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto"
+          data-horizontal-scroll
         >
           {links.map((link) => (
             <Link

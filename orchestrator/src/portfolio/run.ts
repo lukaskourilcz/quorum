@@ -26,6 +26,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { fightWeekFocus, loadEventCards } from "../fightaiq/store.js";
+import { refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
@@ -186,10 +187,12 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
-    const [overview, bridge, events] = await Promise.all([
+    const [overview, bridge, events, sourceSnapshot, sourceSnapshotData] = await Promise.all([
       canonicalStateText(root, "ventures/fightaiq/README.md"),
       readText(root, "mma/BRIDGE.md"),
-      loadEventCards(path.join(root, "ventures", "fightaiq", "events"))
+      loadEventCards(path.join(root, "ventures", "fightaiq", "events")),
+      readText(root, `ventures/fightaiq/source-snapshots/${date}.json`),
+      readJson<{ evidenceRefs?: string[] }>(root, `ventures/fightaiq/source-snapshots/${date}.json`, {})
     ]);
     const day = new Date(`${date}T12:00:00Z`).getUTCDay();
     const leadOrg = ["ufc", "ksw", "oktagon"][day % 3];
@@ -198,8 +201,12 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       ? `Fight-week cards, nearest first. Work only these bouts:\n${JSON.stringify(focus)}`
       : "No verified card is inside the three-day fight-week window. Continue breadth-first file work across all three organizations.";
     return {
-      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${focusPacket}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
-      evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
+      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${focusPacket}\n\nLatest guarded API snapshot:\n${sourceSnapshot}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
+      evidenceRefs: [
+        ...bridgeEvidenceRefs(bridge),
+        ...focus.map((event) => `event:${event.id}`),
+        ...(sourceSnapshotData.evidenceRefs ?? [])
+      ]
     };
   }
   if (phase === "mag-editorial" || phase === "mag-desk") {
@@ -255,6 +262,15 @@ export async function runPortfolioCycle(input: {
   const definition = composeMeetingRouteDefinition(registry, input.phase, input.dry ? "dry" : "live");
   const date = pragueClockParts(input.now).date;
   const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
+  const preparationArtifacts: string[] = [];
+  if (!input.dry && input.phase === "incubator-scan") {
+    const evidence = await refreshIncubatorEvidence({ root, now: input.now });
+    preparationArtifacts.push(...evidence.artifactPaths);
+  }
+  if (!input.dry && input.phase === "mma-intake") {
+    const evidence = await refreshFightAiQEvidence({ root, date, now: input.now });
+    preparationArtifacts.push(...evidence.artifactPaths);
+  }
   if (input.phase === "mma-intake") await refreshMmaBridge(root, date);
   const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
   let cast = input.phase === "tt-marketing"
@@ -413,6 +429,6 @@ export async function runPortfolioCycle(input: {
   ]);
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

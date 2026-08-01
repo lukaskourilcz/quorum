@@ -7,6 +7,42 @@ Vercel Pro is confirmed; there is no Hobby-plan task.
 Never paste a credential into Git, an issue, a meeting record or chat. Put secrets in
 GitHub Actions or Vercel only.
 
+## Why the test meetings were empty
+
+`dry=true` is a safety proof, not a rehearsal that creates real work. A dry meeting
+makes no provider call, writes only under `tmp/dry-run/state`, never commits canonical
+state and deliberately gives its agents no live contribution. The incubator also
+rejects every proposal without a real source reference. You do not pair the 38 roles
+one by one: the meeting router assigns them automatically after the provider accounts,
+source accounts, approval records and project switches below are connected.
+
+## Exact first-live sequence
+
+1. Countersign the decisions in the next section, commit them to `main`, and rotate the
+   two model keys.
+2. Add the required GitHub Actions **secrets** and **repository variables** below.
+   Secrets alone do not authorize a live run; the matching repository switch must
+   already be `true`.
+3. Open **Actions → Guarded council cycle → Run workflow**, choose one phase and turn
+   **dry off**. In `Resolve guarded cycle mode`, require `dry=false` and `skip=false`.
+   `dry=true`, `skip=true` or a `PAUSED` result means a gate is still missing.
+4. Start Caught Up by setting `CAUGHT_UP_LIVE_ENABLED=true`, then run `cu-edition` with
+   dry off. Review the new `cycle(...)` commit, EditionPackage, delivery receipt,
+   bilingual articles and `aifirst` deployment. Set the switch back to `false` if any
+   check fails.
+5. Set `PORTFOLIO_LIVE_ENABLED=true`; run `incubator-scan` before
+   `incubator-synthesis`. The scan now saves a guarded source packet, so synthesis can
+   keep source-backed ideas. Then run `tt-marketing`.
+6. Add `THE_ODDS_API_KEY` and `CITO_API_KEY`, set `FIGHTAIQ_LIVE_ENABLED=true`, then run
+   `mma-intake`. The room now saves a guarded daily API snapshot. It will not promote a
+   one-source claim into a verified fighter file; complete the second-source review in
+   admin. Keep `FIGHTAIQ_ANALYSIS_ENABLED=false` until the separate mode-change decision.
+7. After the signed $50 decision and a verified FightAIQ packet, set
+   `MMA_FILES_LIVE_ENABLED=true` and run `mag-editorial`, `article-am`, `article-pm`, then
+   `mag-desk`. Missing evidence correctly kills an article slot at $0.
+8. Once each manual live run has produced and pushed the expected canonical artifacts,
+   leave its switch on for the Prague schedule. Keep `SOCIAL_KILL_SWITCH=true`.
+
 ## Do these before any live run
 
 - [ ] **Sign the one $50 limit** — countersign `state/decisions/2026-08-04-budget-fifty.md` (`budget-2026-08d`). Until then the code correctly keeps the older $20 all-in fallback, $15 model monthly limit and $0.70 daily pace; MMA Files live work stays off. [imp:5] [owner:me] [time:5m] [kind:decision]
@@ -26,12 +62,12 @@ GitHub Actions or Vercel only.
 - [ ] **Install the delivery GitHub App on `lukaskourilcz/aifirst` only** — grant Contents read/write and no broader permission; add `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY` to Quorum Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
 - [ ] **Set the reader URL** — add repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app`. It is currently missing. [imp:5] [owner:me] [time:5m] [kind:setup]
 - [ ] **Confirm Caught Up’s adopted limits** — add your approval reference to `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
-- [ ] **Enable Caught Up after one reviewed delivery** — dispatch `cu-edition` manually, verify the bilingual package, delivery receipt, `aifirst` checks and deployment, then set `CAUGHT_UP_LIVE_ENABLED=true`. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
+- [ ] **Enable Caught Up for one reviewed delivery** — set `CAUGHT_UP_LIVE_ENABLED=true`, dispatch `cu-edition` with dry off, then verify the bilingual package, delivery receipt, `aifirst` checks and deployment. Set the switch back to `false` on any failure. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Review the first three editions** — check both articles, citations, Czech and English tone, four-frame carousels, Instagram captions and Threads drafts in `/admin`. [imp:5] [owner:me] [time:90m] [kind:content]
 
 ## FightAIQ data and launch gate
 
-- [ ] **Create the free source keys** — add `THE_ODDS_API_KEY` (the-odds-api.com) and `CITO_API_KEY` to Actions secrets. Verify whether The Odds API’s EU MMA feed includes KSW; if not, use the same manual price form used for Oktagon. The adapter stops at zero remaining credits. [imp:5] [owner:me] [time:25m] [kind:setup]
+- [ ] **Create the free source keys** — add `THE_ODDS_API_KEY` (the-odds-api.com) and `CITO_API_KEY` to Actions secrets. The live intake now stores their daily snapshot and stops requesting The Odds API after it reports zero remaining monthly credits. Verify whether its EU MMA feed includes KSW; if not, use the same manual price form used for Oktagon. [imp:5] [owner:me] [time:25m] [kind:setup]
 - [ ] **Review the betting types against your actual books** — trim the committed catalog to markets you can really capture. Do not add bookmaker scraping or account automation. [imp:4] [owner:me] [time:20m] [kind:content]
 - [ ] **Review one complete event per organization** — collect UFC, KSW and Oktagon cards, two-source fighter facts, T-3/T-1/closing prices, results and calibration. Then record a separate owner decision before changing FightAIQ from `data-only` to `live-analysis`. [imp:5] [owner:me] [time:3h] [kind:decision]
 - [ ] **Enable FightAIQ only after that decision** — set `FIGHTAIQ_LIVE_ENABLED=true` for live data rooms and `FIGHTAIQ_ANALYSIS_ENABLED=true` only when public/model analysis is approved. These variables are currently missing. [imp:5] [owner:me] [time:10m] [kind:deploy]

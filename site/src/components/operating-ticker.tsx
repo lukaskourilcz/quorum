@@ -60,7 +60,7 @@ export function OperatingTicker(input: {
 }) {
   const items = itemsFor(input);
   return (
-    <div className="overflow-hidden border-b border-[var(--border)] bg-[var(--surface)]">
+    <div className="overflow-hidden border-b border-[var(--border)] bg-[var(--surface)]" data-horizontal-scroll>
       <div className="marquee-track flex w-max">
         <TickerItems items={items} />
         <TickerItems hidden items={items} />

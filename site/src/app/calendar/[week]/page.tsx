@@ -31,7 +31,7 @@ export default async function CalendarWeekPage({
         title="Every planned meeting"
         description="Fourteen rooms and article-production times are planned each day. This page comes straight from the saved project schedule and meeting records, with no hidden calendar service."
       />
-      <section className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-24">
+      <section className="mx-auto w-full min-w-0 max-w-[var(--container)] overflow-x-clip px-5 py-18 md:px-10 md:py-24">
         <WeekBoard availableWeeks={availableWeeks} feed={feed} headingLevel="page" />
       </section>
     </PageShell>

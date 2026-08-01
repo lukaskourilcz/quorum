@@ -41,11 +41,12 @@ manual FightAIQ price and an MMA Files metrics entry. A `503` means setup is inc
 Do not store personal or confidential text in admin notes because writes become
 repository history.
 
-## 4. Review proof and real inputs
+## 4. Review proof and prepare the first real inputs
 
 Open every link in `docs/LIVE-PROOF.md`. Fixture labels must remain visible. Then:
 
-- deliver one reviewed Caught Up edition to `aifirst`;
+- confirm the Caught Up delivery App is installed on `aifirst` and ready for the first
+  live package;
 - capture one full UFC, KSW and Oktagon event, including two-source fighter facts,
   T-3/T-1/closing prices and results;
 - confirm the committed bet types match markets you can actually capture;
@@ -55,9 +56,13 @@ Record a separate owner mode-change decision before FightAIQ live analysis.
 
 ## 5. Enable one switch at a time
 
-1. `CAUGHT_UP_LIVE_ENABLED=true`
-2. `PORTFOLIO_LIVE_ENABLED=true`
-3. `FIGHTAIQ_LIVE_ENABLED=true`
+1. Set `CAUGHT_UP_LIVE_ENABLED=true`, manually run `cu-edition` with dry off, review the
+   delivered bilingual edition, and switch it back off if delivery fails.
+2. Set `PORTFOLIO_LIVE_ENABLED=true`, then run `incubator-scan` before
+   `incubator-synthesis`; the scan supplies the source packet required for real ideas.
+3. Set `FIGHTAIQ_LIVE_ENABLED=true`, then run `mma-intake`; the configured API sources
+   supply a guarded daily snapshot, while critical fighter fields still need a second
+   agreeing source before model use.
 4. `FIGHTAIQ_ANALYSIS_ENABLED=true` only after the event review and decision
 5. `MMA_FILES_LIVE_ENABLED=true` only after the signed `$50` limit
 

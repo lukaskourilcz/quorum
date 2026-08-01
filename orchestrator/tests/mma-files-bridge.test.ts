@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { composeBridge, validateBridge } from "../src/mma-files/bridge.js";
 import { composePortfolioContext } from "../src/portfolio/run.js";
-import { atomicWriteText } from "../src/state.js";
+import { atomicWriteJson, atomicWriteText } from "../src/state.js";
 import { loadVentureRegistry } from "../src/ventures/registry.js";
 
 const roots: string[] = [];
@@ -31,11 +31,22 @@ describe("PIVOT evidence bridge", () => {
       evidenceRef: "scoreboard:2026-08-01"
     }]);
     await atomicWriteText(root, "mma/BRIDGE.md", bridge);
+    await atomicWriteJson(root, "ventures/fightaiq/source-snapshots/2026-08-01.json", {
+      schemaVersion: "fightaiq-source-snapshot/1",
+      date: "2026-08-01",
+      retrievedAt: "2026-08-01T06:00:00.000Z",
+      evidenceRefs: ["source:cito-ufc:2026-08-01"],
+      sources: [{ sourceId: "cito-ufc", status: "success", reason: null, items: [{ id: "1", name: "Test Fighter", record: "1-0" }] }]
+    });
     const registry = await loadVentureRegistry();
     for (const phase of ["mma-intake", "mma-analysis", "mag-editorial", "mag-desk"] as const) {
       const packet = await composePortfolioContext(phase, root, "2026-08-01", registry);
       expect(packet.text, phase).toContain("Readers saved the sourced layoff explainer");
       expect(packet.evidenceRefs, phase).toContain("scoreboard:2026-08-01");
+      if (phase === "mma-intake" || phase === "mma-analysis") {
+        expect(packet.text, phase).toContain("Test Fighter");
+        expect(packet.evidenceRefs, phase).toContain("source:cito-ufc:2026-08-01");
+      }
     }
   });
 });

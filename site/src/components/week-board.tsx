@@ -1,5 +1,19 @@
 import Link from "next/link";
-import { CheckCircle2, CircleMinus, Clock3, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Beaker,
+  Building2,
+  CheckCircle2,
+  CircleMinus,
+  Clock3,
+  FileText,
+  FlaskConical,
+  Newspaper,
+  Shirt,
+  Swords,
+  type LucideIcon
+} from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -12,27 +26,62 @@ const dayFormatter = new Intl.DateTimeFormat("en", {
   timeZone: "UTC"
 });
 
-const timeFormatter = new Intl.DateTimeFormat("en", {
-  hour: "2-digit",
-  minute: "2-digit",
-  hourCycle: "h23",
-  timeZone: "Europe/Prague"
-});
-
-function statusIcon(status: CalendarStatus) {
-  if (status === "held") return <CheckCircle2 aria-hidden="true" className="size-3.5" />;
-  if (status === "missed") return <CircleMinus aria-hidden="true" className="size-3.5" />;
-  return <Clock3 aria-hidden="true" className="size-3.5" />;
-}
-
-function statusLabel(status: CalendarStatus) {
-  if (status === "held") return "finished";
-  if (status === "missed") return "missed";
-  return "planned";
-}
-
 function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
+}
+
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "incubator" | "fightaiq" | "mma-files";
+type DisplayStatus = CalendarStatus | "test";
+
+const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone: string }> = {
+  company: { icon: Building2, label: "Company", tone: "text-[var(--accent)]" },
+  "caught-up": { icon: Newspaper, label: "Caught Up", tone: "text-[var(--magenta-spark)]" },
+  "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--paper)]" },
+  incubator: { icon: FlaskConical, label: "Magazine Incubator", tone: "text-[var(--ash)]" },
+  fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--mist)]" },
+  "mma-files": { icon: FileText, label: "MMA Files", tone: "text-[var(--fog)]" }
+};
+
+function projectForKind(kind: CalendarKind): ProjectKey {
+  if (isCaughtUp(kind)) return "caught-up";
+  if (kind === "tt-marketing") return "titty-tuesdays";
+  if (isIncubator(kind)) return "incubator";
+  if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
+  if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
+  return "company";
+}
+
+function displayStatus(status: CalendarStatus, fixture: boolean | undefined): DisplayStatus {
+  return fixture ? "test" : status;
+}
+
+function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string; tone: string } {
+  if (status === "test") {
+    return {
+      icon: Beaker,
+      label: "Test meeting",
+      tone: "bg-[color-mix(in_srgb,var(--warning-soft)_22%,var(--surface))] text-[var(--warning-soft)]"
+    };
+  }
+  if (status === "held") {
+    return {
+      icon: CheckCircle2,
+      label: "Happened",
+      tone: "bg-[color-mix(in_srgb,var(--success-soft)_18%,var(--surface))] text-[var(--success-soft)]"
+    };
+  }
+  if (status === "missed") {
+    return {
+      icon: CircleMinus,
+      label: "Did not happen",
+      tone: "bg-[color-mix(in_srgb,var(--destructive-soft)_18%,var(--surface))] text-[var(--destructive-soft)]"
+    };
+  }
+  return {
+    icon: Clock3,
+    label: "Planned",
+    tone: "bg-[var(--surface)] text-[var(--fog)]"
+  };
 }
 
 function isIncubator(kind: CalendarKind) {
@@ -60,17 +109,7 @@ function publicKindLabel(kind: CalendarKind): string {
 }
 
 function definitionTone(kind: CalendarKind): string {
-  if (isCaughtUp(kind)) return "text-[var(--magenta-spark)]";
-  if (kind === "tt-marketing") return "text-[var(--paper)]";
-  if (isIncubator(kind)) return "text-[var(--ash)]";
-  return "text-[var(--accent)]";
-}
-
-function slotTone(kind: CalendarKind): string {
-  if (isCaughtUp(kind)) return "bg-[color-mix(in_srgb,var(--magenta-spark)_6%,var(--surface))]";
-  if (kind === "tt-marketing") return "bg-[color-mix(in_srgb,var(--paper)_7%,var(--surface))]";
-  if (isIncubator(kind)) return "bg-[color-mix(in_srgb,var(--ash)_5%,var(--surface))]";
-  return "bg-[color-mix(in_srgb,var(--accent)_5%,var(--surface))]";
+  return projectDetails[projectForKind(kind)].tone;
 }
 
 export function WeekBoard({
@@ -104,13 +143,13 @@ export function WeekBoard({
         />
       ) : null}
       {headingLevel === "page" ? <div className="mb-6 flex justify-end">{navigation}</div> : null}
-      <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]" data-testid="week-board">
-        <div className="grid min-w-[70rem] grid-cols-[10rem_repeat(7,minmax(8.5rem,1fr))]">
-          <div className="border-b border-r border-[var(--border)] p-4">
+      <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]" data-horizontal-scroll data-testid="week-board">
+        <div className="grid min-w-[62rem] grid-cols-[12rem_repeat(7,minmax(7rem,1fr))]">
+          <div className="border-b border-r border-[var(--border)] p-3">
             <Badge tone="accent">{feed.weekOf}</Badge>
           </div>
           {days.map((day) => (
-            <div className="border-b border-r border-[var(--border)] p-4 last:border-r-0" key={day}>
+            <div className="border-b border-r border-[var(--border)] p-3 last:border-r-0" key={day}>
               <time className="font-mono text-xs uppercase tracking-[0.1em] text-[var(--mist)]" dateTime={day}>
                 {dayFormatter.format(new Date(`${day}T12:00:00Z`))}
               </time>
@@ -118,43 +157,66 @@ export function WeekBoard({
           ))}
           {feed.definitions.map((definition, row) => (
             <div className="contents" key={definition.kind}>
-              <div className="border-b border-r border-[var(--border)] p-4 last:border-b-0">
-                <p className={`font-mono text-xs font-semibold uppercase tracking-[0.08em] ${definitionTone(definition.kind)}`}>
-                  {String(definition.hour).padStart(2, "0")}:00
-                </p>
-                <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{publicKindLabel(definition.kind)}</p>
+              <div className="flex items-start gap-3 border-b border-r border-[var(--border)] p-3 last:border-b-0">
+                {(() => {
+                  const ProjectIcon = projectDetails[projectForKind(definition.kind)].icon;
+                  return <ProjectIcon aria-hidden="true" className={`mt-0.5 size-4 shrink-0 ${definitionTone(definition.kind)}`} data-project-icon />;
+                })()}
+                <div>
+                  <p className={`font-mono text-xs font-semibold uppercase tracking-[0.08em] ${definitionTone(definition.kind)}`}>
+                    {String(definition.hour).padStart(2, "0")}:00
+                  </p>
+                  <p className="mt-0.5 text-xs leading-4 text-[var(--fog)]">{publicKindLabel(definition.kind)}</p>
+                </div>
               </div>
               {days.map((day, column) => {
                 const slot = feed.slots[column * feed.definitions.length + row]!;
+                const visibleStatus = displayStatus(slot.status, slot.fixture);
+                const status = statusDetails(visibleStatus);
+                const StatusIcon = status.icon;
                 const content = (
                   <>
-                    <span className="flex items-center gap-1.5 font-mono text-[0.625rem] uppercase tracking-[0.08em]">
-                      {statusIcon(slot.status)} {statusLabel(slot.status)}
-                    </span>
-                    <span className="mt-2 block text-xs font-semibold leading-5">{kindLabel(slot.kind)}</span>
-                    <time className="mt-1 block font-mono text-[0.625rem] text-[var(--fog)]" dateTime={slot.at}>{timeFormatter.format(new Date(slot.at))} Prague</time>
-                    {slot.fixture ? <span className="mt-2 block text-[0.625rem] uppercase tracking-[0.08em] text-[var(--fog)]">Test example</span> : null}
+                    <StatusIcon aria-hidden="true" className="size-4" />
+                    <span className="sr-only">{status.label}</span>
                   </>
                 );
-                const className = `min-h-31 border-b border-r border-[var(--border)] p-4 last:border-r-0 text-[var(--mist)] ${slotTone(slot.kind)} ${slot.meetingHref ? "transition-colors hover:bg-[var(--surface-raised)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
+                const className = `grid min-h-16 place-items-center border-b border-r border-[var(--border)] p-2 last:border-r-0 ${status.tone} ${slot.meetingHref ? "transition-[filter] hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
                 return slot.meetingHref ? (
-                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${statusLabel(slot.status)}`} className={className} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
+                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
                     {content}
                   </Link>
                 ) : (
-                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${statusLabel(slot.status)}`} className={className} key={`${day}-${slot.kind}`}>{content}</div>
+                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} key={`${day}-${slot.kind}`}>{content}</div>
                 );
               })}
             </div>
           ))}
         </div>
       </div>
-      <div className="mt-5 flex flex-wrap gap-4 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-        <span className="text-[var(--accent)]">Company meeting</span>
-        <span className="text-[var(--magenta-spark)]">Caught Up</span>
-        <span className="text-[var(--paper)]">Titty Tuesdays</span>
-        <span className="text-[var(--ash)]">New project research</span>
-        <span>✓ finished</span><span>− missed</span><span>◷ planned</span>
+      <div className="mt-5 flex flex-wrap justify-between gap-x-8 gap-y-4 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+        <div aria-label="Projects" className="flex flex-wrap gap-x-4 gap-y-3">
+          {(Object.entries(projectDetails) as [ProjectKey, (typeof projectDetails)[ProjectKey]][]).map(([project, details]) => {
+            const ProjectIcon = details.icon;
+            return (
+              <span className={`flex items-center gap-1.5 ${details.tone}`} data-project-legend key={project}>
+                <ProjectIcon aria-hidden="true" className="size-3.5" />
+                {details.label}
+              </span>
+            );
+          })}
+        </div>
+        <div aria-label="Meeting status" className="flex flex-wrap gap-x-4 gap-y-3">
+          {(["held", "missed", "test", "scheduled"] as DisplayStatus[]).map((value) => {
+            const details = statusDetails(value);
+            const StatusIcon = details.icon;
+            return (
+              <span className="flex items-center gap-1.5" key={value}>
+                <span className={`grid size-5 place-items-center rounded-sm ${details.tone}`}><StatusIcon aria-hidden="true" className="size-3" /></span>
+                {details.label}
+              </span>
+            );
+          })}
+        </div>
       </div>
     </>
   );

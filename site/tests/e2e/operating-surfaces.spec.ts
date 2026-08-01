@@ -117,8 +117,16 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
     "data-scroll-behavior",
     "smooth"
   );
-  await expect(page.getByTestId("week-board")).toBeVisible();
-  await expect(page.getByTestId("week-board").locator(".contents")).toHaveCount(14);
+  const weekBoard = page.getByTestId("week-board");
+  await expect(weekBoard).toBeVisible();
+  await expect(weekBoard.locator(".contents")).toHaveCount(14);
+  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(14);
+  await expect(page.locator("[data-project-legend]")).toHaveCount(6);
+  await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
+  await expect(weekBoard.locator('[data-calendar-state="test"]')).not.toHaveCount(0);
+  await expect(weekBoard.locator('[data-calendar-state="held"]')).not.toHaveCount(0);
+  await expect(weekBoard.locator('[data-calendar-state="missed"]')).not.toHaveCount(0);
+  await expect(weekBoard.locator('[data-calendar-state="scheduled"]')).not.toHaveCount(0);
   const next = page.getByRole("link", { name: "Next calendar week" });
   await expect(next).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
   await next.click();
@@ -144,7 +152,7 @@ test("admin rating persists, feeds the incubator shortlist, and the launch binde
   await expect(page.getByText("1 ready plans")).toBeVisible();
 });
 
-const responsiveRoutes = ["/", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/fightaiq/upcoming", "/fighters", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
+const responsiveRoutes = ["/", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/fightaiq/upcoming", "/fighters", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -160,11 +168,12 @@ for (const mode of [
       const viewport = await page.evaluate(() => ({
         clientWidth: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
-        offenders: Array.from(document.querySelectorAll("body *"))
-          .filter((element) => {
-            const bounds = element.getBoundingClientRect();
-            return bounds.left < -1 || bounds.right > document.documentElement.clientWidth + 1;
-          })
+          offenders: Array.from(document.querySelectorAll("body *"))
+            .filter((element) => {
+              if (element.closest("[data-horizontal-scroll], [data-viewport-decoration]")) return false;
+              const bounds = element.getBoundingClientRect();
+              return bounds.left < -1 || bounds.right > document.documentElement.clientWidth + 1;
+            })
           .slice(0, 6)
           .map((element) => ({
             className: element.getAttribute("class"),
@@ -172,7 +181,7 @@ for (const mode of [
             text: element.textContent?.trim().slice(0, 80)
           }))
       }));
-      expect(viewport.scrollWidth, `${route} is wider than its ${viewport.clientWidth}px viewport: ${JSON.stringify(viewport.offenders)}`).toBeLessThanOrEqual(viewport.clientWidth);
+      expect(viewport.offenders, `${route} has content outside its ${viewport.clientWidth}px viewport`).toEqual([]);
     });
   }
 }
