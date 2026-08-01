@@ -33,13 +33,13 @@ function isCaughtUp(kind: CalendarKind) {
 type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "incubator" | "fightaiq" | "mma-files";
 type DisplayStatus = CalendarStatus | "test";
 
-const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone: string }> = {
-  company: { icon: Building2, label: "Company", tone: "text-[var(--accent)]" },
-  "caught-up": { icon: Newspaper, label: "Caught Up", tone: "text-[var(--magenta-spark)]" },
-  "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--paper)]" },
-  incubator: { icon: FlaskConical, label: "Magazine Incubator", tone: "text-[var(--ash)]" },
-  fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--mist)]" },
-  "mma-files": { icon: FileText, label: "MMA Files", tone: "text-[var(--fog)]" }
+const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone: string; slotTone: string }> = {
+  company: { icon: Building2, label: "Company", tone: "text-[var(--accent)]", slotTone: "border-t-[var(--accent)]" },
+  "caught-up": { icon: Newspaper, label: "Caught Up", tone: "text-[var(--magenta-spark)]", slotTone: "border-t-[var(--magenta-spark)]" },
+  "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--warning-soft)]", slotTone: "border-t-[var(--warning-soft)]" },
+  incubator: { icon: FlaskConical, label: "Magazine Incubator", tone: "text-[var(--success-soft)]", slotTone: "border-t-[var(--success-soft)]" },
+  fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotTone: "border-t-[var(--destructive-soft)]" },
+  "mma-files": { icon: FileText, label: "MMA Files", tone: "text-[color-mix(in_srgb,var(--accent)_70%,var(--magenta-spark))]", slotTone: "border-t-[color-mix(in_srgb,var(--accent)_70%,var(--magenta-spark))]" }
 };
 
 function projectForKind(kind: CalendarKind): ProjectKey {
@@ -60,21 +60,21 @@ function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string
     return {
       icon: Beaker,
       label: "Test meeting",
-      tone: "bg-[color-mix(in_srgb,var(--warning-soft)_22%,var(--surface))] text-[var(--warning-soft)]"
+      tone: "bg-[var(--warning-soft)] text-[var(--warning)]"
     };
   }
   if (status === "held") {
     return {
       icon: CheckCircle2,
       label: "Happened",
-      tone: "bg-[color-mix(in_srgb,var(--success-soft)_18%,var(--surface))] text-[var(--success-soft)]"
+      tone: "bg-[var(--success-soft)] text-[var(--success)]"
     };
   }
   if (status === "missed") {
     return {
       icon: CircleMinus,
       label: "Did not happen",
-      tone: "bg-[color-mix(in_srgb,var(--destructive-soft)_18%,var(--surface))] text-[var(--destructive-soft)]"
+      tone: "bg-[var(--destructive-soft)] text-[var(--destructive)]"
     };
   }
   return {
@@ -110,6 +110,10 @@ function publicKindLabel(kind: CalendarKind): string {
 
 function definitionTone(kind: CalendarKind): string {
   return projectDetails[projectForKind(kind)].tone;
+}
+
+function projectSlotTone(kind: CalendarKind): string {
+  return projectDetails[projectForKind(kind)].slotTone;
 }
 
 export function WeekBoard({
@@ -180,13 +184,14 @@ export function WeekBoard({
                     <span className="sr-only">{status.label}</span>
                   </>
                 );
-                const className = `grid min-h-16 place-items-center border-b border-r border-[var(--border)] p-2 last:border-r-0 ${status.tone} ${slot.meetingHref ? "transition-[filter] hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
+                const project = projectForKind(slot.kind);
+                const className = `grid min-h-16 place-items-center border-b border-r border-t-4 border-[var(--border)] p-2 last:border-r-0 ${projectSlotTone(slot.kind)} ${status.tone} ${slot.meetingHref ? "transition-[filter] hover:brightness-95 hover:saturate-125 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
                 return slot.meetingHref ? (
-                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
+                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} href={slot.meetingHref} key={`${day}-${slot.kind}`} title={slot.decisionOneLiner}>
                     {content}
                   </Link>
                 ) : (
-                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} key={`${day}-${slot.kind}`}>{content}</div>
+                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} key={`${day}-${slot.kind}`}>{content}</div>
                 );
               })}
             </div>
