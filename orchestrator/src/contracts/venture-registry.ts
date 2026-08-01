@@ -42,7 +42,25 @@ const VentureDefinitionSchema = openObject({
   status: z.enum(["exploration", "operating", "paused"]),
   taste: z.boolean(),
   ledgerNamespace: VentureIdSchema,
-  adminTabs: z.array(z.enum(["ideas", "plans", "visuals", "niche-proposals"])),
+  mode: z.enum(["data-only", "live-analysis"]).optional(),
+  adminTabs: z.array(z.enum([
+    "ideas",
+    "plans",
+    "visuals",
+    "niche-proposals",
+    "fighters",
+    "events",
+    "slates",
+    "sources",
+    "articles",
+    "calendar",
+    "social-lab"
+  ])),
+  productionJobs: z.array(openObject({
+    kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    cadence: z.string().regex(/^(?:2x-daily@\d{2}:00,\d{2}:00|daily@(?:0[5-9]|1\d|2[0-3]):00)$/),
+    envelopeUsd: z.number().finite().positive().max(1)
+  })).optional(),
   meetings: z.array(VentureMeetingDefinitionSchema),
   pendingApproval: z.string().trim().min(1).max(120).optional()
 });

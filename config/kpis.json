@@ -482,6 +482,102 @@
       "dir": "up"
     },
     {
+      "id": "corner.t3_readiness",
+      "owner": "CORNER",
+      "metric": "announcedBoutDossierReadinessAtT3",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "corner.citation_coverage",
+      "owner": "CORNER",
+      "metric": "fighterFieldCitationCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "spotter.t3_readiness",
+      "owner": "SPOTTER",
+      "metric": "kswBoutDossierReadinessAtT3",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "spotter.weighin_coverage",
+      "owner": "SPOTTER",
+      "metric": "kswWeighInOutcomeCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "tape.linked_adjustments",
+      "owner": "TAPE",
+      "metric": "evidenceLinkedAdjustmentRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "tape.adjustment_review",
+      "owner": "TAPE",
+      "metric": "monthlyAdjustmentOutcomeReview",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "sigma.version_coverage",
+      "owner": "SIGMA",
+      "metric": "publishedProbabilityModelVersionCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "sigma.calibration_report",
+      "owner": "SIGMA",
+      "metric": "weeklyCalibrationReportCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "vig.clv_coverage",
+      "owner": "VIG",
+      "metric": "publishedPickClosingLineCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "vig.pre_event_calls",
+      "owner": "VIG",
+      "metric": "preEventDivergenceRecordRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "sonar.vetted_proposals",
+      "owner": "SONAR",
+      "metric": "vettedSourceProposalsPerWeek",
+      "target": 2,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "sonar.tos_coverage",
+      "owner": "SONAR",
+      "metric": "sourceProposalTermsVerdictCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
       "id": "council.cost_per_learning",
       "owner": "ALL",
       "metric": "usdPerValidatedLearning",

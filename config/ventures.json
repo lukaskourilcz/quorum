@@ -112,6 +112,50 @@
         }
       ],
       "pendingApproval": "budget-2026-08"
+    },
+    {
+      "id": "fightaiq",
+      "name": "FightAIQ",
+      "status": "operating",
+      "mode": "data-only",
+      "taste": true,
+      "ledgerNamespace": "fightaiq",
+      "adminTabs": ["fighters", "events", "slates", "sources"],
+      "meetings": [
+        {
+          "kind": "mma-intake",
+          "label": "FightAIQ morning data check",
+          "cadence": "daily@08:00",
+          "cast": ["FORGE", "CORNER", "SPOTTER", "TAPE", "SONAR"],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "evidence",
+            "decisionNeeded": "PLAN",
+            "preset": "mma-intake-room",
+            "objectives": {
+              "dry": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC, KSW and Oktagon",
+              "live": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC, KSW and Oktagon"
+            }
+          }
+        },
+        {
+          "kind": "mma-analysis",
+          "label": "FightAIQ evening model check",
+          "cadence": "daily@19:00",
+          "cast": ["FORGE", "SIGMA", "VIG", "TAPE", "AUDIT"],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "finance",
+            "decisionNeeded": "PLAN",
+            "preset": "mma-analysis-room",
+            "objectives": {
+              "dry": "Review the fixture model run and record one concrete data improvement without publishing a probability",
+              "live": "Review the latest versioned model run, captured market prices and calibration notes within the current mode gate"
+            }
+          }
+        }
+      ],
+      "pendingApproval": "budget-2026-08d"
     }
   ]
 }

@@ -29,7 +29,7 @@ import {
   resolveEffectivePortfolioSchedule
 } from "./schedule.js";
 
-export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis";
+export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis";
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),

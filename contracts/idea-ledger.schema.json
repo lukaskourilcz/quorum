@@ -56,7 +56,13 @@
             "FUNNEL",
             "PALATE",
             "SCENE",
-            "STUNT"
+            "STUNT",
+            "CORNER",
+            "SPOTTER",
+            "TAPE",
+            "SIGMA",
+            "VIG",
+            "SONAR"
           ]
         },
         "meetingRef": {

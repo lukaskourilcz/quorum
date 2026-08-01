@@ -27,7 +27,13 @@ const titles: Record<AgentId, string> = {
   FUNNEL: "Marketing planner",
   PALATE: "Style reviewer",
   SCENE: "Culture researcher",
-  STUNT: "Campaign ideas lead"
+  STUNT: "Campaign ideas lead",
+  CORNER: "UFC and Oktagon scout",
+  SPOTTER: "KSW scout",
+  TAPE: "Fight analyst",
+  SIGMA: "Probability analyst",
+  VIG: "Odds reviewer",
+  SONAR: "MMA source scout"
 };
 
 const mandates: Record<AgentId, string> = {
@@ -57,7 +63,13 @@ const mandates: Record<AgentId, string> = {
   FUNNEL: "Turns campaign strategy into honest, cost-labeled plans without starting ads or sales.",
   PALATE: "Turns the owner's ratings into written style rules linked to the ratings that inspired them.",
   SCENE: "Tracks sourced streetwear, skate and lifestyle trends for Titty Tuesdays without inventing examples.",
-  STUNT: "Designs low-cost campaign ideas with clear estimates, permissions and a clear way to tell whether they worked."
+  STUNT: "Designs low-cost campaign ideas with clear estimates, permissions and a clear way to tell whether they worked.",
+  CORNER: "Builds sourced UFC and Oktagon fighter files and checks important fields twice before model use.",
+  SPOTTER: "Tracks KSW cards, fighters and weigh-ins from official and Polish fight reporting.",
+  TAPE: "Reviews sourced matchup context and may propose only small, expiring changes to the model input.",
+  SIGMA: "Maintains the repeatable fight model and publishes its version and accuracy record with every number.",
+  VIG: "Compares captured odds with model estimates and records whether published prices beat the closing line.",
+  SONAR: "Finds possible MMA data sources and checks access rules, cost and usefulness before any connection is built."
 };
 
 const replacements: ReadonlyArray<readonly [RegExp, string]> = [

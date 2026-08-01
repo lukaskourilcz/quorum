@@ -42,6 +42,7 @@ const expectedPrompts = [
   "audit.md",
   "channel-agent-template.md",
   "cohort.md",
+  "corner.md",
   "digest.md",
   "forge.md",
   "founding.md",
@@ -64,11 +65,16 @@ const expectedPrompts = [
   "scene.md",
   "scout.md",
   "scribe.md",
+  "sigma.md",
+  "sonar.md",
   "spark.md",
+  "spotter.md",
   "stet.md",
   "stunt.md",
+  "tape.md",
   "threads.md",
   "vault.md",
+  "vig.md",
   "vize.md"
 ] as const;
 

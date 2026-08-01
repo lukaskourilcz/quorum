@@ -115,6 +115,30 @@
     "STUNT": {
       "capabilities": ["marketing:guerrilla", "legality:note", "platform:safety"],
       "status": "active"
+    },
+    "CORNER": {
+      "capabilities": ["mma:scouting", "mma:ufc", "mma:oktagon"],
+      "status": "active"
+    },
+    "SPOTTER": {
+      "capabilities": ["mma:scouting", "mma:ksw", "language:polish"],
+      "status": "active"
+    },
+    "TAPE": {
+      "capabilities": ["mma:analysis", "mma:adjustment", "evidence"],
+      "status": "active"
+    },
+    "SIGMA": {
+      "capabilities": ["mma:model", "statistics", "calibration"],
+      "status": "active"
+    },
+    "VIG": {
+      "capabilities": ["mma:odds", "mma:market", "responsible_play"],
+      "status": "active"
+    },
+    "SONAR": {
+      "capabilities": ["mma:sources", "source:terms", "source:discovery"],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -198,6 +222,14 @@
     },
     "incubator-synthesis-room": {
       "required": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"],
+      "optionalByTopic": false
+    },
+    "mma-intake-room": {
+      "required": ["FORGE", "CORNER", "SPOTTER", "TAPE"],
+      "optionalByTopic": false
+    },
+    "mma-analysis-room": {
+      "required": ["FORGE", "SIGMA", "VIG", "TAPE", "AUDIT"],
       "optionalByTopic": false
     },
     "evidence-room": {

@@ -27,7 +27,13 @@ export type AgentId =
   | "FUNNEL"
   | "PALATE"
   | "SCENE"
-  | "STUNT";
+  | "STUNT"
+  | "CORNER"
+  | "SPOTTER"
+  | "TAPE"
+  | "SIGMA"
+  | "VIG"
+  | "SONAR";
 
 type PublicStatus =
   | "active"
@@ -61,7 +67,7 @@ interface RegistryAgent {
   visual: {
     motif: string;
     accentToken: string;
-    avatar: string;
+    avatar: string | null;
     avatarAlt: string;
     provenanceRef: string;
   };
@@ -248,6 +254,42 @@ const profileCopy: Record<
     operatingPrinciple: "The idea needs permission and a way to fail.",
     output: "Costed and permission-aware stunt concept",
     currentFocus: "Titty Tuesdays guerrilla concepts",
+    publicTrackRecord: null
+  },
+  CORNER: {
+    operatingPrinciple: "A useful fighter file earns every field twice.",
+    output: "Sourced UFC and Oktagon fighter and event records",
+    currentFocus: "UFC and Oktagon cards",
+    publicTrackRecord: null
+  },
+  SPOTTER: {
+    operatingPrinciple: "Read the Polish report before filling the field.",
+    output: "Sourced KSW fighter, weigh-in and event records",
+    currentFocus: "KSW cards and weigh-ins",
+    publicTrackRecord: null
+  },
+  TAPE: {
+    operatingPrinciple: "Context can move a number only when evidence moves with it.",
+    output: "Cited and expiring matchup adjustment",
+    currentFocus: "Fight context and matchup evidence",
+    publicTrackRecord: null
+  },
+  SIGMA: {
+    operatingPrinciple: "Publish the model version with every probability.",
+    output: "Versioned model run and calibration report",
+    currentFocus: "Fight probability engine",
+    publicTrackRecord: null
+  },
+  VIG: {
+    operatingPrinciple: "Show the market, the model and the gap between them.",
+    output: "De-vigged odds comparison and closing-line record",
+    currentFocus: "Odds and track record",
+    publicTrackRecord: null
+  },
+  SONAR: {
+    operatingPrinciple: "A promising source still needs terms, cost and overlap checked.",
+    output: "Vetted fight-data source proposal",
+    currentFocus: "New MMA data sources",
     publicTrackRecord: null
   }
 };

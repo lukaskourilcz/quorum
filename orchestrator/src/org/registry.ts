@@ -30,7 +30,13 @@ export const FOUNDING_AGENT_IDS = [
   "FUNNEL",
   "PALATE",
   "SCENE",
-  "STUNT"
+  "STUNT",
+  "CORNER",
+  "SPOTTER",
+  "TAPE",
+  "SIGMA",
+  "VIG",
+  "SONAR"
 ] as const;
 
 const FoundingAgentIdSchema = z.enum(FOUNDING_AGENT_IDS);
@@ -38,7 +44,7 @@ const FoundingAgentIdSchema = z.enum(FOUNDING_AGENT_IDS);
 const AgentVisualSchema = z.object({
   motif: z.string().min(3).max(80),
   accentToken: z.string().regex(/^agent-[a-z0-9-]+$/),
-  avatar: z.string().regex(/^\/agents\/[a-z0-9-]+\.webp$/),
+  avatar: z.string().regex(/^\/agents\/[a-z0-9-]+\.webp$/).nullable(),
   avatarAlt: z
     .string()
     .min(20)
@@ -91,13 +97,13 @@ export const AgentRegistrySchema = z
   .superRefine((registry, context) => {
     const ids = registry.agents.map((agent) => agent.id);
     const slugs = registry.agents.map((agent) => agent.slug);
-    const avatars = registry.agents.map((agent) => agent.visual.avatar);
+    const avatars = registry.agents.flatMap((agent) => agent.visual.avatar ? [agent.visual.avatar] : []);
     const expected = new Set<string>(FOUNDING_AGENT_IDS);
 
     if (ids.length !== FOUNDING_AGENT_IDS.length || ids.some((id) => !expected.has(id))) {
       context.addIssue({
         code: "custom",
-        message: "registry must contain exactly the 27 operating and proposed agent IDs",
+        message: `registry must contain exactly the ${FOUNDING_AGENT_IDS.length} registered agent IDs`,
         path: ["agents"]
       });
     }
@@ -125,7 +131,7 @@ export const AgentRegistrySchema = z
           path: ["agents", index, "slug"]
         });
       }
-      if (agent.visual.avatar !== `/agents/${expectedSlug}.webp`) {
+      if (agent.visual.avatar !== null && agent.visual.avatar !== `/agents/${expectedSlug}.webp`) {
         context.addIssue({
           code: "custom",
           message: "avatar path must match the stable agent slug",

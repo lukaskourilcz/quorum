@@ -35,7 +35,9 @@
               "cu-product",
               "tt-marketing",
               "incubator-scan",
-              "incubator-synthesis"
+              "incubator-synthesis",
+              "mma-intake",
+              "mma-analysis"
             ]
           },
           "status": {

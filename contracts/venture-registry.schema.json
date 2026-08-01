@@ -38,6 +38,13 @@
             "maxLength": 80,
             "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "data-only",
+              "live-analysis"
+            ]
+          },
           "adminTabs": {
             "type": "array",
             "items": {
@@ -46,8 +53,42 @@
                 "ideas",
                 "plans",
                 "visuals",
-                "niche-proposals"
+                "niche-proposals",
+                "fighters",
+                "events",
+                "slates",
+                "sources",
+                "articles",
+                "calendar",
+                "social-lab"
               ]
+            }
+          },
+          "productionJobs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "cadence": {
+                  "type": "string",
+                  "pattern": "^(?:2x-daily@\\d{2}:00,\\d{2}:00|daily@(?:0[5-9]|1\\d|2[0-3]):00)$"
+                },
+                "envelopeUsd": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "kind",
+                "cadence",
+                "envelopeUsd"
+              ],
+              "additionalProperties": {}
             }
           },
           "meetings": {
@@ -100,7 +141,13 @@
                       "FUNNEL",
                       "PALATE",
                       "SCENE",
-                      "STUNT"
+                      "STUNT",
+                      "CORNER",
+                      "SPOTTER",
+                      "TAPE",
+                      "SIGMA",
+                      "VIG",
+                      "SONAR"
                     ]
                   }
                 },

@@ -31,7 +31,7 @@ export async function validateAgentAvatars(
   publicRoot = path.join(repoRoot, "site", "public")
 ): Promise<AvatarCheck[]> {
   const avatarDirectory = path.join(publicRoot, "agents");
-  const portraitAgents = registry.agents.filter((agent) => agent.status !== "proposed");
+  const portraitAgents = registry.agents.filter((agent) => agent.visual.avatar !== null);
   const expectedNames = portraitAgents.map((agent) => `${agent.slug}.webp`).sort();
   const actualNames = (await readdir(avatarDirectory))
     .filter((name) => name.endsWith(".webp"))
@@ -45,7 +45,7 @@ export async function validateAgentAvatars(
 
   const checks = await Promise.all(
     portraitAgents.map(async (agent): Promise<AvatarCheck> => {
-      const relativePath = agent.visual.avatar.replace(/^\//, "");
+      const relativePath = agent.visual.avatar!.replace(/^\//, "");
       const absolutePath = path.join(publicRoot, relativePath);
       const bytes = await readFile(absolutePath);
 
@@ -69,7 +69,7 @@ export async function validateAgentAvatars(
 
       return {
         agentId: agent.id,
-        path: agent.visual.avatar,
+        path: agent.visual.avatar!,
         bytes: bytes.byteLength,
         width: metadata.width,
         height: metadata.height,

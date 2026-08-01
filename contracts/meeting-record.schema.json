@@ -30,7 +30,9 @@
             "cu-product",
             "tt-marketing",
             "incubator-scan",
-            "incubator-synthesis"
+            "incubator-synthesis",
+            "mma-intake",
+            "mma-analysis"
           ]
         },
         "episode": {
@@ -150,7 +152,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "reason": {
@@ -265,7 +273,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "summary": {
@@ -323,7 +337,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "firstChoice": {
@@ -380,7 +400,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "summary": {
@@ -461,6 +487,42 @@
           "minLength": 1,
           "maxLength": 160
         },
+        "sharperData": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "proposal",
+                "nothing-new"
+              ]
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 280
+            },
+            "ideaRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            }
+          },
+          "required": [
+            "outcome",
+            "summary",
+            "evidenceRefs"
+          ],
+          "additionalProperties": {}
+        },
         "generatedAt": {
           "type": "string",
           "format": "date-time",
@@ -512,7 +574,13 @@
                 "FUNNEL",
                 "PALATE",
                 "SCENE",
-                "STUNT"
+                "STUNT",
+                "CORNER",
+                "SPOTTER",
+                "TAPE",
+                "SIGMA",
+                "VIG",
+                "SONAR"
               ]
             },
             "setting": {
@@ -556,7 +624,13 @@
                       "FUNNEL",
                       "PALATE",
                       "SCENE",
-                      "STUNT"
+                      "STUNT",
+                      "CORNER",
+                      "SPOTTER",
+                      "TAPE",
+                      "SIGMA",
+                      "VIG",
+                      "SONAR"
                     ]
                   },
                   "mode": {
@@ -601,7 +675,13 @@
                       "FUNNEL",
                       "PALATE",
                       "SCENE",
-                      "STUNT"
+                      "STUNT",
+                      "CORNER",
+                      "SPOTTER",
+                      "TAPE",
+                      "SIGMA",
+                      "VIG",
+                      "SONAR"
                     ]
                   },
                   "sentAt": {
@@ -694,7 +774,9 @@
             "cu-product",
             "tt-marketing",
             "incubator-scan",
-            "incubator-synthesis"
+            "incubator-synthesis",
+            "mma-intake",
+            "mma-analysis"
           ]
         },
         "episode": {
@@ -814,7 +896,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "reason": {
@@ -929,7 +1017,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "summary": {
@@ -987,7 +1081,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "firstChoice": {
@@ -1044,7 +1144,13 @@
                   "FUNNEL",
                   "PALATE",
                   "SCENE",
-                  "STUNT"
+                  "STUNT",
+                  "CORNER",
+                  "SPOTTER",
+                  "TAPE",
+                  "SIGMA",
+                  "VIG",
+                  "SONAR"
                 ]
               },
               "summary": {
@@ -1125,6 +1231,42 @@
           "minLength": 1,
           "maxLength": 160
         },
+        "sharperData": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "proposal",
+                "nothing-new"
+              ]
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 280
+            },
+            "ideaRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            }
+          },
+          "required": [
+            "outcome",
+            "summary",
+            "evidenceRefs"
+          ],
+          "additionalProperties": {}
+        },
         "generatedAt": {
           "type": "string",
           "format": "date-time",
@@ -1137,7 +1279,9 @@
             "cu-product",
             "tt-marketing",
             "incubator-scan",
-            "incubator-synthesis"
+            "incubator-synthesis",
+            "mma-intake",
+            "mma-analysis"
           ]
         },
         "roomTranscript": {
@@ -1182,7 +1326,13 @@
                 "FUNNEL",
                 "PALATE",
                 "SCENE",
-                "STUNT"
+                "STUNT",
+                "CORNER",
+                "SPOTTER",
+                "TAPE",
+                "SIGMA",
+                "VIG",
+                "SONAR"
               ]
             },
             "setting": {
@@ -1226,7 +1376,13 @@
                       "FUNNEL",
                       "PALATE",
                       "SCENE",
-                      "STUNT"
+                      "STUNT",
+                      "CORNER",
+                      "SPOTTER",
+                      "TAPE",
+                      "SIGMA",
+                      "VIG",
+                      "SONAR"
                     ]
                   },
                   "mode": {
@@ -1271,7 +1427,13 @@
                       "FUNNEL",
                       "PALATE",
                       "SCENE",
-                      "STUNT"
+                      "STUNT",
+                      "CORNER",
+                      "SPOTTER",
+                      "TAPE",
+                      "SIGMA",
+                      "VIG",
+                      "SONAR"
                     ]
                   },
                   "sentAt": {

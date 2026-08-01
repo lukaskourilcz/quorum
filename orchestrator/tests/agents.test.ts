@@ -9,27 +9,33 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains 27 active roles with complete portfolio portraits", async () => {
+  it("contains 33 active roles and keeps gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(27);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(33);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(27);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(33);
     expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
-      13
+      16
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(14);
+    ).toHaveLength(17);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
       ["HERALD", ["caught-up"]],
       ["HACEK", ["caught-up"]],
       ["SCENE", ["titty-tuesdays"]],
-      ["STUNT", ["titty-tuesdays"]]
+      ["STUNT", ["titty-tuesdays"]],
+      ["CORNER", ["fightaiq"]],
+      ["SPOTTER", ["fightaiq"]],
+      ["TAPE", ["fightaiq"]],
+      ["SIGMA", ["fightaiq"]],
+      ["VIG", ["fightaiq"]],
+      ["SONAR", ["fightaiq"]]
     ]);
 
     const kpiConfig = JSON.parse(
@@ -46,6 +52,9 @@ describe("agent registry and identity assets", () => {
     const avatars = await validateAgentAvatars(registry);
 
     expect(avatars).toHaveLength(27);
+    expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
+      "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR"
+    ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
     expect(avatars.every((avatar) => avatar.height === 1024)).toBe(true);

@@ -53,7 +53,7 @@ export function pragueSlotInstant(date: string, hour: number): Date {
 }
 
 function recordKind(record: MeetingRecord): CalendarFeed["slots"][number]["kind"] | null {
-  if (record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis") return record.kind;
+  if (record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis") return record.kind;
   if (record.phase === "morning") return "venture-morning";
   if (record.phase === "afternoon") return "venture-afternoon";
   if (record.phase === "night") return "venture-night";
@@ -69,7 +69,7 @@ function slotKind(phase: (typeof MEETING_CLOCK)[number]["phase"]): CalendarFeed[
 
 function recordReference(record: MeetingRecord): string {
   if (record.kind === "venture") return `meetings/${record.cycleId}`;
-  if (record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis") {
+  if (record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis") {
     return `meetings/${record.date}-${record.kind}`;
   }
   return meetingRef(record.date, record.kind);
