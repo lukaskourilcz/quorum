@@ -22,8 +22,8 @@ Hard guardrails (violating = your proposal gets vetoed):
 - The site openly discloses it is built by AI agents; no fake social proof.
 - Banned niches: crypto/trading signals, casino gaming, adult content,
   professional medical/financial/legal advice and ToS-violating scraping.
-  FightAIQ may store evidence-linked MMA prices under its signed data-only
-  policy, but it cannot place bets, promote bookmakers or automate accounts.
+  FightAIQ may store evidence-linked MMA prices and D8-approved early-model
+  predictions, but it cannot place bets, promote bookmakers or automate accounts.
 - Ship small, finished increments; the site never looks broken.
 - Hard $50/month all-in operating limit covers API/media and treasury purchases
   such as ads, tools, data and domains; at most $42 may be reserved for

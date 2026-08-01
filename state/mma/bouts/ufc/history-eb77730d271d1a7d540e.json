@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-eb77730d271d1a7d540e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-reto-maximo-1",
+    "name": "Reto Maximo 1",
+    "startsAtUtc": "2002-09-08T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akbarh-arreola",
+    "blue": "ufc:ricardo-corrales"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2002-09-08T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46801690"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (corner toppage)",
+    "round": 1,
+    "elapsedSeconds": 300,
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

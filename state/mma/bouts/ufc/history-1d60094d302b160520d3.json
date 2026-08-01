@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-1d60094d302b160520d3",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-pancrase-brave-10",
+    "name": "Pancrase: Brave 10",
+    "startsAtUtc": "2004-11-07T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akihiro-gono",
+    "blue": "ufc:tim-mckenzie"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2004-11-07T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:5585490"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 473,
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

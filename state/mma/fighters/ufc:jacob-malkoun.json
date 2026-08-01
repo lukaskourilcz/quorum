@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:jacob-malkoun",
+  "slug": "jacob-malkoun",
+  "org": "ufc",
+  "canonicalName": "Jacob Malkoun",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:53118203",
+      "url": "https://en.wikipedia.org/wiki/Abdul_Razak_Alhassan",
+      "publisher": "Wikipedia",
+      "title": "Jacob Malkoun",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Jacob Malkoun",
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-19d2a5ed6b582f2a7bca",
+      "eventRef": "ufc:event:history-ufc-on-espn-whittaker-vs-gastelum",
+      "happenedAt": "2021-04-17T00:00:00.000Z",
+      "opponentRef": "ufc:abdul-razak-alhassan",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:jacob-malkoun:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 1,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 0,
+        "decisionWinShare": 1,
+        "averageElapsedSeconds": 900,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 1932
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1809.6638102,
+    "deviation": 279.14595849,
+    "volatility": 0.06000139,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-19d2a5ed6b582f2a7bca",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

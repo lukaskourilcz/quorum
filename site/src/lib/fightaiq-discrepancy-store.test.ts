@@ -20,13 +20,16 @@ describe("FightAIQ disagreement review", () => {
     vi.stubEnv("BOARDLESSAI_GITHUB_TOKEN", "");
     vi.stubEnv("VERCEL", "");
     const root = await mkdtemp(path.join(os.tmpdir(), "fightaiq-discrepancy-"));
-    const target = path.join(root, "state", "ventures", "fightaiq", "fighters", "ufc", "test-fighter.json");
+    const target = path.join(root, "state", "mma", "fighters", "ufc:test-fighter.json");
     await mkdir(path.dirname(target), { recursive: true });
+    const fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "..", "contracts", "fixtures", "fighter-record.valid.json"), "utf8"));
     await writeFile(target, JSON.stringify({
-      schemaVersion: "fighter-record/1",
+      ...fixture,
+      schemaVersion: "fighter-card/1",
       id: "ufc:test-fighter",
       slug: "test-fighter",
       org: "ufc",
+      canonicalName: "Test Fighter",
       fields: {
         name: { value: "Test Fighter", sourceRefs: ["source:a", "source:b"], retrievedAt: "2026-08-01T00:00:00.000Z", status: "verified", corroborated: true },
         reachCm: { value: 180, sourceRefs: ["source:a"], retrievedAt: "2026-08-01T00:00:00.000Z", status: "disputed", corroborated: false }
@@ -36,7 +39,7 @@ describe("FightAIQ disagreement review", () => {
       completeness: 1,
       corroboration: 0.5,
       modelEligible: false,
-      modelVersion: "fixture-v1",
+      modelVersion: "mma-1.0.0+aaaaaaaa",
       updatedAt: "2026-08-01T00:00:00.000Z"
     }, null, 2));
     const resolution = parseDiscrepancyResolution({ fighterRef: "ufc:test-fighter", field: "reachCm", selectedSourceRef: "source:b", reason: "The official commission measurement is newer." }, new Date("2026-08-01T12:00:00Z"));

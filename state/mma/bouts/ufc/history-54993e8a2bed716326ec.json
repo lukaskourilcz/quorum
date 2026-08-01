@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-54993e8a2bed716326ec",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-pancrase-proof-4",
+    "name": "Pancrase: Proof 4",
+    "startsAtUtc": "2001-06-26T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akihiro-gono",
+    "blue": "ufc:daisuke-watanabe"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2001-06-26T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:5585490"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (doctor stoppage)",
+    "round": 2,
+    "elapsedSeconds": 352,
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

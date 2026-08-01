@@ -39,15 +39,26 @@ product path. Afternoon and night are `$0` checkpoints.
 
 ## 3. Prove FightAIQ and MMA Files delivery
 
-Keep `FIGHTAIQ_ANALYSIS_ENABLED=false`. With the data and newsroom switches enabled,
-run:
+Set the repository variable `FIGHTAIQ_ANALYSIS_ENABLED=true`; decision D8 authorizes
+this setting. Keep `FIGHTAIQ_LIVE_ENABLED=true` and `MMA_FILES_LIVE_ENABLED=true`.
+Confirm the two surviving optional source secrets, `CITO_API_KEY` and
+`THE_ODDS_API_KEY`, are present. Then run:
 
-1. `mma-intake` — saves sourced UFC/Oktagon data and delivers the public FightAIQ file
-   to MMA Files;
-2. `mag-editorial` — assigns or evidence-kills both article slots;
-3. the assigned `article-am` or `article-pm` — produces, delivers and verifies one
+1. `mma-intake` — checks the $0 source allowlist, advances one bounded UFC roster
+   page, discovers bouts, enriches one Wikimedia history batch, rebuilds career
+   totals and delivers `fightaiq-delivery/2` to MMA Files;
+2. `mma-analysis` — creates predictions only for future confirmed bouts with two
+   eligible fighter cards. Zero eligible bouts is an honest successful result, not a
+   reason to loosen the gate;
+3. `mag-editorial` — assigns or evidence-kills both article slots;
+4. the assigned `article-am` or `article-pm` — produces, delivers and verifies one
    bilingual article plus its image;
-4. `mag-desk` — exercises the desk room when manually requested.
+5. `mag-desk` — exercises the desk room when manually requested.
+
+In MMA Files, confirm cancelled bouts are absent from upcoming cards, every rendered
+fighter name opens a profile, and any prediction shows “Early model” plus “Model
+output, not betting advice.” BoardlessAI should show the same prediction only as a
+Stats entry, never as a duplicate public fighter section.
 
 Missing source evidence must kill the article before a model call. Successful article
 delivery receives the same CI, route, content-hash, image and attribution proof as
@@ -82,7 +93,7 @@ never people photography.
 
 ## 6. Leave the human-only boundaries closed
 
-Do not enable FightAIQ analysis until a separate mode-change decision is signed. Keep
+FightAIQ analysis is already approved by D8; do not weaken its evidence gates. Keep
 MMA Files noindex until name, corrections, operator and privacy details are ready.
 Budget raises, commerce, payments, ads, personal data and legal posture remain manual
 owner decisions; no live switch can authorize them.

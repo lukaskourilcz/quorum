@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-72d3c0632335d005ad8b",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-dana-white-s-contender-series-22",
+    "name": "Dana White's Contender Series 22",
+    "startsAtUtc": "2019-07-30T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aleksa-camur",
+    "blue": "ufc:fabio-cherant"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2019-07-30T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:67283766"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:67283766"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (flying knee and punches)",
+    "round": 2,
+    "elapsedSeconds": 348,
+    "sourceRefs": [
+      "source:wikipedia:67283766"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

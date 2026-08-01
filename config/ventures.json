@@ -127,14 +127,14 @@
       "id": "fightaiq",
       "name": "FightAIQ",
       "status": "operating",
-      "mode": "data-only",
+      "mode": "live-analysis",
       "taste": true,
       "ledgerNamespace": "fightaiq",
       "growth_objective": {
         "label": "Improve verified fight coverage and build readiness dossiers",
         "components": ["event-fighter-coverage", "two-source-agreement", "readiness-dossiers"]
       },
-      "adminTabs": ["fighters", "events", "slates", "sources"],
+      "adminTabs": ["fighters", "bouts", "events", "slates", "sources"],
       "meetings": [
         {
           "kind": "mma-intake",

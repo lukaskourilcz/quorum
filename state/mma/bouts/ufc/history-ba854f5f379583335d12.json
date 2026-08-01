@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ba854f5f379583335d12",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-186",
+    "name": "UFC 186",
+    "startsAtUtc": "2015-04-25T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aisling-daly",
+    "blue": "ufc:randa-markos"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-04-25T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:28035301"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

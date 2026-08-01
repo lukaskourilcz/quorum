@@ -1,19 +1,19 @@
-# Needs your help now
+# Needs your help now — FightAIQ free-source keys
 
-The build and fixture proof are complete. Only owner-controlled account plumbing
-remains; content approval is not required.
+Only the two surviving keyed $0 sources belong on this list. Both are GitHub Actions
+repository secrets in `lukaskourilcz/quorum`; never put their values in Vercel, Git or
+a meeting record.
 
-1. Add the Instagram and Threads account IDs and access tokens for Caught Up, MMA
-   Files and Titty Tuesdays. Exact variable/secret names are in `NEEDED.md`.
-2. Add `PEXELS_API_KEY` and `PIXABAY_API_KEY` if you want those licensed-photo
-   libraries. Openverse, Commons and the FRAME fallback already work without them.
-3. Confirm `lukaskourilcz/mma-files` is selected in the delivery GitHub App and its
-   Vercel production project remains connected to `main` in demo/noindex mode.
-4. If a live workflow names another missing secret, add only that exact secret and
-   rerun its validation or delivery-only path. No other missing secret is known now.
+1. `CITO_API_KEY` — confirms the bounded UFC roster and event feed. The runtime stops
+   before 500 calls/month or 200/day and reserves at most five calls per run.
+2. `THE_ODDS_API_KEY` — optional current odds capture. The runtime reads the provider
+   quota headers and stops at zero remaining credits. Predictions still work without
+   odds.
 
-The safe order and automated proof behavior are in `MANUAL STEPS.md`.
+If both secrets are already present, there is nothing to add. Set the repository
+variable `FIGHTAIQ_ANALYSIS_ENABLED=true`, run `mma-intake`, then run `mma-analysis`.
+Exact checks and the MMA Files delivery sequence are in `MANUAL STEPS.md`.
 
-## SOCIAL-PLATFORM-CREDENTIALS
-
-Add the Instagram and Threads account IDs and access tokens as GitHub Actions secrets/variables for each brand. Missing now: caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID; mma-files: MMA_FILES_THREADS_ACCESS_TOKEN, MMA_FILES_THREADS_USER_ID, MMA_FILES_INSTAGRAM_ACCESS_TOKEN, MMA_FILES_INSTAGRAM_USER_ID; titty-tuesdays: TITTY_TUESDAYS_THREADS_ACCESS_TOKEN, TITTY_TUESDAYS_THREADS_USER_ID, TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN, TITTY_TUESDAYS_INSTAGRAM_USER_ID. The per-venture gates remain locked and no post is attempted.
+No paid data-service key is accepted. Wikimedia is keyless, owner-reviewed imports
+are local, and official organization pages stay disabled until a written terms review
+approves automated access.

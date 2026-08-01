@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:alex-vs-sam",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:fixture-night",
+    "name": "Fixture Night",
+    "startsAtUtc": "2026-08-08T18:00:00.000Z",
+    "venue": "Fixture Arena"
+  },
+  "fighters": { "red": "ufc:alex-example", "blue": "ufc:sam-example" },
+  "division": "lightweight",
+  "scheduledRounds": 3,
+  "status": "confirmed",
+  "statusHistory": [
+    { "status": "announced", "at": "2026-08-01T08:00:00.000Z", "sourceRefs": ["https://example.com/card"], "note": "The promotion announced the bout." },
+    { "status": "confirmed", "at": "2026-08-02T08:00:00.000Z", "sourceRefs": ["https://example.com/card", "https://example.org/card"], "note": "A second source confirmed the bout." }
+  ],
+  "discovery": { "firstSeenAt": "2026-08-01T08:00:00.000Z", "lastSeenAt": "2026-08-02T08:00:00.000Z", "sourceRefs": ["https://example.com/card"] },
+  "sourceRefs": ["https://example.com/card", "https://example.org/card"],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    { "at": "2026-08-01T08:00:00.000Z", "kind": "created", "fields": ["fighters", "event"], "sourceRefs": ["https://example.com/card"], "note": "Created from the fixture card." },
+    { "at": "2026-08-02T08:00:00.000Z", "kind": "status-change", "fields": ["status"], "sourceRefs": ["https://example.com/card"], "note": "Status changed to confirmed." }
+  ],
+  "updatedAt": "2026-08-02T08:00:00.000Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-b974d1951b44a0e051eb",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-78",
+    "name": "UFC 78",
+    "startsAtUtc": "2007-11-17T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akihiro-gono",
+    "blue": "ufc:tamdan-mccrory"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2007-11-17T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:5585490"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 2,
+    "elapsedSeconds": 499,
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:robert-beraun",
+  "slug": "robert-beraun",
+  "org": "ufc",
+  "canonicalName": "Robert Beraun",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:46641727",
+      "url": "https://en.wikipedia.org/wiki/Aaron_Brink",
+      "publisher": "Wikipedia",
+      "title": "Robert Beraun",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Robert Beraun",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-9560a54ef080c3e93eaa",
+      "eventRef": "ufc:event:history-ritc-76-hello-tucson",
+      "happenedAt": "2005-11-11T00:00:00.000Z",
+      "opponentRef": "ufc:aaron-brink",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 424,
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:robert-beraun:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 424,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 7568
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1718.65236811,
+    "deviation": 255.05753041,
+    "volatility": 0.05999974,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-9560a54ef080c3e93eaa",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

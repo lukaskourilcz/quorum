@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-99e0b0de74d918f265da",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-the-ultimate-fighter-18-finale",
+    "name": "The Ultimate Fighter 18 Finale",
+    "startsAtUtc": "2013-11-30T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akira-corassani",
+    "blue": "ufc:maximo-blanco"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-11-30T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:33543499"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "DQ (illegal knee)",
+    "round": 1,
+    "elapsedSeconds": 25,
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

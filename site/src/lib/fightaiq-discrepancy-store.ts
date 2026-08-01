@@ -36,7 +36,7 @@ export function parseDiscrepancyResolution(value: unknown, now = new Date()): Di
 function relativePath(fighterRef: string): string {
   const match = fighterRef.match(fighterRefPattern);
   if (!match) throw new DiscrepancyPersistenceError("The fighter reference is invalid.");
-  return `state/ventures/fightaiq/fighters/${match[1]}/${match[2]}.json`;
+  return `state/mma/fighters/${match[1]}:${match[2]}.json`;
 }
 
 function object(value: unknown): Record<string, unknown> | null {
@@ -53,7 +53,7 @@ function applyResolution(raw: string, resolution: DiscrepancyResolution): string
   const record = object(parsed);
   const fields = object(record?.fields);
   const discrepancies = Array.isArray(record?.discrepancies) ? record.discrepancies : null;
-  if (record?.schemaVersion !== "fighter-record/1" || record.id !== resolution.fighterRef || !fields || !discrepancies) {
+  if (record?.schemaVersion !== "fighter-card/1" || record.id !== resolution.fighterRef || !fields || !discrepancies) {
     throw new DiscrepancyPersistenceError("The fighter file does not match the requested record.");
   }
   const index = discrepancies.findIndex((value) => {
@@ -102,6 +102,11 @@ function applyResolution(raw: string, resolution: DiscrepancyResolution): string
   });
   const fieldValues = Object.values(fields).map(object).filter((field): field is Record<string, unknown> => Boolean(field));
   record.corroboration = fieldValues.length ? fieldValues.filter((field) => field.corroborated === true).length / fieldValues.length : 0;
+  const quality = object(record.quality);
+  if (quality) quality.lastReviewedAt = resolution.resolvedAt;
+  const changeLog = Array.isArray(record.changeLog) ? record.changeLog : [];
+  changeLog.push({ at: resolution.resolvedAt, kind: "owner-review", fields: [resolution.field], sourceRefs: [resolution.selectedSourceRef], note: resolution.reason });
+  record.changeLog = changeLog;
   record.updatedAt = resolution.resolvedAt;
   return `${JSON.stringify(record, null, 2)}\n`;
 }

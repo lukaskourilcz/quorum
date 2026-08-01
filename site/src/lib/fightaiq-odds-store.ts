@@ -47,7 +47,7 @@ export function parseOwnerOddsCapture(value: unknown, now = new Date()): OwnerOd
 }
 
 function relativePath(capture: OwnerOddsCapture): string {
-  return `state/ventures/fightaiq/odds/${capture.capturedAt.slice(0, 10)}/${capture.id}.json`;
+  return `state/mma/odds/${capture.capturedAt.slice(0, 10)}/${capture.id}.json`;
 }
 
 async function writeFilesystem(capture: OwnerOddsCapture, root = repositoryRoot): Promise<"filesystem"> {

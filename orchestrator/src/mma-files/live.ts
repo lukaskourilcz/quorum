@@ -54,7 +54,7 @@ function collectStringValues(value: unknown, pattern: RegExp, output = new Set<s
 async function evidenceFor(slate: EditorialSlate, slot: "am" | "pm"): Promise<ArticleEvidencePacket | null> {
   const assignment = slate.slots.find((candidate) => candidate.slot === slot);
   if (!assignment || assignment.status === "killed") return null;
-  const files = await jsonFiles(path.join(stateRoot, "ventures", "fightaiq"));
+  const files = await jsonFiles(path.join(stateRoot, "mma"));
   const matches: Array<{ file: string; value: unknown; raw: string }> = [];
   for (const file of files) {
     const raw = await readFile(file, "utf8");
@@ -189,7 +189,7 @@ export async function runLiveArticleProduction(input: {
     slot: input.slot,
     slug: slugFor(assignment.subjectRefs, input.slot),
     publishAt: input.now,
-    mode: "data-only",
+    mode: "live-analysis",
     evidence,
     imageCandidates: imageSearch.candidates,
     publicRepoRoot: repoRoot,

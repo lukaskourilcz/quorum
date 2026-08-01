@@ -47,7 +47,7 @@ import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { fightWeekFocus, loadEventCards } from "../fightaiq/store.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
-import { refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
+import { refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
@@ -200,7 +200,7 @@ function buildRecord(input: {
     : isFightDesk
       ? input.phase === "mma-intake"
         ? "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
-        : "Reviewed the versioned analysis state within the data-only gate. No probability was published."
+        : "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction."
     : input.phase === "mag-editorial" && input.editorialSlate
       ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
     : input.phase === "incubator-synthesis"
@@ -378,7 +378,7 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     const [overview, bridge, events, sourceSnapshot, sourceSnapshotData] = await Promise.all([
       canonicalStateText(root, "ventures/fightaiq/README.md"),
       readText(root, "mma/BRIDGE.md"),
-      loadEventCards(path.join(root, "ventures", "fightaiq", "events")),
+      loadEventCards(path.join(root, "mma", "events")),
       readText(root, `ventures/fightaiq/source-snapshots/${date}.json`),
       readJson<{ evidenceRefs?: string[] }>(root, `ventures/fightaiq/source-snapshots/${date}.json`, {})
     ]);
@@ -403,7 +403,7 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       readText(root, "mma/BRIDGE.md"),
       canonicalStateText(root, `ventures/mma-files/slates/${date}.json`),
       canonicalStateText(root, "ventures/mma-files/articles/INDEX.md"),
-      loadEventCards(path.join(root, "ventures", "fightaiq", "events"))
+      loadEventCards(path.join(root, "mma", "events"))
     ]);
     const focus = fightWeekFocus(events, new Date(`${date}T12:00:00Z`));
     return {
@@ -484,6 +484,9 @@ export async function runPortfolioCycle(input: {
     preparationArtifacts.push(...evidence.artifactPaths);
     sourceMaterialChanged = evidence.materialChange;
     preparationArtifacts.push(...await refreshReadinessDossiers(root, input.now));
+  }
+  if (!input.dry && input.phase === "mma-analysis") {
+    preparationArtifacts.push(...await refreshFightAiQAnalysis({ root, now: input.now }));
   }
   if (input.phase === "mma-intake") {
     await refreshMmaBridge(root, date);

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6e7b94aa188b1aef40e7",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-tcf-rumble-at-the-ranch-1",
+    "name": "TCF: Rumble at the Ranch 1",
+    "startsAtUtc": "2011-04-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aaron-brink",
+    "blue": "ufc:jesse-varela"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2011-04-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46641727"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 1,
+    "elapsedSeconds": 124,
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

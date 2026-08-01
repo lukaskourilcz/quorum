@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:ryan-couture",
+  "slug": "ryan-couture",
+  "org": "ufc",
+  "canonicalName": "Ryan Couture",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Ryan Couture",
+    "externalIds": {
+      "wikipediaPageId": "21511349"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:21511349"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:21511349",
+      "url": "https://en.wikipedia.org/wiki/Ryan_Couture",
+      "publisher": "Wikipedia",
+      "title": "Ryan Couture",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Ryan Couture",
+      "sourceRefs": [
+        "source:wikipedia:21511349"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:21511349"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

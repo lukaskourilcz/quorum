@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-19059545efe009757aec",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-strikeforce-rockhold-vs-jardine",
+    "name": "Strikeforce: Rockhold vs. Jardine",
+    "startsAtUtc": "2012-01-07T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:adlan-amagov",
+    "blue": "ufc:robbie-lawler"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2012-01-07T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:31990317"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (flying knee and punches)",
+    "round": 1,
+    "elapsedSeconds": 108,
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:alberto-crane",
+  "slug": "alberto-crane",
+  "org": "ufc",
+  "canonicalName": "Alberto Crane",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Alberto Crane",
+    "externalIds": {
+      "wikipediaPageId": "12574562"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:12574562",
+      "url": "https://en.wikipedia.org/wiki/Alberto_Crane",
+      "publisher": "Wikipedia",
+      "title": "Alberto Crane",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Alberto Crane",
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1976-07-14",
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Lightweight",
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Legacy Brazilian Jiu-Jitsu",
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "15-5-0",
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "division",
+        "team",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:12574562"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 0 historical fight rows."
+    }
+  ],
+  "completeness": 0.625,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

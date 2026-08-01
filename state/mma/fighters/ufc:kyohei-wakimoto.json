@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:kyohei-wakimoto",
+  "slug": "kyohei-wakimoto",
+  "org": "ufc",
+  "canonicalName": "Kyohei Wakimoto",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:5585490",
+      "url": "https://en.wikipedia.org/wiki/Akihiro_Gono",
+      "publisher": "Wikipedia",
+      "title": "Kyohei Wakimoto",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Kyohei Wakimoto",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-48612530c5cc1b21b8ae",
+      "eventRef": "ufc:event:history-pancrase-293",
+      "happenedAt": "2018-02-04T00:00:00.000Z",
+      "opponentRef": "ufc:akihiro-gono",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 780,
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:kyohei-wakimoto:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 780,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 365.25,
+        "layoffDays": 3100
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1364.83090578,
+    "deviation": 254.63531062,
+    "volatility": 0.05999893,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-48612530c5cc1b21b8ae",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

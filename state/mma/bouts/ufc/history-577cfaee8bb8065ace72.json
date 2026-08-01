@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-577cfaee8bb8065ace72",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-namajunas-vs-cortez",
+    "name": "UFC on ESPN: Namajunas vs. Cortez",
+    "startsAtUtc": "2024-07-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:abdul-razak-alhassan",
+    "blue": "ufc:cody-brundage"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-07-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:53118203"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:53118203"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "NC (illegal elbows)",
+    "round": 1,
+    "elapsedSeconds": 37,
+    "sourceRefs": [
+      "source:wikipedia:53118203"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

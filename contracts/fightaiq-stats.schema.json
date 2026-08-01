@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "fightaiq-stats/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^prediction:[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "boutRef": {
+      "type": "string",
+      "pattern": "^(ufc|oktagon):bout:[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "eventRef": {
+      "type": "string",
+      "pattern": "^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "fighterRefs": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "string",
+          "pattern": "^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "string",
+          "pattern": "^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
+      ]
+    },
+    "modelVersion": {
+      "type": "string",
+      "pattern": "^mma-\\d+\\.\\d+\\.\\d+\\+[a-f0-9]{8}$"
+    },
+    "redWin": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "blueWin": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "uncertainty": {
+      "type": "string",
+      "enum": [
+        "clear-lean",
+        "lean",
+        "coin-flip",
+        "divergence"
+      ]
+    },
+    "calibrationLabel": {
+      "type": "string",
+      "const": "early-model"
+    },
+    "marketUsed": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "scored",
+        "void"
+      ]
+    },
+    "outcome": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "red",
+            "blue",
+            "draw",
+            "no-contest"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "brierContribution": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sourceRefs": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "scoredAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "boutRef",
+    "eventRef",
+    "fighterRefs",
+    "modelVersion",
+    "redWin",
+    "blueWin",
+    "uncertainty",
+    "calibrationLabel",
+    "marketUsed",
+    "status",
+    "outcome",
+    "brierContribution",
+    "sourceRefs",
+    "generatedAt",
+    "scoredAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/fightaiq-stats.schema.json"
+}

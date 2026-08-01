@@ -1,6 +1,6 @@
 # BoardlessAI ecosystem guide for Fable
 
-Updated: 2026-08-01  
+Updated: 2026-08-02
 Status: current operating and implementation reference  
 Audience: product, service-design and agent-system brainstorming
 
@@ -17,7 +17,8 @@ The system currently runs five workspaces:
 2. **Titty Tuesdays** — a pre-commerce apparel/brand laboratory focused on future
    campaigns, not social production or sales.
 3. **Magazine Incubator** — a research-only way to find possible publication niches.
-4. **FightAIQ** — a sourced UFC and Oktagon data operation in data-only mode.
+4. **FightAIQ** — sourced UFC and Oktagon fighter cards, historical backfill, bout
+   discovery and guarded deterministic analysis.
 5. **MMA Files** — a public English/Czech MMA magazine and the reader-facing home for
    FightAIQ data.
 
@@ -45,7 +46,7 @@ open accounts, place bets or change a consumer application's code.
 | Caught Up site | `https://caughtup-ai.vercel.app` |
 | MMA Files site | `https://mma-files.vercel.app` |
 | Social behavior | packs built; each project locked by health/credentials; global kill switch is supreme |
-| FightAIQ mode | data-only; model-analysis switch stays off |
+| FightAIQ mode | D8 guarded analysis; card and bout evidence gates remain binding |
 
 The founding evidence gate has not passed. Caught Up entered validation through an
 explicit owner adoption, not an invented market discovery. No active market
@@ -103,8 +104,8 @@ Only the owner can approve:
 
 - a higher spending limit or an unplanned external expense;
 - credentials, account access or broader repository permissions;
-- project founding outside the pre-signed content template, stage changes or a change
-  from data-only to analysis mode;
+- project founding outside the pre-signed content template, stage changes or a future
+  expansion of FightAIQ analysis scope;
 - social accounts/scopes, the global posting override, ads, payments, inventory or commerce;
 - changes to governing prompts, safety policy or legal posture;
 - personal-data collection, commercial terms and public indexing decisions.
@@ -545,12 +546,15 @@ proves the generated project can be removed cleanly.
 
 ### Promise and mode
 
-FightAIQ builds sourced UFC and Oktagon fighter/event records, captures market prices
-and runs deterministic, versioned analysis. Current mode
-is data-only: public model probability publishing and model-led analysis remain off.
+FightAIQ builds sourced UFC and Oktagon fighter cards, discovers bouts, backfills
+cited history, captures optional market prices and runs deterministic, versioned
+analysis. Decision D8 permits predictions only after the bout and both fighter cards
+pass their evidence checks.
 
 ### Source path
 
+- Canonical data lives under `state/mma/`; `state/ventures/fightaiq/` keeps project
+  decisions and compatibility reports.
 - Allowed adapters operate only against configured hosts.
 - The Odds API quota is recorded and calls stop at reported zero remaining credits.
 - CITO is a configured UFC data source.
@@ -576,13 +580,15 @@ No bet is placed and no bookmaker account is automated.
 ### 19:00 behavior
 
 The analysis room needs both a due agenda and
-`FIGHTAIQ_ANALYSIS_ENABLED=true`. That switch must stay false until one reviewed UFC
-event, one reviewed Oktagon event and a separate owner mode-change decision exist.
+`FIGHTAIQ_ANALYSIS_ENABLED=true`. D8 authorizes that switch. A future confirmed bout
+still needs two independent sources, and both linked fighter cards must have
+corroborated critical fields. A model run stores card-snapshot hashes and publishes an
+early-model Stats descriptor; odds are optional.
 
-When a covered UFC or Oktagon event completes, the existing rooms can assemble one
-readiness dossier per event: a data-completeness checklist, source-disagreement log
-and snapshot of deterministic model outputs. These dossiers create the evidence for a
-future owner mode decision; they do not flip the switch themselves.
+When a covered UFC or Oktagon event completes, deterministic result processing adds
+the cited history rows, rebuilds career totals and Glicko-2, and scores any issued
+prediction. Event dossiers remain useful calibration evidence but are no longer a
+mode-change gate.
 
 ### Delivery
 
@@ -780,7 +786,7 @@ The system prefers an explicit non-result over fabricated activity:
 - `PAUSED` when a live switch, budget or safety gate blocks work;
 - no visitor/reader/post measurement while the Phase 3 gate is closed;
 - fixture labels on dry proof;
-- data-only FightAIQ output until the analysis decision exists.
+- no FightAIQ prediction unless D8, agenda, bout and both card gates pass.
 
 Global and project kill switches stop work independently. Budget exhaustion stops new
 paid work rather than silently borrowing. Idempotency keys and receipts make retries
@@ -797,9 +803,9 @@ Code completion does not replace account ownership. The only current plumbing is
 4. Add only another exact secret if a failed-closed workflow records it in
    `NEEDS_YOUR_HELP_NOW.md`.
 
-Future human-only gates remain budget raises, new accounts/scopes, FightAIQ analysis,
-legal/name posture, indexing, personal data, commerce, payments and ads. They are not
-content-review requirements.
+Future human-only gates remain budget raises, new accounts/scopes, broader FightAIQ
+analysis behavior, legal/name posture, indexing, personal data, commerce, payments
+and ads. They are not content-review requirements.
 
 `NEEDED.md` is the exact live checklist. `MANUAL STEPS.md` gives its safe order.
 
@@ -823,11 +829,12 @@ Track first-pass proof versus delivery retry, failed check category and rollback
 success. This is internal service reliability—not reader analytics—and it directly
 shows where the two showcase paths need stronger contracts.
 
-### D. Complete FightAIQ readiness dossiers
+### D. Close the FightAIQ coverage gaps
 
-Build a dossier after each covered UFC/Oktagon event and compare missing facts,
-source disagreements and deterministic output snapshots. Those records should make a
-future analysis-mode decision concrete rather than intuitive.
+Use the roster status and backfill queue to separate historical identities from
+confirmed active fighters. Finish the bounded UFC crawl, find a terms-cleared $0
+Oktagon roster source or use reviewed imports, then compare post-event prediction
+scores without hiding the early sample size.
 
 ### E. Rehearse template founding and removal
 

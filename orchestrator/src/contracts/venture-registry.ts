@@ -63,6 +63,7 @@ const VentureDefinitionSchema = openObject({
     "visuals",
     "niche-proposals",
     "fighters",
+    "bouts",
     "events",
     "slates",
     "sources",

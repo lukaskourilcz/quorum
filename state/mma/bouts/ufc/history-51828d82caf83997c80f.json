@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-51828d82caf83997c80f",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-cage-warriors-47",
+    "name": "Cage Warriors: 47",
+    "startsAtUtc": "2012-06-02T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aisling-daly",
+    "blue": "ufc:rosi-sexton"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2012-06-02T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:28035301"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

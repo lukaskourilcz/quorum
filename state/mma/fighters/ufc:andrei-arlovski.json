@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:andrei-arlovski",
+  "slug": "andrei-arlovski",
+  "org": "ufc",
+  "canonicalName": "Andrei Arlovski",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Andrei Arlovski",
+    "externalIds": {
+      "wikipediaPageId": "2421137"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:2421137"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:2421137",
+      "url": "https://en.wikipedia.org/wiki/Andrei_Arlovski",
+      "publisher": "Wikipedia",
+      "title": "Andrei Arlovski",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Andrei Arlovski",
+      "sourceRefs": [
+        "source:wikipedia:2421137"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-977047a8062ea50ed8e9",
+      "eventRef": "ufc:event:history-ufc-28-high-stakes",
+      "happenedAt": "2000-11-17T00:00:00.000Z",
+      "opponentRef": "ufc:aaron-brink",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 55,
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:andrei-arlovski:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 0,
+        "submissionWins": 1,
+        "decisionWins": 0,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 1,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 55,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 9388
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1794.21266898,
+    "deviation": 274.72061091,
+    "volatility": 0.06000107,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-977047a8062ea50ed8e9",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2421137"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

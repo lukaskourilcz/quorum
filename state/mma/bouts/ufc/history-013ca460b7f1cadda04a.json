@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-013ca460b7f1cadda04a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-world-extreme-fighting-16",
+    "name": "World Extreme Fighting 16",
+    "startsAtUtc": "2005-09-24T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alan-belcher",
+    "blue": "ufc:marvin-eastman"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2005-09-24T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:10162012"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:10162012"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:10162012"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

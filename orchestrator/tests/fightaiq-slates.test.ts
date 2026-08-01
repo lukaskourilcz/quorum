@@ -13,6 +13,10 @@ function modelRun(coinFlips: number): ModelRun {
       const redWin = flip ? 0.5 + index * 0.01 : 0.65;
       return {
         boutRef: `bout-${index + 1}`,
+        cardSnapshotRefs: [
+          `mma/fighters/ufc:red-${index + 1}.json#sha256=${"a".repeat(64)}`,
+          `mma/fighters/ufc:blue-${index + 1}.json#sha256=${"b".repeat(64)}`
+        ],
         probabilities: {
           redWin, blueWin: 1 - redWin,
           method: { koTko: 0.4, submission: 0.2, decision: 0.4 },

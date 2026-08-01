@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-b1da29d0890fc41dd4d8",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-kotc-63-final-conflict",
+    "name": "KOTC 63: Final Conflict",
+    "startsAtUtc": "2005-12-02T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aaron-brink",
+    "blue": "ufc:buckley-acosta"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2005-12-02T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46641727"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punch)",
+    "round": 1,
+    "elapsedSeconds": 10,
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

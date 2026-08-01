@@ -1,8 +1,22 @@
 {
-  "schemaVersion": "fighter-record/1",
+  "schemaVersion": "fighter-card/1",
   "id": "ufc:alex-example",
   "slug": "alex-example",
   "org": "ufc",
+  "canonicalName": "Alex Example",
+  "aliases": ["A. Example"],
+  "identity": {
+    "wikidataId": "Q123456",
+    "wikipediaTitle": "Alex Example",
+    "externalIds": { "fixture": "alex-1" }
+  },
+  "organizationHistory": [
+    { "org": "ufc", "from": "2025-01-01", "to": null, "status": "active", "sourceRefs": ["https://example.com/fighter"] }
+  ],
+  "sources": [
+    { "id": "https://example.com/fighter", "url": "https://example.com/fighter", "publisher": "Example", "title": "Alex Example profile", "retrievedAt": "2026-08-01T10:00:00.000Z", "evidenceTier": "primary" },
+    { "id": "https://example.org/fighter", "url": "https://example.org/fighter", "publisher": "Example Org", "title": "Alex Example record", "retrievedAt": "2026-08-01T10:00:00.000Z", "evidenceTier": "secondary" }
+  ],
   "fields": {
     "name": {
       "value": "Alex Example",
@@ -50,6 +64,13 @@
     "record"
   ],
   "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": { "system": "glicko2", "rating": 1500, "deviation": 350, "volatility": 0.06, "boutCount": 0, "asOfBoutRef": null, "updatedAt": "2026-08-01T10:00:00.000Z" },
+  "quality": { "evidenceTier": "secondary", "gaps": ["stance", "heightCm", "dateOfBirth", "team"], "lastReviewedAt": "2026-08-01T10:00:00.000Z" },
+  "changeLog": [
+    { "at": "2026-08-01T10:00:00.000Z", "kind": "created", "fields": ["identity", "fields"], "sourceRefs": ["https://example.com/fighter", "https://example.org/fighter"], "note": "Created from the reviewed contract fixture." }
+  ],
   "completeness": 0.5,
   "corroboration": 0.75,
   "modelEligible": true,

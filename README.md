@@ -23,7 +23,7 @@ passes the existing owner, budget, evidence, security and release gates.
 | Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
 | Magazine Incubator | Evidence-backed niche research and fenced content-project founding | Can found only projects that pass the pre-signed template; anything else stops for the owner |
-| FightAIQ | Sourced UFC and Oktagon data plus deterministic analysis | Data-only until one reviewed event per organization and a signed mode change; no bet placement |
+| FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
 | MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
 
 The common registry is `config/ventures.json`. It defines cadence, routing,
@@ -136,11 +136,12 @@ Useful commands:
 | `pnpm cycle -- --phase incubator-scan --dry` | Runs the research scan with no provider calls |
 | `pnpm cycle -- --phase incubator-synthesis --dry` | Proves empty input creates no niche proposal |
 | `pnpm cycle -- --phase mma-intake --dry` | Checks UFC and Oktagon without live calls |
-| `pnpm cycle -- --phase mma-analysis --dry` | Reviews the fixture model state within the data-only gate |
+| `pnpm cycle -- --phase mma-analysis --dry` | Proves the D8 analysis path without a live provider call |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
 | `pnpm cycle -- --phase mag-desk --dry` | Reviews the bilingual newsroom queue |
 | `pnpm proof:rooms` | Rebuilds fixture-labeled proof for all 12 room kinds |
-| `pnpm fightaiq:backfill -- --input reviewed-history.json` | Seeds ratings from an owner-reviewed, two-source history file |
+| `pnpm fightaiq:backfill -- --input reviewed-history.json` | Imports cited owner-reviewed history and rebuilds ratings |
+| `pnpm fightaiq:roster-sync` | Runs the keyless roster check and one bounded Wikimedia history batch |
 | `pnpm digest:daily -- --dry` | Builds the one daily digest through the log sink |
 | `pnpm edition:dry` | Builds and validates a fixture EditionPackage |
 | `pnpm delivery -- next` | Inspects the oldest valid delivery package |
@@ -181,8 +182,8 @@ Repository variables are independent authorization switches:
 - `PORTFOLIO_LIVE_ENABLED=true` permits scheduled Titty Tuesdays and incubator
   phases after their decisions pass.
 - `FIGHTAIQ_LIVE_ENABLED=true` permits live FightAIQ data rooms;
-  `FIGHTAIQ_ANALYSIS_ENABLED=true` separately permits model analysis after the
-  recorded data-only mode change.
+  `FIGHTAIQ_ANALYSIS_ENABLED=true` permits the guarded model path approved in D8.
+  Confirmed bouts and both fighter cards still have to pass their evidence checks.
 - `MMA_FILES_LIVE_ENABLED=true` permits guarded article production and public
   content delivery after the source packet checks pass.
 - `SOCIAL_KILL_SWITCH=true` is the supreme manual posting stop. With it set to
@@ -253,7 +254,9 @@ Rollback:
 - Git-backed runtime state assumes one serialized writer.
 - Admin has one username/password identity and signed session, not SSO, MFA or
   per-user audit identity.
-- FightAIQ remains data-only; live public probabilities are not authorized.
+- FightAIQ analysis is authorized under D8. Current coverage is still incomplete:
+  the keyless baseline is historical, UFC active status arrives through a complete
+  bounded roster crawl, and no reviewed $0 current Oktagon roster source is wired.
 - Delivery proof is automated; missing/broken consumer output retries once, then
   reverts and pauses the affected project.
 - Commerce, payment, inventory and ads are not implemented. Incubator founding is

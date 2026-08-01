@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-9fbc465fa562fc56b903",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-gods-of-war-5-empathy",
+    "name": "Gods of War 5: Empathy",
+    "startsAtUtc": "2009-09-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akira-corassani",
+    "blue": "ufc:felipe-enomoto"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2009-09-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:33543499"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "No Contest (overturned)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

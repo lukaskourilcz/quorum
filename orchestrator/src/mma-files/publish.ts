@@ -1,12 +1,13 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { z } from "zod";
-import { EdgeReportSchema, EventCardSchema, FighterRecordSchema, ModelRunSchema, OddsSnapshotSchema, SlipOfTenSchema, TrackRecordSchema } from "../contracts/mma.js";
+import { BoutRecordSchema, EventCardSchema, FightAiQStatsEntrySchema, FighterRecordSchema } from "../contracts/mma.js";
 import { FightAiQDeliverySchema, type ArticlePackage, type FightAiQDelivery } from "../contracts/mma-files.js";
 import { repoRoot, stateRoot } from "../paths.js";
 import { atomicWriteJson, readJson } from "../state.js";
 import { canonicalJson, sha256 } from "./hash.js";
 import { loadArticlePackages } from "./store.js";
+import { publicBoutMirror, publicEventMirror, publicFighterMirror } from "../fightaiq/store.js";
 
 export type MmaDeliveryKind = "article" | "fightaiq";
 export type MmaDeliveryStatus = "delivered" | "needs_reconciliation";
@@ -45,20 +46,14 @@ async function parseDirectory<T>(directory: string, schema: z.ZodType<T>): Promi
 function newestTimestamp(input: {
   fighters: Array<{ updatedAt: string }>;
   events: Array<{ updatedAt: string }>;
-  odds: Array<{ capturedAt: string }>;
-  modelRuns: Array<{ createdAt: string }>;
-  edgeReports: Array<{ generatedAt: string }>;
-  slips: Array<{ generatedAt: string }>;
-  trackRecord: { updatedAt: string } | null;
+  bouts: Array<{ updatedAt: string }>;
+  statsEntries: Array<{ generatedAt: string }>;
 }): string | null {
   const values = [
     ...input.fighters.map((item) => item.updatedAt),
     ...input.events.map((item) => item.updatedAt),
-    ...input.odds.map((item) => item.capturedAt),
-    ...input.modelRuns.map((item) => item.createdAt),
-    ...input.edgeReports.map((item) => item.generatedAt),
-    ...input.slips.map((item) => item.generatedAt),
-    ...(input.trackRecord ? [input.trackRecord.updatedAt] : [])
+    ...input.bouts.map((item) => item.updatedAt),
+    ...input.statsEntries.map((item) => item.generatedAt)
   ].sort();
   return values.at(-1) ?? null;
 }
@@ -68,29 +63,25 @@ export function fightAiQDeliveryHash(value: Omit<FightAiQDelivery, "packageHash"
 }
 
 export async function composeFightAiQDelivery(root = stateRoot): Promise<FightAiQDelivery | null> {
-  const base = path.join(root, "ventures", "fightaiq");
-  const [fighters, events, odds, modelRuns, edgeReports, slips] = await Promise.all([
+  const base = path.join(root, "mma");
+  const [privateFighters, privateEvents, privateBouts, statsEntries] = await Promise.all([
     parseDirectory(path.join(base, "fighters"), FighterRecordSchema),
     parseDirectory(path.join(base, "events"), EventCardSchema),
-    parseDirectory(path.join(base, "odds"), OddsSnapshotSchema),
-    parseDirectory(path.join(base, "model-runs"), ModelRunSchema),
-    parseDirectory(path.join(base, "edge-reports"), EdgeReportSchema),
-    parseDirectory(path.join(base, "slips"), SlipOfTenSchema)
+    parseDirectory(path.join(base, "bouts"), BoutRecordSchema),
+    parseDirectory(path.join(base, "stats"), FightAiQStatsEntrySchema)
   ]);
-  const trackRecord = await readJson<unknown>(root, "ventures/fightaiq/track-record.json", null)
-    .then((value) => value === null ? null : TrackRecordSchema.parse(value));
-  const generatedAt = newestTimestamp({ fighters, events, odds, modelRuns, edgeReports, slips, trackRecord });
+  const fighters = privateFighters.map(publicFighterMirror);
+  const events = privateEvents.map(publicEventMirror);
+  const bouts = privateBouts.map(publicBoutMirror);
+  const generatedAt = newestTimestamp({ fighters, events, bouts, statsEntries });
   if (!generatedAt) return null;
   const content = {
-    schemaVersion: "fightaiq-delivery/1" as const,
+    schemaVersion: "fightaiq-delivery/2" as const,
     generatedAt,
     fighters,
     events,
-    odds,
-    modelRuns,
-    edgeReports,
-    slips,
-    trackRecord
+    bouts,
+    statsEntries
   };
   return FightAiQDeliverySchema.parse({ ...content, packageHash: fightAiQDeliveryHash(content) });
 }

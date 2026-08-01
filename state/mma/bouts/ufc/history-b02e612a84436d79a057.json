@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-b02e612a84436d79a057",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-gladiator-challenge-fahrenheit",
+    "name": "Gladiator Challenge: Fahrenheit",
+    "startsAtUtc": "2010-08-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aaron-brink",
+    "blue": "ufc:dan-quinn"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2010-08-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46641727"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (doctor stoppage)",
+    "round": 2,
+    "elapsedSeconds": 322,
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

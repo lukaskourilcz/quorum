@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { fighterHref, parsePublicEvent, parsePublicFighter, parsePublicModelRun, parsePublicTrackRecord } from "./fightaiq-records";
+import { fighterHref, parsePublicEvent, parsePublicFighter, parsePublicFightStatsEntry, parsePublicModelRun, parsePublicTrackRecord } from "./fightaiq-records";
 
 vi.mock("server-only", () => ({}));
 
@@ -16,11 +16,13 @@ describe("FightAIQ public record checks", () => {
     expect(fighterHref("oktagon:losene-keita")).toBe("https://mma-files.vercel.app/en/fighters/oktagon/losene-keita");
     expect(parsePublicModelRun(await fixture("model-run.valid.json"))?.[0]).toMatchObject({ boutRef: "bout-1", modelVersion: "mma-1.0.0+aaaaaaaa" });
     expect(parsePublicTrackRecord(await fixture("track-record.valid.json"))?.picks[0]).toMatchObject({ closing: 0.56, clv: 0.02, brierContribution: null });
+    expect(parsePublicFightStatsEntry(await fixture("fightaiq-stats.valid.json"))).toMatchObject({ calibrationLabel: "early-model", outcome: null, brierContribution: null });
   });
 
   it("hides poisoned and unsafe records", async () => {
     expect(parsePublicFighter(await fixture("fighter-record.poison.json"))).toBeNull();
     expect(parsePublicEvent(await fixture("event-card.poison.json"))).toBeNull();
+    expect(parsePublicFightStatsEntry(await fixture("fightaiq-stats.poison.json"))).toBeNull();
     expect(fighterHref("ufc:../../admin")).toBeNull();
   });
 });

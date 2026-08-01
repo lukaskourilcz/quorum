@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-1bd5c7cea86c5907f754",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-mma-xtreme-4",
+    "name": "MMA Xtreme 4",
+    "startsAtUtc": "2006-08-19T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akbarh-arreola",
+    "blue": "ufc:hajime-ohara"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2006-08-19T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46801690"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 1,
+    "elapsedSeconds": 30,
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

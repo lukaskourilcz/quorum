@@ -6,7 +6,7 @@ import { atomicWriteJson } from "../state.js";
 import { loadEventCards, loadFighterRecords } from "./store.js";
 
 async function newestModelRunRef(root: string): Promise<string | null> {
-  const directory = path.join(root, "ventures", "fightaiq", "model-runs");
+  const directory = path.join(root, "mma", "model-runs");
   try {
     return (await readdir(directory))
       .filter((name) => name.endsWith(".json"))
@@ -58,7 +58,7 @@ export function readinessDossier(input: {
     },
     disagreementLog,
     deterministicModelSnapshot: input.modelRunRef
-      ? { available: true, ref: `ventures/fightaiq/model-runs/${input.modelRunRef}` }
+      ? { available: true, ref: `mma/model-runs/${input.modelRunRef}` }
       : { available: false, reason: "No versioned deterministic model run exists. Analysis mode remains disabled." },
     analysisModeChanged: false,
     generatedAt: input.generatedAt.toISOString()
@@ -72,13 +72,13 @@ export function readinessDossier(input: {
 
 export async function refreshReadinessDossiers(root: string, now = new Date()): Promise<string[]> {
   const [events, fighters, modelRunRef] = await Promise.all([
-    loadEventCards(path.join(root, "ventures", "fightaiq", "events")),
-    loadFighterRecords(path.join(root, "ventures", "fightaiq", "fighters")),
+    loadEventCards(path.join(root, "mma", "events")),
+    loadFighterRecords(path.join(root, "mma", "fighters")),
     newestModelRunRef(root)
   ]);
   const paths: string[] = [];
   for (const event of events.filter((candidate) => candidate.bouts.every((bout) => bout.status === "complete"))) {
-    const relative = `ventures/fightaiq/readiness-dossiers/${event.org}-${event.id.replaceAll(":", "-")}.json`;
+    const relative = `mma/readiness-dossiers/${event.org}-${event.id.replaceAll(":", "-")}.json`;
     const dossier = readinessDossier({ event, fighters, modelRunRef, generatedAt: now });
     let unchanged = false;
     try {

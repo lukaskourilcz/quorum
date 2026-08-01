@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-14b09d5196e07fa63acf",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-octagon-fight-club",
+    "name": "Octagon Fight Club",
+    "startsAtUtc": "2013-06-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aleksandra-albu",
+    "blue": "ufc:lyubov-demidova"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-06-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54392053"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:54392053"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54392053"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 193,
+    "sourceRefs": [
+      "source:wikipedia:54392053"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54392053"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-facd5c6ae8175f34ccab",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-dern-vs-ribas-2",
+    "name": "UFC Fight Night: Dern vs. Ribas 2",
+    "startsAtUtc": "2025-01-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:abdul-razak-alhassan",
+    "blue": "ufc:cesar-almeida"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-01-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:53118203"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:53118203"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punch)",
+    "round": 1,
+    "elapsedSeconds": 259,
+    "sourceRefs": [
+      "source:wikipedia:53118203"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

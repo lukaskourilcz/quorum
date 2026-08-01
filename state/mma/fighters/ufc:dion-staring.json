@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:dion-staring",
+  "slug": "dion-staring",
+  "org": "ufc",
+  "canonicalName": "Dion Staring",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:33543499",
+      "url": "https://en.wikipedia.org/wiki/Akira_Corassani",
+      "publisher": "Wikipedia",
+      "title": "Dion Staring",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Dion Staring",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-d99dd5e371f3e153f87d",
+      "eventRef": "ufc:event:history-united-glory-3-upside-down",
+      "happenedAt": "2007-05-20T00:00:00.000Z",
+      "opponentRef": "ufc:akira-corassani",
+      "result": "win",
+      "method": "TKO (corner stoppage)",
+      "round": 2,
+      "elapsedSeconds": 472,
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:dion-staring:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 472,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 7013
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1662.31089391,
+    "deviation": 290.31896372,
+    "volatility": 0.05999968,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-d99dd5e371f3e153f87d",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

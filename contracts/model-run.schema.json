@@ -28,6 +28,19 @@
             "type": "string",
             "minLength": 1
           },
+          "cardSnapshotRefs": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "pattern": "^mma\\/fighters\\/(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*\\.json#sha256=[a-f0-9]{64}$"
+              },
+              {
+                "type": "string",
+                "pattern": "^mma\\/fighters\\/(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*\\.json#sha256=[a-f0-9]{64}$"
+              }
+            ]
+          },
           "probabilities": {
             "type": "object",
             "properties": {
@@ -197,6 +210,7 @@
         },
         "required": [
           "boutRef",
+          "cardSnapshotRefs",
           "probabilities",
           "adjustmentsApplied",
           "excludedInputs"

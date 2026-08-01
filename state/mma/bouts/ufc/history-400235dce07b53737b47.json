@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-400235dce07b53737b47",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-193",
+    "name": "UFC 193",
+    "startsAtUtc": "2015-11-15T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akbarh-arreola",
+    "blue": "ufc:jake-matthews"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-11-15T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46801690"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (doctor stoppage)",
+    "round": 2,
+    "elapsedSeconds": 600,
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

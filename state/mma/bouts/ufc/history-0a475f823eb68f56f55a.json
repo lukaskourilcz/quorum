@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-0a475f823eb68f56f55a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-cage-rage-contenders-ireland-vs-belgium",
+    "name": "Cage Rage Contenders - Ireland vs. Belgium",
+    "startsAtUtc": "2008-05-03T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aisling-daly",
+    "blue": "ufc:myriem-el-banouti"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2008-05-03T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:28035301"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 98,
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

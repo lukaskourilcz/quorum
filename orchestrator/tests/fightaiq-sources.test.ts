@@ -2,11 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import { fetchOddsApiMma, loadMmaSourceRegistry, projectCitoBouts, projectCitoEvents, projectCitoFighters, projectOddsApiEvents } from "../src/fightaiq/sources.js";
 
 describe("FightAIQ source controls", () => {
-  it("wires only verified APIs and blocks Tapology", async () => {
+  it("keeps only the reviewed free-source allowlist", async () => {
     const registry = await loadMmaSourceRegistry();
-    expect(registry.sources.filter((source) => source.state === "wired").map((source) => source.id)).toEqual(["the-odds-api", "cito-ufc"]);
-    expect(registry.sources.find((source) => source.id === "tapology")).toMatchObject({ state: "blocked", termsVerdict: "forbidden" });
-    expect(registry.sources.find((source) => source.id === "octagon-api")).toMatchObject({ state: "disabled", termsVerdict: "unclear" });
+    expect(registry.sources.filter((source) => source.state === "wired").map((source) => source.id)).toEqual(["wikimedia", "the-odds-api", "cito-ufc", "owner-reviewed-import"]);
+    expect(registry.sources.find((source) => source.id === "official-organization-pages")).toMatchObject({ state: "disabled", termsVerdict: "unclear" });
+    expect(registry.sources.map((source) => source.id)).not.toContain("oddspapi");
   });
 
   it("projects fixture odds without retaining unrecognized markets", () => {

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8a00f6f4752b8a90b765",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-draka-governor-s-cup-2010",
+    "name": "Draka: Governor's Cup 2010",
+    "startsAtUtc": "2010-12-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:adlan-amagov",
+    "blue": "ufc:evgeny-erokhin"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2010-12-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:31990317"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (head kick and punches)",
+    "round": 1,
+    "elapsedSeconds": 148,
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

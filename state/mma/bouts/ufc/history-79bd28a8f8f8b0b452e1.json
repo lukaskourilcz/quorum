@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-79bd28a8f8f8b0b452e1",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-makhachev-vs-moises",
+    "name": "UFC on ESPN: Makhachev vs. Moisés",
+    "startsAtUtc": "2021-07-17T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alan-baudot",
+    "blue": "ufc:rodrigo-nascimento"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-07-17T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:69880085"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:69880085"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:69880085"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "NC (overturned)",
+    "round": 2,
+    "elapsedSeconds": 389,
+    "sourceRefs": [
+      "source:wikipedia:69880085"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:69880085"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

@@ -1,7 +1,7 @@
 import path from "node:path";
-import { EventCardSchema, FighterRecordSchema, SourcedFieldSchema, type EventCard, type FighterRecord } from "../contracts/mma.js";
+import { BoutRecordSchema, EventCardSchema, FighterCardSchema, SourcedFieldSchema, independentMmaSourceCount, type BoutRecord, type EventCard, type FighterRecord } from "../contracts/mma.js";
 import { readJson, atomicWriteJson } from "../state.js";
-import { loadEventCards, loadFighterRecords, saveOddsSnapshot } from "./store.js";
+import { loadBoutRecords, loadFighterRecords, saveBoutRecord, saveOddsSnapshot } from "./store.js";
 import { loadMmaModelConfig, modelVersion } from "./engine.js";
 import type { ApiBoutOdds, CitoEventSummary, CitoFighterSummary } from "./sources.js";
 import type { z } from "zod";
@@ -54,11 +54,31 @@ function sourced(value: SourcedField["value"], sourceRef: string, retrievedAt: s
   };
 }
 
-function preserveReviewedField(current: SourcedField | undefined, incoming: SourcedField): SourcedField {
+function mergeSourcedField(current: SourcedField | undefined, incoming: SourcedField): SourcedField {
   if (!current) return incoming;
+  if (JSON.stringify(current.value) === JSON.stringify(incoming.value)) {
+    const sourceRefs = [...new Set([...current.sourceRefs, ...incoming.sourceRefs])].sort();
+    const corroborated = independentMmaSourceCount(sourceRefs) >= 2;
+    return {
+      ...current,
+      sourceRefs,
+      retrievedAt: incoming.retrievedAt,
+      status: corroborated ? "verified" : current.status,
+      corroborated
+    };
+  }
   if (current.status === "verified" || current.status === "disputed" || current.corroborated) return current;
   const currentHasNonCitoSource = current.sourceRefs.some((reference) => !reference.startsWith("source:cito-ufc:"));
   return currentHasNonCitoSource ? current : incoming;
+}
+
+function activeOrganizationHistory(existing: FighterRecord | null, sourceRef: string, retrievedAt: string): FighterRecord["organizationHistory"] {
+  const history = structuredClone(existing?.organizationHistory ?? []);
+  const current = history.filter((entry) => entry.org === "ufc").at(-1);
+  if (current?.status === "active") return history;
+  if (current && current.to === null) current.to = retrievedAt.slice(0, 10);
+  history.push({ org: "ufc", from: retrievedAt.slice(0, 10), to: null, status: "active", sourceRefs: [sourceRef] });
+  return history;
 }
 
 function modelEligibility(record: {
@@ -69,7 +89,7 @@ function modelEligibility(record: {
   const openFields = new Set(record.discrepancies.filter((item) => item.status === "open").map((item) => item.field));
   return record.criticalFields.every((fieldName) => {
     const field = record.fields[fieldName];
-    return Boolean(field && field.sourceRefs.length >= 2 && field.corroborated && field.status === "verified" && !openFields.has(fieldName));
+    return Boolean(field && independentMmaSourceCount(field.sourceRefs) >= 2 && field.corroborated && field.status === "verified" && !openFields.has(fieldName));
   });
 }
 
@@ -80,9 +100,9 @@ async function writeFighter(input: {
   retrievedAt: string;
   version: string;
 }): Promise<string> {
-  const relative = `ventures/fightaiq/fighters/ufc/${input.fighter.slug}.json`;
+  const relative = `mma/fighters/ufc:${input.fighter.slug}.json`;
   const existingValue = await readJson<unknown | null>(input.root, relative, null);
-  const existing = existingValue === null ? null : FighterRecordSchema.parse(existingValue);
+  const existing = existingValue === null ? null : FighterCardSchema.parse(existingValue);
   const candidates: Record<string, SourcedField["value"] | null> = {
     name: input.fighter.name,
     division: division(input.fighter.division),
@@ -92,26 +112,76 @@ async function writeFighter(input: {
     reachCm: input.fighter.reachCm
   };
   const fields: FighterRecord["fields"] = { ...(existing?.fields ?? {}) };
+  const discrepancies = structuredClone(existing?.discrepancies ?? []);
   for (const [name, value] of Object.entries(candidates)) {
     if (value === null || value === "") continue;
-    fields[name] = preserveReviewedField(fields[name], sourced(value, input.sourceRef, input.retrievedAt));
+    const current = fields[name];
+    if (current && current.status !== "verified" && !current.corroborated && JSON.stringify(current.value) !== JSON.stringify(value) && !discrepancies.some((item) => item.field === name && item.status === "open")) {
+      discrepancies.push({
+        field: name,
+        values: [
+          { value: current.value, sourceRef: current.sourceRefs[0] ?? "source:unknown" },
+          { value, sourceRef: input.sourceRef }
+        ],
+        status: "open"
+      });
+    }
+    fields[name] = mergeSourcedField(current, sourced(value, input.sourceRef, input.retrievedAt));
   }
   const populated = PROFILE_FIELDS.filter((name) => fields[name]?.value !== null).length;
   const corroborated = PROFILE_FIELDS.filter((name) => fields[name]?.corroborated).length;
+  const changedFields = PROFILE_FIELDS.filter((name) => JSON.stringify(existing?.fields[name]) !== JSON.stringify(fields[name]));
+  const sourceId = input.sourceRef;
+  const sources = [...(existing?.sources ?? []).filter((source) => source.id !== sourceId), {
+    id: sourceId,
+    publisher: "Cito API",
+    title: `UFC fighter record for ${input.fighter.name}`,
+    retrievedAt: input.retrievedAt,
+    evidenceTier: "secondary" as const
+  }].sort((left, right) => left.id.localeCompare(right.id));
+  const changeLog = existing?.changeLog ?? [{
+    at: input.retrievedAt,
+    kind: "created" as const,
+    fields: ["identity"],
+    sourceRefs: [sourceId],
+    note: "Created from the approved Cito free-tier intake."
+  }];
+  const organizationHistory = activeOrganizationHistory(existing, sourceId, input.retrievedAt);
+  const statusChanged = JSON.stringify(existing?.organizationHistory ?? []) !== JSON.stringify(organizationHistory);
+  if (existing && changedFields.length > 0 && !changeLog.some((entry) => entry.at === input.retrievedAt && entry.kind === "source-refresh")) {
+    changeLog.push({ at: input.retrievedAt, kind: "source-refresh", fields: changedFields, sourceRefs: [sourceId], note: "Updated fields returned by the Cito intake." });
+  }
+  if (existing && statusChanged && !changeLog.some((entry) => entry.at === input.retrievedAt && entry.kind === "status-change")) {
+    changeLog.push({ at: input.retrievedAt, kind: "status-change", fields: ["organizationHistory"], sourceRefs: [sourceId], note: "The reviewed roster source lists this fighter as active." });
+  }
+  const gaps = PROFILE_FIELDS.filter((name) => !fields[name] || fields[name]?.value === null);
   const base = {
-    schemaVersion: "fighter-record/1" as const,
+    schemaVersion: "fighter-card/1" as const,
     id: `ufc:${input.fighter.slug}`,
     slug: input.fighter.slug,
     org: "ufc" as const,
+    canonicalName: input.fighter.name,
+    aliases: existing?.aliases ?? [],
+    identity: {
+      ...(existing?.identity ?? { wikidataId: null, wikipediaTitle: null, externalIds: {} }),
+      externalIds: { ...(existing?.identity.externalIds ?? {}), cito: input.fighter.id }
+    },
+    organizationHistory,
+    sources,
     fields,
     criticalFields: existing?.criticalFields ?? [...CRITICAL_FIELDS],
-    discrepancies: existing?.discrepancies ?? [],
+    discrepancies,
+    history: existing?.history ?? [],
+    statsProfiles: existing?.statsProfiles ?? [],
+    rating: existing?.rating ?? { system: "glicko2" as const, rating: 1500, deviation: 350, volatility: 0.06, boutCount: 0, asOfBoutRef: null, updatedAt: input.retrievedAt },
+    quality: { evidenceTier: existing?.quality.evidenceTier ?? "secondary" as const, gaps, lastReviewedAt: existing?.quality.lastReviewedAt ?? null },
+    changeLog,
     completeness: Number((populated / PROFILE_FIELDS.length).toFixed(4)),
     corroboration: Number((corroborated / PROFILE_FIELDS.length).toFixed(4)),
     modelVersion: existing?.modelVersion ?? input.version,
-    updatedAt: input.retrievedAt
+    updatedAt: changedFields.length > 0 || statusChanged || !existing ? input.retrievedAt : existing.updatedAt
   };
-  const record = FighterRecordSchema.parse({ ...base, modelEligible: modelEligibility(base) });
+  const record = FighterCardSchema.parse({ ...base, modelEligible: modelEligibility(base) });
   await atomicWriteJson(input.root, relative, record);
   return relative;
 }
@@ -158,14 +228,66 @@ function eventCard(event: CitoEventSummary, retrievedAt: string): EventCard | nu
   });
 }
 
+function boutRecord(event: EventCard, bout: EventCard["bouts"][number], retrievedAt: string): BoutRecord {
+  const sourceRefs = event.sourceRefs;
+  const sourceStatus = bout.status === "complete" ? "completed" : bout.status;
+  const status = sourceStatus === "weigh-in" && independentMmaSourceCount(sourceRefs) < 2 ? "announced" : sourceStatus;
+  return BoutRecordSchema.parse({
+    schemaVersion: "bout/1",
+    id: `${event.org}:bout:${slug(bout.id.replaceAll(":", "-"))}`,
+    org: event.org,
+    event: { ref: event.id, name: event.name, startsAtUtc: event.startsAtUtc, venue: event.venue },
+    fighters: { red: bout.red, blue: bout.blue },
+    division: bout.division,
+    scheduledRounds: bout.scheduledRounds,
+    status,
+    statusHistory: [{ status, at: retrievedAt, sourceRefs, note: status === sourceStatus ? "Status imported from the Cito event listing." : "One source lists the bout at weigh-in; it remains announced until a second source agrees." }],
+    discovery: { firstSeenAt: retrievedAt, lastSeenAt: retrievedAt, sourceRefs },
+    sourceRefs,
+    result: null,
+    predictionRefs: [],
+    changeLog: [{ at: retrievedAt, kind: "created", fields: ["event", "fighters", "status"], sourceRefs, note: "Discovered on the approved Cito free-tier intake." }],
+    updatedAt: retrievedAt
+  });
+}
+
 async function writeEvents(root: string, events: readonly CitoEventSummary[], retrievedAt: string): Promise<string[]> {
   const paths: string[] = [];
   for (const event of events) {
     const card = eventCard(event, retrievedAt);
     if (!card) continue;
-    const relative = `ventures/fightaiq/events/ufc/${event.slug}.json`;
+    const relative = `mma/events/ufc/${event.slug}.json`;
     await atomicWriteJson(root, relative, card);
     paths.push(relative);
+    for (const bout of card.bouts) {
+      const incoming = boutRecord(card, bout, retrievedAt);
+      const existingValue = await readJson<unknown | null>(root, `mma/bouts/ufc/${incoming.id.replace("ufc:bout:", "")}.json`, null);
+      if (existingValue) {
+        const existing = BoutRecordSchema.parse(existingValue);
+        const combinedSources = [...new Set([...existing.sourceRefs, ...incoming.sourceRefs])];
+        const sourceStatus = bout.status === "complete" ? "completed" : bout.status;
+        const candidateStatus = sourceStatus === "weigh-in" && independentMmaSourceCount(combinedSources) < 2 ? "announced" : sourceStatus;
+        const terminal = ["completed", "cancelled"].includes(existing.status);
+        const nextStatus = terminal && candidateStatus !== existing.status ? existing.status : candidateStatus;
+        const statusChanged = existing.status !== nextStatus;
+        const merged = BoutRecordSchema.parse({
+          ...existing,
+          event: incoming.event,
+          fighters: incoming.fighters,
+          division: incoming.division,
+          scheduledRounds: incoming.scheduledRounds,
+          status: nextStatus,
+          statusHistory: statusChanged ? [...existing.statusHistory, { status: nextStatus, at: retrievedAt, sourceRefs: combinedSources, note: "The reviewed source set changed the bout status." }] : existing.statusHistory,
+          discovery: { ...existing.discovery, lastSeenAt: retrievedAt, sourceRefs: [...new Set([...existing.discovery.sourceRefs, ...incoming.sourceRefs])] },
+          sourceRefs: combinedSources,
+          changeLog: statusChanged ? [...existing.changeLog, { at: retrievedAt, kind: "status-change", fields: ["status"], sourceRefs: combinedSources, note: `Status changed to ${nextStatus}.` }] : existing.changeLog,
+          updatedAt: statusChanged ? retrievedAt : existing.updatedAt
+        });
+        paths.push((await saveBoutRecord(merged, root)).path);
+      } else {
+        paths.push((await saveBoutRecord(incoming, root)).path);
+      }
+    }
   }
   return paths;
 }
@@ -192,9 +314,9 @@ async function writeMatchedOdds(input: {
   odds: readonly ApiBoutOdds[];
   capturedAt: Date;
 }): Promise<string[]> {
-  const [events, fighters] = await Promise.all([
-    loadEventCards(path.join(input.root, "ventures", "fightaiq", "events")),
-    loadFighterRecords(path.join(input.root, "ventures", "fightaiq", "fighters"))
+  const [bouts, fighters] = await Promise.all([
+    loadBoutRecords(path.join(input.root, "mma", "bouts")),
+    loadFighterRecords(path.join(input.root, "mma", "fighters"))
   ]);
   const names = new Map(fighters.flatMap((fighter) => {
     const name = fieldName(fighter);
@@ -206,17 +328,18 @@ async function writeMatchedOdds(input: {
     if (!phase || offer.bookmakers.length === 0) continue;
     const home = canonicalName(offer.red);
     const away = canonicalName(offer.blue);
-    const match = events.flatMap((event) => event.bouts).find((bout) => {
-      const red = names.get(bout.red);
-      const blue = names.get(bout.blue);
+    const match = bouts.find((bout) => {
+      const red = names.get(bout.fighters.red);
+      const blue = names.get(bout.fighters.blue);
       if (!red || !blue) return false;
+      if (Math.abs(Date.parse(bout.event.startsAtUtc) - Date.parse(offer.commenceTime)) > 7 * 86_400_000) return false;
       const exact = canonicalName(red) === home && canonicalName(blue) === away;
       const reversed = canonicalName(red) === away && canonicalName(blue) === home;
       return exact || reversed;
     });
     if (!match) continue;
-    const redName = names.get(match.red);
-    const blueName = names.get(match.blue);
+    const redName = names.get(match.fighters.red);
+    const blueName = names.get(match.fighters.blue);
     if (!redName || !blueName) continue;
     const bookmaker = [...offer.bookmakers].sort((left, right) => left.name.localeCompare(right.name))[0];
     if (!bookmaker) continue;
@@ -239,6 +362,26 @@ async function writeMatchedOdds(input: {
     } catch (error) {
       if (!(error instanceof Error) || !error.message.includes("already exists")) throw error;
     }
+    const sourceRef = `source:the-odds-api:${offer.id}`;
+    if (match.sourceRefs.includes(sourceRef)) continue;
+    const combinedSources = [...new Set([...match.sourceRefs, sourceRef])].sort();
+    const canConfirm = ["proposed", "announced"].includes(match.status) && independentMmaSourceCount(combinedSources) >= 2;
+    const updated = BoutRecordSchema.parse({
+      ...match,
+      status: canConfirm ? "confirmed" : match.status,
+      statusHistory: canConfirm ? [...match.statusHistory, { status: "confirmed", at: input.capturedAt.toISOString(), sourceRefs: combinedSources, note: "A second independent current listing confirmed the matchup." }] : match.statusHistory,
+      discovery: { ...match.discovery, lastSeenAt: input.capturedAt.toISOString(), sourceRefs: combinedSources },
+      sourceRefs: combinedSources,
+      changeLog: [...match.changeLog, {
+        at: input.capturedAt.toISOString(),
+        kind: canConfirm ? "status-change" : "source-refresh",
+        fields: canConfirm ? ["status", "sourceRefs"] : ["sourceRefs"],
+        sourceRefs: combinedSources,
+        note: canConfirm ? "The second source promoted the bout to confirmed." : "Added an independent current matchup source."
+      }],
+      updatedAt: input.capturedAt.toISOString()
+    });
+    paths.push((await saveBoutRecord(updated, input.root)).path);
   }
   return paths;
 }

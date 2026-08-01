@@ -15,7 +15,7 @@ const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process
 const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
   "ideas", "plans", "visuals", "niche-proposals",
-  "fighters", "events", "slates", "sources",
+  "fighters", "bouts", "events", "slates", "sources",
   "articles", "calendar", "social-lab"
 ] as const;
 

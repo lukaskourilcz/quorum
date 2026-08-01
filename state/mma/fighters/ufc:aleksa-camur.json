@@ -1,0 +1,290 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:aleksa-camur",
+  "slug": "aleksa-camur",
+  "org": "ufc",
+  "canonicalName": "Aleksa Camur",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Aleksa Camur",
+    "externalIds": {
+      "wikipediaPageId": "67283766"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:67283766",
+      "url": "https://en.wikipedia.org/wiki/Aleksa_Camur",
+      "publisher": "Wikipedia",
+      "title": "Aleksa Camur",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Aleksa Camur",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1995-09-25",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 187.96,
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Light Heavyweight",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Strong Style Fight Team",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "6-3-0",
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "6-3-0",
+          "sourceRef": "source:wikipedia:67283766"
+        },
+        {
+          "value": "2-3-0",
+          "sourceRef": "derived:ufc:aleksa-camur:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-72d3c0632335d005ad8b",
+      "eventRef": "ufc:event:history-dana-white-s-contender-series-22",
+      "happenedAt": "2019-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:fabio-cherant",
+      "result": "win",
+      "method": "TKO (flying knee and punches)",
+      "round": 2,
+      "elapsedSeconds": 348,
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e5efce905d02bbe5bef7",
+      "eventRef": "ufc:event:history-ufc-246",
+      "happenedAt": "2020-01-18T00:00:00.000Z",
+      "opponentRef": "ufc:justin-ledet",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c873ae0f50c882ad86e2",
+      "eventRef": "ufc:event:history-ufc-253",
+      "happenedAt": "2020-09-27T00:00:00.000Z",
+      "opponentRef": "ufc:william-knight",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8e265470f978a35c998e",
+      "eventRef": "ufc:event:history-ufc-on-espn-the-korean-zombie-vs-ige",
+      "happenedAt": "2021-06-19T00:00:00.000Z",
+      "opponentRef": "ufc:nicolae-negumereanu",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ff4dc56d3fa85a743cde",
+      "eventRef": "ufc:event:history-ufc-on-espn-sandhagen-vs-font",
+      "happenedAt": "2023-08-05T00:00:00.000Z",
+      "opponentRef": "ufc:tanner-boser",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:aleksa-camur:history",
+      "bouts": 5,
+      "values": {
+        "bouts": 5,
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.5,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 1,
+        "koTkoWinShare": 0.5,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0.5,
+        "averageElapsedSeconds": 789.6,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 0.99589,
+        "layoffDays": 1092
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1417.08275041,
+    "deviation": 198.57949807,
+    "volatility": 0.06000031,
+    "boutCount": 5,
+    "asOfBoutRef": "ufc:bout:history-ff4dc56d3fa85a743cde",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 5 historical fight rows."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:67283766"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

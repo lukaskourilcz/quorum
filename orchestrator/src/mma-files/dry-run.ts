@@ -52,7 +52,7 @@ export async function runDryArticleProduction(input: {
     slot: input.slot,
     slug: morning ? "fixture-fight-preview" : "fixture-fighter-profile",
     publishAt,
-    mode: "data-only",
+    mode: "live-analysis",
     evidence: {
       sources: [{ kind: "internal", ref: `FIXTURE:MMA-FILES:${input.slot}` }],
       fighterRefs: morning

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ad9eab8c0eb47b88781a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-superior-challenge-4",
+    "name": "Superior Challenge 4",
+    "startsAtUtc": "2009-10-31T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akira-corassani",
+    "blue": "ufc:peter-mettler"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2009-10-31T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:33543499"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 222,
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

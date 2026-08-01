@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-48612530c5cc1b21b8ae",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-pancrase-293",
+    "name": "Pancrase: 293",
+    "startsAtUtc": "2018-02-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akihiro-gono",
+    "blue": "ufc:kyohei-wakimoto"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-02-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:5585490"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 780,
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

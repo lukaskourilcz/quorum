@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-c9fb94a4bdb6bbf9a76a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-pancrase-10th-anniversary-show",
+    "name": "Pancrase: 10th Anniversary Show",
+    "startsAtUtc": "2003-08-31T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akihiro-gono",
+    "blue": "ufc:nilson-de-castro"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2003-08-31T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:5585490"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "DQ (groin strike)",
+    "round": 1,
+    "elapsedSeconds": 29,
+    "sourceRefs": [
+      "source:wikipedia:5585490"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

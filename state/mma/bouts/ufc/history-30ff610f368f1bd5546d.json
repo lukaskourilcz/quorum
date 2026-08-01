@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-30ff610f368f1bd5546d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-rings-usa-rising-stars-block-a",
+    "name": "Rings USA: Rising Stars Block A",
+    "startsAtUtc": "2000-07-15T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aaron-brink",
+    "blue": "ufc:bobby-hoffman"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2000-07-15T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46641727"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (neck crank)",
+    "round": 1,
+    "elapsedSeconds": 192,
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

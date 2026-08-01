@@ -1,8 +1,8 @@
 # FightAIQ doctrine
 
-FightAIQ is a sourced fight-analysis desk for UFC and Oktagon. It starts with
-data, keeps each organization’s ratings separate and earns the right to show live
-analysis only after the owner reviews one full event cycle for both organizations.
+FightAIQ is a sourced fight-analysis desk for UFC and Oktagon. It keeps each
+organization’s ratings separate. Decision D8 now permits guarded live analysis when
+the bout and both fighter cards pass their evidence checks.
 
 ## What the desk does
 

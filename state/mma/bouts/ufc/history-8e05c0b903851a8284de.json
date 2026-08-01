@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8e05c0b903851a8284de",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-fox-diaz-vs-miller",
+    "name": "UFC on Fox: Diaz vs. Miller",
+    "startsAtUtc": "2012-05-05T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alan-belcher",
+    "blue": "ufc:rousimar-palhares"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2012-05-05T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:10162012"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:10162012"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches and elbows)",
+    "round": 1,
+    "elapsedSeconds": 258,
+    "sourceRefs": [
+      "source:wikipedia:10162012"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

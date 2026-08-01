@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-416760fa3e7745854fa9",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-strikeforce-rousey-vs-kaufman",
+    "name": "Strikeforce: Rousey vs. Kaufman",
+    "startsAtUtc": "2012-08-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:adlan-amagov",
+    "blue": "ufc:keith-berry"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2012-08-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:31990317"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (leg kick and punches)",
+    "round": 1,
+    "elapsedSeconds": 48,
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

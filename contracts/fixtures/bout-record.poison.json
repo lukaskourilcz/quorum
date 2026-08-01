@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:bad-history",
+  "org": "ufc",
+  "event": { "ref": "ufc:event:fixture-night", "name": "Fixture Night", "startsAtUtc": "2026-08-08T18:00:00.000Z", "venue": null },
+  "fighters": { "red": "ufc:alex-example", "blue": "ufc:alex-example" },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "cancelled",
+  "statusHistory": [{ "status": "announced", "at": "2026-08-01T08:00:00.000Z", "sourceRefs": ["source:bad"], "note": "Mismatch." }],
+  "discovery": { "firstSeenAt": "2026-08-01T08:00:00.000Z", "lastSeenAt": "2026-08-01T08:00:00.000Z", "sourceRefs": ["source:bad"] },
+  "sourceRefs": ["source:bad"],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [{ "at": "2026-08-01T08:00:00.000Z", "kind": "created", "fields": ["status"], "sourceRefs": ["source:bad"], "note": "Bad fixture." }],
+  "updatedAt": "2026-08-01T08:00:00.000Z"
+}

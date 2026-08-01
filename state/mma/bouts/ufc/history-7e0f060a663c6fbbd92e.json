@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-7e0f060a663c6fbbd92e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-fuel-tv-mousasi-vs-latifi",
+    "name": "UFC on Fuel TV: Mousasi vs. Latifi",
+    "startsAtUtc": "2013-04-06T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:adlan-amagov",
+    "blue": "ufc:chris-spang"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-04-06T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:31990317"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

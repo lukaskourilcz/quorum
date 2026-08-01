@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-7649bdd2359024f15d02",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ifc-wc-11-warriors-challenge-11",
+    "name": "IFC WC 11: Warriors Challenge 11",
+    "startsAtUtc": "2001-01-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aaron-brink",
+    "blue": "ufc:rich-franklin"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2001-01-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46641727"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "No Contest (accidental foot injury)",
+    "round": 1,
+    "elapsedSeconds": null,
+    "sourceRefs": [
+      "source:wikipedia:46641727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

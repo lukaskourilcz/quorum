@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "fightaiq-stats/1",
+  "id": "prediction:bad",
+  "boutRef": "pfl:bout:outside-scope",
+  "eventRef": "pfl:event:outside-scope",
+  "fighterRefs": ["pfl:a", "pfl:b"],
+  "modelVersion": "unversioned",
+  "redWin": 0.7,
+  "blueWin": 0.7,
+  "uncertainty": "certain",
+  "marketUsed": false,
+  "status": "active",
+  "sourceRefs": [],
+  "generatedAt": "not-a-date",
+  "scoredAt": null
+}

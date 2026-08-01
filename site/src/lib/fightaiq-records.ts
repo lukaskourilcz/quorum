@@ -25,6 +25,25 @@ export interface PublicFighter {
   modelEligible: boolean;
   modelVersion: string;
   updatedAt: string;
+  historyCount: number;
+  sourceCount: number;
+  gaps: string[];
+  evidenceTier: "primary" | "secondary" | "tertiary";
+}
+
+export interface PublicBout {
+  id: string;
+  org: MmaOrg;
+  eventRef: string;
+  eventName: string;
+  startsAtUtc: string;
+  red: string;
+  blue: string;
+  division: string | null;
+  scheduledRounds: 3 | 5 | null;
+  status: "proposed" | "announced" | "confirmed" | "weigh-in" | "completed" | "cancelled" | "postponed";
+  sourceRefs: string[];
+  updatedAt: string;
 }
 
 export interface PublicEvent {
@@ -52,6 +71,25 @@ export interface PublicTrackRecord {
   picks: Array<{ id: string; org: MmaOrg; predicted: number; closing: number | null; result: "win" | "loss" | "void" | "pending"; clv: number | null; brierContribution: number | null }>;
   rollups: Array<{ modelVersion: string; org: MmaOrg; picks: number; brier: number | null; meanClv: number | null }>;
   updatedAt: string;
+}
+
+export interface PublicFightStatsEntry {
+  id: string;
+  boutRef: string;
+  eventRef: string;
+  fighterRefs: [string, string];
+  modelVersion: string;
+  redWin: number;
+  blueWin: number;
+  uncertainty: PublicFightPrediction["uncertainty"];
+  calibrationLabel: "early-model";
+  marketUsed: boolean;
+  status: "active" | "scored" | "void";
+  outcome: "red" | "blue" | "draw" | "no-contest" | null;
+  brierContribution: number | null;
+  sourceRefs: string[];
+  generatedAt: string;
+  scoredAt: string | null;
 }
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -82,7 +120,7 @@ function parseField(value: unknown): PublicFighterField | null {
 
 export function parsePublicFighter(value: unknown): PublicFighter | null {
   const record = object(value);
-  if (record?.schemaVersion !== "fighter-record/1") return null;
+  if (record?.schemaVersion !== "fighter-card/1") return null;
   const id = safeText(record.id, 160);
   const slug = safeText(record.slug, 120);
   const org = orgs.has(record.org as MmaOrg) ? record.org as MmaOrg : null;
@@ -103,8 +141,13 @@ export function parsePublicFighter(value: unknown): PublicFighter | null {
   const corroboration = safeFraction(record.corroboration);
   const modelVersion = safeText(record.modelVersion, 80);
   const updatedAt = safeDate(record.updatedAt);
-  if (!id || !slug || !org || id !== `${org}:${slug}` || !fields || Object.keys(fields).length !== Object.keys(rawFields ?? {}).length || !criticalFields?.length || !discrepancies || discrepancies.length !== rawDiscrepancies?.length || completeness === null || corroboration === null || typeof record.modelEligible !== "boolean" || !modelVersion || !updatedAt) return null;
-  return { id, slug, org, fields, criticalFields, discrepancies, completeness, corroboration, modelEligible: record.modelEligible, modelVersion, updatedAt };
+  const quality = object(record.quality);
+  const gaps = Array.isArray(quality?.gaps) ? quality.gaps.map((item) => safeText(item, 120)).filter((item): item is string => Boolean(item)) : null;
+  const evidenceTier = quality?.evidenceTier === "primary" || quality?.evidenceTier === "secondary" || quality?.evidenceTier === "tertiary" ? quality.evidenceTier : null;
+  const historyCount = Array.isArray(record.history) ? record.history.length : null;
+  const sourceCount = Array.isArray(record.sources) ? record.sources.length : null;
+  if (!id || !slug || !org || id !== `${org}:${slug}` || !fields || Object.keys(fields).length !== Object.keys(rawFields ?? {}).length || !criticalFields?.length || !discrepancies || discrepancies.length !== rawDiscrepancies?.length || completeness === null || corroboration === null || typeof record.modelEligible !== "boolean" || !modelVersion || !updatedAt || !gaps || !evidenceTier || historyCount === null || sourceCount === null) return null;
+  return { id, slug, org, fields, criticalFields, discrepancies, completeness, corroboration, modelEligible: record.modelEligible, modelVersion, updatedAt, historyCount, sourceCount, gaps, evidenceTier };
 }
 
 export function parsePublicEvent(value: unknown): PublicEvent | null {
@@ -144,7 +187,7 @@ async function jsonFiles(directory: string): Promise<string[]> {
 }
 
 export async function getPublicFighters(rootDirectory = repositoryRoot): Promise<{ fighters: PublicFighter[]; unreadable: string[] }> {
-  const root = path.join(rootDirectory, "state", "ventures", "fightaiq", "fighters");
+  const root = path.join(rootDirectory, "state", "mma", "fighters");
   const fighters: PublicFighter[] = [];
   const unreadable: string[] = [];
   for (const file of await jsonFiles(root)) {
@@ -157,7 +200,7 @@ export async function getPublicFighters(rootDirectory = repositoryRoot): Promise
 }
 
 export async function getPublicEvents(rootDirectory = repositoryRoot): Promise<{ events: PublicEvent[]; unreadable: string[] }> {
-  const root = path.join(rootDirectory, "state", "ventures", "fightaiq", "events");
+  const root = path.join(rootDirectory, "state", "mma", "events");
   const events: PublicEvent[] = [];
   const unreadable: string[] = [];
   for (const file of await jsonFiles(root)) {
@@ -167,6 +210,40 @@ export async function getPublicEvents(rootDirectory = repositoryRoot): Promise<{
     } catch { unreadable.push(path.relative(root, file)); }
   }
   return { events: events.sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc)), unreadable };
+}
+
+export function parsePublicBout(value: unknown): PublicBout | null {
+  const record = object(value);
+  const event = object(record?.event);
+  const fighters = object(record?.fighters);
+  const id = safeText(record?.id, 180);
+  const org = orgs.has(record?.org as MmaOrg) ? record?.org as MmaOrg : null;
+  const eventRef = safeText(event?.ref, 180);
+  const eventName = safeText(event?.name, 160);
+  const startsAtUtc = safeDate(event?.startsAtUtc);
+  const red = safeText(fighters?.red, 160);
+  const blue = safeText(fighters?.blue, 160);
+  const division = record?.division === null ? null : safeText(record?.division, 80);
+  const scheduledRounds = record?.scheduledRounds === null ? null : record?.scheduledRounds === 3 || record?.scheduledRounds === 5 ? record.scheduledRounds : undefined;
+  const statuses = new Set<PublicBout["status"]>(["proposed", "announced", "confirmed", "weigh-in", "completed", "cancelled", "postponed"]);
+  const status = statuses.has(record?.status as PublicBout["status"]) ? record?.status as PublicBout["status"] : null;
+  const sourceRefs = Array.isArray(record?.sourceRefs) ? record.sourceRefs.map((item) => safeText(item, 240)).filter((item): item is string => Boolean(item)) : [];
+  const updatedAt = safeDate(record?.updatedAt);
+  if (record?.schemaVersion !== "bout/1" || !id || !org || !eventRef || !eventName || !startsAtUtc || !red || !blue || division === undefined || scheduledRounds === undefined || !status || sourceRefs.length === 0 || !updatedAt) return null;
+  return { id, org, eventRef, eventName, startsAtUtc, red, blue, division, scheduledRounds, status, sourceRefs, updatedAt };
+}
+
+export async function getPublicBouts(rootDirectory = repositoryRoot): Promise<{ bouts: PublicBout[]; unreadable: string[] }> {
+  const root = path.join(rootDirectory, "state", "mma", "bouts");
+  const bouts: PublicBout[] = [];
+  const unreadable: string[] = [];
+  for (const file of await jsonFiles(root)) {
+    try {
+      const parsed = parsePublicBout(JSON.parse(await readFile(file, "utf8")));
+      if (parsed) bouts.push(parsed); else unreadable.push(path.relative(root, file));
+    } catch { unreadable.push(path.relative(root, file)); }
+  }
+  return { bouts: bouts.sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc) || left.id.localeCompare(right.id)), unreadable };
 }
 
 export function parsePublicModelRun(value: unknown): PublicFightPrediction[] | null {
@@ -186,7 +263,7 @@ export function parsePublicModelRun(value: unknown): PublicFightPrediction[] | n
 }
 
 export async function getPublicPredictions(rootDirectory = repositoryRoot): Promise<PublicFightPrediction[]> {
-  const root = path.join(rootDirectory, "state", "ventures", "fightaiq", "model-runs");
+  const root = path.join(rootDirectory, "state", "mma", "model-runs");
   const latest = new Map<string, PublicFightPrediction>();
   for (const file of await jsonFiles(root)) {
     try {
@@ -233,10 +310,53 @@ export function parsePublicTrackRecord(value: unknown): PublicTrackRecord | null
 
 export async function getPublicTrackRecord(rootDirectory = repositoryRoot): Promise<PublicTrackRecord | null> {
   try {
-    return parsePublicTrackRecord(JSON.parse(await readFile(path.join(rootDirectory, "state", "ventures", "fightaiq", "track-record.json"), "utf8")));
+    return parsePublicTrackRecord(JSON.parse(await readFile(path.join(rootDirectory, "state", "mma", "track-record.json"), "utf8")));
   } catch {
     return null;
   }
+}
+
+export function parsePublicFightStatsEntry(value: unknown): PublicFightStatsEntry | null {
+  const entry = object(value);
+  const id = safeText(entry?.id, 160);
+  const boutRef = safeText(entry?.boutRef, 180);
+  const eventRef = safeText(entry?.eventRef, 180);
+  const fighterRefs = Array.isArray(entry?.fighterRefs) && entry.fighterRefs.length === 2
+    ? entry.fighterRefs.map((item) => safeText(item, 160))
+    : null;
+  const modelVersion = safeText(entry?.modelVersion, 100);
+  const redWin = safeFraction(entry?.redWin);
+  const blueWin = safeFraction(entry?.blueWin);
+  const uncertainty = entry?.uncertainty === "clear-lean" || entry?.uncertainty === "lean" || entry?.uncertainty === "coin-flip" || entry?.uncertainty === "divergence" ? entry.uncertainty : null;
+  const status = entry?.status === "active" || entry?.status === "scored" || entry?.status === "void" ? entry.status : null;
+  const outcome = entry?.outcome === null || entry?.outcome === "red" || entry?.outcome === "blue" || entry?.outcome === "draw" || entry?.outcome === "no-contest" ? entry.outcome : undefined;
+  const brierContribution = entry?.brierContribution === null ? null : safeFraction(entry?.brierContribution);
+  const sourceRefs = Array.isArray(entry?.sourceRefs) ? entry.sourceRefs.map((item) => safeText(item, 240)) : null;
+  const generatedAt = safeDate(entry?.generatedAt);
+  const scoredAt = entry?.scoredAt === null ? null : safeDate(entry?.scoredAt);
+  const invalidScoring = status === "active"
+    ? outcome !== null || brierContribution !== null || scoredAt !== null
+    : status === "scored"
+      ? (outcome !== "red" && outcome !== "blue") || brierContribution === null || scoredAt === null
+      : brierContribution !== null;
+  if (entry?.schemaVersion !== "fightaiq-stats/1" || !id || !boutRef || !eventRef || !fighterRefs?.[0] || !fighterRefs[1] || !modelVersion || redWin === null || blueWin === null || Math.abs(redWin + blueWin - 1) > 0.000001 || !uncertainty || entry?.calibrationLabel !== "early-model" || typeof entry?.marketUsed !== "boolean" || !status || outcome === undefined || brierContribution === undefined || !sourceRefs?.length || sourceRefs.some((item) => !item) || !generatedAt || scoredAt === undefined || invalidScoring) return null;
+  return { id, boutRef, eventRef, fighterRefs: [fighterRefs[0], fighterRefs[1]], modelVersion, redWin, blueWin, uncertainty, calibrationLabel: "early-model", marketUsed: entry.marketUsed, status, outcome, brierContribution, sourceRefs: sourceRefs as string[], generatedAt, scoredAt };
+}
+
+export async function getPublicFightStatsEntries(rootDirectory = repositoryRoot): Promise<PublicFightStatsEntry[]> {
+  const root = path.join(rootDirectory, "state", "mma", "stats");
+  const latest = new Map<string, PublicFightStatsEntry>();
+  for (const file of await jsonFiles(root)) {
+    try {
+      const entry = parsePublicFightStatsEntry(JSON.parse(await readFile(file, "utf8")));
+      if (!entry) continue;
+      const current = latest.get(entry.boutRef);
+      if (!current || current.generatedAt < entry.generatedAt) latest.set(entry.boutRef, entry);
+    } catch {
+      // A malformed private record does not reach the public Stats page.
+    }
+  }
+  return [...latest.values()].sort((left, right) => right.generatedAt.localeCompare(left.generatedAt));
 }
 
 export function fighterName(fighter: PublicFighter): string {

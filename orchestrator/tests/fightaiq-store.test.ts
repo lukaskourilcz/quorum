@@ -4,13 +4,30 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import event from "../../contracts/fixtures/event-card.valid.json" with { type: "json" };
 import fighter from "../../contracts/fixtures/fighter-record.valid.json" with { type: "json" };
-import { appendTrackRecordPick, fightClock, fightWeekFocus, normalizedSourceUrl, publicEventMirror, publicFighterMirror, saveOddsSnapshot, saveSourceProposal } from "../src/fightaiq/store.js";
+import { appendTrackRecordPick, fightClock, fightWeekFocus, normalizedSourceUrl, publicBoutMirror, publicEventMirror, publicFighterMirror, saveOddsSnapshot, saveSourceProposal } from "../src/fightaiq/store.js";
+import bout from "../../contracts/fixtures/bout-record.valid.json" with { type: "json" };
 
 describe("FightAIQ canonical stores", () => {
   it("defensively reparses public fighters and events", () => {
     expect(publicFighterMirror(fighter).id).toBe("ufc:alex-example");
     expect(publicEventMirror(event).org).toBe("ufc");
     expect(() => publicFighterMirror({ ...fighter, modelEligible: false })).toThrow(/modelEligible/);
+  });
+
+  it("removes private disagreement values and internal notes from delivery mirrors", () => {
+    const privateFighter = {
+      ...fighter,
+      fields: { ...fighter.fields, record: { ...fighter.fields.record, status: "disputed", corroborated: false } },
+      discrepancies: [{ field: "record", values: [{ value: "12-2-0", sourceRef: "source:a" }, { value: "13-2-0", sourceRef: "source:b" }], status: "open" }],
+      modelEligible: false,
+      changeLog: fighter.changeLog.map((entry) => ({ ...entry, note: "PRIVATE: reviewer email and internal resolution note" }))
+    };
+    const mirrored = publicFighterMirror(privateFighter);
+    expect(mirrored.discrepancies).toEqual([]);
+    expect(JSON.stringify(mirrored)).not.toContain("PRIVATE");
+    expect(mirrored.fields.record?.status).toBe("disputed");
+    const mirroredBout = publicBoutMirror({ ...bout, changeLog: bout.changeLog.map((entry) => ({ ...entry, note: "PRIVATE bout note" })) });
+    expect(JSON.stringify(mirroredBout)).not.toContain("PRIVATE");
   });
 
   it("writes owner odds idempotently and rejects a changed duplicate", async () => {
@@ -59,7 +76,7 @@ describe("FightAIQ canonical stores", () => {
     expect((await appendTrackRecordPick(pick, root, new Date("2026-08-02T10:00:00.000Z"))).repeated).toBe(false);
     expect((await appendTrackRecordPick(pick, root, new Date("2026-08-02T10:00:00.000Z"))).repeated).toBe(true);
     await expect(appendTrackRecordPick({ ...pick, result: "win" }, root)).rejects.toThrow(/immutable/);
-    const record = JSON.parse(await readFile(path.join(root, "ventures/fightaiq/track-record.json"), "utf8"));
+    const record = JSON.parse(await readFile(path.join(root, "mma/track-record.json"), "utf8"));
     expect(record.rollups).toEqual([{ modelVersion: pick.modelVersion, org: "ufc", picks: 1, brier: 0.36, meanClv: null }]);
   });
 });

@@ -2,7 +2,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { getPublicEvents, getPublicFighters, type PublicEvent, type PublicFighter, type SourcedValue } from "./fightaiq-records";
+import { getPublicBouts, getPublicEvents, getPublicFighters, type PublicBout, type PublicEvent, type PublicFighter, type SourcedValue } from "./fightaiq-records";
 import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -45,6 +45,7 @@ export interface AdminFighter extends PublicFighter {
 export interface AdminFightAiQSnapshot {
   fighters: AdminFighter[];
   events: PublicEvent[];
+  bouts: PublicBout[];
   slates: AdminMmaSlate[];
   sources: AdminMmaSource[];
   unreadable: string[];
@@ -153,15 +154,16 @@ async function sourceSnapshot(root: string): Promise<AdminMmaSource[]> {
 }
 
 export async function readAdminFightAiQ(root = repositoryRoot): Promise<AdminFightAiQSnapshot> {
-  const [fighterSnapshot, eventSnapshot, sourceRecords, ratingState] = await Promise.all([
-      getPublicFighters(root), getPublicEvents(root), sourceSnapshot(root), ratings(root)
+  const [fighterSnapshot, eventSnapshot, boutSnapshot, sourceRecords, ratingState] = await Promise.all([
+      getPublicFighters(root), getPublicEvents(root), getPublicBouts(root), sourceSnapshot(root), ratings(root)
     ]);
-    const fighterRoot = path.join(root, "state", "ventures", "fightaiq", "fighters");
-    const slateRoot = path.join(root, "state", "ventures", "fightaiq", "slates");
+    const fighterRoot = path.join(root, "state", "mma", "fighters");
+    const slateRoot = path.join(root, "state", "mma", "slips");
     const slates: AdminMmaSlate[] = [];
     const unreadable: string[] = [
       ...fighterSnapshot.unreadable.map((file) => `fighters/${file}`),
       ...eventSnapshot.unreadable.map((file) => `events/${file}`),
+      ...boutSnapshot.unreadable.map((file) => `bouts/${file}`),
       ...(ratingState.malformed ? ["ratings/fightaiq/ledger.jsonl"] : [])
     ];
     for (const file of await files(slateRoot)) {
@@ -177,6 +179,7 @@ export async function readAdminFightAiQ(root = repositoryRoot): Promise<AdminFig
   return {
     fighters: fighterSnapshot.fighters.map((fighter) => ({ ...fighter, discrepancyDetails: detailById.get(fighter.id) ?? [] })),
     events: eventSnapshot.events,
+    bouts: boutSnapshot.bouts,
     slates,
     sources: sourceRecords,
     unreadable

@@ -403,8 +403,8 @@ export default async function AdminPage({
             </aside>
           ) : null}
 
-          {selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "events", "slates", "sources"].includes(selectedTab) ? (
-            <FightAiQAdminPanel snapshot={fightaiq} tab={selectedTab as "fighters" | "events" | "slates" | "sources"} />
+          {selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab) ? (
+            <FightAiQAdminPanel snapshot={fightaiq} tab={selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources"} />
           ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab) ? (
             <MmaFilesAdminPanel snapshot={mmaFiles} tab={selectedTab as "articles" | "calendar" | "social-lab"} />
           ) : visibleCards.length ? (

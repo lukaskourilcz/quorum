@@ -1,0 +1,773 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:akbarh-arreola",
+  "slug": "akbarh-arreola",
+  "org": "ufc",
+  "canonicalName": "Akbarh Arreola",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Akbarh Arreola",
+    "externalIds": {
+      "wikipediaPageId": "46801690"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:46801690",
+      "url": "https://en.wikipedia.org/wiki/Akbarh_Arreola",
+      "publisher": "Wikipedia",
+      "title": "Akbarh Arreola",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Akbarh Arreola",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1983-01-14",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Lightweight Welterweight",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Entram Gym",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "27-11-1",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-eb77730d271d1a7d540e",
+      "eventRef": "ufc:event:history-reto-maximo-1",
+      "happenedAt": "2002-09-08T00:00:00.000Z",
+      "opponentRef": "ufc:ricardo-corrales",
+      "result": "loss",
+      "method": "TKO (corner toppage)",
+      "round": 1,
+      "elapsedSeconds": 300,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f212d42802893e9643c1",
+      "eventRef": "ufc:event:history-reto-maximo-2",
+      "happenedAt": "2002-12-08T00:00:00.000Z",
+      "opponentRef": "ufc:fernando-zatarain",
+      "result": "win",
+      "method": "KO",
+      "round": 1,
+      "elapsedSeconds": 14,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f620e59d3eeb4f79cade",
+      "eventRef": "ufc:event:history-reto-maximo-3",
+      "happenedAt": "2003-03-14T00:00:00.000Z",
+      "opponentRef": "ufc:hector-carrillo",
+      "result": "win",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 67,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a75b65804f83be105692",
+      "eventRef": "ufc:event:history-extreme-international-evolution",
+      "happenedAt": "2003-08-02T00:00:00.000Z",
+      "opponentRef": "ufc:angel-santibanez",
+      "result": "win",
+      "method": "Submission (kimura)",
+      "round": 1,
+      "elapsedSeconds": 62,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-56c81e4b8b7485008e9e",
+      "eventRef": "ufc:event:history-reto-maximo-4",
+      "happenedAt": "2003-09-14T00:00:00.000Z",
+      "opponentRef": "ufc:alex-ramirez",
+      "result": "win",
+      "method": "Submission (triangle Choke)",
+      "round": 2,
+      "elapsedSeconds": 502,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5d085b721618b5184908",
+      "eventRef": "ufc:event:history-total-combat-3",
+      "happenedAt": "2004-05-30T00:00:00.000Z",
+      "opponentRef": "ufc:steve-barnett",
+      "result": "win",
+      "method": "Submission (triangle Choke)",
+      "round": 1,
+      "elapsedSeconds": 50,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5e0071d871a9415b99da",
+      "eventRef": "ufc:event:history-reto-maximo-5",
+      "happenedAt": "2004-06-27T00:00:00.000Z",
+      "opponentRef": "ufc:mac-danzig",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 82,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f5acd86c0cafbc9dc83b",
+      "eventRef": "ufc:event:history-crown-fighting-1",
+      "happenedAt": "2004-09-04T00:00:00.000Z",
+      "opponentRef": "ufc:antonio-mckee",
+      "result": "draw",
+      "method": "Draw",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6e9927e252acdaee69bb",
+      "eventRef": "ufc:event:history-total-combat-9",
+      "happenedAt": "2005-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:toby-imada",
+      "result": "loss",
+      "method": "TKO (corner stoppage)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-14e364a00205184d049d",
+      "eventRef": "ufc:event:history-total-combat-12",
+      "happenedAt": "2005-12-17T00:00:00.000Z",
+      "opponentRef": "ufc:toby-imada",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8072e51cb289a79c69fd",
+      "eventRef": "ufc:event:history-mma-xtreme-1",
+      "happenedAt": "2006-03-25T00:00:00.000Z",
+      "opponentRef": "ufc:jude-gonzales",
+      "result": "win",
+      "method": "Submission (triangle Choke)",
+      "round": 1,
+      "elapsedSeconds": 41,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-52e5b35922db1eac313a",
+      "eventRef": "ufc:event:history-mma-xtreme-3",
+      "happenedAt": "2006-06-03T00:00:00.000Z",
+      "opponentRef": "ufc:hajime-ohara",
+      "result": "win",
+      "method": "Technical Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 25,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-1bd5c7cea86c5907f754",
+      "eventRef": "ufc:event:history-mma-xtreme-4",
+      "happenedAt": "2006-08-19T00:00:00.000Z",
+      "opponentRef": "ufc:hajime-ohara",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 30,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-74c158d09e341a7cb2e4",
+      "eventRef": "ufc:event:history-mma-xtreme-6",
+      "happenedAt": "2006-10-27T00:00:00.000Z",
+      "opponentRef": "ufc:jose-luis-cocafuego",
+      "result": "win",
+      "method": "Submission (triangle Choke)",
+      "round": 1,
+      "elapsedSeconds": 0,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a1122c1233f87f993d32",
+      "eventRef": "ufc:event:history-mma-xtreme-7",
+      "happenedAt": "2006-11-11T00:00:00.000Z",
+      "opponentRef": "ufc:lucas-factor",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-26135e6758e370490a76",
+      "eventRef": "ufc:event:history-mma-xtreme-9",
+      "happenedAt": "2007-03-03T00:00:00.000Z",
+      "opponentRef": "ufc:marquis-mcknight",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 0,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b1767507fc44edc2ff2a",
+      "eventRef": "ufc:event:history-mma-xtreme-12",
+      "happenedAt": "2007-06-30T00:00:00.000Z",
+      "opponentRef": "ufc:mike-tseng",
+      "result": "win",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 103,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c5a8cc524e52d92f0b6a",
+      "eventRef": "ufc:event:history-mma-xtreme-15",
+      "happenedAt": "2007-11-16T00:00:00.000Z",
+      "opponentRef": "ufc:gabe-ruediger",
+      "result": "win",
+      "method": "Submission (kimura)",
+      "round": 1,
+      "elapsedSeconds": 123,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-39ade6af91b1a56df7f2",
+      "eventRef": "ufc:event:history-mma-xtreme-18",
+      "happenedAt": "2008-01-26T00:00:00.000Z",
+      "opponentRef": "ufc:david-gardner",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-96a99cd328e0830763b9",
+      "eventRef": "ufc:event:history-mma-xtreme-21",
+      "happenedAt": "2008-04-19T00:00:00.000Z",
+      "opponentRef": "ufc:luciano-correa",
+      "result": "win",
+      "method": "TKO (corner stoppage)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c7aaa0d2153cc8d8cc2f",
+      "eventRef": "ufc:event:history-uwc-mexico-2",
+      "happenedAt": "2009-05-30T00:00:00.000Z",
+      "opponentRef": "ufc:adam-lehman",
+      "result": "win",
+      "method": "Submission (triangle Choke)",
+      "round": 1,
+      "elapsedSeconds": 49,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0a5ad29a1cc6653f5734",
+      "eventRef": "ufc:event:history-mma-xtreme-23",
+      "happenedAt": "2009-08-15T00:00:00.000Z",
+      "opponentRef": "ufc:brent-weedman",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 342,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b09455dccc694a60115f",
+      "eventRef": "ufc:event:history-uwc-mexico-6",
+      "happenedAt": "2010-04-24T00:00:00.000Z",
+      "opponentRef": "ufc:matt-lagler",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 2,
+      "elapsedSeconds": 547,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-edd3b01ff51416d1cec5",
+      "eventRef": "ufc:event:history-uwc-mexico-8",
+      "happenedAt": "2010-10-16T00:00:00.000Z",
+      "opponentRef": "ufc:jorge-alberto-bustamante",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 587,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d347e93c5885207de1b3",
+      "eventRef": "ufc:event:history-uwc-mexico-9",
+      "happenedAt": "2011-03-26T00:00:00.000Z",
+      "opponentRef": "ufc:carlos-torres",
+      "result": "win",
+      "method": "KO (knees)",
+      "round": 1,
+      "elapsedSeconds": 154,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0873de55a43a32f58b2a",
+      "eventRef": "ufc:event:history-uwc-mexico-10",
+      "happenedAt": "2011-06-25T00:00:00.000Z",
+      "opponentRef": "ufc:gilberto-aguilar",
+      "result": "win",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 85,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7fc50cae09d10523993e",
+      "eventRef": "ufc:event:history-shooto-brasil-25",
+      "happenedAt": "2011-08-25T00:00:00.000Z",
+      "opponentRef": "ufc:ronys-torres",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7d7b8c1d42251ce15ca2",
+      "eventRef": "ufc:event:history-xtreme-kombat-17",
+      "happenedAt": "2012-09-21T00:00:00.000Z",
+      "opponentRef": "ufc:juan-manuel-puig",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 286,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-93765e04490856bc49f9",
+      "eventRef": "ufc:event:history-uwc-mexico-13",
+      "happenedAt": "2013-03-02T00:00:00.000Z",
+      "opponentRef": "ufc:juan-voelker",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 184,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d47b62f718840b1a126b",
+      "eventRef": "ufc:event:history-submission-mma-3",
+      "happenedAt": "2013-09-07T00:00:00.000Z",
+      "opponentRef": "ufc:jason-meaders",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 66,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-29aff6e5987ebfdf5a2d",
+      "eventRef": "ufc:event:history-costa-rica-mma-1",
+      "happenedAt": "2014-03-22T00:00:00.000Z",
+      "opponentRef": "ufc:alejandro-solano-rodriguez",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 402,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5cc7b159ad6e86af43e8",
+      "eventRef": "ufc:event:history-ufc-on-fox-lawler-vs-brown",
+      "happenedAt": "2014-07-26T00:00:00.000Z",
+      "opponentRef": "ufc:tiago-trator",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c046f29c99aab5196508",
+      "eventRef": "ufc:event:history-ufc-fight-night-edgar-vs-swanson",
+      "happenedAt": "2014-11-22T00:00:00.000Z",
+      "opponentRef": "ufc:yves-edwards",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 112,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-226bb9b4939e2e3a6940",
+      "eventRef": "ufc:event:history-ufc-fight-night-maia-vs-laflare",
+      "happenedAt": "2015-03-21T00:00:00.000Z",
+      "opponentRef": "ufc:francisco-trinaldo",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-400235dce07b53737b47",
+      "eventRef": "ufc:event:history-ufc-193",
+      "happenedAt": "2015-11-15T00:00:00.000Z",
+      "opponentRef": "ufc:jake-matthews",
+      "result": "loss",
+      "method": "TKO (doctor stoppage)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-40383e2c0db6ebab8809",
+      "eventRef": "ufc:event:history-pancrase-277",
+      "happenedAt": "2016-04-24T00:00:00.000Z",
+      "opponentRef": "ufc:kazuki-tokudome",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 299,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-cb31027ab8cf217bfab8",
+      "eventRef": "ufc:event:history-uwc-mexico-20",
+      "happenedAt": "2019-08-24T00:00:00.000Z",
+      "opponentRef": "ufc:gammaliel-escarrega",
+      "result": "win",
+      "method": "Submission (heel hook)",
+      "round": 1,
+      "elapsedSeconds": 221,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bec6d586e436a8e7f31d",
+      "eventRef": "ufc:event:history-uwc-mexico-35",
+      "happenedAt": "2022-06-24T00:00:00.000Z",
+      "opponentRef": "ufc:walter-luna",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 136,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-820fd07d97e5f4c53b83",
+      "eventRef": "ufc:event:history-uwc-mexico-57",
+      "happenedAt": "2026-03-22T00:00:00.000Z",
+      "opponentRef": "ufc:roman-cordova",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 66,
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:akbarh-arreola:history",
+      "bouts": 39,
+      "values": {
+        "bouts": 39,
+        "wins": 27,
+        "losses": 11,
+        "draws": 1,
+        "noContests": 0,
+        "finishRate": 0.962963,
+        "koTkoWins": 4,
+        "submissionWins": 22,
+        "decisionWins": 1,
+        "koTkoWinShare": 0.148148,
+        "submissionWinShare": 0.814815,
+        "decisionWinShare": 0.037037,
+        "averageElapsedSeconds": 311.447368,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 0.6,
+        "fightsPerYear": 1.614613,
+        "layoffDays": 132
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1714.30002316,
+    "deviation": 96.40516984,
+    "volatility": 0.0599979,
+    "boutCount": 38,
+    "asOfBoutRef": "ufc:bout:history-820fd07d97e5f4c53b83",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 39 historical fight rows."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.625,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

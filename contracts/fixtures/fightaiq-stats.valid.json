@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "fightaiq-stats/1",
+  "id": "prediction:abc123",
+  "boutRef": "ufc:bout:alex-vs-sam",
+  "eventRef": "ufc:event:fixture-night",
+  "fighterRefs": ["ufc:alex-example", "ufc:sam-example"],
+  "modelVersion": "mma-1.0.0+aaaaaaaa",
+  "redWin": 0.58,
+  "blueWin": 0.42,
+  "uncertainty": "lean",
+  "calibrationLabel": "early-model",
+  "marketUsed": false,
+  "status": "active",
+  "outcome": null,
+  "brierContribution": null,
+  "sourceRefs": ["source:fixture-card"],
+  "generatedAt": "2026-08-02T08:00:00.000Z",
+  "scoredAt": null
+}

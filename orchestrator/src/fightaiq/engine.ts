@@ -167,8 +167,18 @@ export function runMmaModel(input: { config: MmaModelConfig; bouts: BoutModelInp
     const uncertainty = inBand
       ? market && divergence > input.config.divergenceTolerance ? "divergence" : "coin-flip"
       : Math.abs(blended - 0.5) >= 0.15 ? "clear-lean" : "lean";
+    const snapshotRef = (fighter: FighterModelInput) => {
+      const canonical = new RegExp(`^${fighter.org}:[a-z0-9]+(?:-[a-z0-9]+)*$`, "u").test(fighter.ref)
+        ? fighter.ref
+        : `${fighter.org}:${fighter.ref.toLowerCase().replace(/[^a-z0-9]+/gu, "-").replace(/^-+|-+$/gu, "")}`;
+      return `mma/fighters/${canonical}.json#sha256=${sha256(fighter)}`;
+    };
     return {
       boutRef: bout.boutRef,
+      cardSnapshotRefs: [
+        snapshotRef(bout.red),
+        snapshotRef(bout.blue)
+      ],
       probabilities: {
         redWin: round(raw),
         blueWin: round(1 - raw),
@@ -255,7 +265,7 @@ export function bridgeCrossoverRating(origin: { rating: number; deviation: numbe
   return { rating: round((origin.rating + baseRating) / 2), deviation: round(Math.max(250, origin.deviation)) };
 }
 
-export function seedRatings(history: HistoricalBout[], baseRating = 1500, tau = 0.5): Record<string, { rating: number; deviation: number }> {
+export function seedRatings(history: HistoricalBout[], baseRating = 1500, tau = 0.5): Record<string, GlickoState> {
   const ratings: Record<string, GlickoState> = {};
   for (const bout of [...history].sort((left, right) => left.happenedAt.localeCompare(right.happenedAt))) {
     const redKey = `${bout.org}:${bout.red}`;
@@ -266,5 +276,5 @@ export function seedRatings(history: HistoricalBout[], baseRating = 1500, tau = 
     ratings[redKey] = updateGlicko(red, blue, score, tau);
     ratings[blueKey] = updateGlicko(blue, red, score === 1 ? 0 : 1, tau);
   }
-  return Object.fromEntries(Object.entries(ratings).map(([key, value]) => [key, { rating: value.rating, deviation: value.deviation }]));
+  return ratings;
 }

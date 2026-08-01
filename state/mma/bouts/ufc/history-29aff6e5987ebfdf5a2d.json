@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-29aff6e5987ebfdf5a2d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-costa-rica-mma-1",
+    "name": "Costa Rica MMA 1",
+    "startsAtUtc": "2014-03-22T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akbarh-arreola",
+    "blue": "ufc:alejandro-solano-rodriguez"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2014-03-22T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46801690"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 402,
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

@@ -24,7 +24,8 @@ describe("MMA Files repository delivery", () => {
   it("builds a stable UFC/Oktagon FightAIQ snapshot and skips its replay", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "fightaiq-publish-"));
     const workspace = await mkdtemp(path.join(os.tmpdir(), "fightaiq-package-"));
-    await atomicWriteJson(root, "ventures/fightaiq/odds/one.json", {
+    await atomicWriteJson(root, "mma/fighters/ufc:alex-example.json", JSON.parse(await readFile(path.join(repoRoot, "contracts", "fixtures", "fighter-record.valid.json"), "utf8")));
+    await atomicWriteJson(root, "mma/odds/one.json", {
       schemaVersion: "odds-snapshot/1",
       boutRef: "ufc:event:test:bout-1",
       phase: "t3",
@@ -38,6 +39,9 @@ describe("MMA Files repository delivery", () => {
     const feed = JSON.parse(await readFile(pending!.packagePath, "utf8"));
     const { packageHash, ...content } = feed;
     expect(packageHash).toBe(fightAiQDeliveryHash(content));
+    expect(feed).not.toHaveProperty("odds");
+    expect(feed).not.toHaveProperty("modelRuns");
+    expect(JSON.stringify(feed)).not.toContain('"decimal"');
     await recordMmaDelivery({ kind: "fightaiq", packageHash, packagePath: pending!.packagePath, status: "delivered", root });
     expect(await nextFightAiQDelivery(root, workspace)).toBeNull();
   });

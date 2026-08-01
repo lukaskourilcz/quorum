@@ -97,7 +97,7 @@ export async function computeAutonomySnapshot(input: {
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
-    validValues(path.join(input.stateRoot, "ventures", "fightaiq", "fighters"), FighterRecordSchema),
+    validValues(path.join(input.stateRoot, "mma", "fighters"), FighterRecordSchema),
     validValues(path.join(input.stateRoot, "ventures", "titty-tuesdays", "plans"), MarketingPlanSchema),
     validValues(path.join(input.stateRoot, "ventures", "incubator", "niche-proposals"), NicheProposalSchema),
     validValues(path.join(input.stateRoot, "meetings"), MeetingRecordSchema),
@@ -113,7 +113,7 @@ export async function computeAutonomySnapshot(input: {
   const renderedFighterRefs = new Set(publishedArticles.flatMap((article) => article.fighterRefs));
   const corroboratedFields = fighters.flatMap((fighter) => Object.values(fighter.fields)).filter((field) => field.corroborated).length;
   const allFighterFields = fighters.flatMap((fighter) => Object.values(fighter.fields)).length;
-  const dossierCount = (await files(path.join(input.stateRoot, "ventures", "fightaiq", "readiness-dossiers"))).length;
+  const dossierCount = (await files(path.join(input.stateRoot, "mma", "readiness-dossiers"))).length;
   const completePlans = plans.filter((plan) => plan.tactics.length > 0 && plan.calendar.length > 0 && plan.audienceRefs.length > 0).length;
 
   const metricByComponent: Record<string, CapabilitySignal[]> = {

@@ -1,0 +1,581 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:alan-belcher",
+  "slug": "alan-belcher",
+  "org": "ufc",
+  "canonicalName": "Alan Belcher",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Alan Belcher",
+    "externalIds": {
+      "wikipediaPageId": "10162012"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:10162012",
+      "url": "https://en.wikipedia.org/wiki/Alan_Belcher",
+      "publisher": "Wikipedia",
+      "title": "Alan Belcher",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Alan Belcher",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1984-04-24",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Heavyweight",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Roufusport (2007–2015) Remix MMA / American Top Team D'Iberville",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "19-9-0",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "19-9-0",
+          "sourceRef": "source:wikipedia:10162012"
+        },
+        {
+          "value": "16-9-0",
+          "sourceRef": "derived:ufc:alan-belcher:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-a3cb5828781713c8af43",
+      "eventRef": "ufc:event:history-freestyle-fighting-championships-10",
+      "happenedAt": "2004-07-24T00:00:00.000Z",
+      "opponentRef": "ufc:tim-ellis",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 109,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-cd6a847e644cea1b2380",
+      "eventRef": "ufc:event:history-wxf-x-impact-world-championships",
+      "happenedAt": "2005-07-09T00:00:00.000Z",
+      "opponentRef": "ufc:edwin-aguilar",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 241,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-013ca460b7f1cadda04a",
+      "eventRef": "ufc:event:history-world-extreme-fighting-16",
+      "happenedAt": "2005-09-24T00:00:00.000Z",
+      "opponentRef": "ufc:marvin-eastman",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-067205c392aa7bdc07cb",
+      "eventRef": "ufc:event:history-xfl-ek-19-battle-at-the-brady-3",
+      "happenedAt": "2006-02-18T00:00:00.000Z",
+      "opponentRef": "ufc:david-frank",
+      "result": "win",
+      "method": "TKO (submission to punches)",
+      "round": 2,
+      "elapsedSeconds": 397,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f7c6eb5fcf59829a4a57",
+      "eventRef": "ufc:event:history-titan-fc-1",
+      "happenedAt": "2006-03-11T00:00:00.000Z",
+      "opponentRef": "ufc:ron-fields",
+      "result": "win",
+      "method": "TKO (slam)",
+      "round": 1,
+      "elapsedSeconds": 37,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-aeddbdecc9b1eaed9f3f",
+      "eventRef": "ufc:event:history-world-extreme-fighting-17",
+      "happenedAt": "2006-04-01T00:00:00.000Z",
+      "opponentRef": "ufc:marcus-sursa",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 228,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b656db09eac1e5aad56a",
+      "eventRef": "ufc:event:history-raze-mma-fight-night",
+      "happenedAt": "2006-04-29T00:00:00.000Z",
+      "opponentRef": "ufc:buck-meredith",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-43f19e74f9796584be34",
+      "eventRef": "ufc:event:history-wef-orleans-arena",
+      "happenedAt": "2006-06-10T00:00:00.000Z",
+      "opponentRef": "ufc:evert-fyeet",
+      "result": "win",
+      "method": "Submission (toe hold)",
+      "round": 1,
+      "elapsedSeconds": 124,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d7f70ac680e800d064c1",
+      "eventRef": "ufc:event:history-ufc-62",
+      "happenedAt": "2006-08-26T00:00:00.000Z",
+      "opponentRef": "ufc:yushin-okami",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b97587a36da5e3d39cb1",
+      "eventRef": "ufc:event:history-ufc-fight-night-sanchez-vs-riggs",
+      "happenedAt": "2006-12-13T00:00:00.000Z",
+      "opponentRef": "ufc:jorge-santiago",
+      "result": "win",
+      "method": "KO (head kick)",
+      "round": 3,
+      "elapsedSeconds": 765,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ad5ac5e4098face48cb8",
+      "eventRef": "ufc:event:history-ufc-69",
+      "happenedAt": "2007-04-07T00:00:00.000Z",
+      "opponentRef": "ufc:kendall-grove",
+      "result": "loss",
+      "method": "Submission (D'arce choke)",
+      "round": 2,
+      "elapsedSeconds": 582,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-81eeda8107b3467d5ece",
+      "eventRef": "ufc:event:history-ufc-71",
+      "happenedAt": "2007-05-26T00:00:00.000Z",
+      "opponentRef": "ufc:sean-salmon",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 1,
+      "elapsedSeconds": 53,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e52bbd5fbb9a5834a5d6",
+      "eventRef": "ufc:event:history-ufc-77",
+      "happenedAt": "2007-10-20T00:00:00.000Z",
+      "opponentRef": "ufc:kalib-starnes",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 2,
+      "elapsedSeconds": 399,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a2ff6486716855cf7c6a",
+      "eventRef": "ufc:event:history-ufc-83",
+      "happenedAt": "2008-04-19T00:00:00.000Z",
+      "opponentRef": "ufc:jason-day",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 238,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2efe05969f7b7fe70a51",
+      "eventRef": "ufc:event:history-ufc-fight-night-diaz-vs-neer",
+      "happenedAt": "2008-09-17T00:00:00.000Z",
+      "opponentRef": "ufc:ed-herman",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-251797b41271d11ee245",
+      "eventRef": "ufc:event:history-ufc-93",
+      "happenedAt": "2009-01-17T00:00:00.000Z",
+      "opponentRef": "ufc:denis-kang",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 2,
+      "elapsedSeconds": 576,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-acdf10d84d1ee4de64c6",
+      "eventRef": "ufc:event:history-ufc-100",
+      "happenedAt": "2009-07-11T00:00:00.000Z",
+      "opponentRef": "ufc:yoshihiro-akiyama",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3f64b3db50009ba5f91a",
+      "eventRef": "ufc:event:history-ufc-107",
+      "happenedAt": "2009-12-12T00:00:00.000Z",
+      "opponentRef": "ufc:wilson-gouveia",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 183,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f2679430d210631e9da5",
+      "eventRef": "ufc:event:history-ufc-113",
+      "happenedAt": "2010-05-08T00:00:00.000Z",
+      "opponentRef": "ufc:patrick-cote",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 505,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-38820038f51c89c1d58b",
+      "eventRef": "ufc:event:history-ufc-fight-night-shields-vs-ellenberger",
+      "happenedAt": "2011-09-17T00:00:00.000Z",
+      "opponentRef": "ufc:jason-macdonald",
+      "result": "win",
+      "method": "TKO (submission to punches)",
+      "round": 1,
+      "elapsedSeconds": 228,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8e05c0b903851a8284de",
+      "eventRef": "ufc:event:history-ufc-on-fox-diaz-vs-miller",
+      "happenedAt": "2012-05-05T00:00:00.000Z",
+      "opponentRef": "ufc:rousimar-palhares",
+      "result": "win",
+      "method": "TKO (punches and elbows)",
+      "round": 1,
+      "elapsedSeconds": 258,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5da5152d08411f1e86e8",
+      "eventRef": "ufc:event:history-ufc-155",
+      "happenedAt": "2012-12-29T00:00:00.000Z",
+      "opponentRef": "ufc:yushin-okami",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6a1f835f191f02eb3407",
+      "eventRef": "ufc:event:history-ufc-159",
+      "happenedAt": "2013-04-27T00:00:00.000Z",
+      "opponentRef": "ufc:michael-bisping",
+      "result": "loss",
+      "method": "Technical Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 871,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d3deb0bc447ffd509225",
+      "eventRef": "ufc:event:history-gamebred-bareknuckle-mma-6",
+      "happenedAt": "2023-11-10T00:00:00.000Z",
+      "opponentRef": "ufc:roy-nelson",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-df8b81ddc8d29c7d80dd",
+      "eventRef": "ufc:event:history-gamebred-bareknuckle-mma-7",
+      "happenedAt": "2024-03-02T00:00:00.000Z",
+      "opponentRef": "ufc:junior-dos-santos",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 579,
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:alan-belcher:history",
+      "bouts": 25,
+      "values": {
+        "bouts": 25,
+        "wins": 16,
+        "losses": 9,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.8125,
+        "koTkoWins": 9,
+        "submissionWins": 6,
+        "decisionWins": 3,
+        "koTkoWinShare": 0.5625,
+        "submissionWinShare": 0.375,
+        "decisionWinShare": 0.1875,
+        "averageElapsedSeconds": 530.92,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 1.224106,
+        "layoffDays": 882
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1659.96918315,
+    "deviation": 106.87734941,
+    "volatility": 0.0600008,
+    "boutCount": 25,
+    "asOfBoutRef": "ufc:bout:history-df8b81ddc8d29c7d80dd",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 25 historical fight rows."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.625,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

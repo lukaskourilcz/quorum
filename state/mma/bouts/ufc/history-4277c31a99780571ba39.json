@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-4277c31a99780571ba39",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-naafs-night-of-champions-2011",
+    "name": "NAAFS: Night of Champions 2011",
+    "startsAtUtc": "2011-11-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aisling-daly",
+    "blue": "ufc:kelly-warren"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2011-11-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:28035301"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 2,
+    "elapsedSeconds": 579,
+    "sourceRefs": [
+      "source:wikipedia:28035301"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28035301"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

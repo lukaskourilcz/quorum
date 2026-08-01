@@ -12,7 +12,7 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
 | Magazine Incubator | Research and fenced founding | Finds evidence-backed publication ideas and can create a template-compliant content project | Anything needing a new account, more than `$0.15/day`, commerce, legal or personal-data work stops for the owner |
-| FightAIQ | Operating, data-only | UFC and Oktagon fighter/event files and deterministic analysis | No live probability publishing, bet placement, affiliate links or bookmaker automation |
+| FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | MMA Files | Operating public magazine | Two daily bilingual article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, cast, cost envelope and admin
@@ -75,7 +75,7 @@ credentials, evidence, cost limits or safety rules.
 | 14:00 | Board afternoon | `$0` checkpoint |
 | 17:00 | Caught Up product meeting | fixed service |
 | 18:00 | MMA Files evening article | assigned slot and evidence only |
-| 19:00 | FightAIQ model check | due agenda and analysis-mode gate only |
+| 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
 | 20:00 | MMA Files desk review | due agenda only |
 | 21:00 | Incubator synthesis | due agenda only |
 | 22:00 | Board night | `$0` checkpoint and daily summary |

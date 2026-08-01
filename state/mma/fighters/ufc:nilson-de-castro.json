@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:nilson-de-castro",
+  "slug": "nilson-de-castro",
+  "org": "ufc",
+  "canonicalName": "Nilson de Castro",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:5585490",
+      "url": "https://en.wikipedia.org/wiki/Akihiro_Gono",
+      "publisher": "Wikipedia",
+      "title": "Nilson de Castro",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Nilson de Castro",
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-c9fb94a4bdb6bbf9a76a",
+      "eventRef": "ufc:event:history-pancrase-10th-anniversary-show",
+      "happenedAt": "2003-08-31T00:00:00.000Z",
+      "opponentRef": "ufc:akihiro-gono",
+      "result": "loss",
+      "method": "DQ (groin strike)",
+      "round": 1,
+      "elapsedSeconds": 29,
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-42d0ade1f83bebf58a7c",
+      "eventRef": "ufc:event:history-pancrase-hybrid-10",
+      "happenedAt": "2003-11-30T00:00:00.000Z",
+      "opponentRef": "ufc:akihiro-gono",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:nilson-de-castro:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 464.5,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 4.013654,
+        "layoffDays": 8280
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1328.70915385,
+    "deviation": 229.00373104,
+    "volatility": 0.05999776,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-42d0ade1f83bebf58a7c",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:5585490"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

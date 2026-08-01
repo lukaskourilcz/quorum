@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-bec6d586e436a8e7f31d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-uwc-mexico-35",
+    "name": "UWC Mexico 35",
+    "startsAtUtc": "2022-06-24T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akbarh-arreola",
+    "blue": "ufc:walter-luna"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-06-24T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46801690"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 1,
+    "elapsedSeconds": 136,
+    "sourceRefs": [
+      "source:wikipedia:46801690"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46801690"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

@@ -8,6 +8,31 @@ import {
 
 export const MmaOrgSchema = z.enum(["ufc", "oktagon"]);
 export const MmaFieldStatusSchema = z.enum(["verified", "provisional", "disputed"]);
+export const MmaEvidenceTierSchema = z.enum(["primary", "secondary", "tertiary"]);
+
+export function independentMmaSourceCount(sourceRefs: readonly string[]): number {
+  return new Set(sourceRefs.map((reference) => {
+    if (reference.startsWith("source:cito-ufc:")) return "provider:cito-ufc";
+    if (reference.startsWith("source:wikipedia:")) return "provider:wikipedia";
+    if (reference.startsWith("source:wikidata:")) return "provider:wikidata";
+    if (reference.startsWith("source:the-odds-api:")) return "provider:the-odds-api";
+    if (reference.startsWith("https://")) {
+      try { return `host:${new URL(reference).hostname.toLowerCase()}`; } catch { return reference; }
+    }
+    const parts = reference.split(":");
+    return parts.length >= 2 ? parts.slice(0, 2).join(":") : reference;
+  })).size;
+}
+
+export const MmaSourceRefSchema = openObject({
+  id: z.string().trim().min(1).max(240),
+  url: HttpsUrlSchema.optional(),
+  publisher: z.string().trim().min(1).max(120),
+  title: z.string().trim().min(1).max(240),
+  retrievedAt: DateTimeSchema,
+  evidenceTier: MmaEvidenceTierSchema,
+  license: z.string().trim().min(1).max(160).optional()
+});
 
 const FieldValueSchema = z.union([
   z.string(),
@@ -32,14 +57,83 @@ const DiscrepancySchema = openObject({
   resolution: z.string().trim().min(1).max(280).optional()
 });
 
-export const FighterRecordSchema = openObject({
-  schemaVersion: z.literal("fighter-record/1"),
+const FighterRefSchema = z.string().regex(/^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/);
+
+export const FighterHistoryBoutSchema = openObject({
+  boutRef: z.string().regex(/^(ufc|oktagon):bout:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  eventRef: z.string().regex(/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  happenedAt: DateTimeSchema,
+  opponentRef: FighterRefSchema,
+  result: z.enum(["win", "loss", "draw", "no-contest"]),
+  method: z.string().trim().min(1).max(80).nullable(),
+  round: z.number().int().min(1).max(5).nullable(),
+  elapsedSeconds: z.number().int().nonnegative().max(1_500).nullable(),
+  sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1),
+  evidenceTier: MmaEvidenceTierSchema,
+  status: MmaFieldStatusSchema
+});
+
+export const FighterStatsProfileSchema = openObject({
+  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  label: z.string().trim().min(1).max(120),
+  scope: z.enum(["career", "organization", "recent-five"]),
+  organization: MmaOrgSchema.nullable(),
+  sourceRef: z.string().trim().min(1).max(240),
+  bouts: z.number().int().nonnegative(),
+  values: z.record(z.string().trim().min(1).max(80), z.number().finite().nullable()),
+  updatedAt: DateTimeSchema
+});
+
+export const FighterRatingSchema = openObject({
+  system: z.literal("glicko2"),
+  rating: z.number().finite(),
+  deviation: z.number().finite().positive(),
+  volatility: z.number().finite().positive(),
+  boutCount: z.number().int().nonnegative(),
+  asOfBoutRef: z.string().trim().min(1).max(180).nullable(),
+  updatedAt: DateTimeSchema
+});
+
+const ChangeEntrySchema = openObject({
+  at: DateTimeSchema,
+  kind: z.enum(["created", "source-refresh", "field-update", "bout-added", "status-change", "owner-review", "rating-rebuild"]),
+  fields: z.array(z.string().trim().min(1).max(80)).min(1),
+  sourceRefs: z.array(z.string().trim().min(1).max(240)),
+  note: z.string().trim().min(1).max(280)
+});
+
+export const FighterCardSchema = openObject({
+  schemaVersion: z.literal("fighter-card/1"),
   id: z.string().regex(/^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   org: MmaOrgSchema,
+  canonicalName: z.string().trim().min(1).max(120),
+  aliases: z.array(z.string().trim().min(1).max(120)),
+  identity: openObject({
+    wikidataId: z.string().regex(/^Q\d+$/).nullable(),
+    wikipediaTitle: z.string().trim().min(1).max(240).nullable(),
+    externalIds: z.record(z.string().trim().min(1).max(80), z.string().trim().min(1).max(160))
+  }),
+  organizationHistory: z.array(openObject({
+    org: MmaOrgSchema,
+    from: z.iso.date().nullable(),
+    to: z.iso.date().nullable(),
+    status: z.enum(["active", "former", "unknown"]),
+    sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1)
+  })).min(1),
+  sources: z.array(MmaSourceRefSchema).min(1),
   fields: z.record(z.string().min(1), SourcedFieldSchema),
   criticalFields: z.array(z.string().trim().min(1)).min(1),
   discrepancies: z.array(DiscrepancySchema),
+  history: z.array(FighterHistoryBoutSchema),
+  statsProfiles: z.array(FighterStatsProfileSchema),
+  rating: FighterRatingSchema,
+  quality: openObject({
+    evidenceTier: MmaEvidenceTierSchema,
+    gaps: z.array(z.string().trim().min(1).max(120)),
+    lastReviewedAt: DateTimeSchema.nullable()
+  }),
+  changeLog: z.array(ChangeEntrySchema).min(1),
   completeness: z.number().finite().min(0).max(1),
   corroboration: z.number().finite().min(0).max(1),
   modelEligible: z.boolean(),
@@ -53,7 +147,7 @@ export const FighterRecordSchema = openObject({
   let eligible = true;
   for (const fieldName of record.criticalFields) {
     const field = record.fields[fieldName];
-    if (!field || field.sourceRefs.length < 2 || !field.corroborated || field.status !== "verified" || openFields.has(fieldName)) {
+    if (!field || independentMmaSourceCount(field.sourceRefs) < 2 || !field.corroborated || field.status !== "verified" || openFields.has(fieldName)) {
       eligible = false;
     }
   }
@@ -62,7 +156,53 @@ export const FighterRecordSchema = openObject({
   }
 });
 
-const FighterRefSchema = z.string().regex(/^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/);
+export const FighterRecordSchema = FighterCardSchema;
+
+export const BoutRecordSchema = openObject({
+  schemaVersion: z.literal("bout/1"),
+  id: z.string().regex(/^(ufc|oktagon):bout:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  org: MmaOrgSchema,
+  event: openObject({
+    ref: z.string().regex(/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    name: z.string().trim().min(1).max(160),
+    startsAtUtc: DateTimeSchema,
+    venue: z.string().trim().min(1).max(160).nullable()
+  }),
+  fighters: openObject({ red: FighterRefSchema, blue: FighterRefSchema }),
+  division: z.string().trim().min(1).max(80).nullable(),
+  scheduledRounds: z.union([z.literal(3), z.literal(5)]).nullable(),
+  status: z.enum(["proposed", "announced", "confirmed", "weigh-in", "completed", "cancelled", "postponed"]),
+  statusHistory: z.array(openObject({
+    status: z.enum(["proposed", "announced", "confirmed", "weigh-in", "completed", "cancelled", "postponed"]),
+    at: DateTimeSchema,
+    sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1),
+    note: z.string().trim().min(1).max(280)
+  })).min(1),
+  discovery: openObject({
+    firstSeenAt: DateTimeSchema,
+    lastSeenAt: DateTimeSchema,
+    sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1)
+  }),
+  sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1),
+  result: openObject({
+    winner: z.enum(["red", "blue", "draw", "no-contest"]),
+    method: z.string().trim().min(1).max(80).nullable(),
+    round: z.number().int().min(1).max(5).nullable(),
+    elapsedSeconds: z.number().int().nonnegative().max(1_500).nullable(),
+    sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1)
+  }).nullable(),
+  predictionRefs: z.array(z.string().trim().min(1).max(240)),
+  changeLog: z.array(ChangeEntrySchema).min(1),
+  updatedAt: DateTimeSchema
+}).superRefine((bout, context) => {
+  if (bout.fighters.red === bout.fighters.blue) context.addIssue({ code: "custom", message: "A fighter cannot face themself", path: ["fighters"] });
+  const latest = bout.statusHistory.at(-1);
+  if (latest?.status !== bout.status) context.addIssue({ code: "custom", message: "Current status must match the last status history entry", path: ["status"] });
+  if (bout.result && bout.status !== "completed") context.addIssue({ code: "custom", message: "Only completed bouts can carry a result", path: ["result"] });
+  if (["confirmed", "weigh-in"].includes(bout.status) && independentMmaSourceCount(bout.sourceRefs) < 2) {
+    context.addIssue({ code: "custom", message: "Confirmed upcoming bouts require two independent source references", path: ["sourceRefs"] });
+  }
+});
 
 export const EventCardSchema = openObject({
   schemaVersion: z.literal("event-card/1"),
@@ -140,11 +280,35 @@ export const ModelRunSchema = openObject({
   configHash: Sha256Schema,
   bouts: z.array(openObject({
     boutRef: z.string().trim().min(1),
+    cardSnapshotRefs: z.tuple([
+      z.string().regex(/^mma\/fighters\/(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*\.json#sha256=[a-f0-9]{64}$/),
+      z.string().regex(/^mma\/fighters\/(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*\.json#sha256=[a-f0-9]{64}$/)
+    ]),
     probabilities: ProbabilitySetSchema,
     adjustmentsApplied: z.array(AdjustmentEntrySchema),
     excludedInputs: z.array(z.string().trim().min(1))
   })).min(1),
   createdAt: DateTimeSchema
+});
+
+export const FightAiQStatsEntrySchema = openObject({
+  schemaVersion: z.literal("fightaiq-stats/1"),
+  id: z.string().regex(/^prediction:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  boutRef: z.string().regex(/^(ufc|oktagon):bout:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  eventRef: z.string().regex(/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  fighterRefs: z.tuple([FighterRefSchema, FighterRefSchema]),
+  modelVersion: z.string().regex(/^mma-\d+\.\d+\.\d+\+[a-f0-9]{8}$/),
+  redWin: z.number().finite().min(0).max(1),
+  blueWin: z.number().finite().min(0).max(1),
+  uncertainty: z.enum(["clear-lean", "lean", "coin-flip", "divergence"]),
+  calibrationLabel: z.literal("early-model"),
+  marketUsed: z.boolean(),
+  status: z.enum(["active", "scored", "void"]),
+  outcome: z.enum(["red", "blue", "draw", "no-contest"]).nullable(),
+  brierContribution: z.number().finite().min(0).max(1).nullable(),
+  sourceRefs: z.array(z.string().trim().min(1).max(240)).min(1),
+  generatedAt: DateTimeSchema,
+  scoredAt: DateTimeSchema.nullable()
 });
 
 export const EdgeReportSchema = openObject({
@@ -255,9 +419,11 @@ export const SourceProposalSchema = openObject({
   checkedAt: DateTimeSchema
 });
 
-export type FighterRecord = z.infer<typeof FighterRecordSchema>;
+export type FighterRecord = z.infer<typeof FighterCardSchema>;
+export type BoutRecord = z.infer<typeof BoutRecordSchema>;
 export type EventCard = z.infer<typeof EventCardSchema>;
 export type ModelRun = z.infer<typeof ModelRunSchema>;
+export type FightAiQStatsEntry = z.infer<typeof FightAiQStatsEntrySchema>;
 export type SlipOfTen = z.infer<typeof SlipOfTenSchema>;
 export type EdgeReport = z.infer<typeof EdgeReportSchema>;
 export type SourceProposal = z.infer<typeof SourceProposalSchema>;

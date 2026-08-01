@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-f694beba9bff55574e26",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-vision-fighting-championship-1",
+    "name": "Vision Fighting Championship 1",
+    "startsAtUtc": "2010-08-28T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akira-corassani",
+    "blue": "ufc:martin-begley"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2010-08-28T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:33543499"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (scissor choke)",
+    "round": 1,
+    "elapsedSeconds": 268,
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

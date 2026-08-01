@@ -6,6 +6,10 @@
   "bouts": [
     {
       "boutRef": "bout-1",
+      "cardSnapshotRefs": [
+        "mma/fighters/ufc:alex-example.json#sha256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "mma/fighters/ufc:sam-example.json#sha256=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
       "probabilities": {
         "redWin": 0.58,
         "blueWin": 0.42,

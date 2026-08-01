@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-9f28be9e10130e65fd88",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-perm-regional-mma-federation-mma-professional-cup",
+    "name": "Perm Regional MMA Federation: MMA Professional Cup",
+    "startsAtUtc": "2007-11-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:adlan-amagov",
+    "blue": "ufc:aleksei-oleinik"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2007-11-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:31990317"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (ezekiel choke)",
+    "round": 1,
+    "elapsedSeconds": 60,
+    "sourceRefs": [
+      "source:wikipedia:31990317"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:31990317"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

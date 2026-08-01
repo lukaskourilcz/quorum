@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:al-harlow",
+  "slug": "al-harlow",
+  "org": "ufc",
+  "canonicalName": "Al Harlow",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:46641727",
+      "url": "https://en.wikipedia.org/wiki/Aaron_Brink",
+      "publisher": "Wikipedia",
+      "title": "Al Harlow",
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Al Harlow",
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-7f3f055c1794ffe17b5e",
+      "eventRef": "ufc:event:history-wcnhbc-west-coast-nhb-championships-1",
+      "happenedAt": "1998-12-08T00:00:00.000Z",
+      "opponentRef": "ufc:aaron-brink",
+      "result": "loss",
+      "method": "KO (knee)",
+      "round": 1,
+      "elapsedSeconds": 84,
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-210fbe425765c2d02247",
+      "eventRef": "ufc:event:history-wcnhbc-west-coast-nhb-championships-3",
+      "happenedAt": "1999-06-06T00:00:00.000Z",
+      "opponentRef": "ufc:aaron-brink",
+      "result": "loss",
+      "method": "KO",
+      "round": null,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:al-harlow:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 84,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 2.029125,
+        "layoffDays": 9918
+      },
+      "updatedAt": "2026-08-01T23:30:59.810Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1334.47109719,
+    "deviation": 259.54758519,
+    "volatility": 0.05999852,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-210fbe425765c2d02247",
+    "updatedAt": "2026-08-01T23:30:59.810Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46641727"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

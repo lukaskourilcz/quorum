@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-76d8c3b5b41d7920c1ba",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-united-glory-5-stronger",
+    "name": "United Glory 5: Stronger",
+    "startsAtUtc": "2007-09-09T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:akira-corassani",
+    "blue": "ufc:raymond-jarman"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2007-09-09T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:33543499"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (triangle choke)",
+    "round": 2,
+    "elapsedSeconds": null,
+    "sourceRefs": [
+      "source:wikipedia:33543499"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

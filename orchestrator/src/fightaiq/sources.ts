@@ -340,9 +340,10 @@ interface CitoFetchOptions {
   resolveImpl?: SafeFetchOptions["resolveImpl"];
 }
 
-export async function fetchCitoFighters(input: { apiKey: string; context: SourceFetchContext } & CitoFetchOptions): Promise<CitoFighterSummary[]> {
+export async function fetchCitoFighters(input: { apiKey: string; context: SourceFetchContext; page?: number } & CitoFetchOptions): Promise<CitoFighterSummary[]> {
   if (!input.apiKey.trim()) return [];
-  const value = await fetchJson<unknown>("https://api.citoapi.com/api/v1/ufc/fighters?page=1&limit=50", input.context, {
+  const page = Number.isSafeInteger(input.page) && (input.page ?? 0) > 0 ? input.page! : 1;
+  const value = await fetchJson<unknown>(`https://api.citoapi.com/api/v1/ufc/fighters?page=${page}&limit=50`, input.context, {
     headers: { "x-api-key": input.apiKey },
     fetchImpl: input.fetchImpl,
     resolveImpl: input.resolveImpl

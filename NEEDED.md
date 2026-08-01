@@ -55,7 +55,7 @@ live, retries once or is reverted and paused.
 
 ## Human-only gates that remain closed
 
-These are not current setup tasks, but code cannot open them: FightAIQ analysis mode,
-budget increases or unplanned spend, commerce/payments/ads, personal-data collection,
+These are not current setup tasks, but code cannot open them: budget increases or
+unplanned spend, commerce/payments/ads, personal-data collection,
 legal/name clearance and MMA Files indexing. They require a future explicit owner
 decision when the business is ready.

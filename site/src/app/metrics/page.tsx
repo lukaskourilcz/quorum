@@ -3,9 +3,11 @@ import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { metrics } from "@/data/fixtures";
 import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { getPublicStandups } from "@/lib/standup-records";
+import { fighterName, getPublicFightStatsEntries, getPublicFighters } from "@/lib/fightaiq-records";
 import { formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -29,7 +31,12 @@ function metricValue(metric: (typeof metrics)[number]) {
 }
 
 export default async function MetricsPage() {
-  const latestStandup = (await getPublicStandups())[0]!;
+  const [latestStandup, fightStats, fighterSnapshot] = await Promise.all([
+    getPublicStandups().then((items) => items[0]!),
+    getPublicFightStatsEntries(),
+    getPublicFighters()
+  ]);
+  const fighterNames = new Map(fighterSnapshot.fighters.map((fighter) => [fighter.id, fighterName(fighter)]));
   return (
     <PageShell>
       <PageIntro
@@ -147,6 +154,23 @@ export default async function MetricsPage() {
             <span>5 measures / 2 passing / 3 without data</span>
             <span>Targets saved in code</span>
           </div>
+        </div>
+      </section>
+
+      <section className="border-t border-[var(--border)] bg-[var(--surface)]">
+        <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
+          <SectionHeading
+            description="FightAIQ saves a forecast only after both fighter files pass the evidence checks. These are early model outputs, not betting advice. Market prices are optional and the model records whether it used them."
+            eyebrow="FightAIQ"
+            title="Current fight forecasts"
+          />
+          {fightStats.length ? <div className="grid gap-4 lg:grid-cols-2">{fightStats.map((entry) => <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7 md:p-8" key={entry.id}>
+            <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase tracking-[0.08em] text-[var(--fog)]">{entry.status} · {entry.uncertainty.replaceAll("-", " ")}</p><h3 className="mt-2 text-2xl font-semibold">{fighterNames.get(entry.fighterRefs[0]) ?? entry.fighterRefs[0]} vs {fighterNames.get(entry.fighterRefs[1]) ?? entry.fighterRefs[1]}</h3></div><Badge tone={entry.status === "active" ? "warning" : entry.status === "scored" ? "success" : "neutral"}>{entry.marketUsed ? "model + market" : "model only"}</Badge></div>
+            <div className="mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-button)] bg-[var(--border)]"><div className="bg-[var(--surface)] p-4"><p className="text-xs text-[var(--fog)]">Red corner</p><p className="mt-1 text-3xl font-semibold tabular-nums">{Math.round(entry.redWin * 100)}%</p></div><div className="bg-[var(--surface)] p-4"><p className="text-xs text-[var(--fog)]">Blue corner</p><p className="mt-1 text-3xl font-semibold tabular-nums">{Math.round(entry.blueWin * 100)}%</p></div></div>
+            <p className="mt-5 text-sm font-medium text-[var(--warning-soft)]">Early model · Model output, not betting advice.</p>
+            {entry.status === "scored" && entry.brierContribution !== null ? <p className="mt-2 text-xs text-[var(--fog)]">Brier score for this forecast: {entry.brierContribution.toFixed(3)}</p> : null}
+            <p className="mt-3 break-all font-mono text-[0.6875rem] text-[var(--fog)]">{entry.modelVersion} · {entry.boutRef}</p>
+          </div>)}</div> : <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-8 text-[var(--fog)]">No confirmed bout has two analysis-ready fighter cards. FightAIQ has not published a forecast.</div>}
         </div>
       </section>
 

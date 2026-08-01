@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-19d2a5ed6b582f2a7bca",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-whittaker-vs-gastelum",
+    "name": "UFC on ESPN: Whittaker vs. Gastelum",
+    "startsAtUtc": "2021-04-17T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:abdul-razak-alhassan",
+    "blue": "ufc:jacob-malkoun"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-04-17T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:53118203"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:53118203"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:53118203"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

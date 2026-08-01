@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6a1f835f191f02eb3407",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-159",
+    "name": "UFC 159",
+    "startsAtUtc": "2013-04-27T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alan-belcher",
+    "blue": "ufc:michael-bisping"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-04-27T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-01T23:30:59.810Z",
+    "lastSeenAt": "2026-08-01T23:30:59.810Z",
+    "sourceRefs": [
+      "source:wikipedia:10162012"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:10162012"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Technical Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 871,
+    "sourceRefs": [
+      "source:wikipedia:10162012"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-01T23:30:59.810Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:10162012"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-01T23:30:59.810Z"
+}

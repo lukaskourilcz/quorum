@@ -21,6 +21,7 @@
     "dev": "pnpm --filter @boardlessai/site dev",
     "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
     "fightaiq:backfill": "pnpm --filter @boardlessai/orchestrator fightaiq:backfill",
+    "fightaiq:roster-sync": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-sync",
     "ideas:migrate": "pnpm --filter @boardlessai/orchestrator ideas:migrate",
     "mma:delivery": "pnpm --filter @boardlessai/orchestrator mma:delivery",
     "lint": "pnpm -r lint",

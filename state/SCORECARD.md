@@ -13,7 +13,7 @@ are `n/a`; test examples do not count as live proof.
 | --- | --- | --- | --- |
 | Caught Up delivery cadence and healthy source breadth | HERALD | n/a | Waiting for eligible live delivery proofs |
 | MMA Files evidence-backed slot fill and rendered FightAIQ coverage | CANVAS | n/a | Waiting for eligible live article proofs |
-| FightAIQ event/fighter coverage, source agreement and readiness files | CORNER | n/a | Data-only mode remains active |
+| FightAIQ roster/bout coverage, source agreement and scored predictions | CORNER | n/a | D8 is active; current roster and calibration coverage remain incomplete |
 | Titty Tuesdays complete campaign inventory | PULSE | warm-up | Plans are validated against the campaign contract |
 | Incubator evidence-backed proposals | ANGLE | n/a | No live proposal has passed the evidence thesis |
 | Killed-slot reasons, vetoes, retries and release-proof pass rate | AUDIT | warm-up | Deterministic fixture tests pass; fixtures do not count live |

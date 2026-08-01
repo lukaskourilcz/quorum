@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DateSchema, DateTimeSchema, HttpsUrlSchema, Sha256Schema, openObject } from "./common.js";
-import { EdgeReportSchema, EventCardSchema, FighterRecordSchema, ModelRunSchema, OddsSnapshotSchema, SlipOfTenSchema, TrackRecordSchema } from "./mma.js";
+import { BoutRecordSchema, EventCardSchema, FightAiQStatsEntrySchema, FighterRecordSchema } from "./mma.js";
 import { ArticleImageSchema } from "./autonomy.js";
 
 export const ArticleFormatSchema = z.enum([
@@ -99,15 +99,12 @@ export const EditorialSlateSchema = openObject({
 });
 
 export const FightAiQDeliverySchema = openObject({
-  schemaVersion: z.literal("fightaiq-delivery/1"),
+  schemaVersion: z.literal("fightaiq-delivery/2"),
   generatedAt: DateTimeSchema,
   fighters: z.array(FighterRecordSchema),
   events: z.array(EventCardSchema),
-  odds: z.array(OddsSnapshotSchema),
-  modelRuns: z.array(ModelRunSchema),
-  edgeReports: z.array(EdgeReportSchema),
-  slips: z.array(SlipOfTenSchema),
-  trackRecord: TrackRecordSchema.nullable(),
+  bouts: z.array(BoutRecordSchema),
+  statsEntries: z.array(FightAiQStatsEntrySchema),
   packageHash: Sha256Schema
 });
 
