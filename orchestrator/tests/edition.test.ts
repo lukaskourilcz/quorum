@@ -175,6 +175,47 @@ describe("edition configuration and quality", () => {
     expect(result.report.measuredCostUsd).toBe(0.284);
   });
 
+  it("accounts for malformed tool data before regenerating", async () => {
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const malformed = structuredClone(base[1]!);
+    (malformed.value as { en: unknown }).en = "not a locale object";
+    const rewrite = structuredClone(base[1]!);
+    rewrite.usage.stage = "rewrite";
+    const result = await produceEdition(
+      await productionInput([base[0]!, malformed, rewrite, base[2]!])
+    );
+    expect(result.package.status).toBe("edition");
+    expect(result.report.usage.map((usage) => usage.stage)).toEqual([
+      "curate",
+      "write",
+      "rewrite",
+      "localize"
+    ]);
+    expect(result.report.measuredCostUsd).toBe(0.284);
+  });
+
+  it("replaces a repeated lead source in Watchlist with a verified runner-up", async () => {
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const writer = structuredClone(base[1]!);
+    const wire = (writer.value as { wire: Array<{ title: string; url: string; source: string }> }).wire;
+    wire[0] = {
+      title: "Repeated lead source",
+      url: "https://www.anthropic.com/news/example-price-update",
+      source: "anthropic-news"
+    };
+    const result = await produceEdition(
+      await productionInput([base[0]!, writer, base[2]!])
+    );
+    expect(result.package.status).toBe("edition");
+    if (result.package.status === "edition") {
+      const finalWire = result.package.article.en.frontmatter.wire ?? [];
+      expect(finalWire).toHaveLength(4);
+      expect(finalWire.map((item) => item.url)).not.toContain(
+        "https://www.anthropic.com/news/example-price-update"
+      );
+    }
+  });
+
   it("regenerates an enforced failure twice, then calls NO_EDITION", async () => {
     const config = await loadEditionQualityConfig();
     const metrics = {

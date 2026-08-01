@@ -10,6 +10,14 @@ import type {
 const EDITION_MODELS = ["claude-sonnet-4-6", "claude-opus-4-7"] as const;
 type EditionModel = (typeof EDITION_MODELS)[number];
 
+/** A billable tool call whose returned payload did not match the local contract. */
+export class InvalidModelOutputError extends Error {
+  constructor(message: string, readonly usage: EditionUsage) {
+    super(message);
+    this.name = "InvalidModelOutputError";
+  }
+}
+
 function isEditionModel(value: string): value is EditionModel {
   return EDITION_MODELS.includes(value as EditionModel);
 }
@@ -68,24 +76,29 @@ export class AnthropicEditionModelGateway implements EditionModelGateway {
     const cacheReadTokens = response.usage.cache_read_input_tokens ?? 0;
     const cacheWriteTokens = response.usage.cache_creation_input_tokens ?? 0;
     const model = request.model;
-    return {
-      value: request.parse(toolUse.input),
-      usage: {
-        provider: "anthropic",
-        model,
-        stage: request.stage,
+    const usage: EditionUsage = {
+      provider: "anthropic",
+      model,
+      stage: request.stage,
+      inputTokens,
+      outputTokens,
+      cacheReadTokens,
+      cacheWriteTokens,
+      costUsd: editionUsageCost(model, {
         inputTokens,
         outputTokens,
         cacheReadTokens,
-        cacheWriteTokens,
-        costUsd: editionUsageCost(model, {
-          inputTokens,
-          outputTokens,
-          cacheReadTokens,
-          cacheWriteTokens
-        })
-      }
+        cacheWriteTokens
+      })
     };
+    try {
+      return { value: request.parse(toolUse.input), usage };
+    } catch (error) {
+      throw new InvalidModelOutputError(
+        `${request.stage}: ${error instanceof Error ? error.message : "invalid tool output"}`,
+        usage
+      );
+    }
   }
 }
 
@@ -123,7 +136,15 @@ export class BudgetedEditionModelGateway implements EditionModelGateway {
         `Edition call reserve ${reserve.estimatedUsd} would exceed ${this.capUsd}`
       );
     }
-    const result = await this.delegate.invoke(request);
+    let result: { value: T; usage: EditionUsage };
+    try {
+      result = await this.delegate.invoke(request);
+    } catch (error) {
+      if (error instanceof InvalidModelOutputError) {
+        this.measuredUsd = Number((this.measuredUsd + error.usage.costUsd).toFixed(8));
+      }
+      throw error;
+    }
     this.measuredUsd = Number((this.measuredUsd + result.usage.costUsd).toFixed(8));
     if (this.measuredUsd > this.capUsd) {
       throw new BudgetError(

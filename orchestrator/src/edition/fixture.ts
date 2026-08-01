@@ -3,6 +3,7 @@ import type {
   EditionUsage,
   StructuredToolRequest
 } from "./types.js";
+import { InvalidModelOutputError } from "./models.js";
 
 export interface FixtureModelResponse {
   tool: string;
@@ -25,7 +26,14 @@ export class FixtureEditionModelGateway implements EditionModelGateway {
     if (response.usage.model !== request.model || response.usage.stage !== request.stage) {
       throw new Error(`Fixture usage does not match ${request.model}/${request.stage}`);
     }
-    return { value: request.parse(response.value), usage: response.usage };
+    try {
+      return { value: request.parse(response.value), usage: response.usage };
+    } catch (error) {
+      throw new InvalidModelOutputError(
+        `${request.stage}: ${error instanceof Error ? error.message : "invalid tool output"}`,
+        response.usage
+      );
+    }
   }
 
   consumed(): number {

@@ -26,6 +26,7 @@ import type {
   WrittenArticle
 } from "./types.js";
 import { InvalidArticleError, write } from "./write.js";
+import { InvalidModelOutputError } from "./models.js";
 import {
   localizeToCzech,
   parityFeedback,
@@ -162,7 +163,9 @@ export async function produceEdition(
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {
-      if (error instanceof InvalidArticleError) reporter.addUsage(error.usage);
+      if (error instanceof InvalidArticleError || error instanceof InvalidModelOutputError) {
+        reporter.addUsage(error.usage);
+      }
       reporter.warn(`content_invalid:${error instanceof Error ? error.message : "unknown"}`);
       if (attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate) {
         return noEdition(input, reporter, "content_invalid_after_regeneration");

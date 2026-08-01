@@ -215,8 +215,7 @@ function everyHttpsUrl(value: unknown): string[] {
 
 function assertSuppliedLinks(
   output: z.infer<typeof ToolOutputSchema>,
-  supplied: ReadonlySet<string>,
-  runnerUrls: ReadonlySet<string>
+  supplied: ReadonlySet<string>
 ): void {
   const emittedUrls = [
     ...markdownUrls(output.en.body_mdx),
@@ -225,10 +224,31 @@ function assertSuppliedLinks(
   ];
   const unknown = emittedUrls.find((url) => !supplied.has(url));
   if (unknown) throw new Error(`write: output cited an unsupplied URL: ${unknown}`);
-  const inventedWire = output.wire.find((item) => !runnerUrls.has(item.url));
-  if (inventedWire) {
-    throw new Error(`write: wire item was not supplied as a runner-up: ${inventedWire.url}`);
+}
+
+function verifiedWire(
+  wire: z.infer<typeof ToolOutputSchema>["wire"],
+  runnerUpItems: readonly SourceItem[]
+): z.infer<typeof ToolOutputSchema>["wire"] {
+  const runnersByUrl = new Map(runnerUpItems.map((item) => [item.url, item]));
+  const normalized: z.infer<typeof ToolOutputSchema>["wire"] = [];
+  const add = (item: z.infer<typeof ToolOutputSchema>["wire"][number]) => {
+    if (normalized.some((existing) => existing.url === item.url)) return;
+    normalized.push(item);
+  };
+  for (const item of wire) {
+    const runner = runnersByUrl.get(item.url);
+    if (runner) add(item);
   }
+  const targetCount = Math.min(6, Math.max(4, wire.length));
+  for (const runner of runnerUpItems) {
+    if (normalized.length >= targetCount) break;
+    add({ title: runner.title, url: runner.url, source: runner.sourceId });
+  }
+  if (normalized.length < 4) {
+    throw new Error("write: fewer than four verified runner-up items are available for Watchlist");
+  }
+  return normalized;
 }
 
 function sourcePacket(
@@ -278,7 +298,6 @@ export async function write(
   const pickedIds = new Set(pickedItems.map((item) => item.externalId));
   const runnerUpItems = items.filter((item) => !pickedIds.has(item.externalId));
   const suppliedUrls = new Set([...pickedItems, ...runnerUpItems].map((item) => item.url));
-  const runnerUrls = new Set(runnerUpItems.map((item) => item.url));
   const revision = feedback.length
     ? `\n\nTrusted revision requirements:\n${feedback.map((item) => `- ${item}`).join("\n")}`
     : "";
@@ -293,6 +312,8 @@ Trusted URL rules:
 - Every URL in any output field must be an exact character-for-character match from the approved list below.
 - Do not cite a publication, homepage, search result or remembered URL that is not on this list.
 - If a claim has no approved URL, omit the claim instead of adding a citation.
+- The \`en\` field must be a JSON object, never a Markdown string or serialized JSON.
+- Every Watchlist item must come from \`runnerUps\`, never from the selected lead-story sources.
 
 Approved URLs (exact strings):
 ${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
@@ -306,9 +327,11 @@ ${sourcePacket(brief, pickedItems, runnerUpItems)}`,
     parse: (value) => ToolOutputSchema.parse(value)
   });
   let slug: string;
+  let wire: z.infer<typeof ToolOutputSchema>["wire"];
   try {
     slug = normalizeArticleSlug(response.value.slug, brief.date);
-    assertSuppliedLinks(response.value, suppliedUrls, runnerUrls);
+    assertSuppliedLinks(response.value, suppliedUrls);
+    wire = verifiedWire(response.value.wire, runnerUpItems);
   } catch (error) {
     throw new InvalidArticleError(
       error instanceof Error ? error.message : "write: invalid article output",
@@ -320,7 +343,7 @@ ${sourcePacket(brief, pickedItems, runnerUpItems)}`,
     date: brief.date,
     tags: response.value.tags,
     illustrationPrompt: response.value.illustration_prompt,
-    wire: response.value.wire,
+    wire,
     sources: pickedItems.map((item) => {
       const pick = brief.picks.find((candidate) => candidate.itemId === item.externalId);
       return {
