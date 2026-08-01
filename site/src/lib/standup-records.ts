@@ -1,8 +1,8 @@
 import "server-only";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { agentById, type AgentId } from "@/data/agents";
-import { standups as fixtureStandups, type PublicStandup, type RoomTurnMode } from "@/data/fixtures";
+import { agentById, type AgentId } from "../data/agents";
+import { standups as fixtureStandups, type PublicStandup, type RoomTurnMode } from "../data/fixtures";
 
 const phases = new Set([
   "founding",
@@ -85,7 +85,7 @@ function parseTurn(value: unknown): PublicStandup["roomTranscript"]["turns"][num
   };
 }
 
-function parseRecord(value: unknown): PublicStandup | null {
+export function parsePublicStandupRecord(value: unknown): PublicStandup | null {
   const record = object(value);
   if (!record || typeof record.fixture !== "boolean") return null;
   const cycleId = text(record.cycleId, 120);
@@ -192,7 +192,15 @@ function parseRecord(value: unknown): PublicStandup | null {
     proposals.length === 5 &&
     proposals.filter((proposal) => proposal.agent === "SPARK").length === 1
   );
-  if (participants.length === 0 || !proposalCountValid || voteMatrix.length !== 4) {
+  const isIdleCheckpoint =
+    (status === "NO_ACTION" || status === "PAUSED") &&
+    participants.every((participant) => !participant.participated) &&
+    proposals.length === 0 &&
+    voteMatrix.length === 0;
+  if (
+    participants.length === 0 ||
+    (!isIdleCheckpoint && (!proposalCountValid || voteMatrix.length !== 4))
+  ) {
     return null;
   }
   return {
@@ -236,7 +244,7 @@ export async function getPublicStandups(): Promise<readonly PublicStandup[]> {
       .filter((name) => name.endsWith(".json"))
       .map(async (name) => {
         try {
-          return parseRecord(JSON.parse(await readFile(path.join(stateRoot(), name), "utf8")));
+          return parsePublicStandupRecord(JSON.parse(await readFile(path.join(stateRoot(), name), "utf8")));
         } catch {
           return null;
         }
