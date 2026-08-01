@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260801170000-mma-analysis",
+  "date": "2026-08-01",
+  "phase": "mma-analysis",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Review the fixture model run and record one concrete data improvement without publishing a probability",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "VIG",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Reviewed the versioned analysis state within the data-only gate. No probability was published.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "Dry room complete. No provider call, external action or unsupported artifact is represented.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "SIGMA records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "VIG",
+      "summary": "VIG records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "TAPE",
+      "summary": "TAPE records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "PIVOT",
+      "summary": "PIVOT records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "AUDIT records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "VIG",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "PIVOT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "Dry review found no new source-backed change to propose today.",
+    "evidenceRefs": []
+  },
+  "generatedAt": "2026-08-01T17:07:00.000Z",
+  "kind": "mma-analysis",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T17:00:00.000Z",
+    "closedAt": "2026-08-01T17:07:00.000Z",
+    "gavel": "FORGE",
+    "setting": "Deterministic dry portfolio room; no provider call or external action is represented.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T17:00:00.000Z",
+        "text": "Review the fixture model run and record one concrete data improvement without publishing a probability"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-01T17:01:00.000Z",
+        "text": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "statement",
+        "sentAt": "2026-08-01T17:02:00.000Z",
+        "text": "SIGMA records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "VIG",
+        "mode": "statement",
+        "sentAt": "2026-08-01T17:03:00.000Z",
+        "text": "VIG records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-01T17:04:00.000Z",
+        "text": "TAPE records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "PIVOT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T17:05:00.000Z",
+        "text": "PIVOT records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T17:06:00.000Z",
+        "text": "AUDIT records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-01T17:07:00.000Z",
+        "text": "Reviewed the versioned analysis state within the data-only gate. No probability was published."
+      }
+    ]
+  }
+}

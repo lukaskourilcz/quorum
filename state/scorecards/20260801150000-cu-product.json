@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": true,
+  "cycleId": "20260801150000-cu-product",
+  "phase": "cu-product",
+  "estimatedWorstCaseUsd": 0.03,
+  "actualUsd": 0,
+  "participants": [
+    "HERALD",
+    "SPARK",
+    "VAULT",
+    "AUDIT"
+  ],
+  "ideaId": "idea-2026-08-01-c3826574",
+  "vaultScreening": "VAULT hard stop: exact fingerprint match to idea-2026-07-23-84db654b",
+  "generatedAt": "2026-08-01T15:00:04.000Z"
+}

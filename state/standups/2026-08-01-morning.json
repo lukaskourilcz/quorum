@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260801040000-morning",
+  "date": "2026-08-01",
+  "phase": "morning",
+  "episode": {
+    "id": "EP-20260801-MORNING",
+    "shift": "morning",
+    "title": "Morning briefing",
+    "hours": "06:00–14:00",
+    "nextShift": "afternoon",
+    "handoff": "Pass priorities, evidence gaps and blocked work to the afternoon shift."
+  },
+  "fixture": true,
+  "status": "NO_ACTION",
+  "stage": "VALIDATION",
+  "operatingBrief": "Morning shift reviewed its bounded objective and prepared the next handoff.",
+  "participantReasons": [
+    {
+      "agent": "VIZE",
+      "reason": "owns council objective",
+      "participated": true
+    },
+    {
+      "agent": "FORGE",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "PULSE",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "SPARK",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HERALD",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VAULT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FRAME",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RELAY",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FUNNEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PALATE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCENE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STUNT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CANVAS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "REACH",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPLIT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.036254,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No externally consequential action was approved.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "VIZE",
+      "summary": "NO_ACTION until a bounded evidence-backed task exists.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "FORGE",
+      "summary": "NO_ACTION until a bounded evidence-backed task exists.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "PULSE",
+      "summary": "NO_ACTION until a bounded evidence-backed task exists.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Hold the evidence and budget gates.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SPARK",
+      "summary": "Reader source-confidence cue: Show a compact source-independence and correction cue beside each Caught Up edition.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "VIZE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    },
+    {
+      "voter": "FORGE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    },
+    {
+      "voter": "PULSE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260801040000-morning-001",
+      "owner": "SCOUT",
+      "summary": "Collect attributable signals and record the evidence gaps.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "NO_POST — there is no evidence-backed venture fact to distribute.",
+  "eveningOutcome": null,
+  "caughtUpIdeaRef": "idea-2026-08-01-c3826574",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T04:00:00.000Z",
+    "closedAt": "2026-08-01T04:00:02.000Z",
+    "gavel": "VIZE",
+    "setting": "Deterministic offline fixture. No live council call occurred.",
+    "turns": [
+      {
+        "agent": "VIZE",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T04:00:00.000Z",
+        "text": "This fixture opens a deterministic review. No live agent position is being presented."
+      },
+      {
+        "agent": "LEDGER",
+        "mode": "reads-ledger",
+        "sentAt": "2026-08-01T04:00:02.000Z",
+        "text": "Recorded estimate: $0.0363. No paid API call occurred."
+      },
+      {
+        "agent": "SPARK",
+        "mode": "statement",
+        "sentAt": "2026-08-01T04:00:02.000Z",
+        "text": "Reader source-confidence cue. VAULT recorded duplicate_of; carry idea-2026-08-01-c3826574 to the product room.",
+        "evidenceRefs": [
+          "idea-2026-08-01-c3826574"
+        ]
+      }
+    ]
+  },
+  "generatedAt": "2026-08-01T04:00:00.000Z"
+}

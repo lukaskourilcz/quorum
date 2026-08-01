@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260801070000-mag-editorial",
+  "date": "2026-08-01",
+  "phase": "mag-editorial",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Account for both article slots from fixtures, reject repeated or unsupported subjects and record an honest EditorialSlate",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: assigned",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Dry room complete. No provider call, external action or unsupported artifact is represented.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "JAB",
+      "summary": "JAB records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "QUILL",
+      "summary": "QUILL records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "AUDIT records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "NEWSROOM_ONLY. Articles and social variants stay in the private owner desk; no public magazine route or automatic posting is authorized.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-01.json",
+  "generatedAt": "2026-08-01T07:05:00.000Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T07:00:00.000Z",
+    "closedAt": "2026-08-01T07:05:00.000Z",
+    "gavel": "CANVAS",
+    "setting": "Deterministic dry portfolio room; no provider call or external action is represented.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T07:00:00.000Z",
+        "text": "Account for both article slots from fixtures, reject repeated or unsupported subjects and record an honest EditorialSlate"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "statement",
+        "sentAt": "2026-08-01T07:01:00.000Z",
+        "text": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-01T07:02:00.000Z",
+        "text": "JAB records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-08-01T07:03:00.000Z",
+        "text": "QUILL records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T07:04:00.000Z",
+        "text": "AUDIT records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-01T07:05:00.000Z",
+        "text": "AM: assigned; PM: assigned"
+      }
+    ]
+  }
+}

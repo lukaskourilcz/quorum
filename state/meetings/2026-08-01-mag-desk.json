@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260801180000-mag-desk",
+  "date": "2026-08-01",
+  "phase": "mag-desk",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Review both fixture slots, the draft queue and the evidence-linked bridge without pretending an article was published",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "REACH",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "The bounded room recorded no action.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Dry room complete. No provider call, external action or unsupported artifact is represented.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "JAB",
+      "summary": "JAB records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "REACH",
+      "summary": "REACH records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "PIVOT",
+      "summary": "PIVOT records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "AUDIT records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "REACH",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "PIVOT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "NEWSROOM_ONLY. Articles and social variants stay in the private owner desk; no public magazine route or automatic posting is authorized.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-01T18:06:00.000Z",
+  "kind": "mag-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T18:00:00.000Z",
+    "closedAt": "2026-08-01T18:06:00.000Z",
+    "gavel": "CANVAS",
+    "setting": "Deterministic dry portfolio room; no provider call or external action is represented.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T18:00:00.000Z",
+        "text": "Review both fixture slots, the draft queue and the evidence-linked bridge without pretending an article was published"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "statement",
+        "sentAt": "2026-08-01T18:01:00.000Z",
+        "text": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-01T18:02:00.000Z",
+        "text": "JAB records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "REACH",
+        "mode": "statement",
+        "sentAt": "2026-08-01T18:03:00.000Z",
+        "text": "REACH records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "PIVOT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T18:04:00.000Z",
+        "text": "PIVOT records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T18:05:00.000Z",
+        "text": "AUDIT records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-01T18:06:00.000Z",
+        "text": "The bounded room recorded no action."
+      }
+    ]
+  }
+}

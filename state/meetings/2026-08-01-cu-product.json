@@ -1,0 +1,306 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260801150000-cu-product",
+  "date": "2026-08-01",
+  "phase": "cu-product",
+  "fixture": true,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Review the morning Caught Up idea and record a bounded ledger verdict.",
+  "participantReasons": [
+    {
+      "agent": "HERALD",
+      "reason": "owns product objective",
+      "participated": true
+    },
+    {
+      "agent": "SPARK",
+      "reason": "required by product-room preset",
+      "participated": true
+    },
+    {
+      "agent": "VAULT",
+      "reason": "required by product-room preset",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "required by product-room preset",
+      "participated": true
+    },
+    {
+      "agent": "VIZE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FORGE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PULSE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FRAME",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RELAY",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FUNNEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PALATE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCENE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STUNT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CANVAS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "REACH",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPLIT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.03,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "veto",
+    "summary": "Veto the duplicate fixture idea before deliberation.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "SPARK",
+      "summary": "Reader source-confidence cue: Show a compact source-independence and correction cue beside each Caught Up edition.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "HERALD",
+      "firstChoice": "veto:idea-2026-08-01-c3826574",
+      "veto": false
+    },
+    {
+      "voter": "SPARK",
+      "firstChoice": "veto:idea-2026-08-01-c3826574",
+      "veto": false
+    },
+    {
+      "voter": "VAULT",
+      "firstChoice": "veto:idea-2026-08-01-c3826574",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto:idea-2026-08-01-c3826574",
+      "veto": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260801150000-cu-product-LEDGER",
+      "owner": "VAULT",
+      "summary": "Record the dry defer verdict without reviving or accepting an idea.",
+      "status": "done"
+    }
+  ],
+  "growthPlan": "NO_POST. Product-room fixtures do not authorize public distribution.",
+  "eveningOutcome": "The product room recorded a dry veto verdict.",
+  "caughtUpIdeaRef": "idea-2026-08-01-c3826574",
+  "ideaVerdicts": [
+    {
+      "ideaId": "idea-2026-08-01-c3826574",
+      "verdict": "veto",
+      "reason": "VAULT hard-stopped the morning idea before deliberation."
+    }
+  ],
+  "generatedAt": "2026-08-01T15:00:04.000Z",
+  "kind": "cu-product",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T15:00:00.000Z",
+    "closedAt": "2026-08-01T15:00:04.000Z",
+    "gavel": "HERALD",
+    "setting": "Deterministic product-room fixture. No live idea or agent call is represented.",
+    "turns": [
+      {
+        "agent": "HERALD",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T15:00:00.000Z",
+        "text": "The product room is open for the one VAULT-screened fixture handoff."
+      },
+      {
+        "agent": "SPARK",
+        "mode": "statement",
+        "sentAt": "2026-08-01T15:00:01.000Z",
+        "text": "Reader source-confidence cue. Keep the fixture bounded and record no external action.",
+        "evidenceRefs": [
+          "idea-2026-08-01-c3826574"
+        ]
+      },
+      {
+        "agent": "VAULT",
+        "mode": "reads-ledger",
+        "sentAt": "2026-08-01T15:00:02.000Z",
+        "text": "The compact index records the handoff as vetoed; the raw ledger is not meeting context.",
+        "evidenceRefs": [
+          "idea-2026-08-01-c3826574"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "vote",
+        "sentAt": "2026-08-01T15:00:03.000Z",
+        "text": "Record the VAULT hard stop. The room cannot accept an evidence-free duplicate."
+      },
+      {
+        "agent": "HERALD",
+        "mode": "close",
+        "sentAt": "2026-08-01T15:00:04.000Z",
+        "text": "Veto recorded. The room closes without external action."
+      }
+    ]
+  }
+}

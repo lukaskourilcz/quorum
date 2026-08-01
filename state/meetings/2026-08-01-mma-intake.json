@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260801060000-mma-intake",
+  "date": "2026-08-01",
+  "phase": "mma-intake",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC, KSW and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SONAR",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "Dry room complete. No provider call, external action or unsupported artifact is represented.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "CORNER",
+      "summary": "CORNER records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "SPOTTER records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "TAPE",
+      "summary": "TAPE records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SONAR",
+      "summary": "SONAR records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "CORNER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SONAR",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "Dry review found no new source-backed change to propose today.",
+    "evidenceRefs": []
+  },
+  "generatedAt": "2026-08-01T06:06:00.000Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T06:00:00.000Z",
+    "closedAt": "2026-08-01T06:06:00.000Z",
+    "gavel": "FORGE",
+    "setting": "Deterministic dry portfolio room; no provider call or external action is represented.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T06:00:00.000Z",
+        "text": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC, KSW and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-01T06:01:00.000Z",
+        "text": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      },
+      {
+        "agent": "CORNER",
+        "mode": "statement",
+        "sentAt": "2026-08-01T06:02:00.000Z",
+        "text": "CORNER records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-01T06:03:00.000Z",
+        "text": "SPOTTER records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-01T06:04:00.000Z",
+        "text": "TAPE records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "SONAR",
+        "mode": "statement",
+        "sentAt": "2026-08-01T06:05:00.000Z",
+        "text": "SONAR records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-01T06:06:00.000Z",
+        "text": "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-01",
+  "slots": [
+    {
+      "slot": "am",
+      "format": "fight-week-preview",
+      "subjectRefs": [
+        "ufc:event:fixture-prague"
+      ],
+      "rationale": "The verified event is three days away and needs one sourced preview.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "fighter-profile",
+      "subjectRefs": [
+        "ksw:ewa-example"
+      ],
+      "rationale": "The fighter file is complete enough for a useful introduction.",
+      "assignedWriter": "QUILL",
+      "status": "assigned"
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "ufc:event:fixture-prague",
+      "verdict": "fresh",
+      "evidenceRef": "state/ideas/mma-files/ledger.jsonl#1"
+    },
+    {
+      "subjectRef": "ksw:ewa-example",
+      "verdict": "fresh",
+      "evidenceRef": "state/ideas/mma-files/ledger.jsonl#2"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": true,
+  "cycleId": "20260801030000-cu-edition",
+  "phase": "cu-edition",
+  "estimatedWorstCaseUsd": 0.08,
+  "actualUsd": 0,
+  "participants": [
+    "HERALD",
+    "STET",
+    "HACEK",
+    "SPARK",
+    "AUDIT"
+  ],
+  "generatedAt": "2026-08-01T03:00:05.000Z"
+}
