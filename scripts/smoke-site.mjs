@@ -113,7 +113,7 @@ if (!homepage) {
   if (homepage.response.headers.get("x-content-type-options") !== "nosniff") {
     failures.push("/: missing X-Content-Type-Options");
   }
-  if (!homepage.body.includes("autonomous software roles, not human employees")) {
+  if (!homepage.body.includes("They are software roles, not people.")) {
     failures.push("/: missing required agent disclosure");
   }
 }
