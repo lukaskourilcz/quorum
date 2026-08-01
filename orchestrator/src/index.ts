@@ -1,5 +1,9 @@
 import "./env.js";
+import { BudgetError } from "./budget.js";
 import { runCycle } from "./cycle.js";
+import { pragueClockParts } from "./meetings/clock.js";
+import { stateRoot } from "./paths.js";
+import { atomicWriteJson, readJson } from "./state.js";
 import { RunnablePhaseSchema, type RunnablePhase } from "./types.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
@@ -27,7 +31,14 @@ async function main(): Promise<void> {
   console.log(JSON.stringify(result, null, 2));
 }
 
-main().catch((error: unknown) => {
+main().catch(async (error: unknown) => {
+  if (error instanceof BudgetError && error.code === "DAILY_CAP" && !process.argv.includes("--dry")) {
+    const existing = await readJson<{ dates?: string[] }>(stateRoot, "budget/exhaustions.json", {});
+    await atomicWriteJson(stateRoot, "budget/exhaustions.json", {
+      schemaVersion: 1,
+      dates: [...new Set([...(existing.dates ?? []), pragueClockParts(new Date()).date])].sort()
+    });
+  }
   const message = error instanceof Error ? error.message : String(error);
   console.error(JSON.stringify({ status: "failed", error: message }, null, 2));
   process.exitCode = 1;

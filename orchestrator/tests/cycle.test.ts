@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { runCycle } from "../src/cycle.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import { EditorialSlateSchema } from "../src/contracts/mma-files.js";
 import { repoRoot } from "../src/paths.js";
 import {
   PhaseSchema,
@@ -177,6 +178,13 @@ describe("cycle preflight", () => {
         const record = MeetingRecordSchema.parse(JSON.parse(await readFile(path.join(repoRoot, `tmp/dry-run/state/meetings/2026-08-04-${fixture.phase}.json`), "utf8")));
         expect(record.kind).toBe(fixture.phase);
         expect(record.roomTranscript.gavel).toBe("CANVAS");
+        if (fixture.phase === "mag-editorial") {
+          expect(record.editorialSlateRef).toBe("ventures/mma-files/slates/2026-08-04.json");
+          expect(EditorialSlateSchema.parse(JSON.parse(await readFile(
+            path.join(repoRoot, "tmp/dry-run/state/ventures/mma-files/slates/2026-08-04.json"),
+            "utf8"
+          ))).date).toBe("2026-08-04");
+        }
       } else {
         expect(result.artifacts).toEqual(expect.arrayContaining([
           expect.stringMatching(new RegExp(`articles/2026-08-04-${fixture.phase === "article-am" ? "am" : "pm"}-`)),

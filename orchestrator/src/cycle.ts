@@ -72,6 +72,7 @@ import {
 import type { RunnablePhase, Stage } from "./types.js";
 import { runPortfolioCycle } from "./portfolio/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
+import { runLiveArticleProduction } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 
 export interface CycleOptions {
@@ -782,7 +783,22 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       ) {
         return { cycleId, phase: options.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
       }
-      throw new Error("Live MMA Files writing needs the configured guarded editorial gateway");
+      const result = await runLiveArticleProduction({
+        cycleId,
+        slot: options.phase === "article-am" ? "am" : "pm",
+        now
+      });
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: false,
+        status: "live_complete",
+        decision: "PLAN",
+        estimatedWorstCaseUsd: result.estimatedWorstCaseUsd,
+        selectedAgents: result.status === "killed" ? [] : ["JAB", "HACEK", "STET", "REACH", "FRAME"],
+        skippedAgents: [],
+        artifacts: result.artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
+      };
     }
     const root = path.join(repoRoot, "tmp", "dry-run", "state");
     const result = await runDryArticleProduction({ root, slot: options.phase === "article-am" ? "am" : "pm", now });

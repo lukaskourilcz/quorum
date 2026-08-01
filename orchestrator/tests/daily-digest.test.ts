@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import { allInBudgetStatus } from "../src/finance/budget-alert.js";
 import { loadMeetingRecords, mondayOfWeek } from "../src/meetings/calendar.js";
 import {
   buildDailyDigest,
@@ -55,6 +56,24 @@ describe("one daily portfolio digest", () => {
     const final = digest.meetings.at(-1)!;
     expect(final.held).toBe(false);
     expect(final.bullets[0]?.text).toContain("Final scheduled cycle failed");
+  });
+
+  it("replaces the narrow API line with an all-in warning and project breakdown at 80 percent", async () => {
+    const base = await fixtureDigest();
+    const registry = await loadVentureRegistry();
+    const digest = buildDailyDigest({
+      date: base.date,
+      weekOf: mondayOfWeek(base.date),
+      records: [],
+      schedule: resolveScheduledClock(registry),
+      dailyBudgetUsd: 2.2,
+      allInBudget: allInBudgetStatus([
+        { at: "2026-08-01T08:00:00.000Z", ventureId: "caught-up", category: "model", usd: 20, ref: "a" },
+        { at: "2026-08-01T09:00:00.000Z", ventureId: "mma-files", category: "service", usd: 20, ref: "b" }
+      ], "2026-08", 50)
+    });
+    expect(digest.portfolioLine).toContain("All-in warning: $40.00 of $50.00 used");
+    expect(digest.portfolioLine).toContain("mma-files: $20.00");
   });
 
   it("compresses once and then truncates a still-oversized 401-word draft with the rooms link", async () => {

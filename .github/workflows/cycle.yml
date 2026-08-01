@@ -22,6 +22,14 @@ on:
     - cron: "0 7 * * *"
     - cron: "0 17 * * *"
     - cron: "0 18 * * *"
+    - cron: "0 7 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 9 * * *"
+    - cron: "0 16 * * *"
+    - cron: "0 17 * * *"
+    - cron: "0 18 * * *"
+    - cron: "0 19 * * *"
   workflow_dispatch:
     inputs:
       phase:
@@ -38,7 +46,11 @@ on:
           - incubator-scan
           - incubator-synthesis
           - mma-intake
+          - mag-editorial
+          - article-am
+          - article-pm
           - mma-analysis
+          - mag-desk
           - night
       dry:
         description: Never call paid APIs or write canonical state
@@ -117,6 +129,7 @@ jobs:
           PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
           FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
           FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
+          MMA_FILES_LIVE_ENABLED: ${{ vars.MMA_FILES_LIVE_ENABLED }}
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
@@ -132,7 +145,7 @@ jobs:
             dry=true
             echo "The inactive DST cron variant has no Prague wall-clock meeting."
           fi
-          if test "$EVENT_NAME" = "schedule" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis"; }; then
+          if test "$EVENT_NAME" = "schedule" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
               echo "Portfolio meeting crons await explicit owner approval."
@@ -141,13 +154,19 @@ jobs:
               enabled="$(printf '%s' "$schedule_json" | jq -r '.enabled')"
               monthly_budget="$(printf '%s' "$schedule_json" | jq -r '.monthlyBudgetUsd')"
               daily_budget="$(printf '%s' "$schedule_json" | jq -r '.dailyBudgetUsd')"
+              monthly_operating="$(printf '%s' "$schedule_json" | jq -r '.monthlyOperatingUsd')"
               echo "MONTHLY_BUDGET_USD=$monthly_budget" >> "$GITHUB_ENV"
               echo "DAILY_BUDGET_USD=$daily_budget" >> "$GITHUB_ENV"
+              echo "MONTHLY_OPERATING_CAP_USD=$monthly_operating" >> "$GITHUB_ENV"
               if test "$enabled" = "false"; then
                 skip=true
                 echo "The countersign-aware budget shape disabled this phase."
               fi
             fi
+          fi
+          if test "$EVENT_NAME" = "schedule" && { test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
+            skip=true
+            echo "MMA Files awaits the 08d countersign and explicit live gate."
           fi
           if test "$EVENT_NAME" = "schedule" && test "$phase" = "mma-intake" && test "$FIGHTAIQ_LIVE_ENABLED" != "true"; then
             skip=true
@@ -216,6 +235,10 @@ jobs:
           if test "$CYCLE_FAILED" = "true"; then args+=(--final-failed); fi
           pnpm digest:daily -- "${args[@]}"
 
+      - name: Send a one-time hard-limit alert when needed
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        run: pnpm budget:alert
+
       - name: Fail closed after recording the final-cycle failure
         if: ${{ steps.mode.outputs.skip != 'true' && steps.run.outputs.failed == 'true' }}
         run: exit 1
@@ -249,7 +272,7 @@ jobs:
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add config/visual-weights state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/notify state/social state/taste state/ventures state/INBOX.md site/public/social
+          git add config/visual-weights state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/mma state/notify state/social state/taste state/ventures state/INBOX.md site/public/social
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0

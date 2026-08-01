@@ -10,6 +10,7 @@ import {
 } from "../budget.js";
 import { loadRoutingConfig, routeBoardroom } from "../boardroom/router.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
+import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { NicheProposalSchema, type NicheProposal } from "../contracts/niche-proposal.js";
 import { guardedJsonCall } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
@@ -38,7 +39,8 @@ const ContributionSchema = z.object({
   summary: z.string().trim().min(1).max(280),
   evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12),
   task: z.object({ summary: z.string().trim().min(1).max(240) }).nullable(),
-  nicheProposals: z.array(z.unknown()).max(2).default([])
+  nicheProposals: z.array(z.unknown()).max(2).default([]),
+  editorialSlate: z.unknown().nullable().default(null)
 }).superRefine((value, context) => {
   if (/(?:\d|%|\$|€|£)/.test(value.summary) && value.evidenceRefs.length === 0) {
     context.addIssue({ code: "custom", message: "Numeric contribution claims require evidenceRefs", path: ["evidenceRefs"] });
@@ -76,7 +78,7 @@ function modelFor(
       : "OPENAI_SPECIALIST";
   const model = models[role];
   if (!model || provider === "deterministic") throw new Error(`No live text model for ${agent}`);
-  return { ...model, maxOutputTokens: agent === "ANGLE" ? Math.min(700, model.maxOutputTokens) : Math.min(260, model.maxOutputTokens) };
+  return { ...model, maxOutputTokens: agent === "ANGLE" || agent === "CANVAS" ? Math.min(700, model.maxOutputTokens) : Math.min(260, model.maxOutputTokens) };
 }
 
 function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd: number; monthlyOperatingUsd: number }): BudgetLimits {
@@ -112,6 +114,7 @@ function buildRecord(input: {
   contributions: readonly Contribution[];
   fixture: boolean;
   proposals: readonly NicheProposal[];
+  editorialSlate: EditorialSlate | null;
 }): MeetingRecord {
   const isFightDesk = input.phase === "mma-intake" || input.phase === "mma-analysis";
   const isMagazine = input.phase === "mag-editorial" || input.phase === "mag-desk";
@@ -124,6 +127,8 @@ function buildRecord(input: {
       ? input.phase === "mma-intake"
         ? "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability."
         : "Reviewed the versioned analysis state within the data-only gate. No probability was published."
+    : input.phase === "mag-editorial" && input.editorialSlate
+      ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
     : input.phase === "incubator-synthesis"
       ? input.proposals.length
         ? `Recorded ${input.proposals.length} evidenced niche proposal${input.proposals.length === 1 ? "" : "s"} for owner rating. No founding action is authorized.`
@@ -147,6 +152,7 @@ function buildRecord(input: {
     tasks: input.contributions.flatMap((contribution, index) => contribution.task ? [{ id: `TASK-${input.cycleId.toUpperCase()}-${String(index + 1).padStart(2, "0")}`, owner: contribution.agent, summary: contribution.task.summary, status: "planned" as const }] : []),
     growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "NEWSROOM_ONLY. Articles and social variants stay in the private owner desk; no public magazine route or automatic posting is authorized." : "RESEARCH_ONLY. A shortlist does not authorize founding, spend or external action.",
     eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
+    ...(input.editorialSlate ? { editorialSlateRef: `ventures/mma-files/slates/${input.date}.json` } : {}),
     ...(isFightDesk ? { sharperData: {
       outcome: "nothing-new" as const,
       summary: input.fixture ? "Dry review found no new source-backed change to propose today." : "The room found no new source-backed change that cleared the proposal bar today.",
@@ -288,14 +294,14 @@ export async function runPortfolioCycle(input: {
   let estimatedWorstCaseUsd = 0;
   if (input.dry) {
     const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
-    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [] }));
+    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null }));
   } else {
     const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[]}. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis.`;
+      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null|{"schemaVersion":"editorial-slate/1","date":"YYYY-MM-DD","slots":[...],"vaultVerdicts":[...]}}. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM slot; kill a slot when its source-backed subject is missing or repeated.`;
       const prompt = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({ phase: input.phase, objective: definition.objective, allowedEvidenceRefs: context.evidenceRefs, context: context.text }));
       const estimate = estimateTextCall({ provider: model.provider, model: model.model, promptChars: system.length + prompt.length, maxOutputTokens: model.maxOutputTokens, at: input.now });
       return { agent, model, system, prompt, estimate };
@@ -331,24 +337,48 @@ export async function runPortfolioCycle(input: {
   const proposals = proposalCandidates.map((proposal) => NicheProposalSchema.parse(proposal))
     .filter((proposal) => proposal.evidenceRefs.length > 0 && proposal.evidenceRefs.every((reference) => context.evidenceRefs.includes(reference)))
     .slice(0, 2);
+  let editorialSlate: EditorialSlate | null = null;
+  if (input.phase === "mag-editorial") {
+    if (input.dry) {
+      const fixture = JSON.parse(await readFile(path.join(repoRoot, "contracts", "fixtures", "editorial-slate.valid.json"), "utf8")) as Record<string, unknown>;
+      editorialSlate = EditorialSlateSchema.parse({ ...fixture, date });
+    } else {
+      const candidate = contributions.find((contribution) => contribution.agent === "CANVAS")?.editorialSlate;
+      const parsed = EditorialSlateSchema.safeParse(candidate);
+      editorialSlate = parsed.success ? parsed.data : EditorialSlateSchema.parse({
+        schemaVersion: "editorial-slate/1",
+        date,
+        slots: [
+          { slot: "am", format: "desk-notes", subjectRefs: [`missing:${date}:am`], rationale: "No new source-backed subject cleared the desk before the morning cutoff.", assignedWriter: "JAB", status: "killed", killedReason: "Missing fresh, source-backed subject." },
+          { slot: "pm", format: "desk-notes", subjectRefs: [`missing:${date}:pm`], rationale: "No new source-backed subject cleared the desk before the evening cutoff.", assignedWriter: "QUILL", status: "killed", killedReason: "Missing fresh, source-backed subject." }
+        ],
+        vaultVerdicts: [
+          { subjectRef: `missing:${date}:am`, verdict: "repeat", evidenceRef: `meeting:${date}-mag-editorial` },
+          { subjectRef: `missing:${date}:pm`, verdict: "repeat", evidenceRef: `meeting:${date}-mag-editorial` }
+        ]
+      });
+    }
+  }
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
   const monthAllInUsd = actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: definition.objective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, proposals });
+  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: definition.objective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, proposals, editorialSlate });
   const meetingPath = `meetings/${date}-${input.phase}.json`;
   const decisionPath = `decisions/${input.cycleId}.json`;
   const scorecardPath = `scorecards/${input.cycleId}.json`;
   const priorRecords = await loadMeetingRecords(root);
   const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({ weekOf: mondayOfWeek(date), records: [...priorRecords, record], now: input.now }));
   const proposalPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.json`);
+  const editorialSlatePath = editorialSlate ? `ventures/mma-files/slates/${date}.json` : null;
   await Promise.all([
     atomicWriteJson(root, meetingPath, record),
     atomicWriteJson(root, decisionPath, { schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: input.phase, outcome: record.decision.outcome, summary: record.decision.summary, evidenceRefs: record.decision.evidenceRefs, generatedAt: record.generatedAt }),
     atomicWriteJson(root, scorecardPath, { schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: input.phase, estimatedWorstCaseUsd, actualUsd: actualCycleUsd, participants: selected, generatedAt: record.generatedAt }),
+    ...(editorialSlatePath && editorialSlate ? [atomicWriteJson(root, editorialSlatePath, editorialSlate)] : []),
     ...proposals.map((proposal, index) => atomicWriteJson(root, proposalPaths[index]!, proposal))
   ]);
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

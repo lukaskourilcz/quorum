@@ -509,6 +509,11 @@
           "minLength": 1,
           "maxLength": 160
         },
+        "editorialSlateRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
         "sharperData": {
           "type": "object",
           "properties": {
@@ -1286,6 +1291,11 @@
           }
         },
         "editionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "editorialSlateRef": {
           "type": "string",
           "minLength": 1,
           "maxLength": 160

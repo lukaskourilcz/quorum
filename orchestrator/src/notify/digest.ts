@@ -8,6 +8,7 @@ import type { MeetingRecord } from "../contracts/meeting-record.js";
 import type { ResolvedMeetingSlot } from "../ventures/registry.js";
 import { safeFetch } from "../security/url.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
+import { budgetWarningLine, type AllInBudgetStatus } from "../finance/budget-alert.js";
 
 const REQUIRED_DIGESTS_PER_MONTH = 31;
 const REQUIRED_DIGESTS_PER_DAY = 1;
@@ -44,6 +45,7 @@ export function buildDailyDigest(input: {
   records: readonly MeetingRecord[];
   schedule: readonly ResolvedMeetingSlot[];
   dailyBudgetUsd: number;
+  allInBudget?: AllInBudgetStatus;
   finalMeetingFailed?: boolean;
 }): DailyDigest {
   const meetings = input.schedule.map((slot, index) => {
@@ -67,7 +69,8 @@ export function buildDailyDigest(input: {
     };
   });
   const spend = meetings.reduce((sum, meeting) => sum + meeting.costUsd, 0);
-  const portfolioLine = `Recorded API spend $${spend.toFixed(4)} against the $${input.dailyBudgetUsd.toFixed(2)} daily budget.`;
+  const warning = input.allInBudget ? budgetWarningLine(input.allInBudget) : null;
+  const portfolioLine = warning ?? `Recorded API spend $${spend.toFixed(4)} against the $${input.dailyBudgetUsd.toFixed(2)} daily budget.`;
   const bodyWordCount = countWords(portfolioLine) + meetings.reduce(
     (sum, meeting) => sum + meeting.bullets.reduce((total, bullet) => total + countWords(bullet.text), 0),
     0

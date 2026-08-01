@@ -7,7 +7,8 @@ import { loadVentureRegistry } from "../ventures/registry.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
-  resolveEffectivePortfolioSchedule
+  resolveEffectivePortfolioSchedule,
+  signedOwnerDecision
 } from "./schedule.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
@@ -18,9 +19,12 @@ function valueAfter(args: string[], flag: string): string | undefined {
 const args = process.argv.slice(2);
 const phase = ScheduledPhaseSchema.parse(valueAfter(args, "--phase"));
 const now = new Date(valueAfter(args, "--at") ?? Date.now());
-const [registry, decisionRaw, ledgerRaw] = await Promise.all([
+const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, ledgerRaw] = await Promise.all([
   loadVentureRegistry(),
   readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
+  readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
+  readFile(path.join(stateRoot, "decisions", "2026-08-04-budget-fifty.md"), "utf8"),
+  readFile(path.join(stateRoot, "decisions", "2026-08-02-fightaiq-founding.md"), "utf8"),
   readFile(path.join(stateRoot, "budget", "ledger.json"), "utf8")
 ]);
 const month = new Intl.DateTimeFormat("en-CA", {
@@ -33,10 +37,13 @@ const entries = (parsedLedger.entries ?? []).map((entry) => BudgetLedgerEntrySch
 const spent = entries
   .filter((entry) => entry.ts.slice(0, 7) === month)
   .reduce((sum, entry) => sum + entry.usd, 0);
-const provisionalCap = budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
+const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned" ? 42 : budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
 const schedule = resolveEffectivePortfolioSchedule({
   registry,
   budgetDecisionRaw: decisionRaw,
+  budgetMmaRaw,
+  budgetFiftyRaw,
+  fightAiQFoundingRaw,
   monthlyApiHeadroomUsd: Math.max(0, provisionalCap - spent)
 });
 const output = {
@@ -55,6 +62,7 @@ if (args.includes("--github-output")) {
     `envelope_usd=${output.envelopeUsd}`,
     `monthly_budget_usd=${output.monthlyBudgetUsd}`,
     `daily_budget_usd=${output.dailyBudgetUsd}`,
+    `monthly_operating_usd=${output.monthlyOperatingUsd}`,
     `tt_transcript_mode=${output.ttTranscriptMode}`,
     ""
   ].join("\n"));

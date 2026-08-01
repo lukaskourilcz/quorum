@@ -105,6 +105,7 @@ const CommonFields = {
     reason: z.string().trim().min(1).max(280)
   })).optional(),
   editionRef: MeetingRefSchema.optional(),
+  editorialSlateRef: MeetingRefSchema.optional(),
   sharperData: openObject({
     outcome: z.enum(["proposal", "nothing-new"]),
     summary: z.string().trim().min(1).max(280),
