@@ -4,12 +4,14 @@ import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
 import { calendarStaticWeeks } from "@/lib/calendar-feed-model";
+import { getPublicFighters } from "@/lib/fightaiq-records";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getPublicSiteUrl();
-  const [standups, meetings] = await Promise.all([
+  const [standups, meetings, fighters] = await Promise.all([
     getPublicStandups(),
-    getPublicMeetingRecords()
+    getPublicMeetingRecords(),
+    getPublicFighters()
   ]);
   const updated = new Date("2026-07-23T05:30:00.000Z");
   const core = [
@@ -20,6 +22,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/agents",
     "/ventures",
     "/ventures/caught-up",
+    "/ventures/fightaiq",
+    "/ventures/fightaiq/upcoming",
+    "/fighters",
     "/ideas",
     "/metrics",
     "/log",
@@ -39,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${base}/agents/${agent.slug}`,
       lastModified: updated,
       changeFrequency: "monthly" as const,
+      priority: 0.6
+    })),
+    ...fighters.fighters.map((fighter) => ({
+      url: `${base}/fighters/${fighter.org}/${fighter.slug}`,
+      lastModified: new Date(fighter.updatedAt),
+      changeFrequency: "weekly" as const,
       priority: 0.6
     })),
     ...standups.filter((standup) => !standup.fixture).map((standup) => ({

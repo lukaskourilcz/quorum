@@ -1,7 +1,7 @@
 import { agentById, type AgentId } from "../data/agents";
 import type { RoomTranscript, RoomTurnMode } from "../data/fixtures";
 
-export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "incubator-scan" | "incubator-synthesis";
+export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis";
 export type PublicMeetingStatus =
   | "PLAN"
   | "PAUSED"
@@ -44,6 +44,7 @@ export interface PublicMeetingRecord {
     reason: string;
   }>;
   editionRef?: string;
+  sharperData?: { outcome: "proposal" | "nothing-new"; summary: string; ideaRef?: string; evidenceRefs: string[] };
   roomTranscript: RoomTranscript;
   generatedAt: string;
 }
@@ -155,7 +156,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   if (!record || record.schemaVersion !== "meeting-record/2") return null;
   const cycleId = text(record.cycleId, 160);
   const meetingDate = date(record.date);
-  const kind = record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" ? record.kind : null;
+  const kind = record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" ? record.kind : null;
   const phase = record.phase === kind ? kind : null;
   const status = text(record.status, 40) as PublicMeetingStatus | null;
   const stage = text(record.stage, 40);
@@ -229,7 +230,13 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
 
   const caughtUpIdeaRef = record.caughtUpIdeaRef === undefined ? undefined : text(record.caughtUpIdeaRef, 160);
   const editionRef = record.editionRef === undefined ? undefined : text(record.editionRef, 160);
-  if ((record.caughtUpIdeaRef !== undefined && !caughtUpIdeaRef) || (record.editionRef !== undefined && !editionRef)) return null;
+  const sharper = record.sharperData === undefined ? null : object(record.sharperData);
+  const sharperOutcome = sharper?.outcome === "proposal" || sharper?.outcome === "nothing-new" ? sharper.outcome : null;
+  const sharperSummary = sharper ? text(sharper.summary, 280) : null;
+  const sharperEvidence = sharper ? stringArray(sharper.evidenceRefs) : null;
+  const sharperIdeaRef = sharper?.ideaRef === undefined ? undefined : text(sharper.ideaRef, 160);
+  const mmaKind = kind === "mma-intake" || kind === "mma-analysis";
+  if ((record.caughtUpIdeaRef !== undefined && !caughtUpIdeaRef) || (record.editionRef !== undefined && !editionRef) || (mmaKind && (!sharper || !sharperOutcome || !sharperSummary || !sharperEvidence)) || (sharper?.ideaRef !== undefined && !sharperIdeaRef)) return null;
 
   return {
     id: `${meetingDate}-${kind}`,
@@ -251,6 +258,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
     ...(caughtUpIdeaRef ? { caughtUpIdeaRef } : {}),
     ideaVerdicts,
     ...(editionRef ? { editionRef } : {}),
+    ...(sharperOutcome && sharperSummary && sharperEvidence ? { sharperData: { outcome: sharperOutcome, summary: sharperSummary, ...(sharperIdeaRef ? { ideaRef: sharperIdeaRef } : {}), evidenceRefs: sharperEvidence } } : {}),
     roomTranscript: { openedAt, closedAt, gavel, setting, turns },
     generatedAt
   };

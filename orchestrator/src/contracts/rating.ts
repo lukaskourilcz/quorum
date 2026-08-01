@@ -6,7 +6,10 @@ export const RatingObjectKindSchema = z.enum([
   "idea",
   "plan",
   "visual",
-  "niche-proposal"
+  "niche-proposal",
+  "slate",
+  "article",
+  "social-variant"
 ]);
 
 export const RatingRecordSchema = openObject({

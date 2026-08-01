@@ -1,0 +1,171 @@
+import "server-only";
+import { readFile, readdir } from "node:fs/promises";
+import path from "node:path";
+
+export type MmaOrg = "ufc" | "ksw" | "oktagon";
+export type SourcedValue = string | number | boolean | null | Array<string | number | boolean>;
+
+export interface PublicFighterField {
+  value: SourcedValue;
+  sourceRefs: string[];
+  retrievedAt: string;
+  status: "verified" | "provisional" | "disputed";
+  corroborated: boolean;
+}
+
+export interface PublicFighter {
+  id: string;
+  slug: string;
+  org: MmaOrg;
+  fields: Record<string, PublicFighterField>;
+  criticalFields: string[];
+  discrepancies: Array<{ field: string; status: "open" | "resolved" }>;
+  completeness: number;
+  corroboration: number;
+  modelEligible: boolean;
+  modelVersion: string;
+  updatedAt: string;
+}
+
+export interface PublicEvent {
+  id: string;
+  org: MmaOrg;
+  name: string;
+  venue: string;
+  startsAtLocal: string;
+  timeZone: string;
+  startsAtUtc: string;
+  sourceRefs: string[];
+  bouts: Array<{ id: string; red: string; blue: string; division: string; scheduledRounds: 3 | 5; status: "announced" | "weigh-in" | "complete" | "cancelled" }>;
+  updatedAt: string;
+}
+
+const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
+const orgs = new Set<MmaOrg>(["ufc", "ksw", "oktagon"]);
+const safeText = (value: unknown, maximum = 500): string | null => typeof value === "string" && value.trim().length > 0 && value.length <= maximum ? value.trim() : null;
+const safeDate = (value: unknown): string | null => {
+  const text = safeText(value, 80);
+  return text && !Number.isNaN(Date.parse(text)) ? new Date(text).toISOString() : null;
+};
+const safeFraction = (value: unknown): number | null => typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1 ? value : null;
+const object = (value: unknown): Record<string, unknown> | null => typeof value === "object" && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : null;
+
+function sourcedValue(value: unknown): SourcedValue | null | undefined {
+  if (value === null || typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) return value;
+  if (Array.isArray(value) && value.every((entry) => typeof entry === "string" || typeof entry === "boolean" || (typeof entry === "number" && Number.isFinite(entry)))) return value as Array<string | number | boolean>;
+  return undefined;
+}
+
+function parseField(value: unknown): PublicFighterField | null {
+  const field = object(value);
+  const parsedValue = sourcedValue(field?.value);
+  const sourceRefs = Array.isArray(field?.sourceRefs) ? field.sourceRefs.map((ref) => safeText(ref, 240)).filter((ref): ref is string => Boolean(ref)) : [];
+  const retrievedAt = safeDate(field?.retrievedAt);
+  const status = field?.status === "verified" || field?.status === "provisional" || field?.status === "disputed" ? field.status : null;
+  if (parsedValue === undefined || sourceRefs.length === 0 || !retrievedAt || !status || typeof field?.corroborated !== "boolean") return null;
+  return { value: parsedValue, sourceRefs, retrievedAt, status, corroborated: field.corroborated };
+}
+
+export function parsePublicFighter(value: unknown): PublicFighter | null {
+  const record = object(value);
+  if (record?.schemaVersion !== "fighter-record/1") return null;
+  const id = safeText(record.id, 160);
+  const slug = safeText(record.slug, 120);
+  const org = orgs.has(record.org as MmaOrg) ? record.org as MmaOrg : null;
+  const rawFields = object(record.fields);
+  const fields = rawFields ? Object.fromEntries(Object.entries(rawFields).flatMap(([key, item]) => {
+    const field = parseField(item);
+    return field ? [[key, field]] : [];
+  })) : null;
+  const criticalFields = Array.isArray(record.criticalFields) ? record.criticalFields.map((item) => safeText(item, 80)).filter((item): item is string => Boolean(item)) : null;
+  const rawDiscrepancies = Array.isArray(record.discrepancies) ? record.discrepancies : null;
+  const discrepancies: PublicFighter["discrepancies"] | null = rawDiscrepancies?.flatMap((item) => {
+    const entry = object(item);
+    const field = safeText(entry?.field, 80);
+    const status = entry?.status === "open" || entry?.status === "resolved" ? entry.status : null;
+    return field && status ? [{ field, status }] : [];
+  }) ?? null;
+  const completeness = safeFraction(record.completeness);
+  const corroboration = safeFraction(record.corroboration);
+  const modelVersion = safeText(record.modelVersion, 80);
+  const updatedAt = safeDate(record.updatedAt);
+  if (!id || !slug || !org || id !== `${org}:${slug}` || !fields || Object.keys(fields).length !== Object.keys(rawFields ?? {}).length || !criticalFields?.length || !discrepancies || discrepancies.length !== rawDiscrepancies?.length || completeness === null || corroboration === null || typeof record.modelEligible !== "boolean" || !modelVersion || !updatedAt) return null;
+  return { id, slug, org, fields, criticalFields, discrepancies, completeness, corroboration, modelEligible: record.modelEligible, modelVersion, updatedAt };
+}
+
+export function parsePublicEvent(value: unknown): PublicEvent | null {
+  const record = object(value);
+  const id = safeText(record?.id, 160);
+  const org = orgs.has(record?.org as MmaOrg) ? record?.org as MmaOrg : null;
+  const name = safeText(record?.name, 160);
+  const venue = safeText(record?.venue, 160);
+  const startsAtLocal = safeDate(record?.startsAtLocal);
+  const startsAtUtc = safeDate(record?.startsAtUtc);
+  const timeZone = safeText(record?.timeZone, 80);
+  const sourceRefs = Array.isArray(record?.sourceRefs) ? record.sourceRefs.map((item) => safeText(item, 240)).filter((item): item is string => Boolean(item)) : [];
+  const updatedAt = safeDate(record?.updatedAt);
+  const rawBouts = Array.isArray(record?.bouts) ? record.bouts : null;
+  const bouts: PublicEvent["bouts"] | null = rawBouts?.flatMap((item) => {
+    const bout = object(item);
+    const boutId = safeText(bout?.id, 160);
+    const red = safeText(bout?.red, 160);
+    const blue = safeText(bout?.blue, 160);
+    const division = safeText(bout?.division, 80);
+    const scheduledRounds = bout?.scheduledRounds === 3 || bout?.scheduledRounds === 5 ? bout.scheduledRounds : null;
+    const status = ["announced", "weigh-in", "complete", "cancelled"].includes(String(bout?.status)) ? bout?.status as PublicEvent["bouts"][number]["status"] : null;
+    return boutId && red && blue && division && scheduledRounds && status ? [{ id: boutId, red, blue, division, scheduledRounds, status }] : [];
+  }) ?? null;
+  if (record?.schemaVersion !== "event-card/1" || !id || !org || !name || !venue || !startsAtLocal || !startsAtUtc || !timeZone || sourceRefs.length === 0 || !updatedAt || !bouts?.length || bouts.length !== rawBouts?.length) return null;
+  return { id, org, name, venue, startsAtLocal, timeZone, startsAtUtc, sourceRefs, bouts, updatedAt };
+}
+
+async function jsonFiles(directory: string): Promise<string[]> {
+  try {
+    const entries = await readdir(directory, { withFileTypes: true });
+    return (await Promise.all(entries.map((entry) => entry.isDirectory() ? jsonFiles(path.join(directory, entry.name)) : Promise.resolve(entry.name.endsWith(".json") ? [path.join(directory, entry.name)] : [])))).flat().sort();
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  }
+}
+
+export async function getPublicFighters(rootDirectory = repositoryRoot): Promise<{ fighters: PublicFighter[]; unreadable: string[] }> {
+  const root = path.join(rootDirectory, "state", "ventures", "fightaiq", "fighters");
+  const fighters: PublicFighter[] = [];
+  const unreadable: string[] = [];
+  for (const file of await jsonFiles(root)) {
+    try {
+      const parsed = parsePublicFighter(JSON.parse(await readFile(file, "utf8")));
+      if (parsed) fighters.push(parsed); else unreadable.push(path.relative(root, file));
+    } catch { unreadable.push(path.relative(root, file)); }
+  }
+  return { fighters: fighters.sort((left, right) => left.org.localeCompare(right.org) || fighterName(left).localeCompare(fighterName(right))), unreadable };
+}
+
+export async function getPublicEvents(rootDirectory = repositoryRoot): Promise<{ events: PublicEvent[]; unreadable: string[] }> {
+  const root = path.join(rootDirectory, "state", "ventures", "fightaiq", "events");
+  const events: PublicEvent[] = [];
+  const unreadable: string[] = [];
+  for (const file of await jsonFiles(root)) {
+    try {
+      const parsed = parsePublicEvent(JSON.parse(await readFile(file, "utf8")));
+      if (parsed) events.push(parsed); else unreadable.push(path.relative(root, file));
+    } catch { unreadable.push(path.relative(root, file)); }
+  }
+  return { events: events.sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc)), unreadable };
+}
+
+export function fighterName(fighter: PublicFighter): string {
+  return typeof fighter.fields.name?.value === "string" ? fighter.fields.name.value : fighter.slug.replaceAll("-", " ");
+}
+
+export function fighterHref(ref: string): string | null {
+  const match = /^(ufc|ksw|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(ref);
+  return match ? `/fighters/${match[1]}/${match[2]}` : null;
+}
+
+export async function getFightAiQMode(): Promise<"data-only" | "live-analysis"> {
+  const registry = JSON.parse(await readFile(path.join(repositoryRoot, "config", "ventures.json"), "utf8")) as { ventures?: Array<{ id?: string; mode?: string }> };
+  const mode = registry.ventures?.find((venture) => venture.id === "fightaiq")?.mode;
+  return mode === "live-analysis" ? mode : "data-only";
+}

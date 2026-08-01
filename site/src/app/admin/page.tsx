@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, RefreshCw } from "lucide-react";
 import { CopySocialText } from "@/components/admin/copy-social-text";
+import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +11,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
+import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -186,7 +188,7 @@ function StatePanel({ title, content }: { title: string; content: string }) {
   );
 }
 
-const cardKindByTab = {
+const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "niche-proposal">> = {
   ideas: "idea",
   plans: "plan",
   visuals: "visual",
@@ -198,11 +200,12 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
-    getPublicStandups()
+    getPublicStandups(),
+    readAdminFightAiQ()
   ]);
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
   const selectedTab = selectedVenture
@@ -210,7 +213,7 @@ export default async function AdminPage({
       ? requestedTab as AdminVentureTab
       : selectedVenture.tabs[0] ?? null
     : null;
-  const visibleCards = selectedVenture && selectedTab
+  const visibleCards = selectedVenture && selectedTab && cardKindByTab[selectedTab]
     ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])
     : [];
   const shortlist = selectedVenture?.id === "incubator"
@@ -367,7 +370,9 @@ export default async function AdminPage({
             </aside>
           ) : null}
 
-          {visibleCards.length ? (
+          {selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "events", "slates", "sources"].includes(selectedTab) ? (
+            <FightAiQAdminPanel snapshot={fightaiq} tab={selectedTab as "fighters" | "events" | "slates" | "sources"} />
+          ) : visibleCards.length ? (
             <div className="mt-8 grid gap-5 xl:grid-cols-2">
               {visibleCards.map((card) => (
                 <PortfolioCard

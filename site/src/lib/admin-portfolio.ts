@@ -13,7 +13,11 @@ import {
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const adminTabs = ["ideas", "plans", "visuals", "niche-proposals"] as const;
+const adminTabs = [
+  "ideas", "plans", "visuals", "niche-proposals",
+  "fighters", "events", "slates", "sources",
+  "articles", "calendar", "social-lab"
+] as const;
 
 export type AdminVentureTab = (typeof adminTabs)[number];
 

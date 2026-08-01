@@ -48,7 +48,9 @@ function publicKindLabel(kind: CalendarKind): string {
     "venture-afternoon": "Afternoon company meeting",
     "cu-product": "Caught Up product meeting",
     "incubator-synthesis": "Magazine idea review",
-    "venture-night": "Night company meeting"
+    "venture-night": "Night company meeting",
+    "mma-intake": "Fight data check",
+    "mma-analysis": "Fight analysis review"
   };
   return labels[kind];
 }
@@ -92,7 +94,7 @@ export function WeekBoard({
       {headingLevel === "section" ? (
         <SectionHeading
           eyebrow="Weekly schedule / Prague time"
-          title="Eight meetings on one schedule"
+          title="Ten meetings on one schedule"
           description="Company, project, marketing and research meetings share one schedule. Missed meetings stay visible, and finished meetings link to their notes."
           action={navigation}
         />
