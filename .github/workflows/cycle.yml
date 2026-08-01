@@ -278,7 +278,17 @@ jobs:
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
-          git add config/visual-weights state/budget state/standups state/meetings state/scorecards state/decisions state/calendar state/edition state/ideas state/mma state/notify state/social state/taste state/ventures state/INBOX.md site/public/social
+          runtime_paths=(
+            config/visual-weights state/budget state/standups state/meetings
+            state/scorecards state/decisions state/calendar state/edition state/ideas
+            state/mma state/notify state/social state/taste state/ventures state/INBOX.md
+            site/public/social
+          )
+          for runtime_path in "${runtime_paths[@]}"; do
+            if test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path" > /dev/null 2>&1; then
+              git add -A -- "$runtime_path"
+            fi
+          done
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
             exit 0
