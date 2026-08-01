@@ -91,6 +91,7 @@ export interface Agent extends RegistryAgent {
   publicTrackRecord: string | null;
   apiModels: readonly AgentApiModel[];
   apiModelSummary: string;
+  apiCostSummary: string;
 }
 
 export interface AgentApiModel {
@@ -98,6 +99,10 @@ export interface AgentApiModel {
   model: string;
   label: string;
   context: string;
+  estimatedCostUsd: number;
+  estimatedCostLabel: string;
+  estimateBasis: string;
+  priceVerifiedAt: string;
 }
 
 type TextModelRole =
@@ -127,33 +132,195 @@ const modelLabels: Record<string, string> = {
   "claude-opus-4-7": "Claude Opus 4.7"
 };
 
+interface PublicTextPrice {
+  provider: "openai" | "anthropic";
+  model: string;
+  effectiveFrom: string;
+  effectiveTo: string | null;
+  inputUsdPerMillion: number;
+  outputUsdPerMillion: number;
+  verifiedAt: string;
+}
+
+interface CallEstimateProfile {
+  promptChars: number;
+  maxOutputTokens: number;
+  basis: string;
+}
+
+// This display-only table mirrors the runtime's dated text-price table. Billing
+// remains token-based in the orchestrator; the site deliberately labels these
+// figures as estimates rather than presenting them as a fixed meeting fee.
+const publicTextPrices: readonly PublicTextPrice[] = [
+  {
+    provider: "openai",
+    model: "gpt-5.6-luna",
+    effectiveFrom: "2026-06-01",
+    effectiveTo: null,
+    inputUsdPerMillion: 1,
+    outputUsdPerMillion: 6,
+    verifiedAt: "2026-07-23"
+  },
+  {
+    provider: "anthropic",
+    model: "claude-opus-4-7",
+    effectiveFrom: "2026-07-21",
+    effectiveTo: null,
+    inputUsdPerMillion: 5,
+    outputUsdPerMillion: 25,
+    verifiedAt: "2026-07-21"
+  },
+  {
+    provider: "anthropic",
+    model: "claude-sonnet-4-6",
+    effectiveFrom: "2026-07-21",
+    effectiveTo: null,
+    inputUsdPerMillion: 3,
+    outputUsdPerMillion: 15,
+    verifiedAt: "2026-07-21"
+  },
+  {
+    provider: "anthropic",
+    model: "claude-sonnet-5",
+    effectiveFrom: "2026-06-09",
+    effectiveTo: "2026-09-01",
+    inputUsdPerMillion: 2,
+    outputUsdPerMillion: 10,
+    verifiedAt: "2026-07-23"
+  },
+  {
+    provider: "anthropic",
+    model: "claude-sonnet-5",
+    effectiveFrom: "2026-09-01",
+    effectiveTo: null,
+    inputUsdPerMillion: 3,
+    outputUsdPerMillion: 15,
+    verifiedAt: "2026-07-23"
+  },
+  {
+    provider: "anthropic",
+    model: "claude-haiku-4-5-20251001",
+    effectiveFrom: "2025-10-01",
+    effectiveTo: null,
+    inputUsdPerMillion: 1,
+    outputUsdPerMillion: 5,
+    verifiedAt: "2026-07-23"
+  }
+];
+
+const meetingCall: CallEstimateProfile = {
+  promptChars: 8_000,
+  maxOutputTokens: 260,
+  basis: "Typical meeting call: an 8,000-character brief and up to 260 response tokens"
+};
+
+const councilMeetingCall: CallEstimateProfile = {
+  promptChars: 8_000,
+  maxOutputTokens: 400,
+  basis: "Company council call: an 8,000-character brief and up to 400 response tokens"
+};
+
+const sparkMeetingCall: CallEstimateProfile = {
+  promptChars: 12_000,
+  maxOutputTokens: 280,
+  basis: "Morning idea call: a 12,000-character brief and up to 280 response tokens"
+};
+
+const vaultMeetingCall: CallEstimateProfile = {
+  promptChars: 12_000,
+  maxOutputTokens: 240,
+  basis: "Morning check: a 12,000-character brief and up to 240 response tokens"
+};
+
+const curationCall: CallEstimateProfile = {
+  promptChars: 20_000,
+  maxOutputTokens: 1_500,
+  basis: "Typical edition curation run: a 20,000-character source packet and up to 1,500 response tokens"
+};
+
+const englishEditionCall: CallEstimateProfile = {
+  promptChars: 16_000,
+  maxOutputTokens: 2_000,
+  basis: "Typical 1,100-word English edition: a 16,000-character source packet and up to 2,000 response tokens"
+};
+
+const czechEditionCall: CallEstimateProfile = {
+  promptChars: 14_000,
+  maxOutputTokens: 2_000,
+  basis: "Typical 1,100-word Czech edition: a 14,000-character source packet and up to 2,000 response tokens"
+};
+
+const mmaArticleCall: CallEstimateProfile = {
+  promptChars: 25_000,
+  maxOutputTokens: 1_700,
+  basis: "Typical MMA Files article: a 25,000-character evidence packet and up to 1,700 response tokens"
+};
+
 function apiProvider(provider: "openai" | "anthropic"): AgentApiModel["provider"] {
   return provider === "openai" ? "OpenAI" : "Anthropic";
+}
+
+function priceFor(
+  provider: "openai" | "anthropic",
+  model: string
+): PublicTextPrice {
+  const now = new Date().toISOString();
+  const price = publicTextPrices.find(
+    (candidate) =>
+      candidate.provider === provider &&
+      candidate.model === model &&
+      candidate.effectiveFrom <= now &&
+      (candidate.effectiveTo === null || now < candidate.effectiveTo)
+  );
+  if (!price) throw new Error(`No public price estimate for ${provider}/${model}`);
+  return price;
+}
+
+function formatEstimatedCost(estimatedCostUsd: number): string {
+  return estimatedCostUsd < 0.01
+    ? `$${estimatedCostUsd.toFixed(3)}`
+    : `$${estimatedCostUsd.toFixed(2)}`;
 }
 
 function apiModel(
   provider: "openai" | "anthropic",
   model: string,
-  context: string
+  context: string,
+  estimateProfile: CallEstimateProfile
 ): AgentApiModel {
+  const price = priceFor(provider, model);
+  const inputTokens = Math.ceil(estimateProfile.promptChars / 3.5);
+  const estimatedCostUsd = Number((
+    (inputTokens / 1_000_000) * price.inputUsdPerMillion +
+    (estimateProfile.maxOutputTokens / 1_000_000) * price.outputUsdPerMillion
+  ).toFixed(8));
   return {
     provider: apiProvider(provider),
     model,
     label: modelLabels[model] ?? model,
-    context
+    context,
+    estimatedCostUsd,
+    estimatedCostLabel: formatEstimatedCost(estimatedCostUsd),
+    estimateBasis: estimateProfile.basis,
+    priceVerifiedAt: price.verifiedAt
   };
 }
 
-function configuredTextModel(role: TextModelRole, context: string): AgentApiModel {
+function configuredTextModel(
+  role: TextModelRole,
+  context: string,
+  estimateProfile = meetingCall
+): AgentApiModel {
   const route = textModelRoles[role];
-  return apiModel(route.provider, route.model, context);
+  return apiModel(route.provider, route.model, context, estimateProfile);
 }
 
 function configuredEditionModel(
   model: string,
-  context: string
+  context: string,
+  estimateProfile: CallEstimateProfile
 ): AgentApiModel {
-  return apiModel("anthropic", model, context);
+  return apiModel("anthropic", model, context, estimateProfile);
 }
 
 function specialistModel(
@@ -163,41 +330,45 @@ function specialistModel(
   if (provider === "deterministic") return [];
   return [configuredTextModel(
     provider === "OpenAI" ? "OPENAI_SPECIALIST" : "ANTHROPIC_SPECIALIST",
-    context
+    context,
+    meetingCall
   )];
 }
 
 const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
-  VIZE: [configuredTextModel("VIZE", "Company council meetings")],
+  VIZE: [configuredTextModel("VIZE", "Company council meetings", councilMeetingCall)],
   FORGE: [
-    configuredTextModel("FORGE", "Company council meetings"),
+    configuredTextModel("FORGE", "Company council meetings", councilMeetingCall),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
   ],
-  PULSE: [configuredTextModel("PULSE", "Company and portfolio meetings")],
-  AUDIT: [configuredTextModel("AUDIT", "Company and portfolio meetings")],
+  PULSE: [configuredTextModel("PULSE", "Company and portfolio meetings", councilMeetingCall)],
+  AUDIT: [configuredTextModel("AUDIT", "Company and portfolio meetings", councilMeetingCall)],
   HERALD: [
+    configuredEditionModel(editionModels.curation, "Caught Up daily edition curation", curationCall),
     configuredTextModel("DIGEST", "Caught Up product room"),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
   ],
   STET: [
-    configuredEditionModel(editionModels.writing, "Caught Up English edition"),
+    configuredEditionModel(editionModels.writing, "Caught Up English edition", englishEditionCall),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
   ],
   HACEK: [
     configuredEditionModel(
       editionModels.localization,
-      "Caught Up and MMA Files Czech editions"
+      "Caught Up Czech edition",
+      czechEditionCall
     ),
+    configuredEditionModel(editionModels.localization, "MMA Files Czech edition", mmaArticleCall),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
   ],
-  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and portfolio rooms")],
+  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and portfolio rooms", sparkMeetingCall)],
   VAULT: [
-    configuredTextModel("DIGEST", "Caught Up idea checks"),
+    configuredTextModel("DIGEST", "Caught Up idea checks", vaultMeetingCall),
     configuredTextModel("OPENAI_SPECIALIST", "Portfolio rooms when selected")
   ],
   PALATE: [configuredTextModel("ANTHROPIC_SPECIALIST", "Taste and portfolio rooms")],
   JAB: [
-    configuredEditionModel(editionModels.localization, "MMA Files English articles"),
+    configuredEditionModel(editionModels.localization, "MMA Files English articles", mmaArticleCall),
     configuredTextModel("OPENAI_SPECIALIST", "MMA Files editorial rooms")
   ]
 };
@@ -214,6 +385,16 @@ function apiModelSummary(apiModels: readonly AgentApiModel[]): string {
   return apiModels
     .map(({ provider, label }) => `${provider} · ${label}`)
     .join(" + ");
+}
+
+function apiCostSummary(apiModels: readonly AgentApiModel[]): string {
+  if (apiModels.length === 0) return "No LLM API cost";
+  const costs = apiModels.map(({ estimatedCostUsd }) => estimatedCostUsd);
+  const lowest = Math.min(...costs);
+  const highest = Math.max(...costs);
+  return lowest === highest
+    ? `About ${formatEstimatedCost(lowest)} per live run`
+    : `About ${formatEstimatedCost(lowest)}–${formatEstimatedCost(highest)} per live run`;
 }
 
 const profileCopy: Record<
@@ -475,7 +656,8 @@ export const agents: readonly Agent[] = registryAgents.map((agent) => {
     primaryAccountability:
       agent.ownedKpiIds[0] ?? agent.successChecks[0] ?? "n/a",
     apiModels,
-    apiModelSummary: apiModelSummary(apiModels)
+    apiModelSummary: apiModelSummary(apiModels),
+    apiCostSummary: apiCostSummary(apiModels)
   };
 });
 

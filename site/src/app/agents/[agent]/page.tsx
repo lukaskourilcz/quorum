@@ -143,6 +143,20 @@ export default async function AgentDetailPage({
                       <p className="mt-3 text-sm leading-6 text-[var(--muted-foreground)]">
                         {route.context}
                       </p>
+                      <div className="mt-4 border-t border-[var(--border)] pt-3">
+                        <p className="mono-label text-[0.625rem] text-[var(--muted-foreground)]">
+                          Approx. cost per live run
+                        </p>
+                        <p
+                          className="mt-1 font-mono text-sm font-semibold text-[var(--foreground)]"
+                          data-agent-api-cost
+                        >
+                          {route.estimatedCostLabel}
+                        </p>
+                        <p className="mt-2 text-xs leading-5 text-[var(--muted-foreground)]">
+                          {route.estimateBasis}. Price checked {route.priceVerifiedAt}. Actual billing changes with the tokens used.
+                        </p>
+                      </div>
                     </li>
                   ))}
                 </ul>

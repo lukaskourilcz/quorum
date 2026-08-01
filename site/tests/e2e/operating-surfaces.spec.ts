@@ -135,16 +135,20 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   await expect(page.getByRole("link", { name: "Previous calendar week" })).toBeVisible();
 });
 
-test("every agent card and profile exposes its configured API model", async ({ page }) => {
+test("every agent card and profile exposes its configured API model and estimated call cost", async ({ page }) => {
   await page.goto("/agents", { waitUntil: "networkidle" });
   await expect(page.locator("[data-agent-api-model]")).toHaveCount(38);
+  await expect(page.locator("[data-agent-api-cost-summary]")).toHaveCount(38);
   await expect(page.getByText("OpenAI · GPT-5.6 Luna").first()).toBeVisible();
   await expect(page.getByText("Anthropic · Claude Haiku 4.5").first()).toBeVisible();
 
   await page.goto("/agents/hacek", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "Model calls" })).toBeVisible();
   await expect(page.locator("[data-agent-api-routes]")).toContainText("Claude Sonnet 4.6");
-  await expect(page.locator("[data-agent-api-routes]")).toContainText("Caught Up and MMA Files Czech editions");
+  await expect(page.locator("[data-agent-api-routes]")).toContainText("Caught Up Czech edition");
+  await expect(page.locator("[data-agent-api-routes]")).toContainText("MMA Files Czech edition");
+  await expect(page.locator("[data-agent-api-routes]")).toContainText("Approx. cost per live run");
+  await expect(page.locator("[data-agent-api-cost]").first()).toHaveText(/^\$0\.0[1-9]/);
 });
 
 test("metrics role column keeps the table inset", async ({ page }) => {

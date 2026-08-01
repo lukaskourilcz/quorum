@@ -75,6 +75,12 @@ export function AgentCard({
           >
             {agent.apiModelSummary}
           </p>
+          <p
+            className="mt-2 font-mono text-[0.6875rem] leading-[1.125rem] text-[var(--mist)]"
+            data-agent-api-cost-summary
+          >
+            {agent.apiCostSummary}
+          </p>
         </div>
       </div>
     </Link>
@@ -123,8 +129,9 @@ export function AgentRow({
         <p
           className="mt-1 truncate font-mono text-[0.625rem] text-[var(--fog)]"
           data-agent-api-model
+          data-agent-api-cost-summary
         >
-          API: {agent.apiModelSummary}
+          API: {agent.apiModelSummary} · {agent.apiCostSummary}
         </p>
       </div>
       {compact ? null : (
