@@ -37,7 +37,7 @@ export default function CompanyPage() {
             </CardContent>
           </Card>
         }
-        description="BoardlessAI runs five early projects with clear limits. Caught Up publishes, Titty Tuesdays plans, the Incubator researches, FightAIQ is data-only and MMA Files is a private newsroom. None has confirmed revenue."
+        description="BoardlessAI runs five early projects with clear limits. Caught Up and MMA Files publish on their own sites, Titty Tuesdays plans, the Incubator researches and FightAIQ supplies checked fight data. None has confirmed revenue."
         eyebrow="Current business plan"
         title="Where the company stands"
       />
@@ -100,7 +100,7 @@ export default function CompanyPage() {
               },
               {
                 title: "Product and price",
-                text: "Caught Up is free. Titty Tuesdays has no shop or price. FightAIQ is free entertainment data, and MMA Files has no public site yet."
+                text: "Caught Up is free. Titty Tuesdays has no shop or price. FightAIQ supplies research data to the public MMA Files magazine."
               },
               {
                 title: "How people find the work",
@@ -112,7 +112,7 @@ export default function CompanyPage() {
               },
               {
                 title: "What exists today",
-                text: "Caught Up has a reader app. Titty Tuesdays has plans but no shop. FightAIQ has guarded data/model tools. MMA Files has a private newsroom, not a public magazine."
+                text: "Caught Up and MMA Files have public reader apps. Titty Tuesdays has plans but no shop. FightAIQ has guarded data and model tools."
               },
               {
                 title: "When to stop",

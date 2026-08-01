@@ -1,24 +1,86 @@
-import Link from "next/link";
-import { ArrowRight, Database, Scale, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Database, FileCheck2, ShieldCheck } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
-import { getFightAiQMode, getPublicEvents, getPublicFighters, getPublicTrackRecord } from "@/lib/fightaiq-records";
+
+const mmaFilesUrl = "https://mma-files.vercel.app/en/data-desk";
 
 export async function FightAiQVenturePage() {
-  const [fighters, events, mode, track] = await Promise.all([getPublicFighters(), getPublicEvents(), getFightAiQMode(), getPublicTrackRecord()]);
-  const resolved = track?.picks.filter((pick) => pick.result === "win" || pick.result === "loss") ?? [];
-  const brierValues = resolved.flatMap((pick) => pick.brierContribution === null ? [] : [pick.brierContribution]);
-  const clvValues = resolved.flatMap((pick) => pick.clv === null ? [] : [pick.clv]);
-  const average = (values: number[]) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
-  return <PageShell>
-    <PageIntro eyebrow="Project 003 / MMA data" title="FightAIQ" description="Sourced UFC and Oktagon fighter files, a repeatable probability model and an honest public record of every published pick. It starts with data, not tips." aside={<div className="rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)] p-8"><Badge tone="warning">{mode === "data-only" ? "Data-only start" : "Reviewed analysis"}</Badge><p className="mt-5 text-5xl font-semibold tracking-[-0.06em]">003</p><p className="mt-3 text-sm text-[var(--fog)]">18+ · Entertainment only</p></div>} />
-    <section className="bg-[var(--graphite)] text-[var(--paper)]"><div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28"><SectionHeading eyebrow="What matters most" title="Useful data before entertaining picks" description="A ten-pick slip is entertainment. The lasting work is the sourced fighter database, the saved calculation rules and whether an early price beat the final one." /><ol className="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-[var(--iron)] md:grid-cols-3">{[["01","Fighter database","Every important field is sourced and checked twice."],["02","Public results","Every published estimate keeps the rules that produced it and the final-price result."],["03","Slip of Ten","Exactly ten picks, a few dollars total and the expected loss written plainly."]].map(([number,title,text]) => <li className="bg-[var(--graphite)] p-7" key={number}><p className="mono-label text-[var(--accent)]">{number}</p><h2 className="mt-5 text-2xl font-semibold">{title}</h2><p className="mt-3 text-sm leading-6 text-[var(--fog)]">{text}</p></li>)}</ol></div></section>
-    <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28"><SectionHeading eyebrow="Open data" title="See the same files the agents use" description="Every saved file is checked again before it appears here. Values that still need another source are clearly marked." /><div className="mt-8 grid gap-4 md:grid-cols-2"><article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7"><Database className="size-5 text-[var(--accent)]" aria-hidden="true" /><p className="mt-5 text-4xl font-semibold">{fighters.fighters.length}</p><h3 className="mt-2 text-xl font-semibold">verified fighter files</h3><p className="mt-3 text-sm leading-6 text-[var(--fog)]">UFC and Oktagon keep separate rating pools.</p><Link className={`${buttonVariants({ variant: "secondary" })} mt-6`} href="/fighters">Open fighters <ArrowRight className="size-4" aria-hidden="true" /></Link></article><article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7"><Scale className="size-5 text-[var(--accent)]" aria-hidden="true" /><p className="mt-5 text-4xl font-semibold">{events.events.length}</p><h3 className="mt-2 text-xl font-semibold">verified event cards</h3><p className="mt-3 text-sm leading-6 text-[var(--fog)]">Each pairing links both fighters and shows what is still missing.</p><Link className={`${buttonVariants({ variant: "secondary" })} mt-6`} href="/ventures/fightaiq/upcoming">Upcoming fights <ArrowRight className="size-4" aria-hidden="true" /></Link></article></div>{fighters.unreadable.length || events.unreadable.length ? <Callout className="mt-6" tone="warning">Some saved records did not pass the public check and are hidden until fixed.</Callout> : null}</section>
-    <section className="border-y border-[var(--border)] bg-[var(--card)]"><div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28"><SectionHeading eyebrow="Published results" title="What the estimates have actually done" description="Only estimates published before a fight count. Missing final prices stay missing, and a short run is not treated as proof." /><dl className="mt-9 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-[var(--border)] sm:grid-cols-3"><div className="bg-[var(--surface)] p-6"><dt className="text-sm text-[var(--fog)]">Finished picks</dt><dd className="mt-2 text-4xl font-semibold">{resolved.length}</dd></div><div className="bg-[var(--surface)] p-6"><dt className="text-sm text-[var(--fog)]">Average forecast error</dt><dd className="mt-2 text-4xl font-semibold">{average(brierValues)?.toFixed(3) ?? "—"}<span className="mt-2 block text-xs font-normal text-[var(--fog)]">Lower is better; no score appears before results exist.</span></dd></div><div className="bg-[var(--surface)] p-6"><dt className="text-sm text-[var(--fog)]">Average advantage over the final price</dt><dd className="mt-2 text-4xl font-semibold">{average(clvValues) === null ? "—" : `${(average(clvValues)! * 100).toFixed(1)}%`}<span className="mt-2 block text-xs font-normal text-[var(--fog)]">Whether the saved early price beat the market&apos;s final price.</span></dd></div></dl><p className="mt-5 text-sm leading-6 text-[var(--fog)]">A fixed-stake return stays unavailable until published picks have both a saved price and a result. One good weekend is not proof of an advantage.</p></div></section>
-    <section className="border-y border-[var(--border)] bg-[var(--surface)]"><div className="mx-auto grid max-w-[var(--container)] gap-10 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28"><div><ShieldCheck className="size-5 text-[var(--accent)]" aria-hidden="true" /><h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">No prediction before review.</h2><p className="mt-5 max-w-xl leading-7 text-[var(--fog)]">FightAIQ stays in data-only mode until the owner reviews a complete event cycle for UFC and Oktagon. The page does not show model numbers early.</p></div><Callout tone="warning"><strong>Responsible play.</strong> Fight estimates are uncertain. FightAIQ never opens bookmaker accounts, places bets, moves money or links to a bookmaker. Do not chase losses and do not use money needed for bills.</Callout></div></section>
-  </PageShell>;
+  return (
+    <PageShell>
+      <PageIntro
+        eyebrow="Project 003 / MMA data"
+        title="FightAIQ"
+        description="FightAIQ collects and checks UFC and Oktagon data for the MMA Files magazine. BoardlessAI runs the meetings and keeps the audit trail; MMA Files is where readers see the finished fighter, event, odds and model files."
+        aside={
+          <div className="rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)] p-8">
+            <Badge tone="warning">18+ · research only</Badge>
+            <p className="mt-5 text-5xl font-semibold tracking-[-0.06em]">003</p>
+            <p className="mt-3 text-sm text-[var(--fog)]">UFC and Oktagon</p>
+          </div>
+        }
+      />
+
+      <section className="bg-[var(--graphite)] text-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28">
+          <SectionHeading
+            eyebrow="One public home"
+            title="The fight files now live in MMA Files"
+            description="There is no second fighter database on BoardlessAI. One checked delivery package updates the magazine, which prevents the two sites from showing different versions of the same fight."
+          />
+          <ol className="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-[var(--iron)] md:grid-cols-3">
+            {[
+              ["01", "Collect", "FightAIQ stores sourced fighter, event and price files."],
+              ["02", "Check", "The runtime rejects unsupported fields, stale data and records outside UFC or Oktagon."],
+              ["03", "Deliver", "MMA Files tests and builds the exact package before its main branch accepts it."],
+            ].map(([number, title, text]) => (
+              <li className="bg-[var(--graphite)] p-7" key={number}>
+                <p className="mono-label text-[var(--accent)]">{number}</p>
+                <h2 className="mt-5 text-2xl font-semibold">{title}</h2>
+                <p className="mt-3 text-sm leading-6 text-[var(--fog)]">{text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-28">
+        <SectionHeading
+          eyebrow="Where to look"
+          title="Public data in the magazine. Controls in admin."
+          description="Readers get one bilingual destination. You still review source gaps, agent switches and meeting output in the protected BoardlessAI admin."
+        />
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7">
+            <Database className="size-5 text-[var(--accent)]" aria-hidden="true" />
+            <h3 className="mt-5 text-2xl font-semibold">MMA Files data desk</h3>
+            <p className="mt-3 text-sm leading-6 text-[var(--fog)]">Fighters, events, captured odds, model versions and uncertainty are rendered there.</p>
+            <a className={`${buttonVariants({ variant: "secondary" })} mt-6`} href={mmaFilesUrl} rel="noreferrer" target="_blank">
+              Open MMA Files <ArrowUpRight className="size-4" aria-hidden="true" />
+            </a>
+          </article>
+          <article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7">
+            <FileCheck2 className="size-5 text-[var(--accent)]" aria-hidden="true" />
+            <h3 className="mt-5 text-2xl font-semibold">BoardlessAI admin</h3>
+            <p className="mt-3 text-sm leading-6 text-[var(--fog)]">Source disagreements and internal meeting controls remain private.</p>
+            <a className={`${buttonVariants({ variant: "secondary" })} mt-6`} href="/admin?venture=fightaiq">Open protected admin</a>
+          </article>
+        </div>
+      </section>
+
+      <section className="border-y border-[var(--border)] bg-[var(--surface)]">
+        <div className="mx-auto grid max-w-[var(--container)] gap-10 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
+          <div>
+            <ShieldCheck className="size-5 text-[var(--accent)]" aria-hidden="true" />
+            <h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">Evidence still comes first.</h2>
+            <p className="mt-5 max-w-xl leading-7 text-[var(--fog)]">A missing source stays missing. Model files keep their version and capture time, and MMA Files refuses changed same-slot articles or stale FightAIQ snapshots.</p>
+          </div>
+          <Callout tone="warning"><strong>Responsible play.</strong> Fight estimates are uncertain. Neither app opens bookmaker accounts, places bets, moves money or links to a bookmaker. Do not chase losses or use money needed for bills.</Callout>
+        </div>
+      </section>
+    </PageShell>
+  );
 }

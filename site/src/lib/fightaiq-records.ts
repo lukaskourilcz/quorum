@@ -245,7 +245,7 @@ export function fighterName(fighter: PublicFighter): string {
 
 export function fighterHref(ref: string): string | null {
   const match = /^(ufc|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(ref);
-  return match ? `/fighters/${match[1]}/${match[2]}` : null;
+  return match ? `https://mma-files.vercel.app/en/fighters/${match[1]}/${match[2]}` : null;
 }
 
 export async function getFightAiQMode(rootDirectory = repositoryRoot): Promise<"data-only" | "live-analysis"> {

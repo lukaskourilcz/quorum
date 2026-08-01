@@ -45,7 +45,9 @@ work. They require a fresh owner scope before implementation.
 - [x] Ship the research-only magazine incubator and zero-proposal dry proof.
 - [x] Resolve the collision-free 07:00, 11:00 and 21:00 Prague slots.
 - [x] Replace per-meeting email with one idempotent daily portfolio digest.
-- [x] Add FightAIQ contracts, source controls, two-source fighter records, deterministic Glicko-2 analysis, owner prices, private review and public data pages.
-- [x] Add the MMA Files private newsroom, two daily evidence-first slots, English/Czech packages, four social variants and manual metrics.
+- [x] Add FightAIQ contracts, source controls, two-source fighter records, deterministic Glicko-2 analysis, captured prices and private review.
+- [x] Connect MMA Files as the public bilingual newsroom, with automatic article and FightAIQ data delivery, two daily evidence-first slots and manual metrics.
+- [x] Retire the duplicate BoardlessAI fighter/event pages so MMA Files is the single public owner.
+- [x] Keep Titty Tuesdays content-only and store detailed future-campaign notes without producing or publishing social assets.
 - [x] Expand the shared Prague clock to 14 collision-free slots and prove all 12 room kinds with fixture labels.
-- [ ] Complete the owner approvals and week-one review listed in `NEEDED.md`.
+- [ ] Complete the repository-app, Vercel and first-live checks listed in `NEEDED.md`.

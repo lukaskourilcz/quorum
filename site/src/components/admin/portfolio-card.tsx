@@ -23,6 +23,9 @@ function timestamp(value: string | null): string {
 }
 
 export function PortfolioCard({ card, originHref }: { card: AdminCard; originHref: string | null }) {
+  const detailHref = card.detailPath
+    ? `/admin/files/${card.detailPath.split("/").map(encodeURIComponent).join("/")}`
+    : null;
   return (
     <Card className="min-w-0">
       <CardContent className="grid h-full gap-5">
@@ -62,7 +65,12 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
           </div>
         </dl>
 
-        <div className="min-h-11">
+        <div className="flex min-h-11 flex-wrap items-center gap-x-5 gap-y-2">
+          {detailHref ? (
+            <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--foreground)] underline underline-offset-4" href={detailHref}>
+              Read full notes <ExternalLink aria-hidden="true" className="size-4" />
+            </Link>
+          ) : null}
           {originHref ? (
             <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--accent)] underline underline-offset-4" href={originHref}>
               Source meeting <ExternalLink aria-hidden="true" className="size-4" />

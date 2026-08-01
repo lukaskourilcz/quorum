@@ -22,6 +22,9 @@ FightAIQ remains in data-only mode. The owner must review one full UFC event and
 Oktagon event before considering live analysis. MMA Files may write only from verified
 FightAIQ packets inside the same two-organization scope.
 
+The later `mma-files-public-delivery` decision makes MMA Files the public presentation
+layer for these records while leaving this live-analysis gate unchanged.
+
 ## Approval reference
 
 `owner-request:2026-08-01-ufc-oktagon-only`

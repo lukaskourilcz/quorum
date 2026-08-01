@@ -5,5 +5,5 @@ import { cn } from "@/lib/utils";
 
 export function FighterLink({ fighterRef, children, className }: { fighterRef: string; children: ReactNode; className?: string }) {
   const href = fighterHref(fighterRef);
-  return href ? <Link className={cn("underline decoration-[var(--border)] underline-offset-4 transition-colors hover:decoration-[var(--accent)]", className)} href={href}>{children}</Link> : <span className={className}>{children}</span>;
+  return href ? <Link className={cn("underline decoration-[var(--border)] underline-offset-4 transition-colors hover:decoration-[var(--accent)]", className)} href={href} rel="noreferrer" target="_blank">{children}</Link> : <span className={className}>{children}</span>;
 }

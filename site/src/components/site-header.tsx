@@ -11,7 +11,6 @@ const links = [
   { href: "/boardroom", label: "Meetings" },
   { href: "/agents", label: "AI team" },
   { href: "/ventures", label: "Projects" },
-  { href: "/fighters", label: "Fighters" },
   { href: "/incubator", label: "New ideas" },
   { href: "/ideas", label: "Idea history" },
   { href: "/metrics", label: "Results" },

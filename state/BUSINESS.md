@@ -13,11 +13,14 @@ did not discover or approve it. That distinction keeps the founding gate honest:
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
-Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. FightAIQ
-is implemented in data-only mode for UFC and Oktagon. MMA Files is a private
-bilingual newsroom whose public site does not exist yet. Their live schedules remain
-behind the recorded signatures and independent switches. The Magazine Incubator may
-only produce research proposals for owner rating.
+Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. Its public
+storefront remains unchanged and BoardlessAI produces planning notes only. FightAIQ
+collects UFC and Oktagon records and captured market data; live model analysis remains
+behind its separate switch. MMA Files is the public bilingual magazine and the sole
+reader-facing home for delivered fighter files, event cards, captured odds and reviewed
+model outputs. Their live schedules remain behind the recorded signatures and
+independent switches. The Magazine Incubator may only produce research proposals for
+owner rating.
 
 ## Owner and roles
 
@@ -131,8 +134,10 @@ BoardlessAI runs the shared project list and public calendar. For Caught Up it
 owns source collection, edition and product rooms, guarded production, delivery
 records and governance surfaces. For Titty Tuesdays it owns pre-commerce brand,
 season, audience and marketing planning only. FightAIQ owns sourced fighter/event
-records and code-generated analysis without betting. MMA Files owns private bilingual
-article drafts and optional social drafts. Social production is switched off by default.
+records, captured prices and code-generated analysis without bet placement. MMA Files
+owns the public bilingual articles and the reader-facing FightAIQ data pages. The two
+sites accept only bounded, hash-checked content files through their GitHub repositories;
+BoardlessAI cannot change their application code. Social production is switched off by default.
 The incubator owns research proposals only. Caught Up keeps
 a static reader path with Git and MDX as canon.
 

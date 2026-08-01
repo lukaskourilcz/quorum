@@ -27,6 +27,7 @@ export interface AdminCard {
   kind: RatingObjectKind;
   title: string;
   summary: string;
+  detailPath: string | null;
   status: string;
   originMeetingRef: string | null;
   createdAt: string | null;
@@ -210,7 +211,8 @@ function parsePlan(
       ventureId,
       kind: "plan",
       title,
-      summary: objective,
+      summary: text(plan.summary, 280) ?? objective,
+      detailPath: `ventures/${ventureId}/plans/${id}.md`,
       status,
       originMeetingRef,
       createdAt,
@@ -314,6 +316,7 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
         kind: "idea",
         title: idea.title,
         summary: idea.summary,
+        detailPath: `ideas/${ledgerNamespace}/details/${idea.id}.md`,
         status: idea.status,
         originMeetingRef: idea.origin.meetingRef,
         createdAt: idea.statusHistory[0]?.at ?? null,
@@ -378,6 +381,7 @@ async function proposalCards(root: string, ventureId: string, ratings: readonly 
         kind: "niche-proposal",
         title,
         summary,
+        detailPath: `ventures/${ventureId}/niche-proposals/${id}.md`,
         status,
         originMeetingRef,
         createdAt,
@@ -408,6 +412,7 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
           kind: "visual",
           title: `${locale.toUpperCase()} ${channel} package`,
           summary: item.text,
+          detailPath: null,
           status: queue?.status ?? "unavailable",
           originMeetingRef: pack.quoteCard.sourceTurnRef.split("#")[0] ?? null,
           createdAt: pack.date,

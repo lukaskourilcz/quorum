@@ -11,8 +11,6 @@ const routes = [
   "/ventures/caught-up",
   "/ventures/titty-tuesdays",
   "/ventures/fightaiq",
-  "/ventures/fightaiq/upcoming",
-  "/fighters",
   "/incubator",
   "/admin?venture=incubator&tab=niche-proposals",
   "/admin/ventures/titty-tuesdays/binder",

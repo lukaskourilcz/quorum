@@ -39,7 +39,7 @@ export default function VenturesPage() {
             </p>
           </div>
         }
-        description="Five projects share the same checks for sources, cost and human approval. Some are public, some are planning only, and MMA Files remains a private newsroom."
+        description="Five projects share the same checks for sources, cost and human approval. Caught Up and MMA Files have their own public sites; Titty Tuesdays remains planning-only."
         eyebrow="Current work"
         title="Five projects, with clear limits"
       />
@@ -96,7 +96,7 @@ export default function VenturesPage() {
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Sourced UFC and Oktagon files, with estimates made by code rather than guesswork.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The public can inspect verified records. Live probabilities stay hidden until the owner reviews one full event per organization.</p>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI keeps the meetings and source checks. MMA Files is the one public home for fighters, events, captured odds and model output.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/fightaiq">Open FightAIQ <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
@@ -105,13 +105,13 @@ export default function VenturesPage() {
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--magenta-spark)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
               <Badge tone="accent">Project 004</Badge>
-              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">PRIVATE NEWSROOM</p>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">BILINGUAL MAGAZINE</p>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">MMA Files</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Two daily English and Czech article slots, with social drafts ready for review.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The newsroom lives in the protected admin. There is no public magazine page, no automatic posting and no article without a verified FightAIQ source packet.</p>
-              <p className="mt-7 text-sm font-semibold text-[var(--fog)]">Private owner access only</p>
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Two daily English and Czech article slots, backed by FightAIQ files.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Finished bilingual articles and FightAIQ data are delivered to the public magazine. Social posting stays off until you turn it on separately.</p>
+              <a className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="https://mma-files.vercel.app/en" rel="noreferrer" target="_blank">Open MMA Files <ArrowRight aria-hidden="true" className="size-4" /></a>
             </div>
           </div>
         </article>

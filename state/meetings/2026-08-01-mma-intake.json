@@ -6,7 +6,7 @@
   "fixture": true,
   "status": "PLAN",
   "stage": "VALIDATION",
-  "operatingBrief": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC, KSW and Oktagon",
+  "operatingBrief": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC and Oktagon",
   "participantReasons": [
     {
       "agent": "FORGE",
@@ -119,7 +119,7 @@
         "agent": "FORGE",
         "mode": "gavel",
         "sentAt": "2026-08-01T06:00:00.000Z",
-        "text": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC, KSW and Oktagon"
+        "text": "Check fixture cards, fighter-file gaps, source health and one concrete way to improve the data across UFC and Oktagon"
       },
       {
         "agent": "FORGE",

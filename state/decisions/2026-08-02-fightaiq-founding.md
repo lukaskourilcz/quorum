@@ -11,7 +11,7 @@ Decision id: `fightaiq-founding`
 ## Proposed decision
 
 The owner adopts FightAIQ as Venture 003. Its first operating mode is data-only:
-verified UFC, KSW and Oktagon fighter files, event cards, versioned model work and a
+verified UFC and Oktagon fighter files, event cards, versioned model work and a
 private owner review desk.
 
 FightAIQ may explain probabilities and compare its model with captured market prices.
