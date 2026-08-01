@@ -52,7 +52,7 @@ const EditionSchema = openObject({
     roomUrl: HttpsUrlSchema,
     whyThisStory: z.string().trim().min(1).max(280)
   }),
-  socialPackRef: z.string().regex(/^state\/social\/packs\/\d{4}-\d{2}-\d{2}\.json$/)
+  socialPackRef: z.string().regex(/^state\/social\/packs\/\d{4}-\d{2}-\d{2}\.json$/).optional()
 });
 
 const NoEditionSchema = openObject({

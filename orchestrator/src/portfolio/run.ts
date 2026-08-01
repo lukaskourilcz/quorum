@@ -19,6 +19,7 @@ import { atomicWriteJson, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
 import type { FoundingAgent, Stage } from "../types.js";
 import { loadVentureRegistry, composeMeetingRouteDefinition } from "../ventures/registry.js";
+import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { buildCalendarFeed, loadMeetingRecords, mondayOfWeek, writeCalendarFeed } from "../meetings/calendar.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import { resolveTittyTuesdaysSlot } from "../titty-tuesdays/schedule.js";
@@ -237,7 +238,7 @@ export async function runPortfolioCycle(input: {
   explainRouting: boolean;
   now: Date;
 }): Promise<PortfolioCycleResult> {
-  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, budgetLedger, stages, routing, agents, modelConfig] = await Promise.all([
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, budgetLedger, stages, routing, agents, modelConfig, agentControls] = await Promise.all([
     loadVentureRegistry(),
     readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
     readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
@@ -247,7 +248,8 @@ export async function runPortfolioCycle(input: {
     readFile(path.join(configRoot, "stages.json"), "utf8").then((raw) => JSON.parse(raw) as { current: Stage }),
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     loadAgentRegistry(),
-    readFile(path.join(configRoot, "models.json"), "utf8").then((raw) => JSON.parse(raw) as { roles: Record<string, { provider: "openai" | "anthropic"; model: string; maxOutputTokens: number }> })
+    readFile(path.join(configRoot, "models.json"), "utf8").then((raw) => JSON.parse(raw) as { roles: Record<string, { provider: "openai" | "anthropic"; model: string; maxOutputTokens: number }> }),
+    loadVentureAgentControls()
   ]);
   const entries = budgetLedger.entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
   const month = pragueClockParts(input.now).date.slice(0, 7);
@@ -287,6 +289,8 @@ export async function runPortfolioCycle(input: {
   }
   if (input.phase === "mag-desk" && weekday === 5) cast.push("SPLIT");
   cast = [...new Set(cast)];
+  const disabledAgents = disabledAgentsForVenture(agentControls, definition.ventureId);
+  cast = cast.filter((agent) => !disabledAgents.has(agent));
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${input.cycleId.toUpperCase()}`,
     topicType: definition.topicType,
@@ -298,6 +302,7 @@ export async function runPortfolioCycle(input: {
     ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: cast,
+    disabledParticipants: [...disabledAgents],
     owner: cast[0],
     now: input.now
   });

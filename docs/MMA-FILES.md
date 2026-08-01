@@ -1,8 +1,8 @@
 # MMA Files
 
 MMA Files is a private bilingual newsroom inside BoardlessAI. It plans two article
-slots each day, produces English and Czech versions, and stores four social treatments
-per article. It does not have a public magazine route yet.
+slots each day and produces English and Czech versions. Social variants are optional
+and are switched off for now. It does not have a public magazine route yet.
 
 ## Daily path
 
@@ -22,15 +22,15 @@ kills the slot at `$0`; it cannot spend first and discover the gap later.
 `state/ventures/mma-files/STYLEBOOK.md` records observed patterns from ten Czech
 Fights.cz articles and ten English MMA Fighting articles. It describes pacing,
 sentence shape, attribution and words to avoid; it does not copy their prose. JAB
-writes the English draft, REACH rewrites Czech as native Czech rather than literal
-translation, and SPLIT checks both for generic AI filler. Facts and quotations still
-come only from the article’s evidence packet.
+writes the English draft and HACEK rewrites it as natural Czech rather than a literal
+translation. Local checks block generic AI filler in both versions. Facts and quotations
+still come only from the article’s evidence packet.
 
 ## Stored package
 
-Each valid article package contains both locales, evidence/provenance, a deterministic
-SVG hero and exactly four social variants. Instagram and Threads copy is stored in
-`/admin`; nothing posts while the social kill switch is on. The metrics form accepts
+Each valid article package contains both locales, source notes and a deterministic
+SVG hero. When REACH and FRAME are both on, it also stores four social variants in
+`/admin`; they are off now. Nothing posts while the social kill switch is on. The metrics form accepts
 manual views, likes, comments, shares and clicks after publication so future reviews
 can learn from real results.
 

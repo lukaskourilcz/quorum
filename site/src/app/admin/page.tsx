@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, RefreshCw } from "lucide-react";
 import { CopySocialText } from "@/components/admin/copy-social-text";
+import { AgentSwitches } from "@/components/admin/agent-switches";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
@@ -14,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
+import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -146,7 +148,7 @@ function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; u
 
       {packs.length === 0 ? (
         <Callout>
-          No social posts have been stored yet. A successful Caught Up edition saves one English and Czech set, four draft publishing records and the carousel images. Nothing is posted automatically while automatic social publishing is turned off.
+          No social posts are stored. They stay off until you turn THREADS, INSTAGRAM and FRAME on for Caught Up. Article delivery and the hero image continue without them.
         </Callout>
       ) : (
         <div className="grid gap-6">
@@ -204,13 +206,14 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, agentControls] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
     getPublicStandups(),
     readAdminFightAiQ(),
-    readAdminMmaFiles()
+    readAdminMmaFiles(),
+    readAdminAgentControls()
   ]);
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
   const selectedTab = selectedVenture
@@ -230,6 +233,7 @@ export default async function AdminPage({
   const savedItemCount = selectedVenture?.id === "mma-files"
     ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
     : selectedVenture?.cards.length ?? 0;
+  const selectedAgentControls = agentControls.find((control) => control.ventureId === selectedVenture?.id);
   return (
     <main className="min-h-screen">
       <header className="border-b border-[var(--border)] bg-[var(--card)]">
@@ -364,6 +368,10 @@ export default async function AdminPage({
               </Link>
             ))}
           </nav>
+
+          {selectedAgentControls ? (
+            <AgentSwitches initialAgents={selectedAgentControls.agents} ventureId={selectedAgentControls.ventureId} />
+          ) : null}
 
           {unreadableFiles.length ? (
             <Callout className="mt-6" tone="warning">

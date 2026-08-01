@@ -52,6 +52,7 @@ export async function produceMmaFilesArticle(input: {
   evidence: ArticleEvidencePacket;
   gateway: MmaFilesEditorialGateway;
   stylebookRaw?: string;
+  socialProductionEnabled?: boolean;
 }): Promise<ArticleProductionResult> {
   const assignment = input.slate.slots.find((slot) => slot.slot === input.slot);
   if (!assignment) throw new Error(`Editorial slate has no ${input.slot} slot`);
@@ -91,7 +92,9 @@ export async function produceMmaFilesArticle(input: {
   const finalContent = { ...content, status: violations.length ? "blocked" as const : "published" as const };
   const article = ArticlePackageSchema.parse({ ...finalContent, packageHash: articlePackageHash(finalContent) });
   const stored = await storeArticlePackage(input.root, article);
-  const socialPack = article.status === "published" ? buildSocialVariantPack(article) : null;
+  const socialPack = article.status === "published" && input.socialProductionEnabled !== false
+    ? buildSocialVariantPack(article)
+    : null;
   const socialPath = socialPack ? await storeSocialVariantPack(input.root, socialPack) : null;
   const mediaPaths = await storeArticleMedia(
     input.root,

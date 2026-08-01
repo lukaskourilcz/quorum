@@ -146,6 +146,7 @@ export async function runLiveEdition(input: {
   roomUrl: string;
   root?: string;
   dependencies?: LiveEditionDependencies;
+  socialPackEnabled?: boolean;
 }): Promise<LiveEditionResult> {
   const root = input.root ?? stateRoot;
   const [registry, allowlist, config, ledger] = await Promise.all([
@@ -216,7 +217,8 @@ export async function runLiveEdition(input: {
       mode: "production",
       config,
       gateway,
-      reporter
+      reporter,
+      socialPackEnabled: input.socialPackEnabled
     });
     editionPackage = produced.package;
     report = produced.report;

@@ -9,14 +9,14 @@ checks remain common infrastructure.
 
 | Project | State | What it does | Hard boundary |
 | --- | --- | --- | --- |
-| Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and social drafts | Delivery needs its narrow GitHub App; social publishing stays off |
+| Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and an article hero | Delivery needs its narrow GitHub App; social production starts off |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and marketing plans | No shop, stock, payments, ads, people imagery or purchase claims |
 | Magazine Incubator | Research only | Finds evidence-backed publication ideas for owner rating | Cannot found a project or build a product |
 | FightAIQ | Operating, data-only | UFC, KSW and Oktagon fighter/event files and deterministic analysis | No live probability publishing, bet placement, affiliate links or bookmaker automation |
-| MMA Files | Operating as a private newsroom | Two daily bilingual article slots and four social variants per article | No public magazine route; no paid production without verified FightAIQ input |
+| MMA Files | Operating as a private newsroom | Two daily bilingual article slots with optional social variants | No public magazine route; no paid production without verified FightAIQ input |
 
-`config/ventures.json` is the machine-readable source for meeting times, casts,
-cost limits, saved-item namespaces and admin tabs. The site calls these “projects”
+`config/ventures.json` stores meeting times, casts, cost limits, saved-item namespaces
+and admin tabs. `config/venture-agent-controls.json` stores the admin switches. The site calls these “projects”
 because that is clearer to visitors; internal contracts retain `venture` for
 backward compatibility.
 

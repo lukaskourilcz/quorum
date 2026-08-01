@@ -329,7 +329,9 @@ export async function write(
     throw new Error(`write: only ${pickedItems.length} selected items exist in the source pool`);
   }
   const pickedIds = new Set(pickedItems.map((item) => item.externalId));
-  const runnerUpItems = items.filter((item) => !pickedIds.has(item.externalId));
+  const runnerUpItems = items
+    .filter((item) => !pickedIds.has(item.externalId))
+    .slice(0, 12);
   const suppliedUrls = new Set([...pickedItems, ...runnerUpItems].map((item) => item.url));
   const revision = feedback.length
     ? `\n\nTrusted revision requirements:\n${feedback.map((item) => `- ${item}`).join("\n")}`

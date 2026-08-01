@@ -23,7 +23,7 @@
     "watchlistMaximum": 6,
     "maximumOutputTokens": 8000,
     "maximumLocalizationOutputTokens": 5000,
-    "maximumCurationCandidates": 80
+    "maximumCurationCandidates": 50
   },
   "models": {
     "curation": "claude-sonnet-4-6",

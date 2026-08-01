@@ -50,22 +50,23 @@ source accounts, approval records and project switches below are connected.
 - [x] **Sign the one $50 limit** — countersigned in `state/decisions/2026-08-04-budget-fifty.md` (`budget-2026-08d`). The $50 all-in limit, $42 model monthly share and $2.20 daily pace are now recorded. [imp:5] [owner:me] [time:5m] [kind:decision]
 - [x] **Sign the FightAIQ founding record** — countersigned in `state/decisions/2026-08-02-fightaiq-founding.md`. This approves its data-only scope, not betting, affiliates or live public probabilities. [imp:5] [owner:me] [time:5m] [kind:decision]
 - [x] **Sign the Titty Tuesdays founding record** — countersigned in `state/decisions/2026-08-01-titty-tuesdays-founding.md`. This approves planning, not commerce, stock, payments, ads or publishing. [imp:5] [owner:me] [time:5m] [kind:decision]
-- [ ] **Rotate both model keys** — `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` exist in GitHub Actions, but earlier notes say they were shared outside the secret store. Rotate them at the providers, replace the Actions secrets and set provider billing alerts below the signed BoardlessAI limit. The local live-room proof could not call Anthropic because no local key was configured; dry proof passed. [imp:5] [owner:me] [time:20m] [kind:setup]
+- [x] **Rotate both model keys** — the owner confirmed that `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` were rotated and replaced in GitHub Actions on 2026-08-01. Keep provider billing alerts below the signed BoardlessAI limit. [imp:5] [owner:me] [time:20m] [kind:setup]
 - [ ] **Approve the unfinished portraits or leave them blank** — 27 of 38 agents have portraits. The 11 new FightAIQ/MMA Files roles intentionally use the text fallback until you approve the image spend and generation. Never book an unknown image-tool charge as zero. [imp:2] [owner:me] [time:5m] [kind:decision]
 
 ## Private admin and Git-backed writes
 
 - [ ] **Configure `/admin` in Vercel Production** — add a unique `ADMIN_USER` and long random `ADMIN_PASSWORD`, redeploy, then confirm `/admin` returns `401` without credentials and `200` after login. Missing config returns `503` on purpose. [imp:5] [owner:me] [time:15m] [kind:setup]
 - [ ] **Give admin a narrow GitHub writer** — create a fine-grained token limited to Contents read/write on `lukaskourilcz/quorum`; store it in Vercel as `BOARDLESSAI_GITHUB_TOKEN`. Production ratings, manual odds, fighter-disagreement reviews and MMA Files metrics fail closed without it. Defaults are `BOARDLESSAI_GITHUB_REPOSITORY=lukaskourilcz/quorum` and `BOARDLESSAI_GITHUB_BRANCH=main`. [imp:5] [owner:me] [time:15m] [kind:setup]
+- [ ] **Open the project agent switches** — after the two admin environment steps above, sign in at `/admin`, choose a project and check its Meeting controls. Optional roles can be turned on or off there. Caught Up starts with THREADS, INSTAGRAM and FRAME off; MMA Files starts with REACH and FRAME off. Locked roles protect writing, translation, delivery and safety. [imp:4] [owner:me] [time:10m] [kind:setup]
 - [ ] **Accept that admin reviews become public repository history** — ratings, notes, price snapshots, fighter resolutions, metrics and derived taste files are committed state. Do not enter personal or confidential information. [imp:4] [owner:me] [time:5m] [kind:decision]
 
 ## Caught Up delivery
 
-- [ ] **Install the delivery GitHub App on `lukaskourilcz/aifirst` only** — grant Contents read/write and no broader permission; add `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY` to Quorum Actions secrets. [imp:5] [owner:me] [time:30m] [kind:setup]
+- [x] **Install the delivery GitHub App on `lukaskourilcz/aifirst` only** — the owner configured `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`, and the workflow minted a repository-scoped token successfully on 2026-08-01. Keep its installation limited to Caught Up with Contents read/write. [imp:5] [owner:me] [time:30m] [kind:setup]
 - [x] **Set the reader URL** — repository variable `CAUGHT_UP_SITE_URL=https://caughtup-ai.vercel.app` is configured. [imp:5] [owner:me] [time:5m] [kind:setup]
 - [x] **Confirm Caught Up’s adopted limits** — the owner approval reference is recorded in `state/decisions/2026-08-01-caughtup-adoption.md`. [imp:5] [owner:me] [time:5m] [kind:decision]
 - [ ] **Enable Caught Up for one reviewed delivery** — set `CAUGHT_UP_LIVE_ENABLED=true`, dispatch `cu-edition` with dry off, then verify the bilingual package, delivery receipt, `aifirst` checks and deployment. Set the switch back to `false` on any failure. Keep `SOCIAL_KILL_SWITCH=true`. [imp:5] [owner:me] [time:30m] [kind:deploy]
-- [ ] **Review the first three editions** — check both articles, citations, Czech and English tone, four-frame carousels, Instagram captions and Threads drafts in `/admin`. [imp:5] [owner:me] [time:90m] [kind:content]
+- [ ] **Review the first three editions** — check both articles, citations, Czech and English tone, the hero image and the Caught Up render. Social drafts stay off until you turn THREADS, INSTAGRAM and FRAME on in `/admin`. [imp:5] [owner:me] [time:90m] [kind:content]
 
 ## FightAIQ data and launch gate
 
@@ -86,7 +87,7 @@ source accounts, approval records and project switches below are connected.
 
 - [ ] **Configure the one daily email** — verify a Resend sending domain and SPF/DKIM; add `RESEND_API_KEY` and `DAILY_DIGEST_EMAIL_TO` as Actions secrets; add `DAILY_DIGEST_EMAIL_MODE=resend`, `DAILY_DIGEST_EMAIL_FROM`, `RESEND_FREE_TIER_MONTHLY=3000` and `RESEND_FREE_TIER_DAILY=100` as variables. Without them the digest safely logs instead of emailing. [imp:4] [owner:me] [time:45m] [kind:setup]
 - [ ] **Turn on the shared portfolio schedule last** — after signed decisions and reviewed dry rooms, set `PORTFOLIO_LIVE_ENABLED=true`. It currently is not configured. [imp:5] [owner:me] [time:10m] [kind:deploy]
-- [ ] **Keep social posting manual for now** — the storage and copy tools work, but the guarded Instagram connector does not yet publish the required four-frame transaction. Keep `SOCIAL_KILL_SWITCH=true`; no Meta setup is needed to copy drafts. [imp:4] [owner:me] [time:5m] [kind:decision]
+- [x] **Keep social production off for now** — the owner asked to focus on brainstorming and articles. Caught Up THREADS, INSTAGRAM and FRAME are off; MMA Files REACH and FRAME are off. `SOCIAL_KILL_SWITCH=true` still blocks posting if draft production is turned back on. [imp:4] [owner:me] [time:5m] [kind:decision]
 
 ## Before revenue or personal data
 
@@ -99,5 +100,5 @@ source accounts, approval records and project switches below are connected.
 - Five project workspaces, 38 agents, 14 Prague slots and one daily summary share one guarded runtime.
 - All 12 room kinds have fixture-labeled public proof; the production build, contracts and tests pass.
 - FightAIQ has deterministic Glicko-2/model output, source controls, manual odds, immutable performance history and private fighter review.
-- MMA Files stores two daily slots, bilingual article packages, four social variants per article, a private newsroom and manual metrics; it has no public magazine route.
+- MMA Files stores two daily slots, bilingual article packages, optional social variants, a private newsroom and manual metrics; it has no public magazine route.
 - Stateful buttons preserve scroll position. Vercel Pro is confirmed.

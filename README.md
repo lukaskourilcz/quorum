@@ -190,10 +190,9 @@ product, 18:00 article slot, 19:00 FightAIQ analysis, 20:00 MMA Files desk,
 21:00 incubator synthesis and 22:00 board night. GitHub receives both UTC
 daylight-saving variants; the runtime accepts only the one matching Prague time.
 
-The pending `budget-2026-08d` record proposes a `$50` all-in monthly limit,
-`$42` model share and `$2.20` daily pace. Until the owner countersigns it, the
-runtime correctly retains the older `$20` all-in fallback, `$15` model monthly
-limit and `$0.70` daily pace; MMA Files live work is disabled. At 80% the owner
+The owner countersigned `budget-2026-08d`, setting a `$50` all-in monthly limit,
+`$42` model share and `$2.20` daily pace. Project switches and evidence gates
+still control live work. At 80% the owner
 gets a warning. At 100%, or after three exhausted daily limits in a row, spend
 stops and one approval item is opened. Only the owner may raise the limit.
 
@@ -202,11 +201,11 @@ stops and one approval item is opened. Only the owner may raise the limit.
 `/admin` is dynamic, noindex, no-store and protected by constant-time Basic Auth.
 Authenticated traffic is not counted as a failed login; repeated invalid
 credentials are rate-limited. The page displays global social drafts and
-project-specific ideas, plans, visuals, research proposals, FightAIQ data and
-the MMA Files newsroom. Ratings are
+project-specific ideas, plans, visuals, research proposals, FightAIQ data,
+agent switches and the MMA Files newsroom. Ratings are
 re-ratable; the latest value governs the UI and prior values remain visible.
 
-Instagram and Threads start in draft mode. The current guarded Instagram path
+Instagram and Threads production starts switched off. The current guarded Instagram path
 does not implement the intended four-frame carousel transaction, so autopublish
 must remain disabled. A separate owner-approved change must verify current Meta
 contracts, scopes and policy before connecting accounts.

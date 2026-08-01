@@ -27,12 +27,12 @@ describe("agent registry and identity assets", () => {
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
       ["HERALD", ["caught-up"]],
-      ["HACEK", ["caught-up"]],
+      ["HACEK", ["caught-up", "mma-files"]],
       ["SCENE", ["titty-tuesdays"]],
       ["STUNT", ["titty-tuesdays"]],
       ["CORNER", ["fightaiq"]],
       ["SPOTTER", ["fightaiq"]],
-      ["TAPE", ["fightaiq"]],
+      ["TAPE", ["fightaiq", "mma-files"]],
       ["SIGMA", ["fightaiq"]],
       ["VIG", ["fightaiq"]],
       ["SONAR", ["fightaiq"]],

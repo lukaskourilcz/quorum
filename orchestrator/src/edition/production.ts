@@ -32,6 +32,11 @@ import {
   parityFeedback,
   reviewTranslationParity
 } from "./localize.js";
+import { createHash } from "node:crypto";
+import {
+  ARTICLE_HERO_COMPOSER_VERSION,
+  composeArticleHero
+} from "../social/media/compose.js";
 
 export interface EditionProductionInput {
   date: string;
@@ -48,6 +53,8 @@ export interface EditionProductionInput {
   config: EditionQualityConfig;
   gateway: EditionModelGateway;
   reporter?: EditionRunReporter;
+  socialPackEnabled?: boolean;
+  heroEnabled?: boolean;
 }
 
 export interface EditionProductionResult {
@@ -275,17 +282,41 @@ export async function produceEdition(
     reporter.quality = { metrics, result: quality };
     quality.violations.forEach((violation) => reporter.warn(`quality:${violation}`));
     if (quality.passed) {
-      const editionPackage = await reporter.stage("assemble_package", () =>
-        buildEditionPackage(article, input.config, {
+      const editionPackage = await reporter.stage("assemble_package", async () => {
+        const heroInputs = JSON.stringify({
+          composerVersion: ARTICLE_HERO_COMPOSER_VERSION,
+          date: article.date,
+          title: article.byLocale.en.title,
+          dek: article.byLocale.en.dek
+        });
+        const heroBytes = input.heroEnabled === false
+          ? null
+          : await composeArticleHero({
+              date: article.date,
+              title: article.byLocale.en.title,
+              dek: article.byLocale.en.dek
+            });
+        return buildEditionPackage(article, input.config, {
           meetingRef: input.meetingRef,
           roomUrl: input.roomUrl,
           whyThisStory: rationale,
           generatedAt: input.now,
           sourceCandidates: input.items.length,
           signalStrength: metrics.signalStrength,
-          costUsd: reporter.totalCostUsd()
-        })
-      );
+          costUsd: reporter.totalCostUsd(),
+          socialPackEnabled: input.socialPackEnabled,
+          ...(heroBytes
+            ? {
+                hero: {
+                  bytes: heroBytes,
+                  alt: article.byLocale.en.illustrationAlt,
+                  composerVersion: ARTICLE_HERO_COMPOSER_VERSION,
+                  inputsHash: createHash("sha256").update(heroInputs).digest("hex")
+                }
+              }
+            : {})
+        });
+      });
       EditionPackageSchema.parse(editionPackage);
       return {
         package: editionPackage,

@@ -39,6 +39,13 @@ interface EditionPackageContext {
   sourceCandidates: number;
   signalStrength: number;
   costUsd: number | undefined;
+  socialPackEnabled?: boolean;
+  hero?: {
+    bytes: Buffer;
+    alt: string;
+    composerVersion: string;
+    inputsHash: string;
+  };
 }
 
 function frontmatter(
@@ -59,6 +66,7 @@ function frontmatter(
     tags: article.tags,
     sources: article.sources,
     illustration: {
+      ...(context.hero ? { path: `/illustrations/${article.date}.webp` } : {}),
       prompt: article.illustrationPrompt,
       alt: localized.illustrationAlt
     },
@@ -76,7 +84,7 @@ function frontmatter(
       },
       source_candidates: context.sourceCandidates,
       cited_sources: article.sources.length,
-      image_provider: "none",
+      image_provider: context.hero ? "BoardlessAI deterministic composer" : "none",
       ...(context.costUsd === undefined
         ? {}
         : { cost: { amount: context.costUsd, currency: "USD" as const } })
@@ -113,7 +121,23 @@ export function buildEditionPackage(
       roomUrl: context.roomUrl,
       whyThisStory: context.whyThisStory
     },
-    socialPackRef: `state/social/packs/${article.date}.json`,
+    ...(context.socialPackEnabled === false
+      ? {}
+      : { socialPackRef: `state/social/packs/${article.date}.json` }),
+    ...(context.hero
+      ? {
+          hero: {
+            path: `public/illustrations/${article.date}.webp`,
+            bytesBase64: context.hero.bytes.toString("base64"),
+            alt: context.hero.alt,
+            provenance: {
+              method: "composed" as const,
+              composerVersion: context.hero.composerVersion,
+              inputsHash: context.hero.inputsHash
+            }
+          }
+        }
+      : {}),
     generation: {
       models: {
         curation: config.models.curation,

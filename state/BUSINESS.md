@@ -28,18 +28,18 @@ only produce research proposals for owner rating.
 
 ## Budget
 
-Effective unsigned fallback all-in hard cap: $20 USD.
+Effective countersigned all-in hard cap: $50 USD.
 
-- API monthly cap: $15
-- API daily cap: $0.70
+- API monthly cap: $42
+- API daily cap: $2.20
 - Venture standup cap: $0.20 per cycle
 - Caught Up meeting cap: $0.08 per meeting
 - Edition production cap: $0.35 per article run
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
-The pending `budget-2026-08d` record proposes one $50 all-in limit, a $42 model
-share and a $2.20 daily pace for all five projects. Until the owner countersigns
-that exact record, these older fallback limits remain and live MMA Files work is off.
+The owner countersigned `budget-2026-08d` on 2026-08-01. It sets one $50 limit,
+a $42 model share and a $2.20 daily pace for all five projects. Project-specific
+live switches and evidence gates still decide whether a meeting may run.
 
 Hosting has $0 incremental project cost under the owner's existing Vercel Pro
 subscription. If that allocation changes, the owner must review the limit before
@@ -103,13 +103,13 @@ Refunds: unavailable
 
 Payment fees: unavailable
 
-API cost: $0.00
+API cost: $0.52
 
 Treasury cost: $0.00
 
 Other cost: $0.00
 
-Gross profit: $0.00 from committed ledger entries as of adoption
+Gross profit: -$0.52 from recorded API usage through 2026-08-01 13:33 UTC
 
 Zero revenue is a measured operating fact. Unconnected fee or refund data stays
 unavailable.
@@ -127,12 +127,13 @@ venture or a live founding cycle.
 
 ## Solution and scope
 
-BoardlessAI runs the shared project registry and public clock. For Caught Up it
+BoardlessAI runs the shared project list and public calendar. For Caught Up it
 owns source collection, edition and product rooms, guarded production, delivery
 records and governance surfaces. For Titty Tuesdays it owns pre-commerce brand,
 season, audience and marketing planning only. FightAIQ owns sourced fighter/event
 records and code-generated analysis without betting. MMA Files owns private bilingual
-article and social drafts. The incubator owns research proposals only. Caught Up keeps
+article drafts and optional social drafts. Social production is switched off by default.
+The incubator owns research proposals only. Caught Up keeps
 a static reader path with Git and MDX as canon.
 
 ## Constraints

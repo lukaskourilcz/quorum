@@ -8,6 +8,7 @@ const FOREGROUND = "#f4f4f5";
 const MUTED = "#a1a1aa";
 const ACCENT = "#ff5a00";
 const CAUGHT_UP_ACCENT = "#fe45e2";
+export const ARTICLE_HERO_COMPOSER_VERSION = "article-hero-1";
 
 function escapeXml(value: string): string {
   return value
@@ -92,6 +93,34 @@ export async function composeQuoteCard(input: {
     ${textLines({ lines: ["“", ...wrap(input.quote, 30, 8), "”"], x: 110, y: 355, lineHeight: 78, fontSize: 58, weight: 700, fill: FOREGROUND })}
     ${textLines({ lines: [input.agent, input.date], x: 110, y: 1130, lineHeight: 42, fontSize: 28, weight: 700, fill: MUTED })}
   `, ACCENT));
+}
+
+export async function composeArticleHero(input: {
+  date: string;
+  title: string;
+  dek: string;
+}): Promise<Buffer> {
+  const width = 1200;
+  const height = 630;
+  const title = wrap(input.title, 28, 4);
+  const dek = wrap(input.dek, 62, 3);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+    <defs>
+      <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fe45e2" stop-opacity="0.26"/>
+        <stop offset="1" stop-color="#ff5a00" stop-opacity="0.08"/>
+      </linearGradient>
+    </defs>
+    <rect width="${width}" height="${height}" fill="${BACKGROUND}"/>
+    <circle cx="1010" cy="80" r="260" fill="url(#glow)"/>
+    <path d="M0 515 C250 420 400 610 670 490 S1030 410 1200 470 V630 H0Z" fill="#141419"/>
+    <rect x="54" y="54" width="1092" height="522" rx="28" fill="none" stroke="#3f3f46" stroke-width="2"/>
+    ${textLines({ lines: ["CAUGHT UP", input.date], x: 92, y: 112, lineHeight: 34, fontSize: 22, weight: 700, fill: CAUGHT_UP_ACCENT })}
+    ${textLines({ lines: title, x: 92, y: 235, lineHeight: 68, fontSize: 58, weight: 700, fill: FOREGROUND })}
+    ${textLines({ lines: dek, x: 92, y: 500, lineHeight: 36, fontSize: 25, fill: MUTED })}
+    <circle cx="1085" cy="106" r="12" fill="${ACCENT}"/>
+  </svg>`;
+  return sharp(Buffer.from(svg)).webp({ quality: 88, effort: 6 }).toBuffer();
 }
 
 export async function composeDeterministicSocialCard(input: {

@@ -104,7 +104,7 @@ export default function CompanyPage() {
               },
               {
                 title: "How people find the work",
-                text: "Caught Up and MMA Files prepare English and Czech Instagram and Threads drafts. Publishing remains a separate approved step."
+                text: "Caught Up publishes its English and Czech articles. Social drafts can be prepared later when you turn those roles back on."
               },
               {
                 title: "Income and costs",

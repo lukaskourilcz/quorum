@@ -69,6 +69,11 @@ import {
   composeMeetingRouteDefinition,
   loadVentureRegistry
 } from "./ventures/registry.js";
+import {
+  caughtUpSocialProductionEnabled,
+  disabledAgentsForVenture,
+  loadVentureAgentControls
+} from "./ventures/agent-controls.js";
 import type { RunnablePhase, Stage } from "./types.js";
 import { runPortfolioCycle } from "./portfolio/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
@@ -224,12 +229,13 @@ async function runCaughtUpDryCycle(
   if (!options.dry) {
     throw new Error("Caught Up scheduled phases remain dry until the Phase 9 cutover");
   }
-  const [routing, stages, ventureRegistry] = await Promise.all([
+  const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
     ),
-    loadVentureRegistry()
+    loadVentureRegistry(),
+    loadVentureAgentControls()
   ]);
   const definition = composeMeetingRouteDefinition(
     ventureRegistry,
@@ -257,6 +263,7 @@ async function runCaughtUpDryCycle(
     ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: definition.requiredParticipants,
+    disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
     now
   });
   const artifactRoot = path.join(repoRoot, "tmp", "dry-run", "state");
@@ -382,12 +389,13 @@ async function runCaughtUpLiveEditionCycle(
   if (options.phase !== "cu-edition" || options.dry) {
     throw new Error("Live Caught Up edition runner requires a non-dry cu-edition phase");
   }
-  const [routing, stages, ventureRegistry] = await Promise.all([
+  const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
     ),
-    loadVentureRegistry()
+    loadVentureRegistry(),
+    loadVentureAgentControls()
   ]);
   const definition = composeMeetingRouteDefinition(
     ventureRegistry,
@@ -427,6 +435,7 @@ async function runCaughtUpLiveEditionCycle(
     ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: definition.requiredParticipants,
+    disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
     now
   });
   const produced = await runLiveEdition({
@@ -434,7 +443,8 @@ async function runCaughtUpLiveEditionCycle(
     date,
     now,
     meetingRef: reference,
-    roomUrl: `${baseUrl}/${reference}`
+    roomUrl: `${baseUrl}/${reference}`,
+    socialPackEnabled: caughtUpSocialProductionEnabled(agentControls)
   });
   const monthAllInUsd = await appendEditionUsage(stateRoot, cycleId, now, produced.report);
   const evidenceRefs = produced.package.status === "edition"
@@ -493,7 +503,7 @@ async function runCaughtUpLiveEditionCycle(
     })
   ]);
   const socialArtifacts: string[] = [];
-  if (produced.package.status === "edition") {
+  if (produced.package.status === "edition" && caughtUpSocialProductionEnabled(agentControls)) {
     const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
     if (!caughtUpBaseUrl) {
       await recordMissingSocialPackConfiguration(stateRoot);
@@ -571,12 +581,13 @@ async function runCaughtUpLiveProductCycle(
   if (options.phase !== "cu-product" || options.dry) {
     throw new Error("Live Caught Up product runner requires a non-dry cu-product phase");
   }
-  const [routing, stages, ventureRegistry] = await Promise.all([
+  const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
     ),
-    loadVentureRegistry()
+    loadVentureRegistry(),
+    loadVentureAgentControls()
   ]);
   const definition = composeMeetingRouteDefinition(
     ventureRegistry,
@@ -603,6 +614,7 @@ async function runCaughtUpLiveProductCycle(
     ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: definition.requiredParticipants,
+    disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
     now
   });
   const [index, globalIndex] = await Promise.all([

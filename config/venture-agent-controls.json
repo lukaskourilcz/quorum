@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "ventures": {
+    "caught-up": {
+      "lockedOn": [
+        "HERALD",
+        "STET",
+        "HACEK",
+        "AUDIT",
+        "RELAY"
+      ],
+      "switchable": [
+        "SPARK",
+        "THREADS",
+        "INSTAGRAM",
+        "FRAME"
+      ],
+      "disabled": [
+        "THREADS",
+        "INSTAGRAM",
+        "FRAME"
+      ]
+    },
+    "titty-tuesdays": {
+      "lockedOn": [
+        "PULSE",
+        "AUDIT"
+      ],
+      "switchable": [
+        "ANGLE"
+      ],
+      "disabled": []
+    },
+    "incubator": {
+      "lockedOn": [
+        "PULSE"
+      ],
+      "switchable": [
+        "ANGLE",
+        "SCOUT",
+        "COHORT",
+        "VAULT",
+        "AUDIT"
+      ],
+      "disabled": []
+    },
+    "fightaiq": {
+      "lockedOn": [
+        "FORGE"
+      ],
+      "switchable": [
+        "CORNER",
+        "SPOTTER",
+        "TAPE",
+        "SONAR",
+        "SIGMA",
+        "VIG",
+        "PIVOT",
+        "AUDIT"
+      ],
+      "disabled": []
+    },
+    "mma-files": {
+      "lockedOn": [
+        "CANVAS",
+        "JAB",
+        "HACEK",
+        "STET",
+        "AUDIT"
+      ],
+      "switchable": [
+        "QUILL",
+        "REACH",
+        "PIVOT",
+        "SPLIT",
+        "TAPE",
+        "FRAME"
+      ],
+      "disabled": [
+        "REACH",
+        "FRAME"
+      ]
+    }
+  }
+}

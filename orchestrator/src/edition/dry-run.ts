@@ -67,7 +67,8 @@ export async function runEditionDry(): Promise<{
     mode: "dry_run",
     config,
     gateway: new FixtureEditionModelGateway(responses),
-    reporter
+    reporter,
+    heroEnabled: false
   });
   const files = await writeEditionArtifact(result.package, result.report);
   return {

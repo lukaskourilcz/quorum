@@ -104,6 +104,7 @@ export interface RouteInput {
   ventureId?: string;
   preset?: string;
   requiredParticipants?: readonly FoundingAgent[];
+  disabledParticipants?: readonly FoundingAgent[];
   owner?: FoundingAgent;
   affectedAgent?: FoundingAgent;
   now?: Date;
@@ -114,6 +115,7 @@ export function routeBoardroom(
   input: RouteInput
 ): RoomPacket {
   const owner = input.owner ?? OWNER_BY_TOPIC[input.topicType];
+  const disabled = new Set(input.disabledParticipants ?? []);
   const selected = new Map<
     FoundingAgent,
     { reason: string; mandatoryRule: string | null }
@@ -123,6 +125,12 @@ export function routeBoardroom(
     reason: string,
     mandatoryRule: string | null = null
   ) => {
+    if (disabled.has(agent)) {
+      if (agent === owner) {
+        throw new Error(`Routing owner ${agent} cannot be switched off`);
+      }
+      return;
+    }
     if (config.agents[agent]?.status !== "active") {
       throw new Error(`Routing selected inactive or unknown agent ${agent}`);
     }
@@ -199,7 +207,9 @@ export function routeBoardroom(
       .filter((agent) => !selected.has(agent))
       .map((agent) => ({
         agent,
-        reason: "not relevant to this bounded room",
+        reason: disabled.has(agent)
+          ? `switched off for ${input.ventureId ?? "this room"}`
+          : "not relevant to this bounded room",
         mandatoryRule: null
       })),
     maxRounds: config.defaults.maxRounds,

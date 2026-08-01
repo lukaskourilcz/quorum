@@ -8,6 +8,7 @@ import { repoRoot, stateRoot } from "../paths.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { atomicWriteJson, readJson } from "../state.js";
 import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditorialGateway } from "./pipeline.js";
+import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 
 const LocalizationSchema = z.object({
   title: z.string().trim().min(1).max(160),
@@ -148,6 +149,8 @@ export async function runLiveArticleProduction(input: {
   slot: "am" | "pm";
   now: Date;
 }): Promise<LiveArticleResult> {
+  const agentControls = await loadVentureAgentControls();
+  const disabledAgents = disabledAgentsForVenture(agentControls, "mma-files");
   const date = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(input.now);
   const runPath = `ventures/mma-files/runs/${date}-${input.slot}.json`;
   let slate: EditorialSlate;
@@ -172,7 +175,8 @@ export async function runLiveArticleProduction(input: {
     publishAt: input.now,
     mode: "data-only",
     evidence,
-    gateway: new GuardedMmaFilesGateway(input.cycleId, input.now)
+    gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
+    socialProductionEnabled: !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
   });
   await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: result.article.status, articleRef: result.article.packageHash, spentUsd: null, generatedAt: input.now.toISOString() });
   return {

@@ -1010,8 +1010,7 @@
         "reason",
         "status",
         "article",
-        "board",
-        "socialPackRef"
+        "board"
       ],
       "additionalProperties": {}
     },

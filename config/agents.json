@@ -762,10 +762,10 @@
       "slug": "hacek",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["caught-up"],
+      "ventures": ["caught-up", "mma-files"],
       "department": "Editorial (Caught Up)",
       "title": "Czech Language Editor",
-      "mission": "Turn each English edition into a native Czech article and Czech social set without changing its facts, sources, uncertainty or intent.",
+      "mission": "Turn each English edition into a natural Czech article without changing its facts, sources, uncertainty or intent.",
       "responsibilities": [
         "Adapt the cleared English article into natural Czech",
         "Write Czech Instagram carousel copy and its caption",
@@ -1414,7 +1414,8 @@
       "kind": "specialist",
       "provider": "Anthropic",
       "ventures": [
-        "fightaiq"
+        "fightaiq",
+        "mma-files"
       ],
       "department": "FightAIQ",
       "title": "Fight Analyst",
