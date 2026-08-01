@@ -90,7 +90,7 @@ describe("edition configuration and quality", () => {
     expect(EditionQualityConfigSchema.parse(config).quality.enforcement).toBe("enforce");
     expect(config.models).toEqual({
       curation: "claude-sonnet-4-6",
-      writing: "claude-opus-4-7",
+      writing: "claude-sonnet-4-6",
       localization: "claude-sonnet-4-6"
     });
     expect(config.quality.minimumSignalStrength).toBe(45);
@@ -127,7 +127,7 @@ describe("edition configuration and quality", () => {
       await productionInput(responses, 10, true)
     );
     expect(result.package.status).toBe("edition");
-    expect(result.report.measuredCostUsd).toBe(0.254);
+    expect(result.report.measuredCostUsd).toBe(0.194);
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
       "curate",
       "write",
@@ -153,6 +153,26 @@ describe("edition configuration and quality", () => {
       "write",
       "localize"
     ]);
+  });
+
+  it("accounts for a rejected unsupplied URL before regenerating", async () => {
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const invalid = structuredClone(base[1]!);
+    const invalidValue = invalid.value as { en: { body_mdx: string } };
+    invalidValue.en.body_mdx += "\n\n[Unapproved source](https://variety.com/)";
+    const rewrite = structuredClone(base[1]!);
+    rewrite.usage.stage = "rewrite";
+    const result = await produceEdition(
+      await productionInput([base[0]!, invalid, rewrite, base[2]!])
+    );
+    expect(result.package.status).toBe("edition");
+    expect(result.report.usage.map((usage) => usage.stage)).toEqual([
+      "curate",
+      "write",
+      "rewrite",
+      "localize"
+    ]);
+    expect(result.report.measuredCostUsd).toBe(0.284);
   });
 
   it("regenerates an enforced failure twice, then calls NO_EDITION", async () => {
@@ -322,8 +342,8 @@ describe("edition dry production", () => {
   it("builds the deterministic golden package without leaking injected instructions", async () => {
     const result = await runEditionDry();
     expect(result.status).toBe("edition");
-    expect(result.packageHash).toBe("98c929ed95bd54a1d9f6854420d343b7931598ee483d01920b895e44da86d43b");
-    expect(result.report.measuredCostUsd).toBe(0.254);
+    expect(result.packageHash).toBe("bde3aad11db96c92b39b788468e4c7e18878edec189d342267436f8c2cc22deb");
+    expect(result.report.measuredCostUsd).toBe(0.194);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(
       await readFile(

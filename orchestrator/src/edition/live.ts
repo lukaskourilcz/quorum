@@ -37,9 +37,20 @@ export interface LiveEditionResult {
   package: EditionPackage;
   report: EditionRunReport;
   sourceRun: ScrapeRunResult;
-  outboxPath: string;
+  outboxPath: string | null;
   reportPath: string;
   monthApiUsd: number;
+}
+
+/**
+ * A no-edition outcome is only public when it reflects a deterministic
+ * editorial/budget gate. Provider or local validation failures stay inside
+ * BoardlessAI, so a repaired same-day run can still publish a real edition.
+ */
+export function shouldQueueEditionDelivery(editionPackage: EditionPackage): boolean {
+  if (editionPackage.status === "edition") return true;
+  const reason = editionPackage.board.noEditionReason;
+  return reason === "budget_exhausted" || reason.startsWith("source_gate:");
 }
 
 function sameUtcMonth(left: Date, right: Date): boolean {
@@ -212,10 +223,12 @@ export async function runLiveEdition(input: {
   }
   validateEditionForDelivery(editionPackage);
   const hash = editionPackage.idempotencyKey;
-  const outboxPath = `edition/outbox/${input.date}-${hash}.json`;
+  const outboxPath = shouldQueueEditionDelivery(editionPackage)
+    ? `edition/outbox/${input.date}-${hash}.json`
+    : null;
   const reportPath = `edition/runs/${input.date}-${hash}.json`;
   await Promise.all([
-    atomicWriteJson(root, outboxPath, editionPackage),
+    ...(outboxPath ? [atomicWriteJson(root, outboxPath, editionPackage)] : []),
     atomicWriteJson(root, reportPath, {
       ...report,
       sourceSummary: {

@@ -105,6 +105,21 @@ export interface CycleResult {
   artifacts: string[];
 }
 
+/** A completed article is final for its date; a no-edition board status is provisional. */
+export async function hasDeliveredPublishedEdition(
+  date: string,
+  root = stateRoot
+): Promise<boolean> {
+  const receipt = await readJson<{
+    status?: unknown;
+    editionStatus?: unknown;
+    tags?: unknown;
+  } | null>(root, `edition/deliveries/${date}.json`, null);
+  if (receipt?.status !== "delivered") return false;
+  if (receipt.editionStatus === "edition") return true;
+  return Array.isArray(receipt.tags) && receipt.tags.length > 0;
+}
+
 async function exists(filePath: string): Promise<boolean> {
   try {
     await access(filePath);
@@ -386,6 +401,19 @@ async function runCaughtUpLiveEditionCycle(
   const productionBudgetUsd = budgetLimitsFromEnvironment().editionProductionUsd;
   const estimatedWorstCaseUsd = Number((meetingBudgetUsd + productionBudgetUsd).toFixed(8));
   const date = pragueClockParts(now).date;
+  if (await hasDeliveredPublishedEdition(date)) {
+    return {
+      cycleId,
+      phase: "cu-edition",
+      dry: false,
+      status: "preflight_complete",
+      decision: "NO_ACTION",
+      estimatedWorstCaseUsd,
+      selectedAgents: [],
+      skippedAgents: [],
+      artifacts: [`state/edition/deliveries/${date}.json`]
+    };
+  }
   const reference = meetingRef(date, "cu-edition");
   const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");
   const room = routeBoardroom(routing, {
@@ -517,7 +545,7 @@ async function runCaughtUpLiveEditionCycle(
     decisionPath,
     scorecardPath,
     calendarPath,
-    produced.outboxPath,
+    ...(produced.outboxPath ? [produced.outboxPath] : []),
     produced.reportPath,
     "budget/ledger.json",
     ...socialArtifacts

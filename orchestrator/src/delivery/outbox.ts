@@ -3,7 +3,7 @@ import path from "node:path";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { stateRoot } from "../paths.js";
-import { atomicWriteJson, atomicWriteText, readText, resolveStatePath } from "../state.js";
+import { atomicWriteJson, atomicWriteText, readJson, readText, resolveStatePath } from "../state.js";
 import { validateEditionForDelivery } from "./validate.js";
 
 export type DeliveryFailureCode =
@@ -73,15 +73,32 @@ export async function recordDelivery(input: {
   const now = input.now ?? new Date();
   const receiptPath = `edition/deliveries/${editionPackage.date}.json`;
   if (input.status === "delivered") {
+    const existingReceipt = await readJson<{
+      packageHash?: unknown;
+      supersededPackageHashes?: unknown;
+    } | null>(root, receiptPath, null);
+    const supersededPackageHashes = [
+      ...(Array.isArray(existingReceipt?.supersededPackageHashes)
+        ? (existingReceipt.supersededPackageHashes as unknown[]).filter(
+          (value): value is string => typeof value === "string"
+        )
+        : []),
+      ...(typeof existingReceipt?.packageHash === "string" &&
+        existingReceipt.packageHash !== editionPackage.idempotencyKey
+        ? [existingReceipt.packageHash]
+        : [])
+    ];
     await atomicWriteJson(root, receiptPath, {
       schemaVersion: 1,
       date: editionPackage.date,
       packageHash: editionPackage.idempotencyKey,
       status: "delivered",
+      editionStatus: editionPackage.status,
       targetRepository: "lukaskourilcz/aifirst",
       ...(input.targetCommit ? { targetCommit: input.targetCommit } : {}),
       deliveredAt: now.toISOString(),
-      tags: editionPackage.status === "edition" ? editionPackage.article.en.frontmatter.tags : []
+      tags: editionPackage.status === "edition" ? editionPackage.article.en.frontmatter.tags : [],
+      ...(supersededPackageHashes.length ? { supersededPackageHashes } : {})
     });
     await rm(absolute);
     return [receiptPath, input.packagePath];

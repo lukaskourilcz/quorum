@@ -3,10 +3,11 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BudgetError } from "../src/budget.js";
+import { hasDeliveredPublishedEdition } from "../src/cycle.js";
 import { oldestPendingDelivery, recordDelivery } from "../src/delivery/outbox.js";
 import { validateEditionForDelivery } from "../src/delivery/validate.js";
 import { loadEditionQualityConfig } from "../src/edition/config.js";
-import { runLiveEdition } from "../src/edition/live.js";
+import { runLiveEdition, shouldQueueEditionDelivery } from "../src/edition/live.js";
 import { BudgetedEditionModelGateway } from "../src/edition/models.js";
 import { buildNoEditionPackage } from "../src/edition/package.js";
 import type { EditionModelGateway, StructuredToolRequest } from "../src/edition/types.js";
@@ -23,6 +24,26 @@ async function writeJson(file: string, value: unknown): Promise<void> {
 afterEach(() => vi.unstubAllEnvs());
 
 describe("Caught Up production budget", () => {
+  it("keeps technical no-edition failures internal while queuing deterministic gates", async () => {
+    const config = await loadEditionQualityConfig();
+    const technical = buildNoEditionPackage({
+      date: "2026-08-04",
+      meetingRef: "meetings/2026-08-04-cu-edition",
+      roomUrl: "https://boardless.example/meetings/2026-08-04-cu-edition",
+      reason: "content_invalid_after_regeneration",
+      config
+    });
+    const sourceGate = buildNoEditionPackage({
+      date: "2026-08-04",
+      meetingRef: "meetings/2026-08-04-cu-edition",
+      roomUrl: "https://boardless.example/meetings/2026-08-04-cu-edition",
+      reason: "source_gate:successful_sources_2",
+      config
+    });
+    expect(shouldQueueEditionDelivery(technical)).toBe(false);
+    expect(shouldQueueEditionDelivery(sourceGate)).toBe(true);
+  });
+
   it("applies the owner-approved degradation thresholds", () => {
     expect(caughtUpBudgetMode(2.5)).toBe("full");
     expect(caughtUpBudgetMode(2.49)).toBe("minimal_transcript");
@@ -139,6 +160,40 @@ describe("Caught Up production budget", () => {
 });
 
 describe("delivery outbox", () => {
+  it("allows a provisional no-edition receipt to be upgraded once, then closes the date", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-provisional-delivery-"));
+    const config = await loadEditionQualityConfig();
+    const provisional = buildNoEditionPackage({
+      date: "2026-08-04",
+      meetingRef: "meetings/2026-08-04-cu-edition",
+      roomUrl: "https://boardless.example/meetings/2026-08-04-cu-edition",
+      reason: "content_invalid_after_regeneration",
+      config
+    });
+    const finalPackage = JSON.parse(await readFile(
+      path.join(repoRoot, "orchestrator", "tests", "fixtures", "edition", "golden-package.json"),
+      "utf8"
+    ));
+    const provisionalPath = `edition/outbox/2026-08-04-${provisional.idempotencyKey}.json`;
+    const finalPath = `edition/outbox/2026-08-04-${finalPackage.idempotencyKey}.json`;
+    await writeJson(path.join(root, provisionalPath), provisional);
+    await recordDelivery({ root, packagePath: provisionalPath, status: "delivered" });
+    expect(await hasDeliveredPublishedEdition("2026-08-04", root)).toBe(false);
+
+    await writeJson(path.join(root, finalPath), finalPackage);
+    await recordDelivery({ root, packagePath: finalPath, status: "delivered" });
+    const receipt = JSON.parse(await readFile(
+      path.join(root, "edition", "deliveries", "2026-08-04.json"),
+      "utf8"
+    ));
+    expect(receipt).toMatchObject({
+      packageHash: finalPackage.idempotencyKey,
+      editionStatus: "edition",
+      supersededPackageHashes: [provisional.idempotencyKey]
+    });
+    expect(await hasDeliveredPublishedEdition("2026-08-04", root)).toBe(true);
+  });
+
   it("drains oldest-first and records a successful replay exactly once", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-outbox-"));
     const config = await loadEditionQualityConfig();

@@ -15,7 +15,11 @@ const REQUIRED_DIGESTS_PER_DAY = 1;
 
 function truncateWords(value: string, maximum: number): string {
   const words = value.trim().replaceAll(/\s+/g, " ").split(" ").filter(Boolean);
-  return words.length <= maximum ? words.join(" ") : `${words.slice(0, maximum - 1).join(" ")}…`;
+  const wordLimited = words.length <= maximum
+    ? words.join(" ")
+    : `${words.slice(0, maximum - 1).join(" ")}…`;
+  if (wordLimited.length <= 240) return wordLimited;
+  return `${wordLimited.slice(0, 239).trimEnd()}…`;
 }
 
 function slotRecord(records: readonly MeetingRecord[], date: string, phase: string) {

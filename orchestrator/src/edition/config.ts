@@ -32,7 +32,7 @@ export const EditionQualityConfigSchema = z.object({
   }),
   models: z.object({
     curation: z.literal("claude-sonnet-4-6"),
-    writing: z.literal("claude-opus-4-7"),
+    writing: z.literal("claude-sonnet-4-6"),
     localization: z.literal("claude-sonnet-4-6")
   }),
   budgets: z.object({

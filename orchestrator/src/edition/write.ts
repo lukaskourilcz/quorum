@@ -6,6 +6,7 @@ import type {
   CuratedBrief,
   EnglishArticle,
   EditionModelGateway,
+  EditionUsage,
   LocalizedContent,
 } from "./types.js";
 import { DispatchSchema, WireItemSchema } from "./types.js";
@@ -22,6 +23,19 @@ export const LocalizedOutputSchema = z.object({
   uncertainty: z.array(z.string().trim().min(1)).min(1).max(3),
   dispatches: z.array(DispatchSchema).min(2).max(4)
 });
+
+/**
+ * The provider completed a billable call, but the locally enforced source or
+ * serialization rules rejected its tool payload. Keeping the usage attached
+ * lets the production report and ledger stay truthful even for a rejected
+ * draft.
+ */
+export class InvalidArticleError extends Error {
+  constructor(message: string, readonly usage: EditionUsage) {
+    super(message);
+    this.name = "InvalidArticleError";
+  }
+}
 
 const ToolOutputSchema = z.object({
   slug: z.string().trim().min(1),
@@ -263,7 +277,7 @@ export async function write(
   }
   const pickedIds = new Set(pickedItems.map((item) => item.externalId));
   const runnerUpItems = items.filter((item) => !pickedIds.has(item.externalId));
-  const suppliedUrls = new Set(items.map((item) => item.url));
+  const suppliedUrls = new Set([...pickedItems, ...runnerUpItems].map((item) => item.url));
   const runnerUrls = new Set(runnerUpItems.map((item) => item.url));
   const revision = feedback.length
     ? `\n\nTrusted revision requirements:\n${feedback.map((item) => `- ${item}`).join("\n")}`
@@ -273,7 +287,17 @@ export async function write(
     stage: feedback.length ? "rewrite" : "write",
     maxOutputTokens: config.article.maximumOutputTokens,
     system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} English words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${revision}`,
-    user: `Publication date: ${brief.date}\n\n${sourcePacket(brief, pickedItems, runnerUpItems)}`,
+    user: `Publication date: ${brief.date}
+
+Trusted URL rules:
+- Every URL in any output field must be an exact character-for-character match from the approved list below.
+- Do not cite a publication, homepage, search result or remembered URL that is not on this list.
+- If a claim has no approved URL, omit the claim instead of adding a citation.
+
+Approved URLs (exact strings):
+${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
+
+${sourcePacket(brief, pickedItems, runnerUpItems)}`,
     tool: {
       name: "emit_article",
       description: "Emit the English Caught Up feature and supplied-source watchlist.",
@@ -281,8 +305,16 @@ export async function write(
     },
     parse: (value) => ToolOutputSchema.parse(value)
   });
-  const slug = normalizeArticleSlug(response.value.slug, brief.date);
-  assertSuppliedLinks(response.value, suppliedUrls, runnerUrls);
+  let slug: string;
+  try {
+    slug = normalizeArticleSlug(response.value.slug, brief.date);
+    assertSuppliedLinks(response.value, suppliedUrls, runnerUrls);
+  } catch (error) {
+    throw new InvalidArticleError(
+      error instanceof Error ? error.message : "write: invalid article output",
+      response.usage
+    );
+  }
   return {
     slug,
     date: brief.date,

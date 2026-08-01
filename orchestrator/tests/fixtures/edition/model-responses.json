@@ -145,13 +145,13 @@
     },
     "usage": {
       "provider": "anthropic",
-      "model": "claude-opus-4-7",
+      "model": "claude-sonnet-4-6",
       "stage": "write",
       "inputTokens": 8000,
       "outputTokens": 4000,
       "cacheReadTokens": 20000,
       "cacheWriteTokens": 0,
-      "costUsd": 0.15
+      "costUsd": 0.09
     }
   },
   {

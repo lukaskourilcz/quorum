@@ -27,7 +27,7 @@
   },
   "models": {
     "curation": "claude-sonnet-4-6",
-    "writing": "claude-opus-4-7",
+    "writing": "claude-sonnet-4-6",
     "localization": "claude-sonnet-4-6"
   },
   "budgets": {
