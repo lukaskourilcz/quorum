@@ -1,11 +1,12 @@
 # Historical room proof — 2026-08-01
 
-Every scheduled room kind was dispatched and saved. Eleven records use `fixture: true`
-to prove routing, contracts, rooms, public projection and the daily summary without
-claiming a live provider decision. The current Caught Up edition record is a genuine
-provider run (`fixture: false`): it completed with `NO_EDITION` and recorded
-`$0.19983975` of API spend. That result is valid evidence that the paid path works; it
-did not publish an article because the board did not approve an edition in that run.
+Every scheduled room kind was dispatched and saved. Ten records use `fixture: true`
+to prove routing, contracts, rooms and public projection without claiming a live
+provider decision. Two records are genuine runs (`fixture: false`). The Caught Up
+edition completed with `NO_EDITION` and recorded `$0.19983975` of API spend, valid
+evidence that the paid path works; it did not publish because the board did not approve
+an edition. The night company meeting completed with `NO_ACTION` and `$0` of API spend,
+valid evidence that an agenda gate can finish without an unnecessary paid call.
 
 This is a historical proof record, not a description of the current meeting policy.
 Current scheduled specialist windows can end as `not-needed`, the budget is
@@ -31,7 +32,8 @@ Project rooms:
 - [MMA Files story meeting](https://boardless-ai.vercel.app/meetings/2026-08-01-mag-editorial)
 - [MMA Files desk review](https://boardless-ai.vercel.app/meetings/2026-08-01-mag-desk)
 
-The dry daily summary completed with status `sent` through the log sink, seven active
-fallback meetings and a 70-word body. That result is retained as historical fixture
-evidence. The current signed limit is `$50`; current policy avoids unnecessary rooms
-through explicit agenda, source-change and evidence gates.
+The latest daily summary completed during the genuine night cycle with status `sent`
+through the log sink and an untruncated 182-word body. That proves summary assembly and
+local delivery, not external email delivery. The current signed limit is `$50`; current
+policy avoids unnecessary rooms through explicit agenda, source-change and evidence
+gates.
