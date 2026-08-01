@@ -46,6 +46,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { fightWeekFocus, loadEventCards } from "../fightaiq/store.js";
+import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
 import { refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
 import {
   budgetDecisionStatus,
@@ -54,6 +55,8 @@ import {
   signedOwnerDecision
 } from "./schedule.js";
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
+import { foundTemplateVenture, templateCandidateFromProposal } from "../ventures/founding.js";
+import { VentureTemplateSchema } from "../contracts/autonomy.js";
 
 export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
@@ -201,7 +204,7 @@ function buildRecord(input: {
       ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
     : input.phase === "incubator-synthesis"
       ? input.proposals.length
-        ? `Recorded ${input.proposals.length} evidenced niche proposal${input.proposals.length === 1 ? "" : "s"} for owner rating. No founding action is authorized.`
+        ? `Recorded ${input.proposals.length} evidenced niche proposal${input.proposals.length === 1 ? "" : "s"}. The first may be founded only if AUDIT and every deterministic template check pass.`
         : "Recorded zero niche proposals because no candidate cleared the evidence and duplication gates."
       : input.contributions.find((contribution) => contribution.agent === "PULSE")?.summary ?? "The bounded room recorded no action.";
   return MeetingRecordSchema.parse({
@@ -220,7 +223,7 @@ function buildRecord(input: {
     proposals: input.contributions.map((contribution) => ({ agent: contribution.agent, summary: contribution.summary, evidenceRefs: contribution.evidenceRefs })),
     voteMatrix: input.contributions.map((contribution) => ({ voter: contribution.agent, firstChoice: contribution.stance, veto: contribution.stance === "veto" })),
     tasks: input.contributions.flatMap((contribution, index) => contribution.task ? [{ id: `TASK-${input.cycleId.toUpperCase()}-${String(index + 1).padStart(2, "0")}`, owner: contribution.agent, summary: contribution.task.summary, status: "planned" as const }] : []),
-    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "EDITORIAL_ONLY. Approved bilingual articles may enter the guarded MMA Files delivery queue; social variants remain drafts and automatic social posting is disabled." : "RESEARCH_ONLY. A shortlist does not authorize founding, spend or external action.",
+    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "EDITORIAL_ONLY. Approved bilingual articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : input.phase === "incubator-synthesis" ? "TEMPLATE_ONLY. A compliant content venture may be founded; every exception remains with the owner." : "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
     eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
     ...(input.editorialSlate ? { editorialSlateRef: `ventures/mma-files/slates/${input.date}.json` } : {}),
     ...(input.agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${input.agenda.id}` } : {}),
@@ -479,6 +482,7 @@ export async function runPortfolioCycle(input: {
     const evidence = await refreshFightAiQEvidence({ root, date, now: input.now });
     preparationArtifacts.push(...evidence.artifactPaths);
     sourceMaterialChanged = evidence.materialChange;
+    preparationArtifacts.push(...await refreshReadinessDossiers(root, input.now));
   }
   if (input.phase === "mma-intake") {
     await refreshMmaBridge(root, date);
@@ -758,8 +762,18 @@ export async function runPortfolioCycle(input: {
       }
     }
   }
+  const foundingArtifacts: string[] = [];
+  if (!input.dry && input.phase === "incubator-synthesis" && proposals.length > 0 && !contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto")) {
+    const template = VentureTemplateSchema.parse(JSON.parse(await readFile(path.join(configRoot, "venture-template.json"), "utf8")));
+    const currentRegistry = await loadVentureRegistry();
+    const candidate = templateCandidateFromProposal({ proposal: proposals[0]!, registry: currentRegistry, template });
+    if (!currentRegistry.ventures.some((venture) => venture.id === candidate.slug)) {
+      const founded = await foundTemplateVenture({ repoRoot, candidateValue: candidate, now: input.now });
+      foundingArtifacts.push(...founded.files);
+    }
+  }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

@@ -31,7 +31,10 @@ import {
   loadMeetingPolicy,
   mayRequestMeeting,
   nextAgendaDate,
-  requestMeetingAgenda
+  phaseNeedsAgenda,
+  readMeetingAgendaQueue,
+  requestMeetingAgenda,
+  starvationList
 } from "./meetings/agenda.js";
 import {
   createLiveEditionMeeting,
@@ -88,6 +91,8 @@ import { runPortfolioCycle } from "./portfolio/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import { runLiveArticleProduction } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
+import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
+import { openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -969,12 +974,37 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const artifactRoot = options.dry
       ? path.join(repoRoot, "tmp", "dry-run", "state")
       : stateRoot;
+    const morningContext = venturePhase === "morning"
+      ? await (async () => {
+          const [autonomy, meetingPolicy, ventureRegistry, agendaQueue, priorityQueue] = await Promise.all([
+            refreshAutonomySnapshot({ repoRoot, stateRoot: artifactRoot, now }),
+            loadMeetingPolicy(),
+            loadVentureRegistry(),
+            readMeetingAgendaQueue(artifactRoot, now),
+            readPriorityQueue(artifactRoot, now)
+          ]);
+          const agendaVentures = [...new Set(ventureRegistry.ventures
+            .filter((venture) => venture.meetings.some((meeting) => phaseNeedsAgenda(meetingPolicy, meeting.kind)))
+            .map((venture) => venture.id))];
+          return {
+            autonomy,
+            priorityQueue,
+            openPriorities: openPriorityItems(priorityQueue),
+            starvation: starvationList({ queue: agendaQueue, ventureIds: agendaVentures, now })
+          };
+        })()
+      : null;
     const liveCouncil = !options.dry && venturePhase === "morning"
       ? await collectLiveCouncil({
           cycleId,
           phase: venturePhase,
           stage: stages.current,
           now,
+          businessContext: {
+            autonomy: morningContext!.autonomy,
+            openPriorities: morningContext!.openPriorities,
+            starvation: morningContext!.starvation
+          },
           budgetContext: (ledger): ReserveContext => ({
             now,
             cycleId,
@@ -1017,6 +1047,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     }
     const meetingAgendaIds: string[] = [];
     let meetingAgendaStateChanged = false;
+    let priorityStateChanged = false;
+    let selectedPriorityId: string | null = null;
+    let selectedPriorityVenture: string | null = null;
     if (measuredCouncil && venturePhase === "morning") {
       const approvals = measuredCouncil.positions.filter((position) => position.recommendation === "approve");
       const auditApproved = approvals.some((position) => position.agent === "AUDIT");
@@ -1030,31 +1063,55 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         ]);
         if (mayRequestMeeting(meetingPolicy, venturePhase, request.meetingRequest.phase)) {
           const target = getVentureMeetingDefinition(ventureRegistry, request.meetingRequest.phase);
-          const local = pragueClockParts(now);
-          try {
-            const scheduled = await requestMeetingAgenda({
-              root: artifactRoot,
-              policy: meetingPolicy,
-              ventureId: target.ventureId,
-              phase: request.meetingRequest.phase,
-              requestedBy: request.agent,
-              sourcePhase: venturePhase,
-              sourceMeetingRef: `standups/${local.date}-morning`,
-              summary: request.meetingRequest.summary,
-              evidenceRefs: request.meetingRequest.evidenceRefs,
-              notBefore: nextAgendaDate({
-                currentDate: local.date,
-                currentHour: local.hour,
-                targetHour: parseCadenceHour(target.meeting.cadence)
-              }),
-              now
-            });
-            meetingAgendaIds.push(scheduled.agenda.id);
-            meetingAgendaStateChanged = scheduled.created;
-          } catch (error) {
-            console.warn(`Council meeting request was not queued: ${error instanceof Error ? error.message : "unknown scheduler error"}`);
+          const priority = morningContext?.openPriorities.find((item) => item.id === request.meetingRequest?.priorityItemId);
+          if (!priority || priority.venture !== target.ventureId) {
+            console.warn("Council meeting request did not match an open priority item for the target venture");
+          } else {
+            const local = pragueClockParts(now);
+            try {
+              const scheduled = await requestMeetingAgenda({
+                root: artifactRoot,
+                policy: meetingPolicy,
+                ventureId: target.ventureId,
+                phase: request.meetingRequest.phase,
+                requestedBy: request.agent,
+                sourcePhase: venturePhase,
+                sourceMeetingRef: `standups/${local.date}-morning`,
+                summary: request.meetingRequest.summary,
+                evidenceRefs: request.meetingRequest.evidenceRefs,
+                notBefore: nextAgendaDate({
+                  currentDate: local.date,
+                  currentHour: local.hour,
+                  targetHour: parseCadenceHour(target.meeting.cadence)
+                }),
+                now
+              });
+              meetingAgendaIds.push(scheduled.agenda.id);
+              meetingAgendaStateChanged = scheduled.created;
+              await selectPriorityItem({
+                root: artifactRoot,
+                itemId: priority.id,
+                meetingRef: `standups/${local.date}-morning`,
+                now
+              });
+              selectedPriorityId = priority.id;
+              selectedPriorityVenture = priority.venture;
+              priorityStateChanged = true;
+            } catch (error) {
+              console.warn(`Council meeting request was not queued: ${error instanceof Error ? error.message : "unknown scheduler error"}`);
+            }
           }
         }
+      }
+      for (const item of morningContext?.openPriorities ?? []) {
+        if (item.id === selectedPriorityId) continue;
+        await skipPriorityItem({
+          root: artifactRoot,
+          itemId: item.id,
+          reason: "The 06:00 board did not select this item for today's single specialist commission.",
+          now
+        });
+        priorityStateChanged = true;
       }
     }
     const agentsParticipated = Boolean(measuredCouncil) || (options.dry && !deterministicCheckpoint);
@@ -1067,6 +1124,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           estimatedCycleUsd: estimatedWorstCaseUsd,
           now,
           council: measuredCouncil,
+          ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(caughtUpIdea ? { caughtUpIdea } : {})
         })
       : createOfflineStandup({
@@ -1080,30 +1138,48 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           now,
           evidenceRefs: opportunityGate.evidenceRefs,
           agentsParticipated,
+          ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(caughtUpIdea ? { caughtUpIdea } : {})
         });
+    const recordedStandup = morningContext
+      ? StandupSchema.parse({
+          ...standup,
+          starvationReview: morningContext.starvation.map((entry) => ({
+            ventureId: entry.ventureId,
+            outcome: selectedPriorityVenture === entry.ventureId ? "commissioned" as const : "why-not" as const,
+            reason: selectedPriorityVenture === entry.ventureId
+              ? "The board commissioned the venture's selected open priority item."
+              : morningContext.openPriorities.some((item) => item.venture === entry.ventureId)
+                ? "The board used its single commission on a higher-priority bounded decision."
+                : "No open priority item for this venture had a concrete decision at stake.",
+            priorityItemId: selectedPriorityVenture === entry.ventureId ? selectedPriorityId : null
+          }))
+        })
+      : standup;
     const artifacts = [
-      `standups/${standup.date}-${options.phase}.json`,
+      `standups/${recordedStandup.date}-${options.phase}.json`,
       `meetings/${cycleId}.json`,
       `scorecards/${cycleId}.json`,
       `decisions/${cycleId}.json`,
       ...(caughtUpIdea
         ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
         : []),
-      ...(meetingAgendaStateChanged ? [MEETING_AGENDA_PATH] : [])
+      ...(meetingAgendaStateChanged ? [MEETING_AGENDA_PATH] : []),
+      ...(morningContext ? [AUTONOMY_SNAPSHOT_PATH] : []),
+      ...(priorityStateChanged ? [PRIORITY_QUEUE_PATH] : [])
     ];
     await Promise.all([
       atomicWriteJson(
         artifactRoot,
         artifacts[0]!,
-        publicStandup(standup)
+        publicStandup(recordedStandup)
       ),
       atomicWriteJson(artifactRoot, artifacts[1]!, {
         schemaVersion: 1,
         fixture: options.dry,
         cycleId,
         room,
-        summary: standup.decision.summary,
+        summary: recordedStandup.decision.summary,
         generatedAt: now.toISOString()
       }),
       atomicWriteJson(artifactRoot, artifacts[2]!, {
@@ -1113,7 +1189,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         stage: stages.current,
         opportunityGate,
         estimatedWorstCaseUsd,
-        actualUsd: standup.ledger.actualCycleUsd,
+        actualUsd: recordedStandup.ledger.actualCycleUsd,
         socialDecision: "NO_POST",
         ...(caughtUpIdea ? {
           caughtUpIdeaRef: caughtUpIdea.entry.id,

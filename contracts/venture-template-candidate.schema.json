@@ -36,7 +36,7 @@
     },
     "cadenceHourPrague": {
       "type": "integer",
-      "minimum": 0,
+      "minimum": 5,
       "maximum": 23
     },
     "cast": {

@@ -104,6 +104,34 @@ export const StandupSchema = z.object({
     })
   ),
   growthPlan: z.string().min(1),
+  operatingSignals: z.object({
+    snapshotRef: z.string().min(1),
+    growth: z.array(z.object({
+      venture: z.string().min(1),
+      objective: z.string().min(1),
+      signals: z.array(z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        value: z.number().nonnegative(),
+        unit: z.enum(["count", "ratio"]),
+        detail: z.string().min(1)
+      }))
+    })),
+    quality: z.object({
+      killedSlotReasons: z.record(z.string(), z.number().int().nonnegative()),
+      vetoRate: z.number().min(0).max(1),
+      firstPassRate: z.number().min(0).max(1),
+      retryRate: z.number().min(0).max(1),
+      sourceAgreementRate: z.number().min(0).max(1),
+      verifierPassRate: z.number().min(0).max(1)
+    })
+  }).optional(),
+  starvationReview: z.array(z.object({
+    ventureId: z.string().min(1),
+    outcome: z.enum(["commissioned", "why-not"]),
+    reason: z.string().min(1).max(280),
+    priorityItemId: z.string().min(1).nullable()
+  })).optional(),
   eveningOutcome: z.string().nullable(),
   caughtUpIdeaRef: z.string().min(1).optional(),
   roomTranscript: RoomTranscriptSchema,

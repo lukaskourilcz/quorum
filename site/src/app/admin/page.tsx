@@ -16,6 +16,8 @@ import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio"
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
+import { readAdminAutonomy } from "@/lib/admin-autonomy";
+import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -207,14 +209,15 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, agentControls] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, agentControls, autonomy] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
     getPublicStandups(),
     readAdminFightAiQ(),
     readAdminMmaFiles(),
-    readAdminAgentControls()
+    readAdminAgentControls(),
+    readAdminAutonomy()
   ]);
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
   const selectedTab = selectedVenture
@@ -326,6 +329,7 @@ export default async function AdminPage({
 
       {!selectedVenture ? (
         <>
+          <AutonomyPanel initial={autonomy} ventures={portfolio.ventures.map(({ id, name }) => ({ id, name }))} />
           <SocialArchive {...state.socialArchive} />
           <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
             <div className="mb-6 flex items-center gap-3">

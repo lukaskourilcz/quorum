@@ -77,7 +77,7 @@ export const VentureTemplateCandidateSchema = openObject({
   name: z.string().trim().min(1).max(100),
   deliveryTarget: z.enum(["boardless-site", "caught-up", "mma-files"]),
   dailyEnvelopeUsd: z.number().finite().positive().max(0.15),
-  cadenceHourPrague: z.number().int().min(0).max(23),
+  cadenceHourPrague: z.number().int().min(5).max(23),
   cast: z.array(ContractAgentIdSchema).min(2).max(8),
   styleBrief: z.string().trim().min(1).max(2_000),
   requiresNewCredentials: z.boolean(),

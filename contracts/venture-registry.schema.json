@@ -125,6 +125,94 @@
               "additionalProperties": {}
             }
           },
+          "templateOperation": {
+            "type": "object",
+            "properties": {
+              "templateId": {
+                "type": "string",
+                "const": "content-venture-default"
+              },
+              "deliveryTarget": {
+                "type": "string",
+                "enum": [
+                  "boardless-site",
+                  "caught-up",
+                  "mma-files"
+                ]
+              },
+              "dailyEnvelopeUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 0.15
+              },
+              "cast": {
+                "minItems": 2,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "VIZE",
+                    "FORGE",
+                    "PULSE",
+                    "AUDIT",
+                    "SCOUT",
+                    "SCRIBE",
+                    "LENS",
+                    "QUILL",
+                    "RADAR",
+                    "KEEPER",
+                    "THREADS",
+                    "INSTAGRAM",
+                    "PEOPLE",
+                    "LEDGER",
+                    "HERALD",
+                    "STET",
+                    "HACEK",
+                    "SPARK",
+                    "VAULT",
+                    "FRAME",
+                    "RELAY",
+                    "ANGLE",
+                    "COHORT",
+                    "FUNNEL",
+                    "PALATE",
+                    "SCENE",
+                    "STUNT",
+                    "CORNER",
+                    "SPOTTER",
+                    "TAPE",
+                    "SIGMA",
+                    "VIG",
+                    "SONAR",
+                    "CANVAS",
+                    "JAB",
+                    "REACH",
+                    "SPLIT",
+                    "PIVOT"
+                  ]
+                }
+              },
+              "cadence": {
+                "type": "string",
+                "pattern": "^agenda-gated@(?:0[5-9]|1\\d|2[0-3]):00$"
+              },
+              "proposalRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "templateId",
+              "deliveryTarget",
+              "dailyEnvelopeUsd",
+              "cast",
+              "cadence",
+              "proposalRef"
+            ],
+            "additionalProperties": {}
+          },
           "meetings": {
             "type": "array",
             "items": {

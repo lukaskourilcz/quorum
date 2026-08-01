@@ -75,6 +75,14 @@ const VentureDefinitionSchema = openObject({
     cadence: z.string().regex(/^(?:2x-daily@\d{2}:00,\d{2}:00|daily@(?:0[5-9]|1\d|2[0-3]):00)$/),
     envelopeUsd: z.number().finite().positive().max(1)
   })).optional(),
+  templateOperation: openObject({
+    templateId: z.literal("content-venture-default"),
+    deliveryTarget: z.enum(["boardless-site", "caught-up", "mma-files"]),
+    dailyEnvelopeUsd: z.number().finite().positive().max(0.15),
+    cast: z.array(ContractAgentIdSchema).min(2).max(8),
+    cadence: z.string().regex(/^agenda-gated@(?:0[5-9]|1\d|2[0-3]):00$/),
+    proposalRef: z.string().trim().min(1).max(240)
+  }).optional(),
   meetings: z.array(VentureMeetingDefinitionSchema)
 });
 
@@ -113,7 +121,10 @@ export const VentureRegistrySchema = openObject({
       return match
         ? [{ kind: `${job.kind}-am`, hour: Number(match[1]) }, { kind: `${job.kind}-pm`, hour: Number(match[2]) }]
         : [{ kind: job.kind, hour: Number(job.cadence.slice(6, 8)) }];
-    }))
+    })),
+    ...ventures.flatMap((venture) => venture.templateOperation
+      ? [{ kind: `${venture.id}-template-operation`, hour: Number(venture.templateOperation.cadence.slice(13, 15)) }]
+      : [])
   ].sort((left, right) => left.hour - right.hour);
   for (let index = 1; index < starts.length; index += 1) {
     const previous = starts[index - 1]!;

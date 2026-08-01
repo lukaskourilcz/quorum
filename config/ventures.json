@@ -101,7 +101,7 @@
             "preset": "incubator-scan-room",
             "objectives": {
               "dry": "Return zero candidates without a cited external evidence packet",
-              "live": "Bring cited daily-readable candidate domains and reject repeats without founding anything"
+              "live": "Bring cited daily-readable candidate domains and reject repeats; this scan does not found anything"
             }
           }
         },
@@ -117,7 +117,7 @@
             "preset": "incubator-synthesis-room",
             "objectives": {
               "dry": "Return zero proposals when the scan produced no evidenced candidates",
-              "live": "Argue the evidenced scan down to zero, one or two complete niche proposals"
+              "live": "Argue the evidenced scan down to zero, one or two complete proposals; AUDIT may pass the first into deterministic template founding"
             }
           }
         }

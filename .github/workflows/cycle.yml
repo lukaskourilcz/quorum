@@ -291,9 +291,10 @@ jobs:
           CYCLE_NUMBER: ${{ github.run_number }}
         run: |
           runtime_paths=(
-            config/visual-weights state/budget state/standups state/meetings
+            config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
             state/scorecards state/decisions state/calendar state/edition state/ideas state/meeting-agendas
             state/mma state/notify state/social state/taste state/ventures state/INBOX.md
+            NEEDS_YOUR_HELP_NOW.md
             site/public/social
           )
           for runtime_path in "${runtime_paths[@]}"; do
