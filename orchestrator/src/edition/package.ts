@@ -6,6 +6,8 @@ import {
 } from "../contracts/edition-package.js";
 import type { EditionQualityConfig } from "./config.js";
 import type { WrittenArticle } from "./types.js";
+import { deterministicArticleImage } from "../images/article-image.js";
+import type { ArticleImage } from "../contracts/autonomy.js";
 
 function canonical(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
@@ -40,6 +42,7 @@ interface EditionPackageContext {
   signalStrength: number;
   costUsd: number | undefined;
   socialPackEnabled?: boolean;
+  image?: ArticleImage;
   hero?: {
     bytes: Buffer;
     alt: string;
@@ -101,11 +104,19 @@ export function buildEditionPackage(
   config: EditionQualityConfig,
   context: EditionPackageContext
 ): EditionPackage {
+  const image = context.image ?? deterministicArticleImage({
+    venture: "caught-up",
+    slug: article.slug,
+    title: article.byLocale.en.title,
+    altEn: article.byLocale.en.illustrationAlt,
+    altCs: article.byLocale.cs.illustrationAlt
+  });
   const preliminary = {
     schemaVersion: "edition-package/1" as const,
     date: article.date,
     idempotencyKey: "0".repeat(64),
     status: "edition" as const,
+    image,
     article: {
       en: {
         frontmatter: frontmatter(article, "en", config, context),

@@ -7,6 +7,10 @@
       "status": "operating",
       "taste": false,
       "ledgerNamespace": "caught-up",
+      "growth_objective": {
+        "label": "Publish reliably while widening the healthy source mix",
+        "components": ["edition-cadence", "source-coverage"]
+      },
       "adminTabs": ["plans", "visuals"],
       "meetings": [
         {

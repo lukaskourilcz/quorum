@@ -28,6 +28,16 @@ import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
+import {
+  ArticleImageSchema,
+  MetricsPlaceholderSchema,
+  PriorityItemSchema,
+  PriorityQueueSchema,
+  ReleaseProofSchema,
+  SocialPostReceiptSchema,
+  VentureTemplateCandidateSchema,
+  VentureTemplateSchema
+} from "./autonomy.js";
 
 export const ContractSchemas = {
   "audience-spec": AudienceSpecSchema,
@@ -60,7 +70,15 @@ export const ContractSchemas = {
   "season": SeasonFileSchema,
   "social-pack": SocialPackSchema,
   "venture-registry": VentureRegistrySchema,
-  "visual-weights": VisualWeightsSchema
+  "visual-weights": VisualWeightsSchema,
+  "article-image": ArticleImageSchema,
+  "metrics-placeholder": MetricsPlaceholderSchema,
+  "priority-item": PriorityItemSchema,
+  "priority-queue": PriorityQueueSchema,
+  "release-proof": ReleaseProofSchema,
+  "social-post-receipt": SocialPostReceiptSchema,
+  "venture-template": VentureTemplateSchema,
+  "venture-template-candidate": VentureTemplateCandidateSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;

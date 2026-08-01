@@ -407,7 +407,7 @@ describe("edition dry production", () => {
   it("builds the deterministic golden package without leaking injected instructions", async () => {
     const result = await runEditionDry();
     expect(result.status).toBe("edition");
-    expect(result.packageHash).toBe("bde3aad11db96c92b39b788468e4c7e18878edec189d342267436f8c2cc22deb");
+    expect(result.packageHash).toBe("23bd3aef795d6da70ee523bc7e781290f2dc918052c3592d8c1b08bc2c97451e");
     expect(result.report.measuredCostUsd).toBe(0.194);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(
@@ -416,9 +416,13 @@ describe("edition dry production", () => {
         "utf8"
       )
     );
-    expect(artifact).toEqual(await fixtureJson("golden-package.json"));
     const editionPackage = EditionPackageSchema.parse(artifact);
     expect(hasValidEditionPackageHash(editionPackage)).toBe(true);
+    if (editionPackage.status === "edition") {
+      expect(editionPackage.image).toMatchObject({ origin: "svg", width: 1600, height: 900 });
+      expect(Buffer.from(editionPackage.image.hero_bytes_base64, "base64").toString("utf8"))
+        .toContain("FRAME");
+    }
     expect(JSON.stringify(editionPackage)).not.toMatch(/ignore all previous|system prompt/i);
   });
 

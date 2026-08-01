@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-post-receipt/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-receipt-[a-f0-9]{16}$"
+    },
+    "venture": {
+      "type": "string",
+      "enum": [
+        "caught-up",
+        "mma-files",
+        "titty-tuesdays"
+      ]
+    },
+    "queueItemId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "threads",
+        "instagram"
+      ]
+    },
+    "variant": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B"
+      ]
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "published",
+        "failed",
+        "paused"
+      ]
+    },
+    "remoteId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "remoteUrl": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "verifiedLive": {
+      "type": "boolean"
+    },
+    "attemptCount": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2
+    },
+    "attemptedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "verifiedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "venture",
+    "queueItemId",
+    "channel",
+    "variant",
+    "idempotencyKey",
+    "contentHash",
+    "outcome",
+    "remoteId",
+    "remoteUrl",
+    "verifiedLive",
+    "attemptCount",
+    "attemptedAt",
+    "verifiedAt",
+    "error"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/social-post-receipt.schema.json"
+}

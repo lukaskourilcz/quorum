@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "priority-queue/1"
+    },
+    "items": {
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "string",
+            "const": "priority-item/1"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^priority-[a-f0-9]{16}$"
+          },
+          "venture": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 280
+          },
+          "decision_at_stake": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 280
+          },
+          "evidence_needed": {
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "requested_by": {
+            "type": "string",
+            "enum": [
+              "VIZE",
+              "FORGE",
+              "PULSE",
+              "AUDIT",
+              "SCOUT",
+              "SCRIBE",
+              "LENS",
+              "QUILL",
+              "RADAR",
+              "KEEPER",
+              "THREADS",
+              "INSTAGRAM",
+              "PEOPLE",
+              "LEDGER",
+              "HERALD",
+              "STET",
+              "HACEK",
+              "SPARK",
+              "VAULT",
+              "FRAME",
+              "RELAY",
+              "ANGLE",
+              "COHORT",
+              "FUNNEL",
+              "PALATE",
+              "SCENE",
+              "STUNT",
+              "CORNER",
+              "SPOTTER",
+              "TAPE",
+              "SIGMA",
+              "VIG",
+              "SONAR",
+              "CANVAS",
+              "JAB",
+              "REACH",
+              "SPLIT",
+              "PIVOT"
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "expires": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "selected",
+              "why-not",
+              "archived"
+            ]
+          },
+          "why_not_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 280
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "consumed_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "venture",
+          "question",
+          "decision_at_stake",
+          "evidence_needed",
+          "requested_by",
+          "created",
+          "expires",
+          "status",
+          "why_not_reason",
+          "consumed_by"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "items",
+    "updatedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/priority-queue.schema.json"
+}

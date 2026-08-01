@@ -1,0 +1,17 @@
+{
+  "hero_path": "https://untrusted.example/hotlink.jpg",
+  "thumb_path": "public/images/articles/example/thumb.jpg",
+  "width": 1600,
+  "height": 900,
+  "alt_en": "Unlicensed image",
+  "alt_cs": "Obrázek bez licence",
+  "license": {
+    "name": "CC BY",
+    "author": "Unknown",
+    "source_url": "https://untrusted.example/photo",
+    "attribution_html": "Unknown"
+  },
+  "origin": "svg",
+  "hero_bytes_base64": "PHN2Zy8+",
+  "thumb_bytes_base64": "PHN2Zy8+"
+}

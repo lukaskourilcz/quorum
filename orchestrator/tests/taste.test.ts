@@ -221,6 +221,7 @@ describe("taste memory", () => {
           status: "operating",
           taste: true,
           ledgerNamespace: ventureId,
+          growth_objective: { label: "Build complete campaigns", components: ["campaign-inventory"] },
           adminTabs: ["plans"],
           meetings: [{
             kind: "tt-marketing",
@@ -237,6 +238,7 @@ describe("taste memory", () => {
           status: "operating",
           taste: false,
           ledgerNamespace: "caught-up",
+          growth_objective: { label: "Publish reliably", components: ["edition-cadence"] },
           adminTabs: ["plans"],
           meetings: [{
             kind: "cu-product",

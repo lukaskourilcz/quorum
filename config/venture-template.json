@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "venture-template/1",
+  "templateId": "content-venture-default",
+  "dailyEnvelopeCapUsd": 0.15,
+  "allowedDeliveryTargets": ["boardless-site", "caught-up", "mma-files"],
+  "existingRosterOnly": true,
+  "newCredentialsAllowed": false,
+  "newAccountsAllowed": false,
+  "commerceAllowed": false,
+  "paymentsAllowed": false,
+  "adsAllowed": false,
+  "personalDataAllowed": false,
+  "newLegalSurfaceAllowed": false,
+  "newSocialAccountsAllowed": false,
+  "minimumSlotGapMinutes": 60,
+  "requiredFiles": ["README.md", "STYLEBOOK.md"]
+}

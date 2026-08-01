@@ -3,6 +3,23 @@
   "date": "2026-08-04",
   "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "status": "edition",
+  "image": {
+    "hero_path": "public/images/editions/2026-08-04-measured-model-price-cut/hero.svg",
+    "thumb_path": "public/images/editions/2026-08-04-measured-model-price-cut/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "Typographic chart showing a verified model price change",
+    "alt_cs": "Typografický graf ověřené změny ceny modelu",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2Zy8+",
+    "thumb_bytes_base64": "PHN2Zy8+"
+  },
   "article": {
     "en": {
       "frontmatter": {

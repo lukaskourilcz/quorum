@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { DateSchema, DateTimeSchema, HttpsUrlSchema, Sha256Schema, openObject } from "./common.js";
 import { EdgeReportSchema, EventCardSchema, FighterRecordSchema, ModelRunSchema, OddsSnapshotSchema, SlipOfTenSchema, TrackRecordSchema } from "./mma.js";
+import { ArticleImageSchema } from "./autonomy.js";
 
 export const ArticleFormatSchema = z.enum([
   "fight-week-preview", "post-event-recap", "fighter-profile",
@@ -29,6 +30,7 @@ export const ArticlePackageSchema = openObject({
   localizations: openObject({ en: LocalizationSchema, cs: LocalizationSchema }),
   format: ArticleFormatSchema,
   sources: z.array(ArticleSourceSchema).min(1),
+  image: ArticleImageSchema,
   heroSpec: FrameSpecSchema,
   fighterRefs: z.array(z.string().regex(/^(ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/)),
   eventRef: z.string().regex(/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),

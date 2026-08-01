@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-short",
+  "venture": "caught-up",
+  "packageHash": "bad",
+  "targetRepository": "someone/else",
+  "targetCommit": "bad",
+  "deploymentUrl": "http://insecure.example",
+  "checks": [],
+  "retryCount": 3,
+  "status": "passed",
+  "startedAt": "not-a-date",
+  "completedAt": "not-a-date"
+}

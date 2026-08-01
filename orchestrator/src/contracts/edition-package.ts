@@ -7,6 +7,7 @@ import {
   Sha256Schema,
   openObject
 } from "./common.js";
+import { ArticleImageSchema } from "./autonomy.js";
 
 const LocalizedArticleSchema = (lang: "en" | "cs") => openObject({
   frontmatter: ArticleFrontmatterV2Schema.extend({ lang: z.literal(lang) }),
@@ -46,6 +47,7 @@ const EditionSchema = openObject({
   ...CommonFields,
   status: z.literal("edition"),
   article: ArticleSchema,
+  image: ArticleImageSchema,
   hero: HeroSchema.optional(),
   board: openObject({
     meetingRef: MeetingRefSchema,

@@ -38,6 +38,40 @@
             "maxLength": 80,
             "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
+          "growth_objective": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "components": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "edition-cadence",
+                    "source-coverage",
+                    "slot-fill",
+                    "rendered-fightaiq-coverage",
+                    "event-fighter-coverage",
+                    "two-source-agreement",
+                    "readiness-dossiers",
+                    "campaign-inventory",
+                    "evidence-backed-proposals"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "label",
+              "components"
+            ],
+            "additionalProperties": {}
+          },
           "mode": {
             "type": "string",
             "enum": [
@@ -242,6 +276,7 @@
           "status",
           "taste",
           "ledgerNamespace",
+          "growth_objective",
           "adminTabs",
           "meetings"
         ],

@@ -7,6 +7,10 @@
       "status": "operating",
       "taste": false,
       "ledgerNamespace": "caught-up",
+      "growth_objective": {
+        "label": "Publish reliably while widening the healthy source mix",
+        "components": ["edition-cadence", "source-coverage"]
+      },
       "adminTabs": ["plans", "visuals"],
       "meetings": [
         {
@@ -49,6 +53,10 @@
       "status": "operating",
       "taste": true,
       "ledgerNamespace": "titty-tuesdays",
+      "growth_objective": {
+        "label": "Build a complete inventory of campaigns that are ready to launch",
+        "components": ["campaign-inventory"]
+      },
       "adminTabs": ["plans", "ideas", "visuals"],
       "meetings": [
         {
@@ -75,6 +83,10 @@
       "status": "exploration",
       "taste": true,
       "ledgerNamespace": "incubator",
+      "growth_objective": {
+        "label": "Produce evidence-backed content venture proposals",
+        "components": ["evidence-backed-proposals"]
+      },
       "adminTabs": ["niche-proposals"],
       "meetings": [
         {
@@ -118,6 +130,10 @@
       "mode": "data-only",
       "taste": true,
       "ledgerNamespace": "fightaiq",
+      "growth_objective": {
+        "label": "Improve verified fight coverage and build readiness dossiers",
+        "components": ["event-fighter-coverage", "two-source-agreement", "readiness-dossiers"]
+      },
       "adminTabs": ["fighters", "events", "slates", "sources"],
       "meetings": [
         {
@@ -160,6 +176,10 @@
       "status": "operating",
       "taste": true,
       "ledgerNamespace": "mma-files",
+      "growth_objective": {
+        "label": "Fill evidenced article slots and render verified FightAIQ coverage",
+        "components": ["slot-fill", "rendered-fightaiq-coverage"]
+      },
       "adminTabs": ["articles", "calendar", "social-lab"],
       "meetings": [
         {

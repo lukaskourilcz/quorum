@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "metrics-placeholder/1"
+    },
+    "enabled": {
+      "type": "boolean",
+      "const": false
+    },
+    "phase": {
+      "type": "number",
+      "const": 3
+    },
+    "fields": {
+      "type": "array",
+      "prefixItems": []
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "enabled",
+    "phase",
+    "fields"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/metrics-placeholder.schema.json"
+}

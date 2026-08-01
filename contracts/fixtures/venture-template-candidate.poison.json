@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "venture-template-candidate/1",
+  "proposalRef": "",
+  "slug": "Bad Slug",
+  "name": "",
+  "deliveryTarget": "new-host",
+  "dailyEnvelopeUsd": 0.5,
+  "cadenceHourPrague": 24,
+  "cast": ["NEW-AGENT"],
+  "styleBrief": "",
+  "requiresNewCredentials": true,
+  "requiresNewAccounts": true,
+  "includesCommerce": true,
+  "includesPayments": true,
+  "includesAds": true,
+  "includesPersonalData": true,
+  "createsLegalSurface": true,
+  "createsSocialAccount": true
+}

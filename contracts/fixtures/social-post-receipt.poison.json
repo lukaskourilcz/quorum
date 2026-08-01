@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "social-post-receipt/1",
+  "id": "bad",
+  "venture": "caught-up",
+  "queueItemId": "",
+  "channel": "email",
+  "variant": "C",
+  "idempotencyKey": "bad",
+  "contentHash": "bad",
+  "outcome": "published",
+  "remoteId": null,
+  "remoteUrl": null,
+  "verifiedLive": true,
+  "attemptCount": 4,
+  "attemptedAt": "now",
+  "verifiedAt": null,
+  "error": null
+}

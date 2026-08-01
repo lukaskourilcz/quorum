@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "social-post-receipt/1",
+  "id": "social-receipt-0123456789abcdef",
+  "venture": "caught-up",
+  "queueItemId": "2026-08-01-en-threads",
+  "channel": "threads",
+  "variant": "A",
+  "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "contentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "outcome": "published",
+  "remoteId": "threads-123",
+  "remoteUrl": "https://www.threads.net/@caughtup/post/123",
+  "verifiedLive": true,
+  "attemptCount": 1,
+  "attemptedAt": "2026-08-01T12:00:00.000Z",
+  "verifiedAt": "2026-08-01T12:01:00.000Z",
+  "error": null
+}

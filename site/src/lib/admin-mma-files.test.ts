@@ -27,6 +27,23 @@ function article() {
     },
     format: "fight-week-preview",
     sources: [{ kind: "internal", ref: "FIXTURE:ARTICLE" }],
+    image: {
+      hero_path: "public/images/articles/fixture-preview/hero.svg",
+      thumb_path: "public/images/articles/fixture-preview/thumb.svg",
+      width: 1600,
+      height: 900,
+      alt_en: "Fixture cover",
+      alt_cs: "Zkušební obálka",
+      license: {
+        name: "BoardlessAI deterministic",
+        author: "BoardlessAI FRAME",
+        source_url: "https://boardless-ai.vercel.app/",
+        attribution_html: "Artwork by BoardlessAI FRAME"
+      },
+      origin: "svg",
+      hero_bytes_base64: "PHN2Zy8+",
+      thumb_bytes_base64: "PHN2Zy8+"
+    },
     heroSpec: { template: "type-led", bindings: { headline: "Fixture" } },
     fighterRefs: ["ufc:alex-example"],
     eventRef: "ufc:event:fixture",

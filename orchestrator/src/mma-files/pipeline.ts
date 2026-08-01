@@ -4,6 +4,7 @@ import { renderArticleHero, renderSocialVariants } from "./frame.js";
 import { buildSocialVariantPack } from "./social.js";
 import { loadStylebook, reviewArticle, stylebookPacket, validateStylebook, type CopyViolation } from "./style.js";
 import { storeArticleMedia, storeArticlePackage, storeSocialVariantPack } from "./store.js";
+import { deterministicArticleImage } from "../images/article-image.js";
 
 type Localization = ArticlePackage["localizations"]["en"];
 type ArticleSource = ArticlePackage["sources"][number];
@@ -79,6 +80,13 @@ export async function produceMmaFilesArticle(input: {
     localizations: { en, cs },
     format: assignment.format,
     sources: input.evidence.sources,
+    image: deterministicArticleImage({
+      venture: "mma-files",
+      slug: input.slug,
+      title: en.title,
+      altEn: `Editorial cover for ${en.title}`,
+      altCs: `Redakční obrázek k článku ${cs.title}`
+    }),
     heroSpec: input.evidence.heroSpec,
     fighterRefs: input.evidence.fighterRefs,
     ...(input.evidence.eventRef ? { eventRef: input.evidence.eventRef } : {}),

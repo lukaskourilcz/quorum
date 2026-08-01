@@ -1,0 +1,17 @@
+{
+  "hero_path": "public/images/articles/example/hero.svg",
+  "thumb_path": "public/images/articles/example/thumb.svg",
+  "width": 1600,
+  "height": 900,
+  "alt_en": "A deterministic article cover",
+  "alt_cs": "Deterministická obálka článku",
+  "license": {
+    "name": "BoardlessAI deterministic",
+    "author": "BoardlessAI FRAME",
+    "source_url": "https://boardless-ai.vercel.app/",
+    "attribution_html": "Artwork by BoardlessAI FRAME"
+  },
+  "origin": "svg",
+  "hero_bytes_base64": "PHN2Zy8+",
+  "thumb_bytes_base64": "PHN2Zy8+"
+}

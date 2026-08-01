@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "metrics-placeholder/1",
+  "enabled": true,
+  "phase": 2,
+  "fields": ["views"]
+}

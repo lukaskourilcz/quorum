@@ -20,6 +20,7 @@
     "mag-desk": ["mag-editorial", "mma-intake"]
   },
   "maxPending": 24,
+  "perVenturePendingCap": 8,
   "maxRequestsPerMeeting": 1,
   "ttlDays": 3
 }

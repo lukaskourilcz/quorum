@@ -26,6 +26,7 @@ const MeetingPolicySchema = z.object({
     z.array(AgendaPhaseSchema).max(8)
   ),
   maxPending: z.number().int().min(1).max(100),
+  perVenturePendingCap: z.number().int().min(1).max(24),
   maxRequestsPerMeeting: z.literal(1),
   ttlDays: z.number().int().min(1).max(14)
 }).superRefine((policy, context) => {
@@ -148,6 +149,10 @@ export async function requestMeetingAgenda(input: {
   if (pending.length >= input.policy.maxPending) {
     throw new Error(`Meeting agenda queue reached its ${input.policy.maxPending}-item pending limit`);
   }
+  const venturePending = pending.filter((agenda) => agenda.ventureId === input.ventureId);
+  if (venturePending.length >= input.policy.perVenturePendingCap) {
+    throw new Error(`Venture ${input.ventureId} reached its ${input.policy.perVenturePendingCap}-item pending limit`);
+  }
   const requestedAt = input.now.toISOString();
   const id = `agenda-${createHash("sha256")
     .update(`${input.sourceMeetingRef}\n${input.phase}\n${input.notBefore}`)
@@ -174,6 +179,37 @@ export async function requestMeetingAgenda(input: {
     updatedAt: requestedAt
   }));
   return { agenda, created: true };
+}
+
+export interface StarvationEntry {
+  ventureId: string;
+  lastConsumedAt: string | null;
+  daysWithoutConsumedAgenda: number | null;
+}
+
+export function starvationList(input: {
+  queue: MeetingAgendaQueue;
+  ventureIds: readonly string[];
+  now: Date;
+  thresholdDays?: number;
+}): StarvationEntry[] {
+  const thresholdDays = input.thresholdDays ?? 7;
+  const thresholdMs = thresholdDays * 86_400_000;
+  return [...new Set(input.ventureIds)].sort().flatMap((ventureId) => {
+    const lastConsumedAt = input.queue.agendas
+      .filter((agenda) => agenda.ventureId === ventureId && agenda.status === "consumed" && agenda.consumedAt)
+      .map((agenda) => agenda.consumedAt!)
+      .sort()
+      .at(-1) ?? null;
+    if (lastConsumedAt && input.now.getTime() - Date.parse(lastConsumedAt) < thresholdMs) return [];
+    return [{
+      ventureId,
+      lastConsumedAt,
+      daysWithoutConsumedAgenda: lastConsumedAt
+        ? Math.floor((input.now.getTime() - Date.parse(lastConsumedAt)) / 86_400_000)
+        : null
+    }];
+  });
 }
 
 export async function consumeMeetingAgenda(input: {

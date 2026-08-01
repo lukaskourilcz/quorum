@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-template-candidate/1"
+    },
+    "proposalRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "slug": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "deliveryTarget": {
+      "type": "string",
+      "enum": [
+        "boardless-site",
+        "caught-up",
+        "mma-files"
+      ]
+    },
+    "dailyEnvelopeUsd": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.15
+    },
+    "cadenceHourPrague": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 23
+    },
+    "cast": {
+      "minItems": 2,
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "VIZE",
+          "FORGE",
+          "PULSE",
+          "AUDIT",
+          "SCOUT",
+          "SCRIBE",
+          "LENS",
+          "QUILL",
+          "RADAR",
+          "KEEPER",
+          "THREADS",
+          "INSTAGRAM",
+          "PEOPLE",
+          "LEDGER",
+          "HERALD",
+          "STET",
+          "HACEK",
+          "SPARK",
+          "VAULT",
+          "FRAME",
+          "RELAY",
+          "ANGLE",
+          "COHORT",
+          "FUNNEL",
+          "PALATE",
+          "SCENE",
+          "STUNT",
+          "CORNER",
+          "SPOTTER",
+          "TAPE",
+          "SIGMA",
+          "VIG",
+          "SONAR",
+          "CANVAS",
+          "JAB",
+          "REACH",
+          "SPLIT",
+          "PIVOT"
+        ]
+      }
+    },
+    "styleBrief": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "requiresNewCredentials": {
+      "type": "boolean"
+    },
+    "requiresNewAccounts": {
+      "type": "boolean"
+    },
+    "includesCommerce": {
+      "type": "boolean"
+    },
+    "includesPayments": {
+      "type": "boolean"
+    },
+    "includesAds": {
+      "type": "boolean"
+    },
+    "includesPersonalData": {
+      "type": "boolean"
+    },
+    "createsLegalSurface": {
+      "type": "boolean"
+    },
+    "createsSocialAccount": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "proposalRef",
+    "slug",
+    "name",
+    "deliveryTarget",
+    "dailyEnvelopeUsd",
+    "cadenceHourPrague",
+    "cast",
+    "styleBrief",
+    "requiresNewCredentials",
+    "requiresNewAccounts",
+    "includesCommerce",
+    "includesPayments",
+    "includesAds",
+    "includesPersonalData",
+    "createsLegalSurface",
+    "createsSocialAccount"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/venture-template-candidate.schema.json"
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "hero_path": {
+      "type": "string",
+      "pattern": "^public\\/images\\/[a-z0-9][a-z0-9/_-]*\\.(?:webp|png|svg)$"
+    },
+    "thumb_path": {
+      "type": "string",
+      "pattern": "^public\\/images\\/[a-z0-9][a-z0-9/_-]*\\.(?:webp|png|svg)$"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 640,
+      "maximum": 4000
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 360,
+      "maximum": 3000
+    },
+    "alt_en": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "alt_cs": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "license": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "CC0",
+            "CC BY",
+            "CC BY-SA",
+            "Pexels License",
+            "Pixabay Content License",
+            "BoardlessAI deterministic"
+          ]
+        },
+        "author": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "source_url": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        "attribution_html": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "name",
+        "author",
+        "source_url",
+        "attribution_html"
+      ],
+      "additionalProperties": {}
+    },
+    "origin": {
+      "type": "string",
+      "enum": [
+        "photo",
+        "svg"
+      ]
+    },
+    "hero_bytes_base64": {
+      "type": "string",
+      "format": "base64",
+      "contentEncoding": "base64",
+      "pattern": "^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$"
+    },
+    "thumb_bytes_base64": {
+      "type": "string",
+      "format": "base64",
+      "contentEncoding": "base64",
+      "pattern": "^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$"
+    }
+  },
+  "required": [
+    "hero_path",
+    "thumb_path",
+    "width",
+    "height",
+    "alt_en",
+    "alt_cs",
+    "license",
+    "origin",
+    "hero_bytes_base64",
+    "thumb_bytes_base64"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/article-image.schema.json"
+}

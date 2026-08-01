@@ -1,7 +1,7 @@
 {
   "schemaVersion": "edition-package/1",
   "date": "2026-08-04",
-  "idempotencyKey": "bde3aad11db96c92b39b788468e4c7e18878edec189d342267436f8c2cc22deb",
+  "idempotencyKey": "eed20f538946d9d813020ac6d4c259167a68769e966f8e644f54c7322bb5ea0f",
   "generation": {
     "models": {
       "curation": "claude-sonnet-4-6",
@@ -12,6 +12,23 @@
   },
   "reason": "cu-edition decision meetings/2026-08-04-cu-edition",
   "status": "edition",
+  "image": {
+    "hero_path": "public/images/editions/2026-08-04-measured-model-price-cut/hero.svg",
+    "thumb_path": "public/images/editions/2026-08-04-measured-model-price-cut/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "Typographic chart showing a verified model price change",
+    "alt_cs": "Typografický graf ověřené změny ceny modelu",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2Zy8+",
+    "thumb_bytes_base64": "PHN2Zy8+"
+  },
   "article": {
     "en": {
       "frontmatter": {
@@ -107,7 +124,7 @@
             "amount": 0.194,
             "currency": "USD"
           },
-          "package_hash": "bde3aad11db96c92b39b788468e4c7e18878edec189d342267436f8c2cc22deb"
+          "package_hash": "eed20f538946d9d813020ac6d4c259167a68769e966f8e644f54c7322bb5ea0f"
         },
         "translation_of": "2026-08-04-production-inference-price-cut",
         "dispatches": [
@@ -244,7 +261,7 @@
             "amount": 0.194,
             "currency": "USD"
           },
-          "package_hash": "bde3aad11db96c92b39b788468e4c7e18878edec189d342267436f8c2cc22deb"
+          "package_hash": "eed20f538946d9d813020ac6d4c259167a68769e966f8e644f54c7322bb5ea0f"
         },
         "translation_of": "2026-08-04-production-inference-price-cut",
         "dispatches": [

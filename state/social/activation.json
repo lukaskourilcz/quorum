@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "social-activation/1",
+  "ventures": {
+    "caught-up": { "status": "locked", "counter": 0, "required": 7, "reason": "Awaiting seven consecutive verified deliveries", "updatedAt": "2026-08-01T00:00:00.000Z" },
+    "mma-files": { "status": "locked", "counter": 0, "required": 10, "reason": "Awaiting ten verified article deliveries", "updatedAt": "2026-08-01T00:00:00.000Z" },
+    "titty-tuesdays": { "status": "locked", "counter": 0, "required": 4, "reason": "Awaiting four launch-ready campaigns, credentials and safety proof", "updatedAt": "2026-08-01T00:00:00.000Z" }
+  },
+  "updatedAt": "2026-08-01T00:00:00.000Z"
+}

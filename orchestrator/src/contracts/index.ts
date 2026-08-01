@@ -1,4 +1,5 @@
 export * from "./article-frontmatter.js";
+export * from "./autonomy.js";
 export * from "./audience-spec.js";
 export * from "./calendar.js";
 export * from "./campaign-brief.js";

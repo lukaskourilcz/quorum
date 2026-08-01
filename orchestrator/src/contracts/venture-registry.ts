@@ -42,6 +42,20 @@ const VentureDefinitionSchema = openObject({
   status: z.enum(["exploration", "operating", "paused"]),
   taste: z.boolean(),
   ledgerNamespace: VentureIdSchema,
+  growth_objective: openObject({
+    label: z.string().trim().min(1).max(200),
+    components: z.array(z.enum([
+      "edition-cadence",
+      "source-coverage",
+      "slot-fill",
+      "rendered-fightaiq-coverage",
+      "event-fighter-coverage",
+      "two-source-agreement",
+      "readiness-dossiers",
+      "campaign-inventory",
+      "evidence-backed-proposals"
+    ])).min(1).max(4)
+  }),
   mode: z.enum(["data-only", "live-analysis"]).optional(),
   adminTabs: z.array(z.enum([
     "ideas",

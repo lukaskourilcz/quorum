@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-0123456789abcdef",
+  "venture": "caught-up",
+  "packageHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "deploymentUrl": "https://caughtup-ai.vercel.app/en/articles/example",
+  "checks": [
+    { "name": "target-commit", "status": "pass", "detail": "Expected commit reached production", "checkedAt": "2026-08-01T05:01:00.000Z" },
+    { "name": "target-ci", "status": "pass", "detail": "Required checks passed", "checkedAt": "2026-08-01T05:01:00.000Z" },
+    { "name": "english-route", "status": "pass", "detail": "English route returned 200", "checkedAt": "2026-08-01T05:02:00.000Z" },
+    { "name": "czech-route", "status": "pass", "detail": "Czech route returned 200", "checkedAt": "2026-08-01T05:02:00.000Z" },
+    { "name": "title-slug", "status": "pass", "detail": "Title and slug matched", "checkedAt": "2026-08-01T05:02:00.000Z" },
+    { "name": "content-hash", "status": "pass", "detail": "Content marker matched", "checkedAt": "2026-08-01T05:02:00.000Z" },
+    { "name": "hero-image", "status": "pass", "detail": "Hero returned 200", "checkedAt": "2026-08-01T05:03:00.000Z" },
+    { "name": "image-dimensions", "status": "pass", "detail": "Hero dimensions matched", "checkedAt": "2026-08-01T05:03:00.000Z" },
+    { "name": "attribution", "status": "pass", "detail": "Deterministic art needs no photo credit", "checkedAt": "2026-08-01T05:03:00.000Z" }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-01T05:00:00.000Z",
+  "completedAt": "2026-08-01T05:03:00.000Z"
+}

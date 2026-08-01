@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "priority-item/1",
+  "id": "priority-0123456789abcdef",
+  "venture": "caught-up",
+  "question": "Which source gap should the next source check close?",
+  "decision_at_stake": "Whether to add a source to tomorrow's edition scan",
+  "evidence_needed": ["Source health history", "Coverage gap"],
+  "requested_by": "VIZE",
+  "created": "2026-08-01T04:00:00.000Z",
+  "expires": "2026-08-08T04:00:00.000Z",
+  "status": "open",
+  "why_not_reason": null,
+  "consumed_by": null
+}
