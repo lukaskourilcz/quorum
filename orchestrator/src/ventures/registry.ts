@@ -70,6 +70,21 @@ export function resolveMeetingClock(
   ].sort((left, right) => left.hour - right.hour);
 }
 
+export function resolveProductionClock(registry: VentureRegistry): ResolvedMeetingSlot[] {
+  return registry.ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
+    const match = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(job.cadence);
+    if (job.kind === "article-production" && match) return [
+      { phase: ScheduledPhaseSchema.parse("article-am"), hour: Number(match[1]), label: "MMA Files morning article", ventureId: venture.id },
+      { phase: ScheduledPhaseSchema.parse("article-pm"), hour: Number(match[2]), label: "MMA Files evening article", ventureId: venture.id }
+    ];
+    throw new Error(`Unsupported production cadence: ${job.kind} ${job.cadence}`);
+  })).sort((left, right) => left.hour - right.hour);
+}
+
+export function resolveScheduledClock(registry: VentureRegistry): ResolvedMeetingSlot[] {
+  return [...resolveMeetingClock(registry), ...resolveProductionClock(registry)].sort((left, right) => left.hour - right.hour);
+}
+
 export function getVentureMeetingDefinition(
   registry: VentureRegistry,
   kind: string
@@ -104,7 +119,7 @@ export function cronPayloads(registry: VentureRegistry): Array<{
   cron: string;
   phase: ScheduledPhase;
 }> {
-  return resolveMeetingClock(registry).flatMap((slot) => [
+  return resolveScheduledClock(registry).flatMap((slot) => [
     { cron: `0 ${(slot.hour + 22) % 24} * * *`, phase: slot.phase },
     { cron: `0 ${(slot.hour + 23) % 24} * * *`, phase: slot.phase }
   ]);
@@ -116,6 +131,7 @@ export function ventureIdForPhase(
 ): string | "global" {
   for (const venture of registry.ventures) {
     if (venture.meetings.some((meeting) => meeting.kind === phase)) return venture.id;
+    if ((phase === "article-am" || phase === "article-pm") && venture.productionJobs?.some((job) => job.kind === "article-production")) return venture.id;
   }
   return "global";
 }

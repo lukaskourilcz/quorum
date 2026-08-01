@@ -20,7 +20,7 @@ describe("Titty Tuesdays bootstrap", () => {
       taste: true,
       ledgerNamespace: "titty-tuesdays",
       adminTabs: ["plans", "ideas", "visuals"],
-      pendingApproval: "budget-2026-08",
+      pendingApproval: "budget-2026-08d",
       meetings: [expect.objectContaining({ kind: "tt-marketing", cadence: "daily@11:00", envelopeUsd: 0.08 })]
     });
   });

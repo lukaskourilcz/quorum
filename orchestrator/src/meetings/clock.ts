@@ -5,12 +5,12 @@ import {
 } from "../types.js";
 import {
   readVentureRegistry,
-  resolveMeetingClock
+  resolveScheduledClock
 } from "../ventures/registry.js";
 
 export const PRAGUE_TIME_ZONE = "Europe/Prague";
 
-export const MEETING_CLOCK = resolveMeetingClock(readVentureRegistry());
+export const MEETING_CLOCK = resolveScheduledClock(readVentureRegistry());
 
 interface PragueClockParts {
   date: string;

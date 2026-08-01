@@ -1,7 +1,7 @@
 import { agentById, type AgentId } from "../data/agents";
 import type { RoomTranscript, RoomTurnMode } from "../data/fixtures";
 
-export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis";
+export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 export type PublicMeetingStatus =
   | "PLAN"
   | "PAUSED"
@@ -156,7 +156,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   if (!record || record.schemaVersion !== "meeting-record/2") return null;
   const cycleId = text(record.cycleId, 160);
   const meetingDate = date(record.date);
-  const kind = record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" ? record.kind : null;
+  const kind = record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" ? record.kind : null;
   const phase = record.phase === kind ? kind : null;
   const status = text(record.status, 40) as PublicMeetingStatus | null;
   const stage = text(record.stage, 40);

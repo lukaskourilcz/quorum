@@ -33,7 +33,12 @@ const titles: Record<AgentId, string> = {
   TAPE: "Fight analyst",
   SIGMA: "Probability analyst",
   VIG: "Odds reviewer",
-  SONAR: "MMA source scout"
+  SONAR: "MMA source scout",
+  CANVAS: "MMA Files editor",
+  JAB: "MMA writer",
+  REACH: "MMA social editor",
+  SPLIT: "Social test analyst",
+  PIVOT: "MMA desk liaison"
 };
 
 const mandates: Record<AgentId, string> = {
@@ -69,7 +74,12 @@ const mandates: Record<AgentId, string> = {
   TAPE: "Reviews sourced matchup context and may propose only small, expiring changes to the model input.",
   SIGMA: "Maintains the repeatable fight model and publishes its version and accuracy record with every number.",
   VIG: "Compares captured odds with model estimates and records whether published prices beat the closing line.",
-  SONAR: "Finds possible MMA data sources and checks access rules, cost and usefulness before any connection is built."
+  SONAR: "Finds possible MMA data sources and checks access rules, cost and usefulness before any connection is built.",
+  CANVAS: "Runs the two daily MMA Files slots and blocks any article that fails its sources, language or style checks.",
+  JAB: "Writes sourced MMA stories in English and gives the Czech pass the context it needs to sound natural.",
+  REACH: "Builds two clearly different English and Czech social drafts for every approved article.",
+  SPLIT: "Keeps the social test numbers honest and refuses firm conclusions until enough posts have been measured.",
+  PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input."
 };
 
 const replacements: ReadonlyArray<readonly [RegExp, string]> = [

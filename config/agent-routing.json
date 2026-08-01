@@ -139,6 +139,26 @@
     "SONAR": {
       "capabilities": ["mma:sources", "source:terms", "source:discovery"],
       "status": "active"
+    },
+    "CANVAS": {
+      "capabilities": ["editorial:chair", "mma:newsroom", "language:bilingual"],
+      "status": "active"
+    },
+    "JAB": {
+      "capabilities": ["editorial:writing", "mma:reporting", "language:english"],
+      "status": "active"
+    },
+    "REACH": {
+      "capabilities": ["social:editorial", "media:compose", "language:bilingual"],
+      "status": "active"
+    },
+    "SPLIT": {
+      "capabilities": ["experiment:analysis", "social:metrics", "statistics"],
+      "status": "active"
+    },
+    "PIVOT": {
+      "capabilities": ["mma:bridge", "evidence", "portfolio:liaison"],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -229,7 +249,15 @@
       "optionalByTopic": false
     },
     "mma-analysis-room": {
-      "required": ["FORGE", "SIGMA", "VIG", "TAPE", "AUDIT"],
+      "required": ["FORGE", "SIGMA", "VIG", "TAPE", "PIVOT", "AUDIT"],
+      "optionalByTopic": false
+    },
+    "mag-editorial-room": {
+      "required": ["CANVAS", "JAB", "QUILL", "AUDIT"],
+      "optionalByTopic": false
+    },
+    "mag-desk-room": {
+      "required": ["CANVAS", "JAB", "REACH", "PIVOT", "AUDIT"],
       "optionalByTopic": false
     },
     "evidence-room": {

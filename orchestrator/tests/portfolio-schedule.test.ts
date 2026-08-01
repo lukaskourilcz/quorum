@@ -24,9 +24,9 @@ Selection: [ ] Shape A  [x] Shape B
 Signature / explicit approval reference: owner-approval-2026-08-01`;
 
 describe("portfolio schedule and budget gate", () => {
-  it("adds FightAIQ at collision-free 08 and 19 Prague slots", async () => {
+  it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 11, 14, 17, 19, 21, 22]);
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 14, 17, 19, 20, 21, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@07:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -65,14 +65,18 @@ describe("portfolio schedule and budget gate", () => {
     expect(critical.activePhases).toContain("cu-edition");
   });
 
-  it("emits correct summer/winter cron pairs for all three new wall-clock slots", async () => {
+  it("emits correct summer/winter cron pairs for meetings and article slots", async () => {
     const payloads = cronPayloads(await loadVentureRegistry());
-    expect(payloads).toHaveLength(20);
+    expect(payloads).toHaveLength(28);
     expect(payloads.filter((item) => item.phase === "incubator-scan").map((item) => item.cron)).toEqual(["0 5 * * *", "0 6 * * *"]);
     expect(payloads.filter((item) => item.phase === "tt-marketing").map((item) => item.cron)).toEqual(["0 9 * * *", "0 10 * * *"]);
     expect(payloads.filter((item) => item.phase === "incubator-synthesis").map((item) => item.cron)).toEqual(["0 19 * * *", "0 20 * * *"]);
     expect(payloads.filter((item) => item.phase === "mma-intake").map((item) => item.cron)).toEqual(["0 6 * * *", "0 7 * * *"]);
     expect(payloads.filter((item) => item.phase === "mma-analysis").map((item) => item.cron)).toEqual(["0 17 * * *", "0 18 * * *"]);
+    expect(payloads.filter((item) => item.phase === "mag-editorial").map((item) => item.cron)).toEqual(["0 7 * * *", "0 8 * * *"]);
+    expect(payloads.filter((item) => item.phase === "article-am").map((item) => item.cron)).toEqual(["0 8 * * *", "0 9 * * *"]);
+    expect(payloads.filter((item) => item.phase === "article-pm").map((item) => item.cron)).toEqual(["0 16 * * *", "0 17 * * *"]);
+    expect(payloads.filter((item) => item.phase === "mag-desk").map((item) => item.cron)).toEqual(["0 18 * * *", "0 19 * * *"]);
   });
 
   it("runs PALATE only as a pre-step on each taste venture's first meeting", async () => {

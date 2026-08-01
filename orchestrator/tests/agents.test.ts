@@ -9,20 +9,20 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains 33 active roles and keeps gated portraits explicit", async () => {
+  it("contains 38 active roles and keeps gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(33);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(38);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(33);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(38);
     expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
-      16
+      18
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(17);
+    ).toHaveLength(20);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
@@ -35,7 +35,12 @@ describe("agent registry and identity assets", () => {
       ["TAPE", ["fightaiq"]],
       ["SIGMA", ["fightaiq"]],
       ["VIG", ["fightaiq"]],
-      ["SONAR", ["fightaiq"]]
+      ["SONAR", ["fightaiq"]],
+      ["CANVAS", ["mma-files"]],
+      ["JAB", ["mma-files"]],
+      ["REACH", ["mma-files"]],
+      ["SPLIT", ["mma-files"]],
+      ["PIVOT", ["fightaiq", "mma-files"]]
     ]);
 
     const kpiConfig = JSON.parse(
@@ -53,7 +58,8 @@ describe("agent registry and identity assets", () => {
 
     expect(avatars).toHaveLength(27);
     expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
-      "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR"
+      "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR",
+      "CANVAS", "JAB", "REACH", "SPLIT", "PIVOT"
     ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);

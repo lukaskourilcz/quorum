@@ -14,7 +14,7 @@ import {
   type DailyDigestSink
 } from "../src/notify/digest.js";
 import { repoRoot } from "../src/paths.js";
-import { loadVentureRegistry, resolveMeetingClock } from "../src/ventures/registry.js";
+import { loadVentureRegistry, resolveScheduledClock } from "../src/ventures/registry.js";
 
 const roots: string[] = [];
 afterEach(async () => {
@@ -31,21 +31,22 @@ async function fixtureDigest(finalMeetingFailed = false) {
     date: "2026-08-01",
     weekOf: mondayOfWeek("2026-08-01"),
     records,
-    schedule: resolveMeetingClock(registry),
+    schedule: resolveScheduledClock(registry),
     dailyBudgetUsd: 0.7,
     finalMeetingFailed
   });
 }
 
 describe("one daily portfolio digest", () => {
-  it("groups the full ten-slot schedule and records missed meetings in one line", async () => {
+  it("groups the full fourteen-slot schedule and records missed work in one line", async () => {
     const digest = await fixtureDigest();
-    expect(digest.meetings).toHaveLength(10);
+    expect(digest.meetings).toHaveLength(14);
     expect(digest.meetings.filter((meeting) => !meeting.held).length).toBeGreaterThan(0);
     expect(digest.meetings.every((meeting) => meeting.bullets.length === 1)).toBe(true);
     expect(digest.bodyWordCount).toBeLessThanOrEqual(400);
     expect(renderDailyDigestText(digest)).toContain("Skipped:");
     expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("mma-")).every((meeting) => meeting.ventureId === "fightaiq")).toBe(true);
+    expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("article-")).every((meeting) => meeting.ventureId === "mma-files")).toBe(true);
     expect(renderDailyDigestHtml(digest, renderDailyDigestText(digest))).toContain("background:#09090b");
   });
 

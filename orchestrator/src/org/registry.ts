@@ -36,7 +36,12 @@ export const FOUNDING_AGENT_IDS = [
   "TAPE",
   "SIGMA",
   "VIG",
-  "SONAR"
+  "SONAR",
+  "CANVAS",
+  "JAB",
+  "REACH",
+  "SPLIT",
+  "PIVOT"
 ] as const;
 
 const FoundingAgentIdSchema = z.enum(FOUNDING_AGENT_IDS);

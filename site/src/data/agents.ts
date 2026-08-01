@@ -33,7 +33,12 @@ export type AgentId =
   | "TAPE"
   | "SIGMA"
   | "VIG"
-  | "SONAR";
+  | "SONAR"
+  | "CANVAS"
+  | "JAB"
+  | "REACH"
+  | "SPLIT"
+  | "PIVOT";
 
 type PublicStatus =
   | "active"
@@ -290,6 +295,36 @@ const profileCopy: Record<
     operatingPrinciple: "A promising source still needs terms, cost and overlap checked.",
     output: "Vetted fight-data source proposal",
     currentFocus: "New MMA data sources",
+    publicTrackRecord: null
+  },
+  CANVAS: {
+    operatingPrinciple: "A slot ships only when both languages tell the sourced story well.",
+    output: "Two-slot editorial slate and publish-or-kill verdict",
+    currentFocus: "MMA Files newsroom",
+    publicTrackRecord: null
+  },
+  JAB: {
+    operatingPrinciple: "Write the new fact first and never fill a gap from memory.",
+    output: "Sourced English draft and Czech localization brief",
+    currentFocus: "Bilingual MMA Files articles",
+    publicTrackRecord: null
+  },
+  REACH: {
+    operatingPrinciple: "Change one declared design choice at a time.",
+    output: "Two bilingual social variants with reproducible images",
+    currentFocus: "MMA Files social drafts",
+    publicTrackRecord: null
+  },
+  SPLIT: {
+    operatingPrinciple: "No conclusion without the posts and sample size beside it.",
+    output: "Social test scoreboard and bounded design finding",
+    currentFocus: "MMA Files social comparisons",
+    publicTrackRecord: null
+  },
+  PIVOT: {
+    operatingPrinciple: "Carry only the insight whose source can travel with it.",
+    output: "Evidence-linked bridge between both MMA desks",
+    currentFocus: "FightAIQ and MMA Files handoffs",
     publicTrackRecord: null
   }
 };

@@ -578,6 +578,86 @@
       "warmupCycles": 14
     },
     {
+      "id": "canvas.slot_accounting",
+      "owner": "CANVAS",
+      "metric": "dailyArticleSlotAccountingRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "canvas.clean_publish_rate",
+      "owner": "CANVAS",
+      "metric": "articleCleanPublishRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "jab.deadline_rate",
+      "owner": "JAB",
+      "metric": "articleDraftDeadlineRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "jab.grounding_rate",
+      "owner": "JAB",
+      "metric": "articleGroundingPassRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "reach.pack_coverage",
+      "owner": "REACH",
+      "metric": "articleSocialVariantPackCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "reach.axis_coverage",
+      "owner": "REACH",
+      "metric": "socialVariantAxisCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "split.scoreboard_freshness",
+      "owner": "SPLIT",
+      "metric": "metricsToScoreboardHours",
+      "target": 24,
+      "dir": "down",
+      "warmupCycles": 14
+    },
+    {
+      "id": "split.claim_discipline",
+      "owner": "SPLIT",
+      "metric": "sampleLabeledFindingRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "pivot.bridge_freshness",
+      "owner": "PIVOT",
+      "metric": "dailyMmaBridgeCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "pivot.crossed_insights",
+      "owner": "PIVOT",
+      "metric": "usedCrossDeskInsightsPerWeek",
+      "target": 2,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
       "id": "council.cost_per_learning",
       "owner": "ALL",
       "metric": "usdPerValidatedLearning",

@@ -29,7 +29,7 @@ function registryPath(): string {
 }
 
 function calendarKind(value: string): CalendarKind {
-  if (value === "cu-edition" || value === "cu-product" || value === "tt-marketing" || value === "incubator-scan" || value === "incubator-synthesis" || value === "mma-intake" || value === "mma-analysis") return value;
+  if (value === "cu-edition" || value === "cu-product" || value === "tt-marketing" || value === "incubator-scan" || value === "incubator-synthesis" || value === "mma-intake" || value === "mma-analysis" || value === "mag-editorial" || value === "mag-desk") return value;
   throw new Error(`Unsupported public venture meeting kind: ${value}`);
 }
 

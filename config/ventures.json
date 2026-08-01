@@ -41,7 +41,8 @@
             }
           }
         }
-      ]
+      ],
+      "pendingApproval": "budget-2026-08d"
     },
     {
       "id": "titty-tuesdays",
@@ -68,7 +69,7 @@
           }
         }
       ],
-      "pendingApproval": "budget-2026-08"
+      "pendingApproval": "budget-2026-08d"
     },
     {
       "id": "incubator",
@@ -111,7 +112,7 @@
           }
         }
       ],
-      "pendingApproval": "budget-2026-08"
+      "pendingApproval": "budget-2026-08d"
     },
     {
       "id": "fightaiq",
@@ -142,7 +143,7 @@
           "kind": "mma-analysis",
           "label": "FightAIQ evening model check",
           "cadence": "daily@19:00",
-          "cast": ["FORGE", "SIGMA", "VIG", "TAPE", "AUDIT"],
+          "cast": ["FORGE", "SIGMA", "VIG", "TAPE", "PIVOT", "AUDIT"],
           "envelopeUsd": 0.06,
           "packet": {
             "topicType": "finance",
@@ -155,7 +156,57 @@
           }
         }
       ],
-      "pendingApproval": "budget-2026-08b"
+      "pendingApproval": "budget-2026-08d"
+    },
+    {
+      "id": "mma-files",
+      "name": "MMA Files",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "mma-files",
+      "adminTabs": ["articles", "calendar", "social-lab"],
+      "meetings": [
+        {
+          "kind": "mag-editorial",
+          "label": "MMA Files morning story meeting",
+          "cadence": "daily@09:00",
+          "cast": ["CANVAS", "JAB", "QUILL", "AUDIT"],
+          "envelopeUsd": 0.05,
+          "packet": {
+            "topicType": "edition",
+            "decisionNeeded": "EDITION",
+            "preset": "mag-editorial-room",
+            "objectives": {
+              "dry": "Account for both article slots from fixtures, reject repeated or unsupported subjects and record an honest EditorialSlate",
+              "live": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+            }
+          }
+        },
+        {
+          "kind": "mag-desk",
+          "label": "MMA Files evening desk review",
+          "cadence": "daily@20:00",
+          "cast": ["CANVAS", "JAB", "REACH", "PIVOT", "AUDIT"],
+          "envelopeUsd": 0.05,
+          "packet": {
+            "topicType": "edition",
+            "decisionNeeded": "MEMO",
+            "preset": "mag-desk-room",
+            "objectives": {
+              "dry": "Review both fixture slots, the draft queue and the evidence-linked bridge without pretending an article was published",
+              "live": "Review both article slots, owner ratings, the social draft queue and the daily bridge; leave sourced provisional angles for tomorrow"
+            }
+          }
+        }
+      ],
+      "productionJobs": [
+        {
+          "kind": "article-production",
+          "cadence": "2x-daily@10:00,18:00",
+          "envelopeUsd": 0.16
+        }
+      ],
+      "pendingApproval": "budget-2026-08d"
     }
   ]
 }

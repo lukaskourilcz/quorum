@@ -147,7 +147,12 @@
                       "TAPE",
                       "SIGMA",
                       "VIG",
-                      "SONAR"
+                      "SONAR",
+                      "CANVAS",
+                      "JAB",
+                      "REACH",
+                      "SPLIT",
+                      "PIVOT"
                     ]
                   }
                 },

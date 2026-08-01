@@ -37,7 +37,11 @@
               "incubator-scan",
               "incubator-synthesis",
               "mma-intake",
-              "mma-analysis"
+              "mma-analysis",
+              "mag-editorial",
+              "mag-desk",
+              "article-am",
+              "article-pm"
             ]
           },
           "status": {

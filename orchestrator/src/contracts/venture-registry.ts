@@ -94,7 +94,13 @@ export const VentureRegistrySchema = openObject({
     ...ventures.flatMap((venture) => venture.meetings.map((meeting) => ({
       kind: meeting.kind,
       hour: Number(meeting.cadence.slice(6, 8))
-    })))
+    }))),
+    ...ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
+      const match = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(job.cadence);
+      return match
+        ? [{ kind: `${job.kind}-am`, hour: Number(match[1]) }, { kind: `${job.kind}-pm`, hour: Number(match[2]) }]
+        : [{ kind: job.kind, hour: Number(job.cadence.slice(6, 8)) }];
+    }))
   ].sort((left, right) => left.hour - right.hour);
   for (let index = 1; index < starts.length; index += 1) {
     const previous = starts[index - 1]!;

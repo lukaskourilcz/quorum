@@ -50,7 +50,11 @@ function publicKindLabel(kind: CalendarKind): string {
     "incubator-synthesis": "Magazine idea review",
     "venture-night": "Night company meeting",
     "mma-intake": "Fight data check",
-    "mma-analysis": "Fight analysis review"
+    "mma-analysis": "Fight analysis review",
+    "mag-editorial": "MMA Files story meeting",
+    "mag-desk": "MMA Files desk review",
+    "article-am": "Morning MMA Files article",
+    "article-pm": "Evening MMA Files article"
   };
   return labels[kind];
 }
@@ -94,7 +98,7 @@ export function WeekBoard({
       {headingLevel === "section" ? (
         <SectionHeading
           eyebrow="Weekly schedule / Prague time"
-          title="Ten meetings on one schedule"
+          title="Fourteen daily rooms and article slots"
           description="Company, project, marketing and research meetings share one schedule. Missed meetings stay visible, and finished meetings link to their notes."
           action={navigation}
         />

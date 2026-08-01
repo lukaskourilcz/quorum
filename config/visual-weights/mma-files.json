@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "visual-weights/1",
+  "ventureId": "mma-files",
+  "updatedAt": "2026-08-01T09:00:00.000Z",
+  "weights": {
+    "tale-of-the-tape": 1,
+    "type-led-result": 1,
+    "data-card": 1,
+    "quote-led-preview": 1
+  },
+  "adjustments": []
+}

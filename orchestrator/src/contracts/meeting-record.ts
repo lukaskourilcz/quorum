@@ -42,7 +42,7 @@ const CommonFields = {
   schemaVersion: z.literal("meeting-record/2"),
   cycleId: z.string().trim().min(1),
   date: DateSchema,
-  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis"]),
+  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk"]),
   episode: openObject({
     id: z.string().trim().min(1),
     shift: z.enum(["morning", "afternoon", "night"]),
@@ -122,7 +122,7 @@ const VentureMeetingSchema = openObject({
 
 const NamedVentureMeetingSchema = openObject({
   ...CommonFields,
-  kind: z.enum(["cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis"]),
+  kind: z.enum(["cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk"]),
   roomTranscript: RoomTranscriptSchema(36)
 });
 
@@ -139,6 +139,12 @@ export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMe
   }
   if ((record.kind === "mma-intake" || record.kind === "mma-analysis") && !record.sharperData) {
     context.addIssue({ code: "custom", message: "MMA rooms must close with a sharper-data outcome", path: ["sharperData"] });
+  }
+  if (record.kind === "mag-editorial" && turnCount > 14) {
+    context.addIssue({ code: "custom", message: "Editorial room is bounded to 14 turns", path: ["transcript"] });
+  }
+  if (record.kind === "mag-desk" && turnCount > 12) {
+    context.addIssue({ code: "custom", message: "Desk review is bounded to 12 turns", path: ["transcript"] });
   }
 });
 
