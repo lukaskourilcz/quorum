@@ -35,6 +35,14 @@ export interface AdminAutonomySnapshot {
     verifierPassRate: number;
   };
   priorities: AdminPriorityItem[];
+  social: Array<{
+    venture: "caught-up" | "mma-files" | "titty-tuesdays";
+    status: "locked" | "enabled" | "paused";
+    counter: number;
+    required: number;
+    reason: string;
+    updatedAt: string;
+  }>;
 }
 
 interface StoredPriorityItem {
@@ -129,6 +137,20 @@ export async function readAdminAutonomy(root = repositoryRoot): Promise<AdminAut
   const growth = Array.isArray(autonomy?.growth) ? autonomy.growth as AdminAutonomySnapshot["growth"] : [];
   const quality = record(autonomy?.quality);
   const number = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? value : 0;
+  let social: AdminAutonomySnapshot["social"] = [];
+  try {
+    const activation = record(JSON.parse(await readFile(path.join(root, "state/social/activation.json"), "utf8")));
+    const ventures = record(activation?.ventures);
+    social = (["caught-up", "mma-files", "titty-tuesdays"] as const).flatMap((venture) => {
+      const value = record(ventures?.[venture]);
+      const status = value?.status === "locked" || value?.status === "enabled" || value?.status === "paused" ? value.status : null;
+      return status && typeof value?.counter === "number" && typeof value.required === "number" && typeof value.reason === "string" && typeof value.updatedAt === "string"
+        ? [{ venture, status, counter: value.counter, required: value.required, reason: value.reason, updatedAt: value.updatedAt }]
+        : [];
+    });
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
   return {
     generatedAt: typeof autonomy?.generatedAt === "string" ? autonomy.generatedAt : null,
     growth,
@@ -140,7 +162,8 @@ export async function readAdminAutonomy(root = repositoryRoot): Promise<AdminAut
       sourceAgreementRate: number(quality?.sourceAgreementRate),
       verifierPassRate: number(quality?.verifierPassRate)
     },
-    priorities: publicPriorities(queue)
+    priorities: publicPriorities(queue),
+    social
   };
 }
 

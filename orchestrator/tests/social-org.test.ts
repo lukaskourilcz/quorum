@@ -32,6 +32,9 @@ function createQueueItem(): QueueItem {
   const item: QueueItem = {
     schemaVersion: 1,
     id: "SOC-20260723-001",
+    venture: "caught-up",
+    locale: "en",
+    variant: "A",
     campaignId: "CAM-DAILY-STANDUP",
     experimentId: null,
     channel: "threads",
@@ -89,8 +92,9 @@ describe("social and organization controls", () => {
 
   it("cannot call a publisher while a channel remains draft-only", async () => {
     const publish = vi.fn();
+    const verify = vi.fn();
     await expect(
-      publishQueueItem(channel, queueItem, { publish }, {})
+      publishQueueItem(channel, queueItem, { publish, verify }, {})
     ).rejects.toThrow(/draft-only/);
     expect(publish).not.toHaveBeenCalled();
     expect(() => assertLiveChannel(channel, {})).toThrow(/draft-only/);
@@ -142,7 +146,7 @@ describe("social and organization controls", () => {
     expect(() => assertOrgChangeApproved(change)).toThrow(/own control/);
   });
 
-  it("keeps the repository publisher in draft-only mode by default", async () => {
+  it("keeps the repository publisher paused unless the supreme kill switch is explicitly off", async () => {
     const report = await runSocialPublisher({
       validateOnly: false,
       dryIfDisabled: true,
@@ -150,7 +154,7 @@ describe("social and organization controls", () => {
       environment: {}
     });
 
-    expect(report.status).toBe("draft_only");
+    expect(report.status).toBe("paused");
     expect(report.published).toBe(0);
   });
 
@@ -170,8 +174,8 @@ describe("social and organization controls", () => {
     const adapter = createMetaPublishAdapter(
       {
         META_GRAPH_API_VERSION: "v99.0",
-        META_THREADS_USER_ID: "user-1",
-        META_THREADS_ACCESS_TOKEN: "secret"
+        CAUGHT_UP_THREADS_USER_ID: "user-1",
+        CAUGHT_UP_THREADS_ACCESS_TOKEN: "secret"
       },
       fetchMock
     );

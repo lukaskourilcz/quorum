@@ -64,14 +64,44 @@
               "type": "object",
               "properties": {
                 "en": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 2200
+                  "type": "object",
+                  "properties": {
+                    "instagram": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    },
+                    "threads": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "instagram",
+                    "threads"
+                  ],
+                  "additionalProperties": {}
                 },
                 "cs": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 2200
+                  "type": "object",
+                  "properties": {
+                    "instagram": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    },
+                    "threads": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "instagram",
+                    "threads"
+                  ],
+                  "additionalProperties": {}
                 }
               },
               "required": [
@@ -171,14 +201,44 @@
               "type": "object",
               "properties": {
                 "en": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 2200
+                  "type": "object",
+                  "properties": {
+                    "instagram": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    },
+                    "threads": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "instagram",
+                    "threads"
+                  ],
+                  "additionalProperties": {}
                 },
                 "cs": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 2200
+                  "type": "object",
+                  "properties": {
+                    "instagram": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    },
+                    "threads": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "instagram",
+                    "threads"
+                  ],
+                  "additionalProperties": {}
                 }
               },
               "required": [

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isDeepStrictEqual } from "node:util";
 import {
   DateSchema,
   HttpsUrlSchema,
@@ -11,12 +12,20 @@ const FramePathSchema = z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.webp$/);
 
 const InstagramSchema = openObject({
   caption: z.string().trim().min(1).max(2200),
+  variants: openObject({
+    A: z.string().trim().min(1).max(2200),
+    B: z.string().trim().min(1).max(2200)
+  }),
   hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).min(5).max(10),
   frames: z.array(FramePathSchema).min(3).max(6)
 });
 
 const ThreadsSchema = openObject({
   text: z.string().trim().min(1).max(500),
+  variants: openObject({
+    A: z.string().trim().min(1).max(500),
+    B: z.string().trim().min(1).max(500)
+  }),
   hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).max(2),
   frames: z.array(FramePathSchema).min(3).max(6)
 });
@@ -56,8 +65,8 @@ export const SocialPackSchema = openObject({
   altTexts: z.record(FramePathSchema, z.string().trim().min(1).max(300))
 }).superRefine((pack, context) => {
   if (
-    JSON.stringify(pack.instagram) !== JSON.stringify(pack.byLocale.en.instagram) ||
-    JSON.stringify(pack.threads) !== JSON.stringify(pack.byLocale.en.threads)
+    !isDeepStrictEqual(pack.instagram, pack.byLocale.en.instagram) ||
+    !isDeepStrictEqual(pack.threads, pack.byLocale.en.threads)
   ) {
     context.addIssue({
       code: "custom",
@@ -75,6 +84,14 @@ export const SocialPackSchema = openObject({
       message: `${locale} instagram and threads must reference the same render set`,
       path: ["byLocale", locale, "threads", "frames"]
     });
+  }
+  for (const locale of ["en", "cs"] as const) {
+    if (pack.byLocale[locale].instagram.caption !== pack.byLocale[locale].instagram.variants.A) {
+      context.addIssue({ code: "custom", message: `${locale} Instagram caption must mirror variant A`, path: ["byLocale", locale, "instagram", "caption"] });
+    }
+    if (pack.byLocale[locale].threads.text !== pack.byLocale[locale].threads.variants.A) {
+      context.addIssue({ code: "custom", message: `${locale} Threads text must mirror variant A`, path: ["byLocale", locale, "threads", "text"] });
+    }
   }
   const frames = new Set([
     ...pack.byLocale.en.instagram.frames,

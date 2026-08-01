@@ -182,6 +182,26 @@ export const SocialPostReceiptSchema = openObject({
   error: z.string().trim().min(1).max(500).nullable()
 });
 
+export const SocialActivationVentureSchema = openObject({
+  status: z.enum(["locked", "enabled", "paused"]),
+  counter: z.number().int().nonnegative(),
+  required: z.number().int().positive(),
+  reason: z.string().trim().min(1).max(500),
+  updatedAt: DateTimeSchema,
+  unlockedAt: DateTimeSchema.nullable(),
+  decisionReference: z.literal("D2-autonomy-build-2026-08-01")
+});
+
+export const SocialActivationSchema = openObject({
+  schemaVersion: z.literal("social-activation/1"),
+  ventures: openObject({
+    "caught-up": SocialActivationVentureSchema,
+    "mma-files": SocialActivationVentureSchema,
+    "titty-tuesdays": SocialActivationVentureSchema
+  }),
+  updatedAt: DateTimeSchema
+});
+
 export const MetricsPlaceholderSchema = openObject({
   schemaVersion: z.literal("metrics-placeholder/1"),
   enabled: z.literal(false),
@@ -196,3 +216,4 @@ export type VentureTemplateCandidate = z.infer<typeof VentureTemplateCandidateSc
 export type ArticleImage = z.infer<typeof ArticleImageSchema>;
 export type ReleaseProof = z.infer<typeof ReleaseProofSchema>;
 export type SocialPostReceipt = z.infer<typeof SocialPostReceiptSchema>;
+export type SocialActivation = z.infer<typeof SocialActivationSchema>;

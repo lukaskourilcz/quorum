@@ -2,8 +2,8 @@
   "schemaVersion": "social-variant/1",
   "articleRef": "article:fixture",
   "variants": [
-    { "id": "A", "carouselSpec": { "template": "one", "bindings": {} }, "captions": { "en": "One", "cs": "Jedna" }, "designAxes": { "templateFamily": "one", "colorScheme": "dark", "headlineFraming": "fact", "captionTone": "plain" } },
-    { "id": "A", "carouselSpec": { "template": "two", "bindings": {} }, "captions": { "en": "Two", "cs": "Dvě" }, "designAxes": { "templateFamily": "two", "colorScheme": "light", "headlineFraming": "question", "captionTone": "curious" } }
+    { "id": "A", "carouselSpec": { "template": "one", "bindings": {} }, "captions": { "en": { "instagram": "One", "threads": "One" }, "cs": { "instagram": "Jedna", "threads": "Jedna" } }, "designAxes": { "templateFamily": "one", "colorScheme": "dark", "headlineFraming": "fact", "captionTone": "plain" } },
+    { "id": "A", "carouselSpec": { "template": "two", "bindings": {} }, "captions": { "en": { "instagram": "Two", "threads": "Two" }, "cs": { "instagram": "Dvě", "threads": "Dvě" } }, "designAxes": { "templateFamily": "two", "colorScheme": "light", "headlineFraming": "question", "captionTone": "curious" } }
   ],
   "assignmentProtocolRef": "fixture",
   "status": "draft"

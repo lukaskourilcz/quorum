@@ -1,13 +1,12 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { EditorialSlateSchema, MetricsCaptureSchema, type ArticlePackage, type MetricsCapture } from "../src/contracts/mma-files.js";
+import { EditorialSlateSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
 import { LocalStoreDelivery, shipArticleBacklog, type ArticleDeliveryAdapter } from "../src/mma-files/delivery.js";
 import { runDryArticleProduction } from "../src/mma-files/dry-run.js";
 import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
-import { appendMetricsCapture, buildDesignFinding, parseMetricsLedger, scoreVariants } from "../src/mma-files/metrics.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
 import { loadStylebook, reviewArticleCopy, validateStylebook } from "../src/mma-files/style.js";
@@ -157,31 +156,6 @@ describe("MMA Files bilingual production", () => {
 });
 
 describe("MMA Files social evidence and delivery", () => {
-  function capture(variant: "A" | "B", index: number): MetricsCapture {
-    return MetricsCaptureSchema.parse({
-      schemaVersion: "metrics-capture/1",
-      postRef: `article:fixture-${index}:${variant}:instagram:en`,
-      window: "48h",
-      metrics: { views: 100 + index, likes: 10, comments: 1, shares: 2, saves: 3, clicks: 4 },
-      source: "owner-entry",
-      capturedAt: `2026-08-${String(index + 1).padStart(2, "0")}T10:00:00.000Z`
-    });
-  }
-
-  it("stores metrics once, shows sample sizes and never confirms below eight", async () => {
-    const root = await tempRoot("mma-files-metrics-");
-    const first = capture("A", 0);
-    expect((await appendMetricsCapture(root, first)).idempotent).toBe(false);
-    expect((await appendMetricsCapture(root, first)).idempotent).toBe(true);
-    for (let index = 1; index < 8; index += 1) await appendMetricsCapture(root, capture("A", index));
-    for (let index = 0; index < 7; index += 1) await appendMetricsCapture(root, capture("B", index));
-    const records = parseMetricsLedger(await readFile(path.join(root, "ventures/mma-files/social/metrics.jsonl"), "utf8"));
-    expect(scoreVariants(records, "48h").map(({ variant, sampleSize }) => [variant, sampleSize])).toEqual([["A", 8], ["B", 7]]);
-    expect(buildDesignFinding({ axis: "template-family", direction: "A drew more saved interactions.", evidencePostRefs: records.slice(0, 7).map((entry) => entry.postRef), sampleSize: 7 }).status).toBe("directional");
-    expect(buildDesignFinding({ axis: "template-family", direction: "A drew more saved interactions.", evidencePostRefs: records.slice(0, 8).map((entry) => entry.postRef), sampleSize: 8, proposedWeightChange: 0.05 }).status).toBe("confirmed");
-    expect(buildDesignFinding({ axis: "template-family", direction: "Metrics and owner taste disagree.", evidencePostRefs: records.slice(0, 8).map((entry) => entry.postRef), sampleSize: 8, proposedWeightChange: 0.05, tasteConflict: { flag: true, palateRef: "rating:r-2026-08-01-a1b2" } }).proposedWeightChange).toBeUndefined();
-  });
-
   it("delivers the backlog in order and treats an identical replay as success", async () => {
     const sourceRoot = await tempRoot("mma-files-source-");
     const targetRoot = await tempRoot("mma-files-target-");

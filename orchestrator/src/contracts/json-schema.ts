@@ -21,7 +21,7 @@ import {
   SourceProposalSchema,
   TrackRecordSchema
 } from "./mma.js";
-import { ArticlePackageSchema, DesignFindingSchema, EditorialSlateSchema, MetricsCaptureSchema, SocialVariantPackSchema } from "./mma-files.js";
+import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } from "./mma-files.js";
 import { NicheProposalSchema } from "./niche-proposal.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
@@ -34,6 +34,7 @@ import {
   PriorityItemSchema,
   PriorityQueueSchema,
   ReleaseProofSchema,
+  SocialActivationSchema,
   SocialPostReceiptSchema,
   VentureTemplateCandidateSchema,
   VentureTemplateSchema
@@ -62,8 +63,6 @@ export const ContractSchemas = {
   "track-record": TrackRecordSchema,
   "article": ArticlePackageSchema,
   "social-variant": SocialVariantPackSchema,
-  "metrics-capture": MetricsCaptureSchema,
-  "design-finding": DesignFindingSchema,
   "editorial-slate": EditorialSlateSchema,
   "niche-proposal": NicheProposalSchema,
   "rating": RatingRecordSchema,
@@ -76,6 +75,7 @@ export const ContractSchemas = {
   "priority-item": PriorityItemSchema,
   "priority-queue": PriorityQueueSchema,
   "release-proof": ReleaseProofSchema,
+  "social-activation": SocialActivationSchema,
   "social-post-receipt": SocialPostReceiptSchema,
   "venture-template": VentureTemplateSchema,
   "venture-template-candidate": VentureTemplateCandidateSchema

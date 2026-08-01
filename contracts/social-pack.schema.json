@@ -33,6 +33,26 @@
                   "minLength": 1,
                   "maxLength": 2200
                 },
+                "variants": {
+                  "type": "object",
+                  "properties": {
+                    "A": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    },
+                    "B": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    }
+                  },
+                  "required": [
+                    "A",
+                    "B"
+                  ],
+                  "additionalProperties": {}
+                },
                 "hashtags": {
                   "minItems": 5,
                   "maxItems": 10,
@@ -54,6 +74,7 @@
               },
               "required": [
                 "caption",
+                "variants",
                 "hashtags",
                 "frames"
               ],
@@ -66,6 +87,26 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 500
+                },
+                "variants": {
+                  "type": "object",
+                  "properties": {
+                    "A": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    },
+                    "B": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "A",
+                    "B"
+                  ],
+                  "additionalProperties": {}
                 },
                 "hashtags": {
                   "maxItems": 2,
@@ -87,6 +128,7 @@
               },
               "required": [
                 "text",
+                "variants",
                 "hashtags",
                 "frames"
               ],
@@ -115,6 +157,26 @@
                   "minLength": 1,
                   "maxLength": 2200
                 },
+                "variants": {
+                  "type": "object",
+                  "properties": {
+                    "A": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    },
+                    "B": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2200
+                    }
+                  },
+                  "required": [
+                    "A",
+                    "B"
+                  ],
+                  "additionalProperties": {}
+                },
                 "hashtags": {
                   "minItems": 5,
                   "maxItems": 10,
@@ -136,6 +198,7 @@
               },
               "required": [
                 "caption",
+                "variants",
                 "hashtags",
                 "frames"
               ],
@@ -148,6 +211,26 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 500
+                },
+                "variants": {
+                  "type": "object",
+                  "properties": {
+                    "A": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    },
+                    "B": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "A",
+                    "B"
+                  ],
+                  "additionalProperties": {}
                 },
                 "hashtags": {
                   "maxItems": 2,
@@ -169,6 +252,7 @@
               },
               "required": [
                 "text",
+                "variants",
                 "hashtags",
                 "frames"
               ],

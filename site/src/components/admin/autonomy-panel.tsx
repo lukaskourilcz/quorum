@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Archive, ListChecks, Plus, ShieldCheck } from "lucide-react";
+import { Archive, ListChecks, Plus, RadioTower, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
@@ -72,6 +72,20 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
 
       <div className="grid gap-4 md:grid-cols-5">
         {quality.map(([label, value]) => <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4" key={label}><p className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">{label}</p><p className="mt-2 text-2xl font-semibold">{value}</p></div>)}
+      </div>
+
+      <div className="mt-5 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">
+        <div className="flex items-center gap-3"><RadioTower aria-hidden="true" className="size-5 text-[var(--accent)]" /><div><h3 className="text-xl font-semibold">Automatic social release</h3><p className="mt-1 text-sm text-[var(--fog)]">Each project unlocks separately after its delivery checks pass. The global kill switch can still stop all posting.</p></div></div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          {initial.social.length ? initial.social.map((item) => (
+            <article className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={item.venture}>
+              <div className="flex items-center justify-between gap-3"><h4 className="font-semibold capitalize">{item.venture.replaceAll("-", " ")}</h4><Badge tone={item.status === "enabled" ? "success" : item.status === "paused" ? "danger" : "neutral"}>{item.status}</Badge></div>
+              <p className="mt-3 text-2xl font-semibold">{item.counter}/{item.required}</p>
+              <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{item.reason}</p>
+              <p className="mt-3 font-mono text-[0.625rem] text-[var(--fog)]">Checked {formatDateTime(item.updatedAt)}</p>
+            </article>
+          )) : <Callout>Social health counters will appear after the next guarded publisher check.</Callout>}
+        </div>
       </div>
 
       <div className="mt-5 grid gap-4 xl:grid-cols-2">

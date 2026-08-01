@@ -22,6 +22,23 @@
   ],
   "audienceRefs": ["audience-launch-001"],
   "kpis": ["Owner approves the launch binder before season start."],
-  "status": "draft",
+  "postable_assets": [
+    {
+      "id": "asset-season-001-launch",
+      "captions": {
+        "instagram": { "A": "A Tuesday idea made from type and one clear point.", "B": "The line is the visual. The idea earns the pause." },
+        "threads": { "A": "One Tuesday line, built to stand on its own.", "B": "No borrowed face. Just a sharp idea in type." }
+      },
+      "visualSpec": {
+        "template": "tt-typographic-card",
+        "headline": "THE LINE IS THE VISUAL",
+        "subhead": "A Tuesday campaign draft made from type, not people.",
+        "origin": "deterministic",
+        "people": false,
+        "photography": false
+      }
+    }
+  ],
+  "status": "approved",
   "originMeetingRef": "2026-08-04-tt-marketing"
 }

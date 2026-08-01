@@ -192,6 +192,8 @@ export async function runLiveArticleProduction(input: {
     mode: "data-only",
     evidence,
     imageCandidates: imageSearch.candidates,
+    publicRepoRoot: repoRoot,
+    socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
     gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
     socialProductionEnabled: !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
   });

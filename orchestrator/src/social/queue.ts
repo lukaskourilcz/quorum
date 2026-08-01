@@ -24,6 +24,9 @@ export const QueueItemSchema = z
   .object({
     schemaVersion: z.literal(1),
     id: z.string().min(1),
+    venture: z.enum(["caught-up", "mma-files", "titty-tuesdays"]).default("caught-up"),
+    locale: z.enum(["en", "cs"]).nullable().default(null),
+    variant: z.enum(["A", "B"]).default("A"),
     campaignId: z.string().min(1),
     experimentId: z.string().nullable(),
     channel: z.enum(["threads", "instagram"]),
@@ -99,6 +102,9 @@ export function queuePayloadHash(
   item: Pick<
     QueueItem,
     | "id"
+    | "venture"
+    | "locale"
+    | "variant"
     | "campaignId"
     | "experimentId"
     | "channel"
@@ -115,6 +121,9 @@ export function queuePayloadHash(
     .update(
       JSON.stringify({
         id: item.id,
+        venture: item.venture,
+        locale: item.locale,
+        variant: item.variant,
         campaignId: item.campaignId,
         experimentId: item.experimentId,
         channel: item.channel,
@@ -149,11 +158,20 @@ export function assertQueueItemPublishable(item: QueueItem): void {
   if (parsed.channel === "threads" && parsed.content.assetPaths.length > 0) {
     throw new Error("The guarded Threads connector currently supports text only");
   }
-  if (parsed.channel === "instagram" && parsed.content.assetPaths.length !== 1) {
-    throw new Error("The guarded Instagram connector requires one hosted image");
+  if (parsed.channel === "instagram" && (parsed.content.assetPaths.length < 1 || parsed.content.assetPaths.length > 10)) {
+    throw new Error("The guarded Instagram connector requires one to ten hosted images");
   }
   if (parsed.channel === "instagram" && !parsed.content.altText) {
     throw new Error("Instagram media requires alt text in the immutable receipt");
+  }
+  if (parsed.venture === "titty-tuesdays") {
+    const pragueWeekday = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Europe/Prague",
+      weekday: "long"
+    }).format(new Date(parsed.publishWindow.notBefore));
+    if (pragueWeekday !== "Tuesday") {
+      throw new Error("Titty Tuesdays posts must open on Tuesday in Europe/Prague");
+    }
   }
 }
 

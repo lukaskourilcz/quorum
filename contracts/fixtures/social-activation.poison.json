@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "social-activation/1",
+  "ventures": {
+    "caught-up": { "status": "enabled", "counter": -1, "required": 7, "reason": "", "updatedAt": "not-a-date", "unlockedAt": null, "decisionReference": "wrong-decision" }
+  },
+  "updatedAt": "not-a-date"
+}

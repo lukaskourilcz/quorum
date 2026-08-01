@@ -6,6 +6,7 @@ import { loadStylebook, reviewArticle, stylebookPacket, validateStylebook, type 
 import { storeArticleMedia, storeArticlePackage, storeSocialVariantPack } from "./store.js";
 import { deterministicArticleImage } from "../images/article-image.js";
 import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { composeMmaFilesSocialQueue } from "../social/venture-packs.js";
 
 type Localization = ArticlePackage["localizations"]["en"];
 type EnglishDraft = Localization & { imageCandidateIndex?: number };
@@ -58,6 +59,8 @@ export async function produceMmaFilesArticle(input: {
   stylebookRaw?: string;
   socialProductionEnabled?: boolean;
   imageCandidates?: readonly LicensedPhotoCandidate[];
+  publicRepoRoot?: string;
+  socialDestinationBaseUrl?: string;
 }): Promise<ArticleProductionResult> {
   const assignment = input.slate.slots.find((slot) => slot.slot === input.slot);
   if (!assignment) throw new Error(`Editorial slate has no ${input.slot} slot`);
@@ -133,5 +136,8 @@ export async function produceMmaFilesArticle(input: {
     article,
     socialPack ? renderSocialVariants(socialPack, article) : []
   );
-  return { article, violations, articlePath: stored.path, socialPath, mediaPaths, idempotent: stored.idempotent };
+  const queuePaths = socialPack && input.publicRepoRoot && input.socialDestinationBaseUrl
+    ? await composeMmaFilesSocialQueue({ stateRoot: input.root, repoRoot: input.publicRepoRoot, article, pack: socialPack, destinationBaseUrl: input.socialDestinationBaseUrl, now: input.publishAt })
+    : [];
+  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent };
 }

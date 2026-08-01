@@ -6,7 +6,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 import { readAdminMmaFiles } from "./admin-mma-files";
-import { parseOwnerMetrics, saveOwnerMetrics } from "./mma-files-metrics-store";
 
 const roots: string[] = [];
 afterEach(async () => { await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))); });
@@ -55,7 +54,7 @@ function article() {
 }
 
 describe("MMA Files admin projection", () => {
-  it("renders hash-checked bilingual articles, social variants, calendar state and samples", async () => {
+  it("renders hash-checked bilingual articles, platform captions and calendar state", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-admin-"));
     roots.push(root);
     const directories = [
@@ -69,8 +68,8 @@ describe("MMA Files admin projection", () => {
       schemaVersion: "social-variant/1",
       articleRef: "article:2026-08-01:am:fixture-preview",
       variants: [
-        { id: "A", captions: { en: "English A", cs: "Česky A" }, designAxes: { templateFamily: "stat-led", colorScheme: "orange-dark", headlineFraming: "fact-first", captionTone: "plain" } },
-        { id: "B", captions: { en: "English B", cs: "Česky B" }, designAxes: { templateFamily: "question-led", colorScheme: "paper-dark", headlineFraming: "question", captionTone: "curious" } }
+        { id: "A", captions: { en: { instagram: "English A", threads: "English A short" }, cs: { instagram: "Česky A", threads: "Česky A krátce" } }, designAxes: { templateFamily: "stat-led", colorScheme: "orange-dark", headlineFraming: "fact-first", captionTone: "plain" } },
+        { id: "B", captions: { en: { instagram: "English B", threads: "English B short" }, cs: { instagram: "Česky B", threads: "Česky B krátce" } }, designAxes: { templateFamily: "question-led", colorScheme: "paper-dark", headlineFraming: "question", captionTone: "curious" } }
       ],
       assignmentProtocolRef: "state/ventures/mma-files/social/ASSIGNMENT.md",
       status: "draft"
@@ -84,24 +83,11 @@ describe("MMA Files admin projection", () => {
     }));
     const rating = { schemaVersion: "rating/1", id: "r-2026-08-01-abcd", ventureId: "mma-files", objectKind: "article", objectRef: { id: "article:2026-08-01:am:fixture-preview", contentHash: `sha256:${packageValue.packageHash.slice(0, 12)}` }, rating: "good", ratedAt: "2026-08-01T12:00:00.000Z" };
     await writeFile(path.join(root, "state/ratings/mma-files/ledger.jsonl"), `${JSON.stringify(rating)}\n`);
-    const metrics = Array.from({ length: 8 }, (_, index) => JSON.stringify({ schemaVersion: "metrics-capture/1", postRef: `article:fixture-${index}:A:instagram:en`, window: "48h", metrics: { views: 100, likes: 10, comments: 1, shares: 2 }, source: "owner-entry", capturedAt: `2026-08-${String(index + 1).padStart(2, "0")}T10:00:00.000Z` })).join("\n");
-    await writeFile(path.join(root, "state/ventures/mma-files/social/metrics.jsonl"), `${metrics}\n`);
-
     const snapshot = await readAdminMmaFiles(root);
     expect(snapshot.unreadable).toEqual([]);
     expect(snapshot.articles[0]).toMatchObject({ id: "article:2026-08-01:am:fixture-preview", localizations: { en: { title: "Fixture preview" }, cs: { title: "Zkušební pozvánka" } }, ratings: [{ rating: "good" }] });
     expect(snapshot.socialPacks[0]?.variants.map((variant) => variant.id)).toEqual(["A", "B"]);
     expect(snapshot.calendar[0]?.slots.map((slot) => slot.articleStatus)).toEqual(["published", null]);
-    expect(snapshot.scores.find((score) => score.variant === "A" && score.window === "48h")).toMatchObject({ sampleSize: 8, findingStatus: "confirmed" });
-  });
-
-  it("parses bounded owner metrics and saves a replay once", async () => {
-    const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-metrics-site-"));
-    roots.push(root);
-    const capture = parseOwnerMetrics({ postRef: "article:fixture:A:instagram:en", window: "48h", views: "100", likes: "10", comments: "1", shares: "2", saves: "3", clicks: "4", follows: "" }, new Date("2026-08-03T10:00:00.000Z"));
-    expect(capture).not.toBeNull();
-    expect((await saveOwnerMetrics(capture!, root)).idempotent).toBe(false);
-    expect((await saveOwnerMetrics(capture!, root)).idempotent).toBe(true);
-    expect(parseOwnerMetrics({ postRef: "../../escape", window: "48h", views: 1, likes: 1, comments: 1, shares: 1 })).toBeNull();
+    expect(snapshot.socialPacks[0]?.variants[0].captions.en).toEqual({ instagram: "English A", threads: "English A short" });
   });
 });

@@ -16,6 +16,10 @@ function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
+export function deterministicVariant(value: string): "A" | "B" {
+  return Number.parseInt(sha256(value).slice(0, 2), 16) % 2 === 0 ? "A" : "B";
+}
+
 type SocialLocale = "en" | "cs";
 
 function hashtags(tags: readonly string[], locale: SocialLocale): string[] {
@@ -62,9 +66,14 @@ function queueItem(input: {
   const notAfter = new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString();
   const localized = input.pack.byLocale[input.locale];
   const platform = localized[input.channel];
+  const id = `caught-up-${input.pack.date}-${input.locale}-${input.channel}`;
+  const variant = deterministicVariant(id);
   const base = {
     schemaVersion: 1 as const,
-    id: `caught-up-${input.pack.date}-${input.locale}-${input.channel}`,
+    id,
+    venture: "caught-up" as const,
+    locale: input.locale,
+    variant,
     campaignId: `caught-up-${input.pack.date}-${input.locale}`,
     experimentId: null,
     channel: input.channel,
@@ -78,7 +87,7 @@ function queueItem(input: {
       content: `edition-carousel-${input.locale}`
     },
     content: {
-      text: input.channel === "instagram" ? localized.instagram.caption : localized.threads.text,
+      text: input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant],
       altText: queueAltText(input.pack, input.locale),
       assetPaths: platform.frames,
       factualClaimRefs: input.evidenceRefs,
@@ -208,15 +217,21 @@ export async function composeEditionSocialPack(input: {
       const instagramSuffix = `\n\n${readLabel}: ${destinations[locale]}\n\n${tagList.map((tag) => `#${tag}`).join(" ")}`;
       const threadsBody = `${article.title}\n\n${article.why_it_matters[0]}\n\n${openLabel}: ${article.uncertainty[0]}`;
       const threadsSuffix = `\n\n${destinations[locale]}`;
+      const instagramA = boundedCopy(instagramBody, instagramSuffix, 2_200);
+      const instagramBBody = `${article.what_changed[0]}\n\n${article.title}\n\n${article.dek}\n\n${openLabel}: ${article.uncertainty[0]}`;
+      const threadsA = boundedCopy(threadsBody, threadsSuffix, 500);
+      const threadsBBody = `${article.what_changed[0]}\n\n${article.why_it_matters[0]}\n\n${openLabel}: ${article.uncertainty[0]}`;
       return {
         destination: destinations[locale],
         instagram: {
-          caption: boundedCopy(instagramBody, instagramSuffix, 2_200),
+          caption: instagramA,
+          variants: { A: instagramA, B: boundedCopy(instagramBBody, instagramSuffix, 2_200) },
           hashtags: tagList,
           frames: framePaths[locale]
         },
         threads: {
-          text: boundedCopy(threadsBody, threadsSuffix, 500),
+          text: threadsA,
+          variants: { A: threadsA, B: boundedCopy(threadsBBody, threadsSuffix, 500) },
           hashtags: [],
           frames: framePaths[locale]
         }

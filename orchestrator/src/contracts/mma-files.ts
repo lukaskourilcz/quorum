@@ -45,7 +45,10 @@ export const ArticlePackageSchema = openObject({
 const SocialVariantSchema = openObject({
   id: z.enum(["A", "B"]),
   carouselSpec: FrameSpecSchema,
-  captions: openObject({ en: z.string().trim().min(1).max(2_200), cs: z.string().trim().min(1).max(2_200) }),
+  captions: openObject({
+    en: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) }),
+    cs: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) })
+  }),
   designAxes: openObject({
     templateFamily: z.string().trim().min(1).max(80),
     colorScheme: z.string().trim().min(1).max(80),
@@ -62,34 +65,6 @@ export const SocialVariantPackSchema = openObject({
   status: z.enum(["draft", "queued", "archived"])
 }).superRefine((pack, context) => {
   if (pack.variants[0].id !== "A" || pack.variants[1].id !== "B") context.addIssue({ code: "custom", message: "Social variants must be ordered A then B", path: ["variants"] });
-});
-
-export const MetricsCaptureSchema = openObject({
-  schemaVersion: z.literal("metrics-capture/1"),
-  postRef: z.string().trim().min(1).max(240),
-  window: z.enum(["48h", "7d"]),
-  metrics: openObject({
-    views: z.number().int().nonnegative(), likes: z.number().int().nonnegative(),
-    comments: z.number().int().nonnegative(), shares: z.number().int().nonnegative(),
-    saves: z.number().int().nonnegative().optional(), clicks: z.number().int().nonnegative().optional(),
-    follows: z.number().int().nonnegative().optional()
-  }),
-  source: z.literal("owner-entry"),
-  capturedAt: DateTimeSchema
-});
-
-export const DesignFindingSchema = openObject({
-  schemaVersion: z.literal("design-finding/1"),
-  axis: z.enum(["template-family", "color-scheme", "headline-framing", "caption-tone"]),
-  direction: z.string().trim().min(1).max(240),
-  evidencePostRefs: z.array(z.string().trim().min(1).max(240)).min(1),
-  sampleSize: z.number().int().nonnegative(),
-  status: z.enum(["directional", "confirmed"]),
-  proposedWeightChange: z.number().finite().min(-0.1).max(0.1).optional(),
-  tasteConflict: openObject({ flag: z.literal(true), palateRef: z.string().trim().min(1).max(240) }).optional()
-}).superRefine((finding, context) => {
-  if (finding.status === "confirmed" && finding.sampleSize < 8) context.addIssue({ code: "custom", message: "Confirmed findings need at least eight posts per variant family", path: ["sampleSize"] });
-  if (finding.sampleSize > finding.evidencePostRefs.length) context.addIssue({ code: "custom", message: "Sample size cannot exceed named evidence posts", path: ["sampleSize"] });
 });
 
 const SlateSlotSchema = openObject({
@@ -138,7 +113,5 @@ export const FightAiQDeliverySchema = openObject({
 
 export type ArticlePackage = z.infer<typeof ArticlePackageSchema>;
 export type SocialVariantPack = z.infer<typeof SocialVariantPackSchema>;
-export type MetricsCapture = z.infer<typeof MetricsCaptureSchema>;
-export type DesignFinding = z.infer<typeof DesignFindingSchema>;
 export type EditorialSlate = z.infer<typeof EditorialSlateSchema>;
 export type FightAiQDelivery = z.infer<typeof FightAiQDeliverySchema>;

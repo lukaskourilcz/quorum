@@ -26,11 +26,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
+      SOCIAL_KILL_SWITCH: ${{ vars.SOCIAL_KILL_SWITCH }}
       META_GRAPH_API_VERSION: ${{ vars.META_GRAPH_API_VERSION }}
-      META_THREADS_USER_ID: ${{ vars.META_THREADS_USER_ID }}
-      META_THREADS_ACCESS_TOKEN: ${{ secrets.META_THREADS_ACCESS_TOKEN }}
-      META_INSTAGRAM_IG_USER_ID: ${{ vars.META_INSTAGRAM_IG_USER_ID }}
-      META_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.META_INSTAGRAM_ACCESS_TOKEN }}
+      CAUGHT_UP_THREADS_USER_ID: ${{ vars.CAUGHT_UP_THREADS_USER_ID }}
+      CAUGHT_UP_THREADS_ACCESS_TOKEN: ${{ secrets.CAUGHT_UP_THREADS_ACCESS_TOKEN }}
+      CAUGHT_UP_INSTAGRAM_USER_ID: ${{ vars.CAUGHT_UP_INSTAGRAM_USER_ID }}
+      CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN }}
+      MMA_FILES_THREADS_USER_ID: ${{ vars.MMA_FILES_THREADS_USER_ID }}
+      MMA_FILES_THREADS_ACCESS_TOKEN: ${{ secrets.MMA_FILES_THREADS_ACCESS_TOKEN }}
+      MMA_FILES_INSTAGRAM_USER_ID: ${{ vars.MMA_FILES_INSTAGRAM_USER_ID }}
+      MMA_FILES_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.MMA_FILES_INSTAGRAM_ACCESS_TOKEN }}
+      TITTY_TUESDAYS_THREADS_USER_ID: ${{ vars.TITTY_TUESDAYS_THREADS_USER_ID }}
+      TITTY_TUESDAYS_THREADS_ACCESS_TOKEN: ${{ secrets.TITTY_TUESDAYS_THREADS_ACCESS_TOKEN }}
+      TITTY_TUESDAYS_INSTAGRAM_USER_ID: ${{ vars.TITTY_TUESDAYS_INSTAGRAM_USER_ID }}
+      TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN }}
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
     steps:
       - name: Checkout
@@ -81,7 +90,7 @@ jobs:
 
       - name: Commit immutable queue state and receipts
         run: |
-          git add state/social
+          git add state/social state/notify NEEDS_YOUR_HELP_NOW.md
           if git diff --cached --quiet; then
             echo "Publisher produced no state change."
             exit 0
@@ -89,4 +98,12 @@ jobs:
           git config user.name "boardlessai-social[bot]"
           git config user.email "boardlessai-social[bot]@users.noreply.github.com"
           git commit -m "social(${GITHUB_RUN_NUMBER})"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          for attempt in 1 2 3; do
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+          done
+          echo "Social state could not be pushed after three rebase-first attempts."
+          exit 1

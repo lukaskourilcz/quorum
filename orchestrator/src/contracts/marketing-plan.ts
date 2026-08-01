@@ -19,6 +19,22 @@ export const MarketingTacticSchema = openObject({
   }
 });
 
+export const PostableCampaignAssetSchema = openObject({
+  id: z.string().regex(/^asset-[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  captions: openObject({
+    instagram: openObject({ A: z.string().trim().min(1).max(2_200), B: z.string().trim().min(1).max(2_200) }),
+    threads: openObject({ A: z.string().trim().min(1).max(500), B: z.string().trim().min(1).max(500) })
+  }),
+  visualSpec: openObject({
+    template: z.literal("tt-typographic-card"),
+    headline: z.string().trim().min(1).max(100),
+    subhead: z.string().trim().min(1).max(180),
+    origin: z.literal("deterministic"),
+    people: z.literal(false),
+    photography: z.literal(false)
+  })
+});
+
 export const MarketingPlanSchema = openObject({
   schemaVersion: z.literal("marketing-plan/1"),
   id: z.string().regex(/^plan-[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -34,6 +50,7 @@ export const MarketingPlanSchema = openObject({
   })).min(1),
   audienceRefs: z.array(z.string().trim().min(1).max(160)),
   kpis: z.array(z.string().trim().min(1).max(240)).min(1),
+  postable_assets: z.array(PostableCampaignAssetSchema).min(1).max(8),
   status: z.enum(["draft", "owner_rated", "approved", "archived"]),
   originMeetingRef: MeetingRefSchema
 });

@@ -78,7 +78,7 @@ const mandates: Record<AgentId, string> = {
   CANVAS: "Runs the two daily MMA Files slots and blocks any article that fails its sources, language or style checks.",
   JAB: "Writes sourced MMA stories in English and gives the Czech pass the context it needs to sound natural.",
   REACH: "Builds two clearly different English and Czech social drafts for every approved article.",
-  SPLIT: "Keeps the social test numbers honest and refuses firm conclusions until enough posts have been measured.",
+  SPLIT: "Stays idle until Phase 3 and blocks any early reader or post measurement.",
   PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input."
 };
 

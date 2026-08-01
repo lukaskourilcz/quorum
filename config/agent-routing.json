@@ -153,7 +153,7 @@
       "status": "active"
     },
     "SPLIT": {
-      "capabilities": ["experiment:analysis", "social:metrics", "statistics"],
+      "capabilities": ["phase3:standby", "measurement:guard"],
       "status": "active"
     },
     "PIVOT": {

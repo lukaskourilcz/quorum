@@ -14,6 +14,11 @@ export interface PublishAdapter {
     item: QueueItem,
     idempotencyKey: string
   ): Promise<{ remoteId: string }>;
+  verify(
+    channel: Channel,
+    item: QueueItem,
+    remoteId: string
+  ): Promise<{ remoteId: string; remoteUrl: string }>;
   findByIdempotencyKey?(
     channel: Channel,
     idempotencyKey: string

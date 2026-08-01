@@ -4,29 +4,28 @@
     {
       "id": "threads",
       "specialist": "THREADS",
-      "mode": "draft",
+      "mode": "autopublish",
       "connector": "meta_threads",
       "credentialRef": "META_THREADS_ACCESS_TOKEN",
-      "approvedScopes": [],
+      "approvedScopes": ["threads_basic", "threads_content_publish"],
       "nativeFormats": ["text", "image", "carousel"],
       "maxOrganicPostsPerDay": 2,
       "minHoursBetweenPosts": 6,
       "timezone": "Europe/Prague",
-      "enabledByHumanAt": null
+      "enabledByHumanAt": "2026-08-01T00:00:00.000Z"
     },
     {
       "id": "instagram",
       "specialist": "INSTAGRAM",
-      "mode": "draft",
+      "mode": "autopublish",
       "connector": "meta_instagram",
       "credentialRef": "META_INSTAGRAM_ACCESS_TOKEN",
-      "approvedScopes": [],
+      "approvedScopes": ["instagram_basic", "instagram_content_publish"],
       "nativeFormats": ["image", "carousel", "reel"],
       "maxOrganicPostsPerDay": 1,
       "minHoursBetweenPosts": 12,
       "timezone": "Europe/Prague",
-      "enabledByHumanAt": null
+      "enabledByHumanAt": "2026-08-01T00:00:00.000Z"
     }
   ]
 }
-

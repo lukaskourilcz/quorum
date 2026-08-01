@@ -13,12 +13,12 @@ import { composeArticleHero } from "../src/social/media/compose.js";
 import path from "node:path";
 
 describe("venture agent controls", () => {
-  it("starts with social production off while preserving the bilingual article desk", async () => {
+  it("creates social drafts while the separate health gate controls publishing", async () => {
     const controls = await loadVentureAgentControls();
-    expect(caughtUpSocialProductionEnabled(controls)).toBe(false);
-    expect([...disabledAgentsForVenture(controls, "caught-up")]).toEqual(["THREADS", "INSTAGRAM", "FRAME"]);
+    expect(caughtUpSocialProductionEnabled(controls)).toBe(true);
+    expect([...disabledAgentsForVenture(controls, "caught-up")]).toEqual([]);
     expect(enabledAgentsForVenture(controls, "caught-up", ["HERALD", "STET", "HACEK", "THREADS"]))
-      .toEqual(["HERALD", "STET", "HACEK"]);
+      .toEqual(["HERALD", "STET", "HACEK", "THREADS"]);
   });
 
   it("rejects attempts to disable a locked role", async () => {
@@ -36,17 +36,17 @@ describe("venture agent controls", () => {
     const room = routeBoardroom(routing, {
       roomId: "ROOM-AGENT-CONTROLS",
       topicType: "social",
-      objective: "Review one draft",
+      objective: "Review a measurement request",
       evidenceRefs: [],
       decisionNeeded: "PLAN",
-      riskTags: ["social:threads"],
+      riskTags: ["social:metrics"],
       budgetImpactUsd: 0,
-      ventureId: "caught-up",
+      ventureId: "mma-files",
       owner: "PULSE",
-      disabledParticipants: [...disabledAgentsForVenture(controls, "caught-up")]
+      disabledParticipants: [...disabledAgentsForVenture(controls, "mma-files")]
     });
-    expect(room.selectedParticipants.some(({ agent }) => agent === "THREADS")).toBe(false);
-    expect(room.skippedParticipants.find(({ agent }) => agent === "THREADS")?.reason).toContain("switched off");
+    expect(room.selectedParticipants.some(({ agent }) => agent === "SPLIT")).toBe(false);
+    expect(room.skippedParticipants.find(({ agent }) => agent === "SPLIT")?.reason).toContain("switched off");
   });
 
   it("renders a small deterministic article hero", async () => {

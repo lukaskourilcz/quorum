@@ -7,6 +7,14 @@ const MetaIdResponseSchema = z.object({
   id: z.string().min(1)
 });
 
+const MetaLiveResponseSchema = z.object({
+  id: z.string().min(1),
+  permalink_url: z.url().optional(),
+  permalink: z.url().optional()
+}).superRefine((value, context) => {
+  if (!value.permalink_url && !value.permalink) context.addIssue({ code: "custom", message: "Meta live response has no permalink" });
+});
+
 type FetchLike = typeof fetch;
 
 function requiredEnvironment(environment: NodeJS.ProcessEnv, name: string): string {
@@ -23,6 +31,21 @@ function apiVersion(environment: NodeJS.ProcessEnv): string {
     throw new Error("META_GRAPH_API_VERSION must match vN.N");
   }
   return version;
+}
+
+const VENTURE_PREFIX = {
+  "caught-up": "CAUGHT_UP",
+  "mma-files": "MMA_FILES",
+  "titty-tuesdays": "TITTY_TUESDAYS"
+} as const;
+
+function accountCredentials(environment: NodeJS.ProcessEnv, item: QueueItem, channel: Channel): { accessToken: string; userId: string } {
+  const prefix = VENTURE_PREFIX[item.venture];
+  const channelPrefix = channel.id === "threads" ? "THREADS" : "INSTAGRAM";
+  return {
+    accessToken: requiredEnvironment(environment, `${prefix}_${channelPrefix}_ACCESS_TOKEN`),
+    userId: requiredEnvironment(environment, `${prefix}_${channelPrefix}_USER_ID`)
+  };
 }
 
 async function postForm(
@@ -53,19 +76,23 @@ export function createMetaPublishAdapter(
   environment: NodeJS.ProcessEnv,
   fetchImpl: FetchLike = fetch
 ): PublishAdapter {
+  const publishedByKey = new Map<string, string>();
   return {
     async publish(
       channel: Channel,
       item: QueueItem,
-      _idempotencyKey: string
+      idempotencyKey: string
     ): Promise<{ remoteId: string }> {
       assertQueueItemPublishable(item);
       const content = item.content!;
       const version = apiVersion(environment);
-      const accessToken = requiredEnvironment(environment, channel.credentialRef);
+      const credentials = accountCredentials(environment, item, channel);
+      const accessToken = credentials.accessToken;
+      const existing = publishedByKey.get(idempotencyKey);
+      if (existing) return { remoteId: existing };
 
       if (channel.connector === "meta_threads" && channel.id === "threads") {
-        const userId = requiredEnvironment(environment, "META_THREADS_USER_ID");
+        const userId = credentials.userId;
         const base = new URL(
           `https://graph.threads.net/${version}/${encodeURIComponent(userId)}/`
         );
@@ -86,14 +113,12 @@ export function createMetaPublishAdapter(
             access_token: accessToken
           }
         );
+        publishedByKey.set(idempotencyKey, remoteId);
         return { remoteId };
       }
 
       if (channel.connector === "meta_instagram" && channel.id === "instagram") {
-        const userId = requiredEnvironment(
-          environment,
-          "META_INSTAGRAM_IG_USER_ID"
-        );
+        const userId = credentials.userId;
         const base = new URL(
           `https://graph.facebook.com/${version}/${encodeURIComponent(userId)}/`
         );
@@ -101,12 +126,29 @@ export function createMetaPublishAdapter(
         if (!publicSiteUrl.startsWith("https://")) {
           throw new Error("PUBLIC_SITE_URL must use HTTPS for Instagram media");
         }
-        const imageUrl = new URL(content.assetPaths[0]!, publicSiteUrl).toString();
-        const creationId = await postForm(fetchImpl, new URL("media", base), {
-          image_url: imageUrl,
-          caption: content.text,
-          access_token: accessToken
-        });
+        const imageUrls = content.assetPaths.map((asset) => new URL(asset, publicSiteUrl).toString());
+        const creationId = imageUrls.length === 1
+          ? await postForm(fetchImpl, new URL("media", base), {
+              image_url: imageUrls[0]!,
+              caption: content.text,
+              access_token: accessToken
+            })
+          : await (async () => {
+              const children: string[] = [];
+              for (const imageUrl of imageUrls) {
+                children.push(await postForm(fetchImpl, new URL("media", base), {
+                  image_url: imageUrl,
+                  is_carousel_item: "true",
+                  access_token: accessToken
+                }));
+              }
+              return postForm(fetchImpl, new URL("media", base), {
+                media_type: "CAROUSEL",
+                children: children.join(","),
+                caption: content.text,
+                access_token: accessToken
+              });
+            })();
         const remoteId = await postForm(
           fetchImpl,
           new URL("media_publish", base),
@@ -115,10 +157,25 @@ export function createMetaPublishAdapter(
             access_token: accessToken
           }
         );
+        publishedByKey.set(idempotencyKey, remoteId);
         return { remoteId };
       }
 
       throw new Error(`Unsupported guarded connector: ${channel.connector}`);
+    },
+    async verify(channel: Channel, item: QueueItem, remoteId: string): Promise<{ remoteId: string; remoteUrl: string }> {
+      const version = apiVersion(environment);
+      const credentials = accountCredentials(environment, item, channel);
+      const host = channel.id === "threads" ? "graph.threads.net" : "graph.facebook.com";
+      const fields = channel.id === "threads" ? "id,permalink" : "id,permalink_url";
+      const url = new URL(`https://${host}/${version}/${encodeURIComponent(remoteId)}`);
+      url.searchParams.set("fields", fields);
+      url.searchParams.set("access_token", credentials.accessToken);
+      const response = await fetchImpl(url, { method: "GET", redirect: "error", signal: AbortSignal.timeout(20_000) });
+      if (!response.ok) throw new Error(`Meta post verifier returned HTTP ${response.status}`);
+      const parsed = MetaLiveResponseSchema.safeParse(await response.json());
+      if (!parsed.success || parsed.data.id !== remoteId) throw new Error("Meta post verifier returned an invalid post");
+      return { remoteId, remoteUrl: parsed.data.permalink_url ?? parsed.data.permalink! };
     }
   };
 }

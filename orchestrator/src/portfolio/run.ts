@@ -57,6 +57,7 @@ import {
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
 import { foundTemplateVenture, templateCandidateFromProposal } from "../ventures/founding.js";
 import { VentureTemplateSchema } from "../contracts/autonomy.js";
+import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
 
 export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
@@ -514,9 +515,8 @@ export async function runPortfolioCycle(input: {
   }
   if (input.phase === "mag-editorial") {
     if (weekday === 4) cast.push("TAPE");
-    if (weekday === 5) cast.push("REACH", "SPLIT");
+    if (weekday === 5) cast.push("REACH");
   }
-  if (input.phase === "mag-desk" && weekday === 5) cast.push("SPLIT");
   cast = [...new Set(cast)];
   cast = cast.filter((agent) => !disabledAgents.has(agent));
   const effectiveObjective = agenda
@@ -573,7 +573,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null|{"schemaVersion":"editorial-slate/1","date":"YYYY-MM-DD","slots":[...],"vaultVerdicts":[...]},"marketingPlan":null|{"schemaVersion":"marketing-plan/1","title":"...","summary":"<=280 chars","objective":"...","tactics":[...],"calendar":[...],"audienceRefs":[...],"kpis":[...]},"followUpRequest":null|{"phase":"allowed phase","summary":"why another room is needed","evidenceRefs":[]}}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. It must describe future campaign ideas only; no publishing, image production, paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null|{"schemaVersion":"editorial-slate/1","date":"YYYY-MM-DD","slots":[...],"vaultVerdicts":[...]},"marketingPlan":null|{"schemaVersion":"marketing-plan/1","title":"...","summary":"<=280 chars","objective":"...","tactics":[...],"calendar":[...],"audienceRefs":[...],"kpis":[...],"postable_assets":[{"id":"asset-short-name","captions":{"instagram":{"A":"...","B":"..."},"threads":{"A":"...","B":"..."}},"visualSpec":{"template":"tt-typographic-card","headline":"...","subhead":"...","origin":"deterministic","people":false,"photography":false}}]},"followUpRequest":null|{"phase":"allowed phase","summary":"why another room is needed","evidenceRefs":[]}}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. It must describe future campaign ideas and include A/B captions plus deterministic typographic visual specifications; no paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM slot; kill a slot when its source-backed subject is missing or repeated.`;
       const prompt = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -633,7 +633,7 @@ export async function runPortfolioCycle(input: {
           id: `plan-${date}-campaign-notes`,
           ventureId: "titty-tuesdays",
           seasonId: "season-001",
-          status: "draft",
+          status: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto") ? "draft" : "approved",
           originMeetingRef: meetingRef
         })
       : null;
@@ -654,7 +654,15 @@ export async function runPortfolioCycle(input: {
       calendar: [{ week: 1, focus: "Owner reads the notes and decides whether any direction deserves a separate brief." }],
       audienceRefs: [],
       kpis: ["The owner can understand and rate each proposed direction without opening the meeting transcript."],
-      status: "draft",
+      postable_assets: [{
+        id: `asset-${date.replaceAll("-", "")}-campaign-notes`,
+        captions: {
+          instagram: { A: "Tuesday idea: the line does the work. The campaign stays typographic, clear and deliberate.", B: "A Tuesday campaign should earn attention with a sharp sentence, not a borrowed face." },
+          threads: { A: "A Tuesday idea built from type, timing and one clear point.", B: "The line is the visual. The idea is the reason to stop." }
+        },
+        visualSpec: { template: "tt-typographic-card", headline: "THE LINE IS THE VISUAL", subhead: "A Tuesday campaign idea made from type, not people.", origin: "deterministic", people: false, photography: false }
+      }],
+      status: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto") ? "draft" : "approved",
       originMeetingRef: meetingRef
     });
   }
@@ -722,6 +730,15 @@ export async function runPortfolioCycle(input: {
       atomicWriteText(root, proposalMarkdownPaths[index]!, renderNicheProposalMarkdown(proposal))
     ])
   ]);
+  const ttSocialArtifacts = !input.dry && marketingPlan?.status === "approved"
+    ? await composeTittyTuesdaysSocialQueue({
+        stateRoot: root,
+        repoRoot,
+        plan: marketingPlan,
+        destinationBaseUrl: process.env.TITTY_TUESDAYS_SITE_URL ?? "https://titty-tuesdays.vercel.app",
+        now: input.now
+      })
+    : [];
   let agendaStateChanged = false;
   if (!input.dry && agenda) {
     await consumeMeetingAgenda({
@@ -774,6 +791,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

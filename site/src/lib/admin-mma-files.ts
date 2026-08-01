@@ -29,7 +29,7 @@ export interface AdminMmaArticle {
 export interface AdminMmaSocialVariant {
   id: "A" | "B";
   articleRef: string;
-  captions: Record<Locale, string>;
+  captions: Record<Locale, { instagram: string; threads: string }>;
   designAxes: {
     templateFamily: string;
     colorScheme: string;
@@ -60,21 +60,10 @@ export interface AdminEditorialDay {
   }>;
 }
 
-export interface AdminVariantScore {
-  variant: "A" | "B";
-  window: "48h" | "7d";
-  sampleSize: number;
-  views: number;
-  interactions: number;
-  interactionRate: number | null;
-  findingStatus: "waiting" | "directional" | "confirmed";
-}
-
 export interface AdminMmaFilesSnapshot {
   articles: AdminMmaArticle[];
   socialPacks: AdminMmaSocialPack[];
   calendar: AdminEditorialDay[];
-  scores: AdminVariantScore[];
   unreadable: string[];
 }
 
@@ -178,21 +167,25 @@ function variant(value: unknown, articleRef: string, ratingRecords: readonly Rat
   const item = record(value);
   const id = item?.id === "A" || item?.id === "B" ? item.id : null;
   const captions = record(item?.captions);
-  const en = text(captions?.en, 2_200);
-  const cs = text(captions?.cs, 2_200);
+  const enCaptions = record(captions?.en);
+  const csCaptions = record(captions?.cs);
+  const enInstagram = text(enCaptions?.instagram, 2_200);
+  const enThreads = text(enCaptions?.threads, 500);
+  const csInstagram = text(csCaptions?.instagram, 2_200);
+  const csThreads = text(csCaptions?.threads, 500);
   const axes = record(item?.designAxes);
   const templateFamily = text(axes?.templateFamily, 80);
   const colorScheme = text(axes?.colorScheme, 80);
   const headlineFraming = text(axes?.headlineFraming, 120);
   const captionTone = text(axes?.captionTone, 120);
   const refParts = /^article:(\d{4}-\d{2}-\d{2}):(am|pm):([a-z0-9-]+)$/u.exec(articleRef);
-  if (!id || !en || !cs || !templateFamily || !colorScheme || !headlineFraming || !captionTone || !refParts) return null;
+  if (!id || !enInstagram || !enThreads || !csInstagram || !csThreads || !templateFamily || !colorScheme || !headlineFraming || !captionTone || !refParts) return null;
   const objectId = `${articleRef}:${id}`;
   const base = `ventures/mma-files/media/${refParts[1]}-${refParts[2]}-${refParts[3]}`;
   return {
     id,
     articleRef,
-    captions: { en, cs },
+    captions: { en: { instagram: enInstagram, threads: enThreads }, cs: { instagram: csInstagram, threads: csThreads } },
     designAxes: { templateFamily, colorScheme, headlineFraming, captionTone },
     imageUrls: { en: mediaUrl(`${base}/social-${id}-en.svg`), cs: mediaUrl(`${base}/social-${id}-cs.svg`) },
     contentHash: hash12(JSON.stringify(item)),
@@ -229,37 +222,6 @@ function parseEditorialDay(raw: string, articles: readonly AdminMmaArticle[]): A
   return slots.every(Boolean) ? { date, slots: slots as AdminEditorialDay["slots"] } : null;
 }
 
-interface Metric {
-  postRef: string;
-  window: "48h" | "7d";
-  views: number;
-  interactions: number;
-}
-
-function metrics(raw: string): Metric[] | null {
-  const output: Metric[] = [];
-  for (const line of raw.split(/\r?\n/u).filter(Boolean)) {
-    let input: Record<string, unknown> | null = null;
-    try { input = record(JSON.parse(line)); } catch { return null; }
-    const postRef = text(input?.postRef, 240);
-    const window = input?.window === "48h" || input?.window === "7d" ? input.window : null;
-    const values = record(input?.metrics);
-    const required = [values?.views, values?.likes, values?.comments, values?.shares];
-    if (input?.schemaVersion !== "metrics-capture/1" || !postRef || !window || required.some((value) => typeof value !== "number" || !Number.isInteger(value) || value < 0)) return null;
-    output.push({ postRef, window, views: values!.views as number, interactions: (values!.likes as number) + (values!.comments as number) + (values!.shares as number) + (typeof values!.saves === "number" ? values!.saves : 0) + (typeof values!.clicks === "number" ? values!.clicks : 0) });
-  }
-  return output;
-}
-
-function score(metricRecords: readonly Metric[]): AdminVariantScore[] {
-  return (["48h", "7d"] as const).flatMap((window) => (["A", "B"] as const).map((variant) => {
-    const matches = metricRecords.filter((entry) => entry.window === window && entry.postRef.includes(`:${variant}:`));
-    const views = matches.reduce((sum, entry) => sum + entry.views, 0);
-    const interactions = matches.reduce((sum, entry) => sum + entry.interactions, 0);
-    return { variant, window, sampleSize: matches.length, views, interactions, interactionRate: views ? Number((interactions / views).toFixed(4)) : null, findingStatus: matches.length >= 8 ? "confirmed" as const : matches.length ? "directional" as const : "waiting" as const };
-  }));
-}
-
 export async function readAdminMmaFiles(root = repositoryRoot): Promise<AdminMmaFilesSnapshot> {
   const ratingState = await ratings(root);
   const articleRoot = path.join(root, "state", "ventures", "mma-files", "articles");
@@ -281,16 +243,10 @@ export async function readAdminMmaFiles(root = repositoryRoot): Promise<AdminMma
     const parsed = parseEditorialDay(await readFile(path.join(slateRoot, filename), "utf8"), articles);
     if (parsed) calendar.push(parsed); else unreadable.push(`slates/${filename}`);
   }
-  let metricRecords: Metric[] = [];
-  try {
-    const parsed = metrics(await readFile(path.join(root, "state", "ventures", "mma-files", "social", "metrics.jsonl"), "utf8"));
-    if (parsed) metricRecords = parsed; else unreadable.push("social/metrics.jsonl");
-  } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
   return {
     articles: articles.sort((left, right) => right.date.localeCompare(left.date) || left.slot.localeCompare(right.slot)),
     socialPacks: socialPacks.sort((left, right) => right.articleRef.localeCompare(left.articleRef)),
     calendar: calendar.sort((left, right) => right.date.localeCompare(left.date)),
-    scores: score(metricRecords),
     unreadable
   };
 }

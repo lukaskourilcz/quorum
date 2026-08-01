@@ -626,17 +626,17 @@
       "warmupCycles": 14
     },
     {
-      "id": "split.scoreboard_freshness",
+      "id": "split.metrics_ingestion_incidents",
       "owner": "SPLIT",
-      "metric": "metricsToScoreboardHours",
-      "target": 24,
+      "metric": "metricsIngestionIncidentCount",
+      "target": 0,
       "dir": "down",
       "warmupCycles": 14
     },
     {
-      "id": "split.claim_discipline",
+      "id": "split.phase_gate_compliance",
       "owner": "SPLIT",
-      "metric": "sampleLabeledFindingRate",
+      "metric": "phaseThreeGateClosedRate",
       "target": 1,
       "dir": "up",
       "warmupCycles": 14

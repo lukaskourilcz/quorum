@@ -86,7 +86,7 @@ describe("automation policy", () => {
     expect(health).toContain('timezone: "Europe/Prague"');
   });
 
-  it("does not enable any social channel without human approval", async () => {
+  it("keeps channel scopes inside the owner-countersigned posting-only decision", async () => {
     const channels = JSON.parse(
       await readFile(path.join(repoRoot, "config", "channels.json"), "utf8")
     ) as {
@@ -97,13 +97,11 @@ describe("automation policy", () => {
       }>;
     };
 
-    expect(
-      channels.channels.every(
-        (channel) =>
-          channel.mode === "draft" &&
-          channel.approvedScopes.length === 0 &&
-          channel.enabledByHumanAt === null
-      )
-    ).toBe(true);
+    expect(channels.channels.every((channel) =>
+      channel.mode === "autopublish" &&
+      channel.approvedScopes.length > 0 &&
+      channel.approvedScopes.every((scope) => !/comment|reply|message|like|follow/iu.test(scope)) &&
+      channel.enabledByHumanAt === "2026-08-01T00:00:00.000Z"
+    )).toBe(true);
   });
 });

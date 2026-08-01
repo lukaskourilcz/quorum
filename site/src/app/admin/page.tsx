@@ -58,7 +58,7 @@ function statusLabel(status: string): string {
 function tabLabel(tab: AdminVentureTab): string {
   if (tab === "niche-proposals") return "magazine ideas";
   if (tab === "visuals") return "images";
-  if (tab === "social-lab") return "social drafts and results";
+  if (tab === "social-lab") return "social drafts";
   if (tab === "slates") return "fight reports";
   return tab;
 }

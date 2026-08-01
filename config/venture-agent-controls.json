@@ -16,9 +16,6 @@
         "FRAME"
       ],
       "disabled": [
-        "THREADS",
-        "INSTAGRAM",
-        "FRAME"
       ]
     },
     "titty-tuesdays": {
@@ -41,10 +38,7 @@
         "FRAME"
       ],
       "disabled": [
-        "QUILL",
-        "THREADS",
-        "INSTAGRAM",
-        "FRAME"
+        "QUILL"
       ]
     },
     "incubator": {
@@ -93,8 +87,7 @@
         "FRAME"
       ],
       "disabled": [
-        "REACH",
-        "FRAME"
+        "SPLIT"
       ]
     }
   }

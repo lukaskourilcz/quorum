@@ -1,17 +1,15 @@
 import { createHash } from "node:crypto";
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { SocialPostReceiptSchema } from "../contracts/autonomy.js";
+import { atomicWriteJson, withFileLock } from "../state.js";
+import { configRoot as defaultConfigRoot, repoRoot as defaultRepoRoot, stateRoot as defaultStateRoot } from "../paths.js";
+import { refreshSocialActivation, pauseVentureSocial } from "./activation.js";
 import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
 import { createMetaPublishAdapter } from "./meta.js";
-import {
-  assertQueueItemPublishable,
-  claimQueueItem,
-  QueueItemSchema,
-  reconcileQueueItem,
-  type QueueItem
-} from "./queue.js";
-import { atomicWriteJson, withFileLock } from "../state.js";
-import { configRoot, stateRoot } from "../paths.js";
+import type { PublishAdapter } from "./publish.js";
+import { assertQueueItemPublishable, QueueItemSchema, type QueueItem } from "./queue.js";
+import { checkTittyTuesdaysPost, TT_SAFETY_CHECKER_VERSION } from "./tt-safety.js";
 
 export interface SocialPublisherOptions {
   validateOnly: boolean;
@@ -19,6 +17,10 @@ export interface SocialPublisherOptions {
   now?: Date;
   environment?: NodeJS.ProcessEnv;
   fetchImpl?: typeof fetch;
+  adapter?: PublishAdapter;
+  repoRoot?: string;
+  stateRoot?: string;
+  configRoot?: string;
 }
 
 export interface SocialPublisherReport {
@@ -31,173 +33,140 @@ export interface SocialPublisherReport {
 }
 
 async function exists(filePath: string): Promise<boolean> {
-  try {
-    await access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
+  try { await access(filePath); return true; } catch { return false; }
 }
 
-async function writeReceipt(
-  item: QueueItem,
-  outcome: "published" | "ambiguous",
-  now: Date,
-  remoteId: string | null
-): Promise<void> {
-  const attemptCount = item.attempt?.attemptCount;
-  const lastError = item.attempt?.lastError;
-  if (!attemptCount || !item.receiptId) {
-    throw new Error(`Queue item ${item.id} has no reconciled attempt`);
-  }
-  await atomicWriteJson(
-    stateRoot,
-    `social/posts/${item.receiptId}.json`,
-    {
-      schemaVersion: 1,
-      id: item.receiptId,
-      queueItemId: item.id,
-      channel: item.channel,
-      contentHash: item.content.contentHash,
-      outcome,
-      remoteId,
-      attemptedAt: now.toISOString(),
-      error: lastError ?? null,
-      sanitizedProviderMetadata: {}
-    }
-  );
+function receiptId(item: QueueItem): string {
+  return `social-receipt-${createHash("sha256").update(`${item.venture}:${item.id}:${item.content.contentHash}`).digest("hex").slice(0, 16)}`;
 }
 
-export async function runSocialPublisher(
-  options: SocialPublisherOptions
-): Promise<SocialPublisherReport> {
+function idempotencyKey(item: QueueItem): string {
+  return createHash("sha256").update(`${item.venture}:${item.channel}:${item.id}:${item.content.contentHash}`).digest("hex");
+}
+
+export async function runSocialPublisher(options: SocialPublisherOptions): Promise<SocialPublisherReport> {
   const now = options.now ?? new Date();
   const environment = options.environment ?? process.env;
-  if (
-    (await exists(path.join(stateRoot, "PAUSED"))) ||
-    (await exists(path.join(stateRoot, "SOCIAL_PAUSED")))
-  ) {
-    return {
-      status: "paused",
-      queueItems: 0,
-      due: 0,
-      published: 0,
-      ambiguous: 0,
-      skipped: 0
-    };
+  const repoRoot = options.repoRoot ?? defaultRepoRoot;
+  const stateRoot = options.stateRoot ?? defaultStateRoot;
+  const configRoot = options.configRoot ?? defaultConfigRoot;
+  if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "PAUSED")) || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
+    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
   }
 
   return withFileLock(stateRoot, ".social-lock", async () => {
-    const registry = ChannelRegistrySchema.parse(
-      JSON.parse(
-        await readFile(path.join(configRoot, "channels.json"), "utf8")
-      ) as unknown
-    );
+    const activation = await refreshSocialActivation({
+      repoRoot,
+      stateRoot,
+      environment,
+      now,
+      safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
+    });
+    const registry = ChannelRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "channels.json"), "utf8")) as unknown);
     const queueDirectory = path.join(stateRoot, "social", "queue");
-    const files = (await readdir(queueDirectory))
-      .filter((name) => name.endsWith(".json"))
-      .sort();
-    const entries = await Promise.all(
-      files.map(async (name) => ({
-        name,
-        item: QueueItemSchema.parse(
-          JSON.parse(await readFile(path.join(queueDirectory, name), "utf8")) as unknown
-        )
-      }))
-    );
+    const files = await readdir(queueDirectory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : Promise.reject(error));
+    const entries = await Promise.all(files.filter((name) => name.endsWith(".json")).sort().map(async (name) => ({
+      name,
+      item: QueueItemSchema.parse(JSON.parse(await readFile(path.join(queueDirectory, name), "utf8")) as unknown)
+    })));
     const channels = new Map(registry.channels.map((channel) => [channel.id, channel]));
-    const due = entries.filter(
-      ({ item }) =>
-        item.status === "queued" &&
-        new Date(item.publishWindow.notBefore).getTime() <= now.getTime()
+    const due = entries.filter(({ item }) =>
+      ["draft", "queued"].includes(item.status) &&
+      new Date(item.publishWindow.notBefore).getTime() <= now.getTime() &&
+      new Date(item.publishWindow.notAfter).getTime() >= now.getTime()
     );
-    const autopublishDue = due.filter(
-      ({ item }) => channels.get(item.channel)?.mode === "autopublish"
-    );
+    const enabledDue = due.filter(({ item }) => activation.ventures[item.venture].status === "enabled");
 
-    for (const { item } of autopublishDue) {
-      assertQueueItemPublishable(item);
+    for (const { item } of enabledDue) {
+      const queued = item.status === "draft" ? { ...item, status: "queued" as const } : item;
+      assertQueueItemPublishable(queued);
       assertLiveChannel(channels.get(item.channel)!, environment);
     }
-
-    if (registry.channels.every((channel) => channel.mode === "draft")) {
-      return {
-        status: "draft_only",
-        queueItems: entries.length,
-        due: due.length,
-        published: 0,
-        ambiguous: 0,
-        skipped: due.length
-      };
+    if (enabledDue.length === 0) {
+      return { status: "draft_only", queueItems: entries.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length };
     }
     if (options.validateOnly) {
-      return {
-        status: "validated",
-        queueItems: entries.length,
-        due: due.length,
-        published: 0,
-        ambiguous: 0,
-        skipped: due.length
-      };
-    }
-    if (autopublishDue.length === 0 && options.dryIfDisabled) {
-      return {
-        status: "validated",
-        queueItems: entries.length,
-        due: due.length,
-        published: 0,
-        ambiguous: 0,
-        skipped: due.length
-      };
+      return { status: "validated", queueItems: entries.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length };
     }
 
-    const adapter = createMetaPublishAdapter(environment, options.fetchImpl);
+    const adapter = options.adapter ?? createMetaPublishAdapter(environment, options.fetchImpl);
     let published = 0;
-    let ambiguous = 0;
-
-    for (const { name, item } of autopublishDue) {
+    let failed = 0;
+    let safetyKilled = 0;
+    for (const { name, item } of enabledDue) {
       const channel = channels.get(item.channel)!;
-      const claimId = createHash("sha256")
-        .update(`${item.channel}:${item.id}:${item.content.contentHash}`)
-        .digest("hex");
-      const claimed = claimQueueItem(item, claimId, now);
-      await atomicWriteJson(stateRoot, `social/queue/${name}`, claimed);
-      if (claimed.status !== "publishing") {
+      const key = idempotencyKey(item);
+      const queued = QueueItemSchema.parse(item.status === "draft" ? { ...item, status: "queued" } : item);
+      const safety = checkTittyTuesdaysPost(queued);
+      if (!safety.passed) {
+        const killed = QueueItemSchema.parse({ ...queued, status: "cancelled" });
+        await Promise.all([
+          atomicWriteJson(stateRoot, `social/queue/${name}`, killed),
+          atomicWriteJson(stateRoot, `social/safety-kills/${queued.id}.json`, {
+            schemaVersion: "social-safety-kill/1",
+            venture: queued.venture,
+            queueItemId: queued.id,
+            checkerVersion: safety.version,
+            reasons: safety.reasons,
+            killedAt: now.toISOString()
+          })
+        ]);
+        safetyKilled += 1;
         continue;
       }
-      let reconciled: QueueItem;
       let remoteId: string | null = null;
-      try {
-        const result = await adapter.publish(channel, claimed, claimId);
-        remoteId = result.remoteId;
-        reconciled = reconcileQueueItem(claimed, {
-          outcome: "published",
-          remoteId: result.remoteId
-        });
-        published += 1;
-      } catch (error) {
-        reconciled = reconcileQueueItem(claimed, {
-          outcome: "ambiguous",
-          error: error instanceof Error ? error.message : "Unknown connector failure"
-        });
-        ambiguous += 1;
+      let remoteUrl: string | null = null;
+      let errorMessage: string | null = null;
+      let attemptCount: 1 | 2 = 1;
+      for (let attempt = 1; attempt <= 2; attempt += 1) {
+        attemptCount = attempt as 1 | 2;
+        try {
+          const existing = await adapter.findByIdempotencyKey?.(channel, key);
+          remoteId = existing?.remoteId ?? (await adapter.publish(channel, queued, key)).remoteId;
+          const verified = await adapter.verify(channel, queued, remoteId);
+          remoteUrl = verified.remoteUrl;
+          errorMessage = null;
+          break;
+        } catch (error) {
+          errorMessage = error instanceof Error ? error.message : String(error);
+        }
       }
-      await atomicWriteJson(stateRoot, `social/queue/${name}`, reconciled);
-      await writeReceipt(
-        reconciled,
-        reconciled.status === "published" ? "published" : "ambiguous",
-        now,
-        remoteId
-      );
+      const succeeded = remoteId !== null && remoteUrl !== null && errorMessage === null;
+      const id = receiptId(queued);
+      const receipt = SocialPostReceiptSchema.parse({
+        schemaVersion: "social-post-receipt/1",
+        id,
+        venture: queued.venture,
+        queueItemId: queued.id,
+        channel: queued.channel,
+        variant: queued.variant,
+        idempotencyKey: key,
+        contentHash: queued.content.contentHash,
+        outcome: succeeded ? "published" : "paused",
+        remoteId,
+        remoteUrl,
+        verifiedLive: succeeded,
+        attemptCount,
+        attemptedAt: now.toISOString(),
+        verifiedAt: succeeded ? now.toISOString() : null,
+        error: succeeded ? null : (errorMessage ?? "Post did not verify live").slice(0, 500)
+      });
+      const updated = QueueItemSchema.parse({
+        ...queued,
+        status: succeeded ? "published" : "failed",
+        attempt: { idempotencyKey: key, claimedAt: now.toISOString(), attemptCount, lastError: receipt.error },
+        receiptId: id
+      });
+      await Promise.all([
+        atomicWriteJson(stateRoot, `social/queue/${name}`, updated),
+        atomicWriteJson(stateRoot, `social/posts/${id}.json`, receipt)
+      ]);
+      if (succeeded) published += 1;
+      else {
+        failed += 1;
+        await pauseVentureSocial({ stateRoot, venture: queued.venture, reason: `Post ${queued.id} failed twice: ${receipt.error}`, now });
+      }
     }
-
-    return {
-      status: "complete",
-      queueItems: entries.length,
-      due: due.length,
-      published,
-      ambiguous,
-      skipped: due.length - autopublishDue.length
-    };
+    return { status: "complete", queueItems: entries.length, due: due.length, published, ambiguous: failed, skipped: due.length - enabledDue.length + safetyKilled };
   });
 }

@@ -21,8 +21,14 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
           }
         },
         captions: {
-          en: `${article.localizations.en.dek}\n\nRead the sourced story in MMA Files.`,
-          cs: `${article.localizations.cs.dek}\n\nPřečtěte si ozdrojovaný text v MMA Files.`
+          en: {
+            instagram: `${article.localizations.en.dek}\n\nRead the sourced story in MMA Files.`,
+            threads: `${article.localizations.en.dek}\n\nRead it in MMA Files.`
+          },
+          cs: {
+            instagram: `${article.localizations.cs.dek}\n\nPřečtěte si ozdrojovaný text v MMA Files.`,
+            threads: `${article.localizations.cs.dek}\n\nCelý text najdete v MMA Files.`
+          }
         },
         designAxes: {
           templateFamily: "stat-led",
@@ -42,8 +48,14 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
           }
         },
         captions: {
-          en: `${article.localizations.en.title}\n\n${article.localizations.en.dek}`,
-          cs: `${article.localizations.cs.title}\n\n${article.localizations.cs.dek}`
+          en: {
+            instagram: `${article.localizations.en.title}\n\n${article.localizations.en.dek}`,
+            threads: `${article.localizations.en.title}\n\n${article.localizations.en.dek}`.slice(0, 500)
+          },
+          cs: {
+            instagram: `${article.localizations.cs.title}\n\n${article.localizations.cs.dek}`,
+            threads: `${article.localizations.cs.title}\n\n${article.localizations.cs.dek}`.slice(0, 500)
+          }
         },
         designAxes: {
           templateFamily: "question-led",

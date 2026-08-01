@@ -624,9 +624,9 @@ const profileCopy: Record<
     publicTrackRecord: null
   },
   SPLIT: {
-    operatingPrinciple: "No conclusion without the posts and sample size beside it.",
-    output: "Social test scoreboard and bounded design finding",
-    currentFocus: "MMA Files social comparisons",
+    operatingPrinciple: "No measurement work before the owner opens Phase 3.",
+    output: "Closed measurement gate",
+    currentFocus: "Idle until Phase 3",
     publicTrackRecord: null
   },
   PIVOT: {

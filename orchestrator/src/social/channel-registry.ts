@@ -26,9 +26,6 @@ export function assertLiveChannel(channel: Channel, environment: NodeJS.ProcessE
   if (parsed.mode !== "autopublish" || parsed.enabledByHumanAt === null) {
     throw new Error(`${parsed.id} is in draft-only mode`);
   }
-  if (!environment[parsed.credentialRef]) {
-    throw new Error(`Missing credential: ${parsed.credentialRef}`);
-  }
   if (parsed.approvedScopes.length === 0) {
     throw new Error(`${parsed.id} has no approved scopes`);
   }
