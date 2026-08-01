@@ -135,6 +135,18 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   await expect(page.getByRole("link", { name: "Previous calendar week" })).toBeVisible();
 });
 
+test("every agent card and profile exposes its configured API model", async ({ page }) => {
+  await page.goto("/agents", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-agent-api-model]")).toHaveCount(38);
+  await expect(page.getByText("OpenAI · GPT-5.6 Luna").first()).toBeVisible();
+  await expect(page.getByText("Anthropic · Claude Haiku 4.5").first()).toBeVisible();
+
+  await page.goto("/agents/hacek", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "Model calls" })).toBeVisible();
+  await expect(page.locator("[data-agent-api-routes]")).toContainText("Claude Sonnet 4.6");
+  await expect(page.locator("[data-agent-api-routes]")).toContainText("Caught Up and MMA Files Czech editions");
+});
+
 test("admin rating persists, feeds the incubator shortlist, and the launch binder renders", async ({ page }) => {
   await page.goto("/admin?venture=incubator&tab=niche-proposals", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "E2E repair brief" })).toBeVisible();
@@ -152,7 +164,7 @@ test("admin rating persists, feeds the incubator shortlist, and the launch binde
   await expect(page.getByText("1 ready plans")).toBeVisible();
 });
 
-const responsiveRoutes = ["/", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/fightaiq/upcoming", "/fighters", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/fightaiq/upcoming", "/fighters", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },

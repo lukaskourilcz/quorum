@@ -1,4 +1,6 @@
 import registrySource from "../../../config/agents.json";
+import editionQualitySource from "../../../config/edition-quality.json";
+import modelSource from "../../../config/models.json";
 
 export type AgentId =
   | "VIZE"
@@ -87,6 +89,131 @@ export interface Agent extends RegistryAgent {
   primaryAccountability: string;
   currentFocus: string | null;
   publicTrackRecord: string | null;
+  apiModels: readonly AgentApiModel[];
+  apiModelSummary: string;
+}
+
+export interface AgentApiModel {
+  provider: "OpenAI" | "Anthropic";
+  model: string;
+  label: string;
+  context: string;
+}
+
+type TextModelRole =
+  | "VIZE"
+  | "FORGE"
+  | "PULSE"
+  | "AUDIT"
+  | "OPENAI_SPECIALIST"
+  | "ANTHROPIC_SPECIALIST"
+  | "DIGEST";
+
+const textModelRoles = modelSource.roles as Record<
+  TextModelRole,
+  { provider: "openai" | "anthropic"; model: string }
+>;
+const editionModels = editionQualitySource.models as {
+  curation: string;
+  writing: string;
+  localization: string;
+};
+
+const modelLabels: Record<string, string> = {
+  "gpt-5.6-luna": "GPT-5.6 Luna",
+  "claude-sonnet-5": "Claude Sonnet 5",
+  "claude-haiku-4-5-20251001": "Claude Haiku 4.5",
+  "claude-sonnet-4-6": "Claude Sonnet 4.6",
+  "claude-opus-4-7": "Claude Opus 4.7"
+};
+
+function apiProvider(provider: "openai" | "anthropic"): AgentApiModel["provider"] {
+  return provider === "openai" ? "OpenAI" : "Anthropic";
+}
+
+function apiModel(
+  provider: "openai" | "anthropic",
+  model: string,
+  context: string
+): AgentApiModel {
+  return {
+    provider: apiProvider(provider),
+    model,
+    label: modelLabels[model] ?? model,
+    context
+  };
+}
+
+function configuredTextModel(role: TextModelRole, context: string): AgentApiModel {
+  const route = textModelRoles[role];
+  return apiModel(route.provider, route.model, context);
+}
+
+function configuredEditionModel(
+  model: string,
+  context: string
+): AgentApiModel {
+  return apiModel("anthropic", model, context);
+}
+
+function specialistModel(
+  provider: RegistryAgent["provider"],
+  context: string
+): readonly AgentApiModel[] {
+  if (provider === "deterministic") return [];
+  return [configuredTextModel(
+    provider === "OpenAI" ? "OPENAI_SPECIALIST" : "ANTHROPIC_SPECIALIST",
+    context
+  )];
+}
+
+const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
+  VIZE: [configuredTextModel("VIZE", "Company council meetings")],
+  FORGE: [
+    configuredTextModel("FORGE", "Company council meetings"),
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+  ],
+  PULSE: [configuredTextModel("PULSE", "Company and portfolio meetings")],
+  AUDIT: [configuredTextModel("AUDIT", "Company and portfolio meetings")],
+  HERALD: [
+    configuredTextModel("DIGEST", "Caught Up product room"),
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+  ],
+  STET: [
+    configuredEditionModel(editionModels.writing, "Caught Up English edition"),
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+  ],
+  HACEK: [
+    configuredEditionModel(
+      editionModels.localization,
+      "Caught Up and MMA Files Czech editions"
+    ),
+    configuredTextModel("ANTHROPIC_SPECIALIST", "Portfolio rooms when selected")
+  ],
+  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and portfolio rooms")],
+  VAULT: [
+    configuredTextModel("DIGEST", "Caught Up idea checks"),
+    configuredTextModel("OPENAI_SPECIALIST", "Portfolio rooms when selected")
+  ],
+  PALATE: [configuredTextModel("ANTHROPIC_SPECIALIST", "Taste and portfolio rooms")],
+  JAB: [
+    configuredEditionModel(editionModels.localization, "MMA Files English articles"),
+    configuredTextModel("OPENAI_SPECIALIST", "MMA Files editorial rooms")
+  ]
+};
+
+function apiModelsForAgent(agent: RegistryAgent): readonly AgentApiModel[] {
+  return dedicatedApiModels[agent.id] ?? specialistModel(
+    agent.provider,
+    "Text calls when this role is selected"
+  );
+}
+
+function apiModelSummary(apiModels: readonly AgentApiModel[]): string {
+  if (apiModels.length === 0) return "No LLM API call";
+  return apiModels
+    .map(({ provider, label }) => `${provider} · ${label}`)
+    .join(" + ");
 }
 
 const profileCopy: Record<
@@ -332,20 +459,25 @@ const profileCopy: Record<
 const controlIds = new Set<AgentId>(["KEEPER", "PEOPLE", "LEDGER"]);
 const registryAgents = registrySource.agents as RegistryAgent[];
 
-export const agents: readonly Agent[] = registryAgents.map((agent) => ({
-  ...agent,
-  ...profileCopy[agent.id],
-  name: agent.id,
-  group:
-    agent.kind === "council"
-      ? "Council"
-      : controlIds.has(agent.id)
-        ? "Control"
-        : "Specialist",
-  mandate: agent.mission,
-  primaryAccountability:
-    agent.ownedKpiIds[0] ?? agent.successChecks[0] ?? "n/a"
-}));
+export const agents: readonly Agent[] = registryAgents.map((agent) => {
+  const apiModels = apiModelsForAgent(agent);
+  return {
+    ...agent,
+    ...profileCopy[agent.id],
+    name: agent.id,
+    group:
+      agent.kind === "council"
+        ? "Council"
+        : controlIds.has(agent.id)
+          ? "Control"
+          : "Specialist",
+    mandate: agent.mission,
+    primaryAccountability:
+      agent.ownedKpiIds[0] ?? agent.successChecks[0] ?? "n/a",
+    apiModels,
+    apiModelSummary: apiModelSummary(apiModels)
+  };
+});
 
 export const agentBySlug = new Map(agents.map((agent) => [agent.slug, agent]));
 export const agentById = new Map(agents.map((agent) => [agent.id, agent]));

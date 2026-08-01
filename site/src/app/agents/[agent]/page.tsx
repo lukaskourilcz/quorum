@@ -98,11 +98,12 @@ export default async function AgentDetailPage({
         </section>
 
         <section className="bg-[var(--graphite)] text-[var(--snow)]">
-          <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--iron)] md:grid-cols-3">
+          <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--iron)] md:grid-cols-4">
             {[
               ["Main result", publicAgentText(agent.output)],
               ["How success is checked", publicAgentCheck(agent.primaryAccountability)],
-              ["AI provider", agent.provider]
+              ["Team provider", agent.provider],
+              ["API model", agent.apiModelSummary]
             ].map(([label, value]) => (
               <div className="bg-[var(--graphite)] p-7 md:min-h-48 md:p-9" key={label}>
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ash)]">
@@ -114,6 +115,44 @@ export default async function AgentDetailPage({
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="mx-auto max-w-[var(--container)] px-5 py-12 md:px-8 md:py-16">
+          <Card>
+            <CardHeader>
+              <Badge tone="neutral">API setup</Badge>
+              <CardTitle className="mt-5">Model calls</CardTitle>
+              <CardDescription>
+                These are the models configured for this role&apos;s live calls. Dry and test meetings do not call an LLM API.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {agent.apiModels.length ? (
+                <ul className="grid gap-3 md:grid-cols-2" data-agent-api-routes>
+                  {agent.apiModels.map((route) => (
+                    <li
+                      className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface-raised)] p-4"
+                      key={`${route.provider}-${route.model}-${route.context}`}
+                    >
+                      <p className="text-sm font-semibold tracking-[-0.02em]">
+                        {route.provider} · {route.label}
+                      </p>
+                      <p className="mt-1 font-mono text-[0.6875rem] text-[var(--muted-foreground)]">
+                        {route.model}
+                      </p>
+                      <p className="mt-3 text-sm leading-6 text-[var(--muted-foreground)]">
+                        {route.context}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm leading-6 text-[var(--muted-foreground)]">
+                  This role uses deterministic logic and does not make an LLM API call.
+                </p>
+              )}
+            </CardContent>
+          </Card>
         </section>
 
         <section className="mx-auto grid max-w-[var(--container)] gap-4 px-5 py-20 md:grid-cols-2 md:px-8 md:py-28">

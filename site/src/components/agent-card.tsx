@@ -65,6 +65,17 @@ export function AgentCard({
             {publicAgentCheck(agent.primaryAccountability)}
           </p>
         </div>
+        <div className="mt-4 border-t border-[var(--border)] pt-4">
+          <p className="mono-label text-[0.625rem] text-[var(--fog)]">
+            API model
+          </p>
+          <p
+            className="mt-2 break-words font-mono text-[0.6875rem] leading-[1.125rem] text-[var(--mist)]"
+            data-agent-api-model
+          >
+            {agent.apiModelSummary}
+          </p>
+        </div>
       </div>
     </Link>
   );
@@ -109,6 +120,12 @@ export function AgentRow({
           </span>
         </div>
         <p className="mt-1 truncate text-xs text-[var(--fog)]">{publicAgentMandate(agent)}</p>
+        <p
+          className="mt-1 truncate font-mono text-[0.625rem] text-[var(--fog)]"
+          data-agent-api-model
+        >
+          API: {agent.apiModelSummary}
+        </p>
       </div>
       {compact ? null : (
         <>
