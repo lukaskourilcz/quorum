@@ -7,9 +7,7 @@ import { publicAgentText, publicAgentTitle, publicReferenceLabel } from "@/compo
 import {
   DecisionReplay,
   type ReplayChapter,
-  type ReplayCheck,
-  type ReplayCut,
-  type ReplayForecastOption
+  type ReplayCut
 } from "@/components/decision-replay";
 import { PageShell } from "@/components/page-shell";
 import { RoomMessageTime } from "@/components/room-message-time";
@@ -50,7 +48,7 @@ export async function generateMetadata({
   return {
     description: standup
       ? standup.fixture
-        ? `Watch the ${formatDate(standup.date)} BoardlessAI test meeting, make a private guess and read every saved message.`
+        ? `Watch the ${formatDate(standup.date)} BoardlessAI test meeting as a recorded group chat and read every saved message.`
         : `Watch the ${formatDate(standup.date)} BoardlessAI meeting and read every public message with its time.`
       : "BoardlessAI meeting replay.",
     robots: standup?.fixture ? { follow: true, index: false } : undefined,
@@ -127,24 +125,6 @@ const replayChapters = [
   }
 ] satisfies readonly ReplayChapter[];
 
-const forecastOptions = [
-  {
-    id: "build",
-    label: "Choose the strongest idea",
-    detail: "Accept the 34/50 candidate and begin a small build."
-  },
-  {
-    id: "wait",
-    label: "Wait for real sources",
-    detail: "Pause the project decision until outside sources show real interest."
-  },
-  {
-    id: "redirect",
-    label: "Change the brief",
-    detail: "Reject the three ideas and give the team a different question."
-  }
-] satisfies readonly ReplayForecastOption[];
-
 const replayCuts = [
   {
     id: "full",
@@ -172,27 +152,6 @@ const replayCuts = [
     turnIndexes: [11, 12, 13, 14, 15, 16]
   }
 ] satisfies readonly ReplayCut[];
-
-const replayCheck = {
-  prompt: "Which fact gave AUDIT a reason to block a project choice?",
-  answerId: "fixture-evidence",
-  explanation:
-    "Every sign came from sample data. The budget and ability to build both passed their checks.",
-  options: [
-    {
-      id: "budget",
-      label: "The monthly budget was already exhausted."
-    },
-    {
-      id: "fixture-evidence",
-      label: "No reliable information came from an outside source."
-    },
-    {
-      id: "build",
-      label: "The product builder could not make a small test version."
-    }
-  ]
-} satisfies ReplayCheck;
 
 const modeLabel: Record<RoomTurnMode, string> = {
   gavel: "opens the meeting",
@@ -276,8 +235,8 @@ export default async function StandupRoomPage({
               </div>
               <div className="md:col-span-4">
                 <p className="text-base leading-7 text-[var(--fog)]">
-                  Make a private guess. Watch every saved message. See which
-                  source changes the decision.
+                  Follow the recorded group chat. Each message comes from the
+                  saved meeting record.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
                   <span>{transcript.turns.length} messages</span>
@@ -294,11 +253,8 @@ export default async function StandupRoomPage({
             agents={speakers}
             chapters={replayChapters}
             cuts={replayCuts}
-            forecastOptions={forecastOptions}
-            replayCheck={replayCheck}
             transcript={transcript}
             verdict={{
-              outcomeId: "wait",
               label: "Wait for real sources",
               summary:
                 "The team refused to start a project from sample data. SCOUT must return with reliable outside sources before another vote."

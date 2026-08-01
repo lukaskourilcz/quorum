@@ -4,11 +4,8 @@ import {
   ArrowDown,
   Bookmark,
   BookmarkCheck,
-  Check,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Circle,
   Gauge,
   ListVideo,
   Maximize2,
@@ -42,6 +39,17 @@ import { RoomMessageTime } from "@/components/room-message-time";
 import { resolveRoomTurnTiming } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Message,
+  MessageAvatar,
+  MessageBubble,
+  MessageContent,
+  MessageHeader,
+  MessageList,
+  MessageMeta,
+  MessageName,
+  MessageRole
+} from "@/components/ui/message";
 import { usePreservePageScroll } from "@/components/use-preserve-page-scroll";
 import type { Agent, AgentId } from "@/data/agents";
 import type {
@@ -59,26 +67,9 @@ export interface ReplayChapter {
   startTurn: number;
 }
 
-export interface ReplayForecastOption {
-  id: string;
-  label: string;
-  detail: string;
-}
-
 export interface ReplayVerdict {
-  outcomeId: string;
   label: string;
   summary: string;
-}
-
-export interface ReplayCheck {
-  prompt: string;
-  answerId: string;
-  explanation: string;
-  options: readonly {
-    id: string;
-    label: string;
-  }[];
 }
 
 export type { ReplayCut } from "@/components/decision-replay-model";
@@ -139,20 +130,15 @@ export function DecisionReplay({
   agents,
   chapters,
   cuts,
-  forecastOptions,
-  replayCheck,
   transcript,
   verdict
 }: {
   agents: readonly Agent[];
   chapters: readonly ReplayChapter[];
   cuts: readonly ReplayCut[];
-  forecastOptions: readonly ReplayForecastOption[];
-  replayCheck: ReplayCheck;
   transcript: RoomTranscript;
   verdict: ReplayVerdict;
 }) {
-  const [selectedForecast, setSelectedForecast] = useState<string | null>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const [currentTurnIndex, setCurrentTurnIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -163,14 +149,12 @@ export function DecisionReplay({
   const [bookmarkedTurns, setBookmarkedTurns] = useState<number[]>([]);
   const [storageReady, setStorageReady] = useState(false);
   const [resumeMoment, setResumeMoment] = useState<ReplayMoment | null>(null);
-  const [selectedCheckOption, setSelectedCheckOption] = useState<string | null>(
-    null
-  );
   const [actionStatus, setActionStatus] = useState("");
   const [canFullscreen, setCanFullscreen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const replayRef = useRef<HTMLElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
   const preservePageScroll = usePreservePageScroll();
 
   const lastTurnIndex = transcript.turns.length - 1;
@@ -226,9 +210,6 @@ export function DecisionReplay({
     currentTurnIndex
   );
   const currentAgent = getAgent(agents, currentTurn.agent);
-  const addressedAgent = currentTurn.addressedTo
-    ? getAgent(agents, currentTurn.addressedTo)
-    : undefined;
   const activeChapter = useMemo(
     () => chapterForTurn(chapters, currentTurnIndex),
     [chapters, currentTurnIndex]
@@ -245,19 +226,24 @@ export function DecisionReplay({
     followingChapterCandidate > currentTurnIndex
       ? followingChapterCandidate
       : undefined;
-  const selectedForecastOption = forecastOptions.find(
-    (option) => option.id === selectedForecast
-  );
-  const forecastMatched =
-    selectedForecast !== null && selectedForecast === verdict.outcomeId;
   const progress = playlist.length
     ? ((currentPosition + 1) / playlist.length) * 100
     : 0;
   const isBookmarked = bookmarkedTurns.includes(currentTurnIndex);
   const showVerdict =
     currentTurnIndex >= (chapters.at(-1)?.startTurn ?? lastTurnIndex);
-  const checkIsCorrect = selectedCheckOption === replayCheck.answerId;
   const sharedCutId = selectedCutId === "saved" ? "full" : selectedCutId;
+  const replayedTurnIndexes = playlist.slice(0, currentPosition + 1);
+  const upcomingTurnIndex = isPlaying
+    ? playlist[currentPosition + 1]
+    : undefined;
+  const upcomingTurn =
+    upcomingTurnIndex === undefined
+      ? undefined
+      : transcript.turns[upcomingTurnIndex];
+  const typingAgent = upcomingTurn
+    ? getAgent(agents, upcomingTurn.agent)
+    : undefined;
   const availableSeatIds = useMemo(() => {
     const ids = new Set<AgentId>();
     unfilteredPlaylist.forEach((turnIndex) => {
@@ -325,10 +311,8 @@ export function DecisionReplay({
     setHasStarted(false);
     setCurrentTurnIndex(0);
     setIsPlaying(false);
-    setSelectedForecast(null);
     setSelectedCutId("full");
     setFollowedAgent(null);
-    setSelectedCheckOption(null);
     setResumeMoment(null);
     setActionStatus("");
     window.localStorage.removeItem(progressStorageKey);
@@ -653,6 +637,16 @@ export function DecisionReplay({
   ]);
 
   useEffect(() => {
+    if (!hasStarted) return;
+    const chat = chatScrollRef.current;
+    if (!chat) return;
+    chat.scrollTo({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      top: chat.scrollHeight
+    });
+  }, [currentTurnIndex, hasStarted, prefersReducedMotion]);
+
+  useEffect(() => {
     const pauseWhenHidden = () => {
       if (document.hidden) setIsPlaying(false);
     };
@@ -755,19 +749,20 @@ export function DecisionReplay({
                 />
                 <div className="relative">
                   <p className="mono-label text-[var(--accent)]">
-                    Before the gavel
+                    Recorded group chat
                   </p>
                   <h2 className="mt-5 max-w-3xl text-[clamp(2.6rem,6vw,5.6rem)] font-semibold leading-[0.9] tracking-[-0.06em]">
-                    Three ideas.
+                    Watch the team
                     <br />
-                    Zero real signs.
+                    message through
                     <br />
-                    What would you do
-                    <span className="text-[var(--accent)]">?</span>
+                    the decision
+                    <span className="text-[var(--accent)]">.</span>
                   </h2>
                   <p className="mt-7 max-w-xl text-base leading-7 text-[var(--ash)] md:text-lg">
-                    Make a private guess, then watch the AI team check the
-                    budget, audience and sources before it votes.
+                    The replay draws each bubble from the saved meeting
+                    record. The next speaker types before their message
+                    appears.
                   </p>
                 </div>
                 <div className="relative mt-12 grid gap-3 sm:grid-cols-3">
@@ -793,72 +788,39 @@ export function DecisionReplay({
               </div>
 
               <div className="border-t border-[var(--iron)] bg-[var(--graphite)] p-7 md:p-10 lg:col-span-5 lg:border-l lg:border-t-0 lg:p-12">
-                <p className="mono-label text-[var(--ash)]">
-                  Your call stays private
-                </p>
+                <p className="mono-label text-[var(--ash)]">Open the chat</p>
                 <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">
-                  What should the team do?
+                  BoardlessAI standup
                 </h3>
-                <div className="mt-7 grid gap-3">
-                  {forecastOptions.map((option) => {
-                    const selected = selectedForecast === option.id;
-                    return (
-                      <button
-                        aria-pressed={selected}
-                        className={cn(
-                          "group min-h-24 rounded-[var(--radius-button)] border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]",
-                          selected
-                            ? "border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,var(--graphite))]"
-                            : "border-[var(--iron)] bg-[var(--obsidian)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
-                        )}
-                        key={option.id}
-                        onClick={() => setSelectedForecast(option.id)}
-                        type="button"
-                      >
-                        <span className="flex items-start gap-3">
-                          <span
-                            className={cn(
-                              "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border",
-                              selected
-                                ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--obsidian)]"
-                                : "border-[var(--steel)] text-transparent"
-                            )}
-                          >
-                            {selected ? (
-                              <Check aria-hidden="true" className="size-3.5" />
-                            ) : (
-                              <Circle aria-hidden="true" className="size-2" />
-                            )}
-                          </span>
-                          <span>
-                            <span className="block text-sm font-semibold text-[var(--paper)]">
-                              {option.label}
-                            </span>
-                            <span className="mt-1.5 block text-xs leading-5 text-[var(--ash)]">
-                              {option.detail}
-                            </span>
-                          </span>
-                        </span>
-                      </button>
-                    );
-                  })}
+                <div className="mt-7 rounded-[var(--radius-button)] border border-[var(--iron)] bg-[var(--obsidian)] p-5">
+                  <div className="flex items-center gap-3">
+                    <AgentPortrait
+                      agent={currentAgent}
+                      className="size-11 rounded-full ring-1 ring-[var(--steel)]"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--paper)]">
+                        {publicAgentTitle(currentAgent)} is typing
+                      </p>
+                      <p className="mt-1 text-xs text-[var(--ash)]">
+                        The first recorded message is ready to replay.
+                      </p>
+                    </div>
+                  </div>
+                  <div aria-hidden="true" className="mt-5 flex gap-1.5">
+                    <span className="size-2 rounded-full bg-[var(--accent)]" />
+                    <span className="size-2 rounded-full bg-[var(--accent)] opacity-70" />
+                    <span className="size-2 rounded-full bg-[var(--accent)] opacity-40" />
+                  </div>
                 </div>
                 <div className="mt-7 grid gap-3">
                   <Button
                     className="w-full"
-                    disabled={!selectedForecast}
                     onClick={() => startReplay(true)}
                     variant="accent"
                   >
                     <Play aria-hidden="true" className="size-4 fill-current" />
-                    Save my guess and watch
-                  </Button>
-                  <Button
-                    className="w-full border-[var(--iron)] bg-transparent text-[var(--paper)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
-                    onClick={() => startReplay(false)}
-                    variant="secondary"
-                  >
-                    Watch without making a guess
+                    Start chat replay
                   </Button>
                   {resumeMoment ? (
                     <Button
@@ -872,8 +834,8 @@ export function DecisionReplay({
                   ) : null}
                 </div>
                 <p className="mt-5 text-xs leading-5 text-[var(--fog)]">
-                  No account, points or bet. Your guess stays in this tab.
-                  Saved points and unfinished progress stay in this browser.
+                  No account or response is required. Saved points and unfinished
+                  progress stay in this browser.
                 </p>
               </div>
             </div>
@@ -962,77 +924,141 @@ export function DecisionReplay({
               </div>
 
               <div className="grid lg:grid-cols-12">
-                <div className="relative min-h-[33rem] overflow-hidden p-7 md:p-10 lg:col-span-8 lg:min-h-[40rem] lg:p-12">
+                <div className="relative min-h-[33rem] overflow-hidden p-5 md:p-7 lg:col-span-8 lg:min-h-[40rem] lg:p-9">
                   <div
                     aria-hidden="true"
                     className="editorial-grid absolute inset-0 opacity-10"
                   />
-                  <div
-                    aria-hidden="true"
-                    className="absolute -left-36 bottom-[-18rem] size-[38rem] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent)_16%,transparent),transparent_68%)]"
-                  />
-
                   <div className="relative flex h-full flex-col">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <AgentPortrait
-                          agent={currentAgent}
-                          className="size-12 shrink-0 rounded-full ring-1 ring-[var(--steel)] md:size-14"
-                          priority
-                        />
-                        <div>
-                          <p className="font-mono text-sm font-semibold tracking-[-0.01em] text-[var(--paper)]">
-                            {publicAgentTitle(currentAgent)}
+                    <div className="flex items-center justify-between gap-4 border-b border-[var(--iron)] pb-4">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div aria-hidden="true" className="flex -space-x-3">
+                          {agents.slice(0, 4).map((agent) => (
+                            <AgentPortrait
+                              agent={agent}
+                              className="size-9 rounded-full ring-2 ring-[var(--obsidian)]"
+                              key={agent.id}
+                            />
+                          ))}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-semibold text-[var(--paper)]">
+                            BoardlessAI standup
                           </p>
-                          <p className="mt-1 text-xs text-[var(--ash)]">
-                            AI role
+                          <p className="mt-0.5 text-xs text-[var(--ash)]">
+                            {agents.length} AI roles · saved public messages
                           </p>
-                          <RoomMessageTime
-                            className="mt-2 block max-w-xl leading-5 text-[var(--ash)]"
-                            timing={currentTurnTiming}
-                          />
                         </div>
                       </div>
-                      <Badge tone={modeTone[currentTurn.mode]}>
-                        {modeLabel[currentTurn.mode]}
+                      <Badge tone={isPlaying ? "accent" : "dark"}>
+                        {isPlaying ? "Replaying" : "Paused"}
                       </Badge>
                     </div>
 
                     <div
-                      className="flex flex-1 flex-col justify-center py-10 md:py-14"
-                      key={currentTurnIndex}
+                      className="mt-5 min-h-0 flex-1 overflow-y-auto pr-1"
+                      data-replay-chat
+                      ref={chatScrollRef}
                     >
-                      {addressedAgent ? (
-                        <p className="mb-4 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">
-                          To {publicAgentTitle(addressedAgent)}
-                        </p>
-                      ) : null}
-                      <blockquote className="max-w-4xl text-[clamp(1.55rem,3.2vw,3rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[var(--snow)]">
-                        “{publicAgentText(currentTurn.text)}”
-                      </blockquote>
-                      {currentTurn.evidenceRefs?.length ? (
-                        <div className="mt-7 flex flex-wrap gap-2">
-                          <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-                            On record
-                          </span>
-                          {currentTurn.evidenceRefs.map((reference) => (
-                            <span
-                              className="rounded-full border border-[var(--steel)] px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.08em] text-[var(--ash)]"
-                              key={reference}
+                      <p className="mb-4 text-center font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+                        {activeChapter.label} · recorded conversation
+                      </p>
+                      <MessageList className="gap-3 border-0 bg-transparent p-0 md:gap-4">
+                        {replayedTurnIndexes.map((turnIndex) => {
+                          const turn = transcript.turns[turnIndex];
+                          const speaker = turn
+                            ? getAgent(agents, turn.agent)
+                            : undefined;
+                          const listener = turn?.addressedTo
+                            ? getAgent(agents, turn.addressedTo)
+                            : undefined;
+                          if (!turn || !speaker) return null;
+                          const isCurrent = turnIndex === currentTurnIndex;
+                          const emphasis =
+                            turn.agent === "AUDIT"
+                              ? "control"
+                              : turn.mode === "veto" || turn.mode === "vote"
+                                ? "accent"
+                                : "default";
+                          return (
+                            <Message
+                              className={cn(
+                                "transition-opacity duration-200",
+                                isCurrent && "opacity-100"
+                              )}
+                              key={`${turn.agent}-${turnIndex}`}
                             >
-                              {publicReferenceLabel(reference)}
-                            </span>
-                          ))}
+                              <MessageAvatar>
+                                <AgentPortrait
+                                  agent={speaker}
+                                  className="size-9 rounded-full md:size-10"
+                                />
+                              </MessageAvatar>
+                              <MessageBubble emphasis={emphasis}>
+                                <MessageHeader>
+                                  <MessageName>{publicAgentTitle(speaker)}</MessageName>
+                                  <MessageRole>AI role</MessageRole>
+                                  <Badge className="ml-auto" tone={modeTone[turn.mode]}>
+                                    {modeLabel[turn.mode]}
+                                  </Badge>
+                                </MessageHeader>
+                                {listener ? (
+                                  <p className="mb-2 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+                                    To {publicAgentTitle(listener)}
+                                  </p>
+                                ) : null}
+                                <MessageContent>
+                                  {publicAgentText(turn.text)}
+                                </MessageContent>
+                                <MessageMeta>
+                                  <RoomMessageTime
+                                    className="text-[var(--ash)]"
+                                    timing={resolveRoomTurnTiming(transcript, turnIndex)}
+                                  />
+                                  {turn.evidenceRefs?.map((reference) => (
+                                    <span
+                                      className="rounded-full border border-[var(--slate)] px-2 py-0.5 text-[var(--ash)]"
+                                      key={reference}
+                                    >
+                                      {publicReferenceLabel(reference)}
+                                    </span>
+                                  ))}
+                                </MessageMeta>
+                              </MessageBubble>
+                            </Message>
+                          );
+                        })}
+                      </MessageList>
+                      {typingAgent ? (
+                        <div
+                          aria-live="polite"
+                          className="mt-4 flex items-center gap-3"
+                          data-replay-typing
+                          role="status"
+                        >
+                          <AgentPortrait
+                            agent={typingAgent}
+                            className="size-9 rounded-full md:size-10"
+                          />
+                          <div className="rounded-[var(--radius-button)] border border-[var(--iron)] bg-[var(--graphite)] px-4 py-3">
+                            <p className="text-xs text-[var(--ash)]">
+                              {publicAgentTitle(typingAgent)} is typing
+                            </p>
+                            <div aria-hidden="true" className="mt-2 flex gap-1">
+                              <span className="size-1.5 animate-bounce rounded-full bg-[var(--accent)] [animation-delay:-0.2s]" />
+                              <span className="size-1.5 animate-bounce rounded-full bg-[var(--accent)] [animation-delay:-0.1s]" />
+                              <span className="size-1.5 animate-bounce rounded-full bg-[var(--accent)]" />
+                            </div>
+                          </div>
                         </div>
                       ) : null}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[var(--iron)] pt-5 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+                    <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[var(--iron)] pt-4 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
                       <span>Message {currentTurnIndex + 1}</span>
                       <span>
                         Point {currentPosition + 1}/{playlist.length}
                       </span>
-                      <span>{activeChapter.label}</span>
                       <span>{isPlaying ? `Playing at ${speed}×` : "Paused"}</span>
                     </div>
                   </div>
@@ -1046,15 +1072,6 @@ export function DecisionReplay({
                   <p className="mt-4 text-sm leading-6 text-[var(--ash)]">
                     {activeChapter.summary}
                   </p>
-
-                  <div className="mt-8 border-t border-[var(--iron)] pt-6">
-                    <p className="mono-label text-[0.625rem] text-[var(--fog)]">
-                      Your guess
-                    </p>
-                    <p className="mt-3 text-sm font-semibold text-[var(--paper)]">
-                      {selectedForecastOption?.label ?? "No guess made"}
-                    </p>
-                  </div>
 
                   <div className="mt-8 border-t border-[var(--iron)] pt-6">
                     <p className="mono-label text-[0.625rem] text-[var(--fog)]">
@@ -1125,78 +1142,6 @@ export function DecisionReplay({
                       <p className="mt-3 text-sm leading-6 text-[var(--ash)]">
                         {verdict.summary}
                       </p>
-                      <p className="mt-4 flex items-center gap-2 text-xs font-semibold text-[var(--paper)]">
-                        <span className="flex size-5 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--obsidian)]">
-                          {forecastMatched ? (
-                            <Check aria-hidden="true" className="size-3.5" />
-                          ) : (
-                            <Circle aria-hidden="true" className="size-2" />
-                          )}
-                        </span>
-                        {selectedForecast === null
-                          ? "You watched without making a guess."
-                          : forecastMatched
-                            ? "Your guess matched the meeting."
-                            : "The source check changed the decision."}
-                      </p>
-
-                      <fieldset className="mt-6 border-t border-[var(--iron)] pt-5">
-                        <legend className="mono-label text-[0.625rem] text-[var(--fog)]">
-                          Quick check
-                        </legend>
-                        <p className="mt-3 text-sm font-semibold leading-6 text-[var(--paper)]">
-                          {replayCheck.prompt}
-                        </p>
-                        <div className="mt-4 grid gap-2">
-                          {replayCheck.options.map((option) => (
-                            <button
-                              aria-pressed={selectedCheckOption === option.id}
-                              className={cn(
-                                "min-h-11 rounded-[var(--radius-button)] border px-3 py-2 text-left text-xs font-semibold leading-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]",
-                                selectedCheckOption === option.id
-                                  ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--obsidian)]"
-                                  : "border-[var(--iron)] bg-[var(--obsidian)] text-[var(--paper)] hover:border-[var(--steel)]"
-                              )}
-                              key={option.id}
-                              onClick={() => {
-                                setSelectedCheckOption(option.id);
-                                setIsPlaying(false);
-                              }}
-                              type="button"
-                            >
-                              {option.label}
-                            </button>
-                          ))}
-                        </div>
-                        {selectedCheckOption ? (
-                          <p
-                            aria-live="polite"
-                            className="mt-4 flex items-start gap-2 text-xs leading-5 text-[var(--ash)]"
-                          >
-                            {checkIsCorrect ? (
-                              <CheckCircle2
-                                aria-hidden="true"
-                                className="mt-0.5 size-4 shrink-0 text-[var(--accent)]"
-                              />
-                            ) : (
-                              <Circle
-                                aria-hidden="true"
-                                className="mt-1 size-3 shrink-0 text-[var(--accent)]"
-                              />
-                            )}
-                            <span>
-                              {checkIsCorrect
-                                ? "That is the key fact. "
-                                : "The meeting points to another fact. "}
-                              {replayCheck.explanation}
-                            </span>
-                          </p>
-                        ) : (
-                          <p className="mt-3 text-xs leading-5 text-[var(--fog)]">
-                            No score is stored.
-                          </p>
-                        )}
-                      </fieldset>
                     </div>
                   ) : followingChapterTurn !== undefined ? (
                     <button
