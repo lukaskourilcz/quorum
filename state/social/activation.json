@@ -1,9 +1,33 @@
 {
   "schemaVersion": "social-activation/1",
   "ventures": {
-    "caught-up": { "status": "locked", "counter": 0, "required": 7, "reason": "Waiting for seven consecutive verified deliveries.", "updatedAt": "2026-08-01T00:00:00.000Z", "unlockedAt": null, "decisionReference": "D2-autonomy-build-2026-08-01" },
-    "mma-files": { "status": "locked", "counter": 0, "required": 10, "reason": "Waiting for ten verified article deliveries with no unresolved failure.", "updatedAt": "2026-08-01T00:00:00.000Z", "unlockedAt": null, "decisionReference": "D2-autonomy-build-2026-08-01" },
-    "titty-tuesdays": { "status": "locked", "counter": 0, "required": 4, "reason": "Waiting for four complete campaigns, credentials and the safety checker.", "updatedAt": "2026-08-01T00:00:00.000Z", "unlockedAt": null, "decisionReference": "D2-autonomy-build-2026-08-01" }
+    "caught-up": {
+      "status": "locked",
+      "counter": 0,
+      "required": 7,
+      "reason": "Ready count 0/7.",
+      "updatedAt": "2026-08-01T23:14:26.592Z",
+      "unlockedAt": null,
+      "decisionReference": "D2-autonomy-build-2026-08-01"
+    },
+    "mma-files": {
+      "status": "locked",
+      "counter": 0,
+      "required": 10,
+      "reason": "Ready count 0/10.",
+      "updatedAt": "2026-08-01T23:14:26.592Z",
+      "unlockedAt": null,
+      "decisionReference": "D2-autonomy-build-2026-08-01"
+    },
+    "titty-tuesdays": {
+      "status": "locked",
+      "counter": 0,
+      "required": 4,
+      "reason": "Ready count 0/4.",
+      "updatedAt": "2026-08-01T23:14:26.592Z",
+      "unlockedAt": null,
+      "decisionReference": "D2-autonomy-build-2026-08-01"
+    }
   },
-  "updatedAt": "2026-08-01T00:00:00.000Z"
+  "updatedAt": "2026-08-01T23:14:26.592Z"
 }
