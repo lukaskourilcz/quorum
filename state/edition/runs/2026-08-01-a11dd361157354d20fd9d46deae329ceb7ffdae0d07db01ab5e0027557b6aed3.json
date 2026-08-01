@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "runId": "173e7706-7cca-4c1d-9297-e552a72dae0e",
+  "date": "2026-08-01",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-01T13:33:14.533Z",
+  "completedAt": "2026-08-01T13:35:47.283Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-01T13:33:14.535Z",
+      "completedAt": "2026-08-01T13:33:41.468Z",
+      "durationMs": 26933
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-01T13:33:41.468Z",
+      "completedAt": "2026-08-01T13:34:44.309Z",
+      "durationMs": 62841
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-01T13:34:44.309Z",
+      "completedAt": "2026-08-01T13:34:44.311Z",
+      "durationMs": 2
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-08-01T13:34:44.311Z",
+      "completedAt": "2026-08-01T13:35:47.280Z",
+      "durationMs": 62969
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-08-01T13:35:47.280Z",
+      "completedAt": "2026-08-01T13:35:47.280Z",
+      "durationMs": 0
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 2,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11915,
+      "outputTokens": 1100,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.052245
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 8011,
+      "outputTokens": 3187,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1088,
+      "costUsd": 0.075918
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 8011,
+      "outputTokens": 2897,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1117,
+      "costUsd": 0.07167675
+    }
+  ],
+  "measuredCostUsd": 0.19983975,
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "empty_adverb",
+        "locale": "en",
+        "message": "Remove the empty modifier or replace it with evidence."
+      }
+    ]
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "stet:empty_adverb"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

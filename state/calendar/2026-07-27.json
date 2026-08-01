@@ -432,7 +432,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-01-cu-edition",
-      "decisionOneLiner": "NO_EDITION. content_invalid_after_regeneration"
+      "decisionOneLiner": "NO_EDITION. stet_block_after_rewrite"
     },
     {
       "at": "2026-08-01T04:00:00.000Z",
