@@ -59,6 +59,8 @@ No Meta setup is required to store or copy drafts. Keep
 ## Confirmed complete
 
 - Vercel Pro coverage is confirmed; no Hobby-plan limitation applies.
+- Public navigation, page copy, meeting records and social-preview text now use
+  plain language. Saved source files keep their original wording for review.
 - The shared registry exposes Caught Up, Titty Tuesdays and the research-only
   incubator. The public clock has eight collision-free Prague slots.
 - Dry portfolio meetings, the one-digest path, protected rating flow, binder,
