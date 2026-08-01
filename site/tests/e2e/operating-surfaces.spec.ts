@@ -147,6 +147,14 @@ test("every agent card and profile exposes its configured API model", async ({ p
   await expect(page.locator("[data-agent-api-routes]")).toContainText("Caught Up and MMA Files Czech editions");
 });
 
+test("metrics role column keeps the table inset", async ({ page }) => {
+  await page.goto("/metrics", { waitUntil: "networkidle" });
+  const roleHead = page.getByRole("columnheader", { name: "Role" });
+  const firstRole = page.locator("tbody tr").first().getByRole("cell").first();
+  await expect(roleHead).toHaveCSS("padding-left", "32px");
+  await expect(firstRole).toHaveCSS("padding-left", "32px");
+});
+
 test("admin rating persists, feeds the incubator shortlist, and the launch binder renders", async ({ page }) => {
   await page.goto("/admin?venture=incubator&tab=niche-proposals", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "E2E repair brief" })).toBeVisible();

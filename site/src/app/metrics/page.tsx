@@ -92,7 +92,7 @@ export default async function MetricsPage() {
           <Table>
             <thead>
               <tr>
-                <TableHead className="pl-8">Role</TableHead>
+                <TableHead className="first:pl-8">Role</TableHead>
                 <TableHead>Measure</TableHead>
                 <TableHead>Value</TableHead>
                 <TableHead>Target</TableHead>
@@ -111,7 +111,7 @@ export default async function MetricsPage() {
                     className="transition-colors hover:bg-[var(--surface-raised)]"
                     key={`${metric.owner}-${metric.label}`}
                   >
-                    <TableCell className="pl-8 font-mono text-xs font-semibold tracking-[0.08em]">
+                    <TableCell className="first:pl-8 font-mono text-xs font-semibold tracking-[0.08em]">
                       {metric.owner}
                     </TableCell>
                     <TableCell className="text-[var(--mist)]">
