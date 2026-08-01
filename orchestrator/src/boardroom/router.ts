@@ -104,6 +104,7 @@ export interface RouteInput {
   ventureId?: string;
   preset?: string;
   requiredParticipants?: readonly FoundingAgent[];
+  owner?: FoundingAgent;
   affectedAgent?: FoundingAgent;
   now?: Date;
 }
@@ -112,7 +113,7 @@ export function routeBoardroom(
   config: RoutingConfig,
   input: RouteInput
 ): RoomPacket {
-  const owner = OWNER_BY_TOPIC[input.topicType];
+  const owner = input.owner ?? OWNER_BY_TOPIC[input.topicType];
   const selected = new Map<
     FoundingAgent,
     { reason: string; mandatoryRule: string | null }

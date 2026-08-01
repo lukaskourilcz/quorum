@@ -74,6 +74,6 @@ export function isCaughtUpPhase(
 
 export function isPortfolioPhase(
   phase: RunnablePhase
-): phase is "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" {
-  return phase === "tt-marketing" || phase === "incubator-scan" || phase === "incubator-synthesis" || phase === "mma-intake" || phase === "mma-analysis";
+): phase is "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" {
+  return phase === "tt-marketing" || phase === "incubator-scan" || phase === "incubator-synthesis" || phase === "mma-intake" || phase === "mma-analysis" || phase === "mag-editorial" || phase === "mag-desk";
 }

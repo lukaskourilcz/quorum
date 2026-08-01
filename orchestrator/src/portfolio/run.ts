@@ -23,13 +23,15 @@ import { pragueClockParts } from "../meetings/clock.js";
 import { resolveTittyTuesdaysSlot } from "../titty-tuesdays/schedule.js";
 import { composeMeetingTastePacket } from "../taste/packet.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
+import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
-  resolveEffectivePortfolioSchedule
+  resolveEffectivePortfolioSchedule,
+  signedOwnerDecision
 } from "./schedule.js";
 
-export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis";
+export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),
@@ -77,7 +79,7 @@ function modelFor(
   return { ...model, maxOutputTokens: agent === "ANGLE" ? Math.min(700, model.maxOutputTokens) : Math.min(260, model.maxOutputTokens) };
 }
 
-function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd: number }): BudgetLimits {
+function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd: number; monthlyOperatingUsd: number }): BudgetLimits {
   const number = (name: string, fallback: number) => {
     const parsed = Number(process.env[name]);
     return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
@@ -87,7 +89,7 @@ function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd:
     maxCycleUsd: number("MAX_CYCLE_BUDGET_USD", DEFAULT_BUDGET_LIMITS.maxCycleUsd),
     dailyUsd: number("DAILY_BUDGET_USD", schedule.dailyBudgetUsd),
     monthlyApiUsd: number("MONTHLY_BUDGET_USD", schedule.monthlyBudgetUsd),
-    monthlyOperatingUsd: number("MONTHLY_OPERATING_CAP_USD", DEFAULT_BUDGET_LIMITS.monthlyOperatingUsd)
+    monthlyOperatingUsd: number("MONTHLY_OPERATING_CAP_USD", schedule.monthlyOperatingUsd)
   };
 }
 
@@ -106,17 +108,19 @@ function buildRecord(input: {
   envelopeUsd: number;
   actualCycleUsd: number;
   monthAllInUsd: number;
+  monthCapUsd: number;
   contributions: readonly Contribution[];
   fixture: boolean;
   proposals: readonly NicheProposal[];
 }): MeetingRecord {
-  const isMma = input.phase === "mma-intake" || input.phase === "mma-analysis";
-  const chair: FoundingAgent = isMma ? "FORGE" : "PULSE";
+  const isFightDesk = input.phase === "mma-intake" || input.phase === "mma-analysis";
+  const isMagazine = input.phase === "mag-editorial" || input.phase === "mag-desk";
+  const chair: FoundingAgent = isFightDesk ? "FORGE" : isMagazine ? "CANVAS" : "PULSE";
   const times = shiftedTimes(input.now, input.contributions.length + 2);
   const veto = input.contributions.find((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
   const summary = veto
     ? `AUDIT vetoed the room output: ${veto.summary}`
-    : isMma
+    : isFightDesk
       ? input.phase === "mma-intake"
         ? "Checked all three organizations and recorded the fighter-file, card and source state without publishing a probability."
         : "Reviewed the versioned analysis state within the data-only gate. No probability was published."
@@ -136,14 +140,14 @@ function buildRecord(input: {
     stage: input.stage,
     operatingBrief: input.objective,
     participantReasons: input.cast.map((agent) => ({ agent, reason: agent === chair ? "chairs the bounded room" : "serves the registered specialist or veto seat", participated: true })),
-    ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.actualCycleUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: 20 },
+    ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.actualCycleUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: input.monthCapUsd },
     decision: { outcome: veto ? "VETO" : input.phase === "incubator-synthesis" && input.proposals.length === 0 ? "NO_PROPOSAL" : "PLAN", summary, evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))] },
     proposals: input.contributions.map((contribution) => ({ agent: contribution.agent, summary: contribution.summary, evidenceRefs: contribution.evidenceRefs })),
     voteMatrix: input.contributions.map((contribution) => ({ voter: contribution.agent, firstChoice: contribution.stance, veto: contribution.stance === "veto" })),
     tasks: input.contributions.flatMap((contribution, index) => contribution.task ? [{ id: `TASK-${input.cycleId.toUpperCase()}-${String(index + 1).padStart(2, "0")}`, owner: contribution.agent, summary: contribution.task.summary, status: "planned" as const }] : []),
-    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isMma ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : "RESEARCH_ONLY. A shortlist does not authorize founding, spend or external action.",
+    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "NEWSROOM_ONLY. Articles and social variants stay in the private owner desk; no public magazine route or automatic posting is authorized." : "RESEARCH_ONLY. A shortlist does not authorize founding, spend or external action.",
     eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
-    ...(isMma ? { sharperData: {
+    ...(isFightDesk ? { sharperData: {
       outcome: "nothing-new" as const,
       summary: input.fixture ? "Dry review found no new source-backed change to propose today." : "The room found no new source-backed change that cleared the proposal bar today.",
       evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))]
@@ -163,7 +167,12 @@ function buildRecord(input: {
   });
 }
 
-async function canonicalContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>): Promise<{ text: string; evidenceRefs: string[] }> {
+async function canonicalStateText(root: string, relative: string): Promise<string> {
+  const local = await readText(root, relative);
+  return local || root === stateRoot ? local : readText(stateRoot, relative);
+}
+
+export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>): Promise<{ text: string; evidenceRefs: string[] }> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
   if (phase === "tt-marketing") {
     const season = await readText(root, "ventures/titty-tuesdays/season-001.md");
@@ -171,14 +180,26 @@ async function canonicalContext(phase: PortfolioPhase, root: string, date: strin
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
     const [overview, bridge] = await Promise.all([
-      readText(root, "ventures/fightaiq/README.md"),
+      canonicalStateText(root, "ventures/fightaiq/README.md"),
       readText(root, "mma/BRIDGE.md")
     ]);
     const day = new Date(`${date}T12:00:00Z`).getUTCDay();
     const leadOrg = ["ufc", "ksw", "oktagon"][day % 3];
     return {
       text: `${overview}\n\nDaily lead organization: ${leadOrg}. Walk all three organizations.\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
-      evidenceRefs: []
+      evidenceRefs: bridgeEvidenceRefs(bridge)
+    };
+  }
+  if (phase === "mag-editorial" || phase === "mag-desk") {
+    const [stylebook, bridge, slate, articles] = await Promise.all([
+      canonicalStateText(root, "ventures/mma-files/STYLEBOOK.md"),
+      readText(root, "mma/BRIDGE.md"),
+      canonicalStateText(root, `ventures/mma-files/slates/${date}.json`),
+      canonicalStateText(root, "ventures/mma-files/articles/INDEX.md")
+    ]);
+    return {
+      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\n${slate}\n\n${articles}`.slice(0, 18_000),
+      evidenceRefs: bridgeEvidenceRefs(bridge)
     };
   }
   const evidence = await readJson<{ refs?: string[]; packet?: string }>(root, "ventures/incubator/evidence.json", {});
@@ -195,9 +216,12 @@ export async function runPortfolioCycle(input: {
   explainRouting: boolean;
   now: Date;
 }): Promise<PortfolioCycleResult> {
-  const [registry, budgetDecisionRaw, budgetLedger, stages, routing, agents, modelConfig] = await Promise.all([
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, budgetLedger, stages, routing, agents, modelConfig] = await Promise.all([
     loadVentureRegistry(),
     readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
+    readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
+    readFile(path.join(stateRoot, "decisions", "2026-08-04-budget-fifty.md"), "utf8"),
+    readFile(path.join(stateRoot, "decisions", "2026-08-02-fightaiq-founding.md"), "utf8"),
     readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] }),
     readFile(path.join(configRoot, "stages.json"), "utf8").then((raw) => JSON.parse(raw) as { current: Stage }),
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
@@ -207,13 +231,17 @@ export async function runPortfolioCycle(input: {
   const entries = budgetLedger.entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
   const month = pragueClockParts(input.now).date.slice(0, 7);
   const spent = entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  const provisionalCap = budgetDecisionStatus(budgetDecisionRaw) === "countersigned-shape-a" ? 18 : 15;
-  const schedule = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw, monthlyApiHeadroomUsd: Math.max(0, provisionalCap - spent) });
+  const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned"
+    ? 42
+    : budgetDecisionStatus(budgetDecisionRaw) === "countersigned-shape-a" ? 18 : 15;
+  const schedule = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, monthlyApiHeadroomUsd: Math.max(0, provisionalCap - spent) });
   if (!input.dry && (process.env.PORTFOLIO_LIVE_ENABLED !== "true" || !phaseEnabled(schedule, input.phase))) {
     return { cycleId: input.cycleId, phase: input.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
   }
   const definition = composeMeetingRouteDefinition(registry, input.phase, input.dry ? "dry" : "live");
   const date = pragueClockParts(input.now).date;
+  const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
+  if (input.phase === "mma-intake") await refreshMmaBridge(root, date);
   const cast = input.phase === "tt-marketing"
     ? resolveTittyTuesdaysSlot({ date }).cast
     : definition.requiredParticipants;
@@ -228,6 +256,7 @@ export async function runPortfolioCycle(input: {
     ventureId: definition.ventureId,
     preset: definition.preset,
     requiredParticipants: cast,
+    owner: cast[0],
     now: input.now
   });
   const selected = room.selectedParticipants.map(({ agent }) => agent).filter((agent) => cast.includes(agent));
@@ -254,13 +283,14 @@ export async function runPortfolioCycle(input: {
       })
     });
   }
-  const context = await canonicalContext(input.phase, stateRoot, date, registry);
+  const context = await composePortfolioContext(input.phase, root, date, registry);
   let contributions: Contribution[];
   let estimatedWorstCaseUsd = 0;
   if (input.dry) {
-    contributions = selected.map((agent) => ({ agent, stance: agent === "PULSE" ? "plan" : "pass", summary: agent === "PULSE" ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [] }));
+    const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
+    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [] }));
   } else {
-    const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : "pulse.md";
+    const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
@@ -301,11 +331,10 @@ export async function runPortfolioCycle(input: {
   const proposals = proposalCandidates.map((proposal) => NicheProposalSchema.parse(proposal))
     .filter((proposal) => proposal.evidenceRefs.length > 0 && proposal.evidenceRefs.every((reference) => context.evidenceRefs.includes(reference)))
     .slice(0, 2);
-  const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
   const monthAllInUsd = actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: definition.objective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, contributions, fixture: input.dry, proposals });
+  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: definition.objective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, proposals });
   const meetingPath = `meetings/${date}-${input.phase}.json`;
   const decisionPath = `decisions/${input.cycleId}.json`;
   const scorecardPath = `scorecards/${input.cycleId}.json`;

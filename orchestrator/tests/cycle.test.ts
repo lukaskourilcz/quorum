@@ -162,6 +162,31 @@ describe("cycle preflight", () => {
     }
   });
 
+  it("runs both MMA Files rooms and both bilingual article slots in dry mode", async () => {
+    const phases = [
+      { phase: "mag-editorial" as const, now: new Date("2026-08-04T07:00:00.000Z") },
+      { phase: "article-am" as const, now: new Date("2026-08-04T08:00:00.000Z") },
+      { phase: "article-pm" as const, now: new Date("2026-08-04T16:00:00.000Z") },
+      { phase: "mag-desk" as const, now: new Date("2026-08-04T18:00:00.000Z") }
+    ];
+    for (const fixture of phases) {
+      const result = await runCycle({ ...fixture, dry: true, explainBudget: false, explainRouting: false });
+      expect(result.status).toBe("dry_complete");
+      expect(result.estimatedWorstCaseUsd).toBe(0);
+      if (fixture.phase.startsWith("mag-")) {
+        const record = MeetingRecordSchema.parse(JSON.parse(await readFile(path.join(repoRoot, `tmp/dry-run/state/meetings/2026-08-04-${fixture.phase}.json`), "utf8")));
+        expect(record.kind).toBe(fixture.phase);
+        expect(record.roomTranscript.gavel).toBe("CANVAS");
+      } else {
+        expect(result.artifacts).toEqual(expect.arrayContaining([
+          expect.stringMatching(new RegExp(`articles/2026-08-04-${fixture.phase === "article-am" ? "am" : "pm"}-`)),
+          expect.stringMatching(/social-A-en\.svg$/),
+          expect.stringMatching(/social-B-cs\.svg$/)
+        ]));
+      }
+    }
+  });
+
   it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
     const morning = await runCycle({
       phase: "morning",

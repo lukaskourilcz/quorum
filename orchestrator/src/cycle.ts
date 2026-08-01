@@ -71,6 +71,8 @@ import {
 } from "./ventures/registry.js";
 import type { RunnablePhase, Stage } from "./types.js";
 import { runPortfolioCycle } from "./portfolio/run.js";
+import { runDryArticleProduction } from "./mma-files/dry-run.js";
+import { signedOwnerDecision } from "./portfolio/schedule.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -769,6 +771,32 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       explainRouting: options.explainRouting,
       now
     });
+  }
+  if (options.phase === "article-am" || options.phase === "article-pm") {
+    if (!options.dry) {
+      const budgetFifty = await readFile(path.join(stateRoot, "decisions", "2026-08-04-budget-fifty.md"), "utf8");
+      if (
+        signedOwnerDecision(budgetFifty) !== "countersigned" ||
+        process.env.PORTFOLIO_LIVE_ENABLED !== "true" ||
+        process.env.MMA_FILES_LIVE_ENABLED !== "true"
+      ) {
+        return { cycleId, phase: options.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
+      }
+      throw new Error("Live MMA Files writing needs the configured guarded editorial gateway");
+    }
+    const root = path.join(repoRoot, "tmp", "dry-run", "state");
+    const result = await runDryArticleProduction({ root, slot: options.phase === "article-am" ? "am" : "pm", now });
+    return {
+      cycleId,
+      phase: options.phase,
+      dry: true,
+      status: "dry_complete",
+      decision: "PLAN",
+      estimatedWorstCaseUsd: 0,
+      selectedAgents: ["JAB", "HACEK", "STET", "REACH", "FRAME"],
+      skippedAgents: [],
+      artifacts: [result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths].map((artifact) => path.relative(repoRoot, path.join(root, artifact)))
+    };
   }
   if (options.phase !== "founding" && !isShiftPhase(options.phase)) {
     throw new Error(`Unsupported venture phase: ${options.phase}`);

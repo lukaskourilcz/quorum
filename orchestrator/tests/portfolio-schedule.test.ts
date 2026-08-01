@@ -23,6 +23,9 @@ const shapeB = `Status: countersigned
 Selection: [ ] Shape A  [x] Shape B
 Signature / explicit approval reference: owner-approval-2026-08-01`;
 
+const signedDecision = `Status: countersigned
+Signature / explicit approval reference: owner-approval-2026-08-04`;
+
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
@@ -63,6 +66,22 @@ describe("portfolio schedule and budget gate", () => {
     const critical = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 0.4 });
     expect(critical.activePhases).not.toContain("tt-marketing");
     expect(critical.activePhases).toContain("cu-edition");
+  });
+
+  it("keeps the magazine dry until 08d is signed, then enables both rooms and article slots", async () => {
+    const registry = await loadVentureRegistry();
+    const pending = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 18 });
+    expect(pending.activePhases).not.toContain("mag-editorial");
+    expect(pending.activePhases).not.toContain("article-am");
+    const full = resolveEffectivePortfolioSchedule({
+      registry,
+      budgetDecisionRaw: shapeA,
+      budgetFiftyRaw: signedDecision,
+      fightAiQFoundingRaw: signedDecision,
+      monthlyApiHeadroomUsd: 42
+    });
+    expect(full).toMatchObject({ fiftyDecisionStatus: "countersigned", monthlyBudgetUsd: 42, dailyBudgetUsd: 2.2, monthlyOperatingUsd: 50 });
+    expect(full.activePhases).toEqual(expect.arrayContaining(["mma-intake", "mma-analysis", "mag-editorial", "article-am", "article-pm", "mag-desk"]));
   });
 
   it("emits correct summer/winter cron pairs for meetings and article slots", async () => {
