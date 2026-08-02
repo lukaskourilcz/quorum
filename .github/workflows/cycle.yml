@@ -228,8 +228,12 @@ jobs:
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
           echo "delivery_only=$delivery_only" >> "$GITHUB_OUTPUT"
 
+      # Skipped on a delivery-only dispatch, where "Run cycle" does not run, so this gate and
+      # the post-cycle one would compile, test and build a byte-identical tree twice for one
+      # answer. The post-cycle gate still runs in full, and every delivery step comes after
+      # it, so nothing is delivered from an ungated tree.
       - name: Pre-cycle release gate
-        if: ${{ steps.mode.outputs.skip != 'true' }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         run: |
           pnpm agents:validate
           pnpm lint
@@ -484,7 +488,7 @@ jobs:
               --deployment-url "${CAUGHT_UP_SITE_URL:-https://caughtup-ai.vercel.app}" \
               --github-token "$DELIVERY_TOKEN" \
               --retry-count "$retry" \
-              --timeout-ms 900000
+              --timeout-ms 300000
             verifier_status=$?
             set -e
             if test "$verifier_status" -eq 0; then
@@ -707,7 +711,7 @@ jobs:
               --deployment-url "${MMA_FILES_SITE_URL:-https://mma-files.vercel.app}" \
               --github-token "$DELIVERY_TOKEN" \
               --retry-count "$retry" \
-              --timeout-ms 900000
+              --timeout-ms 300000
             verifier_status=$?
             set -e
             if test "$verifier_status" -eq 0; then

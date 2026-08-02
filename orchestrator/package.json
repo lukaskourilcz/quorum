@@ -21,7 +21,6 @@
     "fightaiq:roster-sync": "tsx src/fightaiq/roster-sync-cli.ts",
     "ideas:migrate": "tsx src/ideas/migrate-cli.ts",
     "mma:delivery": "tsx src/mma-files/publish-cli.ts",
-    "lint": "tsc --noEmit",
     "org:maintain": "tsx src/org/maintenance.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "social:publish": "tsx src/social/index.ts",
