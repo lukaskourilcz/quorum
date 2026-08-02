@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260802180958-mag-desk",
+  "date": "2026-08-02",
+  "phase": "mag-desk",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 1.1781047,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "NO_ACTION. A wake-up without a due agenda does not authorize work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-02T18:09:58.580Z",
+  "kind": "mag-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-02T18:09:58.579Z",
+    "closedAt": "2026-08-02T18:09:58.580Z",
+    "gavel": "CANVAS",
+    "setting": "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-02T18:09:58.580Z",
+        "text": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      }
+    ]
+  }
+}
