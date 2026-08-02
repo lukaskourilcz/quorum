@@ -1,6 +1,7 @@
 packages:
   - orchestrator
   - site
+  - studio
 
 allowBuilds:
   esbuild: set this to true or false

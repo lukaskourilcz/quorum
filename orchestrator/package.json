@@ -29,6 +29,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@boardlessai/carousel-studio": "workspace:*",
     "@anthropic-ai/sdk": "0.113.0",
     "cheerio": "^1.2.0",
     "dotenv": "^17.4.2",
