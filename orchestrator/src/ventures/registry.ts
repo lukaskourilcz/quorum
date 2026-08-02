@@ -125,17 +125,17 @@ export function cronPayloads(registry: VentureRegistry): Array<{
   ]);
 }
 
+/**
+ * One entry per UTC hour a meeting can fire at, never a multi-hour expression.
+ *
+ * Studio's two daylight-saving variants used to be folded into "0 11,12 * * *". GitHub reports
+ * the whole expression back as github.event.schedule, so a run triggered by that cron could not
+ * say which of the two hours had fired, and 12:00 UTC is also the summer firing of the
+ * afternoon company meeting. Keeping the hours apart is what lets the fired cron name its
+ * meeting outright, which is how a queued run still holds the right one.
+ */
 export function scheduledCronExpressions(registry: VentureRegistry): string[] {
-  const expressions = [...new Set(cronPayloads(registry).map(({ cron }) => cron))];
-  const summerStudio = "0 11 * * *";
-  const winterStudio = "0 12 * * *";
-  if (expressions.includes(summerStudio) && expressions.includes(winterStudio)) {
-    return [
-      ...expressions.filter((expression) => expression !== summerStudio && expression !== winterStudio),
-      "0 11,12 * * *"
-    ];
-  }
-  return expressions;
+  return [...new Set(cronPayloads(registry).map(({ cron }) => cron))];
 }
 
 export function ventureIdForPhase(

@@ -42,6 +42,59 @@ export function pragueClockParts(at: Date): PragueClockParts {
   return { date: `${year}-${month}-${day}`, hour, minute };
 }
 
+/** Prague's UTC offset in whole hours on a given instant: 2 under CEST, 1 under CET. */
+export function pragueUtcOffsetHours(at: Date): number {
+  const local = pragueClockParts(at);
+  const asUtc = Date.UTC(
+    Number(local.date.slice(0, 4)),
+    Number(local.date.slice(5, 7)) - 1,
+    Number(local.date.slice(8, 10)),
+    local.hour,
+    local.minute
+  );
+  return Math.round((asUtc - at.getTime()) / 3_600_000);
+}
+
+function cronUtcHours(cron: string): number[] {
+  const fields = cron.trim().split(/\s+/u);
+  if (fields.length !== 5 || fields[0] !== "0") return [];
+  const hours = fields[1]!.split(",").map((value) => Number(value));
+  return hours.every((hour) => Number.isInteger(hour) && hour >= 0 && hour <= 23) ? hours : [];
+}
+
+/**
+ * Resolve the meeting a cron fired for, from the cron itself rather than from the clock.
+ *
+ * resolveScheduledPhase asks what meeting is due at the moment the job happens to run, inside
+ * a grace window capped at 20 minutes. GitHub queues scheduled workflows, and on 2 August it
+ * queued them 13 to 54 minutes late: seven of fourteen meetings resolved to "skip" and simply
+ * did not happen. The delay is not something this repository can shorten, and widening the
+ * window past 30 minutes would start matching the neighbouring hour instead.
+ *
+ * The cron that fired already names the meeting, so nothing has to be inferred from lateness.
+ * A cron can list two hours, one per daylight-saving variant of the same slot, and the same
+ * UTC hour can serve one venture's summer slot and another's winter slot; the firing is
+ * therefore the most recent listed hour at or before the run, which is the only one that
+ * could have triggered it. Six hours is a sanity bound, well past any delay observed.
+ */
+export function resolveCronPhase(cron: string, at: Date): ScheduledPhase | null {
+  const hours = cronUtcHours(cron);
+  if (hours.length === 0) return null;
+  const nowUtcMinutes = at.getUTCHours() * 60 + at.getUTCMinutes();
+  let firedHour: number | null = null;
+  let smallestLateness = Number.POSITIVE_INFINITY;
+  for (const hour of hours) {
+    const lateness = (nowUtcMinutes - hour * 60 + 1_440) % 1_440;
+    if (lateness < smallestLateness) {
+      smallestLateness = lateness;
+      firedHour = hour;
+    }
+  }
+  if (firedHour === null || smallestLateness > 6 * 60) return null;
+  const pragueHour = (firedHour + pragueUtcOffsetHours(at)) % 24;
+  return MEETING_CLOCK.find((slot) => slot.hour === pragueHour)?.phase ?? null;
+}
+
 export function resolveScheduledPhase(
   at: Date,
   graceMinutes = 20

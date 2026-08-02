@@ -100,8 +100,14 @@ describe("portfolio schedule and budget gate", () => {
     expect(payloads.filter((item) => item.phase === "article-pm").map((item) => item.cron)).toEqual(["0 16 * * *", "0 17 * * *"]);
     expect(payloads.filter((item) => item.phase === "mag-desk").map((item) => item.cron)).toEqual(["0 18 * * *", "0 19 * * *"]);
     expect(payloads.filter((item) => item.phase === "studio").map((item) => item.cron)).toEqual(["0 11 * * *", "0 12 * * *"]);
-    expect(scheduledCronExpressions(await loadVentureRegistry())).toHaveLength(17);
-    expect(scheduledCronExpressions(await loadVentureRegistry())).toContain("0 11,12 * * *");
+    // One entry per UTC hour, never a multi-hour expression: GitHub reports the whole cron
+    // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
+    // 12:00 UTC is both studio's winter slot and the afternoon meeting's summer one.
+    const expressions = scheduledCronExpressions(await loadVentureRegistry());
+    expect(expressions).toHaveLength(18);
+    expect(expressions.every((expression) => /^0 \d{1,2} \* \* \*$/u.test(expression))).toBe(true);
+    expect(expressions).toContain("0 11 * * *");
+    expect(expressions).toContain("0 12 * * *");
   });
 
   it("runs PALATE only as a pre-step on each taste venture's first meeting", async () => {

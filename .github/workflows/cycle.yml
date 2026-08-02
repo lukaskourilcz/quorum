@@ -5,20 +5,21 @@ on:
     - cron: "0 3 * * *"
     - cron: "0 4 * * *"
     - cron: "0 5 * * *"
-    - cron: "0 11,12 * * *"
+    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 9 * * *"
+    - cron: "0 10 * * *"
+    - cron: "0 11 * * *"
+    - cron: "0 12 * * *"
     - cron: "0 13 * * *"
     - cron: "0 15 * * *"
     - cron: "0 16 * * *"
-    - cron: "0 20 * * *"
-    - cron: "0 21 * * *"
-    - cron: "0 6 * * *"
-    - cron: "0 9 * * *"
-    - cron: "0 10 * * *"
-    - cron: "0 19 * * *"
-    - cron: "0 7 * * *"
     - cron: "0 17 * * *"
     - cron: "0 18 * * *"
-    - cron: "0 8 * * *"
+    - cron: "0 19 * * *"
+    - cron: "0 20 * * *"
+    - cron: "0 21 * * *"
   workflow_dispatch:
     inputs:
       phase:
@@ -136,6 +137,7 @@ jobs:
         id: mode
         env:
           EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
           INPUT_PHASE: ${{ inputs.phase }}
           INPUT_DRY: ${{ inputs.dry }}
           INPUT_DELIVERY_ONLY: ${{ inputs.delivery_only }}
@@ -154,7 +156,7 @@ jobs:
           delivery_only="${INPUT_DELIVERY_ONLY:-false}"
           if test "$EVENT_NAME" = "schedule"; then
             dry=false
-            phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled)"
+            phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled --cron "$EVENT_SCHEDULE")"
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
           fi

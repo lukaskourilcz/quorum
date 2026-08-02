@@ -39,11 +39,13 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle.match(/- cron: "0 [\d,]+ \* \* \*"/g)).toHaveLength(17);
-    for (const hour of [3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 16, 17, 18, 19, 20, 21]) {
+    expect(cycle.match(/- cron: "0 \d{1,2} \* \* \*"/g)).toHaveLength(18);
+    for (const hour of [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21]) {
       expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
     }
-    expect(cycle).toContain('cron: "0 11,12 * * *"');
+    // The fired cron is what names the meeting, so it has to reach the resolver.
+    expect(cycle).toContain("EVENT_SCHEDULE: ${{ github.event.schedule }}");
+    expect(cycle).toContain('--scheduled --cron "$EVENT_SCHEDULE"');
     for (const hour of [4, 5, 8, 17, 18, 20]) {
       expect(cycle.match(new RegExp(`cron: "0 ${hour} \\* \\* \\*"`, "g"))).toHaveLength(1);
     }
