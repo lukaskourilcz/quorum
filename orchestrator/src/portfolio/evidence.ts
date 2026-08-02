@@ -9,8 +9,8 @@ import { runScrapersDetailed } from "../sources/run.js";
 import type { SourceFetchContext } from "../sources/types.js";
 import { fetchCitoFighters, fetchCitoUpcomingEvents, fetchOddsApiMma, loadMmaSourceRegistry, type ApiBoutOdds, type CitoEventSummary, type CitoFighterSummary } from "../fightaiq/sources.js";
 import { materializeFightAiQSources } from "../fightaiq/intake.js";
-import { buildBackfillQueue, fetchWikimediaRoster, materializeWikimediaRoster, reconcileRosterStatuses, writeBackfillQueue, writeRosterStatus, type WikimediaRosterEntry } from "../fightaiq/roster.js";
-import { loadRosterPolicy, rosterPolicyIds } from "../fightaiq/roster-policy.js";
+import { buildBackfillQueue, fetchWikimediaRoster, fetchWikimediaRosterByTitles, materializeWikimediaRoster, reconcileRosterStatuses, writeBackfillQueue, writeRosterStatus, type WikimediaRosterEntry } from "../fightaiq/roster.js";
+import { loadRosterPolicy, rosterPolicyIds, rosterPolicyTitles } from "../fightaiq/roster-policy.js";
 import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
@@ -187,9 +187,16 @@ export async function refreshFightAiQEvidence(input: {
 
   if (wired.has("wikimedia")) {
     try {
+      // Resolve the listed fighters by name rather than crawling the category, which stops at
+      // 500 entries and is shared across both promotions: 34 of the 92 fighters the policy
+      // names never reached the store at all, among them Pereira, Topuria, Pantoja and Nunes,
+      // and 20 more arrived without the Wikipedia title the enrichment step needs, so they
+      // could never gain a division, a record or a history. Asking for exactly the listed
+      // titles is both narrower and complete.
+      const titlePolicy = await loadRosterPolicy(configRoot);
       const rosters = await Promise.all([
-        fetchWikimediaRoster({ org: "ufc", context }),
-        fetchWikimediaRoster({ org: "oktagon", context })
+        fetchWikimediaRosterByTitles({ org: "ufc", titles: rosterPolicyTitles(titlePolicy, "ufc"), context }),
+        fetchWikimediaRosterByTitles({ org: "oktagon", titles: rosterPolicyTitles(titlePolicy, "oktagon"), context })
       ]);
       wikimediaRoster = rosters.flat();
       results.push({
@@ -266,7 +273,7 @@ export async function refreshFightAiQEvidence(input: {
       loadBoutRecords(path.join(input.root, "mma", "bouts"))
     ]);
     const queue = buildBackfillQueue({ fighters: preliminaryFighters, bouts: preliminaryBouts, now: input.now });
-    const backfill = await enrichWikimediaBackfill({ root: input.root, fighters: preliminaryFighters, bouts: preliminaryBouts, queue, context, retrievedAt: input.now });
+    const backfill = await enrichWikimediaBackfill({ root: input.root, fighters: preliminaryFighters, bouts: preliminaryBouts, queue, context, retrievedAt: input.now, allowedIds: rosterPolicyIds(await loadRosterPolicy(configRoot)) });
     backfillPaths.push(...backfill.paths);
     await atomicWriteJson(input.root, backfillRunPath, {
       schemaVersion: "wikimedia-backfill-run/1",

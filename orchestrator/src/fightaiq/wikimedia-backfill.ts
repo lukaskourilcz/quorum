@@ -252,6 +252,8 @@ export async function enrichWikimediaBackfill(input: {
   context: SourceFetchContext;
   retrievedAt: Date;
   limit?: number;
+  /** Ids the roster policy permits. Omitted only by a caller that has no policy to apply. */
+  allowedIds?: ReadonlySet<string>;
   fetchImpl?: SafeFetchOptions["fetchImpl"];
   resolveImpl?: SafeFetchOptions["resolveImpl"];
 }): Promise<{ paths: string[]; processed: number }> {
@@ -309,7 +311,14 @@ export async function enrichWikimediaBackfill(input: {
     for (const fight of profile.fights) {
       const opponentSlug = fighterSlug(fight.opponent);
       if (!opponentSlug) continue;
+      // An opponent name parsed out of a Wikipedia record table is not a roster decision. The
+      // Cito and roster writers both check the policy; this one did not, so every opponent
+      // any subject had ever faced was minted as a card, under the subject's own promotion:
+      // 761 of the 800 fighter ids in the bout store are outside config/mma-roster.json, and
+      // twenty slugs ended up existing under both ufc and oktagon. A bout may still reference
+      // the name; only the card is refused.
       const opponentId = `${selectedCard.org}:${opponentSlug}`;
+      if (input.allowedIds && !input.allowedIds.has(opponentId)) continue;
       let opponent = allCards.get(opponentId);
       if (!opponent) {
         opponent = opponentCard({ org: selectedCard.org, name: fight.opponent, sourceRef, sourceUrl, retrievedAt, modelVersion: selectedCard.modelVersion });

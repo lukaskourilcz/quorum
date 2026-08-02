@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { mkdtemp, readFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -252,5 +253,31 @@ describe("the curated roster contains only people", () => {
         .map((fighter) => `${fighter.id} != ${org}:${fighterSlug(fighter.name)}`)
     );
     expect(mismatched).toEqual([]);
+  });
+});
+
+describe("the backfill respects the roster policy", () => {
+  it("refuses to mint a card for an opponent the policy does not list", async () => {
+    // The Cito and roster writers both check the policy; this one did not, so every opponent
+    // any subject had ever faced was minted as a card under the subject's own promotion. 761
+    // of the 800 fighter ids the bout store references are outside config/mma-roster.json.
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-backfill-policy-"));
+    const subject = FighterCardSchema.parse({ ...fighterFixture, quality: { ...fighterFixture.quality, lastReviewedAt: null } });
+    const content = `==Mixed martial arts record==\n{{MMA record start}}\n|-\n|Win\n|13-2-0\n|[[Outsider Nobody]]\n|Decision (unanimous)\n|[[Fixture Night]]\n|{{Start date|2026|8|8}}\n|3\n|5:00\n|Prague\n|}`;
+    const run = (allowedIds?: ReadonlySet<string>) => enrichWikimediaBackfill({
+      root,
+      fighters: [subject],
+      bouts: [],
+      queue: [{ fighterRef: subject.id, priority: 1_000, reason: "upcoming-bout", gaps: [] }],
+      context: { allowHosts: ["en.wikipedia.org"], now: new Date("2026-08-09T08:00:00.000Z") },
+      retrievedAt: new Date("2026-08-09T08:00:00.000Z"),
+      ...(allowedIds ? { allowedIds } : {}),
+      resolveImpl: async () => ["203.0.113.10"],
+      fetchImpl: async () => new Response(JSON.stringify({ query: { pages: [{ pageid: 123456, title: "Alex Example", revisions: [{ slots: { main: { content } } }] }] } }), { status: 200, headers: { "content-type": "application/json" } })
+    });
+
+    const gated = await run(new Set([subject.id]));
+    expect(gated.paths.some((entry) => entry.includes("outsider-nobody"))).toBe(false);
+    expect(existsSync(path.join(root, "mma", "fighters", "ufc:outsider-nobody.json"))).toBe(false);
   });
 });
