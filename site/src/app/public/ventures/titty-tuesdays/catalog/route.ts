@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getTittyTuesdaysSnapshot } from "../../../../../lib/titty-tuesdays-records";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export async function GET() {
   const snapshot = await getTittyTuesdaysSnapshot();

@@ -29,6 +29,7 @@ export function AgentCard({
         <AgentPortrait
           agent={agent}
           className="transition-transform duration-500 group-hover:scale-[1.025]"
+          sizes="(max-width: 768px) 100vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--obsidian)] via-transparent to-transparent" />
         <span className="mono-label absolute left-4 top-4 text-[0.625rem] text-[var(--accent)]">

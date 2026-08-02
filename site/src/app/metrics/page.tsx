@@ -33,12 +33,15 @@ function metricValue(metric: (typeof metrics)[number]) {
 }
 
 export default async function MetricsPage() {
-  const [latestStandup, fightStats, fighterSnapshot] = await Promise.all([
+  const [latestStandup, fightStats] = await Promise.all([
     getPublicStandups().then((items) => items[0]!),
-    getPublicFightStatsEntries(),
-    getPublicFighters()
+    getPublicFightStatsEntries()
   ]);
-  const fighterNames = new Map(fighterSnapshot.fighters.map((fighter) => [fighter.id, fighterName(fighter)]));
+  const fighterNames = new Map(
+    fightStats.length
+      ? (await getPublicFighters()).fighters.map((fighter) => [fighter.id, fighterName(fighter)] as const)
+      : []
+  );
   return (
     <PageShell>
       <PageIntro

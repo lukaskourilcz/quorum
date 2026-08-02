@@ -93,6 +93,7 @@ export default async function AgentDetailPage({
                 agent={agent}
                 className="rounded-[var(--radius-card)] border border-[var(--border)]"
                 priority
+                sizes="(max-width: 768px) 100vw, 40vw"
               />
             </div>
           </div>

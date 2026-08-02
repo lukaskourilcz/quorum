@@ -18,9 +18,6 @@ import {
 } from "@/lib/money-records";
 import { formatDate, formatDateTime, formatUsd } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export const metadata: Metadata = {
   description: "BoardlessAI quarterly targets, monetization gates, confirmed costs and recognized revenue.",
   title: "Money"

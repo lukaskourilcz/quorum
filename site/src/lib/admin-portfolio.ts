@@ -458,8 +458,10 @@ async function ventureConfigs(root: string): Promise<VentureConfig[]> {
 }
 
 export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPortfolio> {
-  const configs = await ventureConfigs(root);
-  const social = await readAdminSocialArchive(root);
+  const [configs, social] = await Promise.all([
+    ventureConfigs(root),
+    readAdminSocialArchive(root)
+  ]);
   const ventures = await Promise.all(configs.map(async (venture): Promise<AdminVenture> => {
     const ratingState = await readRatings(root, venture.id);
     const [ideas, plans, proposals, visuals] = await Promise.all([

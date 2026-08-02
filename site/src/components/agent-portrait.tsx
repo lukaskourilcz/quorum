@@ -5,11 +5,16 @@ import { cn } from "@/lib/utils";
 export function AgentPortrait({
   agent,
   className,
-  priority = false
+  priority = false,
+  // Twelve of the fourteen call sites render a 36-64px avatar, so a small fixed
+  // default is the honest description. The two that genuinely fill a responsive
+  // container (the grid card and the agent detail hero) pass their own value.
+  sizes = "64px"
 }: {
   agent: Agent;
   className?: string;
   priority?: boolean;
+  sizes?: string;
 }) {
   return (
     <div
@@ -24,7 +29,7 @@ export function AgentPortrait({
           className="object-cover grayscale brightness-[0.82] contrast-105"
           fill
           priority={priority}
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes={sizes}
           src={agent.visual.avatar}
         />
       ) : (
