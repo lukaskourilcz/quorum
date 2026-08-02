@@ -48,10 +48,36 @@ function fighterPath(reference: string): string {
   return `/fighters/${org}/${slug}`;
 }
 
-function linkedFighterLabels(body: string): string[] {
-  return [...body.matchAll(/\[([^\]]+)\]\(\/fighters\/(?:ufc|oktagon)\/[a-z0-9-]+\)/giu)]
-    .map((match) => match[1]!)
-    .sort();
+function linkedFighters(body: string): Array<{ href: string; label: string }> {
+  return [...body.matchAll(/\[([^\]]+)\]\((\/fighters\/(?:ufc|oktagon)\/[a-z0-9-]+)\)/giu)]
+    .map((match) => ({ href: match[2]!.toLowerCase(), label: match[1]! }))
+    .sort((left, right) => left.href.localeCompare(right.href) || left.label.localeCompare(right.label));
+}
+
+/**
+ * Whether a Czech label is the same name as its English counterpart, allowing for declension.
+ *
+ * Czech puts names in grammatical case, so Alexa Grasso becomes "Alexu Grasso" in the
+ * accusative. Comparing the labels byte for byte therefore rejected every Czech article that
+ * followed the stylebook, which asks HACEK to decline names naturally: the desk's first
+ * fighter profile was blocked on exactly this, with the two bodies agreeing on every figure,
+ * every source and every link target. A declension keeps the stem and changes the ending, so
+ * that is what this compares, word by word.
+ */
+function sameNameAcrossLocales(english: string, czech: string): boolean {
+  const left = english.split(/\s+/u).filter(Boolean);
+  const right = czech.split(/\s+/u).filter(Boolean);
+  if (left.length !== right.length) return false;
+  return left.every((word, index) => {
+    const other = right[index]!;
+    const lowerWord = word.toLowerCase();
+    const lowerOther = other.toLowerCase();
+    let shared = 0;
+    while (shared < lowerWord.length && shared < lowerOther.length && lowerWord[shared] === lowerOther[shared]) shared += 1;
+    // A short name has no room to lose three characters and still mean the same person, so the
+    // stem must be at least three characters and must survive all but the final few.
+    return shared >= 3 && shared >= Math.min(lowerWord.length, lowerOther.length) - 3;
+  });
 }
 
 function figures(body: string): string[] {
@@ -143,10 +169,16 @@ export function reviewBilingualParity(article: ArticlePackage): CopyViolation[] 
   if (JSON.stringify(enFigures) !== JSON.stringify(csFigures)) {
     violations.push({ code: "figure-parity", locale: "cs", message: "English and Czech bodies must carry the same figures." });
   }
-  const enNames = linkedFighterLabels(article.localizations.en.bodyMDX);
-  const csNames = linkedFighterLabels(article.localizations.cs.bodyMDX);
-  if (JSON.stringify(enNames) !== JSON.stringify(csNames)) {
-    violations.push({ code: "fighter-name-parity", locale: "cs", message: "Fighter names must stay unchanged across languages." });
+  // Identity lives in the link target, not the spelling. The old check compared labels only,
+  // so an English body could hang Grasso's name on Shevchenko's page and pass; now the two
+  // bodies must point at the same profiles, and each label must be the same name as its
+  // counterpart once Czech declension is allowed for.
+  const enLinks = linkedFighters(article.localizations.en.bodyMDX);
+  const csLinks = linkedFighters(article.localizations.cs.bodyMDX);
+  if (JSON.stringify(enLinks.map(({ href }) => href)) !== JSON.stringify(csLinks.map(({ href }) => href))) {
+    violations.push({ code: "fighter-link-parity", locale: "cs", message: "English and Czech bodies must link the same fighter profiles." });
+  } else if (enLinks.some((link, index) => !sameNameAcrossLocales(link.label, csLinks[index]!.label))) {
+    violations.push({ code: "fighter-name-parity", locale: "cs", message: "A Czech fighter name may be declined but must stay the same name." });
   }
   return violations;
 }

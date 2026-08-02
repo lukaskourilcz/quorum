@@ -11,7 +11,7 @@ import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.
 import { articlePackageHash, hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
-import { loadStylebook, reviewArticleCopy, validateStylebook } from "../src/mma-files/style.js";
+import { loadStylebook, reviewArticleCopy, reviewBilingualParity, validateStylebook } from "../src/mma-files/style.js";
 import { ArticleSlotConflictError, loadArticlePackages, storeArticlePackage } from "../src/mma-files/store.js";
 import { deterministicArticleImage } from "../src/images/article-image.js";
 import { repoRoot, stateRoot } from "../src/paths.js";
@@ -260,5 +260,52 @@ describe("article slot immutability", () => {
     await storeArticlePackage(root, packageFor("published", "shipped"));
     await expect(storeArticlePackage(root, packageFor("published", "replacement")))
       .rejects.toBeInstanceOf(ArticleSlotConflictError);
+  });
+});
+
+describe("bilingual fighter parity", () => {
+  const bodyWith = (links: string) => `${links} Record 26-4-1. [source:state/mma/fighters/ufc:a.json]`;
+  const withBodies = (en: string, cs: string): ArticlePackage => {
+    const content = {
+      schemaVersion: "article/1" as const,
+      slug: "parity",
+      localizations: {
+        en: { title: "Title", dek: "Dek", bodyMDX: bodyWith(en), imageAlt: "Alt" },
+        cs: { title: "Titulek", dek: "Perex", bodyMDX: bodyWith(cs), imageAlt: "Popis" }
+      },
+      format: "fighter-profile" as const,
+      sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
+      image: deterministicArticleImage({ venture: "mma-files", slug: "parity", title: "Title", altEn: "Alt", altCs: "Popis" }),
+      heroSpec: { template: "fighter-file", bindings: { headline: "Headline" } },
+      fighterRefs: [],
+      publishAt: "2026-08-02T06:00:00.000Z",
+      slot: "am" as const,
+      status: "draft" as const
+    };
+    return ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
+  };
+  const codes = (en: string, cs: string) => reviewBilingualParity(withBodies(en, cs)).map(({ code }) => code);
+
+  it("accepts a declined Czech name that points at the same profile", () => {
+    // The stylebook asks HACEK to decline names naturally, and the desk's first fighter
+    // profile was blocked for doing so: "Alexa Grasso" becomes "Alexu Grasso" in Czech.
+    expect(codes(
+      "[Alexa Grasso](/fighters/ufc/alexa-grasso)",
+      "[Alexu Grasso](/fighters/ufc/alexa-grasso)"
+    )).toEqual([]);
+  });
+
+  it("rejects a Czech label that names a different fighter", () => {
+    expect(codes(
+      "[Alexa Grasso](/fighters/ufc/alexa-grasso)",
+      "[Petr Yan](/fighters/ufc/alexa-grasso)"
+    )).toContain("fighter-name-parity");
+  });
+
+  it("rejects bodies that link different profiles", () => {
+    expect(codes(
+      "[Alexa Grasso](/fighters/ufc/alexa-grasso)",
+      "[Alexa Grasso](/fighters/ufc/valentina-shevchenko)"
+    )).toContain("fighter-link-parity");
   });
 });
