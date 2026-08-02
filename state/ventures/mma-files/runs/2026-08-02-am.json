@@ -1,10 +1,18 @@
 {
   "schemaVersion": 1,
-  "cycleId": "20260802161324-article-am",
+  "cycleId": "20260802163243-article-am",
   "date": "2026-08-02",
   "slot": "am",
   "status": "blocked",
-  "articleRef": "1df9f8c5a3fba1b11bb610cc71be21e822842d5ca3bfe0c2c3d4cc9552acc173",
+  "articleRef": "85ecfed4ed62c0b6a026fe70bb192bddba97008fb240eb943fe334daf11825f6",
+  "supersededHash": "1df9f8c5a3fba1b11bb610cc71be21e822842d5ca3bfe0c2c3d4cc9552acc173",
+  "violations": [
+    {
+      "code": "fighter-name-parity",
+      "locale": "cs",
+      "message": "Fighter names must stay unchanged across languages."
+    }
+  ],
   "spentUsd": null,
-  "generatedAt": "2026-08-02T16:13:24.860Z"
+  "generatedAt": "2026-08-02T16:32:43.819Z"
 }

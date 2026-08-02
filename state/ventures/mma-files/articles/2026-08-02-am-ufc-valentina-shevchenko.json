@@ -3,30 +3,18 @@
   "slug": "ufc-valentina-shevchenko",
   "localizations": {
     "en": {
-      "title": "Valentina Shevchenko: Three fights, one rivalry, a record that reads 26-4-1",
-      "dek": "Shevchenko reclaimed the women's flyweight title from Alexa Grasso at UFC 306 after a trilogy that ran through submission, draw and unanimous decision.",
-      "bodyMDX": "[Valentina Shevchenko](/fighters/ufc/valentina-shevchenko) holds a professional record of 26-4-1, competes in the women's flyweight division and is listed as active in the UFC as of August 2026. [source:state/mma/fighters/ufc:valentina-shevchenko.json]\n\nThe most complete chapter of her sourced file covers a three-fight series against [Alexa Grasso](/fighters/ufc/alexa-grasso), a sequence that produced each of the three outcomes the sport allows.\n\nGrasso won the first meeting at UFC 285 on March 4, 2023, finishing Shevchenko by submission via face crank in round four at the 19:34 mark. [source:state/mma/bouts/ufc/history-17b33f7d50b90b29d963.json] The second bout, at UFC Fight Night: Grasso vs. Shevchenko 2 on September 16, 2023, went the full five rounds and ended a split draw. [source:state/mma/bouts/ufc/history-d49cda1598fa4a1c9e59.json]\n\nShevchenko settled the series at UFC 306 on September 14, 2024. She won by unanimous decision across five rounds, reclaiming the title she had lost eighteen months earlier. [source:state/mma/bouts/ufc/history-0fb7c82cdf948e2d2c01.json]\n\nGrasso's record now sits at 17-5-1, with a discrepancy between that figure from Wikipedia and a derived tally of 16-5-1 from her sourced bout history: the gap remains open. [source:state/mma/fighters/ufc:alexa-grasso.json] Her most recent result on file is a knockout win over [Maycee Barber](/fighters/ufc/maycee-barber) in round one on March 28, 2026. [source:state/mma/fighters/ufc:alexa-grasso.json]\n\nShevchenko's file carries a parallel discrepancy: the Cito API lists her record at 26-4-1 while the derived history drawn from sourced bouts shows only the three Grasso contests. The fuller career figure comes from the primary source. [source:state/mma/fighters/ufc:valentina-shevchenko.json]"
+      "title": "Valentina Shevchenko: Three Fights, One Rival, a Career Defined by Grasso",
+      "dek": "The women's flyweight record shows 26-4-1, but the three bouts on file tell the story of a championship lost and reclaimed.",
+      "bodyMDX": "[Valentina Shevchenko](/fighters/ufc/valentina-shevchenko) carries a provisional record of 26-4-1 in the women's flyweight division. [source:state/mma/fighters/ufc:valentina-shevchenko.json] The three sourced bouts on file each involve the same opponent: [Alexa Grasso](/fighters/ufc/alexa-grasso).\n\nAt UFC 285 on March 4, 2023, Grasso submitted Shevchenko by face crank in round four, at the 1:54 mark of the round. [source:state/mma/bouts/ufc/history-17b33f7d50b90b29d963.json] That finish ended a long title reign and handed Shevchenko a loss.\n\nSix months later the two met again at UFC Fight Night: Grasso vs. Shevchenko 2 on September 16, 2023. Five full rounds produced a split draw. [source:state/mma/bouts/ufc/history-d49cda1598fa4a1c9e59.json] Neither fighter left with a clean verdict.\n\nShevchenko resolved the sequence at UFC 306 on September 14, 2024. She won a unanimous decision over five rounds to close the trilogy. [source:state/mma/bouts/ufc/history-0fb7c82cdf948e2d2c01.json] The derived career stats for those three bouts show one win, one loss and one draw, with an average fight time of roughly 23 minutes. [source:state/mma/fighters/ufc:valentina-shevchenko.json]\n\nGrasso's record across the same span sits at a provisional 17-5-1, with a noted discrepancy between the Wikipedia figure and the derived history count of 16-5-1. [source:state/mma/fighters/ufc:alexa-grasso.json] The Shevchenko file carries its own open discrepancy: the sourced record of 26-4-1 does not yet match the three-bout derived history. [source:state/mma/fighters/ufc:valentina-shevchenko.json] Both records remain provisional pending corroboration."
     },
     "cs": {
-      "title": "Valentina Shevchenko: tři zápasy, jedna rivalita, rekord 26-4-1",
-      "dek": "Shevchenko získala titul v ženské muší váze zpět od Alexy Grasso na UFC 306 po trilogii, která přinesla submisi, remízu i jednomyslné rozhodnutí.",
-      "bodyMDX": "[Valentina Shevchenko](/fighters/ufc/valentina-shevchenko) má profesionální rekord 26-4-1, závodí v ženské muší váze a v UFC je vedena jako aktivní bojovnice k srpnu 2026. [source:state/mma/fighters/ufc:valentina-shevchenko.json]\n\nNejlépe zdokumentovanou kapitolou jejího souboru je série tří zápasů proti [Alexe Grasso](/fighters/ufc/alexa-grasso), která přinesla všechny tři výsledky, jaké sport zná.\n\nGrasso vyhrála první vzájemný duel na UFC 285 dne 4. března 2023. Shevchenko donutila ke vzdání se submisí pákou na obličej ve čtvrtém kole v čase 19:34. [source:state/mma/bouts/ufc/history-17b33f7d50b90b29d963.json] Druhý zápas, na UFC Fight Night: Grasso vs. Shevchenko 2 dne 16. září 2023, odšel celých pět kol a skončil nerozhodně se rozštěpeným verdiktem rozhodčích. [source:state/mma/bouts/ufc/history-d49cda1598fa4a1c9e59.json]\n\nSérii uzavřela Shevchenko na UFC 306 dne 14. září 2024. Zvítězila na body jednomyslným rozhodnutím po pěti kolech a získala zpět titul, o který přišla osmnáct měsíců předtím. [source:state/mma/bouts/ufc/history-0fb7c82cdf948e2d2c01.json]\n\nRekord Grasso nyní činí 17-5-1, přičemž tato cifra z Wikipedie se liší od odvozeného součtu 16-5-1 ze zdrojovaných záznamů zápasů: nesoulad zůstává otevřený. [source:state/mma/fighters/ufc:alexa-grasso.json] Nejnovějším výsledkem v jejím souboru je výhra knockoutem v prvním kole nad [Maycee Barber](/fighters/ufc/maycee-barber) ze dne 28. března 2026. [source:state/mma/fighters/ufc:alexa-grasso.json]\n\nSoubor Shevchenko nese obdobný nesoulad: Cito API uvádí rekord 26-4-1, zatímco odvozená historie ze zdrojovaných zápasů zachycuje pouze tři duely s Grasso. Úplnější kariérní číslo pochází z primárního zdroje. [source:state/mma/fighters/ufc:valentina-shevchenko.json]"
+      "title": "Valentina Shevchenko: tři zápasy, jedna soupeřka, kariéra definovaná Grassovou",
+      "dek": "Rekord 26-4-1 v ženské muší váze zahrnuje ztracený titul i jeho znovuzískání. Všechny tři zdrojované zápasy mají stejné jméno na druhé straně klece.",
+      "bodyMDX": "[Valentina Shevchenko](/fighters/ufc/valentina-shevchenko) má v ženské muší váze předběžný rekord 26-4-1. [source:state/mma/fighters/ufc:valentina-shevchenko.json] Všechny tři zdrojované zápasy v databázi mají společného jmenovatele: soupeřku [Alexu Grasso](/fighters/ufc/alexa-grasso).\n\nNa UFC 285 dne 4. března 2023 Grasso Shevchenko podrobila submisí face crank ve čtvrtém kole, ve 1:54 dané části. [source:state/mma/bouts/ufc/history-17b33f7d50b90b29d963.json] Tím skončila dlouhá titulová vláda Shevchenko.\n\nO šest měsíců později se dvojice sešla znovu na UFC Fight Night: Grasso vs. Shevchenko 2 dne 16. září 2023. Pět plných kol skončilo rozdělenou remízou. [source:state/mma/bouts/ufc/history-d49cda1598fa4a1c9e59.json] Jasný verdikt nepadl ani tehdy.\n\nTrilogy uzavřelo UFC 306 dne 14. září 2024. Shevchenko zvítězila jednomyslným rozhodnutím rozhodčích po pěti kolech. [source:state/mma/bouts/ufc/history-0fb7c82cdf948e2d2c01.json] Odvozená kariérní statistika za tyto tři zápasy ukazuje jednu výhru, jednu prohru a jednu remízu; průměrná délka zápasu vychází na přibližně 23 minut. [source:state/mma/fighters/ufc:valentina-shevchenko.json]\n\nRekord Grasso za stejné období je předběžně 17-5-1, přičemž existuje nesoulad s odvozeným historickým počtem 16-5-1. [source:state/mma/fighters/ufc:alexa-grasso.json] Soubor Shevchenko nese vlastní otevřený nesoulad: zdrojovaný rekord 26-4-1 zatím neodpovídá odvozenému záznamu ze tří zápasů. [source:state/mma/fighters/ufc:valentina-shevchenko.json] Oba rekordy zůstávají předběžné, dokud neproběhne ověření."
     }
   },
   "format": "fighter-profile",
   "sources": [
-    {
-      "kind": "internal",
-      "ref": "state/mma/bouts/ufc/history-0fb7c82cdf948e2d2c01.json"
-    },
-    {
-      "kind": "internal",
-      "ref": "state/mma/bouts/ufc/history-17b33f7d50b90b29d963.json"
-    },
-    {
-      "kind": "internal",
-      "ref": "state/mma/bouts/ufc/history-d49cda1598fa4a1c9e59.json"
-    },
     {
       "kind": "internal",
       "ref": "state/mma/fighters/ufc:alexa-grasso.json"
@@ -37,7 +25,15 @@
     },
     {
       "kind": "internal",
-      "ref": "state/mma/source-quota/cito.json"
+      "ref": "state/mma/bouts/ufc/history-0fb7c82cdf948e2d2c01.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/history-d49cda1598fa4a1c9e59.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/history-17b33f7d50b90b29d963.json"
     }
   ],
   "image": {
@@ -46,7 +42,7 @@
     "width": 1600,
     "height": 900,
     "alt_en": "Valentina Shevchenko and her coach Pavel Fedotov operating Engagement Skills Trainer weapons during a visit to Joint Base Langley-Eustis",
-    "alt_cs": "Valentina Shevchenko pózuje pro oficiální fotografii UFC",
+    "alt_cs": "Valentina Shevchenko v postoji před zápasem, pohled zepředu",
     "license": {
       "name": "CC0",
       "author": "Tech. Sgt. Katie Gar Ward",
@@ -65,78 +61,10 @@
   },
   "fighterRefs": [
     "ufc:alexa-grasso",
-    "ufc:valentina-shevchenko",
-    "ufc:sandra-del-rincon",
-    "ufc:lupita-hernandez",
-    "ufc:karina-rodriguez",
-    "ufc:ashley-cummins",
-    "ufc:alida-gray",
-    "ufc:mizuki-inoue",
-    "ufc:jodie-esquibel",
-    "ufc:heather-jo-clark",
-    "ufc:felice-herrig",
-    "ufc:randa-markos",
-    "ufc:tatiana-suarez",
-    "ufc:karolina-kowalkiewicz",
-    "ufc:carla-esparza",
-    "ufc:kim-ji-yeon",
-    "ufc:maycee-barber",
-    "ufc:joanne-wood",
-    "ufc:viviane-araujo",
-    "ufc:natalia-silva",
-    "ufc:aalon-cruz",
-    "ufc:aaron-brink",
-    "ufc:aaron-jeffery",
-    "ufc:aaron-phillips",
-    "ufc:aaron-pico",
-    "ufc:aaron-riley",
-    "ufc:aaron-rosa",
-    "ufc:aaron-simpson",
-    "ufc:aaron-wilkinson",
-    "ufc:abdul-azeem-badakhshi",
-    "ufc:abdul-hussein",
-    "ufc:abdul-kareem-al-selwady",
-    "ufc:abdul-kerim-edilov",
-    "ufc:abdul-rakhman-yakhyaev",
-    "ufc:abdul-razak-alhassan",
-    "ufc:abdulrakhman-yakhyaev",
-    "ufc:abel-trujillo",
-    "ufc:abner-lloveras",
-    "ufc:abner-lloveras-3",
-    "ufc:abu-azaitar",
-    "ufc:abubakar-nurmagomedov",
-    "ufc:abubakar-vagaev",
-    "ufc:abus-magomedov",
-    "ufc:acacio-dos-santos",
-    "ufc:achilles-estremadura",
-    "ufc:adam-antolin",
-    "ufc:adam-fugitt",
-    "ufc:adam-hunter",
-    "ufc:adam-khaliev",
-    "ufc:adam-milstead",
-    "ufc:adam-wieczorek",
-    "ufc:adam-yandiev",
-    "ufc:adlan-amagov",
-    "ufc:adli-edwards",
-    "ufc:adrian-diaz",
-    "ufc:adrian-luna-martinetti",
-    "ufc:aj-cunningham",
-    "ufc:aj-dobson",
-    "ufc:aj-fletcher",
-    "ufc:alexander-volkanovski",
-    "ufc:carlos-ulberg",
-    "ufc:islam-makhachev",
-    "ufc:joshua-van",
-    "ufc:justin-gaethje",
-    "ufc:kayla-harrison",
-    "ufc:mackenzie-dern",
-    "ufc:petr-yan",
-    "ufc:sean-strickland",
-    "ufc:tom-aspinall"
+    "ufc:valentina-shevchenko"
   ],
-  "eventRef": "ufc:event:history-ufc-306",
-  "publishAt": "2026-08-02T16:13:24.860Z",
+  "publishAt": "2026-08-02T16:32:43.819Z",
   "slot": "am",
   "status": "blocked",
-  "packageHash": "1df9f8c5a3fba1b11bb610cc71be21e822842d5ca3bfe0c2c3d4cc9552acc173"
+  "packageHash": "85ecfed4ed62c0b6a026fe70bb192bddba97008fb240eb943fe334daf11825f6"
 }
