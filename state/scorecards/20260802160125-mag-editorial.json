@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260802160125-mag-editorial",
+  "phase": "mag-editorial",
+  "estimatedWorstCaseUsd": 0.033868,
+  "actualUsd": 0.023110000000000002,
+  "participants": [
+    "CANVAS",
+    "JAB",
+    "QUILL",
+    "AUDIT"
+  ],
+  "agendaId": null,
+  "generatedAt": "2026-08-02T16:05:25.253Z"
+}

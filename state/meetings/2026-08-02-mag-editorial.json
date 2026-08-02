@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260802141413-mag-editorial",
+  "cycleId": "20260802160125-mag-editorial",
   "date": "2026-08-02",
   "phase": "mag-editorial",
   "fixture": false,
@@ -31,43 +31,45 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.05,
-    "actualCycleUsd": 0.017507,
-    "monthAllInUsd": 0.7414877,
+    "actualCycleUsd": 0.023110000000000002,
+    "monthAllInUsd": 0.8204267000000001,
     "monthCapUsd": 30
   },
   "decision": {
     "outcome": "PLAN",
-    "summary": "AM: killed; PM: killed",
-    "evidenceRefs": []
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-01-mma-analysis",
+      "meeting:2026-08-02-mag-editorial"
+    ]
   },
   "proposals": [
     {
-      "agent": "CANVAS",
-      "summary": "Cannot assign slots: no fight-week event priority provided, no verified FightAIQ files attached, no idea history supplied, no daily MMA bridge data present. Stylebook and study sources are present but source material for article assignment is missing.",
-      "evidenceRefs": []
-    },
-    {
       "agent": "JAB",
-      "summary": "No verified FightAIQ file, event, result, booking, article record or meeting record is supplied. Both AM and PM article slots must be killed rather than drafted.",
-      "evidenceRefs": []
+      "summary": "Both AM and PM slots are correctly killed. The packet has no fresh named source, fighter file, event, article, or model run to support an English story; the bridge records both FightAIQ slots killed.",
+      "evidenceRefs": [
+        "meeting:2026-08-01-mma-analysis",
+        "meeting:2026-08-02-mag-editorial"
+      ]
     },
     {
       "agent": "QUILL",
-      "summary": "No article slots to assign. The packet contains stylebook, study sources and procedural rules but no FightAIQ files, verified fighter records, event bookings or bridge content to support AM or PM editorial assignments. Kill both slots until source material arrives.",
-      "evidenceRefs": []
+      "summary": "Both AM and PM slots are killed. The portfolio bridge confirms both subjects are missing and both were marked repeat verdicts at the 2026-08-02 editorial meeting. No source-backed FightAIQ file, fighter record, event, or meeting note supports assignment.",
+      "evidenceRefs": [
+        "meeting:2026-08-01-mma-analysis",
+        "meeting:2026-08-02-mag-editorial"
+      ]
     },
     {
       "agent": "AUDIT",
-      "summary": "Nelze obsadit ranní ani odpolední slot. Paket neobsahuje žádný ověřený FightAIQ soubor, zápas, výsledek, článek ani meeting record. Stylový manuál sám o sobě není zdroj tématu.",
-      "evidenceRefs": []
+      "summary": "Oba sloty musí zůstat zrušené. Balíček uvádí chybějící ranní i večerní subjekt, žádnou prioritu akce a žádný aktuální Stats výstup FightAIQ. Nejsou podklady pro článek v češtině ani angličtině.",
+      "evidenceRefs": [
+        "meeting:2026-08-01-mma-analysis",
+        "meeting:2026-08-02-mag-editorial"
+      ]
     }
   ],
   "voteMatrix": [
-    {
-      "voter": "CANVAS",
-      "firstChoice": "veto",
-      "veto": true
-    },
     {
       "voter": "JAB",
       "firstChoice": "pass",
@@ -75,8 +77,8 @@
     },
     {
       "voter": "QUILL",
-      "firstChoice": "pass",
-      "veto": false
+      "firstChoice": "veto",
+      "veto": true
     },
     {
       "voter": "AUDIT",
@@ -88,49 +90,55 @@
   "growthPlan": "EDITORIAL_ONLY. Approved bilingual articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
   "eveningOutcome": null,
   "editorialSlateRef": "ventures/mma-files/slates/2026-08-02.json",
-  "generatedAt": "2026-08-02T14:19:13.178Z",
+  "generatedAt": "2026-08-02T16:05:25.253Z",
   "kind": "mag-editorial",
   "roomTranscript": {
-    "openedAt": "2026-08-02T14:14:13.178Z",
-    "closedAt": "2026-08-02T14:19:13.178Z",
+    "openedAt": "2026-08-02T16:01:25.253Z",
+    "closedAt": "2026-08-02T16:05:25.253Z",
     "gavel": "CANVAS",
     "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
     "turns": [
       {
         "agent": "CANVAS",
         "mode": "gavel",
-        "sentAt": "2026-08-02T14:14:13.178Z",
+        "sentAt": "2026-08-02T16:01:25.253Z",
         "text": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
-      },
-      {
-        "agent": "CANVAS",
-        "mode": "veto",
-        "sentAt": "2026-08-02T14:15:13.178Z",
-        "text": "Cannot assign slots: no fight-week event priority provided, no verified FightAIQ files attached, no idea history supplied, no daily MMA bridge data present. Stylebook and study sources are present but source material for article assignment is missing."
       },
       {
         "agent": "JAB",
         "mode": "statement",
-        "sentAt": "2026-08-02T14:16:13.178Z",
-        "text": "No verified FightAIQ file, event, result, booking, article record or meeting record is supplied. Both AM and PM article slots must be killed rather than drafted."
+        "sentAt": "2026-08-02T16:02:25.253Z",
+        "text": "Both AM and PM slots are correctly killed. The packet has no fresh named source, fighter file, event, article, or model run to support an English story; the bridge records both FightAIQ slots killed.",
+        "evidenceRefs": [
+          "meeting:2026-08-01-mma-analysis",
+          "meeting:2026-08-02-mag-editorial"
+        ]
       },
       {
         "agent": "QUILL",
-        "mode": "statement",
-        "sentAt": "2026-08-02T14:17:13.178Z",
-        "text": "No article slots to assign. The packet contains stylebook, study sources and procedural rules but no FightAIQ files, verified fighter records, event bookings or bridge content to support AM or PM editorial assignments. Kill both slots until source material arrives."
+        "mode": "veto",
+        "sentAt": "2026-08-02T16:03:25.253Z",
+        "text": "Both AM and PM slots are killed. The portfolio bridge confirms both subjects are missing and both were marked repeat verdicts at the 2026-08-02 editorial meeting. No source-backed FightAIQ file, fighter record, event, or meeting note supports assignment.",
+        "evidenceRefs": [
+          "meeting:2026-08-01-mma-analysis",
+          "meeting:2026-08-02-mag-editorial"
+        ]
       },
       {
         "agent": "AUDIT",
         "mode": "statement",
-        "sentAt": "2026-08-02T14:18:13.178Z",
-        "text": "Nelze obsadit ranní ani odpolední slot. Paket neobsahuje žádný ověřený FightAIQ soubor, zápas, výsledek, článek ani meeting record. Stylový manuál sám o sobě není zdroj tématu."
+        "sentAt": "2026-08-02T16:04:25.253Z",
+        "text": "Oba sloty musí zůstat zrušené. Balíček uvádí chybějící ranní i večerní subjekt, žádnou prioritu akce a žádný aktuální Stats výstup FightAIQ. Nejsou podklady pro článek v češtině ani angličtině.",
+        "evidenceRefs": [
+          "meeting:2026-08-01-mma-analysis",
+          "meeting:2026-08-02-mag-editorial"
+        ]
       },
       {
         "agent": "CANVAS",
         "mode": "close",
-        "sentAt": "2026-08-02T14:19:13.178Z",
-        "text": "AM: killed; PM: killed"
+        "sentAt": "2026-08-02T16:05:25.253Z",
+        "text": "AM: assigned; PM: killed"
       }
     ]
   }

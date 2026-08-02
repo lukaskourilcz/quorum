@@ -4,14 +4,13 @@
   "slots": [
     {
       "slot": "am",
-      "format": "desk-notes",
+      "format": "fighter-profile",
       "subjectRefs": [
-        "missing:2026-08-02:am"
+        "ufc:valentina-shevchenko"
       ],
-      "rationale": "No new source-backed subject cleared the desk before the morning cutoff.",
+      "rationale": "No card is inside the window, so the desk profiles the best-sourced fighter on file.",
       "assignedWriter": "JAB",
-      "status": "killed",
-      "killedReason": "Missing fresh, source-backed subject."
+      "status": "assigned"
     },
     {
       "slot": "pm",
@@ -27,13 +26,13 @@
   ],
   "vaultVerdicts": [
     {
-      "subjectRef": "missing:2026-08-02:am",
+      "subjectRef": "missing:2026-08-02:pm",
       "verdict": "repeat",
       "evidenceRef": "meeting:2026-08-02-mag-editorial"
     },
     {
-      "subjectRef": "missing:2026-08-02:pm",
-      "verdict": "repeat",
+      "subjectRef": "ufc:valentina-shevchenko",
+      "verdict": "fresh",
       "evidenceRef": "meeting:2026-08-02-mag-editorial"
     }
   ]
