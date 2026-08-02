@@ -33,6 +33,7 @@ needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. All eight are set as of 
 | Symptom | Where to look |
 | --- | --- |
 | A calendar slot is **Skipped** | its tooltip names the gate; `state/meetings/skips/<date>-<phase>.json` |
+| An article slot is **Skipped** | its tooltip carries the run's reason; `state/ventures/mma-files/runs/<date>-<slot>.json` |
 | A calendar slot is **Did not happen** | no run reached it at all — check the Actions run for that hour |
 | Delivery reverted a published article | Actions → **Delivery doctor**, about one minute, read-only |
 | An article was written but not published | `state/ventures/mma-files/runs/<date>-<slot>.json` lists the gate violations |
@@ -84,3 +85,12 @@ Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STE
   names the article's subject.
 - **A failing delivery run costs about 9 minutes instead of 38**, and `Delivery doctor`
   answers the permission question in one.
+- **The day's own account of itself is now true.** The digest reported $0.0693 against a
+  $1.00 budget on a day the ledger held $0.6767, and called the slot that published the
+  Shevchenko profile "not held"; both now read the ledger and the run files. Caught Up judges
+  its draft before paying the Czech desk, so its two configured rewrites are affordable
+  rather than refused instantly. A reverted release reaches the digest and the inbox.
+- **The fighter-profile rescue no longer repeats a subject.** It was deterministic with no
+  repeat check, so a killed slate would have published a second Shevchenko profile every day
+  at the full envelope. Already-published fighters are excluded; when the eligible list runs
+  out the slot stays killed.
