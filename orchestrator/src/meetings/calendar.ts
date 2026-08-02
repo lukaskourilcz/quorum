@@ -5,6 +5,7 @@ import {
   type CalendarFeed
 } from "../contracts/calendar.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
+import { MeetingSkipSchema, type MeetingSkip } from "../contracts/meeting-skip.js";
 import { atomicWriteJson } from "../state.js";
 import { StandupSchema } from "../standup/schema.js";
 import { MEETING_CLOCK, PRAGUE_TIME_ZONE } from "./clock.js";
@@ -78,9 +79,11 @@ function recordReference(record: MeetingRecord): string {
 export function buildCalendarFeed(input: {
   weekOf: string;
   records: readonly MeetingRecord[];
+  skips?: readonly MeetingSkip[];
   now: Date;
 }): CalendarFeed {
   const weekOf = mondayOfWeek(input.weekOf);
+  const skipReasons = new Map((input.skips ?? []).map((skip) => [`${skip.date}:${skip.phase}`, skip.reason]));
   const bySlot = new Map<string, MeetingRecord>();
   for (const record of input.records) {
     const kind = recordKind(record);
@@ -93,13 +96,19 @@ export function buildCalendarFeed(input: {
       const kind = slotKind(definition.phase);
       const at = pragueSlotInstant(date, definition.hour);
       const record = bySlot.get(`${date}:${kind}`);
+      // A slot a gate turned off is not the same as one nobody reached. Both used to read
+      // "missed", which is how eleven meetings could fail to happen on 2 August with nothing
+      // anywhere saying why. The recorded reason is what the calendar shows for a skip.
+      const skip = skipReasons.get(`${date}:${definition.phase}`);
       const status = record?.status === "PAUSED"
         ? "not-needed"
         : record
           ? "held"
-          : at.getTime() < input.now.getTime()
-            ? "missed"
-            : "scheduled";
+          : skip
+            ? "skipped"
+            : at.getTime() < input.now.getTime()
+              ? "missed"
+              : "scheduled";
       slots.push({
         at: at.toISOString(),
         tz: PRAGUE_TIME_ZONE,
@@ -110,7 +119,9 @@ export function buildCalendarFeed(input: {
               meetingRef: recordReference(record),
               decisionOneLiner: record.decision.summary.slice(0, 180)
             }
-          : {})
+          : skip
+            ? { decisionOneLiner: skip.slice(0, 180) }
+            : {})
       });
     }
   }
@@ -125,6 +136,17 @@ async function jsonFiles(directory: string): Promise<string[]> {
   } catch {
     return [];
   }
+}
+
+/** Every recorded skip under a state root, so the calendar can explain a slot nobody opened. */
+export async function loadMeetingSkips(root: string): Promise<MeetingSkip[]> {
+  const files = await jsonFiles(path.join(root, "meetings", "skips"));
+  const skips: MeetingSkip[] = [];
+  for (const file of files) {
+    const parsed = MeetingSkipSchema.safeParse(JSON.parse(await readFile(file, "utf8")));
+    if (parsed.success) skips.push(parsed.data);
+  }
+  return skips;
 }
 
 export async function loadMeetingRecords(root: string): Promise<MeetingRecord[]> {

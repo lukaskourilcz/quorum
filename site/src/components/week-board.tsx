@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   CircleDollarSign,
   CircleMinus,
+  CircleSlash,
   Clock3,
   FileText,
   FlaskConical,
@@ -205,6 +206,17 @@ function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string
       }
     };
   }
+  if (status === "skipped") {
+    return {
+      icon: CircleSlash,
+      label: "Skipped",
+      tone: "text-[color-mix(in_srgb,var(--warning)_58%,var(--paper))]",
+      surface: {
+        backgroundColor: "color-mix(in srgb, var(--warning) 15%, var(--surface))",
+        backgroundImage: "linear-gradient(135deg, color-mix(in srgb, var(--warning) 9%, transparent), transparent 62%)"
+      }
+    };
+  }
   if (status === "not-needed") {
     return {
       icon: CircleMinus,
@@ -393,7 +405,7 @@ export function WeekBoard({
           })}
         </div>
         <div aria-label="Meeting status" className="flex flex-wrap gap-x-4 gap-y-3">
-          {(["held", "missed", "test", "not-needed", "scheduled"] as DisplayStatus[]).map((value) => {
+          {(["held", "missed", "skipped", "test", "not-needed", "scheduled"] as DisplayStatus[]).map((value) => {
             const details = statusDetails(value);
             const StatusIcon = details.icon;
             return (

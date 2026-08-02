@@ -17,7 +17,7 @@ export type CalendarKind =
   | "article-pm"
   | "studio"
   | "venture-night";
-export type CalendarStatus = "scheduled" | "held" | "missed" | "not-needed";
+export type CalendarStatus = "scheduled" | "held" | "missed" | "not-needed" | "skipped";
 
 export interface CalendarDefinition {
   hour: number;
@@ -33,6 +33,13 @@ export interface CalendarSlot {
   meetingHref?: string;
   decisionOneLiner?: string;
   fixture?: boolean;
+}
+
+/** A slot a gate turned off before any room opened, with the reason it gives the reader. */
+export interface PublicMeetingSkip {
+  date: string;
+  phase: string;
+  reason: string;
 }
 
 export interface PublicCalendarFeed {
@@ -113,6 +120,18 @@ export function pragueSlotInstant(date: string, hour: number): Date {
   return new Date(candidate);
 }
 
+/**
+ * The calendar kind a skipped orchestrator phase belongs to.
+ *
+ * A skip is recorded under the phase name the workflow resolved, which for the three company
+ * shifts is "morning", "afternoon" or "night" while the calendar calls them venture-morning
+ * and so on. Every other phase name is already the calendar kind.
+ */
+function skipKind(phase: string): string {
+  if (phase === "morning" || phase === "afternoon" || phase === "night") return `venture-${phase}`;
+  return phase;
+}
+
 function ventureKind(phase: PublicStandup["phase"]): CalendarKind | null {
   if (phase === "morning") return "venture-morning";
   if (phase === "afternoon") return "venture-afternoon";
@@ -125,10 +144,12 @@ export function buildPublicCalendarFeed(input: {
   now: Date;
   standups: readonly PublicStandup[];
   meetings: readonly PublicMeetingRecord[];
+  skips?: readonly PublicMeetingSkip[];
   definitions?: readonly CalendarDefinition[];
 }): PublicCalendarFeed {
   const weekOf = mondayOfCalendarWeek(input.weekOf);
   const definitions = input.definitions ?? CALENDAR_SLOTS;
+  const skipReasons = new Map((input.skips ?? []).map((skip) => [`${skip.date}:${skipKind(skip.phase)}`, skip.reason]));
   const records = new Map<string, { href: string; summary: string; fixture: boolean; status?: PublicMeetingRecord["status"] }>();
   for (const standup of input.standups) {
     const kind = ventureKind(standup.phase);
@@ -156,17 +177,24 @@ export function buildPublicCalendarFeed(input: {
         at: at.toISOString(),
         tz: "Europe/Prague",
         kind: definition.kind,
+        // A slot a gate turned off reads "skipped" and carries the reason, so it is no longer
+        // indistinguishable from one nobody reached. Eleven slots on 2 August showed as plain
+        // "Did not happen" with nothing anywhere explaining any of them.
         status: record?.status === "PAUSED"
           ? "not-needed"
           : record
             ? "held"
-            : at.getTime() < input.now.getTime()
-              ? "missed"
-              : "scheduled",
+            : skipReasons.has(`${date}:${definition.kind}`)
+              ? "skipped"
+              : at.getTime() < input.now.getTime()
+                ? "missed"
+                : "scheduled",
         ...(record ? {
           meetingHref: record.href,
           decisionOneLiner: record.summary,
           fixture: record.fixture
+        } : skipReasons.has(`${date}:${definition.kind}`) ? {
+          decisionOneLiner: skipReasons.get(`${date}:${definition.kind}`)!
         } : {})
       });
     }

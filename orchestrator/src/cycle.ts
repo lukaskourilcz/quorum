@@ -20,7 +20,7 @@ import {
 import { atomicWriteJson, readJson, readText, withFileLock } from "./state.js";
 import {
   buildCalendarFeed,
-  loadMeetingRecords,
+  loadMeetingRecords, loadMeetingSkips,
   mondayOfWeek,
   writeCalendarFeed
 } from "./meetings/calendar.js";
@@ -335,6 +335,7 @@ async function runCaughtUpDryCycle(
   const calendar = buildCalendarFeed({
     weekOf: mondayOfWeek(record.date),
     records: [...priorRecords, record],
+    skips: await loadMeetingSkips(artifactRoot),
     now
   });
   const calendarPath = await writeCalendarFeed(artifactRoot, calendar);
@@ -494,6 +495,7 @@ async function runCaughtUpLiveEditionCycle(
   const calendar = buildCalendarFeed({
     weekOf: mondayOfWeek(date),
     records: [...priorRecords, record],
+    skips: await loadMeetingSkips(stateRoot),
     now
   });
   const calendarPath = await writeCalendarFeed(stateRoot, calendar);
@@ -720,6 +722,7 @@ async function runCaughtUpLiveProductCycle(
   const calendar = buildCalendarFeed({
     weekOf: mondayOfWeek(date),
     records: [...priorRecords, record],
+    skips: await loadMeetingSkips(stateRoot),
     now
   });
   const calendarPath = await writeCalendarFeed(stateRoot, calendar);

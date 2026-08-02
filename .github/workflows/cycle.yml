@@ -153,6 +153,7 @@ jobs:
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
+          skip_reason=""
           delivery_only="${INPUT_DELIVERY_ONLY:-false}"
           if test "$EVENT_NAME" = "schedule"; then
             dry=false
@@ -164,12 +165,14 @@ jobs:
           if test "$phase" = "skip"; then
             skip=true
             dry=true
-            echo "The inactive DST cron variant has no Prague wall-clock meeting."
+            skip_reason="The inactive DST cron variant has no Prague wall-clock meeting."
+            echo "$skip_reason"
           fi
           if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk" || test "$phase" = "studio"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
-              echo "Portfolio meeting crons await explicit owner approval."
+              skip_reason="Portfolio meeting crons await explicit owner approval."
+              echo "$skip_reason"
             else
               schedule_json="$(pnpm --filter @boardlessai/orchestrator exec tsx src/portfolio/schedule-cli.ts --phase "$phase")"
               enabled="$(printf '%s' "$schedule_json" | jq -r '.enabled')"
@@ -181,22 +184,26 @@ jobs:
               echo "MONTHLY_OPERATING_CAP_USD=$monthly_operating" >> "$GITHUB_ENV"
               if test "$enabled" = "false"; then
                 skip=true
-                echo "The countersign-aware budget shape disabled this phase."
+                skip_reason="The countersign-aware budget shape disabled this phase."
+                echo "$skip_reason"
               fi
             fi
           fi
           if test "$dry" != "true" && { test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
             skip=true
-            echo "MMA Files awaits the 08d countersign and explicit live gate."
+            skip_reason="MMA Files awaits the 08d countersign and explicit live gate."
+            echo "$skip_reason"
           fi
           if test "$dry" != "true" && test "$phase" = "mma-intake" && test "$FIGHTAIQ_LIVE_ENABLED" != "true"; then
             skip=true
-            echo "FightAIQ intake awaits the signed founding decision and live gate."
+            skip_reason="FightAIQ intake awaits the signed founding decision and live gate."
+            echo "$skip_reason"
           fi
           if test "$dry" != "true" && test "$phase" = "mma-analysis"; then
             if test "$FIGHTAIQ_LIVE_ENABLED" != "true" || test "$FIGHTAIQ_ANALYSIS_ENABLED" != "true"; then
               skip=true
-              echo "FightAIQ analysis awaits the founding and budget approval gates."
+              skip_reason="FightAIQ analysis awaits the founding and budget approval gates."
+              echo "$skip_reason"
             fi
           fi
           if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
@@ -228,12 +235,32 @@ jobs:
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=$skip_reason" >> "$GITHUB_OUTPUT"
           echo "delivery_only=$delivery_only" >> "$GITHUB_OUTPUT"
 
       # Skipped on a delivery-only dispatch, where "Run cycle" does not run, so this gate and
       # the post-cycle one would compile, test and build a byte-identical tree twice for one
       # answer. The post-cycle gate still runs in full, and every delivery step comes after
       # it, so nothing is delivered from an ungated tree.
+      # A skipped slot has to leave something behind. The reason lived only in this log,
+      # which expires, so the calendar showed eleven slots on 2 August as plain "missed" with
+      # no way to tell a gate decision from a meeting nobody reached.
+      - name: Record why a scheduled meeting was skipped
+        if: ${{ github.event_name == 'schedule' && steps.mode.outputs.skip == 'true' && steps.mode.outputs.phase != 'skip' }}
+        env:
+          PHASE: ${{ steps.mode.outputs.phase }}
+          REASON: ${{ steps.mode.outputs.skip_reason }}
+        run: |
+          pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
+            --phase "$PHASE" --reason "$REASON"
+          if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git add -A -- state/meetings/skips
+            git commit -m "skip(${PHASE}): ${REASON}"
+            git push origin HEAD:main
+          fi
+
       - name: Pre-cycle release gate
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         run: |

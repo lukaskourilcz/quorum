@@ -56,3 +56,34 @@ describe("public CalendarFeed build model", () => {
       .toBe("not-needed");
   });
 });
+
+describe("a skipped slot says why", () => {
+  const base = { weekOf: "2026-08-03", now: new Date("2026-08-04T23:00:00Z"), standups: [], meetings: [] };
+
+  it("reads skipped rather than missed, and carries the reason", () => {
+    // Eleven slots on 2 August showed as "Did not happen" with the reason living only in a
+    // GitHub Actions log that expires.
+    const feed = buildPublicCalendarFeed({
+      ...base,
+      skips: [{ date: "2026-08-04", phase: "tt-marketing", reason: "Portfolio meeting crons await explicit owner approval." }]
+    });
+    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "tt-marketing");
+    expect(slot?.status).toBe("skipped");
+    expect(slot?.decisionOneLiner).toBe("Portfolio meeting crons await explicit owner approval.");
+  });
+
+  it("maps a company shift onto its calendar kind", () => {
+    const feed = buildPublicCalendarFeed({
+      ...base,
+      skips: [{ date: "2026-08-04", phase: "morning", reason: "The countersign-aware budget shape disabled this phase." }]
+    });
+    expect(feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "venture-morning")?.status).toBe("skipped");
+  });
+
+  it("leaves a slot nobody skipped exactly as it was", () => {
+    const feed = buildPublicCalendarFeed({ ...base, skips: [] });
+    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "tt-marketing");
+    expect(slot?.status).toBe("missed");
+    expect(slot?.decisionOneLiner).toBeUndefined();
+  });
+});

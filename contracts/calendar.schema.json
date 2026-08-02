@@ -51,7 +51,8 @@
               "scheduled",
               "held",
               "missed",
-              "not-needed"
+              "not-needed",
+              "skipped"
             ]
           },
           "meetingRef": {
