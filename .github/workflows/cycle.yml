@@ -77,6 +77,18 @@ jobs:
       PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
       PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
       GITHUB_TOKEN: ${{ github.token }}
+      # The live switches must reach the cycle itself, not only the step that decides
+      # whether to skip. They were declared on "Resolve guarded cycle mode" alone, so a
+      # dispatched mma-intake passed the skip check and then paused itself:
+      # portfolio/run.ts:467 reads process.env.PORTFOLIO_LIVE_ENABLED, saw undefined and
+      # returned status "paused" with zero agents. cycle.ts:847 re-checks the MMA switch the
+      # same way. That silently blocked every portfolio phase — tt-marketing, both incubator
+      # rooms, mma-intake, mma-analysis, mag-editorial, mag-desk and studio.
+      CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
+      PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
+      FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
+      FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
+      MMA_FILES_LIVE_ENABLED: ${{ vars.MMA_FILES_LIVE_ENABLED }}
       MONTHLY_OPERATING_CAP_USD: "30"
       MAX_CYCLE_BUDGET_USD: "0.20"
       CU_MEETING_BUDGET_USD: "0.08"
