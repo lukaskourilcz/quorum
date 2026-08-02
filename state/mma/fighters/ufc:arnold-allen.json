@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Arnold_Allen",
       "publisher": "Wikipedia",
       "title": "Arnold Allen",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,43 @@
       "sourceRefs": [
         "source:wikipedia:49598119"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 177.8,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Bantamweight",
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "BKK Fighters, UK Tristar Gym",
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "21-4-0",
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,29 +87,430 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-3344a28684dbebe66c6a",
+      "eventRef": "ufc:event:history-ultimate-challenge-mma-27",
+      "happenedAt": "2012-04-07T00:00:00.000Z",
+      "opponentRef": "ufc:nathan-greyson",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 340,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-13293139e2b0fd861282",
+      "eventRef": "ufc:event:history-ultimate-warrior-challenge-21",
+      "happenedAt": "2012-10-20T00:00:00.000Z",
+      "opponentRef": "ufc:kim-thinghaugen",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 1,
+      "elapsedSeconds": 300,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ecee018adad9b1313253",
+      "eventRef": "ufc:event:history-ultimate-challenge-mma-32",
+      "happenedAt": "2013-02-02T00:00:00.000Z",
+      "opponentRef": "ufc:carl-orriss",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c408c83cf3018b06de4b",
+      "eventRef": "ufc:event:history-cage-warriors-56",
+      "happenedAt": "2013-07-06T00:00:00.000Z",
+      "opponentRef": "ufc:andy-green",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 240,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-624e86e18aa500d5c319",
+      "eventRef": "ufc:event:history-cage-warriors-60",
+      "happenedAt": "2013-10-05T00:00:00.000Z",
+      "opponentRef": "ufc:declan-williams",
+      "result": "win",
+      "method": "Submission (triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 590,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bdd86343f04d2344666e",
+      "eventRef": "ufc:event:history-cage-warriors-61",
+      "happenedAt": "2013-12-13T00:00:00.000Z",
+      "opponentRef": "ufc:doni-miller",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 334,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b87567d3d5230f06926b",
+      "eventRef": "ufc:event:history-cage-warriors-fight-night-11",
+      "happenedAt": "2014-04-18T00:00:00.000Z",
+      "opponentRef": "ufc:tobias-huber",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 37,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-dcb1eb0efbd4cdbd7dca",
+      "eventRef": "ufc:event:history-cage-warriors-69",
+      "happenedAt": "2014-06-07T00:00:00.000Z",
+      "opponentRef": "ufc:marcin-wrzosek",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2d6033ce71c063540b88",
+      "eventRef": "ufc:event:history-cage-warriors-71",
+      "happenedAt": "2014-08-22T00:00:00.000Z",
+      "opponentRef": "ufc:gaetano-pirello",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0912eecf908d486f8ad8",
+      "eventRef": "ufc:event:history-made-4-the-cage-15",
+      "happenedAt": "2014-11-29T00:00:00.000Z",
+      "opponentRef": "ufc:paul-cook",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-725785a8d7f8d837c79b",
+      "eventRef": "ufc:event:history-ufc-fight-night-jedrzejczyk-vs-penne",
+      "happenedAt": "2015-06-20T00:00:00.000Z",
+      "opponentRef": "ufc:alan-omer",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 3,
+      "elapsedSeconds": 701,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8eec806fca9ba3ca1e31",
+      "eventRef": "ufc:event:history-ufc-fight-night-silva-vs-bisping",
+      "happenedAt": "2016-02-27T00:00:00.000Z",
+      "opponentRef": "ufc:yaotzin-meza",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3e2f59e925f66508327b",
+      "eventRef": "ufc:event:history-ufc-fight-night-manuwa-vs-anderson",
+      "happenedAt": "2017-03-18T00:00:00.000Z",
+      "opponentRef": "ufc:makwan-amirkhani",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-40f0d529754abac95b73",
+      "eventRef": "ufc:event:history-ufc-fight-night-thompson-vs-till",
+      "happenedAt": "2018-05-27T00:00:00.000Z",
+      "opponentRef": "ufc:mads-burnell",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 3,
+      "elapsedSeconds": 761,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c56da2054b076c556261",
+      "eventRef": "ufc:event:history-ufc-fight-night-till-vs-masvidal",
+      "happenedAt": "2019-03-16T00:00:00.000Z",
+      "opponentRef": "ufc:jordan-rinaldi",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a1312bb649e5c74eec00",
+      "eventRef": "ufc:event:history-ufc-239",
+      "happenedAt": "2019-07-06T00:00:00.000Z",
+      "opponentRef": "ufc:gilbert-melendez",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-60858dece7421183efac",
+      "eventRef": "ufc:event:history-ufc-fight-night-blaydes-vs-dos-santos",
+      "happenedAt": "2020-01-25T00:00:00.000Z",
+      "opponentRef": "ufc:nik-lentz",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-80c20664b21903d5cbf9",
+      "eventRef": "ufc:event:history-ufc-on-abc-vettori-vs-holland",
+      "happenedAt": "2021-04-10T00:00:00.000Z",
+      "opponentRef": "ufc:sodiq-yusuff",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3c268b97d9d8404cad33",
+      "eventRef": "ufc:event:history-ufc-fight-night-volkov-vs-aspinall",
+      "happenedAt": "2022-03-19T00:00:00.000Z",
+      "opponentRef": "ufc:dan-hooker",
+      "result": "win",
+      "method": "TKO (punches and elbows)",
+      "round": 1,
+      "elapsedSeconds": 153,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bb346f61b37943d49e44",
+      "eventRef": "ufc:event:history-ufc-fight-night-kattar-vs-allen",
+      "happenedAt": "2022-10-29T00:00:00.000Z",
+      "opponentRef": "ufc:calvin-kattar",
+      "result": "win",
+      "method": "TKO (knee injury)",
+      "round": 2,
+      "elapsedSeconds": 308,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4619543dd1aa641c9f0f",
+      "eventRef": "ufc:event:history-ufc-on-espn-holloway-vs-allen",
+      "happenedAt": "2023-04-15T00:00:00.000Z",
+      "opponentRef": "ufc:max-holloway",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b3533621e4fbacb81e6a",
+      "eventRef": "ufc:event:history-ufc-297",
+      "happenedAt": "2024-01-20T00:00:00.000Z",
+      "opponentRef": "ufc:movsar-evloev",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-cdb4868c00382393ee30",
+      "eventRef": "ufc:event:history-ufc-304",
+      "happenedAt": "2024-07-27T00:00:00.000Z",
+      "opponentRef": "ufc:giga-chikadze",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0b86d0fa658bc30a9fca",
+      "eventRef": "ufc:event:history-ufc-324",
+      "happenedAt": "2026-01-24T00:00:00.000Z",
+      "opponentRef": "ufc:jean-silva",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c173a3a0fd2b19f87a68",
+      "eventRef": "ufc:event:history-ufc-fight-night-allen-vs-costa",
+      "happenedAt": "2026-05-16T00:00:00.000Z",
+      "opponentRef": "ufc:melquizael-costa",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:arnold-allen:history",
+      "bouts": 25,
+      "values": {
+        "bouts": 25,
+        "wins": 21,
+        "losses": 4,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.52381,
+        "koTkoWins": 7,
+        "submissionWins": 4,
+        "decisionWins": 10,
+        "koTkoWinShare": 0.333333,
+        "submissionWinShare": 0.190476,
+        "decisionWinShare": 0.47619,
+        "averageElapsedSeconds": 726.56,
+        "recentThreeWinRate": 0.666667,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 1.70144,
+        "layoffDays": 78
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1935.48981006,
+    "deviation": 120.77459021,
+    "volatility": 0.05999647,
+    "boutCount": 25,
+    "asOfBoutRef": "ufc:bout:history-c173a3a0fd2b19f87a68",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
       "stance",
       "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "dateOfBirth"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +535,40 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 25 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.625,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

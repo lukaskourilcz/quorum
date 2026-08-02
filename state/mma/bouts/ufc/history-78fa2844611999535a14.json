@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-78fa2844611999535a14",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-fight-nights-global-58",
+    "name": "Fight Nights Global 58",
+    "startsAtUtc": "2017-01-28T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:asu-almabayev",
+    "blue": "ufc:tagir-ulanbekov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-01-28T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:77593874"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (submission to punches)",
+    "round": 3,
+    "elapsedSeconds": 891,
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

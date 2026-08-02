@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-02635cb181179133107b",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ckf-66",
+    "name": "CKF 66",
+    "startsAtUtc": "2016-05-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aori-qileng",
+    "blue": "ufc:siwuhaer-husiman"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-05-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:70178359"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:70178359"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (rear-naked choke)",
+    "round": 1,
+    "elapsedSeconds": 84,
+    "sourceRefs": [
+      "source:wikipedia:70178359"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

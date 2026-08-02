@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3344a28684dbebe66c6a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ultimate-challenge-mma-27",
+    "name": "Ultimate Challenge MMA 27",
+    "startsAtUtc": "2012-04-07T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:arnold-allen",
+    "blue": "ufc:nathan-greyson"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2012-04-07T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:49598119"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:49598119"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punch)",
+    "round": 2,
+    "elapsedSeconds": 340,
+    "sourceRefs": [
+      "source:wikipedia:49598119"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

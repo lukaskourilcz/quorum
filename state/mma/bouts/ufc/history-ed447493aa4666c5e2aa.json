@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ed447493aa4666c5e2aa",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-fusao-de-artes-marciais-3",
+    "name": "Fusão de Artes Marciais 3",
+    "startsAtUtc": "2014-07-17T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amanda-lemos",
+    "blue": "ufc:laura-falcao"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2014-07-17T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64535234"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64535234"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 263,
+    "sourceRefs": [
+      "source:wikipedia:64535234"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

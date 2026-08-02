@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Ateba_Gautier",
       "publisher": "Wikipedia",
       "title": "Ateba Gautier",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,52 @@
       "sourceRefs": [
         "source:wikipedia:82864883"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 205.74,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Middleweight",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "switch",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Manchester Top Team",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "11-1-0",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,29 +96,234 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-c74008b68d127681c46d",
+      "eventRef": "ufc:event:history-africa-mma-open-championships",
+      "happenedAt": "2021-05-15T00:00:00.000Z",
+      "opponentRef": "ufc:israel-mano",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f94b819027c902ca6a88",
+      "eventRef": "ufc:event:history-budo-fc-50",
+      "happenedAt": "2022-07-23T00:00:00.000Z",
+      "opponentRef": "ufc:glenn-williams",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6be9a6eb27e60f2c4b5f",
+      "eventRef": "ufc:event:history-vida-fc-3",
+      "happenedAt": "2022-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:jan-lysak",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 278,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-faa04b3115b33de9e293",
+      "eventRef": "ufc:event:history-full-contact-contender-33",
+      "happenedAt": "2023-03-25T00:00:00.000Z",
+      "opponentRef": "ufc:yu-joe-lewis-lai",
+      "result": "win",
+      "method": "TKO (punches and knee)",
+      "round": 1,
+      "elapsedSeconds": 130,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3b42ce8c87bc17f17970",
+      "eventRef": "ufc:event:history-titan-fc-82",
+      "happenedAt": "2023-06-02T00:00:00.000Z",
+      "opponentRef": "ufc:vuk-lekic",
+      "result": "win",
+      "method": "KO (head kick)",
+      "round": 1,
+      "elapsedSeconds": 118,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7c843fa21a3e2fbb563f",
+      "eventRef": "ufc:event:history-fight-klb-series-1",
+      "happenedAt": "2023-12-02T00:00:00.000Z",
+      "opponentRef": "ufc:carlos-antonio-de-souza",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 300,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ca53d4cde8a66a5a1b22",
+      "eventRef": "ufc:event:history-dana-white-s-contender-series-72",
+      "happenedAt": "2024-09-17T00:00:00.000Z",
+      "opponentRef": "ufc:yura-naito",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 540,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-29e73648bfc6547299ae",
+      "eventRef": "ufc:event:history-ufc-on-espn-moreno-vs-erceg",
+      "happenedAt": "2025-03-29T00:00:00.000Z",
+      "opponentRef": "ufc:jose-medina",
+      "result": "win",
+      "method": "KO (punches and knee)",
+      "round": 1,
+      "elapsedSeconds": 212,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-86ab3e55ffdd13690725",
+      "eventRef": "ufc:event:history-ufc-318",
+      "happenedAt": "2025-07-19T00:00:00.000Z",
+      "opponentRef": "ufc:robert-valentin",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 70,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5c9de25724295592962c",
+      "eventRef": "ufc:event:history-ufc-320",
+      "happenedAt": "2025-10-04T00:00:00.000Z",
+      "opponentRef": "ufc:tre-ston-vines",
+      "result": "win",
+      "method": "KO (elbows and punches)",
+      "round": 1,
+      "elapsedSeconds": 101,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6657ef5b425ed2c368d5",
+      "eventRef": "ufc:event:history-ufc-324",
+      "happenedAt": "2026-01-24T00:00:00.000Z",
+      "opponentRef": "ufc:andrey-pulyaev",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-709388b2a6d897739876",
+      "eventRef": "ufc:event:history-ufc-328",
+      "happenedAt": "2026-05-09T00:00:00.000Z",
+      "opponentRef": "ufc:osman-diaz",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 370,
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:ateba-gautier:history",
+      "bouts": 12,
+      "values": {
+        "bouts": 12,
+        "wins": 11,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.818182,
+        "koTkoWins": 9,
+        "submissionWins": 0,
+        "decisionWins": 2,
+        "koTkoWinShare": 0.818182,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0.181818,
+        "averageElapsedSeconds": 401.583333,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 2.20751,
+        "layoffDays": 85
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1900.23039092,
+    "deviation": 152.09723676,
+    "volatility": 0.05999384,
+    "boutCount": 12,
+    "asOfBoutRef": "ufc:bout:history-709388b2a6d897739876",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "dateOfBirth"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +348,41 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 12 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.75,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

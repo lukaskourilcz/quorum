@@ -9,27 +9,44 @@
     "wikidataId": null,
     "wikipediaTitle": "Tom Aspinall",
     "externalIds": {
-      "wikipediaPageId": "66304460"
+      "wikipediaPageId": "66304460",
+      "cito": "62d43a97-f4dc-45e3-9e09-f301582f409f"
     }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-02",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:66304460"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
       ]
     }
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Tom Aspinall",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikipedia:66304460",
       "url": "https://en.wikipedia.org/wiki/Tom_Aspinall",
       "publisher": "Wikipedia",
       "title": "Tom Aspinall",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -38,9 +55,37 @@
     "name": {
       "value": "Tom Aspinall",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f",
         "source:wikipedia:66304460"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "heavyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "15-3-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -50,7 +95,22 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "15-3-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
+        },
+        {
+          "value": "1-0-0",
+          "sourceRef": "derived:ufc:tom-aspinall:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-6feffbe2073d8054e5f5",
@@ -95,7 +155,7 @@
         "fightsPerYear": 365.25,
         "layoffDays": 2122
       },
-      "updatedAt": "2026-08-02T14:14:59.647Z"
+      "updatedAt": "2026-08-02T15:43:59.798Z"
     }
   ],
   "rating": {
@@ -105,18 +165,16 @@
     "volatility": 0.06000037,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-6feffbe2073d8054e5f5",
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "heightCm",
       "reachCm",
       "dateOfBirth",
-      "team"
+      "team",
+      "record-history-mismatch"
     ],
     "lastReviewedAt": null
   },
@@ -158,11 +216,51 @@
         "source:wikipedia:69880085"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:69880085"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
-  "corroboration": 0,
+  "completeness": 0.5,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

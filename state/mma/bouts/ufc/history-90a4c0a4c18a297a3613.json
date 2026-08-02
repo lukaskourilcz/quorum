@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-90a4c0a4c18a297a3613",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-glory-of-heroes-7",
+    "name": "Glory of Heroes 7",
+    "startsAtUtc": "2017-03-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ariane-carnelossi",
+    "blue": "ufc:feier-huang"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-03-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:68442521"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:68442521"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 585,
+    "sourceRefs": [
+      "source:wikipedia:68442521"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

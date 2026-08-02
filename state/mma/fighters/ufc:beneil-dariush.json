@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Beneil_Dariush",
       "publisher": "Wikipedia",
       "title": "Beneil Dariush",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,61 @@
       "sourceRefs": [
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1989-05-06",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "heightCm": {
+      "value": 25.4,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 182.88,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Lightweight",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Kings MMA",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "23-8-1",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,29 +105,533 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-105bf1429d86ad6b9bd9",
+      "eventRef": "ufc:event:history-respect-in-the-cage-2",
+      "happenedAt": "2009-11-20T00:00:00.000Z",
+      "opponentRef": "ufc:jordan-betts",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2f564b7d0f565fa030c6",
+      "eventRef": "ufc:event:history-respect-in-the-cage-8",
+      "happenedAt": "2010-10-08T00:00:00.000Z",
+      "opponentRef": "ufc:vance-bejarano",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b62f1516f9a595c6b766",
+      "eventRef": "ufc:event:history-samurai-mma-pro-2011",
+      "happenedAt": "2011-10-21T00:00:00.000Z",
+      "opponentRef": "ufc:dominic-gutierrez",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 76,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6f66f89603d1898903ee",
+      "eventRef": "ufc:event:history-high-fight-rock-2",
+      "happenedAt": "2012-10-27T00:00:00.000Z",
+      "opponentRef": "ufc:gilberto-dos-santos",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 1,
+      "elapsedSeconds": 243,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-fb1e6afe66f70a1d4e06",
+      "eventRef": "ufc:event:history-respect-in-the-cage-19",
+      "happenedAt": "2013-01-19T00:00:00.000Z",
+      "opponentRef": "ufc:trace-gray",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 36,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b86d192047f19a34514c",
+      "eventRef": "ufc:event:history-respect-in-the-cage-20",
+      "happenedAt": "2013-05-04T00:00:00.000Z",
+      "opponentRef": "ufc:jason-meaders",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 543,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-36fcf185c786b207ee3f",
+      "eventRef": "ufc:event:history-ufc-fight-night-rockhold-vs-philippou",
+      "happenedAt": "2014-01-14T00:00:00.000Z",
+      "opponentRef": "ufc:charlie-brenneman",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 105,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f5aeabdeb8570d4a79c4",
+      "eventRef": "ufc:event:history-ufc-fight-night-nogueira-vs-nelson",
+      "happenedAt": "2014-04-11T00:00:00.000Z",
+      "opponentRef": "ufc:ramsey-nijem",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 260,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-97393a20e907e959df9a",
+      "eventRef": "ufc:event:history-ufc-fight-night-henderson-vs-dos-anjos",
+      "happenedAt": "2014-08-23T00:00:00.000Z",
+      "opponentRef": "ufc:anthony-rocco-martin",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 518,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8ebe5438899dc949624c",
+      "eventRef": "ufc:event:history-ufc-179",
+      "happenedAt": "2014-10-25T00:00:00.000Z",
+      "opponentRef": "ufc:carlos-diego-ferreira",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-673d91dd18e9a648b4fc",
+      "eventRef": "ufc:event:history-ufc-185",
+      "happenedAt": "2015-03-14T00:00:00.000Z",
+      "opponentRef": "ufc:daron-cruickshank",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 468,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-70061c9b1f9708e80709",
+      "eventRef": "ufc:event:history-ufc-on-fox-machida-vs-rockhold",
+      "happenedAt": "2015-04-18T00:00:00.000Z",
+      "opponentRef": "ufc:jim-miller",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-be5cabdec23f2d8c29e1",
+      "eventRef": "ufc:event:history-ufc-fight-night-teixeira-vs-saint-preux",
+      "happenedAt": "2015-08-08T00:00:00.000Z",
+      "opponentRef": "ufc:michael-johnson",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d3faebc6018a69be21c3",
+      "eventRef": "ufc:event:history-ufc-on-fox-teixeira-vs-evans",
+      "happenedAt": "2016-04-16T00:00:00.000Z",
+      "opponentRef": "ufc:michael-chiesa",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 380,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-19ca4e6428a2e52872b8",
+      "eventRef": "ufc:event:history-ufc-199",
+      "happenedAt": "2016-06-04T00:00:00.000Z",
+      "opponentRef": "ufc:james-vick",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 256,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-1451dd752249e63c4520",
+      "eventRef": "ufc:event:history-the-ultimate-fighter-latin-america-3-finale-dos-anjos-vs-ferguson",
+      "happenedAt": "2016-11-05T00:00:00.000Z",
+      "opponentRef": "ufc:rashid-magomedov",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3bd9c461a23d14fc8484",
+      "eventRef": "ufc:event:history-ufc-fight-night-belfort-vs-gastelum",
+      "happenedAt": "2017-03-11T00:00:00.000Z",
+      "opponentRef": "ufc:edson-barboza",
+      "result": "loss",
+      "method": "KO (knee)",
+      "round": 2,
+      "elapsedSeconds": 515,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5d15dd1f981537bbdf61",
+      "eventRef": "ufc:event:history-ufc-216",
+      "happenedAt": "2017-10-07T00:00:00.000Z",
+      "opponentRef": "ufc:evan-dunham",
+      "result": "draw",
+      "method": "Draw (majority)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ced4ed2502c980dd9bb9",
+      "eventRef": "ufc:event:history-ufc-222",
+      "happenedAt": "2018-03-03T00:00:00.000Z",
+      "opponentRef": "ufc:alexander-hernandez",
+      "result": "loss",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 42,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ba148d4f082e7b63c41e",
+      "eventRef": "ufc:event:history-ufc-fight-night-the-korean-zombie-vs-rodriguez",
+      "happenedAt": "2018-11-10T00:00:00.000Z",
+      "opponentRef": "ufc:thiago-moises",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-af7097b0b3dc98d932de",
+      "eventRef": "ufc:event:history-ufc-fight-night-lewis-vs-dos-santos",
+      "happenedAt": "2019-03-09T00:00:00.000Z",
+      "opponentRef": "ufc:drew-dober",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 2,
+      "elapsedSeconds": 581,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-365b2ca52afc9a8661f9",
+      "eventRef": "ufc:event:history-ufc-fight-night-maia-vs-askren",
+      "happenedAt": "2019-10-26T00:00:00.000Z",
+      "opponentRef": "ufc:frank-camacho",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 122,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-fa5c39e6aa5d8e66ce98",
+      "eventRef": "ufc:event:history-ufc-248",
+      "happenedAt": "2020-03-07T00:00:00.000Z",
+      "opponentRef": "ufc:drakkar-klose",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 360,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-80dabd13c3a465f6a1a7",
+      "eventRef": "ufc:event:history-ufc-fight-night-lewis-vs-oleinik",
+      "happenedAt": "2020-08-08T00:00:00.000Z",
+      "opponentRef": "ufc:scott-holtzman",
+      "result": "win",
+      "method": "KO (spinning back fist)",
+      "round": 1,
+      "elapsedSeconds": 278,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b6309816a2ed2a816c79",
+      "eventRef": "ufc:event:history-ufc-fight-night-overeem-vs-volkov",
+      "happenedAt": "2021-02-06T00:00:00.000Z",
+      "opponentRef": "ufc:carlos-diego-ferreira",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-938e7f0731ba28b8d428",
+      "eventRef": "ufc:event:history-ufc-262",
+      "happenedAt": "2021-05-15T00:00:00.000Z",
+      "opponentRef": "ufc:tony-ferguson",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a57f6c8e35e7acf5ff2c",
+      "eventRef": "ufc:event:history-ufc-280",
+      "happenedAt": "2022-10-22T00:00:00.000Z",
+      "opponentRef": "ufc:mateusz-gamrot",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3a9a2f967bf677f23fd1",
+      "eventRef": "ufc:event:history-ufc-289",
+      "happenedAt": "2023-06-10T00:00:00.000Z",
+      "opponentRef": "ufc:charles-oliveira",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 250,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-46e16b3c26a518f614c9",
+      "eventRef": "ufc:event:history-ufc-on-espn-dariush-vs-tsarukyan",
+      "happenedAt": "2023-12-02T00:00:00.000Z",
+      "opponentRef": "ufc:arman-tsarukyan",
+      "result": "loss",
+      "method": "KO (knee and punches)",
+      "round": 1,
+      "elapsedSeconds": 64,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-878f2f1a9da2bdc6fbe3",
+      "eventRef": "ufc:event:history-ufc-317",
+      "happenedAt": "2025-06-28T00:00:00.000Z",
+      "opponentRef": "ufc:renato-moicano",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a775e4f676b95106dbba",
+      "eventRef": "ufc:event:history-ufc-322",
+      "happenedAt": "2025-11-15T00:00:00.000Z",
+      "opponentRef": "ufc:benoit-saint-denis",
+      "result": "loss",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 16,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0ece9616e00d6efdfbac",
+      "eventRef": "ufc:event:history-ufc-fight-night-della-maddalena-vs-prates",
+      "happenedAt": "2026-05-02T00:00:00.000Z",
+      "opponentRef": "ufc:quillan-salkilld",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 209,
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:beneil-dariush:history",
+      "bouts": 32,
+      "values": {
+        "bouts": 32,
+        "wins": 23,
+        "losses": 8,
+        "draws": 1,
+        "noContests": 0,
+        "finishRate": 0.565217,
+        "koTkoWins": 5,
+        "submissionWins": 8,
+        "decisionWins": 10,
+        "koTkoWinShare": 0.217391,
+        "submissionWinShare": 0.347826,
+        "decisionWinShare": 0.434783,
+        "averageElapsedSeconds": 491.032258,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.2,
+        "fightsPerYear": 1.884887,
+        "layoffDays": 92
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1728.54794729,
+    "deviation": 112.94010631,
+    "volatility": 0.06000493,
+    "boutCount": 31,
+    "asOfBoutRef": "ufc:bout:history-0ece9616e00d6efdfbac",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
-      "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "stance"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +656,42 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 32 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.875,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

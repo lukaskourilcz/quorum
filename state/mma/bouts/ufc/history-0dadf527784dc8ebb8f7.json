@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-0dadf527784dc8ebb8f7",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-lemos-vs-jandiroba",
+    "name": "UFC on ESPN: Lemos vs. Jandiroba",
+    "startsAtUtc": "2024-07-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amanda-lemos",
+    "blue": "ufc:virna-jandiroba"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-07-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64535234"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64535234"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (armbar)",
+    "round": 2,
+    "elapsedSeconds": 588,
+    "sourceRefs": [
+      "source:wikipedia:64535234"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

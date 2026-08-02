@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-5c9de25724295592962c",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-320",
+    "name": "UFC 320",
+    "startsAtUtc": "2025-10-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ateba-gautier",
+    "blue": "ufc:tre-ston-vines"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-10-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:82864883"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:82864883"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (elbows and punches)",
+    "round": 1,
+    "elapsedSeconds": 101,
+    "sourceRefs": [
+      "source:wikipedia:82864883"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

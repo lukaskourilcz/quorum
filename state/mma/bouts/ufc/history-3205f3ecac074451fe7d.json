@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3205f3ecac074451fe7d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ultimate-challenge-mma-44",
+    "name": "Ultimate Challenge MMA 44",
+    "startsAtUtc": "2015-09-05T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amir-albazi",
+    "blue": "ufc:niko-gjoka"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-09-05T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64585580"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (slam)",
+    "round": 2,
+    "elapsedSeconds": 441,
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

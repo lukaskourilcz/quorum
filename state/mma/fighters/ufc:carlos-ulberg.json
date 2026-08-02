@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:carlos-ulberg",
+  "slug": "carlos-ulberg",
+  "org": "ufc",
+  "canonicalName": "Carlos Ulberg",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "421d5615-52f9-44ee-9094-67b8291229fc"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Carlos Ulberg",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Carlos Ulberg",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "light-heavyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "15-1-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

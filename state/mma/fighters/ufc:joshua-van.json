@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:joshua-van",
+  "slug": "joshua-van",
+  "org": "ufc",
+  "canonicalName": "Joshua Van",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "c0815ed6-d86d-46dc-b861-83105d81a842"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Joshua Van",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Joshua Van",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "flyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "17-2-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

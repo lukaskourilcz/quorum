@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:chris-honeycutt",
+  "slug": "chris-honeycutt",
+  "org": "ufc",
+  "canonicalName": "Chris Honeycutt",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:79879282",
+      "url": "https://en.wikipedia.org/wiki/Azamat_Bekoev",
+      "publisher": "Wikipedia",
+      "title": "Chris Honeycutt",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Chris Honeycutt",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-00730c424fbb64450ab3",
+      "eventRef": "ufc:event:history-aca-122",
+      "happenedAt": "2021-04-23T00:00:00.000Z",
+      "opponentRef": "ufc:azamat-bekoev",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 573,
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:chris-honeycutt:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 573,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 365.25,
+        "layoffDays": 1927
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1422.2680726,
+    "deviation": 287.96515313,
+    "volatility": 0.05999909,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-00730c424fbb64450ab3",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

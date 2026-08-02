@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8dc50fa2de13a66119f4",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-zaleev-fight-team-moscow-rumble-open-cup-5",
+    "name": "Zaleev Fight Team: Moscow Rumble Open Cup 5",
+    "startsAtUtc": "2015-09-27T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:azamat-bekoev",
+    "blue": "ufc:alexey-maslov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-09-27T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:79879282"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (north-south choke)",
+    "round": 1,
+    "elapsedSeconds": 179,
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

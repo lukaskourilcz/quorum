@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:sean-strickland",
+  "slug": "sean-strickland",
+  "org": "ufc",
+  "canonicalName": "Sean Strickland",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "30c02a93-8f0e-4f60-971b-a8075e82caa6"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Sean Strickland",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Sean Strickland",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "middleweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "31-7-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

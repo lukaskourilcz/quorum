@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-f771e77af7379a944334",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-alash-pride-fc-selection-13",
+    "name": "Alash Pride FC: Selection 13",
+    "startsAtUtc": "2016-02-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:asu-almabayev",
+    "blue": "ufc:yeldos-kaliev"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-02-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:77593874"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 272,
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

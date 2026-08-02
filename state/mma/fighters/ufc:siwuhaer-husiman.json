@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:siwuhaer-husiman",
+  "slug": "siwuhaer-husiman",
+  "org": "ufc",
+  "canonicalName": "Siwuhaer Husiman",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:70178359",
+      "url": "https://en.wikipedia.org/wiki/Aori_Qileng",
+      "publisher": "Wikipedia",
+      "title": "Siwuhaer Husiman",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Siwuhaer Husiman",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-02635cb181179133107b",
+      "eventRef": "ufc:event:history-ckf-66",
+      "happenedAt": "2016-05-04T00:00:00.000Z",
+      "opponentRef": "ufc:aori-qileng",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 84,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:siwuhaer-husiman:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 0,
+        "submissionWins": 1,
+        "decisionWins": 0,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 1,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 84,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 3742
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1712.93700736,
+    "deviation": 274.96833977,
+    "volatility": 0.05999996,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-02635cb181179133107b",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Andre_Fili",
       "publisher": "Wikipedia",
       "title": "Andre Fili",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,52 @@
       "sourceRefs": [
         "source:wikipedia:40814604"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1990-06-25",
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 187.96,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Featherweight",
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Team Alpha Male",
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "25-13-0 (1 NC)",
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -50,30 +95,671 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "25-13-0 (1 NC)",
+          "sourceRef": "source:wikipedia:40814604"
+        },
+        {
+          "value": "25-14-0 (1 NC)",
+          "sourceRef": "derived:ufc:andre-fili:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-36cc69670671cbd825b2",
+      "eventRef": "ufc:event:history-gladiator-challenge-chain-reaction",
+      "happenedAt": "2009-12-12T00:00:00.000Z",
+      "opponentRef": "ufc:anthony-motley",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 61,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-87411aaa664fdbcaaa0b",
+      "eventRef": "ufc:event:history-gladiator-challenge-domination",
+      "happenedAt": "2010-03-06T00:00:00.000Z",
+      "opponentRef": "ufc:cain-campos",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 16,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-85331cda98ecb6c90d82",
+      "eventRef": "ufc:event:history-gladiator-challenge-champions",
+      "happenedAt": "2010-05-01T00:00:00.000Z",
+      "opponentRef": "ufc:justin-smitley",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 401,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6e2a514cf6a4e0f0aecc",
+      "eventRef": "ufc:event:history-rebel-fighter-delima-vs-christensen",
+      "happenedAt": "2010-08-21T00:00:00.000Z",
+      "opponentRef": "ufc:tony-reveles",
+      "result": "win",
+      "method": "KO (head kick)",
+      "round": 1,
+      "elapsedSeconds": 61,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a9db66888430ef8a7a43",
+      "eventRef": "ufc:event:history-rebel-fighter-domination",
+      "happenedAt": "2010-10-02T00:00:00.000Z",
+      "opponentRef": "ufc:derrick-burnsed",
+      "result": "loss",
+      "method": "TKO (knee injury)",
+      "round": 5,
+      "elapsedSeconds": 1282,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-af16d2db2e19923f665e",
+      "eventRef": "ufc:event:history-capitol-fc-fall-classic",
+      "happenedAt": "2011-10-08T00:00:00.000Z",
+      "opponentRef": "ufc:tony-rios",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5f58f5e95100a60f302c",
+      "eventRef": "ufc:event:history-west-coast-fc-bruvado-bash",
+      "happenedAt": "2012-01-07T00:00:00.000Z",
+      "opponentRef": "ufc:vaymond-dennis",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 2,
+      "elapsedSeconds": 411,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d4858f160348cb11b03b",
+      "eventRef": "ufc:event:history-cage-combat-fc-the-return",
+      "happenedAt": "2012-03-03T00:00:00.000Z",
+      "opponentRef": "ufc:alexander-crispim",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-85ddf54250c1a9c07db5",
+      "eventRef": "ufc:event:history-kotc-all-in",
+      "happenedAt": "2012-04-21T00:00:00.000Z",
+      "opponentRef": "ufc:matt-muramoto",
+      "result": "win",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 119,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-117017053b3fac15aea0",
+      "eventRef": "ufc:event:history-west-coast-fc-showdown",
+      "happenedAt": "2012-06-09T00:00:00.000Z",
+      "opponentRef": "ufc:jesse-bowen",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 177,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c854326c9c22ae6e3530",
+      "eventRef": "ufc:event:history-tachi-palace-fights-14",
+      "happenedAt": "2012-09-07T00:00:00.000Z",
+      "opponentRef": "ufc:ricky-wallace",
+      "result": "win",
+      "method": "Technical Submission (armbar)",
+      "round": 2,
+      "elapsedSeconds": 548,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-9f343b6669ac5c973232",
+      "eventRef": "ufc:event:history-tachi-palace-fights-15",
+      "happenedAt": "2012-11-15T00:00:00.000Z",
+      "opponentRef": "ufc:enoch-wilson",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-65a6ba3ab076bc30356c",
+      "eventRef": "ufc:event:history-west-coast-fc-5",
+      "happenedAt": "2013-05-03T00:00:00.000Z",
+      "opponentRef": "ufc:adrian-diaz",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 689,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-63433f337a55e2caca56",
+      "eventRef": "ufc:event:history-ufc-166",
+      "happenedAt": "2013-10-19T00:00:00.000Z",
+      "opponentRef": "ufc:jeremy-larsen",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 353,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-920521ddcf9f1834bb88",
+      "eventRef": "ufc:event:history-ufc-172",
+      "happenedAt": "2014-04-26T00:00:00.000Z",
+      "opponentRef": "ufc:max-holloway",
+      "result": "loss",
+      "method": "Submission (guillotine choke)",
+      "round": 3,
+      "elapsedSeconds": 819,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-51640c81118af707d52b",
+      "eventRef": "ufc:event:history-ufc-179",
+      "happenedAt": "2014-10-25T00:00:00.000Z",
+      "opponentRef": "ufc:felipe-arantes",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d6ab24cdb827bdecf901",
+      "eventRef": "ufc:event:history-ufc-fight-night-maia-vs-laflare",
+      "happenedAt": "2015-03-21T00:00:00.000Z",
+      "opponentRef": "ufc:godofredo-pepey",
+      "result": "loss",
+      "method": "Submission (flying triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 194,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-237e972e1dcbeaae73c7",
+      "eventRef": "ufc:event:history-the-ultimate-fighter-latin-america-2-finale-magny-vs-gastelum",
+      "happenedAt": "2015-11-21T00:00:00.000Z",
+      "opponentRef": "ufc:gabriel-benitez",
+      "result": "win",
+      "method": "KO (head kick and punches)",
+      "round": 1,
+      "elapsedSeconds": 193,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-10efc2debd24d918fbd9",
+      "eventRef": "ufc:event:history-ufc-197",
+      "happenedAt": "2016-04-23T00:00:00.000Z",
+      "opponentRef": "ufc:yair-rodriguez",
+      "result": "loss",
+      "method": "KO (head kick)",
+      "round": 2,
+      "elapsedSeconds": 435,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-42d68f66638c97cb45b8",
+      "eventRef": "ufc:event:history-ufc-fight-night-lineker-vs-dodson",
+      "happenedAt": "2016-10-01T00:00:00.000Z",
+      "opponentRef": "ufc:hacran-dias",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5f9e76144bc790dd1d7c",
+      "eventRef": "ufc:event:history-ufc-214",
+      "happenedAt": "2017-07-29T00:00:00.000Z",
+      "opponentRef": "ufc:calvin-kattar",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-97204884552a176bd19d",
+      "eventRef": "ufc:event:history-ufc-fight-night-cowboy-vs-till",
+      "happenedAt": "2017-10-21T00:00:00.000Z",
+      "opponentRef": "ufc:artem-lobov",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-32f01625898434e66f6d",
+      "eventRef": "ufc:event:history-ufc-on-fox-jacare-vs-brunson-2",
+      "happenedAt": "2018-01-27T00:00:00.000Z",
+      "opponentRef": "ufc:dennis-bermudez",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ce7927ebbdbc7175dd3b",
+      "eventRef": "ufc:event:history-ufc-fight-night-gaethje-vs-vick",
+      "happenedAt": "2018-08-25T00:00:00.000Z",
+      "opponentRef": "ufc:michael-johnson",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6ecde21cce3ddd2ebba4",
+      "eventRef": "ufc:event:history-ufc-on-espn-ngannou-vs-velasquez",
+      "happenedAt": "2019-02-17T00:00:00.000Z",
+      "opponentRef": "ufc:myles-jury",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5739b2456ebeeac7055e",
+      "eventRef": "ufc:event:history-ufc-fight-night-de-randamie-vs-ladd",
+      "happenedAt": "2019-07-13T00:00:00.000Z",
+      "opponentRef": "ufc:sheymon-moraes",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 187,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3984b00cc97fd8bf25f4",
+      "eventRef": "ufc:event:history-ufc-246",
+      "happenedAt": "2020-01-18T00:00:00.000Z",
+      "opponentRef": "ufc:sodiq-yusuff",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c53150eca298b37f5554",
+      "eventRef": "ufc:event:history-ufc-on-espn-eye-vs-calvillo",
+      "happenedAt": "2020-06-13T00:00:00.000Z",
+      "opponentRef": "ufc:charles-jourdain",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bd6331cdfdabe3012bc5",
+      "eventRef": "ufc:event:history-ufc-fight-night-hall-vs-silva",
+      "happenedAt": "2020-10-31T00:00:00.000Z",
+      "opponentRef": "ufc:bryce-mitchell",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-56e5098f4a0469ee28f9",
+      "eventRef": "ufc:event:history-ufc-fight-night-gane-vs-volkov",
+      "happenedAt": "2021-06-26T00:00:00.000Z",
+      "opponentRef": "ufc:daniel-pineda",
+      "result": "no-contest",
+      "method": "NC (accidental eye poke)",
+      "round": 2,
+      "elapsedSeconds": 346,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-593bb0b924f950a76aac",
+      "eventRef": "ufc:event:history-ufc-on-espn-font-vs-vera",
+      "happenedAt": "2022-04-30T00:00:00.000Z",
+      "opponentRef": "ufc:joanderson-brito",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 41,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4acc5a9329c774eb905b",
+      "eventRef": "ufc:event:history-ufc-fight-night-sandhagen-vs-song",
+      "happenedAt": "2022-09-17T00:00:00.000Z",
+      "opponentRef": "ufc:bill-algeo",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b638f2270898bd987ad5",
+      "eventRef": "ufc:event:history-ufc-fight-night-aspinall-vs-tybura",
+      "happenedAt": "2023-07-22T00:00:00.000Z",
+      "opponentRef": "ufc:nathaniel-wood",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-28da0f22ac9cfa4eb4bc",
+      "eventRef": "ufc:event:history-ufc-296",
+      "happenedAt": "2023-12-16T00:00:00.000Z",
+      "opponentRef": "ufc:lucas-almeida",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 212,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-9b76d567752afb131094",
+      "eventRef": "ufc:event:history-ufc-fight-night-hermansson-vs-pyfer",
+      "happenedAt": "2024-02-10T00:00:00.000Z",
+      "opponentRef": "ufc:dan-ige",
+      "result": "loss",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 163,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-89709c9dd5d6c4912c2b",
+      "eventRef": "ufc:event:history-ufc-303",
+      "happenedAt": "2024-06-29T00:00:00.000Z",
+      "opponentRef": "ufc:cub-swanson",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-98cff0f55f7412eff6c8",
+      "eventRef": "ufc:event:history-ufc-fight-night-cejudo-vs-song",
+      "happenedAt": "2025-02-22T00:00:00.000Z",
+      "opponentRef": "ufc:melquizael-costa",
+      "result": "loss",
+      "method": "Submission (guillotine choke)",
+      "round": 1,
+      "elapsedSeconds": 270,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4376194a4358989eb86f",
+      "eventRef": "ufc:event:history-ufc-on-espn-dolidze-vs-hernandez",
+      "happenedAt": "2025-08-09T00:00:00.000Z",
+      "opponentRef": "ufc:christian-rodriguez",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-eadf196939092049c995",
+      "eventRef": "ufc:event:history-ufc-fight-night-emmett-vs-vallejos",
+      "happenedAt": "2026-03-14T00:00:00.000Z",
+      "opponentRef": "ufc:jose-miguel-delgado",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-268251a0846104a02830",
+      "eventRef": "ufc:event:history-ufc-fight-night-kape-vs-horiguchi",
+      "happenedAt": "2026-06-20T00:00:00.000Z",
+      "opponentRef": "ufc:vinicius-oliveira",
+      "result": "loss",
+      "method": "TKO (punches and elbows)",
+      "round": 2,
+      "elapsedSeconds": 596,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:andre-fili:history",
+      "bouts": 40,
+      "values": {
+        "bouts": 40,
+        "wins": 25,
+        "losses": 14,
+        "draws": 0,
+        "noContests": 1,
+        "finishRate": 0.52,
+        "koTkoWins": 10,
+        "submissionWins": 3,
+        "decisionWins": 12,
+        "koTkoWinShare": 0.4,
+        "submissionWinShare": 0.12,
+        "decisionWinShare": 0.48,
+        "averageElapsedSeconds": 594.35,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 2.360699,
+        "layoffDays": 43
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1603.07834841,
+    "deviation": 98.19653915,
+    "volatility": 0.06000924,
+    "boutCount": 39,
+    "asOfBoutRef": "ufc:bout:history-268251a0846104a02830",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
       "stance",
       "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "record-history-mismatch"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +784,43 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 40 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.75,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

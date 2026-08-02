@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-e5ac17f2c927ab8a95da",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-moreno-vs-albazi",
+    "name": "UFC Fight Night: Moreno vs. Albazi",
+    "startsAtUtc": "2024-11-02T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amir-albazi",
+    "blue": "ufc:brandon-moreno"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-11-02T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64585580"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

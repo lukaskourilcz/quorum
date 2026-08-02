@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-e1eb489540d33535ab31",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-pentagon-combat-20",
+    "name": "Pentagon Combat 20",
+    "startsAtUtc": "2014-09-27T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ariane-carnelossi",
+    "blue": "ufc:amanda-ribas"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2014-09-27T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:68442521"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:68442521"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (kneebar)",
+    "round": 1,
+    "elapsedSeconds": 254,
+    "sourceRefs": [
+      "source:wikipedia:68442521"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

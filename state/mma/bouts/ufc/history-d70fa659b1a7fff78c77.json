@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-d70fa659b1a7fff78c77",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ultimate-challenge-mma-41",
+    "name": "Ultimate Challenge MMA 41",
+    "startsAtUtc": "2014-11-08T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amir-albazi",
+    "blue": "ufc:salih-kulucan"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2014-11-08T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64585580"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (kimura)",
+    "round": 2,
+    "elapsedSeconds": 450,
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

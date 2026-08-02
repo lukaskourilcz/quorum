@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-e9894902e0f79c5257f1",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-brave-cf-53",
+    "name": "Brave CF 53",
+    "startsAtUtc": "2021-08-21T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:asu-almabayev",
+    "blue": "ufc:aleksander-doskalchuk"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-08-21T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:77593874"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 527,
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

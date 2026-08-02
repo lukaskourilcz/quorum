@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-50d2164fdb72268124b8",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-overeem-vs-harris",
+    "name": "UFC on ESPN: Overeem vs. Harris",
+    "startsAtUtc": "2020-05-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:angela-hill",
+    "blue": "ufc:claudia-gadelha"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-05-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:47691727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:47691727"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:47691727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-fa267a51aed01ad9e21e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-figueiredo-vs-benavidez-2",
+    "name": "UFC Fight Night: Figueiredo vs. Benavidez 2",
+    "startsAtUtc": "2020-07-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amir-albazi",
+    "blue": "ufc:malcolm-gordon"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-07-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64585580"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (triangle choke)",
+    "round": 1,
+    "elapsedSeconds": 282,
+    "sourceRefs": [
+      "source:wikipedia:64585580"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

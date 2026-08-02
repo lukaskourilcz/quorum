@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-29e73648bfc6547299ae",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-moreno-vs-erceg",
+    "name": "UFC on ESPN: Moreno vs. Erceg",
+    "startsAtUtc": "2025-03-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ateba-gautier",
+    "blue": "ufc:jose-medina"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-03-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:82864883"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:82864883"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punches and knee)",
+    "round": 1,
+    "elapsedSeconds": 212,
+    "sourceRefs": [
+      "source:wikipedia:82864883"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

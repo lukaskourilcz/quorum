@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-bd6331cdfdabe3012bc5",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-hall-vs-silva",
+    "name": "UFC Fight Night: Hall vs. Silva",
+    "startsAtUtc": "2020-10-31T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:andre-fili",
+    "blue": "ufc:bryce-mitchell"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-10-31T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:40814604"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:40814604"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:40814604"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

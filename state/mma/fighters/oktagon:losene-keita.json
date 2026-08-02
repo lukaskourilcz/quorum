@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Losene_Keita",
       "publisher": "Wikipedia",
       "title": "Losene Keita",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:78757319"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -407,7 +407,7 @@
         "fightsPerYear": 2.786929,
         "layoffDays": 134
       },
-      "updatedAt": "2026-08-02T14:14:59.647Z"
+      "updatedAt": "2026-08-02T15:43:59.798Z"
     }
   ],
   "rating": {
@@ -417,7 +417,7 @@
     "volatility": 0.0599968,
     "boutCount": 19,
     "asOfBoutRef": "oktagon:bout:history-c4ed2278e54c19e0db92",
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -473,11 +473,27 @@
         "source:wikipedia:81719858"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319",
+        "source:wikipedia:81719858"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.5,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

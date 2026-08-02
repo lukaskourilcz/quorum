@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-d3faebc6018a69be21c3",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-fox-teixeira-vs-evans",
+    "name": "UFC on Fox: Teixeira vs. Evans",
+    "startsAtUtc": "2016-04-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:beneil-dariush",
+    "blue": "ufc:michael-chiesa"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-04-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:43536705"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 380,
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

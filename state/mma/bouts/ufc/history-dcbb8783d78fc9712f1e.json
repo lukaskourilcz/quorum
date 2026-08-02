@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-dcbb8783d78fc9712f1e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-brave-cf-60",
+    "name": "Brave CF 60",
+    "startsAtUtc": "2022-07-30T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:asu-almabayev",
+    "blue": "ufc:zach-makovsky"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-07-30T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:77593874"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

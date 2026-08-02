@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-b86d192047f19a34514c",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-respect-in-the-cage-20",
+    "name": "Respect in the Cage 20",
+    "startsAtUtc": "2013-05-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:beneil-dariush",
+    "blue": "ufc:jason-meaders"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-05-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:43536705"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punch)",
+    "round": 2,
+    "elapsedSeconds": 543,
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

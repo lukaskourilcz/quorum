@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3d6ef80f7071d80b63e2",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-invicta-fc-16",
+    "name": "Invicta FC 16",
+    "startsAtUtc": "2016-03-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:angela-hill",
+    "blue": "ufc:stephanie-eggink"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-03-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:47691727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:47691727"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punch)",
+    "round": 2,
+    "elapsedSeconds": 456,
+    "sourceRefs": [
+      "source:wikipedia:47691727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

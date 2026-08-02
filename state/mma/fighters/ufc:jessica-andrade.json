@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/J%C3%A9ssica_Andrade",
       "publisher": "Wikipedia",
       "title": "Jéssica Andrade",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:40078160"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,16 +51,76 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-d6f75fadd9580d7c36e4",
+      "eventRef": "ufc:event:history-ufc-fight-night-bermudez-vs-the-korean-zombie",
+      "happenedAt": "2017-02-04T00:00:00.000Z",
+      "opponentRef": "ufc:angela-hill",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-848471285b300fe2f248",
+      "eventRef": "ufc:event:history-ufc-fight-night-lemos-vs-andrade",
+      "happenedAt": "2022-04-23T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-lemos",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 193,
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:jessica-andrade:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.5,
+        "koTkoWins": 0,
+        "submissionWins": 1,
+        "decisionWins": 1,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 0.5,
+        "decisionWinShare": 0.5,
+        "averageElapsedSeconds": 546.5,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 0.191829,
+        "layoffDays": 1562
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1968.66448372,
+    "deviation": 229.02206214,
+    "volatility": 0.06000166,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-848471285b300fe2f248",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -98,11 +158,25 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

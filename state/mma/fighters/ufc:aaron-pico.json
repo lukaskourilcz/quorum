@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:aaron-pico",
+  "slug": "aaron-pico",
+  "org": "ufc",
+  "canonicalName": "Aaron Pico",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "e9d6bb59-e798-40c4-8dbe-03c871bcf61e"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:e9d6bb59-e798-40c4-8dbe-03c871bcf61e"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:e9d6bb59-e798-40c4-8dbe-03c871bcf61e",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Aaron Pico",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Aaron Pico",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:e9d6bb59-e798-40c4-8dbe-03c871bcf61e"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "featherweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:e9d6bb59-e798-40c4-8dbe-03c871bcf61e"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "14-5-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:e9d6bb59-e798-40c4-8dbe-03c871bcf61e"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:e9d6bb59-e798-40c4-8dbe-03c871bcf61e"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-fe750c8056b8c9a53bff",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-lemos-vs-andrade",
+    "name": "UFC Fight Night: Lemos vs. Andrade",
+    "startsAtUtc": "2022-04-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aori-qileng",
+    "blue": "ufc:cameron-else"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-04-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:70178359"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:70178359"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 168,
+    "sourceRefs": [
+      "source:wikipedia:70178359"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

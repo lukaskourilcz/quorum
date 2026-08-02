@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260802154359-mma-intake",
+  "date": "2026-08-02",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.046231999999999995,
+    "monthAllInUsd": 0.7973167,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-02",
+      "source:cito-ufc:2026-08-02",
+      "source:wikimedia:2026-08-02"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon: no supplied official card, fighter file, weigh-in or result record. The snapshot is odds-only and provider-confirmation is absent; no model use or card commitment is safe. Check official Oktagon plus an independent regional source next.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-02"
+      ]
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "UFC/Oktagon intake remains incomplete. Odds snapshot is one provider and cannot confirm bouts or support probabilities; no fighter fields, ModelRun, backtest, or calibration evidence is supplied.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-02",
+        "source:cito-ufc:2026-08-02",
+        "source:wikimedia:2026-08-02"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260802154359-MMA-INTAKE-01",
+      "owner": "SPOTTER",
+      "summary": "Obtain the current official Oktagon card and independently confirm bouts; then collect sourced identity, division, record, age, height, reach, stance and weigh-in fields.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260802154359-MMA-INTAKE-02",
+      "owner": "SIGMA",
+      "summary": "Obtain an independent UFC and Oktagon card source, reconcile identities and critical fields, then create a versioned ModelRun only for confirmed pre-event bouts.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-02",
+      "source:cito-ufc:2026-08-02",
+      "source:wikimedia:2026-08-02"
+    ]
+  },
+  "generatedAt": "2026-08-02T15:46:59.798Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-02T15:43:59.798Z",
+    "closedAt": "2026-08-02T15:46:59.798Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-02T15:43:59.798Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-02T15:44:59.798Z",
+        "text": "Oktagon: no supplied official card, fighter file, weigh-in or result record. The snapshot is odds-only and provider-confirmation is absent; no model use or card commitment is safe. Check official Oktagon plus an independent regional source next.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-02"
+        ]
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "statement",
+        "sentAt": "2026-08-02T15:45:59.798Z",
+        "text": "UFC/Oktagon intake remains incomplete. Odds snapshot is one provider and cannot confirm bouts or support probabilities; no fighter fields, ModelRun, backtest, or calibration evidence is supplied.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-02",
+          "source:cito-ufc:2026-08-02",
+          "source:wikimedia:2026-08-02"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-02T15:46:59.798Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

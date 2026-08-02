@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3078976dad4425b39a57",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-garcia-vs-onama",
+    "name": "UFC Fight Night: Garcia vs. Onama",
+    "startsAtUtc": "2025-11-01T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ariane-carnelossi",
+    "blue": "ufc:talita-alencar"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-11-01T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:68442521"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:68442521"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (rear-naked choke)",
+    "round": 3,
+    "elapsedSeconds": 876,
+    "sourceRefs": [
+      "source:wikipedia:68442521"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

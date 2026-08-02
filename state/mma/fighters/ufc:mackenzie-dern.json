@@ -1,0 +1,208 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:mackenzie-dern",
+  "slug": "mackenzie-dern",
+  "org": "ufc",
+  "canonicalName": "Mackenzie Dern",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "701ff883-8560-4398-a5ab-255637dac561"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Mackenzie Dern",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Mackenzie Dern",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "womens-strawweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "16-5-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "16-5-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+        },
+        {
+          "value": "1-1-0",
+          "sourceRef": "derived:ufc:mackenzie-dern:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-6f376a4047a711a613b3",
+      "eventRef": "ufc:event:history-ufc-fight-night-dern-vs-hill",
+      "happenedAt": "2023-05-20T00:00:00.000Z",
+      "opponentRef": "ufc:angela-hill",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e4a983e8991571c4a4b6",
+      "eventRef": "ufc:event:history-ufc-298",
+      "happenedAt": "2024-02-17T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-lemos",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:mackenzie-dern:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 1,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 0,
+        "decisionWinShare": 1,
+        "averageElapsedSeconds": 1200,
+        "recentThreeWinRate": 0.5,
+        "recentFiveWinRate": 0.5,
+        "fightsPerYear": 1.337885,
+        "layoffDays": 897
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1645.56631237,
+    "deviation": 215.89294448,
+    "volatility": 0.05999874,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-e4a983e8991571c4a4b6",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "reachCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:701ff883-8560-4398-a5ab-255637dac561"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-725785a8d7f8d837c79b",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-jedrzejczyk-vs-penne",
+    "name": "UFC Fight Night: Jędrzejczyk vs. Penne",
+    "startsAtUtc": "2015-06-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:arnold-allen",
+    "blue": "ufc:alan-omer"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-06-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:49598119"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:49598119"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (guillotine choke)",
+    "round": 3,
+    "elapsedSeconds": 701,
+    "sourceRefs": [
+      "source:wikipedia:49598119"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

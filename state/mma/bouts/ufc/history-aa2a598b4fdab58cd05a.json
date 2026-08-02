@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-aa2a598b4fdab58cd05a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-federation-k-9-international-tournament-2017",
+    "name": "Federation K-9: International Tournament 2017",
+    "startsAtUtc": "2017-05-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:azamat-bekoev",
+    "blue": "ufc:ramazan-magomedov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-05-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:79879282"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 479,
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

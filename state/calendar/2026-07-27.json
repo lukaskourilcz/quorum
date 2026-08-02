@@ -596,7 +596,9 @@
       "at": "2026-08-02T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "missed"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-02-mma-intake",
+      "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
     },
     {
       "at": "2026-08-02T07:00:00.000Z",
@@ -636,7 +638,7 @@
       "at": "2026-08-02T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-02T16:00:00.000Z",

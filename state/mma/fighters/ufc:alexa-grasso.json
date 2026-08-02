@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexa_Grasso",
       "publisher": "Wikipedia",
       "title": "Alexa Grasso",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,52 @@
       "sourceRefs": [
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1993-08-09",
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 167.64,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Strawweight",
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Lobo Gym MMA",
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "17-5-1",
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -50,30 +95,401 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "17-5-1",
+          "sourceRef": "source:wikipedia:45441761"
+        },
+        {
+          "value": "16-5-1",
+          "sourceRef": "derived:ufc:alexa-grasso:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-470b26428536518edff7",
+      "eventRef": "ufc:event:history-gex-old-jack-s-fight-night",
+      "happenedAt": "2012-12-19T00:00:00.000Z",
+      "opponentRef": "ufc:sandra-del-rincon",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 15,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-9f4b9e98bb430cfe6497",
+      "eventRef": "ufc:event:history-fight-hard-championship-3",
+      "happenedAt": "2013-05-11T00:00:00.000Z",
+      "opponentRef": "ufc:lupita-hernandez",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 12,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0cdf10b0de9cdae1b49e",
+      "eventRef": "ufc:event:history-xtreme-kombat-20",
+      "happenedAt": "2013-08-31T00:00:00.000Z",
+      "opponentRef": "ufc:karina-rodriguez",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 780,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-32965cec3e5230e01fc9",
+      "eventRef": "ufc:event:history-invicta-fc-8",
+      "happenedAt": "2014-09-06T00:00:00.000Z",
+      "opponentRef": "ufc:ashley-cummins",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-87b6102340203210d3da",
+      "eventRef": "ufc:event:history-invicta-fc-10",
+      "happenedAt": "2014-12-05T00:00:00.000Z",
+      "opponentRef": "ufc:alida-gray",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 107,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5de878ea0665e8af8886",
+      "eventRef": "ufc:event:history-invicta-fc-11",
+      "happenedAt": "2015-02-27T00:00:00.000Z",
+      "opponentRef": "ufc:mizuki-inoue",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7c75f6ae441954c7799d",
+      "eventRef": "ufc:event:history-invicta-fc-18",
+      "happenedAt": "2016-07-29T00:00:00.000Z",
+      "opponentRef": "ufc:jodie-esquibel",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-46115610510c36c13bf7",
+      "eventRef": "ufc:event:history-the-ultimate-fighter-latin-america-3-finale-dos-anjos-vs-ferguson",
+      "happenedAt": "2016-11-05T00:00:00.000Z",
+      "opponentRef": "ufc:heather-jo-clark",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4c048b583d2189178b64",
+      "eventRef": "ufc:event:history-ufc-fight-night-bermudez-vs-the-korean-zombie",
+      "happenedAt": "2017-02-04T00:00:00.000Z",
+      "opponentRef": "ufc:felice-herrig",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8253801b58897f0e85fa",
+      "eventRef": "ufc:event:history-ufc-fight-night-pettis-vs-moreno",
+      "happenedAt": "2017-08-05T00:00:00.000Z",
+      "opponentRef": "ufc:randa-markos",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6e07e381676e330e7954",
+      "eventRef": "ufc:event:history-ufc-fight-night-maia-vs-usman",
+      "happenedAt": "2018-05-19T00:00:00.000Z",
+      "opponentRef": "ufc:tatiana-suarez",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 164,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e0da54326d11b633bd99",
+      "eventRef": "ufc:event:history-ufc-238",
+      "happenedAt": "2019-06-08T00:00:00.000Z",
+      "opponentRef": "ufc:karolina-kowalkiewicz",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f1ae27862591dd7da814",
+      "eventRef": "ufc:event:history-ufc-fight-night-rodriguez-vs-stephens",
+      "happenedAt": "2019-09-21T00:00:00.000Z",
+      "opponentRef": "ufc:carla-esparza",
+      "result": "loss",
+      "method": "Decision (majority)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-562efdacd75debf49b73",
+      "eventRef": "ufc:event:history-ufc-fight-night-smith-vs-rakic",
+      "happenedAt": "2020-08-29T00:00:00.000Z",
+      "opponentRef": "ufc:kim-ji-yeon",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0a863fee5b4771785647",
+      "eventRef": "ufc:event:history-ufc-258",
+      "happenedAt": "2021-02-13T00:00:00.000Z",
+      "opponentRef": "ufc:maycee-barber",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-68c0c20b0d6e8713e6f0",
+      "eventRef": "ufc:event:history-ufc-on-espn-blaydes-vs-daukaus",
+      "happenedAt": "2022-03-26T00:00:00.000Z",
+      "opponentRef": "ufc:joanne-wood",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 237,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3f94c67053cc5bc1acc3",
+      "eventRef": "ufc:event:history-ufc-fight-night-grasso-vs-araujo",
+      "happenedAt": "2022-10-15T00:00:00.000Z",
+      "opponentRef": "ufc:viviane-araujo",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-17b33f7d50b90b29d963",
+      "eventRef": "ufc:event:history-ufc-285",
+      "happenedAt": "2023-03-04T00:00:00.000Z",
+      "opponentRef": "ufc:valentina-shevchenko",
+      "result": "win",
+      "method": "Submission (face crank)",
+      "round": 4,
+      "elapsedSeconds": 1174,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d49cda1598fa4a1c9e59",
+      "eventRef": "ufc:event:history-ufc-fight-night-grasso-vs-shevchenko-2",
+      "happenedAt": "2023-09-16T00:00:00.000Z",
+      "opponentRef": "ufc:valentina-shevchenko",
+      "result": "draw",
+      "method": "Draw (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0fb7c82cdf948e2d2c01",
+      "eventRef": "ufc:event:history-ufc-306",
+      "happenedAt": "2024-09-14T00:00:00.000Z",
+      "opponentRef": "ufc:valentina-shevchenko",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-78c28cf695e7e77ee9a9",
+      "eventRef": "ufc:event:history-ufc-315",
+      "happenedAt": "2025-05-10T00:00:00.000Z",
+      "opponentRef": "ufc:natalia-silva",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-003f7730458fdcb19f97",
+      "eventRef": "ufc:event:history-ufc-fight-night-adesanya-vs-pyfer",
+      "happenedAt": "2026-03-28T00:00:00.000Z",
+      "opponentRef": "ufc:maycee-barber",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 162,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:alexa-grasso:history",
+      "bouts": 22,
+      "values": {
+        "bouts": 22,
+        "wins": 16,
+        "losses": 5,
+        "draws": 1,
+        "noContests": 0,
+        "finishRate": 0.375,
+        "koTkoWins": 4,
+        "submissionWins": 2,
+        "decisionWins": 10,
+        "koTkoWinShare": 0.25,
+        "submissionWinShare": 0.125,
+        "decisionWinShare": 0.625,
+        "averageElapsedSeconds": 775.045455,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 1.582441,
+        "layoffDays": 127
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1762.88803139,
+    "deviation": 128.17488419,
+    "volatility": 0.06000409,
+    "boutCount": 21,
+    "asOfBoutRef": "ufc:bout:history-003f7730458fdcb19f97",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
       "stance",
       "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "record-history-mismatch"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +514,43 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 22 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.75,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

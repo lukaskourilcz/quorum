@@ -9,27 +9,44 @@
     "wikidataId": null,
     "wikipediaTitle": "Justin Gaethje",
     "externalIds": {
-      "wikipediaPageId": "49172283"
+      "wikipediaPageId": "49172283",
+      "cito": "dd274f41-a20a-4a97-9d02-fe42a8d4cdaa"
     }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-02",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:49172283"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa"
       ]
     }
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Justin Gaethje",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikipedia:49172283",
       "url": "https://en.wikipedia.org/wiki/Justin_Gaethje",
       "publisher": "Wikipedia",
       "title": "Justin Gaethje",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -38,9 +55,28 @@
     "name": {
       "value": "Justin Gaethje",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa",
         "source:wikipedia:49172283"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "lightweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "28-5-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -60,13 +96,11 @@
     "volatility": 0.06,
     "boutCount": 0,
     "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
       "stance",
       "heightCm",
       "reachCm",
@@ -98,11 +132,46 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:dd274f41-a20a-4a97-9d02-fe42a8d4cdaa"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
-  "corroboration": 0,
+  "completeness": 0.375,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

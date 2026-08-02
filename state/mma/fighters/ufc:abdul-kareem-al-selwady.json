@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:abdul-kareem-al-selwady",
+  "slug": "abdul-kareem-al-selwady",
+  "org": "ufc",
+  "canonicalName": "Abdul-Kareem Al-Selwady",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "307ecacb-ba28-4f31-9047-42382a6eab3d"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Abdul-Kareem Al-Selwady",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Abdul-Kareem Al-Selwady",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "lightweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "16-4-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "reachCm"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:307ecacb-ba28-4f31-9047-42382a6eab3d"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

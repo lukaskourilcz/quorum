@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-a1d7d39b183ddd07a52e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-berkut-young-eagles-6",
+    "name": "Berkut Young Eagles 6",
+    "startsAtUtc": "2018-10-27T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:azamat-bekoev",
+    "blue": "ufc:elshad-guseynov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-10-27T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:79879282"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (arm-triangle choke)",
+    "round": 2,
+    "elapsedSeconds": 395,
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

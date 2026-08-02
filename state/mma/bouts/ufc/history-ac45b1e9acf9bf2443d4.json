@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ac45b1e9acf9bf2443d4",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-berkut-young-eagles-4",
+    "name": "Berkut Young Eagles 4",
+    "startsAtUtc": "2018-04-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:asu-almabayev",
+    "blue": "ufc:shamil-akhmaev"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-04-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:77593874"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:77593874"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

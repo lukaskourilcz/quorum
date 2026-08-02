@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-2c8bf85c0b18e86e39be",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-octagon-36",
+    "name": "Octagon 36",
+    "startsAtUtc": "2022-10-21T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:azamat-bekoev",
+    "blue": "ufc:behnam-salimi"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-10-21T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:79879282"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 145,
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

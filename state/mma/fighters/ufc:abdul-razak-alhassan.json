@@ -1,0 +1,477 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:abdul-razak-alhassan",
+  "slug": "abdul-razak-alhassan",
+  "org": "ufc",
+  "canonicalName": "Abdul Razak Alhassan",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Abdul Razak Alhassan",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Abdul Razak Alhassan",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "middleweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "12-7-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "12-7-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+        },
+        {
+          "value": "12-7-0 (1 NC)",
+          "sourceRef": "derived:ufc:abdul-razak-alhassan:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-a4116d41c3f473502a45",
+      "eventRef": "ufc:event:history-xtreme-knockout-20",
+      "happenedAt": "2013-11-23T00:00:00.000Z",
+      "opponentRef": "ufc:kolby-adams",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 25,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c5fd966ecae424f7392f",
+      "eventRef": "ufc:event:history-bellator-111",
+      "happenedAt": "2014-03-07T00:00:00.000Z",
+      "opponentRef": "ufc:matt-jones",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 83,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-996ceaccfedcc622d9c1",
+      "eventRef": "ufc:event:history-rocks-xtreme-mma-12",
+      "happenedAt": "2015-02-28T00:00:00.000Z",
+      "opponentRef": "ufc:matt-mckeon",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 47,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a3a67c9371f226682426",
+      "eventRef": "ufc:event:history-bellator-143",
+      "happenedAt": "2015-09-25T00:00:00.000Z",
+      "opponentRef": "ufc:bryce-shepard-mejia",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 86,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-14b865da6ca1e0834202",
+      "eventRef": "ufc:event:history-rage-in-the-cage-47",
+      "happenedAt": "2016-08-13T00:00:00.000Z",
+      "opponentRef": "ufc:ken-jackson",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 40,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-696e9c5608c2d5885cb1",
+      "eventRef": "ufc:event:history-legacy-fc-61",
+      "happenedAt": "2016-10-14T00:00:00.000Z",
+      "opponentRef": "ufc:jos-eichelberger",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 57,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6b32428f10432dd9acec",
+      "eventRef": "ufc:event:history-ufc-fight-night-mousasi-vs-hall-2",
+      "happenedAt": "2016-11-19T00:00:00.000Z",
+      "opponentRef": "ufc:charlie-ward",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 53,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c2b6c03ab4c804377049",
+      "eventRef": "ufc:event:history-ufc-fight-night-gustafsson-vs-teixeira",
+      "happenedAt": "2017-05-28T00:00:00.000Z",
+      "opponentRef": "ufc:omari-akhmedov",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-53bcb0d87a3df28b39ad",
+      "eventRef": "ufc:event:history-ufc-218",
+      "happenedAt": "2017-12-02T00:00:00.000Z",
+      "opponentRef": "ufc:sabah-homasi",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 261,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-113a0469544413ef9b97",
+      "eventRef": "ufc:event:history-ufc-220",
+      "happenedAt": "2018-01-20T00:00:00.000Z",
+      "opponentRef": "ufc:sabah-homasi",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 227,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-61ccc07c92dfebfd028f",
+      "eventRef": "ufc:event:history-ufc-228",
+      "happenedAt": "2018-09-08T00:00:00.000Z",
+      "opponentRef": "ufc:niko-price",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 43,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-df3c16ff8c6086f1335e",
+      "eventRef": "ufc:event:history-ufc-on-espn-kattar-vs-ige",
+      "happenedAt": "2020-07-16T00:00:00.000Z",
+      "opponentRef": "ufc:mounir-lazzez",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bb49a2f4f66a27d2bb7c",
+      "eventRef": "ufc:event:history-ufc-fight-night-felder-vs-dos-anjos",
+      "happenedAt": "2020-11-14T00:00:00.000Z",
+      "opponentRef": "ufc:khaos-williams",
+      "result": "loss",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 30,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-19d2a5ed6b582f2a7bca",
+      "eventRef": "ufc:event:history-ufc-on-espn-whittaker-vs-gastelum",
+      "happenedAt": "2021-04-17T00:00:00.000Z",
+      "opponentRef": "ufc:jacob-malkoun",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0b98bd7793ad22562a46",
+      "eventRef": "ufc:event:history-ufc-on-espn-barboza-vs-chikadze",
+      "happenedAt": "2021-08-28T00:00:00.000Z",
+      "opponentRef": "ufc:alessio-di-chirico",
+      "result": "win",
+      "method": "KO (head kick)",
+      "round": 1,
+      "elapsedSeconds": 17,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7c3ceb08d43cd8a52a72",
+      "eventRef": "ufc:event:history-ufc-fight-night-walker-vs-hill",
+      "happenedAt": "2022-02-19T00:00:00.000Z",
+      "opponentRef": "ufc:joaquin-buckley",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0f2d5d0d28e3a241f499",
+      "eventRef": "ufc:event:history-ufc-fight-night-strickland-vs-imavov",
+      "happenedAt": "2023-01-14T00:00:00.000Z",
+      "opponentRef": "ufc:claudio-ribeiro",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 328,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-be589a1ede662ef683dd",
+      "eventRef": "ufc:event:history-ufc-fight-night-dawson-vs-green",
+      "happenedAt": "2023-10-07T00:00:00.000Z",
+      "opponentRef": "ufc:joe-pyfer",
+      "result": "loss",
+      "method": "Technical Submission (arm-triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 425,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-577cfaee8bb8065ace72",
+      "eventRef": "ufc:event:history-ufc-on-espn-namajunas-vs-cortez",
+      "happenedAt": "2024-07-13T00:00:00.000Z",
+      "opponentRef": "ufc:cody-brundage",
+      "result": "no-contest",
+      "method": "NC (illegal elbows)",
+      "round": 1,
+      "elapsedSeconds": 37,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-facd5c6ae8175f34ccab",
+      "eventRef": "ufc:event:history-ufc-fight-night-dern-vs-ribas-2",
+      "happenedAt": "2025-01-11T00:00:00.000Z",
+      "opponentRef": "ufc:cesar-almeida",
+      "result": "loss",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 259,
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:abdul-razak-alhassan:history",
+      "bouts": 20,
+      "values": {
+        "bouts": 20,
+        "wins": 12,
+        "losses": 7,
+        "draws": 0,
+        "noContests": 1,
+        "finishRate": 1,
+        "koTkoWins": 12,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 280.9,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0.25,
+        "fightsPerYear": 1.706321,
+        "layoffDays": 568
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1587.59380354,
+    "deviation": 130.45897224,
+    "volatility": 0.06000475,
+    "boutCount": 19,
+    "asOfBoutRef": "ufc:bout:history-facd5c6ae8175f34ccab",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "reachCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:502f14ff-7cd2-46dd-b86a-fea0d07b7264"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:53118203"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

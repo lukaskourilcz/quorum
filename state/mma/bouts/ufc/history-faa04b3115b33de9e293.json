@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-faa04b3115b33de9e293",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-full-contact-contender-33",
+    "name": "Full Contact Contender 33",
+    "startsAtUtc": "2023-03-25T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ateba-gautier",
+    "blue": "ufc:yu-joe-lewis-lai"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-03-25T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:82864883"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:82864883"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches and knee)",
+    "round": 1,
+    "elapsedSeconds": 130,
+    "sourceRefs": [
+      "source:wikipedia:82864883"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

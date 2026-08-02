@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-97393a20e907e959df9a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-henderson-vs-dos-anjos",
+    "name": "UFC Fight Night: Henderson vs. dos Anjos",
+    "startsAtUtc": "2014-08-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:beneil-dariush",
+    "blue": "ufc:anthony-rocco-martin"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2014-08-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:43536705"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (arm-triangle choke)",
+    "round": 2,
+    "elapsedSeconds": 518,
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

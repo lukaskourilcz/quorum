@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-498601eae50ef97b3876",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-berkut-young-eagles-7",
+    "name": "Berkut Young Eagles 7",
+    "startsAtUtc": "2018-12-22T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:azamat-bekoev",
+    "blue": "ufc:magomedrasul-gasanov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-12-22T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:79879282"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:79879282"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

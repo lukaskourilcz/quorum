@@ -1,0 +1,214 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:valentina-shevchenko",
+  "slug": "valentina-shevchenko",
+  "org": "ufc",
+  "canonicalName": "Valentina Shevchenko",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {
+      "cito": "061b0bd9-6f34-4849-b265-985aee95eee0"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-02",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Valentina Shevchenko",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "evidenceTier": "secondary"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Valentina Shevchenko",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "womens-flyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "26-4-1",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "26-4-1",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+        },
+        {
+          "value": "1-1-1",
+          "sourceRef": "derived:ufc:valentina-shevchenko:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-17b33f7d50b90b29d963",
+      "eventRef": "ufc:event:history-ufc-285",
+      "happenedAt": "2023-03-04T00:00:00.000Z",
+      "opponentRef": "ufc:alexa-grasso",
+      "result": "loss",
+      "method": "Submission (face crank)",
+      "round": 4,
+      "elapsedSeconds": 1174,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d49cda1598fa4a1c9e59",
+      "eventRef": "ufc:event:history-ufc-fight-night-grasso-vs-shevchenko-2",
+      "happenedAt": "2023-09-16T00:00:00.000Z",
+      "opponentRef": "ufc:alexa-grasso",
+      "result": "draw",
+      "method": "Draw (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0fb7c82cdf948e2d2c01",
+      "eventRef": "ufc:event:history-ufc-306",
+      "happenedAt": "2024-09-14T00:00:00.000Z",
+      "opponentRef": "ufc:alexa-grasso",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:valentina-shevchenko:history",
+      "bouts": 3,
+      "values": {
+        "bouts": 3,
+        "wins": 1,
+        "losses": 1,
+        "draws": 1,
+        "noContests": 0,
+        "finishRate": 0,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 1,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 0,
+        "decisionWinShare": 1,
+        "averageElapsedSeconds": 1391.333333,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.333333,
+        "fightsPerYear": 1.304438,
+        "layoffDays": 687
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1782.55611342,
+    "deviation": 268.86702117,
+    "volatility": 0.06000471,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-0fb7c82cdf948e2d2c01",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 1,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

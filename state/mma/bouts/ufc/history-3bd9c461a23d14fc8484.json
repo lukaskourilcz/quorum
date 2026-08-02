@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3bd9c461a23d14fc8484",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-belfort-vs-gastelum",
+    "name": "UFC Fight Night: Belfort vs. Gastelum",
+    "startsAtUtc": "2017-03-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:beneil-dariush",
+    "blue": "ufc:edson-barboza"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-03-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:43536705"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (knee)",
+    "round": 2,
+    "elapsedSeconds": 515,
+    "sourceRefs": [
+      "source:wikipedia:43536705"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

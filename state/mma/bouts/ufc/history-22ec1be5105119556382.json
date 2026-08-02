@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-22ec1be5105119556382",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-jungle-fight-88",
+    "name": "Jungle Fight 88",
+    "startsAtUtc": "2016-06-25T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amanda-lemos",
+    "blue": "ufc:mayra-cantuaria"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-06-25T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T15:43:59.798Z",
+    "lastSeenAt": "2026-08-02T15:43:59.798Z",
+    "sourceRefs": [
+      "source:wikipedia:64535234"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64535234"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (knee)",
+    "round": 3,
+    "elapsedSeconds": 628,
+    "sourceRefs": [
+      "source:wikipedia:64535234"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T15:43:59.798Z"
+}

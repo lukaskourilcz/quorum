@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Angela_Hill",
       "publisher": "Wikipedia",
       "title": "Angela Hill",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,43 @@
       "sourceRefs": [
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1985-01-12",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Flyweight",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Alliance MMA",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "19-16-0",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -50,30 +86,627 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "19-16-0",
+          "sourceRef": "source:wikipedia:47691727"
+        },
+        {
+          "value": "20-17-0",
+          "sourceRef": "derived:ufc:angela-hill:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-0083d52236605b3896b7",
+      "eventRef": "ufc:event:history-us-freedom-fc-18",
+      "happenedAt": "2014-04-26T00:00:00.000Z",
+      "opponentRef": "ufc:stephanie-skinner",
+      "result": "win",
+      "method": "TKO (knees)",
+      "round": 2,
+      "elapsedSeconds": 395,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-062e520f89a1bc0518ac",
+      "eventRef": "ufc:event:history-the-ultimate-fighter-a-champion-will-be-crowned-finale",
+      "happenedAt": "2014-12-12T00:00:00.000Z",
+      "opponentRef": "ufc:emily-kagan",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8ec7649b96a383fdc4b8",
+      "eventRef": "ufc:event:history-ufc-188",
+      "happenedAt": "2015-06-12T00:00:00.000Z",
+      "opponentRef": "ufc:tecia-torres",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ee8d77cc8322f865ee10",
+      "eventRef": "ufc:event:history-ufc-192",
+      "happenedAt": "2015-10-03T00:00:00.000Z",
+      "opponentRef": "ufc:rose-namajunas",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 167,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e1435ef5a9c71ec4fe28",
+      "eventRef": "ufc:event:history-invicta-fc-15",
+      "happenedAt": "2016-01-16T00:00:00.000Z",
+      "opponentRef": "ufc:alida-gray",
+      "result": "win",
+      "method": "TKO (knee to the body)",
+      "round": 1,
+      "elapsedSeconds": 99,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3d6ef80f7071d80b63e2",
+      "eventRef": "ufc:event:history-invicta-fc-16",
+      "happenedAt": "2016-03-11T00:00:00.000Z",
+      "opponentRef": "ufc:stephanie-eggink",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 456,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bae5cba8fee7f4dc192c",
+      "eventRef": "ufc:event:history-invicta-fc-17",
+      "happenedAt": "2016-05-07T00:00:00.000Z",
+      "opponentRef": "ufc:livia-renata-souza",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2477c09e5544bcc9e317",
+      "eventRef": "ufc:event:history-invicta-fc-20",
+      "happenedAt": "2016-11-18T00:00:00.000Z",
+      "opponentRef": "ufc:kaline-medeiros",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d6f75fadd9580d7c36e4",
+      "eventRef": "ufc:event:history-ufc-fight-night-bermudez-vs-the-korean-zombie",
+      "happenedAt": "2017-02-04T00:00:00.000Z",
+      "opponentRef": "ufc:jessica-andrade",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-67355273ef4665de73ab",
+      "eventRef": "ufc:event:history-the-ultimate-fighter-redemption-finale",
+      "happenedAt": "2017-07-07T00:00:00.000Z",
+      "opponentRef": "ufc:ashley-yoder",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-1f7da2b79bb27ce2d028",
+      "eventRef": "ufc:event:history-ufc-fight-night-poirier-vs-pettis",
+      "happenedAt": "2017-11-11T00:00:00.000Z",
+      "opponentRef": "ufc:nina-ansaroff",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e45042922d090f90c3e1",
+      "eventRef": "ufc:event:history-ufc-on-fox-emmett-vs-stephens",
+      "happenedAt": "2018-02-24T00:00:00.000Z",
+      "opponentRef": "ufc:maryna-moroz",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2ada7a6e64213820f221",
+      "eventRef": "ufc:event:history-ufc-fight-night-gaethje-vs-vick",
+      "happenedAt": "2018-08-25T00:00:00.000Z",
+      "opponentRef": "ufc:cortney-casey",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8d152b3af31215bc45f8",
+      "eventRef": "ufc:event:history-ufc-fight-night-thompson-vs-pettis",
+      "happenedAt": "2019-03-23T00:00:00.000Z",
+      "opponentRef": "ufc:randa-markos",
+      "result": "loss",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 264,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c6f911fdcdef28efeab9",
+      "eventRef": "ufc:event:history-ufc-fight-night-jacare-vs-hermansson",
+      "happenedAt": "2019-04-27T00:00:00.000Z",
+      "opponentRef": "ufc:jodie-esquibel",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-214c1898758670990cb0",
+      "eventRef": "ufc:event:history-ufc-238",
+      "happenedAt": "2019-06-08T00:00:00.000Z",
+      "opponentRef": "ufc:yan-xiaonan",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ec2009e36bf4a5f484a4",
+      "eventRef": "ufc:event:history-ufc-fight-night-rodriguez-vs-stephens",
+      "happenedAt": "2019-09-21T00:00:00.000Z",
+      "opponentRef": "ufc:ariane-carnelossi",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 3,
+      "elapsedSeconds": 716,
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f4f02c397ea76b2fb75e",
+      "eventRef": "ufc:event:history-ufc-fight-night-rodriguez-vs-stephens",
+      "happenedAt": "2019-09-21T00:00:00.000Z",
+      "opponentRef": "ufc:ariane-carnelossi",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 3,
+      "elapsedSeconds": 716,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-cc6adb2800cb18eeaac4",
+      "eventRef": "ufc:event:history-ufc-fight-night-blaydes-vs-dos-santos",
+      "happenedAt": "2020-01-25T00:00:00.000Z",
+      "opponentRef": "ufc:hannah-cifers",
+      "result": "win",
+      "method": "TKO (elbows and punches)",
+      "round": 2,
+      "elapsedSeconds": 566,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8fdcf5e4a534864a2614",
+      "eventRef": "ufc:event:history-ufc-fight-night-felder-vs-hooker",
+      "happenedAt": "2020-02-23T00:00:00.000Z",
+      "opponentRef": "ufc:loma-lookboonmee",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-50d2164fdb72268124b8",
+      "eventRef": "ufc:event:history-ufc-on-espn-overeem-vs-harris",
+      "happenedAt": "2020-05-16T00:00:00.000Z",
+      "opponentRef": "ufc:claudia-gadelha",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ad5850a93c8684e38a6d",
+      "eventRef": "ufc:event:history-ufc-fight-night-waterson-vs-hill",
+      "happenedAt": "2020-09-12T00:00:00.000Z",
+      "opponentRef": "ufc:michelle-waterson",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8d6cd898505889ff1bc6",
+      "eventRef": "ufc:event:history-ufc-fight-night-edwards-vs-muhammad",
+      "happenedAt": "2021-03-13T00:00:00.000Z",
+      "opponentRef": "ufc:ashley-yoder",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-34a176602343d4fbb3c8",
+      "eventRef": "ufc:event:history-ufc-265",
+      "happenedAt": "2021-08-07T00:00:00.000Z",
+      "opponentRef": "ufc:tecia-torres",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-9adaec48c5a4ab652931",
+      "eventRef": "ufc:event:history-ufc-fight-night-lewis-vs-daukaus",
+      "happenedAt": "2021-12-18T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-lemos",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e018c2c3e7e1cb86eb15",
+      "eventRef": "ufc:event:history-ufc-fight-night-lewis-vs-daukaus",
+      "happenedAt": "2021-12-18T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-lemos",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-04139e6b26a665c61320",
+      "eventRef": "ufc:event:history-ufc-on-espn-b-achowicz-vs-rakic",
+      "happenedAt": "2022-05-14T00:00:00.000Z",
+      "opponentRef": "ufc:virna-jandiroba",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ec52a8d0065ef0d996a7",
+      "eventRef": "ufc:event:history-ufc-on-espn-vera-vs-cruz",
+      "happenedAt": "2022-08-13T00:00:00.000Z",
+      "opponentRef": "ufc:lupita-godinez",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-985948c3bb68e4290913",
+      "eventRef": "ufc:event:history-ufc-on-espn-thompson-vs-holland",
+      "happenedAt": "2022-12-03T00:00:00.000Z",
+      "opponentRef": "ufc:emily-ducote",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6f376a4047a711a613b3",
+      "eventRef": "ufc:event:history-ufc-fight-night-dern-vs-hill",
+      "happenedAt": "2023-05-20T00:00:00.000Z",
+      "opponentRef": "ufc:mackenzie-dern",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-dcdf7ba470b2c24e943f",
+      "eventRef": "ufc:event:history-ufc-fight-night-almeida-vs-lewis",
+      "happenedAt": "2023-11-04T00:00:00.000Z",
+      "opponentRef": "ufc:denise-gomes",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c0238374621509acc858",
+      "eventRef": "ufc:event:history-ufc-fight-night-barboza-vs-murphy",
+      "happenedAt": "2024-05-18T00:00:00.000Z",
+      "opponentRef": "ufc:luana-pinheiro",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 2,
+      "elapsedSeconds": 552,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-46091df175f15bf750ee",
+      "eventRef": "ufc:event:history-ufc-on-espn-cannonier-vs-borralho",
+      "happenedAt": "2024-08-24T00:00:00.000Z",
+      "opponentRef": "ufc:tabatha-ricci",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3adaeed0aff689c940f1",
+      "eventRef": "ufc:event:history-ufc-fight-night-cannonier-vs-rodrigues",
+      "happenedAt": "2025-02-15T00:00:00.000Z",
+      "opponentRef": "ufc:ketlen-souza",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-52e38946d0c33139e870",
+      "eventRef": "ufc:event:history-ufc-on-espn-dolidze-vs-hernandez",
+      "happenedAt": "2025-08-09T00:00:00.000Z",
+      "opponentRef": "ufc:iasmin-lucindo",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d196d72125b9466e62c0",
+      "eventRef": "ufc:event:history-ufc-322",
+      "happenedAt": "2025-11-15T00:00:00.000Z",
+      "opponentRef": "ufc:fatima-kline",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3fdf2017b89dcb87235a",
+      "eventRef": "ufc:event:history-ufc-fight-night-song-vs-figueiredo",
+      "happenedAt": "2026-05-30T00:00:00.000Z",
+      "opponentRef": "ufc:xiong-jingnan",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:angela-hill:history",
+      "bouts": 37,
+      "values": {
+        "bouts": 37,
+        "wins": 20,
+        "losses": 17,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.35,
+        "koTkoWins": 6,
+        "submissionWins": 1,
+        "decisionWins": 13,
+        "koTkoWinShare": 0.3,
+        "submissionWinShare": 0.05,
+        "decisionWinShare": 0.65,
+        "averageElapsedSeconds": 852.189189,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 2.976846,
+        "layoffDays": 64
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1572.72651749,
+    "deviation": 90.01372403,
+    "volatility": 0.05999844,
+    "boutCount": 37,
+    "asOfBoutRef": "ufc:bout:history-3fdf2017b89dcb87235a",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
       "stance",
       "heightCm",
       "reachCm",
-      "dateOfBirth",
-      "team"
+      "record-history-mismatch"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +731,44 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 35 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:68442521",
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.625,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

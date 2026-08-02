@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Asu_Almabayev",
       "publisher": "Wikipedia",
       "title": "Asu Almabayev",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,61 @@
       "sourceRefs": [
         "source:wikipedia:77593874"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1994-01-25",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 165.1,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Flyweight",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "DAR Pro Team",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "24-3-0",
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,29 +105,458 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-89de49a212358e748686",
+      "eventRef": "ufc:event:history-r-o-d-shield-and-sword-4",
+      "happenedAt": "2013-06-01T00:00:00.000Z",
+      "opponentRef": "ufc:vadim-buseev",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f771e77af7379a944334",
+      "eventRef": "ufc:event:history-alash-pride-fc-selection-13",
+      "happenedAt": "2016-02-14T00:00:00.000Z",
+      "opponentRef": "ufc:yeldos-kaliev",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 272,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-427beefcbf541c907612",
+      "eventRef": "ufc:event:history-tech-krep-fc-southern-front-3",
+      "happenedAt": "2016-03-03T00:00:00.000Z",
+      "opponentRef": "ufc:oleg-erik",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 244,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0603e0445f8e7c761006",
+      "eventRef": "ufc:event:history-fight-nights-global-45",
+      "happenedAt": "2016-04-22T00:00:00.000Z",
+      "opponentRef": "ufc:galamirza-ayvazov",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 221,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-78fa2844611999535a14",
+      "eventRef": "ufc:event:history-fight-nights-global-58",
+      "happenedAt": "2017-01-28T00:00:00.000Z",
+      "opponentRef": "ufc:tagir-ulanbekov",
+      "result": "loss",
+      "method": "TKO (submission to punches)",
+      "round": 3,
+      "elapsedSeconds": 891,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3443cb922ffcdc3d1f8d",
+      "eventRef": "ufc:event:history-alash-pride-fc-alash-aibary",
+      "happenedAt": "2017-04-01T00:00:00.000Z",
+      "opponentRef": "ufc:mehman-mamedov",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-32577cb0dd8515461387",
+      "eventRef": "ufc:event:history-acb-69",
+      "happenedAt": "2017-09-09T00:00:00.000Z",
+      "opponentRef": "ufc:ibrahim-mamaev",
+      "result": "win",
+      "method": "Submission (Peruvian necktie)",
+      "round": 2,
+      "elapsedSeconds": 427,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4321ec9c4340245bd9c0",
+      "eventRef": "ufc:event:history-alash-pride-fc-almaty-arena",
+      "happenedAt": "2017-12-30T00:00:00.000Z",
+      "opponentRef": "ufc:kenan-jafarli",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ac45b1e9acf9bf2443d4",
+      "eventRef": "ufc:event:history-berkut-young-eagles-4",
+      "happenedAt": "2018-04-29T00:00:00.000Z",
+      "opponentRef": "ufc:shamil-akhmaev",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a38f21838f2cb56819e2",
+      "eventRef": "ufc:event:history-fight-nights-global-88",
+      "happenedAt": "2018-08-31T00:00:00.000Z",
+      "opponentRef": "ufc:saud-karagishov",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 549,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-042088afdc59c0e737fb",
+      "eventRef": "ufc:event:history-m-1-challenge-100",
+      "happenedAt": "2018-12-15T00:00:00.000Z",
+      "opponentRef": "ufc:kiril-fomenkov",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 531,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-1e888dfff410899319b7",
+      "eventRef": "ufc:event:history-m-1-challenge-101",
+      "happenedAt": "2019-03-30T00:00:00.000Z",
+      "opponentRef": "ufc:pierre-ludet",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 2,
+      "elapsedSeconds": 405,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4aa26ee93f5231e07292",
+      "eventRef": "ufc:event:history-m-1-challenge-105",
+      "happenedAt": "2019-10-19T00:00:00.000Z",
+      "opponentRef": "ufc:chris-kelades",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-790e37ea6ff0f72e773c",
+      "eventRef": "ufc:event:history-naiza-fc-27",
+      "happenedAt": "2020-12-24T00:00:00.000Z",
+      "opponentRef": "ufc:darkhan-skakov",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 209,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e9894902e0f79c5257f1",
+      "eventRef": "ufc:event:history-brave-cf-53",
+      "happenedAt": "2021-08-21T00:00:00.000Z",
+      "opponentRef": "ufc:aleksander-doskalchuk",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 527,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-681f762d531e31c134fc",
+      "eventRef": "ufc:event:history-naiza-fc-36",
+      "happenedAt": "2021-12-29T00:00:00.000Z",
+      "opponentRef": "ufc:kayck-alencar",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 3,
+      "elapsedSeconds": 627,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-d6a9472ac87b1901311c",
+      "eventRef": "ufc:event:history-brave-cf-57",
+      "happenedAt": "2022-03-11T00:00:00.000Z",
+      "opponentRef": "ufc:imram-magaramov",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-dcbb8783d78fc9712f1e",
+      "eventRef": "ufc:event:history-brave-cf-60",
+      "happenedAt": "2022-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:zach-makovsky",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4882351f0a1a02b94879",
+      "eventRef": "ufc:event:history-brave-cf-66",
+      "happenedAt": "2022-11-26T00:00:00.000Z",
+      "opponentRef": "ufc:kenneth-maningat",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 510,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-385a7b97b4206fc595fc",
+      "eventRef": "ufc:event:history-ufc-on-espn-sandhagen-vs-font",
+      "happenedAt": "2023-08-05T00:00:00.000Z",
+      "opponentRef": "ufc:ode-osbourne",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 491,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2be7942aa3c129d8f89e",
+      "eventRef": "ufc:event:history-ufc-299",
+      "happenedAt": "2024-03-09T00:00:00.000Z",
+      "opponentRef": "ufc:c-j-vergara",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-30ba852692b3fd8b91c8",
+      "eventRef": "ufc:event:history-ufc-on-espn-perez-vs-taira",
+      "happenedAt": "2024-06-15T00:00:00.000Z",
+      "opponentRef": "ufc:jose-johnson",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-aab86825f90ccbddf772",
+      "eventRef": "ufc:event:history-ufc-fight-night-hernandez-vs-pereira",
+      "happenedAt": "2024-10-19T00:00:00.000Z",
+      "opponentRef": "ufc:matheus-nicolau",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c286904b4507947243b3",
+      "eventRef": "ufc:event:history-ufc-fight-night-kape-vs-almabayev",
+      "happenedAt": "2025-03-01T00:00:00.000Z",
+      "opponentRef": "ufc:manel-kape",
+      "result": "loss",
+      "method": "TKO (retirement)",
+      "round": 3,
+      "elapsedSeconds": 736,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-f616dc70f3512a5d5bd1",
+      "eventRef": "ufc:event:history-ufc-on-abc-whittaker-vs-de-ridder",
+      "happenedAt": "2025-07-26T00:00:00.000Z",
+      "opponentRef": "ufc:jose-ochoa",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-0ccdd49e0d34e5150f0a",
+      "eventRef": "ufc:event:history-ufc-fight-night-tsarukyan-vs-hooker",
+      "happenedAt": "2025-11-22T00:00:00.000Z",
+      "opponentRef": "ufc:alex-perez",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 3,
+      "elapsedSeconds": 622,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-85e14f7fa823fcd219e6",
+      "eventRef": "ufc:event:history-ufc-fight-night-fiziev-vs-torres",
+      "happenedAt": "2026-06-27T00:00:00.000Z",
+      "opponentRef": "ufc:charles-johnson",
+      "result": "win",
+      "method": "Submission (Suloev stretch)",
+      "round": 3,
+      "elapsedSeconds": 813,
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:asu-almabayev:history",
+      "bouts": 27,
+      "values": {
+        "bouts": 27,
+        "wins": 24,
+        "losses": 3,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.583333,
+        "koTkoWins": 3,
+        "submissionWins": 11,
+        "decisionWins": 10,
+        "koTkoWinShare": 0.125,
+        "submissionWinShare": 0.458333,
+        "decisionWinShare": 0.416667,
+        "averageElapsedSeconds": 676.851852,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 0.8,
+        "fightsPerYear": 1.989172,
+        "layoffDays": 36
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1934.84110131,
+    "deviation": 118.65259132,
+    "volatility": 0.05999096,
+    "boutCount": 27,
+    "asOfBoutRef": "ufc:bout:history-85e14f7fa823fcd219e6",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
-      "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "heightCm"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +581,42 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 27 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.875,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

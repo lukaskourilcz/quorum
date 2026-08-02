@@ -51,6 +51,21 @@
   "discrepancies": [],
   "history": [
     {
+      "boutRef": "ufc:bout:history-920521ddcf9f1834bb88",
+      "eventRef": "ufc:event:history-ufc-172",
+      "happenedAt": "2014-04-26T00:00:00.000Z",
+      "opponentRef": "ufc:andre-fili",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 3,
+      "elapsedSeconds": 819,
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-adcc14d368f59e625d49",
       "eventRef": "ufc:event:history-ufc-fight-night-nelson-vs-story",
       "happenedAt": "2014-10-04T00:00:00.000Z",
@@ -64,6 +79,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4619543dd1aa641c9f0f",
+      "eventRef": "ufc:event:history-ufc-on-espn-holloway-vs-allen",
+      "happenedAt": "2023-04-15T00:00:00.000Z",
+      "opponentRef": "ufc:arnold-allen",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -73,37 +103,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:max-holloway:history",
-      "bouts": 1,
+      "bouts": 3,
       "values": {
-        "bouts": 1,
-        "wins": 1,
+        "bouts": 3,
+        "wins": 3,
         "losses": 0,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 1,
+        "finishRate": 0.666667,
         "koTkoWins": 1,
-        "submissionWins": 0,
-        "decisionWins": 0,
-        "koTkoWinShare": 1,
-        "submissionWinShare": 0,
-        "decisionWinShare": 0,
-        "averageElapsedSeconds": 191,
+        "submissionWins": 1,
+        "decisionWins": 1,
+        "koTkoWinShare": 0.333333,
+        "submissionWinShare": 0.333333,
+        "decisionWinShare": 0.333333,
+        "averageElapsedSeconds": 836.666667,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
-        "fightsPerYear": 365.25,
-        "layoffDays": 4320
+        "fightsPerYear": 0.222981,
+        "layoffDays": 1205
       },
-      "updatedAt": "2026-08-02T14:14:59.647Z"
+      "updatedAt": "2026-08-02T15:43:59.798Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1819.36009583,
-    "deviation": 277.54488688,
-    "volatility": 0.06000153,
-    "boutCount": 1,
-    "asOfBoutRef": "ufc:bout:history-adcc14d368f59e625d49",
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 2157.09730399,
+    "deviation": 210.49028426,
+    "volatility": 0.06000322,
+    "boutCount": 3,
+    "asOfBoutRef": "ufc:bout:history-4619543dd1aa641c9f0f",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -156,11 +186,26 @@
         "source:wikipedia:33543499"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604",
+        "source:wikipedia:33543499",
+        "source:wikipedia:49598119"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }

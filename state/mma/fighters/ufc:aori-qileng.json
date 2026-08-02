@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Aori_Qileng",
       "publisher": "Wikipedia",
       "title": "Aori Qileng",
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,61 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1993-06-25",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 175.26,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Featherweight",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Xin-Du Martial Arts Club Fight Ready (2022–present)",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "26-13-0 (1 NC)",
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "retrievedAt": "2026-08-02T15:43:59.798Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -50,30 +104,385 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "26-13-0 (1 NC)",
+          "sourceRef": "source:wikipedia:70178359"
+        },
+        {
+          "value": "12-8-0 (1 NC)",
+          "sourceRef": "derived:ufc:aori-qileng:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-135f4272d03d2c03ba96",
+      "eventRef": "ufc:event:history-ckf-3",
+      "happenedAt": "2015-11-06T00:00:00.000Z",
+      "opponentRef": "ufc:guoqing-zhong",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-aae48e95a75911fa465e",
+      "eventRef": "ufc:event:history-ckf-4",
+      "happenedAt": "2015-12-20T00:00:00.000Z",
+      "opponentRef": "ufc:minghui-bai",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-add945d446e08ca1b4bf",
+      "eventRef": "ufc:event:history-wlf-e-p-i-c-2",
+      "happenedAt": "2016-03-12T00:00:00.000Z",
+      "opponentRef": "ufc:grigorii-popov",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 575,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-02635cb181179133107b",
+      "eventRef": "ufc:event:history-ckf-66",
+      "happenedAt": "2016-05-04T00:00:00.000Z",
+      "opponentRef": "ufc:siwuhaer-husiman",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 84,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-5b990b815409a4fbd25a",
+      "eventRef": "ufc:event:history-wlf-e-p-i-c-8",
+      "happenedAt": "2016-09-28T00:00:00.000Z",
+      "opponentRef": "ufc:rishat-kharisov",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c5433a12f7b85fdb0106",
+      "eventRef": "ufc:event:history-wlf-e-p-i-c-9",
+      "happenedAt": "2016-10-24T00:00:00.000Z",
+      "opponentRef": "ufc:ahmad-davlatov",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 89,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-08012f6bac7e9f6d9298",
+      "eventRef": "ufc:event:history-kung-fu-world-cup-2017-day-1",
+      "happenedAt": "2017-01-24T00:00:00.000Z",
+      "opponentRef": "ufc:max-hunter-leali",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-89fc75606e9869123808",
+      "eventRef": "ufc:event:history-wlf-w-a-r-s-12",
+      "happenedAt": "2017-03-11T00:00:00.000Z",
+      "opponentRef": "ufc:kirill-tropinin",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-1b3cb25131918c780d53",
+      "eventRef": "ufc:event:history-wlf-w-a-r-s-14",
+      "happenedAt": "2017-05-20T00:00:00.000Z",
+      "opponentRef": "ufc:kai-kara-france",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-680f601579588a4a5f80",
+      "eventRef": "ufc:event:history-fight-king-gold-belt-contest",
+      "happenedAt": "2017-07-16T00:00:00.000Z",
+      "opponentRef": "ufc:vitalii",
+      "result": "win",
+      "method": "TKO (flying knee and punches)",
+      "round": 1,
+      "elapsedSeconds": 104,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ea012a3a6878d5817762",
+      "eventRef": "ufc:event:history-guan-sheng-international-wushu-culture-festival",
+      "happenedAt": "2017-08-10T00:00:00.000Z",
+      "opponentRef": "ufc:nakouzi",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 149,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-61777a8e32d7b181b841",
+      "eventRef": "ufc:event:history-ufc-261",
+      "happenedAt": "2021-04-24T00:00:00.000Z",
+      "opponentRef": "ufc:jeff-molina",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4f72a10fa4854d03d8ba",
+      "eventRef": "ufc:event:history-ufc-fight-night-vieira-vs-tate",
+      "happenedAt": "2021-11-20T00:00:00.000Z",
+      "opponentRef": "ufc:cody-durden",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-fe750c8056b8c9a53bff",
+      "eventRef": "ufc:event:history-ufc-fight-night-lemos-vs-andrade",
+      "happenedAt": "2022-04-23T00:00:00.000Z",
+      "opponentRef": "ufc:cameron-else",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 168,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-b651313f5d8775728f65",
+      "eventRef": "ufc:event:history-ufc-278",
+      "happenedAt": "2022-08-20T00:00:00.000Z",
+      "opponentRef": "ufc:jay-perrin",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-796fdf7b2245077427f6",
+      "eventRef": "ufc:event:history-ufc-289",
+      "happenedAt": "2023-06-10T00:00:00.000Z",
+      "opponentRef": "ufc:aiemann-zahabi",
+      "result": "loss",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 64,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2375dc80ae72bfb34abf",
+      "eventRef": "ufc:event:history-ufc-fight-night-dawson-vs-green",
+      "happenedAt": "2023-10-07T00:00:00.000Z",
+      "opponentRef": "ufc:johnny-munoz-jr",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c1b5c2bd967c36ae9270",
+      "eventRef": "ufc:event:history-ufc-fight-night-hermansson-vs-pyfer",
+      "happenedAt": "2024-02-10T00:00:00.000Z",
+      "opponentRef": "ufc:daniel-marcos",
+      "result": "no-contest",
+      "method": "NC (accidental groin kick)",
+      "round": 2,
+      "elapsedSeconds": 508,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4a3b539ed24c09fa84f2",
+      "eventRef": "ufc:event:history-ufc-306",
+      "happenedAt": "2024-09-14T00:00:00.000Z",
+      "opponentRef": "ufc:raul-rosas-jr",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-ea6af69b35e753b97d6f",
+      "eventRef": "ufc:event:history-ufc-fight-night-de-ridder-vs-allen",
+      "happenedAt": "2025-10-18T00:00:00.000Z",
+      "opponentRef": "ufc:cody-gibson",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 21,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-c2912bfff11319101525",
+      "eventRef": "ufc:event:history-ufc-fight-night-song-vs-figueiredo",
+      "happenedAt": "2026-05-30T00:00:00.000Z",
+      "opponentRef": "ufc:cody-haddon",
+      "result": "loss",
+      "method": "TKO (knees to the body and punches)",
+      "round": 2,
+      "elapsedSeconds": 431,
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:aori-qileng:history",
+      "bouts": 21,
+      "values": {
+        "bouts": 21,
+        "wins": 12,
+        "losses": 8,
+        "draws": 0,
+        "noContests": 1,
+        "finishRate": 0.416667,
+        "koTkoWins": 5,
+        "submissionWins": 0,
+        "decisionWins": 7,
+        "koTkoWinShare": 0.416667,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0.583333,
+        "averageElapsedSeconds": 575.857143,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.5,
+        "fightsPerYear": 1.893429,
+        "layoffDays": 64
+      },
+      "updatedAt": "2026-08-02T15:43:59.798Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T14:14:59.647Z"
+    "rating": 1590.03195962,
+    "deviation": 117.11581759,
+    "volatility": 0.06000119,
+    "boutCount": 20,
+    "asOfBoutRef": "ufc:bout:history-c2912bfff11319101525",
+    "updatedAt": "2026-08-02T15:43:59.798Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "heightCm",
-      "reachCm",
-      "dateOfBirth",
-      "team"
+      "record-history-mismatch"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-02T15:43:59.798Z"
   },
   "changeLog": [
     {
@@ -98,11 +507,44 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 21 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T15:43:59.798Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
+  "completeness": 0.875,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T14:14:59.647Z"
+  "updatedAt": "2026-08-02T15:43:59.798Z"
 }
