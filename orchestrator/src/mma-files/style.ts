@@ -86,6 +86,30 @@ function figures(body: string): string[] {
     .sort();
 }
 
+/** English groups thousands with a comma: 1,391 is one figure, not 1 and 391. */
+function ungroupEnglish(body: string): string {
+  return body.replaceAll(/(?<!\d)(\d{1,3}),(\d{3})(?!\d)/gu, "$1$2");
+}
+
+/**
+ * Undo Czech thousands grouping, which is a space rather than a comma.
+ *
+ * A Czech "1 391" is the same figure as an English "1,391", and reading it as two numbers
+ * blocked the desk's first fighter profile on figure-parity when both bodies said 1,391
+ * seconds. Merging on the space alone would be too eager, since a Czech sentence can put a
+ * three-digit number straight after another number, so a pair is only joined when English
+ * states that exact figure. Parity is the question being asked, so English is the reference.
+ *
+ * The separator class holds the four characters a writer or an editor may produce for this:
+ * space, no-break space, narrow no-break space, thin space.
+ */
+function ungroupCzech(body: string, englishFigures: ReadonlySet<string>): string {
+  return body.replaceAll(
+    /(?<!\d)(\d{1,3})[    ](\d{3})(?!\d)/gu,
+    (match, lead: string, tail: string) => englishFigures.has(`${lead}${tail}`) ? `${lead}${tail}` : match
+  );
+}
+
 export async function loadStylebook(
   root = repoRoot
 ): Promise<string> {
@@ -164,8 +188,8 @@ export function reviewArticleCopy(
 
 export function reviewBilingualParity(article: ArticlePackage): CopyViolation[] {
   const violations: CopyViolation[] = [];
-  const enFigures = figures(article.localizations.en.bodyMDX);
-  const csFigures = figures(article.localizations.cs.bodyMDX);
+  const enFigures = figures(ungroupEnglish(article.localizations.en.bodyMDX));
+  const csFigures = figures(ungroupCzech(article.localizations.cs.bodyMDX, new Set(enFigures)));
   if (JSON.stringify(enFigures) !== JSON.stringify(csFigures)) {
     violations.push({ code: "figure-parity", locale: "cs", message: "English and Czech bodies must carry the same figures." });
   }

@@ -309,3 +309,41 @@ describe("bilingual fighter parity", () => {
     )).toContain("fighter-link-parity");
   });
 });
+
+describe("bilingual figure parity", () => {
+  const withBodies = (en: string, cs: string): ArticlePackage => {
+    const content = {
+      schemaVersion: "article/1" as const,
+      slug: "figures",
+      localizations: {
+        en: { title: "Title", dek: "Dek", bodyMDX: `${en} [source:state/mma/fighters/ufc:a.json]`, imageAlt: "Alt" },
+        cs: { title: "Titulek", dek: "Perex", bodyMDX: `${cs} [source:state/mma/fighters/ufc:a.json]`, imageAlt: "Popis" }
+      },
+      format: "fighter-profile" as const,
+      sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
+      image: deterministicArticleImage({ venture: "mma-files", slug: "figures", title: "Title", altEn: "Alt", altCs: "Popis" }),
+      heroSpec: { template: "fighter-file", bindings: { headline: "Headline" } },
+      fighterRefs: [],
+      publishAt: "2026-08-02T06:00:00.000Z",
+      slot: "am" as const,
+      status: "draft" as const
+    };
+    return ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
+  };
+  const codes = (en: string, cs: string) => reviewBilingualParity(withBodies(en, cs)).map(({ code }) => code);
+
+  it("reads Czech space grouping as the figure English states with a comma", () => {
+    // Both bodies say the same 1,391 seconds; only the thousands separator differs.
+    expect(codes("Total elapsed time was 1,391 seconds.", "Celkova delka byla 1 391 sekund.")).toEqual([]);
+  });
+
+  it("still catches a figure that only one language carries", () => {
+    expect(codes("Total elapsed time was 1,391 seconds.", "Celkova delka byla 1 392 sekund.")).toContain("figure-parity");
+  });
+
+  it("does not merge two adjacent Czech numbers English never stated together", () => {
+    // "14 306" is two figures unless English says 14,306, so joining on the space alone
+    // would hide a real drift behind Czech typography.
+    expect(codes("He fought 14 times at UFC 306.", "Bojoval 14 krat na UFC 306.")).toEqual([]);
+  });
+});
