@@ -591,11 +591,16 @@ export async function runPortfolioCycle(input: {
   } else {
     const promptName = input.phase === "studio" ? "studio.md" : input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
+    const personas = new Map<string, string>();
+    for (const agent of selected) {
+      const profile = agents.agents.find((candidate) => candidate.id === agent)!;
+      personas.set(agent, (await readFile(path.join(repoRoot, "orchestrator", "prompts", `${profile.slug}.md`), "utf8")).trim());
+    }
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"followUpRequest":null}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
-      const prompt = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"followUpRequest":null}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
         agenda: agenda ? {
@@ -607,6 +612,11 @@ export async function runPortfolioCycle(input: {
         allowedEvidenceRefs: context.evidenceRefs,
         context: context.text
       }));
+      // The role block is trusted text and deliberately follows the closed <data> fence:
+      // it keeps `system` byte-identical for every seat in the room (so the room prompt and
+      // the shared packet form one cacheable prefix) and leaves the agent's own instruction
+      // as the last thing it reads, after the untrusted packet rather than before it.
+      const prompt = `${packet}\n\nROLE BOUNDARY:\n${profile.mission}\n\n${personas.get(agent) ?? ""}`;
       const estimate = estimateTextCall({ provider: model.provider, model: model.model, promptChars: system.length + prompt.length, maxOutputTokens: model.maxOutputTokens, at: input.now });
       return { agent, model, system, prompt, estimate };
     });

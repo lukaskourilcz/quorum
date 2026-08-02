@@ -67,4 +67,25 @@ describe("agent registry and identity assets", () => {
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
     expect(avatars.every((avatar) => avatar.height === 1024)).toBe(true);
   });
+
+  it("gives every agent a loadable persona prompt, because a live room now reads it", async () => {
+    // portfolio/run.ts loads `orchestrator/prompts/<slug>.md` for each selected seat and
+    // appends it after the packet. A missing or empty file would throw mid-room, after the
+    // budget reservation and part-way through a paid call graph, so pin the coupling here.
+    const registry = await loadAgentRegistry();
+    const promptsRoot = path.join(configRoot, "..", "orchestrator", "prompts");
+
+    const loaded = await Promise.all(
+      registry.agents.map(async (agent) => {
+        const body = await readFile(path.join(promptsRoot, `${agent.slug}.md`), "utf8");
+        return { id: agent.id, body: body.trim() };
+      })
+    );
+
+    expect(loaded).toHaveLength(40);
+    expect(loaded.filter((entry) => entry.body.length === 0).map((entry) => entry.id)).toEqual([]);
+    // Each persona rides on every call in its room; an unbounded file would silently
+    // inflate every seat's input cost against a $0.05-$0.16 room envelope.
+    expect(loaded.filter((entry) => entry.body.length > 4000).map((entry) => entry.id)).toEqual([]);
+  });
 });
