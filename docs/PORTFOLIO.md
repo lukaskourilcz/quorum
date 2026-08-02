@@ -16,8 +16,8 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | Carousel Studio | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
 | MMA Files | Operating public magazine | Two daily bilingual article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
-`config/ventures.json` stores each project's meetings, cast, cost envelope and admin
-tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
+`config/ventures.json` stores each project's meetings, participating roles, cost
+envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
 contracts retain the word `venture` for compatibility; visitor-facing text says
 `project`.
 
@@ -28,7 +28,9 @@ Thirty-six specialists do bounded work only when a service path or due agenda ne
 their domain. The registry has 40 agents: 21 Anthropic and 19 OpenAI. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
-prompts or meeting packets.
+prompts or meeting packets. The public interface uses names and work labels. It does
+not present quarters as seasons, days as episodes or agents as entertainment
+characters.
 
 PULSE chairs project rooms and AUDIT keeps its rule-based veto. Owner ratings teach
 format and taste; they are not commands. Agents cannot approve their own spending,

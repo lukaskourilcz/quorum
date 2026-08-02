@@ -1,12 +1,11 @@
-# Historical BoardlessAI ecosystem guide for Fable
+# BoardlessAI ecosystem guide for Fable
 
-> Superseded on 2026-08-02 by [`docs/ECOSYSTEM.md`](ECOSYSTEM.md), the canonical
-> six-project, 40-agent standing brief with a generated operating-truth block. This
-> file is preserved as the pre-Carousel-Studio design snapshot; do not use its counts
-> or modes as current instructions.
+> Current brainstorming guide for the six-project, 40-agent system. Use
+> [`docs/ECOSYSTEM.md`](ECOSYSTEM.md) for the canonical operating truth and generated
+> state block when a count, switch, cost or status differs from this explanation.
 
 Updated: 2026-08-02
-Status: historical pre-closing design reference
+Status: current supporting design reference
 Audience: product, service-design and agent-system brainstorming
 
 ## 1. What BoardlessAI is
@@ -16,7 +15,7 @@ projects. It is not a chat room where every agent speaks every day. It combines 
 small decision-making board, on-demand specialists, fixed content services,
 deterministic checks and human-only approval gates.
 
-The system currently runs five workspaces:
+The system currently runs six workspaces:
 
 1. **Caught Up** — a daily bilingual AI-news briefing.
 2. **Titty Tuesdays** — a pre-commerce apparel/brand laboratory focused on future
@@ -24,7 +23,9 @@ The system currently runs five workspaces:
 3. **Magazine Incubator** — a research-only way to find possible publication niches.
 4. **FightAIQ** — sourced UFC and Oktagon fighter cards, historical backfill, bout
    discovery and guarded deterministic analysis.
-5. **MMA Files** — a public English/Czech MMA magazine and the reader-facing home for
+5. **Carousel Studio** — an internal deterministic carousel renderer with a public
+   template gallery and no image-model calls.
+6. **MMA Files** — a public English/Czech MMA magazine and the reader-facing home for
    FightAIQ data.
 
 BoardlessAI makes plans and content, records why a decision was made, counts external
@@ -44,8 +45,8 @@ open accounts, place bets or change a consumer application's code.
 | All-in monthly limit | `$50`, countersigned |
 | Model/API share | `$42` monthly |
 | Daily model/API pace | `$2.20` |
-| Projects | 5 |
-| Registered agents | 38: 20 Anthropic, 18 OpenAI |
+| Projects | 6 |
+| Registered agents | 40: 21 Anthropic, 19 OpenAI |
 | Human decision owner | Lukas Kouril |
 | Public BoardlessAI site | `https://boardless-ai.vercel.app` |
 | Caught Up site | `https://caughtup-ai.vercel.app` |
@@ -80,6 +81,7 @@ Specialist agenda queue ───────────────┐
              ├─ Titty Tuesdays room    │
              ├─ incubator scan/synth   │
              ├─ FightAIQ analysis      │
+             ├─ Carousel Studio room   │
              └─ MMA Files desk         │
                                        │
 Fixed services and change triggers ────┤
@@ -155,7 +157,7 @@ call a model. It distinguishes five behaviors:
 This creates a two-level organization:
 
 1. Decision-makers define the problem and name the evidence needed.
-2. A narrow specialist cast works from that agenda and may request one next step.
+2. A narrow specialist group works from that agenda and may request one next step.
 
 The result should be less repetition, clearer accountability and lower cost without
 weakening publication quality.
@@ -204,7 +206,8 @@ Current transition map:
 
 | Source | Allowed follow-up |
 | --- | --- |
-| Morning board | TT campaign, incubator scan, FightAIQ intake, MMA story meeting or MMA desk |
+| Morning board | TT campaign, incubator scan, FightAIQ intake, MMA story meeting, MMA desk or Carousel Studio |
+| Carousel Studio | another Carousel Studio room |
 | TT campaign | another TT campaign |
 | Incubator scan | incubator synthesis |
 | Incubator synthesis | another evidence scan |
@@ -226,6 +229,7 @@ This map prevents an arbitrary agent from scheduling an arbitrary paid room.
 | 09:00 | MMA Files | Story assignment | fixed service | `$0.05` |
 | 10:00 | MMA Files | Morning article | assigned slot + verified evidence | `$0.16` |
 | 11:00 | Titty Tuesdays | Campaign thinking | agenda | `$0.08` |
+| 13:00 | Carousel Studio | Template review | agenda; deterministic rendering stays `$0` | `$0.06` |
 | 14:00 | BoardlessAI | Afternoon checkpoint | deterministic | `$0` |
 | 17:00 | Caught Up | Product decision | fixed service | `$0.08` |
 | 18:00 | MMA Files | Evening article | assigned slot + verified evidence | `$0.16` |
@@ -234,7 +238,7 @@ This map prevents an arbitrary agent from scheduling an arbitrary paid room.
 | 21:00 | Incubator | Proposal synthesis | agenda | `$0.06` |
 | 22:00 | BoardlessAI | Night checkpoint + summary | deterministic | `$0` plus optional digest path |
 
-The GitHub workflow now uses 17 unique UTC cron entries to represent these 14 Prague
+The GitHub workflow uses 17 unique UTC cron entries to represent these 15 Prague
 windows across daylight saving time. The runtime checks the resolved Prague hour, so
 the inactive seasonal entry does no work. Previously duplicated entries were removed.
 
@@ -255,6 +259,8 @@ The morning packet and `/admin` read business capability from existing Git recor
   dossiers.
 - **Titty Tuesdays:** count and completeness of launch-ready campaign plans.
 - **Incubator:** evidence-backed proposals that meet the current research thesis.
+- **Carousel Studio:** live templates, passing proposals, deterministic rendering and
+  cited brand-specific iterations.
 
 The same pass aggregates killed-slot reasons, veto rate, first-pass versus retry,
 source agreement and post-deploy verifier pass rate. These signals describe how well
@@ -263,7 +269,7 @@ social engagement. `METRICS_INGESTION_ENABLED=false` and SPLIT remains idle.
 
 ## 8. Agent roster and model routing
 
-The registry keeps 38 stable identities. The identity describes responsibility; model
+The registry keeps 40 stable identities. The identity describes responsibility; model
 routing remains centralized so models can be changed without rewriting biographies.
 
 Council routing:
@@ -332,6 +338,19 @@ useful guest from FUNNEL, STUNT, COHORT, SCENE, PALATE, SPARK or VAULT. QUILL is
 currently optional/off. THREADS, INSTAGRAM and FRAME turn an approved plan into
 Tuesday-only caption variants and typographic assets without adding another model
 meeting.
+
+### Carousel Studio specialists
+
+| Agent | Specialty | Boundary |
+| --- | --- | --- |
+| EASEL | original reusable carousel templates | proposals must pass schema, brand, contrast, safe-area and overflow checks before going live |
+| MOTIF | cited textual observations about layout patterns | reads only approved sources and never copies artwork or downloads external image bytes |
+| KEEPER/AUDIT | originality, permissions and deterministic lifecycle checks | cannot approve copied work or bypass a failed check |
+| SCRIBE | public/admin template summaries | cannot change the template or its status |
+
+The room opens at 13:00 only for a due agenda. Rendering remains deterministic and
+makes no provider call. Caught Up, MMA Files and Titty Tuesdays receive their own
+brand tokens while sharing the same checked template engine.
 
 ### FightAIQ specialists
 
@@ -531,7 +550,7 @@ passes the pre-signed template; it cannot treat attention as demand.
 3. A follow-up synthesis agenda may be created from the scan.
 4. Synthesis argues the evidence down to zero, one or two complete proposals.
 5. A board-approved proposal passes deterministic template compliance.
-6. A compliant proposal receives an existing-roster cast, collision-free calendar,
+6. A compliant proposal receives an existing-roster participant group, collision-free calendar,
    stylebook seed, project state scaffold and decision record automatically.
 7. Any new account, credential, social account, commerce, legal/personal-data surface,
    unapproved target or daily envelope above `$0.15` stops for the owner instead.
@@ -662,7 +681,7 @@ Git is the canonical audit trail. Important areas:
 | --- | --- |
 | `config/agents.json` | stable agent identities and responsibilities |
 | `config/models.json` | centralized provider/model routing |
-| `config/ventures.json` | project rooms, casts and envelopes |
+| `config/ventures.json` | project rooms, participating roles and envelopes |
 | `config/venture-agent-controls.json` | optional role switches |
 | `config/meeting-policy.json` | agenda rules, per-project cap, starvation interval and transitions |
 | `contracts/` | exported JSON Schemas for cross-repository validation |

@@ -206,6 +206,23 @@ rendering, KPI evaluation, delivery verification and publishing verification are
 deterministic. The daily API pace remains `$2.20`; the monthly model/API share is
 `$42` inside the `$50` all-in ceiling.
 
+## Public and admin presentation
+
+The public site and protected admin use the original BoardlessAI presentation. The 27
+established roles keep their approved photographs and names. Newer roles use neutral,
+name-based placeholders until an approved portrait exists. Pages describe each role's
+job and saved work without treating agents as entertainment characters.
+
+The retired workplace-show skin does not appear in the interface. Quarters are not
+called seasons and calendar days or meetings are not called episodes. Titty Tuesdays
+may still use `season` inside its own campaign records because that term describes its
+91-day brand plan, not the BoardlessAI interface. The five-day calendar keeps plain
+project and meeting labels, project icons and status colors for completed, failed,
+test, planned and intentionally unused windows.
+
+The model-packet presentation barrier remains active. It keeps portraits, visitor
+language and other decorative page details out of prompts and meeting packets.
+
 ## Agenda and priority queue
 
 `state/priority-queue.json` stores bounded questions with the decision that would

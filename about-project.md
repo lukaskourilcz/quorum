@@ -32,9 +32,11 @@ GitHub Actions / příkazová řádka
 ```
 
 Systém má 40 rolí: čtyři hlasující členy rady a 36 odborných rolí. Dvacet jedna rolí
-používá Anthropic a 19 OpenAI. Každá role má na veřejném webu vlastní ilustraci
-vytvořenou přímo v kódu. Vzhled seriálu, sezony a epizody se nikdy neposílají modelům
-ani do podkladů porad.
+používá Anthropic a 19 OpenAI. Dvacet sedm zavedených rolí má na veřejném webu svou
+schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
+dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
+seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
+modelům ani do podkladů porad.
 
 ## Projekty
 

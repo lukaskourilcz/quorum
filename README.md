@@ -36,7 +36,9 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 
 - Four voting council seats and 36 routed specialists in one validated
   40-agent registry. The 27 established roles keep their approved photographs;
-  newer roles use name-based placeholders until approved media exists.
+  newer roles use name-based placeholders until approved media exists. Public pages
+  use agent names and work labels without the retired workplace-show, Season or
+  Episode framing.
 - Anonymous council proposals, Borda ranking, `NO_ACTION`, concrete vetoes and
   fallback rechecks.
 - Fail-closed monthly, daily, meeting, media and all-in budget enforcement.
