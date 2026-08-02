@@ -6,5 +6,6 @@ unmeasured spends, scaled content, privacy/security risk and forecast
 rewriting. Veto only a concrete guardrail breach. Re-check every promoted
 fallback.
 
-You own: `audit.release_success`, `audit.content_quality`,
-`audit.claim_coverage`, `audit.security_incidents` and `audit.json_hygiene`.
+You own: `audit.lh_perf`, `audit.lh_seo`, `audit.links`,
+`audit.content_quality`, `audit.claim_coverage`, `audit.security_incidents`
+and `audit.json_hygiene`.

@@ -88,4 +88,60 @@ describe("agent registry and identity assets", () => {
     // inflate every seat's input cost against a $0.05-$0.16 room envelope.
     expect(loaded.filter((entry) => entry.body.length > 4000).map((entry) => entry.id)).toEqual([]);
   });
+
+  it("keeps every KPI id a prompt states in step with config/agents.json", async () => {
+    // agents.test.ts already checks ownedKpiIds against kpis.json, but that is config
+    // against config and never opens the prompt markdown. That gap is why audit.md shipped
+    // `audit.release_success` (an id that has never existed) while omitting three ids AUDIT
+    // does own, and why forge.md and pulse.md drifted the same way. Now that run.ts loads
+    // every persona into live rooms, a wrong id here is a claim the model acts on.
+    const registry = await loadAgentRegistry();
+    const promptsRoot = path.join(configRoot, "..", "orchestrator", "prompts");
+    const kpiConfig = JSON.parse(
+      await readFile(path.join(configRoot, "kpis.json"), "utf8")
+    ) as { kpis: Array<{ id: string }> };
+    const kpiIds = new Set(kpiConfig.kpis.map(({ id }) => id));
+
+    const drift: string[] = [];
+    for (const agent of registry.agents) {
+      const body = await readFile(path.join(promptsRoot, `${agent.slug}.md`), "utf8");
+      // Backticked dotted tokens are how every prompt writes a KPI id.
+      const claimed = [
+        ...new Set((body.match(/`[a-z][a-z0-9_]*\.[a-z0-9_]+`/gu) ?? []).map((token) => token.slice(1, -1)))
+      ];
+      if (claimed.length === 0) continue;
+
+      const owned = new Set(agent.ownedKpiIds);
+      for (const id of claimed.filter((candidate) => !kpiIds.has(candidate))) {
+        drift.push(`${agent.slug}.md states ${id}, which is not a KPI in config/kpis.json`);
+      }
+      for (const id of claimed.filter((candidate) => kpiIds.has(candidate) && !owned.has(candidate))) {
+        drift.push(`${agent.slug}.md claims ${id}, which ${agent.id} does not own`);
+      }
+      for (const id of agent.ownedKpiIds.filter((candidate) => !claimed.includes(candidate))) {
+        drift.push(`${agent.slug}.md omits ${id}, which ${agent.id} owns`);
+      }
+    }
+
+    expect(drift).toEqual([]);
+  });
+
+  it("keeps the shared preamble's specialist count equal to the registry", async () => {
+    // _shared.md opened with "Thirty-four non-voting specialists" while the registry held
+    // 36 and its roster sentence named 23. Nothing compared the two.
+    const registry = await loadAgentRegistry();
+    const shared = await readFile(
+      path.join(configRoot, "..", "orchestrator", "prompts", "_shared.md"),
+      "utf8"
+    );
+    const specialists = registry.agents.filter((agent) => agent.kind !== "council");
+
+    const words: Record<number, string> = {
+      33: "Thirty-three", 34: "Thirty-four", 35: "Thirty-five",
+      36: "Thirty-six", 37: "Thirty-seven", 38: "Thirty-eight"
+    };
+    const stated = words[specialists.length];
+    expect(stated, `no spelled-out form for ${specialists.length} specialists`).toBeDefined();
+    expect(shared).toContain(`${stated} non-voting specialists`);
+  });
 });
