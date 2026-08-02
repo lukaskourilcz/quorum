@@ -13,7 +13,8 @@ const links = [
   { href: "/ventures", label: "Projects" },
   { href: "/incubator", label: "New ideas" },
   { href: "/ideas", label: "Idea history" },
-  { href: "/metrics", label: "Results" },
+  { href: "/results", label: "Results" },
+  { href: "/metrics", label: "KPIs" },
   { href: "/money", label: "Money" },
   { href: "/governance", label: "Rules" }
 ];

@@ -13,7 +13,8 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,
-    "/money": ["../state/money/public.json"]
+    "/money": ["../state/money/public.json"],
+    "/results": ["../state/notify/digest/**/*"]
   },
   poweredByHeader: false,
   reactStrictMode: true
