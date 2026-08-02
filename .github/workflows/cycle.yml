@@ -726,9 +726,24 @@ jobs:
             echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          npm --prefix "$clone_root" run test
-          npm --prefix "$clone_root" run typecheck
-          NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app NEXT_PUBLIC_DEMO_MODE=false npm --prefix "$clone_root" run build
+          # The target repository's own gates, captured like every other failure in this step.
+          # Uncaptured they abort before any status= line is written, so the receipt step and
+          # the fail-closed step both silently skip and the incident leaves no durable record.
+          set +e
+          {
+            npm --prefix "$clone_root" run test \
+              && npm --prefix "$clone_root" run typecheck \
+              && NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app NEXT_PUBLIC_DEMO_MODE=false npm --prefix "$clone_root" run build
+          } > "$RUNNER_TEMP/mma-target-gate.log" 2>&1
+          gate_status=$?
+          set -e
+          if test "$gate_status" -ne 0; then
+            tail -40 "$RUNNER_TEMP/mma-target-gate.log" >&2
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            echo "failure_code=target_gate_failed" >> "$GITHUB_OUTPUT"
+            echo "detail_file=$RUNNER_TEMP/mma-target-gate.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if test "$PACKAGE_KIND" = "article"; then
             git -C "$clone_root" add data/boardless/articles.json "$IMAGE_HERO_PATH" "$IMAGE_THUMB_PATH"
           else
