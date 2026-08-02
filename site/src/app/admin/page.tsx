@@ -8,6 +8,7 @@ import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
+import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +22,7 @@ import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { getPublicMoneySnapshot } from "@/lib/money-records";
+import { readCarouselStudio } from "@/lib/carousel-studio";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
@@ -213,13 +215,14 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, agentControls, autonomy, fixedCosts, money] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, carouselStudio, agentControls, autonomy, fixedCosts, money] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
     getPublicStandups(),
     readAdminFightAiQ(),
     readAdminMmaFiles(),
+    readCarouselStudio(),
     readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
@@ -242,6 +245,8 @@ export default async function AdminPage({
     : selectedVenture?.unreadableFiles ?? [];
   const savedItemCount = selectedVenture?.id === "mma-files"
     ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
+    : selectedVenture?.id === "carousel-studio"
+      ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length
     : selectedVenture?.cards.length ?? 0;
   const selectedAgentControls = agentControls.find((control) => control.ventureId === selectedVenture?.id);
   return (
@@ -415,6 +420,8 @@ export default async function AdminPage({
             <FightAiQAdminPanel snapshot={fightaiq} tab={selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources"} />
           ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab) ? (
             <MmaFilesAdminPanel snapshot={mmaFiles} tab={selectedTab as "articles" | "calendar" | "social-lab"} />
+          ) : selectedVenture.id === "carousel-studio" && selectedTab && ["templates", "inspiration", "social-lab"].includes(selectedTab) ? (
+            <CarouselStudioAdminPanel snapshot={carouselStudio} tab={selectedTab as "templates" | "inspiration" | "social-lab"} />
           ) : visibleCards.length ? (
             <div className="mt-8 grid gap-5 xl:grid-cols-2">
               {visibleCards.map((card) => (

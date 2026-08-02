@@ -19,13 +19,14 @@ import { Separator } from "@/components/ui/separator";
 import { CaughtUpVenturePage } from "@/components/caught-up-venture-page";
 import { TittyTuesdaysVenturePage } from "@/components/titty-tuesdays-venture-page";
 import { FightAiQVenturePage } from "@/components/fightaiq-venture-page";
+import { CarouselStudioVenturePage } from "@/components/carousel-studio-venture-page";
 import {
   opportunities,
   opportunityDimensions
 } from "@/data/fixtures";
 
 export function generateStaticParams() {
-  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "fightaiq" }, ...opportunities.map((opportunity) => ({ slug: opportunity.slug }))];
+  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "fightaiq" }, { slug: "carousel-studio" }, ...opportunities.map((opportunity) => ({ slug: opportunity.slug }))];
 }
 
 export async function generateMetadata({
@@ -48,6 +49,7 @@ export async function generateMetadata({
     };
   }
   if (slug === "fightaiq") return { title: "FightAIQ", description: "The UFC and Oktagon data layer that delivers checked fight files to MMA Files." };
+  if (slug === "carousel-studio") return { title: "Carousel Studio", description: "BoardlessAI's deterministic carousel template engine and live layout gallery." };
   const opportunity = opportunities.find((item) => item.slug === slug);
   return {
     description: opportunity?.reason ?? "BoardlessAI test idea.",
@@ -65,6 +67,7 @@ export default async function VentureDetailPage({
   if (slug === "caught-up") return <CaughtUpVenturePage />;
   if (slug === "titty-tuesdays") return <TittyTuesdaysVenturePage />;
   if (slug === "fightaiq") return <FightAiQVenturePage />;
+  if (slug === "carousel-studio") return <CarouselStudioVenturePage />;
   const opportunity = opportunities.find((item) => item.slug === slug);
   if (!opportunity) {
     notFound();

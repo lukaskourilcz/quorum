@@ -8,7 +8,8 @@ export const MonetizationMethodIdSchema = z.enum([
   "mma-files-sponsorship-affiliate",
   "titty-tuesdays-commerce",
   "fightaiq-none",
-  "incubator-none"
+  "incubator-none",
+  "carousel-studio-internal"
 ]);
 
 export const MonetizationProposalSchema = openObject({
@@ -49,7 +50,7 @@ export const MonetizationMethodStateSchema = openObject({
 
 export const PublicMonetizationMethodSchema = openObject({
   id: MonetizationMethodIdSchema,
-  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "fightaiq", "incubator"]),
+  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "fightaiq", "incubator", "carousel-studio"]),
   method: z.string().min(1).max(160),
   status: MonetizationStatusSchema,
   activationKpi: z.string().min(1).max(300),
@@ -229,6 +230,15 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     note: "The Incubator supports venture research and does not sell a product.",
     proposal: null,
     readiness: () => ({ met: false, unavailable: false, detail: "No monetization is planned." })
+  },
+  {
+    id: "carousel-studio-internal",
+    venture: "carousel-studio",
+    method: "Not monetized — internal engine",
+    activationKpi: "Locked. A standalone product needs a separate owner decision and extraction plan.",
+    note: "The package stays self-contained so a future standalone product remains possible, but no extraction, sale or service is authorized.",
+    proposal: null,
+    readiness: () => ({ met: false, unavailable: false, detail: "Internal portfolio infrastructure; future product extraction is locked." })
   }
 ];
 

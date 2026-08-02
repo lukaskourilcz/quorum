@@ -11,6 +11,13 @@ import { NicheProposalSchema } from "../contracts/niche-proposal.js";
 import { FixedCostRegistrySchema } from "../money/fixed-costs.js";
 import type { MonetizationMeasurements } from "../money/monetization.js";
 import type { KpiMeasurements } from "./quarterly.js";
+import {
+  CAROUSEL_BRANDS,
+  CarouselTemplateSchema,
+  SEED_TEMPLATES,
+  fixturePayload,
+  renderCarouselSvg
+} from "@boardlessai/carousel-studio";
 
 const DAY_MS = 86_400_000;
 
@@ -134,7 +141,9 @@ export async function collectQuarterlyMeasurements(input: {
     priorityRaw,
     calendars,
     sourcesRaw,
-    storedRaw
+    storedRaw,
+    studioTemplatesRaw,
+    studioObservationsRaw
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -155,7 +164,9 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFile(path.join(input.stateRoot, "priority-queue.json")),
     jsonFiles(path.join(input.stateRoot, "calendar")),
     jsonFile(path.join(input.repoRoot, "config", "sources.json")),
-    jsonFile(path.join(input.stateRoot, "metrics", "quarterly.json"))
+    jsonFile(path.join(input.stateRoot, "metrics", "quarterly.json")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"), true),
+    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "observations"))
   ]);
 
   const measurements: Record<string, number | null> = {};
@@ -234,6 +245,35 @@ export async function collectQuarterlyMeasurements(input: {
     measurements[`receipts/social/${venture}#published_count`] = count;
     if (venture === "titty-tuesdays") measurements["receipts/social/titty-tuesdays#tuesday_published_count"] = count;
   }
+  measurements["receipts/social#carousel_studio_render_rate"] = ratio(
+    publishedSocial.filter((receipt) => receipt.rendererVersion === "carousel-studio-1").length,
+    publishedSocial.length
+  );
+
+  const studioTemplates = studioTemplatesRaw
+    .map((value) => CarouselTemplateSchema.safeParse(value))
+    .filter((result) => result.success)
+    .map((result) => result.data);
+  measurements["state/ventures/carousel-studio/templates#live_count"] =
+    SEED_TEMPLATES.filter((template) => template.status === "live").length
+    + studioTemplates.filter((template) => template.status === "live").length;
+  measurements["state/ventures/carousel-studio/templates#passing_proposal_count"] = studioTemplates.filter((template) => template.status === "live").length;
+  const deterministicSeed = SEED_TEMPLATES[0]!;
+  const deterministicInput = {
+    template: deterministicSeed,
+    payload: fixturePayload(deterministicSeed, "cs"),
+    brand: CAROUSEL_BRANDS["caught-up"],
+    format: "instagram-square" as const
+  };
+  const firstRender = renderCarouselSvg(deterministicInput).map((slide) => slide.svgHash);
+  const secondRender = renderCarouselSvg(deterministicInput).map((slide) => slide.svgHash);
+  measurements["state/ventures/carousel-studio#determinism_check_green"] = JSON.stringify(firstRender) === JSON.stringify(secondRender) ? 1 : 0;
+  const iteratedBrands = new Set(studioObservationsRaw.flatMap((value) => {
+    const observation = record(value);
+    if (!dateInPeriod(observation?.retrievedAt, periodStart, periodEnd) || !Array.isArray(observation?.appliesTo)) return [];
+    return observation.appliesTo.filter((brand): brand is string => typeof brand === "string" && brand in CAROUSEL_BRANDS);
+  }));
+  measurements["state/ventures/carousel-studio/observations#brand_iteration_count"] = iteratedBrands.size;
 
   const sourceConfig = record(sourcesRaw);
   const sources = Array.isArray(sourceConfig?.sources) ? sourceConfig.sources.map(record).filter(Boolean) : [];

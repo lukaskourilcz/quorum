@@ -3,10 +3,10 @@ import { agents } from "./agents";
 import { opportunities, standups } from "./fixtures";
 
 describe("public fixture truthfulness", () => {
-  it("exposes exactly thirty-three unique role profiles", () => {
-    expect(agents).toHaveLength(38);
-    expect(new Set(agents.map((agent) => agent.id)).size).toBe(38);
-    expect(new Set(agents.map((agent) => agent.slug)).size).toBe(38);
+  it("exposes exactly forty unique role profiles", () => {
+    expect(agents).toHaveLength(40);
+    expect(new Set(agents.map((agent) => agent.id)).size).toBe(40);
+    expect(new Set(agents.map((agent) => agent.slug)).size).toBe(40);
   });
 
   it("never presents a fixture opportunity as selected", () => {

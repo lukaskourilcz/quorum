@@ -148,6 +148,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         variant: queued.variant,
         idempotencyKey: key,
         contentHash: queued.content.contentHash,
+        rendererVersion: queued.content.rendererVersion,
         outcome: succeeded ? "published" : "paused",
         remoteId,
         remoteUrl,

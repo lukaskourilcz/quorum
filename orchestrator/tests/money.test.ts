@@ -92,6 +92,7 @@ describe("monetization state machine", () => {
     });
     expect(methods.find((method) => method.id === "caught-up-sponsorship")?.proposal?.ownerChecklist.length).toBeGreaterThan(0);
     expect(methods.find((method) => method.id === "fightaiq-none")).toMatchObject({ status: "locked", proposal: null });
+    expect(methods.find((method) => method.id === "carousel-studio-internal")).toMatchObject({ status: "locked", venture: "carousel-studio", proposal: null });
   });
 });
 

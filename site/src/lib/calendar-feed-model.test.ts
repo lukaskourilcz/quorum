@@ -4,7 +4,7 @@ import { meetingFixtures } from "../data/meeting-fixtures";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 
 describe("public CalendarFeed build model", () => {
-  it("generates fourteen Prague rooms and article slots for every day", () => {
+  it("generates fifteen Prague rooms and article slots for every day", () => {
     const feed = buildPublicCalendarFeed({
       weekOf: "2026-07-31",
       now: new Date("2026-07-31T10:00:00Z"),
@@ -12,8 +12,8 @@ describe("public CalendarFeed build model", () => {
       meetings: []
     });
     expect(feed.weekOf).toBe("2026-07-27");
-    expect(feed.slots).toHaveLength(98);
-    expect(feed.slots.slice(0, 14).map((slot) => slot.kind)).toEqual([
+    expect(feed.slots).toHaveLength(105);
+    expect(feed.slots.slice(0, 15).map((slot) => slot.kind)).toEqual([
       "cu-edition",
       "venture-morning",
       "incubator-scan",
@@ -21,6 +21,7 @@ describe("public CalendarFeed build model", () => {
       "mag-editorial",
       "article-am",
       "tt-marketing",
+      "studio",
       "venture-afternoon",
       "cu-product",
       "article-pm",

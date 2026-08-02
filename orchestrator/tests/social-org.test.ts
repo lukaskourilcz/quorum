@@ -55,6 +55,7 @@ function createQueueItem(): QueueItem {
       altText: null,
       assetPaths: [],
       factualClaimRefs: ["FIXTURE-EVIDENCE-001"],
+      rendererVersion: "carousel-studio-1",
       contentHash: "0".repeat(64)
     },
     publishWindow: {

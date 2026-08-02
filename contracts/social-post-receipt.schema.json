@@ -45,6 +45,10 @@
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
     },
+    "rendererVersion": {
+      "type": "string",
+      "const": "carousel-studio-1"
+    },
     "outcome": {
       "type": "string",
       "enum": [
@@ -123,6 +127,7 @@
     "variant",
     "idempotencyKey",
     "contentHash",
+    "rendererVersion",
     "outcome",
     "remoteId",
     "remoteUrl",

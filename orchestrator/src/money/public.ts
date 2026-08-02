@@ -26,7 +26,7 @@ export const PublicMoneySnapshotSchema = openObject({
     daysRemaining: z.number().int().min(0).max(90),
     statuses: z.array(QuarterlyKpiEvaluationSchema).max(200)
   }),
-  monetization: z.array(PublicMonetizationMethodSchema).length(5),
+  monetization: z.array(PublicMonetizationMethodSchema).length(6),
   costs: openObject({
     currency: z.literal("USD"),
     api: openObject({

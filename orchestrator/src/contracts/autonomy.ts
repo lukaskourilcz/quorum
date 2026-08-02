@@ -172,6 +172,7 @@ export const SocialPostReceiptSchema = openObject({
   variant: z.enum(["A", "B"]),
   idempotencyKey: Sha256Schema,
   contentHash: Sha256Schema,
+  rendererVersion: z.literal("carousel-studio-1"),
   outcome: z.enum(["published", "failed", "paused"]),
   remoteId: z.string().trim().min(1).max(240).nullable(),
   remoteUrl: HttpsUrlSchema.nullable(),

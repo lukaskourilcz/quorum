@@ -16,7 +16,7 @@ const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
   "ideas", "plans", "visuals", "niche-proposals",
   "fighters", "bouts", "events", "slates", "sources",
-  "articles", "calendar", "social-lab"
+  "articles", "calendar", "social-lab", "templates", "inspiration"
 ] as const;
 
 export type AdminVentureTab = (typeof adminTabs)[number];

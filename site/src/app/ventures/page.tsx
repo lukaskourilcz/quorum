@@ -32,16 +32,16 @@ export default function VenturesPage() {
               Current projects
             </p>
             <p className="mt-4 text-7xl font-semibold leading-none tracking-[-0.07em]">
-              5
+              6
             </p>
             <p className="mt-3 text-[0.84375rem] text-[var(--fog)]">
-              Two publications · apparel planning · idea research · fight data
+              Two publications · apparel planning · idea research · fight data · design engine
             </p>
           </div>
         }
-        description="Five projects share the same checks for sources, cost and human approval. Caught Up and MMA Files have their own public sites; Titty Tuesdays remains planning-only."
+        description="Six projects share the same checks for sources, cost and human approval. Carousel Studio supplies checked social layouts without adding an image-model bill."
         eyebrow="Current work"
-        title="Five projects, with clear limits"
+        title="Six projects, with clear limits"
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-22 md:px-10">
@@ -112,6 +112,20 @@ export default function VenturesPage() {
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Two daily English and Czech article slots, backed by FightAIQ files.</h2>
               <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Finished bilingual articles and FightAIQ data are delivered to the public magazine. Social posting stays off until you turn it on separately.</p>
               <a className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="https://mma-files.vercel.app/en" rel="noreferrer" target="_blank">Open MMA Files <ArrowRight aria-hidden="true" className="size-4" /></a>
+            </div>
+          </div>
+        </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
+              <Badge tone="accent">Project 006</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--accent)]">INTERNAL DESIGN ENGINE</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Carousel Studio</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Reusable social layouts that stay distinct across all three brands.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Ten original templates render as deterministic PNGs for Instagram and Threads. The engine costs no API tokens; its paid review room runs only from a bounded agenda.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/carousel-studio">Open Carousel Studio <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
         </article>
@@ -244,7 +258,7 @@ export default function VenturesPage() {
             ))}
           </div>
           <p className="mt-5 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-            Current step / 02 test the idea · five projects share the same checks
+            Current step / 02 test the idea · six projects share the same checks
           </p>
         </div>
       </section>

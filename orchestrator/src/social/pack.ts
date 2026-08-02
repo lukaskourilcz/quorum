@@ -14,7 +14,7 @@ import { atomicWriteBuffer, atomicWriteJson, atomicWriteText, readText } from ".
 import { validateSocialImage } from "./media/validate.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 
-const COMPOSER_VERSION = "carousel-studio-1";
+const COMPOSER_VERSION = "carousel-studio-1" as const;
 
 function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
@@ -95,6 +95,7 @@ function queueItem(input: {
       altText: queueAltText(input.pack, input.locale, input.channel),
       assetPaths: platform.frames,
       factualClaimRefs: input.evidenceRefs,
+      rendererVersion: COMPOSER_VERSION,
       contentHash: "0".repeat(64)
     },
     publishWindow: { notBefore, notAfter },

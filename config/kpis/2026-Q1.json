@@ -325,6 +325,61 @@
       "ramp_days": 0
     },
     {
+      "id": "carousel-studio.live-templates",
+      "venture": "carousel-studio",
+      "name": "Live checked templates",
+      "metric_source": "state/ventures/carousel-studio/templates#live_count",
+      "target": 10,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 0
+    },
+    {
+      "id": "carousel-studio.passing-proposals",
+      "venture": "carousel-studio",
+      "name": "New EASEL proposals that passed every check",
+      "metric_source": "state/ventures/carousel-studio/templates#passing_proposal_count",
+      "target": 6,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14
+    },
+    {
+      "id": "carousel-studio.engine-post-rate",
+      "venture": "carousel-studio",
+      "name": "Published venture carousels rendered through Carousel Studio",
+      "metric_source": "receipts/social#carousel_studio_render_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 14
+    },
+    {
+      "id": "carousel-studio.determinism",
+      "venture": "carousel-studio",
+      "name": "Deterministic render check remains green",
+      "metric_source": "state/ventures/carousel-studio#determinism_check_green",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "boolean",
+      "critical": true,
+      "ramp_days": 0
+    },
+    {
+      "id": "carousel-studio.observation-brand-coverage",
+      "venture": "carousel-studio",
+      "name": "Brands with a cited-observation-driven iteration",
+      "metric_source": "state/ventures/carousel-studio/observations#brand_iteration_count",
+      "target": 3,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14
+    },
+    {
       "id": "board.starvation-resolution-rate",
       "venture": "board",
       "name": "Starvation-list items commissioned or skipped with a reason",

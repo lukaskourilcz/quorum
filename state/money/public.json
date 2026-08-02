@@ -1,6 +1,6 @@
 {
   "schemaVersion": "money-public/1",
-  "generatedAt": "2026-08-02T06:00:00.000Z",
+  "generatedAt": "2026-08-02T12:00:00.000Z",
   "quarter": {
     "id": "2026-Q1",
     "start": "2026-08-03",
@@ -443,6 +443,81 @@
         "reason": null
       },
       {
+        "id": "carousel-studio.live-templates",
+        "venture": "carousel-studio",
+        "name": "Live checked templates",
+        "unit": "count",
+        "actual": 10,
+        "target": 10,
+        "direction": "at-least",
+        "critical": false,
+        "status": "on-track",
+        "paceTarget": 0,
+        "attainmentRatio": 1,
+        "rampActive": false,
+        "reason": null
+      },
+      {
+        "id": "carousel-studio.passing-proposals",
+        "venture": "carousel-studio",
+        "name": "New EASEL proposals that passed every check",
+        "unit": "count",
+        "actual": 0,
+        "target": 6,
+        "direction": "at-least",
+        "critical": false,
+        "status": "on-track",
+        "paceTarget": 0,
+        "attainmentRatio": 0,
+        "rampActive": false,
+        "reason": null
+      },
+      {
+        "id": "carousel-studio.engine-post-rate",
+        "venture": "carousel-studio",
+        "name": "Published venture carousels rendered through Carousel Studio",
+        "unit": "ratio",
+        "actual": null,
+        "target": 1,
+        "direction": "at-least",
+        "critical": true,
+        "status": "unavailable",
+        "paceTarget": null,
+        "attainmentRatio": null,
+        "rampActive": false,
+        "reason": "No verified measurement is connected."
+      },
+      {
+        "id": "carousel-studio.determinism",
+        "venture": "carousel-studio",
+        "name": "Deterministic render check remains green",
+        "unit": "boolean",
+        "actual": 1,
+        "target": 1,
+        "direction": "at-least",
+        "critical": true,
+        "status": "on-track",
+        "paceTarget": 0,
+        "attainmentRatio": 1,
+        "rampActive": false,
+        "reason": null
+      },
+      {
+        "id": "carousel-studio.observation-brand-coverage",
+        "venture": "carousel-studio",
+        "name": "Brands with a cited-observation-driven iteration",
+        "unit": "count",
+        "actual": 0,
+        "target": 3,
+        "direction": "at-least",
+        "critical": false,
+        "status": "on-track",
+        "paceTarget": 0,
+        "attainmentRatio": 0,
+        "rampActive": false,
+        "reason": null
+      },
+      {
         "id": "board.starvation-resolution-rate",
         "venture": "board",
         "name": "Starvation-list items commissioned or skipped with a reason",
@@ -564,6 +639,21 @@
       "proposal": null,
       "ownerGateRequired": true,
       "note": "The Incubator supports venture research and does not sell a product."
+    },
+    {
+      "id": "carousel-studio-internal",
+      "venture": "carousel-studio",
+      "method": "Not monetized — internal engine",
+      "status": "locked",
+      "activationKpi": "Locked. A standalone product needs a separate owner decision and extraction plan.",
+      "readiness": {
+        "met": false,
+        "unavailable": false,
+        "detail": "Internal portfolio infrastructure; future product extraction is locked."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "The package stays self-contained so a future standalone product remains possible, but no extraction, sale or service is authorized."
     }
   ],
   "costs": {

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": true,
+  "cycleId": "20260801110000-studio",
+  "phase": "studio",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [
+    "EASEL",
+    "MOTIF",
+    "KEEPER",
+    "AUDIT",
+    "SCRIBE"
+  ],
+  "agendaId": null,
+  "generatedAt": "2026-08-01T11:06:00.000Z"
+}

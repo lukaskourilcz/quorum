@@ -7,6 +7,7 @@
   "variant": "A",
   "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "contentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "rendererVersion": "carousel-studio-1",
   "outcome": "published",
   "remoteId": "threads-123",
   "remoteUrl": "https://www.threads.net/@caughtup/post/123",

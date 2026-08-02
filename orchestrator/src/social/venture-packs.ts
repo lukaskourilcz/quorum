@@ -44,7 +44,7 @@ function baseQueue(input: {
     audience: input.venture === "mma-files" ? `MMA Files readers${input.locale ? ` (${input.locale})` : ""}` : "Titty Tuesdays adult brand audience",
     destination: input.destination,
     utm: { source: input.channel, medium: "organic_social" as const, campaign: campaignId, content: input.variant },
-    content: { text: input.text, altText: input.altText, assetPaths: input.assetPaths, factualClaimRefs: input.evidenceRefs, contentHash: "0".repeat(64) },
+    content: { text: input.text, altText: input.altText, assetPaths: input.assetPaths, factualClaimRefs: input.evidenceRefs, rendererVersion: "carousel-studio-1" as const, contentHash: "0".repeat(64) },
     publishWindow: { notBefore: input.notBefore, notAfter: input.notAfter },
     status: "draft" as const,
     checks: { schema: "pass" as const, brand: "pass" as const, claims: "pass" as const, quill: "pass" as const, keeper: "pass" as const, duplicate: "pass" as const, accessibility: "pass" as const, budget: "pass" as const },

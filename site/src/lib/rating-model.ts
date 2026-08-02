@@ -1,5 +1,5 @@
 export const ratingValues = ["perfect", "good", "bad"] as const;
-export const ratingObjectKinds = ["idea", "plan", "visual", "niche-proposal", "slate", "article", "social-variant"] as const;
+export const ratingObjectKinds = ["idea", "plan", "visual", "niche-proposal", "slate", "article", "social-variant", "template"] as const;
 
 export type RatingValue = (typeof ratingValues)[number];
 export type RatingObjectKind = (typeof ratingObjectKinds)[number];

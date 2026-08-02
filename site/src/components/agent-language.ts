@@ -38,6 +38,8 @@ const titles: Record<AgentId, string> = {
   JAB: "MMA writer",
   REACH: "MMA social editor",
   SPLIT: "Social test analyst",
+  EASEL: "Carousel template designer",
+  MOTIF: "Visual pattern researcher",
   PIVOT: "MMA desk liaison"
 };
 
@@ -79,6 +81,8 @@ const mandates: Record<AgentId, string> = {
   JAB: "Writes sourced MMA stories in English and gives the Czech pass the context it needs to sound natural.",
   REACH: "Builds two clearly different English and Czech social drafts for every approved article.",
   SPLIT: "Stays idle until Phase 3 and blocks any early reader or post measurement.",
+  EASEL: "Turns cited layout observations into original, checked and reusable carousel templates.",
+  MOTIF: "Studies approved individual links as text-only visual observations without copying or storing external images.",
   PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input."
 };
 

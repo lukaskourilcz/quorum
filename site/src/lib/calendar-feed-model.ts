@@ -15,6 +15,7 @@ export type CalendarKind =
   | "mag-desk"
   | "article-am"
   | "article-pm"
+  | "studio"
   | "venture-night";
 export type CalendarStatus = "scheduled" | "held" | "missed" | "not-needed";
 
@@ -49,6 +50,7 @@ export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 9, kind: "mag-editorial", label: "MMA Files morning story meeting" },
   { hour: 10, kind: "article-am", label: "MMA Files morning article" },
   { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing" },
+  { hour: 13, kind: "studio", label: "Carousel Studio room" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
   { hour: 17, kind: "cu-product", label: "Product room" },
   { hour: 18, kind: "article-pm", label: "MMA Files evening article" },

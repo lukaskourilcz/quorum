@@ -71,7 +71,7 @@ function queueItem(): QueueItem {
     audience: "Caught Up readers",
     destination: "https://caught-up.example/articles/fixture",
     utm: { source: "threads" as const, medium: "organic_social" as const, campaign: "fixture", content: "B" },
-    content: { text: "A fixture post with a verified destination.", altText: null, assetPaths: [], factualClaimRefs: ["fixture:proof"], contentHash: "0".repeat(64) },
+    content: { text: "A fixture post with a verified destination.", altText: null, assetPaths: [], factualClaimRefs: ["fixture:proof"], rendererVersion: "carousel-studio-1" as const, contentHash: "0".repeat(64) },
     publishWindow: { notBefore: "2026-08-08T08:00:00.000Z", notAfter: "2026-08-08T10:00:00.000Z" },
     status: "draft" as const,
     checks: { schema: "pass" as const, brand: "pass" as const, claims: "pass" as const, quill: "pass" as const, keeper: "pass" as const, duplicate: "pass" as const, accessibility: "pass" as const, budget: "pass" as const },

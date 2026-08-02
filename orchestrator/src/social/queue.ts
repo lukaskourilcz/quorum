@@ -10,6 +10,7 @@ export const QueueContentSchema = z.object({
     .array(z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.[a-zA-Z0-9]+$/))
     .max(10),
   factualClaimRefs: z.array(z.string().min(1)),
+  rendererVersion: z.literal("carousel-studio-1"),
   contentHash: z.string().regex(/^[a-f0-9]{64}$/)
 });
 
@@ -135,7 +136,8 @@ export function queuePayloadHash(
           text: item.content.text,
           altText: item.content.altText,
           assetPaths: item.content.assetPaths,
-          factualClaimRefs: item.content.factualClaimRefs
+          factualClaimRefs: item.content.factualClaimRefs,
+          rendererVersion: item.content.rendererVersion
         },
         publishWindow: item.publishWindow,
         selectedBy: item.selectedBy

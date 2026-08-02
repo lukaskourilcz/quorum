@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260801110000-studio",
+  "date": "2026-08-01",
+  "phase": "studio",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check fixture observations and the live template catalog without creating external work or spend",
+  "participantReasons": [
+    {
+      "agent": "EASEL",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "MOTIF",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Dry room complete. No provider call, external action or unsupported artifact is represented.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "EASEL",
+      "summary": "Dry room complete. No provider call, external action or unsupported artifact is represented.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "MOTIF",
+      "summary": "MOTIF records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "KEEPER",
+      "summary": "KEEPER records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "AUDIT records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SCRIBE",
+      "summary": "SCRIBE records no live contribution in a deterministic dry run.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "EASEL",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "MOTIF",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "KEEPER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SCRIBE",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "TEMPLATE_ONLY. Checked original templates may enter the internal live library; this does not authorize social publishing or external media collection.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-01T11:06:00.000Z",
+  "kind": "studio",
+  "roomTranscript": {
+    "openedAt": "2026-08-01T11:00:00.000Z",
+    "closedAt": "2026-08-01T11:06:00.000Z",
+    "gavel": "EASEL",
+    "setting": "Deterministic dry portfolio room; no provider call or external action is represented.",
+    "turns": [
+      {
+        "agent": "EASEL",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T11:00:00.000Z",
+        "text": "Check fixture observations and the live template catalog without creating external work or spend"
+      },
+      {
+        "agent": "EASEL",
+        "mode": "statement",
+        "sentAt": "2026-08-01T11:01:00.000Z",
+        "text": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      },
+      {
+        "agent": "MOTIF",
+        "mode": "statement",
+        "sentAt": "2026-08-01T11:02:00.000Z",
+        "text": "MOTIF records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "KEEPER",
+        "mode": "statement",
+        "sentAt": "2026-08-01T11:03:00.000Z",
+        "text": "KEEPER records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T11:04:00.000Z",
+        "text": "AUDIT records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "SCRIBE",
+        "mode": "statement",
+        "sentAt": "2026-08-01T11:05:00.000Z",
+        "text": "SCRIBE records no live contribution in a deterministic dry run."
+      },
+      {
+        "agent": "EASEL",
+        "mode": "close",
+        "sentAt": "2026-08-01T11:06:00.000Z",
+        "text": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+      }
+    ]
+  }
+}
