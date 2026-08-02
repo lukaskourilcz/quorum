@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { deterministicArticleImage } from "../src/images/article-image.js";
-import { verifyReleaseSnapshot } from "../src/delivery/verifier.js";
+import { verifyReleaseSnapshot, resolveCiState } from "../src/delivery/verifier.js";
 
 function html(input: { title: string; hash: string; attribution: string }): string {
   return `<!doctype html><html><head><meta name="boardless-content-hash" content="${input.hash}"></head><body><h1>${input.title}</h1><a>${input.attribution}</a></body></html>`;
@@ -55,5 +55,29 @@ describe("post-deploy release verifier", () => {
     expect(checks.find((item) => item.name === "czech-route")?.status).toBe("fail");
     expect(checks.find((item) => item.name === "content-hash")?.status).toBe("fail");
     expect(checks.find((item) => item.name === "title-slug")?.status).toBe("fail");
+  });
+});
+
+describe("CI state from partial GitHub reads", () => {
+  it("trusts a successful combined status when check runs are unreadable", () => {
+    // The first MMA Files article reverted itself off the live site on "unavailable" while
+    // its commit's combined status was success: one refused permission erased the other's
+    // answer, because both endpoints were read under a single try.
+    expect(resolveCiState({ state: "success", statuses: [{}] }, null)).toBe("success");
+  });
+
+  it("trusts passing check runs when the combined status is unreadable", () => {
+    expect(resolveCiState(null, { check_runs: [{ status: "completed", conclusion: "success" }] })).toBe("success");
+  });
+
+  it("reports unavailable only when neither signal could be read", () => {
+    expect(resolveCiState(null, null)).toBe("unavailable");
+  });
+
+  it("never turns an unreadable half into a pass", () => {
+    expect(resolveCiState({ state: "pending", statuses: [{}] }, null)).toBe("pending");
+    expect(resolveCiState({ state: "failure", statuses: [{}] }, null)).toBe("failure");
+    expect(resolveCiState(null, { check_runs: [{ status: "completed", conclusion: "failure" }] })).toBe("failure");
+    expect(resolveCiState({ state: "pending", statuses: [] }, { check_runs: [] })).toBe("missing");
   });
 });

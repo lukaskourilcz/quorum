@@ -77,6 +77,31 @@ export async function verifyReleaseSnapshot(snapshot: ReleaseSnapshot, now = new
   ];
 }
 
+export type CiState = "success" | "failure" | "pending" | "missing" | "unavailable";
+
+/**
+ * Decide a commit's CI state from whichever of the two GitHub signals could be read.
+ *
+ * A null argument means that endpoint was unreadable, which is not the same as reporting
+ * nothing: an installation can hold the commit-statuses permission and not the checks one.
+ * Only affirmative success passes, so an unreadable half never invents a green.
+ */
+export function resolveCiState(
+  status: { state?: unknown; statuses?: unknown[] } | null,
+  checks: { check_runs?: Array<{ status?: unknown; conclusion?: unknown }> } | null
+): CiState {
+  if (status === null && checks === null) return "unavailable";
+  const runs = checks?.check_runs ?? [];
+  const passedConclusions = ["success", "neutral", "skipped"];
+  const runPassed = (run: { status?: unknown; conclusion?: unknown }) =>
+    run.status === "completed" && passedConclusions.includes(String(run.conclusion));
+  if (status?.state === "success" || (runs.length > 0 && runs.every(runPassed))) return "success";
+  if (status?.state === "failure" || status?.state === "error") return "failure";
+  if (runs.some((run) => run.status === "completed" && !runPassed(run))) return "failure";
+  const statusesPresent = Array.isArray(status?.statuses) && status.statuses.length > 0;
+  return statusesPresent || runs.length > 0 ? "pending" : "missing";
+}
+
 async function githubChecks(input: { repository: string; commit: string; token: string; now: Date }): Promise<ReleaseCheck[]> {
   const headers = {
     Authorization: `Bearer ${input.token}`,
@@ -93,29 +118,28 @@ async function githubChecks(input: { repository: string; commit: string; token: 
   } catch {
     commitPresent = false;
   }
-  let ciState = "pending";
-  try {
-    const [statusResponse, checksResponse] = await Promise.all([
-      safeFetch(`https://api.github.com/repos/${input.repository}/commits/${input.commit}/status`, {
+  // Commit statuses and check runs are two separate GitHub read permissions, so an
+  // installation can be allowed one and refused the other. Reading them together under a
+  // single try meant one refusal erased the other's answer: the first MMA Files article
+  // reverted itself off the live site on "Target CI state: unavailable" while the commit's
+  // combined status was success, with every other check green. Each endpoint is now read on
+  // its own, and only a genuine success still passes.
+  const readJson = async <T>(url: string): Promise<T | null> => {
+    try {
+      const response = await safeFetch(url, {
         allowHosts: ["api.github.com"], headers, maxBytes: 1_000_000, timeoutMs: 10_000
-      }),
-      safeFetch(`https://api.github.com/repos/${input.repository}/commits/${input.commit}/check-runs`, {
-        allowHosts: ["api.github.com"], headers, maxBytes: 1_000_000, timeoutMs: 10_000
-      })
-    ]);
-    const status = JSON.parse(new TextDecoder().decode(statusResponse.body)) as { state?: unknown; statuses?: unknown[] };
-    const checks = JSON.parse(new TextDecoder().decode(checksResponse.body)) as { check_runs?: Array<{ status?: unknown; conclusion?: unknown }> };
-    const runs = checks.check_runs ?? [];
-    const checksPassed = runs.length > 0 && runs.every((run) => run.status === "completed" && ["success", "neutral", "skipped"].includes(String(run.conclusion)));
-    const statusesPresent = Array.isArray(status.statuses) && status.statuses.length > 0;
-    ciState = status.state === "success" || checksPassed
-      ? "success"
-      : status.state === "failure" || status.state === "error" || runs.some((run) => run.status === "completed" && !["success", "neutral", "skipped"].includes(String(run.conclusion)))
-        ? "failure"
-        : statusesPresent || runs.length > 0 ? "pending" : "missing";
-  } catch {
-    ciState = "unavailable";
-  }
+      });
+      return JSON.parse(new TextDecoder().decode(response.body)) as T;
+    } catch {
+      return null;
+    }
+  };
+  const base = `https://api.github.com/repos/${input.repository}/commits/${input.commit}`;
+  const [status, checks] = await Promise.all([
+    readJson<{ state?: unknown; statuses?: unknown[] }>(`${base}/status`),
+    readJson<{ check_runs?: Array<{ status?: unknown; conclusion?: unknown }> }>(`${base}/check-runs`)
+  ]);
+  const ciState = resolveCiState(status, checks);
   return [
     check("target-commit", commitPresent, commitPresent ? `Target commit ${input.commit} is readable` : `Target commit ${input.commit} is not readable`, input.now),
     check("target-ci", ciState === "success", `Target CI state: ${ciState}`, input.now)
