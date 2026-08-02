@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchOddsApiMma, loadMmaSourceRegistry, projectCitoBouts, projectCitoEvents, projectCitoFighters, projectOddsApiEvents } from "../src/fightaiq/sources.js";
+import { fetchCitoUpcomingEvents, fetchOddsApiMma, loadMmaSourceRegistry, projectCitoBouts, projectCitoEvents, projectCitoFighters, projectOddsApiEvents } from "../src/fightaiq/sources.js";
 
 describe("FightAIQ source controls", () => {
   it("keeps only the reviewed free-source allowlist", async () => {
@@ -82,5 +82,46 @@ describe("FightAIQ source controls", () => {
       timezone: "UTC",
       bouts
     }] } })).toMatchObject([{ id: "event-1", slug: "ufc-example", name: "UFC Example", bouts }]);
+  });
+});
+
+describe("an event with no card says why", () => {
+  const context = { allowHosts: ["api.citoapi.com"], now: new Date("2026-08-02T00:00:00Z") };
+  const resolveImpl = async () => ["203.0.113.10"];
+  const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json" }
+  });
+  const oneEvent = {
+    data: [{ id: "11111111-2222-3333-4444-555555555555", slug: "ufc-330", name: "UFC 330", startDate: "2026-08-08T18:00:00Z" }]
+  };
+
+  it("records the failure instead of returning an event that looks cardless", async () => {
+    // Every intake since founding recorded three upcoming events with empty cards and status
+    // "success". Intake drops an event with no bouts, so the store holds 612 fighters, 572
+    // bouts and no events at all, and nothing said whether the card was empty or refused.
+    const fetchImpl = vi.fn(async (url: string | URL | Request) =>
+      String(url).includes("/bouts") ? json({ message: "Not Found" }, 404) : json(oneEvent));
+    const [event] = await fetchCitoUpcomingEvents({
+      apiKey: "fixture-key",
+      context,
+      fetchImpl: fetchImpl as typeof fetch,
+      resolveImpl
+    });
+    expect(event!.bouts).toEqual([]);
+    expect(event!.boutFetch?.ok).toBe(false);
+    expect(event!.boutFetch?.reason).toContain("404");
+  });
+
+  it("records a successful fetch that genuinely returned no bouts", async () => {
+    const fetchImpl = vi.fn(async (url: string | URL | Request) =>
+      String(url).includes("/bouts") ? json({ data: [] }) : json(oneEvent));
+    const [event] = await fetchCitoUpcomingEvents({
+      apiKey: "fixture-key",
+      context,
+      fetchImpl: fetchImpl as typeof fetch,
+      resolveImpl
+    });
+    expect(event!.boutFetch).toEqual({ ok: true, rowCount: 0, reason: null });
   });
 });

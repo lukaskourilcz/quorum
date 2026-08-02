@@ -161,6 +161,9 @@ export async function produceEdition(
       reporter.warn(`curation_gate_failed_before_write:${error.violations.join(",")}`);
       return noEdition(input, reporter, "curation_gate_failed");
     }
+    // Same reason: only CurationGateError carried its usage, so a curation call that was
+    // billed and then failed to parse vanished from the ledger entirely.
+    if (error instanceof InvalidModelOutputError) reporter.addUsage(error.usage);
     reporter.warn(`curation_failed:${error instanceof Error ? error.message : "unknown"}`);
     return noEdition(input, reporter, "curation_failed");
   }
@@ -245,6 +248,11 @@ export async function produceEdition(
         );
         localized.usage.forEach((usage) => reporter.addUsage(usage));
       } catch (error) {
+        // A localization the provider already billed for still costs money when it fails to
+        // parse. The write stage records that (see the InvalidArticleError branch above); this
+        // one discarded it, so the ledger under-reported and the day and month caps, which are
+        // derived from that same ledger, drifted a little further open on every bad Czech pass.
+        if (error instanceof InvalidModelOutputError) reporter.addUsage(error.usage);
         reporter.warn(`hacek_invalid:${error instanceof Error ? error.message : "unknown"}`);
         reporter.hacekBlocks += 1;
         if (localizationAttempt >= input.config.hacek.maximumRewriteAttempts) {

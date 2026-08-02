@@ -249,6 +249,17 @@ export interface CitoEventSummary {
   startsAt: string | null;
   timeZone: string | null;
   bouts: CitoBoutSummary[];
+  /**
+   * What the follow-up bout request did, when one was made.
+   *
+   * An event with no card and an event whose card could not be fetched both arrive as
+   * `bouts: []`, and the failure was caught and discarded, so they were indistinguishable
+   * downstream. Every FightAIQ intake since founding has recorded three upcoming events with
+   * empty cards and status "success"; because intake drops an event with no bouts, the store
+   * holds 612 fighters, 572 bouts and not one event, and nothing anywhere says why. This
+   * rides out in the source snapshot so the next run answers that in one line.
+   */
+  boutFetch?: { ok: boolean; rowCount: number; reason: string | null };
 }
 
 function fighterReference(value: unknown, fallbackObject: JsonObject, prefix: string): CitoFighterRef | null {
@@ -365,9 +376,16 @@ export async function fetchCitoUpcomingEvents(input: { apiKey: string; context: 
     const key = encodeURIComponent(event.slug || event.id);
     try {
       const boutValue = await fetchJson<unknown>(`https://api.citoapi.com/api/v1/ufc/events/${key}/bouts`, input.context, options);
-      return { ...event, bouts: projectCitoBouts(boutValue) };
-    } catch {
-      return event;
+      const bouts = projectCitoBouts(boutValue);
+      // A recognised envelope with no rows and an envelope this projector does not recognise
+      // both yield an empty array, so the count is recorded either way and the two read the
+      // same in the snapshot only because they are the same outcome: no card was obtained.
+      return { ...event, bouts, boutFetch: { ok: true, rowCount: bouts.length, reason: null } };
+    } catch (error) {
+      return {
+        ...event,
+        boutFetch: { ok: false, rowCount: 0, reason: error instanceof Error ? error.message.slice(0, 200) : "request failed" }
+      };
     }
   }));
 }
