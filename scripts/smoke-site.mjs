@@ -61,6 +61,7 @@ const expectedRoutes = [
   "/log",
   "/manifest.webmanifest",
   "/metrics",
+  "/money",
   "/privacy",
   "/robots.txt",
   "/sitemap.xml",

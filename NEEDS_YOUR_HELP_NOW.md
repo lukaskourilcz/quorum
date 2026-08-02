@@ -1,4 +1,19 @@
-# Needs your help now — FightAIQ free-source keys
+# Needs your help now
+
+## Money and KPI owner inputs
+
+1. Open `/admin` and enter the subscriptions BoardlessAI uses in
+   `config/fixed-costs.json`. Use the amount you pay each month and the date the
+   cost began. The file starts empty because Codex cannot infer your Vercel,
+   Supabase, domain or other bills.
+2. Review the Q1 targets and the 2026-08-03 start date in
+   `config/kpis/2026-Q1.json`. Change any seed value that does not match your
+   operating plan. Your saved values take priority over the defaults.
+
+These steps change reporting inputs. They do not authorize a payment, account,
+shop, sponsorship or affiliate program.
+
+## FightAIQ free-source keys
 
 Only the two surviving keyed $0 sources belong on this list. Both are GitHub Actions
 repository secrets in `lukaskourilcz/quorum`; never put their values in Vercel, Git or

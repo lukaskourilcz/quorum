@@ -97,6 +97,31 @@ The meeting redesign saves cost by avoiding unnecessary calls, not by lowering t
 models that determine publication quality. Static cron wake-ups and `not-needed`
 records cost no model money.
 
+## Money and quarterly targets
+
+The owner-approved D10 protocol gives the company and every project a public 90-day
+target set. Q1 starts on 2026-08-03. Its content and social targets have a 14-day
+setup period before linear pace begins. The daily `$0` evaluator reads only
+deterministic receipt, stats and state paths and labels each target `on-track`,
+`at-risk`, `off-track` or `unavailable`. It does not turn a missing Phase 3 measure
+into zero.
+
+At quarter end, a project below 70% of its targets or missing a critical target gets
+a mandatory `continue / pivot / stop` board item and owner packet. A company miss
+also requires the board to review its operating pattern. The evidence can inform a
+stage decision, but only the owner can change the stage.
+
+`/money` publishes the sanitized target status, earning-method gates, API spend,
+owner-entered fixed-cost categories and verified revenue. Earning methods may move
+from waiting to ready and produce a complete owner proposal. They never become active
+without the owner. FightAIQ remains explicitly unmonetized in Q1 and Q2 while its
+evaluation record is too young.
+
+The protected admin holds the full proposal checklists and edits
+`config/fixed-costs.json`. An empty fixed-cost file is valid but means "not entered,"
+not "free." API totals still come only from the budget ledger, and public output does
+not include invoices, credentials or personal data.
+
 ## Saved work and review
 
 Ideas live under `state/ideas/<project>/`; ratings under
@@ -132,6 +157,8 @@ also lists delivery receipts, deploy proofs, failures and each social unlock cou
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
+- `MMA_FILES_INDEXING_ENABLED` — owner-controlled evidence for the future MMA Files
+  earning-readiness check; absent or false keeps that method waiting.
 - `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
   still needs its own proof/campaign counter, account credentials and safety gate.
 - `METRICS_INGESTION_ENABLED=false` — keeps all visitor, reader and engagement

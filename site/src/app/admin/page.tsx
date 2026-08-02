@@ -5,6 +5,8 @@ import { ArrowLeft, BookOpen, Database, Images, Layers3, LockKeyhole, LogOut, Re
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { AgentSwitches } from "@/components/admin/agent-switches";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
+import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
+import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
@@ -17,6 +19,8 @@ import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
+import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
+import { getPublicMoneySnapshot } from "@/lib/money-records";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
@@ -189,7 +193,7 @@ function StatePanel({ title, content }: { title: string; content: string }) {
           <h2 className="text-xl font-semibold tracking-[-0.035em]">{title}</h2>
           <Badge>Read only</Badge>
         </div>
-        <pre className="max-h-[34rem] min-w-0 overflow-auto whitespace-pre-wrap break-all rounded-[var(--radius-button)] bg-[var(--secondary)] p-5 font-mono text-xs leading-6 text-[var(--steel)]">
+        <pre aria-label={`${title} file content`} className="max-h-[34rem] min-w-0 overflow-auto whitespace-pre-wrap break-all rounded-[var(--radius-button)] bg-[var(--secondary)] p-5 font-mono text-xs leading-6 text-[var(--mist)]" tabIndex={0}>
           {content}
         </pre>
       </CardContent>
@@ -209,7 +213,7 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, agentControls, autonomy] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, agentControls, autonomy, fixedCosts, money] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
@@ -217,7 +221,9 @@ export default async function AdminPage({
     readAdminFightAiQ(),
     readAdminMmaFiles(),
     readAdminAgentControls(),
-    readAdminAutonomy()
+    readAdminAutonomy(),
+    readAdminFixedCosts(),
+    getPublicMoneySnapshot()
   ]);
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
   const selectedTab = selectedVenture
@@ -329,6 +335,8 @@ export default async function AdminPage({
 
       {!selectedVenture ? (
         <>
+          <FixedCostsEditor initialCosts={fixedCosts.costs} />
+          <AdminMoneyPanel snapshot={money} />
           <AutonomyPanel initial={autonomy} ventures={portfolio.ventures.map(({ id, name }) => ({ id, name }))} />
           <SocialArchive {...state.socialArchive} />
           <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">

@@ -48,9 +48,10 @@ The owner countersigned `budget-2026-08d` on 2026-08-01. It sets one $50 limit,
 a $42 model share and a $2.20 daily pace for all five projects. Project-specific
 live switches and evidence gates still decide whether a meeting may run.
 
-Hosting has $0 incremental project cost under the owner's existing Vercel Pro
-subscription. If that allocation changes, the owner must review the limit before
-accepting revenue.
+Fixed subscriptions are unavailable until the owner enters the real names, amounts,
+categories and start dates in the protected admin. An empty fixed-cost list is not a
+claim that hosting, domains or software are free. API cost remains sourced only from
+the budget ledger.
 
 ## Stage and decision
 
@@ -65,6 +66,12 @@ Thesis confidence: owner-adopted, unvalidated
 
 The DISCOVERY gate did not pass. Owner adoption advanced Caught Up to the
 first post-discovery stage without rewriting the founding record.
+
+Quarterly KPI results inform the stage review but never change the stage by
+themselves. Each quarter lasts 90 days. A project below 70% of its targets, or missing
+any critical target, receives a mandatory `continue / pivot / stop` reassessment. A
+company miss makes the board review its own operating pattern. Only the owner may
+approve a stage change after reading that evidence.
 
 ## Thesis
 
@@ -123,6 +130,19 @@ Gross profit: -$0.52 from recorded API usage through 2026-08-01 13:33 UTC
 
 Zero revenue is a measured operating fact. Unconnected fee or refund data stays
 unavailable.
+
+## Money and quarterly KPIs
+
+Decision D10 starts `2026-Q1` on 2026-08-03 for 90 days. Content and social targets
+exclude the first 14 days from their linear pace. The daily evaluator uses saved
+receipts, internal stats and state measurements at `$0`; missing Phase 3 inputs remain
+`unavailable`, not zero. The 06:00 packet, protected admin and public `/money` page
+read the same evaluated status.
+
+Earning methods move through `locked`, `ready`, `proposed` and `active`. Readiness
+prepares a complete owner proposal. It cannot activate sponsorship, affiliates,
+commerce, payments or accounts. Activation always needs an explicit owner decision,
+and FightAIQ remains unmonetized in Q1 and Q2.
 
 ## Active experiment
 

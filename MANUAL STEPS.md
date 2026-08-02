@@ -4,7 +4,25 @@
 keys and Caught Up App installation are already done. The steps below verify plumbing;
 they are not content-approval gates.
 
-## 1. Finish the remaining account connections
+## 1. Confirm Q1 targets and enter real fixed costs
+
+1. Sign in at `/admin`, open **Social posts and company files**, and find **Fixed
+   monthly costs**. Add each subscription BoardlessAI actually uses with its real
+   monthly USD amount, category and first paid date. Save the list. Do not enter an
+   example price or an API estimate; API use is counted from receipts separately.
+2. Review `config/kpis/2026-Q1.json`. Q1 starts on 2026-08-03 and lasts 90 days. The
+   seed values are approved, but the owner may adjust them before relying on the
+   quarter comparison. Content and social pace excludes the first 14 days.
+3. Run the 06:00 `morning` phase once with dry mode off. Confirm the run saves
+   `state/kpis/latest.json` and `state/money/public.json`, then open `/money`. Missing
+   Phase 3 measurements should say **No data**. Recognized revenue should remain
+   `$0.00` until a verified revenue entry exists.
+
+An earning method becoming ready creates a full proposal in `/admin` and a request in
+`NEEDS_YOUR_HELP_NOW.md`. Readiness is not permission to launch it. Sponsorship,
+affiliate work, commerce, accounts, payments and legal setup remain owner-controlled.
+
+## 2. Finish the remaining account connections
 
 1. Add MMA Files to the existing delivery GitHub App if it is not already selected.
    Keep Contents read/write as the only write permission. The App ID and private key
@@ -18,7 +36,7 @@ they are not content-approval gates.
 4. Add the three brands’ Instagram and Threads tokens/IDs from `NEEDED.md`. Keep
    `SOCIAL_KILL_SWITCH=true` during account validation.
 
-## 2. Prove Caught Up delivery
+## 3. Prove Caught Up delivery
 
 Run **Guarded council cycle** for `cu-edition` with dry mode off and delivery-only off.
 The mode step must say `dry=false` and `skip=false`. A successful path now:
@@ -37,7 +55,7 @@ automated verifier fails twice, it reverts the target commit and pauses Caught U
 Then run `morning` and `cu-product` once with dry mode off to populate the normal
 product path. Afternoon and night are `$0` checkpoints.
 
-## 3. Prove FightAIQ and MMA Files delivery
+## 4. Prove FightAIQ and MMA Files delivery
 
 Set the repository variable `FIGHTAIQ_ANALYSIS_ENABLED=true`; decision D8 authorizes
 this setting. Keep `FIGHTAIQ_LIVE_ENABLED=true` and `MMA_FILES_LIVE_ENABLED=true`.
@@ -64,7 +82,7 @@ Missing source evidence must kill the article before a model call. Successful ar
 delivery receives the same CI, route, content-hash, image and attribution proof as
 Caught Up. A verifier failure retries once, then reverts and pauses only MMA Files.
 
-## 4. Prove every boardroom without spending
+## 5. Prove every boardroom without spending
 
 Run `pnpm proof:rooms`. It dispatches every room kind with `fixture: true`, saves the
 visible records and labels them as tests. This proves routing, contracts, calendar
@@ -75,7 +93,7 @@ from the priority queue and may commission a focused specialist room. Empty or
 unsupported work becomes `not-needed`, `NO_EDITION`, a killed slot or a reasoned
 `why-not` at `$0`.
 
-## 5. Validate social readiness without posting
+## 6. Validate social readiness without posting
 
 Run **Guarded social publisher** with **Validate only** selected. The daily evaluator
 shows these counters in `/admin` and the digest:
@@ -91,9 +109,12 @@ Every post is idempotent, verified live and retried once; a second failure pause
 that project. Titty Tuesdays posts on Prague Tuesdays and uses typographic graphics,
 never people photography.
 
-## 6. Leave the human-only boundaries closed
+## 7. Leave the human-only boundaries closed
 
 FightAIQ analysis is already approved by D8; do not weaken its evidence gates. Keep
 MMA Files noindex until name, corrections, operator and privacy details are ready.
 Budget raises, commerce, payments, ads, personal data and legal posture remain manual
-owner decisions; no live switch can authorize them.
+owner decisions; no live switch can authorize them. When the separate indexing
+decision is eventually complete, set the BoardlessAI repository variable
+`MMA_FILES_INDEXING_ENABLED=true`; that records readiness evidence but does not edit
+the MMA Files deployment or activate an earning method.

@@ -12,6 +12,7 @@ const routes = [
   "/ventures/titty-tuesdays",
   "/ventures/fightaiq",
   "/incubator",
+  "/admin?venture=global",
   "/admin?venture=incubator&tab=niche-proposals",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
@@ -32,6 +33,7 @@ const routes = [
   "/meetings/2026-08-01-mag-desk",
   "/ideas",
   "/metrics",
+  "/money",
   "/governance",
   "/log"
 ];

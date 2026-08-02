@@ -11,7 +11,9 @@ const axeRoutes = [
   "/ventures/caught-up",
   "/ventures/titty-tuesdays",
   "/ventures/fightaiq",
+  "/money",
   "/incubator",
+  "/admin?venture=global",
   "/admin?venture=incubator&tab=niche-proposals",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
@@ -212,7 +214,7 @@ test("admin login explains errors, starts a session and signs out", async ({ pag
   await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/incubator", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/money", "/incubator", "/admin?venture=global", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },

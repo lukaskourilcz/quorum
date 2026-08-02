@@ -40,6 +40,9 @@ operating model is in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 - Evidence, opportunity, experiment, stage, finance, treasury, claim and
   content-quality gates, plus a priority queue with per-project caps and a seven-day
   starvation check.
+- A 90-day quarterly KPI system with honest unavailable states, a 14-day Q1
+  content/social ramp, deterministic daily pace checks and mandatory strategy
+  reassessment after a failed quarter.
 - Venture-aware routing, ledgers, owner ratings, evidence-linked taste files and
   bounded visual-weight updates.
 - Caught Up source collection, bilingual article production, licensed-photo-first
@@ -61,6 +64,8 @@ operating model is in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   social archive, project tabs, card history and noindex/no-store headers.
 - Responsive public site, feeds, metadata, accessibility checks, contrast tests
   and scroll-preserving stateful controls.
+- Public `/money` reporting for earning-method gates, quarterly targets, API and
+  owner-entered fixed costs, plus a protected fixed-cost editor and owner proposals.
 - SHA-pinned GitHub Actions with timeouts, concurrency guards, rebase-first state
   commits and independent Caught Up, portfolio, social and health switches.
 - A presentation-only workplace-show skin with season/episode labels and an enforced
@@ -83,7 +88,7 @@ gates, receipts and kill switches.
 ## Repository map
 
 ```text
-config/                     agents, ventures, routing, models and policies
+config/                     agents, ventures, routing, models, KPIs, costs and policies
 contracts/                  exported JSON Schemas
 docs/PORTFOLIO.md           human portfolio operating model
 docs/FIGHTAIQ.md            data, model and launch boundary
@@ -103,6 +108,8 @@ state/
   ratings/<venture>/        append-only owner ratings when present
   taste/<venture>/          rating-linked taste doctrine
   ventures/<venture>/       venture-native plans, seasons and proposals
+  kpis/                     latest pace check, quarter reports and reassessments
+  money/public.json         sanitized costs, revenue and earning-method status
 .github/workflows/          pinned CI, cycle, publisher and health automation
 ```
 
@@ -160,7 +167,8 @@ Core credentials and endpoints:
 - `ADMIN_USER`, `ADMIN_PASSWORD` — required together. Missing configuration
   returns `503`; invalid or absent credentials return `401`.
 - `BOARDLESSAI_GITHUB_TOKEN` — fine-grained Contents read/write token for
-  production rating history. `BOARDLESSAI_GITHUB_REPOSITORY` and
+  production rating history, priorities, agent switches and fixed costs.
+  `BOARDLESSAI_GITHUB_REPOSITORY` and
   `BOARDLESSAI_GITHUB_BRANCH` default to `lukaskourilcz/quorum` and `main`.
 - `DELIVERY_APP_ID`, `DELIVERY_APP_PRIVATE_KEY` — GitHub Actions credentials for
   the content-only App installed on the approved Caught Up and MMA Files repositories.
@@ -186,6 +194,9 @@ Repository variables are independent authorization switches:
   Confirmed bouts and both fighter cards still have to pass their evidence checks.
 - `MMA_FILES_LIVE_ENABLED=true` permits guarded article production and public
   content delivery after the source packet checks pass.
+- `MMA_FILES_INDEXING_ENABLED=true` records the owner's separate indexing decision
+  for the MMA Files earning-readiness check. It defaults to false and does not itself
+  authorize sponsorships, affiliates or search indexing changes in the consumer app.
 - `SOCIAL_KILL_SWITCH=true` is the supreme manual posting stop. With it set to
   `false`, each project still remains locked until its own deterministic health and
   credential gate passes.
@@ -218,6 +229,12 @@ stops and one approval item is opened. Only the owner may raise the limit.
 
 `/admin` is dynamic, noindex, no-store and protected by a constant-time credential
 check plus a signed, HttpOnly session cookie.
+
+The global admin view shows the current quarter, earning-method readiness and full
+owner proposals when a method becomes ready. Its fixed-cost editor writes real
+subscriptions to `config/fixed-costs.json`; an empty list is valid and never implies
+that hosting or software is free. `/money` reads only `state/money/public.json`, which
+contains amounts and categories without invoices, credentials or personal data.
 Authenticated traffic is not counted as a failed login; repeated invalid
 credentials are rate-limited. The page displays the priority queue, social readiness
 and project-specific ideas, plans, visuals, research proposals, meeting agendas, FightAIQ data,

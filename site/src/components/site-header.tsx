@@ -14,6 +14,7 @@ const links = [
   { href: "/incubator", label: "New ideas" },
   { href: "/ideas", label: "Idea history" },
   { href: "/metrics", label: "Results" },
+  { href: "/money", label: "Money" },
   { href: "/governance", label: "Rules" }
 ];
 

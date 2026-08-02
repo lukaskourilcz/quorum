@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { metrics } from "@/data/fixtures";
 import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -177,6 +179,7 @@ export default async function MetricsPage() {
       <section className="border-t border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
           <SectionHeading
+            action={<Link className={buttonVariants({ variant: "secondary" })} href="/money">Open Money</Link>}
             description="Only confirmed money records count. Duplicate or unmatched entries are left out."
             eyebrow="Money"
             title="Confirmed income and unknowns stay separate"

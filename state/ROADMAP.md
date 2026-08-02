@@ -16,6 +16,8 @@ the founding gate remains unpassed and live founding cycles stay disabled.
 
 - [x] Replace three paid full-council shifts with one 06:00 decision room plus
   deterministic 14:00 and 22:00 checkpoints in `Europe/Prague`.
+- [x] Add 90-day company and project KPIs, daily ramp-adjusted pace checks, the
+  public Money page, owner-editable fixed costs and quarter-end reassessment packets.
 - [x] Publish episode IDs, shift objectives and next-shift handoffs so the
   spectator layer can follow one truthful operating story across the day.
 - [x] Add a bounded specialist-agenda queue, allowlisted follow-up requests,

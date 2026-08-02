@@ -10,6 +10,8 @@ GitHub Actions and public/non-sensitive IDs as repository variables.
 
 ## Required account plumbing
 
+- [ ] **Enter real fixed operating costs** — open `/admin` and add each current subscription with its monthly USD amount, category and start date. The registry starts empty because the app cannot infer invoices. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Review the Q1 KPI seed values** — check the targets and the 2026-08-03 quarter start in `config/kpis/2026-Q1.json`; keep them or save the numbers you want the board to use. [imp:4] [owner:me] [time:15m] [kind:decision]
 - [ ] **Connect each brand’s Instagram and Threads accounts** — for Caught Up, MMA Files and Titty Tuesdays, add the four brand-specific values listed below. Each project remains locked until both accounts pass its deterministic health gate. [imp:5] [owner:me] [time:45m] [kind:setup]
 - [ ] **Add the optional licensed-photo keys** — add `PEXELS_API_KEY` and `PIXABAY_API_KEY` as Actions secrets. Openverse and Wikimedia Commons already work without keys; missing paid-account keys never block an article because FRAME supplies a licensed-safe SVG fallback. [imp:3] [owner:me] [time:15m] [kind:setup]
 - [ ] **Confirm the MMA Files delivery installation** — make sure `lukaskourilcz/mma-files` is included in the existing delivery GitHub App, keeping Contents read/write as its only write permission. In Vercel, production must track `main`, `NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app`, `NEXT_PUBLIC_DEMO_MODE=true` and `NEXT_PUBLIC_ALLOW_INDEXING=false`. [imp:5] [owner:me] [time:15m] [kind:deploy]

@@ -823,32 +823,75 @@ After a meaningful set of board cycles, inspect expired questions, repeated `why
 reasons, starvation interventions and agendas that requested follow-ups. Adjust the
 queue policy only when those records show a recurring failure.
 
-### C. Harden release proof around real deployments
+### C. Review whether consumed agendas changed outcomes
+
+After at least 20 specialist agendas have been consumed, compare the question asked,
+artifact produced, follow-up requested, priority closed and decision changed. Count
+the recurring cases where a room produced activity but did not improve an owner or
+board decision. This is the Q1 agenda-outcome review. Its evidence should change room
+routing or agenda policy only when a repeated pattern is visible.
+
+### D. Harden release proof around real deployments
 
 Track first-pass proof versus delivery retry, failed check category and rollback
-success. This is internal service reliability—not reader analytics—and it directly
+success. This is internal service reliability, not reader analytics, and it directly
 shows where the two showcase paths need stronger contracts.
 
-### D. Close the FightAIQ coverage gaps
+### E. Close the FightAIQ coverage gaps
 
 Use the roster status and backfill queue to separate historical identities from
 confirmed active fighters. Finish the bounded UFC crawl, find a terms-cleared $0
 Oktagon roster source or use reviewed imports, then compare post-event prediction
 scores without hiding the early sample size.
 
-### E. Rehearse template founding and removal
+### F. Rehearse template founding and removal
 
 Run the dummy content-project fixture end to end, verify calendar collision handling,
 state scaffolding and delivery boundaries, then remove it cleanly. This protects the
 portfolio from permanent half-founded projects.
 
-### F. Make role review evidence-based
+### G. Make role review evidence-based
 
 PEOPLE should review the roster quarterly or after 20 relevant outputs, not daily.
 Use killed-slot categories, veto rate, first-pass/retry rate, source agreement and
 owner ratings. Split or add a role only when repeated errors prove a missing specialty.
 
-## 23. Questions for Fable brainstorming
+## 23. Money and quarterly KPIs
+
+Decision D10 treats financial and target reporting as part of the public operating
+record. Each quarter lasts 90 days. `config/kpis/2026-Q1.json` stores the owner-editable
+seed values, deterministic metric paths, direction, critical flag and ramp length.
+The first Q1 content and social pace begins only after the 14-day setup period.
+
+The `$0` daily evaluator feeds the 06:00 board packet, the protected admin and
+`/money`. Each target is labeled on track, at risk, off track or unavailable. Missing
+Phase 3 pageviews, followers or other measurements remain unavailable. They do not
+become zeros, pass conditions or negative evidence.
+
+Quarter-end behavior is mandatory and deterministic:
+
+1. Save the complete company and project report.
+2. For every project below 70% target completion or missing a critical target, add
+   `Strategy reassessment: <project>` to the priority queue.
+3. Require a board session with `continue / pivot / stop` as the decision at stake.
+4. Send the owner a digest with the missed targets and report references.
+5. If company targets miss, make the board review its own operating pattern.
+
+This protocol never changes a project stage automatically. Quarter evidence can
+support a stage proposal; the owner remains the only stage authority.
+
+The Money page also explains five earning positions: Caught Up sponsorship, MMA
+Files sponsorship or non-bookmaker affiliates, Titty Tuesdays season-one commerce,
+no FightAIQ monetization in Q1/Q2 and no Incubator monetization. A threshold may move
+a method from waiting to ready and prepare a complete proposal in the admin. Only an
+explicit owner decision can make it active.
+
+API amounts come from the existing budget ledger. Fixed subscriptions come from the
+owner-editable `config/fixed-costs.json`, which starts empty. Verified revenue starts
+at `$0`. The public snapshot contains amounts and categories only, without invoices,
+credentials or personal data.
+
+## 24. Questions for Fable brainstorming
 
 Fable can use this system as a design brief and challenge it with questions such as:
 
@@ -876,7 +919,7 @@ Fable can use this system as a design brief and challenge it with questions such
 12. What is the best humane label for internal concepts such as ledger, venture,
     governance and canonical state on the public/admin surfaces?
 
-## 24. Design principles to preserve
+## 25. Design principles to preserve
 
 - A quiet calendar is healthy when no work is needed.
 - A model call needs a service promise, material change or explicit agenda.

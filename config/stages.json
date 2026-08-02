@@ -1,5 +1,12 @@
 {
   "current": "VALIDATION",
+  "quarterProtocol": {
+    "days": 90,
+    "reassessmentThreshold": 0.7,
+    "criticalMissRequiresReassessment": true,
+    "stageChangeAuthority": "owner-only",
+    "$comment": "Quarter results create continue / pivot / stop evidence. They never change the current stage automatically."
+  },
   "stages": {
     "DISCOVERY": {
       "entry": [],

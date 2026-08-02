@@ -3,6 +3,7 @@ import { Mark } from "@/components/brand/mark";
 
 const footerLinks = [
   { href: "/company", label: "Company" },
+  { href: "/money", label: "Money" },
   { href: "/about", label: "About" },
   { href: "/privacy", label: "Privacy" },
   { href: "/disclosure", label: "Disclosure" },

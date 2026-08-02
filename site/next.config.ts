@@ -7,7 +7,8 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
-    "/admin/**": adminRuntimeFiles
+    "/admin/**": adminRuntimeFiles,
+    "/money": ["../state/money/public.json"]
   },
   poweredByHeader: false,
   reactStrictMode: true
