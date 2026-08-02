@@ -20,7 +20,7 @@ import {
 import { atomicWriteJson, readJson, readText, withFileLock } from "./state.js";
 import {
   buildCalendarFeed,
-  loadMeetingRecords, loadMeetingSkips,
+  loadArticleSlotOutcomes, loadMeetingRecords, loadMeetingSkips,
   mondayOfWeek,
   writeCalendarFeed
 } from "./meetings/calendar.js";
@@ -97,6 +97,7 @@ import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/sign
 import { ensurePriorityItem, openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
+import { loadRuntimeBudgetLimits } from "./portfolio/limits.js";
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 
 export interface CycleOptions {
@@ -200,6 +201,28 @@ function ledgerSpend(
   predicate: (entry: BudgetLedgerEntry) => boolean
 ): number {
   return Number(entries.filter(predicate).reduce((sum, entry) => sum + entry.usd, 0).toFixed(8));
+}
+
+/**
+ * Month-to-date all-in spend and the cap in force, for a record that has no council to ask.
+ *
+ * The deterministic afternoon and night shifts write the newest standup of any day, and the
+ * site reads the newest standup for its headline running cost. A literal here is therefore
+ * published as fact: the site showed "$0.00 of $50" on a day the ledger held $1.18 against a
+ * countersigned $30 cap.
+ */
+async function monthToDateLedger(root: string, now: Date): Promise<{ monthAllInUsd: number; monthCapUsd: number }> {
+  const [entries, limits, fixedMonthlyUsd] = await Promise.all([
+    currentBudgetLedger(root),
+    loadRuntimeBudgetLimits(),
+    loadFixedMonthlyUsd(configRoot, now)
+  ]);
+  const month = pragueClockParts(now).date.slice(0, 7);
+  const apiUsd = Number(entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0).toFixed(8));
+  return {
+    monthAllInUsd: Number((apiUsd + fixedMonthlyUsd).toFixed(8)),
+    monthCapUsd: limits.monthlyOperatingUsd
+  };
 }
 
 async function currentBudgetLedger(root: string): Promise<BudgetLedgerEntry[]> {
@@ -336,6 +359,7 @@ async function runCaughtUpDryCycle(
     weekOf: mondayOfWeek(record.date),
     records: [...priorRecords, record],
     skips: await loadMeetingSkips(artifactRoot),
+    articleSlots: await loadArticleSlotOutcomes(artifactRoot),
     now
   });
   const calendarPath = await writeCalendarFeed(artifactRoot, calendar);
@@ -496,6 +520,7 @@ async function runCaughtUpLiveEditionCycle(
     weekOf: mondayOfWeek(date),
     records: [...priorRecords, record],
     skips: await loadMeetingSkips(stateRoot),
+    articleSlots: await loadArticleSlotOutcomes(stateRoot),
     now
   });
   const calendarPath = await writeCalendarFeed(stateRoot, calendar);
@@ -723,6 +748,7 @@ async function runCaughtUpLiveProductCycle(
     weekOf: mondayOfWeek(date),
     records: [...priorRecords, record],
     skips: await loadMeetingSkips(stateRoot),
+    articleSlots: await loadArticleSlotOutcomes(stateRoot),
     now
   });
   const calendarPath = await writeCalendarFeed(stateRoot, calendar);
@@ -1204,6 +1230,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           now,
           evidenceRefs: opportunityGate.evidenceRefs,
           agentsParticipated,
+          ledger: await monthToDateLedger(artifactRoot, now),
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
           ...(caughtUpIdea ? { caughtUpIdea } : {})

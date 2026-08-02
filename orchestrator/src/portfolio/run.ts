@@ -27,7 +27,7 @@ import {
   parseCadenceHour
 } from "../ventures/registry.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
-import { buildCalendarFeed, loadMeetingRecords, loadMeetingSkips, mondayOfWeek, writeCalendarFeed } from "../meetings/calendar.js";
+import { buildCalendarFeed, loadArticleSlotOutcomes, loadMeetingRecords, loadMeetingSkips, mondayOfWeek, writeCalendarFeed } from "../meetings/calendar.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import {
   MEETING_AGENDA_PATH,
@@ -356,6 +356,7 @@ async function recordNoAgendaCycle(input: {
     weekOf: mondayOfWeek(input.date),
     records: [...priorRecords, record],
     skips: await loadMeetingSkips(input.root),
+    articleSlots: await loadArticleSlotOutcomes(input.root),
     now: input.now
   }));
   await Promise.all([
@@ -901,7 +902,7 @@ export async function runPortfolioCycle(input: {
   const decisionPath = `decisions/${input.cycleId}.json`;
   const scorecardPath = `scorecards/${input.cycleId}.json`;
   const priorRecords = await loadMeetingRecords(root);
-  const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({ weekOf: mondayOfWeek(date), records: [...priorRecords, record], skips: await loadMeetingSkips(root), now: input.now }));
+  const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({ weekOf: mondayOfWeek(date), records: [...priorRecords, record], skips: await loadMeetingSkips(root), articleSlots: await loadArticleSlotOutcomes(root), now: input.now }));
   const proposalPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.json`);
   const proposalMarkdownPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.md`);
   const editorialSlatePath = editorialSlate ? `ventures/mma-files/slates/${date}.json` : null;

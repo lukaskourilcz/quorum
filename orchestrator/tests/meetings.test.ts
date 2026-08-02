@@ -9,7 +9,7 @@ import {
   loadMeetingRecords,
   mondayOfWeek,
   pragueSlotInstant
-} from "../src/meetings/calendar.js";
+ } from "../src/meetings/calendar.js";
 import {
   pragueClockParts,
   resolveManualPhase,
@@ -264,4 +264,31 @@ describe("meeting calendar", () => {
       .toBe(true);
   });
 
+});
+
+describe("the calendar tells the truth about the article slots", () => {
+  const base = { weekOf: mondayOfWeek("2026-08-03"), records: [], now: new Date("2026-08-04T23:00:00Z") };
+
+  it("marks a published slot held rather than missed", () => {
+    // The calendar recorded 2 August 10:00 Prague as missed on the day that slot published
+    // the Shevchenko profile: article production writes a run file, and MeetingRecord has no
+    // kind that can carry it.
+    const feed = buildCalendarFeed({ ...base, articleSlots: [{ date: "2026-08-04", slot: "am", status: "published" }] });
+    expect(feed.slots.find((slot) => slot.at.startsWith("2026-08-04") && slot.kind === "article-am")?.status).toBe("held");
+  });
+
+  it("marks a killed slot skipped and carries the reason it was given", () => {
+    const feed = buildCalendarFeed({
+      ...base,
+      articleSlots: [{ date: "2026-08-04", slot: "pm", status: "killed", reason: "Missing fresh, source-backed subject." }]
+    });
+    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "article-pm");
+    expect(slot?.status).toBe("skipped");
+    expect(slot?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
+  });
+
+  it("leaves a slot with no run exactly as it was", () => {
+    const feed = buildCalendarFeed({ ...base, articleSlots: [] });
+    expect(feed.slots.find((slot) => slot.at.startsWith("2026-08-04") && slot.kind === "article-am")?.status).toBe("missed");
+  });
 });

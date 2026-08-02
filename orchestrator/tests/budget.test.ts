@@ -4,7 +4,7 @@ import path from "node:path";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../src/portfolio/limits.js";
 import { resolveEffectivePortfolioSchedule } from "../src/portfolio/schedule.js";
 import { loadVentureRegistry } from "../src/ventures/registry.js";
-import { stateRoot } from "../src/paths.js";
+import { repoRoot, stateRoot } from "../src/paths.js";
 
 const decisionText = (name: string) => readFile(path.join(stateRoot, "decisions", name), "utf8");
 import {
@@ -232,6 +232,24 @@ describe("every phase reaches the countersigned caps", () => {
     } finally {
       if (previous === undefined) delete process.env.MONTHLY_BUDGET_USD;
       else process.env.MONTHLY_BUDGET_USD = previous;
+    }
+  });
+});
+
+describe("the site quotes the caps the runtime enforces", () => {
+  it("keeps the published operating and API limits equal to the resolved ones", async () => {
+    // The site read $50 all-in and $42 API for a week after budget-2026-08e replaced them
+    // with $30 and $25, and it published that against a standup reporting $0.00 spent.
+    const source = await readFile(path.join(repoRoot, "site", "src", "data", "operating-policy.ts"), "utf8");
+    const constant = (name: string) => Number(source.match(new RegExp(`${name} = (\\d+(?:\\.\\d+)?)`, "u"))?.[1]);
+    const previous = { ...process.env };
+    for (const name of ["DAILY_BUDGET_USD", "MONTHLY_BUDGET_USD", "MONTHLY_OPERATING_CAP_USD"]) delete process.env[name];
+    try {
+      const limits = await loadRuntimeBudgetLimits();
+      expect(constant("CURRENT_MONTHLY_OPERATING_LIMIT_USD")).toBe(limits.monthlyOperatingUsd);
+      expect(constant("CURRENT_MONTHLY_API_LIMIT_USD")).toBe(limits.monthlyApiUsd);
+    } finally {
+      Object.assign(process.env, previous);
     }
   });
 });

@@ -80,10 +80,12 @@ export function buildCalendarFeed(input: {
   weekOf: string;
   records: readonly MeetingRecord[];
   skips?: readonly MeetingSkip[];
+  articleSlots?: readonly ArticleSlotOutcome[];
   now: Date;
 }): CalendarFeed {
   const weekOf = mondayOfWeek(input.weekOf);
   const skipReasons = new Map((input.skips ?? []).map((skip) => [`${skip.date}:${skip.phase}`, skip.reason]));
+  const articleOutcomes = new Map((input.articleSlots ?? []).map((outcome) => [`${outcome.date}:article-${outcome.slot}`, outcome]));
   const bySlot = new Map<string, MeetingRecord>();
   for (const record of input.records) {
     const kind = recordKind(record);
@@ -100,6 +102,22 @@ export function buildCalendarFeed(input: {
       // "missed", which is how eleven meetings could fail to happen on 2 August with nothing
       // anywhere saying why. The recorded reason is what the calendar shows for a skip.
       const skip = skipReasons.get(`${date}:${definition.phase}`);
+      // The article slots keep their outcome in a run file rather than a meeting record, so
+      // they are read from there; a published slot is held, and a killed or blocked one is a
+      // skip carrying the reason it was given.
+      const article = articleOutcomes.get(`${date}:${kind}`);
+      if (article) {
+        slots.push({
+          at: at.toISOString(),
+          tz: PRAGUE_TIME_ZONE,
+          kind,
+          status: article.status === "published" ? "held" : "skipped",
+          ...(article.status === "published"
+            ? { decisionOneLiner: "The desk published this slot's article." }
+            : { decisionOneLiner: (article.reason ?? `The desk did not publish this slot: ${article.status}.`).slice(0, 180) })
+        });
+        continue;
+      }
       const status = record?.status === "PAUSED"
         ? "not-needed"
         : record
@@ -139,6 +157,33 @@ async function jsonFiles(directory: string): Promise<string[]> {
 }
 
 /** Every recorded skip under a state root, so the calendar can explain a slot nobody opened. */
+export interface ArticleSlotOutcome {
+  date: string;
+  slot: "am" | "pm";
+  status: string;
+  reason?: string;
+}
+
+/**
+ * What the two MMA Files article slots actually did, which no meeting record can carry.
+ *
+ * Article production writes a run file and nothing else, and MeetingRecord has no kind for
+ * article-am or article-pm, so both slots fell through to "at < now ? missed". The calendar
+ * marked 2 August 10:00 as missed on the day that slot published the Shevchenko profile.
+ */
+export async function loadArticleSlotOutcomes(root: string): Promise<ArticleSlotOutcome[]> {
+  const files = await jsonFiles(path.join(root, "ventures", "mma-files", "runs"));
+  const outcomes: ArticleSlotOutcome[] = [];
+  for (const file of files) {
+    const value = JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>;
+    const { date, slot, status, reason } = value;
+    if (typeof date === "string" && (slot === "am" || slot === "pm") && typeof status === "string") {
+      outcomes.push({ date, slot, status, ...(typeof reason === "string" ? { reason } : {}) });
+    }
+  }
+  return outcomes;
+}
+
 export async function loadMeetingSkips(root: string): Promise<MeetingSkip[]> {
   const files = await jsonFiles(path.join(root, "meetings", "skips"));
   const skips: MeetingSkip[] = [];

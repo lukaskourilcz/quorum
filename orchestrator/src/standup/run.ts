@@ -23,6 +23,8 @@ export function createOfflineStandup(input: {
   agentsParticipated?: boolean;
   autonomy?: AutonomySnapshot;
   quarterlyKpis?: QuarterlyKpiPacketSummary;
+  /** Month-to-date all-in spend and the cap in force, both read from the runtime. */
+  ledger: { monthAllInUsd: number; monthCapUsd: number };
 }): Standup {
   const outcome =
     input.status === "INSUFFICIENT_EVIDENCE" ? "NO_ACTION" : input.status;
@@ -91,11 +93,15 @@ export function createOfflineStandup(input: {
         participated: false
       }))
     ],
+    // Month-to-date spend and the cap come from the runtime, never from a literal here. The
+    // afternoon and night shifts are deterministic, so this branch always writes the newest
+    // standup, and the site reads the newest standup for its headline running cost: it
+    // published "$0.00 of $50" on a day the ledger held $1.18 against a $30 cap.
     ledger: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: 0,
-      monthAllInUsd: 0,
-      monthCapUsd: 30
+      monthAllInUsd: input.ledger.monthAllInUsd,
+      monthCapUsd: input.ledger.monthCapUsd
     },
     decision: {
       outcome,

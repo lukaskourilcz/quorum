@@ -61,7 +61,8 @@ function liveStandup(audit: "approve" | "hold" = "approve") {
       positions: positions(audit),
       scope: "Internal only.",
       actualCycleUsd: 0.0123,
-      monthAllInUsd: 0.0123
+      monthCapUsd: 30,
+    monthAllInUsd: 0.0123
     }
   });
 }
@@ -106,7 +107,8 @@ describe("live shift standup", () => {
         positions: positions(),
         scope: "Internal only.",
         actualCycleUsd: 0.0123,
-        monthAllInUsd: 0.0123
+        monthCapUsd: 30,
+    monthAllInUsd: 0.0123
       },
       caughtUpIdea: {
         entry: {

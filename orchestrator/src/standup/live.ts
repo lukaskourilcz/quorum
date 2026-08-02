@@ -5,6 +5,7 @@ import { type BudgetLedgerEntry, type ReserveContext } from "../budget.js";
 import type { RoomPacket } from "../boardroom/room.js";
 import { AgendaPhaseSchema } from "../contracts/meeting-agenda.js";
 import { configRoot, stateRoot } from "../paths.js";
+import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
 import { getShiftDefinition, type ShiftDefinition } from "../shifts.js";
 import { guardedJsonCall , ModelOutputParseError } from "../llm/call.js";
 import { readJson } from "../state.js";
@@ -161,6 +162,7 @@ export async function collectLiveCouncil(input: {
   scope: string;
   actualCycleUsd: number;
   monthAllInUsd: number;
+  monthCapUsd: number;
 }> {
   const [modelConfig, work] = await Promise.all([
     readFile(path.join(configRoot, "models.json"), "utf8").then(
@@ -256,7 +258,10 @@ export async function collectLiveCouncil(input: {
     monthAllInUsd: Number((
       monthAllIn(finalLedger.entries, input.now)
       + input.budgetContext(finalLedger.entries).allInNonApiSpentUsd
-    ).toFixed(8))
+    ).toFixed(8)),
+    // The cap the runtime enforces, not a literal. The transcript stated "$50.00" for a week
+    // after budget-2026-08e replaced that figure with $30.
+    monthCapUsd: (await loadRuntimeBudgetLimits()).monthlyOperatingUsd
   };
 }
 
@@ -319,7 +324,7 @@ export function createLiveStandup(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: input.council.actualCycleUsd,
       monthAllInUsd: input.council.monthAllInUsd,
-      monthCapUsd: 30
+      monthCapUsd: input.council.monthCapUsd
     },
     decision: {
       outcome,
@@ -385,7 +390,7 @@ export function createLiveStandup(input: {
           mode: "reads-ledger",
           sentAt: ledgerAt,
           addressedTo: "VIZE",
-          text: `The recorded API cost for this cycle is $${input.council.actualCycleUsd.toFixed(4)}. Month-to-date API cost is $${input.council.monthAllInUsd.toFixed(4)} against the $50.00 all-in operating limit.`
+          text: `The recorded API cost for this cycle is $${input.council.actualCycleUsd.toFixed(4)}. Month-to-date API cost is $${input.council.monthAllInUsd.toFixed(4)} against the $${input.council.monthCapUsd.toFixed(2)} all-in operating limit.`
         },
         ...input.council.positions.map((position) => ({
           agent: position.agent,

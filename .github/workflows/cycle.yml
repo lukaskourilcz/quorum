@@ -307,6 +307,24 @@ jobs:
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         run: pnpm budget:alert
 
+      # The ledger is the only record of what the providers billed, and it lives in the
+      # workspace until something commits it. The atomic cycle commit runs after the release
+      # gates and carries no always(), so a run that paid for calls and then failed took its
+      # own ledger to the grave with the runner: two runs on 2 August spent about $0.10
+      # between them and the month reads as if neither happened. Only spend and the failure
+      # notice are committed here, so the atomic cycle commit still owns everything else.
+      - name: Record spend from a failed cycle
+        if: ${{ always() && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.run.outputs.failed == 'true' }}
+        run: |
+          if test -n "$(git status --porcelain --untracked-files=all -- state/budget state/notify)"; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git add -A -- state/budget state/notify
+            git commit -m "ledger(${{ steps.mode.outputs.phase }}): record spend from a failed cycle"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
       - name: Fail closed after recording the final-cycle failure
         if: ${{ steps.mode.outputs.skip != 'true' && steps.run.outputs.failed == 'true' }}
         run: exit 1
