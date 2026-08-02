@@ -55,6 +55,7 @@ import {
   resolveEffectivePortfolioSchedule,
   signedOwnerDecision
 } from "./schedule.js";
+import { environmentBudgetLimits } from "./limits.js";
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
 import { foundTemplateVenture, templateCandidateFromProposal } from "../ventures/founding.js";
 import { VentureTemplateSchema } from "../contracts/autonomy.js";
@@ -187,20 +188,6 @@ function modelFor(
   // $0.05-$0.08 room envelopes at these sizes.
   const cap = agent === "EASEL" ? 1_500 : agent === "ANGLE" || agent === "CANVAS" ? 1_200 : 900;
   return { ...model, maxOutputTokens: Math.min(cap, model.maxOutputTokens) };
-}
-
-function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd: number; monthlyOperatingUsd: number }): BudgetLimits {
-  const number = (name: string, fallback: number) => {
-    const parsed = Number(process.env[name]);
-    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
-  };
-  return {
-    ...DEFAULT_BUDGET_LIMITS,
-    maxCycleUsd: number("MAX_CYCLE_BUDGET_USD", DEFAULT_BUDGET_LIMITS.maxCycleUsd),
-    dailyUsd: number("DAILY_BUDGET_USD", schedule.dailyBudgetUsd),
-    monthlyApiUsd: number("MONTHLY_BUDGET_USD", schedule.monthlyBudgetUsd),
-    monthlyOperatingUsd: number("MONTHLY_OPERATING_CAP_USD", schedule.monthlyOperatingUsd)
-  };
 }
 
 function shiftedTimes(now: Date, count: number): string[] {
@@ -496,10 +483,16 @@ export async function runPortfolioCycle(input: {
   const entries = budgetLedger.entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
   const month = pragueClockParts(input.now).date.slice(0, 7);
   const spent = entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned"
-    ? 42
-    : budgetDecisionStatus(budgetDecisionRaw) === "countersigned-shape-a" ? 18 : 15;
-  const schedule = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, monthlyApiHeadroomUsd: Math.max(0, provisionalCap - spent) });
+  // Feed the degradation ladder the cap that is actually enforced. Its rungs are $3, $1.50
+  // and $0.50 of remaining model-API budget, and it was fed a provisional $42 from the
+  // superseded budget-2026-08d while enforcement held at $25, so computed headroom could
+  // never fall below $17 and not one rung was reachable. A schedule's amounts depend only on
+  // its shape flags, so the first pass can read the cap at any headroom.
+  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw };
+  const enforcedMonthlyApiUsd = environmentBudgetLimits(
+    resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
+  ).monthlyApiUsd;
+  const schedule = resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: Math.max(0, enforcedMonthlyApiUsd - spent) });
   if (!input.dry && (process.env.PORTFOLIO_LIVE_ENABLED !== "true" || !phaseEnabled(schedule, input.phase))) {
     return { cycleId: input.cycleId, phase: input.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
   }
@@ -613,7 +606,7 @@ export async function runPortfolioCycle(input: {
           allInCommittedUsd: 0,
           knownMonthlyForecastUsd: 0,
           remainingScheduledCycles: 60,
-          limits: environmentLimits(schedule)
+          limits: environmentBudgetLimits(schedule)
         }
       })
     });
@@ -674,7 +667,7 @@ export async function runPortfolioCycle(input: {
         system: call.system,
         input: call.prompt,
         maxOutputTokens: call.model.maxOutputTokens,
-        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits: environmentLimits(schedule) },
+        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits: environmentBudgetLimits(schedule) },
         parse: (text) => ContributionSchema.parse(parseJson(text))
       }).catch((error: unknown) => {
         // One seat returning unparsable JSON must cost that seat, not the room. A live

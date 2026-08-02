@@ -1,4 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { loadRuntimeBudgetLimits, tightenedBy } from "../src/portfolio/limits.js";
+import { resolveEffectivePortfolioSchedule } from "../src/portfolio/schedule.js";
+import { loadVentureRegistry } from "../src/ventures/registry.js";
+import { stateRoot } from "../src/paths.js";
+
+const decisionText = (name: string) => readFile(path.join(stateRoot, "decisions", name), "utf8");
 import {
   assertImageReservation,
   assertTextReservation,
@@ -171,5 +179,59 @@ describe("budget guard", () => {
     expect(() => assertImageReservation(avatar, context(), false)).toThrowError(
       /exceeds/
     );
+  });
+});
+
+describe("every phase reaches the countersigned caps", () => {
+  it("resolves the amounts of the newest countersigned budget decision, not a phase literal", async () => {
+    // Article production carried its own $2.20 / $42 / $50, the figures of budget-2026-08d.
+    // budget-2026-08e superseded them on 2 August with $1.00 / $25 / $30, and that phase
+    // went on enforcing the replaced decision because it never read the resolver.
+    const previous = { ...process.env };
+    for (const name of ["DAILY_BUDGET_USD", "MONTHLY_BUDGET_USD", "MONTHLY_OPERATING_CAP_USD", "MAX_CYCLE_BUDGET_USD"]) {
+      delete process.env[name];
+    }
+    try {
+      const limits = await loadRuntimeBudgetLimits();
+      expect(limits.dailyUsd).toBe(1);
+      expect(limits.monthlyApiUsd).toBe(25);
+      expect(limits.monthlyOperatingUsd).toBe(30);
+
+      // loadRuntimeBudgetLimits reads the amounts at zero headroom, which is only sound
+      // because headroom decides which phases stay active and never what the caps are.
+      const registry = await loadVentureRegistry();
+      const shape = {
+        registry,
+        budgetDecisionRaw: await decisionText("2026-08-01-budget-raise.md"),
+        budgetMmaRaw: await decisionText("2026-08-02-budget-mma.md"),
+        budgetFiftyRaw: await decisionText("2026-08-04-budget-fifty.md"),
+        fightAiQFoundingRaw: await decisionText("2026-08-02-fightaiq-founding.md")
+      };
+      const amountsAt = (monthlyApiHeadroomUsd: number) => {
+        const resolved = resolveEffectivePortfolioSchedule({ ...shape, monthlyApiHeadroomUsd });
+        return [resolved.monthlyBudgetUsd, resolved.dailyBudgetUsd, resolved.monthlyOperatingUsd];
+      };
+      expect(amountsAt(0)).toEqual(amountsAt(999));
+
+      // A phase may lower a cap and may never raise one, whichever direction it asks for.
+      const phase = tightenedBy(limits, { maxCycleUsd: 0.16, dailyUsd: 99, monthlyApiUsd: 42, monthlyOperatingUsd: 50 });
+      expect(phase.maxCycleUsd).toBe(0.16);
+      expect(phase.dailyUsd).toBe(1);
+      expect(phase.monthlyApiUsd).toBe(25);
+      expect(phase.monthlyOperatingUsd).toBe(30);
+    } finally {
+      Object.assign(process.env, previous);
+    }
+  });
+
+  it("lets the workflow env tighten the resolved caps", async () => {
+    const previous = process.env.MONTHLY_BUDGET_USD;
+    process.env.MONTHLY_BUDGET_USD = "12";
+    try {
+      expect((await loadRuntimeBudgetLimits()).monthlyApiUsd).toBe(12);
+    } finally {
+      if (previous === undefined) delete process.env.MONTHLY_BUDGET_USD;
+      else process.env.MONTHLY_BUDGET_USD = previous;
+    }
   });
 });

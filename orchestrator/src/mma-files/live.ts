@@ -1,7 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
-import { BudgetLedgerEntrySchema, DEFAULT_BUDGET_LIMITS, type BudgetLedgerEntry } from "../budget.js";
+import { BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../budget.js";
 import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { guardedJsonCall } from "../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
@@ -12,6 +12,7 @@ import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/
 import { discoverLicensedPhotos } from "../images/licensed.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
+import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
 
 const LocalizationSchema = z.object({
   title: z.string().trim().min(1).max(160),
@@ -189,14 +190,12 @@ class GuardedMmaFilesGateway implements MmaFilesEditorialGateway {
         allInCommittedUsd: 0,
         knownMonthlyForecastUsd: 0,
         remainingScheduledCycles: 60,
-        limits: {
-          ...DEFAULT_BUDGET_LIMITS,
-          perTextCallUsd: 0.08,
-          maxCycleUsd: 0.16,
-          dailyUsd: 2.2,
-          monthlyApiUsd: 42,
-          monthlyOperatingUsd: 50
-        }
+        // The daily, monthly and all-in caps come from the countersigned decision and the
+        // workflow env, never from here. This phase held its own $2.20 / $42 / $50 literal,
+        // the figures of budget-2026-08d, which budget-2026-08e superseded on 2 August with
+        // $1.00 / $25 / $30 — so article production alone kept spending against a decision
+        // the owner had already replaced. A phase may still tighten a cap, never raise one.
+        limits: tightenedBy(await loadRuntimeBudgetLimits(), { perTextCallUsd: 0.08, maxCycleUsd: 0.16 })
       },
       parse: (text) => LocalizationSchema.parse(JSON.parse(text.trim().replace(/^```(?:json)?\s*/iu, "").replace(/\s*```$/u, "")))
     })).value;
