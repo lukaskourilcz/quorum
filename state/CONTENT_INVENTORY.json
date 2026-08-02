@@ -743,6 +743,45 @@
       "informationGain": "material"
     },
     {
+      "url": "/agents/easel",
+      "purpose": "Explain EASEL's original template-design role and deterministic release checks.",
+      "searchIntent": "understand the Carousel Studio template designer",
+      "primaryQuery": "EASEL carousel template agent",
+      "audience": "design-system and governance readers",
+      "evidenceRefs": ["agent-profile:EASEL:v1", "D11"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-02",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/motif",
+      "purpose": "Explain MOTIF's text-only visual research and source boundaries.",
+      "searchIntent": "understand the Carousel Studio research agent",
+      "primaryQuery": "MOTIF visual pattern research agent",
+      "audience": "design-system and governance readers",
+      "evidenceRefs": ["agent-profile:MOTIF:v1", "D11"],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-02",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/ventures/carousel-studio",
+      "purpose": "Show the live original template library across the Caught Up, MMA Files and Titty Tuesdays brand skins.",
+      "searchIntent": "inspect the Carousel Studio template engine",
+      "primaryQuery": "deterministic social carousel templates",
+      "audience": "operators, designers and governance readers",
+      "evidenceRefs": ["D11", "carousel-template/1"],
+      "author": "SCRIBE",
+      "reviewer": "AUDIT",
+      "updatedAt": "2026-08-02",
+      "status": "noindex",
+      "informationGain": "material"
+    },
+    {
       "url": "/ventures/fightaiq",
       "purpose": "Explain FightAIQ's source rules, analysis gate and MMA Files delivery boundary.",
       "searchIntent": "inspect the FightAIQ venture",

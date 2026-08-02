@@ -14,6 +14,7 @@ const fixtures: Array<{ phase: RunnablePhase; at: string }> = [
   { phase: "mma-intake", at: "2026-08-01T06:00:00.000Z" },
   { phase: "mag-editorial", at: "2026-08-01T07:00:00.000Z" },
   { phase: "tt-marketing", at: "2026-08-01T09:00:00.000Z" },
+  { phase: "studio", at: "2026-08-01T11:00:00.000Z" },
   { phase: "afternoon", at: "2026-08-01T12:00:00.000Z" },
   { phase: "cu-product", at: "2026-08-01T15:00:00.000Z" },
   { phase: "mma-analysis", at: "2026-08-01T17:00:00.000Z" },

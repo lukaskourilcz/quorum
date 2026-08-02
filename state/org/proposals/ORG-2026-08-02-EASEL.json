@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "appliedAt": "2026-08-02T10:00:00.000Z",
+  "approvalRef": "D11",
+  "kind": "new_role",
+  "change": {
+    "id": "ORG-2026-08-02-EASEL",
+    "proposedAt": "2026-08-02T09:00:00.000Z",
+    "proposer": "PEOPLE",
+    "subjectAgent": "EASEL",
+    "tier": "C",
+    "change": "Create the Carousel Studio template designer role approved by D11.",
+    "expectedMetric": "checkedTemplateProposalsPerQuarter",
+    "baseline": 0,
+    "expectedDelta": 6,
+    "reviewCycle": 56,
+    "approvers": ["HUMAN_APPROVAL", "AUDIT", "KEEPER"],
+    "status": "approved"
+  },
+  "current": "No agent owns versioned carousel template design and lifecycle checks.",
+  "proposed": "EASEL owns original template proposals and deterministic checks for Carousel Studio.",
+  "evidenceRefs": ["D11", "config/ventures.json#carousel-studio"],
+  "evaluationWindowCycles": 56,
+  "tests": ["pnpm agents:validate", "pnpm test"],
+  "rollbackRef": "state/decisions/2026-08-02-carousel-studio-d11.md",
+  "affectedFiles": ["config/agents.json", "config/agent-routing.json", "config/kpis.json", "orchestrator/prompts/easel.md"],
+  "postconditions": {
+    "agentId": "EASEL",
+    "minimumOwnedKpis": 2,
+    "requiredCapabilities": ["carousel:template", "design:system", "media:deterministic"],
+    "promptPath": "orchestrator/prompts/easel.md",
+    "avatarPath": null
+  }
+}

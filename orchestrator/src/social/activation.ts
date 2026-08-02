@@ -50,6 +50,15 @@ export function missingSocialCredentials(venture: SocialVenture, environment: No
   return SOCIAL_CREDENTIALS[venture]!.filter((name) => !environment[name]?.trim());
 }
 
+export async function socialContentGenerationEnabled(
+  stateRoot: string,
+  venture: SocialVenture
+): Promise<boolean> {
+  const raw = await readJson<unknown>(stateRoot, "social/activation.json", null);
+  const parsed = SocialActivationSchema.safeParse(raw);
+  return parsed.success && parsed.data.ventures[venture].status === "enabled";
+}
+
 async function jsonFiles(directory: string): Promise<string[]> {
   try {
     const entries = await readdir(directory, { recursive: true, withFileTypes: true });

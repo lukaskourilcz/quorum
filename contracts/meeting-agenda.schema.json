@@ -34,7 +34,8 @@
               "mma-intake",
               "mma-analysis",
               "mag-editorial",
-              "mag-desk"
+              "mag-desk",
+              "studio"
             ]
           },
           "requestedBy": {
@@ -77,6 +78,8 @@
               "JAB",
               "REACH",
               "SPLIT",
+              "EASEL",
+              "MOTIF",
               "PIVOT"
             ]
           },

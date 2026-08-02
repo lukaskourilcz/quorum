@@ -16,9 +16,9 @@ describe("venture agent controls", () => {
   it("creates social drafts while the separate health gate controls publishing", async () => {
     const controls = await loadVentureAgentControls();
     expect(caughtUpSocialProductionEnabled(controls)).toBe(true);
-    expect([...disabledAgentsForVenture(controls, "caught-up")]).toEqual([]);
+    expect([...disabledAgentsForVenture(controls, "caught-up")]).toEqual(["THREADS", "INSTAGRAM"]);
     expect(enabledAgentsForVenture(controls, "caught-up", ["HERALD", "STET", "HACEK", "THREADS"]))
-      .toEqual(["HERALD", "STET", "HACEK", "THREADS"]);
+      .toEqual(["HERALD", "STET", "HACEK"]);
   });
 
   it("rejects attempts to disable a locked role", async () => {

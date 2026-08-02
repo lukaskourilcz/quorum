@@ -41,6 +41,8 @@ export const FoundingAgentSchema = z.enum([
   "JAB",
   "REACH",
   "SPLIT",
+  "EASEL",
+  "MOTIF",
   "PIVOT"
 ]);
 export type FoundingAgent = z.infer<typeof FoundingAgentSchema>;
@@ -77,7 +79,8 @@ export const PhaseSchema = z.enum([
   "mag-editorial",
   "mag-desk",
   "article-am",
-  "article-pm"
+  "article-pm",
+  "studio"
 ]);
 export type Phase = z.infer<typeof PhaseSchema>;
 
@@ -96,6 +99,7 @@ export const RunnablePhaseSchema = z.enum([
   "mag-desk",
   "article-am",
   "article-pm",
+  "studio",
   "night"
 ]);
 export type RunnablePhase = z.infer<typeof RunnablePhaseSchema>;
@@ -114,6 +118,7 @@ export const ScheduledPhaseSchema = z.enum([
   "mag-desk",
   "article-am",
   "article-pm",
+  "studio",
   "night"
 ]);
 export type ScheduledPhase = z.infer<typeof ScheduledPhaseSchema>;

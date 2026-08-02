@@ -231,14 +231,14 @@ describe("Caught Up meeting records", () => {
 });
 
 describe("meeting calendar", () => {
-  it("builds a 98-slot Prague week with held, missed and scheduled states", async () => {
+  it("builds a 105-slot Prague week with held, missed and scheduled states", async () => {
     const record = await caughtUpRecord("cu-edition");
     const feed = CalendarFeedSchema.parse(buildCalendarFeed({
       weekOf: mondayOfWeek(record.date),
       records: [record],
       now: new Date("2026-08-04T03:10:00.000Z")
     }));
-    expect(feed.slots).toHaveLength(98);
+    expect(feed.slots).toHaveLength(105);
     const edition = feed.slots.find((slot) => slot.kind === "cu-edition" && slot.status === "held");
     expect(edition?.at).toBe("2026-08-04T03:00:00.000Z");
     expect(edition?.meetingRef).toBe("meetings/2026-08-04-cu-edition");

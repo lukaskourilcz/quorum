@@ -2,8 +2,24 @@
   "schemaVersion": "social-variant/1",
   "articleRef": "article:2026-08-01:am:fixture-fight-preview",
   "variants": [
-    { "id": "A", "carouselSpec": { "template": "stat-led", "bindings": { "headline": "The numbers first" } }, "captions": { "en": { "instagram": "A sourced look at the matchup.", "threads": "A sourced look at the matchup." }, "cs": { "instagram": "Zápas podle ověřených čísel.", "threads": "Zápas podle ověřených čísel." } }, "designAxes": { "templateFamily": "stat-led", "colorScheme": "orange-dark", "headlineFraming": "result-first", "captionTone": "plain" } },
-    { "id": "B", "carouselSpec": { "template": "quote-led", "bindings": { "headline": "The matchup first" } }, "captions": { "en": { "instagram": "What separates these two fighters?", "threads": "What separates these two fighters?" }, "cs": { "instagram": "V čem se oba bojovníci liší?", "threads": "V čem se oba bojovníci liší?" } }, "designAxes": { "templateFamily": "quote-led", "colorScheme": "paper-dark", "headlineFraming": "question", "captionTone": "curious" } }
+    {
+      "id": "A",
+      "carousel": {
+        "en": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "en", "variant": "A", "strings": { "poster-line": "THE NUMBERS FIRST", "poster-note": "Verified fight file" } } },
+        "cs": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "cs", "variant": "A", "strings": { "poster-line": "NEJDŘÍV ČÍSLA", "poster-note": "Ověřená karta zápasu" } } }
+      },
+      "captions": { "en": { "instagram": "A sourced look at the matchup.", "threads": "A sourced look at the matchup." }, "cs": { "instagram": "Zápas podle ověřených čísel.", "threads": "Zápas podle ověřených čísel." } },
+      "designAxes": { "templateFamily": "minimal-text-poster", "colorScheme": "orange-dark", "headlineFraming": "result-first", "captionTone": "plain" }
+    },
+    {
+      "id": "B",
+      "carousel": {
+        "en": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "en", "variant": "B", "strings": { "poster-line": "THE MATCHUP FIRST", "poster-note": "Verified fight file" } } },
+        "cs": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "cs", "variant": "B", "strings": { "poster-line": "NEJDŘÍV ZÁPAS", "poster-note": "Ověřená karta zápasu" } } }
+      },
+      "captions": { "en": { "instagram": "What separates these two fighters?", "threads": "What separates these two fighters?" }, "cs": { "instagram": "V čem se oba bojovníci liší?", "threads": "V čem se oba bojovníci liší?" } },
+      "designAxes": { "templateFamily": "minimal-text-poster", "colorScheme": "paper-dark", "headlineFraming": "question", "captionTone": "curious" }
+    }
   ],
   "assignmentProtocolRef": "state/ventures/mma-files/social/ASSIGNMENT.md",
   "status": "draft"

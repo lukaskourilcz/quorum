@@ -2,6 +2,7 @@ import { z } from "zod";
 import { DateSchema, DateTimeSchema, HttpsUrlSchema, Sha256Schema, openObject } from "./common.js";
 import { BoutRecordSchema, EventCardSchema, FightAiQStatsEntrySchema, FighterRecordSchema } from "./mma.js";
 import { ArticleImageSchema } from "./autonomy.js";
+import { LiveTemplateReferenceSchema } from "./carousel-template.js";
 
 export const ArticleFormatSchema = z.enum([
   "fight-week-preview", "post-event-recap", "fighter-profile",
@@ -44,7 +45,10 @@ export const ArticlePackageSchema = openObject({
 
 const SocialVariantSchema = openObject({
   id: z.enum(["A", "B"]),
-  carouselSpec: FrameSpecSchema,
+  carousel: openObject({
+    en: LiveTemplateReferenceSchema,
+    cs: LiveTemplateReferenceSchema
+  }),
   captions: openObject({
     en: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) }),
     cs: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) })

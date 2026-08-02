@@ -58,5 +58,5 @@ export function enabledAgentsForVenture(
 
 export function caughtUpSocialProductionEnabled(controls: VentureAgentControls): boolean {
   const disabled = disabledAgentsForVenture(controls, "caught-up");
-  return !disabled.has("THREADS") && !disabled.has("INSTAGRAM") && !disabled.has("FRAME");
+  return !disabled.has("FRAME");
 }

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { MeetingRefSchema, VentureIdSchema, openObject } from "./common.js";
+import { LiveTemplateReferenceSchema } from "./carousel-template.js";
 
 export const MarketingTacticSchema = openObject({
   type: z.enum(["guerrilla", "social", "content", "paid", "partnership"]),
@@ -25,14 +26,7 @@ export const PostableCampaignAssetSchema = openObject({
     instagram: openObject({ A: z.string().trim().min(1).max(2_200), B: z.string().trim().min(1).max(2_200) }),
     threads: openObject({ A: z.string().trim().min(1).max(500), B: z.string().trim().min(1).max(500) })
   }),
-  visualSpec: openObject({
-    template: z.literal("tt-typographic-card"),
-    headline: z.string().trim().min(1).max(100),
-    subhead: z.string().trim().min(1).max(180),
-    origin: z.literal("deterministic"),
-    people: z.literal(false),
-    photography: z.literal(false)
-  })
+  visual: LiveTemplateReferenceSchema
 });
 
 export const MarketingPlanSchema = openObject({

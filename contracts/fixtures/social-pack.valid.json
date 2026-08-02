@@ -4,26 +4,20 @@
   "editionRef": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "byLocale": {
     "en": {
-      "destination": "https://caught-up.example/en/articles/2026-08-04-model-price-change",
+      "destination": "https://caught-up.example/articles/2026-08-04-model-price-change",
       "instagram": {
         "caption": "The model price changed. The source and the board's reasoning are linked.",
         "variants": { "A": "The model price changed. The source and the board's reasoning are linked.", "B": "What changed in model pricing, and what remains uncertain?" },
         "hashtags": ["ai", "models", "pricing", "caughtup", "boardlessai"],
-        "frames": [
-          "/social/2026-08-04/en/ig-01.webp",
-          "/social/2026-08-04/en/ig-02.webp",
-          "/social/2026-08-04/en/ig-03.webp"
-        ]
+        "frames": ["/social/2026-08-04/en/instagram/frame-01.png"],
+        "visual": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "en", "strings": { "poster-line": "THE PRICE CHANGED.", "poster-note": "Verified source · 2026-08-04" } } }
       },
       "threads": {
         "text": "The model price changed. Read the source and the board's reasoning.",
         "variants": { "A": "The model price changed. Read the source and the board's reasoning.", "B": "A model price changed. Here is what matters and what remains open." },
         "hashtags": ["ai"],
-        "frames": [
-          "/social/2026-08-04/en/ig-01.webp",
-          "/social/2026-08-04/en/ig-02.webp",
-          "/social/2026-08-04/en/ig-03.webp"
-        ]
+        "frames": ["/social/2026-08-04/en/threads/frame-01.png"],
+        "visual": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "en", "strings": { "poster-line": "THE PRICE CHANGED.", "poster-note": "Verified source · 2026-08-04" } } }
       }
     },
     "cs": {
@@ -32,21 +26,15 @@
         "caption": "Cena modelu se změnila. Zdroj i úvaha redakční rady jsou dohledatelné.",
         "variants": { "A": "Cena modelu se změnila. Zdroj i úvaha redakční rady jsou dohledatelné.", "B": "Co se změnilo v cenách modelů a co zatím nevíme?" },
         "hashtags": ["ai", "modely", "ceny", "caughtup", "technologie"],
-        "frames": [
-          "/social/2026-08-04/cs/ig-01.webp",
-          "/social/2026-08-04/cs/ig-02.webp",
-          "/social/2026-08-04/cs/ig-03.webp"
-        ]
+        "frames": ["/social/2026-08-04/cs/instagram/frame-01.png"],
+        "visual": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "cs", "strings": { "poster-line": "CENA SE ZMĚNILA.", "poster-note": "Ověřený zdroj · 2026-08-04" } } }
       },
       "threads": {
         "text": "Cena modelu se změnila. Přečtěte si zdroj i úvahu redakční rady.",
         "variants": { "A": "Cena modelu se změnila. Přečtěte si zdroj i úvahu redakční rady.", "B": "Cena modelu se změnila. Tohle je podstatné a tohle zůstává otevřené." },
         "hashtags": ["ai"],
-        "frames": [
-          "/social/2026-08-04/cs/ig-01.webp",
-          "/social/2026-08-04/cs/ig-02.webp",
-          "/social/2026-08-04/cs/ig-03.webp"
-        ]
+        "frames": ["/social/2026-08-04/cs/threads/frame-01.png"],
+        "visual": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "cs", "strings": { "poster-line": "CENA SE ZMĚNILA.", "poster-note": "Ověřený zdroj · 2026-08-04" } } }
       }
     }
   },
@@ -54,37 +42,27 @@
     "caption": "The model price changed. The source and the board's reasoning are linked.",
     "variants": { "A": "The model price changed. The source and the board's reasoning are linked.", "B": "What changed in model pricing, and what remains uncertain?" },
     "hashtags": ["ai", "models", "pricing", "caughtup", "boardlessai"],
-    "frames": [
-      "/social/2026-08-04/en/ig-01.webp",
-      "/social/2026-08-04/en/ig-02.webp",
-      "/social/2026-08-04/en/ig-03.webp"
-    ]
+    "frames": ["/social/2026-08-04/en/instagram/frame-01.png"],
+    "visual": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "en", "strings": { "poster-line": "THE PRICE CHANGED.", "poster-note": "Verified source · 2026-08-04" } } }
   },
   "threads": {
     "text": "The model price changed. Read the source and the board's reasoning.",
     "variants": { "A": "The model price changed. Read the source and the board's reasoning.", "B": "A model price changed. Here is what matters and what remains open." },
     "hashtags": ["ai"],
-    "frames": [
-      "/social/2026-08-04/en/ig-01.webp",
-      "/social/2026-08-04/en/ig-02.webp",
-      "/social/2026-08-04/en/ig-03.webp"
-    ]
+    "frames": ["/social/2026-08-04/en/threads/frame-01.png"],
+    "visual": { "template_id": "minimal-text-poster", "version": "1.0.0", "content": { "locale": "en", "strings": { "poster-line": "THE PRICE CHANGED.", "poster-note": "Verified source · 2026-08-04" } } }
   },
   "quoteCard": {
-    "frame": "/social/2026-08-04/quote.webp",
-    "sourceTurnRef": "meetings/2026-08-04-cu-edition#turn-14"
+    "frame": "/social/2026-08-04/quote.png",
+    "sourceTurnRef": "meetings/2026-08-04-cu-edition#turn-14",
+    "visual": { "template_id": "quote-card", "version": "1.0.0", "content": { "locale": "en", "strings": { "quote": "The source supports the change.", "attribution": "STET · edition room" } } }
   },
-  "provenance": {
-    "composerVersion": "carousel-1",
-    "inputsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-  },
+  "provenance": { "composerVersion": "carousel-studio-1", "inputsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
   "altTexts": {
-    "/social/2026-08-04/en/ig-01.webp": "English title frame for the verified model price change",
-    "/social/2026-08-04/en/ig-02.webp": "English source and price comparison frame",
-    "/social/2026-08-04/en/ig-03.webp": "English Caught Up conclusion frame",
-    "/social/2026-08-04/cs/ig-01.webp": "Český titulní snímek k ověřené změně ceny modelu",
-    "/social/2026-08-04/cs/ig-02.webp": "Český snímek se zdrojem a srovnáním cen",
-    "/social/2026-08-04/cs/ig-03.webp": "Český závěrečný snímek Caught Up",
-    "/social/2026-08-04/quote.webp": "A sourced exchange from the edition room"
+    "/social/2026-08-04/en/instagram/frame-01.png": "English price-change frame",
+    "/social/2026-08-04/en/threads/frame-01.png": "English price-change frame for Threads",
+    "/social/2026-08-04/cs/instagram/frame-01.png": "Český snímek ke změně ceny",
+    "/social/2026-08-04/cs/threads/frame-01.png": "Český snímek ke změně ceny pro Threads",
+    "/social/2026-08-04/quote.png": "A sourced exchange from the edition room"
   }
 }

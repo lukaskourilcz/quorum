@@ -193,51 +193,62 @@
             ],
             "additionalProperties": {}
           },
-          "visualSpec": {
+          "visual": {
             "type": "object",
             "properties": {
-              "template": {
+              "template_id": {
                 "type": "string",
-                "const": "tt-typographic-card"
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
               },
-              "headline": {
+              "version": {
                 "type": "string",
-                "minLength": 1,
-                "maxLength": 100
+                "pattern": "^\\d+\\.\\d+\\.\\d+$"
               },
-              "subhead": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 180
-              },
-              "origin": {
-                "type": "string",
-                "const": "deterministic"
-              },
-              "people": {
-                "type": "boolean",
-                "const": false
-              },
-              "photography": {
-                "type": "boolean",
-                "const": false
+              "content": {
+                "type": "object",
+                "properties": {
+                  "locale": {
+                    "type": "string",
+                    "enum": [
+                      "en",
+                      "cs"
+                    ]
+                  },
+                  "strings": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]*$"
+                    },
+                    "additionalProperties": {
+                      "type": "string",
+                      "maxLength": 2000
+                    }
+                  },
+                  "variant": {
+                    "type": "string",
+                    "pattern": "^[A-Z][A-Z0-9-]*$"
+                  }
+                },
+                "required": [
+                  "locale",
+                  "strings"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
-              "template",
-              "headline",
-              "subhead",
-              "origin",
-              "people",
-              "photography"
+              "template_id",
+              "version",
+              "content"
             ],
-            "additionalProperties": {}
+            "additionalProperties": false
           }
         },
         "required": [
           "id",
           "captions",
-          "visualSpec"
+          "visual"
         ],
         "additionalProperties": {}
       }

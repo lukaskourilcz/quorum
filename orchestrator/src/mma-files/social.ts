@@ -6,20 +6,27 @@ export const MMA_FILES_ASSIGNMENT_PROTOCOL = "state/ventures/mma-files/social/AS
 
 export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPack {
   if (article.status !== "published") throw new Error("Social variants require a finished bilingual article");
+  const carousel = (locale: "en" | "cs", variant: "A" | "B") => ({
+    template_id: "cover-cta",
+    version: "1.0.0",
+    content: {
+      locale,
+      variant,
+      strings: {
+        "cover-title": article.localizations[locale].title,
+        "cover-dek": article.localizations[locale].dek,
+        cta: locale === "cs" ? "Přečtěte si celý ozdrojovaný text" : "Read the full sourced story",
+        destination: "mma-files.vercel.app"
+      }
+    }
+  });
   return SocialVariantPackSchema.parse({
     schemaVersion: "social-variant/1",
     articleRef: articleRef(article),
     variants: [
       {
         id: "A",
-        carouselSpec: {
-          template: "stat-led",
-          bindings: {
-            enHeadline: article.localizations.en.title,
-            csHeadline: article.localizations.cs.title,
-            format: article.format
-          }
-        },
+        carousel: { en: carousel("en", "A"), cs: carousel("cs", "A") },
         captions: {
           en: {
             instagram: `${article.localizations.en.dek}\n\nRead the sourced story in MMA Files.`,
@@ -31,7 +38,7 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
           }
         },
         designAxes: {
-          templateFamily: "stat-led",
+          templateFamily: "cover-cta",
           colorScheme: "orange-dark",
           headlineFraming: "fact-first",
           captionTone: "plain"
@@ -39,14 +46,7 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
       },
       {
         id: "B",
-        carouselSpec: {
-          template: "question-led",
-          bindings: {
-            enHeadline: article.localizations.en.title,
-            csHeadline: article.localizations.cs.title,
-            format: article.format
-          }
-        },
+        carousel: { en: carousel("en", "B"), cs: carousel("cs", "B") },
         captions: {
           en: {
             instagram: `${article.localizations.en.title}\n\n${article.localizations.en.dek}`,
@@ -58,7 +58,7 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
           }
         },
         designAxes: {
-          templateFamily: "question-led",
+          templateFamily: "cover-cta",
           colorScheme: "paper-dark",
           headlineFraming: "question-or-tension",
           captionTone: "curious"

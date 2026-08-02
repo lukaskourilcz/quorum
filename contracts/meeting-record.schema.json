@@ -34,7 +34,8 @@
             "mma-intake",
             "mma-analysis",
             "mag-editorial",
-            "mag-desk"
+            "mag-desk",
+            "studio"
           ]
         },
         "episode": {
@@ -165,6 +166,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -291,6 +294,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -360,6 +365,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -428,6 +435,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -617,6 +626,8 @@
                 "JAB",
                 "REACH",
                 "SPLIT",
+                "EASEL",
+                "MOTIF",
                 "PIVOT"
               ]
             },
@@ -672,6 +683,8 @@
                       "JAB",
                       "REACH",
                       "SPLIT",
+                      "EASEL",
+                      "MOTIF",
                       "PIVOT"
                     ]
                   },
@@ -728,6 +741,8 @@
                       "JAB",
                       "REACH",
                       "SPLIT",
+                      "EASEL",
+                      "MOTIF",
                       "PIVOT"
                     ]
                   },
@@ -825,7 +840,8 @@
             "mma-intake",
             "mma-analysis",
             "mag-editorial",
-            "mag-desk"
+            "mag-desk",
+            "studio"
           ]
         },
         "episode": {
@@ -956,6 +972,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -1082,6 +1100,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -1151,6 +1171,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -1219,6 +1241,8 @@
                   "JAB",
                   "REACH",
                   "SPLIT",
+                  "EASEL",
+                  "MOTIF",
                   "PIVOT"
                 ]
               },
@@ -1362,7 +1386,8 @@
             "mma-intake",
             "mma-analysis",
             "mag-editorial",
-            "mag-desk"
+            "mag-desk",
+            "studio"
           ]
         },
         "roomTranscript": {
@@ -1418,6 +1443,8 @@
                 "JAB",
                 "REACH",
                 "SPLIT",
+                "EASEL",
+                "MOTIF",
                 "PIVOT"
               ]
             },
@@ -1473,6 +1500,8 @@
                       "JAB",
                       "REACH",
                       "SPLIT",
+                      "EASEL",
+                      "MOTIF",
                       "PIVOT"
                     ]
                   },
@@ -1529,6 +1558,8 @@
                       "JAB",
                       "REACH",
                       "SPLIT",
+                      "EASEL",
+                      "MOTIF",
                       "PIVOT"
                     ]
                   },

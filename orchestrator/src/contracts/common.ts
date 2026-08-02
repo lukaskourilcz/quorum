@@ -38,6 +38,8 @@ export const ContractAgentIdSchema = z.enum([
   "JAB",
   "REACH",
   "SPLIT",
+  "EASEL",
+  "MOTIF",
   "PIVOT"
 ]);
 

@@ -67,6 +67,7 @@ import {
   recordMissingSocialPackConfiguration,
   recordSocialPackFailure
 } from "./social/pack.js";
+import { socialContentGenerationEnabled } from "./social/activation.js";
 import { collectLiveCouncil, createLiveStandup } from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
@@ -454,13 +455,15 @@ async function runCaughtUpLiveEditionCycle(
     disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
     now
   });
+  const socialContentEnabled = caughtUpSocialProductionEnabled(agentControls) &&
+    await socialContentGenerationEnabled(stateRoot, "caught-up");
   const produced = await runLiveEdition({
     cycleId,
     date,
     now,
     meetingRef: reference,
     roomUrl: `${baseUrl}/${reference}`,
-    socialPackEnabled: caughtUpSocialProductionEnabled(agentControls),
+    socialPackEnabled: socialContentEnabled,
     licensedImageSearchEnabled: true
   });
   const monthAllInUsd = await appendEditionUsage(stateRoot, cycleId, now, produced.report);
@@ -520,7 +523,7 @@ async function runCaughtUpLiveEditionCycle(
     })
   ]);
   const socialArtifacts: string[] = [];
-  if (produced.package.status === "edition" && caughtUpSocialProductionEnabled(agentControls)) {
+  if (produced.package.status === "edition" && socialContentEnabled) {
     const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
     if (!caughtUpBaseUrl) {
       await recordMissingSocialPackConfiguration(stateRoot);

@@ -658,6 +658,38 @@
       "warmupCycles": 14
     },
     {
+      "id": "easel.live_template_proposals",
+      "owner": "EASEL",
+      "metric": "checkedTemplateProposalsPerQuarter",
+      "target": 6,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "easel.check_pass_rate",
+      "owner": "EASEL",
+      "metric": "templateProposalCheckPassRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "motif.cited_observations",
+      "owner": "MOTIF",
+      "metric": "citedStudioObservationsPerQuarter",
+      "target": 12,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
+      "id": "motif.brand_coverage",
+      "owner": "MOTIF",
+      "metric": "studioObservationBrandCoverage",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14
+    },
+    {
       "id": "council.cost_per_learning",
       "owner": "ALL",
       "metric": "usdPerValidatedLearning",

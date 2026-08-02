@@ -1,34 +1,12 @@
 import path from "node:path";
-import sharp from "sharp";
+import { CAROUSEL_BRANDS, renderCarouselPng } from "@boardlessai/carousel-studio";
+import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import type { MarketingPlan } from "../contracts/marketing-plan.js";
 import type { ArticlePackage, SocialVariantPack } from "../contracts/mma-files.js";
 import { parseSafeHttpsUrl } from "../security/url.js";
 import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
-import { renderSocialVariants } from "../mma-files/frame.js";
 import { deterministicVariant } from "./pack.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
-
-function escapeXml(value: string): string {
-  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
-}
-
-function wrapped(value: string, maximum = 24): string[] {
-  const lines: string[] = [];
-  for (const word of value.trim().split(/\s+/u)) {
-    const current = lines.at(-1);
-    if (!current || `${current} ${word}`.length > maximum) lines.push(word);
-    else lines[lines.length - 1] = `${current} ${word}`;
-  }
-  return lines.slice(0, 5);
-}
-
-function ttSvg(headline: string, subhead: string, variant: "A" | "B"): string {
-  const palette = variant === "A"
-    ? { background: "#140f18", card: "#24172b", accent: "#ff5ea8", foreground: "#fff7fb" }
-    : { background: "#fff4e8", card: "#ffe3c3", accent: "#c32e68", foreground: "#321323" };
-  const title = wrapped(headline).map((line, index) => `<text x="92" y="${350 + index * 94}" fill="${palette.foreground}" font-family="Arial, sans-serif" font-size="78" font-weight="800">${escapeXml(line)}</text>`).join("");
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-label="Typographic Titty Tuesdays campaign card"><rect width="1080" height="1350" fill="${palette.background}"/><rect x="54" y="54" width="972" height="1242" rx="42" fill="${palette.card}" stroke="${palette.accent}" stroke-width="4"/><text x="92" y="155" fill="${palette.accent}" font-family="Arial, sans-serif" font-size="34" font-weight="800">TITTY TUESDAYS · ${variant}</text>${title}<text x="92" y="1110" fill="${palette.foreground}" font-family="Arial, sans-serif" font-size="34">${escapeXml(subhead.slice(0, 72))}</text><circle cx="930" cy="1180" r="34" fill="${palette.accent}"/></svg>`;
-}
 
 function nextTuesday(date: string): string {
   const base = new Date(`${date}T12:00:00.000Z`);
@@ -87,7 +65,6 @@ export async function composeMmaFilesSocialQueue(input: {
   now: Date;
 }): Promise<string[]> {
   const baseUrl = parseSafeHttpsUrl(input.destinationBaseUrl);
-  const renders = new Map(renderSocialVariants(input.pack, input.article).map((render) => [render.key, render]));
   const date = input.article.publishAt.slice(0, 10);
   const evidenceRefs = input.article.sources.map((source) => source.kind === "internal" ? source.ref : source.url);
   const paths: string[] = [];
@@ -96,11 +73,14 @@ export async function composeMmaFilesSocialQueue(input: {
       const id = `mma-files-${date}-${input.article.slot}-${input.article.slug}-${locale}-${channel}`;
       const variant = deterministicVariant(id);
       const selected = input.pack.variants.find((item) => item.id === variant)!;
-      const assetPath = `/social/mma-files/${date}/${input.article.slug}-${variant}-${locale}.png`;
-      if (channel === "instagram") {
-        const render = renders.get(`${variant}-${locale}`)!;
-        const bytes = await sharp(Buffer.from(render.svg)).png({ compressionLevel: 9 }).toBuffer();
-        await atomicWriteBuffer(input.repoRoot, `site/public${assetPath}`, bytes);
+      const reference = selected.carousel[locale];
+      const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
+      const renders = await renderCarouselPng({ template: resolveLiveCarouselTemplate(reference.template_id, reference.version), payload: reference.content, brand: CAROUSEL_BRANDS["mma-files"], format });
+      const assetPaths: string[] = [];
+      for (const render of renders) {
+        const assetPath = `/social/mma-files/${date}/${input.article.slug}-${variant}-${locale}-${channel}-${String(render.index + 1).padStart(2, "0")}.png`;
+        await atomicWriteBuffer(input.repoRoot, `site/public${assetPath}`, render.png);
+        assetPaths.push(assetPath);
         paths.push(path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", assetPath.slice(1))));
       }
       const destination = new URL(`/${locale}/articles/${input.article.slug}`, baseUrl).toString();
@@ -112,8 +92,8 @@ export async function composeMmaFilesSocialQueue(input: {
         channel,
         destination,
         text: selected.captions[locale][channel],
-        assetPaths: channel === "instagram" ? [assetPath] : [],
-        altText: channel === "instagram" ? `MMA Files typographic ${variant} cover: ${input.article.localizations[locale].title}` : null,
+        assetPaths,
+        altText: `MMA Files ${variant} carousel: ${input.article.localizations[locale].title}`,
         evidenceRefs,
         notBefore: input.now.toISOString(),
         notAfter: new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString(),
@@ -143,10 +123,14 @@ export async function composeTittyTuesdaysSocialQueue(input: {
     for (const channel of ["instagram", "threads"] as const) {
       const id = `titty-tuesdays-${input.plan.id}-${asset.id}-${channel}`;
       const variant = deterministicVariant(id);
-      const assetPath = `/social/titty-tuesdays/${date}/${asset.id}-${variant}.png`;
-      if (channel === "instagram") {
-        const bytes = await sharp(Buffer.from(ttSvg(asset.visualSpec.headline, asset.visualSpec.subhead, variant))).png({ compressionLevel: 9 }).toBuffer();
-        await atomicWriteBuffer(input.repoRoot, `site/public${assetPath}`, bytes);
+      const reference = { ...asset.visual, content: { ...asset.visual.content, variant } };
+      const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
+      const renders = await renderCarouselPng({ template: resolveLiveCarouselTemplate(reference.template_id, reference.version), payload: reference.content, brand: CAROUSEL_BRANDS["titty-tuesdays"], format });
+      const assetPaths: string[] = [];
+      for (const render of renders) {
+        const assetPath = `/social/titty-tuesdays/${date}/${asset.id}-${variant}-${channel}-${String(render.index + 1).padStart(2, "0")}.png`;
+        await atomicWriteBuffer(input.repoRoot, `site/public${assetPath}`, render.png);
+        assetPaths.push(assetPath);
         paths.push(path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", assetPath.slice(1))));
       }
       const item = baseQueue({
@@ -157,8 +141,8 @@ export async function composeTittyTuesdaysSocialQueue(input: {
         channel,
         destination: baseUrl,
         text: asset.captions[channel][variant],
-        assetPaths: channel === "instagram" ? [assetPath] : [],
-        altText: channel === "instagram" ? `Typographic Titty Tuesdays card: ${asset.visualSpec.headline}` : null,
+        assetPaths,
+        altText: `Titty Tuesdays carousel: ${reference.content.strings["cover-title"] ?? reference.content.strings["poster-line"] ?? "campaign draft"}`,
         evidenceRefs: [input.plan.originMeetingRef],
         notBefore: notBefore.toISOString(),
         notAfter: notAfter.toISOString(),

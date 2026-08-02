@@ -40,9 +40,9 @@ async function fixtureDigest(finalMeetingFailed = false) {
 }
 
 describe("one daily portfolio digest", () => {
-  it("groups the full fourteen-slot schedule and records missed work in one line", async () => {
+  it("groups the full fifteen-slot schedule and records missed work in one line", async () => {
     const digest = await fixtureDigest();
-    expect(digest.meetings).toHaveLength(14);
+    expect(digest.meetings).toHaveLength(15);
     expect(digest.meetings.filter((meeting) => !meeting.held).length).toBeGreaterThan(0);
     expect(digest.meetings.every((meeting) => meeting.bullets.length === 1)).toBe(true);
     expect(digest.bodyWordCount).toBeLessThanOrEqual(400);

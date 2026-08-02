@@ -59,8 +59,10 @@ import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
 import { foundTemplateVenture, templateCandidateFromProposal } from "../ventures/founding.js";
 import { VentureTemplateSchema } from "../contracts/autonomy.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
+import { socialContentGenerationEnabled } from "../social/activation.js";
+import { processStudioContribution } from "../studio/lifecycle.js";
 
-export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
+export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "studio";
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),
@@ -70,6 +72,8 @@ const ContributionSchema = z.object({
   nicheProposals: z.array(z.unknown()).max(2).default([]),
   editorialSlate: z.unknown().nullable().default(null),
   marketingPlan: z.unknown().nullable().default(null),
+  templateProposal: z.unknown().nullable().default(null),
+  inspirationObservations: z.array(z.unknown()).max(4).default([]),
   followUpRequest: z.object({
     phase: AgendaPhaseSchema,
     summary: z.string().trim().min(1).max(280),
@@ -146,7 +150,7 @@ function modelFor(
       : "OPENAI_SPECIALIST";
   const model = models[role];
   if (!model || provider === "deterministic") throw new Error(`No live text model for ${agent}`);
-  return { ...model, maxOutputTokens: agent === "ANGLE" || agent === "CANVAS" ? Math.min(700, model.maxOutputTokens) : Math.min(260, model.maxOutputTokens) };
+  return { ...model, maxOutputTokens: agent === "EASEL" ? Math.min(1_500, model.maxOutputTokens) : agent === "ANGLE" || agent === "CANVAS" ? Math.min(700, model.maxOutputTokens) : Math.min(260, model.maxOutputTokens) };
 }
 
 function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd: number; monthlyOperatingUsd: number }): BudgetLimits {
@@ -168,6 +172,7 @@ function shiftedTimes(now: Date, count: number): string[] {
 }
 
 function portfolioChair(phase: PortfolioPhase): FoundingAgent {
+  if (phase === "studio") return "EASEL";
   if (phase === "mma-intake" || phase === "mma-analysis") return "FORGE";
   if (phase === "mag-editorial" || phase === "mag-desk") return "CANVAS";
   return "PULSE";
@@ -193,6 +198,7 @@ function buildRecord(input: {
 }): MeetingRecord {
   const isFightDesk = input.phase === "mma-intake" || input.phase === "mma-analysis";
   const isMagazine = input.phase === "mag-editorial" || input.phase === "mag-desk";
+  const isStudio = input.phase === "studio";
   const chair = portfolioChair(input.phase);
   const times = shiftedTimes(input.now, input.contributions.length + 2);
   const veto = input.contributions.find((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
@@ -202,6 +208,8 @@ function buildRecord(input: {
       ? input.phase === "mma-intake"
         ? "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
         : "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction."
+    : isStudio
+      ? input.contributions.find((contribution) => contribution.agent === "EASEL")?.summary ?? "The studio checked the current template library and recorded no new proposal."
     : input.phase === "mag-editorial" && input.editorialSlate
       ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
     : input.phase === "incubator-synthesis"
@@ -225,7 +233,7 @@ function buildRecord(input: {
     proposals: input.contributions.map((contribution) => ({ agent: contribution.agent, summary: contribution.summary, evidenceRefs: contribution.evidenceRefs })),
     voteMatrix: input.contributions.map((contribution) => ({ voter: contribution.agent, firstChoice: contribution.stance, veto: contribution.stance === "veto" })),
     tasks: input.contributions.flatMap((contribution, index) => contribution.task ? [{ id: `TASK-${input.cycleId.toUpperCase()}-${String(index + 1).padStart(2, "0")}`, owner: contribution.agent, summary: contribution.task.summary, status: "planned" as const }] : []),
-    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "EDITORIAL_ONLY. Approved bilingual articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : input.phase === "incubator-synthesis" ? "TEMPLATE_ONLY. A compliant content venture may be founded; every exception remains with the owner." : "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
+    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "EDITORIAL_ONLY. Approved bilingual articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : isStudio ? "TEMPLATE_ONLY. Checked original templates may enter the internal live library; this does not authorize social publishing or external media collection." : input.phase === "incubator-synthesis" ? "TEMPLATE_ONLY. A compliant content venture may be founded; every exception remains with the owner." : "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
     eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
     ...(input.editorialSlate ? { editorialSlateRef: `ventures/mma-files/slates/${input.date}.json` } : {}),
     ...(input.agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${input.agenda.id}` } : {}),
@@ -371,6 +379,14 @@ async function canonicalStateText(root: string, relative: string): Promise<strin
 
 export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>): Promise<{ text: string; evidenceRefs: string[] }> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
+  if (phase === "studio") {
+    const inspiration = await readJson<{ links?: Array<{ url?: string; label?: string }> }>(root, "ventures/carousel-studio/inspiration/owner-links.json", {});
+    const links = (inspiration.links ?? []).filter((entry): entry is { url: string; label?: string } => typeof entry.url === "string" && entry.url.startsWith("https://"));
+    return {
+      text: `${taste ?? ""}\n\nApproved individual inspiration links:\n${links.map((link) => `- ${link.url}${link.label ? ` — ${link.label}` : ""}`).join("\n") || "- None. Record no observations and propose no template."}\n\nThe seed library already contains ten live templates. Prefer improving coverage to duplicating an existing layout.`.slice(0, 18_000),
+      evidenceRefs: links.map((link) => link.url)
+    };
+  }
   if (phase === "tt-marketing") {
     const season = await readText(root, "ventures/titty-tuesdays/season-001.md");
     return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
@@ -570,15 +586,15 @@ export async function runPortfolioCycle(input: {
   let contributions: Contribution[];
   let estimatedWorstCaseUsd = 0;
   if (input.dry) {
-    const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
-    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, followUpRequest: null }));
+    const dryChair = input.phase === "studio" ? "EASEL" : input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
+    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, templateProposal: null, inspirationObservations: [], followUpRequest: null }));
   } else {
-    const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
+    const promptName = input.phase === "studio" ? "studio.md" : input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null|{"schemaVersion":"editorial-slate/1","date":"YYYY-MM-DD","slots":[...],"vaultVerdicts":[...]},"marketingPlan":null|{"schemaVersion":"marketing-plan/1","title":"...","summary":"<=280 chars","objective":"...","tactics":[...],"calendar":[...],"audienceRefs":[...],"kpis":[...],"postable_assets":[{"id":"asset-short-name","captions":{"instagram":{"A":"...","B":"..."},"threads":{"A":"...","B":"..."}},"visualSpec":{"template":"tt-typographic-card","headline":"...","subhead":"...","origin":"deterministic","people":false,"photography":false}}]},"followUpRequest":null|{"phase":"allowed phase","summary":"why another room is needed","evidenceRefs":[]}}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. It must describe future campaign ideas and include A/B captions plus deterministic typographic visual specifications; no paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nROLE BOUNDARY:\n${profile.mission}\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"followUpRequest":null}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const prompt = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -665,7 +681,19 @@ export async function runPortfolioCycle(input: {
           instagram: { A: "Tuesday idea: the line does the work. The campaign stays typographic, clear and deliberate.", B: "A Tuesday campaign should earn attention with a sharp sentence, not a borrowed face." },
           threads: { A: "A Tuesday idea built from type, timing and one clear point.", B: "The line is the visual. The idea is the reason to stop." }
         },
-        visualSpec: { template: "tt-typographic-card", headline: "THE LINE IS THE VISUAL", subhead: "A Tuesday campaign idea made from type, not people.", origin: "deterministic", people: false, photography: false }
+        visual: {
+          template_id: "cover-cta",
+          version: "1.0.0",
+          content: {
+            locale: "en",
+            strings: {
+              "cover-title": "THE LINE IS THE VISUAL",
+              "cover-dek": "A Tuesday campaign idea made from type, not people.",
+              cta: "Read the full campaign idea",
+              destination: "titty-tuesdays.vercel.app"
+            }
+          }
+        }
       }],
       status: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto") ? "draft" : "approved",
       originMeetingRef: meetingRef
@@ -707,6 +735,16 @@ export async function runPortfolioCycle(input: {
       }
     }
   }
+  const auditVeto = contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
+  const studioLifecycle = input.phase === "studio"
+    ? await processStudioContribution({
+        root,
+        observations: contributions.find((contribution) => contribution.agent === "MOTIF")?.inspirationObservations ?? [],
+        templateProposal: contributions.find((contribution) => contribution.agent === "EASEL")?.templateProposal ?? null,
+        allowedEvidenceRefs: context.evidenceRefs,
+        allowLive: !input.dry && !auditVeto
+      })
+    : null;
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
   const monthAllInUsd = fixedMonthlyUsd + actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
@@ -735,7 +773,8 @@ export async function runPortfolioCycle(input: {
       atomicWriteText(root, proposalMarkdownPaths[index]!, renderNicheProposalMarkdown(proposal))
     ])
   ]);
-  const ttSocialArtifacts = !input.dry && marketingPlan?.status === "approved"
+  const ttSocialUnlocked = !input.dry && await socialContentGenerationEnabled(root, "titty-tuesdays");
+  const ttSocialArtifacts = ttSocialUnlocked && marketingPlan?.status === "approved"
     ? await composeTittyTuesdaysSocialQueue({
         stateRoot: root,
         repoRoot,
@@ -796,6 +835,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(studioLifecycle?.artifacts ?? []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

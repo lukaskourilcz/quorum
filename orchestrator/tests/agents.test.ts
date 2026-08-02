@@ -9,20 +9,20 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains 38 active roles and keeps gated portraits explicit", async () => {
+  it("contains 40 active roles and keeps gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(38);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(40);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(38);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(40);
     expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
-      18
+      19
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(20);
+    ).toHaveLength(21);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
@@ -40,6 +40,8 @@ describe("agent registry and identity assets", () => {
       ["JAB", ["mma-files"]],
       ["REACH", ["mma-files"]],
       ["SPLIT", ["mma-files"]],
+      ["EASEL", ["carousel-studio"]],
+      ["MOTIF", ["carousel-studio"]],
       ["PIVOT", ["fightaiq", "mma-files"]]
     ]);
 
@@ -59,7 +61,7 @@ describe("agent registry and identity assets", () => {
     expect(avatars).toHaveLength(27);
     expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
       "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR",
-      "CANVAS", "JAB", "REACH", "SPLIT", "PIVOT"
+      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT"
     ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);

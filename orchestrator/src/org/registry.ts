@@ -41,6 +41,8 @@ export const FOUNDING_AGENT_IDS = [
   "JAB",
   "REACH",
   "SPLIT",
+  "EASEL",
+  "MOTIF",
   "PIVOT"
 ] as const;
 

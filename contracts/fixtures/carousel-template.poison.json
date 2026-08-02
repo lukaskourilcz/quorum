@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "carousel-template/1",
+  "id": "broken",
+  "name": "Broken",
+  "version": "latest",
+  "status": "live",
+  "description": "This fixture must fail because it has no formats, slots or slides.",
+  "citedObservationRefs": [],
+  "requiredSlots": [],
+  "slides": []
+}

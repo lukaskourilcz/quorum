@@ -15,8 +15,7 @@
         "INSTAGRAM",
         "FRAME"
       ],
-      "disabled": [
-      ]
+      "disabled": ["THREADS", "INSTAGRAM"]
     },
     "titty-tuesdays": {
       "lockedOn": [
@@ -38,7 +37,9 @@
         "FRAME"
       ],
       "disabled": [
-        "QUILL"
+        "QUILL",
+        "THREADS",
+        "INSTAGRAM"
       ]
     },
     "incubator": {
@@ -89,6 +90,11 @@
       "disabled": [
         "SPLIT"
       ]
+    },
+    "carousel-studio": {
+      "lockedOn": ["EASEL", "MOTIF", "KEEPER", "AUDIT", "SCRIBE"],
+      "switchable": ["PALATE", "FRAME"],
+      "disabled": []
     }
   }
 }

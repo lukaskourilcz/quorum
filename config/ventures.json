@@ -171,6 +171,36 @@
       ]
     },
     {
+      "id": "carousel-studio",
+      "name": "Carousel Studio",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "carousel-studio",
+      "growth_objective": {
+        "label": "Grow a checked library of original, reusable carousel layouts",
+        "components": ["live-template-library"]
+      },
+      "adminTabs": ["templates", "inspiration", "social-lab"],
+      "meetings": [
+        {
+          "kind": "studio",
+          "label": "Carousel Studio room",
+          "cadence": "daily@13:00",
+          "cast": ["EASEL", "MOTIF", "KEEPER", "AUDIT", "SCRIBE"],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "studio-room",
+            "objectives": {
+              "dry": "Check fixture observations and the live template catalog without creating external work or spend",
+              "live": "Turn allowed, cited layout observations into one original proposal or improve the checked live library"
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "mma-files",
       "name": "MMA Files",
       "status": "operating",

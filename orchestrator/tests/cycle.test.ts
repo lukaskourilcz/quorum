@@ -205,8 +205,8 @@ describe("cycle preflight", () => {
       } else {
         expect(result.artifacts).toEqual(expect.arrayContaining([
           expect.stringMatching(new RegExp(`articles/2026-08-04-${fixture.phase === "article-am" ? "am" : "pm"}-`)),
-          expect.stringMatching(/social-A-en\.svg$/),
-          expect.stringMatching(/social-B-cs\.svg$/)
+          expect.stringMatching(/social-A-en-01\.svg$/),
+          expect.stringMatching(/social-B-cs-02\.svg$/)
         ]));
       }
     }

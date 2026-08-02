@@ -40,7 +40,9 @@ export type AgentId =
   | "JAB"
   | "REACH"
   | "SPLIT"
-  | "PIVOT";
+  | "PIVOT"
+  | "EASEL"
+  | "MOTIF";
 
 type PublicStatus =
   | "active"
@@ -633,6 +635,18 @@ const profileCopy: Record<
     operatingPrinciple: "Carry only the finding whose source can travel with it.",
     output: "Evidence-linked bridge between both MMA desks",
     currentFocus: "FightAIQ and MMA Files handoffs",
+    publicTrackRecord: null
+  },
+  EASEL: {
+    operatingPrinciple: "Write the layout as checked data before judging the preview.",
+    output: "Versioned carousel-template/1 proposal",
+    currentFocus: "Original Carousel Studio layouts",
+    publicTrackRecord: null
+  },
+  MOTIF: {
+    operatingPrinciple: "Describe the pattern and cite the page. Never copy the artifact.",
+    output: "Cited textual design observation",
+    currentFocus: "Allowed design publications and owner links",
     publicTrackRecord: null
   }
 };

@@ -61,7 +61,8 @@
                     "two-source-agreement",
                     "readiness-dossiers",
                     "campaign-inventory",
-                    "evidence-backed-proposals"
+                    "evidence-backed-proposals",
+                    "live-template-library"
                   ]
                 }
               }
@@ -95,7 +96,9 @@
                 "sources",
                 "articles",
                 "calendar",
-                "social-lab"
+                "social-lab",
+                "templates",
+                "inspiration"
               ]
             }
           },
@@ -190,6 +193,8 @@
                     "JAB",
                     "REACH",
                     "SPLIT",
+                    "EASEL",
+                    "MOTIF",
                     "PIVOT"
                   ]
                 }
@@ -275,6 +280,8 @@
                       "JAB",
                       "REACH",
                       "SPLIT",
+                      "EASEL",
+                      "MOTIF",
                       "PIVOT"
                     ]
                   }

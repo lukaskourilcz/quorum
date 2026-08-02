@@ -5,7 +5,7 @@ on:
     - cron: "0 3 * * *"
     - cron: "0 4 * * *"
     - cron: "0 5 * * *"
-    - cron: "0 12 * * *"
+    - cron: "0 11,12 * * *"
     - cron: "0 13 * * *"
     - cron: "0 15 * * *"
     - cron: "0 16 * * *"
@@ -40,6 +40,7 @@ on:
           - article-pm
           - mma-analysis
           - mag-desk
+          - studio
           - night
       dry:
         description: Never call paid APIs or write canonical state
@@ -151,7 +152,7 @@ jobs:
             dry=true
             echo "The inactive DST cron variant has no Prague wall-clock meeting."
           fi
-          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; }; then
+          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk" || test "$phase" = "studio"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
               echo "Portfolio meeting crons await explicit owner approval."

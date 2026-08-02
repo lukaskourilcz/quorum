@@ -1,4 +1,6 @@
 import type { ArticlePackage, SocialVariantPack } from "../contracts/mma-files.js";
+import { CAROUSEL_BRANDS, renderCarouselSvg } from "@boardlessai/carousel-studio";
+import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import { canonicalJson, sha256 } from "./hash.js";
 
 function escapeXml(value: unknown): string {
@@ -36,20 +38,23 @@ export function renderArticleHero(article: ArticlePackage): string {
 }
 
 export interface SocialRender {
-  key: `${"A" | "B"}-${"en" | "cs"}`;
+  key: `${"A" | "B"}-${"en" | "cs"}-${string}`;
   svg: string;
   sha256: string;
 }
 
 export function renderSocialVariants(pack: SocialVariantPack, article: ArticlePackage): SocialRender[] {
-  return pack.variants.flatMap((variant) => (["en", "cs"] as const).map((locale) => {
-    const title = article.localizations[locale].title;
-    const palette = variant.id === "A"
-      ? { background: "#111113", card: "#1d1d22", accent: "#ef6c35" }
-      : { background: "#e9e1d3", card: "#f8f3ea", accent: "#7c2d12" };
-    const key = `${variant.id}-${locale}` as const;
-    const fingerprint = sha256(canonicalJson({ article: article.packageHash, variant, locale })).slice(0, 12);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(title)}</title><desc id="desc">MMA Files social variant ${key}. No human figure is generated.</desc><rect width="1080" height="1350" fill="${palette.background}"/><rect x="60" y="60" width="960" height="1230" rx="28" fill="${palette.card}" stroke="${palette.accent}" stroke-width="4"/><text x="104" y="150" fill="${palette.accent}" font-family="Arial, sans-serif" font-size="38" font-weight="700">MMA FILES · ${variant.id} · ${locale.toUpperCase()}</text>${svgText(wrapWords(title, 22), 104, 350, 70)}<text x="104" y="1120" fill="${palette.accent}" font-family="Arial, sans-serif" font-size="30">${escapeXml(variant.designAxes.templateFamily)} · ${escapeXml(variant.designAxes.headlineFraming)}</text><text x="104" y="1200" fill="${palette.accent}" font-family="monospace" font-size="24">${fingerprint}</text></svg>`;
-    return { key, svg, sha256: sha256(svg) };
+  return pack.variants.flatMap((variant) => (["en", "cs"] as const).flatMap((locale) => {
+    const reference = variant.carousel[locale];
+    return renderCarouselSvg({
+      template: resolveLiveCarouselTemplate(reference.template_id, reference.version),
+      payload: reference.content,
+      brand: CAROUSEL_BRANDS["mma-files"],
+      format: "instagram-portrait"
+    }).map((render) => ({
+      key: `${variant.id}-${locale}-${String(render.index + 1).padStart(2, "0")}` as const,
+      svg: render.svg,
+      sha256: render.svgHash
+    }));
   }));
 }

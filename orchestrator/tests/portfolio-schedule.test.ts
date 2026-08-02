@@ -30,7 +30,7 @@ Signature / explicit approval reference: owner-approval-2026-08-04`;
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 14, 17, 19, 20, 21, 22]);
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 21, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@07:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -87,7 +87,7 @@ describe("portfolio schedule and budget gate", () => {
 
   it("emits correct summer/winter cron pairs for meetings and article slots", async () => {
     const payloads = cronPayloads(await loadVentureRegistry());
-    expect(payloads).toHaveLength(28);
+    expect(payloads).toHaveLength(30);
     expect(payloads.filter((item) => item.phase === "incubator-scan").map((item) => item.cron)).toEqual(["0 5 * * *", "0 6 * * *"]);
     expect(payloads.filter((item) => item.phase === "tt-marketing").map((item) => item.cron)).toEqual(["0 9 * * *", "0 10 * * *"]);
     expect(payloads.filter((item) => item.phase === "incubator-synthesis").map((item) => item.cron)).toEqual(["0 19 * * *", "0 20 * * *"]);
@@ -97,7 +97,9 @@ describe("portfolio schedule and budget gate", () => {
     expect(payloads.filter((item) => item.phase === "article-am").map((item) => item.cron)).toEqual(["0 8 * * *", "0 9 * * *"]);
     expect(payloads.filter((item) => item.phase === "article-pm").map((item) => item.cron)).toEqual(["0 16 * * *", "0 17 * * *"]);
     expect(payloads.filter((item) => item.phase === "mag-desk").map((item) => item.cron)).toEqual(["0 18 * * *", "0 19 * * *"]);
+    expect(payloads.filter((item) => item.phase === "studio").map((item) => item.cron)).toEqual(["0 11 * * *", "0 12 * * *"]);
     expect(scheduledCronExpressions(await loadVentureRegistry())).toHaveLength(17);
+    expect(scheduledCronExpressions(await loadVentureRegistry())).toContain("0 11,12 * * *");
   });
 
   it("runs PALATE only as a pre-step on each taste venture's first meeting", async () => {

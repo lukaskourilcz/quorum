@@ -126,7 +126,16 @@ export function cronPayloads(registry: VentureRegistry): Array<{
 }
 
 export function scheduledCronExpressions(registry: VentureRegistry): string[] {
-  return [...new Set(cronPayloads(registry).map(({ cron }) => cron))];
+  const expressions = [...new Set(cronPayloads(registry).map(({ cron }) => cron))];
+  const summerStudio = "0 11 * * *";
+  const winterStudio = "0 12 * * *";
+  if (expressions.includes(summerStudio) && expressions.includes(winterStudio)) {
+    return [
+      ...expressions.filter((expression) => expression !== summerStudio && expression !== winterStudio),
+      "0 11,12 * * *"
+    ];
+  }
+  return expressions;
 }
 
 export function ventureIdForPhase(

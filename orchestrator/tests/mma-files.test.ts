@@ -107,7 +107,7 @@ describe("MMA Files bilingual production", () => {
     expect(first.violations).toEqual([]);
     expect(hasValidArticlePackageHash(first.article)).toBe(true);
     expect(first.socialPath).toMatch(/social\/packs/);
-    expect(first.mediaPaths).toHaveLength(6);
+    expect(first.mediaPaths).toHaveLength(10);
     expect(replay.idempotent).toBe(true);
     expect(replay.article.packageHash).toBe(first.article.packageHash);
     expect(await loadArticlePackages(root)).toEqual([first.article]);
@@ -141,15 +141,15 @@ describe("MMA Files bilingual production", () => {
     expect(reviewArticleCopy(recap, "en", { mode: "data-only" }).map((item) => item.code)).toContain("recap-honesty");
   });
 
-  it("renders one deterministic hero and four deterministic social variants without human imagery", async () => {
+  it("renders one deterministic hero and eight deterministic social slides without human imagery", async () => {
     const root = await tempRoot("mma-files-render-");
     const article = (await production(root)).article;
     const pack = buildSocialVariantPack(article);
     const first = renderSocialVariants(pack, article);
     const second = renderSocialVariants(pack, article);
     expect(first).toEqual(second);
-    expect(first.map((render) => render.key)).toEqual(["A-en", "A-cs", "B-en", "B-cs"]);
-    expect(new Set(first.map((render) => render.sha256)).size).toBe(4);
+    expect(first.map((render) => render.key)).toEqual(["A-en-01", "A-en-02", "A-cs-01", "A-cs-02", "B-en-01", "B-en-02", "B-cs-01", "B-cs-02"]);
+    expect(new Set(first.map((render) => render.sha256)).size).toBe(8);
     expect(renderArticleHero(article)).toBe(renderArticleHero(article));
     expect(`${renderArticleHero(article)}${first.map((render) => render.svg).join("")}`).not.toMatch(/<image|generated human/iu);
   });

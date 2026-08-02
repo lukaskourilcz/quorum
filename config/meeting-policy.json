@@ -5,12 +5,14 @@
     "incubator-scan",
     "incubator-synthesis",
     "mma-analysis",
-    "mag-desk"
+    "mag-desk",
+    "studio"
   ],
   "changeTriggeredPhases": ["mma-intake"],
   "servicePhases": ["cu-edition", "cu-product", "mag-editorial", "article-am", "article-pm"],
   "transitions": {
-    "morning": ["tt-marketing", "incubator-scan", "mma-intake", "mag-editorial", "mag-desk"],
+    "morning": ["tt-marketing", "incubator-scan", "mma-intake", "mag-editorial", "mag-desk", "studio"],
+    "studio": ["studio"],
     "tt-marketing": ["tt-marketing"],
     "incubator-scan": ["incubator-synthesis"],
     "incubator-synthesis": ["incubator-scan"],

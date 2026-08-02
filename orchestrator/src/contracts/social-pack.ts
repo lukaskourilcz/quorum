@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isDeepStrictEqual } from "node:util";
+import { LiveTemplateReferenceSchema } from "./carousel-template.js";
 import {
   DateSchema,
   HttpsUrlSchema,
@@ -8,7 +9,7 @@ import {
   openObject
 } from "./common.js";
 
-const FramePathSchema = z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.webp$/);
+const FramePathSchema = z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.png$/);
 
 const InstagramSchema = openObject({
   caption: z.string().trim().min(1).max(2200),
@@ -17,7 +18,8 @@ const InstagramSchema = openObject({
     B: z.string().trim().min(1).max(2200)
   }),
   hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).min(5).max(10),
-  frames: z.array(FramePathSchema).min(3).max(6)
+  frames: z.array(FramePathSchema).min(1).max(10),
+  visual: LiveTemplateReferenceSchema
 });
 
 const ThreadsSchema = openObject({
@@ -27,7 +29,8 @@ const ThreadsSchema = openObject({
     B: z.string().trim().min(1).max(500)
   }),
   hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).max(2),
-  frames: z.array(FramePathSchema).min(3).max(6)
+  frames: z.array(FramePathSchema).min(1).max(10),
+  visual: LiveTemplateReferenceSchema
 });
 
 const LocalePackSchema = openObject({
@@ -47,16 +50,19 @@ export const SocialPackSchema = openObject({
   instagram: openObject({
     caption: z.string().trim().min(1).max(2200),
     hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).min(5).max(10),
-    frames: z.array(FramePathSchema).min(3).max(6)
+    frames: z.array(FramePathSchema).min(1).max(10),
+    visual: LiveTemplateReferenceSchema
   }),
   threads: openObject({
     text: z.string().trim().min(1).max(500),
     hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).max(2),
-    frames: z.array(FramePathSchema).min(3).max(6)
+    frames: z.array(FramePathSchema).min(1).max(10),
+    visual: LiveTemplateReferenceSchema
   }),
   quoteCard: openObject({
     frame: FramePathSchema,
-    sourceTurnRef: MeetingRefSchema
+    sourceTurnRef: MeetingRefSchema,
+    visual: LiveTemplateReferenceSchema
   }),
   provenance: openObject({
     composerVersion: z.string().trim().min(1).max(40),
@@ -72,17 +78,6 @@ export const SocialPackSchema = openObject({
       code: "custom",
       message: "legacy channel fields must mirror the English locale",
       path: ["byLocale", "en"]
-    });
-  }
-  for (const locale of ["en", "cs"] as const) {
-    const localized = pack.byLocale[locale];
-    if (localized.instagram.frames.join("\n") === localized.threads.frames.join("\n")) {
-      continue;
-    }
-    context.addIssue({
-      code: "custom",
-      message: `${locale} instagram and threads must reference the same render set`,
-      path: ["byLocale", locale, "threads", "frames"]
     });
   }
   for (const locale of ["en", "cs"] as const) {

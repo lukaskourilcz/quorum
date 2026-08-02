@@ -50,15 +50,15 @@ export function renderMarketingPlanMarkdown(plan: MarketingPlan): string {
     "## Ready-to-post drafts",
     "",
     ...plan.postable_assets.flatMap((asset) => [
-      `### ${asset.visualSpec.headline}`,
+      `### ${asset.visual.content.strings["cover-title"] ?? asset.id}`,
       "",
-      asset.visualSpec.subhead,
+      asset.visual.content.strings["cover-dek"] ?? "No short description recorded.",
       "",
       `- Instagram A: ${asset.captions.instagram.A}`,
       `- Instagram B: ${asset.captions.instagram.B}`,
       `- Threads A: ${asset.captions.threads.A}`,
       `- Threads B: ${asset.captions.threads.B}`,
-      "- Visual: deterministic typographic card; no people or photography"
+      `- Visual: ${asset.visual.template_id}@${asset.visual.version} through Carousel Studio`
     ]),
     "",
     "## Approval boundary",

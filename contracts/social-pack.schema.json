@@ -63,20 +63,72 @@
                   }
                 },
                 "frames": {
-                  "minItems": 3,
-                  "maxItems": 6,
+                  "minItems": 1,
+                  "maxItems": 10,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
                   }
+                },
+                "visual": {
+                  "type": "object",
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
+                      },
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
                 "caption",
                 "variants",
                 "hashtags",
-                "frames"
+                "frames",
+                "visual"
               ],
               "additionalProperties": {}
             },
@@ -117,20 +169,72 @@
                   }
                 },
                 "frames": {
-                  "minItems": 3,
-                  "maxItems": 6,
+                  "minItems": 1,
+                  "maxItems": 10,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
                   }
+                },
+                "visual": {
+                  "type": "object",
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
+                      },
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
                 "text",
                 "variants",
                 "hashtags",
-                "frames"
+                "frames",
+                "visual"
               ],
               "additionalProperties": {}
             }
@@ -187,20 +291,72 @@
                   }
                 },
                 "frames": {
-                  "minItems": 3,
-                  "maxItems": 6,
+                  "minItems": 1,
+                  "maxItems": 10,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
                   }
+                },
+                "visual": {
+                  "type": "object",
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
+                      },
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
                 "caption",
                 "variants",
                 "hashtags",
-                "frames"
+                "frames",
+                "visual"
               ],
               "additionalProperties": {}
             },
@@ -241,20 +397,72 @@
                   }
                 },
                 "frames": {
-                  "minItems": 3,
-                  "maxItems": 6,
+                  "minItems": 1,
+                  "maxItems": 10,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
                   }
+                },
+                "visual": {
+                  "type": "object",
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
+                      },
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
                 "text",
                 "variants",
                 "hashtags",
-                "frames"
+                "frames",
+                "visual"
               ],
               "additionalProperties": {}
             }
@@ -291,19 +499,71 @@
           }
         },
         "frames": {
-          "minItems": 3,
-          "maxItems": 6,
+          "minItems": 1,
+          "maxItems": 10,
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
           }
+        },
+        "visual": {
+          "type": "object",
+          "properties": {
+            "template_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            },
+            "content": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "enum": [
+                    "en",
+                    "cs"
+                  ]
+                },
+                "strings": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "additionalProperties": {
+                    "type": "string",
+                    "maxLength": 2000
+                  }
+                },
+                "variant": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9-]*$"
+                }
+              },
+              "required": [
+                "locale",
+                "strings"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "template_id",
+            "version",
+            "content"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
         "caption",
         "hashtags",
-        "frames"
+        "frames",
+        "visual"
       ],
       "additionalProperties": {}
     },
@@ -324,19 +584,71 @@
           }
         },
         "frames": {
-          "minItems": 3,
-          "maxItems": 6,
+          "minItems": 1,
+          "maxItems": 10,
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
           }
+        },
+        "visual": {
+          "type": "object",
+          "properties": {
+            "template_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            },
+            "content": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "enum": [
+                    "en",
+                    "cs"
+                  ]
+                },
+                "strings": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "additionalProperties": {
+                    "type": "string",
+                    "maxLength": 2000
+                  }
+                },
+                "variant": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9-]*$"
+                }
+              },
+              "required": [
+                "locale",
+                "strings"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "template_id",
+            "version",
+            "content"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
         "text",
         "hashtags",
-        "frames"
+        "frames",
+        "visual"
       ],
       "additionalProperties": {}
     },
@@ -345,17 +657,69 @@
       "properties": {
         "frame": {
           "type": "string",
-          "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+          "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
         },
         "sourceTurnRef": {
           "type": "string",
           "minLength": 1,
           "maxLength": 160
+        },
+        "visual": {
+          "type": "object",
+          "properties": {
+            "template_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            },
+            "content": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "enum": [
+                    "en",
+                    "cs"
+                  ]
+                },
+                "strings": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "additionalProperties": {
+                    "type": "string",
+                    "maxLength": 2000
+                  }
+                },
+                "variant": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9-]*$"
+                }
+              },
+              "required": [
+                "locale",
+                "strings"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "template_id",
+            "version",
+            "content"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
         "frame",
-        "sourceTurnRef"
+        "sourceTurnRef",
+        "visual"
       ],
       "additionalProperties": {}
     },
@@ -382,7 +746,7 @@
       "type": "object",
       "propertyNames": {
         "type": "string",
-        "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.webp$"
+        "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
       },
       "additionalProperties": {
         "type": "string",

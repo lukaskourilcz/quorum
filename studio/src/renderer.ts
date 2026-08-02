@@ -45,18 +45,19 @@ function layerSvg(input: {
   const y = px(layer.y, height);
   const w = px(layer.width, width);
   const h = px(layer.height, height);
+  const color = (name: string) => token(brand, name === "accent" && input.accentToken ? input.accentToken : name);
   if (layer.type === "shape") {
     const fill = layer.fillToken === "accent" && input.accentToken ? input.accentToken : layer.fillToken;
     const stroke = layer.strokeToken ? ` stroke="${token(brand, layer.strokeToken)}" stroke-width="${layer.strokeWidth}"` : "";
     return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${px(layer.radius, Math.min(w, h))}" fill="${token(brand, fill)}"${stroke}/>`;
   }
   if (layer.type === "rule") {
-    return `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(layer.thickness, h)}" fill="${token(brand, layer.colorToken)}"/>`;
+    return `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(layer.thickness, h)}" fill="${color(layer.colorToken)}"/>`;
   }
   if (layer.type === "logo") {
     const font = brand.fonts[layer.fontToken];
     const size = Math.max(18, Math.min(h * 0.72, w / Math.max(4, brand.logoText.length) * 1.45));
-    return `<text x="${x}" y="${y + size}" fill="${token(brand, layer.colorToken)}" font-family="${escapeXml(font)}" font-size="${size}" font-weight="800" letter-spacing="1.5">${escapeXml(brand.logoText)}</text>`;
+    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(font)}" font-size="${size}" font-weight="800" letter-spacing="1.5">${escapeXml(brand.logoText)}</text>`;
   }
   if (layer.type === "image") return "";
   const raw = payload.strings[layer.slot] ?? "";
@@ -77,7 +78,7 @@ function layerSvg(input: {
   const tspans = fitted.lines.map((line, index) =>
     `<tspan x="${textX}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
   ).join("");
-  return `<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${token(brand, layer.colorToken)}" font-family="${escapeXml(brand.fonts[layer.fontToken])}" font-size="${fitted.fontSize}" font-weight="${layer.fontWeight}">${tspans}</text>`;
+  return `<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(brand.fonts[layer.fontToken])}" font-size="${fitted.fontSize}" font-weight="${layer.fontWeight}">${tspans}</text>`;
 }
 
 export interface RenderedSlide {

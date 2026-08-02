@@ -16,7 +16,8 @@ export const AgendaPhaseSchema = z.enum([
   "mma-intake",
   "mma-analysis",
   "mag-editorial",
-  "mag-desk"
+  "mag-desk",
+  "studio"
 ]);
 
 export const MeetingAgendaSchema = openObject({

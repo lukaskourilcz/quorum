@@ -29,13 +29,18 @@
         "instagram": { "A": "A Tuesday idea made from type and one clear point.", "B": "The line is the visual. The idea earns the pause." },
         "threads": { "A": "One Tuesday line, built to stand on its own.", "B": "No borrowed face. Just a sharp idea in type." }
       },
-      "visualSpec": {
-        "template": "tt-typographic-card",
-        "headline": "THE LINE IS THE VISUAL",
-        "subhead": "A Tuesday campaign draft made from type, not people.",
-        "origin": "deterministic",
-        "people": false,
-        "photography": false
+      "visual": {
+        "template_id": "cover-cta",
+        "version": "1.0.0",
+        "content": {
+          "locale": "en",
+          "strings": {
+            "cover-title": "THE LINE IS THE VISUAL",
+            "cover-dek": "A Tuesday campaign draft made from type, not people.",
+            "cta": "Read the full campaign idea",
+            "destination": "titty-tuesdays.vercel.app"
+          }
+        }
       }
     }
   ],

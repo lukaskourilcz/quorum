@@ -35,25 +35,31 @@ describe("Caught Up social pack composer", () => {
     });
     expect(result).not.toBeNull();
     const pack = SocialPackSchema.parse(result!.pack);
-    expect(pack.instagram.frames).toEqual(pack.threads.frames);
+    expect(pack.instagram.frames).not.toEqual(pack.threads.frames);
     expect(pack.instagram).toEqual(pack.byLocale.en.instagram);
     expect(pack.threads).toEqual(pack.byLocale.en.threads);
-    expect(pack.byLocale.en.instagram.frames).toHaveLength(4);
-    expect(pack.byLocale.cs.instagram.frames).toHaveLength(4);
+    expect(pack.byLocale.en.instagram.frames).toHaveLength(5);
+    expect(pack.byLocale.cs.instagram.frames).toHaveLength(5);
+    expect(pack.byLocale.en.threads.frames).toHaveLength(5);
+    expect(pack.byLocale.cs.threads.frames).toHaveLength(5);
     expect(pack.byLocale.en.instagram.frames).not.toEqual(pack.byLocale.cs.instagram.frames);
     expect(pack.byLocale.en.destination).toContain("/articles/");
     expect(pack.byLocale.en.destination).not.toContain("/en/articles/");
     expect(pack.byLocale.cs.destination).toContain("/cs/articles/");
-    expect(Object.keys(pack.altTexts)).toHaveLength(9);
+    expect(Object.keys(pack.altTexts)).toHaveLength(21);
     expect(pack.instagram.caption).not.toBe(pack.threads.text);
     expect(pack.byLocale.cs.instagram.caption).not.toBe(pack.byLocale.cs.threads.text);
     for (const frame of [
       ...pack.byLocale.en.instagram.frames,
       ...pack.byLocale.cs.instagram.frames,
+      ...pack.byLocale.en.threads.frames,
+      ...pack.byLocale.cs.threads.frames,
       pack.quoteCard.frame
     ]) {
       const metadata = await sharp(await readFile(path.join(root, "site", "public", frame.slice(1)))).metadata();
-      expect(metadata).toMatchObject({ width: 1080, height: 1350, format: "webp" });
+      expect(metadata.format).toBe("png");
+      if (frame.includes("/threads/")) expect(metadata).toMatchObject({ width: 1200, height: 1200 });
+      else expect(metadata).toMatchObject({ width: 1080, height: 1350 });
       expect(pack.altTexts[frame]).toBeTruthy();
     }
     expect(result!.queueItems).toHaveLength(4);

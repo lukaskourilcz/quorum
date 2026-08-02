@@ -3,6 +3,7 @@ export * from "./autonomy.js";
 export * from "./audience-spec.js";
 export * from "./calendar.js";
 export * from "./campaign-brief.js";
+export * from "./carousel-template.js";
 export * from "./common.js";
 export * from "./daily-digest.js";
 export * from "./edition-package.js";

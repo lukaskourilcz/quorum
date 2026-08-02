@@ -24,39 +24,115 @@
                 "B"
               ]
             },
-            "carouselSpec": {
+            "carousel": {
               "type": "object",
               "properties": {
-                "template": {
-                  "type": "string",
-                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-                },
-                "bindings": {
+                "en": {
                   "type": "object",
-                  "propertyNames": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 80
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
+                      },
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
                   },
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "maxLength": 1000
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
+                },
+                "cs": {
+                  "type": "object",
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
                       },
-                      {
-                        "type": "number"
-                      },
-                      {
-                        "type": "boolean"
-                      }
-                    ]
-                  }
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
-                "template",
-                "bindings"
+                "en",
+                "cs"
               ],
               "additionalProperties": {}
             },
@@ -145,7 +221,7 @@
           },
           "required": [
             "id",
-            "carouselSpec",
+            "carousel",
             "captions",
             "designAxes"
           ],
@@ -161,39 +237,115 @@
                 "B"
               ]
             },
-            "carouselSpec": {
+            "carousel": {
               "type": "object",
               "properties": {
-                "template": {
-                  "type": "string",
-                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-                },
-                "bindings": {
+                "en": {
                   "type": "object",
-                  "propertyNames": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 80
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
+                      },
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
                   },
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "maxLength": 1000
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
+                },
+                "cs": {
+                  "type": "object",
+                  "properties": {
+                    "template_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "version": {
+                      "type": "string",
+                      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "cs"
+                          ]
+                        },
+                        "strings": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 2000
+                          }
+                        },
+                        "variant": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9-]*$"
+                        }
                       },
-                      {
-                        "type": "number"
-                      },
-                      {
-                        "type": "boolean"
-                      }
-                    ]
-                  }
+                      "required": [
+                        "locale",
+                        "strings"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "template_id",
+                    "version",
+                    "content"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
-                "template",
-                "bindings"
+                "en",
+                "cs"
               ],
               "additionalProperties": {}
             },
@@ -282,7 +434,7 @@
           },
           "required": [
             "id",
-            "carouselSpec",
+            "carousel",
             "captions",
             "designAxes"
           ],

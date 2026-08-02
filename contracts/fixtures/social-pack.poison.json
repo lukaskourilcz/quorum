@@ -4,7 +4,7 @@
   "editionRef": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "instagram": { "caption": "Too few tags.", "hashtags": ["ai"], "frames": [] },
   "threads": { "text": "Invalid pack.", "hashtags": [], "frames": [] },
-  "quoteCard": { "frame": "/social/quote.webp", "sourceTurnRef": "meeting#turn-1" },
+  "quoteCard": { "frame": "/social/quote.png", "sourceTurnRef": "meeting#turn-1" },
   "provenance": { "composerVersion": "carousel-1", "inputsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
   "altTexts": {}
 }

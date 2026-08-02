@@ -2,6 +2,7 @@ import { z, type ZodType } from "zod";
 import { AudienceSpecSchema } from "./audience-spec.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
+import { CarouselTemplateSchema } from "./carousel-template.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
@@ -47,6 +48,7 @@ export const ContractSchemas = {
   "audience-spec": AudienceSpecSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
+  "carousel-template": CarouselTemplateSchema,
   "daily-digest": DailyDigestSchema,
   "edition-package": EditionPackageSchema,
   "idea-ledger": IdeaLedgerEntrySchema,

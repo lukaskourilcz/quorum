@@ -1,16 +1,20 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
+import {
+  CAROUSEL_BRANDS,
+  renderCarouselPng,
+  type TemplateReference
+} from "@boardlessai/carousel-studio";
+import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";
 import { parseSafeHttpsUrl } from "../security/url.js";
 import { atomicWriteBuffer, atomicWriteJson, atomicWriteText, readText } from "../state.js";
-import { composeCarouselFrame, composeQuoteCard } from "./media/compose.js";
 import { validateSocialImage } from "./media/validate.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 
-const COMPOSER_VERSION = "carousel-1";
-const FRAME_COUNT = 4;
+const COMPOSER_VERSION = "carousel-studio-1";
 
 function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
@@ -47,8 +51,8 @@ function boundedCopy(body: string, suffix: string, maximum: number): string {
   return `${clipped}…${suffix}`;
 }
 
-function queueAltText(pack: SocialPack, locale: SocialLocale): string {
-  return pack.byLocale[locale].instagram.frames
+function queueAltText(pack: SocialPack, locale: SocialLocale, channel: "instagram" | "threads"): string {
+  return pack.byLocale[locale][channel].frames
     .map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`)
     .join(" ")
     .slice(0, 1_000);
@@ -88,7 +92,7 @@ function queueItem(input: {
     },
     content: {
       text: input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant],
-      altText: queueAltText(input.pack, input.locale),
+      altText: queueAltText(input.pack, input.locale, input.channel),
       assetPaths: platform.frames,
       factualClaimRefs: input.evidenceRefs,
       contentHash: "0".repeat(64)
@@ -143,69 +147,87 @@ export async function composeEditionSocialPack(input: {
     ? input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET")
     : Math.max(0, input.meeting.roomTranscript.turns.findIndex((turn) => turn.mode === "raises-concern"));
   const bestTurn = input.meeting.roomTranscript.turns[bestTurnIndex] ?? input.meeting.roomTranscript.turns[0]!;
-  const frameInputs = {
-    en: [
-      { eyebrow: "Today’s signal", title: editionPackage.article.en.frontmatter.title, body: editionPackage.article.en.frontmatter.dek },
-      { eyebrow: "What changed", title: "The change", body: editionPackage.article.en.frontmatter.what_changed[0]! },
-      { eyebrow: "Why it matters", title: "The consequence", body: editionPackage.article.en.frontmatter.why_it_matters[0]! },
-      { eyebrow: "What remains open", title: "The uncertainty", body: editionPackage.article.en.frontmatter.uncertainty[0]! }
-    ],
-    cs: [
-      { eyebrow: "Dnešní signál", title: editionPackage.article.cs.frontmatter.title, body: editionPackage.article.cs.frontmatter.dek },
-      { eyebrow: "Co se změnilo", title: "Změna", body: editionPackage.article.cs.frontmatter.what_changed[0]! },
-      { eyebrow: "Proč na tom záleží", title: "Důsledek", body: editionPackage.article.cs.frontmatter.why_it_matters[0]! },
-      { eyebrow: "Co zůstává otevřené", title: "Nejistota", body: editionPackage.article.cs.frontmatter.uncertainty[0]! }
-    ]
+  const visualReference = (locale: SocialLocale): TemplateReference => {
+    const article = editionPackage.article[locale].frontmatter;
+    return {
+      template_id: "five-slide-story",
+      version: "1.0.0",
+      content: {
+        locale,
+        strings: {
+        "story-title": article.title,
+        "story-one": article.what_changed[0]!,
+        "story-two": article.why_it_matters[0]!,
+        "story-three": article.uncertainty[0]!,
+        "story-takeaway": article.dek
+        }
+      }
+    };
+  };
+  const visualRefs: Record<SocialLocale, TemplateReference> = {
+    en: visualReference("en"),
+    cs: visualReference("cs")
+  };
+  const quoteVisual: TemplateReference = {
+    template_id: "quote-card",
+    version: "1.0.0",
+    content: {
+      locale: "en",
+      strings: { quote: bestTurn.text, attribution: `${bestTurn.agent} · ${input.editionPackage.date}` }
+    }
   };
   const inputHash = sha256(JSON.stringify({
     composerVersion: COMPOSER_VERSION,
     editionRef: input.editionPackage.idempotencyKey,
     meetingRef: input.editionPackage.board.meetingRef,
     destinations,
-    frameInputs,
+    visualRefs,
     quote: { agent: bestTurn.agent, text: bestTurn.text }
   }));
   const relativeDirectory = `site/public/social/${input.editionPackage.date}`;
   const publicDirectory = `/social/${input.editionPackage.date}`;
-  const framePaths: Record<SocialLocale, string[]> = { en: [], cs: [] };
+  const framePaths: Record<SocialLocale, Record<"instagram" | "threads", string[]>> = {
+    en: { instagram: [], threads: [] },
+    cs: { instagram: [], threads: [] }
+  };
   const frameHashes: Record<string, string> = {};
   const altTexts: Record<string, string> = {};
   for (const locale of ["en", "cs"] as const) {
-    for (const [index, frameInput] of frameInputs[locale].entries()) {
-      const name = `frame-${String(index + 1).padStart(2, "0")}.webp`;
-      const publicPath = `${publicDirectory}/${locale}/${name}`;
-      const bytes = await composeCarouselFrame({
-        date: input.editionPackage.date,
-        ...frameInput,
-        index: index + 1,
-        total: FRAME_COUNT
-      });
-      const validation = await validateSocialImage(bytes);
-      if (validation.width !== 1080 || validation.height !== 1350) {
-        throw new Error(`Social frame ${publicPath} must be 1080x1350`);
+    const reference = visualRefs[locale];
+    const template = resolveLiveCarouselTemplate(reference.template_id, reference.version);
+    for (const channel of ["instagram", "threads"] as const) {
+      const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
+      const rendered = await renderCarouselPng({ template, payload: reference.content, brand: CAROUSEL_BRANDS["caught-up"], format });
+      for (const slide of rendered) {
+        const name = `frame-${String(slide.index + 1).padStart(2, "0")}.png`;
+        const publicPath = `${publicDirectory}/${locale}/${channel}/${name}`;
+        const validation = await validateSocialImage(slide.png);
+        const expected = template.formats[format];
+        if (validation.width !== expected.width || validation.height !== expected.height) {
+          throw new Error(`Social frame ${publicPath} has the wrong canvas`);
+        }
+        await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/${locale}/${channel}/${name}`, slide.png);
+        framePaths[locale][channel].push(publicPath);
+        frameHashes[publicPath] = slide.pngHash;
+        const slots = Object.values(reference.content.strings);
+        altTexts[publicPath] = `${locale === "cs" ? "Slide" : "Slide"} ${slide.index + 1}: ${slots[Math.min(slide.index, slots.length - 1)]}`.slice(0, 300);
       }
-      await atomicWriteBuffer(
-        input.repoRoot,
-        `${relativeDirectory}/${locale}/${name}`,
-        bytes
-      );
-      framePaths[locale].push(publicPath);
-      frameHashes[publicPath] = sha256(bytes);
-      altTexts[publicPath] = `${frameInput.eyebrow}: ${frameInput.title}. ${frameInput.body}`.slice(0, 300);
     }
   }
-  const quotePath = `${publicDirectory}/quote.webp`;
-  const quoteBytes = await composeQuoteCard({
-    date: input.editionPackage.date,
-    agent: bestTurn.agent,
-    quote: bestTurn.text
+  const quotePath = `${publicDirectory}/quote.png`;
+  const [quote] = await renderCarouselPng({
+    template: resolveLiveCarouselTemplate(quoteVisual.template_id, quoteVisual.version),
+    payload: quoteVisual.content,
+    brand: CAROUSEL_BRANDS["caught-up"],
+    format: "instagram-portrait"
   });
+  const quoteBytes = quote!.png;
   const quoteValidation = await validateSocialImage(quoteBytes);
   if (quoteValidation.width !== 1080 || quoteValidation.height !== 1350) {
     throw new Error("Social quote card must be 1080x1350");
   }
-  await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/quote.webp`, quoteBytes);
-  frameHashes[quotePath] = sha256(quoteBytes);
+  await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/quote.png`, quoteBytes);
+  frameHashes[quotePath] = quote!.pngHash;
   altTexts[quotePath] = `Quote from ${bestTurn.agent} in the edition room: ${bestTurn.text}`.slice(0, 300);
 
   const buildLocalePack = (locale: SocialLocale) => {
@@ -227,13 +249,15 @@ export async function composeEditionSocialPack(input: {
           caption: instagramA,
           variants: { A: instagramA, B: boundedCopy(instagramBBody, instagramSuffix, 2_200) },
           hashtags: tagList,
-          frames: framePaths[locale]
+          frames: framePaths[locale].instagram,
+          visual: visualRefs[locale]
         },
         threads: {
           text: threadsA,
           variants: { A: threadsA, B: boundedCopy(threadsBBody, threadsSuffix, 500) },
           hashtags: [],
-          frames: framePaths[locale]
+          frames: framePaths[locale].threads,
+          visual: visualRefs[locale]
         }
       };
   };
@@ -250,7 +274,8 @@ export async function composeEditionSocialPack(input: {
     threads: localePacks.en.threads,
     quoteCard: {
       frame: quotePath,
-      sourceTurnRef: `${input.editionPackage.board.meetingRef}#turn-${bestTurnIndex + 1}`
+      sourceTurnRef: `${input.editionPackage.board.meetingRef}#turn-${bestTurnIndex + 1}`,
+      visual: quoteVisual
     },
     provenance: { composerVersion: COMPOSER_VERSION, inputsHash: inputHash },
     altTexts
@@ -269,9 +294,8 @@ export async function composeEditionSocialPack(input: {
       composerVersion: COMPOSER_VERSION,
       inputsHash: inputHash,
       frameHashes,
-      width: 1080,
-      height: 1350,
-      format: "webp"
+      formats: ["instagram-portrait", "threads"],
+      format: "png"
     }),
     atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-en-instagram.json`, enInstagram),
     atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-en-threads.json`, enThreads),
@@ -288,7 +312,7 @@ export async function composeEditionSocialPack(input: {
       `social/queue/${input.editionPackage.date}-en-threads.json`,
       `social/queue/${input.editionPackage.date}-cs-instagram.json`,
       `social/queue/${input.editionPackage.date}-cs-threads.json`,
-      ...Object.values(framePaths).flat().map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
+      ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
       path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))
     ]
   };

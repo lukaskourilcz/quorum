@@ -11,6 +11,7 @@ import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditor
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { discoverLicensedPhotos } from "../images/licensed.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
+import { socialContentGenerationEnabled } from "../social/activation.js";
 
 const LocalizationSchema = z.object({
   title: z.string().trim().min(1).max(160),
@@ -184,6 +185,7 @@ export async function runLiveArticleProduction(input: {
       .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
     if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
   }
+  const socialUnlocked = await socialContentGenerationEnabled(stateRoot, "mma-files");
   const result = await produceMmaFilesArticle({
     root: stateRoot,
     slate,
@@ -196,7 +198,7 @@ export async function runLiveArticleProduction(input: {
     publicRepoRoot: repoRoot,
     socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
     gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
-    socialProductionEnabled: !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
+    socialProductionEnabled: socialUnlocked && !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
   });
   await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: result.article.status, articleRef: result.article.packageHash, spentUsd: null, generatedAt: input.now.toISOString() });
   return {

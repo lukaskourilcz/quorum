@@ -156,6 +156,14 @@
       "capabilities": ["phase3:standby", "measurement:guard"],
       "status": "active"
     },
+    "EASEL": {
+      "capabilities": ["carousel:template", "design:system", "media:deterministic"],
+      "status": "active"
+    },
+    "MOTIF": {
+      "capabilities": ["visual:research", "source:provenance", "originality:guard"],
+      "status": "active"
+    },
     "PIVOT": {
       "capabilities": ["mma:bridge", "evidence", "portfolio:liaison"],
       "status": "active"
@@ -271,6 +279,10 @@
     "org-review": {
       "required": ["PEOPLE", "AUDIT", "KEEPER"],
       "includeAffectedAgent": true
+    },
+    "studio-room": {
+      "required": ["EASEL", "MOTIF", "KEEPER", "AUDIT", "SCRIBE"],
+      "optionalByTopic": false
     },
     "incident-room": {
       "required": ["AUDIT", "KEEPER", "FORGE"],
