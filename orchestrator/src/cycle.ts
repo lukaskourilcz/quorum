@@ -94,7 +94,7 @@ import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import { runLiveArticleProduction } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
-import { openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
+import { ensurePriorityItem, openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
@@ -1006,11 +1006,50 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           const agendaVentures = [...new Set(ventureRegistry.ventures
             .filter((venture) => venture.meetings.some((meeting) => phaseNeedsAgenda(meetingPolicy, meeting.kind)))
             .map((venture) => venture.id))];
+
+          // Bootstrap the priority queue so the agenda loop can start on its own.
+          //
+          // An agenda-gated room needs a due agenda; an agenda needs an open priority item;
+          // and the council may only request a room against an item that already exists. The
+          // sole writer of the queue was the admin UI, so with an empty queue no agent could
+          // ever open tt-marketing, incubator-scan, incubator-synthesis, mma-analysis,
+          // mag-desk or studio. The loop could not be entered from inside the system.
+          //
+          // The seed is not invented: each venture states its own growth objective in
+          // config/ventures.json, and that is what the queue is for. ensurePriorityItem is
+          // idempotent on (venture, question, decision), so a venture that already has an
+          // open item is left alone and a re-run adds nothing. Agents refine from here by
+          // requesting rooms against the item, which is the behaviour that was designed.
+          let seededQueue = priorityQueue;
+          if (!options.dry) {
+            let seeded = false;
+            for (const ventureId of agendaVentures) {
+              if (openPriorityItems(seededQueue, ventureId).length > 0) continue;
+              const venture = ventureRegistry.ventures.find((candidate) => candidate.id === ventureId);
+              if (!venture || venture.status === "paused") continue;
+              const objective = venture.growth_objective;
+              const result = await ensurePriorityItem({
+                root: artifactRoot,
+                venture: ventureId,
+                question: `What is currently blocking this objective: ${objective.label}?`,
+                decisionAtStake: `Which next bounded action moves ${objective.components.join(", ")} for ${venture.name}.`,
+                evidenceNeeded: [...objective.components],
+                requestedBy: "VIZE",
+                now,
+                // One week, matching the admin control, and shorter than a quarter so a
+                // stale objective expires rather than pinning the queue open forever.
+                expires: new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000))
+              });
+              if (result.created) seeded = true;
+            }
+            if (seeded) seededQueue = await readPriorityQueue(artifactRoot, now);
+          }
+
           return {
             moneyAndKpis,
             autonomy,
-            priorityQueue,
-            openPriorities: openPriorityItems(priorityQueue),
+            priorityQueue: seededQueue,
+            openPriorities: openPriorityItems(seededQueue),
             starvation: starvationList({ queue: agendaQueue, ventureIds: agendaVentures, now })
           };
         })()
