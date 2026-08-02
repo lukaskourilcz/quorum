@@ -31,6 +31,8 @@ additionally needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`.
 
 - [ ] **Set the six repository variables** — table above; nothing runs live without them. [imp:5] [owner:me] [time:15m] [kind:setup]
 - [ ] **Confirm both model API keys are present** — every room call fails closed without them. [imp:5] [owner:me] [time:5m] [kind:setup]
+- [ ] **Give the delivery GitHub App `Checks: Read-only` and `Commit statuses: Read-only`** — the app can push to `mma-files` but cannot read whether the commit it pushed passed CI, so the release verifier reads `Target CI state: unavailable` and reverts a healthy article off the live site. This happened twice on 2 August 2026: eight of nine checks passed, both locales rendered, the content hash matched, and the delivery was reverted anyway. Edit the app that owns `DELIVERY_APP_ID`, add the two read permissions, then accept the permission update on both the `mma-files` and `aifirst` installations. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Render or strip the `[source:...]` markers in the MMA Files article body** — the delivered `bodyMDX` carries inline grounding markers that the style gate requires, and `lukaskourilcz/mma-files` prints them verbatim, so readers see `[source:state/mma/fighters/ufc:valentina-shevchenko.json]` mid-sentence. The article package is hash sealed, so the fix belongs in that repo's renderer: turn each marker into a citation link into the Sources block it already renders, or drop it. [imp:4] [owner:ai] [time:45m] [kind:content]
 
 ## 1. Seed the founding gate — no agent can write the file it scores
 
