@@ -18,8 +18,11 @@ record or chat.
 2. [ ] **Verify Vercel production settings.** BoardlessAI must track `main` at
    `https://boardless-ai.vercel.app`. Caught Up must track `main` at
    `https://caughtup-ai.vercel.app`. MMA Files must track `main` at
-   `https://mma-files.vercel.app` with `NEXT_PUBLIC_DEMO_MODE=true` and
-   `NEXT_PUBLIC_ALLOW_INDEXING=false`. The public BoardlessAI URL is not secret; use a
+   `https://mma-files.vercel.app` with `NEXT_PUBLIC_DEMO_MODE=false` — the delivery step
+   builds that clone with `NEXT_PUBLIC_DEMO_MODE=false` (`.github/workflows/cycle.yml:643`),
+   so leaving production on demo makes a delivered article's route 404 and fails every page
+   check. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` until each magazine has ten articles, per
+   `social-2026-08a`; these two are separate switches and only the demo one changes now. The public BoardlessAI URL is not secret; use a
    repository variable unless a workflow explicitly reads it from secrets.
 3. [ ] **Verify the two surviving FightAIQ free-tier keys in Actions secrets.**
    `CITO_API_KEY` is bounded below 500 calls/month, 200/day and five/run.

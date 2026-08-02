@@ -33,13 +33,28 @@ async function packageFiles(root: string): Promise<string[]> {
 }
 
 export async function oldestPendingDelivery(root = stateRoot): Promise<PendingDelivery | null> {
-  const [file] = await packageFiles(root);
-  if (!file) return null;
-  const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
-  return {
-    packagePath: path.relative(root, file),
-    package: editionPackage
-  };
+  // Oldest first, but skip any date that already has a delivered receipt.
+  //
+  // The outbox is only emptied on a successful delivery, so a package whose date was later
+  // reconciled by hand stayed at the head of an oldest-first queue permanently and every
+  // edition behind it queued forever. One failed release jammed the venture: the next run
+  // would ship the stale package and report success while the new edition waited.
+  for (const file of await packageFiles(root)) {
+    const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
+    const receipt = await readJson<{ status?: unknown; packageHash?: unknown } | null>(
+      root,
+      `edition/deliveries/${editionPackage.date}.json`,
+      null
+    );
+    const alreadyShipped = receipt?.status === "delivered"
+      && receipt.packageHash === editionPackage.idempotencyKey;
+    if (alreadyShipped) continue;
+    return {
+      packagePath: path.relative(root, file),
+      package: editionPackage
+    };
+  }
+  return null;
 }
 
 function inboxItem(date: string, code: DeliveryFailureCode, detail: string): string {
