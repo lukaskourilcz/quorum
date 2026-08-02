@@ -7,6 +7,7 @@ export * from "./common.js";
 export * from "./daily-digest.js";
 export * from "./edition-package.js";
 export * from "./idea-ledger.js";
+export * from "./kpi-set.js";
 export * from "./marketing-plan.js";
 export * from "./meeting-email.js";
 export * from "./meeting-agenda.js";

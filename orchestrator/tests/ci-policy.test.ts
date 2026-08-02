@@ -56,6 +56,7 @@ describe("automation policy", () => {
     expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
     expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
     expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");
+    expect(cycle).toContain("MMA_FILES_INDEXING_ENABLED: ${{ vars.MMA_FILES_INDEXING_ENABLED }}");
     expect(cycle).toContain("schedule-cli.ts");
     expect(cycle).toContain("pnpm digest:daily");
     expect(cycle).toContain("DAILY_DIGEST_EMAIL_MODE");
@@ -70,7 +71,8 @@ describe("automation policy", () => {
     expect(cycle).toContain("forcing fixture-only dry mode");
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain("runtime_paths=(");
-    expect(cycle).toContain("state/mma state/notify state/social");
+    expect(cycle).toContain("state/kpis state/money state/mma state/notify state/social");
+    expect(cycle).toContain("state/meeting-agendas state/priority-queue.json");
     expect(cycle).toContain(
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );

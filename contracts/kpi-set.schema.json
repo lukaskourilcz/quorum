@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "kpi-set/1"
+    },
+    "quarter_id": {
+      "type": "string",
+      "pattern": "^\\d{4}-Q[1-4]$"
+    },
+    "quarter_start": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "quarter_days": {
+      "type": "number",
+      "const": 90
+    },
+    "kpis": {
+      "minItems": 1,
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+          },
+          "venture": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              {
+                "type": "string",
+                "const": "company"
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "metric_source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "pattern": "^(?:receipts|stats|state)\\/[a-zA-Z0-9._/#-]+$"
+          },
+          "target": {
+            "type": "number",
+            "minimum": 0
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "at-least",
+              "at-most"
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "count",
+              "ratio",
+              "usd",
+              "score",
+              "boolean"
+            ]
+          },
+          "critical": {
+            "type": "boolean"
+          },
+          "ramp_days": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 89
+          }
+        },
+        "required": [
+          "id",
+          "venture",
+          "name",
+          "metric_source",
+          "target",
+          "direction",
+          "unit",
+          "critical",
+          "ramp_days"
+        ],
+        "additionalProperties": {}
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "quarter_id",
+    "quarter_start",
+    "quarter_days",
+    "kpis"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/kpi-set.schema.json"
+}

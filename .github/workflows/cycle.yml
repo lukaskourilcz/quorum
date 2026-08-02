@@ -86,6 +86,7 @@ jobs:
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
       CAUGHT_UP_SITE_URL: ${{ vars.CAUGHT_UP_SITE_URL }}
       MMA_FILES_SITE_URL: ${{ vars.MMA_FILES_SITE_URL }}
+      MMA_FILES_INDEXING_ENABLED: ${{ vars.MMA_FILES_INDEXING_ENABLED }}
       DAILY_DIGEST_EMAIL_MODE: ${{ vars.DAILY_DIGEST_EMAIL_MODE }}
       DAILY_DIGEST_EMAIL_FROM: ${{ vars.DAILY_DIGEST_EMAIL_FROM }}
       DAILY_DIGEST_EMAIL_TO: ${{ secrets.DAILY_DIGEST_EMAIL_TO }}
@@ -295,8 +296,8 @@ jobs:
         run: |
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
-            state/scorecards state/decisions state/calendar state/edition state/ideas state/meeting-agendas
-            state/mma state/notify state/social state/taste state/ventures state/INBOX.md
+            state/scorecards state/decisions state/calendar state/edition state/ideas state/meeting-agendas state/priority-queue.json
+            state/kpis state/money state/mma state/notify state/social state/taste state/ventures state/INBOX.md
             NEEDS_YOUR_HELP_NOW.md
             site/public/social
           )

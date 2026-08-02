@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "kpi-set/1",
+  "quarter_id": "2026-Q1",
+  "quarter_start": "not-a-date",
+  "quarter_days": 91,
+  "kpis": [
+    {
+      "id": "company.valid-window-rate",
+      "venture": "company",
+      "name": "Scheduled windows with a valid result",
+      "metric_source": "../../secrets",
+      "target": -1,
+      "direction": "higher",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 90
+    }
+  ]
+}

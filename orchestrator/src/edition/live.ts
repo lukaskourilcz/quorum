@@ -18,6 +18,7 @@ import type { SourceRegistry } from "../sources/types.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
 import { discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -174,6 +175,8 @@ export async function runLiveEdition(input: {
   const monthlyCap = envCap("MONTHLY_BUDGET_USD", 15);
   const dailyCap = envCap("DAILY_BUDGET_USD", 0.7);
   const productionCap = envCap("EDITION_PRODUCTION_BUDGET_USD", 0.35);
+  const operatingCap = envCap("MONTHLY_OPERATING_CAP_USD", 50);
+  const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
   const reporter = new EditionRunReporter(input.date, "production");
   const successfulSources = sourceRun.sources.filter((source) => source.status === "success").length;
   const sourceGateReason = successfulSources < config.quality.minimumSuccessfulSources
@@ -186,6 +189,7 @@ export async function runLiveEdition(input: {
     productionCap < config.budgets.editionProductionUsd ||
     dayApiUsd + config.budgets.editionProductionUsd > dailyCap ||
     monthApiUsd + config.budgets.editionProductionUsd > monthlyCap ||
+    monthApiUsd + fixedMonthlyUsd + config.budgets.editionProductionUsd > operatingCap ||
     budgetMode === "no_edition";
   let editionPackage: EditionPackage;
   let report: EditionRunReport;

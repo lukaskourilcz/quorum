@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "monetization-readiness/1",
+  "generatedAt": "2026-08-02T06:00:00.000Z",
+  "methods": [
+    {
+      "id": "caught-up-sponsorship",
+      "venture": "caught-up",
+      "method": "Sponsorship",
+      "status": "locked",
+      "activationKpi": "Four consecutive weeks at 500 pageviews per week, or 1,000 combined followers.",
+      "readiness": {
+        "met": false,
+        "unavailable": true,
+        "detail": "Phase 3 pageviews or follower measurements are unavailable."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "First-party sponsorship only. Programmatic advertising remains outside the approved scope."
+    },
+    {
+      "id": "mma-files-sponsorship-affiliate",
+      "venture": "mma-files",
+      "method": "Sponsorship or non-bookmaker affiliate",
+      "status": "locked",
+      "activationKpi": "Owner-enabled indexing and four consecutive weeks at 750 pageviews per week.",
+      "readiness": {
+        "met": false,
+        "unavailable": false,
+        "detail": "Indexing remains owner-locked."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "Bookmaker affiliate programs need a separate owner and legal decision."
+    },
+    {
+      "id": "titty-tuesdays-commerce",
+      "venture": "titty-tuesdays",
+      "method": "Season 1 commerce",
+      "status": "locked",
+      "activationKpi": "Eight launch-ready campaigns and 500 combined followers.",
+      "readiness": {
+        "met": false,
+        "unavailable": true,
+        "detail": "Campaign or follower measurements are unavailable."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "Launch also requires the owner-built shop and explicit commerce approval."
+    },
+    {
+      "id": "fightaiq-none",
+      "venture": "fightaiq",
+      "method": "No monetization in Q1 or Q2",
+      "status": "locked",
+      "activationKpi": "Earliest review after 30 evaluated events with published calibration, plus separate owner and legal approval.",
+      "readiness": {
+        "met": false,
+        "unavailable": false,
+        "detail": "Q1 and Q2 monetization is locked while the model builds an evaluation record."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "FightAIQ does not sell or promote an unvalidated model."
+    },
+    {
+      "id": "incubator-none",
+      "venture": "incubator",
+      "method": "Not monetized",
+      "status": "locked",
+      "activationKpi": "None. The Incubator is a research function.",
+      "readiness": {
+        "met": false,
+        "unavailable": false,
+        "detail": "No monetization is planned."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "The Incubator supports venture research and does not sell a product."
+    }
+  ]
+}

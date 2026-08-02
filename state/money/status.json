@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "monetization-status/1",
+  "methods": {
+    "caught-up-sponsorship": {
+      "status": "locked",
+      "proposalPreparedAt": null,
+      "ownerApprovalRef": null,
+      "updatedAt": "2026-08-02T06:00:00.000Z"
+    },
+    "mma-files-sponsorship-affiliate": {
+      "status": "locked",
+      "proposalPreparedAt": null,
+      "ownerApprovalRef": null,
+      "updatedAt": "2026-08-02T06:00:00.000Z"
+    },
+    "titty-tuesdays-commerce": {
+      "status": "locked",
+      "proposalPreparedAt": null,
+      "ownerApprovalRef": null,
+      "updatedAt": "2026-08-02T06:00:00.000Z"
+    },
+    "fightaiq-none": {
+      "status": "locked",
+      "proposalPreparedAt": null,
+      "ownerApprovalRef": null,
+      "updatedAt": "2026-08-02T06:00:00.000Z"
+    },
+    "incubator-none": {
+      "status": "locked",
+      "proposalPreparedAt": null,
+      "ownerApprovalRef": null,
+      "updatedAt": "2026-08-02T06:00:00.000Z"
+    }
+  },
+  "updatedAt": "2026-08-02T06:00:00.000Z"
+}

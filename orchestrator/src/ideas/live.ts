@@ -75,6 +75,7 @@ export interface IdeaRuntimeContext {
   now: Date;
   limits: BudgetLimits;
   remainingScheduledCycles: number;
+  fixedMonthlyUsd?: number;
 }
 
 function reserveContext(
@@ -86,7 +87,7 @@ function reserveContext(
     cycleId: context.cycleId,
     stage: context.stage,
     ledger,
-    allInNonApiSpentUsd: 0,
+    allInNonApiSpentUsd: context.fixedMonthlyUsd ?? 0,
     allInCommittedUsd: 0,
     knownMonthlyForecastUsd: 0,
     remainingScheduledCycles: context.remainingScheduledCycles,

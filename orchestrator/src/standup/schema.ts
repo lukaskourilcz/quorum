@@ -132,6 +132,15 @@ export const StandupSchema = z.object({
     reason: z.string().min(1).max(280),
     priorityItemId: z.string().min(1).nullable()
   })).optional(),
+  quarterlyKpis: z.object({
+    snapshotRef: z.literal("state/kpis/latest.json"),
+    quarterId: z.string().regex(/^\d{4}-Q[1-4]$/),
+    onTrack: z.number().int().nonnegative(),
+    atRisk: z.number().int().nonnegative(),
+    offTrack: z.number().int().nonnegative(),
+    unavailable: z.number().int().nonnegative(),
+    criticalMisses: z.array(z.string().min(1).max(120))
+  }).optional(),
   eveningOutcome: z.string().nullable(),
   caughtUpIdeaRef: z.string().min(1).optional(),
   roomTranscript: RoomTranscriptSchema,

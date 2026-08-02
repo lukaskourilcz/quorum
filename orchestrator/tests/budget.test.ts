@@ -29,6 +29,37 @@ function context(
 }
 
 describe("budget guard", () => {
+  it("counts fixed subscriptions against the hard all-in cap", () => {
+    const estimate = {
+      estimatedInputTokens: 1,
+      estimatedOutputTokens: 1,
+      estimatedUsd: 0.02,
+      toolUsd: 0,
+      priceVerifiedAt: "2026-08-01",
+      priceSourceUrl: "https://example.com/pricing"
+    };
+    const ledger = [{
+      ts: "2026-07-23T09:00:00.000Z",
+      cycleId: "previous-cycle",
+      requestHash: "request-hash-1",
+      phase: "morning",
+      agent: "AUDIT",
+      provider: "openai" as const,
+      model: "gpt-5.6-luna",
+      serviceTier: "default" as const,
+      tokensIn: 1,
+      cachedTokensIn: 0,
+      tokensOut: 1,
+      toolUses: 0,
+      usd: 42,
+      kind: "text" as const
+    }];
+    expect(() => assertTextReservation(estimate, context(ledger, {
+      allInNonApiSpentUsd: 8,
+      limits: { ...DEFAULT_BUDGET_LIMITS, monthlyApiUsd: 50, monthlyOperatingUsd: 50, dailyUsd: 50 }
+    }))).toThrowError(expect.objectContaining({ code: "MONTHLY_OPERATING_CAP" }));
+  });
+
   it("keeps the adopted Caught Up envelopes inside the operating cap", () => {
     expect(DEFAULT_BUDGET_LIMITS).toMatchObject({
       maxCycleUsd: 0.2,

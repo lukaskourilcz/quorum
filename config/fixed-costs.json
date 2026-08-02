@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "fixed-costs/1",
+  "currency": "USD",
+  "costs": [],
+  "$comment": [
+    "Keep costs empty until the owner enters an amount from a real subscription.",
+    "Entry shape: name, monthly_usd, category, since.",
+    "Possible names include Vercel Pro, Supabase Pro, and a domain. Replace them with the owner's actual subscriptions and amounts."
+  ]
+}

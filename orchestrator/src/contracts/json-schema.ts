@@ -5,6 +5,7 @@ import { CampaignBriefSchema } from "./campaign-brief.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
+import { KpiSetSchema } from "./kpi-set.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
 import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
@@ -49,6 +50,7 @@ export const ContractSchemas = {
   "daily-digest": DailyDigestSchema,
   "edition-package": EditionPackageSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
+  "kpi-set": KpiSetSchema,
   "marketing-plan": MarketingPlanSchema,
   "meeting-email": MeetingEmailSchema,
   "meeting-agenda": MeetingAgendaQueueSchema,

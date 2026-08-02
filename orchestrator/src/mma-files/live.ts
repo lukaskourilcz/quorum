@@ -4,12 +4,13 @@ import { z } from "zod";
 import { BudgetLedgerEntrySchema, DEFAULT_BUDGET_LIMITS, type BudgetLedgerEntry } from "../budget.js";
 import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { guardedJsonCall } from "../llm/call.js";
-import { repoRoot, stateRoot } from "../paths.js";
+import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditorialGateway } from "./pipeline.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { discoverLicensedPhotos } from "../images/licensed.js";
+import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 
 const LocalizationSchema = z.object({
   title: z.string().trim().min(1).max(160),
@@ -108,7 +109,7 @@ class GuardedMmaFilesGateway implements MmaFilesEditorialGateway {
         cycleId: this.cycleId,
         stage: "VALIDATION",
         ledger: await this.ledger(),
-        allInNonApiSpentUsd: 0,
+        allInNonApiSpentUsd: await loadFixedMonthlyUsd(configRoot, this.now),
         allInCommittedUsd: 0,
         knownMonthlyForecastUsd: 0,
         remainingScheduledCycles: 60,

@@ -43,6 +43,7 @@ import {
 } from "../meetings/agenda.js";
 import { resolveTittyTuesdaysSlot } from "../titty-tuesdays/schedule.js";
 import { composeMeetingTastePacket } from "../taste/packet.js";
+import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { fightWeekFocus, loadEventCards } from "../fightaiq/store.js";
@@ -425,6 +426,7 @@ export async function runPortfolioCycle(input: {
   explainRouting: boolean;
   now: Date;
 }): Promise<PortfolioCycleResult> {
+  const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
   const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, budgetLedger, stages, routing, agents, modelConfig, agentControls, meetingPolicy] = await Promise.all([
     loadVentureRegistry(),
     readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
@@ -555,7 +557,7 @@ export async function runPortfolioCycle(input: {
           cycleId: input.cycleId,
           stage: stages.current,
           ledger: entries,
-          allInNonApiSpentUsd: 0,
+          allInNonApiSpentUsd: fixedMonthlyUsd,
           allInCommittedUsd: 0,
           knownMonthlyForecastUsd: 0,
           remainingScheduledCycles: 60,
@@ -610,7 +612,7 @@ export async function runPortfolioCycle(input: {
         system: call.system,
         input: call.prompt,
         maxOutputTokens: call.model.maxOutputTokens,
-        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: 0, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits: environmentLimits(schedule) },
+        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits: environmentLimits(schedule) },
         parse: (text) => ContributionSchema.parse(parseJson(text))
       });
       if (response.value.evidenceRefs.some((reference) => !context.evidenceRefs.includes(reference))) throw new Error(`${call.agent} cited an evidence reference outside the packet`);
@@ -707,7 +709,7 @@ export async function runPortfolioCycle(input: {
   }
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
-  const monthAllInUsd = actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
+  const monthAllInUsd = fixedMonthlyUsd + actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
   const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: effectiveObjective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, proposals, editorialSlate, agenda });
   const meetingPath = `meetings/${date}-${input.phase}.json`;
   const decisionPath = `decisions/${input.cycleId}.json`;

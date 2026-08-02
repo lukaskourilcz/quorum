@@ -74,6 +74,26 @@ export async function addPriorityItem(input: {
   return item;
 }
 
+export async function ensurePriorityItem(input: {
+  root: string;
+  venture: string;
+  question: string;
+  decisionAtStake: string;
+  evidenceNeeded?: string[];
+  requestedBy?: string;
+  now: Date;
+  expires: Date;
+}): Promise<{ item: PriorityItem; created: boolean }> {
+  const queue = await readPriorityQueue(input.root, input.now);
+  const existing = queue.items.find((item) =>
+    item.venture === input.venture
+    && item.question === input.question.trim()
+    && item.decision_at_stake === input.decisionAtStake.trim()
+  );
+  if (existing) return { item: existing, created: false };
+  return { item: await addPriorityItem(input), created: true };
+}
+
 async function transition(input: {
   root: string;
   itemId: string;

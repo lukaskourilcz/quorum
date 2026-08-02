@@ -21,6 +21,7 @@ import type { IdeaScreeningResult } from "../ideas/ledger.js";
 import type { AutonomySnapshot } from "../autonomy/signals.js";
 import type { PriorityItem } from "../contracts/autonomy.js";
 import type { StarvationEntry } from "../meetings/agenda.js";
+import type { QuarterlyKpiPacketSummary } from "../money/daily.js";
 
 const COUNCIL: readonly CouncilAgent[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
 
@@ -113,6 +114,7 @@ function positionInput(input: {
     autonomy: AutonomySnapshot;
     openPriorities: PriorityItem[];
     starvation: StarvationEntry[];
+    quarterlyKpis: QuarterlyKpiPacketSummary;
   };
 }) {
   return JSON.stringify({
@@ -151,6 +153,7 @@ export async function collectLiveCouncil(input: {
     autonomy: AutonomySnapshot;
     openPriorities: PriorityItem[];
     starvation: StarvationEntry[];
+    quarterlyKpis: QuarterlyKpiPacketSummary;
   };
 }): Promise<{
   item: z.infer<typeof QueueItemSchema>;
@@ -225,7 +228,10 @@ export async function collectLiveCouncil(input: {
     positions,
     scope: work.scope,
     actualCycleUsd,
-    monthAllInUsd: monthAllIn(finalLedger.entries, input.now)
+    monthAllInUsd: Number((
+      monthAllIn(finalLedger.entries, input.now)
+      + input.budgetContext(finalLedger.entries).allInNonApiSpentUsd
+    ).toFixed(8))
   };
 }
 
@@ -239,6 +245,7 @@ export function createLiveStandup(input: {
   council: Awaited<ReturnType<typeof collectLiveCouncil>>;
   caughtUpIdea?: IdeaScreeningResult;
   autonomy?: AutonomySnapshot;
+  quarterlyKpis?: QuarterlyKpiPacketSummary;
 }): Standup {
   const shift = getShiftDefinition(input.phase);
   const approved =
@@ -330,6 +337,7 @@ export function createLiveStandup(input: {
         quality: input.autonomy.quality
       }
     } : {}),
+    ...(input.quarterlyKpis ? { quarterlyKpis: input.quarterlyKpis } : {}),
     eveningOutcome:
       input.phase === "night"
         ? `${approved ? "Approved" : "Held"} internal work item recorded for the next Morning shift.`

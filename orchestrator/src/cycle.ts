@@ -93,6 +93,8 @@ import { runLiveArticleProduction } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
 import { openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
+import { runDailyMoneyAndKpis } from "./money/daily.js";
+import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -596,13 +598,14 @@ async function runCaughtUpLiveProductCycle(
   if (options.phase !== "cu-product" || options.dry) {
     throw new Error("Live Caught Up product runner requires a non-dry cu-product phase");
   }
-  const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
+  const [routing, stages, ventureRegistry, agentControls, fixedMonthlyUsd] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
     readFile(path.join(configRoot, "stages.json"), "utf8").then(
       (raw) => JSON.parse(raw) as { current: Stage }
     ),
     loadVentureRegistry(),
-    loadVentureAgentControls()
+    loadVentureAgentControls(),
+    loadFixedMonthlyUsd(configRoot, now)
   ]);
   const definition = composeMeetingRouteDefinition(
     ventureRegistry,
@@ -664,7 +667,8 @@ async function runCaughtUpLiveProductCycle(
           stage: stages.current,
           now,
           limits,
-          remainingScheduledCycles: remainingScheduledCycles(now)
+          remainingScheduledCycles: remainingScheduledCycles(now),
+          fixedMonthlyUsd
         },
         idea,
         index,
@@ -977,6 +981,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       : stateRoot;
     const morningContext = venturePhase === "morning"
       ? await (async () => {
+          const moneyAndKpis = await runDailyMoneyAndKpis({
+            repoRoot,
+            stateRoot: artifactRoot,
+            now,
+            writeOwnerNotices: !options.dry
+          });
           const [autonomy, meetingPolicy, ventureRegistry, agendaQueue, priorityQueue] = await Promise.all([
             refreshAutonomySnapshot({ repoRoot, stateRoot: artifactRoot, now }),
             loadMeetingPolicy(),
@@ -988,6 +998,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             .filter((venture) => venture.meetings.some((meeting) => phaseNeedsAgenda(meetingPolicy, meeting.kind)))
             .map((venture) => venture.id))];
           return {
+            moneyAndKpis,
             autonomy,
             priorityQueue,
             openPriorities: openPriorityItems(priorityQueue),
@@ -1004,14 +1015,15 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           businessContext: {
             autonomy: morningContext!.autonomy,
             openPriorities: morningContext!.openPriorities,
-            starvation: morningContext!.starvation
+            starvation: morningContext!.starvation,
+            quarterlyKpis: morningContext!.moneyAndKpis.summary
           },
           budgetContext: (ledger): ReserveContext => ({
             now,
             cycleId,
             stage: stages.current,
             ledger,
-            allInNonApiSpentUsd: 0,
+            allInNonApiSpentUsd: morningContext!.moneyAndKpis.fixedMonthlyUsd,
             allInCommittedUsd: 0,
             knownMonthlyForecastUsd: 0,
             remainingScheduledCycles: remainingScheduledCycles(now),
@@ -1028,7 +1040,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             stage: stages.current,
             now,
             limits: budgetLimitsFromEnvironment(),
-            remainingScheduledCycles: remainingScheduledCycles(now)
+            remainingScheduledCycles: remainingScheduledCycles(now),
+            fixedMonthlyUsd: morningContext!.moneyAndKpis.fixedMonthlyUsd
           },
           dry: options.dry,
           councilSummary: liveCouncil
@@ -1126,6 +1139,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           now,
           council: measuredCouncil,
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
+          ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
           ...(caughtUpIdea ? { caughtUpIdea } : {})
         })
       : createOfflineStandup({
@@ -1140,6 +1154,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           evidenceRefs: opportunityGate.evidenceRefs,
           agentsParticipated,
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
+          ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
           ...(caughtUpIdea ? { caughtUpIdea } : {})
         });
     const recordedStandup = morningContext
@@ -1167,6 +1182,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         : []),
       ...(meetingAgendaStateChanged ? [MEETING_AGENDA_PATH] : []),
       ...(morningContext ? [AUTONOMY_SNAPSHOT_PATH] : []),
+      ...(morningContext ? morningContext.moneyAndKpis.artifacts : []),
       ...(priorityStateChanged ? [PRIORITY_QUEUE_PATH] : [])
     ];
     await Promise.all([

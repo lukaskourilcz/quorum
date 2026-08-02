@@ -7,6 +7,7 @@ import type { RunnablePhase, Stage } from "../types.js";
 import type { IdeaScreeningResult } from "../ideas/ledger.js";
 import { StandupSchema, type Standup } from "./schema.js";
 import type { AutonomySnapshot } from "../autonomy/signals.js";
+import type { QuarterlyKpiPacketSummary } from "../money/daily.js";
 
 export function createOfflineStandup(input: {
   cycleId: string;
@@ -21,6 +22,7 @@ export function createOfflineStandup(input: {
   caughtUpIdea?: IdeaScreeningResult;
   agentsParticipated?: boolean;
   autonomy?: AutonomySnapshot;
+  quarterlyKpis?: QuarterlyKpiPacketSummary;
 }): Standup {
   const outcome =
     input.status === "INSUFFICIENT_EVIDENCE" ? "NO_ACTION" : input.status;
@@ -145,6 +147,7 @@ export function createOfflineStandup(input: {
         quality: input.autonomy.quality
       }
     } : {}),
+    ...(input.quarterlyKpis ? { quarterlyKpis: input.quarterlyKpis } : {}),
     eveningOutcome:
       input.phase === "night"
         ? "Night shift reconciled the record; remain in DISCOVERY."
