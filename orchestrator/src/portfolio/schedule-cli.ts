@@ -4,6 +4,7 @@ import { BudgetLedgerEntrySchema } from "../budget.js";
 import { stateRoot } from "../paths.js";
 import { ScheduledPhaseSchema } from "../types.js";
 import { loadVentureRegistry } from "../ventures/registry.js";
+import { environmentBudgetLimits } from "./limits.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
@@ -37,14 +38,16 @@ const entries = (parsedLedger.entries ?? []).map((entry) => BudgetLedgerEntrySch
 const spent = entries
   .filter((entry) => entry.ts.slice(0, 7) === month)
   .reduce((sum, entry) => sum + entry.usd, 0);
-const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned" ? 42 : budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
+// The cap the runtime enforces, not the superseded $42 of budget-2026-08d. This gate runs
+// before the cycle and decides whether a phase opens at all, so a looser figure here than
+// the runtime holds would let a phase through that the runtime then refuses to fund.
+const shapeInput = { registry, budgetDecisionRaw: decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw };
+const enforcedMonthlyApiUsd = environmentBudgetLimits(
+  resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
+).monthlyApiUsd;
 const schedule = resolveEffectivePortfolioSchedule({
-  registry,
-  budgetDecisionRaw: decisionRaw,
-  budgetMmaRaw,
-  budgetFiftyRaw,
-  fightAiQFoundingRaw,
-  monthlyApiHeadroomUsd: Math.max(0, provisionalCap - spent)
+  ...shapeInput,
+  monthlyApiHeadroomUsd: Math.max(0, enforcedMonthlyApiUsd - spent)
 });
 const output = {
   phase,
