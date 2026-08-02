@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "cycleId": "20260802163243-article-am",
+  "cycleId": "20260802164106-article-am",
   "date": "2026-08-02",
   "slot": "am",
   "status": "blocked",
-  "articleRef": "85ecfed4ed62c0b6a026fe70bb192bddba97008fb240eb943fe334daf11825f6",
-  "supersededHash": "1df9f8c5a3fba1b11bb610cc71be21e822842d5ca3bfe0c2c3d4cc9552acc173",
+  "articleRef": "d3fa48016df204c42e77e416cf4fc050b01004a134e4d8e2da8d2d300668f607",
+  "supersededHash": "85ecfed4ed62c0b6a026fe70bb192bddba97008fb240eb943fe334daf11825f6",
   "violations": [
     {
-      "code": "fighter-name-parity",
+      "code": "figure-parity",
       "locale": "cs",
-      "message": "Fighter names must stay unchanged across languages."
+      "message": "English and Czech bodies must carry the same figures."
     }
   ],
   "spentUsd": null,
-  "generatedAt": "2026-08-02T16:32:43.819Z"
+  "generatedAt": "2026-08-02T16:41:06.485Z"
 }
