@@ -111,6 +111,62 @@ export function titleSimilarity(left: string, right: string): number {
   return intersection / new Set([...a, ...b]).size;
 }
 
+/**
+ * The quality violations a pick list alone decides, checkable before anything is written.
+ *
+ * Six of the edition gates are fixed entirely by which items the editor picked, but they
+ * were only evaluated after the English write and the Czech translation had both been
+ * billed. The first live run failed `primary_source_required` that way: $0.2226 spent,
+ * no edition, and no rewrite of an article can repair a pick list. Running the same rules
+ * against the picks costs nothing and fails at the price of one curation call.
+ *
+ * Deliberately partial. `repeatedTopicFrequency` needs the finished article's tags and
+ * `unsupportedWatchlistItems` needs its wire list, so those stay where they are. This
+ * never returns a violation the full gate would not also return.
+ */
+export function curationOwnedViolations(input: {
+  picked: readonly { sourceId: string; title: string; isPrimarySource: boolean }[];
+  anyCandidateIsPrimarySource: boolean;
+  registry: Parameters<typeof computeSignalStrength>[0]["registry"];
+  config: {
+    quality: {
+      minimumSignalStrength: number;
+      maximumSingleSourceShare: number;
+      minimumSourceDiversity: number;
+      maximumDuplicateStorySimilarity: number;
+      requirePrimarySourceWhenRelevant: boolean;
+    };
+  };
+}): string[] {
+  const violations: string[] = [];
+  const sourceIds = input.picked.map((item) => item.sourceId);
+  if (sourceIds.length === 0) return ["minimum_source_diversity"];
+
+  const contribution = new Map<string, number>();
+  for (const id of sourceIds) contribution.set(id, (contribution.get(id) ?? 0) + 1);
+
+  if (computeSignalStrength({ cited: sourceIds.map((sourceId) => ({ sourceId })), registry: input.registry })
+      < input.config.quality.minimumSignalStrength) {
+    violations.push("minimum_signal_strength");
+  }
+  if (Math.max(...contribution.values()) / sourceIds.length > input.config.quality.maximumSingleSourceShare) {
+    violations.push("maximum_single_source_share");
+  }
+  if (sourceDiversity(sourceIds) < input.config.quality.minimumSourceDiversity) {
+    violations.push("minimum_source_diversity");
+  }
+  if (maximumTitleSimilarity(input.picked.map((item) => item.title))
+      > input.config.quality.maximumDuplicateStorySimilarity) {
+    violations.push("maximum_duplicate_story_similarity");
+  }
+  if (input.config.quality.requirePrimarySourceWhenRelevant
+      && input.anyCandidateIsPrimarySource
+      && !input.picked.some((item) => item.isPrimarySource)) {
+    violations.push("primary_source_required");
+  }
+  return violations;
+}
+
 export function maximumTitleSimilarity(titles: readonly string[]): number {
   let maximum = 0;
   for (let left = 0; left < titles.length; left += 1) {

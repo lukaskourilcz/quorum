@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { curationOwnedViolations } from "./quality.js";
 import { renderDigestDataBlock } from "../sources/digest.js";
 import type { SourceItem } from "../sources/types.js";
 import type { EditionQualityConfig } from "./config.js";
@@ -69,11 +70,20 @@ const toolInputSchema = {
   additionalProperties: false
 } as const;
 
+/** A pick list that cannot pass the gates it alone decides. Thrown before anything is written. */
+export class CurationGateError extends Error {
+  constructor(readonly violations: readonly string[], readonly usage: unknown) {
+    super(`curation gate: ${violations.join(", ")}`);
+    this.name = "CurationGateError";
+  }
+}
+
 export async function curate(
   items: readonly SourceItem[],
   date: string,
   config: EditionQualityConfig,
-  gateway: EditionModelGateway
+  gateway: EditionModelGateway,
+  sources?: Parameters<typeof curationOwnedViolations>[0]["registry"]
 ): Promise<CuratedBrief> {
   if (items.length < 3) throw new Error("curate: at least three source items are required");
   const pool = items.slice(0, config.article.maximumCurationCandidates);
@@ -103,6 +113,24 @@ export async function curate(
       ...(pick.topic ? { topic: pick.topic } : {})
     };
   });
+  // Fail here, at the price of one curation call, rather than after the English write and
+  // the Czech translation are billed. These gates are decided entirely by the pick list,
+  // so a rewrite of the article could never repair them.
+  const pickedItems = picks.map((pick) => pool.find((item) => item.externalId === pick.itemId)!);
+  const curationViolations = curationOwnedViolations({
+    picked: pickedItems.map((item) => ({
+      sourceId: item.sourceId,
+      title: item.title,
+      isPrimarySource: item.tags.includes("primary-source")
+    })),
+    anyCandidateIsPrimarySource: items.some((item) => item.tags.includes("primary-source")),
+    registry: sources ?? [],
+    config
+  });
+  if (curationViolations.length > 0) {
+    throw new CurationGateError(curationViolations, response.usage);
+  }
+
   return {
     date,
     headline: response.value.headline,

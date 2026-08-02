@@ -1,7 +1,7 @@
 import { EditionPackageSchema, type EditionPackage } from "../contracts/edition-package.js";
 import type { SourceScrapeResult } from "../sources/run.js";
 import type { SourceConfig, SourceItem } from "../sources/types.js";
-import { curate } from "./curate.js";
+import { curate, CurationGateError } from "./curate.js";
 import type { EditionQualityConfig } from "./config.js";
 import { buildEditionPackage, buildNoEditionPackage } from "./package.js";
 import {
@@ -146,9 +146,18 @@ export async function produceEdition(
   let brief: CuratedBrief;
   try {
     brief = await reporter.stage("curate", () =>
-      curate(input.items, input.date, input.config, input.gateway)
+      curate(input.items, input.date, input.config, input.gateway, input.sources)
     );
   } catch (error) {
+    if (error instanceof CurationGateError) {
+      // The curation call happened and cost money even though the pick list failed. Record
+      // it, or the ledger under-reports and the day's digest shows a cheaper failure than
+      // the one that occurred. Name the violations so the record says what to fix.
+      reporter.addUsage(error.usage as Parameters<typeof reporter.addUsage>[0]);
+      for (const violation of error.violations) reporter.warn(`quality:${violation}`);
+      reporter.warn(`curation_gate_failed_before_write:${error.violations.join(",")}`);
+      return noEdition(input, reporter, "curation_gate_failed");
+    }
     reporter.warn(`curation_failed:${error instanceof Error ? error.message : "unknown"}`);
     return noEdition(input, reporter, "curation_failed");
   }
