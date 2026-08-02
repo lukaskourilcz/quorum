@@ -46,44 +46,114 @@ async function jsonFiles(directory: string): Promise<string[]> {
   return output.sort();
 }
 
-function collectStringValues(value: unknown, pattern: RegExp, output = new Set<string>()): Set<string> {
-  if (typeof value === "string" && pattern.test(value)) output.add(value);
-  else if (Array.isArray(value)) for (const child of value) collectStringValues(child, pattern, output);
-  else if (value && typeof value === "object") for (const child of Object.values(value)) collectStringValues(child, pattern, output);
-  return output;
+// Article evidence comes only from the record directories. Substring-matching every JSON
+// file under state/mma meant any file that merely mentioned the subject qualified as a
+// source: a Shevchenko profile cited state/mma/source-quota/cito.json, an API-quota ledger
+// of monthlyCalls and page cursors, as one of its six sources, and inherited the 50 unrelated
+// fighter ids parked in that ledger. An allowlist rather than a per-file exclusion is the
+// point — the backfill queue was excluded by name after causing this once, and the next
+// bookkeeping file simply took its place.
+const RECORD_DIRECTORIES = ["fighters", "bouts"] as const;
+
+// A career log is not an article. Refs were harvested from every string in every matched
+// file, so a profile inherited each opponent in the subject's history, and the style gate
+// then required a profile link for all of them. Vemola has 48 bouts on file; no 1,700-token
+// article can carry 48 links, and the ids that cannot be used still cost prompt tokens. Six
+// bouts is what a profile actually discusses.
+const MAX_BOUTS_IN_EVIDENCE = 6;
+
+interface MmaRecord {
+  file: string;
+  value: Record<string, unknown>;
+  raw: string;
 }
 
-async function evidenceFor(slate: EditorialSlate, slot: "am" | "pm"): Promise<ArticleEvidencePacket | null> {
+function boutParticipants(value: Record<string, unknown>): string[] {
+  const fighters = value.fighters as { red?: unknown; blue?: unknown } | undefined;
+  return [fighters?.red, fighters?.blue].filter((entry): entry is string => typeof entry === "string");
+}
+
+function boutEventRef(value: Record<string, unknown>): string | undefined {
+  const reference = (value.event as { ref?: unknown } | undefined)?.ref;
+  return typeof reference === "string" ? reference : undefined;
+}
+
+function boutHappenedAt(value: Record<string, unknown>): string {
+  const startsAt = (value.event as { startsAtUtc?: unknown } | undefined)?.startsAtUtc;
+  return typeof startsAt === "string" ? startsAt : "";
+}
+
+async function loadMmaRecords(root: string): Promise<MmaRecord[]> {
+  const records: MmaRecord[] = [];
+  for (const directory of RECORD_DIRECTORIES) {
+    for (const file of await jsonFiles(path.join(root, "mma", directory))) {
+      const raw = await readFile(file, "utf8");
+      const value = JSON.parse(raw) as unknown;
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        records.push({ file, value: value as Record<string, unknown>, raw });
+      }
+    }
+  }
+  return records;
+}
+
+export async function articleEvidenceFor(root: string, slate: EditorialSlate, slot: "am" | "pm"): Promise<ArticleEvidencePacket | null> {
   const assignment = slate.slots.find((candidate) => candidate.slot === slot);
   if (!assignment || assignment.status === "killed") return null;
-  // Exclude the backfill queue. It is a work list naming every fighter in the store, so any
-  // subject ref that appears in it matched, and collectStringValues then harvested all 856
-  // ids as fighterRefs. That both blocked the article on missing-fighter-link and added
-  // about 16 KB of ids to every prompt. Evidence must come from the records themselves.
-  const files = (await jsonFiles(path.join(stateRoot, "mma")))
-    .filter((file) => !path.relative(stateRoot, file).startsWith(path.join("mma", "backfill")));
-  const matches: Array<{ file: string; value: unknown; raw: string }> = [];
-  for (const file of files) {
-    const raw = await readFile(file, "utf8");
-    if (!assignment.subjectRefs.some((reference) => raw.includes(reference))) continue;
-    matches.push({ file, value: JSON.parse(raw) as unknown, raw });
-  }
-  if (matches.length === 0) return null;
-  const fighterRefs = [...collectStringValues(matches.map(({ value }) => value), /^(?:ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/u)];
-  const eventRef = [...collectStringValues(matches.map(({ value }) => value), /^(?:ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u)][0];
-  const sources = matches.map(({ file }) => ({
-    kind: "internal" as const,
-    ref: path.relative(repoRoot, file)
-  }));
+  const subjects = new Set<string>(assignment.subjectRefs);
+  const records = await loadMmaRecords(root);
+
+  // Selection is structural, not textual: a bout counts when the subject is one of its two
+  // fighters, or when the subject is the event the bout belongs to. That second case is what
+  // keeps a fight-week preview working, where the assigned subject is an event ref.
+  const bouts = records
+    .filter((record) => record.value.schemaVersion === "bout/1")
+    .filter((record) => {
+      const eventRef = boutEventRef(record.value);
+      return boutParticipants(record.value).some((fighter) => subjects.has(fighter))
+        || (eventRef !== undefined && subjects.has(eventRef));
+    })
+    .sort((left, right) =>
+      boutHappenedAt(right.value).localeCompare(boutHappenedAt(left.value)) || left.file.localeCompare(right.file))
+    .slice(0, MAX_BOUTS_IN_EVIDENCE);
+
+  const participants = new Set<string>(bouts.flatMap((record) => boutParticipants(record.value)));
+  for (const subject of subjects) participants.add(subject);
+  const cards = records.filter(
+    (record) => record.value.schemaVersion === "fighter-card/1"
+      && typeof record.value.id === "string"
+      && participants.has(record.value.id)
+  );
+  if (cards.length === 0 && bouts.length === 0) return null;
+
+  // Only a fighter with a card on file gets declared. The style gate turns every declared ref
+  // into a required /fighters/org/slug link, and a fighter with no record has no such page.
+  const fighterRefs = cards.map((record) => record.value.id as string).sort();
+  const eventRefs = new Set(bouts.map((record) => boutEventRef(record.value)).filter((entry) => entry !== undefined));
+  const eventRef = [...subjects].find((subject) => subject.includes(":event:"))
+    ?? (eventRefs.size === 1 ? [...eventRefs][0] : undefined);
+
+  // Opponent cards travel without their own career history. The subject's history is the
+  // article; an opponent's is prompt weight the piece never uses, and every name in it is a
+  // fighter the writer might mention but has no declared ref to link.
+  const used = [
+    ...cards.map((record) => ({
+      file: record.file,
+      raw: subjects.has(record.value.id as string)
+        ? record.raw
+        : JSON.stringify({ ...record.value, history: undefined })
+    })),
+    ...bouts.map((record) => ({ file: record.file, raw: record.raw }))
+  ];
   return {
-    sources,
+    sources: used.map(({ file }) => ({ kind: "internal" as const, ref: path.relative(repoRoot, file) })),
     fighterRefs,
     ...(eventRef ? { eventRef } : {}),
     heroSpec: {
       template: assignment.format === "fighter-profile" ? "fighter-file" : "fight-desk",
       bindings: { headline: assignment.subjectRefs.join(" · ").slice(0, 120) }
     },
-    evidenceText: matches.map(({ file, raw }) => `FILE ${path.relative(repoRoot, file)}\n${raw}`).join("\n\n").slice(0, 24_000)
+    evidenceText: used.map(({ file, raw }) => `FILE ${path.relative(repoRoot, file)}\n${raw}`).join("\n\n").slice(0, 24_000)
   };
 }
 
@@ -171,7 +241,7 @@ export async function runLiveArticleProduction(input: {
     return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
   }
   const assignment = slate.slots.find((candidate) => candidate.slot === input.slot);
-  const evidence = await evidenceFor(slate, input.slot);
+  const evidence = await articleEvidenceFor(stateRoot, slate, input.slot);
   if (!assignment || assignment.status === "killed" || !evidence) {
     const reason = assignment?.status === "killed" ? assignment.killedReason : "missing_sourced_subject";
     await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, spentUsd: 0, generatedAt: input.now.toISOString() });
@@ -205,7 +275,22 @@ export async function runLiveArticleProduction(input: {
     gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
     socialProductionEnabled: socialUnlocked && !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
   });
-  await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: result.article.status, articleRef: result.article.packageHash, spentUsd: null, generatedAt: input.now.toISOString() });
+  // Record why a blocked article was blocked. The gate's violations were computed, used to
+  // set the status, and discarded, so a blocked run reported a hash and nothing else — the
+  // day looked like a silent no-op from every angle except re-running the gate by hand.
+  await atomicWriteJson(stateRoot, runPath, {
+    schemaVersion: 1,
+    cycleId: input.cycleId,
+    date,
+    slot: input.slot,
+    status: result.article.status,
+    articleRef: result.article.packageHash,
+    ...(result.violations.length > 0
+      ? { violations: result.violations.slice(0, 20).map(({ code, locale, message }) => ({ code, locale, message })) }
+      : {}),
+    spentUsd: null,
+    generatedAt: input.now.toISOString()
+  });
   return {
     status: result.article.status === "published" ? "published" : "blocked",
     artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, "budget/ledger.json"],

@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -5,13 +6,14 @@ import { afterEach, describe, expect, it } from "vitest";
 import { EditorialSlateSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
 import { LocalStoreDelivery, shipArticleBacklog, type ArticleDeliveryAdapter } from "../src/mma-files/delivery.js";
 import { runDryArticleProduction } from "../src/mma-files/dry-run.js";
+import { articleEvidenceFor } from "../src/mma-files/live.js";
 import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
 import { loadStylebook, reviewArticleCopy, validateStylebook } from "../src/mma-files/style.js";
 import { loadArticlePackages } from "../src/mma-files/store.js";
-import { repoRoot } from "../src/paths.js";
+import { repoRoot, stateRoot } from "../src/paths.js";
 
 const roots: string[] = [];
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
@@ -173,5 +175,45 @@ describe("MMA Files social evidence and delivery", () => {
       }
     };
     expect((await mockGitHub.deliver(article)).adapter).toBe("github-app");
+  });
+});
+
+describe("article evidence selection", () => {
+  const profileSlate = EditorialSlateSchema.parse({
+    schemaVersion: "editorial-slate/1",
+    date: "2026-08-02",
+    slots: [
+      { slot: "am", format: "fighter-profile", subjectRefs: ["ufc:valentina-shevchenko"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "JAB", status: "assigned" },
+      { slot: "pm", format: "desk-notes", subjectRefs: ["missing:2026-08-02:pm"], rationale: "No second subject cleared the desk.", assignedWriter: "QUILL", status: "killed", killedReason: "Missing fresh, source-backed subject." }
+    ],
+    vaultVerdicts: [
+      { subjectRef: "ufc:valentina-shevchenko", verdict: "fresh", evidenceRef: "meeting:2026-08-02-mag-editorial" },
+      { subjectRef: "missing:2026-08-02:pm", verdict: "fresh", evidenceRef: "meeting:2026-08-02-mag-editorial" }
+    ]
+  });
+
+  it("cites only record files, never bookkeeping that happens to name the subject", async () => {
+    const evidence = await articleEvidenceFor(stateRoot, profileSlate, "am");
+    expect(evidence).not.toBeNull();
+    // state/mma/source-quota/cito.json is an API-quota ledger carrying a cycle's worth of
+    // fighter ids. It named the subject, so it was cited as a source on a live article.
+    const cited = evidence!.sources.map((source) => source.kind === "internal" ? source.ref : source.url);
+    expect(cited.every((reference) => /state\/mma\/(?:fighters|bouts)\//u.test(reference))).toBe(true);
+  });
+
+  it("declares only fighters the article is about, each with a card to link to", async () => {
+    const evidence = await articleEvidenceFor(stateRoot, profileSlate, "am");
+    const declared = new Set(evidence!.fighterRefs);
+    expect(declared.has("ufc:valentina-shevchenko")).toBe(true);
+    // Every declared ref becomes a required profile link, so an id the piece never mentions
+    // blocks the article. A live run declared 69, including the whole quota ledger.
+    expect(evidence!.fighterRefs.length).toBeLessThanOrEqual(2 + 2 * 6);
+    for (const reference of evidence!.fighterRefs) {
+      expect(existsSync(path.join(stateRoot, "mma", "fighters", `${reference}.json`))).toBe(true);
+    }
+  });
+
+  it("returns nothing for a killed slot", async () => {
+    expect(await articleEvidenceFor(stateRoot, profileSlate, "pm")).toBeNull();
   });
 });
