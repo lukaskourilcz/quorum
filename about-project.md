@@ -8,6 +8,10 @@ Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běž
 <https://boardless-ai.vercel.app>. Systém má šest pracovních projektů: Caught Up,
 Titty Tuesdays, Magazine Incubator, FightAIQ, Carousel Studio a MMA Files.
 
+**Co už publikuje (k 2. srpnu 2026):** MMA Files vydal první článek, který napsala rada —
+profil Valentiny Ševčenkové, živě anglicky i česky, prošel všemi devíti kontrolami vydání.
+Ostatní projekty zatím nepublikují; na co každý čeká, je v `NEEDS_YOUR_HELP_NOW.md`.
+
 ## Jak je systém poskládaný
 
 ```text
@@ -55,23 +59,38 @@ modelům ani do podkladů porad.
 - **Carousel Studio** spravuje deset znovupoužitelných rozložení a bez modelu z nich
   vykresluje všechny sociální karusely. Nemá vlastní sociální účet, marketing ani
   měření návštěvnosti.
-- **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře
-  posílá jen ověřené články a data z FightAIQ; rozepsané texty a interní poznámky
-  zůstávají v chráněné administraci.
+- **MMA Files** je veřejný anglicko-český magazín a jediný projekt, který dnes
+  publikuje. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
+  rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
+  nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe
+  podloženého bojovníka — oba projekty na sobě nezávisí.
 
 ## Denní rozpis a peníze
 
 Společný pražský rozpis má 15 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
-11:00, 13:00, 14:00, 17:00, 18:00, 19:00, 20:00, 21:00 a 22:00. Letní a zimní časy mají
-vlastní spouštění; stejné časy se neopakují a program přijme jen správnou variantu
-pro Prahu. V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba.
-Odpoledne a večer se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays,
-inkubátoru, Carousel Studia, večerní analýzy FightAIQ a redakční kontrola MMA Files se
-spustí jen s platnou agendou. Kalendář jinak ukáže „nebylo potřeba“, ne zmeškanou poradu.
+11:00, 13:00, 14:00, 17:00, 18:00, 19:00, 20:00, 21:00 a 22:00. Letní a zimní čas má každý
+slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
 
-Podepsané rozhodnutí `budget-2026-08d` stanovuje celkový měsíční limit 50 dolarů,
-z toho nejvýše 42 dolarů pro modely a API a denní tempo 2,20 dolaru. Systém si
-limit nesmí zvýšit sám a platby vždy provádí člověk.
+Kterou poradu spustit, určuje **spouštěč, který se ozval**, ne hodiny v okamžiku startu.
+GitHub úlohy podle rozpisu často odloží — 2. srpna o 13 až 54 minut — a dřívější odvození
+z nástěnných hodin mělo toleranci jen dvacet minut: sedm ze čtrnácti porad se ten den
+nekonalo a jedna se spustila jako sousední porada. Spouštěč poradu pojmenuje sám, takže
+zpoždění už nevadí.
+
+V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba. Odpoledne a večer
+se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays, inkubátoru, Carousel
+Studia, večerní analýzy FightAIQ a redakční kontrola MMA Files se spustí jen s platnou
+agendou.
+
+Když nějaká brána poradu vypne, zapíše se do `state/meetings/skips/` důvod a kalendář slot
+označí jako **Skipped** s vysvětlením v popisku. Prázdný den tak řekne, kterou bránu
+otevřít, místo aby vypadal jako porucha.
+
+Podepsané rozhodnutí `budget-2026-08e` stanovuje celkový měsíční limit **30 dolarů**,
+z toho 25 dolarů pro modely a API a denní tempo 1,00 dolaru. Nahrazuje starší
+`budget-2026-08d` (50 / 42 / 2,20). Jeden resolver drží tyto částky pro celý běh; každá
+fáze si limit smí jen utáhnout, nikdy povolit. Systém si limit nesmí zvýšit sám a platby
+vždy provádí člověk.
 
 ## Data a soukromá správa
 
@@ -101,5 +120,6 @@ pnpm --filter @boardlessai/site test:e2e
 ```
 
 Zkušební porady zapisují jen do dočasných složek. Přehled kroků, které musí udělat
-majitel, je v `NEEDED.md`; doporučené pořadí je v `MANUAL STEPS.md`.
+majitel, je v `NEEDS_YOUR_HELP_NOW.md`; `NEEDED.md` k tomu drží referenční tabulky a
+postup, jak dohledat prázdný den. Doporučené pořadí je v `MANUAL STEPS.md`.
 Úplný samostatný popis systému je v `docs/ECOSYSTEM.md`.

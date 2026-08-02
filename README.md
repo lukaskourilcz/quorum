@@ -222,8 +222,13 @@ incubator scan, 08:00 FightAIQ intake, 09:00 MMA Files story meeting, 10:00
 article slot, 11:00 Titty Tuesdays, 13:00 Carousel Studio, 14:00 board afternoon, 17:00 Caught Up
 product, 18:00 article slot, 19:00 FightAIQ analysis, 20:00 MMA Files desk,
 21:00 incubator synthesis and 22:00 board night. GitHub receives both UTC
-daylight-saving variants; duplicates are removed and the runtime accepts only the
-one matching Prague time. The morning council may place one bounded specialist
+daylight-saving variants as separate one-hour crons, and the phase is resolved from
+the cron that fired rather than from the clock at the moment the job starts: GitHub
+queues scheduled workflows, sometimes by the better part of an hour, and reading the
+wall clock lost seven of fourteen meetings on 2 August and ran an eighth as the
+neighbouring room. The runtime still accepts only the variant matching Prague today.
+A slot a gate turns off is recorded in `state/meetings/skips/` and shown on the
+calendar as **Skipped** with its reason. The morning council may place one bounded specialist
 agenda. Titty Tuesdays, both incubator rooms, Carousel Studio, FightAIQ analysis and
 the MMA Files desk open on scheduled runs only when an agenda is due. FightAIQ intake also opens
 after a material source change. Manual runs remain available for explicit tests.
@@ -279,14 +284,24 @@ Rollback:
 - Social account credentials, optional Pexels/Pixabay keys and confirmation of the
   MMA Files App/Vercel connection remain owner-controlled steps in `NEEDED.md`.
 - No eligible live experiment or accepted market evidence exists yet.
+- MMA Files is the only venture publishing. Caught Up has produced no edition; its
+  per-edition cap is consumed by one pass, so its configured regenerations cannot run.
+  FightAIQ holds fighters and historical bouts but no upcoming events, so its analysis
+  emits nothing. Titty Tuesdays and Carousel Studio have never produced their artifact:
+  both need an open priority item, and Carousel Studio also needs owner inspiration
+  links. See `NEEDS_YOUR_HELP_NOW.md`.
 - Git-backed runtime state assumes one serialized writer.
 - Admin has one username/password identity and signed session, not SSO, MFA or
   per-user audit identity.
 - FightAIQ analysis is authorized under D8. Current coverage is still incomplete:
   the keyless baseline is historical, UFC active status arrives through a complete
   bounded roster crawl, and no reviewed $0 current Oktagon roster source is wired.
-- Delivery proof is automated; missing/broken consumer output retries once, then
-  reverts and pauses the affected project.
+- Delivery proof is automated; missing or broken consumer output retries once, then
+  reverts and pauses the affected project. **Delivery doctor** (Actions, manual,
+  read-only) reports in about a minute whether the delivery App can read each target
+  repository's commits, commit statuses and check runs, and names the permission to
+  grant — those are three separate installation permissions, and a missing one reverts
+  a healthy article off the live site.
 - Commerce, payment, inventory and ads are not implemented. Incubator founding is
   limited to the pre-signed, no-new-account content-project template.
 

@@ -1,90 +1,86 @@
 # NEEDED — owner setup index
 
 The complete, deduplicated checklist is [`NEEDS_YOUR_HELP_NOW.md`](NEEDS_YOUR_HELP_NOW.md).
-Use that file as the source of truth; this compatibility file exists because older
-runbooks and admin links still point to `NEEDED.md`.
+Use that file as the source of truth; this one exists because older runbooks and admin links
+still point at `NEEDED.md`, and it carries the reference tables and the record of what
+changed.
 
-## 0. Repository variables — everything below is inert until these are set
+## Repository variables — everything is inert until these are set
 
-No cycle does live work without these. They are GitHub **repository variables**
-(Settings → Secrets and variables → Actions → Variables), not secrets, and they are read
-by `.github/workflows/cycle.yml` and re-checked in `orchestrator/src/cycle.ts:847` and
-`orchestrator/src/portfolio/run.ts:467`. A missing variable is not an error: the run
-records a deterministic skip and costs $0, which is why a misconfigured repo looks
-healthy and still produces nothing.
+GitHub **repository variables** (Settings → Secrets and variables → Actions → Variables),
+not secrets, read by `.github/workflows/cycle.yml`. A missing variable is not an error: the
+run records a skip and costs $0, which is why a misconfigured repository looks healthy and
+produces nothing. Since 2 August a skipped slot is written to `state/meetings/skips/` and
+shown on the calendar as **Skipped** with its reason, so this no longer looks like silence.
 
 | Variable | Set to | Unlocks |
 | --- | --- | --- |
-| `AUTONOMY_KILL_SWITCH` | anything except `true` | every scheduled cycle; `true` halts all of them |
+| `AUTONOMY_KILL_SWITCH` | anything except `true` | every scheduled cycle; `true` halts all |
 | `PORTFOLIO_LIVE_ENABLED` | `true` | the global board and every venture room |
 | `CAUGHT_UP_LIVE_ENABLED` | `true` | `cu-edition`, `morning`, `cu-product` |
 | `MMA_FILES_LIVE_ENABLED` | `true` | `mag-editorial`, `mag-desk`, `article-am`, `article-pm`, MMA delivery |
 | `FIGHTAIQ_LIVE_ENABLED` | `true` | FightAIQ intake |
 | `FIGHTAIQ_ANALYSIS_ENABLED` | `true` | FightAIQ D8 analysis |
 
-MMA Files needs **both** `PORTFOLIO_LIVE_ENABLED` and `MMA_FILES_LIVE_ENABLED`; either
-one alone still skips. Leave `SOCIAL_KILL_SWITCH` as it is — it beats every per-channel
-unlock and nothing here asks you to change it.
+MMA Files needs **both** `PORTFOLIO_LIVE_ENABLED` and `MMA_FILES_LIVE_ENABLED`; either alone
+still skips. Leave `SOCIAL_KILL_SWITCH` as it is — it beats every per-channel unlock.
 
-Required secrets for any model call: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`. Publishing
-additionally needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`.
+Secrets for any model call: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`. Publishing additionally
+needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. All eight are set as of 2026-08-02.
 
-- [ ] **Set the six repository variables** — table above; nothing runs live without them. [imp:5] [owner:me] [time:15m] [kind:setup]
-- [ ] **Confirm both model API keys are present** — every room call fails closed without them. [imp:5] [owner:me] [time:5m] [kind:setup]
-- [x] **Give the delivery GitHub App `Checks` and `Commit status` read access** — done 2 August 2026. Granting the permissions on the app is not enough; each installation has to accept the update before the tokens it mints carry it. Verified with `Delivery doctor`, and the first MMA Files article went live and stayed. [imp:5] [owner:me] [time:10m] [kind:setup]
-- [ ] **Render or strip the `[source:...]` markers in the MMA Files article body** — the delivered `bodyMDX` carries inline grounding markers that the style gate requires, and `lukaskourilcz/mma-files` prints them verbatim, so readers see `[source:state/mma/fighters/ufc:valentina-shevchenko.json]` mid-sentence. The article package is hash sealed, so the fix belongs in that repo's renderer: turn each marker into a citation link into the Sources block it already renders, or drop it. [imp:4] [owner:ai] [time:45m] [kind:content]
+## Diagnosing an empty day
 
-## 1. Seed the founding gate — no agent can write the file it scores
+| Symptom | Where to look |
+| --- | --- |
+| A calendar slot is **Skipped** | its tooltip names the gate; `state/meetings/skips/<date>-<phase>.json` |
+| A calendar slot is **Did not happen** | no run reached it at all — check the Actions run for that hour |
+| Delivery reverted a published article | Actions → **Delivery doctor**, about one minute, read-only |
+| An article was written but not published | `state/ventures/mma-files/runs/<date>-<slot>.json` lists the gate violations |
+| Caught Up produced no edition | `state/edition/runs/` — the newest file names the stage that stopped |
 
-The DISCOVERY gate reads `state/OPPORTUNITIES.json` (`orchestrator/src/cycle.ts:973`),
-but the task allowlist (`orchestrator/src/patch.ts:17`) lets a `research` task write only
-`state/OPPORTUNITIES.md` and `state/EVIDENCE.jsonl`. No task type can write the `.json`
-the gate reads, so no agent can pass it and the board returns the same `NO_ACTION` every
-cycle. Do not widen the allowlist to fix this — the narrow write scope is a guard.
+## Why the meetings did not run on 2 August
 
-- [ ] **Add the first opportunity record to `state/OPPORTUNITIES.json`** — needs score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence refs in `state/EVIDENCE.jsonl`. [imp:5] [owner:me] [time:60m] [kind:decision]
-- [ ] **Record in `state/BUSINESS.md` that the DISCOVERY gate is owner-seeded by design** — otherwise this reads as a bug at every re-audit. [imp:3] [owner:ai] [time:10m] [kind:decision]
+Fourteen crons fired and three meetings happened. Two separate causes, both now fixed:
 
-## 2. Unblock the specialist rooms
+- The meeting was resolved from the wall clock at the moment the job started, inside a grace
+  window capped at twenty minutes, and GitHub queued the crons 13 to 54 minutes late. Seven
+  runs found no slot and skipped; one ran the *neighbouring* meeting. The fired cron now
+  names the meeting outright, so lateness no longer matters.
+- `PORTFOLIO_LIVE_ENABLED` was set at 12:26 UTC that day, so the morning portfolio phases
+  correctly skipped before it existed.
 
-Six phases need a due agenda, agendas need an open priority item, and the only producer
-is the quarter-end protocol, which throws until 2026-10-31
-(`orchestrator/src/metrics/quarterly.ts:231`). Four daily windows stay parked until then.
-The control to add an item already ships and is documented nowhere:
-`site/src/app/admin/api/priorities/route.ts` appends one with a seven-day expiry.
+## Standing constraints
 
-- [ ] **Add a priority item through `/admin` to open a specialist room before Q1 closes** — the control exists; no code change needed. [imp:4] [owner:me] [time:10m] [kind:setup]
-
-## 3. Then, in order
-
-1. verify the delivery App covers Caught Up and MMA Files;
-2. verify the three Vercel production domains/settings;
-3. verify the two allowed FightAIQ free-tier keys;
-4. enter real fixed costs and review Q1 seeds;
-5. add the three brands' Instagram/Threads tokens and IDs only before social posting;
-6. keep analytics deferred until the owner chooses a provider and lawful plan.
-
-Optional Pexels/Pixabay keys are not blockers. GNews, Guardian and NYTimes keys are
-not used. Carousel Studio needs no credential, account or separate deployment.
+- Six phases need a due agenda, an agenda needs an open priority item, and the only
+  automatic producer is the quarter-end protocol which does not run until 2026-10-31. Add
+  one through `/admin` — see the checklist.
+- The DISCOVERY gate reads `state/OPPORTUNITIES.json` and no task type may write it. That
+  narrow write scope is a guard; seed the file by hand rather than widening the allowlist.
+- Optional Pexels/Pixabay keys are not blockers. GNews, Guardian and NYTimes keys are not
+  used. Carousel Studio needs no credential, account or separate deployment — only links.
 
 Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STEPS.md).
 
 ## Recently finished
 
-- MMA Files published its first council-produced article: a Valentina Shevchenko profile,
-  live in English and Czech, 9/9 release checks. Seven blockers stood between the desk and
-  that page; the last was a GitHub App permission the installations had never accepted.
-- `Delivery doctor` (Actions, manual) reports in about a minute whether the delivery app can
-  read the commit, its status and its check runs on both target repos, and names the
-  permission to grant. It replaces a 38-minute delivery run as the way to find that out.
-- A failing delivery run costs about 9 minutes instead of 38: the verifier polls 5 minutes
-  rather than 15, a delivery-only dispatch no longer runs the same release gate twice, and
-  `lint` no longer re-runs `tsc` in two packages.
-
-- The 40 agent personas now load into live rooms, and `system` is byte-identical per
-  room so the room prompt and shared packet form one cacheable prefix.
-- Caught Up rewrites receive the specific validator rejection instead of a generic line.
-- `CLAUDE.md` carries the countersigned $30 cap; `STYLEBOOK.md` states the em-dash and
-  recap rules that `style.ts` enforces literally; `mma.md` states the D8 gate as
-  independent sources.
-- `.nvmrc` pins Node 22, without which the test suite cannot run at all.
+- **MMA Files publishes.** The first council-produced article is live in both languages and
+  survived all nine release checks. Seven defects stood between the desk and that page: no
+  subject when FightAIQ had no events, a blocked article that would not say why, 69 required
+  fighter links on a two-fighter piece, a slot that refused retries, Czech name declension,
+  the Czech thousands separator, and a GitHub App permission the installations had never
+  accepted.
+- **A queued cron still runs its own meeting.** Plus one entry per firing hour instead of the
+  ambiguous `0 11,12`, and a cron that resolves to no meeting is final rather than falling
+  back to the clock.
+- **A skipped slot says why**, on the calendar and in `state/meetings/skips/`.
+- **The record stopped misreporting itself.** The site published "$0.00 of $50" while the
+  ledger held $1.18 against a $30 cap; a cycle that paid for calls and then failed discarded
+  its own ledger; the calendar marked an article slot "missed" on the day it published.
+- **Roster integrity.** The intake resolves the 92 listed fighters by name rather than
+  crawling a category that truncates at 500, and the Wikipedia backfill no longer mints a
+  card for every opponent it reads out of a record table.
+- **Article prose is clean.** Grounding markers are checked by the gate and then stripped, so
+  repository paths never reach a reader, and a hero photo is used only when its own metadata
+  names the article's subject.
+- **A failing delivery run costs about 9 minutes instead of 38**, and `Delivery doctor`
+  answers the permission question in one.
