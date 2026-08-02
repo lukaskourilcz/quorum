@@ -4,67 +4,66 @@
   "venture": "mma-files",
   "packageHash": "b1864a78b80b822b000cbad32826e71eec6a7eddfec763900f4598a664230ba3",
   "targetRepository": "lukaskourilcz/mma-files",
-  "targetCommit": "56705e92269de0058c598eb8fc68002c2a0fec67",
+  "targetCommit": "50f36237880c95f2e34bdaea345f6d62df150e7f",
   "deploymentUrl": "https://mma-files.vercel.app",
   "checks": [
     {
       "name": "target-commit",
       "status": "pass",
-      "detail": "Target commit 56705e92269de0058c598eb8fc68002c2a0fec67 is readable",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "detail": "Target commit 50f36237880c95f2e34bdaea345f6d62df150e7f is readable",
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "target-ci",
-      "status": "fail",
-      "detail": "Target CI state: unavailable",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "english-route",
       "status": "pass",
-      "detail": "200 https://mma-files.vercel.app/en/articles/ufc-valentina-shevchenko?boardless_verify=b1864a78b80b-1785696249378",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "detail": "200 https://mma-files.vercel.app/en/articles/ufc-valentina-shevchenko?boardless_verify=b1864a78b80b-1785698779641",
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "czech-route",
       "status": "pass",
-      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-valentina-shevchenko?boardless_verify=b1864a78b80b-1785696249378",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-valentina-shevchenko?boardless_verify=b1864a78b80b-1785698779641",
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "title-slug",
       "status": "pass",
       "detail": "Both locale titles and ufc-valentina-shevchenko match",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "content-hash",
       "status": "pass",
       "detail": "Both pages expose b1864a78b80b822b000cbad32826e71eec6a7eddfec763900f4598a664230ba3",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "hero-image",
       "status": "pass",
-      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-valentina-shevchenko/hero.webp?boardless_verify=b1864a78b80b-1785696249378",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-valentina-shevchenko/hero.webp?boardless_verify=b1864a78b80b-1785698779641",
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "image-dimensions",
       "status": "pass",
       "detail": "1600x900; expected 1600x900",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     },
     {
       "name": "attribution",
       "status": "pass",
       "detail": "Tech. Sgt. Katie Gar Ward · CC0",
-      "checkedAt": "2026-08-02T18:44:09.378Z"
+      "checkedAt": "2026-08-02T19:26:19.641Z"
     }
   ],
-  "retryCount": 1,
-  "status": "reverted",
-  "startedAt": "2026-08-02T18:29:08.990Z",
-  "completedAt": "2026-08-02T18:44:09.860Z",
-  "revertCommit": "4438f387319631b8b05ca8adb0f4d5d749c1cdec"
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-02T19:25:17.011Z",
+  "completedAt": "2026-08-02T19:26:20.179Z"
 }
