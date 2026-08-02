@@ -95,9 +95,13 @@ export function resolveCiState(
   const passedConclusions = ["success", "neutral", "skipped"];
   const runPassed = (run: { status?: unknown; conclusion?: unknown }) =>
     run.status === "completed" && passedConclusions.includes(String(run.conclusion));
-  if (status?.state === "success" || (runs.length > 0 && runs.every(runPassed))) return "success";
+  // Failure is decided first, because the two endpoints report different systems: /status is
+  // the legacy commit-status API that Vercel writes to, /check-runs is where GitHub Actions
+  // reports. Answering success on the first green signal let a deployed preview outvote a
+  // red test suite on the same commit.
   if (status?.state === "failure" || status?.state === "error") return "failure";
   if (runs.some((run) => run.status === "completed" && !runPassed(run))) return "failure";
+  if (status?.state === "success" || (runs.length > 0 && runs.every(runPassed))) return "success";
   const statusesPresent = Array.isArray(status?.statuses) && status.statuses.length > 0;
   return statusesPresent || runs.length > 0 ? "pending" : "missing";
 }
@@ -124,14 +128,14 @@ async function githubChecks(input: { repository: string; commit: string; token: 
   // reverted itself off the live site on "Target CI state: unavailable" while the commit's
   // combined status was success, with every other check green. Each endpoint is now read on
   // its own, and only a genuine success still passes.
-  const readJson = async <T>(url: string): Promise<T | null> => {
+  const readJson = async <T>(url: string): Promise<{ value: T | null; error: string | null }> => {
     try {
       const response = await safeFetch(url, {
         allowHosts: ["api.github.com"], headers, maxBytes: 1_000_000, timeoutMs: 10_000
       });
-      return JSON.parse(new TextDecoder().decode(response.body)) as T;
-    } catch {
-      return null;
+      return { value: JSON.parse(new TextDecoder().decode(response.body)) as T, error: null };
+    } catch (error) {
+      return { value: null, error: error instanceof Error ? error.message : "request failed" };
     }
   };
   const base = `https://api.github.com/repos/${input.repository}/commits/${input.commit}`;
@@ -139,10 +143,20 @@ async function githubChecks(input: { repository: string; commit: string; token: 
     readJson<{ state?: unknown; statuses?: unknown[] }>(`${base}/status`),
     readJson<{ check_runs?: Array<{ status?: unknown; conclusion?: unknown }> }>(`${base}/check-runs`)
   ]);
-  const ciState = resolveCiState(status, checks);
+  const ciState = resolveCiState(status.value, checks.value);
+  // Name the endpoint that would not answer. "Target CI state: unavailable" on its own cost
+  // two full delivery runs and an hour of wall clock to attribute to a missing installation
+  // permission, because the line said the signal was absent without saying which one, or why.
+  const unreadable = [
+    status.error === null ? null : `statuses: ${status.error}`,
+    checks.error === null ? null : `check-runs: ${checks.error}`
+  ].filter((entry): entry is string => entry !== null);
+  const detail = unreadable.length > 0
+    ? `Target CI state: ${ciState} (${unreadable.join("; ")})`
+    : `Target CI state: ${ciState}`;
   return [
     check("target-commit", commitPresent, commitPresent ? `Target commit ${input.commit} is readable` : `Target commit ${input.commit} is not readable`, input.now),
-    check("target-ci", ciState === "success", `Target CI state: ${ciState}`, input.now)
+    check("target-ci", ciState === "success", detail, input.now)
   ];
 }
 

@@ -1,0 +1,99 @@
+name: Delivery doctor
+
+# Answers one question in about a minute: can the delivery app do everything a release
+# needs, on both target repositories?
+#
+# The release verifier needs three GitHub reads per delivery — the commit, its combined
+# status, and its check runs — and those are three separate installation permissions. When
+# one is missing the verifier reports "Target CI state: unavailable" and reverts a healthy
+# article off the live site, and finding that out costs a full delivery run: about 38
+# minutes, most of it the verifier waiting for a signal it is not allowed to read. This
+# probes the same three endpoints directly and prints the HTTP status of each.
+#
+# Read-only. It mints the same bounded token the delivery steps use and issues GET requests.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe the aifirst installation
+        id: aifirst-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
+        with:
+          client-id: ${{ secrets.DELIVERY_APP_ID }}
+          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
+          owner: lukaskourilcz
+          repositories: aifirst
+
+      - name: Probe the mma-files installation
+        id: mma-files-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
+        with:
+          client-id: ${{ secrets.DELIVERY_APP_ID }}
+          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
+          owner: lukaskourilcz
+          repositories: mma-files
+
+      - name: Report what the delivery app may read
+        env:
+          AIFIRST_TOKEN: ${{ steps.aifirst-token.outputs.token }}
+          MMA_FILES_TOKEN: ${{ steps.mma-files-token.outputs.token }}
+        run: |
+          set -u
+          failures=0
+
+          probe() {
+            repository="$1"
+            token="$2"
+            head_sha="$(curl -sS -H "Authorization: Bearer $token" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$repository/commits/main" \
+              | sed -n 's/^  "sha": "\(.*\)",$/\1/p' | head -1)"
+            if test -z "$head_sha"; then
+              echo "  main HEAD          UNREADABLE — the app cannot read contents of $repository"
+              failures=$((failures + 1))
+              return
+            fi
+            echo "  main HEAD          $head_sha"
+            for endpoint in "" "/status" "/check-runs"; do
+              code="$(curl -sS -o /dev/null -w '%{http_code}' \
+                -H "Authorization: Bearer $token" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/$repository/commits/$head_sha$endpoint")"
+              name="commit${endpoint:-}"
+              case "$endpoint" in
+                "") need="Contents -> Read-only" ;;
+                "/status") need="Commit status -> Read-only" ;;
+                *) need="Checks -> Read-only" ;;
+              esac
+              if test "$code" = "200"; then
+                printf '  %-18s %s ok\n' "$name" "$code"
+              else
+                printf '  %-18s %s — grant "%s" and accept the update on this installation\n' "$name" "$code" "$need"
+                failures=$((failures + 1))
+              fi
+            done
+          }
+
+          echo "lukaskourilcz/mma-files"
+          probe "lukaskourilcz/mma-files" "$MMA_FILES_TOKEN"
+          echo ""
+          echo "lukaskourilcz/aifirst"
+          probe "lukaskourilcz/aifirst" "$AIFIRST_TOKEN"
+          echo ""
+
+          if test "$failures" -gt 0; then
+            echo "$failures endpoint(s) the release verifier needs are not readable."
+            echo "A GitHub App permission change also has to be accepted on each installation"
+            echo "before the tokens it mints carry it: Settings -> GitHub Apps -> the app ->"
+            echo "the installation -> review the pending permission request."
+            exit 1
+          fi
+          echo "Every endpoint the release verifier needs is readable on both targets."

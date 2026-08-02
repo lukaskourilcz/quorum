@@ -81,3 +81,29 @@ describe("CI state from partial GitHub reads", () => {
     expect(resolveCiState({ state: "pending", statuses: [] }, { check_runs: [] })).toBe("missing");
   });
 });
+
+describe("a failing signal is not outvoted by a passing one", () => {
+  it("fails when Actions reports a red check run and Vercel's commit status is green", () => {
+    // /status is the legacy commit-status API that Vercel writes to; /check-runs is where
+    // GitHub Actions reports. Deciding success on the first green signal let a deployed
+    // preview outvote a red test suite on the same commit.
+    expect(resolveCiState(
+      { state: "success", statuses: [{}] },
+      { check_runs: [{ status: "completed", conclusion: "failure" }] }
+    )).toBe("failure");
+  });
+
+  it("fails when the commit status is red and every check run is green", () => {
+    expect(resolveCiState(
+      { state: "failure", statuses: [{}] },
+      { check_runs: [{ status: "completed", conclusion: "success" }] }
+    )).toBe("failure");
+  });
+
+  it("still passes when both readable signals agree", () => {
+    expect(resolveCiState(
+      { state: "success", statuses: [{}] },
+      { check_runs: [{ status: "completed", conclusion: "success" }] }
+    )).toBe("success");
+  });
+});

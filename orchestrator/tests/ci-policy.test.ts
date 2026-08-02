@@ -11,6 +11,7 @@ describe("automation policy", () => {
     expect(names.sort()).toEqual([
       "ci.yml",
       "cycle.yml",
+      "delivery-doctor.yml",
       "health.yml",
       "owndashboard-cron-report.yml",
       "social-publisher.yml"
