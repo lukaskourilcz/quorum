@@ -95,7 +95,7 @@ export function createOfflineStandup(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: 0,
       monthAllInUsd: 0,
-      monthCapUsd: 50
+      monthCapUsd: 30
     },
     decision: {
       outcome,

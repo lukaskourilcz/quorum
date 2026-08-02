@@ -319,7 +319,7 @@ export function createLiveStandup(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: input.council.actualCycleUsd,
       monthAllInUsd: input.council.monthAllInUsd,
-      monthCapUsd: 50
+      monthCapUsd: 30
     },
     decision: {
       outcome,

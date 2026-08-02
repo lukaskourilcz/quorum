@@ -53,7 +53,7 @@ function editionRecord(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: 0,
       monthAllInUsd: 0,
-      monthCapUsd: 50
+      monthCapUsd: 30
     },
     decision: {
       outcome: "NO_EDITION",
@@ -154,7 +154,7 @@ function productRecord(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: 0,
       monthAllInUsd: 0,
-      monthCapUsd: 50
+      monthCapUsd: 30
     },
     decision: {
       outcome: verdict,
@@ -299,7 +299,7 @@ export async function createLiveEditionMeeting(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd,
       monthAllInUsd: input.monthAllInUsd,
-      monthCapUsd: 50
+      monthCapUsd: 30
     },
     decision: {
       outcome,
@@ -442,7 +442,7 @@ export async function createLiveProductMeeting(input: {
       estimatedCycleUsd: input.estimatedCycleUsd,
       actualCycleUsd: input.actualCycleUsd,
       monthAllInUsd: input.monthAllInUsd,
-      monthCapUsd: 50
+      monthCapUsd: 30
     },
     decision: {
       outcome,

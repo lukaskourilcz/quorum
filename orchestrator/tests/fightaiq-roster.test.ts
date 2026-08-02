@@ -7,10 +7,11 @@ import fighterFixture from "../../contracts/fixtures/fighter-record.valid.json" 
 import { BoutRecordSchema, FighterCardSchema } from "../src/contracts/mma.js";
 import { reconcilePredictionResults } from "../src/fightaiq/analysis.js";
 import { rebuildDerivedFighterData } from "../src/fightaiq/derived.js";
-import { buildBackfillQueue, materializeWikimediaRoster, projectWikimediaCategory, reconcileRosterStatuses, sanitizeSourceText } from "../src/fightaiq/roster.js";
+import { buildBackfillQueue, fighterSlug, materializeWikimediaRoster, projectWikimediaCategory, reconcileRosterStatuses, sanitizeSourceText } from "../src/fightaiq/roster.js";
+import { loadRosterPolicy } from "../src/fightaiq/roster-policy.js";
+import { configRoot } from "../src/paths.js";
 import { enrichWikimediaBackfill, parseWikipediaFighterPage } from "../src/fightaiq/wikimedia-backfill.js";
 import { loadBoutRecords, saveBoutRecord, upcomingBoutRecords } from "../src/fightaiq/store.js";
-import { configRoot } from "../src/paths.js";
 import { atomicWriteJson } from "../src/state.js";
 
 describe("FightAIQ roster and history automation", () => {
@@ -223,5 +224,33 @@ describe("FightAIQ roster and history automation", () => {
     const raw = (await readFile(path.join(configRoot, "mma-sources.json"), "utf8")).toLowerCase();
     expect(raw).not.toMatch(/oddspapi|tapology|sherdog|octagon-api/);
     expect(raw).toContain("free plan");
+  });
+});
+
+describe("the curated roster contains only people", () => {
+  it("rejects promotions, weight classes and list pages", async () => {
+    // The Oktagon half was seeded by intersecting a current-roster article with "any page in
+    // an MMA category", which matched organizations and weight classes: Adrenaline MMA,
+    // Atomweight (MMA), Bellator MMA and 13 others were listed as fighters. A card minted for
+    // a weight class would then sit in the store looking like a real competitor.
+    //
+    // "(fighter)" is Wikipedia's disambiguator for a PERSON and must stay allowed — Robert
+    // Whittaker (fighter) and Sean O'Malley (fighter) are real.
+    const notAPerson = /\(MMA\)$|championship$|entertainment$|promotions?$|^List of|fighting championship|\bMMA$/iu;
+    const policy = await loadRosterPolicy(configRoot);
+
+    const offenders = Object.entries(policy.organizations).flatMap(([org, entry]) =>
+      entry.fighters.filter((fighter) => notAPerson.test(fighter.name)).map((fighter) => `${org}: ${fighter.name}`)
+    );
+    expect(offenders).toEqual([]);
+
+    // Every id must also be a slug of its own name, so an entry cannot claim one page and
+    // mint a card under a different fighter's id.
+    const mismatched = Object.entries(policy.organizations).flatMap(([org, entry]) =>
+      entry.fighters
+        .filter((fighter) => fighter.id !== `${org}:${fighterSlug(fighter.name)}`)
+        .map((fighter) => `${fighter.id} != ${org}:${fighterSlug(fighter.name)}`)
+    );
+    expect(mismatched).toEqual([]);
   });
 });
