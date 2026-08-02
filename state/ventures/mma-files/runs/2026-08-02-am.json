@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "cycleId": "20260802141433-article-am",
+  "cycleId": "20260802161324-article-am",
   "date": "2026-08-02",
   "slot": "am",
-  "status": "killed",
-  "reason": "Missing fresh, source-backed subject.",
-  "spentUsd": 0,
-  "generatedAt": "2026-08-02T14:14:33.527Z"
+  "status": "blocked",
+  "articleRef": "1df9f8c5a3fba1b11bb610cc71be21e822842d5ca3bfe0c2c3d4cc9552acc173",
+  "spentUsd": null,
+  "generatedAt": "2026-08-02T16:13:24.860Z"
 }
