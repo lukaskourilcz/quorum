@@ -29,8 +29,8 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
    `HUMAN_APPROVAL`. After that one-time approval, the dedicated publisher may
    send validated organic queue items within the exact approved scope; an
    interactive builder never posts directly. All API/media/hosting/tool/ad
-   costs share the hard $50/mo all-in operating cap from `budget-2026-08d`
-   ($42 model/API share, $2.20 daily pace); council purchases run through
+   costs share the hard $30/mo all-in operating cap from `budget-2026-08e`
+   ($25 model/API share, $1.00 daily pace); council purchases run through
    `state/treasury/ledger.json`, only the human executes payments and resolves
    SPEND items — never mark them yourself.
 6. Small commits. Initial implementation uses phase commits; runtime council

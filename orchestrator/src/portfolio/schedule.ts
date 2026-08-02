@@ -8,9 +8,9 @@ export interface EffectivePortfolioSchedule {
   shape: BudgetShape;
   decisionStatus: "countersigned-shape-a" | "countersigned-shape-b" | "pending";
   fiftyDecisionStatus: "countersigned" | "pending";
-  monthlyBudgetUsd: 15 | 18 | 42;
-  dailyBudgetUsd: 0.7 | 1 | 2.2;
-  monthlyOperatingUsd: 20 | 50;
+  monthlyBudgetUsd: 15 | 18 | 25;
+  dailyBudgetUsd: 0.7 | 1;
+  monthlyOperatingUsd: 20 | 30;
   ttTranscriptMode: "full" | "minimal" | "paused";
   activePhases: ScheduledPhase[];
   envelopeByPhase: Partial<Record<ScheduledPhase, number>>;
@@ -52,8 +52,11 @@ export function resolveEffectivePortfolioSchedule(input: {
   const mmaDecisionStatus = signedOwnerDecision(input.budgetMmaRaw ?? "");
   const fightAiQFoundingStatus = signedOwnerDecision(input.fightAiQFoundingRaw ?? "");
   const shape: BudgetShape = decisionStatus === "countersigned-shape-a" ? "A" : "B";
-  const fullFiftyShape = fiftyDecisionStatus === "countersigned";
-  const active = new Set((fullFiftyShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry)).map((slot) => slot.phase));
+  // budget-2026-08d unlocks the full scheduled clock and is still the signal the runtime
+  // reads. budget-2026-08e supersedes it on amounts only: $30 all-in, $25 model share, $1.00
+  // daily pace. The flag is named for what it selects, not for the superseded figure.
+  const fullScheduleShape = fiftyDecisionStatus === "countersigned";
+  const active = new Set((fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry)).map((slot) => slot.phase));
   const envelopeByPhase: Partial<Record<ScheduledPhase, number>> = {};
   for (const venture of input.registry.ventures) {
     for (const meeting of venture.meetings) {
@@ -70,7 +73,7 @@ export function resolveEffectivePortfolioSchedule(input: {
     active.delete("incubator-synthesis");
     envelopeByPhase["tt-marketing"] = 0.06;
   }
-  if (!fullFiftyShape) {
+  if (!fullScheduleShape) {
     active.delete("mag-editorial");
     active.delete("mag-desk");
     active.delete("article-am");
@@ -79,7 +82,7 @@ export function resolveEffectivePortfolioSchedule(input: {
   if (fightAiQFoundingStatus !== "countersigned") {
     active.delete("mma-intake");
     active.delete("mma-analysis");
-  } else if (!fullFiftyShape && mmaDecisionStatus !== "countersigned") {
+  } else if (!fullScheduleShape && mmaDecisionStatus !== "countersigned") {
     active.delete("mma-analysis");
     envelopeByPhase["mma-intake"] = 0.05;
   }
@@ -98,11 +101,11 @@ export function resolveEffectivePortfolioSchedule(input: {
     shape,
     decisionStatus,
     fiftyDecisionStatus,
-    monthlyBudgetUsd: fullFiftyShape ? 42 : shape === "A" ? 18 : 15,
-    dailyBudgetUsd: fullFiftyShape ? 2.2 : shape === "A" ? 1 : 0.7,
-    monthlyOperatingUsd: fullFiftyShape ? 50 : 20,
+    monthlyBudgetUsd: fullScheduleShape ? 25 : shape === "A" ? 18 : 15,
+    dailyBudgetUsd: fullScheduleShape ? 1 : shape === "A" ? 1 : 0.7,
+    monthlyOperatingUsd: fullScheduleShape ? 30 : 20,
     ttTranscriptMode,
-    activePhases: (fullFiftyShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
+    activePhases: (fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
       .map((slot) => slot.phase)
       .filter((phase) => active.has(phase)),
     envelopeByPhase

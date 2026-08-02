@@ -8,7 +8,7 @@ Next.js site.
 Current status: **operating, pre-revenue, VALIDATION**. The public site is
 <https://boardless-ai.vercel.app>. Six project workspaces share this runtime:
 Caught Up, Titty Tuesdays, the Magazine Incubator, FightAIQ, Carousel Studio and MMA Files.
-The $50 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
+The $30 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
 decisions are countersigned. Separate live switches, evidence checks and delivery
 credentials still decide whether a scheduled wake-up may do work.
 
@@ -229,8 +229,8 @@ the MMA Files desk open on scheduled runs only when an agenda is due. FightAIQ i
 after a material source change. Manual runs remain available for explicit tests.
 Afternoon and night are zero-model checkpoints.
 
-The owner countersigned `budget-2026-08d`, setting a `$50` all-in monthly limit,
-`$42` model share and `$2.20` daily pace. Project switches and evidence gates
+The owner countersigned `budget-2026-08e`, setting a `$30` all-in monthly limit,
+`$25` model share and `$1.00` daily pace. Project switches and evidence gates
 still control live work. At 80% the owner
 gets a warning. At 100%, or after three exhausted daily limits in a row, spend
 stops and one approval item is opened. Only the owner may raise the limit.

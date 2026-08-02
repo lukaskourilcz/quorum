@@ -79,9 +79,11 @@ describe("portfolio schedule and budget gate", () => {
       budgetDecisionRaw: shapeA,
       budgetFiftyRaw: signedDecision,
       fightAiQFoundingRaw: signedDecision,
-      monthlyApiHeadroomUsd: 42
+      monthlyApiHeadroomUsd: 25
     });
-    expect(full).toMatchObject({ fiftyDecisionStatus: "countersigned", monthlyBudgetUsd: 42, dailyBudgetUsd: 2.2, monthlyOperatingUsd: 50 });
+    // budget-2026-08d unlocks the full clock; budget-2026-08e supersedes it on amounts,
+    // lowering the all-in limit to $30, the model share to $25 and the daily pace to $1.00.
+    expect(full).toMatchObject({ fiftyDecisionStatus: "countersigned", monthlyBudgetUsd: 25, dailyBudgetUsd: 1, monthlyOperatingUsd: 30 });
     expect(full.activePhases).toEqual(expect.arrayContaining(["mma-intake", "mma-analysis", "mag-editorial", "article-am", "article-pm", "mag-desk"]));
   });
 

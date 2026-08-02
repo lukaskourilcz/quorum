@@ -72,7 +72,7 @@ Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STE
 - The 40 agent personas now load into live rooms, and `system` is byte-identical per
   room so the room prompt and shared packet form one cacheable prefix.
 - Caught Up rewrites receive the specific validator rejection instead of a generic line.
-- `CLAUDE.md` carries the countersigned $50 cap; `STYLEBOOK.md` states the em-dash and
+- `CLAUDE.md` carries the countersigned $30 cap; `STYLEBOOK.md` states the em-dash and
   recap rules that `style.ts` enforces literally; `mma.md` states the D8 gate as
   independent sources.
 - `.nvmrc` pins Node 22, without which the test suite cannot run at all.

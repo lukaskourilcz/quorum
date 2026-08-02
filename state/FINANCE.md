@@ -1,7 +1,7 @@
 # Finance
 
 Currency: USD  
-Effective countersigned monthly all-in cap: $50.00 under `budget-2026-08d`
+Effective countersigned monthly all-in cap: $30.00 under `budget-2026-08e`
 
 | Metric | Value |
 | --- | ---: |
@@ -16,5 +16,5 @@ Effective countersigned monthly all-in cap: $50.00 under `budget-2026-08d`
 Operating mode began with no accepted revenue event. API usage recorded through
 2026-08-01 13:33 UTC totals $0.5161982 and is shown rounded to cents above. Refund
 and payment-fee data remains unavailable until a payment source exists. The owner
-countersigned the $50 limit; project switches and evidence gates still block work
+countersigned the $30 limit; project switches and evidence gates still block work
 that has not been enabled.

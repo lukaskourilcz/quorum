@@ -44,7 +44,7 @@ const entries = ((JSON.parse(ledgerRaw) as { entries?: unknown[] }).entries ?? [
   .map((entry) => BudgetLedgerEntrySchema.parse(entry));
 const month = date.slice(0, 7);
 const spent = entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned" ? 42 : budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
+const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned" ? 25 : budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
 const effective = resolveEffectivePortfolioSchedule({
   registry,
   budgetDecisionRaw: decisionRaw,

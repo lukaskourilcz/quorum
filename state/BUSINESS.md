@@ -37,17 +37,17 @@ marketing, analytics or current earning method.
 
 ## Budget
 
-Effective countersigned all-in hard cap: $50 USD.
+Effective countersigned all-in hard cap: $30 USD.
 
-- API monthly cap: $42
-- API daily cap: $2.20
+- API monthly cap: $25
+- API daily cap: $1.00
 - Venture standup cap: $0.20 per cycle
 - Caught Up meeting cap: $0.08 per meeting
 - Edition production cap: $0.35 per article run
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
-The owner countersigned `budget-2026-08d` on 2026-08-01. It sets one $50 limit,
-a $42 model share and a $2.20 daily pace for all six projects. Project-specific
+The owner countersigned `budget-2026-08e` on 2026-08-02. It sets one $30 limit,
+a $25 model share and a $1.00 daily pace for all six projects. Project-specific
 live switches and evidence gates still decide whether a meeting may run.
 
 Fixed subscriptions are unavailable until the owner enters the real names, amounts,
@@ -173,7 +173,7 @@ a static reader path with Git and MDX as canon.
 
 ## Constraints
 
-The countersigned `$50` all-in limit and `$42` model/API share, human-only payments,
+The countersigned `$30` all-in limit and `$25` model/API share, human-only payments,
 per-project social gates, the global posting stop, sanitization boundary, evidence
 rules, security controls and release gates remain binding. Scheduled specialist
 windows additionally need a due

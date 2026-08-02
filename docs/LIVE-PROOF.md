@@ -34,6 +34,6 @@ Project rooms:
 
 The latest daily summary completed during the genuine night cycle with status `sent`
 through the log sink and an untruncated 182-word body. That proves summary assembly and
-local delivery, not external email delivery. The current signed limit is `$50`; current
+local delivery, not external email delivery. The current signed limit is `$30`; current
 policy avoids unnecessary rooms through explicit agenda, source-change and evidence
 gates.

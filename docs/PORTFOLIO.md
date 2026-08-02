@@ -92,8 +92,8 @@ resolved table.
 
 ## Spending behavior
 
-The owner countersigned one `$50` monthly all-in limit in `budget-2026-08d`. No more
-than `$42` is reserved for model/API calls, with a `$2.20` daily pace. At 80% the
+The owner countersigned one `$30` monthly all-in limit in `budget-2026-08e`. No more
+than `$25` is reserved for model/API calls, with a `$1.00` daily pace. At 80% the
 summary warns with a project breakdown. At 100%, or after three consecutive exhausted
 days, new paid work stops and one approval item opens. The runtime cannot borrow from
 next month or raise its own limit. Payments remain human-only.

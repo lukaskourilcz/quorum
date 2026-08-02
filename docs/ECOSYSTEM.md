@@ -203,8 +203,8 @@ collisions and the public calendar uses the same source.
 The sum of room envelopes is not expected daily spend: idle agenda rooms make no
 provider call, evidence-killed production stops before generation, and checkpoints,
 rendering, KPI evaluation, delivery verification and publishing verification are
-deterministic. The daily API pace remains `$2.20`; the monthly model/API share is
-`$42` inside the `$50` all-in ceiling.
+deterministic. The daily API pace is `$1.00`; the monthly model/API share is
+`$25` inside the `$30` all-in ceiling.
 
 ## Public and admin presentation
 

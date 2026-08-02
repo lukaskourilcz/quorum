@@ -6,7 +6,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 ## Peníze teď
 
-- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08d` nastavuje společný limit **$50 / měsíc**, z toho $42 pro modely a $2.20 denně. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví.
+- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08e` nastavuje společný limit **$30 / měsíc**, z toho $25 pro modely a $1.00 denně. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví.
 - Každý externí výdaj schvaluje člověk (položka `HUMAN_APPROVAL` / `SPEND`); agent nedrží platební údaje.
 - Obrázky vytvářené přímo v kódu a jeden denní e-mailový souhrn mají plánovaný
   náklad $0. Projekty používají existující Vercel Pro, proto je jejich dodatečný

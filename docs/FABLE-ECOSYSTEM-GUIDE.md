@@ -42,9 +42,9 @@ open accounts, place bets or change a consumer application's code.
 | Stage | Validation |
 | Recognized revenue | `$0` |
 | Recorded API use | `$0.52` through 2026-08-01 13:33 UTC |
-| All-in monthly limit | `$50`, countersigned |
-| Model/API share | `$42` monthly |
-| Daily model/API pace | `$2.20` |
+| All-in monthly limit | `$30`, countersigned |
+| Model/API share | `$25` monthly |
+| Daily model/API pace | `$1.00` |
 | Projects | 6 |
 | Registered agents | 40: 21 Anthropic, 19 OpenAI |
 | Human decision owner | Lukas Kouril |
