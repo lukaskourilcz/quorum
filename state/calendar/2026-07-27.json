@@ -45,6 +45,12 @@
       "status": "missed"
     },
     {
+      "at": "2026-07-27T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
+      "status": "missed"
+    },
+    {
       "at": "2026-07-27T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
@@ -126,6 +132,12 @@
       "at": "2026-07-28T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
+      "status": "missed"
+    },
+    {
+      "at": "2026-07-28T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
       "status": "missed"
     },
     {
@@ -213,6 +225,12 @@
       "status": "missed"
     },
     {
+      "at": "2026-07-29T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
+      "status": "missed"
+    },
+    {
       "at": "2026-07-29T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
@@ -294,6 +312,12 @@
       "at": "2026-07-30T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
+      "status": "missed"
+    },
+    {
+      "at": "2026-07-30T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
       "status": "missed"
     },
     {
@@ -380,6 +404,12 @@
       "at": "2026-07-31T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
+      "status": "missed"
+    },
+    {
+      "at": "2026-07-31T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
       "status": "missed"
     },
     {
@@ -481,6 +511,14 @@
       "decisionOneLiner": "Record One Good Day as a four-concept planning season. All products remain concepts and no external action is authorized."
     },
     {
+      "at": "2026-08-01T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
+      "status": "held",
+      "meetingRef": "meetings/2026-08-01-studio",
+      "decisionOneLiner": "Dry room complete. No provider call, external action or unsupported artifact is represented."
+    },
+    {
       "at": "2026-08-01T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
@@ -500,7 +538,7 @@
       "at": "2026-08-01T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-pm",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-01T17:00:00.000Z",
@@ -531,56 +569,66 @@
       "tz": "Europe/Prague",
       "kind": "venture-night",
       "status": "held",
-      "meetingRef": "meetings/20260801200000-night",
+      "meetingRef": "meetings/20260801201444-night",
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-02T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-02-cu-edition",
+      "decisionOneLiner": "NO_EDITION. content_invalid_after_regeneration"
     },
     {
       "at": "2026-08-02T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-02T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-scan",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-02T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-02T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-02T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-02T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "missed"
+    },
+    {
+      "at": "2026-08-02T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "studio",
+      "status": "missed"
     },
     {
       "at": "2026-08-02T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/20260802120140-afternoon",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-02T15:00:00.000Z",

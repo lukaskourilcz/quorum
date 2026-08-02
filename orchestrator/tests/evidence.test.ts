@@ -85,3 +85,63 @@ describe("evidence and opportunity gate", () => {
     expect(summarizeEvidence([first, duplicate], "OPP-001").eligible).toBe(1);
   });
 });
+
+describe("independence cannot be manufactured by the author", () => {
+  const declaring = (id: string, host: string, independenceKey?: string, direct = false): Evidence => ({
+    ...evidence(id, host, direct),
+    ...(independenceKey === undefined ? {} : { independenceKey })
+  });
+
+  it("counts one publisher once, whatever independenceKey claims", () => {
+    // The gate's whole purpose is that three mirrors of one story cannot found a venture.
+    // independenceKey used to be returned verbatim, so three arbitrary strings on one host
+    // read as three independent sources. Now the host decides.
+    const sameHost = [
+      declaring("E-1", "example.com", "alpha", true),
+      declaring("E-2", "example.com", "beta"),
+      declaring("E-3", "example.com", "gamma")
+    ];
+    expect(summarizeEvidence(sameHost, "OPP-001").independent).toBe(1);
+    expect(evaluateOpportunity(baseOpportunity, sameHost).passed).toBe(false);
+    expect(evaluateOpportunity(baseOpportunity, sameHost).reasons)
+      .toContain("Fewer than three independent eligible evidence sources.");
+  });
+
+  it("still passes on three genuinely different publishers", () => {
+    const distinct = [
+      declaring("E-1", "alpha.com", undefined, true),
+      declaring("E-2", "beta.org"),
+      declaring("E-3", "gamma.net")
+    ];
+    expect(summarizeEvidence(distinct, "OPP-001").independent).toBe(3);
+    expect(evaluateOpportunity(baseOpportunity, distinct).passed).toBe(true);
+  });
+
+  it("lets independenceKey merge hosts that share an owner, but never split one", () => {
+    // Narrowing is the one legitimate use: a syndication network or a rebrand.
+    const syndicated = [
+      declaring("E-1", "alpha.com", "wire-network", true),
+      declaring("E-2", "beta.org", "wire-network"),
+      declaring("E-3", "gamma.net")
+    ];
+    expect(summarizeEvidence(syndicated, "OPP-001").independent).toBe(2);
+    expect(evaluateOpportunity(baseOpportunity, syndicated).passed).toBe(false);
+  });
+
+  it("resolves conflicting declarations for one host deterministically", () => {
+    const forward = [declaring("E-1", "alpha.com", "zulu", true), declaring("E-2", "alpha.com", "alpha-owner")];
+    const reversed = [...forward].reverse();
+    expect(summarizeEvidence(forward, "OPP-001").independent)
+      .toBe(summarizeEvidence(reversed, "OPP-001").independent);
+    expect(summarizeEvidence(forward, "OPP-001").independent).toBe(1);
+  });
+
+  it("treats www and casing as the same publisher", () => {
+    const entries = [
+      { ...evidence("E-1", "example.com", true), sourceUrl: "https://WWW.Example.com/a" },
+      { ...evidence("E-2", "example.com"), sourceUrl: "https://example.com/b" },
+      declaring("E-3", "other.com")
+    ];
+    expect(summarizeEvidence(entries, "OPP-001").independent).toBe(2);
+  });
+});

@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "runId": "aeefeb57-cb13-4f21-a9e8-e70bcdb43346",
+  "date": "2026-08-02",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-02T13:43:45.718Z",
+  "completedAt": "2026-08-02T13:47:30.191Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-02T13:43:46.463Z",
+      "completedAt": "2026-08-02T13:44:17.092Z",
+      "durationMs": 30629
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-02T13:44:17.092Z",
+      "completedAt": "2026-08-02T13:45:36.432Z",
+      "durationMs": 79340
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-02T13:45:36.432Z",
+      "completedAt": "2026-08-02T13:45:36.434Z",
+      "durationMs": 2
+    },
+    {
+      "name": "hacek_0",
+      "status": "success",
+      "startedAt": "2026-08-02T13:45:36.434Z",
+      "completedAt": "2026-08-02T13:47:30.174Z",
+      "durationMs": 113740
+    },
+    {
+      "name": "hacek_register_0_0",
+      "status": "success",
+      "startedAt": "2026-08-02T13:47:30.174Z",
+      "completedAt": "2026-08-02T13:47:30.179Z",
+      "durationMs": 5
+    },
+    {
+      "name": "hacek_parity_0_0",
+      "status": "success",
+      "startedAt": "2026-08-02T13:47:30.179Z",
+      "completedAt": "2026-08-02T13:47:30.183Z",
+      "durationMs": 4
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-02T13:47:30.185Z",
+      "completedAt": "2026-08-02T13:47:30.186Z",
+      "durationMs": 1
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-08-02T13:47:30.186Z",
+      "completedAt": "2026-08-02T13:47:30.186Z",
+      "durationMs": 0,
+      "errorCode": "BudgetError",
+      "errorMessage": "Edition call reserve 0.13734 would exceed 0.35"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-08-02T13:47:30.187Z",
+      "completedAt": "2026-08-02T13:47:30.187Z",
+      "durationMs": 0,
+      "errorCode": "BudgetError",
+      "errorMessage": "Edition call reserve 0.137478 would exceed 0.35"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12724,
+      "outputTokens": 1229,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.056607
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 5767,
+      "outputTokens": 3780,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1198,
+      "costUsd": 0.0784935
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "localize",
+      "inputTokens": 4515,
+      "outputTokens": 4927,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.08745
+    }
+  ],
+  "measuredCostUsd": 0.2225505,
+  "quality": {
+    "metrics": {
+      "successfulSources": 32,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.13333333333333333,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": true,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.2225505
+    },
+    "result": {
+      "passed": false,
+      "enforced": true,
+      "violations": [
+        "primary_source_required"
+      ],
+      "action": "regenerate"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "hacek": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "quality:primary_source_required",
+    "content_invalid:Edition call reserve 0.13734 would exceed 0.35",
+    "content_invalid:Edition call reserve 0.137478 would exceed 0.35"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

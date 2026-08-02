@@ -21,7 +21,7 @@
     "targetWords": 1100,
     "briefsMaximum": 4,
     "watchlistMaximum": 6,
-    "maximumOutputTokens": 8000,
+    "maximumOutputTokens": 5000,
     "maximumLocalizationOutputTokens": 5000,
     "maximumCurationCandidates": 50
   },

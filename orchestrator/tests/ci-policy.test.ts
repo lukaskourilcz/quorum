@@ -100,11 +100,19 @@ describe("automation policy", () => {
       }>;
     };
 
+    // The scope guard holds in every mode: a stored scope must never reach beyond
+    // posting, whatever the channel is currently allowed to do.
     expect(channels.channels.every((channel) =>
-      channel.mode === "autopublish" &&
       channel.approvedScopes.length > 0 &&
-      channel.approvedScopes.every((scope) => !/comment|reply|message|like|follow/iu.test(scope)) &&
-      channel.enabledByHumanAt === "2026-08-01T00:00:00.000Z"
+      channel.approvedScopes.every((scope) => !/comment|reply|message|like|follow/iu.test(scope))
+    )).toBe(true);
+
+    // social-2026-08a pauses distribution until each magazine has rendered ten articles.
+    // Draft with no human enablement is the strictly safer state, and channel-registry.ts
+    // refuses to publish unless mode is autopublish AND enabledByHumanAt is set, so both
+    // fields are pinned rather than just one.
+    expect(channels.channels.every((channel) =>
+      channel.mode === "draft" && channel.enabledByHumanAt === null
     )).toBe(true);
   });
 });

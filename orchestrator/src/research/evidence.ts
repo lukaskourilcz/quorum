@@ -39,12 +39,42 @@ export function evidenceFingerprint(evidence: Pick<Evidence, "sourceUrl" | "clai
     .digest("hex");
 }
 
+export function evidenceHost(evidence: Pick<Evidence, "sourceUrl">): string {
+  return new URL(evidence.sourceUrl).hostname.replace(/^www\./u, "").toLowerCase();
+}
+
 export function evidenceIndependenceKey(evidence: Evidence): string {
-  if (evidence.independenceKey) {
-    return normalizedText(evidence.independenceKey);
+  return evidenceHost(evidence);
+}
+
+/**
+ * How many genuinely independent publishers back this evidence set.
+ *
+ * Independence is derived from the source host, never from a field the author controls.
+ * `independenceKey` still has a job, but only a narrowing one: it declares that two
+ * different hosts share an owner — a syndication network, a mirror, a rebrand — so they
+ * collapse into one. It can never split a single host into several keys.
+ *
+ * That direction matters now that agents write their own evidence and opportunities. The
+ * previous implementation returned the author's `independenceKey` verbatim when present,
+ * so three entries from one publisher carrying three arbitrary strings counted as three
+ * independent sources. That is precisely the outcome the ">=3 independent refs" gate
+ * exists to prevent, and an author could reach it by accident as easily as on purpose.
+ *
+ * The count is therefore bounded above by the number of distinct hosts, and merges are
+ * applied deterministically so the result does not depend on entry order.
+ */
+export function countIndependentSources(entries: readonly Evidence[]): number {
+  const ownerByHost = new Map<string, string>();
+  for (const entry of entries) {
+    const host = evidenceHost(entry);
+    const declared = entry.independenceKey ? normalizedText(entry.independenceKey) : host;
+    const existing = ownerByHost.get(host);
+    // Lowest value wins so a host with conflicting declarations resolves the same way
+    // regardless of the order entries appear in the ledger.
+    ownerByHost.set(host, existing === undefined ? declared : (existing < declared ? existing : declared));
   }
-  const hostname = new URL(evidence.sourceUrl).hostname.replace(/^www\./, "");
-  return `${hostname}:${normalizedText(evidence.sourceType)}`;
+  return new Set(ownerByHost.values()).size;
 }
 
 export function deduplicateEvidence(entries: readonly Evidence[]): Evidence[] {
@@ -85,7 +115,7 @@ export function summarizeEvidence(
   const eligible = eligibleEvidence(entries, opportunityId);
   return {
     eligible: eligible.length,
-    independent: new Set(eligible.map(evidenceIndependenceKey)).size,
+    independent: countIndependentSources(eligible),
     direct: eligible.filter((entry) => entry.direct).length,
     refs: eligible.map((entry) => entry.id)
   };

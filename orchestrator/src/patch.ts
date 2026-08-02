@@ -14,7 +14,17 @@ export const PatchOperationSchema = z.object({
 export type PatchOperation = z.infer<typeof PatchOperationSchema>;
 
 const TASK_ALLOWLIST: Readonly<Record<TaskType, readonly string[]>> = {
-  research: ["state/OPPORTUNITIES.md", "state/EVIDENCE.jsonl"],
+  // OPPORTUNITIES.json is the file the DISCOVERY gate scores. Research could previously
+  // write only the markdown narrative beside it, so findings accumulated somewhere the
+  // gate never read and founding could not happen without a human commit. Agents now
+  // promote their own research into a scored candidate.
+  //
+  // This widens who may propose, not what passes. selectOpportunity still requires a real
+  // score of 35/50, no dimension below 2, a reachable channel, a bounded first experiment,
+  // one direct signal, and three independent non-fixture evidence sources — and
+  // independence is now derived from the source host rather than a field the author sets,
+  // so a candidate cannot be talked past the gate by the agent that wrote it.
+  research: ["state/OPPORTUNITIES.md", "state/OPPORTUNITIES.json", "state/EVIDENCE.jsonl"],
   experiment: ["state/EXPERIMENTS.md", "site/src/content/"],
   page: [
     "site/src/app/",
