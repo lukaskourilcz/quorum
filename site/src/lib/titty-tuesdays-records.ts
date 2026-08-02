@@ -47,7 +47,9 @@ function parseSeason(raw: string): TittyTuesdaysSnapshot["season"] {
   const block = /```json\n([\s\S]*?)\n```/.exec(raw.replaceAll("\r\n", "\n"))?.[1];
   if (!block) throw new Error("Season JSON block is missing");
   const value = JSON.parse(block) as Record<string, unknown>;
-  if (value.schemaVersion !== "season/1" || value.ventureId !== "titty-tuesdays" || value.seasonNumber !== 1 || !Array.isArray(value.products) || value.products.length !== 4) {
+  // Any positive season, not season one forever. season-001 ends on 2026-10-30, and pinning
+  // the number here would have made the first successor invisible to the site.
+  if (value.schemaVersion !== "season/1" || value.ventureId !== "titty-tuesdays" || !Number.isInteger(value.seasonNumber) || (value.seasonNumber as number) < 1 || !Array.isArray(value.products) || value.products.length !== 4) {
     throw new Error("Season contract is invalid");
   }
   const products = value.products.map((entry) => {

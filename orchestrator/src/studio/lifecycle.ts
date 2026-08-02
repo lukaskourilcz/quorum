@@ -127,12 +127,13 @@ export async function processStudioContribution(input: {
           brand,
           format
         });
-        for (const slide of renders) {
-          const relative = `ventures/carousel-studio/previews/${template.id}/${template.version}/${brand.id}/${format}/slide-${slide.index + 1}.png`;
-          const absolute = path.join(input.root, relative);
-          await mkdir(path.dirname(absolute), { recursive: true });
-          await writeFile(absolute, slide.png);
-          artifacts.push(relative);
+        // The render runs because a layout that cannot be drawn for every brand and format
+        // is not live; the bytes are not kept. Persisting them wrote three brands times
+        // three formats times every slide into the repository — eighteen PNGs at up to
+        // 1080x1350 per accepted version — and nothing read them: the site re-renders from
+        // the stored template on request. The .checks.json artifact below is the evidence.
+        if (renders.length === 0) {
+          throw new Error(`Carousel template ${template.id} rendered no slide for ${brand.id}/${format}`);
         }
       }
     }

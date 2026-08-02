@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import {
@@ -402,6 +402,24 @@ async function canonicalStateText(root: string, relative: string): Promise<strin
   return local || root === stateRoot ? local : readText(stateRoot, relative);
 }
 
+export /**
+ * The newest `season-NNN.md` on file, falling back to the first season before any exists.
+ *
+ * Three places asserted `season-001` as a literal — the room's whole context and the id
+ * stamped onto every marketing plan — while the file itself declares it ends on 2026-10-30
+ * and nothing writes a successor. Creating the next season stays owner or room work; this
+ * only stops the code from asserting a season that has ended.
+ */
+async function newestSeasonFilename(root: string): Promise<string> {
+  const names = await readdir(path.join(root, "ventures", "titty-tuesdays")).catch(() => [] as string[]);
+  const seasons = names.filter((name) => /^season-\d{3}\.md$/u.test(name)).sort();
+  return seasons.at(-1) ?? "season-001.md";
+}
+
+function seasonIdFrom(filename: string): string {
+  return filename.replace(/\.md$/u, "");
+}
+
 export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>): Promise<{ text: string; evidenceRefs: string[] }> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
   if (phase === "studio") {
@@ -413,7 +431,9 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     };
   }
   if (phase === "tt-marketing") {
-    const season = await readText(root, "ventures/titty-tuesdays/season-001.md");
+    // The newest season file, not season-001 forever. season-001 ends on 2026-10-30 and the
+    // room would have gone on reading an expired season and stamping its id onto every plan.
+    const season = await readText(root, `ventures/titty-tuesdays/${await newestSeasonFilename(root)}`);
     return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
@@ -771,7 +791,7 @@ export async function runPortfolioCycle(input: {
           schemaVersion: "marketing-plan/1",
           id: `plan-${date}-campaign-notes`,
           ventureId: "titty-tuesdays",
-          seasonId: "season-001",
+          seasonId: seasonIdFrom(await newestSeasonFilename(root)),
           status: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto") ? "draft" : "approved",
           originMeetingRef: meetingRef
         })
@@ -780,7 +800,7 @@ export async function runPortfolioCycle(input: {
       schemaVersion: "marketing-plan/1",
       id: `plan-${date}-campaign-notes`,
       ventureId: "titty-tuesdays",
-      seasonId: "season-001",
+      seasonId: seasonIdFrom(await newestSeasonFilename(root)),
       title: `Campaign notes for ${date}`,
       summary: contributions.find((contribution) => contribution.agent === "ANGLE")?.summary ?? "The room kept a short list of future campaign directions for owner review.",
       objective: "Keep a detailed record of future marketing ideas without producing assets or taking any public action.",
@@ -813,9 +833,21 @@ export async function runPortfolioCycle(input: {
           }
         }
       }],
-      status: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto") ? "draft" : "approved",
+      // A placeholder is a draft, whatever AUDIT thought of it. This fallback hard-codes an
+      // empty audienceRefs, and both consumers require a non-empty one — the growth signal
+      // and the social unlock counter — so stamping it "approved" put a plan in the admin
+      // tab that looked launch-ready while moving neither counter, and the venture's only
+      // growth component deadlocked closed. Never synthesize an audience to satisfy the
+      // check: the non-empty requirement is the guard.
+      status: "draft" as const,
       originMeetingRef: meetingRef
     });
+    console.warn(JSON.stringify({
+      event: "marketing_plan_fallback",
+      phase: input.phase,
+      cycleId: input.cycleId,
+      reason: "ANGLE returned no usable plan; the placeholder carries no audienceRefs and stays a draft."
+    }));
   }
   let editorialSlate: EditorialSlate | null = null;
   if (input.phase === "mag-editorial") {
@@ -885,6 +917,13 @@ export async function runPortfolioCycle(input: {
     }
   }
   const auditVeto = contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
+  // A rejected studio contribution costs the contribution, not the room. Every seat has
+  // already been billed by the time this runs, and it sits before the writes that produce the
+  // meeting record, decision, scorecard and calendar — so an observation citing a URL outside
+  // the packet, or a template citing no observation, threw and destroyed a paid room that had
+  // nothing to do with the studio. The same file already treats an unparsable seat and an
+  // out-of-packet evidence ref this way. The guarantee is unchanged: neither ever reaches an
+  // artifact; the rejection simply no longer takes the room with it.
   const studioLifecycle = input.phase === "studio"
     ? await processStudioContribution({
         root,
@@ -892,6 +931,14 @@ export async function runPortfolioCycle(input: {
         templateProposal: contributions.find((contribution) => contribution.agent === "EASEL")?.templateProposal ?? null,
         allowedEvidenceRefs: context.evidenceRefs,
         allowLive: !input.dry && !auditVeto
+      }).catch((error: unknown) => {
+        console.warn(JSON.stringify({
+          event: "studio_contribution_rejected",
+          phase: input.phase,
+          cycleId: input.cycleId,
+          reason: error instanceof Error ? error.message : String(error)
+        }));
+        return null;
       })
     : null;
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
