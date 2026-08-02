@@ -155,6 +155,24 @@ test("every agent card and profile exposes its configured API model and estimate
   await expect(page.locator("[data-agent-api-cost]").first()).toHaveText(/^\$0\.0[1-9]/);
 });
 
+test("public presentation keeps approved agent photos and plain calendar labels", async ({ page }) => {
+  await page.goto("/agents", { waitUntil: "networkidle" });
+  await expect(page.getByText("The AI team", { exact: true })).toBeVisible();
+  await expect(page.getByText("The cast", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "VIZE", exact: true })).toBeVisible();
+  await expect(page.locator('img[src*="vize.webp"]').first()).toBeVisible();
+  await expect(page.locator("[data-show-presentation]")).toHaveCount(0);
+
+  await page.goto("/agents/vize", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "VIZE" })).toBeVisible();
+  await expect(page.getByText("Strategy lead", { exact: true })).toBeVisible();
+
+  await page.goto("/", { waitUntil: "networkidle" });
+  const weekBoard = page.getByTestId("week-board");
+  await expect(weekBoard.getByText(/Season|Episode/)).toHaveCount(0);
+  await expect(page.locator("[data-show-presentation]")).toHaveCount(0);
+});
+
 test("metrics role column keeps the table inset", async ({ page }) => {
   await page.goto("/metrics", { waitUntil: "networkidle" });
   const roleHead = page.getByRole("columnheader", { name: "Role" });

@@ -24,8 +24,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { agentBySlug, agents } from "@/data/agents";
 import { formatDate } from "@/lib/utils";
-import { pragueCalendarDate } from "@/lib/calendar-feed-model";
-import { ShowLabel } from "@/show/show-label";
 
 export function generateStaticParams() {
   return agents.map((agent) => ({ agent: agent.slug }));
@@ -57,7 +55,6 @@ export default async function AgentDetailPage({
   const index = agents.findIndex((candidate) => candidate.id === agent.id);
   const next = agents[(index + 1) % agents.length]!;
   const isControl = agent.group === "Control" || agent.id === "AUDIT";
-  const today = pragueCalendarDate(new Date());
 
   return (
     <PageShell>
@@ -72,8 +69,7 @@ export default async function AgentDetailPage({
           </Link>
           <div className="mt-10 grid gap-8 md:grid-cols-12 md:items-end">
             <div className="md:col-span-7">
-              <ShowLabel compact date={today} />
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Badge tone={agent.group === "Council" ? "dark" : "neutral"}>
                   {publicAgentGroup(agent)}
                 </Badge>
@@ -82,11 +78,11 @@ export default async function AgentDetailPage({
                 </Badge>
               </div>
               <h1 className="mt-7 text-[clamp(3.25rem,8vw,7.5rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
-                {publicAgentTitle(agent)}
+                {agent.name}
                 <span className="text-[var(--accent)]">.</span>
               </h1>
               <p className="mt-8 text-2xl font-medium tracking-[-0.03em]">
-                AI role
+                {publicAgentTitle(agent)}
               </p>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted-foreground)]">
                 {publicAgentMandate(agent)}

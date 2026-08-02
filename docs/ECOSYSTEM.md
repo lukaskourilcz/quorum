@@ -3,7 +3,7 @@
 Updated: 2026-08-02  
 Status: implementation complete; launch-ready after the owner-only setup in `NEEDS_YOUR_HELP_NOW.md`  
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state and countersigned decisions D1–D11
+Authority: current code, committed state and countersigned decisions D1–D12
 
 ## What BoardlessAI is
 
@@ -335,14 +335,14 @@ prepare a proposal but never activate an earning method.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
-## Decision map D1–D11
+## Decision map D1–D12
 
 | Decision | Current effect |
 | --- | --- |
 | D1 Agent-owned release | Caught Up/MMA agents release inside contracts; deterministic deploy proof replaces owner content approval |
 | D2 Phased social activation | per-project counters/credentials plus global kill switch; idempotent posting and verification |
 | D3 Licensed images | exactly one licensed hero or deterministic fallback per article |
-| D4 Workplace-show skin | presentation only; no visitor/show data may enter agent packets |
+| D4 Workplace-show skin | historical visual direction; D12 removes the skin while its model-packet barrier remains |
 | D5 Operating priorities | bounded priority queue, one morning commission and honest no-work state |
 | D6 Template founding | fenced content-project founding without new human-only surfaces |
 | D7 Unchanged gates | money, accounts, legal, commerce, personal data and scope remain owner-only |
@@ -350,6 +350,7 @@ prepare a proposal but never activate an earning method.
 | D9 Measurement readiness | contracts/assignment may exist, but ingestion and SPLIT remain off |
 | D10 Money and quarterly KPIs | public cost/revenue truth, 90-day protocol and owner-only earning activation |
 | D11 Carousel Studio | sixth project, monorepo engine, 10 live templates, lifecycle, room and public showcase |
+| D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.

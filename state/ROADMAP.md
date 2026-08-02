@@ -18,8 +18,8 @@ the founding gate remains unpassed and live founding cycles stay disabled.
   deterministic 14:00 and 22:00 checkpoints in `Europe/Prague`.
 - [x] Add 90-day company and project KPIs, daily ramp-adjusted pace checks, the
   public Money page, owner-editable fixed costs and quarter-end reassessment packets.
-- [x] Publish episode IDs, shift objectives and next-shift handoffs so the
-  spectator layer can follow one truthful operating story across the day.
+- [x] Publish stable run IDs, shift objectives and next-shift handoffs so the
+  operating history remains clear across the day.
 - [x] Add a bounded specialist-agenda queue, allowlisted follow-up requests,
   three-day expiry and visible `$0` `not-needed` calendar records.
 - [x] Deduplicate the Prague schedule to 17 UTC wake-ups while preserving all
@@ -31,7 +31,8 @@ work. They require a fresh owner scope before implementation.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [x] Expand the shared roster to 40 agents across six projects and give every role a deterministic illustrated character identity.
+- [x] Expand the shared roster to 40 agents across six projects, retain the 27
+  approved agent photographs and use neutral name-based placeholders for newer roles.
 - [x] Add Carousel Studio, ten checked live layouts and the one deterministic social-visual path used by every project.
 - [x] Port source collection and edition production into BoardlessAI.
 - [x] Run the two Caught Up rooms in guarded dry mode.

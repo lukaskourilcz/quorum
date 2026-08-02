@@ -105,7 +105,7 @@ must not be edited to make the historical record look current.
 | `state/decisions/2026-08-01-autonomy-content-release.md` | Historical/current agent-owned release decision |
 | `state/decisions/2026-08-01-autonomy-licensed-images.md` | Historical/current licensed-image decision |
 | `state/decisions/2026-08-01-autonomy-metrics-deferred.md` | Historical/current Phase 3 hold |
-| `state/decisions/2026-08-01-autonomy-sitcom-skin.md` | Historical/current presentation-only decision |
+| `state/decisions/2026-08-01-autonomy-sitcom-skin.md` | Historical, visually superseded by D12; packet barrier retained |
 | `state/decisions/2026-08-01-autonomy-social-activation.md` | Historical/current automatic social-gate decision |
 | `state/decisions/2026-08-01-autonomy-template-founding.md` | Historical/current fenced founding decision |
 | `state/decisions/2026-08-01-autonomy-unchanged-gates.md` | Historical/current human-only boundary decision |

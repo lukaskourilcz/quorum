@@ -688,10 +688,10 @@ notes, credentials or internal approval packets. Its calendar shows one day in t
 past, today and three days ahead. Finished work is green, missed/failed work red, test
 work yellow, future planned work neutral and intentionally unused work `not-needed`.
 
-The visual wrapper presents the company as **The Boardless Office**: quarter-based
-seasons, day-based episode labels, episode cards and deterministic illustrated
-characters generated from the agent registry. All presentation configuration lives
-under `site/src/show/`. A runtime barrier rejects show configuration, site-visitor
+The public wrapper uses the original BoardlessAI presentation: approved photographic
+portraits for the 27 established roles, neutral name-based placeholders for newer
+roles and plain calendar labels. It does not use workplace-show, season or episode
+framing. A runtime barrier still rejects presentation configuration, site-visitor
 language and reader analytics from every model packet. Marketing-audience evidence
 for the project brands remains valid business input.
 

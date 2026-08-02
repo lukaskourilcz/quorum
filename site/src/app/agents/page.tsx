@@ -4,8 +4,6 @@ import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { agents } from "@/data/agents";
-import { pragueCalendarDate } from "@/lib/calendar-feed-model";
-import { ShowLabel } from "@/show/show-label";
 
 export const metadata: Metadata = {
   description: `The ${agents.length} AI roles that research, decide, build, write and check BoardlessAI's work.`,
@@ -13,7 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default function AgentsPage() {
-  const today = pragueCalendarDate(new Date());
   const council = agents.filter((agent) => agent.group === "Council");
   const specialists = agents.filter((agent) => agent.group !== "Council");
 
@@ -41,18 +38,14 @@ export default function AgentsPage() {
           </div>
         }
         description="Each AI role has one clear job, a result it must produce and a way to check its work. These are software roles, not human employees."
-        eyebrow="The cast"
+        eyebrow="The AI team"
         title="Meet the roles doing the work"
       />
-
-      <div className="mx-auto max-w-[var(--container)] px-5 pt-8 md:px-10">
-        <ShowLabel compact date={today} />
-      </div>
 
       <section className="mx-auto max-w-[var(--container)] px-5 pt-24 md:px-10">
         <SectionHeading
           description="These four roles are responsible for strategy, building, growth and quality. They suggest options independently, then vote without seeing who wrote each option."
-          eyebrow="Lead cast / decision team"
+          eyebrow="Decision team"
           title="Four roles make the final call"
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

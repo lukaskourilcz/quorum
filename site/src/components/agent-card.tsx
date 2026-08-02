@@ -36,9 +36,11 @@ export function AgentCard({
         </span>
         <div className="absolute inset-x-4 bottom-4">
           <h3 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
-            {publicAgentTitle(agent)}
+            {agent.name}
           </h3>
-          <p className="mt-0.5 text-xs text-[var(--ash)]">AI role</p>
+          <p className="mt-0.5 text-xs text-[var(--ash)]">
+            {publicAgentTitle(agent)}
+          </p>
         </div>
       </div>
       <div className="p-6">
@@ -114,7 +116,7 @@ export function AgentRow({
       <div className="min-w-0">
         <div className="flex items-center gap-2.5">
           <p className="text-base font-semibold tracking-[-0.03em]">
-            {publicAgentTitle(agent)}
+            {agent.name}
           </p>
           <span
             className={cn(
@@ -125,7 +127,9 @@ export function AgentRow({
             {publicAgentGroup(agent)}
           </span>
         </div>
-        <p className="mt-1 truncate text-xs text-[var(--fog)]">{publicAgentMandate(agent)}</p>
+        <p className="mt-1 truncate text-xs text-[var(--fog)]">
+          {publicAgentTitle(agent)}
+        </p>
         <p
           className="mt-1 truncate font-mono text-[0.625rem] text-[var(--fog)]"
           data-agent-api-model

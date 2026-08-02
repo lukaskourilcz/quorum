@@ -25,9 +25,10 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
 Thirty-six specialists do bounded work only when a service path or due agenda needs
-their domain. The registry has 40 agents: 21 Anthropic and 19 OpenAI. Every role has a
-deterministic illustrated character portrait on the public presentation layer; those
-visuals never enter model prompts or meeting packets.
+their domain. The registry has 40 agents: 21 Anthropic and 19 OpenAI. The 27
+established roles keep their approved photographic portraits. Newer roles use neutral
+name-based placeholders until approved media exists. Public visuals never enter model
+prompts or meeting packets.
 
 PULSE chairs project rooms and AUDIT keeps its rule-based veto. Owner ratings teach
 format and taste; they are not commands. Agents cannot approve their own spending,
@@ -171,5 +172,5 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 Missing variables deny the action. The exact owner checklist is `NEEDED.md`; the
 ordered setup path is `MANUAL STEPS.md`.
 
-The canonical, standalone description of all six projects, 40 roles, D1–D11 and
+The canonical, standalone description of all six projects, 40 roles, D1–D12 and
 current generated state is `docs/ECOSYSTEM.md`.

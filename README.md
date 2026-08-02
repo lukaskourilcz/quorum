@@ -35,7 +35,8 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 ## What is implemented
 
 - Four voting council seats and 36 routed specialists in one validated
-  40-agent registry, each with a deterministic illustrated character identity.
+  40-agent registry. The 27 established roles keep their approved photographs;
+  newer roles use name-based placeholders until approved media exists.
 - Anonymous council proposals, Borda ranking, `NO_ACTION`, concrete vetoes and
   fallback rechecks.
 - Fail-closed monthly, daily, meeting, media and all-in budget enforcement.
@@ -72,8 +73,8 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   owner-entered fixed costs, plus a protected fixed-cost editor and owner proposals.
 - SHA-pinned GitHub Actions with timeouts, concurrency guards, rebase-first state
   commits and independent Caught Up, portfolio, social and health switches.
-- A presentation-only workplace-show skin with season/episode labels and an enforced
-  model-packet barrier; no visitor or engagement data is collected.
+- A model-packet presentation barrier that keeps decorative site framing out of
+  agent instructions; no visitor or engagement data is collected.
 
 ## Truth boundary
 
@@ -106,7 +107,6 @@ orchestrator/
 site/
   src/app/                  public routes and protected admin
   src/components/           shared UI and operating surfaces
-  src/show/                 presentation-only workplace-show configuration
 state/
   meetings/                 sanitized meeting records
   meeting-agendas/          bounded specialist-room requests and consumption state
