@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { runCycle } from "../src/cycle.js";
@@ -181,6 +181,14 @@ describe("cycle preflight", () => {
   });
 
   it("runs both MMA Files rooms and both bilingual article slots in dry mode", async () => {
+    // tmp/dry-run is not cleaned between runs, so the packages a previous run left in these
+    // two slots collide with this one's the moment the article body changes at all — the slot
+    // guard doing its job on a scratch directory that was never meant to hold history. Only
+    // this test's own slots are cleared; the rest of the tree is state earlier tests built.
+    const dryArticles = path.join(repoRoot, "tmp", "dry-run", "state", "ventures", "mma-files", "articles");
+    for (const name of await readdir(dryArticles).catch(() => [])) {
+      if (name.startsWith("2026-08-04-")) await rm(path.join(dryArticles, name), { force: true });
+    }
     const phases = [
       { phase: "mag-editorial" as const, now: new Date("2026-08-04T07:00:00.000Z") },
       { phase: "article-am" as const, now: new Date("2026-08-04T08:00:00.000Z") },

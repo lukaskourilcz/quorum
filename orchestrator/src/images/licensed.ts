@@ -208,6 +208,34 @@ async function searchPixabay(query: string, key: string, fetchJson: JsonFetcher)
   });
 }
 
+/**
+ * Keep only photographs whose own metadata names the subject.
+ *
+ * A stock search for "ufc valentina-shevchenko" returned a US Air Force range photograph of
+ * two people who are not her, and it shipped as the hero of her profile, credited to the
+ * airman who took it. A generic query returns generic results, and an article about a named
+ * person carrying a photograph of different named people is a misattribution, not a
+ * decoration. So a candidate has to earn its place: every word of the subject's name must
+ * appear in the candidate's own title, author or source URL. Nothing matching is the correct
+ * answer often, and the deterministic FRAME hero covers it.
+ */
+export function candidatesNaming(
+  candidates: readonly LicensedPhotoCandidate[],
+  subject: string
+): LicensedPhotoCandidate[] {
+  const words = subject
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((word) => word.length >= 3);
+  if (words.length === 0) return [];
+  return candidates.filter((candidate) => {
+    const haystack = `${candidate.title} ${candidate.author} ${candidate.sourceUrl}`
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, " ");
+    return words.every((word) => haystack.includes(word));
+  });
+}
+
 export async function discoverLicensedPhotos(input: {
   query: string;
   pexelsKey?: string;

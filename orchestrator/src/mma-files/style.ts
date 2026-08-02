@@ -27,6 +27,27 @@ const slopTells: Record<MmaFilesLocale, readonly string[]> = {
 const toutWords = /\b(?:lock|can't lose|cannot lose|guaranteed|smash|sure thing|easy money|units?)\b/iu;
 const czechToutWords = /\b(?:jistota|nemůže prohrát|garantovan[áýé]|snadné peníze)\b/iu;
 const sourceMarker = /(?:\[\^source-\d+\]|\[source:[^\]]+\])/iu;
+
+/**
+ * Remove the grounding markers from copy that is about to be read by a person.
+ *
+ * A marker is how a writer proves a figure came from a record, and reviewArticleCopy rejects
+ * any line carrying a figure without one. It is not a citation a reader can use: it names a
+ * path inside this repository, and the first published article printed
+ * "[source:state/mma/fighters/ufc:valentina-shevchenko.json]" in the middle of a Czech
+ * sentence. The article package keeps every one of those paths in its sources array, so the
+ * provenance survives; only the prose is cleaned, and only after the gate has checked it.
+ */
+export function stripSourceMarkers(body: string): string {
+  return body
+    .replaceAll(new RegExp(sourceMarker.source, "giu"), "")
+    // A marker almost always trails a sentence, so removing it leaves a space before the full
+    // stop or a double space mid-paragraph. Neither should reach the page.
+    .replaceAll(/[ \t]+([.,;:!?])/gu, "$1")
+    .replaceAll(/[ \t]{2,}/gu, " ")
+    .replaceAll(/[ \t]+$/gmu, "")
+    .trim();
+}
 const quoteLine = /^\s*>/u;
 const numericClaim = /(?:\d|%|\$|€|£)/u;
 const probabilityClaim = /(?:\bchance\b|\bprobabilit|\bpravděpodob|\bšanc[ei]\b)[^\n]{0,48}%|%[^\n]{0,48}(?:\bchance\b|\bprobabilit|\bpravděpodob|\bšanc[ei]\b)/iu;

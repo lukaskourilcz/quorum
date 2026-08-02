@@ -11,7 +11,7 @@ import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.
 import { articlePackageHash, hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
-import { loadStylebook, reviewArticleCopy, reviewBilingualParity, validateStylebook } from "../src/mma-files/style.js";
+import { loadStylebook, reviewArticleCopy, reviewBilingualParity, stripSourceMarkers, validateStylebook } from "../src/mma-files/style.js";
 import { ArticleSlotConflictError, loadArticlePackages, storeArticlePackage } from "../src/mma-files/store.js";
 import { deterministicArticleImage } from "../src/images/article-image.js";
 import { repoRoot, stateRoot } from "../src/paths.js";
@@ -345,5 +345,44 @@ describe("bilingual figure parity", () => {
     // "14 306" is two figures unless English says 14,306, so joining on the space alone
     // would hide a real drift behind Czech typography.
     expect(codes("He fought 14 times at UFC 306.", "Bojoval 14 krat na UFC 306.")).toEqual([]);
+  });
+});
+
+describe("grounding markers do not reach the reader", () => {
+  it("removes the markers and the space they leave behind", () => {
+    // The first published article printed the repository path mid-sentence, in both languages.
+    expect(stripSourceMarkers(
+      "Shevchenko holds a record of 26-4-1. [source:state/mma/fighters/ufc:valentina-shevchenko.json] The trilogy ran 18 months."
+    )).toBe("Shevchenko holds a record of 26-4-1. The trilogy ran 18 months.");
+  });
+
+  it("does not leave a space before the punctuation a marker preceded", () => {
+    expect(stripSourceMarkers("She won by decision [^source-2], her third title fight."))
+      .toBe("She won by decision, her third title fight.");
+  });
+
+  it("leaves copy that carries no marker exactly as written", () => {
+    const body = "Grasso won the first meeting at UFC 285.\n\nShevchenko took the third.";
+    expect(stripSourceMarkers(body)).toBe(body);
+  });
+
+  it("still requires a marker on a figure, because the gate runs before the strip", () => {
+    const copy = { title: "T", dek: "D", bodyMDX: "She holds a record of 26-4-1.", imageAlt: "A" };
+    const content = {
+      schemaVersion: "article/1" as const,
+      slug: "grounding",
+      localizations: { en: copy, cs: copy },
+      format: "fighter-profile" as const,
+      sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
+      image: deterministicArticleImage({ venture: "mma-files", slug: "grounding", title: "T", altEn: "A", altCs: "P" }),
+      heroSpec: { template: "fighter-file", bindings: { headline: "H" } },
+      fighterRefs: [],
+      publishAt: "2026-08-02T06:00:00.000Z",
+      slot: "am" as const,
+      status: "draft" as const
+    };
+    const article = ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
+    expect(reviewArticleCopy(article, "en", { mode: "data-only" }).map(({ code }) => code))
+      .toContain("ungrounded-claim");
   });
 });

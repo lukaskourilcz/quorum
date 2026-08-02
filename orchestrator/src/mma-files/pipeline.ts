@@ -2,7 +2,7 @@ import { ArticlePackageSchema, type ArticlePackage, type EditorialSlate } from "
 import { articlePackageHash } from "./hash.js";
 import { renderSocialVariants } from "./frame.js";
 import { buildSocialVariantPack } from "./social.js";
-import { loadStylebook, reviewArticle, stylebookPacket, validateStylebook, type CopyViolation } from "./style.js";
+import { loadStylebook, reviewArticle, stripSourceMarkers, stylebookPacket, validateStylebook, type CopyViolation } from "./style.js";
 import { storeArticleMedia, storeArticlePackage, storeSocialVariantPack } from "./store.js";
 import { deterministicArticleImage } from "../images/article-image.js";
 import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
@@ -125,7 +125,18 @@ export async function produceMmaFilesArticle(input: {
   };
   const draft = ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
   const violations = reviewArticle(draft, { mode: input.mode });
-  const finalContent = { ...content, status: violations.length ? "blocked" as const : "published" as const };
+  // The gate has now checked that every figure carries a marker, so the markers have done
+  // their work and come out before the package is hashed. They are repository paths, not
+  // citations a reader can follow, and the first published article printed one mid-sentence
+  // in both languages. The sources array still carries every path, so nothing is lost.
+  const finalContent = {
+    ...content,
+    localizations: {
+      en: { ...content.localizations.en, bodyMDX: stripSourceMarkers(content.localizations.en.bodyMDX) },
+      cs: { ...content.localizations.cs, bodyMDX: stripSourceMarkers(content.localizations.cs.bodyMDX) }
+    },
+    status: violations.length ? "blocked" as const : "published" as const
+  };
   const article = ArticlePackageSchema.parse({ ...finalContent, packageHash: articlePackageHash(finalContent) });
   const stored = await storeArticlePackage(input.root, article);
   const socialPack = article.status === "published" && input.socialProductionEnabled !== false

@@ -9,7 +9,7 @@ import { wrapUntrustedData } from "../security/content.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditorialGateway } from "./pipeline.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
-import { discoverLicensedPhotos } from "../images/licensed.js";
+import { candidatesNaming, discoverLicensedPhotos } from "../images/licensed.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
@@ -246,8 +246,15 @@ export async function runLiveArticleProduction(input: {
     await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, spentUsd: 0, generatedAt: input.now.toISOString() });
     return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
   }
+  // Search on the subject's name rather than its record id. "ufc valentina-shevchenko" is a
+  // query no photo archive is indexed for, and what came back was a US Air Force range
+  // photograph of two other people, which then ran as the hero of her profile.
+  const subject = assignment.subjectRefs
+    .map((reference) => reference.split(":").at(-1)?.replaceAll("-", " ") ?? "")
+    .filter(Boolean)
+    .join(" ");
   const imageSearch = await discoverLicensedPhotos({
-    query: assignment.subjectRefs.join(" ").replaceAll(":", " ").slice(0, 100),
+    query: subject.slice(0, 100),
     pexelsKey: process.env.PEXELS_API_KEY,
     pixabayKey: process.env.PIXABAY_API_KEY
   });
@@ -268,7 +275,7 @@ export async function runLiveArticleProduction(input: {
     publishAt: input.now,
     mode: "live-analysis",
     evidence,
-    imageCandidates: imageSearch.candidates,
+    imageCandidates: candidatesNaming(imageSearch.candidates, subject),
     publicRepoRoot: repoRoot,
     socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
     gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),

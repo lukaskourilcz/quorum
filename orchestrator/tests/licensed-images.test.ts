@@ -4,7 +4,8 @@ import { validateLicensedImageCandidate } from "../src/images/article-image.js";
 import {
   discoverLicensedPhotos,
   materializeLicensedPhoto,
-  type LicensedPhotoCandidate
+  type LicensedPhotoCandidate,
+  candidatesNaming
 } from "../src/images/licensed.js";
 
 const candidate: LicensedPhotoCandidate = {
@@ -85,5 +86,37 @@ describe("licensed article images", () => {
     expect(await sharp(hero).metadata()).toMatchObject({ width: 1_600, height: 900, format: "webp" });
     expect(await sharp(thumb).metadata()).toMatchObject({ width: 640, height: 360, format: "webp" });
     expect((await sharp(hero).metadata()).orientation).toBeUndefined();
+  });
+});
+
+describe("a hero photo has to name its subject", () => {
+  const candidate = (title: string, author = "Someone", sourceUrl = "https://commons.wikimedia.org/wiki/File:X.jpg") => ({
+    id: title, provider: "wikimedia" as const, title, thumbnailUrl: "https://example.test/t.jpg",
+    downloadUrl: "https://example.test/d.jpg", width: 1600, height: 900, license: "CC0" as const,
+    author, sourceUrl, attributionHtml: `<span>${author}</span>`
+  });
+
+  it("drops a photo of other people that merely came back from the search", () => {
+    // This is the real one: a US Air Force range photograph ran as the hero of a Valentina
+    // Shevchenko profile, credited to the airman who took it.
+    const results = candidatesNaming(
+      [candidate("Airmen fire an M2 machine gun during a range day", "Tech. Sgt. Katie Gar Ward")],
+      "valentina shevchenko"
+    );
+    expect(results).toEqual([]);
+  });
+
+  it("keeps a photo whose title names the subject", () => {
+    const match = candidate("Valentina Shevchenko at UFC 285 weigh-ins");
+    expect(candidatesNaming([match, candidate("A crowd at an arena")], "valentina shevchenko")).toEqual([match]);
+  });
+
+  it("accepts the name from the file URL when the title is unhelpful", () => {
+    const match = candidate("File photo", "Photographer", "https://commons.wikimedia.org/wiki/File:Valentina_Shevchenko_2023.jpg");
+    expect(candidatesNaming([match], "valentina shevchenko")).toEqual([match]);
+  });
+
+  it("returns nothing rather than guess when there is no subject to match", () => {
+    expect(candidatesNaming([candidate("Anything")], "")).toEqual([]);
   });
 });
