@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "b1864a78b80b822b000cbad32826e71eec6a7eddfec763900f4598a664230ba3",
+  "status": "needs_reconciliation",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "054a2b2b383bd22488324ee92546a315b1a05811",
+  "code": "post_deploy_verification",
+  "recordedAt": "2026-08-02T17:25:17.935Z"
+}

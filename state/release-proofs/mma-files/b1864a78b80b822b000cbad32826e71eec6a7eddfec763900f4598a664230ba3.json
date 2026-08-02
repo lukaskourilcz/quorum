@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-6817ef14bb9a3166",
+  "venture": "mma-files",
+  "packageHash": "b1864a78b80b822b000cbad32826e71eec6a7eddfec763900f4598a664230ba3",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "054a2b2b383bd22488324ee92546a315b1a05811",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 054a2b2b383bd22488324ee92546a315b1a05811 is readable",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "fail",
+      "detail": "Target CI state: unavailable",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "english-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/en/articles/ufc-valentina-shevchenko?boardless_verify=b1864a78b80b-1785691513168",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-valentina-shevchenko?boardless_verify=b1864a78b80b-1785691513168",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "Both locale titles and ufc-valentina-shevchenko match",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "Both pages expose b1864a78b80b822b000cbad32826e71eec6a7eddfec763900f4598a664230ba3",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-valentina-shevchenko/hero.webp?boardless_verify=b1864a78b80b-1785691513168",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Tech. Sgt. Katie Gar Ward · CC0",
+      "checkedAt": "2026-08-02T17:25:13.168Z"
+    }
+  ],
+  "retryCount": 1,
+  "status": "reverted",
+  "startedAt": "2026-08-02T17:09:53.513Z",
+  "completedAt": "2026-08-02T17:25:13.616Z",
+  "revertCommit": "66de74d6141850ee18ceb9689a2d3075ca14cf1c"
+}
