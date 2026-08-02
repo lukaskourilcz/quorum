@@ -3,16 +3,17 @@ import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { EditorialSlateSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
+import { ArticlePackageSchema, EditorialSlateSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
 import { LocalStoreDelivery, shipArticleBacklog, type ArticleDeliveryAdapter } from "../src/mma-files/delivery.js";
 import { runDryArticleProduction } from "../src/mma-files/dry-run.js";
 import { articleEvidenceFor } from "../src/mma-files/live.js";
 import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.js";
-import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
+import { articlePackageHash, hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
 import { loadStylebook, reviewArticleCopy, validateStylebook } from "../src/mma-files/style.js";
-import { loadArticlePackages } from "../src/mma-files/store.js";
+import { ArticleSlotConflictError, loadArticlePackages, storeArticlePackage } from "../src/mma-files/store.js";
+import { deterministicArticleImage } from "../src/images/article-image.js";
 import { repoRoot, stateRoot } from "../src/paths.js";
 
 const roots: string[] = [];
@@ -215,5 +216,49 @@ describe("article evidence selection", () => {
 
   it("returns nothing for a killed slot", async () => {
     expect(await articleEvidenceFor(stateRoot, profileSlate, "pm")).toBeNull();
+  });
+});
+
+describe("article slot immutability", () => {
+  const packageFor = (status: ArticlePackage["status"], slug: string): ArticlePackage => {
+    const content = {
+      schemaVersion: "article/1" as const,
+      slug,
+      localizations: {
+        en: { title: "Title", dek: "Dek", bodyMDX: "Body [source:state/mma/fighters/ufc:a.json]", imageAlt: "Alt" },
+        cs: { title: "Titulek", dek: "Perex", bodyMDX: "Telo [source:state/mma/fighters/ufc:a.json]", imageAlt: "Popis" }
+      },
+      format: "fighter-profile" as const,
+      sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
+      image: deterministicArticleImage({ venture: "mma-files", slug, title: "Title", altEn: "Alt", altCs: "Popis" }),
+      heroSpec: { template: "fighter-file", bindings: { headline: "Headline" } },
+      fighterRefs: ["ufc:a"],
+      publishAt: "2026-08-02T06:00:00.000Z",
+      slot: "am" as const,
+      status
+    };
+    return ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
+  };
+
+  it("lets a retry replace a blocked attempt and keeps the superseded hash", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-slot-"));
+    roots.push(root);
+    const rejected = packageFor("blocked", "first-attempt");
+    await storeArticlePackage(root, rejected);
+    // A blocked package used to poison its slot: after the cause was fixed, the retry aborted
+    // on the rejected attempt it existed to replace, so the day could never produce anything.
+    const stored = await storeArticlePackage(root, packageFor("published", "second-attempt"));
+    expect(stored.idempotent).toBe(false);
+    expect(stored.supersededHash).toBe(rejected.packageHash);
+    const remaining = await loadArticlePackages(root);
+    expect(remaining.map((entry) => entry.slug)).toEqual(["second-attempt"]);
+  });
+
+  it("still refuses to swap a published article under the same slot", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-slot-"));
+    roots.push(root);
+    await storeArticlePackage(root, packageFor("published", "shipped"));
+    await expect(storeArticlePackage(root, packageFor("published", "replacement")))
+      .rejects.toBeInstanceOf(ArticleSlotConflictError);
   });
 });

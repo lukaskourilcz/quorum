@@ -45,6 +45,7 @@ export interface ArticleProductionResult {
   socialPath: string | null;
   mediaPaths: string[];
   idempotent: boolean;
+  supersededHash?: string;
 }
 
 export async function produceMmaFilesArticle(input: {
@@ -139,5 +140,5 @@ export async function produceMmaFilesArticle(input: {
   const queuePaths = socialPack && input.publicRepoRoot && input.socialDestinationBaseUrl
     ? await composeMmaFilesSocialQueue({ stateRoot: input.root, repoRoot: input.publicRepoRoot, article, pack: socialPack, destinationBaseUrl: input.socialDestinationBaseUrl, now: input.publishAt })
     : [];
-  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent };
+  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent, ...(stored.supersededHash ? { supersededHash: stored.supersededHash } : {}) };
 }

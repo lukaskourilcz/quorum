@@ -285,6 +285,7 @@ export async function runLiveArticleProduction(input: {
     slot: input.slot,
     status: result.article.status,
     articleRef: result.article.packageHash,
+    ...(result.supersededHash ? { supersededHash: result.supersededHash } : {}),
     ...(result.violations.length > 0
       ? { violations: result.violations.slice(0, 20).map(({ code, locale, message }) => ({ code, locale, message })) }
       : {}),

@@ -1,4 +1,4 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { ArticlePackageSchema, SocialVariantPackSchema, type ArticlePackage, type SocialVariantPack } from "../contracts/mma-files.js";
 import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
@@ -24,22 +24,39 @@ async function directoryFiles(directory: string): Promise<string[]> {
 export async function storeArticlePackage(
   root: string,
   input: ArticlePackage
-): Promise<{ path: string; idempotent: boolean }> {
+): Promise<{ path: string; idempotent: boolean; supersededHash?: string }> {
   const article = ArticlePackageSchema.parse(input);
   if (!hasValidArticlePackageHash(article)) throw new Error("Article package hash is invalid");
   const directory = path.join(root, "ventures", "mma-files", "articles");
   const prefix = `${article.publishAt.slice(0, 10)}-${article.slot}-`;
+  const superseded: Array<{ filename: string; hash: string }> = [];
   for (const filename of await directoryFiles(directory)) {
     if (!filename.startsWith(prefix)) continue;
     const existing = ArticlePackageSchema.parse(JSON.parse(await readFile(path.join(directory, filename), "utf8")));
     if (existing.packageHash === article.packageHash) {
       return { path: `ventures/mma-files/articles/${filename}`, idempotent: true };
     }
-    throw new ArticleSlotConflictError(`Article slot ${prefix.slice(0, -1)} already contains a different package`);
+    // A slot that holds a publishable package is immutable, and stays that way: rewriting a
+    // published or draft article under the same date and slot is how a delivered piece gets
+    // quietly swapped, which is exactly what this guard exists to stop.
+    if (existing.status !== "blocked" && existing.status !== "killed") {
+      throw new ArticleSlotConflictError(`Article slot ${prefix.slice(0, -1)} already contains a different package`);
+    }
+    // A blocked or killed package is a rejected draft, not an artifact. Treating it as one
+    // meant a single failed gate poisoned the slot for good: after the cause was fixed the
+    // retry aborted on the rejected attempt it was meant to replace, so the day could never
+    // produce an article no matter what changed. The superseded hash rides out with the
+    // result so the run record keeps the trail.
+    superseded.push({ filename, hash: existing.packageHash });
   }
+  for (const { filename } of superseded) await rm(path.join(directory, filename), { force: true });
   const relative = articleRelativePath(article);
   await atomicWriteJson(root, relative, article);
-  return { path: relative, idempotent: false };
+  return {
+    path: relative,
+    idempotent: false,
+    ...(superseded[0] ? { supersededHash: superseded[0].hash } : {})
+  };
 }
 
 export async function storeSocialVariantPack(
