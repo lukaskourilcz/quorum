@@ -8,13 +8,15 @@ function valueAfter(args: string[], flag: string): string | undefined {
 const args = process.argv.slice(2);
 if (args.includes("--scheduled")) {
   const at = new Date(valueAfter(args, "--at") ?? Date.now());
-  // Prefer the cron that fired. It names the meeting outright, so a queued run still holds
-  // the one it was scheduled for; the wall clock is the fallback for a caller that has no
-  // cron to hand, and it is the reading that lost seven of fourteen meetings on 2 August.
-  const cron = valueAfter(args, "--cron");
-  const fromCron = cron ? resolveCronPhase(cron, at) : null;
-  if (fromCron) {
-    console.log(fromCron);
+  // The cron that fired names the meeting outright, so a queued run still holds the one it
+  // was scheduled for. Its answer is final in both directions: null means the firing belongs
+  // to the inactive daylight-saving variant of a slot and there is genuinely no meeting, and
+  // falling back to the wall clock there would hand the run its neighbour instead — which is
+  // the failure being removed, not a safety net. The clock is only for a caller with no cron,
+  // such as a manual invocation.
+  const cron = valueAfter(args, "--cron")?.trim();
+  if (cron) {
+    console.log(resolveCronPhase(cron, at) ?? "skip");
   } else {
     try {
       console.log(resolveScheduledPhase(at));

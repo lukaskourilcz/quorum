@@ -42,3 +42,22 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
     expect(resolveCronPhase("0 4 * * *", new Date("2026-08-02T11:00:00Z"))).toBeNull();
   });
 });
+
+describe("the fired cron is the final word", () => {
+  it("covers all fifteen Prague slots and only those, from the summer crons", () => {
+    const summer = [3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 16, 17, 18, 19, 20]
+      .map((hour) => resolveCronPhase(`0 ${hour} * * *`, new Date(Date.UTC(2026, 7, 3, hour, 40))));
+    expect(summer.filter(Boolean)).toHaveLength(15);
+    expect(new Set(summer).size).toBe(15);
+  });
+
+  it("answers nothing for a firing that belongs to the other daylight-saving variant", () => {
+    // 10:00, 13:00 and 21:00 UTC are winter firings. In summer they must resolve to no
+    // meeting — and a caller must not then reach for the wall clock, which at 10:40 UTC is
+    // 12:40 in Prague and would hand back the 13:00 studio slot: the neighbouring-meeting
+    // failure this whole change exists to remove.
+    for (const hour of [10, 13, 21]) {
+      expect(resolveCronPhase(`0 ${hour} * * *`, new Date(Date.UTC(2026, 7, 3, hour, 40))), `0 ${hour}`).toBeNull();
+    }
+  });
+});
