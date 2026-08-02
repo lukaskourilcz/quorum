@@ -32,7 +32,10 @@ async function packageFiles(root: string): Promise<string[]> {
   }
 }
 
-export async function oldestPendingDelivery(root = stateRoot): Promise<PendingDelivery | null> {
+export async function oldestPendingDelivery(
+  root = stateRoot,
+  today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague" }).format(new Date())
+): Promise<PendingDelivery | null> {
   // Oldest first, but skip any date that already has a delivered receipt.
   //
   // The outbox is only emptied on a successful delivery, so a package whose date was later
@@ -49,6 +52,10 @@ export async function oldestPendingDelivery(root = stateRoot): Promise<PendingDe
     const alreadyShipped = receipt?.status === "delivered"
       && receipt.packageHash === editionPackage.idempotencyKey;
     if (alreadyShipped) continue;
+    // A "no edition today" notice is only true on its own day. Left in an oldest-first queue
+    // that ships one package per run, a stale one holds every real edition behind it and
+    // would publish yesterday's notice as though it were today's. Today's still ships.
+    if (editionPackage.status === "no_edition" && editionPackage.date !== today) continue;
     return {
       packagePath: path.relative(root, file),
       package: editionPackage

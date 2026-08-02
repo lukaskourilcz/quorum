@@ -53,11 +53,12 @@ async function recordsForDate(directory: string, date: string): Promise<Array<{ 
 }
 
 export async function collectDigestOperations(stateRoot: string, date: string): Promise<DigestOperation[]> {
-  const [releaseProofs, caughtUpDeliveries, mmaDeliveries, socialFailures, activationRaw] = await Promise.all([
+  const [releaseProofs, caughtUpDeliveries, mmaDeliveries, socialFailures, releaseFailures, activationRaw] = await Promise.all([
     recordsForDate(path.join(stateRoot, "release-proofs"), date),
     recordsForDate(path.join(stateRoot, "edition", "deliveries"), date),
     recordsForDate(path.join(stateRoot, "ventures", "mma-files", "deliveries"), date),
     recordsForDate(path.join(stateRoot, "notify", "social-failures"), date),
+    recordsForDate(path.join(stateRoot, "notify", "release-failures"), date),
     readJson<unknown>(stateRoot, "social/activation.json", null)
   ]);
   const operations: DigestOperation[] = [];
@@ -80,6 +81,20 @@ export async function collectDigestOperations(stateRoot: string, date: string): 
       type: "delivery",
       status,
       text: `${venture} delivery ${status}; a saved receipt identifies the exact package.`,
+      ref: path.relative(stateRoot, file)
+    }));
+  }
+  // A release that was reverted off production is the loudest thing that can happen in a
+  // day, and it was written to notify/release-failures and read by nothing. The flagship
+  // article was reverted twice on 2 August and the digest never mentioned it.
+  for (const { file, record } of releaseFailures.slice(-3)) {
+    const venture = ventureFrom(file, record);
+    const status = cleanStatus(record.status);
+    operations.push(DigestOperationSchema.parse({
+      ventureId: venture,
+      type: "failure",
+      status: "paused",
+      text: `${venture} release ${status} after post-deploy verification failed; the delivery was taken off production.`,
       ref: path.relative(stateRoot, file)
     }));
   }

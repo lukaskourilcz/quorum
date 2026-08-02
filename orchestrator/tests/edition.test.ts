@@ -435,3 +435,25 @@ describe("edition dry production", () => {
     );
   });
 });
+
+describe("a rejected edition dies at the price of one write", () => {
+  it("never reaches the Czech desk for a draft the quality gate refuses", async () => {
+    // One full pass costs about $0.22 of the $0.35 per-edition cap and a rewrite reserves
+    // $0.14, so a violation found after localization was terminal and both configured
+    // regenerations were refused instantly, each recorded with durationMs 0. Supplying only
+    // the three write responses and no localization at all is the assertion: if the run
+    // still asked a language desk, it would have no response to take and would fail here.
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const rewriteOne = structuredClone(base[1]!);
+    const rewriteTwo = structuredClone(base[1]!);
+    rewriteOne.usage.stage = "rewrite";
+    rewriteTwo.usage.stage = "rewrite";
+    const result = await produceEdition(
+      await productionInput([base[0]!, base[1]!, rewriteOne, rewriteTwo], 1)
+    );
+    expect(result.package.status).toBe("no_edition");
+    expect(result.report.regenerationAttempts).toBe(2);
+    expect(result.report.stages.some((stage) => stage.name.startsWith("hacek"))).toBe(false);
+    expect(result.report.stages.some((stage) => stage.name.startsWith("stet"))).toBe(false);
+  });
+});

@@ -29,6 +29,7 @@ import type { LicensedPhotoCandidate } from "../images/licensed.js";
 import { materializeLicensedPhoto } from "../images/licensed.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
+import { BudgetError } from "../budget.js";
 import {
   localizeToCzech,
   parityFeedback,
@@ -183,6 +184,14 @@ export async function produceEdition(
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {
+      // A refused reservation is not a bad article. It was reported as
+      // content_invalid_after_regeneration, and the remaining attempts were then spent on
+      // calls the budget refuses instantly — each recorded with durationMs 0 — while the
+      // budget error text was fed back to the writer as though it were editorial feedback.
+      if (error instanceof BudgetError) {
+        reporter.warn(`budget_stop:${error.code}`);
+        return noEdition(input, reporter, "budget_exhausted");
+      }
       if (error instanceof InvalidArticleError || error instanceof InvalidModelOutputError) {
         reporter.addUsage(error.usage);
       }
@@ -203,6 +212,34 @@ export async function produceEdition(
         "Correct exactly that rejection. Keep everything else that already passed unchanged.",
         "Return a complete schema-valid article using only supplied source URLs."
       ];
+      continue;
+    }
+
+    // Judge what the English draft already settles before paying to localize it. Every metric
+    // the quality gate reads comes from the article's sources and tags, both fixed by the
+    // time write() returns, and one full pass costs about $0.22 of a $0.35 per-edition cap
+    // while a rewrite reserves $0.14 — so a violation discovered after the Czech desk had
+    // been paid was terminal, and the two configured regenerations could never run. The
+    // thresholds and the post-localization gate are untouched; this only fails earlier, and
+    // it can never pass anything the final gate would reject.
+    const draftMetrics = qualityMetrics(
+      { ...english, byLocale: { en: english.en, cs: english.en } },
+      input,
+      reporter.totalCostUsd()
+    );
+    const draftQuality = evaluateEditionQuality(draftMetrics, input.config, attempt);
+    if (!draftQuality.passed) {
+      // The report carries the gate that stopped the run, whichever pass caught it.
+      reporter.quality = { metrics: draftMetrics, result: draftQuality };
+      draftQuality.violations.forEach((violation) => reporter.warn(`quality:${violation}`));
+      lastQualityViolations = draftQuality.violations;
+      if (attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate) {
+        return noEdition(input, reporter, `quality_block:${draftQuality.violations.join(",")}`);
+      }
+      reporter.regenerationAttempts += 1;
+      feedback = draftQuality.violations.map(
+        (violation) => `Quality gate ${violation} must pass without inventing facts or sources.`
+      );
       continue;
     }
 

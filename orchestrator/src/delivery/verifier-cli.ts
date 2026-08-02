@@ -5,7 +5,7 @@ import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { stateRoot } from "../paths.js";
-import { atomicWriteJson, atomicWriteText } from "../state.js";
+import { atomicWriteJson, atomicWriteText, readText } from "../state.js";
 import { verifyDeployedRelease } from "./verifier.js";
 
 function valueAfter(args: string[], name: string): string | undefined {
@@ -17,6 +17,26 @@ function required(args: string[], name: string): string {
   const value = valueAfter(args, name);
   if (!value) throw new Error(`${name} is required`);
   return value;
+}
+
+
+/**
+ * Put a reverted release in front of the owner.
+ *
+ * The Caught Up delivery path already appends to INBOX on failure; the MMA path wrote a JSON
+ * file nothing read. The flagship article was reverted off production twice on 2 August and
+ * neither the digest nor the inbox mentioned it.
+ */
+async function appendInboxReleaseFailure(
+  venture: string,
+  packageHash: string,
+  status: string,
+  revertCommit: string | undefined
+): Promise<void> {
+  const current = await readText(stateRoot, "INBOX.md", "# Inbox\n");
+  const line = `- [ ] **${venture} release ${status}** — package \`${packageHash.slice(0, 12)}\` failed post-deploy verification${revertCommit ? ` and was reverted in \`${revertCommit.slice(0, 12)}\`` : ""}. Proof: \`state/release-proofs/${venture}/${packageHash}.json\`. [owner:me]`;
+  if (current.includes(packageHash.slice(0, 12))) return;
+  await atomicWriteText(stateRoot, "INBOX.md", `${current.trimEnd()}\n${line}\n`);
 }
 
 async function main(): Promise<void> {
@@ -36,6 +56,7 @@ async function main(): Promise<void> {
     await Promise.all([
       atomicWriteJson(stateRoot, proofRelative, finalized),
       atomicWriteText(stateRoot, `ventures/${venture}/PAUSED`, `Release ${packageHash} failed deterministic post-deploy verification at ${finalized.completedAt}. Clear this file only after the failure is repaired and a new proof passes.\n`),
+      appendInboxReleaseFailure(venture, packageHash, finalized.status, revertCommit),
       atomicWriteJson(stateRoot, `notify/release-failures/${venture}-${packageHash}.json`, {
         schemaVersion: "release-failure-digest/1",
         venture,

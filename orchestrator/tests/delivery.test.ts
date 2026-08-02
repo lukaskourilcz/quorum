@@ -213,7 +213,7 @@ describe("delivery outbox", () => {
     });
     await writeJson(path.join(root, "edition", "outbox", `2026-08-05-${second.idempotencyKey}.json`), second);
     await writeJson(path.join(root, "edition", "outbox", `2026-08-04-${first.idempotencyKey}.json`), first);
-    const pending = await oldestPendingDelivery(root);
+    const pending = await oldestPendingDelivery(root, "2026-08-04");
     expect(pending?.package.date).toBe("2026-08-04");
     await recordDelivery({
       root,
@@ -222,7 +222,12 @@ describe("delivery outbox", () => {
       targetCommit: "b".repeat(40),
       now: new Date("2026-08-04T04:00:00.000Z")
     });
-    expect((await oldestPendingDelivery(root))?.package.date).toBe("2026-08-05");
+    expect((await oldestPendingDelivery(root, "2026-08-05"))?.package.date).toBe("2026-08-05");
+
+    // A "no edition today" notice is only true on its own day. Both of these are no-edition
+    // packages, so on a later day the queue is empty rather than publishing a stale notice
+    // and holding every real edition behind it.
+    expect(await oldestPendingDelivery(root, "2026-08-06")).toBeNull();
     const receipt = JSON.parse(await readFile(
       path.join(root, "edition", "deliveries", "2026-08-04.json"),
       "utf8"
