@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-dc3e93950da04c07c5d9",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-gcf-26",
+    "name": "GCF 26",
+    "startsAtUtc": "2013-12-07T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:karlos-vemola",
+    "blue": "oktagon:tomas-kuzela"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-12-07T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:26668929"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 1,
+    "elapsedSeconds": 251,
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

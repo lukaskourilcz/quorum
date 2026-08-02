@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-b600834b2380fbc21773",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-fight-nights-global-79",
+    "name": "Fight Nights Global 79",
+    "startsAtUtc": "2017-11-19T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:viktor-pesta",
+    "blue": "oktagon:alexei-kudin"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-11-19T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42735957"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 1,
+    "elapsedSeconds": 292,
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

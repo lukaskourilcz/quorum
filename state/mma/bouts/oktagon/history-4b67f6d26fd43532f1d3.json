@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-4b67f6d26fd43532f1d3",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-296",
+    "name": "UFC 296",
+    "startsAtUtc": "2023-12-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:martin-buday",
+    "blue": "oktagon:shamil-gaziev"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-12-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80546380"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 356,
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

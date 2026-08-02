@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-17146c06edde933a1c12",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-251",
+    "name": "UFC 251",
+    "startsAtUtc": "2020-07-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:zhalgas-zhumagulov",
+    "blue": "oktagon:raulian-paiva"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-07-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:64559517"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64559517"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:64559517"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

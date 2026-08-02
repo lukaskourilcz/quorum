@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-c1fe3de6bf4c552394d0",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-on-espn-luque-vs-muhammad-2",
+    "name": "UFC on ESPN: Luque vs. Muhammad 2",
+    "startsAtUtc": "2022-04-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:martin-buday",
+    "blue": "oktagon:chris-barnett"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-04-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80546380"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Technical Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 697,
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,936 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:karlos-vemola",
+  "slug": "karlos-vemola",
+  "org": "oktagon",
+  "canonicalName": "Karlos Vémola",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Karlos Vémola",
+    "externalIds": {
+      "wikipediaPageId": "26668929"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:26668929",
+      "url": "https://en.wikipedia.org/wiki/Karlos_V%C3%A9mola",
+      "publisher": "Wikipedia",
+      "title": "Karlos Vémola",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Karlos Vémola",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1985-07-01",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Heavyweight Light Heavyweight Middleweight",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "London Shootfighters, Reinders MMA",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "38-9-0",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "38-9-0",
+          "sourceRef": "source:wikipedia:26668929"
+        },
+        {
+          "value": "38-10-0",
+          "sourceRef": "derived:oktagon:karlos-vemola:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-cb14536fc56f4907750e",
+      "eventRef": "oktagon:event:history-cage-fighters-championship-2",
+      "happenedAt": "2008-02-24T00:00:00.000Z",
+      "opponentRef": "oktagon:patric-carroll",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 44,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-4945d401b8a28d63df17",
+      "eventRef": "oktagon:event:history-cage-fighters-championship-3",
+      "happenedAt": "2008-05-18T00:00:00.000Z",
+      "opponentRef": "oktagon:bill-georgitsis",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 5,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-acac6add14cd179b1e32",
+      "eventRef": "oktagon:event:history-cage-fighters-championship-4",
+      "happenedAt": "2008-10-25T00:00:00.000Z",
+      "opponentRef": "oktagon:szilvester-silbont",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 194,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0267a9da8d52f61d028d",
+      "eventRef": "oktagon:event:history-cage-fighters-championship-5",
+      "happenedAt": "2009-03-07T00:00:00.000Z",
+      "opponentRef": "oktagon:markus-hipp",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 15,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-17558b806bf4b828d696",
+      "eventRef": "oktagon:event:history-cage-fighters-championship-6",
+      "happenedAt": "2009-04-25T00:00:00.000Z",
+      "opponentRef": "oktagon:ashley-pollard",
+      "result": "win",
+      "method": "Technical Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 36,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b1c8e52d38fec4d7ff44",
+      "eventRef": "oktagon:event:history-cage-fighters-championship-7",
+      "happenedAt": "2009-07-04T00:00:00.000Z",
+      "opponentRef": "oktagon:stav-economou",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 117,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-67d153adc97126ec5de7",
+      "eventRef": "oktagon:event:history-ultimate-challenge-mma-10",
+      "happenedAt": "2010-02-06T00:00:00.000Z",
+      "opponentRef": "oktagon:peter-yendall",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 49,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0400f0be2ab12bdfcc59",
+      "eventRef": "oktagon:event:history-ufc-116",
+      "happenedAt": "2010-07-03T00:00:00.000Z",
+      "opponentRef": "oktagon:jon-madsen",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-63a9d4ffa4f39e919cbc",
+      "eventRef": "oktagon:event:history-ufc-122",
+      "happenedAt": "2010-11-13T00:00:00.000Z",
+      "opponentRef": "oktagon:seth-petruzelli",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 226,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ebae071aa90af27e2ad2",
+      "eventRef": "oktagon:event:history-ufc-live-hardy-vs-lytle",
+      "happenedAt": "2011-08-14T00:00:00.000Z",
+      "opponentRef": "oktagon:ronny-markes",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-fae04cb4222fef51f97c",
+      "eventRef": "oktagon:event:history-ufc-on-fox-diaz-vs-miller",
+      "happenedAt": "2012-05-05T00:00:00.000Z",
+      "opponentRef": "oktagon:mike-massenzio",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 367,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-69973e283306be1ae65f",
+      "eventRef": "oktagon:event:history-ufc-on-fuel-tv-munoz-vs-weidman",
+      "happenedAt": "2012-07-11T00:00:00.000Z",
+      "opponentRef": "oktagon:francis-carmont",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 399,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b77de5bcaa8ebd5590c8",
+      "eventRef": "oktagon:event:history-ufc-on-fuel-tv-nogueira-vs-werdum",
+      "happenedAt": "2013-06-08T00:00:00.000Z",
+      "opponentRef": "oktagon:caio-magalhaes",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 469,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0240ce6e82b54c6e1ce4",
+      "eventRef": "oktagon:event:history-ultimate-challenge-mma-35",
+      "happenedAt": "2013-08-03T00:00:00.000Z",
+      "opponentRef": "oktagon:denniston-sutherland",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-70e6c144ac44404df4e0",
+      "eventRef": "oktagon:event:history-mmaa-arena-2",
+      "happenedAt": "2013-11-10T00:00:00.000Z",
+      "opponentRef": "oktagon:petr-knize",
+      "result": "win",
+      "method": "Technical Submission (north-south choke)",
+      "round": 3,
+      "elapsedSeconds": 803,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-dc3e93950da04c07c5d9",
+      "eventRef": "oktagon:event:history-gcf-26",
+      "happenedAt": "2013-12-07T00:00:00.000Z",
+      "opponentRef": "oktagon:tomas-kuzela",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 251,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-05b4f6a2c705f3120b79",
+      "eventRef": "oktagon:event:history-ultimate-challenge-mma-38",
+      "happenedAt": "2014-02-01T00:00:00.000Z",
+      "opponentRef": "oktagon:marvin-campbell",
+      "result": "win",
+      "method": "Submission (kimura)",
+      "round": 1,
+      "elapsedSeconds": 96,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-85013280bd7bedff45ae",
+      "eventRef": "oktagon:event:history-mmaa-arena-3",
+      "happenedAt": "2014-03-07T00:00:00.000Z",
+      "opponentRef": "oktagon:piotr-strus",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-6eb734780595e6c66ff3",
+      "eventRef": "oktagon:event:history-ultimate-challenge-mma-43",
+      "happenedAt": "2015-05-02T00:00:00.000Z",
+      "opponentRef": "oktagon:carl-kinslow",
+      "result": "win",
+      "method": "Submission (north-south choke)",
+      "round": 1,
+      "elapsedSeconds": 76,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9e04427657d6ca908172",
+      "eventRef": "oktagon:event:history-fusion-fight-night-series-1",
+      "happenedAt": "2015-05-16T00:00:00.000Z",
+      "opponentRef": "oktagon:david-marcina",
+      "result": "win",
+      "method": "Submission (north-south choke)",
+      "round": 1,
+      "elapsedSeconds": 96,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-4143753edf1b12f87a2d",
+      "eventRef": "oktagon:event:history-warrior-fight-series-4",
+      "happenedAt": "2015-08-02T00:00:00.000Z",
+      "opponentRef": "oktagon:jack-hermansson",
+      "result": "loss",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 126,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0bee971e310ba6f63e61",
+      "eventRef": "oktagon:event:history-night-of-warriors-10",
+      "happenedAt": "2016-11-05T00:00:00.000Z",
+      "opponentRef": "oktagon:dritan-barjamaj",
+      "result": "win",
+      "method": "TKO (elbows)",
+      "round": 1,
+      "elapsedSeconds": 103,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-c39227d38ffc003e43fe",
+      "eventRef": "oktagon:event:history-night-of-warriors-12",
+      "happenedAt": "2017-11-11T00:00:00.000Z",
+      "opponentRef": "oktagon:maximilian-bajlitz",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 62,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-17a8c674eed6be8cbc06",
+      "eventRef": "oktagon:event:history-x-fight-night-6",
+      "happenedAt": "2017-12-07T00:00:00.000Z",
+      "opponentRef": "oktagon:petr-ondrus",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 280,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-119c7e59b66ada28caae",
+      "eventRef": "oktagon:event:history-x-fight-night-8",
+      "happenedAt": "2018-03-03T00:00:00.000Z",
+      "opponentRef": "oktagon:jamie-sloane",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 126,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-460353d640867de46675",
+      "eventRef": "oktagon:event:history-x-fight-night-11",
+      "happenedAt": "2018-06-28T00:00:00.000Z",
+      "opponentRef": "oktagon:patrik-kincl",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-92488da387b112ac9c24",
+      "eventRef": "oktagon:event:history-x-fight-night-12",
+      "happenedAt": "2018-10-06T00:00:00.000Z",
+      "opponentRef": "oktagon:mateusz-ostrowski",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 366,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-76b1cff94812422931b9",
+      "eventRef": "oktagon:event:history-x-fight-night-14",
+      "happenedAt": "2018-11-18T00:00:00.000Z",
+      "opponentRef": "oktagon:moise-rimbon",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a724a9b5766125dddb51",
+      "eventRef": "oktagon:event:history-x-fight-night-15",
+      "happenedAt": "2018-12-27T00:00:00.000Z",
+      "opponentRef": "oktagon:flavio-rodrigo-magon",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 117,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-93c7fff4435e32a43850",
+      "eventRef": "oktagon:event:history-oktagon-11",
+      "happenedAt": "2019-03-16T00:00:00.000Z",
+      "opponentRef": "oktagon:pawe-brandys",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 265,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b32aeff41df47aa29fc3",
+      "eventRef": "oktagon:event:history-night-of-warriors-15",
+      "happenedAt": "2019-04-06T00:00:00.000Z",
+      "opponentRef": "oktagon:prince-aounallah",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b87241ec3ceaf995d380",
+      "eventRef": "oktagon:event:history-oktagon-13",
+      "happenedAt": "2019-07-27T00:00:00.000Z",
+      "opponentRef": "oktagon:henrique-da-silva",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-434ca78aca89b4891b11",
+      "eventRef": "oktagon:event:history-oktagon-15",
+      "happenedAt": "2019-11-09T00:00:00.000Z",
+      "opponentRef": "oktagon:attila-vegh",
+      "result": "loss",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 127,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-6adf951d1ee6085ee0a2",
+      "eventRef": "oktagon:event:history-oktagon-17",
+      "happenedAt": "2020-10-17T00:00:00.000Z",
+      "opponentRef": "oktagon:thomas-robertsen",
+      "result": "win",
+      "method": "Submission (north-south choke)",
+      "round": 3,
+      "elapsedSeconds": 662,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-2c4eca7250c3d06cae92",
+      "eventRef": "oktagon:event:history-oktagon-19",
+      "happenedAt": "2020-12-05T00:00:00.000Z",
+      "opponentRef": "oktagon:vaclav-mikulasek",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 125,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-cdb4a69921505057c035",
+      "eventRef": "oktagon:event:history-oktagon-20",
+      "happenedAt": "2020-12-30T00:00:00.000Z",
+      "opponentRef": "oktagon:alex-lohore",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-d4ea36375e648b2df9c1",
+      "eventRef": "oktagon:event:history-oktagon-22",
+      "happenedAt": "2021-03-27T00:00:00.000Z",
+      "opponentRef": "oktagon:milan-datelinka",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 132,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-07a4c394965f19ec52d6",
+      "eventRef": "oktagon:event:history-oktagon-33",
+      "happenedAt": "2022-06-04T00:00:00.000Z",
+      "opponentRef": "oktagon:micha-pasternak",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 235,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-568daeae8aa3ad3b2bf4",
+      "eventRef": "oktagon:event:history-oktagon-34",
+      "happenedAt": "2022-07-23T00:00:00.000Z",
+      "opponentRef": "oktagon:aleksandar-ilic",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 232,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9b72ede6ec7db453695b",
+      "eventRef": "oktagon:event:history-oktagon-41",
+      "happenedAt": "2023-04-15T00:00:00.000Z",
+      "opponentRef": "oktagon:al-matavao",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 198,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-83323eca6dfc7ab38c37",
+      "eventRef": "oktagon:event:history-oktagon-43",
+      "happenedAt": "2023-05-20T00:00:00.000Z",
+      "opponentRef": "oktagon:patrik-kincl",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-dd065136484f834d7ee8",
+      "eventRef": "oktagon:event:history-oktagon-45",
+      "happenedAt": "2023-07-29T00:00:00.000Z",
+      "opponentRef": "oktagon:lucas-alsina",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b3f16419af874fe0c457",
+      "eventRef": "oktagon:event:history-oktagon-47",
+      "happenedAt": "2023-10-07T00:00:00.000Z",
+      "opponentRef": "oktagon:pavol-langer",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 7,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-379c8905bb94906ea1bf",
+      "eventRef": "oktagon:event:history-oktagon-51",
+      "happenedAt": "2023-12-29T00:00:00.000Z",
+      "opponentRef": "oktagon:samuel-kristofic",
+      "result": "loss",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 108,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-7846c321f3a74e8b91f8",
+      "eventRef": "oktagon:event:history-oktagon-58",
+      "happenedAt": "2024-06-08T00:00:00.000Z",
+      "opponentRef": "oktagon:attila-vegh",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 345,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0aa66fc3c154718fa39c",
+      "eventRef": "oktagon:event:history-oktagon-65",
+      "happenedAt": "2024-12-29T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-2c9ef3813f31d8a495b8",
+      "eventRef": "oktagon:event:history-oktagon-65",
+      "happenedAt": "2024-12-29T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-2f944a4ff02b4044fae8",
+      "eventRef": "oktagon:event:history-oktagon-72",
+      "happenedAt": "2025-06-14T00:00:00.000Z",
+      "opponentRef": "oktagon:attila-vegh",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:karlos-vemola:history",
+      "bouts": 48,
+      "values": {
+        "bouts": 48,
+        "wins": 38,
+        "losses": 10,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.763158,
+        "koTkoWins": 9,
+        "submissionWins": 20,
+        "decisionWins": 9,
+        "koTkoWinShare": 0.236842,
+        "submissionWinShare": 0.526316,
+        "decisionWinShare": 0.236842,
+        "averageElapsedSeconds": 467.895833,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 2.716202,
+        "layoffDays": 414
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1837.1424044,
+    "deviation": 91.60546594,
+    "volatility": 0.05999692,
+    "boutCount": 48,
+    "asOfBoutRef": "oktagon:bout:history-2f944a4ff02b4044fae8",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "reachCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 47 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929",
+        "source:wikipedia:78757307"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

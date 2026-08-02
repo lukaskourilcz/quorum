@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-71edde893409f2395454",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ksw-86",
+    "name": "KSW 86",
+    "startsAtUtc": "2023-09-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:viktor-pesta",
+    "blue": "oktagon:filip-stawowy"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-09-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42735957"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 1,
+    "elapsedSeconds": 132,
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -91,9 +91,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 4319
+        "layoffDays": 4320
       },
-      "updatedAt": "2026-08-01T23:30:59.810Z"
+      "updatedAt": "2026-08-02T14:14:59.647Z"
     }
   ],
   "rating": {
@@ -103,7 +103,7 @@
     "volatility": 0.06000153,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-adcc14d368f59e625d49",
-    "updatedAt": "2026-08-01T23:30:59.810Z"
+    "updatedAt": "2026-08-02T14:14:59.647Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -143,11 +143,24 @@
         "source:wikipedia:33543499"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:33543499"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-01T23:30:59.810Z"
+  "updatedAt": "2026-08-02T14:14:59.647Z"
 }

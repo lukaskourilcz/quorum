@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-02",
+  "idempotencyKey": "9e5e08903e46ad2ea6833de8c0ef3d2e20b88e3e4a98f813ebded274cbc89cf3",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6",
+      "localization": "claude-sonnet-4-6"
+    }
+  },
+  "reason": "cu-edition decision meetings/2026-08-02-cu-edition",
+  "status": "no_edition",
+  "board": {
+    "meetingRef": "meetings/2026-08-02-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-02-cu-edition",
+    "noEditionReason": "budget_exhausted"
+  }
+}

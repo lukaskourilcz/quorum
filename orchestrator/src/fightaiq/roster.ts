@@ -239,9 +239,17 @@ export async function materializeWikimediaRoster(input: {
   root: string;
   entries: readonly WikimediaRosterEntry[];
   retrievedAt: Date;
+  /**
+   * The curated roster from config/mma-roster.json. FightAIQ tracks about 130 fighters, not
+   * everything a crawl can reach: a pass without this wrote 829 cards straight back over a
+   * pruned store, because the policy existed but nothing consulted it at the write. Omitted
+   * only by callers that have no policy loaded, which then keep the old behaviour.
+   */
+  allowedIds?: ReadonlySet<string>;
 }): Promise<string[]> {
   const output: string[] = [];
   for (const entry of [...input.entries].sort((left, right) => `${left.org}:${left.slug}`.localeCompare(`${right.org}:${right.slug}`))) {
+    if (input.allowedIds && !input.allowedIds.has(`${entry.org}:${entry.slug}`)) continue;
     const relative = `mma/fighters/${entry.org}:${entry.slug}.json`;
     const current = await readJson<unknown | null>(input.root, relative, null);
     const existing = current === null ? null : FighterCardSchema.parse(current);

@@ -578,7 +578,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-02-cu-edition",
-      "decisionOneLiner": "NO_EDITION. content_invalid_after_regeneration"
+      "decisionOneLiner": "NO_EDITION. budget_exhausted"
     },
     {
       "at": "2026-08-02T04:00:00.000Z",
@@ -602,7 +602,9 @@
       "at": "2026-08-02T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "missed"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-02-mag-editorial",
+      "decisionOneLiner": "AM: killed; PM: killed"
     },
     {
       "at": "2026-08-02T08:00:00.000Z",

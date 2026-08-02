@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-5162a2fede132616a4b8",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-amazon-talent-10",
+    "name": "Amazon Talent 10",
+    "startsAtUtc": "2018-12-05T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:felipe-lima",
+    "blue": "oktagon:eurides-bandeira"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-12-05T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80310974"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (retirement)",
+    "round": 3,
+    "elapsedSeconds": 820,
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

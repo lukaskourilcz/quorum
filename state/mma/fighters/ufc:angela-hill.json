@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Angela_Hill",
       "publisher": "Wikipedia",
       "title": "Angela Hill",
-      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-01T23:30:59.810Z",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -60,7 +60,7 @@
     "volatility": 0.06,
     "boutCount": 0,
     "asOfBoutRef": null,
-    "updatedAt": "2026-08-01T23:30:59.810Z"
+    "updatedAt": "2026-08-02T14:14:59.647Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -87,11 +87,22 @@
         "source:wikipedia:47691727"
       ],
       "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-01T23:30:59.810Z"
+  "updatedAt": "2026-08-02T14:14:59.647Z"
 }

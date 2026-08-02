@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-cef9daa3f41dc1b3bf67",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-professional-muaythai-league-13",
+    "name": "Professional Muaythai League 13",
+    "startsAtUtc": "2025-01-25T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:gustavo-lopez",
+    "blue": "oktagon:denis-tripsansky"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-01-25T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64100795"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:64100795"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64100795"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (leg injury)",
+    "round": 3,
+    "elapsedSeconds": 637,
+    "sourceRefs": [
+      "source:wikipedia:64100795"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64100795"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-b3f4f225887d5dfba8fa",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-45",
+    "name": "Oktagon 45",
+    "startsAtUtc": "2023-07-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:losene-keita",
+    "blue": "oktagon:mate-sanikidze"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-07-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757319"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (leg injury)",
+    "round": 1,
+    "elapsedSeconds": 68,
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

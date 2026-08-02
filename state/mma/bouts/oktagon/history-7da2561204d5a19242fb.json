@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-7da2561204d5a19242fb",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-50",
+    "name": "Oktagon 50",
+    "startsAtUtc": "2023-12-09T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:losene-keita",
+    "blue": "oktagon:niko-samsonidse"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-12-09T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757319"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 2,
+    "elapsedSeconds": 323,
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

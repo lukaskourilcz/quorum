@@ -1,5 +1,21 @@
 {
   "schemaVersion": "meeting-agenda-queue/1",
-  "agendas": [],
-  "updatedAt": "2026-08-01T00:00:00.000Z"
+  "agendas": [
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-f59b48142579ebbe",
+      "ventureId": "fightaiq",
+      "phase": "mma-intake",
+      "requestedBy": "CANVAS",
+      "sourcePhase": "mag-editorial",
+      "sourceMeetingRef": "meetings/2026-08-02-mag-editorial",
+      "summary": "Supply fight-week event priority list, verified FightAIQ fighter or event files, recent idea history and daily MMA bridge to enable two-slot assignment. Stylebook standards confirmed ready.",
+      "evidenceRefs": [],
+      "requestedAt": "2026-08-02T14:14:13.178Z",
+      "notBefore": "2026-08-03",
+      "expiresAt": "2026-08-06T23:59:59.000Z",
+      "status": "pending"
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:13.178Z"
 }

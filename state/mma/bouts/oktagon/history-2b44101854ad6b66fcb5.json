@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-2b44101854ad6b66fcb5",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-rcc-3",
+    "name": "RCC 3",
+    "startsAtUtc": "2018-07-09T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:viktor-pesta",
+    "blue": "oktagon:alexander-emelianenko"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-07-09T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42735957"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 532,
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

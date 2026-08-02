@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-325d36fc75c410a5d92f",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-cage-xfc-international-lake-constance-cup-2",
+    "name": "Cage XFC: International Lake Constance Cup 2",
+    "startsAtUtc": "2012-10-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:makhmud-muradov",
+    "blue": "oktagon:christoph-steinmann"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2012-10-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:61905642"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 1,
+    "elapsedSeconds": null,
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,7 +1,21 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-01T23:30:59.810Z",
+  "generatedAt": "2026-08-02T14:14:59.647Z",
   "items": [
+    {
+      "fighterRef": "ufc:alberto-crane",
+      "priority": 670,
+      "reason": "missing-history",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
     {
       "fighterRef": "ufc:alen-amedovski",
       "priority": 670,
@@ -7829,17 +7843,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:alberto-crane",
-      "priority": 630,
-      "reason": "missing-history",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm"
-      ]
-    },
-    {
-      "fighterRef": "ufc:abbdullah-mahmud",
+      "fighterRef": "oktagon:aaron-aby",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7853,7 +7857,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:adam-lehman",
+      "fighterRef": "oktagon:aboubakar-younousov",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7867,7 +7871,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:adam-nance",
+      "fighterRef": "oktagon:adalberto-mota-da-silva-jr",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7881,7 +7885,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:adrian-perez",
+      "fighterRef": "oktagon:admilson-pimentel",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7895,7 +7899,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:adriano-balby",
+      "fighterRef": "oktagon:adrian-yanez",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7909,7 +7913,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:adriano-de-souza",
+      "fighterRef": "oktagon:agy-sardari",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7923,7 +7927,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:akhmat-akhmedov",
+      "fighterRef": "oktagon:aitana-alvarez",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7937,7 +7941,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:akira-okada",
+      "fighterRef": "oktagon:akonne-wanliss",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7951,7 +7955,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:al-harlow",
+      "fighterRef": "oktagon:al-matavao",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7965,7 +7969,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:alejandro-solano-rodriguez",
+      "fighterRef": "oktagon:alateng-heili",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7979,7 +7983,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:aleksandar-radosavljevic",
+      "fighterRef": "oktagon:alberto-emiliano-pereira",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -7993,7 +7997,3395 @@
       ]
     },
     {
-      "fighterRef": "ufc:aleksei-oleinik",
+      "fighterRef": "oktagon:aleksandar-ilic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:aleksei-oleinik",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alen-amedovski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alessio-di-chirico",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alex-lohore",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alexander-emelianenko",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alexander-gladkov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alexander-uhlir",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:alexei-kudin",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ali-bagautinov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:aliaskhab-khizriev",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:amir-albazi",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:andre-ewell",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:andreas-birgels",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:andrei-arlovski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:andrew-sanchez",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:anita-bekus",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:anthony-birchak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:anthony-salamone",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:antonio-jones",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:anzelika-petkeviciute",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:artur-bagautinov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ashley-nichols",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ashley-pollard",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:attila-korkmaz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:attila-vegh",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:bartosz-gorczyca",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:bekzat-aliev",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:beno-adamia",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:bill-georgitsis",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:bryan-barberena",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:caio-borralho",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:caio-magalhaes",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:carl-kinslow",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:cecile-bolander",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:charles-johnson",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:cheyanne-vlismas",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:chris-barnett",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:christian-colombo",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:christina-netza",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:christoph-steinmann",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:cleveland-mclean",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:cornelia-holm",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:cynthia-arceo",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:damian-chandzel",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:daniel-dittrich",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:daniel-skvor",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:david-dvorak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:david-marcina",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:david-ramires",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:david-sajben",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:denis-tripsansky",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:denniston-sutherland",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:derrick-lewis",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:deyan-topalski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:diego-gonzalez",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:dionatan-carvalho",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:dritan-barjamaj",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:dzhangir-nasibov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:edvaldo-de-oliveira",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:eurides-bandeira",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:eva-dourthe",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:evgeniy-odnorog",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:farbod-iran-nezhad",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:fernando-flores",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:filip-macek",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:filip-stawowy",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:flavio-rodrigo-magon",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:francis-carmont",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:francisco-barrio",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:francisco-silva",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gerald-meerschaert",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gokhan-aksu",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gordon-roodman",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gracjan-golebiowski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:grzegorz-siwy",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gustavo-oliveira",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:hannah-cifers",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:henrique-da-silva",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:heqin-lin",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:hojat-khajevand",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:igor-severino",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ildemar-alcantara",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:isaias-monteiro-da-silva",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:istvan-toth",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ivan-andrushchenko",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ivan-buchinger",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ivan-luiz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ivan-vitasovic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jack-hermansson",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jake-collier",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jakub-bahnik",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jakub-tichota",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jamie-sloane",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jeff-molina",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jerome-rivera",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:john-redmond",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jon-madsen",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jonas-magard",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:jose-rodrigo-guelke",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:josh-parisian",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:joshua-van",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:juan-espino",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:justin-moore",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kalindra-faria",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kamil-cibinski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kamil-czyzewski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kamil-minda",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:karol-michalak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:karol-rysavy",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kasim-aras",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:katharina-dalisda",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kent-kauppinen",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:konrad-furmanek",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:konstantin-erokhin",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:krzysztof-jotko",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:krzysztof-klepacz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:kyle-mcclurkin",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lazar-todev",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:leidiane-fernandes",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:linsey-williams",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:livio-victoriano",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lorenzo-hood",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lucas-alsina",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lucie-pudilova",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lukas-olejnik",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lukas-tupa",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:maciej-rozanski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:magdalena-sormova",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:manel-kape",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:marcin-krysztofiak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:marcin-tybura",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:marcus-buchecha",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:markus-hipp",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:marvin-campbell",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:masato-nakamura",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:mate-sanikidze",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:matej-kuznik",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:mateusz-ostrowski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:matous-kohout",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:maximilian-bajlitz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:maycee-barber",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:merab-dvalishvili",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:micha-kita",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:micha-pasternak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:michal-konrad",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:michal-martinek",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:micol-di-segni",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:mike-kyle",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:mike-massenzio",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:milan-datelinka",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:milan-vrbic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:miles-johns",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:miroslav-strbak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:moise-rimbon",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:muhammad-naimov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:nathaniel-wood",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:niko-samsonidse",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:norbert-novenyi-jr",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:omari-akhmedov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:oscar-dolchin",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:patric-carroll",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:patrik-jevicky",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:patrik-kincl",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:pavol-langer",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:pawe-brandys",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:payton-talbott",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:peter-capkovic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:peter-yendall",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:petr-knize",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:petr-ondrus",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:petr-striz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:piotr-strus",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:polyana-viana",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:predrag-bogdanovic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:prince-aounallah",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:rafael-silva",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:raulian-paiva",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:raymond-jarman",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:riccardo-nosiglia",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:rizlen-zouak",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:rob-wilkinson",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:roman-szymanski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ronald-paradeiser",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ronny-markes",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:roza-gumienna",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ruslan-magomedov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:samuel-bark",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:samuel-kristofic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:sasa-lazic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:scott-askham",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:sean-cantor",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:sebastiao-da-silva-calixto",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:seth-petruzelli",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:shajidul-haque",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:shamil-gaziev",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:shaun-taylor",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:shota-gvasalia",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:simon-bruknar",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:soufiene-oudina",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:stav-economou",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:stefan-krajci",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:stephan-puetz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:sunna-davi-sdottir",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:szilvester-silbont",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:szymon-bajor",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tagir-ulanbekov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tarek-suleiman",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tato-primera",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tayron-chavarro",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:thomas-robertsen",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tiago-santos",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tiffany-masters",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tomas-kuzela",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tomas-penz",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:trevor-smith",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:tyson-nam",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ukasz-brzeski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:ukasz-ysoniewski",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:uran-satybaldiev",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:uros-stefanovic",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:vaclav-mikulasek",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:vartan-asatryan",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:virna-jandiroba",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:vit-mrakota",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:wendell-de-oliveira-marques",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:yasubey-enomoto",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:yevhen-orlov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:yosef-ali-mohammad",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:zhifa-shang",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:zoran-dod",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:zoran-krpan",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aaron-brink",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:abdul-razak-alhassan",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:adlan-amagov",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aisling-daly",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:akbarh-arreola",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:akihiro-gono",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:akira-corassani",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alan-baudot",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alan-belcher",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aleksa-camur",
+      "priority": 370,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "team"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aleksandra-albu",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -8035,483 +11427,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:alex-ramirez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ali-afra",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alistair-overeem",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:allan-sullivan",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-de-jesus",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:andrei-arlovski",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andy-montana",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andy-ogle",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andy-wang",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:angel-santibanez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:angela-hayes",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:annika-sitter",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ansar-chalangov",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:anthony-smith",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:antonio-mckee",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:art-hughes",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ashley-gooch",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:attila-vegh",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:aysen-berik",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:barb-honchak",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:bazigit-atajev",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:bobby-hoffman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brad-peterson",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brent-weedman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brian-tolbert",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:bryce-shepard-mejia",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:buck-meredith",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:buckley-acosta",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:carlos-torres",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:cesar-almeida",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:chael-sonnen",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:charlie-ward",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:chris-haseman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:chris-spang",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:claudio-ribeiro",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -8539,609 +11455,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:cody-sons",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:cory-timmerman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:crosley-gracie",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:curtis-crawford",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dae-won-kim",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:daisuke-nakamura",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:daisuke-watanabe",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dan-hardy",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dan-henderson",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dan-hornbuckle",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dan-huber",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dan-quinn",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:daniel-acacio",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:darin-hughes",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dave-huckaba",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:david-frank",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:david-gardner",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:denis-kang",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dennis-taddio",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:denys-liadovyi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:diego-gonzalez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dion-staring",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dirlei-broenstrup",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dominique-stetefeld",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dustin-denes",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dustin-poirier",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ed-herman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:eduardo-garvon",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:edwin-aguilar",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:egan-inoue",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:eli-joslin",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:emily-whitmire",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ericka-almeida",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:eva-liskova",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:evert-fyeet",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:evgeny-erokhin",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:fabiano-scherner",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:fabio-cherant",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:felipe-enomoto",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:fernando-zatarain",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:flavio-luiz-moura",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:francisco-trinaldo",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:frank-blessing",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:gabe-ruediger",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -9169,357 +11483,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:gammaliel-escarrega",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:gan-mcgee",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:gegard-mousasi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:gilberto-aguilar",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:graham-turner",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:grzegorz-tredowski",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:hajime-ohara",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:harout-terzyan",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:harry-moskowitz",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:hayato-sakurai",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:hector-carrillo",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:hector-lombard",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ivan-buchinger",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ivan-salaverry",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:izabela-badurek",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jacob-malkoun",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jadamba-narantungalag",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jake-matthews",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jaroslav-poborsky",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:jason-day",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jason-jones",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jason-macdonald",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jason-meaders",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jeff-ford",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jeremy-horn",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jesse-varela",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -9561,245 +11525,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:joe-pyfer",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:joe-riggs",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:john-meirzwa",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:jon-fitch",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jon-rizo",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jorge-alberto-bustamante",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jorge-santiago",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jos-eichelberger",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jose-luis-cocafuego",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:josh-parisian",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:juan-manuel-puig",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:juan-voelker",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jude-gonzales",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jukka-kuitunen",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:julian-hamilton",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:junior-dos-santos",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:justin-ledet",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jutaro-nakao",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -9827,259 +11553,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:kalib-starnes",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:karla-benitez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:katja-kankaanpaa",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kazuhiro-kusayanagi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kazuki-tokudome",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kazunari-murakami",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:keiichiro-yamamiya",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:keith-berry",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kelly-warren",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ken-jackson",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kendall-grove",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:khaos-williams",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:killys-mota",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kolby-adams",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kousei-kubota",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kyohei-wakimoto",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:lance-gibson",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:larry-papadopoulos",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:larry-robertson",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -10107,76 +11581,6 @@
       ]
     },
     {
-      "fighterRef": "ufc:lloyd-marshbanks",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:loma-lookboonmee",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:lucas-factor",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:luciano-correa",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:lyubov-demidova",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:mac-danzig",
       "priority": 370,
       "reason": "missing-profile",
@@ -10191,203 +11595,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:maiju-kujala",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:marcos-da-silva",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:marcus-sursa",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:marquis-mcknight",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:martin-begley",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:marvin-eastman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:masanori-suda",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:masato-fujiwara",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:maskhat-akhmetov",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:matt-hughes",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:matt-jones",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:matt-lagler",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:matt-mckeon",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:matt-rocca",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:mauricio-rua",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -10429,20 +11637,6 @@
       ]
     },
     {
-      "fighterRef": "ufc:melville-calabaca",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:michael-bisping",
       "priority": 370,
       "reason": "missing-profile",
@@ -10471,231 +11665,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:mike-bourke",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:mike-tseng",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:mike-whitehead",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:miroslav-strbak",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:molly-helsel",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:mounir-lazzez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:murilo-rua",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:myriem-el-banouti",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:myriem-lathouwers",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:nadia-van-der-wel",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:nicolae-negumereanu",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:nicole-sydboge",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:niko-price",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:nilson-de-castro",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:omari-akhmedov",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:osami-shibuya",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:parker-porter",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -10723,329 +11693,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:paul-reed",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:peter-mettler",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:randa-markos",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:raymond-jarman",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ricardo-corrales",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:rich-franklin",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:richard-montoya",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:robbie-lawler",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:robbie-peralta",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:robert-beraun",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:rodrigo-nascimento",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:roman-cordova",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ron-fields",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ron-stallings",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ronys-torres",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:rosi-sexton",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:rousimar-palhares",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:roy-nelson",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:sabah-homasi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:sam-sicilia",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:sean-loeffler",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:sean-salmon",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:shamil-tinagadjiev",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:shawn-frye",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -11073,189 +11721,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:sherman-pendergarst",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:steve-barnett",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:taisuke-okuno",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tamdan-mccrory",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:tanner-boser",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tatsuharu-doi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tetsuya-izuchi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tevi-say",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tiago-trator",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tim-ellis",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tim-mckenzie",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tj-waldburger",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:toby-imada",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:todd-bjornethun",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -11283,119 +11749,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:tommy-sauer",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:travis-browne",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tsunemichi-nagano",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tsuyoshi-kurihara",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:valentijn-overeem",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:vaughan-palelei",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:vitor-vianna",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:wade-shipp",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:walter-luna",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -11423,147 +11777,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:william-johnson",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:william-knight",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:wilson-gouveia",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yasunori-okuda",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yasushi-warita",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yoon-young-kim",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
       "fighterRef": "ufc:yoshihiro-akiyama",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yuji-sakuragi",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yuki-kondo",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yuki-okano",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yushin-okami",
       "priority": 370,
       "reason": "missing-profile",
       "gaps": [
@@ -11605,10 +11819,23 @@
       ]
     },
     {
-      "fighterRef": "ufc:aisling-daly",
-      "priority": 340,
+      "fighterRef": "oktagon:losene-keita",
+      "priority": 350,
       "reason": "missing-profile",
       "gaps": [
+        "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "record-history-mismatch"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lucia-szabova",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "record",
         "stance",
         "heightCm",
         "reachCm",
@@ -11616,48 +11843,29 @@
       ]
     },
     {
-      "fighterRef": "ufc:alan-belcher",
-      "priority": 340,
+      "fighterRef": "oktagon:will-fleury",
+      "priority": 350,
       "reason": "missing-profile",
       "gaps": [
         "stance",
+        "heightCm",
+        "reachCm",
+        "dateOfBirth",
+        "record-history-mismatch"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:karlos-vemola",
+      "priority": 330,
+      "reason": "missing-profile",
+      "gaps": [
         "heightCm",
         "reachCm",
         "record-history-mismatch"
       ]
     },
     {
-      "fighterRef": "ufc:akbarh-arreola",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm"
-      ]
-    },
-    {
-      "fighterRef": "ufc:akihiro-gono",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth"
-      ]
-    },
-    {
-      "fighterRef": "ufc:akira-corassani",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alan-baudot",
+      "fighterRef": "oktagon:makhmud-muradov",
       "priority": 330,
       "reason": "missing-profile",
       "gaps": [
@@ -11667,7 +11875,7 @@
       ]
     },
     {
-      "fighterRef": "ufc:aleksa-camur",
+      "fighterRef": "oktagon:mallory-martin",
       "priority": 330,
       "reason": "missing-profile",
       "gaps": [
@@ -11677,26 +11885,45 @@
       ]
     },
     {
-      "fighterRef": "ufc:aleksandra-albu",
+      "fighterRef": "oktagon:martin-buday",
       "priority": 330,
       "reason": "missing-profile",
       "gaps": [
         "stance",
         "heightCm",
-        "reachCm"
+        "record-history-mismatch"
       ]
     },
     {
-      "fighterRef": "ufc:abdul-razak-alhassan",
+      "fighterRef": "oktagon:mateusz-legierski",
+      "priority": 330,
+      "reason": "missing-profile",
+      "gaps": [
+        "stance",
+        "heightCm",
+        "record-history-mismatch"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gustavo-lopez",
       "priority": 320,
       "reason": "missing-profile",
       "gaps": [
-        "stance",
-        "heightCm"
+        "heightCm",
+        "record-history-mismatch"
       ]
     },
     {
-      "fighterRef": "ufc:aaron-brink",
+      "fighterRef": "oktagon:zhalgas-zhumagulov",
+      "priority": 320,
+      "reason": "missing-profile",
+      "gaps": [
+        "heightCm",
+        "record-history-mismatch"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:felipe-lima",
       "priority": 310,
       "reason": "missing-profile",
       "gaps": [
@@ -11704,11 +11931,11 @@
       ]
     },
     {
-      "fighterRef": "ufc:adlan-amagov",
+      "fighterRef": "oktagon:viktor-pesta",
       "priority": 310,
       "reason": "missing-profile",
       "gaps": [
-        "stance"
+        "heightCm"
       ]
     }
   ]

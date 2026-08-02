@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-1d956977488bbdad4272",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-257",
+    "name": "UFC 257",
+    "startsAtUtc": "2021-01-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:makhmud-muradov",
+    "blue": "oktagon:andrew-sanchez"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-01-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:61905642"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (flying knee and punches)",
+    "round": 3,
+    "elapsedSeconds": 779,
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

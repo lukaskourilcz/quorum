@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-d67494ab87a47e691fcb",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ksw-89",
+    "name": "KSW 89",
+    "startsAtUtc": "2023-12-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:viktor-pesta",
+    "blue": "oktagon:szymon-bajor"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-12-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42735957"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

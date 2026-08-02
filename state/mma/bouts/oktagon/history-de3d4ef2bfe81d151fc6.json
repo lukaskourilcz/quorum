@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-de3d4ef2bfe81d151fc6",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-22",
+    "name": "Oktagon 22",
+    "startsAtUtc": "2021-03-27T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:lucia-szabova",
+    "blue": "oktagon:christina-netza"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-03-27T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:83844409"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:83844409"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (head kick)",
+    "round": 1,
+    "elapsedSeconds": 90,
+    "sourceRefs": [
+      "source:wikipedia:83844409"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

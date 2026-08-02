@@ -5,6 +5,7 @@ import { atomicWriteJson } from "../state.js";
 import { reconcilePredictionResults } from "./analysis.js";
 import { rebuildDerivedFighterData } from "./derived.js";
 import { buildBackfillQueue, fetchWikimediaRoster, materializeWikimediaRoster, writeBackfillQueue, writeRosterStatus } from "./roster.js";
+import { loadRosterPolicy, rosterPolicyIds } from "./roster-policy.js";
 import { loadBoutRecords, loadFighterRecords } from "./store.js";
 import { enrichWikimediaBackfill } from "./wikimedia-backfill.js";
 
@@ -15,7 +16,8 @@ const [ufc, oktagon] = await Promise.all([
   fetchWikimediaRoster({ org: "ufc", context }),
   fetchWikimediaRoster({ org: "oktagon", context })
 ]);
-const paths = await materializeWikimediaRoster({ root: stateRoot, entries: [...ufc, ...oktagon], retrievedAt: now });
+const rosterPolicy = await loadRosterPolicy(configRoot);
+const paths = await materializeWikimediaRoster({ root: stateRoot, entries: [...ufc, ...oktagon], retrievedAt: now, allowedIds: rosterPolicyIds(rosterPolicy) });
 const [beforeFighters, beforeBouts] = await Promise.all([loadFighterRecords(), loadBoutRecords()]);
 const backfill = await enrichWikimediaBackfill({ root: stateRoot, fighters: beforeFighters, bouts: beforeBouts, queue: buildBackfillQueue({ fighters: beforeFighters, bouts: beforeBouts, now }), context, retrievedAt: now });
 const [enrichedFighters, enrichedBouts] = await Promise.all([loadFighterRecords(), loadBoutRecords()]);

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-31a4b0e31f0bc69a6e37",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-plmma-76",
+    "name": "PLMMA 76",
+    "startsAtUtc": "2018-09-22T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:mateusz-legierski",
+    "blue": "oktagon:kamil-czyzewski"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-09-22T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:81719858"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 449,
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

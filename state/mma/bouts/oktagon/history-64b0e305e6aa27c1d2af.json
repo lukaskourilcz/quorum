@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-64b0e305e6aa27c1d2af",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-czech-muay-thai-association-trutnovs-night-of-gladiators",
+    "name": "Czech Muay Thai Association: Trutnovs Night of Gladiators",
+    "startsAtUtc": "2013-02-07T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:makhmud-muradov",
+    "blue": "oktagon:pavol-langer"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-02-07T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:61905642"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 210,
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

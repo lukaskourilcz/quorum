@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-a9146e7d30f02c990ae5",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-bellator-203",
+    "name": "Bellator 203",
+    "startsAtUtc": "2018-07-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:will-fleury",
+    "blue": "oktagon:alen-amedovski"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-07-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757307"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punches)",
+    "round": 1,
+    "elapsedSeconds": 99,
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

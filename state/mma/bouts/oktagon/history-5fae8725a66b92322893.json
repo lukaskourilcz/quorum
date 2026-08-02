@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-5fae8725a66b92322893",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-mmaa-arena-2",
+    "name": "MMAA Aréna 2",
+    "startsAtUtc": "2013-11-10T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:makhmud-muradov",
+    "blue": "oktagon:livio-victoriano"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2013-11-10T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:61905642"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (triangle choke)",
+    "round": 1,
+    "elapsedSeconds": 220,
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

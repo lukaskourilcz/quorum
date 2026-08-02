@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-64973723fd9fc48815ca",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-43",
+    "name": "Oktagon 43",
+    "startsAtUtc": "2023-05-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:mateusz-legierski",
+    "blue": "oktagon:matej-kuznik"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-05-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:81719858"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

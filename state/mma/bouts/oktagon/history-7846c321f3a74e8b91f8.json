@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-7846c321f3a74e8b91f8",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-58",
+    "name": "Oktagon 58",
+    "startsAtUtc": "2024-06-08T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:karlos-vemola",
+    "blue": "oktagon:attila-vegh"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-06-08T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:26668929"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (arm-triangle choke)",
+    "round": 2,
+    "elapsedSeconds": 345,
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

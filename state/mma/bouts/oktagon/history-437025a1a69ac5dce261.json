@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-437025a1a69ac5dce261",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-192",
+    "name": "UFC 192",
+    "startsAtUtc": "2015-10-03T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:viktor-pesta",
+    "blue": "oktagon:derrick-lewis"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-10-03T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42735957"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 3,
+    "elapsedSeconds": 675,
+    "sourceRefs": [
+      "source:wikipedia:42735957"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

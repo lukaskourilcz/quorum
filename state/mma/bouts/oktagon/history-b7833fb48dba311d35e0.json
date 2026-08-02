@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-b7833fb48dba311d35e0",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-real-fight-arena-29",
+    "name": "Real Fight Arena 29",
+    "startsAtUtc": "2026-03-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:gustavo-lopez",
+    "blue": "oktagon:david-sajben"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-03-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64100795"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:64100795"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64100795"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:64100795"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64100795"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-379c8905bb94906ea1bf",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-51",
+    "name": "Oktagon 51",
+    "startsAtUtc": "2023-12-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:karlos-vemola",
+    "blue": "oktagon:samuel-kristofic"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-12-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:26668929"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punch)",
+    "round": 1,
+    "elapsedSeconds": 108,
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-6d9fa10369d059361b02",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-pfl-1",
+    "name": "PFL 1 (2023)",
+    "startsAtUtc": "2023-04-01T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:will-fleury",
+    "blue": "oktagon:krzysztof-jotko"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-04-01T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757307"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "NC (overturned)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,4926 @@
+{
+  "schemaVersion": "fightaiq-source-snapshot/1",
+  "date": "2026-08-02",
+  "retrievedAt": "2026-08-02T14:14:59.647Z",
+  "contentHash": "4d3fc3174da3f81e086d94fd8536f925448cf71dc922f4fdd1353736421e2ad3",
+  "evidenceRefs": [
+    "source:wikimedia:2026-08-02"
+  ],
+  "sources": [
+    {
+      "sourceId": "the-odds-api",
+      "status": "skipped",
+      "reason": "THE_ODDS_API_KEY is unavailable.",
+      "items": []
+    },
+    {
+      "sourceId": "cito-ufc",
+      "status": "skipped",
+      "reason": "CITO_API_KEY is unavailable.",
+      "items": []
+    },
+    {
+      "sourceId": "wikimedia",
+      "status": "success",
+      "reason": null,
+      "items": [
+        {
+          "org": "ufc",
+          "name": "Aaron Brink",
+          "slug": "aaron-brink",
+          "wikipediaTitle": "Aaron Brink",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aaron_Brink",
+          "pageId": 46641727
+        },
+        {
+          "org": "ufc",
+          "name": "Abdul Razak Alhassan",
+          "slug": "abdul-razak-alhassan",
+          "wikipediaTitle": "Abdul Razak Alhassan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Abdul_Razak_Alhassan",
+          "pageId": 53118203
+        },
+        {
+          "org": "ufc",
+          "name": "Adlan Amagov",
+          "slug": "adlan-amagov",
+          "wikipediaTitle": "Adlan Amagov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Adlan_Amagov",
+          "pageId": 31990317
+        },
+        {
+          "org": "ufc",
+          "name": "Aisling Daly",
+          "slug": "aisling-daly",
+          "wikipediaTitle": "Aisling Daly",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aisling_Daly",
+          "pageId": 28035301
+        },
+        {
+          "org": "ufc",
+          "name": "Akbarh Arreola",
+          "slug": "akbarh-arreola",
+          "wikipediaTitle": "Akbarh Arreola",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Akbarh_Arreola",
+          "pageId": 46801690
+        },
+        {
+          "org": "ufc",
+          "name": "Akihiro Gono",
+          "slug": "akihiro-gono",
+          "wikipediaTitle": "Akihiro Gono",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Akihiro_Gono",
+          "pageId": 5585490
+        },
+        {
+          "org": "ufc",
+          "name": "Akira Corassani",
+          "slug": "akira-corassani",
+          "wikipediaTitle": "Akira Corassani",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Akira_Corassani",
+          "pageId": 33543499
+        },
+        {
+          "org": "ufc",
+          "name": "Alan Baudot",
+          "slug": "alan-baudot",
+          "wikipediaTitle": "Alan Baudot",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alan_Baudot",
+          "pageId": 69880085
+        },
+        {
+          "org": "ufc",
+          "name": "Alan Belcher",
+          "slug": "alan-belcher",
+          "wikipediaTitle": "Alan Belcher",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alan_Belcher",
+          "pageId": 10162012
+        },
+        {
+          "org": "ufc",
+          "name": "Alberto Crane",
+          "slug": "alberto-crane",
+          "wikipediaTitle": "Alberto Crane",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alberto_Crane",
+          "pageId": 12574562
+        },
+        {
+          "org": "ufc",
+          "name": "Aleksa Camur",
+          "slug": "aleksa-camur",
+          "wikipediaTitle": "Aleksa Camur",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aleksa_Camur",
+          "pageId": 67283766
+        },
+        {
+          "org": "ufc",
+          "name": "Aleksandra Albu",
+          "slug": "aleksandra-albu",
+          "wikipediaTitle": "Aleksandra Albu",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aleksandra_Albu",
+          "pageId": 54392053
+        },
+        {
+          "org": "ufc",
+          "name": "Alen Amedovski",
+          "slug": "alen-amedovski",
+          "wikipediaTitle": "Alen Amedovski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alen_Amedovski",
+          "pageId": 67831660
+        },
+        {
+          "org": "ufc",
+          "name": "Alessio Di Chirico",
+          "slug": "alessio-di-chirico",
+          "wikipediaTitle": "Alessio Di Chirico",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alessio_Di_Chirico",
+          "pageId": 54379958
+        },
+        {
+          "org": "ufc",
+          "name": "Alex Caceres",
+          "slug": "alex-caceres",
+          "wikipediaTitle": "Alex Caceres",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alex_Caceres",
+          "pageId": 27725209
+        },
+        {
+          "org": "ufc",
+          "name": "Alex Chambers",
+          "slug": "alex-chambers",
+          "wikipediaTitle": "Alex Chambers",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alex_Chambers",
+          "pageId": 44670954
+        },
+        {
+          "org": "ufc",
+          "name": "Alex Garcia (fighter)",
+          "slug": "alex-garcia",
+          "wikipediaTitle": "Alex Garcia (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alex_Garcia_(fighter)",
+          "pageId": 40747270
+        },
+        {
+          "org": "ufc",
+          "name": "Alexa Grasso",
+          "slug": "alexa-grasso",
+          "wikipediaTitle": "Alexa Grasso",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexa_Grasso",
+          "pageId": 45441761
+        },
+        {
+          "org": "ufc",
+          "name": "Alexandre Dantas",
+          "slug": "alexandre-dantas",
+          "wikipediaTitle": "Alexandre Dantas",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexandre_Dantas",
+          "pageId": 17443105
+        },
+        {
+          "org": "ufc",
+          "name": "Alexandre Ferreira (fighter)",
+          "slug": "alexandre-ferreira",
+          "wikipediaTitle": "Alexandre Ferreira (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexandre_Ferreira_(fighter)",
+          "pageId": 15979292
+        },
+        {
+          "org": "ufc",
+          "name": "Alexis Davis (fighter)",
+          "slug": "alexis-davis",
+          "wikipediaTitle": "Alexis Davis (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexis_Davis_(fighter)",
+          "pageId": 22360621
+        },
+        {
+          "org": "ufc",
+          "name": "Ali Bagautinov",
+          "slug": "ali-bagautinov",
+          "wikipediaTitle": "Ali Bagautinov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ali_Bagautinov",
+          "pageId": 39754435
+        },
+        {
+          "org": "ufc",
+          "name": "Allan Góes",
+          "slug": "allan-goes",
+          "wikipediaTitle": "Allan Góes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Allan_G%C3%B3es",
+          "pageId": 10222822
+        },
+        {
+          "org": "ufc",
+          "name": "Allen Crowder",
+          "slug": "allen-crowder",
+          "wikipediaTitle": "Allen Crowder",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Allen_Crowder",
+          "pageId": 62362498
+        },
+        {
+          "org": "ufc",
+          "name": "Amanda Brundage",
+          "slug": "amanda-brundage",
+          "wikipediaTitle": "Amanda Brundage",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amanda_Brundage",
+          "pageId": 24490011
+        },
+        {
+          "org": "ufc",
+          "name": "Amanda Lemos",
+          "slug": "amanda-lemos",
+          "wikipediaTitle": "Amanda Lemos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amanda_Lemos",
+          "pageId": 64535234
+        },
+        {
+          "org": "ufc",
+          "name": "Amaury Bitetti",
+          "slug": "amaury-bitetti",
+          "wikipediaTitle": "Amaury Bitetti",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amaury_Bitetti",
+          "pageId": 38218287
+        },
+        {
+          "org": "ufc",
+          "name": "Amir Albazi",
+          "slug": "amir-albazi",
+          "wikipediaTitle": "Amir Albazi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amir_Albazi",
+          "pageId": 64585580
+        },
+        {
+          "org": "ufc",
+          "name": "Anderson dos Santos (fighter)",
+          "slug": "anderson-dos-santos",
+          "wikipediaTitle": "Anderson dos Santos (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Anderson_dos_Santos_(fighter)",
+          "pageId": 65334111
+        },
+        {
+          "org": "ufc",
+          "name": "Andre Ewell",
+          "slug": "andre-ewell",
+          "wikipediaTitle": "Andre Ewell",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andre_Ewell",
+          "pageId": 61461794
+        },
+        {
+          "org": "ufc",
+          "name": "André Fialho",
+          "slug": "andre-fialho",
+          "wikipediaTitle": "André Fialho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andr%C3%A9_Fialho",
+          "pageId": 70562139
+        },
+        {
+          "org": "ufc",
+          "name": "Andre Fili",
+          "slug": "andre-fili",
+          "wikipediaTitle": "Andre Fili",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andre_Fili",
+          "pageId": 40814604
+        },
+        {
+          "org": "ufc",
+          "name": "Andrea Lee (fighter)",
+          "slug": "andrea-lee",
+          "wikipediaTitle": "Andrea Lee (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andrea_Lee_(fighter)",
+          "pageId": 47865165
+        },
+        {
+          "org": "ufc",
+          "name": "Andrei Arlovski",
+          "slug": "andrei-arlovski",
+          "wikipediaTitle": "Andrei Arlovski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andrei_Arlovski",
+          "pageId": 2421137
+        },
+        {
+          "org": "ufc",
+          "name": "Andrew Craig",
+          "slug": "andrew-craig",
+          "wikipediaTitle": "Andrew Craig",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andrew_Craig",
+          "pageId": 34894193
+        },
+        {
+          "org": "ufc",
+          "name": "Andy Enz",
+          "slug": "andy-enz",
+          "wikipediaTitle": "Andy Enz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andy_Enz",
+          "pageId": 46949192
+        },
+        {
+          "org": "ufc",
+          "name": "Angela Hill",
+          "slug": "angela-hill",
+          "wikipediaTitle": "Angela Hill",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Angela_Hill",
+          "pageId": 47691727
+        },
+        {
+          "org": "ufc",
+          "name": "Anthony Birchak",
+          "slug": "anthony-birchak",
+          "wikipediaTitle": "Anthony Birchak",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Anthony_Birchak",
+          "pageId": 46918504
+        },
+        {
+          "org": "ufc",
+          "name": "Antônio Arroyo",
+          "slug": "antonio-arroyo",
+          "wikipediaTitle": "Antônio Arroyo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ant%C3%B4nio_Arroyo",
+          "pageId": 67420133
+        },
+        {
+          "org": "ufc",
+          "name": "Antonio Banuelos",
+          "slug": "antonio-banuelos",
+          "wikipediaTitle": "Antonio Banuelos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Antonio_Banuelos",
+          "pageId": 17428696
+        },
+        {
+          "org": "ufc",
+          "name": "Antônio Carlos Jr.",
+          "slug": "antonio-carlos-jr",
+          "wikipediaTitle": "Antônio Carlos Jr.",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ant%C3%B4nio_Carlos_Jr.",
+          "pageId": 43442413
+        },
+        {
+          "org": "ufc",
+          "name": "Antonio Carvalho",
+          "slug": "antonio-carvalho",
+          "wikipediaTitle": "Antonio Carvalho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Antonio_Carvalho",
+          "pageId": 22982813
+        },
+        {
+          "org": "ufc",
+          "name": "Aori Qileng",
+          "slug": "aori-qileng",
+          "wikipediaTitle": "Aori Qileng",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aori_Qileng",
+          "pageId": 70178359
+        },
+        {
+          "org": "ufc",
+          "name": "Ariane Carnelossi",
+          "slug": "ariane-carnelossi",
+          "wikipediaTitle": "Ariane Carnelossi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ariane_Carnelossi",
+          "pageId": 68442521
+        },
+        {
+          "org": "ufc",
+          "name": "Arjan Bhullar",
+          "slug": "arjan-bhullar",
+          "wikipediaTitle": "Arjan Bhullar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Arjan_Bhullar",
+          "pageId": 33441869
+        },
+        {
+          "org": "ufc",
+          "name": "Arnold Allen",
+          "slug": "arnold-allen",
+          "wikipediaTitle": "Arnold Allen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Arnold_Allen",
+          "pageId": 49598119
+        },
+        {
+          "org": "ufc",
+          "name": "Ashlee Evans-Smith",
+          "slug": "ashlee-evans-smith",
+          "wikipediaTitle": "Ashlee Evans-Smith",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ashlee_Evans-Smith",
+          "pageId": 51501586
+        },
+        {
+          "org": "ufc",
+          "name": "Askar Askarov",
+          "slug": "askar-askarov",
+          "wikipediaTitle": "Askar Askarov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Askar_Askarov",
+          "pageId": 63675824
+        },
+        {
+          "org": "ufc",
+          "name": "Aspen Ladd",
+          "slug": "aspen-ladd",
+          "wikipediaTitle": "Aspen Ladd",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aspen_Ladd",
+          "pageId": 50127023
+        },
+        {
+          "org": "ufc",
+          "name": "Asu Almabayev",
+          "slug": "asu-almabayev",
+          "wikipediaTitle": "Asu Almabayev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Asu_Almabayev",
+          "pageId": 77593874
+        },
+        {
+          "org": "ufc",
+          "name": "Ateba Gautier",
+          "slug": "ateba-gautier",
+          "wikipediaTitle": "Ateba Gautier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ateba_Gautier",
+          "pageId": 82864883
+        },
+        {
+          "org": "ufc",
+          "name": "Austin Arnett",
+          "slug": "austin-arnett",
+          "wikipediaTitle": "Austin Arnett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Austin_Arnett",
+          "pageId": 59119239
+        },
+        {
+          "org": "ufc",
+          "name": "Azamat Bekoev",
+          "slug": "azamat-bekoev",
+          "wikipediaTitle": "Azamat Bekoev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Azamat_Bekoev",
+          "pageId": 79879282
+        },
+        {
+          "org": "ufc",
+          "name": "Bartosz Fabiński",
+          "slug": "bartosz-fabinski",
+          "wikipediaTitle": "Bartosz Fabiński",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bartosz_Fabi%C5%84ski",
+          "pageId": 58023302
+        },
+        {
+          "org": "ufc",
+          "name": "Ben Alloway",
+          "slug": "ben-alloway",
+          "wikipediaTitle": "Ben Alloway",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ben_Alloway",
+          "pageId": 38220442
+        },
+        {
+          "org": "ufc",
+          "name": "Ben Askren",
+          "slug": "ben-askren",
+          "wikipediaTitle": "Ben Askren",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ben_Askren",
+          "pageId": 6163319
+        },
+        {
+          "org": "ufc",
+          "name": "Beneil Dariush",
+          "slug": "beneil-dariush",
+          "wikipediaTitle": "Beneil Dariush",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Beneil_Dariush",
+          "pageId": 43536705
+        },
+        {
+          "org": "ufc",
+          "name": "Bethe Correia",
+          "slug": "bethe-correia",
+          "wikipediaTitle": "Bethe Correia",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bethe_Correia",
+          "pageId": 43037425
+        },
+        {
+          "org": "ufc",
+          "name": "Bill Algeo",
+          "slug": "bill-algeo",
+          "wikipediaTitle": "Bill Algeo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bill_Algeo",
+          "pageId": 67143654
+        },
+        {
+          "org": "ufc",
+          "name": "Billy Elekana",
+          "slug": "billy-elekana",
+          "wikipediaTitle": "Billy Elekana",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Billy_Elekana",
+          "pageId": 82830749
+        },
+        {
+          "org": "ufc",
+          "name": "Bob Gilstrap",
+          "slug": "bob-gilstrap",
+          "wikipediaTitle": "Bob Gilstrap",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bob_Gilstrap",
+          "pageId": 17433715
+        },
+        {
+          "org": "ufc",
+          "name": "Brad Blackburn",
+          "slug": "brad-blackburn",
+          "wikipediaTitle": "Brad Blackburn",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brad_Blackburn",
+          "pageId": 10222517
+        },
+        {
+          "org": "ufc",
+          "name": "Brandon Davis",
+          "slug": "brandon-davis",
+          "wikipediaTitle": "Brandon Davis",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brandon_Davis",
+          "pageId": 57579497
+        },
+        {
+          "org": "ufc",
+          "name": "Brendan Allen",
+          "slug": "brendan-allen",
+          "wikipediaTitle": "Brendan Allen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brendan_Allen",
+          "pageId": 64400223
+        },
+        {
+          "org": "ufc",
+          "name": "Brian Bowles (fighter)",
+          "slug": "brian-bowles",
+          "wikipediaTitle": "Brian Bowles (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brian_Bowles_(fighter)",
+          "pageId": 14767606
+        },
+        {
+          "org": "ufc",
+          "name": "Brian Camozzi",
+          "slug": "brian-camozzi",
+          "wikipediaTitle": "Brian Camozzi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brian_Camozzi",
+          "pageId": 54427230
+        },
+        {
+          "org": "ufc",
+          "name": "Brian Ebersole",
+          "slug": "brian-ebersole",
+          "wikipediaTitle": "Brian Ebersole",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brian_Ebersole",
+          "pageId": 30841259
+        },
+        {
+          "org": "ufc",
+          "name": "Brian Foster (fighter)",
+          "slug": "brian-foster",
+          "wikipediaTitle": "Brian Foster (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brian_Foster_(fighter)",
+          "pageId": 24263718
+        },
+        {
+          "org": "ufc",
+          "name": "Brian Gassaway",
+          "slug": "brian-gassaway",
+          "wikipediaTitle": "Brian Gassaway",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brian_Gassaway",
+          "pageId": 17442564
+        },
+        {
+          "org": "ufc",
+          "name": "Brodie Farber",
+          "slug": "brodie-farber",
+          "wikipediaTitle": "Brodie Farber",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brodie_Farber",
+          "pageId": 17433784
+        },
+        {
+          "org": "ufc",
+          "name": "Bryan Barberena",
+          "slug": "bryan-barberena",
+          "wikipediaTitle": "Bryan Barberena",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bryan_Barberena",
+          "pageId": 49279951
+        },
+        {
+          "org": "ufc",
+          "name": "Bryan Battle",
+          "slug": "bryan-battle",
+          "wikipediaTitle": "Bryan Battle",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bryan_Battle",
+          "pageId": 78127736
+        },
+        {
+          "org": "ufc",
+          "name": "Bryan Caraway",
+          "slug": "bryan-caraway",
+          "wikipediaTitle": "Bryan Caraway",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bryan_Caraway",
+          "pageId": 25626205
+        },
+        {
+          "org": "ufc",
+          "name": "C. B. Dollaway",
+          "slug": "c-b-dollaway",
+          "wikipediaTitle": "C. B. Dollaway",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/C._B._Dollaway",
+          "pageId": 17430191
+        },
+        {
+          "org": "ufc",
+          "name": "Caio Borralho",
+          "slug": "caio-borralho",
+          "wikipediaTitle": "Caio Borralho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Caio_Borralho",
+          "pageId": 72075601
+        },
+        {
+          "org": "ufc",
+          "name": "Carla Esparza",
+          "slug": "carla-esparza",
+          "wikipediaTitle": "Carla Esparza",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carla_Esparza",
+          "pageId": 37299252
+        },
+        {
+          "org": "ufc",
+          "name": "Carlos Barreto (fighter)",
+          "slug": "carlos-barreto",
+          "wikipediaTitle": "Carlos Barreto (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carlos_Barreto_(fighter)",
+          "pageId": 16174499
+        },
+        {
+          "org": "ufc",
+          "name": "Carlos Condit",
+          "slug": "carlos-condit",
+          "wikipediaTitle": "Carlos Condit",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carlos_Condit",
+          "pageId": 13301335
+        },
+        {
+          "org": "ufc",
+          "name": "Carlos Diego Ferreira",
+          "slug": "carlos-diego-ferreira",
+          "wikipediaTitle": "Carlos Diego Ferreira",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carlos_Diego_Ferreira",
+          "pageId": 43769573
+        },
+        {
+          "org": "ufc",
+          "name": "Carlos Felipe",
+          "slug": "carlos-felipe",
+          "wikipediaTitle": "Carlos Felipe",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carlos_Felipe",
+          "pageId": 65671678
+        },
+        {
+          "org": "ufc",
+          "name": "Carlos Prates",
+          "slug": "carlos-prates",
+          "wikipediaTitle": "Carlos Prates",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carlos_Prates",
+          "pageId": 78357252
+        },
+        {
+          "org": "ufc",
+          "name": "Caros Fodor",
+          "slug": "caros-fodor",
+          "wikipediaTitle": "Caros Fodor",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Caros_Fodor",
+          "pageId": 31408829
+        },
+        {
+          "org": "ufc",
+          "name": "Cezar Ferreira",
+          "slug": "cezar-ferreira",
+          "wikipediaTitle": "Cezar Ferreira",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cezar_Ferreira",
+          "pageId": 35600827
+        },
+        {
+          "org": "ufc",
+          "name": "Charles Byrd (fighter)",
+          "slug": "charles-byrd",
+          "wikipediaTitle": "Charles Byrd (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Charles_Byrd_(fighter)",
+          "pageId": 61870291
+        },
+        {
+          "org": "ufc",
+          "name": "Charlie Brenneman",
+          "slug": "charlie-brenneman",
+          "wikipediaTitle": "Charlie Brenneman",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Charlie_Brenneman",
+          "pageId": 15212257
+        },
+        {
+          "org": "ufc",
+          "name": "Chase Gormley",
+          "slug": "chase-gormley",
+          "wikipediaTitle": "Chase Gormley",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chase_Gormley",
+          "pageId": 50297003
+        },
+        {
+          "org": "ufc",
+          "name": "Chico Camus",
+          "slug": "chico-camus",
+          "wikipediaTitle": "Chico Camus",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chico_Camus",
+          "pageId": 36702583
+        },
+        {
+          "org": "ufc",
+          "name": "Choi Doo-ho",
+          "slug": "choi-doo-ho",
+          "wikipediaTitle": "Choi Doo-ho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Choi_Doo-ho",
+          "pageId": 39786561
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Avila",
+          "slug": "chris-avila",
+          "wikipediaTitle": "Chris Avila",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Avila",
+          "pageId": 78859258
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Barnett",
+          "slug": "chris-barnett",
+          "wikipediaTitle": "Chris Barnett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Barnett",
+          "pageId": 69210240
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Beal",
+          "slug": "chris-beal",
+          "wikipediaTitle": "Chris Beal",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Beal",
+          "pageId": 42809829
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Brennan",
+          "slug": "chris-brennan",
+          "wikipediaTitle": "Chris Brennan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Brennan",
+          "pageId": 17445429
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Camozzi",
+          "slug": "chris-camozzi",
+          "wikipediaTitle": "Chris Camozzi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Camozzi",
+          "pageId": 26689270
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Cariaso",
+          "slug": "chris-cariaso",
+          "wikipediaTitle": "Chris Cariaso",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Cariaso",
+          "pageId": 27428632
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Clements (fighter)",
+          "slug": "chris-clements",
+          "wikipediaTitle": "Chris Clements (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Clements_(fighter)",
+          "pageId": 34312797
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Cope",
+          "slug": "chris-cope",
+          "wikipediaTitle": "Chris Cope",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Cope",
+          "pageId": 31432313
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Curtis (fighter)",
+          "slug": "chris-curtis",
+          "wikipediaTitle": "Chris Curtis (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Curtis_(fighter)",
+          "pageId": 69894102
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Daukaus",
+          "slug": "chris-daukaus",
+          "wikipediaTitle": "Chris Daukaus",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Daukaus",
+          "pageId": 66021543
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Dempsey",
+          "slug": "chris-dempsey",
+          "wikipediaTitle": "Chris Dempsey",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Dempsey",
+          "pageId": 47489388
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Duncan (fighter)",
+          "slug": "chris-duncan",
+          "wikipediaTitle": "Chris Duncan (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Duncan_(fighter)",
+          "pageId": 81156024
+        },
+        {
+          "org": "ufc",
+          "name": "Chris Fishgold",
+          "slug": "chris-fishgold",
+          "wikipediaTitle": "Chris Fishgold",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Chris_Fishgold",
+          "pageId": 61856276
+        },
+        {
+          "org": "ufc",
+          "name": "Christian Aguilera",
+          "slug": "christian-aguilera",
+          "wikipediaTitle": "Christian Aguilera",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Christian_Aguilera",
+          "pageId": 66021514
+        },
+        {
+          "org": "ufc",
+          "name": "Christian Leroy Duncan",
+          "slug": "christian-leroy-duncan",
+          "wikipediaTitle": "Christian Leroy Duncan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Christian_Leroy_Duncan",
+          "pageId": 81572442
+        },
+        {
+          "org": "ufc",
+          "name": "Christos Giagos",
+          "slug": "christos-giagos",
+          "wikipediaTitle": "Christos Giagos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Christos_Giagos",
+          "pageId": 46703653
+        },
+        {
+          "org": "ufc",
+          "name": "Cindy Dandois",
+          "slug": "cindy-dandois",
+          "wikipediaTitle": "Cindy Dandois",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cindy_Dandois",
+          "pageId": 50885433
+        },
+        {
+          "org": "ufc",
+          "name": "Ciryl Gane",
+          "slug": "ciryl-gane",
+          "wikipediaTitle": "Ciryl Gane",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ciryl_Gane",
+          "pageId": 62192397
+        },
+        {
+          "org": "ufc",
+          "name": "Cláudia Gadelha",
+          "slug": "claudia-gadelha",
+          "wikipediaTitle": "Cláudia Gadelha",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cl%C3%A1udia_Gadelha",
+          "pageId": 39984067
+        },
+        {
+          "org": "ufc",
+          "name": "Clay Collard",
+          "slug": "clay-collard",
+          "wikipediaTitle": "Clay Collard",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Clay_Collard",
+          "pageId": 46896613
+        },
+        {
+          "org": "ufc",
+          "name": "Cody Brundage",
+          "slug": "cody-brundage",
+          "wikipediaTitle": "Cody Brundage",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cody_Brundage",
+          "pageId": 72947009
+        },
+        {
+          "org": "ufc",
+          "name": "Cody Donovan",
+          "slug": "cody-donovan",
+          "wikipediaTitle": "Cody Donovan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cody_Donovan",
+          "pageId": 37948019
+        },
+        {
+          "org": "ufc",
+          "name": "Cody Durden",
+          "slug": "cody-durden",
+          "wikipediaTitle": "Cody Durden",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cody_Durden",
+          "pageId": 68557965
+        },
+        {
+          "org": "ufc",
+          "name": "Cody Garbrandt",
+          "slug": "cody-garbrandt",
+          "wikipediaTitle": "Cody Garbrandt",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cody_Garbrandt",
+          "pageId": 47163936
+        },
+        {
+          "org": "ufc",
+          "name": "Cody Gibson",
+          "slug": "cody-gibson",
+          "wikipediaTitle": "Cody Gibson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cody_Gibson",
+          "pageId": 43967393
+        },
+        {
+          "org": "ufc",
+          "name": "Colby Covington",
+          "slug": "colby-covington",
+          "wikipediaTitle": "Colby Covington",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Colby_Covington",
+          "pageId": 45588434
+        },
+        {
+          "org": "ufc",
+          "name": "Cole Escovedo",
+          "slug": "cole-escovedo",
+          "wikipediaTitle": "Cole Escovedo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cole_Escovedo",
+          "pageId": 13300453
+        },
+        {
+          "org": "ufc",
+          "name": "Corey Anderson (fighter)",
+          "slug": "corey-anderson",
+          "wikipediaTitle": "Corey Anderson (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Corey_Anderson_(fighter)",
+          "pageId": 43309764
+        },
+        {
+          "org": "ufc",
+          "name": "Cortney Casey",
+          "slug": "cortney-casey",
+          "wikipediaTitle": "Cortney Casey",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cortney_Casey",
+          "pageId": 53620882
+        },
+        {
+          "org": "ufc",
+          "name": "Cris Cyborg",
+          "slug": "cris-cyborg",
+          "wikipediaTitle": "Cris Cyborg",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cris_Cyborg",
+          "pageId": 18373446
+        },
+        {
+          "org": "ufc",
+          "name": "Curtis Blaydes",
+          "slug": "curtis-blaydes",
+          "wikipediaTitle": "Curtis Blaydes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Curtis_Blaydes",
+          "pageId": 53107086
+        },
+        {
+          "org": "ufc",
+          "name": "Cynthia Calvillo",
+          "slug": "cynthia-calvillo",
+          "wikipediaTitle": "Cynthia Calvillo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cynthia_Calvillo",
+          "pageId": 53382500
+        },
+        {
+          "org": "ufc",
+          "name": "Cyril Asker",
+          "slug": "cyril-asker",
+          "wikipediaTitle": "Cyril Asker",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cyril_Asker",
+          "pageId": 54392637
+        },
+        {
+          "org": "ufc",
+          "name": "Cyrille Diabaté",
+          "slug": "cyrille-diabate",
+          "wikipediaTitle": "Cyrille Diabaté",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cyrille_Diabat%C3%A9",
+          "pageId": 18722380
+        },
+        {
+          "org": "ufc",
+          "name": "Daichi Abe",
+          "slug": "daichi-abe",
+          "wikipediaTitle": "Daichi Abe",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Daichi_Abe",
+          "pageId": 58096461
+        },
+        {
+          "org": "ufc",
+          "name": "Damien Brown (fighter)",
+          "slug": "damien-brown",
+          "wikipediaTitle": "Damien Brown (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Damien_Brown_(fighter)",
+          "pageId": 53971374
+        },
+        {
+          "org": "ufc",
+          "name": "Dan Bobish",
+          "slug": "dan-bobish",
+          "wikipediaTitle": "Dan Bobish",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dan_Bobish",
+          "pageId": 20853526
+        },
+        {
+          "org": "ufc",
+          "name": "Dan Christison",
+          "slug": "dan-christison",
+          "wikipediaTitle": "Dan Christison",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dan_Christison",
+          "pageId": 6215722
+        },
+        {
+          "org": "ufc",
+          "name": "Dan Cramer",
+          "slug": "dan-cramer",
+          "wikipediaTitle": "Dan Cramer",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dan_Cramer",
+          "pageId": 20598596
+        },
+        {
+          "org": "ufc",
+          "name": "Dan Evensen",
+          "slug": "dan-evensen",
+          "wikipediaTitle": "Dan Evensen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dan_Evensen",
+          "pageId": 17621533
+        },
+        {
+          "org": "ufc",
+          "name": "Danaa Batgerel",
+          "slug": "danaa-batgerel",
+          "wikipediaTitle": "Danaa Batgerel",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Danaa_Batgerel",
+          "pageId": 65265334
+        },
+        {
+          "org": "ufc",
+          "name": "Daniel Cormier",
+          "slug": "daniel-cormier",
+          "wikipediaTitle": "Daniel Cormier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Daniel_Cormier",
+          "pageId": 16801144
+        },
+        {
+          "org": "ufc",
+          "name": "Daniel Santos (fighter)",
+          "slug": "daniel-santos",
+          "wikipediaTitle": "Daniel Santos (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Daniel_Santos_(fighter)",
+          "pageId": 81261829
+        },
+        {
+          "org": "ufc",
+          "name": "Danny Castillo",
+          "slug": "danny-castillo",
+          "wikipediaTitle": "Danny Castillo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Danny_Castillo",
+          "pageId": 18177632
+        },
+        {
+          "org": "ufc",
+          "name": "Danny Chavez",
+          "slug": "danny-chavez",
+          "wikipediaTitle": "Danny Chavez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Danny_Chavez",
+          "pageId": 67780060
+        },
+        {
+          "org": "ufc",
+          "name": "Danny Downes",
+          "slug": "danny-downes",
+          "wikipediaTitle": "Danny Downes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Danny_Downes",
+          "pageId": 27730019
+        },
+        {
+          "org": "ufc",
+          "name": "Daron Cruickshank",
+          "slug": "daron-cruickshank",
+          "wikipediaTitle": "Daron Cruickshank",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Daron_Cruickshank",
+          "pageId": 28556566
+        },
+        {
+          "org": "ufc",
+          "name": "Darren Elkins",
+          "slug": "darren-elkins",
+          "wikipediaTitle": "Darren Elkins",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Darren_Elkins",
+          "pageId": 26388293
+        },
+        {
+          "org": "ufc",
+          "name": "Dave Beneteau",
+          "slug": "dave-beneteau",
+          "wikipediaTitle": "Dave Beneteau",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dave_Beneteau",
+          "pageId": 14931925
+        },
+        {
+          "org": "ufc",
+          "name": "David Baron (fighter)",
+          "slug": "david-baron",
+          "wikipediaTitle": "David Baron (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/David_Baron_(fighter)",
+          "pageId": 17944505
+        },
+        {
+          "org": "ufc",
+          "name": "David Bielkheden",
+          "slug": "david-bielkheden",
+          "wikipediaTitle": "David Bielkheden",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/David_Bielkheden",
+          "pageId": 15985025
+        },
+        {
+          "org": "ufc",
+          "name": "David Branch (fighter)",
+          "slug": "david-branch",
+          "wikipediaTitle": "David Branch (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/David_Branch_(fighter)",
+          "pageId": 27437385
+        },
+        {
+          "org": "ufc",
+          "name": "David Dvořák",
+          "slug": "david-dvorak",
+          "wikipediaTitle": "David Dvořák",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/David_Dvo%C5%99%C3%A1k",
+          "pageId": 64360802
+        },
+        {
+          "org": "ufc",
+          "name": "Deiveson Figueiredo",
+          "slug": "deiveson-figueiredo",
+          "wikipediaTitle": "Deiveson Figueiredo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
+          "pageId": 56637932
+        },
+        {
+          "org": "ufc",
+          "name": "Denise Gomes",
+          "slug": "denise-gomes",
+          "wikipediaTitle": "Denise Gomes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Denise_Gomes",
+          "pageId": 74765470
+        },
+        {
+          "org": "ufc",
+          "name": "Dennis Bermudez",
+          "slug": "dennis-bermudez",
+          "wikipediaTitle": "Dennis Bermudez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dennis_Bermudez",
+          "pageId": 32095601
+        },
+        {
+          "org": "ufc",
+          "name": "Derek Brunson",
+          "slug": "derek-brunson",
+          "wikipediaTitle": "Derek Brunson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Derek_Brunson",
+          "pageId": 31786551
+        },
+        {
+          "org": "ufc",
+          "name": "Devin Clark (fighter)",
+          "slug": "devin-clark",
+          "wikipediaTitle": "Devin Clark (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Devin_Clark_(fighter)",
+          "pageId": 54147637
+        },
+        {
+          "org": "ufc",
+          "name": "Diana Belbiță",
+          "slug": "diana-belbita",
+          "wikipediaTitle": "Diana Belbiță",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Diana_Belbi%C8%9B%C4%83",
+          "pageId": 68192162
+        },
+        {
+          "org": "ufc",
+          "name": "Diego Brandão",
+          "slug": "diego-brandao",
+          "wikipediaTitle": "Diego Brandão",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Diego_Brand%C3%A3o",
+          "pageId": 37343058
+        },
+        {
+          "org": "ufc",
+          "name": "Dominick Cruz",
+          "slug": "dominick-cruz",
+          "wikipediaTitle": "Dominick Cruz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dominick_Cruz",
+          "pageId": 21719230
+        },
+        {
+          "org": "ufc",
+          "name": "Don Frye",
+          "slug": "don-frye",
+          "wikipediaTitle": "Don Frye",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Don_Frye",
+          "pageId": 1753067
+        },
+        {
+          "org": "ufc",
+          "name": "Donald Cerrone",
+          "slug": "donald-cerrone",
+          "wikipediaTitle": "Donald Cerrone",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Donald_Cerrone",
+          "pageId": 17994055
+        },
+        {
+          "org": "ufc",
+          "name": "Doug Evans (fighter)",
+          "slug": "doug-evans",
+          "wikipediaTitle": "Doug Evans (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Doug_Evans_(fighter)",
+          "pageId": 17440697
+        },
+        {
+          "org": "ufc",
+          "name": "Drew Dober",
+          "slug": "drew-dober",
+          "wikipediaTitle": "Drew Dober",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Drew_Dober",
+          "pageId": 44729313
+        },
+        {
+          "org": "ufc",
+          "name": "Drew Fickett",
+          "slug": "drew-fickett",
+          "wikipediaTitle": "Drew Fickett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Drew_Fickett",
+          "pageId": 17441888
+        },
+        {
+          "org": "ufc",
+          "name": "Dricus du Plessis",
+          "slug": "dricus-du-plessis",
+          "wikipediaTitle": "Dricus du Plessis",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dricus_du_Plessis",
+          "pageId": 62595898
+        },
+        {
+          "org": "ufc",
+          "name": "Dylan Andrews",
+          "slug": "dylan-andrews",
+          "wikipediaTitle": "Dylan Andrews",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dylan_Andrews",
+          "pageId": 39123804
+        },
+        {
+          "org": "ufc",
+          "name": "Ebenezer Fontes Braga",
+          "slug": "ebenezer-fontes-braga",
+          "wikipediaTitle": "Ebenezer Fontes Braga",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ebenezer_Fontes_Braga",
+          "pageId": 17446702
+        },
+        {
+          "org": "ufc",
+          "name": "Eddie Alvarez",
+          "slug": "eddie-alvarez",
+          "wikipediaTitle": "Eddie Alvarez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Eddie_Alvarez",
+          "pageId": 16122692
+        },
+        {
+          "org": "ufc",
+          "name": "Eddie Gordon (fighter)",
+          "slug": "eddie-gordon",
+          "wikipediaTitle": "Eddie Gordon (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Eddie_Gordon_(fighter)",
+          "pageId": 43242821
+        },
+        {
+          "org": "ufc",
+          "name": "Édgar Cháirez",
+          "slug": "edgar-chairez",
+          "wikipediaTitle": "Édgar Cháirez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/%C3%89dgar_Ch%C3%A1irez",
+          "pageId": 81862654
+        },
+        {
+          "org": "ufc",
+          "name": "Edgar García (fighter)",
+          "slug": "edgar-garcia",
+          "wikipediaTitle": "Edgar García (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Edgar_Garc%C3%ADa_(fighter)",
+          "pageId": 22740549
+        },
+        {
+          "org": "ufc",
+          "name": "Edson Barboza",
+          "slug": "edson-barboza",
+          "wikipediaTitle": "Edson Barboza",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Edson_Barboza",
+          "pageId": 28292458
+        },
+        {
+          "org": "ufc",
+          "name": "Edward Faaloloto",
+          "slug": "edward-faaloloto",
+          "wikipediaTitle": "Edward Faaloloto",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Edward_Faaloloto",
+          "pageId": 32488102
+        },
+        {
+          "org": "ufc",
+          "name": "Edwin Figueroa",
+          "slug": "edwin-figueroa",
+          "wikipediaTitle": "Edwin Figueroa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Edwin_Figueroa",
+          "pageId": 31826170
+        },
+        {
+          "org": "ufc",
+          "name": "Efraín Escudero",
+          "slug": "efrain-escudero",
+          "wikipediaTitle": "Efraín Escudero",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Efra%C3%ADn_Escudero",
+          "pageId": 16128317
+        },
+        {
+          "org": "ufc",
+          "name": "Emily Kagan",
+          "slug": "emily-kagan",
+          "wikipediaTitle": "Emily Kagan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Emily_Kagan",
+          "pageId": 44666734
+        },
+        {
+          "org": "ufc",
+          "name": "Enrique Barzola",
+          "slug": "enrique-barzola",
+          "wikipediaTitle": "Enrique Barzola",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Enrique_Barzola",
+          "pageId": 54518890
+        },
+        {
+          "org": "ufc",
+          "name": "Erin Blanchfield",
+          "slug": "erin-blanchfield",
+          "wikipediaTitle": "Erin Blanchfield",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Erin_Blanchfield",
+          "pageId": 62182166
+        },
+        {
+          "org": "ufc",
+          "name": "Ernest Chavez (fighter)",
+          "slug": "ernest-chavez",
+          "wikipediaTitle": "Ernest Chavez (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ernest_Chavez_(fighter)",
+          "pageId": 42943252
+        },
+        {
+          "org": "ufc",
+          "name": "Eryk Anders",
+          "slug": "eryk-anders",
+          "wikipediaTitle": "Eryk Anders",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Eryk_Anders",
+          "pageId": 54553684
+        },
+        {
+          "org": "ufc",
+          "name": "Evan Dunham",
+          "slug": "evan-dunham",
+          "wikipediaTitle": "Evan Dunham",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Evan_Dunham",
+          "pageId": 21603408
+        },
+        {
+          "org": "ufc",
+          "name": "Fabio Cherant",
+          "slug": "fabio-cherant",
+          "wikipediaTitle": "Fabio Cherant",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Fabio_Cherant",
+          "pageId": 69341187
+        },
+        {
+          "org": "ufc",
+          "name": "Fabrício Camões",
+          "slug": "fabricio-camoes",
+          "wikipediaTitle": "Fabrício Camões",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Fabr%C3%ADcio_Cam%C3%B5es",
+          "pageId": 25056410
+        },
+        {
+          "org": "ufc",
+          "name": "Farid Basharat",
+          "slug": "farid-basharat",
+          "wikipediaTitle": "Farid Basharat",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Farid_Basharat",
+          "pageId": 75532612
+        },
+        {
+          "org": "ufc",
+          "name": "Felice Herrig",
+          "slug": "felice-herrig",
+          "wikipediaTitle": "Felice Herrig",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Felice_Herrig",
+          "pageId": 16182887
+        },
+        {
+          "org": "ufc",
+          "name": "Felipe Arantes",
+          "slug": "felipe-arantes",
+          "wikipediaTitle": "Felipe Arantes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Felipe_Arantes",
+          "pageId": 34389359
+        },
+        {
+          "org": "ufc",
+          "name": "Felipe Colares",
+          "slug": "felipe-colares",
+          "wikipediaTitle": "Felipe Colares",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Felipe_Colares",
+          "pageId": 64267595
+        },
+        {
+          "org": "ufc",
+          "name": "Francimar Barroso",
+          "slug": "francimar-barroso",
+          "wikipediaTitle": "Francimar Barroso",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Francimar_Barroso",
+          "pageId": 41925420
+        },
+        {
+          "org": "ufc",
+          "name": "Francis Carmont",
+          "slug": "francis-carmont",
+          "wikipediaTitle": "Francis Carmont",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Francis_Carmont",
+          "pageId": 33576518
+        },
+        {
+          "org": "ufc",
+          "name": "Francisco Figueiredo",
+          "slug": "francisco-figueiredo",
+          "wikipediaTitle": "Francisco Figueiredo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Francisco_Figueiredo",
+          "pageId": 69563943
+        },
+        {
+          "org": "ufc",
+          "name": "Frank Camacho",
+          "slug": "frank-camacho",
+          "wikipediaTitle": "Frank Camacho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Frank_Camacho",
+          "pageId": 55679810
+        },
+        {
+          "org": "ufc",
+          "name": "Frankie Edgar",
+          "slug": "frankie-edgar",
+          "wikipediaTitle": "Frankie Edgar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Frankie_Edgar",
+          "pageId": 10071745
+        },
+        {
+          "org": "ufc",
+          "name": "Gabriel Benítez",
+          "slug": "gabriel-benitez",
+          "wikipediaTitle": "Gabriel Benítez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gabriel_Ben%C3%ADtez",
+          "pageId": 54583435
+        },
+        {
+          "org": "ufc",
+          "name": "Gabriel Bonfim",
+          "slug": "gabriel-bonfim",
+          "wikipediaTitle": "Gabriel Bonfim",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gabriel_Bonfim",
+          "pageId": 80953540
+        },
+        {
+          "org": "ufc",
+          "name": "Gabriel Gonzaga",
+          "slug": "gabriel-gonzaga",
+          "wikipediaTitle": "Gabriel Gonzaga",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gabriel_Gonzaga",
+          "pageId": 8913616
+        },
+        {
+          "org": "ufc",
+          "name": "Gadzhimurad Antigulov",
+          "slug": "gadzhimurad-antigulov",
+          "wikipediaTitle": "Gadzhimurad Antigulov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gadzhimurad_Antigulov",
+          "pageId": 54400788
+        },
+        {
+          "org": "ufc",
+          "name": "Gary Goodridge",
+          "slug": "gary-goodridge",
+          "wikipediaTitle": "Gary Goodridge",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gary_Goodridge",
+          "pageId": 3186377
+        },
+        {
+          "org": "ufc",
+          "name": "Geraldo de Freitas",
+          "slug": "geraldo-de-freitas",
+          "wikipediaTitle": "Geraldo de Freitas",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Geraldo_de_Freitas",
+          "pageId": 65645003
+        },
+        {
+          "org": "ufc",
+          "name": "Gerard Gordeau",
+          "slug": "gerard-gordeau",
+          "wikipediaTitle": "Gerard Gordeau",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gerard_Gordeau",
+          "pageId": 9101404
+        },
+        {
+          "org": "ufc",
+          "name": "Giga Chikadze",
+          "slug": "giga-chikadze",
+          "wikipediaTitle": "Giga Chikadze",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Giga_Chikadze",
+          "pageId": 64057645
+        },
+        {
+          "org": "ufc",
+          "name": "Gil Castillo",
+          "slug": "gil-castillo",
+          "wikipediaTitle": "Gil Castillo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gil_Castillo",
+          "pageId": 4212216
+        },
+        {
+          "org": "ufc",
+          "name": "Gilbert Burns",
+          "slug": "gilbert-burns",
+          "wikipediaTitle": "Gilbert Burns",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gilbert_Burns",
+          "pageId": 36899924
+        },
+        {
+          "org": "ufc",
+          "name": "Gloria de Paula",
+          "slug": "gloria-de-paula",
+          "wikipediaTitle": "Gloria de Paula",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gloria_de_Paula",
+          "pageId": 69469775
+        },
+        {
+          "org": "ufc",
+          "name": "Grant Dawson",
+          "slug": "grant-dawson",
+          "wikipediaTitle": "Grant Dawson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Grant_Dawson",
+          "pageId": 63260298
+        },
+        {
+          "org": "ufc",
+          "name": "Gregor Gillespie",
+          "slug": "gregor-gillespie",
+          "wikipediaTitle": "Gregor Gillespie",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gregor_Gillespie",
+          "pageId": 53594292
+        },
+        {
+          "org": "ufc",
+          "name": "Guido Cannetti",
+          "slug": "guido-cannetti",
+          "wikipediaTitle": "Guido Cannetti",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Guido_Cannetti",
+          "pageId": 47451375
+        },
+        {
+          "org": "ufc",
+          "name": "Hacran Dias",
+          "slug": "hacran-dias",
+          "wikipediaTitle": "Hacran Dias",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hacran_Dias",
+          "pageId": 26284660
+        },
+        {
+          "org": "ufc",
+          "name": "Hakeem Dawodu",
+          "slug": "hakeem-dawodu",
+          "wikipediaTitle": "Hakeem Dawodu",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hakeem_Dawodu",
+          "pageId": 55997800
+        },
+        {
+          "org": "ufc",
+          "name": "Hamdy Abdelwahab",
+          "slug": "hamdy-abdelwahab",
+          "wikipediaTitle": "Hamdy Abdelwahab",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hamdy_Abdelwahab",
+          "pageId": 51868225
+        },
+        {
+          "org": "ufc",
+          "name": "Hannah Cifers",
+          "slug": "hannah-cifers",
+          "wikipediaTitle": "Hannah Cifers",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hannah_Cifers",
+          "pageId": 61608567
+        },
+        {
+          "org": "ufc",
+          "name": "Hannah Goldy",
+          "slug": "hannah-goldy",
+          "wikipediaTitle": "Hannah Goldy",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hannah_Goldy",
+          "pageId": 68557960
+        },
+        {
+          "org": "ufc",
+          "name": "Heather Clark (fighter)",
+          "slug": "heather-clark",
+          "wikipediaTitle": "Heather Clark (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Heather_Clark_(fighter)",
+          "pageId": 44696121
+        },
+        {
+          "org": "ufc",
+          "name": "Hector Aldana",
+          "slug": "hector-aldana",
+          "wikipediaTitle": "Hector Aldana",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hector_Aldana",
+          "pageId": 64255892
+        },
+        {
+          "org": "ufc",
+          "name": "Henry Briones",
+          "slug": "henry-briones",
+          "wikipediaTitle": "Henry Briones",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Henry_Briones",
+          "pageId": 54653766
+        },
+        {
+          "org": "ufc",
+          "name": "Henry Cejudo",
+          "slug": "henry-cejudo",
+          "wikipediaTitle": "Henry Cejudo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Henry_Cejudo",
+          "pageId": 18931507
+        },
+        {
+          "org": "ufc",
+          "name": "Herbert Burns",
+          "slug": "herbert-burns",
+          "wikipediaTitle": "Herbert Burns",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Herbert_Burns",
+          "pageId": 64775741
+        },
+        {
+          "org": "ufc",
+          "name": "Hermes França",
+          "slug": "hermes-franca",
+          "wikipediaTitle": "Hermes França",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hermes_Fran%C3%A7a",
+          "pageId": 5863246
+        },
+        {
+          "org": "ufc",
+          "name": "Holly Holm",
+          "slug": "holly-holm",
+          "wikipediaTitle": "Holly Holm",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Holly_Holm",
+          "pageId": 12635050
+        },
+        {
+          "org": "ufc",
+          "name": "Houston Alexander",
+          "slug": "houston-alexander",
+          "wikipediaTitle": "Houston Alexander",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Houston_Alexander",
+          "pageId": 11440045
+        },
+        {
+          "org": "ufc",
+          "name": "Humberto Bandenay",
+          "slug": "humberto-bandenay",
+          "wikipediaTitle": "Humberto Bandenay",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Humberto_Bandenay",
+          "pageId": 59090829
+        },
+        {
+          "org": "ufc",
+          "name": "Hunter Azure",
+          "slug": "hunter-azure",
+          "wikipediaTitle": "Hunter Azure",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hunter_Azure",
+          "pageId": 65170540
+        },
+        {
+          "org": "ufc",
+          "name": "Hyder Amil",
+          "slug": "hyder-amil",
+          "wikipediaTitle": "Hyder Amil",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Hyder_Amil",
+          "pageId": 80158192
+        },
+        {
+          "org": "ufc",
+          "name": "Ian Entwistle",
+          "slug": "ian-entwistle",
+          "wikipediaTitle": "Ian Entwistle",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ian_Entwistle",
+          "pageId": 47059810
+        },
+        {
+          "org": "ufc",
+          "name": "Ian Freeman (mixed martial artist)",
+          "slug": "ian-freeman",
+          "wikipediaTitle": "Ian Freeman (mixed martial artist)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ian_Freeman_(mixed_martial_artist)",
+          "pageId": 2508911
+        },
+        {
+          "org": "ufc",
+          "name": "Ian Machado Garry",
+          "slug": "ian-machado-garry",
+          "wikipediaTitle": "Ian Machado Garry",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ian_Machado_Garry",
+          "pageId": 68490664
+        },
+        {
+          "org": "ufc",
+          "name": "İbo Aslan",
+          "slug": "ibo-aslan",
+          "wikipediaTitle": "İbo Aslan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/%C4%B0bo_Aslan",
+          "pageId": 78218815
+        },
+        {
+          "org": "ufc",
+          "name": "Ignacio Bahamondes",
+          "slug": "ignacio-bahamondes",
+          "wikipediaTitle": "Ignacio Bahamondes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ignacio_Bahamondes",
+          "pageId": 69151226
+        },
+        {
+          "org": "ufc",
+          "name": "Igor Araújo",
+          "slug": "igor-araujo",
+          "wikipediaTitle": "Igor Araújo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Igor_Ara%C3%BAjo",
+          "pageId": 46449556
+        },
+        {
+          "org": "ufc",
+          "name": "Ildemar Alcântara",
+          "slug": "ildemar-alcantara",
+          "wikipediaTitle": "Ildemar Alcântara",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ildemar_Alc%C3%A2ntara",
+          "pageId": 38752884
+        },
+        {
+          "org": "ufc",
+          "name": "Ion Cutelaba",
+          "slug": "ion-cutelaba",
+          "wikipediaTitle": "Ion Cutelaba",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ion_Cutelaba",
+          "pageId": 52051856
+        },
+        {
+          "org": "ufc",
+          "name": "Irene Aldana",
+          "slug": "irene-aldana",
+          "wikipediaTitle": "Irene Aldana",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Irene_Aldana",
+          "pageId": 45538582
+        },
+        {
+          "org": "ufc",
+          "name": "Islam Dulatov",
+          "slug": "islam-dulatov",
+          "wikipediaTitle": "Islam Dulatov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Islam_Dulatov",
+          "pageId": 78096345
+        },
+        {
+          "org": "ufc",
+          "name": "Israel Adesanya",
+          "slug": "israel-adesanya",
+          "wikipediaTitle": "Israel Adesanya",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Israel_Adesanya",
+          "pageId": 51774563
+        },
+        {
+          "org": "ufc",
+          "name": "Iuri Alcântara",
+          "slug": "iuri-alcantara",
+          "wikipediaTitle": "Iuri Alcântara",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Iuri_Alc%C3%A2ntara",
+          "pageId": 29464741
+        },
+        {
+          "org": "ufc",
+          "name": "Iwo Baraniewski",
+          "slug": "iwo-baraniewski",
+          "wikipediaTitle": "Iwo Baraniewski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Iwo_Baraniewski",
+          "pageId": 78857203
+        },
+        {
+          "org": "ufc",
+          "name": "Jack Della Maddalena",
+          "slug": "jack-della-maddalena",
+          "wikipediaTitle": "Jack Della Maddalena",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jack_Della_Maddalena",
+          "pageId": 67838330
+        },
+        {
+          "org": "ufc",
+          "name": "Jacqueline Cavalcanti",
+          "slug": "jacqueline-cavalcanti",
+          "wikipediaTitle": "Jacqueline Cavalcanti",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jacqueline_Cavalcanti",
+          "pageId": 78341155
+        },
+        {
+          "org": "ufc",
+          "name": "Jailton Almeida",
+          "slug": "jailton-almeida",
+          "wikipediaTitle": "Jailton Almeida",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jailton_Almeida",
+          "pageId": 71036531
+        },
+        {
+          "org": "ufc",
+          "name": "Jake Collier",
+          "slug": "jake-collier",
+          "wikipediaTitle": "Jake Collier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jake_Collier",
+          "pageId": 50334312
+        },
+        {
+          "org": "ufc",
+          "name": "Jake Ellenberger",
+          "slug": "jake-ellenberger",
+          "wikipediaTitle": "Jake Ellenberger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jake_Ellenberger",
+          "pageId": 18281308
+        },
+        {
+          "org": "ufc",
+          "name": "Jamall Emmers",
+          "slug": "jamall-emmers",
+          "wikipediaTitle": "Jamall Emmers",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jamall_Emmers",
+          "pageId": 66114758
+        },
+        {
+          "org": "ufc",
+          "name": "Jan Błachowicz",
+          "slug": "jan-b-achowicz",
+          "wikipediaTitle": "Jan Błachowicz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jan_B%C5%82achowicz",
+          "pageId": 28667675
+        },
+        {
+          "org": "ufc",
+          "name": "Jared Cannonier",
+          "slug": "jared-cannonier",
+          "wikipediaTitle": "Jared Cannonier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jared_Cannonier",
+          "pageId": 52471954
+        },
+        {
+          "org": "ufc",
+          "name": "Jared Gooden",
+          "slug": "jared-gooden",
+          "wikipediaTitle": "Jared Gooden",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jared_Gooden",
+          "pageId": 68353867
+        },
+        {
+          "org": "ufc",
+          "name": "Jared Gordon",
+          "slug": "jared-gordon",
+          "wikipediaTitle": "Jared Gordon",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jared_Gordon",
+          "pageId": 54394519
+        },
+        {
+          "org": "ufc",
+          "name": "Jarjis Danho",
+          "slug": "jarjis-danho",
+          "wikipediaTitle": "Jarjis Danho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jarjis_Danho",
+          "pageId": 55314011
+        },
+        {
+          "org": "ufc",
+          "name": "Jarred Brooks",
+          "slug": "jarred-brooks",
+          "wikipediaTitle": "Jarred Brooks",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jarred_Brooks",
+          "pageId": 54512700
+        },
+        {
+          "org": "ufc",
+          "name": "Jasmine Jasudavicius",
+          "slug": "jasmine-jasudavicius",
+          "wikipediaTitle": "Jasmine Jasudavicius",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jasmine_Jasudavicius",
+          "pageId": 77465103
+        },
+        {
+          "org": "ufc",
+          "name": "Jason Black",
+          "slug": "jason-black",
+          "wikipediaTitle": "Jason Black",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_Black",
+          "pageId": 11266587
+        },
+        {
+          "org": "ufc",
+          "name": "Jason Brilz",
+          "slug": "jason-brilz",
+          "wikipediaTitle": "Jason Brilz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_Brilz",
+          "pageId": 21105301
+        },
+        {
+          "org": "ufc",
+          "name": "Jason Day (fighter)",
+          "slug": "jason-day",
+          "wikipediaTitle": "Jason Day (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_Day_(fighter)",
+          "pageId": 17017717
+        },
+        {
+          "org": "ufc",
+          "name": "Jason DeLucia",
+          "slug": "jason-delucia",
+          "wikipediaTitle": "Jason DeLucia",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_DeLucia",
+          "pageId": 3181057
+        },
+        {
+          "org": "ufc",
+          "name": "Jason Dent",
+          "slug": "jason-dent",
+          "wikipediaTitle": "Jason Dent",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_Dent",
+          "pageId": 17441450
+        },
+        {
+          "org": "ufc",
+          "name": "Jason Gonzalez (fighter)",
+          "slug": "jason-gonzalez",
+          "wikipediaTitle": "Jason Gonzalez (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_Gonzalez_(fighter)",
+          "pageId": 55130539
+        },
+        {
+          "org": "ufc",
+          "name": "Jason Von Flue",
+          "slug": "jason-von-flue",
+          "wikipediaTitle": "Jason Von Flue",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jason_Von_Flue",
+          "pageId": 4690987
+        },
+        {
+          "org": "ufc",
+          "name": "Javid Basharat",
+          "slug": "javid-basharat",
+          "wikipediaTitle": "Javid Basharat",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Javid_Basharat",
+          "pageId": 69137526
+        },
+        {
+          "org": "ufc",
+          "name": "Jeff Curran",
+          "slug": "jeff-curran",
+          "wikipediaTitle": "Jeff Curran",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jeff_Curran",
+          "pageId": 14751026
+        },
+        {
+          "org": "ufc",
+          "name": "Jerry Bohlander",
+          "slug": "jerry-bohlander",
+          "wikipediaTitle": "Jerry Bohlander",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jerry_Bohlander",
+          "pageId": 11830815
+        },
+        {
+          "org": "ufc",
+          "name": "Jessamyn Duke",
+          "slug": "jessamyn-duke",
+          "wikipediaTitle": "Jessamyn Duke",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jessamyn_Duke",
+          "pageId": 41250959
+        },
+        {
+          "org": "ufc",
+          "name": "Jesse Forbes",
+          "slug": "jesse-forbes",
+          "wikipediaTitle": "Jesse Forbes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jesse_Forbes",
+          "pageId": 13009581
+        },
+        {
+          "org": "ufc",
+          "name": "Jessica Aguilar",
+          "slug": "jessica-aguilar",
+          "wikipediaTitle": "Jessica Aguilar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jessica_Aguilar",
+          "pageId": 31570840
+        },
+        {
+          "org": "ufc",
+          "name": "Jéssica Andrade",
+          "slug": "jessica-andrade",
+          "wikipediaTitle": "Jéssica Andrade",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/J%C3%A9ssica_Andrade",
+          "pageId": 40078160
+        },
+        {
+          "org": "ufc",
+          "name": "Jessica Eye",
+          "slug": "jessica-eye",
+          "wikipediaTitle": "Jessica Eye",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jessica_Eye",
+          "pageId": 37865351
+        },
+        {
+          "org": "ufc",
+          "name": "Jessica-Rose Clark",
+          "slug": "jessica-rose-clark",
+          "wikipediaTitle": "Jessica-Rose Clark",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jessica-Rose_Clark",
+          "pageId": 55752328
+        },
+        {
+          "org": "ufc",
+          "name": "Jessin Ayari",
+          "slug": "jessin-ayari",
+          "wikipediaTitle": "Jessin Ayari",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jessin_Ayari",
+          "pageId": 55513759
+        },
+        {
+          "org": "ufc",
+          "name": "Ji Yeon Kim (fighter)",
+          "slug": "ji-yeon-kim",
+          "wikipediaTitle": "Ji Yeon Kim (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ji_Yeon_Kim_(fighter)",
+          "pageId": 58360059
+        },
+        {
+          "org": "ufc",
+          "name": "Jim Alers",
+          "slug": "jim-alers",
+          "wikipediaTitle": "Jim Alers",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jim_Alers",
+          "pageId": 47785900
+        },
+        {
+          "org": "ufc",
+          "name": "Jimmy Crute",
+          "slug": "jimmy-crute",
+          "wikipediaTitle": "Jimmy Crute",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jimmy_Crute",
+          "pageId": 59862652
+        },
+        {
+          "org": "ufc",
+          "name": "Jinh Yu Frey",
+          "slug": "jinh-yu-frey",
+          "wikipediaTitle": "Jinh Yu Frey",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jinh_Yu_Frey",
+          "pageId": 47613098
+        },
+        {
+          "org": "ufc",
+          "name": "JJ Aldrich",
+          "slug": "jj-aldrich",
+          "wikipediaTitle": "JJ Aldrich",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/JJ_Aldrich",
+          "pageId": 47613897
+        },
+        {
+          "org": "ufc",
+          "name": "Joachim Christensen",
+          "slug": "joachim-christensen",
+          "wikipediaTitle": "Joachim Christensen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joachim_Christensen",
+          "pageId": 54314115
+        },
+        {
+          "org": "ufc",
+          "name": "Joanderson Brito",
+          "slug": "joanderson-brito",
+          "wikipediaTitle": "Joanderson Brito",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joanderson_Brito",
+          "pageId": 83500205
+        },
+        {
+          "org": "ufc",
+          "name": "Joanna Jędrzejczyk",
+          "slug": "joanna-jedrzejczyk",
+          "wikipediaTitle": "Joanna Jędrzejczyk",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joanna_J%C4%99drzejczyk",
+          "pageId": 43530666
+        },
+        {
+          "org": "ufc",
+          "name": "Joaquin Buckley",
+          "slug": "joaquin-buckley",
+          "wikipediaTitle": "Joaquin Buckley",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joaquin_Buckley",
+          "pageId": 65586938
+        },
+        {
+          "org": "ufc",
+          "name": "Jocelyn Jones-Lybarger",
+          "slug": "jocelyn-jones-lybarger",
+          "wikipediaTitle": "Jocelyn Jones-Lybarger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jocelyn_Jones-Lybarger",
+          "pageId": 50265449
+        },
+        {
+          "org": "ufc",
+          "name": "Jodie Esquibel",
+          "slug": "jodie-esquibel",
+          "wikipediaTitle": "Jodie Esquibel",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jodie_Esquibel",
+          "pageId": 43762028
+        },
+        {
+          "org": "ufc",
+          "name": "Joe Charles",
+          "slug": "joe-charles",
+          "wikipediaTitle": "Joe Charles",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joe_Charles",
+          "pageId": 44295275
+        },
+        {
+          "org": "ufc",
+          "name": "Joe Doerksen",
+          "slug": "joe-doerksen",
+          "wikipediaTitle": "Joe Doerksen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joe_Doerksen",
+          "pageId": 9530719
+        },
+        {
+          "org": "ufc",
+          "name": "Joel Álvarez",
+          "slug": "joel-alvarez",
+          "wikipediaTitle": "Joel Álvarez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joel_%C3%81lvarez",
+          "pageId": 64400534
+        },
+        {
+          "org": "ufc",
+          "name": "Joey Beltran",
+          "slug": "joey-beltran",
+          "wikipediaTitle": "Joey Beltran",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joey_Beltran",
+          "pageId": 26054614
+        },
+        {
+          "org": "ufc",
+          "name": "John Albert (fighter)",
+          "slug": "john-albert",
+          "wikipediaTitle": "John Albert (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Albert_(fighter)",
+          "pageId": 33040978
+        },
+        {
+          "org": "ufc",
+          "name": "John Alessio",
+          "slug": "john-alessio",
+          "wikipediaTitle": "John Alessio",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Alessio",
+          "pageId": 14768499
+        },
+        {
+          "org": "ufc",
+          "name": "John Allan (fighter)",
+          "slug": "john-allan",
+          "wikipediaTitle": "John Allan (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Allan_(fighter)",
+          "pageId": 65192835
+        },
+        {
+          "org": "ufc",
+          "name": "John Castañeda",
+          "slug": "john-castaneda",
+          "wikipediaTitle": "John Castañeda",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Casta%C3%B1eda",
+          "pageId": 69152970
+        },
+        {
+          "org": "ufc",
+          "name": "John Cholish",
+          "slug": "john-cholish",
+          "wikipediaTitle": "John Cholish",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Cholish",
+          "pageId": 34017782
+        },
+        {
+          "org": "ufc",
+          "name": "John Dodson (fighter)",
+          "slug": "john-dodson",
+          "wikipediaTitle": "John Dodson (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Dodson_(fighter)",
+          "pageId": 32321651
+        },
+        {
+          "org": "ufc",
+          "name": "John-Olav Einemo",
+          "slug": "john-olav-einemo",
+          "wikipediaTitle": "John-Olav Einemo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/John-Olav_Einemo",
+          "pageId": 32077584
+        },
+        {
+          "org": "ufc",
+          "name": "Johnny Bedford",
+          "slug": "johnny-bedford",
+          "wikipediaTitle": "Johnny Bedford",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Johnny_Bedford",
+          "pageId": 33320485
+        },
+        {
+          "org": "ufc",
+          "name": "Johnny Case",
+          "slug": "johnny-case",
+          "wikipediaTitle": "Johnny Case",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Johnny_Case",
+          "pageId": 45596741
+        },
+        {
+          "org": "ufc",
+          "name": "Johnny Eduardo",
+          "slug": "johnny-eduardo",
+          "wikipediaTitle": "Johnny Eduardo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Johnny_Eduardo",
+          "pageId": 34958077
+        },
+        {
+          "org": "ufc",
+          "name": "Jon Delos Reyes",
+          "slug": "jon-delos-reyes",
+          "wikipediaTitle": "Jon Delos Reyes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jon_Delos_Reyes",
+          "pageId": 46532168
+        },
+        {
+          "org": "ufc",
+          "name": "Jon Fitch",
+          "slug": "jon-fitch",
+          "wikipediaTitle": "Jon Fitch",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jon_Fitch",
+          "pageId": 6083514
+        },
+        {
+          "org": "ufc",
+          "name": "Jonathan Brookins",
+          "slug": "jonathan-brookins",
+          "wikipediaTitle": "Jonathan Brookins",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jonathan_Brookins",
+          "pageId": 28126817
+        },
+        {
+          "org": "ufc",
+          "name": "Jonathan Goulet",
+          "slug": "jonathan-goulet",
+          "wikipediaTitle": "Jonathan Goulet",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jonathan_Goulet",
+          "pageId": 5822371
+        },
+        {
+          "org": "ufc",
+          "name": "Jordan Espinosa",
+          "slug": "jordan-espinosa",
+          "wikipediaTitle": "Jordan Espinosa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jordan_Espinosa",
+          "pageId": 64224592
+        },
+        {
+          "org": "ufc",
+          "name": "José Aldo",
+          "slug": "jose-aldo",
+          "wikipediaTitle": "José Aldo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jos%C3%A9_Aldo",
+          "pageId": 21231858
+        },
+        {
+          "org": "ufc",
+          "name": "Josefine Lindgren Knutsson",
+          "slug": "josefine-lindgren-knutsson",
+          "wikipediaTitle": "Josefine Lindgren Knutsson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Josefine_Lindgren_Knutsson",
+          "pageId": 64338461
+        },
+        {
+          "org": "ufc",
+          "name": "Joselyne Edwards",
+          "slug": "joselyne-edwards",
+          "wikipediaTitle": "Joselyne Edwards",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joselyne_Edwards",
+          "pageId": 67831683
+        },
+        {
+          "org": "ufc",
+          "name": "Joseph Benavidez",
+          "slug": "joseph-benavidez",
+          "wikipediaTitle": "Joseph Benavidez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joseph_Benavidez",
+          "pageId": 20537980
+        },
+        {
+          "org": "ufc",
+          "name": "Joseph Duffy (fighter)",
+          "slug": "joseph-duffy",
+          "wikipediaTitle": "Joseph Duffy (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joseph_Duffy_(fighter)",
+          "pageId": 45674466
+        },
+        {
+          "org": "ufc",
+          "name": "Josh Barnett",
+          "slug": "josh-barnett",
+          "wikipediaTitle": "Josh Barnett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Josh_Barnett",
+          "pageId": 2859817
+        },
+        {
+          "org": "ufc",
+          "name": "Josh Burkman",
+          "slug": "josh-burkman",
+          "wikipediaTitle": "Josh Burkman",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Josh_Burkman",
+          "pageId": 8121019
+        },
+        {
+          "org": "ufc",
+          "name": "Josh Emmett",
+          "slug": "josh-emmett",
+          "wikipediaTitle": "Josh Emmett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Josh_Emmett",
+          "pageId": 54139789
+        },
+        {
+          "org": "ufc",
+          "name": "Joshua Culibao",
+          "slug": "joshua-culibao",
+          "wikipediaTitle": "Joshua Culibao",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joshua_Culibao",
+          "pageId": 67363669
+        },
+        {
+          "org": "ufc",
+          "name": "JP Buys",
+          "slug": "jp-buys",
+          "wikipediaTitle": "JP Buys",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/JP_Buys",
+          "pageId": 79114040
+        },
+        {
+          "org": "ufc",
+          "name": "Juan Adams",
+          "slug": "juan-adams",
+          "wikipediaTitle": "Juan Adams",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Juan_Adams",
+          "pageId": 61327286
+        },
+        {
+          "org": "ufc",
+          "name": "Juan Espino",
+          "slug": "juan-espino",
+          "wikipediaTitle": "Juan Espino",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Juan_Espino",
+          "pageId": 67287591
+        },
+        {
+          "org": "ufc",
+          "name": "Julia Avila",
+          "slug": "julia-avila",
+          "wikipediaTitle": "Julia Avila",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Julia_Avila",
+          "pageId": 61231817
+        },
+        {
+          "org": "ufc",
+          "name": "Julian Erosa",
+          "slug": "julian-erosa",
+          "wikipediaTitle": "Julian Erosa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Julian_Erosa",
+          "pageId": 64400294
+        },
+        {
+          "org": "ufc",
+          "name": "Julie Kedzie",
+          "slug": "julie-kedzie",
+          "wikipediaTitle": "Julie Kedzie",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Julie_Kedzie",
+          "pageId": 9478763
+        },
+        {
+          "org": "ufc",
+          "name": "Julio Arce",
+          "slug": "julio-arce",
+          "wikipediaTitle": "Julio Arce",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Julio_Arce",
+          "pageId": 58957885
+        },
+        {
+          "org": "ufc",
+          "name": "Júnior Albini",
+          "slug": "junior-albini",
+          "wikipediaTitle": "Júnior Albini",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/J%C3%BAnior_Albini",
+          "pageId": 55555391
+        },
+        {
+          "org": "ufc",
+          "name": "Júnior Assunção",
+          "slug": "junior-assuncao",
+          "wikipediaTitle": "Júnior Assunção",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/J%C3%BAnior_Assun%C3%A7%C3%A3o",
+          "pageId": 17441410
+        },
+        {
+          "org": "ufc",
+          "name": "Jussier Formiga",
+          "slug": "jussier-formiga",
+          "wikipediaTitle": "Jussier Formiga",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jussier_Formiga",
+          "pageId": 25227094
+        },
+        {
+          "org": "ufc",
+          "name": "Justin Buchholz",
+          "slug": "justin-buchholz",
+          "wikipediaTitle": "Justin Buchholz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justin_Buchholz",
+          "pageId": 17440437
+        },
+        {
+          "org": "ufc",
+          "name": "Justin Edwards (fighter)",
+          "slug": "justin-edwards",
+          "wikipediaTitle": "Justin Edwards (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justin_Edwards_(fighter)",
+          "pageId": 32747056
+        },
+        {
+          "org": "ufc",
+          "name": "Justin Eilers",
+          "slug": "justin-eilers",
+          "wikipediaTitle": "Justin Eilers",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justin_Eilers",
+          "pageId": 5946848
+        },
+        {
+          "org": "ufc",
+          "name": "Justin Frazier",
+          "slug": "justin-frazier",
+          "wikipediaTitle": "Justin Frazier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justin_Frazier",
+          "pageId": 67274818
+        },
+        {
+          "org": "ufc",
+          "name": "Justin Gaethje",
+          "slug": "justin-gaethje",
+          "wikipediaTitle": "Justin Gaethje",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justin_Gaethje",
+          "pageId": 49172283
+        },
+        {
+          "org": "ufc",
+          "name": "Justine Kish",
+          "slug": "justine-kish",
+          "wikipediaTitle": "Justine Kish",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justine_Kish",
+          "pageId": 43836103
+        },
+        {
+          "org": "ufc",
+          "name": "Kailin Curran",
+          "slug": "kailin-curran",
+          "wikipediaTitle": "Kailin Curran",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kailin_Curran",
+          "pageId": 47860947
+        },
+        {
+          "org": "ufc",
+          "name": "Kalindra Faria",
+          "slug": "kalindra-faria",
+          "wikipediaTitle": "Kalindra Faria",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kalindra_Faria",
+          "pageId": 55855105
+        },
+        {
+          "org": "ufc",
+          "name": "Karolina Kowalkiewicz",
+          "slug": "karolina-kowalkiewicz",
+          "wikipediaTitle": "Karolina Kowalkiewicz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Karolina_Kowalkiewicz",
+          "pageId": 48864405
+        },
+        {
+          "org": "ufc",
+          "name": "Katlyn Cerminara",
+          "slug": "katlyn-cerminara",
+          "wikipediaTitle": "Katlyn Cerminara",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Katlyn_Cerminara",
+          "pageId": 53620195
+        },
+        {
+          "org": "ufc",
+          "name": "Katsuhisa Fujii",
+          "slug": "katsuhisa-fujii",
+          "wikipediaTitle": "Katsuhisa Fujii",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Katsuhisa_Fujii",
+          "pageId": 17446182
+        },
+        {
+          "org": "ufc",
+          "name": "Kay Hansen",
+          "slug": "kay-hansen",
+          "wikipediaTitle": "Kay Hansen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kay_Hansen",
+          "pageId": 57071566
+        },
+        {
+          "org": "ufc",
+          "name": "Kayla Harrison",
+          "slug": "kayla-harrison",
+          "wikipediaTitle": "Kayla Harrison",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kayla_Harrison",
+          "pageId": 27613520
+        },
+        {
+          "org": "ufc",
+          "name": "Kelly Dullanty",
+          "slug": "kelly-dullanty",
+          "wikipediaTitle": "Kelly Dullanty",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kelly_Dullanty",
+          "pageId": 17445415
+        },
+        {
+          "org": "ufc",
+          "name": "Kelly Faszholz",
+          "slug": "kelly-faszholz",
+          "wikipediaTitle": "Kelly Faszholz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kelly_Faszholz",
+          "pageId": 65663052
+        },
+        {
+          "org": "ufc",
+          "name": "Kelvin Gastelum",
+          "slug": "kelvin-gastelum",
+          "wikipediaTitle": "Kelvin Gastelum",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kelvin_Gastelum",
+          "pageId": 39073652
+        },
+        {
+          "org": "ufc",
+          "name": "Kenny Florian",
+          "slug": "kenny-florian",
+          "wikipediaTitle": "Kenny Florian",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kenny_Florian",
+          "pageId": 3092266
+        },
+        {
+          "org": "ufc",
+          "name": "Kevin Aguilar (mixed martial artist)",
+          "slug": "kevin-aguilar",
+          "wikipediaTitle": "Kevin Aguilar (mixed martial artist)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kevin_Aguilar_(mixed_martial_artist)",
+          "pageId": 61196465
+        },
+        {
+          "org": "ufc",
+          "name": "Kevin Burns (fighter)",
+          "slug": "kevin-burns",
+          "wikipediaTitle": "Kevin Burns (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kevin_Burns_(fighter)",
+          "pageId": 18214958
+        },
+        {
+          "org": "ufc",
+          "name": "Kevin Casey (fighter)",
+          "slug": "kevin-casey",
+          "wikipediaTitle": "Kevin Casey (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kevin_Casey_(fighter)",
+          "pageId": 25157728
+        },
+        {
+          "org": "ufc",
+          "name": "Kevin Croom",
+          "slug": "kevin-croom",
+          "wikipediaTitle": "Kevin Croom",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kevin_Croom",
+          "pageId": 66389158
+        },
+        {
+          "org": "ufc",
+          "name": "Khamzat Chimaev",
+          "slug": "khamzat-chimaev",
+          "wikipediaTitle": "Khamzat Chimaev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Khamzat_Chimaev",
+          "pageId": 64648112
+        },
+        {
+          "org": "ufc",
+          "name": "Klidson Abreu",
+          "slug": "klidson-abreu",
+          "wikipediaTitle": "Klidson Abreu",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Klidson_Abreu",
+          "pageId": 64268656
+        },
+        {
+          "org": "ufc",
+          "name": "Kyle Bochniak",
+          "slug": "kyle-bochniak",
+          "wikipediaTitle": "Kyle Bochniak",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kyle_Bochniak",
+          "pageId": 54431726
+        },
+        {
+          "org": "ufc",
+          "name": "Kyle Daukaus",
+          "slug": "kyle-daukaus",
+          "wikipediaTitle": "Kyle Daukaus",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kyle_Daukaus",
+          "pageId": 66595215
+        },
+        {
+          "org": "ufc",
+          "name": "Lance Benoist",
+          "slug": "lance-benoist",
+          "wikipediaTitle": "Lance Benoist",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lance_Benoist",
+          "pageId": 32594992
+        },
+        {
+          "org": "ufc",
+          "name": "Lance Gibson",
+          "slug": "lance-gibson",
+          "wikipediaTitle": "Lance Gibson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lance_Gibson",
+          "pageId": 17445508
+        },
+        {
+          "org": "ufc",
+          "name": "LaVerne Clark",
+          "slug": "laverne-clark",
+          "wikipediaTitle": "LaVerne Clark",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/LaVerne_Clark",
+          "pageId": 17445697
+        },
+        {
+          "org": "ufc",
+          "name": "Leon Edwards",
+          "slug": "leon-edwards",
+          "wikipediaTitle": "Leon Edwards",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Leon_Edwards",
+          "pageId": 46384799
+        },
+        {
+          "org": "ufc",
+          "name": "Leonard Garcia",
+          "slug": "leonard-garcia",
+          "wikipediaTitle": "Leonard Garcia",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Leonard_Garcia",
+          "pageId": 17441442
+        },
+        {
+          "org": "ufc",
+          "name": "Liana Jojua",
+          "slug": "liana-jojua",
+          "wikipediaTitle": "Liana Jojua",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Liana_Jojua",
+          "pageId": 65253899
+        },
+        {
+          "org": "ufc",
+          "name": "Lina Länsberg",
+          "slug": "lina-lansberg",
+          "wikipediaTitle": "Lina Länsberg",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lina_L%C3%A4nsberg",
+          "pageId": 53153170
+        },
+        {
+          "org": "ufc",
+          "name": "Lisa Ellis (martial artist)",
+          "slug": "lisa-ellis",
+          "wikipediaTitle": "Lisa Ellis (martial artist)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lisa_Ellis_(martial_artist)",
+          "pageId": 28356393
+        },
+        {
+          "org": "ufc",
+          "name": "Liz Carmouche",
+          "slug": "liz-carmouche",
+          "wikipediaTitle": "Liz Carmouche",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Liz_Carmouche",
+          "pageId": 30988188
+        },
+        {
+          "org": "ufc",
+          "name": "Logan Clark",
+          "slug": "logan-clark",
+          "wikipediaTitle": "Logan Clark",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Logan_Clark",
+          "pageId": 8560335
+        },
+        {
+          "org": "ufc",
+          "name": "Loopy Godinez",
+          "slug": "loopy-godinez",
+          "wikipediaTitle": "Loopy Godinez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Loopy_Godinez",
+          "pageId": 69002071
+        },
+        {
+          "org": "ufc",
+          "name": "Louis Gaudinot",
+          "slug": "louis-gaudinot",
+          "wikipediaTitle": "Louis Gaudinot",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Louis_Gaudinot",
+          "pageId": 33931125
+        },
+        {
+          "org": "ufc",
+          "name": "Luan Chagas",
+          "slug": "luan-chagas",
+          "wikipediaTitle": "Luan Chagas",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luan_Chagas",
+          "pageId": 55255503
+        },
+        {
+          "org": "ufc",
+          "name": "Luana Carolina",
+          "slug": "luana-carolina",
+          "wikipediaTitle": "Luana Carolina",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luana_Carolina",
+          "pageId": 67269950
+        },
+        {
+          "org": "ufc",
+          "name": "Luigi Fioravanti",
+          "slug": "luigi-fioravanti",
+          "wikipediaTitle": "Luigi Fioravanti",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luigi_Fioravanti",
+          "pageId": 16123539
+        },
+        {
+          "org": "ufc",
+          "name": "Luiz Cané",
+          "slug": "luiz-cane",
+          "wikipediaTitle": "Luiz Cané",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luiz_Can%C3%A9",
+          "pageId": 23134991
+        },
+        {
+          "org": "ufc",
+          "name": "Luiz Eduardo Garagorri",
+          "slug": "luiz-eduardo-garagorri",
+          "wikipediaTitle": "Luiz Eduardo Garagorri",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luiz_Eduardo_Garagorri",
+          "pageId": 64962728
+        },
+        {
+          "org": "ufc",
+          "name": "Luke Barnatt",
+          "slug": "luke-barnatt",
+          "wikipediaTitle": "Luke Barnatt",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luke_Barnatt",
+          "pageId": 40657375
+        },
+        {
+          "org": "ufc",
+          "name": "Luke Caudillo",
+          "slug": "luke-caudillo",
+          "wikipediaTitle": "Luke Caudillo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luke_Caudillo",
+          "pageId": 17440823
+        },
+        {
+          "org": "ufc",
+          "name": "Luke Cummo",
+          "slug": "luke-cummo",
+          "wikipediaTitle": "Luke Cummo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Luke_Cummo",
+          "pageId": 3035342
+        },
+        {
+          "org": "ufc",
+          "name": "Lyman Good",
+          "slug": "lyman-good",
+          "wikipediaTitle": "Lyman Good",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lyman_Good",
+          "pageId": 22422796
+        },
+        {
+          "org": "ufc",
+          "name": "Mac Danzig",
+          "slug": "mac-danzig",
+          "wikipediaTitle": "Mac Danzig",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mac_Danzig",
+          "pageId": 4346608
+        },
+        {
+          "org": "ufc",
+          "name": "Mackenzie Dern",
+          "slug": "mackenzie-dern",
+          "wikipediaTitle": "Mackenzie Dern",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mackenzie_Dern",
+          "pageId": 48456306
+        },
+        {
+          "org": "ufc",
+          "name": "Macy Chiasson",
+          "slug": "macy-chiasson",
+          "wikipediaTitle": "Macy Chiasson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Macy_Chiasson",
+          "pageId": 60679112
+        },
+        {
+          "org": "ufc",
+          "name": "Mads Burnell",
+          "slug": "mads-burnell",
+          "wikipediaTitle": "Mads Burnell",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mads_Burnell",
+          "pageId": 57564809
+        },
+        {
+          "org": "ufc",
+          "name": "Magnus Cedenblad",
+          "slug": "magnus-cedenblad",
+          "wikipediaTitle": "Magnus Cedenblad",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Magnus_Cedenblad",
+          "pageId": 42923753
+        },
+        {
+          "org": "ufc",
+          "name": "Magomed Ankalaev",
+          "slug": "magomed-ankalaev",
+          "wikipediaTitle": "Magomed Ankalaev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Magomed_Ankalaev",
+          "pageId": 55885618
+        },
+        {
+          "org": "ufc",
+          "name": "Magomed Bibulatov",
+          "slug": "magomed-bibulatov",
+          "wikipediaTitle": "Magomed Bibulatov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Magomed_Bibulatov",
+          "pageId": 54069833
+        },
+        {
+          "org": "ufc",
+          "name": "Maiquel Falcão",
+          "slug": "maiquel-falcao",
+          "wikipediaTitle": "Maiquel Falcão",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Maiquel_Falc%C3%A3o",
+          "pageId": 29684773
+        },
+        {
+          "org": "ufc",
+          "name": "Makwan Amirkhani",
+          "slug": "makwan-amirkhani",
+          "wikipediaTitle": "Makwan Amirkhani",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Makwan_Amirkhani",
+          "pageId": 45223445
+        },
+        {
+          "org": "ufc",
+          "name": "Malcolm Gordon (fighter)",
+          "slug": "malcolm-gordon",
+          "wikipediaTitle": "Malcolm Gordon (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Malcolm_Gordon_(fighter)",
+          "pageId": 66204637
+        },
+        {
+          "org": "ufc",
+          "name": "Manny Bermudez",
+          "slug": "manny-bermudez",
+          "wikipediaTitle": "Manny Bermudez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Manny_Bermudez",
+          "pageId": 60004141
+        },
+        {
+          "org": "ufc",
+          "name": "Manny Gamburyan",
+          "slug": "manny-gamburyan",
+          "wikipediaTitle": "Manny Gamburyan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Manny_Gamburyan",
+          "pageId": 10507195
+        },
+        {
+          "org": "ufc",
+          "name": "Manon Fiorot",
+          "slug": "manon-fiorot",
+          "wikipediaTitle": "Manon Fiorot",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Manon_Fiorot",
+          "pageId": 67909486
+        },
+        {
+          "org": "ufc",
+          "name": "Mara Romero Borella",
+          "slug": "mara-romero-borella",
+          "wikipediaTitle": "Mara Romero Borella",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mara_Romero_Borella",
+          "pageId": 58506127
+        },
+        {
+          "org": "ufc",
+          "name": "Marc Diakiese",
+          "slug": "marc-diakiese",
+          "wikipediaTitle": "Marc Diakiese",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marc_Diakiese",
+          "pageId": 53526733
+        },
+        {
+          "org": "ufc",
+          "name": "Marc-André Barriault",
+          "slug": "marc-andre-barriault",
+          "wikipediaTitle": "Marc-André Barriault",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marc-Andr%C3%A9_Barriault",
+          "pageId": 62633977
+        },
+        {
+          "org": "ufc",
+          "name": "Marcel Fortuna",
+          "slug": "marcel-fortuna",
+          "wikipediaTitle": "Marcel Fortuna",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcel_Fortuna",
+          "pageId": 53741840
+        },
+        {
+          "org": "ufc",
+          "name": "Marcelo Aguiar",
+          "slug": "marcelo-aguiar",
+          "wikipediaTitle": "Marcelo Aguiar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcelo_Aguiar",
+          "pageId": 44433775
+        },
+        {
+          "org": "ufc",
+          "name": "Marcelo Golm",
+          "slug": "marcelo-golm",
+          "wikipediaTitle": "Marcelo Golm",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcelo_Golm",
+          "pageId": 65157658
+        },
+        {
+          "org": "ufc",
+          "name": "Marcin Bandel",
+          "slug": "marcin-bandel",
+          "wikipediaTitle": "Marcin Bandel",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcin_Bandel",
+          "pageId": 81914438
+        },
+        {
+          "org": "ufc",
+          "name": "Márcio Cruz",
+          "slug": "marcio-cruz",
+          "wikipediaTitle": "Márcio Cruz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/M%C3%A1rcio_Cruz",
+          "pageId": 7889724
+        },
+        {
+          "org": "ufc",
+          "name": "Marco Beltrán",
+          "slug": "marco-beltran",
+          "wikipediaTitle": "Marco Beltrán",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marco_Beltr%C3%A1n",
+          "pageId": 51041819
+        },
+        {
+          "org": "ufc",
+          "name": "Marcus Aurélio",
+          "slug": "marcus-aurelio",
+          "wikipediaTitle": "Marcus Aurélio",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcus_Aur%C3%A9lio",
+          "pageId": 8284960
+        },
+        {
+          "org": "ufc",
+          "name": "Marcus Bossett",
+          "slug": "marcus-bossett",
+          "wikipediaTitle": "Marcus Bossett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcus_Bossett",
+          "pageId": 44218651
+        },
+        {
+          "org": "ufc",
+          "name": "Marcus Brimage",
+          "slug": "marcus-brimage",
+          "wikipediaTitle": "Marcus Brimage",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcus_Brimage",
+          "pageId": 33941539
+        },
+        {
+          "org": "ufc",
+          "name": "Marcus Davis",
+          "slug": "marcus-davis",
+          "wikipediaTitle": "Marcus Davis",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcus_Davis",
+          "pageId": 7402653
+        },
+        {
+          "org": "ufc",
+          "name": "Mario Bautista",
+          "slug": "mario-bautista",
+          "wikipediaTitle": "Mario Bautista",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mario_Bautista",
+          "pageId": 63269058
+        },
+        {
+          "org": "ufc",
+          "name": "Mariya Agapova",
+          "slug": "mariya-agapova",
+          "wikipediaTitle": "Mariya Agapova",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mariya_Agapova",
+          "pageId": 64270224
+        },
+        {
+          "org": "ufc",
+          "name": "Mark Bocek",
+          "slug": "mark-bocek",
+          "wikipediaTitle": "Mark Bocek",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_Bocek",
+          "pageId": 17440158
+        },
+        {
+          "org": "ufc",
+          "name": "Mark Coleman",
+          "slug": "mark-coleman",
+          "wikipediaTitle": "Mark Coleman",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_Coleman",
+          "pageId": 1346406
+        },
+        {
+          "org": "ufc",
+          "name": "Mark De La Rosa",
+          "slug": "mark-de-la-rosa",
+          "wikipediaTitle": "Mark De La Rosa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_De_La_Rosa",
+          "pageId": 56113082
+        },
+        {
+          "org": "ufc",
+          "name": "Mark Eddiva",
+          "slug": "mark-eddiva",
+          "wikipediaTitle": "Mark Eddiva",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_Eddiva",
+          "pageId": 45546856
+        },
+        {
+          "org": "ufc",
+          "name": "Mark Godbeer",
+          "slug": "mark-godbeer",
+          "wikipediaTitle": "Mark Godbeer",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_Godbeer",
+          "pageId": 53140171
+        },
+        {
+          "org": "ufc",
+          "name": "Martin Bravo",
+          "slug": "martin-bravo",
+          "wikipediaTitle": "Martin Bravo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_Bravo",
+          "pageId": 18301939
+        },
+        {
+          "org": "ufc",
+          "name": "Martin Buday",
+          "slug": "martin-buday",
+          "wikipediaTitle": "Martin Buday",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_Buday",
+          "pageId": 80546380
+        },
+        {
+          "org": "ufc",
+          "name": "Martin Day (fighter)",
+          "slug": "martin-day",
+          "wikipediaTitle": "Martin Day (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_Day_(fighter)",
+          "pageId": 65334105
+        },
+        {
+          "org": "ufc",
+          "name": "Marvin Eastman",
+          "slug": "marvin-eastman",
+          "wikipediaTitle": "Marvin Eastman",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Marvin_Eastman",
+          "pageId": 6695876
+        },
+        {
+          "org": "ufc",
+          "name": "Mateusz Gamrot",
+          "slug": "mateusz-gamrot",
+          "wikipediaTitle": "Mateusz Gamrot",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mateusz_Gamrot",
+          "pageId": 65074463
+        },
+        {
+          "org": "ufc",
+          "name": "Matt Arroyo",
+          "slug": "matt-arroyo",
+          "wikipediaTitle": "Matt Arroyo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Matt_Arroyo",
+          "pageId": 13405967
+        },
+        {
+          "org": "ufc",
+          "name": "Matt Bessette",
+          "slug": "matt-bessette",
+          "wikipediaTitle": "Matt Bessette",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Matt_Bessette",
+          "pageId": 41099037
+        },
+        {
+          "org": "ufc",
+          "name": "Matt Brown (fighter)",
+          "slug": "matt-brown",
+          "wikipediaTitle": "Matt Brown (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Matt_Brown_(fighter)",
+          "pageId": 17679758
+        },
+        {
+          "org": "ufc",
+          "name": "Matt Dwyer",
+          "slug": "matt-dwyer",
+          "wikipediaTitle": "Matt Dwyer",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Matt_Dwyer",
+          "pageId": 45495282
+        },
+        {
+          "org": "ufc",
+          "name": "Matt Frevola",
+          "slug": "matt-frevola",
+          "wikipediaTitle": "Matt Frevola",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Matt_Frevola",
+          "pageId": 56026686
+        },
+        {
+          "org": "ufc",
+          "name": "Maximo Blanco",
+          "slug": "maximo-blanco",
+          "wikipediaTitle": "Maximo Blanco",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Maximo_Blanco",
+          "pageId": 22501079
+        },
+        {
+          "org": "ufc",
+          "name": "Maycee Barber",
+          "slug": "maycee-barber",
+          "wikipediaTitle": "Maycee Barber",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Maycee_Barber",
+          "pageId": 62125598
+        },
+        {
+          "org": "ufc",
+          "name": "Megan Anderson (fighter)",
+          "slug": "megan-anderson",
+          "wikipediaTitle": "Megan Anderson (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Megan_Anderson_(fighter)",
+          "pageId": 50352466
+        },
+        {
+          "org": "ufc",
+          "name": "Mehdi Baghdad",
+          "slug": "mehdi-baghdad",
+          "wikipediaTitle": "Mehdi Baghdad",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mehdi_Baghdad",
+          "pageId": 50819986
+        },
+        {
+          "org": "ufc",
+          "name": "Melinda Fábián",
+          "slug": "melinda-fabian",
+          "wikipediaTitle": "Melinda Fábián",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Melinda_F%C3%A1bi%C3%A1n",
+          "pageId": 62542666
+        },
+        {
+          "org": "ufc",
+          "name": "Melissa Gatto",
+          "slug": "melissa-gatto",
+          "wikipediaTitle": "Melissa Gatto",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Melissa_Gatto",
+          "pageId": 62531167
+        },
+        {
+          "org": "ufc",
+          "name": "Melsik Baghdasaryan",
+          "slug": "melsik-baghdasaryan",
+          "wikipediaTitle": "Melsik Baghdasaryan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Melsik_Baghdasaryan",
+          "pageId": 65259047
+        },
+        {
+          "org": "ufc",
+          "name": "Merab Dvalishvili",
+          "slug": "merab-dvalishvili",
+          "wikipediaTitle": "Merab Dvalishvili",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Merab_Dvalishvili",
+          "pageId": 56012380
+        },
+        {
+          "org": "ufc",
+          "name": "Michael Bisping",
+          "slug": "michael-bisping",
+          "wikipediaTitle": "Michael Bisping",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Michael_Bisping",
+          "pageId": 5576823
+        },
+        {
+          "org": "ufc",
+          "name": "Michael Chandler",
+          "slug": "michael-chandler",
+          "wikipediaTitle": "Michael Chandler",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Michael_Chandler",
+          "pageId": 31581084
+        },
+        {
+          "org": "ufc",
+          "name": "Michael Chiesa",
+          "slug": "michael-chiesa",
+          "wikipediaTitle": "Michael Chiesa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Michael_Chiesa",
+          "pageId": 35374947
+        },
+        {
+          "org": "ufc",
+          "name": "Michel Batista (wrestler)",
+          "slug": "michel-batista",
+          "wikipediaTitle": "Michel Batista (wrestler)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Michel_Batista_(wrestler)",
+          "pageId": 38026803
+        },
+        {
+          "org": "ufc",
+          "name": "Mickey Gall",
+          "slug": "mickey-gall",
+          "wikipediaTitle": "Mickey Gall",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mickey_Gall",
+          "pageId": 51585921
+        },
+        {
+          "org": "ufc",
+          "name": "Miguel Baeza",
+          "slug": "miguel-baeza",
+          "wikipediaTitle": "Miguel Baeza",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Miguel_Baeza",
+          "pageId": 65162708
+        },
+        {
+          "org": "ufc",
+          "name": "Mike Brown (fighter)",
+          "slug": "mike-brown",
+          "wikipediaTitle": "Mike Brown (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mike_Brown_(fighter)",
+          "pageId": 17442679
+        },
+        {
+          "org": "ufc",
+          "name": "Mike Davis (fighter)",
+          "slug": "mike-davis",
+          "wikipediaTitle": "Mike Davis (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mike_Davis_(fighter)",
+          "pageId": 66232787
+        },
+        {
+          "org": "ufc",
+          "name": "Mike De La Torre",
+          "slug": "mike-de-la-torre",
+          "wikipediaTitle": "Mike De La Torre",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mike_De_La_Torre",
+          "pageId": 45421220
+        },
+        {
+          "org": "ufc",
+          "name": "Mike Easton",
+          "slug": "mike-easton",
+          "wikipediaTitle": "Mike Easton",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mike_Easton",
+          "pageId": 23902641
+        },
+        {
+          "org": "ufc",
+          "name": "Mikey Burnett",
+          "slug": "mikey-burnett",
+          "wikipediaTitle": "Mikey Burnett",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mikey_Burnett",
+          "pageId": 6896231
+        },
+        {
+          "org": "ufc",
+          "name": "Milana Dudieva",
+          "slug": "milana-dudieva",
+          "wikipediaTitle": "Milana Dudieva",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Milana_Dudieva",
+          "pageId": 47428597
+        },
+        {
+          "org": "ufc",
+          "name": "Miranda Granger",
+          "slug": "miranda-granger",
+          "wikipediaTitle": "Miranda Granger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Miranda_Granger",
+          "pageId": 64535237
+        },
+        {
+          "org": "ufc",
+          "name": "Mirko Cro Cop",
+          "slug": "mirko-cro-cop",
+          "wikipediaTitle": "Mirko Cro Cop",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mirko_Cro_Cop",
+          "pageId": 314828
+        },
+        {
+          "org": "ufc",
+          "name": "Mirsad Bektić",
+          "slug": "mirsad-bektic",
+          "wikipediaTitle": "Mirsad Bektić",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mirsad_Bekti%C4%87",
+          "pageId": 45515914
+        },
+        {
+          "org": "ufc",
+          "name": "Misha Cirkunov",
+          "slug": "misha-cirkunov",
+          "wikipediaTitle": "Misha Cirkunov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Misha_Cirkunov",
+          "pageId": 49379350
+        },
+        {
+          "org": "ufc",
+          "name": "Mitch Clarke",
+          "slug": "mitch-clarke",
+          "wikipediaTitle": "Mitch Clarke",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mitch_Clarke",
+          "pageId": 39712765
+        },
+        {
+          "org": "ufc",
+          "name": "Mitch Gagnon",
+          "slug": "mitch-gagnon",
+          "wikipediaTitle": "Mitch Gagnon",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mitch_Gagnon",
+          "pageId": 34380419
+        },
+        {
+          "org": "ufc",
+          "name": "Mizuki Inoue",
+          "slug": "mizuki-inoue",
+          "wikipediaTitle": "Mizuki Inoue",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mizuki_Inoue",
+          "pageId": 30099276
+        },
+        {
+          "org": "ufc",
+          "name": "Modestas Bukauskas",
+          "slug": "modestas-bukauskas",
+          "wikipediaTitle": "Modestas Bukauskas",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Modestas_Bukauskas",
+          "pageId": 66392972
+        },
+        {
+          "org": "ufc",
+          "name": "Montana De La Rosa",
+          "slug": "montana-de-la-rosa",
+          "wikipediaTitle": "Montana De La Rosa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Montana_De_La_Rosa",
+          "pageId": 56012573
+        },
+        {
+          "org": "ufc",
+          "name": "Movsar Evloev",
+          "slug": "movsar-evloev",
+          "wikipediaTitle": "Movsar Evloev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Movsar_Evloev",
+          "pageId": 64594369
+        },
+        {
+          "org": "ufc",
+          "name": "Murilo Bustamante",
+          "slug": "murilo-bustamante",
+          "wikipediaTitle": "Murilo Bustamante",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Murilo_Bustamante",
+          "pageId": 3015961
+        },
+        {
+          "org": "ufc",
+          "name": "Nadia Kassem",
+          "slug": "nadia-kassem",
+          "wikipediaTitle": "Nadia Kassem",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nadia_Kassem",
+          "pageId": 54431980
+        },
+        {
+          "org": "ufc",
+          "name": "Nah-Shon Burrell",
+          "slug": "nah-shon-burrell",
+          "wikipediaTitle": "Nah-Shon Burrell",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nah-Shon_Burrell",
+          "pageId": 38030947
+        },
+        {
+          "org": "ufc",
+          "name": "Nate Diaz",
+          "slug": "nate-diaz",
+          "wikipediaTitle": "Nate Diaz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nate_Diaz",
+          "pageId": 10076461
+        },
+        {
+          "org": "ufc",
+          "name": "Nathan Coy",
+          "slug": "nathan-coy",
+          "wikipediaTitle": "Nathan Coy",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nathan_Coy",
+          "pageId": 27151049
+        },
+        {
+          "org": "ufc",
+          "name": "Nick Catone",
+          "slug": "nick-catone",
+          "wikipediaTitle": "Nick Catone",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nick_Catone",
+          "pageId": 21291172
+        },
+        {
+          "org": "ufc",
+          "name": "Nick Denis",
+          "slug": "nick-denis",
+          "wikipediaTitle": "Nick Denis",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nick_Denis",
+          "pageId": 22197217
+        },
+        {
+          "org": "ufc",
+          "name": "Nick Diaz",
+          "slug": "nick-diaz",
+          "wikipediaTitle": "Nick Diaz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nick_Diaz",
+          "pageId": 3848862
+        },
+        {
+          "org": "ufc",
+          "name": "Nicolas Dalby",
+          "slug": "nicolas-dalby",
+          "wikipediaTitle": "Nicolas Dalby",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nicolas_Dalby",
+          "pageId": 46848558
+        },
+        {
+          "org": "ufc",
+          "name": "Niklas Bäckström (fighter)",
+          "slug": "niklas-backstrom",
+          "wikipediaTitle": "Niklas Bäckström (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Niklas_B%C3%A4ckstr%C3%B6m_(fighter)",
+          "pageId": 42878320
+        },
+        {
+          "org": "ufc",
+          "name": "Nora Cornolle",
+          "slug": "nora-cornolle",
+          "wikipediaTitle": "Nora Cornolle",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nora_Cornolle",
+          "pageId": 78378502
+        },
+        {
+          "org": "ufc",
+          "name": "Norma Dumont",
+          "slug": "norma-dumont",
+          "wikipediaTitle": "Norma Dumont",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Norma_Dumont",
+          "pageId": 66456544
+        },
+        {
+          "org": "ufc",
+          "name": "Nurullo Aliev",
+          "slug": "nurullo-aliev",
+          "wikipediaTitle": "Nurullo Aliev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Nurullo_Aliev",
+          "pageId": 83479208
+        },
+        {
+          "org": "ufc",
+          "name": "Oliver Enkamp",
+          "slug": "oliver-enkamp",
+          "wikipediaTitle": "Oliver Enkamp",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Oliver_Enkamp",
+          "pageId": 54165652
+        },
+        {
+          "org": "ufc",
+          "name": "Olivier Aubin-Mercier",
+          "slug": "olivier-aubin-mercier",
+          "wikipediaTitle": "Olivier Aubin-Mercier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Olivier_Aubin-Mercier",
+          "pageId": 45558742
+        },
+        {
+          "org": "ufc",
+          "name": "Oluwale Bamgbose",
+          "slug": "oluwale-bamgbose",
+          "wikipediaTitle": "Oluwale Bamgbose",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Oluwale_Bamgbose",
+          "pageId": 50237164
+        },
+        {
+          "org": "ufc",
+          "name": "Omari Akhmedov",
+          "slug": "omari-akhmedov",
+          "wikipediaTitle": "Omari Akhmedov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Omari_Akhmedov",
+          "pageId": 41041143
+        },
+        {
+          "org": "ufc",
+          "name": "Ottman Azaitar",
+          "slug": "ottman-azaitar",
+          "wikipediaTitle": "Ottman Azaitar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ottman_Azaitar",
+          "pageId": 65970091
+        },
+        {
+          "org": "ufc",
+          "name": "Pablo Garza (fighter)",
+          "slug": "pablo-garza",
+          "wikipediaTitle": "Pablo Garza (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Pablo_Garza_(fighter)",
+          "pageId": 28247414
+        },
+        {
+          "org": "ufc",
+          "name": "Pannie Kianzad",
+          "slug": "pannie-kianzad",
+          "wikipediaTitle": "Pannie Kianzad",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Pannie_Kianzad",
+          "pageId": 47489444
+        },
+        {
+          "org": "ufc",
+          "name": "Papy Abedi",
+          "slug": "papy-abedi",
+          "wikipediaTitle": "Papy Abedi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Papy_Abedi",
+          "pageId": 31315274
+        },
+        {
+          "org": "ufc",
+          "name": "Pat Barry (fighter)",
+          "slug": "pat-barry",
+          "wikipediaTitle": "Pat Barry (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Pat_Barry_(fighter)",
+          "pageId": 14112315
+        },
+        {
+          "org": "ufc",
+          "name": "Patrick Côté (fighter)",
+          "slug": "patrick-cote",
+          "wikipediaTitle": "Patrick Côté (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Patrick_C%C3%B4t%C3%A9_(fighter)",
+          "pageId": 5438605
+        },
+        {
+          "org": "ufc",
+          "name": "Patrick Cummins (fighter)",
+          "slug": "patrick-cummins",
+          "wikipediaTitle": "Patrick Cummins (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Patrick_Cummins_(fighter)",
+          "pageId": 42272043
+        },
+        {
+          "org": "ufc",
+          "name": "Paul Bradley (fighter)",
+          "slug": "paul-bradley",
+          "wikipediaTitle": "Paul Bradley (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_Bradley_(fighter)",
+          "pageId": 39935894
+        },
+        {
+          "org": "ufc",
+          "name": "Paul Buentello",
+          "slug": "paul-buentello",
+          "wikipediaTitle": "Paul Buentello",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_Buentello",
+          "pageId": 5280158
+        },
+        {
+          "org": "ufc",
+          "name": "Paul Craig",
+          "slug": "paul-craig",
+          "wikipediaTitle": "Paul Craig",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_Craig",
+          "pageId": 52963347
+        },
+        {
+          "org": "ufc",
+          "name": "Paul Creighton",
+          "slug": "paul-creighton",
+          "wikipediaTitle": "Paul Creighton",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_Creighton",
+          "pageId": 17445367
+        },
+        {
+          "org": "ufc",
+          "name": "Paul Daley",
+          "slug": "paul-daley",
+          "wikipediaTitle": "Paul Daley",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_Daley",
+          "pageId": 20441427
+        },
+        {
+          "org": "ufc",
+          "name": "Paul Felder",
+          "slug": "paul-felder",
+          "wikipediaTitle": "Paul Felder",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_Felder",
+          "pageId": 44971648
+        },
+        {
+          "org": "ufc",
+          "name": "Paulo Costa",
+          "slug": "paulo-costa",
+          "wikipediaTitle": "Paulo Costa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Paulo_Costa",
+          "pageId": 54070190
+        },
+        {
+          "org": "ufc",
+          "name": "Pearl Gonzalez",
+          "slug": "pearl-gonzalez",
+          "wikipediaTitle": "Pearl Gonzalez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Pearl_Gonzalez",
+          "pageId": 56962729
+        },
+        {
+          "org": "ufc",
+          "name": "Per Eklund (fighter)",
+          "slug": "per-eklund",
+          "wikipediaTitle": "Per Eklund (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Per_Eklund_(fighter)",
+          "pageId": 17440650
+        },
+        {
+          "org": "ufc",
+          "name": "Phil Baroni",
+          "slug": "phil-baroni",
+          "wikipediaTitle": "Phil Baroni",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Phil_Baroni",
+          "pageId": 2904549
+        },
+        {
+          "org": "ufc",
+          "name": "Phil Davis (fighter)",
+          "slug": "phil-davis",
+          "wikipediaTitle": "Phil Davis (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Phil_Davis_(fighter)",
+          "pageId": 25677517
+        },
+        {
+          "org": "ufc",
+          "name": "Phil De Fries",
+          "slug": "phil-de-fries",
+          "wikipediaTitle": "Phil De Fries",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Phil_De_Fries",
+          "pageId": 32540035
+        },
+        {
+          "org": "ufc",
+          "name": "Poliana Botelho",
+          "slug": "poliana-botelho",
+          "wikipediaTitle": "Poliana Botelho",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Poliana_Botelho",
+          "pageId": 55134143
+        },
+        {
+          "org": "ufc",
+          "name": "Priscila Cachoeira",
+          "slug": "priscila-cachoeira",
+          "wikipediaTitle": "Priscila Cachoeira",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Priscila_Cachoeira",
+          "pageId": 56026701
+        },
+        {
+          "org": "ufc",
+          "name": "Rafa García (fighter)",
+          "slug": "rafa-garcia",
+          "wikipediaTitle": "Rafa García (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rafa_Garc%C3%ADa_(fighter)",
+          "pageId": 68758902
+        },
+        {
+          "org": "ufc",
+          "name": "Rafael Alves (fighter)",
+          "slug": "rafael-alves",
+          "wikipediaTitle": "Rafael Alves (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rafael_Alves_(fighter)",
+          "pageId": 70178377
+        },
+        {
+          "org": "ufc",
+          "name": "Rafael Cavalcante",
+          "slug": "rafael-cavalcante",
+          "wikipediaTitle": "Rafael Cavalcante",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rafael_Cavalcante",
+          "pageId": 19510356
+        },
+        {
+          "org": "ufc",
+          "name": "Rafael dos Anjos",
+          "slug": "rafael-dos-anjos",
+          "wikipediaTitle": "Rafael dos Anjos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rafael_dos_Anjos",
+          "pageId": 18427840
+        },
+        {
+          "org": "ufc",
+          "name": "Rafael Fiziev",
+          "slug": "rafael-fiziev",
+          "wikipediaTitle": "Rafael Fiziev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rafael_Fiziev",
+          "pageId": 63215959
+        },
+        {
+          "org": "ufc",
+          "name": "Ramazan Emeev",
+          "slug": "ramazan-emeev",
+          "wikipediaTitle": "Ramazan Emeev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ramazan_Emeev",
+          "pageId": 55142443
+        },
+        {
+          "org": "ufc",
+          "name": "Ramiz Brahimaj",
+          "slug": "ramiz-brahimaj",
+          "wikipediaTitle": "Ramiz Brahimaj",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ramiz_Brahimaj",
+          "pageId": 69151210
+        },
+        {
+          "org": "ufc",
+          "name": "Randy Brown (fighter)",
+          "slug": "randy-brown",
+          "wikipediaTitle": "Randy Brown (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Randy_Brown_(fighter)",
+          "pageId": 49278652
+        },
+        {
+          "org": "ufc",
+          "name": "Randy Costa",
+          "slug": "randy-costa",
+          "wikipediaTitle": "Randy Costa",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Randy_Costa",
+          "pageId": 64962744
+        },
+        {
+          "org": "ufc",
+          "name": "Randy Couture",
+          "slug": "randy-couture",
+          "wikipediaTitle": "Randy Couture",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Randy_Couture",
+          "pageId": 1216791
+        },
+        {
+          "org": "ufc",
+          "name": "Raoni Barcelos",
+          "slug": "raoni-barcelos",
+          "wikipediaTitle": "Raoni Barcelos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Raoni_Barcelos",
+          "pageId": 56012547
+        },
+        {
+          "org": "ufc",
+          "name": "Raphael Assunção",
+          "slug": "raphael-assuncao",
+          "wikipediaTitle": "Raphael Assunção",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Raphael_Assun%C3%A7%C3%A3o",
+          "pageId": 21739527
+        },
+        {
+          "org": "ufc",
+          "name": "Rashad Coulter",
+          "slug": "rashad-coulter",
+          "wikipediaTitle": "Rashad Coulter",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rashad_Coulter",
+          "pageId": 59146119
+        },
+        {
+          "org": "ufc",
+          "name": "Rashad Evans",
+          "slug": "rashad-evans",
+          "wikipediaTitle": "Rashad Evans",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rashad_Evans",
+          "pageId": 2903913
+        },
+        {
+          "org": "ufc",
+          "name": "Ray Borg",
+          "slug": "ray-borg",
+          "wikipediaTitle": "Ray Borg",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ray_Borg",
+          "pageId": 44384951
+        },
+        {
+          "org": "ufc",
+          "name": "Reese Andy",
+          "slug": "reese-andy",
+          "wikipediaTitle": "Reese Andy",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Reese_Andy",
+          "pageId": 18485402
+        },
+        {
+          "org": "ufc",
+          "name": "Renan Barão",
+          "slug": "renan-barao",
+          "wikipediaTitle": "Renan Barão",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Renan_Bar%C3%A3o",
+          "pageId": 27227946
+        },
+        {
+          "org": "ufc",
+          "name": "Renée Forte",
+          "slug": "renee-forte",
+          "wikipediaTitle": "Renée Forte",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ren%C3%A9e_Forte",
+          "pageId": 38567109
+        },
+        {
+          "org": "ufc",
+          "name": "Reuben Duran",
+          "slug": "reuben-duran",
+          "wikipediaTitle": "Reuben Duran",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Reuben_Duran",
+          "pageId": 31968461
+        },
+        {
+          "org": "ufc",
+          "name": "Ricardo Almeida",
+          "slug": "ricardo-almeida",
+          "wikipediaTitle": "Ricardo Almeida",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ricardo_Almeida",
+          "pageId": 9530963
+        },
+        {
+          "org": "ufc",
+          "name": "Ricardo Funch",
+          "slug": "ricardo-funch",
+          "wikipediaTitle": "Ricardo Funch",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ricardo_Funch",
+          "pageId": 24401567
+        },
+        {
+          "org": "ufc",
+          "name": "Rich Attonito",
+          "slug": "rich-attonito",
+          "wikipediaTitle": "Rich Attonito",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rich_Attonito",
+          "pageId": 26689259
+        },
+        {
+          "org": "ufc",
+          "name": "Rich Clementi",
+          "slug": "rich-clementi",
+          "wikipediaTitle": "Rich Clementi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rich_Clementi",
+          "pageId": 6897791
+        },
+        {
+          "org": "ufc",
+          "name": "Rich Franklin",
+          "slug": "rich-franklin",
+          "wikipediaTitle": "Rich Franklin",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rich_Franklin",
+          "pageId": 2160402
+        },
+        {
+          "org": "ufc",
+          "name": "Richard Crunkilton",
+          "slug": "richard-crunkilton",
+          "wikipediaTitle": "Richard Crunkilton",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Richard_Crunkilton",
+          "pageId": 17443070
+        },
+        {
+          "org": "ufc",
+          "name": "Ricky Glenn",
+          "slug": "ricky-glenn",
+          "wikipediaTitle": "Ricky Glenn",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ricky_Glenn",
+          "pageId": 54727987
+        },
+        {
+          "org": "ufc",
+          "name": "Riki Fukuda",
+          "slug": "riki-fukuda",
+          "wikipediaTitle": "Riki Fukuda",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Riki_Fukuda",
+          "pageId": 12785650
+        },
+        {
+          "org": "ufc",
+          "name": "Rinat Fakhretdinov",
+          "slug": "rinat-fakhretdinov",
+          "wikipediaTitle": "Rinat Fakhretdinov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rinat_Fakhretdinov",
+          "pageId": 74215145
+        },
+        {
+          "org": "ufc",
+          "name": "Roan Carneiro",
+          "slug": "roan-carneiro",
+          "wikipediaTitle": "Roan Carneiro",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Roan_Carneiro",
+          "pageId": 16907538
+        },
+        {
+          "org": "ufc",
+          "name": "Rob Broughton",
+          "slug": "rob-broughton",
+          "wikipediaTitle": "Rob Broughton",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rob_Broughton",
+          "pageId": 11087181
+        },
+        {
+          "org": "ufc",
+          "name": "Rob Emerson",
+          "slug": "rob-emerson",
+          "wikipediaTitle": "Rob Emerson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rob_Emerson",
+          "pageId": 12614827
+        },
+        {
+          "org": "ufc",
+          "name": "Rob Font",
+          "slug": "rob-font",
+          "wikipediaTitle": "Rob Font",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rob_Font",
+          "pageId": 49927708
+        },
+        {
+          "org": "ufc",
+          "name": "Robert Bryczek",
+          "slug": "robert-bryczek",
+          "wikipediaTitle": "Robert Bryczek",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Robert_Bryczek",
+          "pageId": 81584155
+        },
+        {
+          "org": "ufc",
+          "name": "Rodrigo Damm",
+          "slug": "rodrigo-damm",
+          "wikipediaTitle": "Rodrigo Damm",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rodrigo_Damm",
+          "pageId": 22351816
+        },
+        {
+          "org": "ufc",
+          "name": "Roger Bowling (fighter)",
+          "slug": "roger-bowling",
+          "wikipediaTitle": "Roger Bowling (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Roger_Bowling_(fighter)",
+          "pageId": 22082346
+        },
+        {
+          "org": "ufc",
+          "name": "Rogério Bontorin",
+          "slug": "rogerio-bontorin",
+          "wikipediaTitle": "Rogério Bontorin",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rog%C3%A9rio_Bontorin",
+          "pageId": 63270152
+        },
+        {
+          "org": "ufc",
+          "name": "Roland Delorme",
+          "slug": "roland-delorme",
+          "wikipediaTitle": "Roland Delorme",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Roland_Delorme",
+          "pageId": 33957808
+        },
+        {
+          "org": "ufc",
+          "name": "Rolando Delgado",
+          "slug": "rolando-delgado",
+          "wikipediaTitle": "Rolando Delgado",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rolando_Delgado",
+          "pageId": 20685596
+        },
+        {
+          "org": "ufc",
+          "name": "Rolando Dy",
+          "slug": "rolando-dy",
+          "wikipediaTitle": "Rolando Dy",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rolando_Dy",
+          "pageId": 55871358
+        },
+        {
+          "org": "ufc",
+          "name": "Roman Dolidze",
+          "slug": "roman-dolidze",
+          "wikipediaTitle": "Roman Dolidze",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Roman_Dolidze",
+          "pageId": 64612644
+        },
+        {
+          "org": "ufc",
+          "name": "Royce Alger",
+          "slug": "royce-alger",
+          "wikipediaTitle": "Royce Alger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Royce_Alger",
+          "pageId": 14795931
+        },
+        {
+          "org": "ufc",
+          "name": "Russell Doane",
+          "slug": "russell-doane",
+          "wikipediaTitle": "Russell Doane",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Russell_Doane",
+          "pageId": 43079296
+        },
+        {
+          "org": "ufc",
+          "name": "Ryan Bader",
+          "slug": "ryan-bader",
+          "wikipediaTitle": "Ryan Bader",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ryan_Bader",
+          "pageId": 20188067
+        },
+        {
+          "org": "ufc",
+          "name": "Ryan Benoit",
+          "slug": "ryan-benoit",
+          "wikipediaTitle": "Ryan Benoit",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ryan_Benoit",
+          "pageId": 45618411
+        },
+        {
+          "org": "ufc",
+          "name": "Ryan Couture",
+          "slug": "ryan-couture",
+          "wikipediaTitle": "Ryan Couture",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ryan_Couture",
+          "pageId": 21511349
+        },
+        {
+          "org": "ufc",
+          "name": "Ryo Chonan",
+          "slug": "ryo-chonan",
+          "wikipediaTitle": "Ryo Chonan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ryo_Chonan",
+          "pageId": 3999868
+        },
+        {
+          "org": "ufc",
+          "name": "Sam Adkins (fighter)",
+          "slug": "sam-adkins",
+          "wikipediaTitle": "Sam Adkins (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sam_Adkins_(fighter)",
+          "pageId": 44267737
+        },
+        {
+          "org": "ufc",
+          "name": "Sam Alvey",
+          "slug": "sam-alvey",
+          "wikipediaTitle": "Sam Alvey",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sam_Alvey",
+          "pageId": 44349666
+        },
+        {
+          "org": "ufc",
+          "name": "Sam Hughes (fighter)",
+          "slug": "sam-hughes",
+          "wikipediaTitle": "Sam Hughes (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sam_Hughes_(fighter)",
+          "pageId": 68442515
+        },
+        {
+          "org": "ufc",
+          "name": "Sarah Kaufman",
+          "slug": "sarah-kaufman",
+          "wikipediaTitle": "Sarah Kaufman",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sarah_Kaufman",
+          "pageId": 22711666
+        },
+        {
+          "org": "ufc",
+          "name": "Scott Askham",
+          "slug": "scott-askham",
+          "wikipediaTitle": "Scott Askham",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Scott_Askham",
+          "pageId": 47145528
+        },
+        {
+          "org": "ufc",
+          "name": "Scott Ferrozzo",
+          "slug": "scott-ferrozzo",
+          "wikipediaTitle": "Scott Ferrozzo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Scott_Ferrozzo",
+          "pageId": 17958251
+        },
+        {
+          "org": "ufc",
+          "name": "Sean Alvarez",
+          "slug": "sean-alvarez",
+          "wikipediaTitle": "Sean Alvarez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sean_Alvarez",
+          "pageId": 17443088
+        },
+        {
+          "org": "ufc",
+          "name": "Sean Brady (fighter)",
+          "slug": "sean-brady",
+          "wikipediaTitle": "Sean Brady (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sean_Brady_(fighter)",
+          "pageId": 64535228
+        },
+        {
+          "org": "ufc",
+          "name": "Seo Hee Ham",
+          "slug": "seo-hee-ham",
+          "wikipediaTitle": "Seo Hee Ham",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Seo_Hee_Ham",
+          "pageId": 28930728
+        },
+        {
+          "org": "ufc",
+          "name": "Seth Baczynski",
+          "slug": "seth-baczynski",
+          "wikipediaTitle": "Seth Baczynski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Seth_Baczynski",
+          "pageId": 26689274
+        },
+        {
+          "org": "ufc",
+          "name": "Seung Woo Choi",
+          "slug": "seung-woo-choi",
+          "wikipediaTitle": "Seung Woo Choi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Seung_Woo_Choi",
+          "pageId": 62676156
+        },
+        {
+          "org": "ufc",
+          "name": "Shamar Bailey",
+          "slug": "shamar-bailey",
+          "wikipediaTitle": "Shamar Bailey",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shamar_Bailey",
+          "pageId": 31054246
+        },
+        {
+          "org": "ufc",
+          "name": "Shamil Abdurakhimov",
+          "slug": "shamil-abdurakhimov",
+          "wikipediaTitle": "Shamil Abdurakhimov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shamil_Abdurakhimov",
+          "pageId": 46295865
+        },
+        {
+          "org": "ufc",
+          "name": "Shamil Gaziev",
+          "slug": "shamil-gaziev",
+          "wikipediaTitle": "Shamil Gaziev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shamil_Gaziev",
+          "pageId": 79080356
+        },
+        {
+          "org": "ufc",
+          "name": "Shana Dobson",
+          "slug": "shana-dobson",
+          "wikipediaTitle": "Shana Dobson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shana_Dobson",
+          "pageId": 56012567
+        },
+        {
+          "org": "ufc",
+          "name": "Shane Burgos",
+          "slug": "shane-burgos",
+          "wikipediaTitle": "Shane Burgos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shane_Burgos",
+          "pageId": 54050449
+        },
+        {
+          "org": "ufc",
+          "name": "Shane Campbell",
+          "slug": "shane-campbell",
+          "wikipediaTitle": "Shane Campbell",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shane_Campbell",
+          "pageId": 19464193
+        },
+        {
+          "org": "ufc",
+          "name": "Shane Carwin",
+          "slug": "shane-carwin",
+          "wikipediaTitle": "Shane Carwin",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shane_Carwin",
+          "pageId": 17440322
+        },
+        {
+          "org": "ufc",
+          "name": "Shayna Baszler",
+          "slug": "shayna-baszler",
+          "wikipediaTitle": "Shayna Baszler",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shayna_Baszler",
+          "pageId": 3569175
+        },
+        {
+          "org": "ufc",
+          "name": "Sheila Gaff",
+          "slug": "sheila-gaff",
+          "wikipediaTitle": "Sheila Gaff",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sheila_Gaff",
+          "pageId": 36850589
+        },
+        {
+          "org": "ufc",
+          "name": "Shinsho Anzai",
+          "slug": "shinsho-anzai",
+          "wikipediaTitle": "Shinsho Anzai",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shinsho_Anzai",
+          "pageId": 55130920
+        },
+        {
+          "org": "ufc",
+          "name": "Shonie Carter",
+          "slug": "shonie-carter",
+          "wikipediaTitle": "Shonie Carter",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Shonie_Carter",
+          "pageId": 6895708
+        },
+        {
+          "org": "ufc",
+          "name": "Sijara Eubanks",
+          "slug": "sijara-eubanks",
+          "wikipediaTitle": "Sijara Eubanks",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sijara_Eubanks",
+          "pageId": 54779328
+        },
+        {
+          "org": "ufc",
+          "name": "Silvana Gómez Juárez",
+          "slug": "silvana-gomez-juarez",
+          "wikipediaTitle": "Silvana Gómez Juárez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Silvana_G%C3%B3mez_Ju%C3%A1rez",
+          "pageId": 70357744
+        },
+        {
+          "org": "ufc",
+          "name": "Siyar Bahadurzada",
+          "slug": "siyar-bahadurzada",
+          "wikipediaTitle": "Siyar Bahadurzada",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Siyar_Bahadurzada",
+          "pageId": 18981955
+        },
+        {
+          "org": "ufc",
+          "name": "Spencer Fisher",
+          "slug": "spencer-fisher",
+          "wikipediaTitle": "Spencer Fisher",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Spencer_Fisher",
+          "pageId": 5334419
+        },
+        {
+          "org": "ufc",
+          "name": "Spike Carlyle",
+          "slug": "spike-carlyle",
+          "wikipediaTitle": "Spike Carlyle",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Spike_Carlyle",
+          "pageId": 65805491
+        },
+        {
+          "org": "ufc",
+          "name": "Stephan Bonnar",
+          "slug": "stephan-bonnar",
+          "wikipediaTitle": "Stephan Bonnar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Stephan_Bonnar",
+          "pageId": 2935437
+        },
+        {
+          "org": "ufc",
+          "name": "Stephanie Egger",
+          "slug": "stephanie-egger",
+          "wikipediaTitle": "Stephanie Egger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Stephanie_Egger",
+          "pageId": 67390863
+        },
+        {
+          "org": "ufc",
+          "name": "Steve Berger",
+          "slug": "steve-berger",
+          "wikipediaTitle": "Steve Berger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Steve_Berger",
+          "pageId": 17445336
+        },
+        {
+          "org": "ufc",
+          "name": "Steve Bossé",
+          "slug": "steve-bosse",
+          "wikipediaTitle": "Steve Bossé",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Steve_Boss%C3%A9",
+          "pageId": 49967577
+        },
+        {
+          "org": "ufc",
+          "name": "Steve Bruno",
+          "slug": "steve-bruno",
+          "wikipediaTitle": "Steve Bruno",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Steve_Bruno",
+          "pageId": 17440443
+        },
+        {
+          "org": "ufc",
+          "name": "Steve Cantwell",
+          "slug": "steve-cantwell",
+          "wikipediaTitle": "Steve Cantwell",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Steve_Cantwell",
+          "pageId": 18714215
+        },
+        {
+          "org": "ufc",
+          "name": "Steve Erceg",
+          "slug": "steve-erceg",
+          "wikipediaTitle": "Steve Erceg",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Steve_Erceg",
+          "pageId": 75922526
+        },
+        {
+          "org": "ufc",
+          "name": "Steve Garcia",
+          "slug": "steve-garcia",
+          "wikipediaTitle": "Steve Garcia",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Steve_Garcia",
+          "pageId": 43769501
+        },
+        {
+          "org": "ufc",
+          "name": "Sultan Aliev",
+          "slug": "sultan-aliev",
+          "wikipediaTitle": "Sultan Aliev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sultan_Aliev",
+          "pageId": 38683527
+        },
+        {
+          "org": "ufc",
+          "name": "T.J. Brown",
+          "slug": "t-j-brown",
+          "wikipediaTitle": "T.J. Brown",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/T.J._Brown",
+          "pageId": 66700549
+        },
+        {
+          "org": "ufc",
+          "name": "T.J. Dillashaw",
+          "slug": "t-j-dillashaw",
+          "wikipediaTitle": "T.J. Dillashaw",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/T.J._Dillashaw",
+          "pageId": 33622889
+        },
+        {
+          "org": "ufc",
+          "name": "Tae Hyun Bang",
+          "slug": "tae-hyun-bang",
+          "wikipediaTitle": "Tae Hyun Bang",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tae_Hyun_Bang",
+          "pageId": 46719100
+        },
+        {
+          "org": "ufc",
+          "name": "Takanori Gomi",
+          "slug": "takanori-gomi",
+          "wikipediaTitle": "Takanori Gomi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Takanori_Gomi",
+          "pageId": 1370208
+        },
+        {
+          "org": "ufc",
+          "name": "Talita Alencar",
+          "slug": "talita-alencar",
+          "wikipediaTitle": "Talita Alencar",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Talita_Alencar",
+          "pageId": 73361846
+        },
+        {
+          "org": "ufc",
+          "name": "Talita Bernardo",
+          "slug": "talita-bernardo",
+          "wikipediaTitle": "Talita Bernardo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Talita_Bernardo",
+          "pageId": 58969919
+        },
+        {
+          "org": "ufc",
+          "name": "Tank Abbott",
+          "slug": "tank-abbott",
+          "wikipediaTitle": "Tank Abbott",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tank_Abbott",
+          "pageId": 1334806
+        },
+        {
+          "org": "ufc",
+          "name": "Tanner Boser",
+          "slug": "tanner-boser",
+          "wikipediaTitle": "Tanner Boser",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tanner_Boser",
+          "pageId": 64399632
+        },
+        {
+          "org": "ufc",
+          "name": "Terry Etim",
+          "slug": "terry-etim",
+          "wikipediaTitle": "Terry Etim",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Terry_Etim",
+          "pageId": 13484116
+        },
+        {
+          "org": "ufc",
+          "name": "Thiago Alves (fighter)",
+          "slug": "thiago-alves",
+          "wikipediaTitle": "Thiago Alves (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Thiago_Alves_(fighter)",
+          "pageId": 9178628
+        },
+        {
+          "org": "ufc",
+          "name": "Thomas Almeida",
+          "slug": "thomas-almeida",
+          "wikipediaTitle": "Thomas Almeida",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Thomas_Almeida",
+          "pageId": 45547626
+        },
+        {
+          "org": "ufc",
+          "name": "Tiki Ghosn",
+          "slug": "tiki-ghosn",
+          "wikipediaTitle": "Tiki Ghosn",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tiki_Ghosn",
+          "pageId": 17433882
+        },
+        {
+          "org": "ufc",
+          "name": "Tim Boetsch",
+          "slug": "tim-boetsch",
+          "wikipediaTitle": "Tim Boetsch",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tim_Boetsch",
+          "pageId": 15579832
+        },
+        {
+          "org": "ufc",
+          "name": "Tim Credeur",
+          "slug": "tim-credeur",
+          "wikipediaTitle": "Tim Credeur",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tim_Credeur",
+          "pageId": 18005521
+        },
+        {
+          "org": "ufc",
+          "name": "Tim Elliott",
+          "slug": "tim-elliott",
+          "wikipediaTitle": "Tim Elliott",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tim_Elliott",
+          "pageId": 35561191
+        },
+        {
+          "org": "ufc",
+          "name": "Todd Duffee",
+          "slug": "todd-duffee",
+          "wikipediaTitle": "Todd Duffee",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Todd_Duffee",
+          "pageId": 21745500
+        },
+        {
+          "org": "ufc",
+          "name": "Tom Aspinall",
+          "slug": "tom-aspinall",
+          "wikipediaTitle": "Tom Aspinall",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tom_Aspinall",
+          "pageId": 66304460
+        },
+        {
+          "org": "ufc",
+          "name": "Tom Breese",
+          "slug": "tom-breese",
+          "wikipediaTitle": "Tom Breese",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tom_Breese",
+          "pageId": 48412768
+        },
+        {
+          "org": "ufc",
+          "name": "Tom DeBlass",
+          "slug": "tom-deblass",
+          "wikipediaTitle": "Tom DeBlass",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tom_DeBlass",
+          "pageId": 40733447
+        },
+        {
+          "org": "ufc",
+          "name": "Tom Duquesnoy",
+          "slug": "tom-duquesnoy",
+          "wikipediaTitle": "Tom Duquesnoy",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tom_Duquesnoy",
+          "pageId": 53793594
+        },
+        {
+          "org": "ufc",
+          "name": "Tomasz Drwal",
+          "slug": "tomasz-drwal",
+          "wikipediaTitle": "Tomasz Drwal",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tomasz_Drwal",
+          "pageId": 12584364
+        },
+        {
+          "org": "ufc",
+          "name": "Tony DeSouza",
+          "slug": "tony-desouza",
+          "wikipediaTitle": "Tony DeSouza",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tony_DeSouza",
+          "pageId": 5895812
+        },
+        {
+          "org": "ufc",
+          "name": "Tony Ferguson",
+          "slug": "tony-ferguson",
+          "wikipediaTitle": "Tony Ferguson",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tony_Ferguson",
+          "pageId": 31689180
+        },
+        {
+          "org": "ufc",
+          "name": "Tony Fryklund",
+          "slug": "tony-fryklund",
+          "wikipediaTitle": "Tony Fryklund",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tony_Fryklund",
+          "pageId": 17430042
+        },
+        {
+          "org": "ufc",
+          "name": "Tonya Evinger",
+          "slug": "tonya-evinger",
+          "wikipediaTitle": "Tonya Evinger",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tonya_Evinger",
+          "pageId": 27979764
+        },
+        {
+          "org": "ufc",
+          "name": "Tracy Cortez",
+          "slug": "tracy-cortez",
+          "wikipediaTitle": "Tracy Cortez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tracy_Cortez",
+          "pageId": 60153745
+        },
+        {
+          "org": "ufc",
+          "name": "Travis Browne",
+          "slug": "travis-browne",
+          "wikipediaTitle": "Travis Browne",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Travis_Browne",
+          "pageId": 26486447
+        },
+        {
+          "org": "ufc",
+          "name": "Travis Fulton",
+          "slug": "travis-fulton",
+          "wikipediaTitle": "Travis Fulton",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Travis_Fulton",
+          "pageId": 7493548
+        },
+        {
+          "org": "ufc",
+          "name": "Trevin Giles",
+          "slug": "trevin-giles",
+          "wikipediaTitle": "Trevin Giles",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Trevin_Giles",
+          "pageId": 61291801
+        },
+        {
+          "org": "ufc",
+          "name": "Tristan Connelly",
+          "slug": "tristan-connelly",
+          "wikipediaTitle": "Tristan Connelly",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tristan_Connelly",
+          "pageId": 62023217
+        },
+        {
+          "org": "ufc",
+          "name": "Tyrell Fortune",
+          "slug": "tyrell-fortune",
+          "wikipediaTitle": "Tyrell Fortune",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tyrell_Fortune",
+          "pageId": 83467130
+        },
+        {
+          "org": "ufc",
+          "name": "Ulysses Gomez",
+          "slug": "ulysses-gomez",
+          "wikipediaTitle": "Ulysses Gomez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ulysses_Gomez",
+          "pageId": 27431005
+        },
+        {
+          "org": "ufc",
+          "name": "Urijah Faber",
+          "slug": "urijah-faber",
+          "wikipediaTitle": "Urijah Faber",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Urijah_Faber",
+          "pageId": 8654898
+        },
+        {
+          "org": "ufc",
+          "name": "Vanessa Demopoulos",
+          "slug": "vanessa-demopoulos",
+          "wikipediaTitle": "Vanessa Demopoulos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Vanessa_Demopoulos",
+          "pageId": 70532267
+        },
+        {
+          "org": "ufc",
+          "name": "Victoria Leonardo",
+          "slug": "victoria-leonardo",
+          "wikipediaTitle": "Victoria Leonardo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Victoria_Leonardo",
+          "pageId": 65939126
+        },
+        {
+          "org": "ufc",
+          "name": "Virna Jandiroba",
+          "slug": "virna-jandiroba",
+          "wikipediaTitle": "Virna Jandiroba",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Virna_Jandiroba",
+          "pageId": 58362951
+        },
+        {
+          "org": "ufc",
+          "name": "Viscardi Andrade",
+          "slug": "viscardi-andrade",
+          "wikipediaTitle": "Viscardi Andrade",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Viscardi_Andrade",
+          "pageId": 40154309
+        },
+        {
+          "org": "ufc",
+          "name": "Vitor Belfort",
+          "slug": "vitor-belfort",
+          "wikipediaTitle": "Vitor Belfort",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Vitor_Belfort",
+          "pageId": 1111874
+        },
+        {
+          "org": "ufc",
+          "name": "Viviane Araújo (fighter)",
+          "slug": "viviane-araujo",
+          "wikipediaTitle": "Viviane Araújo (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Viviane_Ara%C3%BAjo_(fighter)",
+          "pageId": 62585920
+        },
+        {
+          "org": "ufc",
+          "name": "Waldo Cortes-Acosta",
+          "slug": "waldo-cortes-acosta",
+          "wikipediaTitle": "Waldo Cortes-Acosta",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Waldo_Cortes-Acosta",
+          "pageId": 79108787
+        },
+        {
+          "org": "ufc",
+          "name": "Warlley Alves",
+          "slug": "warlley-alves",
+          "wikipediaTitle": "Warlley Alves",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Warlley_Alves",
+          "pageId": 43438076
+        },
+        {
+          "org": "ufc",
+          "name": "Wesley Correira",
+          "slug": "wesley-correira",
+          "wikipediaTitle": "Wesley Correira",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Wesley_Correira",
+          "pageId": 3303974
+        },
+        {
+          "org": "ufc",
+          "name": "Will Brooks",
+          "slug": "will-brooks",
+          "wikipediaTitle": "Will Brooks",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Will_Brooks",
+          "pageId": 38356381
+        },
+        {
+          "org": "ufc",
+          "name": "Will Campuzano",
+          "slug": "will-campuzano",
+          "wikipediaTitle": "Will Campuzano",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Will_Campuzano",
+          "pageId": 24468104
+        },
+        {
+          "org": "ufc",
+          "name": "Willamy Freire",
+          "slug": "willamy-freire",
+          "wikipediaTitle": "Willamy Freire",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Willamy_Freire",
+          "pageId": 27609570
+        },
+        {
+          "org": "ufc",
+          "name": "Willie Gates",
+          "slug": "willie-gates",
+          "wikipediaTitle": "Willie Gates",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Willie_Gates",
+          "pageId": 47234283
+        },
+        {
+          "org": "ufc",
+          "name": "Yan Cabral",
+          "slug": "yan-cabral",
+          "wikipediaTitle": "Yan Cabral",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yan_Cabral",
+          "pageId": 32957935
+        },
+        {
+          "org": "ufc",
+          "name": "Yazmin Jauregui",
+          "slug": "yazmin-jauregui",
+          "wikipediaTitle": "Yazmin Jauregui",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yazmin_Jauregui",
+          "pageId": 74154333
+        },
+        {
+          "org": "ufc",
+          "name": "Yoji Anjo",
+          "slug": "yoji-anjo",
+          "wikipediaTitle": "Yoji Anjo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yoji_Anjo",
+          "pageId": 17445522
+        },
+        {
+          "org": "ufc",
+          "name": "Yorgan De Castro",
+          "slug": "yorgan-de-castro",
+          "wikipediaTitle": "Yorgan De Castro",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yorgan_De_Castro",
+          "pageId": 65001158
+        },
+        {
+          "org": "ufc",
+          "name": "Yosdenis Cedeno",
+          "slug": "yosdenis-cedeno",
+          "wikipediaTitle": "Yosdenis Cedeno",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yosdenis_Cedeno",
+          "pageId": 43382583
+        },
+        {
+          "org": "ufc",
+          "name": "Yoshihiro Akiyama",
+          "slug": "yoshihiro-akiyama",
+          "wikipediaTitle": "Yoshihiro Akiyama",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yoshihiro_Akiyama",
+          "pageId": 8817967
+        },
+        {
+          "org": "ufc",
+          "name": "Yves Edwards",
+          "slug": "yves-edwards",
+          "wikipediaTitle": "Yves Edwards",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yves_Edwards",
+          "pageId": 5757353
+        },
+        {
+          "org": "ufc",
+          "name": "Zak Cummings",
+          "slug": "zak-cummings",
+          "wikipediaTitle": "Zak Cummings",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zak_Cummings",
+          "pageId": 29432500
+        },
+        {
+          "org": "ufc",
+          "name": "Zane Frazier",
+          "slug": "zane-frazier",
+          "wikipediaTitle": "Zane Frazier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zane_Frazier",
+          "pageId": 29142416
+        },
+        {
+          "org": "ufc",
+          "name": "Zarah Fairn",
+          "slug": "zarah-fairn",
+          "wikipediaTitle": "Zarah Fairn",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zarah_Fairn",
+          "pageId": 67264294
+        },
+        {
+          "org": "ufc",
+          "name": "Zarrukh Adashev",
+          "slug": "zarrukh-adashev",
+          "wikipediaTitle": "Zarrukh Adashev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zarrukh_Adashev",
+          "pageId": 62662404
+        },
+        {
+          "org": "oktagon",
+          "name": "Felipe Lima (fighter)",
+          "slug": "felipe-lima",
+          "wikipediaTitle": "Felipe Lima (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Felipe_Lima_(fighter)",
+          "pageId": 80310974
+        },
+        {
+          "org": "oktagon",
+          "name": "Gustavo Lopez (fighter)",
+          "slug": "gustavo-lopez",
+          "wikipediaTitle": "Gustavo Lopez (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gustavo_Lopez_(fighter)",
+          "pageId": 64100795
+        },
+        {
+          "org": "oktagon",
+          "name": "Karlos Vémola",
+          "slug": "karlos-vemola",
+          "wikipediaTitle": "Karlos Vémola",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Karlos_V%C3%A9mola",
+          "pageId": 26668929
+        },
+        {
+          "org": "oktagon",
+          "name": "Losene Keita",
+          "slug": "losene-keita",
+          "wikipediaTitle": "Losene Keita",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Losene_Keita",
+          "pageId": 78757319
+        },
+        {
+          "org": "oktagon",
+          "name": "Lucia Szabová",
+          "slug": "lucia-szabova",
+          "wikipediaTitle": "Lucia Szabová",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lucia_Szabov%C3%A1",
+          "pageId": 83844409
+        },
+        {
+          "org": "oktagon",
+          "name": "Makhmud Muradov",
+          "slug": "makhmud-muradov",
+          "wikipediaTitle": "Makhmud Muradov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Makhmud_Muradov",
+          "pageId": 61905642
+        },
+        {
+          "org": "oktagon",
+          "name": "Mallory Martin",
+          "slug": "mallory-martin",
+          "wikipediaTitle": "Mallory Martin",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mallory_Martin",
+          "pageId": 59862260
+        },
+        {
+          "org": "oktagon",
+          "name": "Martin Buday",
+          "slug": "martin-buday",
+          "wikipediaTitle": "Martin Buday",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_Buday",
+          "pageId": 80546380
+        },
+        {
+          "org": "oktagon",
+          "name": "Mateusz Legierski",
+          "slug": "mateusz-legierski",
+          "wikipediaTitle": "Mateusz Legierski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mateusz_Legierski",
+          "pageId": 81719858
+        },
+        {
+          "org": "oktagon",
+          "name": "Viktor Pešta",
+          "slug": "viktor-pesta",
+          "wikipediaTitle": "Viktor Pešta",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Viktor_Pe%C5%A1ta",
+          "pageId": 42735957
+        },
+        {
+          "org": "oktagon",
+          "name": "Will Fleury",
+          "slug": "will-fleury",
+          "wikipediaTitle": "Will Fleury",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Will_Fleury",
+          "pageId": 78757307
+        },
+        {
+          "org": "oktagon",
+          "name": "Zhalgas Zhumagulov",
+          "slug": "zhalgas-zhumagulov",
+          "wikipediaTitle": "Zhalgas Zhumagulov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zhalgas_Zhumagulov",
+          "pageId": 64559517
+        }
+      ]
+    }
+  ]
+}

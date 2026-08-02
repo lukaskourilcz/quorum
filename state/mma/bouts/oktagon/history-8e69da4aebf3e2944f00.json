@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-8e69da4aebf3e2944f00",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-fight-club-rush-10",
+    "name": "Fight Club Rush 10",
+    "startsAtUtc": "2021-11-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:felipe-lima",
+    "blue": "oktagon:evgeniy-odnorog"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-11-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80310974"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (flying knee)",
+    "round": 1,
+    "elapsedSeconds": 35,
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

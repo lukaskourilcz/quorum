@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:daniel-skvor",
+  "slug": "daniel-skvor",
+  "org": "oktagon",
+  "canonicalName": "Daniel Škvor",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": null,
+    "externalIds": {}
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:78757307",
+      "url": "https://en.wikipedia.org/wiki/Will_Fleury",
+      "publisher": "Wikipedia",
+      "title": "Daniel Škvor",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Daniel Škvor",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-943f65a6adb989fca264",
+      "eventRef": "oktagon:event:history-oktagon-56",
+      "happenedAt": "2024-04-20T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "loss",
+      "method": "Submission (arm-triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 374,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:daniel-skvor:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 374,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 365.25,
+        "layoffDays": 834
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1421.97988699,
+    "deviation": 285.38666271,
+    "volatility": 0.05999905,
+    "boutCount": 1,
+    "asOfBoutRef": "oktagon:bout:history-943f65a6adb989fca264",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created as an opponent linked from a sourced fight-history row."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

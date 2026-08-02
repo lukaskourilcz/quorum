@@ -1,0 +1,471 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:mateusz-legierski",
+  "slug": "mateusz-legierski",
+  "org": "oktagon",
+  "canonicalName": "Mateusz Legierski",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Mateusz Legierski",
+    "externalIds": {
+      "wikipediaPageId": "81719858"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:81719858",
+      "url": "https://en.wikipedia.org/wiki/Mateusz_Legierski",
+      "publisher": "Wikipedia",
+      "title": "Mateusz Legierski",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Mateusz Legierski",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1996-07-23",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 182.12,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "{{plainlist|",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Octagon Team Cieszyn",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "14-2-0",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "14-2-0",
+          "sourceRef": "source:wikipedia:81719858"
+        },
+        {
+          "value": "14-3-0",
+          "sourceRef": "derived:oktagon:mateusz-legierski:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-fe48b27b5d498aec199e",
+      "eventRef": "oktagon:event:history-oktagon-11",
+      "happenedAt": "2018-03-16T00:00:00.000Z",
+      "opponentRef": "oktagon:michal-konrad",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 287,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-31a4b0e31f0bc69a6e37",
+      "eventRef": "oktagon:event:history-plmma-76",
+      "happenedAt": "2018-09-22T00:00:00.000Z",
+      "opponentRef": "oktagon:kamil-czyzewski",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 449,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9b95e3e58ebd53980d81",
+      "eventRef": "oktagon:event:history-gala-sportow-walki-9",
+      "happenedAt": "2018-10-27T00:00:00.000Z",
+      "opponentRef": "oktagon:konrad-furmanek",
+      "result": "win",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 123,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-30a4f0dc123940c21419",
+      "eventRef": "oktagon:event:history-oktagon-12",
+      "happenedAt": "2019-06-08T00:00:00.000Z",
+      "opponentRef": "oktagon:ronald-paradeiser",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 401,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ca15573a2fb37609d8ca",
+      "eventRef": "oktagon:event:history-oktagon-15",
+      "happenedAt": "2019-11-09T00:00:00.000Z",
+      "opponentRef": "oktagon:jakub-bahnik",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 106,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-6088a01fb825c14382de",
+      "eventRef": "oktagon:event:history-oktagon-prime-3",
+      "happenedAt": "2020-02-15T00:00:00.000Z",
+      "opponentRef": "oktagon:miroslav-strbak",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-100bcf6b86561e02f8de",
+      "eventRef": "oktagon:event:history-ksw-56",
+      "happenedAt": "2020-11-14T00:00:00.000Z",
+      "opponentRef": "oktagon:francisco-barrio",
+      "result": "win",
+      "method": "Decision (majority)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ba41c7b3032d46f6721d",
+      "eventRef": "oktagon:event:history-ksw-65",
+      "happenedAt": "2021-12-18T00:00:00.000Z",
+      "opponentRef": "oktagon:roman-szymanski",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 587,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-460007dd719db5ca2580",
+      "eventRef": "oktagon:event:history-oktagon-34",
+      "happenedAt": "2022-07-23T00:00:00.000Z",
+      "opponentRef": "oktagon:matous-kohout",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 3,
+      "elapsedSeconds": 776,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-64973723fd9fc48815ca",
+      "eventRef": "oktagon:event:history-oktagon-43",
+      "happenedAt": "2023-05-20T00:00:00.000Z",
+      "opponentRef": "oktagon:matej-kuznik",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-89c77e19c8a710b366ae",
+      "eventRef": "oktagon:event:history-oktagon-47",
+      "happenedAt": "2023-10-07T00:00:00.000Z",
+      "opponentRef": "oktagon:karol-rysavy",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-85e76d8b1d1e65e8d370",
+      "eventRef": "oktagon:event:history-oktagon-54",
+      "happenedAt": "2024-03-02T00:00:00.000Z",
+      "opponentRef": "oktagon:matous-kohout",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 278,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9654a557df1df1e9c8cb",
+      "eventRef": "oktagon:event:history-oktagon-58",
+      "happenedAt": "2024-06-08T00:00:00.000Z",
+      "opponentRef": "oktagon:akonne-wanliss",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-41297ebb2b93b3afc961",
+      "eventRef": "oktagon:event:history-oktagon-61",
+      "happenedAt": "2024-09-21T00:00:00.000Z",
+      "opponentRef": "oktagon:losene-keita",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e80f19862b41cccb9b78",
+      "eventRef": "oktagon:event:history-oktagon-61",
+      "happenedAt": "2024-09-21T00:00:00.000Z",
+      "opponentRef": "oktagon:losene-keita",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-26c4729bae6b45b4ebcd",
+      "eventRef": "oktagon:event:history-oktagon-80",
+      "happenedAt": "2025-11-22T00:00:00.000Z",
+      "opponentRef": "oktagon:attila-korkmaz",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-babbdced370b25f03622",
+      "eventRef": "oktagon:event:history-oktagon-90",
+      "happenedAt": "2026-06-20T00:00:00.000Z",
+      "opponentRef": "oktagon:gokhan-aksu",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 203,
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:mateusz-legierski:history",
+      "bouts": 17,
+      "values": {
+        "bouts": 17,
+        "wins": 14,
+        "losses": 3,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.571429,
+        "koTkoWins": 5,
+        "submissionWins": 3,
+        "decisionWins": 6,
+        "koTkoWinShare": 0.357143,
+        "submissionWinShare": 0.214286,
+        "decisionWinShare": 0.428571,
+        "averageElapsedSeconds": 682.941176,
+        "recentThreeWinRate": 0.666667,
+        "recentFiveWinRate": 0.6,
+        "fightsPerYear": 1.936342,
+        "layoffDays": 43
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1868.43140482,
+    "deviation": 133.34918976,
+    "volatility": 0.05999204,
+    "boutCount": 17,
+    "asOfBoutRef": "oktagon:bout:history-babbdced370b25f03622",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 16 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858",
+        "source:wikipedia:78757319"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

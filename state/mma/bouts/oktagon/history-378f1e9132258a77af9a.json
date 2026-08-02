@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-378f1e9132258a77af9a",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-x-fight-nights-2",
+    "name": "X Fight Nights 2",
+    "startsAtUtc": "2016-12-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:makhmud-muradov",
+    "blue": "oktagon:david-ramires"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-12-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:61905642"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (clavicle injury)",
+    "round": 2,
+    "elapsedSeconds": 379,
+    "sourceRefs": [
+      "source:wikipedia:61905642"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-47438bcd331c6a6120e7",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-39",
+    "name": "Oktagon 39",
+    "startsAtUtc": "2023-02-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:losene-keita",
+    "blue": "oktagon:samuel-bark"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-02-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757319"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 30,
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

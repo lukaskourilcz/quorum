@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-568daeae8aa3ad3b2bf4",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-34",
+    "name": "Oktagon 34",
+    "startsAtUtc": "2022-07-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:karlos-vemola",
+    "blue": "oktagon:aleksandar-ilic"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-07-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:26668929"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (arm-triangle choke)",
+    "round": 1,
+    "elapsedSeconds": 232,
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

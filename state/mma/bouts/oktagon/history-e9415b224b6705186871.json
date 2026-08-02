@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-e9415b224b6705186871",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-on-espn-brunson-vs-holland",
+    "name": "UFC on ESPN: Brunson vs. Holland",
+    "startsAtUtc": "2021-03-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:gustavo-lopez",
+    "blue": "oktagon:adrian-yanez"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-03-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64100795"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:64100795"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64100795"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punch)",
+    "round": 3,
+    "elapsedSeconds": 627,
+    "sourceRefs": [
+      "source:wikipedia:64100795"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64100795"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

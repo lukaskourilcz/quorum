@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-63a9d4ffa4f39e919cbc",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-122",
+    "name": "UFC 122",
+    "startsAtUtc": "2010-11-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:karlos-vemola",
+    "blue": "oktagon:seth-petruzelli"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2010-11-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:26668929"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 226,
+    "sourceRefs": [
+      "source:wikipedia:26668929"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

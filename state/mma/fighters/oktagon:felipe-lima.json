@@ -1,0 +1,461 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:felipe-lima",
+  "slug": "felipe-lima",
+  "org": "oktagon",
+  "canonicalName": "Felipe Lima (fighter)",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Felipe Lima (fighter)",
+    "externalIds": {
+      "wikipediaPageId": "80310974"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:80310974",
+      "url": "https://en.wikipedia.org/wiki/Felipe_Lima_(fighter)",
+      "publisher": "Wikipedia",
+      "title": "Felipe Lima (fighter)",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Felipe Lima (fighter)",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1998-05-07",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 172.72,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Featherweight Bantamweight",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Allstars Training Center",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "14-2-0",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "name",
+      "values": [
+        {
+          "value": "Felipe Lima (fighter)",
+          "sourceRef": "source:wikipedia:80310974"
+        },
+        {
+          "value": "Felipe Lima",
+          "sourceRef": "source:wikipedia:80310974"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-d96f0fcb469f0c943124",
+      "eventRef": "oktagon:event:history-energym-fight-1",
+      "happenedAt": "2015-08-08T00:00:00.000Z",
+      "opponentRef": "oktagon:ivan-luiz",
+      "result": "loss",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-d7d661d7897f769bb956",
+      "eventRef": "oktagon:event:history-amazon-talent-3",
+      "happenedAt": "2015-10-29T00:00:00.000Z",
+      "opponentRef": "oktagon:tiago-santos",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 205,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-8f8da122ecc91b0be564",
+      "eventRef": "oktagon:event:history-amazon-talent-7",
+      "happenedAt": "2017-03-04T00:00:00.000Z",
+      "opponentRef": "oktagon:dionatan-carvalho",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 153,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-18f7d7ff2c2a59f89993",
+      "eventRef": "oktagon:event:history-arena-fight-championship-3",
+      "happenedAt": "2017-07-29T00:00:00.000Z",
+      "opponentRef": "oktagon:isaias-monteiro-da-silva",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-bba7388c484535ab9efa",
+      "eventRef": "oktagon:event:history-rei-da-selva-combat-10",
+      "happenedAt": "2017-11-11T00:00:00.000Z",
+      "opponentRef": "oktagon:sebastiao-da-silva-calixto",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ff4a8da0c59763ac0e5b",
+      "eventRef": "oktagon:event:history-amazon-talent-8",
+      "happenedAt": "2018-03-10T00:00:00.000Z",
+      "opponentRef": "oktagon:admilson-pimentel",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 98,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-7cab6f09e4430f79e38c",
+      "eventRef": "oktagon:event:history-arena-fight-championship-4",
+      "happenedAt": "2018-06-30T00:00:00.000Z",
+      "opponentRef": "oktagon:adalberto-mota-da-silva-jr",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 43,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-5162a2fede132616a4b8",
+      "eventRef": "oktagon:event:history-amazon-talent-10",
+      "happenedAt": "2018-12-05T00:00:00.000Z",
+      "opponentRef": "oktagon:eurides-bandeira",
+      "result": "win",
+      "method": "TKO (retirement)",
+      "round": 3,
+      "elapsedSeconds": 820,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-707f7bf803de6f3a060e",
+      "eventRef": "oktagon:event:history-mr-cage-39",
+      "happenedAt": "2019-10-13T00:00:00.000Z",
+      "opponentRef": "oktagon:gustavo-oliveira",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-3a689bbe7588665d20fd",
+      "eventRef": "oktagon:event:history-brave-cf-39",
+      "happenedAt": "2020-08-15T00:00:00.000Z",
+      "opponentRef": "oktagon:farbod-iran-nezhad",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-1cd9809e2830bb2a4179",
+      "eventRef": "oktagon:event:history-fight-club-rush-8",
+      "happenedAt": "2021-03-06T00:00:00.000Z",
+      "opponentRef": "oktagon:fernando-flores",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-8e69da4aebf3e2944f00",
+      "eventRef": "oktagon:event:history-fight-club-rush-10",
+      "happenedAt": "2021-11-20T00:00:00.000Z",
+      "opponentRef": "oktagon:evgeniy-odnorog",
+      "result": "win",
+      "method": "KO (flying knee)",
+      "round": 1,
+      "elapsedSeconds": 35,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ab10d471b3ac7b45db03",
+      "eventRef": "oktagon:event:history-oktagon-45-special",
+      "happenedAt": "2023-07-28T00:00:00.000Z",
+      "opponentRef": "oktagon:jonas-magard",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-fc73dee8ea6c9a5b6485",
+      "eventRef": "oktagon:event:history-ufc-on-abc-whittaker-vs-aliskerov",
+      "happenedAt": "2024-06-22T00:00:00.000Z",
+      "opponentRef": "oktagon:muhammad-naimov",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 3,
+      "elapsedSeconds": 675,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-4718c3fecc275494691e",
+      "eventRef": "oktagon:event:history-ufc-on-espn-covington-vs-buckley",
+      "happenedAt": "2024-12-14T00:00:00.000Z",
+      "opponentRef": "oktagon:miles-johns",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e907035d5dc59ab9048e",
+      "eventRef": "oktagon:event:history-ufc-317",
+      "happenedAt": "2025-06-28T00:00:00.000Z",
+      "opponentRef": "oktagon:payton-talbott",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:felipe-lima:history",
+      "bouts": 16,
+      "values": {
+        "bouts": 16,
+        "wins": 14,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.5,
+        "koTkoWins": 4,
+        "submissionWins": 3,
+        "decisionWins": 7,
+        "koTkoWinShare": 0.285714,
+        "submissionWinShare": 0.214286,
+        "decisionWinShare": 0.5,
+        "averageElapsedSeconds": 655.266667,
+        "recentThreeWinRate": 0.666667,
+        "recentFiveWinRate": 0.8,
+        "fightsPerYear": 1.516788,
+        "layoffDays": 400
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1888.95802777,
+    "deviation": 138.95436191,
+    "volatility": 0.05999492,
+    "boutCount": 16,
+    "asOfBoutRef": "oktagon:bout:history-e907035d5dc59ab9048e",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 16 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.875,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

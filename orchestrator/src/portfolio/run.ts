@@ -88,11 +88,18 @@ const ContributionSchema = z.object({
     title: z.string().trim().min(1).max(80),
     summary: z.string().trim().min(1).max(280)
   }).nullable().default(null),
+  // A malformed follow-up request must never discard a room that has already been paid
+  // for. A live mag-editorial run returned a followUpRequest naming a phase outside the
+  // allowlist and omitting evidenceRefs, and the whole room aborted on it — no editorial
+  // slate, so the article slot downstream was killed for missing_editorial_slate too.
+  // The request is optional by design: dropping it costs one deferred room, while failing
+  // the parse costs the entire contribution. Falling back to null keeps the allowlist
+  // exactly as strict, since an out-of-allowlist phase still never reaches the queue.
   followUpRequest: z.object({
     phase: AgendaPhaseSchema,
     summary: z.string().trim().min(1).max(280),
     evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12)
-  }).nullable().default(null)
+  }).nullable().default(null).catch(null)
 }).superRefine((value, context) => {
   if (/(?:\d|%|\$|€|£)/.test(value.summary) && value.evidenceRefs.length === 0) {
     context.addIssue({ code: "custom", message: "Numeric contribution claims require evidenceRefs", path: ["evidenceRefs"] });
@@ -613,7 +620,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Set idea to {"title":"<=80 chars","summary":"<=280 chars"} when this room surfaced a concrete idea worth keeping for later, otherwise null; it is recorded verbatim and must stand alone without the transcript. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Set idea to {"title":"<=80 chars","summary":"<=280 chars"} when this room surfaced a concrete idea worth keeping for later, otherwise null; it is recorded verbatim and must stand alone without the transcript. The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|incubator-scan|incubator-synthesis|mma-intake|mma-analysis|mag-editorial|mag-desk|studio","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,

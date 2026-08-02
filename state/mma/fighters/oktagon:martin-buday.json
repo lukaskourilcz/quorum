@@ -1,0 +1,531 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:martin-buday",
+  "slug": "martin-buday",
+  "org": "oktagon",
+  "canonicalName": "Martin Buday",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Martin Buday",
+    "externalIds": {
+      "wikipediaPageId": "80546380"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:80546380",
+      "url": "https://en.wikipedia.org/wiki/Martin_Buday",
+      "publisher": "Wikipedia",
+      "title": "Martin Buday",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Martin Buday",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1991-11-11",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 195.58,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Heavyweight",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Spartakus Fight Gym",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "16-4-0",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "16-4-0",
+          "sourceRef": "source:wikipedia:80546380"
+        },
+        {
+          "value": "16-5-0",
+          "sourceRef": "derived:oktagon:martin-buday:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-6dfc7a260b09270ca63f",
+      "eventRef": "oktagon:event:history-fight-of-gladiators-night-of-champions-2",
+      "happenedAt": "2015-10-23T00:00:00.000Z",
+      "opponentRef": "oktagon:uros-stefanovic",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ffadbf0647c1f71894ae",
+      "eventRef": "oktagon:event:history-fecaluma-mma-k1-bjj",
+      "happenedAt": "2017-10-14T00:00:00.000Z",
+      "opponentRef": "oktagon:juan-espino",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e99ec5a6f4d1e0d3389c",
+      "eventRef": "oktagon:event:history-x-fight-nights-9",
+      "happenedAt": "2018-04-21T00:00:00.000Z",
+      "opponentRef": "oktagon:milan-vrbic",
+      "result": "win",
+      "method": "TKO (submission to punchea)",
+      "round": 2,
+      "elapsedSeconds": 545,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-bdbcf5714545296fbb66",
+      "eventRef": "oktagon:event:history-oktagon-6",
+      "happenedAt": "2018-05-26T00:00:00.000Z",
+      "opponentRef": "oktagon:dzhangir-nasibov",
+      "result": "win",
+      "method": "TKO (retirement)",
+      "round": 1,
+      "elapsedSeconds": 300,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-3715d2ec2bf41378ad51",
+      "eventRef": "oktagon:event:history-oktagon-9",
+      "happenedAt": "2018-09-15T00:00:00.000Z",
+      "opponentRef": "oktagon:ukasz-ysoniewski",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 285,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-46f7c134d47ed27706b2",
+      "eventRef": "oktagon:event:history-spartakus-fight-gym-night-of-champions-5",
+      "happenedAt": "2018-10-26T00:00:00.000Z",
+      "opponentRef": "oktagon:jose-rodrigo-guelke",
+      "result": "win",
+      "method": "TKO (retirement)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-aa0ba6f3f417c84c89c9",
+      "eventRef": "oktagon:event:history-oktagon-prime-1",
+      "happenedAt": "2019-04-26T00:00:00.000Z",
+      "opponentRef": "oktagon:yevhen-orlov",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 212,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-c457a49744877b2ceff4",
+      "eventRef": "oktagon:event:history-oktagon-14",
+      "happenedAt": "2019-09-14T00:00:00.000Z",
+      "opponentRef": "oktagon:daniel-dittrich",
+      "result": "win",
+      "method": "Submission (kimura)",
+      "round": 2,
+      "elapsedSeconds": 373,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-51088c2fa9281590a6a2",
+      "eventRef": "oktagon:event:history-oktagon-25",
+      "happenedAt": "2021-06-19T00:00:00.000Z",
+      "opponentRef": "oktagon:kamil-minda",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 581,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a05c495d850844023ba7",
+      "eventRef": "oktagon:event:history-dana-white-s-contender-series-43",
+      "happenedAt": "2021-10-12T00:00:00.000Z",
+      "opponentRef": "oktagon:lorenzo-hood",
+      "result": "win",
+      "method": "TKO (knee)",
+      "round": 1,
+      "elapsedSeconds": 296,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-c1fe3de6bf4c552394d0",
+      "eventRef": "oktagon:event:history-ufc-on-espn-luque-vs-muhammad-2",
+      "happenedAt": "2022-04-16T00:00:00.000Z",
+      "opponentRef": "oktagon:chris-barnett",
+      "result": "win",
+      "method": "Technical Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 697,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b133257abdabd0e72d42",
+      "eventRef": "oktagon:event:history-ufc-on-espn-vera-vs-cruz",
+      "happenedAt": "2022-08-13T00:00:00.000Z",
+      "opponentRef": "oktagon:ukasz-brzeski",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-2053948938071d946348",
+      "eventRef": "oktagon:event:history-ufc-on-espn-song-vs-simon",
+      "happenedAt": "2023-04-29T00:00:00.000Z",
+      "opponentRef": "oktagon:jake-collier",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e95fda5bd56cebf13a49",
+      "eventRef": "oktagon:event:history-ufc-on-espn-luque-vs-dos-anjos",
+      "happenedAt": "2023-08-12T00:00:00.000Z",
+      "opponentRef": "oktagon:josh-parisian",
+      "result": "win",
+      "method": "Submission (kimura)",
+      "round": 1,
+      "elapsedSeconds": 251,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-4b67f6d26fd43532f1d3",
+      "eventRef": "oktagon:event:history-ufc-296",
+      "happenedAt": "2023-12-16T00:00:00.000Z",
+      "opponentRef": "oktagon:shamil-gaziev",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 356,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-035236eaf0bee679d0f6",
+      "eventRef": "oktagon:event:history-ufc-303",
+      "happenedAt": "2024-06-29T00:00:00.000Z",
+      "opponentRef": "oktagon:andrei-arlovski",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b4a2da53dffc5994731b",
+      "eventRef": "oktagon:event:history-ufc-on-espn-emmett-vs-murphy",
+      "happenedAt": "2025-04-05T00:00:00.000Z",
+      "opponentRef": "oktagon:uran-satybaldiev",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-8a59274c70fdd148b76d",
+      "eventRef": "oktagon:event:history-ufc-on-abc-whittaker-vs-de-ridder",
+      "happenedAt": "2025-07-26T00:00:00.000Z",
+      "opponentRef": "oktagon:marcus-buchecha",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-5753c2b0bccb6e0b7873",
+      "eventRef": "oktagon:event:history-oktagon-81",
+      "happenedAt": "2025-12-28T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 100,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b6fe4632b243b13dd7c2",
+      "eventRef": "oktagon:event:history-oktagon-81",
+      "happenedAt": "2025-12-28T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 100,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-90944b2a43e2ec1acf1e",
+      "eventRef": "oktagon:event:history-oktagon-89",
+      "happenedAt": "2026-06-06T00:00:00.000Z",
+      "opponentRef": "oktagon:lazar-todev",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:martin-buday:history",
+      "bouts": 21,
+      "values": {
+        "bouts": 21,
+        "wins": 16,
+        "losses": 5,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.5625,
+        "koTkoWins": 7,
+        "submissionWins": 3,
+        "decisionWins": 7,
+        "koTkoWinShare": 0.4375,
+        "submissionWinShare": 0.1875,
+        "decisionWinShare": 0.4375,
+        "averageElapsedSeconds": 552.190476,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 1.883179,
+        "layoffDays": 57
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1781.49248641,
+    "deviation": 119.34367624,
+    "volatility": 0.05999564,
+    "boutCount": 21,
+    "asOfBoutRef": "oktagon:bout:history-90944b2a43e2ec1acf1e",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 20 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380",
+        "source:wikipedia:78757307"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

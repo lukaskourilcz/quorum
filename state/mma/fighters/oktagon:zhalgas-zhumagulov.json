@@ -1,0 +1,569 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:zhalgas-zhumagulov",
+  "slug": "zhalgas-zhumagulov",
+  "org": "oktagon",
+  "canonicalName": "Zhalgas Zhumagulov",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Zhalgas Zhumagulov",
+    "externalIds": {
+      "wikipediaPageId": "64559517"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:64559517",
+      "url": "https://en.wikipedia.org/wiki/Zhalgas_Zhumagulov",
+      "publisher": "Wikipedia",
+      "title": "Zhalgas Zhumagulov",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Zhalgas Zhumagulov",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1988-08-29",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 167.64,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Flyweight",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "switch",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Erkin Kush",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "19-9-0 (1 NC)",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "19-9-0 (1 NC)",
+          "sourceRef": "source:wikipedia:64559517"
+        },
+        {
+          "value": "14-8-0 (1 NC)",
+          "sourceRef": "derived:oktagon:zhalgas-zhumagulov:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-4f59dea1e022b716a6f0",
+      "eventRef": "oktagon:event:history-zhekpe-zhek-bantamweight-grand-prix",
+      "happenedAt": "2014-10-06T00:00:00.000Z",
+      "opponentRef": "oktagon:bekzat-aliev",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 730,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-761a1093cd695b181ac1",
+      "eventRef": "oktagon:event:history-kunlun-fight-cage-fight-series-3",
+      "happenedAt": "2015-07-06T00:00:00.000Z",
+      "opponentRef": "oktagon:zhifa-shang",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e2e6291811bbd57b7c0f",
+      "eventRef": "oktagon:event:history-fight-nights-global-46",
+      "happenedAt": "2016-04-29T00:00:00.000Z",
+      "opponentRef": "oktagon:oscar-dolchin",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9e656d92f7e76980ff90",
+      "eventRef": "oktagon:event:history-fight-nights-global-55",
+      "happenedAt": "2016-11-22T00:00:00.000Z",
+      "opponentRef": "oktagon:ivan-andrushchenko",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-687a2e87c363709b3bdb",
+      "eventRef": "oktagon:event:history-fight-nights-global-62",
+      "happenedAt": "2017-03-31T00:00:00.000Z",
+      "opponentRef": "oktagon:artur-bagautinov",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 413,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a41381bfa84b4de71119",
+      "eventRef": "oktagon:event:history-fight-nights-global-65",
+      "happenedAt": "2017-05-19T00:00:00.000Z",
+      "opponentRef": "oktagon:vartan-asatryan",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9880a83b8bae62d00712",
+      "eventRef": "oktagon:event:history-fight-nights-global-80",
+      "happenedAt": "2017-11-26T00:00:00.000Z",
+      "opponentRef": "oktagon:shajidul-haque",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-37097d98808b7723fdec",
+      "eventRef": "oktagon:event:history-fight-nights-global-86",
+      "happenedAt": "2018-04-01T00:00:00.000Z",
+      "opponentRef": "oktagon:tyson-nam",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-50fee96e534cbe025d77",
+      "eventRef": "oktagon:event:history-fight-nights-global-88",
+      "happenedAt": "2018-08-31T00:00:00.000Z",
+      "opponentRef": "oktagon:tagir-ulanbekov",
+      "result": "win",
+      "method": "Decision (majority)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-c225d946b0013af6da81",
+      "eventRef": "oktagon:event:history-fight-nights-global-95",
+      "happenedAt": "2019-10-19T00:00:00.000Z",
+      "opponentRef": "oktagon:ali-bagautinov",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-17146c06edde933a1c12",
+      "eventRef": "oktagon:event:history-ufc-251",
+      "happenedAt": "2020-07-12T00:00:00.000Z",
+      "opponentRef": "oktagon:raulian-paiva",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a3b7330f16bab5be813f",
+      "eventRef": "oktagon:event:history-ufc-257",
+      "happenedAt": "2021-01-24T00:00:00.000Z",
+      "opponentRef": "oktagon:amir-albazi",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-047a147c2b8ccfbb4770",
+      "eventRef": "oktagon:event:history-ufc-264",
+      "happenedAt": "2021-07-10T00:00:00.000Z",
+      "opponentRef": "oktagon:jerome-rivera",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 1,
+      "elapsedSeconds": 122,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f5917b3afefaf79f9ed0",
+      "eventRef": "oktagon:event:history-ufc-on-espn-font-vs-aldo",
+      "happenedAt": "2021-12-04T00:00:00.000Z",
+      "opponentRef": "oktagon:manel-kape",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 242,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-7247ec4606f849003972",
+      "eventRef": "oktagon:event:history-ufc-fight-night-volkov-vs-rozenstruik",
+      "happenedAt": "2022-06-04T00:00:00.000Z",
+      "opponentRef": "oktagon:jeff-molina",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b831fd45ef21c4c4e358",
+      "eventRef": "oktagon:event:history-ufc-fight-night-nzechukwu-vs-cutelaba",
+      "happenedAt": "2022-11-19T00:00:00.000Z",
+      "opponentRef": "oktagon:charles-johnson",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a98a416d6416cdf6f737",
+      "eventRef": "oktagon:event:history-ufc-on-abc-emmett-vs-topuria",
+      "happenedAt": "2023-06-24T00:00:00.000Z",
+      "opponentRef": "oktagon:joshua-van",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9dd5e59d6a6b8a908faf",
+      "eventRef": "oktagon:event:history-naiza-fc-55",
+      "happenedAt": "2023-12-06T00:00:00.000Z",
+      "opponentRef": "oktagon:masato-nakamura",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 102,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-437660b1af4050864fec",
+      "eventRef": "oktagon:event:history-naiza-fc-57",
+      "happenedAt": "2024-02-24T00:00:00.000Z",
+      "opponentRef": "oktagon:cleveland-mclean",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-5be83117e81473f96c85",
+      "eventRef": "oktagon:event:history-oktagon-63",
+      "happenedAt": "2024-11-09T00:00:00.000Z",
+      "opponentRef": "oktagon:aaron-aby",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-23a9a433fce84277ed93",
+      "eventRef": "oktagon:event:history-oktagon-73",
+      "happenedAt": "2025-06-28T00:00:00.000Z",
+      "opponentRef": "oktagon:beno-adamia",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-792ca3ae8da31f1f3796",
+      "eventRef": "oktagon:event:history-oktagon-81",
+      "happenedAt": "2025-12-28T00:00:00.000Z",
+      "opponentRef": "oktagon:david-dvorak",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-067a78d62f7fd2607810",
+      "eventRef": "oktagon:event:history-oktagon-89",
+      "happenedAt": "2026-06-06T00:00:00.000Z",
+      "opponentRef": "oktagon:igor-severino",
+      "result": "no-contest",
+      "method": "NC (accidental punch to the groin)",
+      "round": 2,
+      "elapsedSeconds": 446,
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:zhalgas-zhumagulov:history",
+      "bouts": 23,
+      "values": {
+        "bouts": 23,
+        "wins": 14,
+        "losses": 8,
+        "draws": 0,
+        "noContests": 1,
+        "finishRate": 0.357143,
+        "koTkoWins": 4,
+        "submissionWins": 1,
+        "decisionWins": 9,
+        "koTkoWinShare": 0.285714,
+        "submissionWinShare": 0.071429,
+        "decisionWinShare": 0.642857,
+        "averageElapsedSeconds": 885,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 1.885786,
+        "layoffDays": 57
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1641.09880106,
+    "deviation": 112.03726535,
+    "volatility": 0.06000115,
+    "boutCount": 22,
+    "asOfBoutRef": "oktagon:bout:history-067a78d62f7fd2607810",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 23 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.875,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

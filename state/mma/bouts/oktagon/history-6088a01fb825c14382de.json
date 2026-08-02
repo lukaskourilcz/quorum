@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-6088a01fb825c14382de",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-prime-3",
+    "name": "Oktagon Prime 3",
+    "startsAtUtc": "2020-02-15T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:mateusz-legierski",
+    "blue": "oktagon:miroslav-strbak"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-02-15T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:81719858"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-5074fdbb02a5ae21e481",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-18",
+    "name": "Oktagon 18",
+    "startsAtUtc": "2020-11-21T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:lucia-szabova",
+    "blue": "oktagon:anzelika-petkeviciute"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-11-21T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:83844409"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:83844409"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 1,
+    "elapsedSeconds": 43,
+    "sourceRefs": [
+      "source:wikipedia:83844409"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

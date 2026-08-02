@@ -1,0 +1,320 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:lucia-szabova",
+  "slug": "lucia-szabova",
+  "org": "oktagon",
+  "canonicalName": "Lucia Szabová",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Lucia Szabová",
+    "externalIds": {
+      "wikipediaPageId": "83844409"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:83844409",
+      "url": "https://en.wikipedia.org/wiki/Lucia_Szabov%C3%A1",
+      "publisher": "Wikipedia",
+      "title": "Lucia Szabová",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Lucia Szabová",
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Bantamweight",
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Hanuman Gym Prague",
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-5074fdbb02a5ae21e481",
+      "eventRef": "oktagon:event:history-oktagon-18",
+      "happenedAt": "2020-11-21T00:00:00.000Z",
+      "opponentRef": "oktagon:anzelika-petkeviciute",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 43,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-d44d0b9af986553df9cb",
+      "eventRef": "oktagon:event:history-oktagon-21",
+      "happenedAt": "2021-01-30T00:00:00.000Z",
+      "opponentRef": "oktagon:rizlen-zouak",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 2,
+      "elapsedSeconds": 385,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-de3d4ef2bfe81d151fc6",
+      "eventRef": "oktagon:event:history-oktagon-22",
+      "happenedAt": "2021-03-27T00:00:00.000Z",
+      "opponentRef": "oktagon:christina-netza",
+      "result": "win",
+      "method": "KO (head kick)",
+      "round": 1,
+      "elapsedSeconds": 90,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-67e9f97704f4f4bd1973",
+      "eventRef": "oktagon:event:history-oktagon-26",
+      "happenedAt": "2021-07-24T00:00:00.000Z",
+      "opponentRef": "oktagon:cornelia-holm",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e48fac04dc63cb7f10f9",
+      "eventRef": "oktagon:event:history-oktagon-55",
+      "happenedAt": "2024-03-23T00:00:00.000Z",
+      "opponentRef": "oktagon:roza-gumienna",
+      "result": "win",
+      "method": "Submission (armbar)",
+      "round": 3,
+      "elapsedSeconds": 878,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-1233e1f579d3f31c84a3",
+      "eventRef": "oktagon:event:history-oktagon-59",
+      "happenedAt": "2024-07-20T00:00:00.000Z",
+      "opponentRef": "oktagon:aitana-alvarez",
+      "result": "win",
+      "method": "Decision (decision)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f56693b36ad3f004d822",
+      "eventRef": "oktagon:event:history-oktagon-67",
+      "happenedAt": "2025-02-23T00:00:00.000Z",
+      "opponentRef": "oktagon:kalindra-faria",
+      "result": "win",
+      "method": "Submission (keylock)",
+      "round": 1,
+      "elapsedSeconds": 256,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-86f1f34645347464abaa",
+      "eventRef": "oktagon:event:history-oktagon-74",
+      "happenedAt": "2025-08-09T00:00:00.000Z",
+      "opponentRef": "oktagon:cecile-bolander",
+      "result": "win",
+      "method": "TKO (elbows and punches)",
+      "round": 1,
+      "elapsedSeconds": 191,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e83474433aaaa25d997e",
+      "eventRef": "oktagon:event:history-oktagon-87",
+      "happenedAt": "2026-04-25T00:00:00.000Z",
+      "opponentRef": "oktagon:leidiane-fernandes",
+      "result": "win",
+      "method": "TKO (elbows and punches)",
+      "round": 3,
+      "elapsedSeconds": 732,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a83fb3b727d03ecfe6dd",
+      "eventRef": "oktagon:event:history-oktagon-92",
+      "happenedAt": "2026-08-01T00:00:00.000Z",
+      "opponentRef": "oktagon:lucie-pudilova",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:lucia-szabova:history",
+      "bouts": 10,
+      "values": {
+        "bouts": 10,
+        "wins": 10,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.7,
+        "koTkoWins": 3,
+        "submissionWins": 4,
+        "decisionWins": 3,
+        "koTkoWinShare": 0.3,
+        "submissionWinShare": 0.4,
+        "decisionWinShare": 0.3,
+        "averageElapsedSeconds": 587.5,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 1.581136,
+        "layoffDays": 1
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1993.14907321,
+    "deviation": 175.12602664,
+    "volatility": 0.05999392,
+    "boutCount": 10,
+    "asOfBoutRef": "oktagon:bout:history-a83fb3b727d03ecfe6dd",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "team",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 10 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.375,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

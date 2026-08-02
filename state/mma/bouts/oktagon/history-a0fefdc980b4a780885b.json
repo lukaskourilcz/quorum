@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-a0fefdc980b4a780885b",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-invicta-fc-31-jandiroba-vs-morandin",
+    "name": "Invicta FC 31: Jandiroba vs. Morandin",
+    "startsAtUtc": "2018-09-01T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:mallory-martin",
+    "blue": "oktagon:ashley-nichols"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-09-01T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:59862260"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:59862260"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (elbows)",
+    "round": 3,
+    "elapsedSeconds": 665,
+    "sourceRefs": [
+      "source:wikipedia:59862260"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

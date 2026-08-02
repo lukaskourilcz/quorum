@@ -10,6 +10,7 @@ import type { SourceFetchContext } from "../sources/types.js";
 import { fetchCitoFighters, fetchCitoUpcomingEvents, fetchOddsApiMma, loadMmaSourceRegistry, type ApiBoutOdds, type CitoEventSummary, type CitoFighterSummary } from "../fightaiq/sources.js";
 import { materializeFightAiQSources } from "../fightaiq/intake.js";
 import { buildBackfillQueue, fetchWikimediaRoster, materializeWikimediaRoster, reconcileRosterStatuses, writeBackfillQueue, writeRosterStatus, type WikimediaRosterEntry } from "../fightaiq/roster.js";
+import { loadRosterPolicy, rosterPolicyIds } from "../fightaiq/roster-policy.js";
 import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
@@ -241,7 +242,8 @@ export async function refreshFightAiQEvidence(input: {
     citoEvents,
     odds: oddsEvents
   });
-  const wikimediaPaths = await materializeWikimediaRoster({ root: input.root, entries: wikimediaRoster, retrievedAt: input.now });
+  const rosterPolicy = await loadRosterPolicy(configRoot);
+  const wikimediaPaths = await materializeWikimediaRoster({ root: input.root, entries: wikimediaRoster, retrievedAt: input.now, allowedIds: rosterPolicyIds(rosterPolicy) });
   const rosterStatusPaths: string[] = [];
   if (citoRosterCycleComplete) {
     const currentFighters = await loadFighterRecords(path.join(input.root, "mma", "fighters"));

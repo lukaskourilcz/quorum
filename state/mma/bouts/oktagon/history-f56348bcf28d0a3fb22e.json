@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-f56348bcf28d0a3fb22e",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-bellator-240",
+    "name": "Bellator 240",
+    "startsAtUtc": "2020-02-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:will-fleury",
+    "blue": "oktagon:justin-moore"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-02-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757307"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (arm-triangle choke)",
+    "round": 1,
+    "elapsedSeconds": 254,
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

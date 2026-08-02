@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-8a59274c70fdd148b76d",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ufc-on-abc-whittaker-vs-de-ridder",
+    "name": "UFC on ABC: Whittaker vs. de Ridder",
+    "startsAtUtc": "2025-07-26T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:martin-buday",
+    "blue": "oktagon:marcus-buchecha"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-07-26T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80546380"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

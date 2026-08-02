@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-707f7bf803de6f3a060e",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-mr-cage-39",
+    "name": "Mr. Cage 39",
+    "startsAtUtc": "2019-10-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:felipe-lima",
+    "blue": "oktagon:gustavo-oliveira"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2019-10-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80310974"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

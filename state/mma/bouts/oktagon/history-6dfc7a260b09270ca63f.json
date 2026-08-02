@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-6dfc7a260b09270ca63f",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-fight-of-gladiators-night-of-champions-2",
+    "name": "Fight of Gladiators: Night of Champions 2",
+    "startsAtUtc": "2015-10-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:martin-buday",
+    "blue": "oktagon:uros-stefanovic"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-10-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80546380"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 2,
+    "elapsedSeconds": 600,
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

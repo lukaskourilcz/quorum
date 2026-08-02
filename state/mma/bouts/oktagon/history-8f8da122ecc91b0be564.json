@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-8f8da122ecc91b0be564",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-amazon-talent-7",
+    "name": "Amazon Talent 7",
+    "startsAtUtc": "2017-03-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:felipe-lima",
+    "blue": "oktagon:dionatan-carvalho"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-03-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80310974"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 1,
+    "elapsedSeconds": 153,
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

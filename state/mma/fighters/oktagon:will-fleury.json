@@ -1,0 +1,575 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:will-fleury",
+  "slug": "will-fleury",
+  "org": "oktagon",
+  "canonicalName": "Will Fleury",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Will Fleury",
+    "externalIds": {
+      "wikipediaPageId": "78757307"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:78757307",
+      "url": "https://en.wikipedia.org/wiki/Will_Fleury",
+      "publisher": "Wikipedia",
+      "title": "Will Fleury",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Will Fleury",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Heavyweight",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "SBG Ireland",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "17-4-0 (1 NC)",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "17-4-0 (1 NC)",
+          "sourceRef": "source:wikipedia:78757307"
+        },
+        {
+          "value": "19-5-0 (1 NC)",
+          "sourceRef": "derived:oktagon:will-fleury:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-3329feca78418be365df",
+      "eventRef": "oktagon:event:history-battle-zone-fc-15",
+      "happenedAt": "2016-04-02T00:00:00.000Z",
+      "opponentRef": "oktagon:john-redmond",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 1,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-888cb13f7cdeedcf5b2e",
+      "eventRef": "oktagon:event:history-bamma-28",
+      "happenedAt": "2017-02-24T00:00:00.000Z",
+      "opponentRef": "oktagon:kyle-mcclurkin",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 169,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-83ad306c627ab5949986",
+      "eventRef": "oktagon:event:history-efc-worldwide-66",
+      "happenedAt": "2017-12-16T00:00:00.000Z",
+      "opponentRef": "oktagon:gordon-roodman",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 395,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ce096e57aa58f221810a",
+      "eventRef": "oktagon:event:history-brave-cf-10",
+      "happenedAt": "2018-03-02T00:00:00.000Z",
+      "opponentRef": "oktagon:tarek-suleiman",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a9146e7d30f02c990ae5",
+      "eventRef": "oktagon:event:history-bellator-203",
+      "happenedAt": "2018-07-14T00:00:00.000Z",
+      "opponentRef": "oktagon:alen-amedovski",
+      "result": "loss",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 99,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f188065e54c9feb919e5",
+      "eventRef": "oktagon:event:history-bellator-217",
+      "happenedAt": "2019-02-23T00:00:00.000Z",
+      "opponentRef": "oktagon:shaun-taylor",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 392,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-8ac9fedfeba5010c4fe9",
+      "eventRef": "oktagon:event:history-bellator-224",
+      "happenedAt": "2019-07-12T00:00:00.000Z",
+      "opponentRef": "oktagon:antonio-jones",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-586f68382d7812a6a5b0",
+      "eventRef": "oktagon:event:history-bellator-227",
+      "happenedAt": "2019-09-27T00:00:00.000Z",
+      "opponentRef": "oktagon:norbert-novenyi-jr",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f56348bcf28d0a3fb22e",
+      "eventRef": "oktagon:event:history-bellator-240",
+      "happenedAt": "2020-02-20T00:00:00.000Z",
+      "opponentRef": "oktagon:justin-moore",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 254,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0d7e0743a4bb5aeb11da",
+      "eventRef": "oktagon:event:history-efm-3",
+      "happenedAt": "2020-06-20T00:00:00.000Z",
+      "opponentRef": "oktagon:maciej-rozanski",
+      "result": "loss",
+      "method": "Submission (arm-triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 540,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ba0d5c6d159fc4562d8a",
+      "eventRef": "oktagon:event:history-bellator-milan-2",
+      "happenedAt": "2020-09-26T00:00:00.000Z",
+      "opponentRef": "oktagon:kent-kauppinen",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-7d92a8ee0ee32e3adde1",
+      "eventRef": "oktagon:event:history-efm-show-2",
+      "happenedAt": "2021-09-11T00:00:00.000Z",
+      "opponentRef": "oktagon:hojat-khajevand",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f1de85e4033f65b946c5",
+      "eventRef": "oktagon:event:history-uae-warriors-28",
+      "happenedAt": "2022-03-26T00:00:00.000Z",
+      "opponentRef": "oktagon:tarek-suleiman",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-84722901d385726ed9c2",
+      "eventRef": "oktagon:event:history-pfl-8",
+      "happenedAt": "2022-08-13T00:00:00.000Z",
+      "opponentRef": "oktagon:anthony-salamone",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-6d9fa10369d059361b02",
+      "eventRef": "oktagon:event:history-pfl-1",
+      "happenedAt": "2023-04-01T00:00:00.000Z",
+      "opponentRef": "oktagon:krzysztof-jotko",
+      "result": "no-contest",
+      "method": "NC (overturned)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-943f65a6adb989fca264",
+      "eventRef": "oktagon:event:history-oktagon-56",
+      "happenedAt": "2024-04-20T00:00:00.000Z",
+      "opponentRef": "oktagon:daniel-skvor",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 2,
+      "elapsedSeconds": 374,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-63f35ca7d8a53fe7e411",
+      "eventRef": "oktagon:event:history-oktagon-62",
+      "happenedAt": "2024-10-12T00:00:00.000Z",
+      "opponentRef": "oktagon:pavol-langer",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 1,
+      "elapsedSeconds": 91,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0aa66fc3c154718fa39c",
+      "eventRef": "oktagon:event:history-oktagon-65",
+      "happenedAt": "2024-12-29T00:00:00.000Z",
+      "opponentRef": "oktagon:karlos-vemola",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:26668929"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-2c9ef3813f31d8a495b8",
+      "eventRef": "oktagon:event:history-oktagon-65",
+      "happenedAt": "2024-12-29T00:00:00.000Z",
+      "opponentRef": "oktagon:karlos-vemola",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-3d12052b10fe81db5bcb",
+      "eventRef": "oktagon:event:history-oktagon-68",
+      "happenedAt": "2025-03-08T00:00:00.000Z",
+      "opponentRef": "oktagon:lazar-todev",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-5753c2b0bccb6e0b7873",
+      "eventRef": "oktagon:event:history-oktagon-81",
+      "happenedAt": "2025-12-28T00:00:00.000Z",
+      "opponentRef": "oktagon:martin-buday",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 100,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-b6fe4632b243b13dd7c2",
+      "eventRef": "oktagon:event:history-oktagon-81",
+      "happenedAt": "2025-12-28T00:00:00.000Z",
+      "opponentRef": "oktagon:martin-buday",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 100,
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9c27a0e5521c15f9517a",
+      "eventRef": "oktagon:event:history-oktagon-90",
+      "happenedAt": "2026-06-20T00:00:00.000Z",
+      "opponentRef": "oktagon:kasim-aras",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 389,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-4b879104ade199971590",
+      "eventRef": "oktagon:event:history-oktagon-92",
+      "happenedAt": "2026-08-01T00:00:00.000Z",
+      "opponentRef": "oktagon:makhmud-muradov",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 319,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-8903c8049fa9606e64c6",
+      "eventRef": "oktagon:event:history-oktagon-92",
+      "happenedAt": "2026-08-01T00:00:00.000Z",
+      "opponentRef": "oktagon:makhmud-muradov",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 319,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:will-fleury:history",
+      "bouts": 25,
+      "values": {
+        "bouts": 25,
+        "wins": 19,
+        "losses": 5,
+        "draws": 0,
+        "noContests": 1,
+        "finishRate": 0.526316,
+        "koTkoWins": 6,
+        "submissionWins": 4,
+        "decisionWins": 9,
+        "koTkoWinShare": 0.315789,
+        "submissionWinShare": 0.210526,
+        "decisionWinShare": 0.473684,
+        "averageElapsedSeconds": 660.041667,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.6,
+        "fightsPerYear": 2.323302,
+        "layoffDays": 1
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1899.02407904,
+    "deviation": 101.65216072,
+    "volatility": 0.05999562,
+    "boutCount": 24,
+    "asOfBoutRef": "oktagon:bout:history-8903c8049fa9606e64c6",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 22 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307",
+        "source:wikipedia:26668929",
+        "source:wikipedia:80546380",
+        "source:wikipedia:61905642"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.5,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

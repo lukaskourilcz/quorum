@@ -1,0 +1,816 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:makhmud-muradov",
+  "slug": "makhmud-muradov",
+  "org": "oktagon",
+  "canonicalName": "Makhmud Muradov",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Makhmud Muradov",
+    "externalIds": {
+      "wikipediaPageId": "61905642"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:61905642",
+      "url": "https://en.wikipedia.org/wiki/Makhmud_Muradov",
+      "publisher": "Wikipedia",
+      "title": "Makhmud Muradov",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Makhmud Muradov",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1990-02-08",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 190.5,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Middleweight Light Heavyweight",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "The Money Team (Mayweather Boxing Club) (present) Legion Fight Club (Muradov Team) (present) Black Kobra Striking System (present) Tiger Muay Thai Phuket (previously)",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "30-8-0 (1 NC)",
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "30-8-0 (1 NC)",
+          "sourceRef": "source:wikipedia:61905642"
+        },
+        {
+          "value": "31-8-0 (1 NC)",
+          "sourceRef": "derived:oktagon:makhmud-muradov:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-840d43f1bc4e0a1848ac",
+      "eventRef": "oktagon:event:history-k1-empress-league-round-2",
+      "happenedAt": "2012-04-29T00:00:00.000Z",
+      "opponentRef": "oktagon:patrik-jevicky",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 26,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-d9918b27f5bea568cf65",
+      "eventRef": "oktagon:event:history-czech-muay-thai-association-pardal-gladiators-night-cage-1",
+      "happenedAt": "2012-05-19T00:00:00.000Z",
+      "opponentRef": "oktagon:francisco-silva",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 665,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-037862de678ec9ef5309",
+      "eventRef": "oktagon:event:history-mmaa-arena-1",
+      "happenedAt": "2012-09-30T00:00:00.000Z",
+      "opponentRef": "oktagon:kamil-cibinski",
+      "result": "loss",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 117,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-325d36fc75c410a5d92f",
+      "eventRef": "oktagon:event:history-cage-xfc-international-lake-constance-cup-2",
+      "happenedAt": "2012-10-20T00:00:00.000Z",
+      "opponentRef": "oktagon:christoph-steinmann",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 1,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-81c8b5713ce59dae00e5",
+      "eventRef": "oktagon:event:history-makowski-fc-5",
+      "happenedAt": "2012-12-08T00:00:00.000Z",
+      "opponentRef": "oktagon:marcin-krysztofiak",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 2,
+      "elapsedSeconds": 600,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-64b0e305e6aa27c1d2af",
+      "eventRef": "oktagon:event:history-czech-muay-thai-association-trutnovs-night-of-gladiators",
+      "happenedAt": "2013-02-07T00:00:00.000Z",
+      "opponentRef": "oktagon:pavol-langer",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 210,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-6dc1eee00cf6fccb75b2",
+      "eventRef": "oktagon:event:history-arena-berserkerow-3",
+      "happenedAt": "2013-05-11T00:00:00.000Z",
+      "opponentRef": "oktagon:maciej-rozanski",
+      "result": "loss",
+      "method": "Submission (guillotine choke)",
+      "round": 2,
+      "elapsedSeconds": 345,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-5fae8725a66b92322893",
+      "eventRef": "oktagon:event:history-mmaa-arena-2",
+      "happenedAt": "2013-11-10T00:00:00.000Z",
+      "opponentRef": "oktagon:livio-victoriano",
+      "result": "loss",
+      "method": "Submission (triangle choke)",
+      "round": 1,
+      "elapsedSeconds": 220,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0572817ecc4f678d39ef",
+      "eventRef": "oktagon:event:history-fight-explosion-return-of-kings",
+      "happenedAt": "2013-12-06T00:00:00.000Z",
+      "opponentRef": "oktagon:peter-capkovic",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 2,
+      "elapsedSeconds": 457,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a66160e4dc9df6cd67b6",
+      "eventRef": "oktagon:event:history-mmaa-arena-3",
+      "happenedAt": "2014-03-07T00:00:00.000Z",
+      "opponentRef": "oktagon:krzysztof-klepacz",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 228,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-0b86b16a5937d79bf69a",
+      "eventRef": "oktagon:event:history-czech-muay-thai-association-pardal-gladiators-night-cage-3",
+      "happenedAt": "2014-05-24T00:00:00.000Z",
+      "opponentRef": "oktagon:istvan-toth",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 1,
+      "elapsedSeconds": 140,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-60d4050a0097a4b1645d",
+      "eventRef": "oktagon:event:history-fighting-zone-cage-time-1",
+      "happenedAt": "2014-12-10T00:00:00.000Z",
+      "opponentRef": "oktagon:maciej-rozanski",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ff7de4ad9ad14ff9a623",
+      "eventRef": "oktagon:event:history-caveam-bitva-roku-2015",
+      "happenedAt": "2015-03-19T00:00:00.000Z",
+      "opponentRef": "oktagon:andreas-birgels",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 815,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-71224cf3f5bfb2074d8f",
+      "eventRef": "oktagon:event:history-night-of-warriors-9",
+      "happenedAt": "2016-03-19T00:00:00.000Z",
+      "opponentRef": "oktagon:tomas-kuzela",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9ef60d18e8453b6035ed",
+      "eventRef": "oktagon:event:history-x-fight-nights-1",
+      "happenedAt": "2016-06-12T00:00:00.000Z",
+      "opponentRef": "oktagon:rafael-silva",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-16a521ba0357fccde9f2",
+      "eventRef": "oktagon:event:history-night-of-warriors-10",
+      "happenedAt": "2016-11-05T00:00:00.000Z",
+      "opponentRef": "oktagon:damian-chandzel",
+      "result": "win",
+      "method": "Submission (forearm choke)",
+      "round": 1,
+      "elapsedSeconds": 96,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-378f1e9132258a77af9a",
+      "eventRef": "oktagon:event:history-x-fight-nights-2",
+      "happenedAt": "2016-12-18T00:00:00.000Z",
+      "opponentRef": "oktagon:david-ramires",
+      "result": "loss",
+      "method": "TKO (clavicle injury)",
+      "round": 2,
+      "elapsedSeconds": 379,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-29864c916768159c22a4",
+      "eventRef": "oktagon:event:history-simply-the-best-14",
+      "happenedAt": "2017-04-18T00:00:00.000Z",
+      "opponentRef": "oktagon:shota-gvasalia",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 727,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e94f47a680045d36e700",
+      "eventRef": "oktagon:event:history-x-fight-nights-3",
+      "happenedAt": "2017-06-25T00:00:00.000Z",
+      "opponentRef": "oktagon:zoran-dod",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-fa1aab89d3f16bc50af3",
+      "eventRef": "oktagon:event:history-x-fight-nights-6",
+      "happenedAt": "2017-12-07T00:00:00.000Z",
+      "opponentRef": "oktagon:tomas-penz",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 260,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-de359ac5e23807a3e331",
+      "eventRef": "oktagon:event:history-x-fight-nights-8",
+      "happenedAt": "2018-03-03T00:00:00.000Z",
+      "opponentRef": "oktagon:edvaldo-de-oliveira",
+      "result": "win",
+      "method": "TKO (elbows)",
+      "round": 2,
+      "elapsedSeconds": 582,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-69262a260fdf6edca902",
+      "eventRef": "oktagon:event:history-x-fight-nights-11",
+      "happenedAt": "2018-06-28T00:00:00.000Z",
+      "opponentRef": "oktagon:david-ramires",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 330,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-ec0b2c5f95993b186a2d",
+      "eventRef": "oktagon:event:history-x-fight-nights-12",
+      "happenedAt": "2018-10-06T00:00:00.000Z",
+      "opponentRef": "oktagon:deyan-topalski",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 267,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-aa9ac3ae2a7b3713090f",
+      "eventRef": "oktagon:event:history-x-fight-nights-15",
+      "happenedAt": "2018-12-27T00:00:00.000Z",
+      "opponentRef": "oktagon:grzegorz-siwy",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 3,
+      "elapsedSeconds": 890,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-c54e4a2022e4dd741a0c",
+      "eventRef": "oktagon:event:history-x-fight-nights-17",
+      "happenedAt": "2019-03-16T00:00:00.000Z",
+      "opponentRef": "oktagon:diego-gonzalez",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-59b13e709ba0e086d79e",
+      "eventRef": "oktagon:event:history-night-of-warriors-15",
+      "happenedAt": "2019-04-06T00:00:00.000Z",
+      "opponentRef": "oktagon:tato-primera",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 2,
+      "elapsedSeconds": 318,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-806e7436e59a0dfd03dc",
+      "eventRef": "oktagon:event:history-oktagon-12",
+      "happenedAt": "2019-06-08T00:00:00.000Z",
+      "opponentRef": "oktagon:alberto-emiliano-pereira",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 214,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e2c1b8bc941915f45140",
+      "eventRef": "oktagon:event:history-oktagon-13",
+      "happenedAt": "2019-07-27T00:00:00.000Z",
+      "opponentRef": "oktagon:wendell-de-oliveira-marques",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 416,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-90c116ac328754e79eba",
+      "eventRef": "oktagon:event:history-ufc-fight-night-hermansson-vs-cannonier",
+      "happenedAt": "2019-09-28T00:00:00.000Z",
+      "opponentRef": "oktagon:alessio-di-chirico",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-fa5d6a15aba1a47a1b51",
+      "eventRef": "oktagon:event:history-ufc-on-espn-overeem-vs-rozenstruik",
+      "happenedAt": "2019-12-07T00:00:00.000Z",
+      "opponentRef": "oktagon:trevor-smith",
+      "result": "win",
+      "method": "KO (punch)",
+      "round": 3,
+      "elapsedSeconds": 849,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-1d956977488bbdad4272",
+      "eventRef": "oktagon:event:history-ufc-257",
+      "happenedAt": "2021-01-23T00:00:00.000Z",
+      "opponentRef": "oktagon:andrew-sanchez",
+      "result": "win",
+      "method": "TKO (flying knee and punches)",
+      "round": 3,
+      "elapsedSeconds": 779,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-3bc0ff462a89204a7626",
+      "eventRef": "oktagon:event:history-ufc-on-espn-barboza-vs-chikadze",
+      "happenedAt": "2021-08-28T00:00:00.000Z",
+      "opponentRef": "oktagon:gerald-meerschaert",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 409,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-7379f6bcc3782ff395fd",
+      "eventRef": "oktagon:event:history-ufc-280",
+      "happenedAt": "2022-10-22T00:00:00.000Z",
+      "opponentRef": "oktagon:caio-borralho",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-776e7458abccb57ceaae",
+      "eventRef": "oktagon:event:history-ufc-fight-night-aspinall-vs-tybura",
+      "happenedAt": "2023-07-22T00:00:00.000Z",
+      "opponentRef": "oktagon:bryan-barberena",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f347aa5320d88c76e721",
+      "eventRef": "oktagon:event:history-ufc-fight-night-dolidze-vs-imavov",
+      "happenedAt": "2024-02-03T00:00:00.000Z",
+      "opponentRef": "oktagon:aliaskhab-khizriev",
+      "result": "no-contest",
+      "method": "NC (accidental eye poke)",
+      "round": 1,
+      "elapsedSeconds": 11,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a8c81c5f4acc12861ab0",
+      "eventRef": "oktagon:event:history-oktagon-61",
+      "happenedAt": "2024-09-21T00:00:00.000Z",
+      "opponentRef": "oktagon:scott-askham",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f7e2e756c2a8134ee684",
+      "eventRef": "oktagon:event:history-oktagon-68",
+      "happenedAt": "2025-03-08T00:00:00.000Z",
+      "opponentRef": "oktagon:yasubey-enomoto",
+      "result": "win",
+      "method": "KO (knee and punches)",
+      "round": 2,
+      "elapsedSeconds": 340,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-e23abb4f7f1a702d60f3",
+      "eventRef": "oktagon:event:history-oktagon-72",
+      "happenedAt": "2025-06-14T00:00:00.000Z",
+      "opponentRef": "oktagon:patrik-kincl",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-4b879104ade199971590",
+      "eventRef": "oktagon:event:history-oktagon-92",
+      "happenedAt": "2026-08-01T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 319,
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-8903c8049fa9606e64c6",
+      "eventRef": "oktagon:event:history-oktagon-92",
+      "happenedAt": "2026-08-01T00:00:00.000Z",
+      "opponentRef": "oktagon:will-fleury",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 319,
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:makhmud-muradov:history",
+      "bouts": 40,
+      "values": {
+        "bouts": 40,
+        "wins": 31,
+        "losses": 8,
+        "draws": 0,
+        "noContests": 1,
+        "finishRate": 0.709677,
+        "koTkoWins": 19,
+        "submissionWins": 3,
+        "decisionWins": 9,
+        "koTkoWinShare": 0.612903,
+        "submissionWinShare": 0.096774,
+        "decisionWinShare": 0.290323,
+        "averageElapsedSeconds": 536.615385,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 2.735636,
+        "layoffDays": 1
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1887.36902619,
+    "deviation": 91.10601653,
+    "volatility": 0.05999532,
+    "boutCount": 39,
+    "asOfBoutRef": "oktagon:bout:history-8903c8049fa9606e64c6",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 39 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:61905642",
+        "source:wikipedia:78757307"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

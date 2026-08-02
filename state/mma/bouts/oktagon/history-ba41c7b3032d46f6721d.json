@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-ba41c7b3032d46f6721d",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-ksw-65",
+    "name": "KSW 65",
+    "startsAtUtc": "2021-12-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:mateusz-legierski",
+    "blue": "oktagon:roman-szymanski"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-12-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:81719858"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 587,
+    "sourceRefs": [
+      "source:wikipedia:81719858"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

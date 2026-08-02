@@ -1,0 +1,470 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "oktagon:mallory-martin",
+  "slug": "mallory-martin",
+  "org": "oktagon",
+  "canonicalName": "Mallory Martin",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Mallory Martin",
+    "externalIds": {
+      "wikipediaPageId": "59862260"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "oktagon",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:59862260",
+      "url": "https://en.wikipedia.org/wiki/Mallory_Martin",
+      "publisher": "Wikipedia",
+      "title": "Mallory Martin",
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Mallory Martin",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1994-01-29",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 160.02,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Strawweight",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Zingano BJJ Tiger Muay Thai (2016–) Tao of Boxing",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "10-6-0",
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "retrievedAt": "2026-08-02T14:14:59.647Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "10-6-0",
+          "sourceRef": "source:wikipedia:59862260"
+        },
+        {
+          "value": "11-6-0",
+          "sourceRef": "derived:oktagon:mallory-martin:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "oktagon:bout:history-4fa3a0906065ee531e11",
+      "eventRef": "oktagon:event:history-kunlun-fight-mma-7",
+      "happenedAt": "2016-12-15T00:00:00.000Z",
+      "opponentRef": "oktagon:heqin-lin",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-5e0638684afd83cc526b",
+      "eventRef": "oktagon:event:history-invicta-fc-22-evinger-vs-kunitskaya-ii",
+      "happenedAt": "2017-03-25T00:00:00.000Z",
+      "opponentRef": "oktagon:sunna-davi-sdottir",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-985748d33ffa40b2b199",
+      "eventRef": "oktagon:event:history-lfa-22",
+      "happenedAt": "2017-09-08T00:00:00.000Z",
+      "opponentRef": "oktagon:maycee-barber",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-09530cf5fcf563956885",
+      "eventRef": "oktagon:event:history-invicta-fc-27-kaufman-vs-kianzad",
+      "happenedAt": "2018-01-08T00:00:00.000Z",
+      "opponentRef": "oktagon:tiffany-masters",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 516,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a3efe88b012c10def730",
+      "eventRef": "oktagon:event:history-lfa-38",
+      "happenedAt": "2018-04-27T00:00:00.000Z",
+      "opponentRef": "oktagon:linsey-williams",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 498,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-a0fefdc980b4a780885b",
+      "eventRef": "oktagon:event:history-invicta-fc-31-jandiroba-vs-morandin",
+      "happenedAt": "2018-09-01T00:00:00.000Z",
+      "opponentRef": "oktagon:ashley-nichols",
+      "result": "win",
+      "method": "TKO (elbows)",
+      "round": 3,
+      "elapsedSeconds": 665,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f10d528b88175536a623",
+      "eventRef": "oktagon:event:history-dana-white-s-contender-series-25",
+      "happenedAt": "2019-08-20T00:00:00.000Z",
+      "opponentRef": "oktagon:micol-di-segni",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-728237b02e4c7411e78b",
+      "eventRef": "oktagon:event:history-invicta-fc-38-murato-vs-ducote",
+      "happenedAt": "2019-11-01T00:00:00.000Z",
+      "opponentRef": "oktagon:cynthia-arceo",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-f1956cde6c8bd9fa1dbe",
+      "eventRef": "oktagon:event:history-ufc-on-espn-overeem-vs-rozenstruik",
+      "happenedAt": "2019-12-07T00:00:00.000Z",
+      "opponentRef": "oktagon:virna-jandiroba",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 376,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-861a90f5dacaec2689fb",
+      "eventRef": "oktagon:event:history-ufc-fight-night-smith-vs-rakic",
+      "happenedAt": "2020-08-29T00:00:00.000Z",
+      "opponentRef": "oktagon:hannah-cifers",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 393,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-074c8a554782924d0343",
+      "eventRef": "oktagon:event:history-ufc-258",
+      "happenedAt": "2021-02-13T00:00:00.000Z",
+      "opponentRef": "oktagon:polyana-viana",
+      "result": "loss",
+      "method": "Submission (armbar)",
+      "round": 1,
+      "elapsedSeconds": 198,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-d020fc195b609a019a78",
+      "eventRef": "oktagon:event:history-ufc-on-espn-font-vs-aldo",
+      "happenedAt": "2021-12-04T00:00:00.000Z",
+      "opponentRef": "oktagon:cheyanne-vlismas",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-78e1824669cf5780f284",
+      "eventRef": "oktagon:event:history-oktagon-36",
+      "happenedAt": "2022-10-15T00:00:00.000Z",
+      "opponentRef": "oktagon:katharina-dalisda",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-95b128d3412c58c7c47c",
+      "eventRef": "oktagon:event:history-oktagon-51",
+      "happenedAt": "2023-12-29T00:00:00.000Z",
+      "opponentRef": "oktagon:magdalena-sormova",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-9d9b2093016d94dbe30f",
+      "eventRef": "oktagon:event:history-oktagon-57",
+      "happenedAt": "2024-05-04T00:00:00.000Z",
+      "opponentRef": "oktagon:anita-bekus",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-53100854fbdbaff562fd",
+      "eventRef": "oktagon:event:history-oktagon-62",
+      "happenedAt": "2024-10-12T00:00:00.000Z",
+      "opponentRef": "oktagon:katharina-dalisda",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "oktagon:bout:history-1e0a0bb3fabd5b5bd51b",
+      "eventRef": "oktagon:event:history-oktagon-70",
+      "happenedAt": "2025-04-26T00:00:00.000Z",
+      "opponentRef": "oktagon:eva-dourthe",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "oktagon",
+      "sourceRef": "derived:oktagon:mallory-martin:history",
+      "bouts": 17,
+      "values": {
+        "bouts": 17,
+        "wins": 11,
+        "losses": 6,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.363636,
+        "koTkoWins": 2,
+        "submissionWins": 2,
+        "decisionWins": 7,
+        "koTkoWinShare": 0.181818,
+        "submissionWinShare": 0.181818,
+        "decisionWinShare": 0.636364,
+        "averageElapsedSeconds": 808.588235,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 0.8,
+        "fightsPerYear": 1.913517,
+        "layoffDays": 463
+      },
+      "updatedAt": "2026-08-02T14:14:59.647Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1655.97721358,
+    "deviation": 122.78077199,
+    "volatility": 0.06000079,
+    "boutCount": 17,
+    "asOfBoutRef": "oktagon:bout:history-1e0a0bb3fabd5b5bd51b",
+    "updatedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-02T14:14:59.647Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 17 historical fight rows."
+    },
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-a05c495d850844023ba7",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-dana-white-s-contender-series-43",
+    "name": "Dana White's Contender Series 43",
+    "startsAtUtc": "2021-10-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:martin-buday",
+    "blue": "oktagon:lorenzo-hood"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-10-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80546380"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (knee)",
+    "round": 1,
+    "elapsedSeconds": 296,
+    "sourceRefs": [
+      "source:wikipedia:80546380"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80546380"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

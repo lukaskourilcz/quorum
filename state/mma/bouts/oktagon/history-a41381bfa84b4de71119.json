@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-a41381bfa84b4de71119",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-fight-nights-global-65",
+    "name": "Fight Nights Global 65",
+    "startsAtUtc": "2017-05-19T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:zhalgas-zhumagulov",
+    "blue": "oktagon:vartan-asatryan"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-05-19T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:64559517"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64559517"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:64559517"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

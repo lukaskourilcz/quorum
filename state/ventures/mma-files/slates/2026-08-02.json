@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-02",
+  "slots": [
+    {
+      "slot": "am",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-02:am"
+      ],
+      "rationale": "No new source-backed subject cleared the desk before the morning cutoff.",
+      "assignedWriter": "JAB",
+      "status": "killed",
+      "killedReason": "Missing fresh, source-backed subject."
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-02:pm"
+      ],
+      "rationale": "No new source-backed subject cleared the desk before the evening cutoff.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "Missing fresh, source-backed subject."
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-08-02:am",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-02-mag-editorial"
+    },
+    {
+      "subjectRef": "missing:2026-08-02:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-02-mag-editorial"
+    }
+  ]
+}

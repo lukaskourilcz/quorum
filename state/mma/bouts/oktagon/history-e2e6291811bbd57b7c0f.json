@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-e2e6291811bbd57b7c0f",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-fight-nights-global-46",
+    "name": "Fight Nights Global 46",
+    "startsAtUtc": "2016-04-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:zhalgas-zhumagulov",
+    "blue": "oktagon:oscar-dolchin"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2016-04-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:64559517"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64559517"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:64559517"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-7cab6f09e4430f79e38c",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-arena-fight-championship-4",
+    "name": "Arena Fight Championship 4",
+    "startsAtUtc": "2018-06-30T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:felipe-lima",
+    "blue": "oktagon:adalberto-mota-da-silva-jr"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-06-30T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:80310974"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 43,
+    "sourceRefs": [
+      "source:wikipedia:80310974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}

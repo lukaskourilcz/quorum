@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-6f7d09281480395dd276",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-world-fighting-league-4",
+    "name": "World Fighting League 4",
+    "startsAtUtc": "2020-02-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:losene-keita",
+    "blue": "oktagon:tayron-chavarro"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-02-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-02T14:14:59.647Z",
+    "lastSeenAt": "2026-08-02T14:14:59.647Z",
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757319"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": null,
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-02T14:14:59.647Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-02T14:14:59.647Z"
+}
