@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-08-02",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-08-02",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-edition",
+        "held": true,
+        "bullets": [
+          {
+            "text": "NO_EDITION. budget_exhausted",
+            "roomLink": "/meetings/2026-08-02-cu-edition"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Venture morning was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "incubator",
+        "kind": "incubator-scan",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Incubator evidence scan was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-intake",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+            "roomLink": "/meetings/2026-08-02-mma-intake"
+          }
+        ],
+        "costUsd": 0.046231999999999995
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-editorial",
+        "held": true,
+        "bullets": [
+          {
+            "text": "AM: assigned; PM: killed",
+            "roomLink": "/meetings/2026-08-02-mag-editorial"
+          }
+        ],
+        "costUsd": 0.023110000000000002
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-am",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files morning article was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "kind": "tt-marketing",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Titty Tuesdays marketing room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "incubator",
+        "kind": "studio",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Carousel Studio room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "afternoon",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260802120140-afternoon/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-product",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Caught Up product room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-pm",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files evening article was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-analysis",
+        "held": false,
+        "bullets": [
+          {
+            "text": "FightAIQ evening model check was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-07-27"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+            "roomLink": "/meetings/2026-08-02-mag-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "night",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260802210439-night/room"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "operations": [
+      {
+        "ventureId": "mma-files",
+        "type": "release-proof",
+        "status": "passed",
+        "text": "mma-files release proof passed; the public result was checked after delivery.",
+        "ref": "release-proofs/mma-files/b1864a78b80b822b000cbad32826e71eec6a7eddfec763900f4598a664230ba3.json"
+      },
+      {
+        "ventureId": "global",
+        "type": "failure",
+        "status": "none",
+        "text": "No social publishing failure was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "caught-up social check locked; ready count 0/7.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "mma-files social check locked; ready count 0/10.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "titty-tuesdays social check locked; ready count 0/4.",
+        "ref": "social/activation.json"
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.0693 against the $1.00 daily budget.",
+    "bodyWordCount": 191
+  },
+  "bodyWordCount": 254,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-08-02T21:04:40.470Z"
+}
