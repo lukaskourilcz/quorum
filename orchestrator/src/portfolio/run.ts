@@ -46,7 +46,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
-import { fightWeekFocus, loadEventCards } from "../fightaiq/store.js";
+import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
 import { refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
 import {
@@ -842,6 +842,37 @@ export async function runPortfolioCycle(input: {
           { subjectRef: `missing:${date}:pm`, verdict: "repeat", evidenceRef: `meeting:${date}-mag-editorial` }
         ]
       });
+      // MMA Files must be able to publish without FightAIQ.
+      //
+      // The only rescue was a fight-week preview keyed to an `event:` ref, so a day with no
+      // upcoming event killed both slots and the magazine printed nothing — one venture's
+      // empty data pipeline silenced another venture entirely. FightAIQ currently holds 58
+      // sourced fighter cards and a full bout history while holding zero events, so there is
+      // real, cited material to write about and no way to reach it.
+      //
+      // A fighter profile is an allowed format and needs only a card that is already sourced
+      // and reviewed. Selection is deterministic — most complete first, then by id — so the
+      // same day always picks the same subject, and a card with no source is never eligible.
+      if (!editorialSlate.slots.some((slot) => slot.status === "assigned")) {
+        const profileSubject = (await loadFighterRecords())
+          .filter((fighter) => (fighter.sources?.length ?? 0) > 0 && (fighter.history?.length ?? 0) > 0)
+          .sort((left, right) =>
+            (right.completeness ?? 0) - (left.completeness ?? 0) || left.id.localeCompare(right.id))[0];
+        if (profileSubject) {
+          editorialSlate = EditorialSlateSchema.parse({
+            ...editorialSlate,
+            slots: [
+              { slot: "am", format: "fighter-profile", subjectRefs: [profileSubject.id], rationale: "No card is inside the window, so the desk profiles the best-sourced fighter on file.", assignedWriter: "JAB", status: "assigned" },
+              editorialSlate.slots[1]
+            ],
+            vaultVerdicts: [
+              ...editorialSlate.vaultVerdicts.filter((verdict) => verdict.subjectRef !== editorialSlate!.slots[0]!.subjectRefs[0]),
+              { subjectRef: profileSubject.id, verdict: "fresh", evidenceRef: `meeting:${date}-mag-editorial` }
+            ]
+          });
+        }
+      }
+
       const fightWeekSubject = context.evidenceRefs.find((reference) => reference.startsWith("event:"))?.slice("event:".length);
       if (fightWeekSubject && !editorialSlate.slots.some((slot) => slot.status === "assigned" && slot.subjectRefs.includes(fightWeekSubject))) {
         editorialSlate = EditorialSlateSchema.parse({
