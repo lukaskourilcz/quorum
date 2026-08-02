@@ -515,12 +515,38 @@ export async function runPortfolioCycle(input: {
     resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
   ).monthlyApiUsd;
   const schedule = resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: Math.max(0, enforcedMonthlyApiUsd - spent) });
-  if (!input.dry && (process.env.PORTFOLIO_LIVE_ENABLED !== "true" || !phaseEnabled(schedule, input.phase))) {
-    return { cycleId: input.cycleId, phase: input.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
-  }
   const definition = composeMeetingRouteDefinition(registry, input.phase, input.dry ? "dry" : "live");
   const date = pragueClockParts(input.now).date;
   const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
+  // A room the owner gate or the degradation ladder closed leaves the same PAUSED record the
+  // no-agenda path already leaves. This used to return with artifacts: [] and write nothing,
+  // so the slot was indistinguishable on the calendar from one nobody reached — the shape of
+  // an empty day that took a full audit to explain.
+  if (!input.dry && (process.env.PORTFOLIO_LIVE_ENABLED !== "true" || !phaseEnabled(schedule, input.phase))) {
+    // Only a scheduled wake-up leaves a record, exactly as the no-agenda path below does. A
+    // manual or local invocation of a closed phase is not a missed meeting and must not write
+    // one into the calendar.
+    if (process.env.MEETING_TRIGGER !== "schedule") {
+      return { cycleId: input.cycleId, phase: input.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
+    }
+    const closedBy = process.env.PORTFOLIO_LIVE_ENABLED !== "true"
+      ? "The owner's portfolio gate is closed, so the room did not open and no model was called."
+      : "The countersigned budget shape closed this room, so it did not open and no model was called.";
+    return recordNoAgendaCycle({
+      phase: input.phase,
+      cycleId: input.cycleId,
+      date,
+      now: input.now,
+      stage: stages.current,
+      root,
+      expectedCast: definition.requiredParticipants.filter(
+        (agent) => !disabledAgentsForVenture(agentControls, definition.ventureId).has(agent)
+      ),
+      monthAllInUsd: spent,
+      monthCapUsd: schedule.monthlyOperatingUsd,
+      reason: closedBy
+    });
+  }
   const preparationArtifacts: string[] = [];
   const scheduledWakeUp = !input.dry && process.env.MEETING_TRIGGER === "schedule";
   const agendaQueue = input.dry ? null : await readMeetingAgendaQueue(root, input.now);
