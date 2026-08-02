@@ -173,6 +173,25 @@ test("public presentation keeps approved agent photos and plain calendar labels"
   await expect(page.locator("[data-show-presentation]")).toHaveCount(0);
 });
 
+test("Carousel Studio serves and displays its preview images", async ({ page, request }) => {
+  const response = await request.get(
+    "/api/carousel-studio/preview/cover-cta/1.0.0/caught-up/instagram-square/1"
+  );
+  expect(response.ok()).toBe(true);
+  expect(response.headers()["content-type"]).toBe("image/svg+xml; charset=utf-8");
+  expect((await response.text()).startsWith("<svg ")).toBe(true);
+
+  await page.goto("/ventures/carousel-studio", { waitUntil: "networkidle" });
+  const preview = page.locator("[data-carousel-preview]").first();
+  await preview.scrollIntoViewIfNeeded();
+  await expect(preview).toBeVisible();
+  await expect.poll(async () => preview.evaluate((image: HTMLImageElement) => ({
+    complete: image.complete,
+    height: image.naturalHeight,
+    width: image.naturalWidth
+  }))).toEqual({ complete: true, height: 1080, width: 1080 });
+});
+
 test("metrics role column keeps the table inset", async ({ page }) => {
   await page.goto("/metrics", { waitUntil: "networkidle" });
   const roleHead = page.getByRole("columnheader", { name: "Role" });

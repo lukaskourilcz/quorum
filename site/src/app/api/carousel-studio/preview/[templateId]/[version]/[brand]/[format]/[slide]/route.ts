@@ -1,7 +1,7 @@
 import {
   CAROUSEL_BRANDS,
   CarouselFormatSchema,
-  renderCarouselPng
+  renderCarouselSvg
 } from "@boardlessai/carousel-studio";
 import { findCarouselTemplate, previewPayload } from "@/lib/carousel-studio";
 
@@ -21,7 +21,7 @@ export async function GET(
   }
   const locale = new URL(request.url).searchParams.get("locale") === "cs" ? "cs" : "en";
   try {
-    const renders = await renderCarouselPng({
+    const renders = renderCarouselSvg({
       template,
       payload: previewPayload(template, locale),
       brand: brandTokens,
@@ -29,11 +29,11 @@ export async function GET(
     });
     const render = renders[slideIndex];
     if (!render) return Response.json({ error: "Slide not found." }, { status: 404 });
-    return new Response(new Uint8Array(render.png), {
+    return new Response(render.svg, {
       headers: {
         "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
-        "Content-Type": "image/png",
-        ETag: `"${render.pngHash}"`,
+        "Content-Type": "image/svg+xml; charset=utf-8",
+        ETag: `"${render.svgHash}"`,
         "X-Content-Type-Options": "nosniff"
       }
     });

@@ -157,6 +157,9 @@ project. It lives inside this monorepo as `@boardlessai/carousel-studio`; no sep
 service or image model is involved. A `carousel-template/1` record defines safe areas,
 slides, text slots, fit rules, optional imagery and semantic version. The pure pipeline
 is template + payload + brand tokens → SVG → PNG, with stable hashes.
+The public and admin galleries serve the checked SVG directly so their previews do
+not depend on a native image library inside a serverless request. Final deliverables
+still use the deterministic PNG renderer.
 
 Ten original seed layouts are live: quote, steps, statistic, before/after, headline
 plus bullets, timeline, comparison, cover/CTA, five-slide story and minimal poster.

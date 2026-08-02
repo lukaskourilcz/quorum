@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import sharp from "sharp";
 import {
   BrandTokensSchema,
   CarouselPayloadSchema,
@@ -132,6 +131,7 @@ export async function renderCarouselPng(input: {
   brand: BrandTokens;
   format: CarouselFormat;
 }): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
+  const { default: sharp } = await import("sharp");
   const slides = renderCarouselSvg(input);
   return Promise.all(slides.map(async (slide) => {
     const png = await sharp(Buffer.from(slide.svg))
