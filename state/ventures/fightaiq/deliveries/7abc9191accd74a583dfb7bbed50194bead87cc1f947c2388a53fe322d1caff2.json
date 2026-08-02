@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "fightaiq",
+  "packageHash": "7abc9191accd74a583dfb7bbed50194bead87cc1f947c2388a53fe322d1caff2",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "2c2fb71637408dff0b5570771b1a1920190463b3",
+  "recordedAt": "2026-08-02T15:48:20.428Z"
+}
