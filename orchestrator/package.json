@@ -27,7 +27,8 @@
     "social:publish": "tsx src/social/index.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
     "test": "vitest run --passWithNoTests",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts"
   },
   "dependencies": {
     "@boardlessai/carousel-studio": "workspace:*",

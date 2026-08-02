@@ -59,6 +59,74 @@ export function projectWikimediaCategory(value: unknown, org: WikimediaRosterEnt
   });
 }
 
+interface WikimediaTitleResponse {
+  query?: {
+    pages?: Array<{ pageid?: number; ns?: number; title?: string; missing?: boolean }>;
+  };
+}
+
+export function projectWikimediaTitles(value: unknown, org: WikimediaRosterEntry["org"]): WikimediaRosterEntry[] {
+  const response = value as WikimediaTitleResponse;
+  return (response.query?.pages ?? []).flatMap((item) => {
+    if (item.missing === true) return [];
+    const title = typeof item.title === "string" ? sanitizeSourceText(item.title, 160) : "";
+    const pageId = Number(item.pageid);
+    const slug = fighterSlug(title);
+    if (!title || !slug || !Number.isSafeInteger(pageId) || pageId <= 0 || item.ns !== 0) return [];
+    return [{
+      org,
+      name: title,
+      slug,
+      wikipediaTitle: title,
+      wikipediaUrl: `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replaceAll(" ", "_"))}`,
+      pageId
+    }];
+  });
+}
+
+/**
+ * Resolve named fighters instead of crawling a category.
+ *
+ * The category crawl below shares one `entries` map across an organization's categories and
+ * stops at 500, so the UFC male category consumed the whole budget and the roster arrived
+ * alphabetically truncated: the 840 cards on disk ran A-G and then thinned out, which is why
+ * Alex Pereira, Alexander Volkanovski and Alexandre Pantoja were absent while 560 cards with
+ * no bout history were present. It also cannot reach Oktagon at all, because the category it
+ * asks for does not exist. Asking for the policy's titles directly avoids both problems and
+ * costs about three requests instead of twenty on the same keyless endpoint.
+ */
+export async function fetchWikimediaRosterByTitles(input: {
+  org: WikimediaRosterEntry["org"];
+  titles: readonly string[];
+  context: SourceFetchContext;
+  fetchImpl?: SafeFetchOptions["fetchImpl"];
+  resolveImpl?: SafeFetchOptions["resolveImpl"];
+}): Promise<WikimediaRosterEntry[]> {
+  const entries = new Map<string, WikimediaRosterEntry>();
+  const unique = [...new Set(input.titles.filter((title) => title.trim().length > 0))];
+  // The API accepts at most 50 titles per query.
+  for (let offset = 0; offset < unique.length; offset += 50) {
+    const batch = unique.slice(offset, offset + 50);
+    const endpoint = new URL("https://en.wikipedia.org/w/api.php");
+    endpoint.searchParams.set("action", "query");
+    endpoint.searchParams.set("format", "json");
+    endpoint.searchParams.set("formatversion", "2");
+    endpoint.searchParams.set("redirects", "1");
+    endpoint.searchParams.set("maxlag", "5");
+    endpoint.searchParams.set("titles", batch.join("|"));
+    const response = await safeFetch(endpoint.toString(), {
+      allowHosts: input.context.allowHosts,
+      headers: { "User-Agent": USER_AGENT },
+      maxBytes: 750_000,
+      fetchImpl: input.fetchImpl,
+      resolveImpl: input.resolveImpl
+    });
+    const payload = JSON.parse(new TextDecoder().decode(response.body)) as unknown;
+    for (const entry of projectWikimediaTitles(payload, input.org)) entries.set(`${entry.org}:${entry.slug}`, entry);
+  }
+  return [...entries.values()].sort((left, right) => left.name.localeCompare(right.name));
+}
+
 export async function fetchWikimediaRoster(input: {
   org: WikimediaRosterEntry["org"];
   context: SourceFetchContext;
@@ -67,7 +135,7 @@ export async function fetchWikimediaRoster(input: {
 }): Promise<WikimediaRosterEntry[]> {
   const categories = input.org === "ufc"
     ? ["Ultimate Fighting Championship male fighters", "Ultimate Fighting Championship female fighters"]
-    : ["Oktagon MMA fighters"];
+    : ["Oktagon MMA champions"];
   const entries = new Map<string, WikimediaRosterEntry>();
   for (const category of categories) {
     let continuation: string | undefined;

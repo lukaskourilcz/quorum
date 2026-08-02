@@ -1,0 +1,800 @@
+{
+  "schemaVersion": "mma-roster-policy/1",
+  "note": "Curated FightAIQ roster. Only fighters listed here get cards. Edit this file to change who the venture tracks; run pnpm fightaiq:roster-prune afterwards.",
+  "selectedAt": "2026-08-02",
+  "source": "en.wikipedia.org: List of current <org> fighters, intersected with the org's fighter categories; champions ordered first.",
+  "organizations": {
+    "ufc": {
+      "cap": 80,
+      "category": "Ultimate Fighting Championship male fighters",
+      "fighters": [
+        {
+          "id": "ufc:alex-pereira",
+          "name": "Alex Pereira",
+          "wikipediaTitle": "Alex Pereira",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:alexa-grasso",
+          "name": "Alexa Grasso",
+          "wikipediaTitle": "Alexa Grasso",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:alexander-volkanovski",
+          "name": "Alexander Volkanovski",
+          "wikipediaTitle": "Alexander Volkanovski",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:alexandre-pantoja",
+          "name": "Alexandre Pantoja",
+          "wikipediaTitle": "Alexandre Pantoja",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:aljamain-sterling",
+          "name": "Aljamain Sterling",
+          "wikipediaTitle": "Aljamain Sterling",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:amanda-nunes",
+          "name": "Amanda Nunes",
+          "wikipediaTitle": "Amanda Nunes",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:belal-muhammad",
+          "name": "Belal Muhammad",
+          "wikipediaTitle": "Belal Muhammad",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:brandon-moreno",
+          "name": "Brandon Moreno",
+          "wikipediaTitle": "Brandon Moreno",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:carlos-ulberg",
+          "name": "Carlos Ulberg",
+          "wikipediaTitle": "Carlos Ulberg",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:charles-oliveira",
+          "name": "Charles Oliveira",
+          "wikipediaTitle": "Charles Oliveira",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:ciryl-gane",
+          "name": "Ciryl Gane",
+          "wikipediaTitle": "Ciryl Gane",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:cody-garbrandt",
+          "name": "Cody Garbrandt",
+          "wikipediaTitle": "Cody Garbrandt",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:conor-mcgregor",
+          "name": "Conor McGregor",
+          "wikipediaTitle": "Conor McGregor",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:deiveson-figueiredo",
+          "name": "Deiveson Figueiredo",
+          "wikipediaTitle": "Deiveson Figueiredo",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:dricus-du-plessis",
+          "name": "Dricus du Plessis",
+          "wikipediaTitle": "Dricus du Plessis",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:ilia-topuria",
+          "name": "Ilia Topuria",
+          "wikipediaTitle": "Ilia Topuria",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:islam-makhachev",
+          "name": "Islam Makhachev",
+          "wikipediaTitle": "Islam Makhachev",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:israel-adesanya",
+          "name": "Israel Adesanya",
+          "wikipediaTitle": "Israel Adesanya",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:jamahal-hill",
+          "name": "Jamahal Hill",
+          "wikipediaTitle": "Jamahal Hill",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:jan-b-achowicz",
+          "name": "Jan Błachowicz",
+          "wikipediaTitle": "Jan Błachowicz",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:jessica-andrade",
+          "name": "Jéssica Andrade",
+          "wikipediaTitle": "Jéssica Andrade",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:jiri-prochazka",
+          "name": "Jiří Procházka",
+          "wikipediaTitle": "Jiří Procházka",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:joshua-van",
+          "name": "Joshua Van",
+          "wikipediaTitle": "Joshua Van",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:julianna-pena",
+          "name": "Julianna Peña",
+          "wikipediaTitle": "Julianna Peña",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:justin-gaethje",
+          "name": "Justin Gaethje",
+          "wikipediaTitle": "Justin Gaethje",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:kamaru-usman",
+          "name": "Kamaru Usman",
+          "wikipediaTitle": "Kamaru Usman",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:leon-edwards",
+          "name": "Leon Edwards",
+          "wikipediaTitle": "Leon Edwards",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:max-holloway",
+          "name": "Max Holloway",
+          "wikipediaTitle": "Max Holloway",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:merab-dvalishvili",
+          "name": "Merab Dvalishvili",
+          "wikipediaTitle": "Merab Dvalishvili",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:miesha-tate",
+          "name": "Miesha Tate",
+          "wikipediaTitle": "Miesha Tate",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:petr-yan",
+          "name": "Petr Yan",
+          "wikipediaTitle": "Petr Yan",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:rafael-dos-anjos",
+          "name": "Rafael dos Anjos",
+          "wikipediaTitle": "Rafael dos Anjos",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:raquel-pennington",
+          "name": "Raquel Pennington",
+          "wikipediaTitle": "Raquel Pennington",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:robert-whittaker",
+          "name": "Robert Whittaker (fighter)",
+          "wikipediaTitle": "Robert Whittaker (fighter)",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:rose-namajunas",
+          "name": "Rose Namajunas",
+          "wikipediaTitle": "Rose Namajunas",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:sean-o-malley",
+          "name": "Sean O'Malley (fighter)",
+          "wikipediaTitle": "Sean O'Malley (fighter)",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:sean-strickland",
+          "name": "Sean Strickland",
+          "wikipediaTitle": "Sean Strickland",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:tom-aspinall",
+          "name": "Tom Aspinall",
+          "wikipediaTitle": "Tom Aspinall",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:valentina-shevchenko",
+          "name": "Valentina Shevchenko",
+          "wikipediaTitle": "Valentina Shevchenko",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:yair-rodriguez",
+          "name": "Yair Rodríguez",
+          "wikipediaTitle": "Yair Rodríguez",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:zhang-weili",
+          "name": "Zhang Weili",
+          "wikipediaTitle": "Zhang Weili",
+          "tier": "champion"
+        },
+        {
+          "id": "ufc:aaron-pico",
+          "name": "Aaron Pico",
+          "wikipediaTitle": "Aaron Pico",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:abusupiyan-magomedov",
+          "name": "Abusupiyan Magomedov",
+          "wikipediaTitle": "Abusupiyan Magomedov",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:adrian-yanez",
+          "name": "Adrian Yañez",
+          "wikipediaTitle": "Adrian Yañez",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:aiemann-zahabi",
+          "name": "Aiemann Zahabi",
+          "wikipediaTitle": "Aiemann Zahabi",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:ailin-perez",
+          "name": "Ailín Pérez",
+          "wikipediaTitle": "Ailín Pérez",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:alateng-heili",
+          "name": "Alateng Heili",
+          "wikipediaTitle": "Alateng Heili",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:aleksandar-rakic",
+          "name": "Aleksandar Rakić",
+          "wikipediaTitle": "Aleksandar Rakić",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:aleksandre-topuria",
+          "name": "Aleksandre Topuria",
+          "wikipediaTitle": "Aleksandre Topuria",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:alex-perez",
+          "name": "Alex Perez (fighter)",
+          "wikipediaTitle": "Alex Perez (fighter)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:alexander-hernandez",
+          "name": "Alexander Hernandez",
+          "wikipediaTitle": "Alexander Hernandez",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:alexander-volkov",
+          "name": "Alexander Volkov (fighter)",
+          "wikipediaTitle": "Alexander Volkov (fighter)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:alonzo-menifield",
+          "name": "Alonzo Menifield",
+          "wikipediaTitle": "Alonzo Menifield",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:amanda-lemos",
+          "name": "Amanda Lemos",
+          "wikipediaTitle": "Amanda Lemos",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:amanda-ribas",
+          "name": "Amanda Ribas",
+          "wikipediaTitle": "Amanda Ribas",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:amir-albazi",
+          "name": "Amir Albazi",
+          "wikipediaTitle": "Amir Albazi",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:andre-fili",
+          "name": "Andre Fili",
+          "wikipediaTitle": "Andre Fili",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:andre-lima",
+          "name": "André Lima (fighter)",
+          "wikipediaTitle": "André Lima (fighter)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:andre-petroski",
+          "name": "Andre Petroski",
+          "wikipediaTitle": "Andre Petroski",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:angela-hill",
+          "name": "Angela Hill",
+          "wikipediaTitle": "Angela Hill",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:anshul-jubli",
+          "name": "Anshul Jubli",
+          "wikipediaTitle": "Anshul Jubli",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:anthony-hernandez",
+          "name": "Anthony Hernandez",
+          "wikipediaTitle": "Anthony Hernandez",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:aori-qileng",
+          "name": "Aori Qileng",
+          "wikipediaTitle": "Aori Qileng",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:ariane-carnelossi",
+          "name": "Ariane Carnelossi",
+          "wikipediaTitle": "Ariane Carnelossi",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:arman-tsarukyan",
+          "name": "Arman Tsarukyan",
+          "wikipediaTitle": "Arman Tsarukyan",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:arnold-allen",
+          "name": "Arnold Allen",
+          "wikipediaTitle": "Arnold Allen",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:asu-almabayev",
+          "name": "Asu Almabayev",
+          "wikipediaTitle": "Asu Almabayev",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:ateba-gautier",
+          "name": "Ateba Gautier",
+          "wikipediaTitle": "Ateba Gautier",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:azamat-bekoev",
+          "name": "Azamat Bekoev",
+          "wikipediaTitle": "Azamat Bekoev",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:azamat-murzakanov",
+          "name": "Azamat Murzakanov",
+          "wikipediaTitle": "Azamat Murzakanov",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:beneil-dariush",
+          "name": "Beneil Dariush",
+          "wikipediaTitle": "Beneil Dariush",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:benoit-saint-denis",
+          "name": "Benoît Saint Denis",
+          "wikipediaTitle": "Benoît Saint Denis",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:billy-elekana",
+          "name": "Billy Elekana",
+          "wikipediaTitle": "Billy Elekana",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:billy-quarantillo",
+          "name": "Billy Quarantillo",
+          "wikipediaTitle": "Billy Quarantillo",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:bogdan-guskov",
+          "name": "Bogdan Guskov",
+          "wikipediaTitle": "Bogdan Guskov",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:brad-tavares",
+          "name": "Brad Tavares",
+          "wikipediaTitle": "Brad Tavares",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:brando-pericic",
+          "name": "Brando Peričić",
+          "wikipediaTitle": "Brando Peričić",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:brandon-royval",
+          "name": "Brandon Royval",
+          "wikipediaTitle": "Brandon Royval",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:brendan-allen",
+          "name": "Brendan Allen",
+          "wikipediaTitle": "Brendan Allen",
+          "tier": "current-roster"
+        },
+        {
+          "id": "ufc:brian-ortega",
+          "name": "Brian Ortega",
+          "wikipediaTitle": "Brian Ortega",
+          "tier": "current-roster"
+        }
+      ]
+    },
+    "oktagon": {
+      "cap": 50,
+      "category": "Oktagon MMA",
+      "fighters": [
+        {
+          "id": "oktagon:felipe-lima",
+          "name": "Felipe Lima (fighter)",
+          "wikipediaTitle": "Felipe Lima (fighter)",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:gustavo-lopez",
+          "name": "Gustavo Lopez (fighter)",
+          "wikipediaTitle": "Gustavo Lopez (fighter)",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:karlos-vemola",
+          "name": "Karlos Vémola",
+          "wikipediaTitle": "Karlos Vémola",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:losene-keita",
+          "name": "Losene Keita",
+          "wikipediaTitle": "Losene Keita",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:lucia-szabova",
+          "name": "Lucia Szabová",
+          "wikipediaTitle": "Lucia Szabová",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:makhmud-muradov",
+          "name": "Makhmud Muradov",
+          "wikipediaTitle": "Makhmud Muradov",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:mallory-martin",
+          "name": "Mallory Martin",
+          "wikipediaTitle": "Mallory Martin",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:martin-buday",
+          "name": "Martin Buday",
+          "wikipediaTitle": "Martin Buday",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:mateusz-legierski",
+          "name": "Mateusz Legierski",
+          "wikipediaTitle": "Mateusz Legierski",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:viktor-pesta",
+          "name": "Viktor Pešta",
+          "wikipediaTitle": "Viktor Pešta",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:will-fleury",
+          "name": "Will Fleury",
+          "wikipediaTitle": "Will Fleury",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:zhalgas-zhumagulov",
+          "name": "Zhalgas Zhumagulov",
+          "wikipediaTitle": "Zhalgas Zhumagulov",
+          "tier": "champion"
+        },
+        {
+          "id": "oktagon:adrenaline-mma",
+          "name": "Adrenaline MMA",
+          "wikipediaTitle": "Adrenaline MMA",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:affliction-entertainment",
+          "name": "Affliction Entertainment",
+          "wikipediaTitle": "Affliction Entertainment",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:african-knockout",
+          "name": "African Knockout",
+          "wikipediaTitle": "African Knockout",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:andreas-michailidis",
+          "name": "Andreas Michailidis",
+          "wikipediaTitle": "Andreas Michailidis",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:arian-sadikovic",
+          "name": "Arian Sadiković",
+          "wikipediaTitle": "Arian Sadiković",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:art-of-war-fighting-championship",
+          "name": "Art of War Fighting Championship",
+          "wikipediaTitle": "Art of War Fighting Championship",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:art-of-war-undisputed-arena-fighting-championship",
+          "name": "Art of War Undisputed Arena Fighting Championship",
+          "wikipediaTitle": "Art of War Undisputed Arena Fighting Championship",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:atomweight",
+          "name": "Atomweight (MMA)",
+          "wikipediaTitle": "Atomweight (MMA)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:attila-vegh",
+          "name": "Attila Végh",
+          "wikipediaTitle": "Attila Végh",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:australian-fighting-championship",
+          "name": "Australian Fighting Championship",
+          "wikipediaTitle": "Australian Fighting Championship",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:bamma",
+          "name": "BAMMA",
+          "wikipediaTitle": "BAMMA",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:bantamweight",
+          "name": "Bantamweight (MMA)",
+          "wikipediaTitle": "Bantamweight (MMA)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:battlecade-extreme-fighting",
+          "name": "Battlecade Extreme Fighting",
+          "wikipediaTitle": "Battlecade Extreme Fighting",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:bellator-mma",
+          "name": "Bellator MMA",
+          "wikipediaTitle": "Bellator MMA",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:brace",
+          "name": "Brace (MMA)",
+          "wikipediaTitle": "Brace (MMA)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:brave-combat-federation",
+          "name": "Brave Combat Federation",
+          "wikipediaTitle": "Brave Combat Federation",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:budo-sento-championship",
+          "name": "Budo Sento Championship",
+          "wikipediaTitle": "Budo Sento Championship",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:cage-contender",
+          "name": "Cage Contender",
+          "wikipediaTitle": "Cage Contender",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:cage-force",
+          "name": "Cage Force",
+          "wikipediaTitle": "Cage Force",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:cage-fury-fighting-championships",
+          "name": "Cage Fury Fighting Championships",
+          "wikipediaTitle": "Cage Fury Fighting Championships",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:cage-rage-championships",
+          "name": "Cage Rage Championships",
+          "wikipediaTitle": "Cage Rage Championships",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:cage-warriors",
+          "name": "Cage Warriors",
+          "wikipediaTitle": "Cage Warriors",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:catchweight",
+          "name": "Catchweight",
+          "wikipediaTitle": "Catchweight",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:centurion-fc",
+          "name": "Centurion FC",
+          "wikipediaTitle": "Centurion FC",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:ces-mma",
+          "name": "CES MMA",
+          "wikipediaTitle": "CES MMA",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:championship-fighting-alliance",
+          "name": "Championship Fighting Alliance",
+          "wikipediaTitle": "Championship Fighting Alliance",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:colosseum-tournament",
+          "name": "Colosseum Tournament",
+          "wikipediaTitle": "Colosseum Tournament",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:combate-global",
+          "name": "Combate Global",
+          "wikipediaTitle": "Combate Global",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:cruiserweight",
+          "name": "Cruiserweight (MMA)",
+          "wikipediaTitle": "Cruiserweight (MMA)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:daniel-skvor",
+          "name": "Daniel Škvor",
+          "wikipediaTitle": "Daniel Škvor",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:daniel-weichel",
+          "name": "Daniel Weichel",
+          "wikipediaTitle": "Daniel Weichel",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:david-dvorak",
+          "name": "David Dvořák",
+          "wikipediaTitle": "David Dvořák",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:david-zawada",
+          "name": "David Zawada",
+          "wikipediaTitle": "David Zawada",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:deep",
+          "name": "Deep (mixed martial arts)",
+          "wikipediaTitle": "Deep (mixed martial arts)",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:desert-force-championship",
+          "name": "Desert Force Championship",
+          "wikipediaTitle": "Desert Force Championship",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:dynamite-fighting-show",
+          "name": "Dynamite Fighting Show",
+          "wikipediaTitle": "Dynamite Fighting Show",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:eagle-fighting-championship",
+          "name": "Eagle Fighting Championship",
+          "wikipediaTitle": "Eagle Fighting Championship",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:eagles-mma",
+          "name": "Eagles MMA",
+          "wikipediaTitle": "Eagles MMA",
+          "tier": "current-roster"
+        }
+      ]
+    }
+  }
+}
