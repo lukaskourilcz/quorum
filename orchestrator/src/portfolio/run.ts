@@ -14,7 +14,7 @@ import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-re
 import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { NicheProposalSchema, type NicheProposal } from "../contracts/niche-proposal.js";
-import { guardedJsonCall } from "../llm/call.js";
+import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
@@ -661,9 +661,43 @@ export async function runPortfolioCycle(input: {
         maxOutputTokens: call.model.maxOutputTokens,
         budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits: environmentLimits(schedule) },
         parse: (text) => ContributionSchema.parse(parseJson(text))
+      }).catch((error: unknown) => {
+        // One seat returning unparsable JSON must cost that seat, not the room. A live
+        // mma-intake run died on "Expected double-quoted property name in JSON at position
+        // 824" and took every other agent's work with it. The spend is already recorded by
+        // guardedJsonCall, so skipping here loses a contribution, not an accounting entry.
+        // Anything that is not a parse failure still propagates: a budget stop, a barrier
+        // violation or a provider outage should stop the room.
+        if (error instanceof ModelOutputParseError) {
+          console.warn(JSON.stringify({
+            event: "contribution_unparsable",
+            agent: call.agent,
+            phase: input.phase,
+            usd: error.usd,
+            reason: error.message
+          }));
+          return null;
+        }
+        throw error;
       });
-      if (response.value.evidenceRefs.some((reference) => !context.evidenceRefs.includes(reference))) throw new Error(`${call.agent} cited an evidence reference outside the packet`);
-      contributions.push({ agent: call.agent, ...response.value });
+      if (response === null) continue;
+      // Drop refs outside the packet rather than destroying a room that is already paid for.
+      // The narrowed list is still strictly inside the allowlist, so nothing unciteable ever
+      // reaches an artifact — the previous throw discarded every other seat's work too, and
+      // for two phases the allowlist is empty, which made a single stray ref fatal.
+      const citedRefs = response.value.evidenceRefs.filter((reference) => context.evidenceRefs.includes(reference));
+      if (citedRefs.length !== response.value.evidenceRefs.length) {
+        console.warn(JSON.stringify({
+          event: "evidence_refs_dropped",
+          agent: call.agent,
+          phase: input.phase,
+          dropped: response.value.evidenceRefs.filter((reference) => !context.evidenceRefs.includes(reference))
+        }));
+      }
+      contributions.push({ agent: call.agent, ...response.value, evidenceRefs: citedRefs });
+    }
+    if (contributions.length === 0) {
+      throw new Error(`Every seat in ${input.phase} returned unparsable output; the room produced nothing`);
     }
   }
   // Record every idea a seat raised, into that venture's own ledger namespace.

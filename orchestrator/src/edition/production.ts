@@ -103,7 +103,10 @@ function qualityMetrics(
       article.sources.map((source) => source.title)
     ),
     repeatedTopicFrequency: repeatedTopicFrequency(article.tags, input.recentEditionTags),
-    primarySourceRelevant: input.items.some((item) => item.tags.includes("primary-source")),
+    // Same cut as curate: relevance is only fair over the candidates the editor saw.
+    primarySourceRelevant: input.items
+      .slice(0, input.config.article.maximumCurationCandidates)
+      .some((item) => item.tags.includes("primary-source")),
     primarySourcePresent: article.sources.some(
       (source) => source.classification === "primary"
     ),

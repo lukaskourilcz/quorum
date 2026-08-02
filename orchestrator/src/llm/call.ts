@@ -36,6 +36,20 @@ export interface GuardedCallInput<T> {
   dry?: boolean;
 }
 
+/**
+ * A provider response that was paid for but could not be parsed.
+ *
+ * Carries the recorded cost so a caller can decide whether to lose one contribution or the
+ * whole room, without having to guess what the failure cost. The ledger entry is already
+ * written by the time this is thrown.
+ */
+export class ModelOutputParseError extends Error {
+  constructor(readonly agent: string, readonly usd: number, readonly reason: unknown) {
+    super(`${agent} returned unparsable output (billed $${usd.toFixed(6)}): ${reason instanceof Error ? reason.message : String(reason)}`);
+    this.name = "ModelOutputParseError";
+  }
+}
+
 export async function guardedJsonCall<T>(
   request: GuardedCallInput<T>
 ): Promise<{ value: T; cached: boolean; usd: number }> {
@@ -84,7 +98,6 @@ export async function guardedJsonCall<T>(
           input: request.input,
           maxOutputTokens: request.maxOutputTokens
         });
-  const value = request.parse(response.text);
   const actual = estimateTextCall({
     provider: request.provider,
     model: request.model,
@@ -92,14 +105,6 @@ export async function guardedJsonCall<T>(
     maxOutputTokens: response.tokensOut,
     cachedInputTokens: response.cachedTokensIn
   });
-  await writeCachedResponse(
-    request.stateRoot,
-    request.cycleId,
-    request.phase,
-    request.agent,
-    hash,
-    value
-  );
   const ledger = await readJson<{ entries: BudgetLedgerEntry[] }>(
     request.stateRoot,
     "budget/ledger.json",
@@ -131,5 +136,27 @@ export async function guardedJsonCall<T>(
       entries: [...ledger.entries, entry]
     });
   }
+
+  // Parse AFTER the ledger entry is durable. The provider has already billed for this
+  // response, so a malformed body must not make the spend disappear: parsing first meant a
+  // model returning bad JSON threw before the ledger write, and the call was paid for and
+  // never recorded. That silently erodes the monthly cap, and it is exactly how a run can
+  // cost money while the day's Results row shows nothing.
+  let value: T;
+  try {
+    value = request.parse(response.text);
+  } catch (error) {
+    throw new ModelOutputParseError(request.agent, actual.estimatedUsd, error);
+  }
+
+  // Only a valid value is worth replaying.
+  await writeCachedResponse(
+    request.stateRoot,
+    request.cycleId,
+    request.phase,
+    request.agent,
+    hash,
+    value
+  );
   return { value, cached: false, usd: actual.estimatedUsd };
 }

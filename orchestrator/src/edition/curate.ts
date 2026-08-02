@@ -123,7 +123,13 @@ export async function curate(
       title: item.title,
       isPrimarySource: item.tags.includes("primary-source")
     })),
-    anyCandidateIsPrimarySource: items.some((item) => item.tags.includes("primary-source")),
+    // Over the pool, not over every item. live.ts builds an 80-item digest but the editor
+    // only ever sees maximumCurationCandidates of it, and the primary-source feeds are
+    // low-volume so their items routinely sort past that cut. Judging relevance over the
+    // full list demanded a pick the editor could not make: measured live, the single
+    // primary-source item sat at index 72 of 80 while the pool held none, so the gate was
+    // unsatisfiable every run.
+    anyCandidateIsPrimarySource: pool.some((item) => item.tags.includes("primary-source")),
     registry: sources ?? [],
     config
   });

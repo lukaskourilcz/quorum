@@ -87,6 +87,10 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
   const failureByVenture = new Map<string, string>();
   for (const operation of operations) {
     if (text(operation.type) !== "failure") continue;
+    // A failure operation with status "none" is the digest saying nothing went wrong — for
+    // example "No social publishing failure was recorded today." Treating it as a failure
+    // reason marked every global meeting Failed on /results.
+    if (text(operation.status) === "none") continue;
     const venture = text(operation.ventureId);
     const detail = text(operation.text).trim();
     if (!venture || !detail || failureByVenture.has(venture)) continue;

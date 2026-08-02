@@ -85,8 +85,13 @@ export async function ensurePriorityItem(input: {
   expires: Date;
 }): Promise<{ item: PriorityItem; created: boolean }> {
   const queue = await readPriorityQueue(input.root, input.now);
+  // Match only OPEN items. Matching across every status meant a question that had been
+  // consumed or had expired still counted as present, so the morning seed could run exactly
+  // once per venture for the life of the repo and the agenda loop would go quiet a week
+  // later with nothing in the queue and no way to refill it.
   const existing = queue.items.find((item) =>
-    item.venture === input.venture
+    item.status === "open"
+    && item.venture === input.venture
     && item.question === input.question.trim()
     && item.decision_at_stake === input.decisionAtStake.trim()
   );

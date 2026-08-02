@@ -39,7 +39,10 @@ export function createDigest(items: readonly SourceItem[], limit = 50): SourceIt
 }
 
 export function renderDigestDataBlock(items: readonly SourceItem[]): string {
-  const projection = createDigest(items).map((item) => ({
+  // Render everything the caller passed. The default limit silently re-sliced to 50, so a
+  // caller that widened its pool still showed the editor the first 50 and the extra items
+  // were invisible but still counted by the gates.
+  const projection = createDigest(items, items.length).map((item) => ({
     sourceId: item.sourceId,
     title: item.title,
     url: item.url,
