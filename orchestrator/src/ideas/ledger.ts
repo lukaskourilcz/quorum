@@ -94,7 +94,10 @@ export interface IdeaProposal {
   title: string;
   summary: string;
   origin: {
-    agent: "SPARK";
+    // Widened from the SPARK literal: portfolio rooms record ideas under the seat that
+    // raised them (ANGLE, PULSE, SCOUT, ...). The value is still validated against
+    // ContractAgentIdSchema when the entry is written, so an unknown id is rejected.
+    agent: string;
     meetingRef: string;
   };
   proposedAt: string;
@@ -121,6 +124,35 @@ export interface VaultAdjudicator {
     proposal: IdeaProposal;
     candidates: readonly ScoredIdeaCandidate[];
   }): Promise<VaultVerdict>;
+}
+
+/**
+ * A VAULT adjudicator that never calls a model.
+ *
+ * `prefilterIdeaCandidates` already scores each existing idea by token overlap, so for
+ * capture-only paths the verdict can be read off those scores. Portfolio rooms record
+ * ideas as a side effect of work already paid for; making capture cost an extra call
+ * would mean the cheapest safe outcome (writing the idea down) is the one the budget
+ * discourages. Near-duplicates are linked rather than dropped, so nothing is lost.
+ */
+export function deterministicVaultAdjudicator(input?: { duplicateAtOrAbove?: number }): VaultAdjudicator {
+  const duplicateAt = input?.duplicateAtOrAbove ?? 0.85;
+  return {
+    async adjudicate({ candidates }) {
+      const top = candidates[0];
+      if (!top) return { verdict: "novel", reason: "No prior idea shares enough wording to compare." };
+      const score = Number(top.score.toFixed(2));
+      if (top.score >= duplicateAt) {
+        return { verdict: `duplicate_of:${top.entry.id}`, reason: `Wording overlap ${score} is at or above the duplicate threshold.` };
+      }
+      // Deliberately never returns variant_of. That verdict is guarded by
+      // MATERIAL_DIFFERENCE: the reason must name what is materially different, which is a
+      // semantic judgement a similarity score cannot make. Producing a sentence that merely
+      // satisfies the regex would defeat the guard rather than honour it, so a close-but-not
+      // -identical idea is recorded on its own and left for a room to link deliberately.
+      return { verdict: "novel", reason: `Closest prior idea overlaps only ${score}.` };
+    }
+  };
 }
 
 export interface IdeaScreeningResult {

@@ -13,6 +13,7 @@ import {
   applyIdeaRoomVerdict,
   canonicalIdeaTokens,
   currentIdeaEntries,
+  deterministicVaultAdjudicator,
   ideaDetailPath,
   ideaIndexPath,
   ideaLedgerPath,
@@ -328,5 +329,92 @@ describe("VAULT ledger adjudication", () => {
     });
     expect(response.verdict).toBe("veto");
     expect(response.votes.find((vote) => vote.agent === "AUDIT")?.veto).toBe(true);
+  });
+});
+
+describe("deterministic idea capture from portfolio rooms", () => {
+  it("records a novel idea with no model call and links a near-duplicate instead of dropping it", async () => {
+    const prior = entry({
+      id: "idea-2026-08-01-b7c2",
+      title: "Weekly fight breakdown for casual fans",
+      summary: "A short weekly breakdown of one fight, written for people who do not follow the sport closely."
+    });
+    const root = await rootWith([prior]);
+
+    // Unrelated subject: the adjudicator should call it novel from token overlap alone.
+    const novel = await screenAndRecordIdea({
+      root,
+      namespace: "titty-tuesdays",
+      proposal: proposal("Crop top drop tied to a season finale", "Time a limited drop to the final episode of a season and let the story carry the launch."),
+      evidence: [],
+      adjudicator: deterministicVaultAdjudicator()
+    });
+    expect(novel.verdict).toBe("novel");
+    // `modelCalled` records that the adjudicator was consulted, not that a provider was
+    // billed. The deterministic adjudicator reads the prefilter's own overlap scores, so
+    // this path costs $0 even though the flag is true.
+    expect(novel.modelCalled).toBe(true);
+
+    // An exact repeat is caught before the adjudicator is ever consulted.
+    const repeat = await screenAndRecordIdea({
+      root,
+      namespace: GLOBAL_IDEA_NAMESPACE,
+      proposal: proposal(prior.title, prior.summary),
+      evidence: [],
+      adjudicator: deterministicVaultAdjudicator()
+    });
+    expect(repeat.verdict).toBe("duplicate_of");
+    expect(repeat.modelCalled).toBe(false);
+  });
+
+  it("decides duplicate or novel from the score, and never claims variant_of", async () => {
+    // The rule is unit-tested against explicit scores rather than through the similarity
+    // function, so a change to scoring cannot silently move the decision boundary.
+    const adjudicator = deterministicVaultAdjudicator({ duplicateAtOrAbove: 0.8 });
+    const candidate = (score: number) => ({
+      entry: entry({ id: "idea-2026-08-01-c1d4", title: "Prior", summary: "Prior idea." }),
+      score
+    });
+    const ask = (score?: number) => adjudicator.adjudicate({
+      proposal: proposal("Anything", "Any summary."),
+      candidates: score === undefined ? [] : [candidate(score)]
+    });
+
+    expect((await ask()).verdict).toBe("novel");
+    expect((await ask(0.12)).verdict).toBe("novel");
+    expect((await ask(0.79)).verdict).toBe("novel");
+    expect((await ask(0.8)).verdict).toBe("duplicate_of:idea-2026-08-01-c1d4");
+    expect((await ask(0.97)).verdict).toBe("duplicate_of:idea-2026-08-01-c1d4");
+
+    // variant_of is guarded by a rule requiring the reason to name the material
+    // difference. A similarity score cannot make that judgement, and a sentence written
+    // only to satisfy the regex would defeat the guard rather than honour it.
+    for (const score of [0, 0.3, 0.6, 0.79, 0.8, 1]) {
+      expect((await ask(score)).verdict).not.toContain("variant_of");
+    }
+  });
+
+  it("keeps a captured idea inside the ledger's own compact caps", async () => {
+    // The room contract caps title at 80 and summary at 280 precisely so a room can never
+    // mint an idea the ledger would reject, and an idea can never become a document.
+    const root = await rootWith([]);
+    const captured = await screenAndRecordIdea({
+      root,
+      namespace: "global",
+      proposal: proposal("A".repeat(80), "B".repeat(280)),
+      evidence: [],
+      adjudicator: deterministicVaultAdjudicator()
+    });
+    expect(() => IdeaLedgerEntrySchema.parse(captured.entry)).not.toThrow();
+    expect(captured.entry.title).toHaveLength(80);
+    expect(captured.entry.summary).toHaveLength(280);
+
+    await expect(screenAndRecordIdea({
+      root,
+      namespace: "global",
+      proposal: proposal("C".repeat(81), "valid summary"),
+      evidence: [],
+      adjudicator: deterministicVaultAdjudicator()
+    })).rejects.toThrow();
   });
 });

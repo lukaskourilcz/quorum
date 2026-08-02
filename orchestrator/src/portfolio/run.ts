@@ -61,6 +61,13 @@ import { VentureTemplateSchema } from "../contracts/autonomy.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import { processStudioContribution } from "../studio/lifecycle.js";
+import {
+  deterministicVaultAdjudicator,
+  ideaIndexPath,
+  ideaLedgerPath,
+  regenerateIdeaIndex,
+  screenAndRecordIdea
+} from "../ideas/ledger.js";
 
 export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "studio";
 
@@ -74,6 +81,13 @@ const ContributionSchema = z.object({
   marketingPlan: z.unknown().nullable().default(null),
   templateProposal: z.unknown().nullable().default(null),
   inspirationObservations: z.array(z.unknown()).max(4).default([]),
+  // One compact idea per seat. The caps match IdeaLedgerEntrySchema exactly, so a room can
+  // never mint an idea the ledger would then reject, and an idea can never grow into a
+  // document: 80 characters of title and 280 of summary is the whole artifact.
+  idea: z.object({
+    title: z.string().trim().min(1).max(80),
+    summary: z.string().trim().min(1).max(280)
+  }).nullable().default(null),
   followUpRequest: z.object({
     phase: AgendaPhaseSchema,
     summary: z.string().trim().min(1).max(280),
@@ -587,7 +601,7 @@ export async function runPortfolioCycle(input: {
   let estimatedWorstCaseUsd = 0;
   if (input.dry) {
     const dryChair = input.phase === "studio" ? "EASEL" : input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
-    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, templateProposal: null, inspirationObservations: [], followUpRequest: null }));
+    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, templateProposal: null, inspirationObservations: [], idea: null, followUpRequest: null }));
   } else {
     const promptName = input.phase === "studio" ? "studio.md" : input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
@@ -599,7 +613,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"followUpRequest":null}. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"..."},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Set idea to {"title":"<=80 chars","summary":"<=280 chars"} when this room surfaced a concrete idea worth keeping for later, otherwise null; it is recorded verbatim and must stand alone without the transcript. The room chair may request at most one allowlisted follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -645,6 +659,49 @@ export async function runPortfolioCycle(input: {
       contributions.push({ agent: call.agent, ...response.value });
     }
   }
+  // Record every idea a seat raised, into that venture's own ledger namespace.
+  //
+  // Before this, `screenAndRecordIdea` had exactly one caller, in the Caught Up morning
+  // path, so state/ideas/{global,incubator,titty-tuesdays}/ledger.jsonl were all empty
+  // files: rooms had no field to return an idea in and nothing to write it to. Capture
+  // runs on the deterministic adjudicator, so it adds no model call to a room that has
+  // already been paid for, and a failure here never discards the room's real output.
+  const savedIdeaIds: string[] = [];
+  const ideaArtifacts: string[] = [];
+  if (!input.dry) {
+    const roomMeetingRef = `${date}-${input.phase}`;
+    for (const contribution of contributions) {
+      if (!contribution.idea) continue;
+      try {
+        const screened = await screenAndRecordIdea({
+          root: stateRoot,
+          namespace: definition.ventureId,
+          proposal: {
+            title: contribution.idea.title,
+            summary: contribution.idea.summary,
+            origin: { agent: contribution.agent, meetingRef: roomMeetingRef },
+            proposedAt: input.now.toISOString()
+          },
+          evidence: [],
+          adjudicator: deterministicVaultAdjudicator()
+        });
+        savedIdeaIds.push(screened.entry.id);
+      } catch (error) {
+        // An idea that cannot be screened is worth losing; the room's output is not.
+        console.warn(JSON.stringify({
+          event: "idea_capture_failed",
+          agent: contribution.agent,
+          phase: input.phase,
+          reason: error instanceof Error ? error.message : String(error)
+        }));
+      }
+    }
+    if (savedIdeaIds.length > 0) {
+      await regenerateIdeaIndex(stateRoot, definition.ventureId);
+      ideaArtifacts.push(ideaLedgerPath(definition.ventureId), ideaIndexPath(definition.ventureId));
+    }
+  }
+
   const proposalCandidates = input.phase === "incubator-synthesis"
     ? contributions.find((contribution) => contribution.agent === "ANGLE")?.nicheProposals ?? []
     : [];
@@ -845,6 +902,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(studioLifecycle?.artifacts ?? []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(studioLifecycle?.artifacts ?? []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }
