@@ -53,8 +53,32 @@ export function buildDailyDigest(input: {
   allInBudget?: AllInBudgetStatus;
   finalMeetingFailed?: boolean;
   operations?: readonly DigestOperation[];
+  /** What the two article slots did. They have no meeting record to read. */
+  articleSlots?: readonly { date: string; slot: "am" | "pm"; status: string; reason?: string }[];
+  /** The day's recorded API spend, from the ledger rather than from per-meeting totals. */
+  spentUsd?: number;
 }): DailyDigest {
+  const articleOutcome = (phase: string) => phase === "article-am" || phase === "article-pm"
+    ? (input.articleSlots ?? []).find((entry) => entry.date === input.date && `article-${entry.slot}` === phase)
+    : undefined;
   const meetings = input.schedule.map((slot, index) => {
+    const article = articleOutcome(slot.phase);
+    if (article) {
+      // Article production writes a run file and no meeting record, so both slots reported
+      // "was not held" on the day one of them published.
+      return {
+        ventureId: "mma-files",
+        kind: slot.phase,
+        held: article.status === "published",
+        bullets: [{
+          text: truncateWords(article.status === "published"
+            ? "The desk published this slot's article."
+            : article.reason ?? `The desk did not publish this slot: ${article.status}.`, 20),
+          roomLink: `/calendar/${input.weekOf}`
+        }],
+        costUsd: 0
+      };
+    }
     const record = slotRecord(input.records, input.date, slot.phase);
     const finalFailure = input.finalMeetingFailed === true && index === input.schedule.length - 1;
     const held = Boolean(record && !finalFailure && !["PAUSED", "FAILED"].includes(record.status));
@@ -74,7 +98,10 @@ export function buildDailyDigest(input: {
       costUsd: record?.ledger.actualCycleUsd ?? 0
     };
   });
-  const spend = meetings.reduce((sum, meeting) => sum + meeting.costUsd, 0);
+  // The day's real spend. Summing per-meeting totals missed every phase without a meeting
+  // record — article production above all — and missed a room whose record carries 0, so the
+  // digest reported $0.0693 on a day the ledger held $0.6767.
+  const spend = input.spentUsd ?? meetings.reduce((sum, meeting) => sum + meeting.costUsd, 0);
   const warning = input.allInBudget ? budgetWarningLine(input.allInBudget) : null;
   const portfolioLine = warning ?? `Recorded API spend $${spend.toFixed(4)} against the $${input.dailyBudgetUsd.toFixed(2)} daily budget.`;
   const operations = [...(input.operations ?? [])];

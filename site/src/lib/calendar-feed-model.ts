@@ -42,6 +42,14 @@ export interface PublicMeetingSkip {
   reason: string;
 }
 
+/** What an MMA Files article slot did. Those two slots have no meeting record. */
+export interface PublicArticleSlotOutcome {
+  date: string;
+  slot: "am" | "pm";
+  status: string;
+  reason?: string;
+}
+
 export interface PublicCalendarFeed {
   schemaVersion: "calendar/1";
   weekOf: string;
@@ -145,11 +153,13 @@ export function buildPublicCalendarFeed(input: {
   standups: readonly PublicStandup[];
   meetings: readonly PublicMeetingRecord[];
   skips?: readonly PublicMeetingSkip[];
+  articleSlots?: readonly PublicArticleSlotOutcome[];
   definitions?: readonly CalendarDefinition[];
 }): PublicCalendarFeed {
   const weekOf = mondayOfCalendarWeek(input.weekOf);
   const definitions = input.definitions ?? CALENDAR_SLOTS;
   const skipReasons = new Map((input.skips ?? []).map((skip) => [`${skip.date}:${skipKind(skip.phase)}`, skip.reason]));
+  const articleOutcomes = new Map((input.articleSlots ?? []).map((run) => [`${run.date}:article-${run.slot}`, run]));
   const records = new Map<string, { href: string; summary: string; fixture: boolean; status?: PublicMeetingRecord["status"] }>();
   for (const standup of input.standups) {
     const kind = ventureKind(standup.phase);
@@ -172,6 +182,21 @@ export function buildPublicCalendarFeed(input: {
     const date = addCalendarDays(weekOf, day);
     for (const definition of definitions) {
       const at = pragueSlotInstant(date, definition.hour);
+      // The article slots keep their outcome in a run file rather than a meeting record, so
+      // both fell through to "missed" every day — including the day one of them published.
+      const article = articleOutcomes.get(`${date}:${definition.kind}`);
+      if (article) {
+        slots.push({
+          at: at.toISOString(),
+          tz: "Europe/Prague",
+          kind: definition.kind,
+          status: article.status === "published" ? "held" : "skipped",
+          decisionOneLiner: article.status === "published"
+            ? "The desk published this slot's article."
+            : (article.reason ?? `The desk did not publish this slot: ${article.status}.`).slice(0, 180)
+        });
+        continue;
+      }
       const record = records.get(`${date}:${definition.kind}`);
       slots.push({
         at: at.toISOString(),

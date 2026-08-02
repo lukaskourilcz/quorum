@@ -19,7 +19,10 @@ const [ufc, oktagon] = await Promise.all([
 const rosterPolicy = await loadRosterPolicy(configRoot);
 const paths = await materializeWikimediaRoster({ root: stateRoot, entries: [...ufc, ...oktagon], retrievedAt: now, allowedIds: rosterPolicyIds(rosterPolicy) });
 const [beforeFighters, beforeBouts] = await Promise.all([loadFighterRecords(), loadBoutRecords()]);
-const backfill = await enrichWikimediaBackfill({ root: stateRoot, fighters: beforeFighters, bouts: beforeBouts, queue: buildBackfillQueue({ fighters: beforeFighters, bouts: beforeBouts, now }), context, retrievedAt: now });
+// The same policy gate the intake applies. Without it this documented command re-mints a
+// card for every opponent in every record table, which is how 761 of the 800 ids in the
+// bout store came to be outside config/mma-roster.json.
+const backfill = await enrichWikimediaBackfill({ root: stateRoot, fighters: beforeFighters, bouts: beforeBouts, queue: buildBackfillQueue({ fighters: beforeFighters, bouts: beforeBouts, now }), context, retrievedAt: now, allowedIds: rosterPolicyIds(rosterPolicy) });
 const [enrichedFighters, enrichedBouts] = await Promise.all([loadFighterRecords(), loadBoutRecords()]);
 for (const fighter of rebuildDerivedFighterData({ fighters: enrichedFighters, bouts: enrichedBouts, now })) {
   await atomicWriteJson(stateRoot, `mma/fighters/${fighter.id}.json`, fighter);

@@ -46,6 +46,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
+import { loadArticlePackages } from "../mma-files/store.js";
 import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
 import { refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
@@ -868,12 +869,15 @@ export async function runPortfolioCycle(input: {
       status: "draft" as const,
       originMeetingRef: meetingRef
     });
-    console.warn(JSON.stringify({
-      event: "marketing_plan_fallback",
-      phase: input.phase,
-      cycleId: input.cycleId,
-      reason: "ANGLE returned no usable plan; the placeholder carries no audienceRefs and stays a draft."
-    }));
+    if (marketingPlan.status === "draft" && marketingPlan.audienceRefs.length === 0) {
+      console.warn(JSON.stringify({
+        event: "marketing_plan_fallback",
+        phase: input.phase,
+        cycleId: input.cycleId,
+        reason: "ANGLE returned no usable plan; the placeholder carries no audienceRefs and stays a draft."
+      }));
+    }
+
   }
   let editorialSlate: EditorialSlate | null = null;
   if (input.phase === "mag-editorial") {
@@ -907,8 +911,17 @@ export async function runPortfolioCycle(input: {
       // and reviewed. Selection is deterministic — most complete first, then by id — so the
       // same day always picks the same subject, and a card with no source is never eligible.
       if (!editorialSlate.slots.some((slot) => slot.status === "assigned")) {
+        // A subject already profiled is not fresh. Selection is deterministic, so without
+        // this the same best-sourced fighter would be assigned every day the desk kills its
+        // slate, publishing a second Shevchenko profile tomorrow at the full article
+        // envelope and stamping a "fresh" verdict on a repeat. When every eligible fighter
+        // has been used the slot stays killed, which is the honest answer.
+        const alreadyProfiled = new Set(
+          (await loadArticlePackages(stateRoot)).flatMap((article) => article.fighterRefs)
+        );
         const profileSubject = (await loadFighterRecords())
           .filter((fighter) => (fighter.sources?.length ?? 0) > 0 && (fighter.history?.length ?? 0) > 0)
+          .filter((fighter) => !alreadyProfiled.has(fighter.id))
           .sort((left, right) =>
             (right.completeness ?? 0) - (left.completeness ?? 0) || left.id.localeCompare(right.id))[0];
         if (profileSubject) {

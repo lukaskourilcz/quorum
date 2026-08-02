@@ -150,7 +150,9 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFiles(path.join(input.stateRoot, "edition", "deliveries")),
     jsonFiles(path.join(input.stateRoot, "ventures", "mma-files", "articles")),
     jsonFiles(path.join(input.stateRoot, "release-proofs"), true),
-    jsonFiles(path.join(input.stateRoot, "social", "receipts"), true),
+    // social/posts is where the publisher writes. Reading social/receipts, which nothing
+    // has ever written, made published_count 0 and carousel_studio_render_rate null.
+    jsonFiles(path.join(input.stateRoot, "social", "posts"), true),
     jsonFiles(path.join(input.stateRoot, "mma", "fighters")),
     jsonFiles(path.join(input.stateRoot, "mma", "bouts"), true),
     jsonFiles(path.join(input.stateRoot, "mma", "events"), true),

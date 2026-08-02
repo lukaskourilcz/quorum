@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { BudgetLedgerEntrySchema } from "../budget.js";
-import { loadMeetingRecords, mondayOfWeek } from "../meetings/calendar.js";
+import { loadArticleSlotOutcomes, loadMeetingRecords, mondayOfWeek } from "../meetings/calendar.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import {
@@ -69,6 +69,8 @@ const digest = buildDailyDigest({
   dailyBudgetUsd: effective.dailyBudgetUsd,
   allInBudget: allIn,
   operations,
+  articleSlots: await loadArticleSlotOutcomes(digestRoot),
+  spentUsd: Number(entries.filter((entry) => entry.ts.slice(0, 10) === date).reduce((sum, entry) => sum + entry.usd, 0).toFixed(8)),
   finalMeetingFailed: args.includes("--final-failed")
 });
 const baseUrl = (process.env.PUBLIC_SITE_URL || "https://quorum-site-chi.vercel.app").replace(/\/$/, "");

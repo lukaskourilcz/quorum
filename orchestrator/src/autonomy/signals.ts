@@ -9,6 +9,7 @@ import { NicheProposalSchema } from "../contracts/niche-proposal.js";
 import { VentureRegistrySchema } from "../contracts/venture-registry.js";
 import { configRoot } from "../paths.js";
 import { atomicWriteJson } from "../state.js";
+import { SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 
 export const AUTONOMY_SNAPSHOT_PATH = "autonomy/latest.json";
 
@@ -85,6 +86,30 @@ function killedCategory(reason: string): string {
   return "other";
 }
 
+/**
+ * Live carousel templates, counted where the lifecycle actually writes them.
+ *
+ * processStudioContribution stores each accepted layout at templates/<id>/<version>.json, so
+ * a flat readdir of the parent sees only directories and counts zero forever. The seed
+ * library ships with the code rather than living in state, and the quarterly collector counts
+ * it too, so the venture's signal and its KPI agree.
+ */
+async function studioTemplateFiles(directory: string): Promise<Array<{ status?: unknown }>> {
+  const entries = await readdir(directory, { withFileTypes: true }).catch(() => []);
+  const found: Array<{ status?: unknown }> = [];
+  for (const entry of entries) {
+    const child = path.join(directory, entry.name);
+    const names = entry.isDirectory()
+      ? (await readdir(child).catch(() => [])).map((name) => path.join(child, name))
+      : [child];
+    for (const file of names.filter((name) => name.endsWith(".json"))) {
+      const parsed = CarouselTemplateSchema.safeParse(JSON.parse(await readFile(file, "utf8")));
+      if (parsed.success) found.push(parsed.data);
+    }
+  }
+  return [...SEED_TEMPLATES, ...found];
+}
+
 export async function computeAutonomySnapshot(input: {
   repoRoot: string;
   stateRoot: string;
@@ -103,7 +128,7 @@ export async function computeAutonomySnapshot(input: {
     validValues(path.join(input.stateRoot, "ventures", "incubator", "niche-proposals"), NicheProposalSchema),
     validValues(path.join(input.stateRoot, "meetings"), MeetingRecordSchema),
     files(path.join(input.stateRoot, "release-proofs")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
-    validValues(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"), CarouselTemplateSchema)
+    studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"))
   ]);
 
   const deliveredEditions = editionReceipts.filter((receipt) => receipt.status === "delivered" && receipt.editionStatus === "edition").length;

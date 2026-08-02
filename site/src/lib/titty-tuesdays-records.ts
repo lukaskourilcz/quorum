@@ -1,5 +1,5 @@
 import "server-only";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 interface PublicSeasonProduct {
@@ -90,8 +90,15 @@ function bootstrapMeetingId(raw: string): string {
 
 export async function getTittyTuesdaysSnapshot(): Promise<TittyTuesdaysSnapshot> {
   const root = repositoryRoot();
+  // The newest season on file, not season one forever. season-001 ends on 2026-10-30 and
+  // the site would have gone on showing an expired season after its successor was written.
+  const seasonDirectory = path.join(root, "state", "ventures", "titty-tuesdays");
+  const seasonFile = (await readdir(seasonDirectory).catch(() => [] as string[]))
+    .filter((name) => /^season-\d{3}\.md$/u.test(name))
+    .sort()
+    .at(-1) ?? "season-001.md";
   const [seasonRaw, foundingRaw, budgetRaw, ledgerRaw, meetingRaw] = await Promise.all([
-    readFile(path.join(root, "state", "ventures", "titty-tuesdays", "season-001.md"), "utf8"),
+    readFile(path.join(seasonDirectory, seasonFile), "utf8"),
     readFile(path.join(root, "state", "decisions", "2026-08-01-titty-tuesdays-founding.md"), "utf8"),
     readFile(path.join(root, "state", "decisions", "2026-08-01-budget-raise.md"), "utf8"),
     readFile(path.join(root, "state", "budget", "ledger.json"), "utf8").catch(() => '{"entries":[]}'),

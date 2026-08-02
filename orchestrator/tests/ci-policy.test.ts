@@ -81,7 +81,13 @@ describe("automation policy", () => {
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
     expect(cycle).toContain('git add -A -- "$runtime_path"');
-    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED)");
+    // state/INBOX.md is on both receipt lists. The shared fail-closed writer appends an owner
+    // line for either venture, and the MMA step used to leave it unstaged, so a reverted
+    // article's inbox item died with the runner.
+    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
+    for (const list of cycle.match(/receipt_paths=\([^)]*\)/gu) ?? []) {
+      expect(list, "every fail-closed receipt list stages the inbox").toContain("state/INBOX.md");
+    }
     expect(cycle).toContain('git add -A -- "$receipt_path"');
     expect(cycle).not.toContain("git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries");
     expect(cycle).toContain("MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true.");

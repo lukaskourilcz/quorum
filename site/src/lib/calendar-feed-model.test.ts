@@ -87,3 +87,29 @@ describe("a skipped slot says why", () => {
     expect(slot?.decisionOneLiner).toBeUndefined();
   });
 });
+
+describe("the site calendar reports the article slots", () => {
+  const base = { weekOf: "2026-08-03", now: new Date("2026-08-04T23:00:00Z"), standups: [], meetings: [] };
+  const slotOn = (feed: ReturnType<typeof buildPublicCalendarFeed>, kind: string) =>
+    feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === kind);
+
+  it("marks a published slot held rather than missed", () => {
+    // The orchestrator learned this first, but the site builds its own feed and never got it,
+    // so both slots read "Did not happen" on the day one of them published.
+    const feed = buildPublicCalendarFeed({ ...base, articleSlots: [{ date: "2026-08-04", slot: "am", status: "published" }] });
+    expect(slotOn(feed, "article-am")?.status).toBe("held");
+  });
+
+  it("marks a killed slot skipped and carries its reason", () => {
+    const feed = buildPublicCalendarFeed({
+      ...base,
+      articleSlots: [{ date: "2026-08-04", slot: "pm", status: "killed", reason: "Missing fresh, source-backed subject." }]
+    });
+    expect(slotOn(feed, "article-pm")?.status).toBe("skipped");
+    expect(slotOn(feed, "article-pm")?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
+  });
+
+  it("leaves a slot with no run exactly as it was", () => {
+    expect(slotOn(buildPublicCalendarFeed({ ...base, articleSlots: [] }), "article-am")?.status).toBe("missed");
+  });
+});

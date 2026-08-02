@@ -258,11 +258,18 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
             git commit -m "skip(${PHASE}): ${REASON}"
+            pushed=false
             for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
               git fetch origin "$GITHUB_REF_NAME"
-              git rebase "origin/$GITHUB_REF_NAME" || { git rebase --abort; exit 1; }
+              # --autostash because a failed cycle leaves unrelated unstaged state behind, and
+              # a plain rebase refuses to start on a dirty tree — which would drop this commit.
+              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
             done
+            if test "$pushed" != "true"; then
+              echo "Could not push the record after three attempts." >&2
+              exit 1
+            fi
           fi
 
       - name: Pre-cycle release gate
@@ -318,18 +325,29 @@ jobs:
       # between them and the month reads as if neither happened. Only spend and the failure
       # notice are committed here, so the atomic cycle commit still owns everything else.
       - name: Record spend from a failed cycle
-        if: ${{ always() && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.run.outputs.failed == 'true' }}
+        # Any failure, not only one the cycle reported. A cycle can exit 0 having billed for
+        # calls and then trip the post-cycle gate or the smoke test, and the atomic commit
+        # below carries no always() — so the ledger died with the runner either way. The
+        # porcelain check makes this a no-op when the atomic commit already took it.
+        if: ${{ always() && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         run: |
           if test -n "$(git status --porcelain --untracked-files=all -- state/budget state/notify)"; then
             git config user.name "boardlessai-cycle[bot]"
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/budget state/notify
-            git commit -m "ledger(${{ steps.mode.outputs.phase }}): record spend from a failed cycle"
+            git commit -m "ledger(${{ steps.mode.outputs.phase }}): record spend the cycle commit did not take"
+            pushed=false
             for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
               git fetch origin "$GITHUB_REF_NAME"
-              git rebase "origin/$GITHUB_REF_NAME" || { git rebase --abort; exit 1; }
+              # --autostash because a failed cycle leaves unrelated unstaged state behind, and
+              # a plain rebase refuses to start on a dirty tree — which would drop this commit.
+              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
             done
+            if test "$pushed" != "true"; then
+              echo "Could not push the record after three attempts." >&2
+              exit 1
+            fi
           fi
 
       - name: Fail closed after recording the final-cycle failure
@@ -405,7 +423,7 @@ jobs:
 
       - name: Select the oldest Caught Up delivery
         id: delivery
-        if: ${{ steps.mode.outputs.phase == 'cu-edition' && steps.mode.outputs.dry != 'true' }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'cu-edition' && steps.mode.outputs.dry != 'true' }}
         run: pnpm delivery -- next --github-output "$GITHUB_OUTPUT"
 
       - name: Mint bounded aifirst installation token
@@ -630,7 +648,7 @@ jobs:
 
       - name: Select pending MMA Files delivery
         id: mma-delivery
-        if: ${{ steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
         run: |
@@ -819,7 +837,7 @@ jobs:
           if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
           if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
           pnpm mma:delivery -- "${args[@]}"
-          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED)
+          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)
           for receipt_path in "${receipt_paths[@]}"; do
             if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
               git add -A -- "$receipt_path"
