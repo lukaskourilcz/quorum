@@ -29,7 +29,8 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
    `HUMAN_APPROVAL`. After that one-time approval, the dedicated publisher may
    send validated organic queue items within the exact approved scope; an
    interactive builder never posts directly. All API/media/hosting/tool/ad
-   costs share the hard $20/mo operating cap; council purchases run through
+   costs share the hard $50/mo all-in operating cap from `budget-2026-08d`
+   ($42 model/API share, $2.20 daily pace); council purchases run through
    `state/treasury/ledger.json`, only the human executes payments and resolves
    SPEND items — never mark them yourself.
 6. Small commits. Initial implementation uses phase commits; runtime council
@@ -54,6 +55,14 @@ task per commit, tick checkboxes, update `state/ROADMAP.md`.
 Four skills in `.claude/skills/` are vendored verbatim from upstream and kept
 identical across every repository. Each carries an `UPSTREAM.md` with its
 source, pinned commit, and license — re-vendor rather than hand-editing them.
+
+Eleven skills are mirrored byte-for-byte into `.agents/skills/` for Codex CLI
+sessions: agent-identity, boardroom-routing, brand-identity, business-validation,
+financial-operations, organization-operations, page-publishing, safe-release,
+social-operations, stop-slop and titty-tuesdays-brandbook. Edit both copies in
+the same commit; `orchestrator/tests/architecture.test.ts` fails on any drift.
+`skillRefs` in `config/agents.json` is a declarative registry field for org
+review and interactive sessions. Runtime prompts do not load skill files.
 
 - **`task-observer`** — invoke at the **start of every task-oriented session**,
   before producing deliverables. It records corrections and workflow friction in

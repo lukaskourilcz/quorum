@@ -58,6 +58,11 @@ Reject these phrases and close variants:
 Also reject inflated claims, unnamed observers, canned conclusions, fake quotes and a
 string of same-length paragraphs.
 
+Two rules a machine checks literally:
+
+- Never use an em dash. Use a full stop, comma or colon. One em dash blocks the article.
+- A post-event recap must contain the exact words "what we said beforehand".
+
 ### English study sources
 
 1. <https://www.mmafighting.com/ufc/501617/islam-makhachev-reveals-his-game-plan-for-ian-machado-garry-at-ufc-330-i-have-to-follow-him-he-runs-too-much>
@@ -120,6 +125,12 @@ Zakázané jsou tyto obraty a jejich zjevné obměny:
 
 Kontrola odmítne také anglický slovosled, přemíru přídavných jmen, stejné začátky
 odstavců, neobratné neskloňování a citaci bez zdroje.
+
+Dvě pravidla kontroluje stroj doslova:
+
+- Nikdy nepoužívej dlouhou pomlčku. Piš tečku, čárku nebo dvojtečku. Jediná dlouhá
+  pomlčka článek zablokuje.
+- Report po turnaji musí obsahovat přesná slova "co jsme psali před zápasem".
 
 ### České studijní zdroje
 
