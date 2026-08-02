@@ -171,7 +171,16 @@ function modelFor(
       : "OPENAI_SPECIALIST";
   const model = models[role];
   if (!model || provider === "deterministic") throw new Error(`No live text model for ${agent}`);
-  return { ...model, maxOutputTokens: agent === "EASEL" ? Math.min(1_500, model.maxOutputTokens) : agent === "ANGLE" || agent === "CANVAS" ? Math.min(700, model.maxOutputTokens) : Math.min(260, model.maxOutputTokens) };
+  // Caps sized against the contract, not guessed. A minimally-filled contribution
+  // serialises to ~228 tokens before any real prose, so the previous 260 left 12% headroom
+  // and a seat that actually said something was cut off mid-JSON. Nothing detected the
+  // truncation, so it surfaced as "Expected double-quoted property name in JSON at position
+  // 824" and killed a live mma-intake room. CANVAS additionally carries a whole editorial
+  // slate, and a truncated slate parses as an absent one, which reads as a quiet no-news day.
+  // Only generated tokens are billed; the cap sets the reserve, which still fits the
+  // $0.05-$0.08 room envelopes at these sizes.
+  const cap = agent === "EASEL" ? 1_500 : agent === "ANGLE" || agent === "CANVAS" ? 1_200 : 600;
+  return { ...model, maxOutputTokens: Math.min(cap, model.maxOutputTokens) };
 }
 
 function environmentLimits(schedule: { monthlyBudgetUsd: number; dailyBudgetUsd: number; monthlyOperatingUsd: number }): BudgetLimits {

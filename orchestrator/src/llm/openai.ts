@@ -35,6 +35,10 @@ export class OpenAiTextClient {
       service_tier: "default",
       store: false
     });
+    if (response.status === "incomplete") {
+      const reason = response.incomplete_details?.reason ?? "unknown";
+      throw new Error(`Response incomplete (${reason}) at the ${request.maxOutputTokens}-token cap for ${request.model}; raise maxOutputTokens`);
+    }
     return {
       text: response.output_text,
       model: response.model,

@@ -25,6 +25,12 @@ export class AnthropicTextClient {
       model: request.model,
       system: request.system
     });
+    // A cut-off body is not a model mistake, it is our cap being too small, and it must not
+    // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the
+    // cap" and hours spent hunting a syntax error at some byte offset.
+    if (response.stop_reason === "max_tokens") {
+      throw new Error(`Response truncated at the ${request.maxOutputTokens}-token cap for ${request.model}; raise maxOutputTokens`);
+    }
     const text = response.content
       .filter((block) => block.type === "text")
       .map((block) => block.text)

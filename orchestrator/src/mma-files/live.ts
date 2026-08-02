@@ -56,7 +56,12 @@ function collectStringValues(value: unknown, pattern: RegExp, output = new Set<s
 async function evidenceFor(slate: EditorialSlate, slot: "am" | "pm"): Promise<ArticleEvidencePacket | null> {
   const assignment = slate.slots.find((candidate) => candidate.slot === slot);
   if (!assignment || assignment.status === "killed") return null;
-  const files = await jsonFiles(path.join(stateRoot, "mma"));
+  // Exclude the backfill queue. It is a work list naming every fighter in the store, so any
+  // subject ref that appears in it matched, and collectStringValues then harvested all 856
+  // ids as fighterRefs. That both blocked the article on missing-fighter-link and added
+  // about 16 KB of ids to every prompt. Evidence must come from the records themselves.
+  const files = (await jsonFiles(path.join(stateRoot, "mma")))
+    .filter((file) => !path.relative(stateRoot, file).startsWith(path.join("mma", "backfill")));
   const matches: Array<{ file: string; value: unknown; raw: string }> = [];
   for (const file of files) {
     const raw = await readFile(file, "utf8");
