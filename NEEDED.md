@@ -31,7 +31,7 @@ additionally needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`.
 
 - [ ] **Set the six repository variables** — table above; nothing runs live without them. [imp:5] [owner:me] [time:15m] [kind:setup]
 - [ ] **Confirm both model API keys are present** — every room call fails closed without them. [imp:5] [owner:me] [time:5m] [kind:setup]
-- [ ] **Give the delivery GitHub App `Checks: Read-only` and `Commit statuses: Read-only`** — the app can push to `mma-files` but cannot read whether the commit it pushed passed CI, so the release verifier reads `Target CI state: unavailable` and reverts a healthy article off the live site. This happened twice on 2 August 2026: eight of nine checks passed, both locales rendered, the content hash matched, and the delivery was reverted anyway. Edit the app that owns `DELIVERY_APP_ID`, add the two read permissions, then accept the permission update on both the `mma-files` and `aifirst` installations. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [x] **Give the delivery GitHub App `Checks` and `Commit status` read access** — done 2 August 2026. Granting the permissions on the app is not enough; each installation has to accept the update before the tokens it mints carry it. Verified with `Delivery doctor`, and the first MMA Files article went live and stayed. [imp:5] [owner:me] [time:10m] [kind:setup]
 - [ ] **Render or strip the `[source:...]` markers in the MMA Files article body** — the delivered `bodyMDX` carries inline grounding markers that the style gate requires, and `lukaskourilcz/mma-files` prints them verbatim, so readers see `[source:state/mma/fighters/ufc:valentina-shevchenko.json]` mid-sentence. The article package is hash sealed, so the fix belongs in that repo's renderer: turn each marker into a citation link into the Sources block it already renders, or drop it. [imp:4] [owner:ai] [time:45m] [kind:content]
 
 ## 1. Seed the founding gate — no agent can write the file it scores
@@ -70,6 +70,16 @@ not used. Carousel Studio needs no credential, account or separate deployment.
 Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STEPS.md).
 
 ## Recently finished
+
+- MMA Files published its first council-produced article: a Valentina Shevchenko profile,
+  live in English and Czech, 9/9 release checks. Seven blockers stood between the desk and
+  that page; the last was a GitHub App permission the installations had never accepted.
+- `Delivery doctor` (Actions, manual) reports in about a minute whether the delivery app can
+  read the commit, its status and its check runs on both target repos, and names the
+  permission to grant. It replaces a 38-minute delivery run as the way to find that out.
+- A failing delivery run costs about 9 minutes instead of 38: the verifier polls 5 minutes
+  rather than 15, a delivery-only dispatch no longer runs the same release gate twice, and
+  `lint` no longer re-runs `tsc` in two packages.
 
 - The 40 agent personas now load into live rooms, and `system` is byte-identical per
   room so the room prompt and shared packet form one cacheable prefix.

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { EditionPackageSchema } from "../contracts/edition-package.js";
@@ -89,6 +89,15 @@ async function main(): Promise<void> {
   });
   const relative = `release-proofs/${venture}/${release.packageHash}.json`;
   await atomicWriteJson(stateRoot, relative, proof);
+  // The marker fail-closed writes says to clear it once the failure is repaired and a new
+  // proof passes. That is this moment, so clearing it is the job of the passing proof rather
+  // than of someone remembering: a marker left behind after a good release describes a
+  // failure that is over, and a note that is usually wrong stops being read. It stays a note
+  // and not a gate, because a failed release must not jam the venture — today's recovery was
+  // a retry of the very package that had failed.
+  if (proof.status === "passed") {
+    await rm(path.join(stateRoot, "ventures", venture, "PAUSED"), { force: true });
+  }
   console.log(JSON.stringify({ status: proof.status, proof: `state/${relative}`, checks: proof.checks }));
   if (proof.status !== "passed") process.exitCode = 1;
 }
