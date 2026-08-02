@@ -392,13 +392,22 @@ export async function materializeFightAiQSources(input: {
   citoFighters: readonly CitoFighterSummary[];
   citoEvents: readonly CitoEventSummary[];
   odds: readonly ApiBoutOdds[];
+  /**
+   * The curated roster from config/mma-roster.json. Without it this path wrote a card for
+   * every Cito profile and every event participant: one live intake took the store from 39
+   * to 339 while the policy listed 92. The Wikipedia path was already gated; this one is the
+   * other half, and events and bouts are unaffected — only fighter cards are narrowed.
+   */
+  allowedIds?: ReadonlySet<string>;
 }): Promise<string[]> {
   const retrievedAt = input.retrievedAt.toISOString();
   const version = modelVersion(await loadMmaModelConfig());
-  const profiles = new Map(input.citoFighters.map((fighter) => [fighter.slug, { ...fighter }]));
+  const permitted = (slug: string) => !input.allowedIds || input.allowedIds.has(`ufc:${slug}`);
+  const profiles = new Map(input.citoFighters.filter((fighter) => permitted(fighter.slug)).map((fighter) => [fighter.slug, { ...fighter }]));
   for (const event of input.citoEvents) {
     for (const bout of event.bouts) {
       for (const fighter of [bout.red, bout.blue]) {
+        if (!permitted(fighter.slug)) continue;
         const prior = profiles.get(fighter.slug);
         const normalizedDivision = division(bout.division);
         if (!prior) {

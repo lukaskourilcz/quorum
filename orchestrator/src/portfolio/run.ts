@@ -73,9 +73,15 @@ export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synt
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),
-  summary: z.string().trim().min(1).max(280),
+  // Clip the free-text fields rather than reject them. Three seats were dropped in one live
+  // mma-intake for a summary a few characters over 280, each after being billed — the room
+  // lost most of its contributions to a display limit. The cap exists so a public record
+  // stays readable, and a clipped summary satisfies that; a discarded seat does not. Fields
+  // that carry meaning rather than prose (evidenceRefs, stance, ids) still reject, because
+  // silently trimming those would change what was claimed.
+  summary: z.string().trim().min(1).transform((value) => value.slice(0, 280)),
   evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12),
-  task: z.object({ summary: z.string().trim().min(1).max(240) }).nullable(),
+  task: z.object({ summary: z.string().trim().min(1).transform((value) => value.slice(0, 240)) }).nullable(),
   nicheProposals: z.array(z.unknown()).max(2).default([]),
   editorialSlate: z.unknown().nullable().default(null),
   marketingPlan: z.unknown().nullable().default(null),

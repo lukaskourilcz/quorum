@@ -235,14 +235,15 @@ export async function refreshFightAiQEvidence(input: {
     evidenceRefs,
     sources: results
   });
+  const rosterPolicy = await loadRosterPolicy(configRoot);
   const normalizedPaths = await materializeFightAiQSources({
     root: input.root,
     retrievedAt: input.now,
     citoFighters,
     citoEvents,
-    odds: oddsEvents
+    odds: oddsEvents,
+    allowedIds: rosterPolicyIds(rosterPolicy)
   });
-  const rosterPolicy = await loadRosterPolicy(configRoot);
   const wikimediaPaths = await materializeWikimediaRoster({ root: input.root, entries: wikimediaRoster, retrievedAt: input.now, allowedIds: rosterPolicyIds(rosterPolicy) });
   const rosterStatusPaths: string[] = [];
   if (citoRosterCycleComplete) {
