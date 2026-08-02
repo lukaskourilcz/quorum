@@ -1,5 +1,12 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  test: { environment: "node" }
+  test: {
+    // sharp-backed rendering runs well past vitest's 5s default under parallel load. The
+    // post-cycle release gate runs this suite, so a tight timeout turns a healthy cycle
+    // into a red one. A genuinely hung test still fails.
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
+    environment: "node"
+  }
 });
