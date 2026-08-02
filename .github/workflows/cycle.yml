@@ -258,7 +258,11 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
             git commit -m "skip(${PHASE}): ${REASON}"
-            git push origin HEAD:main
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              git rebase "origin/$GITHUB_REF_NAME" || { git rebase --abort; exit 1; }
+            done
           fi
 
       - name: Pre-cycle release gate
@@ -321,8 +325,11 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/budget state/notify
             git commit -m "ledger(${{ steps.mode.outputs.phase }}): record spend from a failed cycle"
-            git pull --rebase origin main
-            git push origin HEAD:main
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              git rebase "origin/$GITHUB_REF_NAME" || { git rebase --abort; exit 1; }
+            done
           fi
 
       - name: Fail closed after recording the final-cycle failure
