@@ -171,12 +171,23 @@ export async function produceEdition(
       if (error instanceof InvalidArticleError || error instanceof InvalidModelOutputError) {
         reporter.addUsage(error.usage);
       }
-      reporter.warn(`content_invalid:${error instanceof Error ? error.message : "unknown"}`);
+      const reason = error instanceof Error ? error.message : "unknown";
+      reporter.warn(`content_invalid:${reason}`);
       if (attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate) {
         return noEdition(input, reporter, "content_invalid_after_regeneration");
       }
       reporter.regenerationAttempts += 1;
-      feedback = ["Return a complete schema-valid article using only supplied source URLs."];
+      // Without the specific rejection, a rewrite is a verbatim replay of the attempt that
+      // just failed and reproduces the same violation until the budget is spent. This text
+      // is our own validator describing our own schema, not external content, so it does
+      // not cross the untrusted-data boundary. Bound it so one pathological error cannot
+      // dominate the rewrite prompt.
+      const diagnosis = reason.replace(/\s+/gu, " ").trim().slice(0, 400);
+      feedback = [
+        `Your previous attempt was rejected: ${diagnosis}`,
+        "Correct exactly that rejection. Keep everything else that already passed unchanged.",
+        "Return a complete schema-valid article using only supplied source URLs."
+      ];
       continue;
     }
 
