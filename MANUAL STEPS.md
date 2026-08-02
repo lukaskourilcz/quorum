@@ -1,7 +1,7 @@
 # Manual steps — connect accounts and prove the live paths
 
-`NEEDED.md` is the complete owner checklist. The decisions, admin credentials, model
-keys and Caught Up App installation are already done. The steps below verify plumbing;
+`NEEDS_YOUR_HELP_NOW.md` is the complete owner checklist. The decisions are recorded;
+Git cannot verify secret values or external installation settings. The steps below verify plumbing;
 they are not content-approval gates.
 
 ## 1. Confirm Q1 targets and enter real fixed costs
@@ -88,6 +88,11 @@ Run `pnpm proof:rooms`. It dispatches every room kind with `fixture: true`, save
 visible records and labels them as tests. This proves routing, contracts, calendar
 projection and room pages; it does not claim a live provider decision.
 
+The proof includes the 13:00 Carousel Studio room. It renders complete Caught Up,
+MMA Files and Titty Tuesdays fixture PNG sets through live templates without an image
+model or provider call. Review all template statuses, slides, formats and brand skins
+in `/admin`; the public `/ventures/carousel-studio` page shows live fixture samples.
+
 Scheduled windows are wake-ups, not guaranteed paid meetings. The 06:00 board chooses
 from the priority queue and may commission a focused specialist room. Empty or
 unsupported work becomes `not-needed`, `NO_EDITION`, a killed slot or a reasoned
@@ -118,3 +123,7 @@ owner decisions; no live switch can authorize them. When the separate indexing
 decision is eventually complete, set the BoardlessAI repository variable
 `MMA_FILES_INDEXING_ENABLED=true`; that records readiness evidence but does not edit
 the MMA Files deployment or activate an earning method.
+
+Analytics is also deliberately closed. Choose a provider and a minimal lawful plan
+before changing `METRICS_INGESTION_ENABLED` from `false`; until then SPLIT stays off and the
+quarterly evaluator reports missing audience data as unavailable.

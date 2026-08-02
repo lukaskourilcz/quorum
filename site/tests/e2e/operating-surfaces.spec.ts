@@ -11,6 +11,7 @@ const axeRoutes = [
   "/ventures/caught-up",
   "/ventures/titty-tuesdays",
   "/ventures/fightaiq",
+  "/ventures/carousel-studio",
   "/money",
   "/incubator",
   "/admin?venture=global",
@@ -23,10 +24,13 @@ const axeRoutes = [
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",
   "/admin?venture=mma-files&tab=social-lab",
+  "/admin?venture=carousel-studio&tab=templates",
+  "/admin?venture=carousel-studio&tab=inspiration",
   "/meetings/2026-08-01-mma-intake",
   "/meetings/2026-08-01-mma-analysis",
   "/meetings/2026-08-01-mag-editorial",
-  "/meetings/2026-08-01-mag-desk"
+  "/meetings/2026-08-01-mag-desk",
+  "/meetings/2026-08-01-studio"
 ];
 
 const repositoryRoot = path.resolve(process.cwd(), "..");
@@ -119,9 +123,9 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   );
   const weekBoard = page.getByTestId("week-board");
   await expect(weekBoard).toBeVisible();
-  await expect(weekBoard.locator(".contents")).toHaveCount(14);
-  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(14);
-  await expect(page.locator("[data-project-legend]")).toHaveCount(6);
+  await expect(weekBoard.locator(".contents")).toHaveCount(15);
+  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(15);
+  await expect(page.locator("[data-project-legend]")).toHaveCount(7);
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   await expect(weekBoard.locator('[data-calendar-state="test"]')).not.toHaveCount(0);
   await expect(weekBoard.locator('[data-calendar-state="held"]')).not.toHaveCount(0);
@@ -137,8 +141,8 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
 
 test("every agent card and profile exposes its configured API model and estimated call cost", async ({ page }) => {
   await page.goto("/agents", { waitUntil: "networkidle" });
-  await expect(page.locator("[data-agent-api-model]")).toHaveCount(38);
-  await expect(page.locator("[data-agent-api-cost-summary]")).toHaveCount(38);
+  await expect(page.locator("[data-agent-api-model]")).toHaveCount(40);
+  await expect(page.locator("[data-agent-api-cost-summary]")).toHaveCount(40);
   await expect(page.getByText("OpenAI · GPT-5.6 Luna").first()).toBeVisible();
   await expect(page.getByText("Anthropic · Claude Haiku 4.5").first()).toBeVisible();
 
@@ -214,7 +218,7 @@ test("admin login explains errors, starts a session and signs out", async ({ pag
   await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/money", "/incubator", "/admin?venture=global", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/incubator", "/admin?venture=global", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=templates"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -334,7 +338,8 @@ for (const [route, heading] of [
   ["/meetings/2026-08-01-mma-intake", "Check the fight data"],
   ["/meetings/2026-08-01-mma-analysis", "Review the model without guessing"],
   ["/meetings/2026-08-01-mag-editorial", "Choose or reject both article slots"],
-  ["/meetings/2026-08-01-mag-desk", "Check today’s articles and social drafts"]
+  ["/meetings/2026-08-01-mag-desk", "Check today’s articles and social drafts"],
+  ["/meetings/2026-08-01-studio", "Review the work."]
 ] as const) {
   test(`renders the new room kind at ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: "networkidle" });

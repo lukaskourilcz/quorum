@@ -85,6 +85,7 @@ import {
 import {
   caughtUpSocialProductionEnabled,
   disabledAgentsForVenture,
+  enabledAgentsForVenture,
   loadVentureAgentControls
 } from "./ventures/agent-controls.js";
 import type { RunnablePhase, Stage } from "./types.js";
@@ -96,6 +97,7 @@ import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/sign
 import { openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
+import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -852,6 +854,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         slot: options.phase === "article-am" ? "am" : "pm",
         now
       });
+      const articleAgents = ["JAB", "HACEK", "STET", "REACH", "FRAME"] as const;
+      const controls = await loadVentureAgentControls();
+      const enabledArticleAgents = enabledAgentsForVenture(controls, "mma-files", articleAgents);
+      const disabledArticleAgents = articleAgents.filter((agent) => !enabledArticleAgents.includes(agent));
       return {
         cycleId,
         phase: options.phase,
@@ -859,8 +865,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         status: "live_complete",
         decision: "PLAN",
         estimatedWorstCaseUsd: result.estimatedWorstCaseUsd,
-        selectedAgents: result.status === "killed" ? [] : ["JAB", "HACEK", "STET", "REACH", "FRAME"],
-        skippedAgents: [],
+        selectedAgents: result.status === "killed" ? [] : enabledArticleAgents,
+        skippedAgents: result.status === "killed" ? [...articleAgents] : disabledArticleAgents,
         artifacts: result.artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
       };
     }
@@ -1234,6 +1240,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         generatedAt: now.toISOString()
       })
     ]);
+    const ecosystemArtifact = !options.dry && venturePhase === "night"
+      ? (await refreshEcosystemOperatingTruth({ repoRoot })).path
+      : null;
     if (options.explainBudget) {
       console.log(
         JSON.stringify(
@@ -1287,9 +1296,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       skippedAgents: agentsParticipated
         ? room.skippedParticipants.map(({ agent }) => agent)
         : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
-      artifacts: artifacts.map((artifact) =>
-        path.relative(repoRoot, path.join(artifactRoot, artifact))
-      )
+      artifacts: [
+        ...artifacts.map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
+        ...(ecosystemArtifact ? [ecosystemArtifact] : [])
+      ]
     };
   };
   if (options.dry) {

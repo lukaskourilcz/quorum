@@ -15,6 +15,7 @@
     "delivery": "tsx src/delivery/cli.ts",
     "release:verify": "tsx src/delivery/verifier-cli.ts",
     "digest:daily": "tsx src/notify/digest-cli.ts",
+    "docs:refresh": "tsx src/docs/ecosystem-cli.ts",
     "edition:dry": "tsx src/edition/dry-run.ts",
     "fightaiq:backfill": "tsx src/fightaiq/backfill-cli.ts",
     "fightaiq:roster-sync": "tsx src/fightaiq/roster-sync-cli.ts",

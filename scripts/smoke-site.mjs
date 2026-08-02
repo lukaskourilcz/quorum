@@ -37,7 +37,20 @@ const agentSlugs = [
   "funnel",
   "palate",
   "scene",
-  "stunt"
+  "stunt",
+  "corner",
+  "spotter",
+  "tape",
+  "sigma",
+  "vig",
+  "sonar",
+  "canvas",
+  "jab",
+  "reach",
+  "split",
+  "easel",
+  "motif",
+  "pivot"
 ];
 const ventureSlugs = [
   "release-evidence-notebook",
@@ -70,6 +83,7 @@ const expectedRoutes = [
   "/standups/2026-07-23-founding/room",
   "/ventures",
   "/ventures/caught-up",
+  "/ventures/carousel-studio",
   "/ventures/fightaiq",
   "/ventures/titty-tuesdays",
   ...ventureSlugs.map((slug) => `/ventures/${slug}`)
@@ -87,7 +101,21 @@ async function request(pathname) {
   };
 }
 
-const results = await Promise.all(expectedRoutes.map(request));
+async function mapWithConcurrency(values, concurrency, mapper) {
+  const results = new Array(values.length);
+  let cursor = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, values.length) }, async () => {
+      while (cursor < values.length) {
+        const index = cursor++;
+        results[index] = await mapper(values[index]);
+      }
+    })
+  );
+  return results;
+}
+
+const results = await mapWithConcurrency(expectedRoutes, 8, request);
 const failures = [];
 
 for (const result of results) {
@@ -138,7 +166,7 @@ for (const { response, body } of results) {
   }
 }
 
-const linkedResults = await Promise.all([...linkedPaths].sort().map(request));
+const linkedResults = await mapWithConcurrency([...linkedPaths].sort(), 8, request);
 for (const result of linkedResults) {
   if (![200, 307, 401, 503].includes(result.response.status)) {
     failures.push(

@@ -21,6 +21,11 @@ Return ONLY:
       "cta": "cta",
       "replyPlan": null,
       "factualClaimRefs": [],
+      "visual": {
+        "template_id": "live-template-id",
+        "version": "1.0.0",
+        "content": {"locale": "en|cs", "strings": {"slot-id": "bounded text"}}
+      },
       "charCount": 0
     }
   ],
@@ -33,7 +38,10 @@ Return ONLY:
 Provide 2–3 variants. A non-null replyPlan is
 `{"trigger":"trigger","reply":"reply"}`. Every factual claim needs an input ref.
 Count Unicode characters with the deterministic validator; the LLM's charCount
-is advisory. If no honest, channel-native post adds value, return:
+is advisory. Every visual is a Carousel Studio reference expressed only as
+`template_id + version + content`; the referenced version must be `live`. Never
+return a freeform image brief, remote image or alternative render path. If no
+honest, channel-native post adds value, return:
 
 ```json
 {"channel":"threads","campaignId":"CAM-...","decision":"NO_POST","why":"≤25 words"}

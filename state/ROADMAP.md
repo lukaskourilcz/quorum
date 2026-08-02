@@ -31,7 +31,8 @@ work. They require a fresh owner scope before implementation.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [x] Expand the shared roster to 38 agents across five projects and give every role a deterministic illustrated character portrait.
+- [x] Expand the shared roster to 40 agents across six projects and give every role a deterministic illustrated character identity.
+- [x] Add Carousel Studio, ten checked live layouts and the one deterministic social-visual path used by every project.
 - [x] Port source collection and edition production into BoardlessAI.
 - [x] Run the two Caught Up rooms in guarded dry mode.
 - [x] Add Caught Up consumer rendering and the missed-day sentinel.
@@ -55,10 +56,12 @@ work. They require a fresh owner scope before implementation.
 - [x] Retire the duplicate BoardlessAI fighter/event pages so MMA Files is the single public owner.
 - [x] Keep Titty Tuesdays pre-commerce, store detailed campaign plans and prepare
   Tuesday-only typographic social assets behind its health and safety gates.
-- [x] Expand the shared Prague clock to 14 collision-free windows and preserve the
-  fixture proof for all 12 room kinds as historical evidence.
+- [x] Expand the shared Prague clock to 15 collision-free windows and preserve
+  fixture-labeled proof for all 13 room kinds.
 - [x] Add the project priority queue, starvation guard, internal quality signals,
   growth objectives and pre-signed content-project template founding.
 - [x] Build per-project social unlock counters, Meta adapters, receipts and `$0` post
   verification while keeping visitor/engagement measurement disabled.
-- [ ] Complete only the account plumbing listed in `NEEDED.md`.
+- [x] Found Carousel Studio with ten live templates, one deterministic renderer,
+  lifecycle checks, a 13:00 agenda room, admin previews and a public showcase.
+- [ ] Complete only the owner plumbing listed in `NEEDS_YOUR_HELP_NOW.md`.

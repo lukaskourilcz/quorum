@@ -6,8 +6,8 @@ Git-backed state, shared contracts, guarded automation, and a public/admin
 Next.js site.
 
 Current status: **operating, pre-revenue, VALIDATION**. The public site is
-<https://boardless-ai.vercel.app>. Five project workspaces share this runtime:
-Caught Up, Titty Tuesdays, the Magazine Incubator, FightAIQ and MMA Files.
+<https://boardless-ai.vercel.app>. Six project workspaces share this runtime:
+Caught Up, Titty Tuesdays, the Magazine Incubator, FightAIQ, Carousel Studio and MMA Files.
 The $50 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
 decisions are countersigned. Separate live switches, evidence checks and delivery
 credentials still decide whether a scheduled wake-up may do work.
@@ -24,16 +24,18 @@ passes the existing owner, budget, evidence, security and release gates.
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
 | Magazine Incubator | Evidence-backed niche research and fenced content-project founding | Can found only projects that pass the pre-signed template; anything else stops for the owner |
 | FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
+| Carousel Studio | Shared deterministic carousel templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
 | MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
 
 The common registry is `config/ventures.json`. It defines cadence, routing,
-budgets, idea namespaces, taste participation and admin tabs. The human-readable
-operating model is in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
+budgets, idea namespaces, taste participation and admin tabs. The complete standing
+operating model is [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md); the compact architecture
+summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 
 ## What is implemented
 
-- Four voting council seats and 34 routed specialists in one validated
-  38-agent registry, each with a deterministic illustrated character portrait.
+- Four voting council seats and 36 routed specialists in one validated
+  40-agent registry, each with a deterministic illustrated character identity.
 - Anonymous council proposals, Borda ranking, `NO_ACTION`, concrete vetoes and
   fallback rechecks.
 - Fail-closed monthly, daily, meeting, media and all-in budget enforcement.
@@ -55,7 +57,9 @@ operating model is in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   probabilities, owner odds capture, immutable results and public performance view.
 - MMA Files source-first bilingual production, Czech and English style desks,
   licensed-photo-first heroes, public delivery, release proof and guarded social packs.
-- One 14-window Prague calendar, 17 deduplicated UTC wake-ups, correct DST
+- Carousel Studio's `carousel-template/1` DSL, ten checked layouts, deterministic
+  SVG/PNG renderer, lifecycle, admin preview controls and public showcase.
+- One 15-window Prague calendar, 17 deduplicated UTC wake-ups, correct DST
   resolution and collision validation shared by runtime and WeekBoard. Agenda-gated
   windows record `not-needed` without opening paid rooms.
 - One daily portfolio digest, capped at 400 words and idempotent per Prague date,
@@ -91,6 +95,8 @@ gates, receipts and kill switches.
 config/                     agents, ventures, routing, models, KPIs, costs and policies
 contracts/                  exported JSON Schemas
 docs/PORTFOLIO.md           human portfolio operating model
+docs/ECOSYSTEM.md           canonical full-context brief plus generated operating truth
+studio/                     deterministic Carousel Studio package and seed templates
 docs/FIGHTAIQ.md            data, model and launch boundary
 docs/MMA-FILES.md           public magazine and content-delivery boundary
 orchestrator/
@@ -136,7 +142,7 @@ Useful commands:
 
 | Command | Result |
 | --- | --- |
-| `pnpm agents:validate` | Validates all 38 registry entries and available portrait assets |
+| `pnpm agents:validate` | Validates all 40 registry entries and available portrait assets |
 | `pnpm cycle -- --phase morning --dry --explain-budget --explain-routing` | Runs and explains a dry portfolio-board shift |
 | `pnpm cycle -- --phase cu-edition --dry` | Runs the dry Caught Up edition room |
 | `pnpm cycle -- --phase tt-marketing --dry` | Runs the weekday Titty Tuesdays fixture room |
@@ -146,7 +152,9 @@ Useful commands:
 | `pnpm cycle -- --phase mma-analysis --dry` | Proves the D8 analysis path without a live provider call |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
 | `pnpm cycle -- --phase mag-desk --dry` | Reviews the bilingual newsroom queue |
-| `pnpm proof:rooms` | Rebuilds fixture-labeled proof for all 12 room kinds |
+| `pnpm cycle -- --phase studio --dry` | Proves the agenda-ready Carousel Studio room without a provider call |
+| `pnpm proof:rooms` | Rebuilds fixture-labeled proof for all 13 room kinds |
+| `pnpm docs:refresh` | Rebuilds the `$0` operating-truth block in `docs/ECOSYSTEM.md` |
 | `pnpm fightaiq:backfill -- --input reviewed-history.json` | Imports cited owner-reviewed history and rebuilds ratings |
 | `pnpm fightaiq:roster-sync` | Runs the keyless roster check and one bounded Wikimedia history batch |
 | `pnpm digest:daily -- --dry` | Builds the one daily digest through the log sink |
@@ -209,13 +217,13 @@ publisher. Missing approval never authorizes a live action.
 
 The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 07:00
 incubator scan, 08:00 FightAIQ intake, 09:00 MMA Files story meeting, 10:00
-article slot, 11:00 Titty Tuesdays, 14:00 board afternoon, 17:00 Caught Up
+article slot, 11:00 Titty Tuesdays, 13:00 Carousel Studio, 14:00 board afternoon, 17:00 Caught Up
 product, 18:00 article slot, 19:00 FightAIQ analysis, 20:00 MMA Files desk,
 21:00 incubator synthesis and 22:00 board night. GitHub receives both UTC
 daylight-saving variants; duplicates are removed and the runtime accepts only the
 one matching Prague time. The morning council may place one bounded specialist
-agenda. Titty Tuesdays, both incubator rooms, FightAIQ analysis and the MMA Files
-desk open on scheduled runs only when an agenda is due. FightAIQ intake also opens
+agenda. Titty Tuesdays, both incubator rooms, Carousel Studio, FightAIQ analysis and
+the MMA Files desk open on scheduled runs only when an agenda is due. FightAIQ intake also opens
 after a material source change. Manual runs remain available for explicit tests.
 Afternoon and night are zero-model checkpoints.
 
@@ -238,7 +246,8 @@ contains amounts and categories without invoices, credentials or personal data.
 Authenticated traffic is not counted as a failed login; repeated invalid
 credentials are rate-limited. The page displays the priority queue, social readiness
 and project-specific ideas, plans, visuals, research proposals, meeting agendas, FightAIQ data,
-agent switches and the MMA Files newsroom. Ratings are
+agent switches, the MMA Files newsroom and Carousel Studio's all-status/all-brand/all-format
+template previews, checks, ratings and inspiration links. Ratings are
 re-ratable; the latest value governs the UI and prior values remain visible.
 
 Instagram and Threads posting is pre-authorized within the recorded project scopes.

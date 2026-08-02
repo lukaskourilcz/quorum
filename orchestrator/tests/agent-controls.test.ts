@@ -47,6 +47,8 @@ describe("venture agent controls", () => {
     });
     expect(room.selectedParticipants.some(({ agent }) => agent === "SPLIT")).toBe(false);
     expect(room.skippedParticipants.find(({ agent }) => agent === "SPLIT")?.reason).toContain("switched off");
+    expect(room.selectedParticipants.some(({ agent }) => agent === "REACH")).toBe(false);
+    expect(room.skippedParticipants.find(({ agent }) => agent === "REACH")?.reason).toContain("switched off");
   });
 
   it("renders a small deterministic article hero", async () => {

@@ -1,7 +1,12 @@
-# BoardlessAI ecosystem guide for Fable
+# Historical BoardlessAI ecosystem guide for Fable
+
+> Superseded on 2026-08-02 by [`docs/ECOSYSTEM.md`](ECOSYSTEM.md), the canonical
+> six-project, 40-agent standing brief with a generated operating-truth block. This
+> file is preserved as the pre-Carousel-Studio design snapshot; do not use its counts
+> or modes as current instructions.
 
 Updated: 2026-08-02
-Status: current operating and implementation reference  
+Status: historical pre-closing design reference
 Audience: product, service-design and agent-system brainstorming
 
 ## 1. What BoardlessAI is

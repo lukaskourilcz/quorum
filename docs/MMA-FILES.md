@@ -48,11 +48,14 @@ polls both language routes, the content-hash marker, image dimensions and attrib
 It retries delivery once. A second failure reverts the target commit, pauses MMA Files
 and enters the failure in the daily digest.
 
-REACH captions and FRAME social graphics are prepared inside the existing article
-path. MMA Files posting unlocks only after ten consecutive passed article proofs and
-complete brand credentials; `SOCIAL_KILL_SWITCH=true` still beats that project gate.
-A/B variants rotate and are recorded, but views, clicks, reactions and other reader
-data are not collected. SPLIT stays idle while `METRICS_INGESTION_ENABLED=false`.
+REACH and SPLIT are currently disabled, so the article path spends no social-content
+tokens. Their re-enable path is already complete: REACH returns two bilingual A/B
+drafts whose visuals contain only a live Carousel Studio template id, version and
+content payload; FRAME renders that payload deterministically. MMA Files posting
+unlocks only after ten consecutive passed article proofs and complete brand
+credentials; `SOCIAL_KILL_SWITCH=true` still beats that project gate. A/B variants
+rotate and are recorded, but views, clicks, reactions and other reader data are not
+collected. SPLIT stays idle while `METRICS_INGESTION_ENABLED=false`.
 
 The BoardlessAI admin is the operating newsroom: it exposes short summaries, full
 records, agent switches, articles, calendars, source data and ratings. The public

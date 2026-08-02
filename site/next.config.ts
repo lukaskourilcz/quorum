@@ -5,6 +5,11 @@ const adminRuntimeFiles = ["../config/**/*", "../state/**/*"];
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
+  experimental: {
+    extensionAlias: {
+      ".js": [".ts", ".tsx", ".js"]
+    }
+  },
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,

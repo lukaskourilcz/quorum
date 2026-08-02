@@ -1,5 +1,9 @@
 # Markdown audit — 2026-08-01
 
+> Historical pre-Carousel-Studio audit. The closing six-project audit is
+> [`docs/AUDIT-2026-08-02.md`](AUDIT-2026-08-02.md), and the current standing brief is
+> [`docs/ECOSYSTEM.md`](ECOSYSTEM.md).
+
 Scope: all 180 Markdown files tracked after the Autonomy Build. Ignored dry-run files
 under `tmp/` were checked only as
 generated fixture output; they are not documentation and are not committed.

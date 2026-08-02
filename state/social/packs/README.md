@@ -6,6 +6,7 @@ English and Czech Instagram captions, Threads copy, destinations, carousel
 paths, alt text and provenance.
 
 The protected `/admin` page reads these files as the canonical social-content
-archive. Carousel WebP files live under `site/public/social/<date>/<locale>/`;
+archive. Carousel PNG files rendered from live Carousel Studio templates live under
+`site/public/social/<date>/<locale>/`;
 queue lifecycle records live in `state/social/queue/`. The admin is read-only,
 and no pack authorizes publication while the social kill switch remains on.

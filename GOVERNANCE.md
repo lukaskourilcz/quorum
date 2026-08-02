@@ -45,3 +45,7 @@ access. Visitor, reader and engagement ingestion remains disabled for Phase 3.
 
 Historical decision records are append-only evidence. If a decision changes, add a
 new superseding record rather than rewriting the old one.
+
+The complete D1–D11 map, six-project operating model and generated current-state block
+live in `docs/ECOSYSTEM.md`. Every future handoff that changes governance must update
+its curated sections and run `pnpm docs:refresh`.

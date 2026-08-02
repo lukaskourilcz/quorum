@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with five project workspaces. Shared
+BoardlessAI is one guarded operating system with six project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -13,6 +13,7 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
 | Magazine Incubator | Research and fenced founding | Finds evidence-backed publication ideas and can create a template-compliant content project | Anything needing a new account, more than `$0.15/day`, commerce, legal or personal-data work stops for the owner |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
+| Carousel Studio | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
 | MMA Files | Operating public magazine | Two daily bilingual article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, cast, cost envelope and admin
@@ -23,8 +24,8 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Thirty-four specialists do bounded work only when a service path or due agenda needs
-their domain. The registry has 38 agents: 20 Anthropic and 18 OpenAI. Every role has a
+Thirty-six specialists do bounded work only when a service path or due agenda needs
+their domain. The registry has 40 agents: 21 Anthropic and 19 OpenAI. Every role has a
 deterministic illustrated character portrait on the public presentation layer; those
 visuals never enter model prompts or meeting packets.
 
@@ -51,7 +52,7 @@ Not every clock entry is a meeting:
 - **Service:** Caught Up production, Caught Up product review, MMA Files story
   assignment and article production retain their fixed reader promise.
 - **Agenda-gated:** Titty Tuesdays, both incubator rooms, FightAIQ analysis and the
-  MMA Files desk run only when requested.
+  MMA Files desk plus Carousel Studio run only when requested.
 - **Change-triggered:** FightAIQ intake runs when its source snapshot materially
   changes or an agenda requests it.
 - **Checkpoint:** 14:00 and 22:00 update the operating trail deterministically and
@@ -72,6 +73,7 @@ credentials, evidence, cost limits or safety rules.
 | 09:00 | MMA Files story meeting | fixed service |
 | 10:00 | MMA Files morning article | assigned slot and evidence only |
 | 11:00 | Titty Tuesdays campaign room | due agenda only |
+| 13:00 | Carousel Studio room | due agenda only; deterministic rendering remains `$0` |
 | 14:00 | Board afternoon | `$0` checkpoint |
 | 17:00 | Caught Up product meeting | fixed service |
 | 18:00 | MMA Files evening article | assigned slot and evidence only |
@@ -138,7 +140,8 @@ owner input is optional.
 
 At 22:00 the runtime builds one idempotent, 400-word maximum summary for the Prague
 date. Held, paused, failed and not-needed windows remain distinguishable. The summary
-also lists delivery receipts, deploy proofs, failures and each social unlock counter.
+also lists delivery receipts, deploy proofs, failures and each social unlock counter,
+then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 
 ## Delivery boundaries
 
@@ -162,7 +165,11 @@ also lists delivery receipts, deploy proofs, failures and each social unlock cou
 - `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
   still needs its own proof/campaign counter, account credentials and safety gate.
 - `METRICS_INGESTION_ENABLED=false` — keeps all visitor, reader and engagement
-  measurement out of state; SPLIT stays idle.
+  measurement out of state; SPLIT stays idle. REACH also stays disabled while the MMA
+  social-content phase is locked; both roles already carry current output contracts.
 
 Missing variables deny the action. The exact owner checklist is `NEEDED.md`; the
 ordered setup path is `MANUAL STEPS.md`.
+
+The canonical, standalone description of all six projects, 40 roles, D1–D11 and
+current generated state is `docs/ECOSYSTEM.md`.

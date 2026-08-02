@@ -10,5 +10,9 @@ pass, and the SHA-256 `content.contentHash` covers the campaign, audience,
 destination, UTM data, factual claims, assets, publication window, and copy.
 Changing any of those fields after approval invalidates the item.
 
+`content.rendererVersion` is fixed to `carousel-studio-1`. Upstream social contracts
+must reference a live template id/version and bounded payload; a freeform visual or
+alternate renderer never becomes a valid queue item.
+
 The connector claims an item before making a remote call. An uncertain remote
 result becomes `needs_reconciliation`; it is never retried automatically.

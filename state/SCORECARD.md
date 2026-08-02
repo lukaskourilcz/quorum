@@ -1,6 +1,6 @@
 # Internal service scorecard
 
-As of: 2026-08-01
+As of: 2026-08-02
 
 Stage: VALIDATION
 
@@ -16,6 +16,7 @@ are `n/a`; test examples do not count as live proof.
 | FightAIQ roster/bout coverage, source agreement and scored predictions | CORNER | n/a | D8 is active; current roster and calibration coverage remain incomplete |
 | Titty Tuesdays complete campaign inventory | PULSE | warm-up | Plans are validated against the campaign contract |
 | Incubator evidence-backed proposals | ANGLE | n/a | No live proposal has passed the evidence thesis |
+| Carousel Studio live library, determinism and passing proposals | EASEL | warm-up | Ten seed layouts pass; new cited iterations and posted-engine rate await live records |
 | Killed-slot reasons, vetoes, retries and release-proof pass rate | AUDIT | warm-up | Deterministic fixture tests pass; fixtures do not count live |
 | Budget difference and commitments | LEDGER | warm-up | Recorded cost stays within the signed limit; recognized revenue is `$0` |
 

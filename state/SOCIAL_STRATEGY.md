@@ -21,7 +21,9 @@
 ## Channel roles
 
 Threads is text-native. Instagram is visual-native. Copy is adapted, never
-duplicated unchanged.
+duplicated unchanged. Every social visual uses a live Carousel Studio template id,
+semantic version and bounded content payload. Freeform image briefs and alternate
+social renderers are invalid.
 
 ## Voice and cadence
 
@@ -35,8 +37,9 @@ delivery proofs; MMA Files needs ten passed article proofs without an unresolved
 failure; Titty Tuesdays needs four complete approved campaigns, credentials and its
 safety checker. The global kill switch can stop all posting immediately.
 
-Each post uses an idempotency key and a live-post proof. A/B variants rotate without
-measurement. Phase 3 remains closed and SPLIT stays idle.
+Each post uses an idempotency key, records `carousel-studio-1` as its renderer and has
+a live-post proof. A/B variants rotate without measurement. Phase 3 remains closed;
+SPLIT and MMA Files social editor REACH stay disabled until their gates are opened.
 
 ## Prohibited and escalation
 

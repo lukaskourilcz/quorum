@@ -24,7 +24,9 @@ behind its separate switch. MMA Files is the public bilingual magazine and the s
 reader-facing home for delivered fighter files, event cards, captured odds and reviewed
 model outputs. Their live schedules remain behind the recorded signatures and
 independent switches. The Magazine Incubator may produce research proposals and
-automatically found only template-compliant content projects.
+automatically found only template-compliant content projects. Carousel Studio is the
+sixth project: an internal, deterministic social-rendering engine with no accounts,
+marketing, analytics or current earning method.
 
 ## Owner and roles
 
@@ -45,7 +47,7 @@ Effective countersigned all-in hard cap: $50 USD.
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
 The owner countersigned `budget-2026-08d` on 2026-08-01. It sets one $50 limit,
-a $42 model share and a $2.20 daily pace for all five projects. Project-specific
+a $42 model share and a $2.20 daily pace for all six projects. Project-specific
 live switches and evidence gates still decide whether a meeting may run.
 
 Fixed subscriptions are unavailable until the owner enters the real names, amounts,
@@ -59,8 +61,9 @@ Current stage: **VALIDATION**
 
 Entered: 2026-08-01 through the `config/stages.json` current-stage mechanism
 
-Next gate: Phase 3 remains undefined and closed. No visitor, reader or engagement
-signal is collected while `METRICS_INGESTION_ENABLED=false`.
+Next gate: D9 defines measurement-ready contracts, but live ingestion remains closed.
+No visitor, reader or engagement signal is collected while
+`METRICS_INGESTION_ENABLED=false`.
 
 Thesis confidence: owner-adopted, unvalidated
 
@@ -107,10 +110,10 @@ stop every post.
 
 ## Phase 3 measurement hold
 
-Visitor paths, readership, social results and experiments are deliberately undefined.
-The placeholder contract contains no fields, `METRICS_INGESTION_ENABLED=false`, and
-SPLIT stays idle until a future owner decision defines a lawful, useful measurement
-scope.
+Visitor paths, readership, social results and experiments are deliberately unavailable.
+Phase 3 contracts and deterministic variant assignment exist, but
+`METRICS_INGESTION_ENABLED=false`; SPLIT stays idle until a future owner decision
+chooses a lawful provider and useful measurement scope.
 
 ## Unit economics
 

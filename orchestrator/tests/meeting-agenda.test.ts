@@ -19,6 +19,9 @@ describe("meeting agenda queue", () => {
   it("allows only bounded transitions and picks the next available room date", async () => {
     const policy = await loadMeetingPolicy();
     expect(mayRequestMeeting(policy, "morning", "tt-marketing")).toBe(true);
+    expect(mayRequestMeeting(policy, "morning", "studio")).toBe(true);
+    expect(mayRequestMeeting(policy, "studio", "studio")).toBe(true);
+    expect(policy.agendaRequiredPhases).toContain("studio");
     expect(mayRequestMeeting(policy, "tt-marketing", "mma-analysis")).toBe(false);
     expect(nextAgendaDate({ currentDate: "2026-08-01", currentHour: 6, targetHour: 11 }))
       .toBe("2026-08-01");

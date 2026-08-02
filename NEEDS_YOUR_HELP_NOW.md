@@ -1,34 +1,72 @@
-# Needs your help now
+# Needs your help now — one owner checklist
 
-## Money and KPI owner inputs
+Updated: 2026-08-02
 
-1. Open `/admin` and enter the subscriptions BoardlessAI uses in
-   `config/fixed-costs.json`. Use the amount you pay each month and the date the
-   cost began. The file starts empty because Codex cannot infer your Vercel,
-   Supabase, domain or other bills.
-2. Review the Q1 targets and the 2026-08-03 start date in
-   `config/kpis/2026-Q1.json`. Change any seed value that does not match your
-   operating plan. Your saved values take priority over the defaults.
+This is the only canonical list of human-owned setup across all six projects. Code,
+contracts, `$0` dry proofs and release checks are complete. Git cannot inspect secret
+values or external account settings, so an item remains unchecked until the owner has
+verified it in the provider UI. Never paste a credential into Git, an issue, a meeting
+record or chat.
 
-These steps change reporting inputs. They do not authorize a payment, account,
-shop, sponsorship or affiliate program.
+## Required to prove the two publishing projects
 
-## FightAIQ free-source keys
+1. [ ] **Verify the delivery GitHub App installation.** It must include both
+   `lukaskourilcz/aifirst` and `lukaskourilcz/mma-files`, with Contents read/write as
+   the only write permission. `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY` stay in
+   `lukaskourilcz/quorum` Actions secrets. If both repositories are already selected,
+   mark this done without rotating the key again.
+2. [ ] **Verify Vercel production settings.** BoardlessAI must track `main` at
+   `https://boardless-ai.vercel.app`. Caught Up must track `main` at
+   `https://caughtup-ai.vercel.app`. MMA Files must track `main` at
+   `https://mma-files.vercel.app` with `NEXT_PUBLIC_DEMO_MODE=true` and
+   `NEXT_PUBLIC_ALLOW_INDEXING=false`. The public BoardlessAI URL is not secret; use a
+   repository variable unless a workflow explicitly reads it from secrets.
+3. [ ] **Verify the two surviving FightAIQ free-tier keys in Actions secrets.**
+   `CITO_API_KEY` is bounded below 500 calls/month, 200/day and five/run.
+   `THE_ODDS_API_KEY` is optional for current prices and stops at the provider's zero
+   quota. Predictions still work without odds. Do not add GNews, Guardian, NYTimes or
+   another paid data API; Wikimedia and reviewed imports remain the `$0` baseline.
+4. [ ] **Optionally add licensed-photo keys.** `PEXELS_API_KEY` and
+   `PIXABAY_API_KEY` expand the allowed photo search. They are not launch blockers:
+   Openverse, Wikimedia Commons and FRAME's deterministic fallback remain available.
 
-Only the two surviving keyed $0 sources belong on this list. Both are GitHub Actions
-repository secrets in `lukaskourilcz/quorum`; never put their values in Vercel, Git or
-a meeting record.
+## Required before automatic social posting
 
-1. `CITO_API_KEY` — confirms the bounded UFC roster and event feed. The runtime stops
-   before 500 calls/month or 200/day and reserves at most five calls per run.
-2. `THE_ODDS_API_KEY` — optional current odds capture. The runtime reads the provider
-   quota headers and stops at zero remaining credits. Predictions still work without
-   odds.
+5. [ ] **Connect Instagram and Threads for each external brand.** Carousel Studio has
+   no accounts. Add the following values to the BoardlessAI repository, then run the
+   publisher in Validate-only mode:
 
-If both secrets are already present, there is nothing to add. Set the repository
-variable `FIGHTAIQ_ANALYSIS_ENABLED=true`, run `mma-intake`, then run `mma-analysis`.
-Exact checks and the MMA Files delivery sequence are in `MANUAL STEPS.md`.
+   | Project | Actions secrets | Repository variables |
+   | --- | --- | --- |
+   | Caught Up | `CAUGHT_UP_THREADS_ACCESS_TOKEN`, `CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN` | `CAUGHT_UP_THREADS_USER_ID`, `CAUGHT_UP_INSTAGRAM_USER_ID` |
+   | MMA Files | `MMA_FILES_THREADS_ACCESS_TOKEN`, `MMA_FILES_INSTAGRAM_ACCESS_TOKEN` | `MMA_FILES_THREADS_USER_ID`, `MMA_FILES_INSTAGRAM_USER_ID` |
+   | Titty Tuesdays | `TITTY_TUESDAYS_THREADS_ACCESS_TOKEN`, `TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN` | `TITTY_TUESDAYS_THREADS_USER_ID`, `TITTY_TUESDAYS_INSTAGRAM_USER_ID` |
 
-No paid data-service key is accepted. Wikimedia is keyless, owner-reviewed imports
-are local, and official organization pages stay disabled until a written terms review
-approves automated access.
+   Keep `SOCIAL_KILL_SWITCH=true` during validation. Changing it to `false` removes
+   only the owner stop; each project's proof/campaign counter, credentials, enabled
+   roles and safety checks still have to pass.
+
+## Required for honest Money and KPI reporting
+
+6. [ ] **Enter actual fixed monthly costs in `/admin`.** Add each subscription with
+   its monthly USD amount, category and first-paid date. The empty registry means
+   “not entered,” not “free.” Do not enter example prices or API estimates.
+7. [ ] **Review Q1 target seeds.** Confirm the 2026-08-03 start and values in
+   `config/kpis/2026-Q1.json`. Keep them or save your chosen values before using the
+   quarter for decisions. Runtime cannot lower a target or rewrite a past snapshot.
+
+## Deliberately deferred; not a launch blocker
+
+8. [ ] **Choose an analytics provider and lawful measurement plan only when useful.**
+   Name the exact decisions the data would change, then approve the provider, legal
+   posture and data minimization before setting `METRICS_INGESTION_ENABLED=true`.
+   Until then, keep it false; SPLIT remains disabled and follower/engagement KPIs stay
+   honestly unavailable. No analytics credential is currently required.
+
+## Completion rule
+
+When items 1–3 and 6–7 are verified, Caught Up and MMA Files are ready for the live
+proof order in `MANUAL STEPS.md`. Item 5 is needed only before social posting. Item 4
+is optional and item 8 is intentionally deferred. A valid `NO_EDITION`, killed article
+or `not-needed` room costs `$0` and is a successful gated outcome; do not pay for a
+rerun merely to force content.
