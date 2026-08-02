@@ -86,7 +86,7 @@ describe("quarterly measurement collector", () => {
     expect(result.measurements["receipts/delivery#pass_within_one_retry_rate"]).toBe(1);
   });
 
-  it("does not turn missing ledgers or an unconfirmed roster into a passing zero", async () => {
+  it("never lets a missing ledger or an unconfirmed roster read better than it is", async () => {
     const { root, stateRoot } = await fixtureRoot();
     const fighter = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/fighter-record.valid.json"), "utf8")) as unknown;
     await writeJson(path.join(stateRoot, "mma/fighters/ufc:alex-example.json"), fighter);
@@ -112,8 +112,17 @@ describe("quarterly measurement collector", () => {
     });
     expect(missing.measurements["state/metrics/quarterly#maximum_monthly_api_usd"]).toBeNull();
     expect(missing.measurements["state/metrics/quarterly#maximum_monthly_all_in_usd"]).toBeNull();
-    expect(missing.measurements["state/mma/fighters#active_roster_coverage_rate"]).toBeNull();
-    expect(missing.measurements["state/mma/fighters#average_completeness"]).toBeNull();
+    // One fighter file against a roster of one active plus one unclassified. The old
+    // denominator excluded unknowns, so this exact fixture would have reported 1/1 = 100%
+    // coverage with half the roster unclassified; reporting null was the guard against that.
+    // Counting unknowns in the denominator removes the inflation at the source, so the
+    // number can be shown without flattering anyone: 1 of 2 known fighters.
+    expect(missing.measurements["state/mma/fighters#active_roster_coverage_rate"]).toBe(0.5);
+    expect(
+      missing.measurements["state/mma/fighters#active_roster_coverage_rate"],
+      "an unconfirmed roster must never report full coverage"
+    ).toBeLessThan(1);
+    expect(missing.measurements["state/mma/fighters#average_completeness"]).not.toBeNull();
 
     await writeJson(path.join(stateRoot, "budget/ledger.json"), { schemaVersion: 1, entries: [] });
     const verifiedEmpty = await collectQuarterlyMeasurements({

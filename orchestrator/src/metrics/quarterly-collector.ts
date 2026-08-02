@@ -293,11 +293,20 @@ export async function collectQuarterlyMeasurements(input: {
   const unknownRosterCount = rosterCounts.every(Boolean)
     ? rosterCounts.reduce((total, counts) => total + (typeof counts?.unknown === "number" ? counts.unknown : 0), 0)
     : 1;
-  const rosterConfirmed = activeRosterCount > 0 && unknownRosterCount === 0;
-  measurements["state/mma/fighters#active_roster_coverage_rate"] = rosterConfirmed
-    ? Math.min(1, activeFighters.length / activeRosterCount)
+  // Coverage counts unclassified fighters in the denominator. The previous denominator was
+  // `activeRosterCount` alone, which excludes them, so a partly-reviewed roster reported
+  // INFLATED coverage - it could read 100% while half the roster was unclassified. Guarding
+  // that by reporting null kept the number honest but made the venture holding the most real
+  // data report nothing until the last fighter was confirmed. Dividing by the full known
+  // population is strictly conservative: it can only under-report, never over-report, and it
+  // rises as unknowns are resolved. Still null when no roster has been reviewed at all, since
+  // there is then no population to measure against.
+  const knownRosterCount = activeRosterCount + unknownRosterCount;
+  const rosterReviewed = rosterCounts.every(Boolean) && knownRosterCount > 0;
+  measurements["state/mma/fighters#active_roster_coverage_rate"] = rosterReviewed
+    ? Math.min(1, activeFighters.length / knownRosterCount)
     : null;
-  measurements["state/mma/fighters#average_completeness"] = rosterConfirmed && activeFighters.length > 0
+  measurements["state/mma/fighters#average_completeness"] = rosterReviewed && activeFighters.length > 0
     ? Number((sum(activeFighters.map((fighter) => fighter.completeness)) * 100 / activeFighters.length).toFixed(8))
     : null;
 
