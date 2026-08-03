@@ -9,6 +9,8 @@ import {
   refreshFightAiQEvidence,
   withinIntakeHorizon
 } from "../src/portfolio/evidence.js";
+import { fightAiQBrief } from "../src/fightaiq/brief.js";
+import { repoRoot } from "../src/paths.js";
 import { atomicWriteJson } from "../src/state.js";
 
 /**
@@ -145,5 +147,39 @@ describe("nothing is enriched until a card is scheduled", () => {
     const now = new Date("2026-08-03T09:00:00.000Z");
     expect(withinIntakeHorizon(null, now)).toBe(false);
     expect(withinIntakeHorizon("soon", now)).toBe(false);
+  });
+});
+
+describe("the intake brief", () => {
+  it("fits, and names what a truncated snapshot buried", async () => {
+    // The packet pasted a 66 kB snapshot into an 18 kB window. The bookmaker feed came first,
+    // so the room read eleven kilobytes of decimal odds and never reached the roster at all —
+    // which is how SPOTTER concluded on 3 August that no Oktagon data was present. It was.
+    const snapshot = JSON.parse(await readFile(
+      path.join(repoRoot, "state/ventures/fightaiq/source-snapshots/2026-08-03.json"),
+      "utf8"
+    )) as { sources: Array<{ sourceId: string; status: string; items?: unknown[] }> };
+
+    const brief = fightAiQBrief({
+      sources: snapshot.sources,
+      horizonEvents: [],
+      now: new Date("2026-08-03T12:00:00.000Z")
+    });
+
+    expect(brief.length).toBeLessThan(4_000);
+    for (const source of snapshot.sources) {
+      expect(brief, `${source.sourceId} is named`).toContain(source.sourceId);
+    }
+    // The roster the old packet never reached.
+    expect(brief).toMatch(/oktagon \d+/u);
+    expect(brief).toMatch(/ufc \d+/u);
+    // And no raw odds payload.
+    expect(brief).not.toContain("redDecimal");
+  });
+
+  it("tells the room plainly when no card is scheduled", () => {
+    const brief = fightAiQBrief({ sources: [], horizonEvents: [], now: new Date("2026-08-03T12:00:00.000Z") });
+    expect(brief).toMatch(/No scheduled card is inside the intake horizon/u);
+    expect(brief).toMatch(/weigh-in/u);
   });
 });

@@ -48,7 +48,9 @@ import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { fetchReadable } from "../sources/adapters/reader.js";
 import { loadArticlePackages } from "../mma-files/store.js";
+import { fightAiQBrief } from "../fightaiq/brief.js";
 import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
+import { withinIntakeHorizon } from "./evidence.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
 import { refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
 import {
@@ -482,12 +484,15 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
-    const [overview, bridge, events, sourceSnapshot, sourceSnapshotData] = await Promise.all([
+    const [overview, bridge, events, sourceSnapshotData] = await Promise.all([
       canonicalStateText(root, "ventures/fightaiq/README.md"),
       readText(root, "mma/BRIDGE.md"),
       loadEventCards(path.join(root, "mma", "events")),
-      readText(root, `ventures/fightaiq/source-snapshots/${date}.json`),
-      readJson<{ evidenceRefs?: string[] }>(root, `ventures/fightaiq/source-snapshots/${date}.json`, {})
+      readJson<{ evidenceRefs?: string[]; sources?: Array<{ sourceId: string; status: string; reason?: string | null; items?: unknown[] }> }>(
+        root,
+        `ventures/fightaiq/source-snapshots/${date}.json`,
+        {}
+      )
     ]);
     const day = new Date(`${date}T12:00:00Z`).getUTCDay();
     const leadOrg = ["ufc", "oktagon"][day % 2];
@@ -495,8 +500,19 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     const focusPacket = focus.length
       ? `Fight-week cards, nearest first. Work only these bouts:\n${JSON.stringify(focus)}`
       : "No verified card is inside the three-day fight-week window. Continue file work across UFC and Oktagon.";
+    // A brief, not the snapshot. Pasting the snapshot and cutting at eighteen thousand
+    // characters meant the room read eleven kilobytes of bookmaker odds and never reached the
+    // ninety-two roster entries at all — which is why SPOTTER reported no Oktagon data on a day
+    // the data was there.
+    const brief = fightAiQBrief({
+      sources: sourceSnapshotData.sources ?? [],
+      horizonEvents: events
+        .filter((event) => withinIntakeHorizon(event.startsAtUtc, new Date(`${date}T12:00:00Z`)))
+        .map((event) => ({ id: event.id, name: event.name, startsAt: event.startsAtUtc, bouts: event.bouts })),
+      now: new Date(`${date}T12:00:00Z`)
+    });
     return {
-      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Check UFC and Oktagon.\n\n${focusPacket}\n\nLatest guarded API snapshot:\n${sourceSnapshot}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
+      text: `${overview}\n\nDaily lead organization: ${leadOrg}. Check UFC and Oktagon.\n\n${focusPacket}\n\n${brief}\n\n${taste ?? ""}\n\n${bridge}`.slice(0, 18_000),
       evidenceRefs: [
         ...bridgeEvidenceRefs(bridge),
         ...focus.map((event) => `event:${event.id}`),
