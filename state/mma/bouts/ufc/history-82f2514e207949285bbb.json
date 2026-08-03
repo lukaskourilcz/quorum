@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-82f2514e207949285bbb",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-freedom-250",
+    "name": "UFC Freedom 250",
+    "startsAtUtc": "2026-06-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alex-pereira",
+    "blue": "ufc:ciryl-gane"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-06-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42031348"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 387,
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

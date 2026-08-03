@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexa_Grasso",
       "publisher": "Wikipedia",
       "title": "Alexa Grasso",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -468,19 +468,19 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.582441,
-        "layoffDays": 127
+        "layoffDays": 128
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1762.88803139,
-    "deviation": 128.17488419,
-    "volatility": 0.06000409,
+    "rating": 1742.96525624,
+    "deviation": 129.82291901,
+    "volatility": 0.06000629,
     "boutCount": 21,
     "asOfBoutRef": "ufc:bout:history-003f7730458fdcb19f97",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -546,11 +546,26 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6f743691510e42bf96b2",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-269",
+    "name": "UFC 269",
+    "startsAtUtc": "2021-12-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amanda-nunes",
+    "blue": "ufc:julianna-pena"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-12-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:30387040"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:30387040"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 506,
+    "sourceRefs": [
+      "source:wikipedia:30387040"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

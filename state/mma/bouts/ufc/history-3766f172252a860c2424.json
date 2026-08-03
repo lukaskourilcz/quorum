@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3766f172252a860c2424",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-volkov-vs-aspinall",
+    "name": "UFC Fight Night: Volkov vs. Aspinall",
+    "startsAtUtc": "2022-03-19T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexander-volkov",
+    "blue": "ufc:tom-aspinall"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-03-19T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:28754266"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:28754266"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (straight armbar)",
+    "round": 1,
+    "elapsedSeconds": 225,
+    "sourceRefs": [
+      "source:wikipedia:28754266"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:ailin-perez",
+  "slug": "ailin-perez",
+  "org": "ufc",
+  "canonicalName": "Ailin Perez",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Ailín Pérez",
+    "externalIds": {
+      "cito": "3c47cb7a-de8c-495f-94b9-4269d961aabe",
+      "wikipediaPageId": "76555249"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-03",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Ailin Perez",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:76555249",
+      "url": "https://en.wikipedia.org/wiki/Ail%C3%ADn_P%C3%A9rez",
+      "publisher": "Wikipedia",
+      "title": "Ailín Pérez",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Ailin Perez",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "womens-bantamweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "13-2-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "switch",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:3c47cb7a-de8c-495f-94b9-4269d961aabe"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 0.5,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

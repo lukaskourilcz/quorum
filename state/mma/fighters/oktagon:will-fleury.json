@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Will_Fleury",
       "publisher": "Wikipedia",
       "title": "Will Fleury",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:78757307"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -495,9 +495,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 2.323302,
-        "layoffDays": 1
+        "layoffDays": 2
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
@@ -507,7 +507,7 @@
     "volatility": 0.05999562,
     "boutCount": 24,
     "asOfBoutRef": "oktagon:bout:history-8903c8049fa9606e64c6",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -583,11 +583,29 @@
         "source:wikipedia:61905642"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307",
+        "source:wikipedia:26668929",
+        "source:wikipedia:80546380",
+        "source:wikipedia:61905642"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.5,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

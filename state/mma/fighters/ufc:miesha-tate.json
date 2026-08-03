@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:miesha-tate",
+  "slug": "miesha-tate",
+  "org": "ufc",
+  "canonicalName": "Miesha Tate",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Miesha Tate",
+    "externalIds": {
+      "wikipediaPageId": "22359670"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:22359670"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:22359670",
+      "url": "https://en.wikipedia.org/wiki/Miesha_Tate",
+      "publisher": "Wikipedia",
+      "title": "Miesha Tate",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Miesha Tate",
+      "sourceRefs": [
+        "source:wikipedia:22359670"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-dae65e063210f80d2db2",
+      "eventRef": "ufc:event:history-ufc-200",
+      "happenedAt": "2016-07-09T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-nunes",
+      "result": "loss",
+      "method": "Submission (rear-naked choke )",
+      "round": 1,
+      "elapsedSeconds": 196,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:miesha-tate:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 196,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 365.25,
+        "layoffDays": 3677
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1383.35807927,
+    "deviation": 286.92720667,
+    "volatility": 0.05999928,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-dae65e063210f80d2db2",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:22359670"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

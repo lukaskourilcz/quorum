@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:alexander-volkov",
+  "slug": "alexander-volkov",
+  "org": "ufc",
+  "canonicalName": "Alexander Volkov (fighter)",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Alexander Volkov (fighter)",
+    "externalIds": {
+      "wikipediaPageId": "28754266"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:28754266",
+      "url": "https://en.wikipedia.org/wiki/Alexander_Volkov_(fighter)",
+      "publisher": "Wikipedia",
+      "title": "Alexander Volkov (fighter)",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Alexander Volkov (fighter)",
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 203.2,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Heavyweight",
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "40-11-0",
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "name",
+      "values": [
+        {
+          "value": "Alexander Volkov (fighter)",
+          "sourceRef": "source:wikipedia:28754266"
+        },
+        {
+          "value": "Alexander Volkov",
+          "sourceRef": "source:wikipedia:28754266"
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "40-11-0",
+          "sourceRef": "source:wikipedia:28754266"
+        },
+        {
+          "value": "0-3-0",
+          "sourceRef": "derived:ufc:alexander-volkov:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-6957355d053a3bcdfe83",
+      "eventRef": "ufc:event:history-ufc-fight-night-gane-vs-volkov",
+      "happenedAt": "2021-06-26T00:00:00.000Z",
+      "opponentRef": "ufc:ciryl-gane",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3766f172252a860c2424",
+      "eventRef": "ufc:event:history-ufc-fight-night-volkov-vs-aspinall",
+      "happenedAt": "2022-03-19T00:00:00.000Z",
+      "opponentRef": "ufc:tom-aspinall",
+      "result": "loss",
+      "method": "Submission (straight armbar)",
+      "round": 1,
+      "elapsedSeconds": 225,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6dbedda89286821eeb49",
+      "eventRef": "ufc:event:history-ufc-310",
+      "happenedAt": "2024-12-07T00:00:00.000Z",
+      "opponentRef": "ufc:ciryl-gane",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:alexander-volkov:history",
+      "bouts": 3,
+      "values": {
+        "bouts": 3,
+        "wins": 0,
+        "losses": 3,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 875,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 0.57975,
+        "layoffDays": 604
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1247.35098658,
+    "deviation": 244.12712249,
+    "volatility": 0.05999826,
+    "boutCount": 3,
+    "asOfBoutRef": "ufc:bout:history-6dbedda89286821eeb49",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "dateOfBirth",
+      "team",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "reachCm",
+        "division",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 51 historical fight rows."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.5,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

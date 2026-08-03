@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Ciryl_Gane",
       "publisher": "Wikipedia",
       "title": "Ciryl Gane",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:62192397"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,16 +51,91 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-6957355d053a3bcdfe83",
+      "eventRef": "ufc:event:history-ufc-fight-night-gane-vs-volkov",
+      "happenedAt": "2021-06-26T00:00:00.000Z",
+      "opponentRef": "ufc:alexander-volkov",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6dbedda89286821eeb49",
+      "eventRef": "ufc:event:history-ufc-310",
+      "happenedAt": "2024-12-07T00:00:00.000Z",
+      "opponentRef": "ufc:alexander-volkov",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-82f2514e207949285bbb",
+      "eventRef": "ufc:event:history-ufc-freedom-250",
+      "happenedAt": "2026-06-14T00:00:00.000Z",
+      "opponentRef": "ufc:alex-pereira",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 387,
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:ciryl-gane:history",
+      "bouts": 3,
+      "values": {
+        "bouts": 3,
+        "wins": 3,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.333333,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 2,
+        "koTkoWinShare": 0.333333,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0.666667,
+        "averageElapsedSeconds": 929,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 0.402693,
+        "layoffDays": 50
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1847.57558296,
+    "deviation": 220.24047342,
+    "volatility": 0.05999876,
+    "boutCount": 3,
+    "asOfBoutRef": "ufc:bout:history-82f2514e207949285bbb",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -109,11 +184,25 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266",
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260803095550-mma-intake",
+  "date": "2026-08-03",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon Assigned agenda: Supply fight-week event priority list, verified FightAIQ fighter or event files, recent idea history and daily MMA bridge to enable two-slot assignment. Stylebook standards confirmed ready.",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.038849,
+    "monthAllInUsd": 1.4524402000000005,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-03",
+      "source:cito-ufc:2026-08-03",
+      "source:wikimedia:2026-08-03"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "MMA intake phase without verified fight-week card. Odds snapshot (2026-08-03) shows 16 UFC/mixed bouts across Aug 8–Dec 31. No fighter-file gaps flagged yet; awaiting two-source confirmation on any critical fields before model use. Daily lead (Oktagon) task: Continue UFC and Okta",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-03",
+        "source:cito-ufc:2026-08-03",
+        "source:wikimedia:2026-08-03"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon: no Oktagon event, bout, weigh-in or result is present in the supplied snapshot. UFC entries are visible but outside this specialist scope. No fighter file can be verified or model-ready.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-03",
+        "source:cito-ufc:2026-08-03",
+        "source:wikimedia:2026-08-03"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260803095550-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Check official Oktagon and independent regional reports for the next active card, then verify bout identities and weigh-ins with two providers.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "agendaRef": "meeting-agendas/queue.json#agenda-f59b48142579ebbe",
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-03",
+      "source:cito-ufc:2026-08-03",
+      "source:wikimedia:2026-08-03"
+    ]
+  },
+  "generatedAt": "2026-08-03T09:58:50.919Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-03T09:55:50.919Z",
+    "closedAt": "2026-08-03T09:58:50.919Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-03T09:55:50.919Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon Assigned agenda: Supply fight-week event priority list, verified FightAIQ fighter or event files, recent idea history and daily MMA bridge to enable two-slot assignment. Stylebook standards confirmed ready."
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-03T09:56:50.919Z",
+        "text": "MMA intake phase without verified fight-week card. Odds snapshot (2026-08-03) shows 16 UFC/mixed bouts across Aug 8–Dec 31. No fighter-file gaps flagged yet; awaiting two-source confirmation on any critical fields before model use. Daily lead (Oktagon) task: Continue UFC and Okta",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-03",
+          "source:cito-ufc:2026-08-03",
+          "source:wikimedia:2026-08-03"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-03T09:57:50.919Z",
+        "text": "Oktagon: no Oktagon event, bout, weigh-in or result is present in the supplied snapshot. UFC entries are visible but outside this specialist scope. No fighter file can be verified or model-ready.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-03",
+          "source:cito-ufc:2026-08-03",
+          "source:wikimedia:2026-08-03"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-03T09:58:50.919Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

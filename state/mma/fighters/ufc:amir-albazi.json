@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Amir_Albazi",
       "publisher": "Wikipedia",
       "title": "Amir Albazi",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -423,19 +423,19 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 1.093359,
-        "layoffDays": 176
+        "layoffDays": 177
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1868.23849403,
-    "deviation": 140.98111929,
-    "volatility": 0.06000019,
+    "rating": 1844.32083283,
+    "deviation": 142.22707493,
+    "volatility": 0.06000386,
     "boutCount": 19,
     "asOfBoutRef": "ufc:bout:history-af78c4dc026e1d5b1e8e",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -501,11 +501,26 @@
         "source:wikipedia:64585580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

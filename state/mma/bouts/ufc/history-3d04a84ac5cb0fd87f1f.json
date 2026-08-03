@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3d04a84ac5cb0fd87f1f",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-295",
+    "name": "UFC 295",
+    "startsAtUtc": "2023-11-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alex-pereira",
+    "blue": "ufc:jiri-prochazka"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-11-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42031348"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (elbows)",
+    "round": 2,
+    "elapsedSeconds": 548,
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

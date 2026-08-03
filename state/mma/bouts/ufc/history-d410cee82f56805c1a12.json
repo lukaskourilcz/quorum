@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-d410cee82f56805c1a12",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-276",
+    "name": "UFC 276",
+    "startsAtUtc": "2022-07-02T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alex-pereira",
+    "blue": "ufc:sean-strickland"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-07-02T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42031348"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 1,
+    "elapsedSeconds": 156,
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

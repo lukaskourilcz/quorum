@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Brendan_Allen",
       "publisher": "Wikipedia",
       "title": "Brendan Allen",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,16 +51,76 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-222cc4f8c750ad3428aa",
+      "eventRef": "ufc:event:history-lfa-32",
+      "happenedAt": "2018-01-26T00:00:00.000Z",
+      "opponentRef": "ufc:anthony-hernandez",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-a2f557418e5d1af0c9d3",
+      "eventRef": "ufc:event:history-ufc-fight-night-cejudo-vs-song",
+      "happenedAt": "2025-02-22T00:00:00.000Z",
+      "opponentRef": "ufc:anthony-hernandez",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:brendan-allen:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 1200,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 0.141348,
+        "layoffDays": 527
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1279.68280156,
+    "deviation": 260.48876257,
+    "volatility": 0.05999893,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-a2f557418e5d1af0c9d3",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -109,11 +169,24 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

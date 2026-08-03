@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:azamat-murzakanov",
+  "slug": "azamat-murzakanov",
+  "org": "ufc",
+  "canonicalName": "Azamat Murzakanov",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Azamat Murzakanov",
+    "externalIds": {
+      "wikipediaPageId": "56012507"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:56012507",
+      "url": "https://en.wikipedia.org/wiki/Azamat_Murzakanov",
+      "publisher": "Wikipedia",
+      "title": "Azamat Murzakanov",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Azamat Murzakanov",
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-060198c4109b2e06c124",
+      "eventRef": "ufc:event:history-ufc-on-abc-sandhagen-vs-nurmagomedov",
+      "happenedAt": "2024-08-03T00:00:00.000Z",
+      "opponentRef": "ufc:alonzo-menifield",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 498,
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:azamat-murzakanov:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 498,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 730
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1616.64192073,
+    "deviation": 286.92720667,
+    "volatility": 0.05999928,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-060198c4109b2e06c124",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

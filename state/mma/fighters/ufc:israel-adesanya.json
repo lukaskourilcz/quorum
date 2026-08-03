@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Israel_Adesanya",
       "publisher": "Wikipedia",
       "title": "Israel Adesanya",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:51774563"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,16 +51,76 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-d3baa719c7f25313b455",
+      "eventRef": "ufc:event:history-ufc-281",
+      "happenedAt": "2022-11-12T00:00:00.000Z",
+      "opponentRef": "ufc:alex-pereira",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 5,
+      "elapsedSeconds": 1321,
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-82e547eb62b20c09e105",
+      "eventRef": "ufc:event:history-ufc-287",
+      "happenedAt": "2023-04-08T00:00:00.000Z",
+      "opponentRef": "ufc:alex-pereira",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 561,
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:israel-adesanya:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 941,
+        "recentThreeWinRate": 0.5,
+        "recentFiveWinRate": 0.5,
+        "fightsPerYear": 2.484643,
+        "layoffDays": 1213
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1635.27890692,
+    "deviation": 259.54760225,
+    "volatility": 0.06000218,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-82e547eb62b20c09e105",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -109,11 +169,24 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

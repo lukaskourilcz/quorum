@@ -1,11 +1,11 @@
 {
   "schemaVersion": "mma-roster-status/1",
-  "generatedAt": "2026-08-02T15:43:59.798Z",
+  "generatedAt": "2026-08-03T09:55:50.919Z",
   "organizations": {
     "ufc": {
-      "active": 50,
+      "active": 15,
       "former": 0,
-      "unknown": 277
+      "unknown": 65
     },
     "oktagon": {
       "active": 0,
@@ -14,7 +14,7 @@
     }
   },
   "confirmedUpcomingBouts": 0,
-  "queuedForEnrichment": 339,
+  "queuedForEnrichment": 92,
   "priorityFighters": 0,
   "note": "Unknown means a historical identity was found but no reviewed current-roster source has confirmed active status."
 }

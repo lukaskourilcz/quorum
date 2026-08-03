@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:sean-o-malley",
+  "slug": "sean-o-malley",
+  "org": "ufc",
+  "canonicalName": "Sean O'Malley (fighter)",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Sean O'Malley (fighter)",
+    "externalIds": {
+      "wikipediaPageId": "55885581"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:55885581"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:55885581",
+      "url": "https://en.wikipedia.org/wiki/Sean_O'Malley_(fighter)",
+      "publisher": "Wikipedia",
+      "title": "Sean O'Malley (fighter)",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Sean O'Malley (fighter)",
+      "sourceRefs": [
+        "source:wikipedia:55885581"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-e3a394b27dbd71d97461",
+      "eventRef": "ufc:event:history-ufc-292",
+      "happenedAt": "2023-08-19T00:00:00.000Z",
+      "opponentRef": "ufc:aljamain-sterling",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 351,
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:sean-o-malley:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 351,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 1080
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1767.16671599,
+    "deviation": 287.88191486,
+    "volatility": 0.06000086,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-e3a394b27dbd71d97461",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:55885581"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

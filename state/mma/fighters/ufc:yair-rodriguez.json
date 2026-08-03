@@ -7,8 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
-    "externalIds": {}
+    "wikipediaTitle": "Yair Rodríguez",
+    "externalIds": {
+      "wikipediaPageId": "45514815"
+    }
   },
   "organizationHistory": [
     {
@@ -30,15 +32,25 @@
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
+    },
+    {
+      "id": "source:wikipedia:45514815",
+      "url": "https://en.wikipedia.org/wiki/Yair_Rodr%C3%ADguez",
+      "publisher": "Wikipedia",
+      "title": "Yair Rodríguez",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Yair Rodríguez",
       "sourceRefs": [
-        "source:wikipedia:40814604"
+        "source:wikipedia:40814604",
+        "source:wikipedia:45514815"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -91,9 +103,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 3753
+        "layoffDays": 3754
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
@@ -103,7 +115,7 @@
     "volatility": 0.06000315,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-10efc2debd24d918fbd9",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -143,11 +155,24 @@
         "source:wikipedia:40814604"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

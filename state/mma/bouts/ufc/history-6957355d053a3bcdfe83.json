@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6957355d053a3bcdfe83",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-gane-vs-volkov",
+    "name": "UFC Fight Night: Gane vs. Volkov",
+    "startsAtUtc": "2021-06-26T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexander-volkov",
+    "blue": "ufc:ciryl-gane"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-06-26T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:28754266"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:28754266"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:28754266"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

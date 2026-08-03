@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:jiri-prochazka",
+  "slug": "jiri-prochazka",
+  "org": "ufc",
+  "canonicalName": "Jiří Procházka",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Jiří Procházka",
+    "externalIds": {
+      "wikipediaPageId": "64548777"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:64548777"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:64548777",
+      "url": "https://en.wikipedia.org/wiki/Ji%C5%99%C3%AD_Proch%C3%A1zka",
+      "publisher": "Wikipedia",
+      "title": "Jiří Procházka",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Jiří Procházka",
+      "sourceRefs": [
+        "source:wikipedia:64548777"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-3d04a84ac5cb0fd87f1f",
+      "eventRef": "ufc:event:history-ufc-295",
+      "happenedAt": "2023-11-11T00:00:00.000Z",
+      "opponentRef": "ufc:alex-pereira",
+      "result": "loss",
+      "method": "TKO (elbows)",
+      "round": 2,
+      "elapsedSeconds": 548,
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-64093d4460895192ef5c",
+      "eventRef": "ufc:event:history-ufc-303",
+      "happenedAt": "2024-06-29T00:00:00.000Z",
+      "opponentRef": "ufc:alex-pereira",
+      "result": "loss",
+      "method": "TKO (head kick and punches)",
+      "round": 2,
+      "elapsedSeconds": 313,
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:jiri-prochazka:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 430.5,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 1.581136,
+        "layoffDays": 765
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1331.98791682,
+    "deviation": 248.01983961,
+    "volatility": 0.05999828,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-64093d4460895192ef5c",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64548777"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

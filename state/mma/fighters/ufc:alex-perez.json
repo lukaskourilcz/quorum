@@ -7,8 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
-    "externalIds": {}
+    "wikipediaTitle": "Alex Perez (fighter)",
+    "externalIds": {
+      "wikipediaPageId": "58085526"
+    }
   },
   "organizationHistory": [
     {
@@ -22,6 +24,15 @@
     }
   ],
   "sources": [
+    {
+      "id": "source:wikipedia:58085526",
+      "url": "https://en.wikipedia.org/wiki/Alex_Perez_(fighter)",
+      "publisher": "Wikipedia",
+      "title": "Alex Perez (fighter)",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    },
     {
       "id": "source:wikipedia:77593874",
       "url": "https://en.wikipedia.org/wiki/Asu_Almabayev",
@@ -51,6 +62,21 @@
   "discrepancies": [],
   "history": [
     {
+      "boutRef": "ufc:bout:history-db14bc8a572a985ca6da",
+      "eventRef": "ufc:event:history-ufc-277",
+      "happenedAt": "2022-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:alexandre-pantoja",
+      "result": "loss",
+      "method": "Submission (neck crank)",
+      "round": 1,
+      "elapsedSeconds": 91,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-0ccdd49e0d34e5150f0a",
       "eventRef": "ufc:event:history-ufc-fight-night-tsarukyan-vs-hooker",
       "happenedAt": "2025-11-22T00:00:00.000Z",
@@ -73,11 +99,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:alex-perez:history",
-      "bouts": 1,
+      "bouts": 2,
       "values": {
-        "bouts": 1,
+        "bouts": 2,
         "wins": 0,
-        "losses": 1,
+        "losses": 2,
         "draws": 0,
         "noContests": 0,
         "finishRate": null,
@@ -87,23 +113,23 @@
         "koTkoWinShare": null,
         "submissionWinShare": null,
         "decisionWinShare": null,
-        "averageElapsedSeconds": 622,
+        "averageElapsedSeconds": 356.5,
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
-        "fightsPerYear": 365.25,
-        "layoffDays": 253
+        "fightsPerYear": 0.301604,
+        "layoffDays": 254
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1451.50182411,
-    "deviation": 306.17102295,
-    "volatility": 0.05999928,
-    "boutCount": 1,
+    "rating": 1360.58166675,
+    "deviation": 261.82464023,
+    "volatility": 0.05999863,
+    "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-0ccdd49e0d34e5150f0a",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -143,11 +169,25 @@
         "source:wikipedia:77593874"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:77593874"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

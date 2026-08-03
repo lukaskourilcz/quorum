@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ebef62846c56e7c34ab7",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-291",
+    "name": "UFC 291",
+    "startsAtUtc": "2023-07-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alex-pereira",
+    "blue": "ufc:jan-b-achowicz"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-07-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42031348"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

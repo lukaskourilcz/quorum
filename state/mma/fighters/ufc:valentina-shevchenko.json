@@ -7,9 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
+    "wikipediaTitle": "Valentina Shevchenko",
     "externalIds": {
-      "cito": "061b0bd9-6f34-4849-b265-985aee95eee0"
+      "cito": "061b0bd9-6f34-4849-b265-985aee95eee0",
+      "wikipediaPageId": "44159133"
     }
   },
   "organizationHistory": [
@@ -30,17 +31,27 @@
       "title": "UFC fighter record for Valentina Shevchenko",
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:44159133",
+      "url": "https://en.wikipedia.org/wiki/Valentina_Shevchenko",
+      "publisher": "Wikipedia",
+      "title": "Valentina Shevchenko",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Valentina Shevchenko",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0"
+        "source:cito-ufc:2026-08-02:fighter:061b0bd9-6f34-4849-b265-985aee95eee0",
+        "source:wikipedia:44159133"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "womens-flyweight",
@@ -83,6 +94,36 @@
     }
   ],
   "history": [
+    {
+      "boutRef": "ufc:bout:history-b4a3cca8d95b483740d6",
+      "eventRef": "ufc:event:history-ufc-196",
+      "happenedAt": "2016-03-05T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-nunes",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-dfb98e39e3f08b37c72e",
+      "eventRef": "ufc:event:history-ufc-215",
+      "happenedAt": "2017-09-09T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-nunes",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
     {
       "boutRef": "ufc:bout:history-17b33f7d50b90b29d963",
       "eventRef": "ufc:event:history-ufc-285",
@@ -136,11 +177,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:valentina-shevchenko:history",
-      "bouts": 3,
+      "bouts": 5,
       "values": {
-        "bouts": 3,
+        "bouts": 5,
         "wins": 1,
-        "losses": 1,
+        "losses": 3,
         "draws": 1,
         "noContests": 0,
         "finishRate": 0,
@@ -150,23 +191,23 @@
         "koTkoWinShare": 0,
         "submissionWinShare": 0,
         "decisionWinShare": 1,
-        "averageElapsedSeconds": 1391.333333,
+        "averageElapsedSeconds": 1314.8,
         "recentThreeWinRate": 0.333333,
-        "recentFiveWinRate": 0.333333,
-        "fightsPerYear": 1.304438,
-        "layoffDays": 687
+        "recentFiveWinRate": 0.2,
+        "fightsPerYear": 0.469011,
+        "layoffDays": 688
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1782.55611342,
-    "deviation": 268.86702117,
-    "volatility": 0.06000471,
-    "boutCount": 2,
+    "rating": 1578.97485827,
+    "deviation": 244.66133099,
+    "volatility": 0.06000697,
+    "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-0fb7c82cdf948e2d2c01",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -174,6 +215,8 @@
       "stance",
       "heightCm",
       "reachCm",
+      "dateOfBirth",
+      "team",
       "record-history-mismatch"
     ],
     "lastReviewedAt": null
@@ -204,11 +247,27 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040",
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 1,
-  "corroboration": 0,
+  "completeness": 0.375,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

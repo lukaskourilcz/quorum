@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:julianna-pena",
+  "slug": "julianna-pena",
+  "org": "ufc",
+  "canonicalName": "Julianna Peña",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Julianna Peña",
+    "externalIds": {
+      "wikipediaPageId": "41237982"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:41237982"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:41237982",
+      "url": "https://en.wikipedia.org/wiki/Julianna_Pe%C3%B1a",
+      "publisher": "Wikipedia",
+      "title": "Julianna Peña",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Julianna Peña",
+      "sourceRefs": [
+        "source:wikipedia:41237982"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-6f743691510e42bf96b2",
+      "eventRef": "ufc:event:history-ufc-269",
+      "happenedAt": "2021-12-11T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-nunes",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 506,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-30d31d41d70787d156f2",
+      "eventRef": "ufc:event:history-ufc-277",
+      "happenedAt": "2022-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-nunes",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:julianna-pena:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 0,
+        "submissionWins": 1,
+        "decisionWins": 0,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 1,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 1003,
+        "recentThreeWinRate": 0.5,
+        "recentFiveWinRate": 0.5,
+        "fightsPerYear": 1.581136,
+        "layoffDays": 1465
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1650.00905171,
+    "deviation": 246.91629451,
+    "volatility": 0.06000282,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-30d31d41d70787d156f2",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:41237982"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

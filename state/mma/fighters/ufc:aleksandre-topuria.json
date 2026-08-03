@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:aleksandre-topuria",
+  "slug": "aleksandre-topuria",
+  "org": "ufc",
+  "canonicalName": "Aleksandre Topuria",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Aleksandre Topuria",
+    "externalIds": {
+      "cito": "b4709f67-a7d9-4173-b8e0-f5872bc21ae5",
+      "wikipediaPageId": "81849591"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-03",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Aleksandre Topuria",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:81849591",
+      "url": "https://en.wikipedia.org/wiki/Aleksandre_Topuria",
+      "publisher": "Wikipedia",
+      "title": "Aleksandre Topuria",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Aleksandre Topuria",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5",
+        "source:wikipedia:81849591"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "bantamweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "7-1-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:b4709f67-a7d9-4173-b8e0-f5872bc21ae5"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 0.5,
+  "corroboration": 0.125,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

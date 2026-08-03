@@ -7,9 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
+    "wikipediaTitle": "Sean Strickland",
     "externalIds": {
-      "cito": "30c02a93-8f0e-4f60-971b-a8075e82caa6"
+      "cito": "30c02a93-8f0e-4f60-971b-a8075e82caa6",
+      "wikipediaPageId": "42944791"
     }
   },
   "organizationHistory": [
@@ -30,17 +31,27 @@
       "title": "UFC fighter record for Sean Strickland",
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:42944791",
+      "url": "https://en.wikipedia.org/wiki/Sean_Strickland",
+      "publisher": "Wikipedia",
+      "title": "Sean Strickland",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Sean Strickland",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+        "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6",
+        "source:wikipedia:42944791"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "middleweight",
@@ -66,24 +77,117 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "31-7-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
+        },
+        {
+          "value": "2-1-0",
+          "sourceRef": "derived:ufc:sean-strickland:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-d410cee82f56805c1a12",
+      "eventRef": "ufc:event:history-ufc-276",
+      "happenedAt": "2022-07-02T00:00:00.000Z",
+      "opponentRef": "ufc:alex-pereira",
+      "result": "loss",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 156,
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-917b2e0a9db79d814be7",
+      "eventRef": "ufc:event:history-ufc-on-espn-strickland-vs-magomedov",
+      "happenedAt": "2023-07-01T00:00:00.000Z",
+      "opponentRef": "ufc:abusupiyan-magomedov",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 560,
+      "sourceRefs": [
+        "source:wikipedia:80563842"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8463e84f4d32786f2bab",
+      "eventRef": "ufc:event:history-ufc-fight-night-strickland-vs-hernandez",
+      "happenedAt": "2026-02-21T00:00:00.000Z",
+      "opponentRef": "ufc:anthony-hernandez",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 743,
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:sean-strickland:history",
+      "bouts": 3,
+      "values": {
+        "bouts": 3,
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 2,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 486.333333,
+        "recentThreeWinRate": 0.666667,
+        "recentFiveWinRate": 0.666667,
+        "fightsPerYear": 0.549237,
+        "layoffDays": 163
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1670.60515019,
+    "deviation": 228.67800942,
+    "volatility": 0.06000155,
+    "boutCount": 3,
+    "asOfBoutRef": "ufc:bout:history-8463e84f4d32786f2bab",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "stance",
       "heightCm",
-      "reachCm"
+      "reachCm",
+      "dateOfBirth",
+      "team",
+      "record-history-mismatch"
     ],
     "lastReviewedAt": null
   },
@@ -98,11 +202,28 @@
         "source:cito-ufc:2026-08-02:fighter:30c02a93-8f0e-4f60-971b-a8075e82caa6"
       ],
       "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348",
+        "source:wikipedia:80563842",
+        "source:wikipedia:64111674"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 1,
-  "corroboration": 0,
+  "completeness": 0.375,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

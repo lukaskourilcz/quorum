@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-e3a394b27dbd71d97461",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-292",
+    "name": "UFC 292",
+    "startsAtUtc": "2023-08-19T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aljamain-sterling",
+    "blue": "ufc:sean-o-malley"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-08-19T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:43320208"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:43320208"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 351,
+    "sourceRefs": [
+      "source:wikipedia:43320208"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

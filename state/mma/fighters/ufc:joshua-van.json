@@ -7,9 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
+    "wikipediaTitle": "Joshua Van",
     "externalIds": {
-      "cito": "c0815ed6-d86d-46dc-b861-83105d81a842"
+      "cito": "c0815ed6-d86d-46dc-b861-83105d81a842",
+      "wikipediaPageId": "78781693"
     }
   },
   "organizationHistory": [
@@ -30,17 +31,27 @@
       "title": "UFC fighter record for Joshua Van",
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:78781693",
+      "url": "https://en.wikipedia.org/wiki/Joshua_Van",
+      "publisher": "Wikipedia",
+      "title": "Joshua Van",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Joshua Van",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+        "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842",
+        "source:wikipedia:78781693"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "flyweight",
@@ -66,24 +77,87 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "17-2-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
+        },
+        {
+          "value": "1-0-0",
+          "sourceRef": "derived:ufc:joshua-van:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-624484474ecb6285950a",
+      "eventRef": "ufc:event:history-ufc-323",
+      "happenedAt": "2025-12-06T00:00:00.000Z",
+      "opponentRef": "ufc:alexandre-pantoja",
+      "result": "win",
+      "method": "TKO (arm injury)",
+      "round": 1,
+      "elapsedSeconds": 26,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:joshua-van:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 26,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 240
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1809.50864411,
+    "deviation": 283.32634798,
+    "volatility": 0.06000145,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-624484474ecb6285950a",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "stance",
       "heightCm",
-      "reachCm"
+      "reachCm",
+      "dateOfBirth",
+      "team",
+      "record-history-mismatch"
     ],
     "lastReviewedAt": null
   },
@@ -98,11 +172,26 @@
         "source:cito-ufc:2026-08-02:fighter:c0815ed6-d86d-46dc-b861-83105d81a842"
       ],
       "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 1,
-  "corroboration": 0,
+  "completeness": 0.375,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

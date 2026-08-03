@@ -7,9 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
+    "wikipediaTitle": "Petr Yan",
     "externalIds": {
-      "cito": "e530969e-5117-4913-a912-deb37fe302fb"
+      "cito": "e530969e-5117-4913-a912-deb37fe302fb",
+      "wikipediaPageId": "57503647"
     }
   },
   "organizationHistory": [
@@ -30,17 +31,27 @@
       "title": "UFC fighter record for Petr Yan",
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:57503647",
+      "url": "https://en.wikipedia.org/wiki/Petr_Yan",
+      "publisher": "Wikipedia",
+      "title": "Petr Yan",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Petr Yan",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-02:fighter:e530969e-5117-4913-a912-deb37fe302fb"
+        "source:cito-ufc:2026-08-02:fighter:e530969e-5117-4913-a912-deb37fe302fb",
+        "source:wikipedia:57503647"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "bantamweight",
@@ -66,24 +77,102 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "20-5-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:e530969e-5117-4913-a912-deb37fe302fb"
+        },
+        {
+          "value": "0-2-0",
+          "sourceRef": "derived:ufc:petr-yan:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-604cca95ed217fa749f5",
+      "eventRef": "ufc:event:history-ufc-259",
+      "happenedAt": "2021-03-06T00:00:00.000Z",
+      "opponentRef": "ufc:aljamain-sterling",
+      "result": "loss",
+      "method": "DQ (illegal knee)",
+      "round": 4,
+      "elapsedSeconds": 1169,
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-728c91d8cd4fbe82eba4",
+      "eventRef": "ufc:event:history-ufc-273",
+      "happenedAt": "2022-04-09T00:00:00.000Z",
+      "opponentRef": "ufc:aljamain-sterling",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:petr-yan:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 1334.5,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 0.915395,
+        "layoffDays": 1577
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1279.68280156,
+    "deviation": 260.48876257,
+    "volatility": 0.05999893,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-728c91d8cd4fbe82eba4",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "stance",
       "heightCm",
-      "reachCm"
+      "reachCm",
+      "dateOfBirth",
+      "team",
+      "record-history-mismatch"
     ],
     "lastReviewedAt": null
   },
@@ -98,11 +187,26 @@
         "source:cito-ufc:2026-08-02:fighter:e530969e-5117-4913-a912-deb37fe302fb"
       ],
       "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 1,
-  "corroboration": 0,
+  "completeness": 0.375,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

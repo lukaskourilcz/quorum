@@ -7,9 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
+    "wikipediaTitle": "Islam Makhachev",
     "externalIds": {
-      "cito": "2df4f188-a33e-463a-a66b-471cfa23e2a0"
+      "cito": "2df4f188-a33e-463a-a66b-471cfa23e2a0",
+      "wikipediaPageId": "44264537"
     }
   },
   "organizationHistory": [
@@ -30,17 +31,27 @@
       "title": "UFC fighter record for Islam Makhachev",
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:44264537",
+      "url": "https://en.wikipedia.org/wiki/Islam_Makhachev",
+      "publisher": "Wikipedia",
+      "title": "Islam Makhachev",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Islam Makhachev",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-02:fighter:2df4f188-a33e-463a-a66b-471cfa23e2a0"
+        "source:cito-ufc:2026-08-02:fighter:2df4f188-a33e-463a-a66b-471cfa23e2a0",
+        "source:wikipedia:44264537"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "welterweight",
@@ -85,13 +96,15 @@
     "volatility": 0.06,
     "boutCount": 0,
     "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "heightCm",
-      "reachCm"
+      "reachCm",
+      "dateOfBirth",
+      "team"
     ],
     "lastReviewedAt": null
   },
@@ -106,11 +119,22 @@
         "source:cito-ufc:2026-08-02:fighter:2df4f188-a33e-463a-a66b-471cfa23e2a0"
       ],
       "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 1,
-  "corroboration": 0,
+  "completeness": 0.5,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

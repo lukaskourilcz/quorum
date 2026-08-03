@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8e9ee43fc899c040dd61",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-224",
+    "name": "UFC 224",
+    "startsAtUtc": "2018-05-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amanda-nunes",
+    "blue": "ufc:raquel-pennington"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-05-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:30387040"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:30387040"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (elbows and punches)",
+    "round": 5,
+    "elapsedSeconds": 1356,
+    "sourceRefs": [
+      "source:wikipedia:30387040"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

@@ -7,21 +7,49 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
-    "externalIds": {}
+    "wikipediaTitle": "Aiemann Zahabi",
+    "externalIds": {
+      "cito": "2e1e6454-aab9-4e37-86b2-4cb741637579",
+      "wikipediaPageId": "54051600"
+    }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-03",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:70178359"
       ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-03",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+      ]
     }
   ],
   "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Aiemann Zahabi",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:54051600",
+      "url": "https://en.wikipedia.org/wiki/Aiemann_Zahabi",
+      "publisher": "Wikipedia",
+      "title": "Aiemann Zahabi",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    },
     {
       "id": "source:wikipedia:70178359",
       "url": "https://en.wikipedia.org/wiki/Aori_Qileng",
@@ -36,9 +64,38 @@
     "name": {
       "value": "Aiemann Zahabi",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579",
+        "source:wikipedia:54051600",
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "bantamweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "14-3-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -48,7 +105,22 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "14-3-0",
+          "sourceRef": "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+        },
+        {
+          "value": "1-0-0",
+          "sourceRef": "derived:ufc:aiemann-zahabi:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-796fdf7b2245077427f6",
@@ -91,9 +163,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 1149
+        "layoffDays": 1150
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
@@ -103,18 +175,16 @@
     "volatility": 0.06000043,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-796fdf7b2245077427f6",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "heightCm",
       "reachCm",
       "dateOfBirth",
-      "team"
+      "team",
+      "record-history-mismatch"
     ],
     "lastReviewedAt": null
   },
@@ -143,11 +213,51 @@
         "source:wikipedia:70178359"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2e1e6454-aab9-4e37-86b2-4cb741637579"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
-  "corroboration": 0,
+  "completeness": 0.5,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

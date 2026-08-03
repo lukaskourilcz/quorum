@@ -7,9 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
+    "wikipediaTitle": "Carlos Ulberg",
     "externalIds": {
-      "cito": "421d5615-52f9-44ee-9094-67b8291229fc"
+      "cito": "421d5615-52f9-44ee-9094-67b8291229fc",
+      "wikipediaPageId": "66657574"
     }
   },
   "organizationHistory": [
@@ -30,17 +31,27 @@
       "title": "UFC fighter record for Carlos Ulberg",
       "retrievedAt": "2026-08-02T15:43:59.798Z",
       "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:66657574",
+      "url": "https://en.wikipedia.org/wiki/Carlos_Ulberg",
+      "publisher": "Wikipedia",
+      "title": "Carlos Ulberg",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
     }
   ],
   "fields": {
     "name": {
       "value": "Carlos Ulberg",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+        "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc",
+        "source:wikipedia:66657574"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "light-heavyweight",
@@ -66,24 +77,87 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "15-1-0",
+          "sourceRef": "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
+        },
+        {
+          "value": "1-0-0",
+          "sourceRef": "derived:ufc:carlos-ulberg:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-c04fee74d8b718077d2a",
+      "eventRef": "ufc:event:history-ufc-on-espn-lewis-vs-nascimento",
+      "happenedAt": "2024-05-11T00:00:00.000Z",
+      "opponentRef": "ufc:alonzo-menifield",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 1,
+      "elapsedSeconds": 12,
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:carlos-ulberg:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 1,
+        "koTkoWins": 1,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": 1,
+        "submissionWinShare": 0,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 12,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 814
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1662.31089391,
+    "deviation": 290.31896372,
+    "volatility": 0.05999968,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-c04fee74d8b718077d2a",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "stance",
       "heightCm",
-      "reachCm"
+      "reachCm",
+      "dateOfBirth",
+      "team",
+      "record-history-mismatch"
     ],
     "lastReviewedAt": null
   },
@@ -98,11 +172,26 @@
         "source:cito-ufc:2026-08-02:fighter:421d5615-52f9-44ee-9094-67b8291229fc"
       ],
       "note": "Created from the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 1,
-  "corroboration": 0,
+  "completeness": 0.375,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

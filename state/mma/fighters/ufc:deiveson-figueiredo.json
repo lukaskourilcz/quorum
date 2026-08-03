@@ -29,7 +29,7 @@
       "url": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
       "publisher": "Wikipedia",
       "title": "Deiveson Figueiredo",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -40,7 +40,7 @@
       "sourceRefs": [
         "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -51,16 +51,61 @@
     "record"
   ],
   "discrepancies": [],
-  "history": [],
-  "statsProfiles": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-314312bae8eb1c8a7291",
+      "eventRef": "ufc:event:history-ufc-240",
+      "happenedAt": "2019-07-27T00:00:00.000Z",
+      "opponentRef": "ufc:alexandre-pantoja",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:deiveson-figueiredo:history",
+      "bouts": 1,
+      "values": {
+        "bouts": 1,
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 1,
+        "koTkoWinShare": 0,
+        "submissionWinShare": 0,
+        "decisionWinShare": 1,
+        "averageElapsedSeconds": 900,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 365.25,
+        "layoffDays": 2564
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
   "rating": {
     "system": "glicko2",
-    "rating": 1500,
-    "deviation": 350,
-    "volatility": 0.06,
-    "boutCount": 0,
-    "asOfBoutRef": null,
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1767.16671599,
+    "deviation": 287.88191486,
+    "volatility": 0.06000086,
+    "boutCount": 1,
+    "asOfBoutRef": "ufc:bout:history-314312bae8eb1c8a7291",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -109,11 +154,24 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

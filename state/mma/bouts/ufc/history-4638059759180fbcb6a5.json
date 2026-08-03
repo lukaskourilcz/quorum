@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-4638059759180fbcb6a5",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-cannonier-vs-gastelum",
+    "name": "UFC on ESPN: Cannonier vs. Gastelum",
+    "startsAtUtc": "2021-08-21T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexandre-pantoja",
+    "blue": "ufc:brandon-royval"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-08-21T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54180928"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 406,
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:anshul-jubli",
+  "slug": "anshul-jubli",
+  "org": "ufc",
+  "canonicalName": "Anshul Jubli",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Anshul Jubli",
+    "externalIds": {
+      "wikipediaPageId": "72989309"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:72989309",
+      "url": "https://en.wikipedia.org/wiki/Anshul_Jubli",
+      "publisher": "Wikipedia",
+      "title": "Anshul Jubli",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Anshul Jubli",
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 175.26,
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Lightweight",
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Soma Fight Club",
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "7-2-0",
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "dateOfBirth"
+    ],
+    "lastReviewedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 0 historical fight rows."
+    }
+  ],
+  "completeness": 0.75,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

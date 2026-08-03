@@ -1,0 +1,313 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:amanda-nunes",
+  "slug": "amanda-nunes",
+  "org": "ufc",
+  "canonicalName": "Amanda Nunes",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Amanda Nunes",
+    "externalIds": {
+      "wikipediaPageId": "30387040"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:30387040",
+      "url": "https://en.wikipedia.org/wiki/Amanda_Nunes",
+      "publisher": "Wikipedia",
+      "title": "Amanda Nunes",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Amanda Nunes",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "dateOfBirth": {
+      "value": "1988-05-30",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 175,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "Bantamweight",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Team Carvalho (2003–2012) AMA Fight Club (2010–2012) MMA Masters (2012–2014) American Top Team (2014–2022)",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "23-5-0",
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "23-5-0",
+          "sourceRef": "source:wikipedia:30387040"
+        },
+        {
+          "value": "5-1-0",
+          "sourceRef": "derived:ufc:amanda-nunes:history"
+        }
+      ],
+      "status": "open"
+    }
+  ],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-b4a3cca8d95b483740d6",
+      "eventRef": "ufc:event:history-ufc-196",
+      "happenedAt": "2016-03-05T00:00:00.000Z",
+      "opponentRef": "ufc:valentina-shevchenko",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-dae65e063210f80d2db2",
+      "eventRef": "ufc:event:history-ufc-200",
+      "happenedAt": "2016-07-09T00:00:00.000Z",
+      "opponentRef": "ufc:miesha-tate",
+      "result": "win",
+      "method": "Submission (rear-naked choke )",
+      "round": 1,
+      "elapsedSeconds": 196,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-dfb98e39e3f08b37c72e",
+      "eventRef": "ufc:event:history-ufc-215",
+      "happenedAt": "2017-09-09T00:00:00.000Z",
+      "opponentRef": "ufc:valentina-shevchenko",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-8e9ee43fc899c040dd61",
+      "eventRef": "ufc:event:history-ufc-224",
+      "happenedAt": "2018-05-12T00:00:00.000Z",
+      "opponentRef": "ufc:raquel-pennington",
+      "result": "win",
+      "method": "TKO (elbows and punches)",
+      "round": 5,
+      "elapsedSeconds": 1356,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-6f743691510e42bf96b2",
+      "eventRef": "ufc:event:history-ufc-269",
+      "happenedAt": "2021-12-11T00:00:00.000Z",
+      "opponentRef": "ufc:julianna-pena",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 506,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-30d31d41d70787d156f2",
+      "eventRef": "ufc:event:history-ufc-277",
+      "happenedAt": "2022-07-30T00:00:00.000Z",
+      "opponentRef": "ufc:julianna-pena",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:amanda-nunes:history",
+      "bouts": 6,
+      "values": {
+        "bouts": 6,
+        "wins": 5,
+        "losses": 1,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": 0.4,
+        "koTkoWins": 1,
+        "submissionWins": 1,
+        "decisionWins": 3,
+        "koTkoWinShare": 0.2,
+        "submissionWinShare": 0.2,
+        "decisionWinShare": 0.6,
+        "averageElapsedSeconds": 993,
+        "recentThreeWinRate": 0.666667,
+        "recentFiveWinRate": 0.8,
+        "fightsPerYear": 0.7811,
+        "layoffDays": 1465
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1802.42549214,
+    "deviation": 193.80715853,
+    "volatility": 0.06000046,
+    "boutCount": 6,
+    "asOfBoutRef": "ufc:bout:history-30d31d41d70787d156f2",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "heightCm",
+      "record-history-mismatch"
+    ],
+    "lastReviewedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "source-refresh",
+      "fields": [
+        "dateOfBirth",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 28 historical fight rows."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.875,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

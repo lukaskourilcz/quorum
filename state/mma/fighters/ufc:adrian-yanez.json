@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:adrian-yanez",
+  "slug": "adrian-yanez",
+  "org": "ufc",
+  "canonicalName": "Adrian Yanez",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Adrian Yañez",
+    "externalIds": {
+      "cito": "2748e5ac-f2e0-43cd-ad20-564ad4744997",
+      "wikipediaPageId": "67943570"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-03",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2748e5ac-f2e0-43cd-ad20-564ad4744997"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-03:fighter:2748e5ac-f2e0-43cd-ad20-564ad4744997",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Adrian Yanez",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:67943570",
+      "url": "https://en.wikipedia.org/wiki/Adrian_Ya%C3%B1ez",
+      "publisher": "Wikipedia",
+      "title": "Adrian Yañez",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Adrian Yanez",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2748e5ac-f2e0-43cd-ad20-564ad4744997"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "bantamweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2748e5ac-f2e0-43cd-ad20-564ad4744997"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "18-6-1",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2748e5ac-f2e0-43cd-ad20-564ad4744997"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:2748e5ac-f2e0-43cd-ad20-564ad4744997"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 0.375,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

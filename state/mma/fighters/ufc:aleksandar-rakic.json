@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:aleksandar-rakic",
+  "slug": "aleksandar-rakic",
+  "org": "ufc",
+  "canonicalName": "Aleksandar Rakić",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Aleksandar Rakić",
+    "externalIds": {
+      "cito": "ff86d16b-ef4a-4afd-94f2-0b795d2047cd",
+      "wikipediaPageId": "56012518"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": "2026-08-03",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:ff86d16b-ef4a-4afd-94f2-0b795d2047cd"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-03:fighter:ff86d16b-ef4a-4afd-94f2-0b795d2047cd",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Aleksandar Rakić",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary"
+    },
+    {
+      "id": "source:wikipedia:56012518",
+      "url": "https://en.wikipedia.org/wiki/Aleksandar_Raki%C4%87",
+      "publisher": "Wikipedia",
+      "title": "Aleksandar Rakić",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Aleksandar Rakić",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:ff86d16b-ef4a-4afd-94f2-0b795d2047cd",
+        "source:wikipedia:56012518"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "heavyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:ff86d16b-ef4a-4afd-94f2-0b795d2047cd"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "15-6-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:ff86d16b-ef4a-4afd-94f2-0b795d2047cd"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [],
+  "statsProfiles": [],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1500,
+    "deviation": 350,
+    "volatility": 0.06,
+    "boutCount": 0,
+    "asOfBoutRef": null,
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-03:fighter:ff86d16b-ef4a-4afd-94f2-0b795d2047cd"
+      ],
+      "note": "Created from the approved Cito free-tier intake."
+    }
+  ],
+  "completeness": 0.375,
+  "corroboration": 0.125,
+  "modelEligible": false,
+  "modelVersion": "mma-1.0.0+f2e370f0",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "fighter-card/1",
+  "id": "ufc:brandon-royval",
+  "slug": "brandon-royval",
+  "org": "ufc",
+  "canonicalName": "Brandon Royval",
+  "aliases": [],
+  "identity": {
+    "wikidataId": null,
+    "wikipediaTitle": "Brandon Royval",
+    "externalIds": {
+      "wikipediaPageId": "64578559"
+    }
+  },
+  "organizationHistory": [
+    {
+      "org": "ufc",
+      "from": null,
+      "to": null,
+      "status": "unknown",
+      "sourceRefs": [
+        "source:wikipedia:64578559"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:wikipedia:64578559",
+      "url": "https://en.wikipedia.org/wiki/Brandon_Royval",
+      "publisher": "Wikipedia",
+      "title": "Brandon Royval",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    }
+  ],
+  "fields": {
+    "name": {
+      "value": "Brandon Royval",
+      "sourceRefs": [
+        "source:wikipedia:64578559"
+      ],
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "status": "provisional",
+      "corroborated": false
+    }
+  },
+  "criticalFields": [
+    "name",
+    "division",
+    "record"
+  ],
+  "discrepancies": [],
+  "history": [
+    {
+      "boutRef": "ufc:bout:history-4638059759180fbcb6a5",
+      "eventRef": "ufc:event:history-ufc-on-espn-cannonier-vs-gastelum",
+      "happenedAt": "2021-08-21T00:00:00.000Z",
+      "opponentRef": "ufc:alexandre-pantoja",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 2,
+      "elapsedSeconds": 406,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-96558fa774174fb7c543",
+      "eventRef": "ufc:event:history-ufc-296",
+      "happenedAt": "2023-12-16T00:00:00.000Z",
+      "opponentRef": "ufc:alexandre-pantoja",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    }
+  ],
+  "statsProfiles": [
+    {
+      "id": "derived-career",
+      "label": "Career totals derived from sourced canonical bout records",
+      "scope": "career",
+      "organization": "ufc",
+      "sourceRef": "derived:ufc:brandon-royval:history",
+      "bouts": 2,
+      "values": {
+        "bouts": 2,
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "noContests": 0,
+        "finishRate": null,
+        "koTkoWins": 0,
+        "submissionWins": 0,
+        "decisionWins": 0,
+        "koTkoWinShare": null,
+        "submissionWinShare": null,
+        "decisionWinShare": null,
+        "averageElapsedSeconds": 953,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0,
+        "fightsPerYear": 0.431219,
+        "layoffDays": 961
+      },
+      "updatedAt": "2026-08-03T09:55:50.919Z"
+    }
+  ],
+  "rating": {
+    "system": "glicko2",
+    "rating": 1312.16629268,
+    "deviation": 248.4941277,
+    "volatility": 0.05999845,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-96558fa774174fb7c543",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
+  },
+  "quality": {
+    "evidenceTier": "secondary",
+    "gaps": [
+      "division",
+      "record",
+      "stance",
+      "heightCm",
+      "reachCm",
+      "dateOfBirth",
+      "team"
+    ],
+    "lastReviewedAt": null
+  },
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "identity",
+        "name"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64578559"
+      ],
+      "note": "Created from a Wikipedia fighter category."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    }
+  ],
+  "completeness": 0.125,
+  "corroboration": 0,
+  "modelEligible": false,
+  "modelVersion": "mma-0.1.0+00000000",
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}

@@ -7,8 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
-    "externalIds": {}
+    "wikipediaTitle": "Charles Oliveira",
+    "externalIds": {
+      "wikipediaPageId": "27167974"
+    }
   },
   "organizationHistory": [
     {
@@ -23,6 +25,15 @@
   ],
   "sources": [
     {
+      "id": "source:wikipedia:27167974",
+      "url": "https://en.wikipedia.org/wiki/Charles_Oliveira",
+      "publisher": "Wikipedia",
+      "title": "Charles Oliveira",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    },
+    {
       "id": "source:wikipedia:43536705",
       "url": "https://en.wikipedia.org/wiki/Beneil_Dariush",
       "publisher": "Wikipedia",
@@ -36,9 +47,10 @@
     "name": {
       "value": "Charles Oliveira",
       "sourceRefs": [
+        "source:wikipedia:27167974",
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -91,9 +103,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 1149
+        "layoffDays": 1150
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
@@ -103,7 +115,7 @@
     "volatility": 0.06000404,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-3a9a2f967bf677f23fd1",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -143,11 +155,24 @@
         "source:wikipedia:43536705"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

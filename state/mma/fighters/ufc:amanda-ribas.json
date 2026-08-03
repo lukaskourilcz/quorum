@@ -7,8 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
-    "externalIds": {}
+    "wikipediaTitle": "Amanda Ribas",
+    "externalIds": {
+      "wikipediaPageId": "63376607"
+    }
   },
   "organizationHistory": [
     {
@@ -23,6 +25,15 @@
   ],
   "sources": [
     {
+      "id": "source:wikipedia:63376607",
+      "url": "https://en.wikipedia.org/wiki/Amanda_Ribas",
+      "publisher": "Wikipedia",
+      "title": "Amanda Ribas",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    },
+    {
       "id": "source:wikipedia:68442521",
       "url": "https://en.wikipedia.org/wiki/Ariane_Carnelossi",
       "publisher": "Wikipedia",
@@ -36,9 +47,10 @@
     "name": {
       "value": "Amanda Ribas",
       "sourceRefs": [
+        "source:wikipedia:63376607",
         "source:wikipedia:68442521"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -91,9 +103,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 4327
+        "layoffDays": 4328
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
@@ -103,7 +115,7 @@
     "volatility": 0.05999968,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-e1eb489540d33535ab31",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -143,11 +155,24 @@
         "source:wikipedia:68442521"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

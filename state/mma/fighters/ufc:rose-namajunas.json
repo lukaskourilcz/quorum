@@ -7,8 +7,10 @@
   "aliases": [],
   "identity": {
     "wikidataId": null,
-    "wikipediaTitle": null,
-    "externalIds": {}
+    "wikipediaTitle": "Rose Namajunas",
+    "externalIds": {
+      "wikipediaPageId": "39957370"
+    }
   },
   "organizationHistory": [
     {
@@ -23,6 +25,15 @@
   ],
   "sources": [
     {
+      "id": "source:wikipedia:39957370",
+      "url": "https://en.wikipedia.org/wiki/Rose_Namajunas",
+      "publisher": "Wikipedia",
+      "title": "Rose Namajunas",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "evidenceTier": "secondary",
+      "license": "CC BY-SA"
+    },
+    {
       "id": "source:wikipedia:47691727",
       "url": "https://en.wikipedia.org/wiki/Angela_Hill",
       "publisher": "Wikipedia",
@@ -36,9 +47,10 @@
     "name": {
       "value": "Rose Namajunas",
       "sourceRefs": [
+        "source:wikipedia:39957370",
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -91,9 +103,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 3956
+        "layoffDays": 3957
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
@@ -103,7 +115,7 @@
     "volatility": 0.05999996,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:history-ee8d77cc8322f865ee10",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -143,11 +155,24 @@
         "source:wikipedia:47691727"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.125,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

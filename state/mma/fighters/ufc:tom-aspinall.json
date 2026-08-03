@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Tom_Aspinall",
       "publisher": "Wikipedia",
       "title": "Tom Aspinall",
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -58,7 +58,7 @@
         "source:cito-ufc:2026-08-02:fighter:62d43a97-f4dc-45e3-9e09-f301582f409f",
         "source:wikipedia:66304460"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
+      "retrievedAt": "2026-08-03T09:55:50.919Z",
       "status": "verified",
       "corroborated": true
     },
@@ -126,6 +126,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3766f172252a860c2424",
+      "eventRef": "ufc:event:history-ufc-fight-night-volkov-vs-aspinall",
+      "happenedAt": "2022-03-19T00:00:00.000Z",
+      "opponentRef": "ufc:alexander-volkov",
+      "result": "win",
+      "method": "Submission (straight armbar)",
+      "round": 1,
+      "elapsedSeconds": 225,
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -135,37 +150,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:tom-aspinall:history",
-      "bouts": 1,
+      "bouts": 2,
       "values": {
-        "bouts": 1,
-        "wins": 1,
+        "bouts": 2,
+        "wins": 2,
         "losses": 0,
         "draws": 0,
         "noContests": 0,
         "finishRate": 1,
         "koTkoWins": 1,
-        "submissionWins": 0,
+        "submissionWins": 1,
         "decisionWins": 0,
-        "koTkoWinShare": 1,
-        "submissionWinShare": 0,
+        "koTkoWinShare": 0.5,
+        "submissionWinShare": 0.5,
         "decisionWinShare": 0,
-        "averageElapsedSeconds": 95,
+        "averageElapsedSeconds": 160,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
-        "fightsPerYear": 365.25,
-        "layoffDays": 2122
+        "fightsPerYear": 0.6957,
+        "layoffDays": 1598
       },
-      "updatedAt": "2026-08-02T15:43:59.798Z"
+      "updatedAt": "2026-08-03T09:55:50.919Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1731.884899,
-    "deviation": 286.92720977,
-    "volatility": 0.06000037,
-    "boutCount": 1,
-    "asOfBoutRef": "ufc:bout:history-6feffbe2073d8054e5f5",
-    "updatedAt": "2026-08-02T15:43:59.798Z"
+    "rating": 1778.11489683,
+    "deviation": 262.41331272,
+    "volatility": 0.05999968,
+    "boutCount": 2,
+    "asOfBoutRef": "ufc:bout:history-3766f172252a860c2424",
+    "updatedAt": "2026-08-03T09:55:50.919Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -256,11 +271,27 @@
         "source:wikipedia:69880085"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:69880085",
+        "source:wikipedia:28754266"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.5,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-02T15:43:59.798Z"
+  "updatedAt": "2026-08-03T09:55:50.919Z"
 }

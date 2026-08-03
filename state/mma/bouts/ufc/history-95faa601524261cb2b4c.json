@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-95faa601524261cb2b4c",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-walker-vs-zhang",
+    "name": "UFC Fight Night: Walker vs. Zhang",
+    "startsAtUtc": "2025-08-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aljamain-sterling",
+    "blue": "ufc:brian-ortega"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-08-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T09:55:50.919Z",
+    "lastSeenAt": "2026-08-03T09:55:50.919Z",
+    "sourceRefs": [
+      "source:wikipedia:43320208"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:43320208"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:43320208"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T09:55:50.919Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43320208"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T09:55:50.919Z"
+}
