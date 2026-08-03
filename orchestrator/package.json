@@ -27,7 +27,8 @@
     "sources:shadow": "tsx src/sources/shadow.ts",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
-    "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts"
+    "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts",
+    "social:deck": "tsx src/social/deck-cli.ts"
   },
   "dependencies": {
     "@boardlessai/carousel-studio": "workspace:*",

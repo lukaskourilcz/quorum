@@ -28,3 +28,6 @@ __pycache__/
 site/test-results/
 site/playwright-report/
 site/.playwright/
+
+# Carousel previews are regenerable renders for looking at, not canonical state.
+state/social/previews/

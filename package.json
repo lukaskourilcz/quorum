@@ -34,6 +34,7 @@
     "site:smoke": "node scripts/smoke-site.mjs",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune"
+    "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune",
+    "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck"
   }
 }
