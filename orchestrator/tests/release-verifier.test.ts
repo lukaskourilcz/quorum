@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { deterministicArticleImage } from "../src/images/article-image.js";
-import { verifyReleaseSnapshot, resolveCiState } from "../src/delivery/verifier.js";
+import { czechArticlePath, resolveCiState, verifyReleaseSnapshot } from "../src/delivery/verifier.js";
 
 function html(input: { title: string; hash: string; attribution: string }): string {
   return `<!doctype html><html><head><meta name="boardless-content-hash" content="${input.hash}"></head><body><h1>${input.title}</h1><a>${input.attribution}</a></body></html>`;
@@ -102,5 +102,15 @@ describe("a failing signal is not outvoted by a passing one", () => {
       { state: "success", statuses: [{}] },
       { check_runs: [{ status: "completed", conclusion: "success" }] }
     )).toBe("success");
+  });
+});
+
+describe("the Czech page lives at a different path on each site", () => {
+  it("is the root on Caught Up and the /cs segment on MMA Files", () => {
+    // Caught Up moved Czech onto the URLs English used to hold, so /cs there is a 308.
+    // safeFetch would follow it and the proof would still pass, but a release check should
+    // read the page rather than the redirect that points at it.
+    expect(czechArticlePath("caught-up", "a-slug")).toBe("/articles/a-slug");
+    expect(czechArticlePath("mma-files", "a-slug")).toBe("/cs/articles/a-slug");
   });
 });

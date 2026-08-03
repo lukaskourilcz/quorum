@@ -182,6 +182,18 @@ async function githubChecks(input: { repository: string; commit: string; token: 
   ];
 }
 
+/**
+ * Where the Czech article lives on each site.
+ *
+ * The two differ. Caught Up serves Czech at the root, because Czech took over the URLs English
+ * used to hold and /cs now redirects there; MMA Files keeps its /cs segment. Fetching the
+ * redirecting form would still pass — safeFetch follows same-host redirects — but a release
+ * proof should read the page rather than the redirect that points at it.
+ */
+export function czechArticlePath(venture: "caught-up" | "mma-files", slug: string): string {
+  return `${venture === "caught-up" ? "" : "/cs"}/articles/${slug}`;
+}
+
 async function publicSnapshot(input: {
   venture: "caught-up" | "mma-files";
   slug: string;
@@ -193,7 +205,7 @@ async function publicSnapshot(input: {
 }): Promise<ReleaseSnapshot> {
   const baseUrl = input.baseUrl.replace(/\/$/u, "");
   const cacheBust = encodeURIComponent(`${input.packageHash.slice(0, 12)}-${input.now.getTime()}`);
-  const csUrl = `${baseUrl}/cs/articles/${input.slug}?boardless_verify=${cacheBust}`;
+  const csUrl = `${baseUrl}${czechArticlePath(input.venture, input.slug)}?boardless_verify=${cacheBust}`;
   const imageUrl = `${baseUrl}${input.image.hero_path.replace(/^public/u, "")}?boardless_verify=${cacheBust}`;
   const host = new URL(baseUrl).hostname;
   const fetchPage = async (locale: "en" | "cs", url: string): Promise<ReleasePageSnapshot> => {

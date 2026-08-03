@@ -560,9 +560,11 @@ async function runCaughtUpLiveEditionCycle(
     } else {
       try {
         const slug = produced.package.article.cs.frontmatter.slug;
+        // Czech is served at the site root now, and /cs 308s there. A queue item carries its
+        // destination to the platform and cannot be edited afterwards, so it points at the
+        // final URL rather than at a redirect.
         const destinations = {
-          en: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString(),
-          cs: new URL(`/cs/articles/${slug}`, caughtUpBaseUrl).toString()
+          cs: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString()
         };
         const social = await composeEditionSocialPack({
           editionPackage: produced.package,

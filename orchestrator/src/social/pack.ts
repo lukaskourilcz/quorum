@@ -123,14 +123,16 @@ function queueItem(input: {
 
 export interface SocialPackComposition {
   pack: SocialPack;
-  queueItems: [QueueItem, QueueItem, QueueItem, QueueItem];
+  /** One per published locale and channel. Two while the desk publishes one language. */
+  queueItems: QueueItem[];
   artifactPaths: string[];
 }
 
 export async function composeEditionSocialPack(input: {
   editionPackage: EditionPackage;
   meeting: MeetingRecord;
-  destinations: Record<SocialLocale, string>;
+  /** Czech is what the desk publishes. English destinations are no longer produced. */
+  destinations: { en?: string; cs: string };
   repoRoot: string;
   stateRoot: string;
   now?: Date;
@@ -141,7 +143,7 @@ export async function composeEditionSocialPack(input: {
     throw new Error("Social pack requires the matching Caught Up edition meeting");
   }
   const destinations = {
-    en: parseSafeHttpsUrl(input.destinations.en).toString(),
+    ...(input.destinations.en ? { en: parseSafeHttpsUrl(input.destinations.en).toString() } : {}),
     cs: parseSafeHttpsUrl(input.destinations.cs).toString()
   };
   const bestTurnIndex = input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET") >= 0
@@ -263,7 +265,7 @@ export async function composeEditionSocialPack(input: {
       };
   };
   const localePacks = {
-    en: buildLocalePack("en"),
+    ...(destinations.en ? { en: buildLocalePack("en") } : {}),
     cs: buildLocalePack("cs")
   };
   const pack = SocialPackSchema.parse({
@@ -271,8 +273,11 @@ export async function composeEditionSocialPack(input: {
     date: input.editionPackage.date,
     editionRef: input.editionPackage.idempotencyKey,
     byLocale: localePacks,
-    instagram: localePacks.en.instagram,
-    threads: localePacks.en.threads,
+    // The legacy top-level fields mirror the locale the pack leads with — English while it
+    // existed, Czech now. Filling an `en` mirror with Czech was the alternative and is not
+    // something this codebase does.
+    instagram: (localePacks.en ?? localePacks.cs).instagram,
+    threads: (localePacks.en ?? localePacks.cs).threads,
     quoteCard: {
       frame: quotePath,
       sourceTurnRef: `${input.editionPackage.board.meetingRef}#turn-${bestTurnIndex + 1}`,
@@ -284,10 +289,18 @@ export async function composeEditionSocialPack(input: {
   const evidenceRefs = editionPackage.article.cs.frontmatter.sources
     .map((source) => `source:${source.source_id ?? source.id}`);
   const now = input.now ?? new Date();
-  const enInstagram = queueItem({ pack, locale: "en", channel: "instagram", destination: destinations.en, evidenceRefs, now });
-  const enThreads = queueItem({ pack, locale: "en", channel: "threads", destination: destinations.en, evidenceRefs, now });
-  const csInstagram = queueItem({ pack, locale: "cs", channel: "instagram", destination: destinations.cs, evidenceRefs, now });
-  const csThreads = queueItem({ pack, locale: "cs", channel: "threads", destination: destinations.cs, evidenceRefs, now });
+  // A queue item carries its destination all the way to the platform and cannot be edited
+  // after it publishes. Items are built only for locales that have a destination, so nothing
+  // in the queue can outlive the route it points at.
+  const queued = (["en", "cs"] as const).flatMap((locale) => {
+    const destination = destinations[locale];
+    if (!destination) return [];
+    return (["instagram", "threads"] as const).map((channel) => ({
+      locale,
+      channel,
+      item: queueItem({ pack, locale, channel, destination, evidenceRefs, now })
+    }));
+  });
   await Promise.all([
     atomicWriteJson(input.stateRoot, `social/packs/${input.editionPackage.date}.json`, pack),
     atomicWriteJson(input.stateRoot, `social/assets/${input.editionPackage.date}.json`, {
@@ -298,21 +311,16 @@ export async function composeEditionSocialPack(input: {
       formats: ["instagram-portrait", "threads"],
       format: "png"
     }),
-    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-en-instagram.json`, enInstagram),
-    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-en-threads.json`, enThreads),
-    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-cs-instagram.json`, csInstagram),
-    atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-cs-threads.json`, csThreads)
+    ...queued.map(({ locale, channel, item }) =>
+      atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-${locale}-${channel}.json`, item))
   ]);
   return {
     pack,
-    queueItems: [enInstagram, enThreads, csInstagram, csThreads],
+    queueItems: queued.map(({ item }) => item),
     artifactPaths: [
       `social/packs/${input.editionPackage.date}.json`,
       `social/assets/${input.editionPackage.date}.json`,
-      `social/queue/${input.editionPackage.date}-en-instagram.json`,
-      `social/queue/${input.editionPackage.date}-en-threads.json`,
-      `social/queue/${input.editionPackage.date}-cs-instagram.json`,
-      `social/queue/${input.editionPackage.date}-cs-threads.json`,
+      ...queued.map(({ locale, channel }) => `social/queue/${input.editionPackage.date}-${locale}-${channel}.json`),
       ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
       path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))
     ]

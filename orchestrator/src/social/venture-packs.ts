@@ -68,7 +68,9 @@ export async function composeMmaFilesSocialQueue(input: {
   const date = input.article.publishAt.slice(0, 10);
   const evidenceRefs = input.article.sources.map((source) => source.kind === "internal" ? source.ref : source.url);
   const paths: string[] = [];
-  for (const locale of ["en", "cs"] as const) {
+  // Czech only: a queue item outlives the route it names, so none is built for a locale the
+  // desk no longer publishes.
+  for (const locale of ["cs"] as const) {
     for (const channel of ["instagram", "threads"] as const) {
       const id = `mma-files-${date}-${input.article.slot}-${input.article.slug}-${locale}-${channel}`;
       const variant = deterministicVariant(id);
