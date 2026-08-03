@@ -65,31 +65,34 @@
       "at": "2026-08-03T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-03T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-03T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-pm",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "missing_editorial_slate"
     },
     {
       "at": "2026-08-03T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-03-mma-analysis",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-03T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-03T19:00:00.000Z",
