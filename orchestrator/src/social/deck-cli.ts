@@ -2,14 +2,17 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  ARTICLE_HERO_SLOT,
   CAROUSEL_BRANDS,
   articleDeckTemplate,
   articleSlideSlot,
-  renderCarouselPng
+  renderCarouselPng,
+  type DeckStyle
 } from "@boardlessai/carousel-studio";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
 import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { repoRoot, stateRoot } from "../paths.js";
+import sharp from "sharp";
 import { buildArticleDeck, reviewDeck, wordCount, type Slide } from "./slides.js";
 
 /**
@@ -32,7 +35,22 @@ function valueAfter(args: string[], name: string): string | undefined {
   return index < 0 ? undefined : args[index + 1];
 }
 
-async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "mma-files"; slug: string; slides: Slide[] }> {
+/**
+ * The article's hero, as PNG bytes the renderer can embed.
+ *
+ * Heroes are stored as WebP, and librsvg draws nothing at all for a WebP data URI — no error, no
+ * image, just the background. Verified by rendering all three encodings and sampling the pixels.
+ */
+async function heroPng(base64: string | undefined): Promise<Buffer | null> {
+  if (!base64) return null;
+  try {
+    return await sharp(Buffer.from(base64, "base64")).png().toBuffer();
+  } catch {
+    return null;
+  }
+}
+
+async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "mma-files"; slug: string; slides: Slide[]; hero: string | undefined }> {
   const raw = JSON.parse(await readFile(file, "utf8")) as { schemaVersion?: unknown };
   if (String(raw.schemaVersion ?? "").startsWith("edition")) {
     const pkg = EditionPackageSchema.parse(raw);
@@ -41,6 +59,7 @@ async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "
     return {
       venture: "caught-up",
       slug: article.slug,
+      hero: pkg.image?.hero_bytes_base64,
       slides: buildArticleDeck({
         title: article.title,
         dek: article.dek,
@@ -61,6 +80,7 @@ async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "
   return {
     venture: "mma-files",
     slug: pkg.slug,
+    hero: pkg.image.hero_bytes_base64,
     slides: buildArticleDeck({ title: cs.title, dek: cs.dek, bodyMdx: cs.bodyMDX, outro: OUTRO["mma-files"] })
   };
 }
@@ -73,23 +93,26 @@ async function main(): Promise<void> {
   const outputRoot = valueAfter(args, "--out") ?? path.join(stateRoot, "social", "previews");
 
   // Resolved against the repository, so a path copied from the tree works from anywhere.
-  const { venture, slug, slides } = await deckFromPackage(
+  const { venture, slug, slides, hero } = await deckFromPackage(
     path.isAbsolute(file) ? file : path.resolve(repoRoot, file)
   );
+  const style = (valueAfter(args, "--style") ?? "mesh") as DeckStyle;
   const review = reviewDeck(slides);
-  const template = articleDeckTemplate(slides.length);
+  const template = articleDeckTemplate(slides.length, style);
   const strings = Object.fromEntries(slides.map((slide, index) => [articleSlideSlot(index), slide.text]));
+  const heroBytes = await heroPng(hero);
   const rendered = await renderCarouselPng({
     template,
     payload: { locale: "cs", strings },
     brand: CAROUSEL_BRANDS[venture],
-    format
+    format,
+    ...(heroBytes ? { images: { [ARTICLE_HERO_SLOT]: heroBytes } } : {})
   });
   // A slide the renderer had to clip is a slide the reader sees cut off mid-sentence. It is
   // reported rather than left to be noticed in the image.
   const clipped = rendered.flatMap((slide) => slide.truncatedSlots);
 
-  const directory = path.join(outputRoot, `${venture}-${slug}-${format}`);
+  const directory = path.join(outputRoot, `${venture}-${slug}-${style}-${format}`);
   await mkdir(directory, { recursive: true });
   await Promise.all(rendered.map((slide) =>
     writeFile(path.join(directory, `slide-${String(slide.index + 1).padStart(2, "0")}.png`), slide.png)
@@ -103,6 +126,8 @@ async function main(): Promise<void> {
     longestSlideWords: Math.max(...slides.map((slide) => wordCount(slide.text))),
     publishable: review.publishable && clipped.length === 0,
     problems: [...review.problems, ...clipped.map((slot) => `${slot} did not fit and was clipped.`)],
+    style,
+    hero: heroBytes ? "embedded" : "absent",
     directory,
     published: false
   }, null, 2));

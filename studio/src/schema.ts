@@ -65,7 +65,30 @@ const ImageLayerSchema = FrameSchema.extend({
   type: z.literal("image"),
   slot: z.literal("image"),
   optional: z.literal(true),
-  fit: z.enum(["cover", "contain"])
+  fit: z.enum(["cover", "contain"]),
+  /** A soft fade to the slide background, so text over the lower edge stays legible. */
+  scrim: z.enum(["none", "bottom", "full"]).default("none")
+});
+
+/**
+ * A mesh gradient: several wide, blurred colour fields overlapping.
+ *
+ * Built from blurred radial gradients rather than an image, so it renders offline, deterministically,
+ * and at any canvas size. Colours are token names — a template may not invent a colour, and the same
+ * mesh reads differently under each venture's palette because it is the venture's own colours.
+ */
+const MeshLayerSchema = FrameSchema.extend({
+  type: z.literal("mesh"),
+  blobs: z.array(z.object({
+    colorToken: TokenNameSchema,
+    /** Centre and radius, as a fraction of the layer frame. */
+    cx: z.number().finite().min(-0.5).max(1.5),
+    cy: z.number().finite().min(-0.5).max(1.5),
+    radius: z.number().finite().min(0.05).max(1.5),
+    opacity: z.number().finite().min(0.05).max(1)
+  })).min(2).max(6),
+  /** Blur radius as a fraction of the shorter canvas edge. */
+  softness: z.number().finite().min(0).max(0.3).default(0.08)
 });
 
 export const CarouselLayerSchema = z.discriminatedUnion("type", [
@@ -73,7 +96,8 @@ export const CarouselLayerSchema = z.discriminatedUnion("type", [
   ShapeLayerSchema,
   RuleLayerSchema,
   LogoLayerSchema,
-  ImageLayerSchema
+  ImageLayerSchema,
+  MeshLayerSchema
 ]);
 
 const SlideVariantSchema = z.object({

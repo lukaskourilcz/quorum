@@ -5,10 +5,10 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import {
-  ARTICLE_DECK_TEMPLATES,
+  articleDeckTemplates,
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
-  LIVE_TEMPLATES,
+  liveTemplates,
   SEED_TEMPLATES,
   articleDeckTemplate,
   articleSlideSlot,
@@ -33,9 +33,10 @@ describe("carousel-template/1", () => {
     // The seed layouts are design work someone made, and counting them is a real check. The
     // decks are one layout at six lengths, generated, and kept out of that count so they
     // cannot pad it — while still resolving like any other live template.
-    expect(ARTICLE_DECK_TEMPLATES).toHaveLength(6);
-    expect(LIVE_TEMPLATES).toHaveLength(SEED_TEMPLATES.length + ARTICLE_DECK_TEMPLATES.length);
-    expect(ARTICLE_DECK_TEMPLATES.every((template) => template.status === "live")).toBe(true);
+    // Five designs at six lengths each.
+    expect(articleDeckTemplates()).toHaveLength(30);
+    expect(liveTemplates()).toHaveLength(SEED_TEMPLATES.length + articleDeckTemplates().length);
+    expect(articleDeckTemplates().every((template) => template.status === "live")).toBe(true);
   });
 
   it("renders hash-stable SVG and PNG bytes", async () => {
@@ -96,7 +97,11 @@ describe("carousel-template/1", () => {
     const assetSource = await Promise.all(files.map((file) => readFile(file)));
     for (const bytes of assetSource) {
       const text = bytes.toString("utf8");
-      expect(text).not.toMatch(/data:image\//i);
+      // An embedded asset is a base64 payload sitting in the source. The renderer builds a
+      // data URI at render time from bytes the caller hands it, which is the opposite: nothing
+      // is stored, and what is drawn is the article's own image. The prefix alone is not the
+      // thing this guards against; a hundred characters of base64 after it is.
+      expect(text, "no image is embedded in the studio source").not.toMatch(/data:image\/[a-z]+;base64,[A-Za-z0-9+/]{100}/i);
       expect(bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))).toBe(false);
     }
     expect(JSON.stringify(SEED_TEMPLATES)).not.toMatch(/(?:https?:|data:image|\.png|\.jpe?g|\.webp)/i);

@@ -543,6 +543,15 @@
                         "cover",
                         "contain"
                       ]
+                    },
+                    "scrim": {
+                      "default": "none",
+                      "type": "string",
+                      "enum": [
+                        "none",
+                        "bottom",
+                        "full"
+                      ]
                     }
                   },
                   "required": [
@@ -553,7 +562,95 @@
                     "type",
                     "slot",
                     "optional",
-                    "fit"
+                    "fit",
+                    "scrim"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "y": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "width": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "maximum": 1
+                    },
+                    "height": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "maximum": 1
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "mesh"
+                    },
+                    "blobs": {
+                      "minItems": 2,
+                      "maxItems": 6,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "colorToken": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "cx": {
+                            "type": "number",
+                            "minimum": -0.5,
+                            "maximum": 1.5
+                          },
+                          "cy": {
+                            "type": "number",
+                            "minimum": -0.5,
+                            "maximum": 1.5
+                          },
+                          "radius": {
+                            "type": "number",
+                            "minimum": 0.05,
+                            "maximum": 1.5
+                          },
+                          "opacity": {
+                            "type": "number",
+                            "minimum": 0.05,
+                            "maximum": 1
+                          }
+                        },
+                        "required": [
+                          "colorToken",
+                          "cx",
+                          "cy",
+                          "radius",
+                          "opacity"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "softness": {
+                      "default": 0.08,
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 0.3
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y",
+                    "width",
+                    "height",
+                    "type",
+                    "blobs",
+                    "softness"
                   ],
                   "additionalProperties": false
                 }

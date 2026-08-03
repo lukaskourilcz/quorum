@@ -1,12 +1,14 @@
 import type { ArticlePackage, SocialVariantPack } from "../contracts/mma-files.js";
 import { SocialVariantPackSchema } from "../contracts/mma-files.js";
-import { articleSlideSlot } from "@boardlessai/carousel-studio";
-import { buildArticleDeck, reviewDeck } from "../social/slides.js";
+import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
+import { buildArticleDeck, deckStyleFor, reviewDeck } from "../social/slides.js";
 import { articleRef } from "./hash.js";
 
 export const MMA_FILES_ASSIGNMENT_PROTOCOL = "state/ventures/mma-files/social/ASSIGNMENT.md";
 
 export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPack | null {
+  // Fixed by the slug, so a replay renders identical bytes and the package hash holds.
+  const style = deckStyleFor(article.slug, DECK_STYLES);
   if (article.status !== "published") throw new Error("Social variants require a finished article");
   /**
    * The carousel is the article, split.
@@ -29,7 +31,7 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
     // artifact refusing to build is not a reason to withhold journalism.
     if (!review.publishable) return null;
     return {
-      template_id: `article-deck-${slides.length}`,
+      template_id: `deck-${style}-${slides.length}`,
       version: "1.0.0",
       content: {
         locale,

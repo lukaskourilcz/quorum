@@ -40,10 +40,10 @@ const text = (
   ...options
 });
 
-const logo = (): CarouselLayer => ({
+const logo = (y = 0.07): CarouselLayer => ({
   type: "logo",
   x: 0.08,
-  y: 0.07,
+  y,
   width: 0.44,
   height: 0.06,
   colorToken: "accent",
@@ -96,45 +96,141 @@ export function articleSlideSlot(index: number): string {
   return `slide-${String(index + 1).padStart(2, "0")}`;
 }
 
+/** The slot the article's own hero occupies on the opening slide. */
+export const ARTICLE_HERO_SLOT = "image";
+
 /**
- * A deck template sized to the article rather than the other way round.
+ * The five deck designs.
  *
- * Every other template here has a fixed slide array, which is right for a poster or a quote
- * card and wrong for an article: the number of slides a piece deserves is a property of the
- * piece. This builds one template per length, so a five-slide deck and a ten-slide deck are
- * both real templates that the renderer can check rather than a template being stretched.
- *
- * The first and last slides sit on `surface` and carry the cover and the closing line; the
- * middle sits on `background` and carries the argument. maxChars is generous because the word
- * cap upstream is the real limit — this one exists so a slot cannot silently swallow a page.
+ * They differ in composition and in how the gradient behaves, not in palette. Every colour is a
+ * brand token, so the same design reads as Caught Up's magenta or MMA Files' orange without a
+ * template inventing anything — which is what BRAND.md locks and what brandTokenCheck enforces.
  */
-export function articleDeckTemplate(slideCount: number): CarouselTemplate {
+export const DECK_STYLES = ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const;
+export type DeckStyle = (typeof DECK_STYLES)[number];
+
+const mesh = (
+  blobs: Array<{ colorToken: string; cx: number; cy: number; radius: number; opacity: number }>,
+  softness = 0.09
+): CarouselLayer => ({
+  type: "mesh",
+  x: 0,
+  y: 0,
+  width: 1,
+  height: 1,
+  blobs,
+  softness
+});
+
+const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full"): CarouselLayer => ({
+  type: "image",
+  slot: ARTICLE_HERO_SLOT,
+  optional: true,
+  fit: "cover",
+  scrim,
+  x: 0,
+  y,
+  width: 1,
+  height
+});
+
+/** Per-style background art. `phase` walks 0..1 across the deck so a gradient can travel. */
+function styleBackdrop(style: DeckStyle, phase: number, cover: boolean): CarouselLayer[] {
+  // Clamped to the schema's own bounds. A blob may sit a little off-canvas — that is how a
+  // gradient reads as continuing past the edge — but not so far it is invisible, and the schema
+  // is where that judgement lives rather than here.
+  const drift = (base: number, amount: number) =>
+    Math.max(-0.5, Math.min(1.5, base + (phase - 0.5) * amount));
+  if (style === "mesh") {
+    return [mesh([
+      { colorToken: "accent", cx: drift(0.18, 0.5), cy: 0.22, radius: 0.62, opacity: cover ? 0.5 : 0.34 },
+      { colorToken: "secondary", cx: drift(0.86, -0.5), cy: 0.74, radius: 0.58, opacity: cover ? 0.42 : 0.28 },
+      { colorToken: "surface-strong", cx: 0.5, cy: drift(0.5, 0.3), radius: 0.7, opacity: 0.5 }
+    ])];
+  }
+  if (style === "aurora") {
+    // One continuous gradient the reader travels through: the field walks corner to corner.
+    return [mesh([
+      { colorToken: "accent", cx: drift(-0.1, 1.3), cy: drift(1.1, -1.3), radius: 0.8, opacity: 0.44 },
+      { colorToken: "secondary", cx: drift(0.4, 0.8), cy: drift(-0.05, 1.0), radius: 0.66, opacity: 0.34 },
+      { colorToken: "surface", cx: 0.5, cy: 0.5, radius: 0.9, opacity: 0.5 }
+    ], 0.13)];
+  }
+  if (style === "spotlight") {
+    return [mesh([
+      { colorToken: "accent", cx: 0.5, cy: 0.44, radius: 0.42, opacity: cover ? 0.4 : 0.24 },
+      { colorToken: "surface-strong", cx: 0.5, cy: 0.5, radius: 0.85, opacity: 0.55 }
+    ], 0.11)];
+  }
+  if (style === "contrast") {
+    // No gradient. A hard accent bar and a flat field, which is its own kind of loud.
+    return [{ type: "shape", x: 0, y: 0, width: 0.055, height: 1, fillToken: "accent", strokeWidth: 0, radius: 0 }];
+  }
+  // editorial: a single restrained wash, mostly out of the way of the text.
+  return [mesh([
+    { colorToken: "surface", cx: 0.5, cy: 0.12, radius: 0.75, opacity: 0.6 },
+    { colorToken: "accent", cx: 0.9, cy: 0.05, radius: 0.3, opacity: cover ? 0.3 : 0.14 }
+  ], 0.12)];
+}
+
+/**
+ * A deck template sized to the article and dressed in one of the five designs.
+ *
+ * Every other template in this file has a fixed slide array, which is right for a poster and wrong
+ * for an article: how many slides a piece deserves is a property of the piece. The first slide
+ * carries the article's own hero image; the rest carry its words.
+ */
+export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh"): CarouselTemplate {
   const slots = Array.from({ length: slideCount }, (_, index) => articleSlideSlot(index));
+  const textTop = style === "editorial" ? 0.24 : 0.3;
   return template({
-    id: `article-deck-${slideCount}`,
-    name: `Article deck (${slideCount} slides)`,
-    description: "A cover, the article's own points one per slide, and a closing line.",
+    id: `deck-${style}-${slideCount}`,
+    name: `Article deck · ${style} · ${slideCount} slides`,
+    description: "A cover carrying the article's own image, the article's points one per slide, and a closing line.",
     requiredSlots: slots,
     slides: slots.map((slot, index) => {
-      const last = index === slideCount - 1;
       const cover = index === 0;
+      const last = index === slideCount - 1;
+      const phase = slideCount === 1 ? 0 : index / (slideCount - 1);
+      // The hero sits differently in each design: a framed band, a tall bleed, or half the slide.
+      const heroTop = style === "contrast" ? 0.06 : 0;
+      const heroHeight = style === "contrast" ? 0.34 : style === "editorial" ? 0.46 : 0.52;
+      const heroBottom = cover ? heroTop + heroHeight : 0;
+      const heroLayers: CarouselLayer[] = !cover
+        ? []
+        : [heroImage(heroTop, heroHeight, style === "contrast" ? "none" : "bottom")];
       return {
-        id: `slide-article-${String(index + 1).padStart(2, "0")}`,
+        id: `slide-deck-${String(index + 1).padStart(2, "0")}`,
         backgroundToken: cover || last ? "surface" : "background",
         variants: [],
         layers: [
-          logo(),
-          text(slot, 0.1, 0.3, 0.78, 0.4, {
-            fontToken: "headline",
-            fontWeight: cover ? 900 : 800,
-            minFontSize: 30,
-            maxFontSize: cover ? 78 : 62,
-            maxChars: 260,
-            maxLines: 8,
-            align: last ? "middle" : "start"
-          }),
-          shape(0.76, 0.83, 0.04 + (index / Math.max(1, slideCount - 1)) * 0.16, 0.025, "muted", 0.5),
-          rule(0.1, 0.75, last ? 0.68 : 0.28)
+          ...styleBackdrop(style, phase, cover),
+          ...heroLayers,
+          // On a cover the wordmark drops below the photograph. Over the image it sat on
+          // whatever the photograph happened to be, which for a bright frame is unreadable and
+          // for a dark one is luck rather than design.
+          logo(cover ? heroBottom + 0.03 : 0.07),
+          // On a cover the headline sits between the wordmark and the rule, so its height is
+          // whatever is left rather than a constant — a fixed block ran the last line straight
+          // through the accent rule on the taller heroes.
+          text(
+            slot,
+            style === "contrast" ? 0.13 : 0.1,
+            cover ? heroBottom + 0.12 : textTop,
+            0.76,
+            cover ? Math.max(0.14, 0.84 - (heroBottom + 0.12)) : 0.42,
+            {
+              fontToken: "headline",
+              fontWeight: cover ? 900 : 800,
+              minFontSize: 30,
+              maxFontSize: cover ? 72 : 60,
+              maxChars: 260,
+              maxLines: 8,
+              align: last ? "middle" : "start"
+            }
+          ),
+          shape(0.76, 0.9, 0.04 + phase * 0.16, 0.02, "muted", 0.5),
+          rule(style === "contrast" ? 0.13 : 0.1, 0.86, last ? 0.6 : 0.24)
         ]
       };
     })
@@ -343,11 +439,26 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
  * seed layouts are design work someone made, and counting them is a real check. These are the
  * same layout at six lengths.
  */
-export const ARTICLE_DECK_TEMPLATES: readonly CarouselTemplate[] =
-  Array.from({ length: 6 }, (_, index) => articleDeckTemplate(index + 5));
+/**
+ * Built on first use rather than at import.
+ *
+ * A module-level constant that parses thirty templates makes any import of this file fail with a
+ * validation error and no attribution — the stack points at Array.from, not at the template that
+ * is wrong. Lazy keeps the failure where the caller can see it.
+ */
+let articleDeckCache: readonly CarouselTemplate[] | null = null;
+
+export function articleDeckTemplates(): readonly CarouselTemplate[] {
+  articleDeckCache ??= DECK_STYLES.flatMap((style) =>
+    Array.from({ length: 6 }, (_, index) => articleDeckTemplate(index + 5, style))
+  );
+  return articleDeckCache;
+}
 
 /** Everything a reference may resolve to. */
-export const LIVE_TEMPLATES: readonly CarouselTemplate[] = [...SEED_TEMPLATES, ...ARTICLE_DECK_TEMPLATES];
+export function liveTemplates(): readonly CarouselTemplate[] {
+  return [...SEED_TEMPLATES, ...articleDeckTemplates()];
+}
 
 export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> = {
   "caught-up": BrandTokensSchema.parse({
@@ -420,7 +531,7 @@ const czechFixtureOverrides: Partial<Record<string, Record<string, string>>> = {
 };
 
 export function templateByReference(templateId: string, version: string): CarouselTemplate | null {
-  return LIVE_TEMPLATES.find((template) => template.id === templateId && template.version === version) ?? null;
+  return liveTemplates().find((template) => template.id === templateId && template.version === version) ?? null;
 }
 
 export function liveTemplateByReference(templateId: string, version: string): CarouselTemplate {

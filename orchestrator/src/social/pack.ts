@@ -5,9 +5,9 @@ import {
   renderCarouselPng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
-import { articleSlideSlot } from "@boardlessai/carousel-studio";
+import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
-import { buildArticleDeck, reviewDeck } from "./slides.js";
+import { buildArticleDeck, deckStyleFor, reviewDeck } from "./slides.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";
@@ -166,6 +166,8 @@ export async function composeEditionSocialPack(input: {
    * Never the body. An eleven-hundred-word edition would be thirty-seven slides, and the
    * frontmatter arrays are already the editor's own summary of the same text.
    */
+  // Fixed by the edition date, so a replay renders identical bytes.
+  const deckStyle = deckStyleFor(editionPackage.date, DECK_STYLES);
   const visualReference = (locale: SocialLocale): TemplateReference | null => {
     const article = editionPackage.article?.[locale]?.frontmatter;
     if (!article) return null;
@@ -181,7 +183,7 @@ export async function composeEditionSocialPack(input: {
     });
     if (!reviewDeck(slides).publishable) return null;
     return {
-      template_id: `article-deck-${slides.length}`,
+      template_id: `deck-${deckStyle}-${slides.length}`,
       version: "1.0.0",
       content: {
         locale,

@@ -40,6 +40,10 @@ function layerSvg(input: {
   accentToken?: string;
   /** Collector for slots whose text had to be clipped to fit. */
   truncatedSlots?: string[];
+  /** Decoded PNG bytes per image slot. Absent means the slide draws without a photograph. */
+  images?: Readonly<Record<string, Buffer>>;
+  /** Unique per layer, so two gradients on one slide cannot share an SVG id. */
+  uid: string;
 }): string {
   const { layer, payload, brand, width, height } = input;
   const x = px(layer.x, width);
@@ -60,7 +64,39 @@ function layerSvg(input: {
     const size = Math.max(18, Math.min(h * 0.72, w / Math.max(4, brand.logoText.length) * 1.45));
     return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(font)}" font-size="${size}" font-weight="800" letter-spacing="1.5">${escapeXml(brand.logoText)}</text>`;
   }
-  if (layer.type === "image") return "";
+  if (layer.type === "mesh") {
+    // Several wide, blurred colour fields that overlap into a mesh. Built from radial gradients
+    // rather than a bitmap so it renders offline and at any canvas size, and from token colours
+    // so the same mesh reads as each venture's own palette.
+    const id = `mesh-${input.uid}`;
+    const blur = Math.max(1, Math.min(width, height) * layer.softness);
+    const stops = layer.blobs.map((blob, index) => {
+      const fill = color(blob.colorToken);
+      return `<radialGradient id="${id}-${index}"><stop offset="0%" stop-color="${fill}" stop-opacity="${blob.opacity}"/><stop offset="100%" stop-color="${fill}" stop-opacity="0"/></radialGradient>`;
+    }).join("");
+    const circles = layer.blobs.map((blob, index) =>
+      `<circle cx="${x + blob.cx * w}" cy="${y + blob.cy * h}" r="${blob.radius * Math.max(w, h)}" fill="url(#${id}-${index})"/>`
+    ).join("");
+    return `<defs>${stops}<filter id="${id}-soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="${blur.toFixed(2)}"/></filter></defs><g filter="url(#${id}-soft)" clip-path="url(#${id}-clip)"><clipPath id="${id}-clip"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath>${circles}</g>`;
+  }
+  if (layer.type === "image") {
+    // The article's own hero. Supplied as decoded bytes rather than carried in the payload: the
+    // payload is hashed into the pack and stored in git, and a 200 kB base64 photo does not
+    // belong in either. Absent bytes draw nothing and the slide still renders, because a
+    // missing photograph is not a reason to lose the words.
+    const bytes = input.images?.[layer.slot];
+    if (!bytes) return "";
+    const id = `img-${input.uid}`;
+    // librsvg does not decode WebP inside a data URI — it silently draws nothing — so callers
+    // hand over PNG. Verified by rendering all three: only PNG and JPEG appear.
+    const href = `data:image/png;base64,${bytes.toString("base64")}`;
+    const scrim = layer.scrim === "none" ? "" : layer.scrim === "full"
+      ? `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${token(brand, "background")}" opacity="0.55"/>`
+      : `<defs><linearGradient id="${id}-scrim" x1="0" y1="0" x2="0" y2="1"><stop offset="55%" stop-color="${token(brand, "background")}" stop-opacity="0"/><stop offset="100%" stop-color="${token(brand, "background")}" stop-opacity="0.96"/></linearGradient></defs><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id}-scrim)"/>`;
+    return `<defs><clipPath id="${id}-clip"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath></defs>`
+      + `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="${layer.fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"}" clip-path="url(#${id}-clip)"/>`
+      + scrim;
+  }
   const raw = payload.strings[layer.slot] ?? "";
   const value = layer.uppercase ? raw.toLocaleUpperCase(payload.locale) : raw;
   const fitted = fitText({
@@ -98,6 +134,8 @@ export function renderCarouselSvg(input: {
   payload: CarouselPayload;
   brand: BrandTokens;
   format: CarouselFormat;
+  /** Decoded PNG bytes per image slot. WebP will not decode inside an SVG data URI. */
+  images?: Readonly<Record<string, Buffer>>;
 }): RenderedSlide[] {
   const template = CarouselTemplateSchema.parse(input.template);
   const payload = CarouselPayloadSchema.parse(input.payload);
@@ -115,14 +153,17 @@ export function renderCarouselSvg(input: {
     // answer, so an over-long slide clipped to an ellipsis and nothing said so. A word limit
     // that the renderer silently enforces by cutting is not a limit, it is a surprise.
     const truncatedSlots: string[] = [];
-    const content = slide.layers.map((layer) => layerSvg({
+    const content = slide.layers.map((layer, layerIndex) => layerSvg({
       layer,
       payload,
       brand,
       width: canvas.width,
       height: canvas.height,
       accentToken: variant?.accentToken,
-      truncatedSlots
+      truncatedSlots,
+      images: input.images,
+      // Slide and layer, so two gradients on one deck cannot collide on an SVG id.
+      uid: `${index}-${layerIndex}`
     })).join("");
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by Carousel Studio.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(brand, backgroundToken)}"/>${content}</svg>`;
     return {
@@ -141,6 +182,7 @@ export async function renderCarouselPng(input: {
   payload: CarouselPayload;
   brand: BrandTokens;
   format: CarouselFormat;
+  images?: Readonly<Record<string, Buffer>>;
 }): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
   const { default: sharp } = await import("sharp");
   const slides = renderCarouselSvg(input);

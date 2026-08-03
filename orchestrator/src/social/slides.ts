@@ -175,3 +175,17 @@ export function reviewDeck(slides: readonly Slide[]): DeckReview {
   });
   return { slides: [...slides], publishable: problems.length === 0, problems };
 }
+
+/**
+ * Which of the five designs a given article gets.
+ *
+ * Deterministic from a stable seed — the slug or the edition date — for two reasons. A cycle can
+ * replay, and a replay that picked a different design would render different bytes and break the
+ * package hash. And across a week of articles the decks vary on their own, without anyone
+ * choosing, which is the point of having five.
+ */
+export function deckStyleFor(seed: string, styles: readonly string[]): string {
+  let hash = 0;
+  for (const character of seed) hash = (hash * 31 + character.codePointAt(0)!) >>> 0;
+  return styles[hash % styles.length]!;
+}
