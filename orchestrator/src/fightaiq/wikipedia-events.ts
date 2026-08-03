@@ -32,6 +32,13 @@ export interface ScheduledEvent {
   venue: string | null;
   location: string | null;
   sourceTitle: string;
+  /**
+   * The article the row links to, which is not always what the row displays.
+   *
+   * The schedule shows "UFC 330: Makhachev vs. Machado Garry" and links [[UFC 330]]. Asking
+   * Wikipedia for the display name returned nothing and the card came back empty.
+   */
+  pageTitle: string | null;
 }
 
 /** `{{dts|2026|Oct|24}}` and `{{dts|2026|10|24}}` both appear on these pages. */
@@ -53,6 +60,12 @@ export function parseDtsDate(cell: string): string | null {
  * throw away the country. Piped links keep their label: readers know the venue by the name on the
  * page, not by the article it points at.
  */
+/** The article a cell's first wikilink points at, before the pipe. */
+export function parseWikiLinkTarget(cell: string): string | null {
+  const link = /\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]/u.exec(cell);
+  return link?.[1]?.trim() || null;
+}
+
 export function parseWikiLinkLabel(cell: string): string | null {
   const rendered = cell
     .replace(/<ref[\s\S]*?(?:\/>|<\/ref>)/gu, "")
@@ -113,11 +126,13 @@ export function projectScheduledEvents(input: {
     // The UFC section is future by construction; filtering both costs nothing and means neither
     // reader depends on a page's section titles staying what they are today.
     if (Date.parse(startsAtUtc) < input.now.getTime()) continue;
-    const name = parseWikiLinkLabel(cells[dateIndex - 1]!);
+    const nameCell = cells[dateIndex - 1]!;
+    const name = parseWikiLinkLabel(nameCell);
     if (!name) continue;
     events.push({
       org: input.org,
       name,
+      pageTitle: parseWikiLinkTarget(nameCell),
       startsAtUtc,
       venue: cells[dateIndex + 1] ? parseWikiLinkLabel(cells[dateIndex + 1]!) : null,
       location: cells[dateIndex + 2] ? parseWikiLinkLabel(cells[dateIndex + 2]!) : null,
@@ -157,6 +172,49 @@ async function wikitextOf(input: {
     query?: { pages?: Array<{ revisions?: Array<{ slots?: { main?: { content?: string } } }> }> };
   };
   return body.query?.pages?.[0]?.revisions?.[0]?.slots?.main?.content ?? "";
+}
+
+export interface ScheduledBout {
+  division: string;
+  red: string;
+  blue: string;
+  /** Five rounds for a title fight or the main event, three for everything else. */
+  scheduledRounds: 5 | 3;
+  /** True when the bout template names a championship, which is why the rounds are five. */
+  title: boolean;
+}
+
+/**
+ * The bouts announced for one event, from its own Wikipedia page.
+ *
+ * The schedule tables give an event, a date and a venue; the card lives on the event's article as
+ * `{{MMAevent bout|Division|Red|vs.|Blue|…}}`. That is where "the fighters on those cards" comes
+ * from, which is the half of event-first the schedule alone cannot answer.
+ *
+ * Round counts are not in the template. Five rounds for a championship bout and for the main event,
+ * three for the rest, is the standing rule in both promotions rather than a guess about this card,
+ * and `title` records which of the two reasons applied so a reader can tell.
+ */
+export function projectEventBouts(wikitext: string): ScheduledBout[] {
+  const bouts: ScheduledBout[] = [];
+  for (const match of wikitext.matchAll(/\{\{\s*MMAevent bout\s*([\s\S]*?)\}\}/gu)) {
+    const fields = match[1]!.split(/\n?\s*\|/u).slice(1).map((field) => field.trim());
+    const division = parseWikiLinkLabel(fields[0] ?? "");
+    const red = parseWikiLinkLabel(fields[1] ?? "");
+    const blue = parseWikiLinkLabel(fields[3] ?? "");
+    if (!division || !red || !blue) continue;
+    const notes = fields.slice(4).join(" ");
+    const title = /championship|title/iu.test(notes) || /\(c\)/u.test(fields[1] ?? "") || /\(c\)/u.test(fields[3] ?? "");
+    bouts.push({
+      division,
+      // "(c)" marks the reigning champion and is not part of anyone's name.
+      red: red.replace(/\s*\((?:c|ic)\)\s*$/iu, "").trim(),
+      blue: blue.replace(/\s*\((?:c|ic)\)\s*$/iu, "").trim(),
+      scheduledRounds: title || bouts.length === 0 ? 5 : 3,
+      title
+    });
+  }
+  return bouts;
 }
 
 /** Where each promotion publishes its schedule, and under which heading. */
@@ -199,4 +257,112 @@ export async function fetchScheduledEvents(input: {
     }
   }
   return found.sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc));
+}
+
+export interface ScheduledCard extends ScheduledEvent {
+  bouts: ScheduledBout[];
+}
+
+/**
+ * The schedule, and the card for each event close enough to matter.
+ *
+ * Two page reads for the schedule plus one per event inside the horizon — on 3 August that is two
+ * events, so four keyless requests. The horizon is what keeps it that way: without it this would
+ * read every announced card twenty deep, every day, for events months out that nobody is writing
+ * about yet. That is the owner's complaint in a different costume.
+ */
+export async function fetchScheduledCards(input: {
+  context: SourceFetchContext;
+  now: Date;
+  withinDays: number;
+  pages?: typeof SCHEDULE_PAGES;
+  maxEvents?: number;
+  fetchImpl?: SafeFetchOptions["fetchImpl"];
+  resolveImpl?: SafeFetchOptions["resolveImpl"];
+}): Promise<ScheduledCard[]> {
+  const scheduled = await fetchScheduledEvents({
+    context: input.context,
+    now: input.now,
+    ...(input.pages ? { pages: input.pages } : {}),
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+    ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
+  });
+  const horizon = input.now.getTime() + input.withinDays * 86_400_000;
+  const due = scheduled
+    .filter((event) => Date.parse(event.startsAtUtc) <= horizon)
+    .slice(0, input.maxEvents ?? 6);
+  const cards: ScheduledCard[] = [];
+  for (const event of due) {
+    try {
+      const wikitext = await wikitextOf({
+        // The article, not the label. Oktagon links a same-page anchor, so its rows fall back
+        // to the displayed name, which is also the article title there.
+        title: event.pageTitle ?? event.name,
+        context: input.context,
+        ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+        ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
+      });
+      cards.push({ ...event, bouts: projectEventBouts(wikitext) });
+    } catch {
+      // An event whose page will not load is still a scheduled event; it just has no card yet.
+      cards.push({ ...event, bouts: [] });
+    }
+  }
+  return cards;
+}
+
+/**
+ * Who is currently on a promotion's roster, from the page that lists exactly that.
+ *
+ * Active-versus-former used to be decided by whether a fighter appeared in a completed pass of
+ * Cito's all-time UFC list. That pass took two months of daily paging to finish and now never runs
+ * at all, so `former` has been zero against sixty-five `unknown` since founding.
+ *
+ * Names come from `{{sortname|First|Last}}`, which is how the page writes them. Reading plain
+ * wikilinks instead found 358 targets — mostly events and country codes — and matched only 55 of
+ * the 80 tracked fighters, which would have marked twenty-five current fighters former, including
+ * several champions. Verified before use: 78 of 80 match, and the two that do not are Amanda
+ * Nunes, retired, and Ariane Carnelossi.
+ *
+ * Only the UFC has such a page. "List of Oktagon MMA fighters" does not exist, so Oktagon status
+ * stays unknown rather than being guessed from a page that is not about it.
+ */
+export const CURRENT_ROSTER_PAGES: Readonly<Partial<Record<ScheduledEvent["org"], string>>> = {
+  ufc: "List of current UFC fighters"
+};
+
+export function projectCurrentRosterNames(wikitext: string): Set<string> {
+  const names = new Set<string>();
+  for (const match of wikitext.matchAll(/\{\{\s*sortname\s*\|([^|}]+)\|([^|}]+)(?:\|([^}]*))?\}\}/gu)) {
+    const [, first, last, third] = match;
+    names.add(`${first!.trim()} ${last!.trim()}`);
+    // A third parameter is the article title when the display name differs; "nolink" is a flag.
+    const alternate = third?.replace(/^\s*\|/u, "").trim();
+    if (alternate && !alternate.startsWith("nolink")) names.add(alternate);
+  }
+  return names;
+}
+
+export async function fetchCurrentRosterNames(input: {
+  org: ScheduledEvent["org"];
+  context: SourceFetchContext;
+  fetchImpl?: SafeFetchOptions["fetchImpl"];
+  resolveImpl?: SafeFetchOptions["resolveImpl"];
+}): Promise<Set<string> | null> {
+  const title = CURRENT_ROSTER_PAGES[input.org];
+  if (!title) return null;
+  try {
+    const wikitext = await wikitextOf({
+      title,
+      context: input.context,
+      ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+      ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
+    });
+    const names = projectCurrentRosterNames(wikitext);
+    // An empty answer means the page changed shape, not that the roster emptied. Reporting null
+    // keeps the reconciler from marking every tracked fighter former on a parser regression.
+    return names.size > 0 ? names : null;
+  } catch {
+    return null;
+  }
 }

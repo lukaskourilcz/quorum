@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { parseDtsDate, projectScheduledEvents } from "../src/fightaiq/wikipedia-events.js";
+import {
+  parseDtsDate,
+  projectCurrentRosterNames,
+  projectEventBouts,
+  projectScheduledEvents
+} from "../src/fightaiq/wikipedia-events.js";
 
 /**
  * Rows copied from the two live pages on 3 August 2026, because the parser's job is to read those
@@ -128,5 +133,61 @@ describe("the date template", () => {
   it("answers null for a cell with no date, rather than a wrong one", () => {
     expect(parseDtsDate("[[Etihad Arena]]")).toBeNull();
     expect(parseDtsDate("{{dts|2026|Neveruary|24}}")).toBeNull();
+  });
+});
+
+describe("the announced card on an event page", () => {
+  const CARD = `== Fight card ==
+{{MMAevent card|Fight card (Paramount+)}}
+{{MMAevent bout
+|Welterweight
+|[[Islam Makhachev]] (c)
+|vs.
+|[[Ian Machado Garry]]
+|
+|
+|
+|
+|For the [[UFC Welterweight Championship]].
+}}
+{{MMAevent bout
+|Middleweight
+|[[Mansur Abdul-Malik]]
+|vs.
+|[[Dustin Stoltzfus]]
+|
+|
+|
+|
+|
+}}`;
+
+  it("reads the pairing, and drops the champion marker from the name", () => {
+    const bouts = projectEventBouts(CARD);
+    expect(bouts).toHaveLength(2);
+    expect(bouts[0]).toMatchObject({
+      division: "Welterweight",
+      red: "Islam Makhachev",
+      blue: "Ian Machado Garry",
+      scheduledRounds: 5,
+      title: true
+    });
+    // Not five because it is second, but because nothing marks it a title fight.
+    expect(bouts[1]).toMatchObject({ red: "Mansur Abdul-Malik", scheduledRounds: 3, title: false });
+  });
+});
+
+describe("who is currently on the roster", () => {
+  it("reads the sortname template the page actually uses", () => {
+    // Reading plain wikilinks instead found country codes and event links, matched 55 of 80
+    // tracked fighters, and would have marked twenty-five current ones former — champions
+    // among them. Checked against the live page before this was wired to anything.
+    const names = projectCurrentRosterNames(
+      "| {{sortname|Merab|Dvalishvili}} || x\n| {{sortname|Ian|Machado Garry|Ian Garry}} || y\n| [[UFC 323|December 6, 2025]]"
+    );
+    expect(names.has("Merab Dvalishvili")).toBe(true);
+    expect(names.has("Ian Machado Garry")).toBe(true);
+    expect(names.has("Ian Garry"), "the article title when it differs from the display name").toBe(true);
+    expect(names.has("UFC 323"), "an event link is not a fighter").toBe(false);
   });
 });

@@ -228,6 +228,57 @@ function eventCard(event: CitoEventSummary, retrievedAt: string): EventCard | nu
   });
 }
 
+/**
+ * A scheduled card from Wikipedia, as an event record.
+ *
+ * The Cito path builds an event from an API payload and drops it when the bouts come back empty,
+ * which they always do. This one builds from a published schedule and a published card, so the
+ * event exists and its bouts are the ones the promotion announced.
+ *
+ * A card with no bouts yet is still dropped, for the same reason as before: an event with no card
+ * is not a card, and materialising one would put an empty fixture in front of the desk.
+ */
+export function scheduledEventCard(input: {
+  org: "ufc" | "oktagon";
+  name: string;
+  startsAtUtc: string;
+  venue: string | null;
+  bouts: ReadonlyArray<{ division: string; red: string; blue: string; scheduledRounds: 5 | 3 }>;
+  sourceTitle: string;
+  retrievedAt: string;
+}): EventCard | null {
+  const eventSlug = slug(input.name);
+  if (!eventSlug) return null;
+  const bouts = input.bouts.flatMap((bout, index) => {
+    const normalizedDivision = division(bout.division);
+    const red = slug(bout.red);
+    const blue = slug(bout.blue);
+    if (!normalizedDivision || !red || !blue || red === blue) return [];
+    return [{
+      id: `${input.org}:${eventSlug}:bout:${red}-vs-${blue}-${index + 1}`.slice(0, 160),
+      red: `${input.org}:${red}` as const,
+      blue: `${input.org}:${blue}` as const,
+      division: normalizedDivision,
+      scheduledRounds: bout.scheduledRounds,
+      status: "announced" as const
+    }];
+  });
+  if (bouts.length === 0) return null;
+  return EventCardSchema.parse({
+    schemaVersion: "event-card/1",
+    id: `${input.org}:event:${eventSlug}`,
+    org: input.org,
+    name: input.name,
+    venue: input.venue ?? "Venue not announced",
+    startsAtLocal: input.startsAtUtc,
+    timeZone: "UTC",
+    startsAtUtc: input.startsAtUtc,
+    sourceRefs: [`source:wikipedia:${input.retrievedAt.slice(0, 10)}:${input.sourceTitle}`],
+    bouts,
+    updatedAt: input.retrievedAt
+  });
+}
+
 function boutRecord(event: EventCard, bout: EventCard["bouts"][number], retrievedAt: string): BoutRecord {
   const sourceRefs = event.sourceRefs;
   const sourceStatus = bout.status === "complete" ? "completed" : bout.status;
@@ -251,17 +302,15 @@ function boutRecord(event: EventCard, bout: EventCard["bouts"][number], retrieve
   });
 }
 
-async function writeEvents(root: string, events: readonly CitoEventSummary[], retrievedAt: string): Promise<string[]> {
+async function writeEventCards(root: string, cards: readonly EventCard[], retrievedAt: string): Promise<string[]> {
   const paths: string[] = [];
-  for (const event of events) {
-    const card = eventCard(event, retrievedAt);
-    if (!card) continue;
-    const relative = `mma/events/ufc/${event.slug}.json`;
+  for (const card of cards) {
+    const relative = `mma/events/${card.org}/${card.id.split(":").at(-1)}.json`;
     await atomicWriteJson(root, relative, card);
     paths.push(relative);
     for (const bout of card.bouts) {
       const incoming = boutRecord(card, bout, retrievedAt);
-      const existingValue = await readJson<unknown | null>(root, `mma/bouts/ufc/${incoming.id.replace("ufc:bout:", "")}.json`, null);
+      const existingValue = await readJson<unknown | null>(root, `mma/bouts/${card.org}/${incoming.id.replace(`${card.org}:bout:`, "")}.json`, null);
       if (existingValue) {
         const existing = BoutRecordSchema.parse(existingValue);
         const combinedSources = [...new Set([...existing.sourceRefs, ...incoming.sourceRefs])];
@@ -399,6 +448,8 @@ export async function materializeFightAiQSources(input: {
    * other half, and events and bouts are unaffected — only fighter cards are narrowed.
    */
   allowedIds?: ReadonlySet<string>;
+  /** Cards read from a published schedule, already built into event records. */
+  scheduledCards?: readonly EventCard[];
 }): Promise<string[]> {
   const retrievedAt = input.retrievedAt.toISOString();
   const version = modelVersion(await loadMmaModelConfig());
@@ -437,7 +488,13 @@ export async function materializeFightAiQSources(input: {
       version
     }));
   }
-  const eventPaths = await writeEvents(input.root, input.citoEvents, retrievedAt);
+  // Cito's events keep their path; Wikipedia's scheduled cards join them. The Cito bouts
+  // endpoint has never returned a row, so in practice every card here comes from Wikipedia —
+  // but a promotion that starts answering is not something to have to re-wire for.
+  const eventPaths = await writeEventCards(input.root, [
+    ...input.citoEvents.flatMap((event) => eventCard(event, retrievedAt) ?? []),
+    ...(input.scheduledCards ?? [])
+  ], retrievedAt);
   const oddsPaths = await writeMatchedOdds({ root: input.root, odds: input.odds, capturedAt: input.retrievedAt });
   return [...new Set([...fighterPaths, ...eventPaths, ...oddsPaths])].sort();
 }

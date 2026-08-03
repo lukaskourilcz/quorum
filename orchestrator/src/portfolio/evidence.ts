@@ -8,9 +8,11 @@ import { loadSourceRegistry } from "../sources/registry.js";
 import { runScrapersDetailed } from "../sources/run.js";
 import type { SourceFetchContext } from "../sources/types.js";
 import { fetchCitoFighters, fetchCitoUpcomingEvents, fetchOddsApiMma, loadMmaSourceRegistry, type ApiBoutOdds, type CitoEventSummary, type CitoFighterSummary } from "../fightaiq/sources.js";
-import { materializeFightAiQSources } from "../fightaiq/intake.js";
+import { materializeFightAiQSources, scheduledEventCard } from "../fightaiq/intake.js";
 import { buildBackfillQueue, fetchWikimediaRoster, fetchWikimediaRosterByTitles, materializeWikimediaRoster, reconcileRosterStatuses, writeBackfillQueue, writeRosterStatus, type WikimediaRosterEntry } from "../fightaiq/roster.js";
 import { loadRosterPolicy, rosterPolicyIds, rosterPolicyTitles } from "../fightaiq/roster-policy.js";
+import { fetchCurrentRosterNames, fetchScheduledCards } from "../fightaiq/wikipedia-events.js";
+
 import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
@@ -249,6 +251,33 @@ export async function refreshFightAiQEvidence(input: {
     }
   }
 
+  // The published schedule, and the card for each event close enough to matter. This is what
+  // event-first is first from: Cito announces events and its bouts endpoint has returned nothing
+  // on every run, so without this state/mma/events stays empty and nothing downstream has a card
+  // to work from.
+  let scheduledCards: Array<NonNullable<ReturnType<typeof scheduledEventCard>>> = [];
+  try {
+    const cards = await fetchScheduledCards({ context, now: input.now, withinDays: INTAKE_HORIZON_DAYS });
+    scheduledCards = cards.flatMap((card) => scheduledEventCard({
+      org: card.org,
+      name: card.name,
+      startsAtUtc: card.startsAtUtc,
+      venue: card.venue,
+      bouts: card.bouts,
+      sourceTitle: card.sourceTitle,
+      retrievedAt: input.now.toISOString()
+    }) ?? []);
+    results.push({
+      sourceId: "wikipedia-schedule",
+      status: scheduledCards.length > 0 ? "success" : "skipped",
+      reason: scheduledCards.length > 0 ? null : "No scheduled card with an announced bout list is inside the horizon.",
+      items: scheduledCards.map((card) => ({ kind: "event", id: card.id, name: card.name, startsAtUtc: card.startsAtUtc, bouts: card.bouts.length }))
+    });
+  } catch (error) {
+    results.push({ sourceId: "wikipedia-schedule", status: "failed", reason: cleanFailure(error), items: [] });
+  }
+
+
   const evidenceRefs = results
     .filter((result) => result.status === "success")
     .map((result) => `source:${result.sourceId}:${input.date}`);
@@ -264,13 +293,25 @@ export async function refreshFightAiQEvidence(input: {
       {}
     )
   ]);
+  // Material facts, not payloads.
+  //
+  // Hashing the raw items meant the hash changed every single day whether or not anything had:
+  // bookmaker decimals move by the hour, and the fighter page cursor advanced on every run, so
+  // mma-intake's change trigger could never fire negative and the room opened daily regardless.
+  // What counts as change here is a card, its date and its bout roster; who is on the roster;
+  // and whether a source answered at all.
   const contentHash = createHash("sha256")
-    .update(JSON.stringify(results.map(({ sourceId, status, items, quota }) => ({
-      sourceId,
-      status,
-      items,
-      ...(quota ? { quota: { exhausted: quota.exhausted } } : {})
-    }))))
+    .update(JSON.stringify({
+      sources: results.map(({ sourceId, status }) => ({ sourceId, status })).sort((left, right) => left.sourceId.localeCompare(right.sourceId)),
+      events: scheduledCards
+        .map((card) => ({
+          id: card.id,
+          startsAtUtc: card.startsAtUtc,
+          bouts: card.bouts.map((bout) => `${bout.red}-${bout.blue}-${bout.division}-${bout.status}`).sort()
+        }))
+        .sort((left, right) => left.id.localeCompare(right.id)),
+      roster: wikimediaRoster.map((entry) => `${entry.org}:${entry.slug}`).sort()
+    }))
     .digest("hex");
   const priorContentHash = sameDaySnapshot.contentHash ?? previousSnapshot.contentHash ?? null;
   await atomicWriteJson(input.root, artifactPath, {
@@ -283,6 +324,7 @@ export async function refreshFightAiQEvidence(input: {
   });
   const rosterPolicy = await loadRosterPolicy(configRoot);
   const normalizedPaths = await materializeFightAiQSources({
+    scheduledCards,
     root: input.root,
     retrievedAt: input.now,
     citoFighters,
@@ -291,17 +333,30 @@ export async function refreshFightAiQEvidence(input: {
     allowedIds: rosterPolicyIds(rosterPolicy)
   });
   const wikimediaPaths = await materializeWikimediaRoster({ root: input.root, entries: wikimediaRoster, retrievedAt: input.now, allowedIds: rosterPolicyIds(rosterPolicy) });
+  // Active or former, from the page that lists who is currently on the roster.
+  //
+  // This used to wait for a completed pass of Cito's all-time UFC list, which took two months of
+  // daily paging and now never runs at all — so `former` has been zero against sixty-five
+  // `unknown` since founding. A null answer means the page could not be read or its shape
+  // changed, and nothing is reconciled: marking every tracked fighter former on a parser
+  // regression is a far worse outcome than leaving the status as it was.
   const rosterStatusPaths: string[] = [];
-  if (citoRosterCycleComplete) {
+  const currentRoster = await fetchCurrentRosterNames({ org: "ufc", context });
+  if (currentRoster) {
     const currentFighters = await loadFighterRecords(path.join(input.root, "mma", "fighters"));
+    const seen = new Set(
+      wikimediaRoster
+        .filter((entry) => entry.org === "ufc" && currentRoster.has(entry.wikipediaTitle))
+        .map((entry) => `ufc:${entry.slug}`)
+    );
     rosterStatusPaths.push(...await reconcileRosterStatuses({
       root: input.root,
       org: "ufc",
       fighters: currentFighters,
-      seenFighterRefs: new Set(citoRosterCycleRefs),
-      sourceRef: `source:cito-ufc:${input.date}:complete-roster`,
+      seenFighterRefs: seen,
+      sourceRef: `source:wikipedia:${input.date}:List of current UFC fighters`,
       reviewedAt: input.now,
-      externalIdKey: "cito"
+      externalIdKey: "wikipediaPageId"
     }));
   }
   const backfillPaths: string[] = [];
