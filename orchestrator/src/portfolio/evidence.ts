@@ -11,12 +11,17 @@ import { fetchCitoFighters, fetchCitoUpcomingEvents, fetchOddsApiMma, loadMmaSou
 import { materializeFightAiQSources, scheduledEventCard } from "../fightaiq/intake.js";
 import { buildBackfillQueue, fetchWikimediaRoster, fetchWikimediaRosterByTitles, materializeWikimediaRoster, reconcileRosterStatuses, writeBackfillQueue, writeRosterStatus, type WikimediaRosterEntry } from "../fightaiq/roster.js";
 import { loadRosterPolicy, rosterPolicyIds, rosterPolicyTitles } from "../fightaiq/roster-policy.js";
-import { fetchCurrentRosterNames, fetchScheduledCards } from "../fightaiq/wikipedia-events.js";
+import { fetchCurrentRosterNames, fetchRecentResults, fetchScheduledCards } from "../fightaiq/wikipedia-events.js";
+import { applyEventResults } from "../fightaiq/results.js";
+import { enrichWikidataProfiles } from "../fightaiq/wikidata.js";
 
 import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
 import { enrichWikimediaBackfill } from "../fightaiq/wikimedia-backfill.js";
+
+/** How far back the results reader looks for a card whose outcome is not on file yet. */
+const RESULT_WINDOW_DAYS = 10;
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -333,6 +338,48 @@ export async function refreshFightAiQEvidence(input: {
     allowedIds: rosterPolicyIds(rosterPolicy)
   });
   const wikimediaPaths = await materializeWikimediaRoster({ root: input.root, entries: wikimediaRoster, retrievedAt: input.now, allowedIds: rosterPolicyIds(rosterPolicy) });
+
+  // What happened on the cards that have already been fought.
+  //
+  // Without this a bout goes in announced and stays announced: the rating engine only counts
+  // completed bouts, so every derived record froze at whatever the last historical import left.
+  // Ten days back is two or three articles, read off the same pages the announced card came from.
+  const resultPaths: string[] = [];
+  const resultsRunPath = "mma/results/last-run.json";
+  try {
+    const resultCards = await fetchRecentResults({ context, now: input.now, sinceDays: RESULT_WINDOW_DAYS });
+    const applied = await applyEventResults({
+      root: input.root,
+      bouts: await loadBoutRecords(path.join(input.root, "mma", "bouts")),
+      cards: resultCards,
+      retrievedAt: input.now
+    });
+    resultPaths.push(...applied.paths);
+    await atomicWriteJson(input.root, resultsRunPath, {
+      schemaVersion: "mma-results-run/1",
+      status: "success",
+      windowDays: RESULT_WINDOW_DAYS,
+      cards: resultCards.map((card) => ({ name: card.name, startsAtUtc: card.startsAtUtc, results: card.results.length })),
+      applied: applied.applied,
+      // A year page carries the whole season, so most of its results are for events we never
+      // tracked a bout for. The count says so without listing a hundred of them.
+      untracked: applied.unmatched.length,
+      generatedAt: input.now.toISOString()
+    });
+  } catch (error) {
+    // A card we cannot read leaves its bouts announced, which is the honest state.
+    await atomicWriteJson(input.root, resultsRunPath, {
+      schemaVersion: "mma-results-run/1",
+      status: "failed",
+      windowDays: RESULT_WINDOW_DAYS,
+      cards: [],
+      applied: [],
+      untracked: 0,
+      reason: cleanFailure(error),
+      generatedAt: input.now.toISOString()
+    });
+  }
+
   // Active or former, from the page that lists who is currently on the roster.
   //
   // This used to wait for a completed pass of Cito's all-time UFC list, which took two months of
@@ -386,6 +433,26 @@ export async function refreshFightAiQEvidence(input: {
       generatedAt: input.now.toISOString()
     });
   }
+
+  // Wikidata after Wikipedia, so a value the two agree about is already there to agree with.
+  //
+  // It holds a date of birth, a height and an English label, and no weight class or fight record.
+  // So it cannot corroborate two of the three critical fields — but it took date of birth from 37
+  // cards to 92 and height from 2 to 79, which is what the analysis layer needs to work out an age
+  // at all. One batched request per fifty fighters, on a host already in the allowlist.
+  const wikidataPaths: string[] = [];
+  try {
+    const wikidata = await enrichWikidataProfiles({
+      root: input.root,
+      fighters: await loadFighterRecords(path.join(input.root, "mma", "fighters")),
+      context,
+      retrievedAt: input.now
+    });
+    wikidataPaths.push(...wikidata.paths);
+  } catch {
+    // A card keeps whatever it already had; nothing downstream depends on this having run.
+  }
+
   const [fighters, bouts] = await Promise.all([
     loadFighterRecords(path.join(input.root, "mma", "fighters")),
     loadBoutRecords(path.join(input.root, "mma", "bouts"))
@@ -402,7 +469,7 @@ export async function refreshFightAiQEvidence(input: {
   const queue = buildBackfillQueue({ fighters: rebuilt, bouts, now: input.now });
   const rosterStatusPath = await writeRosterStatus({ root: input.root, fighters: rebuilt, bouts, queue, now: input.now });
   return {
-    artifactPaths: [artifactPath, ...(results.some((result) => result.quota) ? [quotaPath] : []), ...(citoQuotaRecorded ? [citoQuotaPath] : []), ...normalizedPaths, ...wikimediaPaths, ...rosterStatusPaths, ...backfillPaths, backfillRunPath, ...derivedPaths, ...evaluationPaths, queuePath, rosterStatusPath],
+    artifactPaths: [artifactPath, ...(results.some((result) => result.quota) ? [quotaPath] : []), ...(citoQuotaRecorded ? [citoQuotaPath] : []), ...normalizedPaths, ...wikimediaPaths, ...rosterStatusPaths, ...resultPaths, resultsRunPath, ...backfillPaths, backfillRunPath, ...wikidataPaths, ...derivedPaths, ...evaluationPaths, queuePath, rosterStatusPath],
     evidenceRefs,
     contentHash,
     materialChange: priorContentHash !== contentHash
