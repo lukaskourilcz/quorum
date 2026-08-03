@@ -238,11 +238,20 @@ export async function collectLiveCouncil(input: {
     let seated = response;
     if (seated !== null && "parseFailure" in seated) {
       const first = seated.parseFailure;
-      seated = await guardedJsonCall(callFor()).catch((error: unknown) => {
+      seated = await guardedJsonCall({ ...callFor(), attempt: 2 }).catch((error: unknown) => {
         if (error instanceof ModelOutputParseError) return { parseFailure: error };
         throw error;
       });
       if (seated !== null && "parseFailure" in seated) {
+        // Both in the record the cycle can publish and in the log, because a seat lost twice is
+        // the difference between a council that can pass its own commission gate and one that
+        // cannot — and nothing downstream reads droppedSeats yet.
+        console.warn(JSON.stringify({
+          event: "council_seat_lost",
+          agent,
+          phase: input.phase,
+          reason: first.message
+        }));
         dropped.push({
           agent,
           reason: `Unparsable on both attempts: ${first.message}`.slice(0, 240)

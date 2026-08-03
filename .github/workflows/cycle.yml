@@ -1021,7 +1021,10 @@ jobs:
       # a push race, a network failure, a step that threw — so the slot reads "Skipped" with the
       # reason instead of "Did not happen" with silence.
       - name: Say on the calendar why this run did not finish
-        if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' }}
+        # Not when the meeting itself already ran and committed. A delivery step failing after
+        # the cycle pushed is a delivery problem, and calling it "the meeting never finished" on the
+        # calendar is the opposite of what happened.
+        if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outcome != 'success' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

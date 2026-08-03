@@ -214,7 +214,17 @@ export async function enrichWikidataProfiles(input: {
       quality: { ...fighter.quality, gaps: [...gaps] },
       completeness: Number(((PROFILE_FIELDS.length - gaps.length) / PROFILE_FIELDS.length).toFixed(4)),
       corroboration: Number((corroborated / PROFILE_FIELDS.length).toFixed(4)),
-      modelEligible: modelEligible(fighter, fields, discrepancies),
+      modelEligible: modelEligible(fighter, fields, discrepancies)
+    });
+    // Compared before the log entry is added, not after.
+    //
+    // Appending the entry first meant every card differed from itself on every run: the no-op
+    // guard below could never fire, so a daily sweep that learned nothing still rewrote all
+    // ninety-two files and grew ninety-two change-log entries. What counts as a change is the
+    // facts, so the log and the timestamp are only added once the facts have moved.
+    if (JSON.stringify(card) === JSON.stringify(fighter)) continue;
+    const written = FighterCardSchema.parse({
+      ...card,
       changeLog: [...fighter.changeLog, {
         at: retrievedAt,
         kind: "source-refresh" as const,
@@ -224,9 +234,8 @@ export async function enrichWikidataProfiles(input: {
       }],
       updatedAt: retrievedAt
     });
-    if (JSON.stringify(card) === JSON.stringify(fighter)) continue;
     const relative = `mma/fighters/${card.id}.json`;
-    await atomicWriteJson(input.root, relative, card);
+    await atomicWriteJson(input.root, relative, written);
     paths.push(relative);
   }
   return { paths: [...new Set(paths)].sort(), processed: candidates.length, matched };

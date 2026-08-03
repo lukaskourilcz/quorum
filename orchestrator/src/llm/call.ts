@@ -24,6 +24,8 @@ export interface GuardedCallInput<T> {
   stateRoot: string;
   cycleId: string;
   phase: string;
+  /** 2 for a retry of a call whose first reply would not parse. Keeps the two apart in the ledger. */
+  attempt?: number;
   ventureId?: string;
   agent: string;
   provider: "openai" | "anthropic";
@@ -83,7 +85,12 @@ export async function guardedJsonCall<T>(
     model: request.model,
     system: request.system,
     input: request.input,
-    maxOutputTokens: request.maxOutputTokens
+    maxOutputTokens: request.maxOutputTokens,
+    // A retry of a seat whose reply would not parse sends byte-identical arguments, so without
+    // this it hashes to the first attempt, hits the response cache and — worse — never reaches
+    // the ledger, because the ledger is deduplicated on the same hash. The provider bills both
+    // calls either way; only the record of the second one went missing.
+    ...(request.attempt && request.attempt > 1 ? { attempt: request.attempt } : {})
   });
   const cached = await readCachedResponse<T>(
     request.stateRoot,
