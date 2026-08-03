@@ -187,8 +187,31 @@ export function reviewArticleCopy(
     add("tout-language", "Betting-tout language is not allowed.");
   }
   if (combined.includes("—")) add("em-dash", "Use a full stop, comma or colon instead of an em dash.");
+  // Two separate things: a claim must carry a marker, and the marker must name a source the
+  // article actually has. Requiring only the first accepted [source:anything-at-all] —
+  // verified, a marker naming a file that does not exist passed — which is exactly what a
+  // model reaches for when told every figure needs one. This is the last grounding gate once
+  // English is gone, so it resolves.
+  //
+  // Its reach is the body. A number in a title or dek is not covered, which was already true
+  // when English existed and is stated here rather than left implied by "every figure".
+  const internalRefs = new Set(article.sources.flatMap((entry) => (entry.kind === "internal" ? [entry.ref] : [])));
   for (const line of linesWithClaims(copy.bodyMDX)) {
-    if (!sourceMarker.test(line)) add("ungrounded-claim", `A figure or quote has no source marker: ${line.slice(0, 100)}`);
+    if (!sourceMarker.test(line)) {
+      add("ungrounded-claim", `A figure or quote has no source marker: ${line.slice(0, 100)}`);
+      continue;
+    }
+    for (const [, named, numbered] of line.matchAll(/\[source:([^\]]+)\]|\[\^source-(\d+)\]/gu)) {
+      if (named !== undefined && !internalRefs.has(named)) {
+        add("unresolvable-source", `The marker [source:${named.slice(0, 80)}] names no source on this article.`);
+      }
+      if (numbered !== undefined) {
+        const index = Number(numbered);
+        if (!Number.isInteger(index) || index < 1 || index > article.sources.length) {
+          add("unresolvable-source", `The marker [^source-${numbered}] is outside this article's ${article.sources.length} sources.`);
+        }
+      }
+    }
   }
   for (const fighterRef of article.fighterRefs) {
     if (!copy.bodyMDX.includes(`](${fighterPath(fighterRef)})`)) {

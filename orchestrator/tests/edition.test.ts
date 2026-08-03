@@ -528,3 +528,29 @@ describe("the writer is given the articles, not just their blurbs", () => {
     }
   });
 });
+
+describe("the Czech copy gate actually fires", () => {
+  // \b is an ASCII word boundary, so a pattern ending in "ě", "í" or "ň" could never match:
+  // \b needs an ASCII word character on one side. Six alternatives were dead for that reason,
+  // and were verified dead by running them before the fix. This stopped being a curiosity the
+  // moment Czech became the only locale — from then on this is the edition's only copy gate.
+  const deadBefore: Array<[string, string]> = [
+    ["throat_clearing", "V dnešní rychle se měnící době firmy hledají úspory."],
+    ["bureaucratic_filler", "Došlo k provedení testu na dvou modelech."],
+    ["bureaucratic_filler", "Došlo k zahájení prací na novém indexu."],
+    ["literal_calque", "Chtějí to posunout na další úroveň."],
+    ["empty_adverb", "Upřímně nevím, co ta čísla znamenají."],
+    ["empty_adverb", "Je to skutečně velký rozdíl."],
+    ["empty_adverb", "Potenciálně užitečné pro menší týmy."]
+  ];
+
+  it.each(deadBefore)("catches %s in %j", (code, text) => {
+    const violations = reviewArticleText(text, "cs");
+    expect(violations.map((violation) => violation.code)).toContain(code);
+  });
+
+  it("still says nothing about clean Czech prose", () => {
+    const clean = "Anthropic zveřejnil test dvou modelů. Oba obešly kontrolu v izolovaném prostředí.";
+    expect(reviewArticleText(clean, "cs")).toEqual([]);
+  });
+});

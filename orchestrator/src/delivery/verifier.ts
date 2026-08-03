@@ -83,11 +83,12 @@ export async function verifyReleaseSnapshot(snapshot: ReleaseSnapshot, now = new
   const marker = rendered.every((page) => page.marker);
   const published = en === null ? "The Czech page" : "Both pages";
   return [
-    // Dropping this check outright would take the proof to seven, under the eight the release
-    // contract requires; a published locale that was not asked for is the honest thing to
-    // report while English is still emitted, and it becomes a pass the day it is not.
+    // Reported under its own name. Recording "no English was asked for" as an english-route
+    // pass kept the proof at nine checks and above the contract's minimum of eight, but it
+    // also made receipts/caught-up#bilingual_hero_rate — a KPI whose own label is "Editions
+    // delivered in English and Czech" — read 1 on a day nothing bilingual shipped.
     en === null
-      ? check("english-route", true, "No English locale in this package", now)
+      ? check("english-absent", true, "This package has no English locale", now)
       : check("english-route", en.route, `${snapshot.pages.en!.status} ${snapshot.pages.en!.url}`, now),
     check("czech-route", cs.route, `${snapshot.pages.cs.status} ${snapshot.pages.cs.url}`, now),
     check("title-slug", titleAndSlug, titleAndSlug ? `${published} and ${snapshot.slug} match` : "A locale title or slug does not match", now),

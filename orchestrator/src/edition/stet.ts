@@ -60,15 +60,26 @@ const ENGLISH_ARTICLE_RULES: readonly StetRule[] = [
   }
 ];
 
+/**
+ * Czech slop rules.
+ *
+ * Every pattern guards its edges with a Unicode class, never \b. \b is an ASCII word boundary,
+ * so it does not exist between a space and "u" of "upřímně"... it does — the failure is at the
+ * OTHER end: \b after "upřímně" needs an ASCII word character before it, and "ě" is not one.
+ * Six alternatives were dead for that reason and were verified dead by running them: "upřímně",
+ * "skutečně", "potenciálně", "v dnešní ... době", "došlo k provedení|zahájení", and
+ * "posunout na další úroveň". This matters more from here on: once English stops being written,
+ * this is the only copy gate the edition has.
+ */
 const CZECH_ARTICLE_RULES: readonly StetRule[] = [
   {
     code: "generated_meta",
-    pattern: /\bjako (?:umělá inteligence|jazykový model)\b/i,
+    pattern: /(?<![\p{L}\p{N}_])jako (?:umělá inteligence|jazykový model)(?![\p{L}\p{N}_])/iu,
     message: "Odstraň komentář o tom, že text vytvořil model."
   },
   {
     code: "throat_clearing",
-    pattern: /\b(?:pojďme se podívat|je (?:třeba|nutné|důležité) (?:si )?(?:uvědomit|zmínit|poznamenat)|v dnešní (?:rychle|neustále) se (?:měnící|vyvíjející) době)\b/i,
+    pattern: /(?<![\p{L}\p{N}_])(?:pojďme se podívat|je (?:třeba|nutné|důležité) (?:si )?(?:uvědomit|zmínit|poznamenat)|v dnešní (?:rychle|neustále) se (?:měnící|vyvíjející) době)(?![\p{L}\p{N}_])/iu,
     message: "Vynech úvodní vatu a napiš rovnou podstatnou větu."
   },
   {
@@ -78,17 +89,17 @@ const CZECH_ARTICLE_RULES: readonly StetRule[] = [
   },
   {
     code: "bureaucratic_filler",
-    pattern: /\b(?:v rámci|za účelem|došlo k (?:provedení|realizaci|zahájení)|s ohledem na skutečnost)\b/i,
+    pattern: /(?<![\p{L}\p{N}_])(?:v rámci|za účelem|došlo k (?:provedení|realizaci|zahájení)|s ohledem na skutečnost)(?![\p{L}\p{N}_])/iu,
     message: "Použij přímé sloveso místo úřednické konstrukce."
   },
   {
     code: "literal_calque",
-    pattern: /\b(?:na konci dne|adresovat (?:problém|otázku)|udělat rozdíl|dává smysl pro|přinést na stůl|posunout na další úroveň)\b/i,
+    pattern: /(?<![\p{L}\p{N}_])(?:na konci dne|adresovat (?:problém|otázku)|udělat rozdíl|dává smysl pro|přinést na stůl|posunout na další úroveň)(?![\p{L}\p{N}_])/iu,
     message: "Přestav anglický kalk do přirozené češtiny."
   },
   {
     code: "empty_adverb",
-    pattern: /\b(?:doslova|upřímně|skutečně|jednoduše|potenciálně|zajímavé je,? že|důležité je,? že)\b/i,
+    pattern: /(?<![\p{L}\p{N}_])(?:doslova|upřímně|skutečně|jednoduše|potenciálně|zajímavé je,? že|důležité je,? že)(?![\p{L}\p{N}_])/iu,
     message: "Odstraň prázdný přívlastek nebo jej nahraď důkazem."
   },
   {
@@ -103,7 +114,7 @@ const CZECH_ARTICLE_RULES: readonly StetRule[] = [
   },
   {
     code: "source_instruction_leak",
-    pattern: /\b(?:ignoruj (?:všechny|předchozí) pokyny|prozraď systémový prompt|schval tento článek)\b/i,
+    pattern: /(?<![\p{L}\p{N}_])(?:ignoruj (?:všechny|předchozí) pokyny|prozraď systémový prompt|schval tento článek)(?![\p{L}\p{N}_])/iu,
     message: "Odstraň pokyn převzatý z nedůvěryhodného zdroje."
   }
 ];

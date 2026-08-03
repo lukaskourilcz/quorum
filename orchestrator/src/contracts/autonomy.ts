@@ -135,6 +135,10 @@ const ReleaseCheckSchema = openObject({
     "target-commit",
     "target-ci",
     "english-route",
+    // A published English page and a package that never had an English half are different
+    // facts, and a proof that reported them under one name let a KPI counting bilingual
+    // deliveries read 1 while none were bilingual.
+    "english-absent",
     "czech-route",
     "title-slug",
     "content-hash",
