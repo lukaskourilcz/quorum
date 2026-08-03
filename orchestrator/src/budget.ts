@@ -87,6 +87,15 @@ export interface TextEstimateInput {
   promptChars: number;
   maxOutputTokens: number;
   cachedInputTokens?: number;
+  /**
+   * Tokens written to the provider's prompt cache on this call.
+   *
+   * Anthropic bills a write at 1.25x the input rate and a read at 0.1x, and reports the three
+   * counts separately: `input_tokens` already excludes both. Charging a write as ordinary
+   * input would under-report every first call of a room by a quarter of its prompt, so the
+   * premium is priced rather than assumed away.
+   */
+  cacheWriteInputTokens?: number;
   webSearchUses?: number;
   maxSearchContentTokens?: number;
   at?: Date;
@@ -100,6 +109,9 @@ export interface CostEstimate {
   priceVerifiedAt: string;
   priceSourceUrl: string;
 }
+
+/** Anthropic bills a cache write at 1.25x the ordinary input rate. */
+const CACHE_WRITE_MULTIPLIER = 1.25;
 
 export function estimateTextCall(input: TextEstimateInput): CostEstimate {
   const at = input.at ?? new Date();
@@ -116,7 +128,8 @@ export function estimateTextCall(input: TextEstimateInput): CostEstimate {
     input.cachedInputTokens ?? 0,
     estimatedInputTokens
   );
-  const uncachedInputTokens = estimatedInputTokens - cachedInputTokens;
+  const cacheWriteInputTokens = Math.max(0, input.cacheWriteInputTokens ?? 0);
+  const uncachedInputTokens = Math.max(0, estimatedInputTokens - cachedInputTokens - cacheWriteInputTokens);
   const maxSearchContentTokens = input.maxSearchContentTokens ?? 0;
   const searchUses = input.webSearchUses ?? 0;
   if (searchUses > 0 && maxSearchContentTokens <= 0) {
@@ -130,6 +143,7 @@ export function estimateTextCall(input: TextEstimateInput): CostEstimate {
   const tokenUsd =
     (uncachedInputTokens / 1_000_000) * price.inputUsdPerMillion +
     (cachedInputTokens / 1_000_000) * cachedRate +
+    (cacheWriteInputTokens / 1_000_000) * price.inputUsdPerMillion * CACHE_WRITE_MULTIPLIER +
     (maxSearchContentTokens / 1_000_000) * price.inputUsdPerMillion +
     (input.maxOutputTokens / 1_000_000) * price.outputUsdPerMillion;
   const toolUsd = searchUses * WEB_SEARCH_USD_PER_CALL;

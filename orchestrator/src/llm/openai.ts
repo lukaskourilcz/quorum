@@ -13,6 +13,8 @@ export interface TextProviderResponse {
   tokensIn: number;
   tokensOut: number;
   cachedTokensIn: number;
+  /** Tokens written to the provider's prompt cache, billed above the input rate. */
+  cacheWriteTokensIn: number;
 }
 
 export class OpenAiTextClient {
@@ -44,7 +46,9 @@ export class OpenAiTextClient {
       model: response.model,
       tokensIn: response.usage?.input_tokens ?? 0,
       tokensOut: response.usage?.output_tokens ?? 0,
-      cachedTokensIn: response.usage?.input_tokens_details?.cached_tokens ?? 0
+      cachedTokensIn: response.usage?.input_tokens_details?.cached_tokens ?? 0,
+      // OpenAI does not bill a separate cache write.
+      cacheWriteTokensIn: 0
     };
   }
 }

@@ -735,9 +735,12 @@ export async function runPortfolioCycle(input: {
         context: context.text
       }));
       // The role block is trusted text and deliberately follows the closed <data> fence:
-      // it keeps `system` byte-identical for every seat in the room (so the room prompt and
-      // the shared packet form one cacheable prefix) and leaves the agent's own instruction
-      // as the last thing it reads, after the untrusted packet rather than before it.
+      // it keeps `system` byte-identical for every seat in the room, so the room prompt and
+      // the shared packet form one cacheable prefix, and leaves the agent's own instruction as
+      // the last thing it reads, after the untrusted packet rather than before it. The request
+      // now actually marks that prefix cacheable; for a long time this comment described an
+      // intention the provider was never told about, and sixty ledger entries showed one
+      // cache read between them.
       const prompt = `${packet}\n\nROLE BOUNDARY:\n${profile.mission}\n\n${personas.get(agent) ?? ""}`;
       const estimate = estimateTextCall({ provider: model.provider, model: model.model, promptChars: system.length + prompt.length, maxOutputTokens: model.maxOutputTokens, at: input.now });
       return { agent, model, system, prompt, estimate };

@@ -19,11 +19,21 @@ export class AnthropicTextClient {
   }
 
   async generate(request: AnthropicTextRequest): Promise<TextProviderResponse> {
+    // The system prompt is marked cacheable, not merely stable.
+    //
+    // A room sends the same system text once per seat, and the code that builds it says so:
+    // it keeps `system` byte-identical for every agent "so the room prompt and the shared
+    // packet form one cacheable prefix". That was true of the text and false of the request —
+    // nothing ever asked for the cache, so every seat paid full input price for the same
+    // bytes. Sixty ledger entries, one with a cache read.
+    //
+    // Marked on the system block only. The user turn carries the per-agent packet and differs
+    // every call, so caching it would pay the write premium for a prefix nothing re-reads.
     const response = await this.client.messages.create({
       max_tokens: request.maxOutputTokens,
       messages: [{ role: "user", content: request.input }],
       model: request.model,
-      system: request.system
+      system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }]
     });
     // A cut-off body is not a model mistake, it is our cap being too small, and it must not
     // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the
@@ -40,7 +50,8 @@ export class AnthropicTextClient {
       model: response.model,
       tokensIn: response.usage.input_tokens,
       tokensOut: response.usage.output_tokens,
-      cachedTokensIn: response.usage.cache_read_input_tokens ?? 0
+      cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
+      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0
     };
   }
 }

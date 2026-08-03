@@ -253,3 +253,35 @@ describe("the site quotes the caps the runtime enforces", () => {
     }
   });
 });
+
+describe("prompt caching is priced, not assumed away", () => {
+  // A room sends the same system prompt once per seat. The first seat writes the cache and the
+  // rest read it, and the provider bills those three counts at three different rates while
+  // reporting them as disjoint numbers. Getting the arithmetic wrong here does not fail a test
+  // somewhere else — it quietly moves the daily and monthly caps.
+  const call = (over: Partial<Parameters<typeof estimateTextCall>[0]>) => estimateTextCall({
+    provider: "anthropic",
+    model: "claude-sonnet-4-6",
+    promptChars: 1_000_000 * 3.5,
+    maxOutputTokens: 0,
+    at: new Date("2026-08-03T00:00:00.000Z"),
+    ...over
+  });
+
+  it("charges a cache read below the input rate and a write above it", () => {
+    const plain = call({}).estimatedUsd;
+    const read = call({ cachedInputTokens: 1_000_000 }).estimatedUsd;
+    const write = call({ cacheWriteInputTokens: 1_000_000 }).estimatedUsd;
+    expect(read).toBeLessThan(plain);
+    expect(write).toBeGreaterThan(plain);
+    expect(write / plain).toBeCloseTo(1.25, 5);
+  });
+
+  it("never lets the cached share be subtracted twice", () => {
+    // The three counts partition the prompt, so a prompt that is entirely a cache read must
+    // cost the cached rate for all of it, not zero.
+    const all = call({ promptChars: 1_000_000 * 3.5, cachedInputTokens: 1_000_000 });
+    expect(all.estimatedUsd).toBeGreaterThan(0);
+    expect(all.estimatedInputTokens).toBe(1_000_000);
+  });
+});

@@ -119,12 +119,18 @@ export async function guardedJsonCall<T>(
           input: request.input,
           maxOutputTokens: request.maxOutputTokens
         });
+  // input_tokens, cache_read_input_tokens and cache_creation_input_tokens are disjoint counts,
+  // so the prompt is their sum. Passing tokensIn alone and then subtracting the cached share
+  // would have discounted tokens the provider had already left out, under-reporting the spend
+  // the daily and monthly caps are computed from.
+  const promptTokens = response.tokensIn + response.cachedTokensIn + response.cacheWriteTokensIn;
   const actual = estimateTextCall({
     provider: request.provider,
     model: request.model,
-    promptChars: response.tokensIn * 3.5,
+    promptChars: promptTokens * 3.5,
     maxOutputTokens: response.tokensOut,
-    cachedInputTokens: response.cachedTokensIn
+    cachedInputTokens: response.cachedTokensIn,
+    cacheWriteInputTokens: response.cacheWriteTokensIn
   });
   const ledger = await readJson<{ entries: BudgetLedgerEntry[] }>(
     request.stateRoot,
