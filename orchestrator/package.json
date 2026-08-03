@@ -21,6 +21,7 @@
     "fightaiq:events": "tsx src/fightaiq/events-cli.ts",
     "fightaiq:roster-sync": "tsx src/fightaiq/roster-sync-cli.ts",
     "ideas:migrate": "tsx src/ideas/migrate-cli.ts",
+    "meetings:reconcile": "tsx src/meetings/reconcile-cli.ts",
     "mma:delivery": "tsx src/mma-files/publish-cli.ts",
     "org:maintain": "tsx src/org/maintenance.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",

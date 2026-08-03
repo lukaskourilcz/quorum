@@ -60,7 +60,7 @@ const mandates: Record<AgentId, string> = {
   LEDGER: "Tracks every cost and plans the monthly budget without making up revenue or spending just to spend.",
   HERALD: "Chooses and takes responsibility for the daily DNESKAi story.",
   STET: "Removes generic AI wording and checks every article and public meeting text before release.",
-  HACEK: "Rewrites each English edition as natural Czech, including the Czech social posts, without changing the facts.",
+  HACEK: "Keeps the Czech style rules and checks that each article reads as natural Czech without changing the facts.",
   SPARK: "Brings one realistic DNESKAi product idea to each morning meeting and follows it through the final decision.",
   VAULT: "Keeps the idea history, catches duplicates and stops old failures returning without new information.",
   FRAME: "Creates carousels, quote cards and header images with repeatable code, source notes and useful alt text.",

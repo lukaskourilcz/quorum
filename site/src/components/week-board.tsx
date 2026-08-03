@@ -266,6 +266,39 @@ function projectSlotColor(kind: CalendarKind): string {
   return projectDetails[projectForKind(kind)].slotColor;
 }
 
+/**
+ * An article run states why its slot died as a machine token. `buildCalendarFeed` copies that
+ * token into `decisionOneLiner` unchanged, and the board is where an owner reads it, so each
+ * token gets a sentence here. A reason absent from this map is printed verbatim, not guessed at.
+ */
+const articleRunReasonCopy: Record<string, string> = {
+  missing_editorial_slate: "The story meeting left no slate, so this slot had no subject.",
+  missing_sourced_subject: "The slate carried no source-backed subject for this slot.",
+  no_sourced_subject_on_file: "No slate, and no source-backed subject left on file."
+};
+
+/**
+ * Translate the reason once, as the slot enters its row, so the accessible name, the tooltip and
+ * the printed cell text cannot disagree about what the cell says.
+ */
+function readableSlot(slot: CalendarSlot): CalendarSlot {
+  const copy = slot.decisionOneLiner ? articleRunReasonCopy[slot.decisionOneLiner] : undefined;
+  return copy ? { ...slot, decisionOneLiner: copy } : slot;
+}
+
+/**
+ * Accessible name for one calendar cell. The one-liner belongs in the name, not in `title`: an
+ * element with an aria-label never announces its title, so on a cell that links to its record the
+ * decision summary reached nobody using a screen reader. A cell with no record page carried no
+ * title at all, so its reason reached no one.
+ */
+function calendarSlotLabel(day: string, slot: CalendarSlot): string {
+  const status = statusDetails(displayStatus(slot.status, slot.fixture));
+  const parts = [`${day} ${publicKindLabel(slot.kind)}`, status.label];
+  if (slot.decisionOneLiner) parts.push(slot.decisionOneLiner);
+  return parts.join(", ");
+}
+
 export function WeekBoard({
   feed,
   adjacentFeeds = [],
@@ -281,7 +314,6 @@ export function WeekBoard({
   availableWeeks: readonly string[];
   headingLevel?: "section" | "page";
 }) {
-  const kindLabel = (kind: CalendarKind) => publicKindLabel(kind);
   const days = Array.from({ length: 5 }, (_, index) => addCalendarDays(anchorDate, index - 1));
   const slotByDateAndKind = new Map<string, CalendarSlot>();
   for (const sourceFeed of [feed, ...adjacentFeeds]) {
@@ -365,7 +397,7 @@ export function WeekBoard({
                 </div>
               </div>
               {days.map((day) => {
-                const slot = getSlot(day, definition.kind);
+                const slot = readableSlot(getSlot(day, definition.kind));
                 const visibleStatus = displayStatus(slot.status, slot.fixture);
                 const status = statusDetails(visibleStatus);
                 const StatusIcon = status.icon;
@@ -378,14 +410,27 @@ export function WeekBoard({
                   </>
                 );
                 const project = projectForKind(slot.kind);
+                const label = calendarSlotLabel(day, slot);
                 const className = `grid min-h-14 place-items-center border-b border-r border-t-2 border-[var(--line-strong)] p-2 last:border-r-0 ${status.tone} ${day === today ? "outline outline-1 -outline-offset-1 outline-[color-mix(in_srgb,var(--accent)_22%,transparent)]" : ""} ${slot.meetingHref ? "transition-[background-color,filter] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]" : ""}`;
                 const slotSurface = { ...status.surface, borderTopColor: projectSlotColor(slot.kind) };
                 return slot.meetingHref ? (
-                  <Link aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} href={slot.meetingHref} key={`${day}-${slot.kind}`} style={slotSurface} title={slot.decisionOneLiner}>
+                  <Link aria-label={label} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} href={slot.meetingHref} key={`${day}-${slot.kind}`} style={slotSurface} title={slot.decisionOneLiner}>
                     {content}
                   </Link>
                 ) : (
-                  <div aria-label={`${day} ${kindLabel(slot.kind)}, ${status.label}`} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} key={`${day}-${slot.kind}`} style={slotSurface}>{content}</div>
+                  // A skipped slot has no record page to link to, so this branch was the only place
+                  // its reason could appear — and it showed nothing at all. The owner got a coloured
+                  // square with no explanation. Print the reason in the cell, since there is no page
+                  // one click away that carries it. `title` repeats it because the cell clamps to
+                  // three lines and the tooltip is where a mouse user reads a long reason in full.
+                  <div aria-label={label} className={className} data-calendar-slot data-calendar-state={visibleStatus} data-project={project} key={`${day}-${slot.kind}`} style={slotSurface} title={slot.decisionOneLiner}>
+                    {content}
+                    {slot.decisionOneLiner ? (
+                      <span className="mt-1.5 line-clamp-3 w-full break-words text-center text-[0.625rem] leading-[0.875rem] text-[var(--fog)]" data-calendar-reason>
+                        {slot.decisionOneLiner}
+                      </span>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>

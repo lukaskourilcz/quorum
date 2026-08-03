@@ -1,8 +1,12 @@
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { CalendarFeedSchema } from "../src/contracts/calendar.js";
+import { EditionPackageSchema, type EditionPackage } from "../src/contracts/edition-package.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../src/contracts/meeting-record.js";
+import { loadEditionQualityConfig } from "../src/edition/config.js";
+import { buildNoEditionPackage } from "../src/edition/package.js";
 import { reviewBoardroomText } from "../src/edition/stet.js";
 import {
   buildCalendarFeed,
@@ -15,7 +19,11 @@ import {
   resolveManualPhase,
   resolveScheduledPhase
 } from "../src/meetings/clock.js";
-import { createLiveProductMeeting, createOfflineCaughtUpMeeting } from "../src/meetings/record.js";
+import {
+  createLiveEditionMeeting,
+  createLiveProductMeeting,
+  createOfflineCaughtUpMeeting
+} from "../src/meetings/record.js";
 import {
   enforceMeetingTranscript,
   transcriptViolations
@@ -45,6 +53,44 @@ async function caughtUpRecord(
     room,
     now: new Date(edition ? "2026-08-04T03:00:00.000Z" : "2026-08-04T15:00:00.000Z"),
     estimatedCycleUsd: 0.08
+  });
+}
+
+async function liveEditionRecord(status: EditionPackage["status"]): Promise<MeetingRecord> {
+  const routing = await loadRoutingConfig(path.join(configRoot, "agent-routing.json"));
+  const now = new Date("2026-08-04T03:00:00.000Z");
+  const room = routeBoardroom(routing, {
+    roomId: "ROOM-LIVE-EDITION",
+    topicType: "edition",
+    objective: "Select a story or NO_EDITION",
+    evidenceRefs: [],
+    decisionNeeded: "EDITION",
+    riskTags: [],
+    budgetImpactUsd: 0.35,
+    preset: "edition-room",
+    now
+  });
+  const editionPackage = status === "edition"
+    ? EditionPackageSchema.parse(JSON.parse(await readFile(
+        path.join(repoRoot, "orchestrator", "tests", "fixtures", "edition", "golden-package.json"),
+        "utf8"
+      )))
+    : buildNoEditionPackage({
+        date: "2026-08-04",
+        meetingRef: "meetings/2026-08-04-cu-edition",
+        roomUrl: "https://boardless.example/meetings/2026-08-04-cu-edition",
+        reason: "quality_block:source_diversity",
+        config: await loadEditionQualityConfig()
+      });
+  return createLiveEditionMeeting({
+    cycleId: "20260804030000-cu-edition",
+    stage: "VALIDATION",
+    room,
+    now,
+    estimatedCycleUsd: 0.35,
+    monthAllInUsd: 1.2,
+    editionPackage,
+    evidenceRefs: ["source:the-verge"]
   });
 }
 
@@ -227,6 +273,47 @@ describe("Caught Up meeting records", () => {
       ledgerValues: [0.004, 0.03, 1.2, 50],
       evidenceValues: []
     })).toEqual([]);
+  });
+});
+
+describe("the edition room reports the reviews that actually run", () => {
+  // The room published "The English copy cleared its register and source-link checks" and
+  // "The Czech version cleared register, natural phrasing and parity checks" on the public
+  // meeting page after both stages had been deleted. One write call produces one Czech
+  // article, and reviewCzechArticle is the only review it gets.
+  // "czech version" belongs here too: the dry room said "No Czech version exists", and a
+  // version is the second telling that no longer gets made.
+  const RETIRED_REVIEW =
+    /english (?:copy|draft|version|review)|czech version|parity|translat|localiz/i;
+
+  it("never claims an English or parity review in any branch", async () => {
+    const records = [
+      await liveEditionRecord("edition"),
+      await liveEditionRecord("no_edition"),
+      await caughtUpRecord("cu-edition")
+    ];
+    for (const record of records) {
+      const spoken = record.roomTranscript.turns.map((turn) => turn.text).join("\n");
+      expect(spoken).not.toMatch(RETIRED_REVIEW);
+      expect(transcriptViolations(record.roomTranscript, {
+        ledgerValues: [0, 0.08, 0.194, 0.35, 1.2, 50],
+        evidenceValues: []
+      })).toEqual([]);
+    }
+  });
+
+  it("names the supplied-source rule and the single Czech copy review", async () => {
+    const record = await liveEditionRecord("edition");
+    const spoken = new Map(record.roomTranscript.turns.map((turn) => [turn.agent, turn.text]));
+    expect(spoken.get("STET")).toMatch(/Czech/);
+    expect(spoken.get("STET")).toMatch(/link/i);
+    expect(spoken.get("HACEK")).toMatch(/Czech copy review/i);
+  });
+
+  it("has the dry room miss an article rather than a second version", async () => {
+    const record = await caughtUpRecord("cu-edition");
+    const spoken = new Map(record.roomTranscript.turns.map((turn) => [turn.agent, turn.text]));
+    expect(spoken.get("HACEK")).toMatch(/No Czech article exists/);
   });
 });
 

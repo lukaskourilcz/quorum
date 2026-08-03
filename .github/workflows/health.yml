@@ -35,3 +35,68 @@ jobs:
           curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/standups"
           curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/feed.json"
           curl --fail --silent --show-error --location --max-time 20 --proto '=https' "$PUBLIC_SITE_URL/robots.txt"
+
+  # Every recorder in cycle.yml is a step inside the run it describes, so what none of them can
+  # cover is a run that is stopped before those steps or whose commit never lands — a cron GitHub
+  # silently drops, a cancelled run, a dead runner, a push that keeps failing, and anything else
+  # with the same shape. That slot ends the day with no meeting record, no article run file and no
+  # skip, and the calendar's last branch renders it red as "missed" with nothing saying why.
+  #
+  # Its own job, not a step on the health check: the health job is gated on HEALTH_CHECK_ENABLED
+  # and a production URL secret, and yesterday's meetings have to be accounted for whether or not
+  # the public site is being polled.
+  #
+  # A second run of this workflow cancels the one in progress through the workflow-level group
+  # above, this job with it; a job-level concurrency block cannot opt out of that. A day lost that
+  # way stays unaccounted until someone runs `meetings:reconcile -- --date <YYYY-MM-DD>` for it.
+  reconcile:
+    name: Account for yesterday's meeting slots
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Install Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Record yesterday's slots that have no record
+        run: |
+          # No argument: the reconciler defaults to yesterday on the Prague calendar, which is the
+          # day boundary the slots themselves are defined against. It refuses a day that is not
+          # over, writes only for a slot the calendar already calls missed, and leaves an existing
+          # record or skip untouched — so running it twice is a no-op.
+          pnpm --filter @boardlessai/orchestrator run meetings:reconcile
+          if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git add -A -- state/meetings/skips
+            git commit -m "skip(reconcile): account for yesterday's slots that have no record"
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              # --autostash because install and the reconciler can leave unrelated files in the
+              # tree, and a plain rebase refuses to start on a dirty one — which would drop this
+              # commit and lose the very records this job exists to write.
+              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+            done
+            if test "$pushed" != "true"; then
+              echo "Could not push the reconciled records after three attempts." >&2
+              exit 1
+            fi
+          fi

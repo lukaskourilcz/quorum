@@ -131,6 +131,21 @@ yours, not the runtime's.
     removes only the owner stop, and each venture's counter, credentials, roles and safety
     checks still have to pass. [imp:2] [owner:me] [time:45m] [kind:setup]
 
+## 4. One scheduling key that does nothing
+
+- [ ] **`timezone:` under `on.schedule` is not honoured by GitHub Actions.** `health.yml` and
+  `social-publisher.yml` both carry `timezone: "Europe/Prague"` beside their cron. The files
+  parse and the workflows do fire, so nothing is blocked, but the key has no effect and the cron
+  is read as UTC: every scheduled `Production health` run since 24 July started at or after
+  08:15 UTC (earliest 08:23), never near 06:15 UTC, which is what 08:15 Prague would be in
+  summer. So the health workflow — and the daily meeting reconciler that now runs as a second job
+  inside it — fires at 08:15 UTC, roughly 10:15 Prague in summer and 09:15 in winter. That is
+  still hours after the last slot of the day being reconciled, so the reconciler is correct
+  either way; the schedule simply is not the Prague time it looks like. Decide whether to drop
+  the key or move the cron. `orchestrator/tests/ci-policy.test.ts` asserts the key is present in
+  both files, so removing it means changing that assertion in the same commit. The social
+  publisher runs hourly, so its own schedule is unaffected. [imp:2] [owner:me] [time:10m] [kind:decision]
+
 ## Deliberately deferred
 
 

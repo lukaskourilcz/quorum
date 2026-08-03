@@ -8,6 +8,15 @@ import type { SocialRender } from "./frame.js";
 
 export class ArticleSlotConflictError extends Error {}
 
+export const ARTICLE_INDEX_PATH = "ventures/mma-files/articles/INDEX.md";
+
+// The two magazine rooms read this index as their entire "what we already published" context.
+// `preparePortfolioContext` appends it last in a packet cut at 18,000 characters, after the
+// stylebook, the bridge and the day's slate — so a growing index evicts nothing ahead of it and
+// instead absorbs the cut itself: the table would end mid-row, with the count line under it
+// gone. Bounding the render here drops whole rows, oldest first, and keeps the count.
+const MAX_ARTICLE_INDEX_CHARS = 6_000;
+
 function articleRelativePath(article: ArticlePackage): string {
   return `ventures/mma-files/articles/${article.publishAt.slice(0, 10)}-${article.slot}-${article.slug}.json`;
 }
@@ -104,4 +113,61 @@ export async function loadArticlePackages(root: string): Promise<ArticlePackage[
 
 export function storedArticleRef(article: ArticlePackage): string {
   return articleRef(article);
+}
+
+function indexCell(value: string, limit: number): string {
+  // A pipe inside a Czech title would split the row into extra columns and silently shift every
+  // later field one place left, so the table is built from flattened cells rather than raw copy.
+  const flat = value.replaceAll("|", "/").replace(/\s+/gu, " ").trim();
+  return flat.length > limit ? `${flat.slice(0, limit - 1).trimEnd()}…` : flat;
+}
+
+/**
+ * The published-work table both magazine rooms are given.
+ *
+ * Newest first, because a repeat is nearly always a repeat of something recent, and the rows
+ * that get dropped when the index outgrows its budget are the oldest ones.
+ */
+export function renderArticleIndex(articles: readonly ArticlePackage[]): string {
+  let rows = [...articles]
+    .sort((left, right) => right.publishAt.localeCompare(left.publishAt) || right.slot.localeCompare(left.slot))
+    .map((article) => {
+      // The subject column carries every ref the package declared, not just its headline
+      // subject: that is the same set mag-editorial excludes from selection, so a room reading
+      // this index and the code picking a fallback subject agree on what "already covered" means.
+      const subjects = [...(article.eventRef ? [article.eventRef] : []), ...article.fighterRefs].join(" ");
+      return `| ${article.publishAt.slice(0, 10)} | ${article.slot} | ${article.status} | ${article.format} | ${indexCell(article.localizations.cs.title, 70)} | ${indexCell(subjects, 160)} |`;
+    });
+  const render = () => [
+    "# MMA Files article index",
+    "",
+    "> Generated from the stored article packages after every article slot runs. This is the desk's record of what has already been published: a subject listed here is not fresh.",
+    "",
+    "| Published | Slot | Status | Format | Czech title | Subjects covered |",
+    "| --- | --- | --- | --- | --- | --- |",
+    rows.length ? rows.join("\n") : "| — | — | — | — | No article stored yet | — |",
+    "",
+    `Articles on file: ${articles.length}. Rows shown: ${rows.length}.`,
+    ""
+  ].join("\n");
+  let rendered = render();
+  while (rendered.length > MAX_ARTICLE_INDEX_CHARS && rows.length > 1) {
+    rows = rows.slice(0, -1);
+    rendered = render();
+  }
+  return rendered;
+}
+
+/**
+ * Rewrite the index from the packages on disk.
+ *
+ * `preparePortfolioContext` loads `ventures/mma-files/articles/INDEX.md` into both the
+ * mag-editorial and mag-desk packets, and nothing had ever written the file — so the rooms were
+ * handed an empty string and told, in effect, that the desk had never published anything. VAULT
+ * judges a subject repeat against this list, which is how a subject already on file can be
+ * assigned a second time.
+ */
+export async function regenerateArticleIndex(root: string): Promise<string> {
+  await atomicWriteText(root, ARTICLE_INDEX_PATH, renderArticleIndex(await loadArticlePackages(root)));
+  return ARTICLE_INDEX_PATH;
 }

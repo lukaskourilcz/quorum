@@ -8,6 +8,8 @@ import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditorialGateway } from "./pipeline.js";
+import { loadArticlePackages, regenerateArticleIndex } from "./store.js";
+import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { candidatesNaming, discoverLicensedPhotos } from "../images/licensed.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
@@ -229,6 +231,131 @@ function slugFor(subjectRefs: readonly string[], slot: "am" | "pm"): string {
   return slug || `mma-files-${slot}`;
 }
 
+interface DerivedSubject {
+  format: "fight-week-preview" | "fighter-profile";
+  ref: string;
+  evidenceRef: string;
+  rationale: string;
+}
+
+// An event's article is built from the bout records that name it, never from the event card, so
+// a card with no bout records on file yields no evidence packet at all. Offering such a card as
+// the fallback subject would rebuild the failure this path exists to prevent — the slot dying on
+// missing_sourced_subject with 92 sourced fighter files sitting next to it.
+async function eventHasBoutRecords(root: string, eventRef: string): Promise<boolean> {
+  for (const file of await jsonFiles(path.join(root, "mma", "bouts"))) {
+    const value = JSON.parse(await readFile(file, "utf8")) as unknown;
+    if (value && typeof value === "object" && !Array.isArray(value)
+      && (value as Record<string, unknown>).schemaVersion === "bout/1"
+      && boutEventRef(value as Record<string, unknown>) === eventRef) return true;
+  }
+  return false;
+}
+
+/**
+ * Today's slate rebuilt from the records on disk, for the days mag-editorial never wrote one.
+ *
+ * The article slots hard-depended on a file the editorial room writes an hour earlier. On 3
+ * August that room never ran, so both slots died with `missing_editorial_slate` and MMA Files
+ * published nothing: one room's absence took the venture's entire daily output with it.
+ *
+ * Nothing here is invented and nothing is asked of a model. This replays the selection
+ * mag-editorial already performs deterministically in `runPortfolioCycle` — the nearest verified
+ * card inside the three-day window first, then the best-sourced fighter files no stored article
+ * has covered — against the same `state/mma` records and the same article packages. A slot with
+ * no source-backed subject is still killed; it is the reason that changes, not the outcome.
+ *
+ * `forSlot` is the slot the caller is about to run, and it gets first pick of the subjects.
+ */
+export async function deriveEditorialSlate(
+  root: string,
+  date: string,
+  now: Date,
+  options: { forSlot?: "am" | "pm" } = {}
+): Promise<EditorialSlate | null> {
+  const [events, fighters, published] = await Promise.all([
+    loadEventCards(path.join(root, "mma", "events")),
+    loadFighterRecords(path.join(root, "mma", "fighters")),
+    loadArticlePackages(root)
+  ]);
+  // The desk's repeat rule, unchanged: every ref an article declared counts as covered, not only
+  // its headline subject. Narrowing it here would let this path assign a fighter the editorial
+  // room considers spent, and the two would disagree on what "fresh" means on alternating days.
+  const covered = new Set(published.flatMap((article) => [
+    ...article.fighterRefs,
+    ...(article.eventRef ? [article.eventRef] : [])
+  ]));
+  let preview: DerivedSubject | undefined;
+  for (const event of fightWeekFocus(events, now)) {
+    if (covered.has(event.id) || !await eventHasBoutRecords(root, event.id)) continue;
+    preview = {
+      format: "fight-week-preview",
+      ref: event.id,
+      // Intake writes a card to `mma/events/<org>/<id tail>.json`, so the id itself is not a
+      // filename: `ufc:event:ufc-330-...` lives at `events/ufc/ufc-330-....json`. The ref exists
+      // to be opened by a reviewer, and `state/mma/events/ufc:event:ufc-330-....json` never was.
+      evidenceRef: `state/mma/events/${event.org}/${event.id.split(":").at(-1)}.json`,
+      rationale: "No editorial slate exists for today; the nearest verified card is inside the three-day window."
+    };
+    break;
+  }
+  const subjects: DerivedSubject[] = [
+    ...(preview ? [preview] : []),
+    ...fighters
+      .filter((fighter) => fighter.sources.length > 0 && fighter.history.length > 0 && !covered.has(fighter.id))
+      .sort((left, right) => (right.completeness - left.completeness) || left.id.localeCompare(right.id))
+      .slice(0, 2)
+      .map((fighter) => ({
+        format: "fighter-profile" as const,
+        ref: fighter.id,
+        evidenceRef: `state/mma/fighters/${fighter.id}.json`,
+        rationale: "No editorial slate exists for today, so the desk profiles the best-sourced fighter file no article has covered."
+      }))
+  ].slice(0, 2);
+  if (subjects.length === 0) return null;
+  // The slot the caller is about to run takes the strongest subject; the other slot takes the
+  // next one, so the two slots of one derived slate never name the same subject. Reading the
+  // list am-first regardless of caller was what front-loaded am: a pm run always took the
+  // second entry, so on a day the am slot published nothing the best subject on file was
+  // skipped and the runner-up was written instead. A subject an am article did publish cannot
+  // come back here at all — every ref that article declared is in `covered` above.
+  const filling = options.forSlot ?? "am";
+  const assigned = new Map<"am" | "pm", DerivedSubject | undefined>([
+    [filling, subjects[0]],
+    [filling === "am" ? "pm" : "am", subjects[1]]
+  ]);
+  const slotFor = (slot: "am" | "pm", assignedWriter: "JAB" | "QUILL") => {
+    const subject = assigned.get(slot);
+    return subject
+      ? { slot, format: subject.format, subjectRefs: [subject.ref], rationale: subject.rationale, assignedWriter, status: "assigned" }
+      : {
+          slot,
+          format: "desk-notes",
+          subjectRefs: [`missing:${date}:${slot}`],
+          rationale: "No further source-backed subject is on file for this slot.",
+          assignedWriter,
+          status: "killed",
+          killedReason: "No source-backed subject left on file."
+        };
+  };
+  return EditorialSlateSchema.parse({
+    schemaVersion: "editorial-slate/1",
+    date,
+    slots: [slotFor("am", "JAB"), slotFor("pm", "QUILL")],
+    vaultVerdicts: [
+      // The verdict cites the record the subject was read from. A `meeting:` ref would name a
+      // room that never sat, which is the one thing this path must not claim.
+      ...subjects.map((subject) => ({ subjectRef: subject.ref, verdict: "fresh", evidenceRef: subject.evidenceRef })),
+      // Every subject a slot names needs a verdict, and the killed slot names a `missing:` ref.
+      // Which slot that is now depends on the caller, so it is read back from the assignment
+      // rather than assumed to be pm.
+      ...(["am", "pm"] as const)
+        .filter((slot) => !assigned.get(slot))
+        .map((slot) => ({ subjectRef: `missing:${date}:${slot}`, verdict: "repeat", evidenceRef: "state/mma/fighters" }))
+    ]
+  });
+}
+
 export async function runLiveArticleProduction(input: {
   cycleId: string;
   slot: "am" | "pm";
@@ -238,18 +365,50 @@ export async function runLiveArticleProduction(input: {
   const disabledAgents = disabledAgentsForVenture(agentControls, "mma-files");
   const date = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(input.now);
   const runPath = `ventures/mma-files/runs/${date}-${input.slot}.json`;
-  let slate: EditorialSlate;
+  let storedSlate: EditorialSlate | null = null;
   try {
-    slate = EditorialSlateSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "ventures", "mma-files", "slates", `${date}.json`), "utf8")));
+    storedSlate = EditorialSlateSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "ventures", "mma-files", "slates", `${date}.json`), "utf8")));
   } catch {
-    await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason: "missing_editorial_slate", spentUsd: 0, generatedAt: input.now.toISOString() });
+    // An absent or unreadable slate used to end the slot outright. The room that writes it runs
+    // an hour earlier and can simply not run, and when it did not on 3 August both slots died
+    // and the venture published nothing. The desk's own subject selection is deterministic and
+    // reads only files already on disk, so it is replayed below instead of giving up.
+    storedSlate = null;
+  }
+  const derivedSlate = storedSlate === null;
+  // The derivation parses every fighter card, event card and article package on disk, so a single
+  // record that fails its schema throws. Calling it from inside the catch above put that throw
+  // outside every writer in this function: the slot ended with no run file at all, which is the
+  // silence the fallback exists to remove. Here the failure becomes a killed run record naming
+  // its cause instead.
+  let derivationError: string | undefined;
+  const slate = storedSlate ?? await deriveEditorialSlate(stateRoot, date, input.now, { forSlot: input.slot })
+    .catch((error: unknown) => {
+      derivationError = error instanceof Error ? error.message : String(error);
+      return null;
+    });
+  if (!slate) {
+    // Distinct from missing_editorial_slate on purpose: the slate is gone *and* the records
+    // either hold no uncovered, source-backed subject or could not be read. That is a data
+    // problem, not a room that skipped its turn, and the two need different fixes.
+    await atomicWriteJson(stateRoot, runPath, {
+      schemaVersion: 1,
+      cycleId: input.cycleId,
+      date,
+      slot: input.slot,
+      status: "killed",
+      reason: derivationError ? "slate_derivation_failed" : "no_sourced_subject_on_file",
+      ...(derivationError ? { detail: derivationError.slice(0, 300) } : {}),
+      spentUsd: 0,
+      generatedAt: input.now.toISOString()
+    });
     return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
   }
   const assignment = slate.slots.find((candidate) => candidate.slot === input.slot);
   const evidence = await articleEvidenceFor(stateRoot, slate, input.slot);
   if (!assignment || assignment.status === "killed" || !evidence) {
     const reason = assignment?.status === "killed" ? assignment.killedReason : "missing_sourced_subject";
-    await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, spentUsd: 0, generatedAt: input.now.toISOString() });
+    await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, ...(derivedSlate ? { slateSource: "derived" } : {}), spentUsd: 0, generatedAt: input.now.toISOString() });
     return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
   }
   // Search on the subject's name rather than its record id. "ufc valentina-shevchenko" is a
@@ -297,6 +456,10 @@ export async function runLiveArticleProduction(input: {
     slot: input.slot,
     status: result.article.status,
     articleRef: result.article.packageHash,
+    // A derived slate is not a room product, and it is never written to slates/, so the run
+    // record is the only place the trail can say the subject came from the records rather than
+    // from CANVAS.
+    ...(derivedSlate ? { slateSource: "derived", subjectRefs: assignment.subjectRefs } : {}),
     ...(result.supersededHash ? { supersededHash: result.supersededHash } : {}),
     ...(result.violations.length > 0
       ? { violations: result.violations.slice(0, 20).map(({ code, locale, message }) => ({ code, locale, message })) }
@@ -304,9 +467,23 @@ export async function runLiveArticleProduction(input: {
     spentUsd: null,
     generatedAt: input.now.toISOString()
   });
+  // The article is stored, so the published-work index the magazine rooms read is now stale.
+  // Rebuilding it here is what keeps it written at all — it is loaded into both rooms and had
+  // no writer anywhere. A failure to rebuild derived bookkeeping must not discard an article
+  // that has already passed every gate and been stored, so it is reported, not thrown.
+  const indexPath = await regenerateArticleIndex(stateRoot).catch((error: unknown) => {
+    console.warn(JSON.stringify({
+      event: "article_index_regeneration_failed",
+      cycleId: input.cycleId,
+      date,
+      slot: input.slot,
+      reason: error instanceof Error ? error.message : String(error)
+    }));
+    return null;
+  });
   return {
     status: result.article.status === "published" ? "published" : "blocked",
-    artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, "budget/ledger.json"],
+    artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, ...(indexPath ? [indexPath] : []), "budget/ledger.json"],
     estimatedWorstCaseUsd: 0.16
   };
 }

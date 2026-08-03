@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { z } from "zod";
 import {
   PriorityItemSchema,
   PriorityQueueSchema,
@@ -9,17 +10,80 @@ import { atomicWriteJson, readJson } from "../state.js";
 
 export const PRIORITY_QUEUE_PATH = "priority-queue.json";
 
-function archivedAtExpiry(queue: PriorityQueue, now: Date): PriorityQueue {
+// The items cap in PriorityQueueSchema, restated so the prune below can reason about it.
+// A test asserts the two stay equal.
+export const PRIORITY_QUEUE_CAP = 200;
+
+// One week, the same window the morning seed gives an item in cycle.ts. A finished item
+// is kept for a full window past its own expiry so a recently resolved question is still
+// readable in the file, then it goes.
+const RESOLVED_RETENTION_MS = 7 * 86_400_000;
+
+// The file on disk is exactly what may already sit over the cap, so it is read with the
+// cap lifted. Parsing it with PriorityQueueSchema would throw before the prune could run.
+const StoredQueueSchema = PriorityQueueSchema.extend({
+  items: z.array(PriorityItemSchema)
+});
+
+function archivedAtExpiry(items: readonly PriorityItem[], now: Date): PriorityItem[] {
   const at = now.getTime();
-  return PriorityQueueSchema.parse({
-    ...queue,
-    items: queue.items.map((item) =>
-      item.status === "open" && Date.parse(item.expires) <= at
-        ? { ...item, status: "archived" as const }
-        : item
-    ),
-    updatedAt: now.toISOString()
-  });
+  return items.map((item) =>
+    item.status === "open" && Date.parse(item.expires) <= at
+      ? PriorityItemSchema.parse({ ...item, status: "archived" as const })
+      : item
+  );
+}
+
+// Prune on read.
+//
+// Open items do not accumulate: the morning branch skips any venture that already has one,
+// and ensurePriorityItem matches open items, so a venture holds at most one at a time.
+// Finished items are the other case. An item expires a week after it is seeded,
+// archivedAtExpiry retires it, the next morning seeds a replacement, and before this function
+// nothing took the retired one back out — so the file gained about one dead item per agenda
+// venture per expiry window, with no ceiling short of the cap.
+//
+// No queue has actually reached the 200-item cap; this prune is what keeps it that way,
+// rather than a repair for an outage that already happened. Were the file to reach the cap,
+// PriorityQueueSchema.parse would reject it and readPriorityQueue and addPriorityItem would
+// both throw, taking the morning cycle down with a zod error and no queue at all.
+//
+// Only finished items are dropped, and only once they are a full retention window past
+// their own expiry: they cannot be selected, and ensurePriorityItem already matches open
+// items only, so nothing live is lost.
+function withoutStaleResolved(items: readonly PriorityItem[], now: Date): PriorityItem[] {
+  const cutoff = now.getTime() - RESOLVED_RETENTION_MS;
+  return items.filter((item) => item.status === "open" || Date.parse(item.expires) > cutoff);
+}
+
+// An open item is never dropped to fit the cap. Losing unanswered questions to keep a file
+// parseable trades a loud failure for a silent one, so recent finished items give way first
+// (oldest expiry out first) and a queue that is full of open work says so.
+function withinCap(items: readonly PriorityItem[]): PriorityItem[] {
+  if (items.length <= PRIORITY_QUEUE_CAP) return [...items];
+  const open = items.filter((item) => item.status === "open").length;
+  if (open > PRIORITY_QUEUE_CAP) {
+    throw new Error(
+      `Priority queue holds ${open} open items, past the ${PRIORITY_QUEUE_CAP}-item cap. `
+      + "Nothing was dropped. This needs a human: selectPriorityItem, skipPriorityItem and "
+      + "archivePriorityItem all read the queue through here first, so every one of them "
+      + "raises this same error and the queue cannot clear itself from inside the council. "
+      + `Resolve open items in the admin UI, which reads ${PRIORITY_QUEUE_PATH} on its own `
+      + "without this cap, or edit that file directly."
+    );
+  }
+  const doomed = new Set(
+    items
+      .map((item, index) => ({ item, index }))
+      .filter((entry) => entry.item.status !== "open")
+      .sort((left, right) =>
+        left.item.expires.localeCompare(right.item.expires)
+        || left.item.created.localeCompare(right.item.created)
+        || left.index - right.index)
+      .slice(0, items.length - PRIORITY_QUEUE_CAP)
+      .map((entry) => entry.index)
+  );
+  return items.filter((_, index) => !doomed.has(index));
 }
 
 export async function readPriorityQueue(root: string, now = new Date()): Promise<PriorityQueue> {
@@ -28,7 +92,12 @@ export async function readPriorityQueue(root: string, now = new Date()): Promise
     items: [],
     updatedAt: now.toISOString()
   });
-  return archivedAtExpiry(PriorityQueueSchema.parse(value), now);
+  const stored = StoredQueueSchema.parse(value);
+  return PriorityQueueSchema.parse({
+    ...stored,
+    items: withinCap(withoutStaleResolved(archivedAtExpiry(stored.items, now), now)),
+    updatedAt: now.toISOString()
+  });
 }
 
 export function openPriorityItems(queue: PriorityQueue, venture?: string): PriorityItem[] {
@@ -68,7 +137,9 @@ export async function addPriorityItem(input: {
   });
   await atomicWriteJson(input.root, PRIORITY_QUEUE_PATH, PriorityQueueSchema.parse({
     schemaVersion: "priority-queue/1",
-    items: [...queue.items, item],
+    // The read pruned by age; this only bites when the append itself lands on the cap, and
+    // it fails loudly rather than with a bare zod message when open work fills the queue.
+    items: withinCap([...queue.items, item]),
     updatedAt: input.now.toISOString()
   }));
   return item;

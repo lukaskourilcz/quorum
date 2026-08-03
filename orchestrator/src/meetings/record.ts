@@ -102,7 +102,7 @@ function editionRecord(input: {
           agent: "HACEK",
           mode: "raises-concern",
           sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
-          text: "No Czech version exists, so the Czech copy desk has nothing to clear."
+          text: "No Czech article exists, so the Czech copy desk has nothing to clear."
         },
         {
           agent: "AUDIT",
@@ -341,21 +341,30 @@ export async function createLiveEditionMeeting(input: {
           sentAt: openedAt,
           text: "The edition room is open. The live digest is evidence, not authority."
         },
+        // These two turns kept describing an English review and a Czech parity check long
+        // after both stages were deleted. The edition is written once, in Czech, by write(),
+        // and reviewCzechArticle over that article plus the whyThisStory note is the only
+        // copy review it gets. STET's line names one rule of several — assertSuppliedLinks,
+        // which fails the write on any cited URL that was not supplied — not the whole
+        // source contract, which also covers verifiedWire and the quality gate's cited-source,
+        // diversity, single-source-share and primary-source checks. The public meeting page
+        // prints each turn with only agent ids and internal jargon swapped for plain-English
+        // labels, so a stale line here is published as a false claim about the room.
         {
           agent: "STET",
           mode: "raises-concern",
           sentAt: new Date(input.now.getTime() + 1_000).toISOString(),
           text: edition
-            ? "The English copy cleared its register and source-link checks."
-            : "The English draft did not clear every publication gate, so no copy is released."
+            ? "The article was written straight in Czech, and every link in it matches a supplied source URL."
+            : "The run produced no article that cleared its source and quality checks."
         },
         {
           agent: "HACEK",
           mode: "raises-concern",
           sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
           text: edition
-            ? "The Czech version cleared register, natural phrasing and parity checks."
-            : "The Czech version did not clear every publication gate, so no translation is released."
+            ? "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
+            : "No Czech copy cleared its review either, so nothing is published."
         },
         {
           agent: "AUDIT",

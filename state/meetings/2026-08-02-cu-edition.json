@@ -309,13 +309,13 @@
         "agent": "STET",
         "mode": "raises-concern",
         "sentAt": "2026-08-02T14:11:02.989Z",
-        "text": "The English draft did not clear every publication gate, so no copy is released."
+        "text": "The budget stopped the run before anything was written, so no copy reached this desk."
       },
       {
         "agent": "HACEK",
         "mode": "raises-concern",
         "sentAt": "2026-08-02T14:11:03.989Z",
-        "text": "The Czech version did not clear every publication gate, so no translation is released."
+        "text": "With nothing written, there was no Czech copy to review."
       },
       {
         "agent": "AUDIT",
