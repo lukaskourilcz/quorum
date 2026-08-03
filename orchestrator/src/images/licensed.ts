@@ -255,12 +255,40 @@ export function candidatesNaming(
     .split(/[^\p{L}\p{N}]+/u)
     .filter((word) => word.length >= 3);
   if (words.length === 0) return [];
-  return candidates.filter((candidate) => {
-    const haystack = `${candidate.title} ${candidate.author} ${candidate.sourceUrl}`
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}]+/gu, " ");
-    return words.every((word) => haystack.includes(word));
-  });
+  return candidates
+    .filter((candidate) => {
+      const haystack = `${candidate.title} ${candidate.author} ${candidate.sourceUrl}`
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, " ");
+      return words.every((word) => haystack.includes(word));
+    })
+    .map((candidate) => ({ candidate, aboutness: captionResidual(candidate.title, words) }))
+    .sort((left, right) => left.aboutness - right.aboutness)
+    .map((entry) => entry.candidate);
+}
+
+/**
+ * How much of a caption is about someone or something other than the subject.
+ *
+ * Naming the subject is not the same as being a photograph of the subject. The hero that shipped
+ * on Valentina Shevchenko's profile is genuinely her — and its Commons caption reads "Valentina
+ * Shevchenko, UFC bantamweight fighter, and her coach, Pavel Fedotov, operate Engagement Skills
+ * Trainer weapons during a visit to Joint Base Langley-Eustis." Her name is in it, so the filter
+ * above passed it, and what ran above an article about her retirement trilogy was a firearms
+ * range. The same search also returned a file captioned "Kyrgyzstani–Peruvian muay thai and MMA
+ * fighter Valentina Shevchenko", which is the photograph anyone would have picked.
+ *
+ * The difference between those two is the words left over once the subject's name is removed:
+ * four, against sixteen naming a second person, a weapon system and a military base. So the
+ * shortest remainder wins. This ranks; it never rejects, because a long caption can still be the
+ * only photograph there is.
+ */
+export function captionResidual(title: string, subjectWords: readonly string[]): number {
+  const remaining = title
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((word) => word.length >= 3 && !subjectWords.includes(word));
+  return remaining.length;
 }
 
 export async function discoverLicensedPhotos(input: {
