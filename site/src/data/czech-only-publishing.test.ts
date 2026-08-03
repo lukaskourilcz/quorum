@@ -46,9 +46,16 @@ function shippedSource(file: string): string {
 const sourceRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
- * Every reader-facing source file. `admin/` is left out on purpose: it is password-protected,
- * and it still reads the optional `en` locale that older stored articles and social packs carry.
- * Making the admin drop that fallback is a separate change to the readers in `src/lib`.
+ * Every reader-facing source file. `lib/` is in the list because that is where the public pages
+ * get their data and their links: `/metrics` reads FightAIQ records straight out of
+ * `lib/fightaiq-records.ts`, and that file built a `mma-files.vercel.app/en/fighters/...` URL
+ * this check was written to forbid. Walking only `app`, `components` and `data` never saw it.
+ *
+ * Directories named `admin` are skipped on purpose: that area is password-protected and still
+ * reads the optional `en` locale that older stored articles and social packs carry. The
+ * `admin-*.ts` readers that sit directly in `lib/` are scanned like anything else and pass:
+ * they touch that locale as data — type unions and object keys — never as prose or a link
+ * promising an English edition, which is all these patterns look for.
  */
 function readerFacingFiles(): string[] {
   const found: string[] = [];
@@ -62,7 +69,7 @@ function readerFacingFiles(): string[] {
       }
     }
   };
-  for (const top of ["app", "components", "data"]) walk(path.join(sourceRoot, top));
+  for (const top of ["app", "components", "data", "lib"]) walk(path.join(sourceRoot, top));
   return found;
 }
 
@@ -90,7 +97,7 @@ describe("Czech-only publishing", () => {
 
   /**
    * The calendar's cost estimate resolves an agent's priced call by an exact `context` string.
-   * A miss does not throw — it falls back to the cheapest meeting call — so a stale label just
+   * A miss does not throw — it charges that agent's cheapest priced call — so a stale label just
    * understates the slot on the public homepage. "DNESKAi English edition" did exactly that:
    * STET's real call is the $0.0437 Czech edition, and the homepage advertised $0.0036.
    */

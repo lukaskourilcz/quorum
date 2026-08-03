@@ -363,9 +363,21 @@ export function fighterName(fighter: PublicFighter): string {
   return typeof fighter.fields.name?.value === "string" ? fighter.fields.name.value : fighter.slug.replaceAll("-", " ");
 }
 
+/**
+ * The link goes to /cs because that is the only locale MMA Files publishes: the desk makes one
+ * `writeCzech` call and stores `localizations: { cs }` (orchestrator/src/mma-files/pipeline.ts).
+ * It built /en until now. The only caller today is `FighterLink`, which is rendered from the
+ * admin panel, but this module also feeds the public /metrics page, so it is held to the public
+ * rule rather than the admin exception. `czech-only-publishing.test.ts` now walks `src/lib` and
+ * fails on the next /en link that appears here.
+ *
+ * The pattern is anchored and admits only lowercase slug characters, so no `ref` can steer the
+ * path outside `/cs/fighters/<org>/<slug>`; anything else returns null and `FighterLink` renders
+ * plain text instead of a link.
+ */
 export function fighterHref(ref: string): string | null {
   const match = /^(ufc|oktagon):([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(ref);
-  return match ? `https://mma-files.vercel.app/en/fighters/${match[1]}/${match[2]}` : null;
+  return match ? `https://mma-files.vercel.app/cs/fighters/${match[1]}/${match[2]}` : null;
 }
 
 export async function getFightAiQMode(rootDirectory = repositoryRoot): Promise<"data-only" | "live-analysis"> {

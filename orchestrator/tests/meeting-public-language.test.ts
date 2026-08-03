@@ -1,5 +1,4 @@
 import { readFile } from "node:fs/promises";
-import { stripTypeScriptTypes } from "node:module";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
@@ -15,25 +14,28 @@ import {
 } from "../src/meetings/record.js";
 import { configRoot, repoRoot } from "../src/paths.js";
 
+const AGENT_LANGUAGE_PATH = path.join(
+  repoRoot,
+  "site",
+  "src",
+  "components",
+  "agent-language.ts"
+);
+
 /**
  * Loads the site's real plain-English filter and runs it, rather than re-implementing it.
  *
- * site/src/components/agent-language.ts belongs to the Next.js package: importing it normally
- * would pull its "@/data/agents" path alias into this package's tsconfig, which has no such
- * alias. That import is type-only, and every other TypeScript construct in the file is erasable,
- * so Node's own stripper turns the file into runnable ESM without resolving anything. The test
- * therefore exercises the function the meeting page actually calls, including any edit made to
- * the replacement table after this test was written.
+ * site/src/components/agent-language.ts belongs to the Next.js package. A static import would
+ * put it in this package's tsconfig program, where its "@/data/agents" specifier has no path
+ * alias and `tsc --noEmit` fails. The specifier is reached only by `import type`, so vitest's
+ * transform erases it before anything resolves it, and a runtime import of the absolute path
+ * never enters the type program. The test therefore exercises the function the meeting page
+ * actually calls, including any edit made to the replacement table after this test was written.
  */
 async function loadPublicAgentText(): Promise<(value: string) => string> {
-  const source = await readFile(
-    path.join(repoRoot, "site", "src", "components", "agent-language.ts"),
-    "utf8"
-  );
-  const javascript = stripTypeScriptTypes(source, { mode: "strip" });
-  const loaded = await import(
-    `data:text/javascript;base64,${Buffer.from(javascript).toString("base64")}`
-  ) as { publicAgentText: (value: string) => string };
+  const loaded = await import(AGENT_LANGUAGE_PATH) as {
+    publicAgentText: (value: string) => string;
+  };
   return loaded.publicAgentText;
 }
 

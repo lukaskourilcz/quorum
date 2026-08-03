@@ -288,7 +288,7 @@
       "status": "planned"
     }
   ],
-  "growthPlan": "NO_POST. A held edition cannot authorize distribution.",
+  "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
   "eveningOutcome": null,
   "editionRef": "9e5e08903e46ad2ea6833de8c0ef3d2e20b88e3e4a98f813ebded274cbc89cf3",
   "generatedAt": "2026-08-02T14:11:06.989Z",
@@ -327,13 +327,13 @@
         "agent": "SPARK",
         "mode": "statement",
         "sentAt": "2026-08-02T14:11:05.989Z",
-        "text": "There is no distribution brief without an edition."
+        "text": "Without an edition there is nothing to promote."
       },
       {
         "agent": "HERALD",
         "mode": "close",
         "sentAt": "2026-08-02T14:11:06.989Z",
-        "text": "NO_EDITION recorded. The room closes honestly."
+        "text": "The room recorded NO_EDITION and closes honestly."
       }
     ]
   }

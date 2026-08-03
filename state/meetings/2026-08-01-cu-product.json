@@ -247,7 +247,7 @@
       "status": "done"
     }
   ],
-  "growthPlan": "NO_POST. Product-room fixtures do not authorize public distribution.",
+  "growthPlan": "Publishing is blocked (NO_POST): a product-room fixture authorizes no public promotion.",
   "eveningOutcome": "The product room recorded a dry veto verdict.",
   "caughtUpIdeaRef": "idea-2026-08-01-c3826574",
   "ideaVerdicts": [
@@ -269,7 +269,7 @@
         "agent": "HERALD",
         "mode": "gavel",
         "sentAt": "2026-08-01T15:00:00.000Z",
-        "text": "The product room is open for the one VAULT-screened fixture handoff."
+        "text": "The product room is open for the one screened idea."
       },
       {
         "agent": "SPARK",
@@ -293,7 +293,7 @@
         "agent": "AUDIT",
         "mode": "vote",
         "sentAt": "2026-08-01T15:00:03.000Z",
-        "text": "Record the VAULT hard stop. The room cannot accept an evidence-free duplicate."
+        "text": "Record the VAULT hard stop. The room cannot accept a duplicate with no sources."
       },
       {
         "agent": "HERALD",

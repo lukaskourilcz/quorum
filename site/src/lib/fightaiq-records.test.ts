@@ -13,7 +13,7 @@ describe("FightAIQ public record checks", () => {
     const event = parsePublicEvent(await fixture("event-card.valid.json"));
     expect(fighter?.id).toBe("ufc:alex-example");
     expect(event?.org).toBe("ufc");
-    expect(fighterHref("oktagon:losene-keita")).toBe("https://mma-files.vercel.app/en/fighters/oktagon/losene-keita");
+    expect(fighterHref("oktagon:losene-keita")).toBe("https://mma-files.vercel.app/cs/fighters/oktagon/losene-keita");
     expect(parsePublicModelRun(await fixture("model-run.valid.json"))?.[0]).toMatchObject({ boutRef: "bout-1", modelVersion: "mma-1.0.0+aaaaaaaa" });
     expect(parsePublicTrackRecord(await fixture("track-record.valid.json"))?.picks[0]).toMatchObject({ closing: 0.56, clv: 0.02, brierContribution: null });
     expect(parsePublicFightStatsEntry(await fixture("fightaiq-stats.valid.json"))).toMatchObject({ calibrationLabel: "early-model", outcome: null, brierContribution: null });

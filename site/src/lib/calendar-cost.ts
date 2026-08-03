@@ -6,8 +6,8 @@ import type { CalendarKind } from "@/lib/calendar-feed-model";
  *
  * Every value has to be a `context` string the agent really carries in `data/agents.ts`.
  * `calendarCostUsd` in `week-board.tsx` looks the call up by that exact string and, on a miss,
- * falls back to the cheapest meeting call rather than throwing — so a label that has drifted out
- * of date does not break the page, it just prints a smaller number than the slot costs. The
+ * charges that agent's cheapest priced call rather than throwing — so a label that has drifted
+ * out of date does not break the page, it just prints a smaller number than the slot costs. The
  * stale "DNESKAi English edition" label did exactly that: STET writes the Czech edition for
  * $0.0437, the lookup missed, and the homepage advertised the $0.0036 meeting call instead.
  *

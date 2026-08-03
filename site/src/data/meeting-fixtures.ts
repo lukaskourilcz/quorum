@@ -14,7 +14,7 @@ export const meetingFixtures = [
     participantReasons: [
       { agent: "HERALD", reason: "Chairs the edition room.", participated: true },
       { agent: "STET", reason: "Holds the copy-quality block.", participated: true },
-      { agent: "SPARK", reason: "Tests the distribution implication.", participated: true },
+      { agent: "SPARK", reason: "Tests what it would mean for reaching readers.", participated: true },
       { agent: "AUDIT", reason: "Retains the evidence veto.", participated: true }
     ],
     ledger: { estimatedCycleUsd: 0.06, actualCycleUsd: 0, monthAllInUsd: 0, monthCapUsd: 20 },
@@ -22,7 +22,7 @@ export const meetingFixtures = [
     proposals: [{ agent: "HERALD", summary: "Hold publication until a live digest clears every release gate.", evidenceRefs: [] }],
     voteMatrix: ["HERALD", "STET", "SPARK", "AUDIT"].map((voter) => ({ voter, firstChoice: "NO_EDITION", veto: false })),
     tasks: [],
-    growthPlan: "NO_POST. An offline meeting cannot commission or promote an edition.",
+    growthPlan: "Publishing is blocked (NO_POST): an offline meeting cannot commission or promote an edition.",
     eveningOutcome: null,
     roomTranscript: {
       openedAt: "2026-07-30T03:00:00.000Z",
@@ -33,7 +33,7 @@ export const meetingFixtures = [
         { agent: "HERALD", mode: "gavel", sentAt: "2026-07-30T03:00:00.000Z", text: "The edition room is open. We either select one sourced story or record NO_EDITION." },
         { agent: "STET", mode: "raises-concern", sentAt: "2026-07-30T03:00:01.000Z", text: "No draft exists, so the copy desk has nothing to clear." },
         { agent: "AUDIT", mode: "vote", sentAt: "2026-07-30T03:00:03.000Z", text: "Approve NO_EDITION. No source claim has cleared the gate." },
-        { agent: "HERALD", mode: "close", sentAt: "2026-07-30T03:00:04.000Z", text: "NO_EDITION recorded. The offline room closes without a commission." }
+        { agent: "HERALD", mode: "close", sentAt: "2026-07-30T03:00:04.000Z", text: "The offline room recorded NO_EDITION and closes without a commission." }
       ]
     },
     generatedAt: "2026-07-30T03:00:04.000Z"
@@ -59,7 +59,7 @@ export const meetingFixtures = [
     proposals: [{ agent: "SPARK", summary: "Keep the placeholder out of the live ledger until a morning handoff exists.", evidenceRefs: [] }],
     voteMatrix: ["HERALD", "SPARK", "VAULT", "AUDIT"].map((voter) => ({ voter, firstChoice: "defer:placeholder", veto: false })),
     tasks: [{ id: "TASK-20260730-LEDGER", owner: "VAULT", summary: "Record the offline defer without authorizing product action.", status: "done" }],
-    growthPlan: "NO_POST. An offline product room does not authorize distribution.",
+    growthPlan: "Publishing is blocked (NO_POST): an offline product room authorizes no promotion.",
     eveningOutcome: "The offline product room recorded a defer verdict.",
     caughtUpIdeaRef: "IDEA-2026-07-30-DRY",
     ideaVerdicts: [{ ideaId: "IDEA-2026-07-30-DRY", verdict: "defer", reason: "A fixture is not a product case." }],

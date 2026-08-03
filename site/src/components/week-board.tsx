@@ -72,6 +72,14 @@ function calendarParticipants(kind: CalendarKind): readonly AgentId[] {
   return configuredMeetingCast.get(kind) ?? [];
 }
 
+/**
+ * A slot costs the sum of one priced call per participant. `calendarCostContexts` names which
+ * call each participant makes; an agent with no entry there, or an entry whose `context` no
+ * longer exists, falls back to that agent's cheapest priced call. Picking the cheapest by price
+ * rather than by position is what makes the fallback safe: `apiModels[0]` is authoring order,
+ * not price order, and for JAB it is the $0.047 article call — an unnamed JAB slot would have
+ * printed twelve times the $0.0038 editorial-room call it really makes.
+ */
 function calendarCostUsd(kind: CalendarKind): number {
   const contexts = calendarCostContexts[kind];
   return Number(calendarParticipants(kind).reduce((sum, agentId) => {
@@ -80,9 +88,9 @@ function calendarCostUsd(kind: CalendarKind): number {
       (contexts?.[agentId]
         ? apiModels.find((model) => model.context === contexts[agentId])
         : undefined) ??
-      apiModels.find((model) => model.context === "Project meetings when selected") ??
-      apiModels.find((model) => model.context === "Text calls when this role is selected") ??
-      apiModels[0];
+      (apiModels.length > 0
+        ? apiModels.reduce((cheapest, model) => model.estimatedCostUsd < cheapest.estimatedCostUsd ? model : cheapest)
+        : undefined);
     return sum + (apiModel?.estimatedCostUsd ?? 0);
   }, 0).toFixed(8));
 }

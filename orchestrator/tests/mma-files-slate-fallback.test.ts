@@ -1,11 +1,11 @@
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
-import { ArticlePackageSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ArticlePackageSchema, EditorialSlateSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
 import { deterministicArticleImage } from "../src/images/article-image.js";
+import { buildCalendarFeed, loadArticleSlotOutcomes, mondayOfWeek } from "../src/meetings/calendar.js";
 import { articlePackageHash } from "../src/mma-files/hash.js";
-import { deriveEditorialSlate } from "../src/mma-files/live.js";
 import {
   ARTICLE_INDEX_PATH,
   loadArticlePackages,
@@ -13,7 +13,65 @@ import {
   renderArticleIndex,
   storeArticlePackage
 } from "../src/mma-files/store.js";
-import { stateRoot } from "../src/paths.js";
+
+// `runLiveArticleProduction` reads and writes the one module-level `stateRoot`, so the only way
+// to drive it against fixtures is to move that root. repoRoot and configRoot stay real: the
+// evidence packet's source refs are computed relative to repoRoot, the stylebook is read from
+// there, and the venture agent controls the function loads first live under configRoot.
+vi.mock("../src/paths.js", async () => {
+  const { mkdtempSync } = await import("node:fs");
+  const nodeOs = await import("node:os");
+  const nodePath = await import("node:path");
+  const actual = await vi.importActual<typeof import("../src/paths.js")>("../src/paths.js");
+  return { ...actual, stateRoot: mkdtempSync(nodePath.join(nodeOs.tmpdir(), "mma-live-state-")) };
+});
+
+// The licensed-photo search fans out to Openverse and Wikimedia over HTTP before the article is
+// written. Nothing about the run record depends on what it returns, so it answers nothing here
+// rather than making the suite depend on two public APIs. `candidatesNaming` stays real and
+// filters an empty list to an empty list; `materializeLicensedPhoto` is then never reached, so
+// the article carries the deterministic FRAME hero.
+vi.mock("../src/images/licensed.js", async () => {
+  const actual = await vi.importActual<typeof import("../src/images/licensed.js")>("../src/images/licensed.js");
+  return { ...actual, discoverLicensedPhotos: async () => ({ candidates: [], skippedProviders: [] }) };
+});
+
+// The model call is the one step that cannot run in a test: it is billed, and
+// `runLiveArticleProduction` builds its own gateway, so there is no seam to pass a stub in
+// through. Only the gateway is replaced. The stylebook load, the style gate, the package hash,
+// the store and the media write all run for real, because the order those happen in is the
+// thing under test.
+vi.mock("../src/mma-files/pipeline.js", async () => {
+  const actual = await vi.importActual<typeof import("../src/mma-files/pipeline.js")>("../src/mma-files/pipeline.js");
+  return {
+    ...actual,
+    produceMmaFilesArticle: (input: Parameters<typeof actual.produceMmaFilesArticle>[0]) => actual.produceMmaFilesArticle({
+      ...input,
+      gateway: {
+        // Copy the style gate passes: no figure, so no line needs a source marker, and every
+        // fighter the packet declares carries the /fighters/org/slug link the gate requires.
+        // Anything it rejected would store a "blocked" package instead of a published one.
+        writeCzech: async ({ evidence }) => ({
+          title: "Profil zápasníka pro dnešní vydání",
+          dek: "Redakční poznámka k dnešnímu profilu.",
+          bodyMDX: evidence.fighterRefs
+            .map((reference) => {
+              const [org, slug] = reference.split(":");
+              return `Karta zápasníka: [karta](/fighters/${org}/${slug})`;
+            })
+            .join("\n\n"),
+          imageAlt: "Redakční ilustrace k profilu zápasníka."
+        })
+      }
+    })
+  };
+});
+
+const { deriveEditorialSlate, runLiveArticleProduction } = await import("../src/mma-files/live.js");
+const { repoRoot, stateRoot: liveStateRoot } = await import("../src/paths.js");
+const realStateRoot = path.join(repoRoot, "state");
+
+afterAll(async () => rm(liveStateRoot, { recursive: true, force: true }));
 
 const roots: string[] = [];
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
@@ -26,20 +84,20 @@ async function tempRoot(prefix = "mma-slate-fallback-"): Promise<string> {
 
 /** A real sourced card, copied so the test exercises the schema the desk actually reads. */
 async function plantFighter(root: string, id: string, overrides: Record<string, unknown> = {}): Promise<void> {
-  const raw = JSON.parse(await readFile(path.join(stateRoot, "mma", "fighters", `${id}.json`), "utf8")) as Record<string, unknown>;
+  const raw = JSON.parse(await readFile(path.join(realStateRoot, "mma", "fighters", `${id}.json`), "utf8")) as Record<string, unknown>;
   await mkdir(path.join(root, "mma", "fighters"), { recursive: true });
   await writeFile(path.join(root, "mma", "fighters", `${id}.json`), JSON.stringify({ ...raw, ...overrides }));
 }
 
 async function plantEvent(root: string, filename: string, startsAtUtc: string): Promise<string> {
-  const raw = JSON.parse(await readFile(path.join(stateRoot, "mma", "events", "ufc", filename), "utf8")) as Record<string, unknown>;
+  const raw = JSON.parse(await readFile(path.join(realStateRoot, "mma", "events", "ufc", filename), "utf8")) as Record<string, unknown>;
   await mkdir(path.join(root, "mma", "events"), { recursive: true });
   await writeFile(path.join(root, "mma", "events", filename), JSON.stringify({ ...raw, startsAtUtc }));
   return raw.id as string;
 }
 
 async function plantBout(root: string, filename: string): Promise<void> {
-  const raw = await readFile(path.join(stateRoot, "mma", "bouts", "ufc", filename), "utf8");
+  const raw = await readFile(path.join(realStateRoot, "mma", "bouts", "ufc", filename), "utf8");
   await mkdir(path.join(root, "mma", "bouts"), { recursive: true });
   await writeFile(path.join(root, "mma", "bouts", filename), raw);
 }
@@ -217,5 +275,132 @@ describe("published-article index", () => {
     const row = renderArticleIndex([article]).split("\n").find((line) => line.includes("Vemola"))!;
     expect(row.split("|")).toHaveLength(8);
     expect(row).toContain("Vemola / Pesta");
+  });
+});
+
+const SUBJECT_REF = "oktagon:gustavo-lopez";
+
+/** The Prague day the run record is keyed by, which is the desk's timezone and not UTC. */
+function pragueDate(now: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+}
+
+async function plantSlate(root: string, date: string, subjectRef: string): Promise<void> {
+  const slate = EditorialSlateSchema.parse({
+    schemaVersion: "editorial-slate/1",
+    date,
+    slots: [
+      { slot: "am", format: "fighter-profile", subjectRefs: [subjectRef], rationale: "Test assignment.", assignedWriter: "JAB", status: "assigned" },
+      { slot: "pm", format: "desk-notes", subjectRefs: [`missing:${date}:pm`], rationale: "Nothing left on file.", assignedWriter: "QUILL", status: "killed", killedReason: "No source-backed subject left on file." }
+    ],
+    vaultVerdicts: [
+      { subjectRef, verdict: "fresh", evidenceRef: `state/mma/fighters/${subjectRef}.json` },
+      { subjectRef: `missing:${date}:pm`, verdict: "repeat", evidenceRef: "state/mma/fighters" }
+    ]
+  });
+  await mkdir(path.join(root, "ventures", "mma-files", "slates"), { recursive: true });
+  await writeFile(path.join(root, "ventures", "mma-files", "slates", `${date}.json`), JSON.stringify(slate));
+}
+
+/**
+ * Break a step that runs after the package is stored, without touching the store itself.
+ *
+ * `produceMmaFilesArticle` stores the package and then calls `storeArticleMedia`, which creates
+ * `ventures/mma-files/media/<date>-<slot>-<slug>` before writing the hero and the thumbnail. A
+ * plain file where that directory has to go makes the mkdir fail, so the throw is a real one
+ * from a real post-store step rather than a stub pretending to be one.
+ */
+async function trapMediaWrites(root: string): Promise<void> {
+  await mkdir(path.join(root, "ventures", "mma-files"), { recursive: true });
+  await writeFile(path.join(root, "ventures", "mma-files", "media"), "not a directory");
+}
+
+describe("a throw after the article package is stored", () => {
+  let warn: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(async () => {
+    await rm(liveStateRoot, { recursive: true, force: true });
+    await mkdir(liveStateRoot, { recursive: true });
+    warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+  });
+
+  afterEach(() => warn.mockRestore());
+
+  // The catch in runLiveArticleProduction is wider than the point of no return: the package is
+  // stored part-way through produceMmaFilesArticle, and the social pack, the media files and the
+  // public social queue are written after it. Every one of those throws used to become a run
+  // record of status "killed" while the finished article sat in ventures/mma-files/articles, and
+  // that record is the only thing the public calendar reads for this slot.
+  it("keeps the run record on the stored article rather than calling the slot killed", async () => {
+    // 10:00 in Prague, which is the am slot's own hour.
+    const now = new Date("2026-08-05T08:00:00.000Z");
+    const date = pragueDate(now);
+    await plantFighter(liveStateRoot, SUBJECT_REF, { completeness: 0.9 });
+    await plantSlate(liveStateRoot, date, SUBJECT_REF);
+    await trapMediaWrites(liveStateRoot);
+
+    const result = await runLiveArticleProduction({ cycleId: "test-cycle", slot: "am", now });
+
+    const stored = await loadArticlePackages(liveStateRoot);
+    expect(stored.map((article) => article.status)).toEqual(["published"]);
+    const record = JSON.parse(await readFile(path.join(liveStateRoot, "ventures", "mma-files", "runs", `${date}-am.json`), "utf8"));
+    expect(record.status).toBe("published");
+    expect(record.articleRef).toBe(stored[0]!.packageHash);
+    // The failure is still on the record. Losing it would be the opposite mistake: a slot that
+    // published, with no trace of the media files it never wrote.
+    expect(record.reason).toBe("article_production_failed");
+    expect(record.detail).toContain("media");
+    expect(warn).toHaveBeenCalled();
+    expect(result.status).toBe("published");
+    expect(result.artifacts).toContain(`ventures/mma-files/articles/${date}-am-oktagon-gustavo-lopez.json`);
+    // What the public calendar shows for this slot is decided by that record and nothing else.
+    const feed = buildCalendarFeed({
+      weekOf: mondayOfWeek(date),
+      records: [],
+      articleSlots: await loadArticleSlotOutcomes(liveStateRoot),
+      now
+    });
+    const slot = feed.slots.find((entry) => entry.kind === "article-am" && pragueDate(new Date(entry.at)) === date);
+    expect(slot?.status).toBe("held");
+  });
+
+  it("looks for the package under the date the store filed it by, not the run's Prague date", async () => {
+    // storeArticlePackage names the file from publishAt in UTC; the run record is keyed by the
+    // Prague date. Prague runs an hour or two ahead of UTC, so a run late enough in the UTC
+    // evening is filed under one day and recorded under the next, and a lookup built from the
+    // run's own date would miss the package and call the slot killed.
+    const now = new Date("2026-08-05T22:30:00.000Z");
+    const date = pragueDate(now);
+    expect(date).toBe("2026-08-06");
+    await plantFighter(liveStateRoot, SUBJECT_REF, { completeness: 0.9 });
+    await plantSlate(liveStateRoot, date, SUBJECT_REF);
+    await trapMediaWrites(liveStateRoot);
+
+    const result = await runLiveArticleProduction({ cycleId: "test-cycle", slot: "am", now });
+
+    expect((await readdir(path.join(liveStateRoot, "ventures", "mma-files", "articles"))).filter((name) => name.endsWith(".json")))
+      .toEqual(["2026-08-05-am-oktagon-gustavo-lopez.json"]);
+    const record = JSON.parse(await readFile(path.join(liveStateRoot, "ventures", "mma-files", "runs", "2026-08-06-am.json"), "utf8"));
+    expect(record.status).toBe("published");
+    expect(result.status).toBe("published");
+  });
+
+  it("still kills the slot when the throw leaves no package behind", async () => {
+    // The same catch, with nothing stored: a corrupt record makes articleEvidenceFor throw long
+    // before the writing call, so there is no article and killed is the whole of it.
+    const now = new Date("2026-08-05T08:00:00.000Z");
+    const date = pragueDate(now);
+    await plantFighter(liveStateRoot, SUBJECT_REF, { completeness: 0.9 });
+    await writeFile(path.join(liveStateRoot, "mma", "fighters", "oktagon:corrupt.json"), "{ not json");
+    await plantSlate(liveStateRoot, date, SUBJECT_REF);
+
+    const result = await runLiveArticleProduction({ cycleId: "test-cycle", slot: "am", now });
+
+    expect(await loadArticlePackages(liveStateRoot)).toEqual([]);
+    const record = JSON.parse(await readFile(path.join(liveStateRoot, "ventures", "mma-files", "runs", `${date}-am.json`), "utf8"));
+    expect(record.status).toBe("killed");
+    expect(record.reason).toBe("article_production_failed");
+    expect(record.articleRef).toBeUndefined();
+    expect(result.status).toBe("killed");
   });
 });

@@ -278,7 +278,7 @@
       "status": "planned"
     }
   ],
-  "growthPlan": "Prepare only draft-locked distribution assets after delivery succeeds.",
+  "growthPlan": "Prepare only draft-locked promotion assets after delivery succeeds.",
   "eveningOutcome": null,
   "editionRef": "fb3c9b691e99c9f3eb193b3d234b6c8d09df5170686c1d87b83acfe04fa913b3",
   "generatedAt": "2026-08-03T08:40:13.040Z",
@@ -317,13 +317,13 @@
         "agent": "SPARK",
         "mode": "statement",
         "sentAt": "2026-08-03T08:40:12.040Z",
-        "text": "Distribution remains draft-locked until RELAY confirms delivery."
+        "text": "Promotion assets stay locked as drafts until RELAY confirms delivery."
       },
       {
         "agent": "HERALD",
         "mode": "close",
         "sentAt": "2026-08-03T08:40:13.040Z",
-        "text": "EDITION recorded. RELAY owns the handoff."
+        "text": "EDITION recorded. RELAY owns delivery from here."
       }
     ]
   }

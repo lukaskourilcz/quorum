@@ -249,7 +249,15 @@ export async function runLiveEdition(input: {
       recentEditionTags: await recentEditionTags(root),
       meetingRef: input.meetingRef,
       roomUrl: input.roomUrl,
-      whyThisStory: "The live digest cleared source coverage; HERALD commissioned the strongest independently supported story, STET cleared English and HACEK cleared Czech.",
+      // `deriveWhyThisStory` is on, so `produceEdition` throws this string away and writes the
+      // note from the article it actually produced (`articleRationale` in production.ts). The
+      // field is required by the input type, so it stays — but it stays defensible, because
+      // flipping the flag would publish it. It no longer claims "STET cleared English and HACEK
+      // cleared Czech": STET reviews the one Czech article the desk writes, and HACEK has had
+      // nothing to adapt since the second writing call was removed. What is left is true of this
+      // branch — it runs only when `sourceGateReason` is null and HERALD's curation call picked
+      // the story.
+      whyThisStory: "The live digest cleared source coverage and HERALD commissioned the strongest independently supported story.",
       deriveWhyThisStory: true,
       mode: "production",
       config,

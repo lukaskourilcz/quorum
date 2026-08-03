@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../budget.js";
-import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
+import { ArticlePackageSchema, EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { guardedJsonCall } from "../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { wrapUntrustedData } from "../security/content.js";
@@ -430,12 +430,59 @@ export async function deriveEditorialSlate(
   });
 }
 
+interface StoredSlotPackage {
+  status: "published" | "blocked";
+  packageHash: string;
+  path: string;
+}
+
+/**
+ * The article package the store already holds for this date and slot, or null.
+ *
+ * `produceMmaFilesArticle` stores the package part-way through its work and keeps going: the
+ * social variant pack, the media files and the public social queue are all written afterwards.
+ * A throw from any of those reaches the catch below with the package already on disk, where
+ * `shipArticleBacklog` collects every published one — it reads the stored packages and never
+ * the run records, so a killed run record would be the one thing claiming the slot died.
+ *
+ * The store is re-read rather than trusted to the result, because the throw is what destroyed
+ * the result. `storeArticlePackage` names the file from the UTC date of `publishAt`, the slot
+ * and the slug, so `publishAt` is what the prefix is built from — not the Prague date the run
+ * record is keyed by. Prague runs an hour or two ahead of UTC, so a run late enough in the UTC
+ * evening is filed under one day and recorded under the next.
+ *
+ * Every failure here answers null. This runs inside the catch, and a throw would take the run
+ * record with it, which is the silence that catch exists to remove.
+ */
+async function storedArticleForSlot(publishAt: Date, slot: "am" | "pm"): Promise<StoredSlotPackage | null> {
+  const directory = path.join(stateRoot, "ventures", "mma-files", "articles");
+  const prefix = `${publishAt.toISOString().slice(0, 10)}-${slot}-`;
+  try {
+    for (const filename of (await readdir(directory)).sort()) {
+      if (!filename.startsWith(prefix) || !filename.endsWith(".json")) continue;
+      const parsed = ArticlePackageSchema.safeParse(JSON.parse(await readFile(path.join(directory, filename), "utf8")));
+      // "draft" and "killed" are in the package schema but are not statuses this pipeline ever
+      // stores — `produceMmaFilesArticle` writes "published" or "blocked" and nothing else — so a
+      // file carrying one is not an article this desk produced and does not speak for the slot.
+      if (!parsed.success || (parsed.data.status !== "published" && parsed.data.status !== "blocked")) continue;
+      return {
+        status: parsed.data.status,
+        packageHash: parsed.data.packageHash,
+        path: `ventures/mma-files/articles/${filename}`
+      };
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 /**
  * Rewrite the published-work index, reporting a failure rather than raising it.
  *
- * Rebuilding derived bookkeeping must never discard the work it describes, so both callers below
- * treat a failure as a warning: one runs before anything has happened, the other after an article
- * has already passed every gate and been stored.
+ * Rebuilding derived bookkeeping must never discard the work it describes, so all three callers
+ * below treat a failure as a warning: one runs before anything has happened, the other two once
+ * a package is already stored.
  */
 async function refreshArticleIndex(context: { cycleId: string; date: string; slot: "am" | "pm" }): Promise<string | null> {
   return regenerateArticleIndex(stateRoot).catch((error: unknown) => {
@@ -583,9 +630,58 @@ export async function runLiveArticleProduction(input: {
     };
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
+    // The catch is wider than the point of no return. `produceMmaFilesArticle` stores the package
+    // and then writes the social variant pack, the media files and the public social queue, so a
+    // throw from any of those arrives here with the package already on disk. The store is read
+    // before anything is written, because what it holds decides what this slot is called.
+    const stored = await storedArticleForSlot(input.now, input.slot);
     // Also on stderr: the run record is the durable trail, but a phase that swallows a throw and
-    // exits zero would otherwise show a clean CI log for a day that produced nothing.
-    console.warn(JSON.stringify({ event: "article_production_failed", cycleId: input.cycleId, date, slot: input.slot, reason: detail.slice(0, 300) }));
+    // exits zero would otherwise show a clean CI log for a slot that failed. The package hash
+    // rides along so the log separates a failure that lost the article from one that did not.
+    console.warn(JSON.stringify({
+      event: "article_production_failed",
+      cycleId: input.cycleId,
+      date,
+      slot: input.slot,
+      reason: detail.slice(0, 300),
+      ...(stored ? { articleRef: stored.packageHash } : {})
+    }));
+    if (stored) {
+      // `loadArticleSlotOutcomes` reads this record and nothing else, and `buildCalendarFeed`
+      // holds a slot only for status "published" — so a killed record written over a stored
+      // package marks the slot killed on the public calendar while a published package sits in
+      // the delivery backlog. What is stored sets the status; the throw stays on as the reason.
+      //
+      // The violations of a blocked package are not recoverable here, unlike on the completed
+      // path: they lived in the result the throw destroyed. The status and the hash are, and
+      // both come off the stored package rather than out of this function's memory.
+      await atomicWriteJson(stateRoot, runPath, {
+        schemaVersion: 1,
+        cycleId: input.cycleId,
+        date,
+        slot: input.slot,
+        status: stored.status,
+        articleRef: stored.packageHash,
+        reason: "article_production_failed",
+        detail: detail.slice(0, 300),
+        ...(derivedSlate ? { slateSource: "derived" } : {}),
+        spentUsd: null,
+        generatedAt: input.now.toISOString()
+      });
+      // A package is on disk, so the index rebuilt at the top of this function is stale — the
+      // same reason the completed path rebuilds it again.
+      const indexPath = await refreshArticleIndex({ cycleId: input.cycleId, date, slot: input.slot });
+      return {
+        status: stored.status,
+        // The social pack, the media files and the queue entries are the steps that may have
+        // thrown, so none of them is claimed. The package is on disk by the check above, and the
+        // ledger entry with it: a stored package means the model call has already been billed.
+        artifacts: [runPath, stored.path, ...(indexPath ? [indexPath] : []), "budget/ledger.json"],
+        estimatedWorstCaseUsd: 0.16
+      };
+    }
+    // Nothing publishable is on file for this slot, so the throw cost the article and killed is
+    // the whole of it.
     await atomicWriteJson(stateRoot, runPath, {
       schemaVersion: 1,
       cycleId: input.cycleId,
