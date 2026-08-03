@@ -1,6 +1,6 @@
 # Needs your help now — one owner checklist
 
-Updated: 2026-08-02
+Updated: 2026-08-03
 
 The only canonical list of human-owned setup across all six ventures. Git cannot inspect a
 secret's value or an external account's settings, so an item stays unchecked until you have
@@ -8,6 +8,12 @@ seen it in the provider's own UI. Never paste a credential into Git, an issue, a
 record or chat.
 
 ## What already works
+
+Both magazines are Czech-only. MMA Files and DNESKAi (formerly Caught Up) each
+write their article in one Czech call instead of writing English and paying again
+to translate it. Measured: MMA Files was spending 51% of an article on a draft
+nobody read, DNESKAi 39% of an edition. Both sites serve Czech and no longer
+offer English; no indexed URL broke doing it.
 
 MMA Files publishes. The first council-produced article — a Valentina Shevchenko profile —
 is live in English and Czech and passed all nine release checks. The delivery App can read
@@ -17,6 +23,35 @@ it ever regresses.
 
 Nothing else publishes yet. The three sections below are what each remaining venture is
 waiting for, in the order that unblocks the most.
+
+## 0. Decisions the Czech-only move handed you
+
+These are not setup steps. They are choices the migration surfaced that are
+yours, not the runtime's.
+
+- [ ] **Decide what happens to HACEK.** HACEK was the Czech language editor: it
+  adapted the English edition and the English article into Czech. Both magazines
+  are written in Czech now, so the role has no model call attached to it. The
+  agent still holds a seat in the DNESKAi edition room and its approved role
+  record still names `orchestrator/src/edition/localize.ts`, which now holds the
+  Czech register and the copy repair rather than a translation stage. Removing an
+  agent from a room is an org change and goes through PEOPLE, so nothing was
+  touched. [imp:3] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Decide what `bilingual_hero_rate` should measure.** The KPI is literally
+  named "Editions delivered in English and Czech" and the company has stopped
+  doing that on purpose. It now reads honestly — a Czech-only edition scores
+  zero — rather than borrowing a pass from a check that no longer runs. Either
+  retire it or replace it with the thing you actually want counted. The runtime
+  cannot lower a target or rewrite a past snapshot, so this is yours.
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Rename the DNESKAi Vercel project and decide on a domain.** The
+  publication is DNESKAi everywhere a reader can see. The deployment is still at
+  `caughtup-ai.vercel.app`, the repository is still `aifirst`, and the venture is
+  still `caught-up` in every contract and Actions variable — all deliberate, so
+  that sealed package hashes and your existing settings keep working. The public
+  URL is the one part only you can change. [imp:3] [owner:me] [time:20m] [kind:setup]
 
 ## 1. Blocking a venture right now
 

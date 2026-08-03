@@ -64,6 +64,22 @@ Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STE
 
 ## Recently finished
 
+- **Both magazines are Czech-only.** One writing call each instead of writing
+  English and paying to translate it. The move ran in three steps because the
+  delivery path fails closed and reverts: both sites learned to accept a
+  Czech-only package while English was still being written, then the desks
+  stopped writing English, then the English routes went. Nothing indexed broke —
+  DNESKAi's Czech took over the URLs English held, and MMA Files was never
+  indexed at all.
+- **Caught Up is now DNESKAi** to readers. The venture id, the Actions
+  variables, the repository name and the sealed package hashes are unchanged.
+- **Three Czech gates were weaker than they read.** Six slop patterns could
+  never match, because `\b` is an ASCII word boundary and cannot see the end of
+  "upřímně". The MMA source marker was never resolved, so `[source:anything]`
+  passed. And a package with no English half was recording an english-route
+  pass, which would have made a bilingual-delivery KPI read 1 on a day nothing
+  bilingual shipped.
+
 - **MMA Files publishes.** The first council-produced article is live in both languages and
   survived all nine release checks. Seven defects stood between the desk and that page: no
   subject when FightAIQ had no events, a blocked article that would not say why, 69 required
