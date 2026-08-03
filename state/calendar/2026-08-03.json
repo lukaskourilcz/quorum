@@ -20,7 +20,9 @@
       "at": "2026-08-03T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-scan",
-      "status": "missed"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-03-incubator-scan",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-03T06:00:00.000Z",
@@ -32,13 +34,13 @@
       "at": "2026-08-03T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-03T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-03T09:00:00.000Z",

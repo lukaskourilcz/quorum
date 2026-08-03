@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260803082106-incubator-scan",
+  "phase": "incubator-scan",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "schedulerOutcome": "not-needed",
+  "generatedAt": "2026-08-03T08:21:06.092Z"
+}
