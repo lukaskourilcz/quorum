@@ -278,3 +278,35 @@ describe("source isolation and probe summary", () => {
     });
   });
 });
+
+describe("a page wrapped in one article", () => {
+  it("keeps the links but drops the page-wide summary and date", () => {
+    // anthropic.com/news wraps its whole index in a single <article>. Taking the enclosing
+    // article's text and its first <time> as each link's own gave eighteen items sharing one
+    // 1,827-character blob and one timestamp. The blob is noise to rank on; the shared date is
+    // worse than none, because the digest sorts on recency and all eighteen would read as
+    // equally fresh.
+    const html = `<article>
+      <time datetime="2026-07-23T22:00:00.000Z">Jul 24, 2026</time>
+      <a href="/news/first-post">Introducing something substantial</a>
+      <a href="/news/second-post">A second announcement entirely</a>
+      <a href="/press">Download press kit</a>
+    </article>`;
+    const items = projectHtml(html, source("html"), NOW);
+    expect(items).toHaveLength(3);
+    expect(items.every((item) => !item.summary)).toBe(true);
+    expect(items.every((item) => !item.publishedAt)).toBe(true);
+  });
+
+  it("keeps both when each link has its own article", () => {
+    const html = `
+      <article><time datetime="2026-08-01T00:00:00.000Z">Aug 1</time>
+        <a href="/news/first-post">Introducing something substantial</a> First summary text.</article>
+      <article><time datetime="2026-08-02T00:00:00.000Z">Aug 2</time>
+        <a href="/news/second-post">A second announcement entirely</a> Second summary text.</article>`;
+    const items = projectHtml(html, source("html"), NOW);
+    expect(items).toHaveLength(2);
+    expect(new Set(items.map((item) => item.summary)).size).toBe(2);
+    expect(items.every((item) => item.publishedAt)).toBe(true);
+  });
+});

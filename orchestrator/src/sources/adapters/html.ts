@@ -7,13 +7,23 @@ import type {
 import { fetchReadable, linksFromMarkdown } from "./reader.js";
 import { fetchText, makeItem } from "./util.js";
 
+/**
+ * The number of distinct summaries below which a page is treated as having none.
+ *
+ * Some publishers wrap their whole index in a single <article>. Taking the enclosing
+ * article's text as each link's summary then hands every item the same page-sized blob:
+ * anthropic.com/news produced eighteen items sharing one 1,827-character summary, one of them
+ * "Download press kit". A summary that is identical across a page is not a summary.
+ */
+const DISTINCT_SUMMARY_MINIMUM = 2;
+
 export function projectHtml(
   html: string,
   source: SourceConfig,
   now: Date
 ): SourceItem[] {
   const $ = cheerio.load(html);
-  const items: SourceItem[] = [];
+  const drafts: Array<{ url: string; title: string; summary: string; publishedAt: string | undefined }> = [];
   $("article a[href]").each((_, element) => {
     const href = $(element).attr("href");
     const title = $(element).text().trim();
@@ -25,18 +35,36 @@ export function projectHtml(
     } catch {
       return;
     }
-    const item = makeItem(
+    drafts.push({
       url,
+      title,
+      summary: article.text().replace(/\s+/gu, " ").trim(),
+      // Anthropic's <time> carries no datetime attribute, so its dates were dropped entirely
+      // and every item sank below the dated ones in the digest.
+      publishedAt: article.find("time[datetime]").first().attr("datetime")
+        ?? (article.find("time").first().text().trim() || undefined)
+    });
+  });
+  // One <article> around the whole index gives every link the same text — and the same first
+  // <time>. Both are then page facts wearing item clothes, so both are dropped: an identical
+  // summary is noise to rank on, and an identical date is worse than none, because the digest
+  // sorts on recency and eighteen items sharing one timestamp would all read as equally fresh.
+  const distinct = new Set(drafts.map((draft) => draft.summary)).size;
+  const perItem = distinct >= DISTINCT_SUMMARY_MINIMUM;
+  const items: SourceItem[] = [];
+  for (const draft of drafts) {
+    const item = makeItem(
+      draft.url,
       {
-        title,
-        summary: article.text(),
-        publishedAt: article.find("time[datetime]").first().attr("datetime")
+        title: draft.title,
+        ...(perItem && draft.summary ? { summary: draft.summary } : {}),
+        ...(perItem ? { publishedAt: draft.publishedAt } : {})
       },
       source,
       now
     );
     if (item) items.push(item);
-  });
+  }
   return items;
 }
 

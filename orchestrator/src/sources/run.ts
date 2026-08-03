@@ -63,13 +63,17 @@ export async function runScrapersDetailed(
           source.maxItems
         );
         items.push(...kept);
+        // A fetch that returned nothing is not a successful source. Recording it as one let a
+        // publisher whose layout the extractor cannot read — tubefilter returns zero items on
+        // every run — count toward minimumSuccessfulSources, so the edition gate was satisfied
+        // in part by sources contributing no candidates at all.
         results.push({
           sourceId: source.id,
-          status: "success",
+          status: kept.length > 0 ? "success" : "failed",
           candidateItems: kept.length,
           durationMs: Date.now() - started,
-          errorCode: null,
-          errorMessage: null
+          errorCode: kept.length > 0 ? null : "empty",
+          errorMessage: kept.length > 0 ? null : "fetch succeeded but yielded no candidate items"
         });
       } catch (error) {
         results.push({
