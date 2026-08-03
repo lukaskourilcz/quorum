@@ -46,6 +46,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
+import { fetchReadable } from "../sources/adapters/reader.js";
 import { loadArticlePackages } from "../mma-files/store.js";
 import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
@@ -421,14 +422,57 @@ function seasonIdFrom(filename: string): string {
   return filename.replace(/\.md$/u, "");
 }
 
-export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>): Promise<{ text: string; evidenceRefs: string[] }> {
+/** How many owner links one studio room reads. Each is a network fetch inside a daily room. */
+const STUDIO_LINKS_PER_ROOM = 6;
+/** Characters kept per page, so six pages cannot crowd out the rest of the packet. */
+const STUDIO_PAGE_CHARS = 2_200;
+
+/**
+ * The same rejections the admin store applies when a link is saved.
+ *
+ * A board or a bare homepage is not a design to observe. The room filter only checked the
+ * https prefix, so a link that the admin store would refuse could still reach the room if it
+ * arrived any other way.
+ */
+function allowedIndividualUrl(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== "https:") return false;
+  if (/(?:^|\.)pinterest\./iu.test(url.hostname)) return false;
+  return url.pathname.replace(/\/+$/u, "").length > 1;
+}
+
+export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>, now = new Date()): Promise<{ text: string; evidenceRefs: string[] }> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
   if (phase === "studio") {
     const inspiration = await readJson<{ links?: Array<{ url?: string; label?: string }> }>(root, "ventures/carousel-studio/inspiration/owner-links.json", {});
-    const links = (inspiration.links ?? []).filter((entry): entry is { url: string; label?: string } => typeof entry.url === "string" && entry.url.startsWith("https://"));
+    const links = (inspiration.links ?? [])
+      .filter((entry): entry is { url: string; label?: string } => typeof entry.url === "string" && allowedIndividualUrl(entry.url))
+      .slice(0, STUDIO_LINKS_PER_ROOM);
+    // Read the pages. MOTIF was handed bare URLs and has no tool with which to open one, yet
+    // StudioObservationSchema demands a principle, an originality boundary and the time the
+    // page was retrieved — so every observation the room could return was invented rather
+    // than observed. The reader is Firecrawl when a key exists and keyless r.jina.ai
+    // otherwise, both already allowlisted, and a page that will not load is named as unread
+    // rather than quietly dropped.
+    const pages = await Promise.all(links.map(async (link) => {
+      const body = await fetchReadable(link.url, { allowHosts: [new URL(link.url).hostname, "r.jina.ai", "api.firecrawl.dev"], now })
+        .catch(() => null);
+      return { link, body: body?.slice(0, STUDIO_PAGE_CHARS) ?? null };
+    }));
+    const readable = pages.filter((page) => page.body !== null);
+    const rendered = pages.length === 0
+      ? "- None. Record no observations and propose no template."
+      : pages.map(({ link, body }) => body === null
+          ? `- ${link.url}${link.label ? ` — ${link.label}` : ""} — could not be read; record no observation for it.`
+          : `- ${link.url}${link.label ? ` — ${link.label}` : ""}\n${wrapUntrustedData("owner-inspiration-page", body)}`).join("\n\n");
     return {
-      text: `${taste ?? ""}\n\nApproved individual inspiration links:\n${links.map((link) => `- ${link.url}${link.label ? ` — ${link.label}` : ""}`).join("\n") || "- None. Record no observations and propose no template."}\n\nThe seed library already contains ten live templates. Prefer improving coverage to duplicating an existing layout.`.slice(0, 18_000),
-      evidenceRefs: links.map((link) => link.url)
+      text: `${taste ?? ""}\n\nApproved individual inspiration links, retrieved ${now.toISOString()}:\n${rendered}\n\nThe seed library already contains ten live templates. Prefer improving coverage to duplicating an existing layout.`.slice(0, 18_000),
+      evidenceRefs: readable.map(({ link }) => link.url)
     };
   }
   if (phase === "tt-marketing") {
@@ -660,7 +704,7 @@ export async function runPortfolioCycle(input: {
       })
     });
   }
-  const context = await composePortfolioContext(input.phase, root, date, registry);
+  const context = await composePortfolioContext(input.phase, root, date, registry, input.now);
   let contributions: Contribution[];
   let estimatedWorstCaseUsd = 0;
   if (input.dry) {

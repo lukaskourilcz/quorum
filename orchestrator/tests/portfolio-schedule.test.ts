@@ -1,3 +1,6 @@
+import { composePortfolioContext } from "../src/portfolio/run.js";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import os from "node:os";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -154,5 +157,25 @@ describe("Titty Tuesdays cadence wheel", () => {
       palatePreStep: true
     });
     expect(resolveTittyTuesdaysSlot({ date: "2026-10-30" }).kind).toBe("tt-marketing");
+  });
+});
+
+describe("the studio room reads the links it is given", () => {
+  it("refuses a board or a bare homepage the way the admin store does", async () => {
+    // The room filter checked only the https prefix, so a link the admin store would refuse
+    // could still reach the room if it arrived any other way.
+    const root = await mkdtemp(path.join(os.tmpdir(), "studio-links-"));
+    await mkdir(path.join(root, "ventures", "carousel-studio", "inspiration"), { recursive: true });
+    await writeFile(
+      path.join(root, "ventures", "carousel-studio", "inspiration", "owner-links.json"),
+      JSON.stringify({ links: [
+        { url: "https://www.pinterest.com/someone/a-board/" },
+        { url: "https://godly.website/" },
+        { url: "http://example.com/an-article" }
+      ] })
+    );
+    const context = await composePortfolioContext("studio", root, "2026-08-04", await loadVentureRegistry(), new Date("2026-08-04T11:00:00.000Z"));
+    expect(context.evidenceRefs).toEqual([]);
+    expect(context.text).toContain("Record no observations");
   });
 });
