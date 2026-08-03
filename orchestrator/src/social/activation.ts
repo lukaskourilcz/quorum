@@ -50,7 +50,29 @@ export function missingSocialCredentials(venture: SocialVenture, environment: No
   return SOCIAL_CREDENTIALS[venture]!.filter((name) => !environment[name]?.trim());
 }
 
+/**
+ * Whether the pipeline may COMPOSE social drafts. Not whether it may send them.
+ *
+ * These were the same check, which made the code stricter than the decision it implements.
+ * social-2026-08a says in as many words: "The pipeline still composes social drafts and queues
+ * them; `draft` only stops the send." Gating composition on the same "enabled" flag as posting
+ * meant no carousel was ever built for either magazine, so on the day the counters unlock there
+ * would be no evidence any of it works — and nothing to look at in the meantime.
+ *
+ * "paused" is the owner turning a venture off and stays off for both. "locked" is the counter
+ * not yet reached, which is exactly the state the decision describes: compose, queue, do not send.
+ */
 export async function socialContentGenerationEnabled(
+  stateRoot: string,
+  venture: SocialVenture
+): Promise<boolean> {
+  const raw = await readJson<unknown>(stateRoot, "social/activation.json", null);
+  const parsed = SocialActivationSchema.safeParse(raw);
+  return parsed.success && parsed.data.ventures[venture].status !== "paused";
+}
+
+/** Whether a validated queue item may actually be sent. Unchanged: posting needs "enabled". */
+export async function socialPostingEnabled(
   stateRoot: string,
   venture: SocialVenture
 ): Promise<boolean> {

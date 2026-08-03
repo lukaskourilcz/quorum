@@ -167,10 +167,15 @@ export async function composeEditionSocialPack(input: {
       }
     };
   };
-  const visualRefs: Record<SocialLocale, TemplateReference> = {
-    en: visualReference("en"),
-    cs: visualReference("cs")
-  };
+  // Only the locales the edition carries. Building both unconditionally read article.en on a
+  // Czech-only package and threw "Cannot read properties of undefined"; cycle.ts catches that
+  // and recordSocialPackFailure dedupes on a marker, so the composer went silently dark and
+  // only the first day ever reached the inbox.
+  const visualRefs: Partial<Record<SocialLocale, TemplateReference>> = Object.fromEntries(
+    (["en", "cs"] as const)
+      .filter((locale) => editionPackage.article?.[locale])
+      .map((locale) => [locale, visualReference(locale)])
+  );
   const quoteVisual: TemplateReference = {
     template_id: "quote-card",
     version: "1.0.0",
@@ -189,14 +194,13 @@ export async function composeEditionSocialPack(input: {
   }));
   const relativeDirectory = `site/public/social/${input.editionPackage.date}`;
   const publicDirectory = `/social/${input.editionPackage.date}`;
-  const framePaths: Record<SocialLocale, Record<"instagram" | "threads", string[]>> = {
-    en: { instagram: [], threads: [] },
-    cs: { instagram: [], threads: [] }
-  };
+  const framePaths: Partial<Record<SocialLocale, Record<"instagram" | "threads", string[]>>> = {};
   const frameHashes: Record<string, string> = {};
   const altTexts: Record<string, string> = {};
   for (const locale of ["en", "cs"] as const) {
     const reference = visualRefs[locale];
+    if (!reference) continue;
+    framePaths[locale] = { instagram: [], threads: [] };
     const template = resolveLiveCarouselTemplate(reference.template_id, reference.version);
     for (const channel of ["instagram", "threads"] as const) {
       const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
@@ -234,7 +238,13 @@ export async function composeEditionSocialPack(input: {
   altTexts[quotePath] = `Quote from ${bestTurn.agent} in the edition room: ${bestTurn.text}`.slice(0, 300);
 
   const buildLocalePack = (locale: SocialLocale) => {
-      const article = editionPackage.article[locale]!.frontmatter;
+      const localized = editionPackage.article?.[locale];
+      const frames = framePaths[locale];
+      const visual = visualRefs[locale];
+      if (!localized || !frames || !visual) {
+        throw new Error(`social pack: the edition has no ${locale} locale to compose from`);
+      }
+      const article = localized.frontmatter;
       const tagList = hashtags(article.tags, locale);
       const readLabel = locale === "cs" ? "Celý článek" : "Read the edition";
       const openLabel = locale === "cs" ? "Otevřené zůstává" : "Still open";
@@ -252,15 +262,15 @@ export async function composeEditionSocialPack(input: {
           caption: instagramA,
           variants: { A: instagramA, B: boundedCopy(instagramBBody, instagramSuffix, 2_200) },
           hashtags: tagList,
-          frames: framePaths[locale].instagram,
-          visual: visualRefs[locale]
+          frames: frames.instagram,
+          visual
         },
         threads: {
           text: threadsA,
           variants: { A: threadsA, B: boundedCopy(threadsBBody, threadsSuffix, 500) },
           hashtags: [],
-          frames: framePaths[locale].threads,
-          visual: visualRefs[locale]
+          frames: frames.threads,
+          visual
         }
       };
   };

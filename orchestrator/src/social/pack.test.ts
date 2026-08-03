@@ -137,3 +137,31 @@ describe("Caught Up social pack composer", () => {
     })).rejects.toThrow("Only HTTPS URLs are allowed");
   });
 });
+
+describe("a Czech-only edition composes", () => {
+  it("renders one locale and never reaches for an English half the package lacks", async () => {
+    // composeEditionSocialPack built both locale visuals unconditionally, so the first
+    // Czech-only edition threw "Cannot read properties of undefined (reading 'frontmatter')".
+    // cycle.ts catches that and recordSocialPackFailure dedupes on a marker, so the composer
+    // went dark silently and only the first day ever reached the inbox. This fixture is
+    // bilingual, which is exactly why the crash survived until production met it.
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-cs-"));
+    roots.push(root);
+    const czechOnly = structuredClone(editionFixture) as Record<string, unknown>;
+    delete (czechOnly.article as Record<string, unknown>).en;
+    const result = await composeEditionSocialPack({
+      editionPackage: EditionPackageSchema.parse(czechOnly),
+      meeting: MeetingRecordSchema.parse(meetingFixture),
+      destinations: { cs: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut" },
+      repoRoot: root,
+      stateRoot: path.join(root, "state"),
+      now: new Date("2026-08-04T04:00:00.000Z")
+    });
+    expect(result).not.toBeNull();
+    const pack = SocialPackSchema.parse(result!.pack);
+    expect(Object.keys(pack.byLocale)).toEqual(["cs"]);
+    // Two queue items, not four: one locale times two channels.
+    expect(result!.queueItems).toHaveLength(2);
+    expect(result!.queueItems.every((item) => item.locale === "cs")).toBe(true);
+  });
+});
