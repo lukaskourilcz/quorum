@@ -37,7 +37,24 @@ const gateway: MmaFilesEditorialGateway = {
     return {
       title: "Alex Example se v Praze utká se Samem Examplem",
       dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
-      bodyMDX: "## Zápas\n\n[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3. [^source-1]",
+      // Long enough to build a real carousel. The fixture used to be two sentences, which is a
+      // fine article for the copy gates and too thin for a five-slide deck, so the deck path
+      // was never exercised by a test that claimed to cover article production.
+      bodyMDX: [
+        "## Zápas",
+        "",
+        "[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2. [^source-1]",
+        "",
+        "[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3. [^source-1]",
+        "",
+        "Oba zápasníci se v hlavním zápase potkávají poprvé a soubor u obou uvádí shodně vedenou bilanci. [^source-1]",
+        "",
+        "Rozdíl je v cestě k výsledku: jeden vítězí častěji v postoji, druhý se opírá o zemní práci. [^source-1]",
+        "",
+        "Ověřená data neuvádějí u žádného z nich zranění, které by kartu ohrozilo. [^source-1]",
+        "",
+        "Karta se koná v Praze a je to teprve druhý turnaj organizace v tomto městě. [^source-1]"
+      ].join("\n"),
       imageAlt: "Zkušební karta zápasu Alexe Examplea se Samem Examplem"
     };
   }
@@ -102,8 +119,13 @@ describe("MMA Files article production", () => {
     expect(first.violations).toEqual([]);
     expect(hasValidArticlePackageHash(first.article)).toBe(true);
     expect(first.socialPath).toMatch(/social\/packs/);
-    // Half of ten. The desk publishes one language, so it renders one language's slides.
-    expect(first.mediaPaths).toHaveLength(6);
+    // Hero, thumbnail, and one Czech slide per deck position for each of the two variants.
+    // The count follows the article now, so it is derived rather than restated as a literal.
+    const deckSlides = (first.article.localizations.cs && buildSocialVariantPack(first.article)?.variants[0]?.carousel.cs?.content.strings) ?? {};
+    const slidesPerVariant = Object.keys(deckSlides).length;
+    expect(slidesPerVariant).toBeGreaterThanOrEqual(5);
+    expect(slidesPerVariant).toBeLessThanOrEqual(10);
+    expect(first.mediaPaths).toHaveLength(2 + slidesPerVariant * 2);
     expect(replay.idempotent).toBe(true);
     expect(replay.article.packageHash).toBe(first.article.packageHash);
     expect(await loadArticlePackages(root)).toEqual([first.article]);
@@ -138,15 +160,26 @@ describe("MMA Files article production", () => {
     expect(reviewArticleCopy(recap, "cs", { mode: "data-only" }).map((item) => item.code)).toContain("recap-honesty");
   });
 
-  it("renders one deterministic hero and four deterministic social slides without human imagery", async () => {
+  it("renders one deterministic hero and a deterministic Czech deck without human imagery", async () => {
     const root = await tempRoot("mma-files-render-");
     const article = (await production(root)).article;
-    const pack = buildSocialVariantPack(article);
+    const pack = buildSocialVariantPack(article)!;
     const first = renderSocialVariants(pack, article);
     const second = renderSocialVariants(pack, article);
     expect(first).toEqual(second);
-    expect(first.map((render) => render.key)).toEqual(["A-cs-01", "A-cs-02", "B-cs-01", "B-cs-02"]);
-    expect(new Set(first.map((render) => render.sha256)).size).toBe(4);
+    // Two variants of the same Czech deck, numbered in reading order.
+    const perVariant = pack.variants[0]!.carousel.cs!.content.strings;
+    const count = Object.keys(perVariant).length;
+    expect(count).toBeGreaterThanOrEqual(5);
+    expect(first.map((render) => render.key)).toEqual([
+      ...Array.from({ length: count }, (_, index) => `A-cs-${String(index + 1).padStart(2, "0")}`),
+      ...Array.from({ length: count }, (_, index) => `B-cs-${String(index + 1).padStart(2, "0")}`)
+    ]);
+    // A and B render the same deck: the deck is the article, and there is no second way to
+    // slice it. What the two variants differ in is the caption, which is where the experiment
+    // actually lives.
+    expect(new Set(first.map((render) => render.sha256)).size).toBe(count);
+    expect(pack.variants[0]!.captions.cs!.instagram).not.toBe(pack.variants[1]!.captions.cs!.instagram);
     expect(renderArticleHero(article)).toBe(renderArticleHero(article));
     expect(`${renderArticleHero(article)}${first.map((render) => render.svg).join("")}`).not.toMatch(/<image|generated human/iu);
   });
@@ -378,5 +411,29 @@ describe("grounding markers do not reach the reader", () => {
     const article = ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
     expect(reviewArticleCopy(article, "en", { mode: "data-only" }).map(({ code }) => code))
       .toContain("ungrounded-claim");
+  });
+});
+
+describe("an article too thin for a deck", () => {
+  it("publishes without a carousel rather than blocking or padding", async () => {
+    // A piece that cannot fill five slides of thirty words gets no carousel. It does not get a
+    // padded one — inventing a slide is how a deck starts saying things the article does not —
+    // and it does not stop the article, which cleared every editorial gate on its own.
+    const root = await tempRoot("mma-files-thin-");
+    const thin: MmaFilesEditorialGateway = {
+      ...gateway,
+      async writeCzech() {
+        return {
+          title: "Alex Example se v Praze utká se Samem Examplem",
+          dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
+          bodyMDX: "## Zápas\n\n[Alex Example](/fighters/ufc/alex-example) má bilanci 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) má bilanci 10-3. [^source-1]",
+          imageAlt: "Zkušební karta zápasu"
+        };
+      }
+    };
+    const result = await production(root, thin);
+    expect(result.article.status).toBe("published");
+    expect(result.socialPath).toBeNull();
+    expect(result.mediaPaths.filter((file) => file.includes("social-"))).toEqual([]);
   });
 });

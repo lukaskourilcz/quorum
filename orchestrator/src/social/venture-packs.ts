@@ -98,7 +98,9 @@ export async function composeMmaFilesSocialQueue(input: {
         channel,
         destination,
         text: caption[channel],
-        assetPaths,
+        // Text-only on Threads: assertQueueItemPublishable rejects a Threads item carrying
+        // any asset and throws the whole publisher run out, not just the item.
+        assetPaths: channel === "threads" ? [] : assetPaths,
         altText: `MMA Files ${variant} carousel: ${input.article.localizations[locale]!.title}`,
         evidenceRefs,
         notBefore: input.now.toISOString(),
@@ -147,7 +149,9 @@ export async function composeTittyTuesdaysSocialQueue(input: {
         channel,
         destination: baseUrl,
         text: asset.captions[channel][variant],
-        assetPaths,
+        // Text-only on Threads: assertQueueItemPublishable rejects a Threads item carrying
+        // any asset and throws the whole publisher run out, not just the item.
+        assetPaths: channel === "threads" ? [] : assetPaths,
         altText: `Titty Tuesdays carousel: ${reference.content.strings["cover-title"] ?? reference.content.strings["poster-line"] ?? "campaign draft"}`,
         evidenceRefs: [input.plan.originMeetingRef],
         notBefore: notBefore.toISOString(),

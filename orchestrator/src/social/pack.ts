@@ -93,7 +93,11 @@ function queueItem(input: {
     content: {
       text: input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant],
       altText: queueAltText(input.pack, input.locale, input.channel),
-      assetPaths: platform.frames,
+      // Threads carries text and a link; the guarded connector is text-only and
+      // assertQueueItemPublishable rejects a Threads item with any asset, throwing the whole
+      // publisher run out rather than skipping the one item. Frames belong to the carousel,
+      // which is Instagram's.
+      assetPaths: input.channel === "threads" ? [] : platform.frames,
       factualClaimRefs: input.evidenceRefs,
       rendererVersion: COMPOSER_VERSION,
       contentHash: "0".repeat(64)

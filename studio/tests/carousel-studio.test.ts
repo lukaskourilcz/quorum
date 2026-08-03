@@ -5,8 +5,10 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import {
+  ARTICLE_DECK_TEMPLATES,
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
+  LIVE_TEMPLATES,
   SEED_TEMPLATES,
   articleDeckTemplate,
   articleSlideSlot,
@@ -25,6 +27,15 @@ describe("carousel-template/1", () => {
     expect(SEED_TEMPLATES).toHaveLength(10);
     expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(10);
     expect(SEED_TEMPLATES.every((template) => CarouselTemplateSchema.parse(template).status === "live")).toBe(true);
+  });
+
+  it("resolves the generated article decks without counting them as seed layouts", () => {
+    // The seed layouts are design work someone made, and counting them is a real check. The
+    // decks are one layout at six lengths, generated, and kept out of that count so they
+    // cannot pad it — while still resolving like any other live template.
+    expect(ARTICLE_DECK_TEMPLATES).toHaveLength(6);
+    expect(LIVE_TEMPLATES).toHaveLength(SEED_TEMPLATES.length + ARTICLE_DECK_TEMPLATES.length);
+    expect(ARTICLE_DECK_TEMPLATES.every((template) => template.status === "live")).toBe(true);
   });
 
   it("renders hash-stable SVG and PNG bytes", async () => {

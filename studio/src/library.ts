@@ -336,6 +336,19 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
   })
 ] as const;
 
+/**
+ * One template per deck length the article splitter can produce.
+ *
+ * Generated rather than authored, and held apart from SEED_TEMPLATES for that reason: the ten
+ * seed layouts are design work someone made, and counting them is a real check. These are the
+ * same layout at six lengths.
+ */
+export const ARTICLE_DECK_TEMPLATES: readonly CarouselTemplate[] =
+  Array.from({ length: 6 }, (_, index) => articleDeckTemplate(index + 5));
+
+/** Everything a reference may resolve to. */
+export const LIVE_TEMPLATES: readonly CarouselTemplate[] = [...SEED_TEMPLATES, ...ARTICLE_DECK_TEMPLATES];
+
 export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> = {
   "caught-up": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -407,7 +420,7 @@ const czechFixtureOverrides: Partial<Record<string, Record<string, string>>> = {
 };
 
 export function templateByReference(templateId: string, version: string): CarouselTemplate | null {
-  return SEED_TEMPLATES.find((template) => template.id === templateId && template.version === version) ?? null;
+  return LIVE_TEMPLATES.find((template) => template.id === templateId && template.version === version) ?? null;
 }
 
 export function liveTemplateByReference(templateId: string, version: string): CarouselTemplate {

@@ -11,12 +11,42 @@ const dryGateway: MmaFilesEditorialGateway = {
     return slot === "am" ? {
       title: "Alex Example se na zkušební kartě utká se Samem Examplem",
       dek: "Suchý běh kontroluje článek a netvrdí, že skutečný turnaj existuje.",
-      bodyMDX: "## Zkušební zápas\n\n[Alex Example](/fighters/ufc/alex-example) má zkušební bilanci 12-2. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) má zkušební bilanci 10-3. [^source-1]",
+      // Long enough to build a real deck. A dry run that skips the carousel proves the article
+      // path and leaves the part most likely to break untested.
+      bodyMDX: [
+        "## Zkušební zápas",
+        "",
+        "[Alex Example](/fighters/ufc/alex-example) má zkušební bilanci 12-2. [^source-1]",
+        "",
+        "[Sam Example](/fighters/ufc/sam-example) má zkušební bilanci 10-3. [^source-1]",
+        "",
+        "Oba zápasníci se v hlavním zápase potkávají poprvé a soubor u obou uvádí shodně vedenou bilanci. [^source-1]",
+        "",
+        "Rozdíl je v cestě k výsledku: jeden vítězí častěji v postoji, druhý se opírá o zemní práci. [^source-1]",
+        "",
+        "Ověřená data neuvádějí u žádného z nich zranění, které by kartu ohrozilo. [^source-1]",
+        "",
+        "Karta se koná v Praze a je to teprve druhý zkušební turnaj v tomto městě. [^source-1]"
+      ].join("\n"),
       imageAlt: "Typografická zkušební karta pro Alexe Examplea a Sama Examplea"
     } : {
       title: "Eva Example vstupuje do zkušebního profilu bojovnice",
       dek: "Suchý profil hlídá stejná pravidla pro zdroje jako živá redakce.",
-      bodyMDX: "## Zkušební profil\n\n[Eva Example](/fighters/oktagon/eva-example) má zkušební bilanci 8-1. [^source-1]\n\n[Anna Example](/fighters/oktagon/anna-example) má zkušební bilanci 7-2. [^source-1]",
+      bodyMDX: [
+        "## Zkušební profil",
+        "",
+        "[Eva Example](/fighters/oktagon/eva-example) má zkušební bilanci 8-1. [^source-1]",
+        "",
+        "[Anna Example](/fighters/oktagon/anna-example) má zkušební bilanci 7-2. [^source-1]",
+        "",
+        "Profil sleduje pět posledních zápasů a u každého uvádí způsob ukončení i délku trvání. [^source-1]",
+        "",
+        "Soubor upozorňuje na jeden nesoulad v bilanci, který zatím nebyl vyřešen. [^source-1]",
+        "",
+        "Zkušební data neobsahují žádnou informaci o nadcházejícím soupeři. [^source-1]",
+        "",
+        "Profil zůstává otevřený, dokud se nepotvrdí zařazení na některou z karet. [^source-1]"
+      ].join("\n"),
       imageAlt: "Typografický zkušební profil Evy Example"
     };
   }

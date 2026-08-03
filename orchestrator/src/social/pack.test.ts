@@ -8,7 +8,7 @@ import meetingFixture from "../../../contracts/fixtures/meeting-record.valid.jso
 import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { SocialPackSchema } from "../contracts/social-pack.js";
-import { QueueItemSchema, queuePayloadHash } from "./queue.js";
+import { QueueItemSchema, assertQueueItemPublishable, queuePayloadHash } from "./queue.js";
 import { composeEditionSocialPack } from "./pack.js";
 
 const roots: string[] = [];
@@ -163,5 +163,35 @@ describe("a Czech-only edition composes", () => {
     // Two queue items, not four: one locale times two channels.
     expect(result!.queueItems).toHaveLength(2);
     expect(result!.queueItems.every((item) => item.locale === "cs")).toBe(true);
+  });
+});
+
+describe("every composed queue item survives the publisher's own gate", () => {
+  it("does not attach carousel frames to a Threads item", async () => {
+    // assertQueueItemPublishable rejects a Threads item carrying any asset — the guarded
+    // connector is text-only — and it throws rather than skipping, so one bad item would take
+    // the whole publisher run down on the first send. Frames belong to the Instagram carousel.
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-threads-"));
+    roots.push(root);
+    const result = await composeEditionSocialPack({
+      editionPackage: EditionPackageSchema.parse(editionFixture),
+      meeting: MeetingRecordSchema.parse(meetingFixture),
+      destinations: {
+        en: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
+        cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
+      },
+      repoRoot: root,
+      stateRoot: path.join(root, "state"),
+      now: new Date("2026-08-04T04:00:00.000Z")
+    });
+    const items = result!.queueItems;
+    expect(items.some((item) => item.channel === "threads")).toBe(true);
+    expect(items.some((item) => item.channel === "instagram")).toBe(true);
+    for (const item of items) {
+      if (item.channel === "threads") expect(item.content.assetPaths).toEqual([]);
+      else expect(item.content.assetPaths.length).toBeGreaterThan(0);
+      // The real gate, not a restatement of it: whatever the composer emits must pass here.
+      expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).not.toThrow();
+    }
   });
 });
