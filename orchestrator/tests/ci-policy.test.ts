@@ -92,6 +92,11 @@ describe("automation policy", () => {
     expect(cycle).not.toContain("git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries");
     expect(cycle).toContain("MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true.");
     expect(cycle).toContain("status --porcelain --untracked-files=all");
+    // Every push retry rebases with --autostash. The cycle commits only its allowlisted paths,
+    // so anything else the run touched is left unstaged, and a plain rebase refuses to start —
+    // which discarded a company meeting that had already run and already been paid for.
+    expect(cycle).not.toMatch(/git rebase "origin/u);
+    expect(cycle.match(/git rebase --autostash "origin/gu)).toHaveLength(5);
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");

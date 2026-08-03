@@ -411,7 +411,11 @@ jobs:
             fi
             echo "Runtime push raced with a newer ${GITHUB_REF_NAME}; refetching before retry ${attempt}."
             git fetch origin "$GITHUB_REF_NAME"
-            if ! git rebase "origin/$GITHUB_REF_NAME"; then
+            # --autostash, because the cycle commits only its allowlisted paths and anything else
+              # the run touched stays unstaged. Without it the rebase refuses outright with "cannot
+              # rebase: You have unstaged changes", both retries fail the same way, and a meeting that
+              # already ran and already cost money is thrown away with its records.
+              if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
               git rebase --abort || true
               break
             fi
@@ -647,7 +651,11 @@ jobs:
               fi
               echo "Delivery receipt push raced with a newer ${GITHUB_REF_NAME}; refetching before retry ${attempt}."
               git fetch origin "$GITHUB_REF_NAME"
-              if ! git rebase "origin/$GITHUB_REF_NAME"; then
+              # --autostash, because the cycle commits only its allowlisted paths and anything else
+              # the run touched stays unstaged. Without it the rebase refuses outright with "cannot
+              # rebase: You have unstaged changes", both retries fail the same way, and a meeting that
+              # already ran and already cost money is thrown away with its records.
+              if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
                 git rebase --abort || true
                 break
               fi
@@ -885,7 +893,11 @@ jobs:
                 break
               fi
               git fetch origin "$GITHUB_REF_NAME"
-              if ! git rebase "origin/$GITHUB_REF_NAME"; then
+              # --autostash, because the cycle commits only its allowlisted paths and anything else
+              # the run touched stays unstaged. Without it the rebase refuses outright with "cannot
+              # rebase: You have unstaged changes", both retries fail the same way, and a meeting that
+              # already ran and already cost money is thrown away with its records.
+              if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
                 git rebase --abort || true
                 break
               fi
