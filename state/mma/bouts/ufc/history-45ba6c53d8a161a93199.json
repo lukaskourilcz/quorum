@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-45ba6c53d8a161a93199",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-321",
+    "name": "UFC 321",
+    "startsAtUtc": "2025-10-25T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:tom-aspinall",
+    "blue": "ufc:ciryl-gane"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-10-25T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:66304460"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:66304460"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:66304460"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "NC (eye poke)",
+    "round": 1,
+    "elapsedSeconds": 275,
+    "sourceRefs": [
+      "source:wikipedia:66304460"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66304460"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

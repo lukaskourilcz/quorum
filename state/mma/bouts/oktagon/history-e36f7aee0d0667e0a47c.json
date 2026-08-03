@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-e36f7aee0d0667e0a47c",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-81",
+    "name": "Oktagon 81",
+    "startsAtUtc": "2025-12-28T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:will-fleury",
+    "blue": "oktagon:martin-buday"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-12-28T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:09:35.256Z",
+    "lastSeenAt": "2026-08-03T18:09:35.256Z",
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757307"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 100,
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:09:35.256Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:09:35.256Z"
+}

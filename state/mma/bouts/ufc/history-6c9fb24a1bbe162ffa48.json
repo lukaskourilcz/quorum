@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6c9fb24a1bbe162ffa48",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-freedom-250",
+    "name": "UFC Freedom 250",
+    "startsAtUtc": "2026-06-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aiemann-zahabi",
+    "blue": "ufc:sean-o-malley"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-06-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54051600"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:51.598Z",
+    "lastSeenAt": "2026-08-03T18:02:51.598Z",
+    "sourceRefs": [
+      "source:wikipedia:54051600"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54051600"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 542,
+    "sourceRefs": [
+      "source:wikipedia:54051600"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:51.598Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54051600"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:51.598Z"
+}

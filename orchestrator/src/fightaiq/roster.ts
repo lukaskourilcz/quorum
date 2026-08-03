@@ -3,6 +3,7 @@ import { FighterCardSchema, independentMmaSourceCount, type BoutRecord, type Fig
 import type { SourceFetchContext } from "../sources/types.js";
 import { safeFetch, type SafeFetchOptions } from "../security/url.js";
 import { atomicWriteJson, readJson } from "../state.js";
+import { computeModelEligibility, namesAgree, stripDisambiguator, supersedesSameProvider } from "./field-agreement.js";
 
 const USER_AGENT = "BoardlessAI-FightAIQ/1.0 (https://boardless-ai.vercel.app; source review bot)";
 const PROFILE_FIELDS = ["name", "division", "record", "stance", "heightCm", "reachCm", "dateOfBirth", "team"] as const;
@@ -172,24 +173,25 @@ function field(value: string, sourceRef: string, retrievedAt: string) {
 
 function addAgreeingSource(current: FighterRecord["fields"][string] | undefined, value: string, sourceRef: string, retrievedAt: string) {
   if (!current) return field(value, sourceRef, retrievedAt);
-  if (String(current.value).trim().toLocaleLowerCase("en") !== value.trim().toLocaleLowerCase("en")) return current;
+  // Accents and disambiguators are spelling, not disagreement — see field-agreement.ts.
+  if (!namesAgree(String(current.value), value)) {
+    return supersedesSameProvider(current.sourceRefs, sourceRef) ? { ...current, value, retrievedAt } : current;
+  }
   const sourceRefs = [...new Set([...current.sourceRefs, sourceRef])].sort();
   const corroborated = independentMmaSourceCount(sourceRefs) >= 2;
   return { ...current, sourceRefs, retrievedAt, corroborated, status: corroborated ? "verified" as const : current.status };
 }
 
 function eligible(fields: FighterRecord["fields"], criticalFields: readonly string[], fighter: FighterRecord | null): boolean {
-  const open = new Set((fighter?.discrepancies ?? []).filter((item) => item.status === "open").map((item) => item.field));
-  return criticalFields.every((name) => {
-    const value = fields[name];
-    return Boolean(value?.status === "verified" && value.corroborated && independentMmaSourceCount(value.sourceRefs) >= 2 && !open.has(name));
-  });
+  return computeModelEligibility(criticalFields, fields, fighter?.discrepancies ?? []);
 }
 
 function cardForEntry(entry: WikimediaRosterEntry, retrievedAt: string, existing: FighterRecord | null): FighterRecord {
   const id = `${entry.org}:${entry.slug}` as const;
   const sourceRef = `source:wikipedia:${entry.pageId}`;
-  const nameField = addAgreeingSource(existing?.fields.name, entry.name, sourceRef, retrievedAt);
+  // The roster list gives page titles, and a page title carries a disambiguator when two people
+  // share a name. "Robert Whittaker (fighter)" is not what anyone is called.
+  const nameField = addAgreeingSource(existing?.fields.name, stripDisambiguator(entry.name), sourceRef, retrievedAt);
   const fields: FighterRecord["fields"] = { ...(existing?.fields ?? {}), name: nameField };
   const gaps = PROFILE_FIELDS.filter((name) => !fields[name] || fields[name]?.value === null);
   const populated = PROFILE_FIELDS.length - gaps.length;
@@ -263,8 +265,27 @@ export async function materializeWikimediaRoster(input: {
 export interface BackfillQueueItem {
   fighterRef: string;
   priority: number;
-  reason: "upcoming-bout" | "missing-history" | "missing-profile" | "stale";
+  reason: "upcoming-bout" | "missing-history" | "uncorroborated" | "missing-profile" | "stale";
   gaps: string[];
+  /** When the profile was last read, so a run works through the roster instead of the same head. */
+  reviewedAt: string;
+  /** Critical fields still resting on a single provider. Empty unless the reason is uncorroborated. */
+  uncorroborated?: string[];
+}
+
+/**
+ * Critical fields that only one provider has ever supplied.
+ *
+ * A profile the gate refuses is not the same as a profile with holes in it: fifty of the ninety-two
+ * cards carry a division and a record, and not one of them is model-eligible, because every value
+ * came from a single source. Filling gaps cannot fix that — only reading a second source for a
+ * field that is already populated can. So this is its own reason to revisit a fighter.
+ */
+function uncorroboratedCriticalFields(fighter: FighterRecord): string[] {
+  return fighter.criticalFields.filter((name) => {
+    const field = fighter.fields[name];
+    return Boolean(field) && field?.value !== null && independentMmaSourceCount(field?.sourceRefs ?? []) < 2;
+  });
 }
 
 export function buildBackfillQueue(input: {
@@ -279,19 +300,35 @@ export function buildBackfillQueue(input: {
   const staleBefore = input.now.getTime() - (input.staleAfterDays ?? 30) * 86_400_000;
   return input.fighters.flatMap((fighter) => {
     const gaps = [...fighter.quality.gaps];
+    const uncorroborated = uncorroboratedCriticalFields(fighter);
     const reason: BackfillQueueItem["reason"] | null = upcoming.has(fighter.id)
       ? "upcoming-bout"
       : fighter.history.length === 0
         ? "missing-history"
-        : gaps.length > 0
-          ? "missing-profile"
-          : Date.parse(fighter.updatedAt) < staleBefore
-            ? "stale"
-            : null;
+        : uncorroborated.length > 0
+          ? "uncorroborated"
+          : gaps.length > 0
+            ? "missing-profile"
+            : Date.parse(fighter.updatedAt) < staleBefore
+              ? "stale"
+              : null;
     if (!reason) return [];
-    const base = reason === "upcoming-bout" ? 1_000 : reason === "missing-history" ? 600 : reason === "missing-profile" ? 300 : 100;
-    return [{ fighterRef: fighter.id, priority: base + Math.min(99, gaps.length * 10), reason, gaps }];
-  }).sort((left, right) => right.priority - left.priority || left.fighterRef.localeCompare(right.fighterRef));
+    const base = reason === "upcoming-bout" ? 1_000 : reason === "missing-history" ? 600 : reason === "uncorroborated" ? 450 : reason === "missing-profile" ? 300 : 100;
+    return [{
+      fighterRef: fighter.id,
+      priority: base + Math.min(99, gaps.length * 10),
+      reason,
+      gaps,
+      reviewedAt: fighter.quality.lastReviewedAt ?? "",
+      ...(uncorroborated.length > 0 ? { uncorroborated } : {})
+    }];
+    // Least recently reviewed first inside a priority band. Breaking the tie on the id served the
+    // same alphabetically-first twelve on every run, so Brad Tavares kept a height of 27.94 cm
+    // through nine passes of a fixed parser: the queue never reached him.
+  }).sort((left, right) =>
+    right.priority - left.priority
+    || left.reviewedAt.localeCompare(right.reviewedAt)
+    || left.fighterRef.localeCompare(right.fighterRef));
 }
 
 export async function writeBackfillQueue(input: { root: string; fighters: readonly FighterRecord[]; bouts: readonly BoutRecord[]; now: Date }): Promise<string> {

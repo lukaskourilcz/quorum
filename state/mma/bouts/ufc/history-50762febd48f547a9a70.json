@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-50762febd48f547a9a70",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-215",
+    "name": "UFC 215",
+    "startsAtUtc": "2017-09-09T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:valentina-shevchenko",
+    "blue": "ufc:amanda-nunes"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-09-09T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:44159133"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:44159133"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:44159133"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:44159133"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44159133"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

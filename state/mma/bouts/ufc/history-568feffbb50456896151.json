@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-568feffbb50456896151",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-lewis-vs-nascimento",
+    "name": "UFC on ESPN: Lewis vs. Nascimento",
+    "startsAtUtc": "2024-05-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:carlos-ulberg",
+    "blue": "ufc:alonzo-menifield"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-05-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:66657574"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:66657574"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:66657574"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 1,
+    "elapsedSeconds": 12,
+    "sourceRefs": [
+      "source:wikipedia:66657574"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66657574"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

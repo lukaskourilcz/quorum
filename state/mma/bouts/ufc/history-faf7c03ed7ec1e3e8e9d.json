@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-faf7c03ed7ec1e3e8e9d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-308",
+    "name": "UFC 308",
+    "startsAtUtc": "2024-10-26T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ilia-topuria",
+    "blue": "ufc:max-holloway"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-10-26T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:66838633"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:66838633"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:66838633"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 3,
+    "elapsedSeconds": 694,
+    "sourceRefs": [
+      "source:wikipedia:66838633"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66838633"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-fc1c130d396457cfcbd0",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-290",
+    "name": "UFC 290",
+    "startsAtUtc": "2023-07-08T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:dricus-du-plessis",
+    "blue": "ufc:robert-whittaker"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-07-08T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:62595898"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 443,
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

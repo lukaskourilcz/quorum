@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-bd885b3dbfdf7885bb2a",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-freedom-250",
+    "name": "UFC Freedom 250",
+    "startsAtUtc": "2026-06-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ilia-topuria",
+    "blue": "ufc:justin-gaethje"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-06-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:66838633"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:66838633"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:66838633"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (corner stoppage)",
+    "round": 4,
+    "elapsedSeconds": 1200,
+    "sourceRefs": [
+      "source:wikipedia:66838633"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66838633"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

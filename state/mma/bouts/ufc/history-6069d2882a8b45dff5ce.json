@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6069d2882a8b45dff5ce",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-300",
+    "name": "UFC 300",
+    "startsAtUtc": "2024-04-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aleksandar-rakic",
+    "blue": "ufc:jiri-prochazka"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-04-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:56012518"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:58:29.899Z",
+    "lastSeenAt": "2026-08-03T17:58:29.899Z",
+    "sourceRefs": [
+      "source:wikipedia:56012518"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:56012518"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 497,
+    "sourceRefs": [
+      "source:wikipedia:56012518"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:58:29.899Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012518"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:58:29.899Z"
+}

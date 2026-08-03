@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-de7ea506536dccdb23ea",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-du-plessis-vs-usman",
+    "name": "UFC Fight Night: du Plessis vs. Usman",
+    "startsAtUtc": "2026-07-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:dricus-du-plessis",
+    "blue": "ufc:kamaru-usman"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-07-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:62595898"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-75eb0f642a0b842312d7",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-311",
+    "name": "UFC 311",
+    "startsAtUtc": "2025-01-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:billy-elekana",
+    "blue": "ufc:bogdan-guskov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-01-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:82830749"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:82830749"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:82830749"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (guillotine choke)",
+    "round": 2,
+    "elapsedSeconds": 513,
+    "sourceRefs": [
+      "source:wikipedia:82830749"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82830749"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

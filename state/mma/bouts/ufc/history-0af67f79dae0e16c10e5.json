@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-0af67f79dae0e16c10e5",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-298",
+    "name": "UFC 298",
+    "startsAtUtc": "2024-02-17T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:ilia-topuria",
+    "blue": "ufc:alexander-volkanovski"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-02-17T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:66838633"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:66838633"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:66838633"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punch)",
+    "round": 2,
+    "elapsedSeconds": 512,
+    "sourceRefs": [
+      "source:wikipedia:66838633"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66838633"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ba49e7d375873bd25b10",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-305",
+    "name": "UFC 305",
+    "startsAtUtc": "2024-08-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:dricus-du-plessis",
+    "blue": "ufc:israel-adesanya"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-08-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:62595898"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (face crank)",
+    "round": 4,
+    "elapsedSeconds": 1118,
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

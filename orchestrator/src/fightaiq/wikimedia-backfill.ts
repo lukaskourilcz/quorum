@@ -4,6 +4,7 @@ import type { SourceFetchContext } from "../sources/types.js";
 import { safeFetch, type SafeFetchOptions } from "../security/url.js";
 import { atomicWriteJson } from "../state.js";
 import { sha256 } from "./engine.js";
+import { computeModelEligibility, fieldValuesAgree, supersedesSameProvider } from "./field-agreement.js";
 import { fighterSlug, sanitizeSourceText, type BackfillQueueItem } from "./roster.js";
 import { loadFighterRecords, saveBoutRecord } from "./store.js";
 
@@ -61,6 +62,30 @@ function templateDate(value: string): string | null {
 }
 
 function centimetres(value: string): number | null {
+  // Feet and inches first, in both the plain and the templated spelling. Reading only the inches
+  // filed Islam Makhachev's "5 ft 10 in" as 25.4 centimetres and Brad Tavares as 27.94 — a height
+  // no fighter has, sitting on the card as a fact.
+  // {{height|ft=5|in=5}} and {{height|m=1.65}} — the parameters carry the units, not the text.
+  const template = /\{\{\s*height\s*\|([^}]*)\}\}/iu.exec(value);
+  if (template) {
+    const parameter = (name: string) => {
+      const found = new RegExp(`\\b${name}\\s*=\\s*(\\d+(?:\\.\\d+)?)`, "iu").exec(template[1]!);
+      return found ? Number(found[1]) : null;
+    };
+    const metres = parameter("m");
+    if (metres) return Number((metres * 100).toFixed(2));
+    const centimetresParameter = parameter("cm");
+    if (centimetresParameter) return Number(centimetresParameter.toFixed(2));
+    const feet = parameter("ft");
+    if (feet) return Number((feet * 30.48 + (parameter("in") ?? 0) * 2.54).toFixed(2));
+  }
+  const feetInches = value.match(/(?:\bft\s*=\s*|\b)(\d(?:\.\d+)?)\s*(?:ft|feet|')\s*(?:\|?\s*in\s*=\s*)?(\d{1,2}(?:\.\d+)?)?\s*(?:in|inches|")?/iu);
+  if (feetInches && Number(feetInches[1]) >= 4 && Number(feetInches[1]) <= 7) {
+    const total = Number(feetInches[1]) * 30.48 + (feetInches[2] ? Number(feetInches[2]) * 2.54 : 0);
+    return Number(total.toFixed(2));
+  }
+  const metres = value.match(/(?:\bm\s*=\s*)(\d\.\d{2})\b/iu);
+  if (metres) return Number((Number(metres[1]) * 100).toFixed(2));
   const converted = value.match(/\{\{convert\s*\|\s*(\d{2,3}(?:\.\d+)?)\s*\|\s*(cm|in)(?:\||\}\})/iu);
   if (converted) return Number((Number(converted[1]) * (converted[2]!.toLowerCase() === "in" ? 2.54 : 1)).toFixed(2));
   const cm = value.match(/(?:cm\s*=\s*|\b)(\d{2,3}(?:\.\d+)?)\s*cm\b/iu);
@@ -69,9 +94,24 @@ function centimetres(value: string): number | null {
   return inches ? Number((Number(inches[1]) * 2.54).toFixed(2)) : null;
 }
 
+/**
+ * An infobox value, including the lines it continues onto.
+ *
+ * Stopping at the first newline truncated Valentina Shevchenko's weight class to "Bantamweight
+ * (MMA) (2003-2005," — the rest of her career, flyweight included, was on the following lines, so
+ * the current champion of a division was filed under the one she left twenty years ago.
+ */
 function infoboxValue(wikitext: string, key: string): string | null {
-  const match = wikitext.match(new RegExp(`^\\|[ \\t]*${key}[ \\t]*=[ \\t]*(.*)$`, "imu"));
-  return match?.[1]?.trim() || null;
+  const start = new RegExp(`^\\|[ \\t]*${key}[ \\t]*=[ \\t]*(.*)$`, "imu").exec(wikitext);
+  if (!start) return null;
+  const rest = wikitext.slice(start.index + start[0].length);
+  const lines: string[] = [start[1] ?? ""];
+  for (const line of rest.split("\n").slice(1)) {
+    // The next parameter, or the end of the template, ends the value.
+    if (/^\s*[|}]/u.test(line)) break;
+    lines.push(line);
+  }
+  return lines.join("\n").trim() || null;
 }
 
 function recordFromInfobox(wikitext: string): string | null {
@@ -108,6 +148,23 @@ function parseClock(value: string, round: number | null): number | null {
   return (round - 1) * 300 + minutes * 60 + seconds;
 }
 
+/**
+ * The division a fighter competes in now, from an infobox that lists the whole career.
+ *
+ * `weight_class` is not one value. Ilia Topuria's reads "Bantamweight (2018)<br />Featherweight
+ * (2020–2025)<br />Lightweight (2025–present)", and taking the first line filed the lightweight
+ * champion as a bantamweight — a wrong fact, not a missing one. The line marked present wins;
+ * failing that, the last, because the list runs oldest to newest.
+ */
+export function currentDivision(raw: string): string | null {
+  const lines = raw.split(/<br\s*\/?>|\n/iu).map((line) => line.trim()).filter(Boolean);
+  if (lines.length === 0) return null;
+  const present = lines.find((line) => /\b(?:present|current)\b/iu.test(line));
+  const chosen = present ?? lines[lines.length - 1]!;
+  const text = wikiText(chosen).split(/\s{2,}|\(|\//u)[0]!.trim();
+  return text.length > 0 ? text : null;
+}
+
 export function parseWikipediaFighterPage(wikitext: string): ParsedWikiProfile {
   const fields: Record<string, string | number> = {};
   const name = infoboxValue(wikitext, "name");
@@ -122,7 +179,7 @@ export function parseWikipediaFighterPage(wikitext: string): ParsedWikiProfile {
   if (birth && templateDate(birth)) fields.dateOfBirth = templateDate(birth)!.slice(0, 10);
   if (height && centimetres(height)) fields.heightCm = centimetres(height)!;
   if (reach && centimetres(reach)) fields.reachCm = centimetres(reach)!;
-  if (division && wikiText(division)) fields.division = wikiText(division).split(/\s{2,}|\(|\//u)[0]!.trim();
+  if (division && currentDivision(division)) fields.division = currentDivision(division)!;
   if (stance && wikiText(stance)) fields.stance = wikiText(stance).toLowerCase();
   if (team && wikiText(team)) fields.team = wikiText(team);
   if (record) fields.record = record;
@@ -158,20 +215,26 @@ export function parseWikipediaFighterPage(wikitext: string): ParsedWikiProfile {
   return { fields, fights };
 }
 
-function mergeField(current: FighterRecord["fields"][string] | undefined, incomingValue: string | number, sourceRef: string, retrievedAt: string) {
+export function mergeField(
+  current: FighterRecord["fields"][string] | undefined,
+  incomingValue: string | number,
+  sourceRef: string,
+  retrievedAt: string,
+  fieldName = ""
+) {
   if (!current) return { value: incomingValue, sourceRefs: [sourceRef], retrievedAt, status: "provisional" as const, corroborated: false };
-  if (String(current.value).trim().toLocaleLowerCase("en") !== String(incomingValue).trim().toLocaleLowerCase("en")) return current;
+  if (!fieldValuesAgree(fieldName, current.value, incomingValue)) {
+    // The same provider read again is a re-read, not a rival: take the new value.
+    if (!supersedesSameProvider(current.sourceRefs, sourceRef)) return current;
+    return { ...current, value: incomingValue, retrievedAt };
+  }
   const sourceRefs = [...new Set([...current.sourceRefs, sourceRef])].sort();
   const corroborated = independentMmaSourceCount(sourceRefs) >= 2;
   return { ...current, sourceRefs, retrievedAt, corroborated, status: corroborated ? "verified" as const : current.status };
 }
 
-function modelEligible(card: FighterRecord, fields: FighterRecord["fields"], discrepancies: FighterRecord["discrepancies"]): boolean {
-  const open = new Set(discrepancies.filter((item) => item.status === "open").map((item) => item.field));
-  return card.criticalFields.every((name) => {
-    const field = fields[name];
-    return Boolean(field?.status === "verified" && field.corroborated && independentMmaSourceCount(field.sourceRefs) >= 2 && !open.has(name));
-  });
+export function modelEligible(card: FighterRecord, fields: FighterRecord["fields"], discrepancies: FighterRecord["discrepancies"]): boolean {
+  return computeModelEligibility(card.criticalFields, fields, discrepancies);
 }
 
 function opponentCard(input: { org: FighterRecord["org"]; name: string; sourceRef: string; sourceUrl: string; retrievedAt: string; modelVersion: string }): FighterRecord {
@@ -202,8 +265,33 @@ function opponentCard(input: { org: FighterRecord["org"]; name: string; sourceRe
   });
 }
 
+/**
+ * The id a historical row maps to, which is a hash of the pairing and so is stable across reads.
+ *
+ * Needed separately because minting the record again to find out its id is what broke: the fresh
+ * record carries a one-entry change log, the stored one carries more, and the bout store refuses a
+ * shorter log. Re-reading a page must not look like rewriting its history.
+ */
+export function historicalBoutId(input: { fighter: FighterRecord; opponent: FighterRecord; fight: ParsedWikiFight }): string {
+  return `${input.fighter.org}:bout:history-${historicalIdentity(input.fighter.org, input.fighter.id, input.opponent.id, input.fight.happenedAt)}`;
+}
+
+/**
+ * One fight, one id, whichever fighter's page it was read from.
+ *
+ * Hashing the subject, the opponent and the event name gave Grasso–Shevchenko two records: read
+ * from Grasso the subject is Grasso, read from Shevchenko it is Shevchenko, and the two pages
+ * spell the event differently besides. Alexa Grasso's derived record came out 17-6-2 against a
+ * stated 17-5-1 — three of her twenty-five bouts were the same three fights counted twice. So the
+ * pair is sorted and the event name is left out; two people cannot fight each other twice in a day.
+ */
+function historicalIdentity(org: string, left: string, right: string, happenedAt: string): string {
+  const pair = [left, right].sort();
+  return sha256({ org, pair, day: happenedAt.slice(0, 10) }).slice(0, 20);
+}
+
 function historicalBout(input: { fighter: FighterRecord; opponent: FighterRecord; fight: ParsedWikiFight; sourceRef: string; retrievedAt: string }): BoutRecord {
-  const identity = sha256({ org: input.fighter.org, fighter: input.fighter.id, opponent: input.opponent.id, event: input.fight.event, happenedAt: input.fight.happenedAt }).slice(0, 20);
+  const identity = historicalIdentity(input.fighter.org, input.fighter.id, input.opponent.id, input.fight.happenedAt);
   const winner = input.fight.result === "win" ? "red" : input.fight.result === "loss" ? "blue" : input.fight.result;
   return BoutRecordSchema.parse({
     schemaVersion: "bout/1",
@@ -262,7 +350,17 @@ export async function enrichWikimediaBackfill(input: {
   const selected = input.queue.flatMap((item) => {
     const fighter = byId.get(item.fighterRef);
     if (!fighter?.identity.wikipediaTitle) return [];
-    if (fighter.quality.lastReviewedAt && Date.parse(fighter.quality.lastReviewedAt) >= staleBefore) return [];
+    // A fighter reviewed inside the window is normally left alone — re-reading the same page for
+    // the same gaps costs a request and changes nothing. But a critical field resting on one
+    // provider is not a gap, and the review that left it there is exactly what has to be redone:
+    // fifty cards carried a division and a record and none was model-eligible, because the
+    // fifteen fighters holding a Cito id had been reviewed once and were then skipped for thirty
+    // days, so Wikipedia never got to agree with Cito about anything.
+    // Read off the field list, not off the winning reason: a fighter with no fight history at all
+    // also has single-sourced fields, and reason is whichever ranked highest, so keying on it
+    // would have gone on skipping the twenty-seven worst profiles.
+    const stillSingleSourced = (item.uncorroborated ?? []).length > 0;
+    if (!stillSingleSourced && fighter.quality.lastReviewedAt && Date.parse(fighter.quality.lastReviewedAt) >= staleBefore) return [];
     return [fighter];
   }).slice(0, input.limit ?? 12);
   if (selected.length === 0) return { paths: [], processed: 0 };
@@ -302,10 +400,21 @@ export async function enrichWikimediaBackfill(input: {
     const discrepancies = structuredClone(selectedCard.discrepancies);
     for (const [name, value] of Object.entries(profile.fields)) {
       const current = fields[name];
-      if (current && String(current.value).trim().toLocaleLowerCase("en") !== String(value).trim().toLocaleLowerCase("en") && !discrepancies.some((item) => item.field === name && item.status === "open")) {
-        discrepancies.push({ field: name, values: [{ value: current.value, sourceRef: current.sourceRefs[0] ?? "source:unknown" }, { value, sourceRef }], status: "open" });
+      const conflicts = Boolean(current)
+        && !fieldValuesAgree(name, current!.value, value)
+        && !supersedesSameProvider(current!.sourceRefs, sourceRef);
+      // A re-read of the page we already read supersedes; only a second provider can conflict.
+      const stale = current ? current.sourceRefs.some((reference) => reference === sourceRef) : false;
+      if (conflicts && !discrepancies.some((item) => item.field === name && item.status === "open")) {
+        discrepancies.push({ field: name, values: [{ value: current!.value, sourceRef: current!.sourceRefs[0] ?? "source:unknown" }, { value, sourceRef }], status: "open" });
       }
-      fields[name] = mergeField(current, value, sourceRef, retrievedAt);
+      if (!conflicts && stale) {
+        // The parser changed, so a discrepancy this page raised against itself is now moot.
+        for (const item of discrepancies) {
+          if (item.field === name && item.status === "open" && item.values.every((entry) => entry.sourceRef === sourceRef)) item.status = "resolved";
+        }
+      }
+      fields[name] = mergeField(current, value, sourceRef, retrievedAt, name);
     }
     const opponentPaths: string[] = [];
     for (const fight of profile.fights) {
@@ -333,6 +442,8 @@ export async function enrichWikimediaBackfill(input: {
         if (!samePair.has(selectedCard.id) || !samePair.has(opponent!.id)) return false;
         return Math.abs(Date.parse(bout.event.startsAtUtc) - Date.parse(fight.happenedAt)) <= 3 * 86_400_000;
       });
+      // Already imported on an earlier read of this same row: leave it alone.
+      if (!existing && allBouts.has(historicalBoutId({ fighter: selectedCard, opponent, fight }))) continue;
       const resolvedBout = existing
         ? completedExistingBout({ bout: existing, subjectRef: selectedCard.id, fight, sourceRef, retrievedAt })
         : historicalBout({ fighter: selectedCard, opponent, fight, sourceRef, retrievedAt });

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8451286def5cb8559f74",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-strickland-vs-magomedov",
+    "name": "UFC on ESPN: Strickland vs. Magomedov",
+    "startsAtUtc": "2023-07-01T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:sean-strickland",
+    "blue": "ufc:abusupiyan-magomedov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-07-01T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42944791"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:04:05.941Z",
+    "lastSeenAt": "2026-08-03T18:04:05.941Z",
+    "sourceRefs": [
+      "source:wikipedia:42944791"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42944791"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 560,
+    "sourceRefs": [
+      "source:wikipedia:42944791"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:04:05.941Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42944791"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:04:05.941Z"
+}

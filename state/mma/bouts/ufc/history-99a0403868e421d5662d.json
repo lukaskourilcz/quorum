@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-99a0403868e421d5662d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-251",
+    "name": "UFC 251",
+    "startsAtUtc": "2020-07-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:jessica-andrade",
+    "blue": "ufc:rose-namajunas"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-07-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:40078160"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

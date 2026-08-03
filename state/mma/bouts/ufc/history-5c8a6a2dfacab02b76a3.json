@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-5c8a6a2dfacab02b76a3",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-296",
+    "name": "UFC 296",
+    "startsAtUtc": "2023-12-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexandre-pantoja",
+    "blue": "ufc:brandon-royval"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-12-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54180928"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

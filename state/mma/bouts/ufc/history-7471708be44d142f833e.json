@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-7471708be44d142f833e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-b-achowicz-vs-rakic",
+    "name": "UFC on ESPN: Błachowicz vs. Rakić",
+    "startsAtUtc": "2022-05-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aleksandar-rakic",
+    "blue": "ufc:jan-b-achowicz"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-05-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:56012518"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:56012518"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:56012518"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (knee injury)",
+    "round": 3,
+    "elapsedSeconds": 671,
+    "sourceRefs": [
+      "source:wikipedia:56012518"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012518"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

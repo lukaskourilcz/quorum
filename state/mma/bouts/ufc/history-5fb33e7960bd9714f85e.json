@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-5fb33e7960bd9714f85e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-192",
+    "name": "UFC 192",
+    "startsAtUtc": "2015-10-03T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:angela-hill",
+    "blue": "ufc:rose-namajunas"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-10-03T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:47691727"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:47691727"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (rear-naked choke)",
+    "round": 1,
+    "elapsedSeconds": 167,
+    "sourceRefs": [
+      "source:wikipedia:47691727"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

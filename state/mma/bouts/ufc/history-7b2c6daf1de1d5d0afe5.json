@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-7b2c6daf1de1d5d0afe5",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-286",
+    "name": "UFC 286",
+    "startsAtUtc": "2023-03-18T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:kamaru-usman",
+    "blue": "ufc:leon-edwards"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-03-18T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:49620123"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:49620123"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:49620123"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (majority)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:49620123"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

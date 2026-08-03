@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-535e3eee7445df042b0e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-280",
+    "name": "UFC 280",
+    "startsAtUtc": "2022-10-22T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:islam-makhachev",
+    "blue": "ufc:charles-oliveira"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-10-22T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:44264537"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:58:29.899Z",
+    "lastSeenAt": "2026-08-03T17:58:29.899Z",
+    "sourceRefs": [
+      "source:wikipedia:44264537"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:44264537"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (arm-triangle choke)",
+    "round": 2,
+    "elapsedSeconds": 496,
+    "sourceRefs": [
+      "source:wikipedia:44264537"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:58:29.899Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44264537"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:58:29.899Z"
+}

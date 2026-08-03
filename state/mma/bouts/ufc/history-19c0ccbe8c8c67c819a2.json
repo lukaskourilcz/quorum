@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-19c0ccbe8c8c67c819a2",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-abc-sandhagen-vs-nurmagomedov",
+    "name": "UFC on ABC: Sandhagen vs. Nurmagomedov",
+    "startsAtUtc": "2024-08-03T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alonzo-menifield",
+    "blue": "ufc:azamat-murzakanov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-08-03T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:64198883"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64198883"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punches)",
+    "round": 2,
+    "elapsedSeconds": 498,
+    "sourceRefs": [
+      "source:wikipedia:64198883"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

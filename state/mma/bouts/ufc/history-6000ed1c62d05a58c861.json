@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6000ed1c62d05a58c861",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-240",
+    "name": "UFC 240",
+    "startsAtUtc": "2019-07-27T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexandre-pantoja",
+    "blue": "ufc:deiveson-figueiredo"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2019-07-27T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54180928"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

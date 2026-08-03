@@ -1,11 +1,25 @@
 import { FighterCardSchema, FighterHistoryBoutSchema, independentMmaSourceCount, type BoutRecord, type FighterRecord } from "../contracts/mma.js";
 import { seedRatings } from "./engine.js";
+import { computeModelEligibility, resolveAgreeingDiscrepancies } from "./field-agreement.js";
 import type { z } from "zod";
 
 type HistoryBout = z.infer<typeof FighterHistoryBoutSchema>;
 
 function round(value: number): number {
   return Number(value.toFixed(6));
+}
+
+/**
+ * How many bouts a stated record accounts for — "24-6-0 (1 NC)" is thirty-one.
+ *
+ * Null when the string is not a record, so a caller cannot mistake an unreadable value for zero.
+ */
+export function recordBoutCount(record: string | null): number | null {
+  if (!record) return null;
+  const parts = /^\s*(\d+)\s*[-–]\s*(\d+)\s*[-–]\s*(\d+)/u.exec(record);
+  if (!parts) return null;
+  const noContests = /\((\d+)\s*NC\)/iu.exec(record);
+  return Number(parts[1]) + Number(parts[2]) + Number(parts[3]) + (noContests ? Number(noContests[1]) : 0);
 }
 
 export function deriveCareerStats(history: readonly HistoryBout[], now?: Date): Record<string, number | null> {
@@ -96,9 +110,27 @@ export function rebuildDerivedFighterData(input: {
       ? `${values.wins}-${values.losses}-${values.draws}${values.noContests ? ` (${values.noContests} NC)` : ""}`
       : null;
     const aggregateRecord = typeof fighter.fields.record?.value === "string" ? fighter.fields.record.value.trim() : null;
-    const recordMismatch = Boolean(derivedRecord && aggregateRecord && derivedRecord !== aggregateRecord);
-    const discrepancies = recordMismatch && !fighter.discrepancies.some((item) => item.field === "record" && item.status === "open")
-      ? [...fighter.discrepancies, {
+    // A derived record shorter than the stated one is an incomplete history, not two sources
+    // disagreeing. We hold four of Ilia Topuria's eighteen bouts; reading 3-1-0 against 17-1-0 as
+    // a contradiction opened a discrepancy that could never close, and an open discrepancy on a
+    // critical field bars the fighter from the model permanently. Only a history that covers the
+    // stated bout count can contradict it.
+    const aggregateBouts = recordBoutCount(aggregateRecord);
+    const historyCoversRecord = aggregateBouts === null || history.length >= aggregateBouts;
+    const recordMismatch = Boolean(derivedRecord && aggregateRecord && derivedRecord !== aggregateRecord && historyCoversRecord);
+    const historyIncomplete = Boolean(derivedRecord && aggregateRecord && derivedRecord !== aggregateRecord && !historyCoversRecord);
+    // Ones this rebuild opened in an earlier run and no longer stands behind. Only its own —
+    // a disagreement between two outside sources is not this function's to close.
+    const reviewed = resolveAgreeingDiscrepancies(fighter.discrepancies);
+    const carried = recordMismatch
+      ? reviewed
+      : reviewed.filter((item) => !(
+        item.field === "record"
+        && item.status === "open"
+        && item.values.some((value) => value.sourceRef === `derived:${fighter.id}:history`)
+      ));
+    const discrepancies = recordMismatch && !carried.some((item) => item.field === "record" && item.status === "open")
+      ? [...carried, {
           field: "record",
           values: [
             { value: aggregateRecord!, sourceRef: fighter.fields.record?.sourceRefs[0] ?? "source:unknown" },
@@ -106,10 +138,15 @@ export function rebuildDerivedFighterData(input: {
           ],
           status: "open" as const
         }]
-      : fighter.discrepancies;
-    const qualityGaps = recordMismatch
+      : carried;
+    const withMismatch = recordMismatch
       ? [...new Set([...fighter.quality.gaps, "record-history-mismatch"])]
       : fighter.quality.gaps.filter((gap) => gap !== "record-history-mismatch");
+    // Still recorded, still visible in the backfill queue and the roster status — it just does not
+    // masquerade as a source conflict.
+    const qualityGaps = historyIncomplete
+      ? [...new Set([...withMismatch, "record-history-incomplete"])]
+      : withMismatch.filter((gap) => gap !== "record-history-incomplete");
     const historyRefs = history.flatMap((bout) => bout.sourceRefs);
     const statsProfiles = history.length ? [{
       id: "derived-career",
@@ -139,11 +176,11 @@ export function rebuildDerivedFighterData(input: {
       rating,
       discrepancies,
       quality: { ...fighter.quality, gaps: qualityGaps },
-      modelEligible: recordMismatch ? false : fighter.modelEligible,
+      modelEligible: recordMismatch ? false : computeModelEligibility(fighter.criticalFields, fighter.fields, discrepancies),
       changeLog: changed ? [...fighter.changeLog, {
         at: timestamp,
         kind: "rating-rebuild",
-        fields: ["history", "statsProfiles", "rating", ...(recordMismatch ? ["discrepancies", "quality"] : [])],
+        fields: ["history", "statsProfiles", "rating", ...(recordMismatch || historyIncomplete ? ["discrepancies", "quality"] : [])],
         sourceRefs: [...new Set(historyRefs)],
         note: "Rebuilt career totals and Glicko state from canonical completed bouts."
       }] : fighter.changeLog,

@@ -139,7 +139,7 @@ describe("FightAIQ roster and history automation", () => {
       root,
       fighters: [red, blue],
       bouts: [announced],
-      queue: [{ fighterRef: red.id, priority: 1_000, reason: "upcoming-bout", gaps: [] }],
+      queue: [{ fighterRef: red.id, priority: 1_000, reason: "upcoming-bout", gaps: [], reviewedAt: "" }],
       context: { allowHosts: ["en.wikipedia.org"], now: new Date("2026-08-09T08:00:00.000Z") },
       retrievedAt: new Date("2026-08-09T08:00:00.000Z"),
       resolveImpl: async () => ["203.0.113.10"],
@@ -218,7 +218,23 @@ describe("FightAIQ roster and history automation", () => {
     expect(second).toEqual(first);
     expect(first.find((fighter) => fighter.id === red.id)?.rating.rating).toBeGreaterThan(1500);
     expect(first.find((fighter) => fighter.id === red.id)?.statsProfiles[0]?.values).toMatchObject({ bouts: 1, wins: 1, finishRate: 1, koTkoWins: 1, recentThreeWinRate: 1 });
-    expect(first.find((fighter) => fighter.id === red.id)?.discrepancies).toContainEqual(expect.objectContaining({ field: "record", status: "open" }));
+    // One bout on file against a stated 12-2-0 is an incomplete history, not a contradiction.
+    // Treating it as one opened a discrepancy that could never close on every partially-populated
+    // card — all ninety-two of them — and an open discrepancy on a critical field bars the fighter
+    // from the model. The gap is still recorded; it just is not filed as two sources disagreeing.
+    const partial = first.find((fighter) => fighter.id === red.id)!;
+    expect(partial.discrepancies.filter((item) => item.field === "record" && item.status === "open")).toEqual([]);
+    expect(partial.quality.gaps).toContain("record-history-incomplete");
+
+    // A history that does cover the stated record and still disagrees is the real signal, and it
+    // still fires: one bout on file, a stated record of no bouts won.
+    const contradicted = rebuildDerivedFighterData({
+      ...input,
+      fighters: [FighterCardSchema.parse({ ...red, fields: { ...red.fields, record: { ...red.fields.record!, value: "0-1-0" } } })]
+    });
+    expect(contradicted[0]?.discrepancies).toContainEqual(expect.objectContaining({ field: "record", status: "open" }));
+    expect(contradicted[0]?.quality.gaps).toContain("record-history-mismatch");
+    expect(contradicted[0]?.modelEligible).toBe(false);
   });
 
   it("contains no paid-only or retired FightAIQ source entry", async () => {
@@ -268,7 +284,7 @@ describe("the backfill respects the roster policy", () => {
       root,
       fighters: [subject],
       bouts: [],
-      queue: [{ fighterRef: subject.id, priority: 1_000, reason: "upcoming-bout", gaps: [] }],
+      queue: [{ fighterRef: subject.id, priority: 1_000, reason: "upcoming-bout", gaps: [], reviewedAt: "" }],
       context: { allowHosts: ["en.wikipedia.org"], now: new Date("2026-08-09T08:00:00.000Z") },
       retrievedAt: new Date("2026-08-09T08:00:00.000Z"),
       ...(allowedIds ? { allowedIds } : {}),

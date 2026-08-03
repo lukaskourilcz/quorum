@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-67bfeecd765b0a3b1052",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-303",
+    "name": "UFC 303",
+    "startsAtUtc": "2024-06-29T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alex-pereira",
+    "blue": "ufc:jiri-prochazka"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-06-29T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42031348"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (head kick and punches)",
+    "round": 2,
+    "elapsedSeconds": 313,
+    "sourceRefs": [
+      "source:wikipedia:42031348"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

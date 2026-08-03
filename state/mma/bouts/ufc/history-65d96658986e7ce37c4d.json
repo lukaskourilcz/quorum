@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-65d96658986e7ce37c4d",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-fox-dos-anjos-vs-cowboy-2",
+    "name": "UFC on Fox: dos Anjos vs. Cowboy 2",
+    "startsAtUtc": "2015-12-19T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:kamaru-usman",
+    "blue": "ufc:leon-edwards"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-12-19T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:49620123"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:49620123"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:49620123"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:49620123"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

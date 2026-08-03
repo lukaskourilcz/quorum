@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-d90c3977b53c7a170a07",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-289",
+    "name": "UFC 289",
+    "startsAtUtc": "2023-06-10T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:charles-oliveira",
+    "blue": "ufc:beneil-dariush"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-06-10T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:27167974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:09:35.256Z",
+    "lastSeenAt": "2026-08-03T18:09:35.256Z",
+    "sourceRefs": [
+      "source:wikipedia:27167974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:27167974"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 250,
+    "sourceRefs": [
+      "source:wikipedia:27167974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:09:35.256Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:27167974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:09:35.256Z"
+}

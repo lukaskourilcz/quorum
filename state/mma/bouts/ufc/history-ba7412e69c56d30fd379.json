@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ba7412e69c56d30fd379",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-dos-anjos-vs-edwards",
+    "name": "UFC on ESPN: dos Anjos vs. Edwards",
+    "startsAtUtc": "2019-07-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:leon-edwards",
+    "blue": "ufc:rafael-dos-anjos"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2019-07-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46384799"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:46384799"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46384799"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:46384799"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46384799"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

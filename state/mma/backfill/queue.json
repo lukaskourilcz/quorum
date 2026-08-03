@@ -1,1111 +1,1202 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-03T09:55:50.919Z",
+  "generatedAt": "2026-08-03T18:14:46.640Z",
   "items": [
     {
-      "fighterRef": "ufc:belal-muhammad",
-      "priority": 670,
+      "fighterRef": "ufc:aaron-pico",
+      "priority": 620,
       "reason": "missing-history",
       "gaps": [
-        "division",
-        "record",
         "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:billy-elekana",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:billy-quarantillo",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:bogdan-guskov",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brad-tavares",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
+        "reachCm"
+      ],
+      "reviewedAt": "2026-08-03T17:58:29.899Z"
     },
     {
       "fighterRef": "ufc:brando-pericic",
-      "priority": 670,
+      "priority": 620,
       "reason": "missing-history",
       "gaps": [
+        "stance",
+        "team"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "name",
         "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:cody-garbrandt",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:conor-mcgregor",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:dricus-du-plessis",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ilia-topuria",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:kamaru-usman",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:leon-edwards",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:merab-dvalishvili",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:rafael-dos-anjos",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:robert-whittaker",
-      "priority": 670,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:aaron-pico",
-      "priority": 650,
-      "reason": "missing-history",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:adrian-yanez",
-      "priority": 650,
-      "reason": "missing-history",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:aleksandar-rakic",
-      "priority": 650,
-      "reason": "missing-history",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alexander-volkanovski",
-      "priority": 650,
-      "reason": "missing-history",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:justin-gaethje",
-      "priority": 650,
-      "reason": "missing-history",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ailin-perez",
-      "priority": 640,
-      "reason": "missing-history",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:aleksandre-topuria",
-      "priority": 640,
+      "priority": 610,
       "reason": "missing-history",
       "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:islam-makhachev",
-      "priority": 640,
-      "reason": "missing-history",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
+        "heightCm"
+      ],
+      "reviewedAt": "2026-08-03T17:58:29.899Z"
     },
     {
       "fighterRef": "ufc:alateng-heili",
-      "priority": 620,
+      "priority": 610,
       "reason": "missing-history",
       "gaps": [
-        "stance",
-        "heightCm"
+        "stance"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "name",
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:andre-lima",
-      "priority": 620,
+      "priority": 610,
       "reason": "missing-history",
       "gaps": [
-        "stance",
-        "heightCm"
+        "stance"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:andre-petroski",
-      "priority": 620,
+      "priority": 610,
       "reason": "missing-history",
       "gaps": [
-        "stance",
-        "heightCm"
+        "stance"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:ailin-perez",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
       ]
     },
     {
       "fighterRef": "ufc:anshul-jubli",
-      "priority": 620,
+      "priority": 600,
       "reason": "missing-history",
-      "gaps": [
-        "heightCm",
-        "dateOfBirth"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alex-perez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
+      "gaps": [],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
         "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:alexander-hernandez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
+      "fighterRef": "ufc:conor-mcgregor",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
         "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:amanda-ribas",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:arman-tsarukyan",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:azamat-murzakanov",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:benoit-saint-denis",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brandon-moreno",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brandon-royval",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brendan-allen",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brian-ortega",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:charles-oliveira",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ciryl-gane",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:deiveson-figueiredo",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:israel-adesanya",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jamahal-hill",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jan-b-achowicz",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jessica-andrade",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:jiri-prochazka",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:julianna-pena",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:max-holloway",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:miesha-tate",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:raquel-pennington",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:rose-namajunas",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:sean-o-malley",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yair-rodriguez",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:zhang-weili",
-      "priority": 370,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team"
-      ]
-    },
-    {
-      "fighterRef": "ufc:carlos-ulberg",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:joshua-van",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:petr-yan",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:sean-strickland",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:valentina-shevchenko",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
+        "record"
       ]
     },
     {
       "fighterRef": "oktagon:losene-keita",
-      "priority": 350,
-      "reason": "missing-profile",
+      "priority": 490,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
         "heightCm",
         "reachCm",
-        "dateOfBirth",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "oktagon:lucia-szabova",
-      "priority": 350,
-      "reason": "missing-profile",
+      "priority": 490,
+      "reason": "uncorroborated",
       "gaps": [
         "record",
         "stance",
         "heightCm",
-        "reachCm",
-        "dateOfBirth"
+        "reachCm"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
       ]
     },
     {
       "fighterRef": "oktagon:will-fleury",
-      "priority": 350,
-      "reason": "missing-profile",
+      "priority": 490,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
         "heightCm",
         "reachCm",
-        "dateOfBirth",
         "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:aiemann-zahabi",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:alexander-volkov",
-      "priority": 350,
-      "reason": "missing-profile",
+      "priority": 480,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
-        "dateOfBirth",
         "team",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:tom-aspinall",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "dateOfBirth",
-        "team",
-        "record-history-mismatch"
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:angela-hill",
-      "priority": 340,
-      "reason": "missing-profile",
+      "priority": 480,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
         "reachCm",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "oktagon:karlos-vemola",
-      "priority": 330,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:charles-oliveira",
+      "priority": 480,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "division",
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "name",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:cody-garbrandt",
+      "priority": 480,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
         "reachCm",
-        "record-history-mismatch"
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "oktagon:makhmud-muradov",
-      "priority": 330,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:jessica-andrade",
+      "priority": 480,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:mallory-martin",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:martin-buday",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:mateusz-legierski",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:abusupiyan-magomedov",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alex-pereira",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
         "reachCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alexa-grasso",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alexandre-pantoja",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alonzo-menifield",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
-      ]
-    },
-    {
-      "fighterRef": "ufc:amanda-lemos",
-      "priority": 330,
-      "reason": "missing-profile",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "record-history-mismatch"
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:amir-albazi",
-      "priority": 330,
-      "reason": "missing-profile",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:andre-fili",
-      "priority": 330,
-      "reason": "missing-profile",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:ariane-carnelossi",
-      "priority": 330,
-      "reason": "missing-profile",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
-        "record-history-mismatch"
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:arnold-allen",
-      "priority": 330,
-      "reason": "missing-profile",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
         "stance",
-        "heightCm",
-        "dateOfBirth"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:gustavo-lopez",
-      "priority": 320,
-      "reason": "missing-profile",
-      "gaps": [
-        "heightCm",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "oktagon:zhalgas-zhumagulov",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "oktagon:karlos-vemola",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "reachCm",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:aljamain-sterling",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "oktagon:makhmud-muradov",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "stance",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:amanda-nunes",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "oktagon:mallory-martin",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "stance",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:anthony-hernandez",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "oktagon:martin-buday",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "stance",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:aori-qileng",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "oktagon:mateusz-legierski",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "stance",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:ateba-gautier",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:abusupiyan-magomedov",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
-        "dateOfBirth"
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "name",
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:azamat-bekoev",
-      "priority": 320,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:alex-pereira",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm",
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alexa-grasso",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
         "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "oktagon:felipe-lima",
-      "priority": 310,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:alexandre-pantoja",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm"
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "oktagon:viktor-pesta",
-      "priority": 310,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:alonzo-menifield",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm"
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
-      "fighterRef": "ufc:asu-almabayev",
-      "priority": 310,
-      "reason": "missing-profile",
+      "fighterRef": "ufc:amanda-lemos",
+      "priority": 470,
+      "reason": "uncorroborated",
       "gaps": [
-        "heightCm"
+        "stance",
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:belal-muhammad",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
       "fighterRef": "ufc:beneil-dariush",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:billy-quarantillo",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:brad-tavares",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:dricus-du-plessis",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "division",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:leon-edwards",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:merab-dvalishvili",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:valentina-shevchenko",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:azamat-bekoev",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-02T15:43:59.798Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:gustavo-lopez",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:27.954Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:zhalgas-zhumagulov",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:27.954Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:tom-aspinall",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:27.954Z",
+      "uncorroborated": [
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aori-qileng",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:33.909Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:billy-elekana",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:33.909Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:amanda-nunes",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:anthony-hernandez",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:carlos-ulberg",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:felipe-lima",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "heightCm"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aleksandar-rakic",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aljamain-sterling",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:bogdan-guskov",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:ilia-topuria",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:kamaru-usman",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:asu-almabayev",
+      "priority": 450,
+      "reason": "uncorroborated",
+      "gaps": [],
+      "reviewedAt": "2026-08-02T15:43:59.798Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:ateba-gautier",
+      "priority": 450,
+      "reason": "uncorroborated",
+      "gaps": [],
+      "reviewedAt": "2026-08-02T15:43:59.798Z",
+      "uncorroborated": [
+        "name",
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:viktor-pesta",
+      "priority": 450,
+      "reason": "uncorroborated",
+      "gaps": [],
+      "reviewedAt": "2026-08-03T18:14:27.954Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alexander-hernandez",
+      "priority": 360,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:amanda-ribas",
+      "priority": 360,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:azamat-murzakanov",
+      "priority": 360,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:benoit-saint-denis",
+      "priority": 360,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:brandon-royval",
+      "priority": 360,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:alex-perez",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:arman-tsarukyan",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:brandon-moreno",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:brendan-allen",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:brian-ortega",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:ciryl-gane",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:deiveson-figueiredo",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:israel-adesanya",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:jamahal-hill",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:jan-b-achowicz",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:jiri-prochazka",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:julianna-pena",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:max-holloway",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:miesha-tate",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:rafael-dos-anjos",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:raquel-pennington",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:robert-whittaker",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:rose-namajunas",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:sean-o-malley",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:yair-rodriguez",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:zhang-weili",
+      "priority": 350,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "stance",
+        "reachCm",
+        "team"
+      ],
+      "reviewedAt": ""
+    },
+    {
+      "fighterRef": "ufc:joshua-van",
+      "priority": 330,
+      "reason": "missing-profile",
+      "gaps": [
+        "heightCm",
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:02:46.021Z"
+    },
+    {
+      "fighterRef": "ufc:aiemann-zahabi",
+      "priority": 330,
+      "reason": "missing-profile",
+      "gaps": [
+        "heightCm",
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:02:51.598Z"
+    },
+    {
+      "fighterRef": "ufc:adrian-yanez",
+      "priority": 320,
+      "reason": "missing-profile",
+      "gaps": [
+        "heightCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:02:46.021Z"
+    },
+    {
+      "fighterRef": "ufc:alexander-volkanovski",
+      "priority": 320,
+      "reason": "missing-profile",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:02:51.598Z"
+    },
+    {
+      "fighterRef": "ufc:islam-makhachev",
       "priority": 310,
       "reason": "missing-profile",
       "gaps": [
-        "stance"
-      ]
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T17:58:29.899Z"
+    },
+    {
+      "fighterRef": "ufc:petr-yan",
+      "priority": 310,
+      "reason": "missing-profile",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:04:05.941Z"
+    },
+    {
+      "fighterRef": "ufc:sean-strickland",
+      "priority": 310,
+      "reason": "missing-profile",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:04:05.941Z"
+    },
+    {
+      "fighterRef": "ufc:justin-gaethje",
+      "priority": 310,
+      "reason": "missing-profile",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:11:44.232Z"
     }
   ]
 }

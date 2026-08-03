@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-2cda4f20289ba23935e9",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-329",
+    "name": "UFC 329",
+    "startsAtUtc": "2026-07-11T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:cody-garbrandt",
+    "blue": "ufc:adrian-yanez"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-07-11T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:47163936"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:47163936"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 167,
+    "sourceRefs": [
+      "source:wikipedia:47163936"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-00824210ed3bacc83d80",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-289",
+    "name": "UFC 289",
+    "startsAtUtc": "2023-06-10T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:aiemann-zahabi",
+    "blue": "ufc:aori-qileng"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-06-10T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54051600"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:51.598Z",
+    "lastSeenAt": "2026-08-03T18:02:51.598Z",
+    "sourceRefs": [
+      "source:wikipedia:54051600"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54051600"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 1,
+    "elapsedSeconds": 64,
+    "sourceRefs": [
+      "source:wikipedia:54051600"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:51.598Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54051600"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:51.598Z"
+}

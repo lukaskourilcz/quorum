@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-9ff49b1b905befd302e2",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-300",
+    "name": "UFC 300",
+    "startsAtUtc": "2024-04-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:justin-gaethje",
+    "blue": "ufc:max-holloway"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-04-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:49172283"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:11:44.232Z",
+    "lastSeenAt": "2026-08-03T18:11:44.232Z",
+    "sourceRefs": [
+      "source:wikipedia:49172283"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:49172283"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "KO (punch)",
+    "round": 5,
+    "elapsedSeconds": 1499,
+    "sourceRefs": [
+      "source:wikipedia:49172283"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:11:44.232Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49172283"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:11:44.232Z"
+}

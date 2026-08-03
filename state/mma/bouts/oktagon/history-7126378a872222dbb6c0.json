@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-7126378a872222dbb6c0",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-92",
+    "name": "Oktagon 92",
+    "startsAtUtc": "2026-08-01T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:will-fleury",
+    "blue": "oktagon:makhmud-muradov"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-08-01T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:09:35.256Z",
+    "lastSeenAt": "2026-08-03T18:09:35.256Z",
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757307"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 319,
+    "sourceRefs": [
+      "source:wikipedia:78757307"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:09:35.256Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757307"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:09:35.256Z"
+}

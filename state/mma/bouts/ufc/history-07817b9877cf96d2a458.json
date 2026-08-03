@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-07817b9877cf96d2a458",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-306",
+    "name": "UFC 306",
+    "startsAtUtc": "2024-09-14T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:merab-dvalishvili",
+    "blue": "ufc:sean-o-malley"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-09-14T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:56012380"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:58:29.899Z",
+    "lastSeenAt": "2026-08-03T17:58:29.899Z",
+    "sourceRefs": [
+      "source:wikipedia:56012380"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:56012380"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:56012380"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:58:29.899Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012380"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:58:29.899Z"
+}

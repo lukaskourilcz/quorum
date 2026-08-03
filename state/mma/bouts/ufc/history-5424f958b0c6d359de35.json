@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-5424f958b0c6d359de35",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-290",
+    "name": "UFC 290",
+    "startsAtUtc": "2023-07-08T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexander-volkanovski",
+    "blue": "ufc:yair-rodriguez"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-07-08T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54197580"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:51.598Z",
+    "lastSeenAt": "2026-08-03T18:02:51.598Z",
+    "sourceRefs": [
+      "source:wikipedia:54197580"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54197580"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 3,
+    "elapsedSeconds": 859,
+    "sourceRefs": [
+      "source:wikipedia:54197580"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:51.598Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54197580"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:51.598Z"
+}

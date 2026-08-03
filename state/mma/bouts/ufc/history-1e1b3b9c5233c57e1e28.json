@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-1e1b3b9c5233c57e1e28",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-300",
+    "name": "UFC 300",
+    "startsAtUtc": "2024-04-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:cody-garbrandt",
+    "blue": "ufc:deiveson-figueiredo"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-04-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:47163936"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:47163936"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 542,
+    "sourceRefs": [
+      "source:wikipedia:47163936"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

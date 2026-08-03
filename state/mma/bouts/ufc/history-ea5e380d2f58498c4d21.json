@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-ea5e380d2f58498c4d21",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-251",
+    "name": "UFC 251",
+    "startsAtUtc": "2020-07-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexander-volkanovski",
+    "blue": "ufc:max-holloway"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2020-07-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54197580"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:51.598Z",
+    "lastSeenAt": "2026-08-03T18:02:51.598Z",
+    "sourceRefs": [
+      "source:wikipedia:54197580"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54197580"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:54197580"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:51.598Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54197580"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:51.598Z"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-17f42834f343a9f2ea1e",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-edwards-vs-muhammad",
+    "name": "UFC Fight Night: Edwards vs. Muhammad",
+    "startsAtUtc": "2021-03-13T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:leon-edwards",
+    "blue": "ufc:belal-muhammad"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-03-13T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:46384799"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:46384799"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:46384799"
+  ],
+  "result": {
+    "winner": "no-contest",
+    "method": "NC (accidental eye poke)",
+    "round": 2,
+    "elapsedSeconds": 318,
+    "sourceRefs": [
+      "source:wikipedia:46384799"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:46384799"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

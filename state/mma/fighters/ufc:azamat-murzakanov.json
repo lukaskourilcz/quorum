@@ -6,7 +6,7 @@
   "canonicalName": "Azamat Murzakanov",
   "aliases": [],
   "identity": {
-    "wikidataId": null,
+    "wikidataId": "Q56000949",
     "wikipediaTitle": "Azamat Murzakanov",
     "externalIds": {
       "wikipediaPageId": "56012507"
@@ -25,6 +25,15 @@
   ],
   "sources": [
     {
+      "id": "source:wikidata:Q56000949",
+      "url": "https://www.wikidata.org/wiki/Q56000949",
+      "publisher": "Wikidata",
+      "title": "Azamat Murzakanov",
+      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "evidenceTier": "secondary",
+      "license": "CC0"
+    },
+    {
       "id": "source:wikipedia:56012507",
       "url": "https://en.wikipedia.org/wiki/Azamat_Murzakanov",
       "publisher": "Wikipedia",
@@ -38,9 +47,19 @@
     "name": {
       "value": "Azamat Murzakanov",
       "sourceRefs": [
+        "source:wikidata:Q56000949",
         "source:wikipedia:56012507"
       ],
-      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "dateOfBirth": {
+      "value": "1989-04-12",
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "retrievedAt": "2026-08-03T18:14:46.640Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -66,6 +85,51 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-19c0ccbe8c8c67c819a2",
+      "eventRef": "ufc:event:history-ufc-on-abc-sandhagen-vs-nurmagomedov",
+      "happenedAt": "2024-08-03T00:00:00.000Z",
+      "opponentRef": "ufc:alonzo-menifield",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 498,
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-1bd33757a29ac4e8d4b9",
+      "eventRef": "ufc:event:history-ufc-321",
+      "happenedAt": "2025-10-25T00:00:00.000Z",
+      "opponentRef": "ufc:aleksandar-rakic",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 191,
+      "sourceRefs": [
+        "source:wikipedia:56012518"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-bf99ff077221bfb5a5b6",
+      "eventRef": "ufc:event:history-ufc-321",
+      "happenedAt": "2025-10-25T00:00:00.000Z",
+      "opponentRef": "ufc:aleksandar-rakic",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 191,
+      "sourceRefs": [
+        "source:wikipedia:56012518"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -75,37 +139,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:azamat-murzakanov:history",
-      "bouts": 1,
+      "bouts": 4,
       "values": {
-        "bouts": 1,
-        "wins": 1,
+        "bouts": 4,
+        "wins": 4,
         "losses": 0,
         "draws": 0,
         "noContests": 0,
         "finishRate": 1,
-        "koTkoWins": 1,
+        "koTkoWins": 4,
         "submissionWins": 0,
         "decisionWins": 0,
         "koTkoWinShare": 1,
         "submissionWinShare": 0,
         "decisionWinShare": 0,
-        "averageElapsedSeconds": 498,
+        "averageElapsedSeconds": 344.5,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
-        "fightsPerYear": 365.25,
-        "layoffDays": 730
+        "fightsPerYear": 2.44582,
+        "layoffDays": 282
       },
-      "updatedAt": "2026-08-03T09:55:50.919Z"
+      "updatedAt": "2026-08-03T18:14:46.640Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1616.64192073,
-    "deviation": 286.92720667,
-    "volatility": 0.05999928,
-    "boutCount": 1,
-    "asOfBoutRef": "ufc:bout:history-060198c4109b2e06c124",
-    "updatedAt": "2026-08-03T09:55:50.919Z"
+    "rating": 1687.61937241,
+    "deviation": 237.0807858,
+    "volatility": 0.05999735,
+    "boutCount": 4,
+    "asOfBoutRef": "ufc:bout:history-bf99ff077221bfb5a5b6",
+    "updatedAt": "2026-08-03T18:14:46.640Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -115,7 +179,6 @@
       "stance",
       "heightCm",
       "reachCm",
-      "dateOfBirth",
       "team"
     ],
     "lastReviewedAt": null
@@ -145,11 +208,1116 @@
         "source:wikipedia:64198883"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T17:58:29.899Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T17:58:29.899Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:02:46.021Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:02:46.021Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:05.941Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:05.941Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:12.366Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:12.366Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:17.770Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:17.770Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:23.096Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:23.096Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:29.249Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:29.249Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:34.694Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:34.694Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:39.931Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:39.931Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:45.714Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:45.714Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:04:51.282Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:04:51.282Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:06.587Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:06.587Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:12.902Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:12.902Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:18.387Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:18.387Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:24.380Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:24.380Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:29.891Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:29.891Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:35.339Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:35.339Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:41.334Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:41.334Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:46.410Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:46.410Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:07:52.083Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:07:52.083Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:09:35.256Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:09:35.256Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:09:40.422Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:09:40.422Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:09:45.382Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:09:45.382Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:09:50.790Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:09:50.790Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:09:56.416Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:09:56.416Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:10:02.590Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:10:02.590Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:10:08.080Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:10:08.080Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:10:13.644Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:10:13.644Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:10:20.502Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:10:20.502Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:11:44.232Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:11:44.232Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:11:50.579Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:11:50.579Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:11:56.153Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:11:56.153Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:12:01.701Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:12:01.701Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:12:07.211Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:12:07.211Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:12:13.258Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:12:13.258Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:12:18.238Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:12:18.238Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:12:23.600Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:12:23.600Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:12:29.582Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:12:29.582Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:14:40.046Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:14:40.046Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:14:46.640Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth"
+      ],
+      "sourceRefs": [
+        "source:wikidata:Q56000949"
+      ],
+      "note": "Read the Wikidata item Q56000949 for date of birth, height and the English label."
+    },
+    {
+      "at": "2026-08-03T18:14:46.640Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.125,
-  "corroboration": 0,
+  "completeness": 0.25,
+  "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T09:55:50.919Z"
+  "updatedAt": "2026-08-03T18:14:46.640Z"
 }

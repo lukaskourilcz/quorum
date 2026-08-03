@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-0bca316cae8de039e7cb",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-bermudez-vs-the-korean-zombie",
+    "name": "UFC Fight Night: Bermudez vs. The Korean Zombie",
+    "startsAtUtc": "2017-02-04T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:jessica-andrade",
+    "blue": "ufc:angela-hill"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-02-04T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:46.021Z",
+    "lastSeenAt": "2026-08-03T18:02:46.021Z",
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:40078160"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:46.021Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:46.021Z"
+}

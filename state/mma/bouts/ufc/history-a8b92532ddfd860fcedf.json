@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-a8b92532ddfd860fcedf",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-282",
+    "name": "UFC 282",
+    "startsAtUtc": "2022-12-10T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:billy-quarantillo",
+    "blue": "ufc:alexander-hernandez"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-12-10T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64857899"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:53:07.072Z",
+    "lastSeenAt": "2026-08-03T17:53:07.072Z",
+    "sourceRefs": [
+      "source:wikipedia:64857899"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64857899"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (knees and punches)",
+    "round": 2,
+    "elapsedSeconds": 570,
+    "sourceRefs": [
+      "source:wikipedia:64857899"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:53:07.072Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64857899"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:53:07.072Z"
+}

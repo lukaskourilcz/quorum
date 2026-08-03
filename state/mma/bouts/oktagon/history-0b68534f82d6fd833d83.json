@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:history-0b68534f82d6fd833d83",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:history-oktagon-61",
+    "name": "Oktagon 61",
+    "startsAtUtc": "2024-09-21T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "oktagon:losene-keita",
+    "blue": "oktagon:mateusz-legierski"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-09-21T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:09:35.256Z",
+    "lastSeenAt": "2026-08-03T18:09:35.256Z",
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:78757319"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:78757319"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:09:35.256Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:09:35.256Z"
+}

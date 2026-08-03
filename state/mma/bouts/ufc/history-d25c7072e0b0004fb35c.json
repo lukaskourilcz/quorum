@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-d25c7072e0b0004fb35c",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-holloway-vs-oliveira",
+    "name": "UFC Fight Night: Holloway vs. Oliveira",
+    "startsAtUtc": "2015-08-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:charles-oliveira",
+    "blue": "ufc:max-holloway"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2015-08-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:27167974"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:46.021Z",
+    "lastSeenAt": "2026-08-03T18:02:46.021Z",
+    "sourceRefs": [
+      "source:wikipedia:27167974"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:27167974"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (neck injury)",
+    "round": 1,
+    "elapsedSeconds": 99,
+    "sourceRefs": [
+      "source:wikipedia:27167974"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:46.021Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:27167974"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:46.021Z"
+}

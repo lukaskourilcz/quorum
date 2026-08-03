@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-2b1db953c1e9be8dc259",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-284",
+    "name": "UFC 284",
+    "startsAtUtc": "2023-02-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:islam-makhachev",
+    "blue": "ufc:alexander-volkanovski"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-02-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:44264537"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T17:58:29.899Z",
+    "lastSeenAt": "2026-08-03T17:58:29.899Z",
+    "sourceRefs": [
+      "source:wikipedia:44264537"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:44264537"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:44264537"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T17:58:29.899Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44264537"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T17:58:29.899Z"
+}

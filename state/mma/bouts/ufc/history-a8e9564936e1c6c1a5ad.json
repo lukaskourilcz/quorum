@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-a8e9564936e1c6c1a5ad",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-297",
+    "name": "UFC 297",
+    "startsAtUtc": "2024-01-20T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:dricus-du-plessis",
+    "blue": "ufc:sean-strickland"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-01-20T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:33.909Z",
+    "lastSeenAt": "2026-08-03T18:14:33.909Z",
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:62595898"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:62595898"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:33.909Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:62595898"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:33.909Z"
+}

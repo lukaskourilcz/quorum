@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-aed876569ee4347d2b0b",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-293",
+    "name": "UFC 293",
+    "startsAtUtc": "2023-09-10T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:sean-strickland",
+    "blue": "ufc:israel-adesanya"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2023-09-10T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:42944791"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:04:05.941Z",
+    "lastSeenAt": "2026-08-03T18:04:05.941Z",
+    "sourceRefs": [
+      "source:wikipedia:42944791"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:42944791"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:42944791"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:04:05.941Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42944791"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:04:05.941Z"
+}

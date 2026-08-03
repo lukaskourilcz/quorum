@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-6c9d33948c8fb68fdba0",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-273",
+    "name": "UFC 273",
+    "startsAtUtc": "2022-04-09T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:petr-yan",
+    "blue": "ufc:aljamain-sterling"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-04-09T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:57503647"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:04:05.941Z",
+    "lastSeenAt": "2026-08-03T18:04:05.941Z",
+    "sourceRefs": [
+      "source:wikipedia:57503647"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:57503647"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (split)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:57503647"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:04:05.941Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:57503647"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:04:05.941Z"
+}

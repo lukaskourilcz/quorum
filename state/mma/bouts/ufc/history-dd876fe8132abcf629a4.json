@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-dd876fe8132abcf629a4",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-261",
+    "name": "UFC 261",
+    "startsAtUtc": "2021-04-24T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:jessica-andrade",
+    "blue": "ufc:valentina-shevchenko"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-04-24T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:40078160"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (elbows)",
+    "round": 2,
+    "elapsedSeconds": 499,
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

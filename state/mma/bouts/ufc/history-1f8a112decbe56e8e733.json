@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-1f8a112decbe56e8e733",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-fox-shevchenko-vs-pena",
+    "name": "UFC on Fox: Shevchenko vs. Peña",
+    "startsAtUtc": "2017-01-28T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:valentina-shevchenko",
+    "blue": "ufc:julianna-pena"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2017-01-28T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:44159133"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:44159133"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:44159133"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (armbar)",
+    "round": 2,
+    "elapsedSeconds": 569,
+    "sourceRefs": [
+      "source:wikipedia:44159133"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44159133"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

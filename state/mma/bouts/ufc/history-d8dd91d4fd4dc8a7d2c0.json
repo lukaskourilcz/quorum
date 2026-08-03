@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-d8dd91d4fd4dc8a7d2c0",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-strickland-vs-hernandez",
+    "name": "UFC Fight Night: Strickland vs. Hernandez",
+    "startsAtUtc": "2026-02-21T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:anthony-hernandez",
+    "blue": "ufc:sean-strickland"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2026-02-21T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:14:27.954Z",
+    "lastSeenAt": "2026-08-03T18:14:27.954Z",
+    "sourceRefs": [
+      "source:wikipedia:64111674"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:64111674"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 3,
+    "elapsedSeconds": 743,
+    "sourceRefs": [
+      "source:wikipedia:64111674"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:14:27.954Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:14:27.954Z"
+}

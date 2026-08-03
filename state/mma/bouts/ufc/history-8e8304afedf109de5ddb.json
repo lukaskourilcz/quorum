@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8e8304afedf109de5ddb",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-171",
+    "name": "UFC 171",
+    "startsAtUtc": "2014-03-15T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:jessica-andrade",
+    "blue": "ufc:raquel-pennington"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2014-03-15T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:02:46.021Z",
+    "lastSeenAt": "2026-08-03T18:02:46.021Z",
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:40078160"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:40078160"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:02:46.021Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:02:46.021Z"
+}
