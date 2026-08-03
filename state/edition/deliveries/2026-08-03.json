@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-03",
+  "packageHash": "fb3c9b691e99c9f3eb193b3d234b6c8d09df5170686c1d87b83acfe04fa913b3",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "51fbce406818c1f7a9329ab674c0893ff085d6af",
+  "deliveredAt": "2026-08-03T08:47:14.257Z",
+  "tags": [
+    "ai",
+    "safety",
+    "platforms",
+    "cybersecurity",
+    "social-media",
+    "policy"
+  ]
+}

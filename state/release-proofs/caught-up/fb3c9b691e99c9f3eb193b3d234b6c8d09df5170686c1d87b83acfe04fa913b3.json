@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-cb3558a99ec334b4",
+  "venture": "caught-up",
+  "packageHash": "fb3c9b691e99c9f3eb193b3d234b6c8d09df5170686c1d87b83acfe04fa913b3",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "51fbce406818c1f7a9329ab674c0893ff085d6af",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 51fbce406818c1f7a9329ab674c0893ff085d6af is readable",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "english-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/en/articles/2026-08-03-ai-agents-lie-cheat-platforms-fight-back?boardless_verify=fb3c9b691e99-1785746832200",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/cs/articles/2026-08-03-ai-agents-lie-cheat-platforms-fight-back?boardless_verify=fb3c9b691e99-1785746832200",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "Both locale titles and 2026-08-03-ai-agents-lie-cheat-platforms-fight-back match",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "Both pages expose fb3c9b691e99c9f3eb193b3d234b6c8d09df5170686c1d87b83acfe04fa913b3",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-03-ai-agents-lie-cheat-platforms-fight-back/hero.svg?boardless_verify=fb3c9b691e99-1785746832200",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-03T08:47:12.200Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-03T08:46:09.583Z",
+  "completedAt": "2026-08-03T08:47:13.041Z"
+}
