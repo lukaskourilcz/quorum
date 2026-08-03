@@ -35,7 +35,7 @@ async function main(): Promise<void> {
           image_hero_path: pending.package.status === "edition" ? pending.package.image.hero_path : "",
           image_thumb_path: pending.package.status === "edition" ? pending.package.image.thumb_path : "",
           slug: pending.package.status === "edition"
-            ? pending.package.article.en.frontmatter.slug
+            ? pending.package.article.cs.frontmatter.slug
             : "no edition"
         }
       : { has_package: "false" };

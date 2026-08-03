@@ -52,7 +52,7 @@ function boundedCopy(body: string, suffix: string, maximum: number): string {
 }
 
 function queueAltText(pack: SocialPack, locale: SocialLocale, channel: "instagram" | "threads"): string {
-  return pack.byLocale[locale][channel].frames
+  return pack.byLocale[locale]![channel].frames
     .map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`)
     .join(" ")
     .slice(0, 1_000);
@@ -68,7 +68,7 @@ function queueItem(input: {
 }): QueueItem {
   const notBefore = input.now.toISOString();
   const notAfter = new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString();
-  const localized = input.pack.byLocale[input.locale];
+  const localized = input.pack.byLocale[input.locale]!;
   const platform = localized[input.channel];
   const id = `caught-up-${input.pack.date}-${input.locale}-${input.channel}`;
   const variant = deterministicVariant(id);
@@ -149,7 +149,7 @@ export async function composeEditionSocialPack(input: {
     : Math.max(0, input.meeting.roomTranscript.turns.findIndex((turn) => turn.mode === "raises-concern"));
   const bestTurn = input.meeting.roomTranscript.turns[bestTurnIndex] ?? input.meeting.roomTranscript.turns[0]!;
   const visualReference = (locale: SocialLocale): TemplateReference => {
-    const article = editionPackage.article[locale].frontmatter;
+    const article = editionPackage.article[locale]!.frontmatter;
     return {
       template_id: "five-slide-story",
       version: "1.0.0",
@@ -232,7 +232,7 @@ export async function composeEditionSocialPack(input: {
   altTexts[quotePath] = `Quote from ${bestTurn.agent} in the edition room: ${bestTurn.text}`.slice(0, 300);
 
   const buildLocalePack = (locale: SocialLocale) => {
-      const article = editionPackage.article[locale].frontmatter;
+      const article = editionPackage.article[locale]!.frontmatter;
       const tagList = hashtags(article.tags, locale);
       const readLabel = locale === "cs" ? "Celý článek" : "Read the edition";
       const openLabel = locale === "cs" ? "Otevřené zůstává" : "Still open";
@@ -281,7 +281,7 @@ export async function composeEditionSocialPack(input: {
     provenance: { composerVersion: COMPOSER_VERSION, inputsHash: inputHash },
     altTexts
   });
-  const evidenceRefs = editionPackage.article.en.frontmatter.sources
+  const evidenceRefs = editionPackage.article.cs.frontmatter.sources
     .map((source) => `source:${source.source_id ?? source.id}`);
   const now = input.now ?? new Date();
   const enInstagram = queueItem({ pack, locale: "en", channel: "instagram", destination: destinations.en, evidenceRefs, now });

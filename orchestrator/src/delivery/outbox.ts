@@ -119,7 +119,7 @@ export async function recordDelivery(input: {
       targetRepository: "lukaskourilcz/aifirst",
       ...(input.targetCommit ? { targetCommit: input.targetCommit } : {}),
       deliveredAt: now.toISOString(),
-      tags: editionPackage.status === "edition" ? editionPackage.article.en.frontmatter.tags : [],
+      tags: editionPackage.status === "edition" ? editionPackage.article.cs.frontmatter.tags : [],
       ...(supersededPackageHashes.length ? { supersededPackageHashes } : {})
     });
     await rm(absolute);

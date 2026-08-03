@@ -36,20 +36,15 @@ export async function writeEditionArtifact(
   ]);
   const files = [packageFile, reportFile, latestFile];
   if (editionPackage.status === "edition") {
-    files.push(
-      await writeMdxFile(
-        outputRoot,
-        `${editionPackage.date}.en.mdx`,
-        editionPackage.article.en.frontmatter,
-        editionPackage.article.en.body
-      ),
-      await writeMdxFile(
-        outputRoot,
-        `${editionPackage.date}.cs.mdx`,
-        editionPackage.article.cs.frontmatter,
-        editionPackage.article.cs.body
-      )
-    );
+    // One file per locale the package carries. Czech is always there; English is optional and
+    // on its way out, and writing a fixed pair would emit an empty English artifact after it.
+    for (const locale of ["en", "cs"] as const) {
+      const article = editionPackage.article[locale];
+      if (!article) continue;
+      files.push(
+        await writeMdxFile(outputRoot, `${editionPackage.date}.${locale}.mdx`, article.frontmatter, article.body)
+      );
+    }
   }
   return files;
 }

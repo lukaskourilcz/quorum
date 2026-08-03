@@ -495,7 +495,7 @@ async function runCaughtUpLiveEditionCycle(
   });
   const monthAllInUsd = await appendEditionUsage(stateRoot, cycleId, now, produced.report);
   const evidenceRefs = produced.package.status === "edition"
-    ? produced.package.article.en.frontmatter.sources.map(
+    ? produced.package.article.cs.frontmatter.sources.map(
         (source) => `source:${source.source_id ?? source.id}`
       )
     : produced.sourceRun.sources
@@ -559,7 +559,7 @@ async function runCaughtUpLiveEditionCycle(
       console.warn("Caught Up social pack skipped: CAUGHT_UP_SITE_URL is not configured");
     } else {
       try {
-        const slug = produced.package.article.en.frontmatter.slug;
+        const slug = produced.package.article.cs.frontmatter.slug;
         const destinations = {
           en: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString(),
           cs: new URL(`/cs/articles/${slug}`, caughtUpBaseUrl).toString()

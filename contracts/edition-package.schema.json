@@ -1015,7 +1015,6 @@
             }
           },
           "required": [
-            "en",
             "cs"
           ],
           "additionalProperties": {}

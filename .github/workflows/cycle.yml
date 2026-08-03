@@ -481,12 +481,23 @@ jobs:
             echo "detail_file=$RUNNER_TEMP/delivery-consumer.log" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # The same gate the MMA path runs before it commits. Caught Up used to check content
+          # only, so a change that content-checked but broke the build was pushed, Vercel went
+          # red, target-ci resolved to failure and the verifier reverted the fresh commit — the
+          # day's edition lost, and the site briefly serving a broken deploy, to learn something
+          # a local build would have said first. Captured, because uncaptured under bash -e it
+          # aborts before any status= line and both the receipt and fail-closed steps skip.
           set +e
-          pnpm --dir "$clone_root" check:content > "$RUNNER_TEMP/delivery-content.log" 2>&1
+          {
+            pnpm --dir "$clone_root" check:content \
+              && pnpm --dir "$clone_root" test \
+              && pnpm --dir "$clone_root" typecheck \
+              && pnpm --dir "$clone_root" build
+          } > "$RUNNER_TEMP/delivery-content.log" 2>&1
           content_status=$?
           set -e
           if test "$content_status" -ne 0; then
-            cat "$RUNNER_TEMP/delivery-content.log"
+            tail -40 "$RUNNER_TEMP/delivery-content.log" >&2
             echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
             echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
             echo "detail_file=$RUNNER_TEMP/delivery-content.log" >> "$GITHUB_OUTPUT"
@@ -505,11 +516,16 @@ jobs:
           git -C "$clone_root" add \
             "public/data/board/${PACKAGE_DATE}.json"
           if test "$PACKAGE_STATUS" = "edition"; then
-            git -C "$clone_root" add \
-              "content/articles/${PACKAGE_DATE}.en.mdx" \
-              "content/articles/${PACKAGE_DATE}.cs.mdx" \
-              "$IMAGE_HERO_PATH" \
-              "$IMAGE_THUMB_PATH"
+            # Czech is the locale that is always written; English is optional and on its way
+            # out. git add is fatal on a pathspec that matches nothing, and this step runs
+            # under bash -e, so naming the English file unconditionally would abort here —
+            # after the consumer had already written everything. status= would stay empty,
+            # 'Record the delivery transaction' is gated on it being non-empty and would be
+            # skipped, and the edition would be lost for the day with almost no signal.
+            git -C "$clone_root" add "content/articles/${PACKAGE_DATE}.cs.mdx" "$IMAGE_HERO_PATH" "$IMAGE_THUMB_PATH"
+            if test -f "$clone_root/content/articles/${PACKAGE_DATE}.en.mdx"; then
+              git -C "$clone_root" add "content/articles/${PACKAGE_DATE}.en.mdx"
+            fi
           fi
           echo "created_commit=false" >> "$GITHUB_OUTPUT"
           if ! git -C "$clone_root" diff --cached --quiet; then

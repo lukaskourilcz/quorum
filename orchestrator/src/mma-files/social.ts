@@ -13,8 +13,8 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
       locale,
       variant,
       strings: {
-        "cover-title": article.localizations[locale].title,
-        "cover-dek": article.localizations[locale].dek,
+        "cover-title": article.localizations[locale]!.title,
+        "cover-dek": article.localizations[locale]!.dek,
         cta: locale === "cs" ? "Přečtěte si celý ozdrojovaný text" : "Read the full sourced story",
         destination: "mma-files.vercel.app"
       }
@@ -29,8 +29,8 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
         carousel: { en: carousel("en", "A"), cs: carousel("cs", "A") },
         captions: {
           en: {
-            instagram: `${article.localizations.en.dek}\n\nRead the sourced story in MMA Files.`,
-            threads: `${article.localizations.en.dek}\n\nRead it in MMA Files.`
+            instagram: `${article.localizations.en!.dek}\n\nRead the sourced story in MMA Files.`,
+            threads: `${article.localizations.en!.dek}\n\nRead it in MMA Files.`
           },
           cs: {
             instagram: `${article.localizations.cs.dek}\n\nPřečtěte si ozdrojovaný text v MMA Files.`,
@@ -49,8 +49,8 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
         carousel: { en: carousel("en", "B"), cs: carousel("cs", "B") },
         captions: {
           en: {
-            instagram: `${article.localizations.en.title}\n\n${article.localizations.en.dek}`,
-            threads: `${article.localizations.en.title}\n\n${article.localizations.en.dek}`.slice(0, 500)
+            instagram: `${article.localizations.en!.title}\n\n${article.localizations.en!.dek}`,
+            threads: `${article.localizations.en!.title}\n\n${article.localizations.en!.dek}`.slice(0, 500)
           },
           cs: {
             instagram: `${article.localizations.cs.title}\n\n${article.localizations.cs.dek}`,

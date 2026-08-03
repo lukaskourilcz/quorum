@@ -150,7 +150,7 @@ describe("edition configuration and quality", () => {
     );
     expect(result.package.status).toBe("edition");
     if (result.package.status === "edition") {
-      expect(result.package.article.en.frontmatter.slug).toBe(
+      expect(result.package.article.en!.frontmatter.slug).toBe(
         "2026-08-04-openai-pricing-update"
       );
     }
@@ -214,7 +214,7 @@ describe("edition configuration and quality", () => {
     );
     expect(result.package.status).toBe("edition");
     if (result.package.status === "edition") {
-      const finalWire = result.package.article.en.frontmatter.wire ?? [];
+      const finalWire = result.package.article.en!.frontmatter.wire ?? [];
       expect(finalWire).toHaveLength(4);
       expect(finalWire.map((item) => item.url)).not.toContain(
         "https://www.anthropic.com/news/example-price-update"
@@ -293,7 +293,7 @@ describe("STET article register", () => {
     expect(result.package.status).toBe("edition");
     expect(result.report.stet?.passed).toBe(true);
     if (result.package.status === "edition") {
-      expect(result.package.article.en.frontmatter.dek).toBe(
+      expect(result.package.article.en!.frontmatter.dek).toBe(
         "This changes the budget for smaller teams."
       );
     }

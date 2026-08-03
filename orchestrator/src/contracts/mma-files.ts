@@ -29,7 +29,11 @@ const FrameSpecSchema = openObject({
 export const ArticlePackageSchema = openObject({
   schemaVersion: z.literal("article/1"),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  localizations: openObject({ en: LocalizationSchema, cs: LocalizationSchema }),
+  // Czech is the published locale. English is optional rather than removed: openObject is
+  // z.looseObject, so the two sealed live packages keep their en key through a round-trip and
+  // go on hashing to the value store.ts already holds. A strict object would strip it, the
+  // recomputed hash would not match, and MMA delivery selection would throw on every cycle.
+  localizations: openObject({ en: LocalizationSchema.optional(), cs: LocalizationSchema }),
   format: ArticleFormatSchema,
   sources: z.array(ArticleSourceSchema).min(1),
   image: ArticleImageSchema,

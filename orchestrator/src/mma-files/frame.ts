@@ -32,9 +32,9 @@ function svgText(lines: readonly string[], x: number, y: number, size: number): 
 }
 
 export function renderArticleHero(article: ArticlePackage): string {
-  const headline = article.heroSpec.bindings.headline ?? article.localizations.en.title;
+  const headline = article.heroSpec.bindings.headline ?? article.localizations.cs.title;
   const fingerprint = sha256(canonicalJson(article.heroSpec)).slice(0, 12);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(article.localizations.en.title)}</title><desc id="desc">MMA Files typographic article cover. No human figure is generated.</desc><rect width="1600" height="900" fill="#111113"/><rect x="72" y="72" width="1456" height="756" rx="24" fill="#19191d" stroke="#ef6c35" stroke-width="3"/><path d="M72 230H1528" stroke="#34343a"/><text x="112" y="154" fill="#ef6c35" font-family="Arial, sans-serif" font-size="38" font-weight="700">MMA FILES · ${escapeXml(article.format.toUpperCase())}</text>${svgText(wrapWords(String(headline), 32), 112, 360, 82)}<text x="112" y="760" fill="#aaa7a0" font-family="monospace" font-size="25">${escapeXml(article.publishAt.slice(0, 10))} · ${escapeXml(article.slot.toUpperCase())} · ${fingerprint}</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(article.localizations.cs.title)}</title><desc id="desc">MMA Files typographic article cover. No human figure is generated.</desc><rect width="1600" height="900" fill="#111113"/><rect x="72" y="72" width="1456" height="756" rx="24" fill="#19191d" stroke="#ef6c35" stroke-width="3"/><path d="M72 230H1528" stroke="#34343a"/><text x="112" y="154" fill="#ef6c35" font-family="Arial, sans-serif" font-size="38" font-weight="700">MMA FILES · ${escapeXml(article.format.toUpperCase())}</text>${svgText(wrapWords(String(headline), 32), 112, 360, 82)}<text x="112" y="760" fill="#aaa7a0" font-family="monospace" font-size="25">${escapeXml(article.publishAt.slice(0, 10))} · ${escapeXml(article.slot.toUpperCase())} · ${fingerprint}</text></svg>`;
 }
 
 export interface SocialRender {

@@ -14,8 +14,10 @@ const LocalizedArticleSchema = (lang: "en" | "cs") => openObject({
   body: z.string().trim().min(1)
 });
 
+// Czech is the published locale; English is optional and on its way out. Kept as a loose
+// object so an existing bilingual package still round-trips with its en key intact.
 const ArticleSchema = openObject({
-  en: LocalizedArticleSchema("en"),
+  en: LocalizedArticleSchema("en").optional(),
   cs: LocalizedArticleSchema("cs")
 });
 

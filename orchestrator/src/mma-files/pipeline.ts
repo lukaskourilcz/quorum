@@ -8,7 +8,9 @@ import { deterministicArticleImage } from "../images/article-image.js";
 import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
 import { composeMmaFilesSocialQueue } from "../social/venture-packs.js";
 
-type Localization = ArticlePackage["localizations"]["en"];
+// Czech is the locale that is always there, so it is the one the shape is taken from. Reading
+// it off "en" made the alias optional the moment English became optional.
+type Localization = ArticlePackage["localizations"]["cs"];
 type EnglishDraft = Localization & { imageCandidateIndex?: number };
 type ArticleSource = ArticlePackage["sources"][number];
 

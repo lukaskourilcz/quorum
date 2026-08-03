@@ -44,7 +44,7 @@ export const SocialPackSchema = openObject({
   date: DateSchema,
   editionRef: Sha256Schema,
   byLocale: openObject({
-    en: LocalePackSchema,
+    en: LocalePackSchema.optional(),
     cs: LocalePackSchema
   }),
   instagram: openObject({
@@ -70,29 +70,33 @@ export const SocialPackSchema = openObject({
   }),
   altTexts: z.record(FramePathSchema, z.string().trim().min(1).max(300))
 }).superRefine((pack, context) => {
+  // The legacy top-level fields mirror the locale the pack actually leads with — English
+  // while it exists, Czech once it does not. The alternative on offer was to keep an `en`
+  // mirror and fill it with Czech text, which would publish Czech copy under an English key.
+  const lead = pack.byLocale.en ?? pack.byLocale.cs;
   if (
-    !isDeepStrictEqual(pack.instagram, pack.byLocale.en.instagram) ||
-    !isDeepStrictEqual(pack.threads, pack.byLocale.en.threads)
+    !isDeepStrictEqual(pack.instagram, lead.instagram) ||
+    !isDeepStrictEqual(pack.threads, lead.threads)
   ) {
     context.addIssue({
       code: "custom",
-      message: "legacy channel fields must mirror the English locale",
-      path: ["byLocale", "en"]
+      message: "legacy channel fields must mirror the leading locale",
+      path: ["byLocale", pack.byLocale.en ? "en" : "cs"]
     });
   }
-  for (const locale of ["en", "cs"] as const) {
-    if (pack.byLocale[locale].instagram.caption !== pack.byLocale[locale].instagram.variants.A) {
+  const localePacks = (["en", "cs"] as const)
+    .map((locale) => ({ locale, value: pack.byLocale[locale] }))
+    .filter((entry): entry is { locale: "en" | "cs"; value: NonNullable<typeof entry.value> } => entry.value !== undefined);
+  for (const { locale, value } of localePacks) {
+    if (value.instagram.caption !== value.instagram.variants.A) {
       context.addIssue({ code: "custom", message: `${locale} Instagram caption must mirror variant A`, path: ["byLocale", locale, "instagram", "caption"] });
     }
-    if (pack.byLocale[locale].threads.text !== pack.byLocale[locale].threads.variants.A) {
+    if (value.threads.text !== value.threads.variants.A) {
       context.addIssue({ code: "custom", message: `${locale} Threads text must mirror variant A`, path: ["byLocale", locale, "threads", "text"] });
     }
   }
   const frames = new Set([
-    ...pack.byLocale.en.instagram.frames,
-    ...pack.byLocale.en.threads.frames,
-    ...pack.byLocale.cs.instagram.frames,
-    ...pack.byLocale.cs.threads.frames,
+    ...localePacks.flatMap(({ value }) => [...value.instagram.frames, ...value.threads.frames]),
     pack.quoteCard.frame
   ]);
   for (const frame of frames) {

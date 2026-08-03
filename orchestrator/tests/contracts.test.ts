@@ -7,6 +7,8 @@ import { ContractSchemas, jsonSchemaText, type ContractName } from "../src/contr
 import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
 import { NicheProposalSchema } from "../src/contracts/niche-proposal.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
+import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
+import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -64,5 +66,36 @@ describe("portfolio contract boundaries", () => {
   it("requires evidence for quantitative niche claims", async () => {
     const poison = await fixture("niche-proposal", "poison");
     expect(NicheProposalSchema.safeParse(poison).success).toBe(false);
+  });
+});
+
+describe("Czech is the required locale and English is optional", () => {
+  it("keeps the en key on a sealed bilingual package so its hash still matches", async () => {
+    // The worst failure mode available here: if making en optional had switched these to a
+    // stripping object, loading the one live article would drop its English half, the
+    // recomputed hash would not match, and store.ts would throw on every future cycle —
+    // wedging MMA delivery permanently. openObject is z.looseObject precisely to prevent that.
+    const stored = JSON.parse(
+      await readFile(path.join(repoRoot, "state/ventures/mma-files/articles/2026-08-02-am-ufc-valentina-shevchenko.json"), "utf8")
+    ) as unknown;
+    const parsed = ArticlePackageSchema.parse(stored);
+    expect(parsed.localizations.en, "the sealed package keeps its English half").toBeDefined();
+    expect(hasValidArticlePackageHash(parsed), "and still hashes to its stored value").toBe(true);
+  });
+
+  it("accepts an article with no English at all", async () => {
+    const valid = await fixture("article", "valid") as { localizations: Record<string, unknown> };
+    const czechOnly = { ...valid, localizations: { cs: valid.localizations.cs } };
+    expect(ArticlePackageSchema.safeParse(czechOnly).success).toBe(true);
+  });
+
+  it("still refuses an article with no Czech, and for that reason alone", async () => {
+    const poison = await fixture("article", "poison");
+    const result = ArticlePackageSchema.safeParse(poison);
+    expect(result.success).toBe(false);
+    // The fixture used to be missing its image too, so it went on passing this test while no
+    // longer testing the invariant its slug names.
+    const reasons = result.success ? [] : result.error.issues.map((issue) => issue.path.join("."));
+    expect(reasons).toEqual(["localizations.cs"]);
   });
 });

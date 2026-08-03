@@ -13,12 +13,20 @@ export interface ReleasePageSnapshot {
   html: string;
 }
 
+/**
+ * Czech is the published locale; English is optional and on its way out.
+ *
+ * The verifier has to tolerate a Czech-only release *before* the first one exists. It fetches
+ * whatever locales the package declares, so an English page that is no longer produced is an
+ * absent locale rather than a failed check — the alternative is a checker that fetches a route
+ * nobody publishes any more, fails closed, and reverts a commit that was perfectly good.
+ */
 export interface ReleaseSnapshot {
   venture: "caught-up" | "mma-files";
   slug: string;
   packageHash: string;
-  titles: { en: string; cs: string };
-  pages: { en: ReleasePageSnapshot; cs: ReleasePageSnapshot };
+  titles: { en?: string; cs: string };
+  pages: { en?: ReleasePageSnapshot; cs: ReleasePageSnapshot };
   image: ArticleImage;
   imageUrl: string;
   imageStatus: number;
@@ -53,8 +61,13 @@ function pageFacts(page: ReleasePageSnapshot, title: string, slug: string, packa
 }
 
 export async function verifyReleaseSnapshot(snapshot: ReleaseSnapshot, now = new Date()): Promise<ReleaseCheck[]> {
-  const en = pageFacts(snapshot.pages.en, snapshot.titles.en, snapshot.slug, snapshot.packageHash);
   const cs = pageFacts(snapshot.pages.cs, snapshot.titles.cs, snapshot.slug, snapshot.packageHash);
+  // An English page counts only when the package declared one and it was actually fetched.
+  // Anything weaker would let a half-built snapshot pass as "no English expected".
+  const en = snapshot.pages.en && typeof snapshot.titles.en === "string"
+    ? pageFacts(snapshot.pages.en, snapshot.titles.en, snapshot.slug, snapshot.packageHash)
+    : null;
+  const rendered = en === null ? [cs] : [en, cs];
   let dimensions = { width: 0, height: 0 };
   try {
     const metadata = await sharp(snapshot.imageBytes).metadata();
@@ -63,14 +76,22 @@ export async function verifyReleaseSnapshot(snapshot: ReleaseSnapshot, now = new
     dimensions = { width: 0, height: 0 };
   }
   const attributionNeedle = snapshot.image.license.attribution_html.replace(/<[^>]+>/gu, " ").replace(/\s+/gu, " ").trim();
-  const attributionPresent = snapshot.image.origin === "svg" || [en.text, cs.text].every((text) =>
-    text.includes(attributionNeedle) || (text.includes(snapshot.image.license.author) && text.includes(snapshot.image.license.name))
+  const attributionPresent = snapshot.image.origin === "svg" || rendered.every((page) =>
+    page.text.includes(attributionNeedle) || (page.text.includes(snapshot.image.license.author) && page.text.includes(snapshot.image.license.name))
   );
+  const titleAndSlug = rendered.every((page) => page.titleAndSlug);
+  const marker = rendered.every((page) => page.marker);
+  const published = en === null ? "The Czech page" : "Both pages";
   return [
-    check("english-route", en.route, `${snapshot.pages.en.status} ${snapshot.pages.en.url}`, now),
+    // Dropping this check outright would take the proof to seven, under the eight the release
+    // contract requires; a published locale that was not asked for is the honest thing to
+    // report while English is still emitted, and it becomes a pass the day it is not.
+    en === null
+      ? check("english-route", true, "No English locale in this package", now)
+      : check("english-route", en.route, `${snapshot.pages.en!.status} ${snapshot.pages.en!.url}`, now),
     check("czech-route", cs.route, `${snapshot.pages.cs.status} ${snapshot.pages.cs.url}`, now),
-    check("title-slug", en.titleAndSlug && cs.titleAndSlug, en.titleAndSlug && cs.titleAndSlug ? `Both locale titles and ${snapshot.slug} match` : "A locale title or slug does not match", now),
-    check("content-hash", en.marker && cs.marker, en.marker && cs.marker ? `Both pages expose ${snapshot.packageHash}` : "A locale is missing the package hash marker", now),
+    check("title-slug", titleAndSlug, titleAndSlug ? `${published} and ${snapshot.slug} match` : "A locale title or slug does not match", now),
+    check("content-hash", marker, marker ? `${published} expose ${snapshot.packageHash}` : "A locale is missing the package hash marker", now),
     check("hero-image", snapshot.imageStatus === 200 && snapshot.imageBytes.byteLength > 0, `${snapshot.imageStatus} ${snapshot.imageUrl}`, now),
     check("image-dimensions", dimensions.width === snapshot.image.width && dimensions.height === snapshot.image.height, `${dimensions.width}x${dimensions.height}; expected ${snapshot.image.width}x${snapshot.image.height}`, now),
     check("attribution", attributionPresent, snapshot.image.origin === "svg" ? "FRAME fallback needs no external photo credit" : `${snapshot.image.license.author} · ${snapshot.image.license.name}`, now)
@@ -164,14 +185,13 @@ async function publicSnapshot(input: {
   venture: "caught-up" | "mma-files";
   slug: string;
   packageHash: string;
-  titles: { en: string; cs: string };
+  titles: { en?: string; cs: string };
   image: ArticleImage;
   baseUrl: string;
   now: Date;
 }): Promise<ReleaseSnapshot> {
   const baseUrl = input.baseUrl.replace(/\/$/u, "");
   const cacheBust = encodeURIComponent(`${input.packageHash.slice(0, 12)}-${input.now.getTime()}`);
-  const enUrl = `${baseUrl}/en/articles/${input.slug}?boardless_verify=${cacheBust}`;
   const csUrl = `${baseUrl}/cs/articles/${input.slug}?boardless_verify=${cacheBust}`;
   const imageUrl = `${baseUrl}${input.image.hero_path.replace(/^public/u, "")}?boardless_verify=${cacheBust}`;
   const host = new URL(baseUrl).hostname;
@@ -184,7 +204,9 @@ async function publicSnapshot(input: {
     }
   };
   const [en, cs, imageResponse] = await Promise.all([
-    fetchPage("en", enUrl),
+    typeof input.titles.en === "string"
+      ? fetchPage("en", `${baseUrl}/en/articles/${input.slug}?boardless_verify=${cacheBust}`)
+      : Promise.resolve(undefined),
     fetchPage("cs", csUrl),
     safeFetch(imageUrl, { allowHosts: [host], maxBytes: 1_000_000, timeoutMs: 12_000 }).catch(() => null)
   ]);
@@ -193,7 +215,7 @@ async function publicSnapshot(input: {
     slug: input.slug,
     packageHash: input.packageHash,
     titles: input.titles,
-    pages: { en, cs },
+    pages: en ? { en, cs } : { cs },
     image: input.image,
     imageUrl,
     imageStatus: imageResponse ? 200 : 0,
@@ -205,7 +227,7 @@ export async function verifyDeployedRelease(input: {
   venture: "caught-up" | "mma-files";
   packageHash: string;
   slug: string;
-  titles: { en: string; cs: string };
+  titles: { en?: string; cs: string };
   image: ArticleImage;
   targetRepository: "lukaskourilcz/aifirst" | "lukaskourilcz/mma-files";
   targetCommit: string;

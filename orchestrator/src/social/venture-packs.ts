@@ -93,7 +93,7 @@ export async function composeMmaFilesSocialQueue(input: {
         destination,
         text: selected.captions[locale][channel],
         assetPaths,
-        altText: `MMA Files ${variant} carousel: ${input.article.localizations[locale].title}`,
+        altText: `MMA Files ${variant} carousel: ${input.article.localizations[locale]!.title}`,
         evidenceRefs,
         notBefore: input.now.toISOString(),
         notAfter: new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString(),

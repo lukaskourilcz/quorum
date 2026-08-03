@@ -171,7 +171,10 @@ export function reviewArticleCopy(
   locale: MmaFilesLocale,
   options: { mode: "data-only" | "live-analysis" }
 ): CopyViolation[] {
+  // A locale the package does not carry has no copy to review. Czech is always present; the
+  // caller iterates locales, so an absent English one is nothing to say rather than a pass.
   const copy = article.localizations[locale];
+  if (!copy) return [];
   const combined = `${copy.title}\n${copy.dek}\n${copy.bodyMDX}`;
   const lower = combined.toLocaleLowerCase(locale === "cs" ? "cs-CZ" : "en-US");
   const violations: CopyViolation[] = [];
@@ -207,9 +210,20 @@ export function reviewArticleCopy(
   return violations;
 }
 
+/**
+ * Cross-locale drift checks, for a package that carries two locales.
+ *
+ * With a single locale there is no second telling of the same fact to disagree with, so this
+ * has nothing to compare and returns nothing. That is not a gate quietly going dark: every
+ * figure still has to sit on a line carrying a source marker (`ungrounded-claim` in
+ * reviewArticleCopy), and every fighter link is still checked against fighterRefs there. What
+ * lapses with English is only the ability to catch a figure that survived one telling and was
+ * mangled in the other.
+ */
 export function reviewBilingualParity(article: ArticlePackage): CopyViolation[] {
   const violations: CopyViolation[] = [];
-  const enFigures = figures(ungroupEnglish(article.localizations.en.bodyMDX));
+  if (!article.localizations.en) return violations;
+  const enFigures = figures(ungroupEnglish(article.localizations.en!.bodyMDX));
   const csFigures = figures(ungroupCzech(article.localizations.cs.bodyMDX, new Set(enFigures)));
   if (JSON.stringify(enFigures) !== JSON.stringify(csFigures)) {
     violations.push({ code: "figure-parity", locale: "cs", message: "English and Czech bodies must carry the same figures." });
@@ -218,7 +232,7 @@ export function reviewBilingualParity(article: ArticlePackage): CopyViolation[] 
   // so an English body could hang Grasso's name on Shevchenko's page and pass; now the two
   // bodies must point at the same profiles, and each label must be the same name as its
   // counterpart once Czech declension is allowed for.
-  const enLinks = linkedFighters(article.localizations.en.bodyMDX);
+  const enLinks = linkedFighters(article.localizations.en!.bodyMDX);
   const csLinks = linkedFighters(article.localizations.cs.bodyMDX);
   if (JSON.stringify(enLinks.map(({ href }) => href)) !== JSON.stringify(csLinks.map(({ href }) => href))) {
     violations.push({ code: "fighter-link-parity", locale: "cs", message: "English and Czech bodies must link the same fighter profiles." });

@@ -78,10 +78,15 @@ async function main(): Promise<void> {
     ? (() => {
         const pkg = EditionPackageSchema.parse(raw);
         if (pkg.status !== "edition") throw new Error("Caught Up verification requires an edition package");
+        // Czech is the locale that must be there; the slug is identical across locales, so it
+        // is read from the one that cannot be absent.
         return {
           packageHash: pkg.idempotencyKey,
-          slug: pkg.article.en.frontmatter.slug,
-          titles: { en: pkg.article.en.frontmatter.title, cs: pkg.article.cs.frontmatter.title },
+          slug: pkg.article.cs.frontmatter.slug,
+          titles: {
+            ...(pkg.article.en ? { en: pkg.article.en.frontmatter.title } : {}),
+            cs: pkg.article.cs.frontmatter.title
+          },
           image: pkg.image,
           targetRepository: "lukaskourilcz/aifirst" as const
         };
@@ -92,7 +97,10 @@ async function main(): Promise<void> {
         return {
           packageHash: pkg.packageHash,
           slug: pkg.slug,
-          titles: { en: pkg.localizations.en.title, cs: pkg.localizations.cs.title },
+          titles: {
+            ...(pkg.localizations.en ? { en: pkg.localizations.en.title } : {}),
+            cs: pkg.localizations.cs.title
+          },
           image: pkg.image,
           targetRepository: "lukaskourilcz/mma-files" as const
         };

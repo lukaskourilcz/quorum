@@ -1,11 +1,50 @@
 {
   "schemaVersion": "article/1",
   "slug": "fixture-without-czech",
-  "localizations": { "en": { "title": "English only", "dek": "This must not publish.", "bodyMDX": "Missing Czech text." } },
+  "localizations": {
+    "en": {
+      "title": "A measured look at the fixture fight",
+      "dek": "Both records are sourced and the uncertainty stays visible.",
+      "bodyMDX": "## The matchup\n\n[Alex Example](/fighters/ufc/alex-example) enters with a verified file [^source-1]."
+    }
+  },
   "format": "fight-week-preview",
-  "sources": [{ "kind": "internal", "ref": "fixture" }],
-  "heroSpec": { "template": "tale-of-the-tape", "bindings": {} },
-  "fighterRefs": [],
+  "sources": [
+    {
+      "kind": "internal",
+      "ref": "state/ventures/fightaiq/fighters/ufc/alex-example.json"
+    }
+  ],
+  "image": {
+    "hero_path": "public/images/articles/fixture-fight-preview/hero.svg",
+    "thumb_path": "public/images/articles/fixture-fight-preview/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "Fixture fight preview cover",
+    "alt_cs": "Obálka zkušebního článku o zápase",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2Zy8+",
+    "thumb_bytes_base64": "PHN2Zy8+"
+  },
+  "heroSpec": {
+    "template": "tale-of-the-tape",
+    "bindings": {
+      "headline": "Alex Example vs Sam Example",
+      "redRecord": "12-2",
+      "blueRecord": "10-3"
+    }
+  },
+  "fighterRefs": [
+    "ufc:alex-example",
+    "ufc:sam-example"
+  ],
+  "eventRef": "ufc:event:fixture-prague",
   "publishAt": "2026-08-01T10:00:00.000Z",
   "slot": "am",
   "status": "draft",
