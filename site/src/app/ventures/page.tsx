@@ -50,11 +50,11 @@ export default function VenturesPage() {
             <div className="bg-[color-mix(in_srgb,var(--magenta-spark)_12%,var(--surface))] p-8 md:col-span-4 md:p-10">
               <Badge tone="accent">Project 001</Badge>
               <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">TESTING THE IDEA</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Caught Up</h2>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">DNESKAi</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One important AI story a day, or an honest note when none is strong enough.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI finds the sources, chooses the story, checks each release and keeps the product ideas. The existing Caught Up reader still publishes the finished edition.</p>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">BoardlessAI finds the sources, chooses the story, checks each release and keeps the product ideas. The existing DNESKAi reader still publishes the finished edition.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/caught-up">Open project <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>

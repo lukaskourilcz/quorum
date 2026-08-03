@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 const ventureLabels: Record<string, string> = {
   company: "Company",
-  "caught-up": "Caught Up",
+  "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",

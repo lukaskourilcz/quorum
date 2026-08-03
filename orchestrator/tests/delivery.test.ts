@@ -23,7 +23,7 @@ async function writeJson(file: string, value: unknown): Promise<void> {
 
 afterEach(() => vi.unstubAllEnvs());
 
-describe("Caught Up production budget", () => {
+describe("DNESKAi production budget", () => {
   it("keeps technical no-edition failures internal while queuing deterministic gates", async () => {
     const config = await loadEditionQualityConfig();
     const technical = buildNoEditionPackage({

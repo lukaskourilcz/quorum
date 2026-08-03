@@ -144,7 +144,7 @@ function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; u
       <div className="mb-6 flex items-center gap-3">
         <Images aria-hidden="true" className="size-5 text-[var(--accent)]" />
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.12em]">Caught Up social archive</p>
+          <p className="text-xs font-bold uppercase tracking-[0.12em]">DNESKAi social archive</p>
           <p className="mt-1 text-sm text-[var(--fog)]">English and Czech drafts are stored with carousel images that can be recreated from the same text and design settings.</p>
         </div>
       </div>
@@ -157,7 +157,7 @@ function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; u
 
       {packs.length === 0 ? (
         <Callout>
-          No social posts are stored. They stay off until you turn THREADS, INSTAGRAM and FRAME on for Caught Up. Article delivery and the hero image continue without them.
+          No social posts are stored. They stay off until you turn THREADS, INSTAGRAM and FRAME on for DNESKAi. Article delivery and the hero image continue without them.
         </Callout>
       ) : (
         <div className="grid gap-6">

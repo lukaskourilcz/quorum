@@ -23,7 +23,7 @@ function required(args: string[], name: string): string {
 /**
  * Put a reverted release in front of the owner.
  *
- * The Caught Up delivery path already appends to INBOX on failure; the MMA path wrote a JSON
+ * The DNESKAi delivery path already appends to INBOX on failure; the MMA path wrote a JSON
  * file nothing read. The flagship article was reverted off production twice on 2 August and
  * neither the digest nor the inbox mentioned it.
  */
@@ -77,7 +77,7 @@ async function main(): Promise<void> {
   const release = venture === "caught-up"
     ? (() => {
         const pkg = EditionPackageSchema.parse(raw);
-        if (pkg.status !== "edition") throw new Error("Caught Up verification requires an edition package");
+        if (pkg.status !== "edition") throw new Error("DNESKAi verification requires an edition package");
         // Czech is the locale that must be there; the slug is identical across locales, so it
         // is read from the one that cannot be absent.
         return {

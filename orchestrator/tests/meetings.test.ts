@@ -79,7 +79,7 @@ describe("Prague meeting clock", () => {
   });
 });
 
-describe("Caught Up meeting records", () => {
+describe("DNESKAi meeting records", () => {
   it("creates both v2 dry records with the bounded casts", async () => {
     const edition = MeetingRecordSchema.parse(await caughtUpRecord("cu-edition"));
     const product = MeetingRecordSchema.parse(await caughtUpRecord("cu-product"));

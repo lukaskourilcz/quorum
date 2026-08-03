@@ -61,7 +61,7 @@ function source(
   });
 }
 
-describe("Caught Up source registry", () => {
+describe("DNESKAi source registry", () => {
   it("ports all 32 configured sources and every supported adapter kind", async () => {
     const [registry, allowlist] = await Promise.all([
       loadSourceRegistry(),

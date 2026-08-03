@@ -288,8 +288,8 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
   "caught-up": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
     id: "caught-up",
-    name: "Caught Up",
-    logoText: "CAUGHT UP",
+    name: "DNESKAi",
+    logoText: "DNESKAI",
     colors: {
       background: "#09090b",
       surface: "#18181b",

@@ -7,7 +7,7 @@
   "fixture": false,
   "status": "PLAN",
   "stage": "VALIDATION",
-  "operatingBrief": "Choose one sourced story for today's Caught Up edition.",
+  "operatingBrief": "Choose one sourced story for today's DNESKAi edition.",
   "participantReasons": [
     { "agent": "HERALD", "reason": "HERALD chairs the edition room.", "participated": true },
     { "agent": "STET", "reason": "STET holds the copy-quality block.", "participated": true },

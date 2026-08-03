@@ -4,7 +4,7 @@ export const STANDUP_SCHEDULE = [
   {
     hour: 5,
     hours: "05:00 · daily",
-    label: "Caught Up edition meeting",
+    label: "DNESKAi edition meeting",
     minute: 0,
     phase: "cu-edition"
   },
@@ -25,7 +25,7 @@ export const STANDUP_SCHEDULE = [
   {
     hour: 17,
     hours: "17:00 · daily",
-    label: "Caught Up product meeting",
+    label: "DNESKAi product meeting",
     minute: 0,
     phase: "cu-product"
   },
@@ -217,8 +217,8 @@ export function formatPhaseLabel(phase: string) {
     founding: "Founding",
     morning: "Morning company meeting",
     night: "Night company meeting",
-    "cu-edition": "Caught Up edition meeting",
-    "cu-product": "Caught Up product meeting",
+    "cu-edition": "DNESKAi edition meeting",
+    "cu-product": "DNESKAi product meeting",
     pm: "Afternoon meeting · old label"
   };
 

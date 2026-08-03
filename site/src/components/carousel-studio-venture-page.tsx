@@ -22,7 +22,7 @@ export async function CarouselStudioVenturePage() {
           <Link className={buttonVariants({ variant: "ghost", size: "small" })} href="/ventures"><ArrowLeft aria-hidden="true" className="size-4" />All projects</Link>
           <div className="mt-10 grid gap-10 md:grid-cols-12 md:items-end">
             <div className="md:col-span-8"><div className="flex flex-wrap gap-2"><Badge tone="accent">Project 006</Badge><Badge>{live.length} live templates</Badge></div><h1 className="mt-7 text-[clamp(3.5rem,9vw,8rem)] font-semibold leading-[0.84] tracking-[-0.075em]">Carousel<br />Studio<span className="text-[var(--accent)]">.</span></h1></div>
-            <div className="md:col-span-4"><p className="text-lg leading-8 text-[var(--muted-foreground)]">One checked layout engine gives Caught Up, MMA Files and Titty Tuesdays their own visual voice—without an image model or a second design system.</p></div>
+            <div className="md:col-span-4"><p className="text-lg leading-8 text-[var(--muted-foreground)]">One checked layout engine gives DNESKAi, MMA Files and Titty Tuesdays their own visual voice—without an image model or a second design system.</p></div>
           </div>
         </section>
 

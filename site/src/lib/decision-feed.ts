@@ -19,9 +19,9 @@ export async function getPublicDecisions() {
       href: `/meetings/${record.id}`,
       at: record.generatedAt,
       kind: record.kind === "cu-edition"
-        ? "Caught Up edition"
+        ? "DNESKAi edition"
         : record.kind === "cu-product"
-          ? "Caught Up product"
+          ? "DNESKAi product"
           : record.kind === "tt-marketing"
             ? "Titty Tuesdays marketing"
             : record.kind === "incubator-scan"

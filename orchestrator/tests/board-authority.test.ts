@@ -11,7 +11,7 @@ const lockedControls = [
   "security_headers"
 ];
 
-describe("Caught Up board authority", () => {
+describe("DNESKAi board authority", () => {
   it("keeps ring three complete and unreachable from delivery", async () => {
     const authority = await loadBoardAuthority();
     expect(authority.rings.locked.controls.map((control) => control.id).sort()).toEqual(

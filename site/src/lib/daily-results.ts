@@ -29,7 +29,7 @@ export interface DailyResult {
 
 const VENTURE_LABELS: Record<string, string> = {
   global: "Global board",
-  "caught-up": "Caught Up",
+  "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",

@@ -52,7 +52,7 @@ describe("automation policy", () => {
     expect(cycle).not.toContain('timezone: "Europe/Prague"');
     expect(cycle).toContain("clock-cli.ts --scheduled");
     expect(cycle).toContain('clock-cli.ts --phase "$phase"');
-    expect(cycle).not.toContain("Caught Up product remains fixture-only until the Phase 10 ledger cutover.");
+    expect(cycle).not.toContain("DNESKAi product remains fixture-only until the Phase 10 ledger cutover.");
     expect(cycle).toContain("CAUGHT_UP_LIVE_ENABLED");
     expect(cycle).toContain("INPUT_DELIVERY_ONLY");
     expect(cycle).toContain("Delivery-only mode requires a manual dispatch");

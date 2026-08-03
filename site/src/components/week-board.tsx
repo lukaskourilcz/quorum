@@ -73,8 +73,8 @@ const calendarCostContexts: Partial<
     FORGE: "Company council meetings",
     PULSE: "Company and project meetings",
     AUDIT: "Company and project meetings",
-    SPARK: "Caught Up idea and project meetings",
-    VAULT: "Caught Up idea checks"
+    SPARK: "DNESKAi idea and project meetings",
+    VAULT: "DNESKAi idea checks"
   },
   "venture-afternoon": {
     VIZE: "Company council meetings",
@@ -89,16 +89,16 @@ const calendarCostContexts: Partial<
     AUDIT: "Company and project meetings"
   },
   "cu-edition": {
-    HERALD: "Caught Up daily edition curation",
-    STET: "Caught Up English edition",
-    HACEK: "Caught Up Czech edition",
-    SPARK: "Caught Up idea and project meetings",
+    HERALD: "DNESKAi daily edition curation",
+    STET: "DNESKAi English edition",
+    HACEK: "DNESKAi Czech edition",
+    SPARK: "DNESKAi idea and project meetings",
     AUDIT: "Company and project meetings"
   },
   "cu-product": {
-    HERALD: "Caught Up product room",
-    SPARK: "Caught Up idea and project meetings",
-    VAULT: "Caught Up idea checks",
+    HERALD: "DNESKAi product room",
+    SPARK: "DNESKAi idea and project meetings",
+    VAULT: "DNESKAi idea checks",
     AUDIT: "Company and project meetings"
   },
   "mag-editorial": {
@@ -145,7 +145,7 @@ function calendarCostLabel(kind: CalendarKind): string {
 
 const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone: string; slotColor: string }> = {
   company: { icon: Building2, label: "Company", tone: "text-[var(--accent)]", slotColor: "var(--accent)" },
-  "caught-up": { icon: Newspaper, label: "Caught Up", tone: "text-[var(--magenta-spark)]", slotColor: "var(--magenta-spark)" },
+  "caught-up": { icon: Newspaper, label: "DNESKAi", tone: "text-[var(--magenta-spark)]", slotColor: "var(--magenta-spark)" },
   "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--warning-soft)]", slotColor: "var(--warning-soft)" },
   incubator: { icon: FlaskConical, label: "Magazine Incubator", tone: "text-[var(--success-soft)]", slotColor: "var(--success-soft)" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
@@ -239,12 +239,12 @@ function isIncubator(kind: CalendarKind) {
 
 function publicKindLabel(kind: CalendarKind): string {
   const labels: Record<CalendarKind, string> = {
-    "cu-edition": "Caught Up edition meeting",
+    "cu-edition": "DNESKAi edition meeting",
     "venture-morning": "Morning company meeting",
     "incubator-scan": "Magazine idea research",
     "tt-marketing": "Titty Tuesdays marketing meeting",
     "venture-afternoon": "Afternoon company meeting",
-    "cu-product": "Caught Up product meeting",
+    "cu-product": "DNESKAi product meeting",
     "incubator-synthesis": "Magazine idea review",
     "venture-night": "Night company meeting",
     "mma-intake": "Fight data check",

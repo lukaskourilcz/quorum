@@ -339,12 +339,12 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   PULSE: [configuredTextModel("PULSE", "Company and project meetings", councilMeetingCall)],
   AUDIT: [configuredTextModel("AUDIT", "Company and project meetings", councilMeetingCall)],
   HERALD: [
-    configuredEditionModel(editionModels.curation, "Caught Up daily edition curation", curationCall),
-    configuredTextModel("DIGEST", "Caught Up product room"),
+    configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
+    configuredTextModel("DIGEST", "DNESKAi product room"),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   STET: [
-    configuredEditionModel(editionModels.writing, "Caught Up Czech edition", czechEditionCall),
+    configuredEditionModel(editionModels.writing, "DNESKAi Czech edition", czechEditionCall),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   // HACEK adapted the English edition and the English article into Czech. Both magazines are
@@ -353,9 +353,9 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   HACEK: [
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
-  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and project meetings", sparkMeetingCall)],
+  SPARK: [configuredTextModel("OPENAI_SPECIALIST", "DNESKAi idea and project meetings", sparkMeetingCall)],
   VAULT: [
-    configuredTextModel("DIGEST", "Caught Up idea checks", vaultMeetingCall),
+    configuredTextModel("DIGEST", "DNESKAi idea checks", vaultMeetingCall),
     configuredTextModel("OPENAI_SPECIALIST", "Project meetings when selected")
   ],
   PALATE: [configuredTextModel("ANTHROPIC_SPECIALIST", "Taste and project meetings")],
@@ -486,43 +486,43 @@ const profileCopy: Record<
   HERALD: {
     operatingPrinciple: "One consequential story, or no edition.",
     output: "Commissioned edition or NO_EDITION record",
-    currentFocus: "Caught Up daily edition",
+    currentFocus: "DNESKAi daily edition",
     publicTrackRecord: null
   },
   STET: {
     operatingPrinciple: "Nothing is poised. Say what happened.",
     output: "Blocking copy verdict and one rewrite request",
-    currentFocus: "Caught Up and MMA Files copy quality",
+    currentFocus: "DNESKAi and MMA Files copy quality",
     publicTrackRecord: null
   },
   HACEK: {
     operatingPrinciple: "Překlad není převod slov, ale přesný český článek.",
     output: "Project-specific Czech article and language check",
-    currentFocus: "Caught Up and MMA Files Czech editions",
+    currentFocus: "DNESKAi and MMA Files Czech editions",
     publicTrackRecord: null
   },
   SPARK: {
     operatingPrinciple: "Bring one idea worth shipping, not someday.",
     output: "Budget-checked growth idea and result report",
-    currentFocus: "Caught Up product growth",
+    currentFocus: "DNESKAi product growth",
     publicTrackRecord: null
   },
   VAULT: {
     operatingPrinciple: "A prior failure is evidence until something changes.",
     output: "Saved idea decision and refreshed index",
-    currentFocus: "Caught Up institutional memory",
+    currentFocus: "DNESKAi institutional memory",
     publicTrackRecord: null
   },
   FRAME: {
     operatingPrinciple: "Measure every pixel and preserve its provenance.",
     output: "Deterministic visual asset with QA and alt text",
-    currentFocus: "Caught Up visual production",
+    currentFocus: "DNESKAi visual production",
     publicTrackRecord: null
   },
   RELAY: {
     operatingPrinciple: "A handoff is complete only when the destination confirms it.",
     output: "Validated delivery and reconciliation status",
-    currentFocus: "Caught Up delivery and notifications",
+    currentFocus: "DNESKAi delivery and notifications",
     publicTrackRecord: null
   },
   ANGLE: {

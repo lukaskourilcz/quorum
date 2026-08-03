@@ -37,7 +37,7 @@ export default function CompanyPage() {
             </CardContent>
           </Card>
         }
-        description="BoardlessAI runs five early projects with clear limits. Caught Up and MMA Files publish on their own sites, Titty Tuesdays plans, the Incubator researches and FightAIQ supplies checked fight data. None has confirmed revenue."
+        description="BoardlessAI runs five early projects with clear limits. DNESKAi and MMA Files publish on their own sites, Titty Tuesdays plans, the Incubator researches and FightAIQ supplies checked fight data. None has confirmed revenue."
         eyebrow="Current business plan"
         title="Where the company stands"
       />
@@ -55,7 +55,7 @@ export default function CompanyPage() {
               icon: FlaskConical,
               label: "Release checks",
               value: "Auto",
-              note: "Caught Up and MMA Files are checked after every delivery"
+              note: "DNESKAi and MMA Files are checked after every delivery"
             },
             {
               icon: CircleDollarSign,
@@ -96,15 +96,15 @@ export default function CompanyPage() {
             {[
               {
                 title: "Readers and buyers",
-                text: "Caught Up serves people who want one important AI story a day. Titty Tuesdays needs buyer research. FightAIQ and MMA Files need a reviewed MMA audience window."
+                text: "DNESKAi serves people who want one important AI story a day. Titty Tuesdays needs buyer research. FightAIQ and MMA Files need a reviewed MMA audience window."
               },
               {
                 title: "Product and price",
-                text: "Caught Up is free. Titty Tuesdays has no shop or price. FightAIQ supplies research data to the public MMA Files magazine."
+                text: "DNESKAi is free. Titty Tuesdays has no shop or price. FightAIQ supplies research data to the public MMA Files magazine."
               },
               {
                 title: "How people find the work",
-                text: "Caught Up publishes in English and Czech. Each project's social posting unlocks only after its delivery or campaign checks pass."
+                text: "DNESKAi publishes in English and Czech. Each project's social posting unlocks only after its delivery or campaign checks pass."
               },
               {
                 title: "Income and costs",
@@ -112,7 +112,7 @@ export default function CompanyPage() {
               },
               {
                 title: "What exists today",
-                text: "Caught Up and MMA Files have public reader apps. Titty Tuesdays has plans but no shop. FightAIQ has guarded data and model tools."
+                text: "DNESKAi and MMA Files have public reader apps. Titty Tuesdays has plans but no shop. FightAIQ has guarded data and model tools."
               },
               {
                 title: "When to stop",

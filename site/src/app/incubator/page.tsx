@@ -64,7 +64,7 @@ function ProposalCard({ proposal }: { proposal: PublicIncubatorProposal }) {
         <div className="bg-[var(--card)] p-4"><dt className="mono-label text-[0.625rem] text-[var(--fog)]">Who might read it</dt><dd className="mt-2 text-sm leading-6">{proposal.audience.regions.join(", ")} · ages {proposal.audience.ageMin}–{proposal.audience.ageMax} · {proposal.audience.interests.join(", ")}</dd></div>
         <div className="bg-[var(--card)] p-4"><dt className="mono-label text-[0.625rem] text-[var(--fog)]">How often and in what format</dt><dd className="mt-2 text-sm leading-6">{publicAgentText(proposal.cadence)} · {proposal.formats.map(publicAgentText).join(", ")}</dd></div>
       </dl>
-      <p className="mt-5 text-sm leading-6"><span className="font-semibold">What Caught Up can already provide:</span> <span className="text-[var(--fog)]">{proposal.caughtUpReuseNotes}</span></p>
+      <p className="mt-5 text-sm leading-6"><span className="font-semibold">What DNESKAi can already provide:</span> <span className="text-[var(--fog)]">{proposal.caughtUpReuseNotes}</span></p>
       <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[var(--border)] pt-5">
         <Link className={buttonVariants({ size: "small", variant: "secondary" })} href={`/meetings/${proposal.originMeetingId}`}>
           See the meeting <Gavel aria-hidden="true" className="size-4" />

@@ -3,7 +3,7 @@
   "ventures": [
     {
       "id": "caught-up",
-      "name": "Caught Up",
+      "name": "DNESKAi",
       "status": "operating",
       "taste": false,
       "ledgerNamespace": "caught-up",
@@ -15,7 +15,7 @@
       "meetings": [
         {
           "kind": "cu-edition",
-          "label": "Caught Up edition room",
+          "label": "DNESKAi edition room",
           "cadence": "daily@05:00",
           "cast": ["HERALD", "STET", "HACEK", "AUDIT"],
           "envelopeUsd": 0.08,

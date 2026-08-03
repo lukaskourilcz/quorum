@@ -234,7 +234,7 @@ describe("taste memory", () => {
         },
         {
           id: "caught-up",
-          name: "Caught Up",
+          name: "DNESKAi",
           status: "operating",
           taste: false,
           ledgerNamespace: "caught-up",
@@ -242,7 +242,7 @@ describe("taste memory", () => {
           adminTabs: ["plans"],
           meetings: [{
             kind: "cu-product",
-            label: "Caught Up product",
+            label: "DNESKAi product",
             cadence: "daily@17:00",
             cast: ["HERALD"],
             envelopeUsd: 0.08,

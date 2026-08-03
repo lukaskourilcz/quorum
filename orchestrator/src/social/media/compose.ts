@@ -75,7 +75,7 @@ export async function composeCarouselFrame(input: {
   const title = wrap(input.title, 23, 5);
   const body = wrap(input.body, 40, 7);
   return webp(shell(`
-    ${textLines({ lines: ["CAUGHT UP", input.eyebrow.toUpperCase()], x: 110, y: 150, lineHeight: 42, fontSize: 26, weight: 700, fill: CAUGHT_UP_ACCENT })}
+    ${textLines({ lines: ["DNESKAI", input.eyebrow.toUpperCase()], x: 110, y: 150, lineHeight: 42, fontSize: 26, weight: 700, fill: CAUGHT_UP_ACCENT })}
     ${textLines({ lines: title, x: 110, y: 370, lineHeight: 92, fontSize: 78, weight: 700, fill: FOREGROUND })}
     ${textLines({ lines: body, x: 110, y: 900, lineHeight: 54, fontSize: 38, fill: MUTED })}
     ${textLines({ lines: [input.date], x: 110, y: 1250, lineHeight: 0, fontSize: 24, weight: 700, fill: FOREGROUND })}
@@ -115,7 +115,7 @@ export async function composeArticleHero(input: {
     <circle cx="1010" cy="80" r="260" fill="url(#glow)"/>
     <path d="M0 515 C250 420 400 610 670 490 S1030 410 1200 470 V630 H0Z" fill="#141419"/>
     <rect x="54" y="54" width="1092" height="522" rx="28" fill="none" stroke="#3f3f46" stroke-width="2"/>
-    ${textLines({ lines: ["CAUGHT UP", input.date], x: 92, y: 112, lineHeight: 34, fontSize: 22, weight: 700, fill: CAUGHT_UP_ACCENT })}
+    ${textLines({ lines: ["DNESKAI", input.date], x: 92, y: 112, lineHeight: 34, fontSize: 22, weight: 700, fill: CAUGHT_UP_ACCENT })}
     ${textLines({ lines: title, x: 92, y: 235, lineHeight: 68, fontSize: 58, weight: 700, fill: FOREGROUND })}
     ${textLines({ lines: dek, x: 92, y: 500, lineHeight: 36, fontSize: 25, fill: MUTED })}
     <circle cx="1085" cy="106" r="12" fill="${ACCENT}"/>

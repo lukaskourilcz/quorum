@@ -22,7 +22,7 @@ describe("admin portfolio projection", () => {
       schemaVersion: "venture-registry/1",
       ventures: [{
         id: "caught-up",
-        name: "Caught Up",
+        name: "DNESKAi",
         status: "operating",
         ledgerNamespace: "caught-up",
         adminTabs: ["ideas", "plans", "visuals", "niche-proposals"]

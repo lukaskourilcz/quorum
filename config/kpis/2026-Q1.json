@@ -41,7 +41,7 @@
     {
       "id": "company.content-units",
       "venture": "company",
-      "name": "Caught Up editions and MMA Files articles delivered",
+      "name": "DNESKAi editions and MMA Files articles delivered",
       "metric_source": "receipts/delivery#content_units",
       "target": 180,
       "direction": "at-least",

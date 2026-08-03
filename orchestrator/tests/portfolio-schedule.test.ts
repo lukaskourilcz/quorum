@@ -64,7 +64,7 @@ describe("portfolio schedule and budget gate", () => {
     expect(budgetDecisionStatus(shapeB)).toBe("countersigned-shape-b");
   });
 
-  it("extends the monthly-headroom degradation ladder without displacing Caught Up", async () => {
+  it("extends the monthly-headroom degradation ladder without displacing DNESKAi", async () => {
     const registry = await loadVentureRegistry();
     const low = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 1 });
     expect(low.activePhases).not.toContain("incubator-scan");

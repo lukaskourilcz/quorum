@@ -44,7 +44,7 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
   });
 
   it("keeps the two daylight-saving variants apart", () => {
-    // 03:00 UTC carries the 06:00 Prague morning board in summer and the 05:00 Caught Up
+    // 03:00 UTC carries the 06:00 Prague morning board in summer and the 05:00 DNESKAi
     // edition in winter — one firing, two meetings, told apart by the date alone.
     expect(resolveCronPhase("0 3 * * *", new Date("2026-08-02T03:00:00Z"))).toBe("morning");
     expect(resolveCronPhase("0 3 * * *", new Date("2026-01-15T03:00:00Z"))).toBe("cu-edition");

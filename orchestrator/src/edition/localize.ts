@@ -4,7 +4,7 @@ import { CZECH_EDITORIAL_REGISTER } from "./registers.js";
  * The Czech desk.
  *
  * This module used to run a second model call: STET wrote the article in English and HACEK
- * rebuilt it in Czech. Caught Up publishes in Czech only now, so there is nothing to rebuild
+ * rebuilt it in Czech. DNESKAi publishes in Czech only now, so there is nothing to rebuild
  * and the call is gone — it was 39% of an edition's cost for a locale nobody was served.
  *
  * What remains is the part that was never about translating: the register the Czech desk

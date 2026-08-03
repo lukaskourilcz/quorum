@@ -37,8 +37,8 @@ export async function generateMetadata({
   const { slug } = await params;
   if (slug === "caught-up") {
     return {
-      description: "Caught Up is BoardlessAI project 001: one important AI story a day, made in public.",
-      title: "Caught Up"
+      description: "DNESKAi is BoardlessAI project 001: one important AI story a day, made in public.",
+      title: "DNESKAi"
     };
   }
   if (slug === "titty-tuesdays") {

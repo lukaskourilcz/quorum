@@ -1,4 +1,4 @@
-// Public, clearly labelled fallbacks for rendering both Caught Up room kinds
+// Public, clearly labelled fallbacks for rendering both DNESKAi room kinds
 // before a live record is committed. These contain no provider prompts or raw queues.
 export const meetingFixtures = [
   {
@@ -47,7 +47,7 @@ export const meetingFixtures = [
     fixture: true,
     status: "HELD",
     stage: "VALIDATION",
-    operatingBrief: "Review the morning Caught Up idea and record a bounded ledger verdict.",
+    operatingBrief: "Review the morning DNESKAi idea and record a bounded ledger verdict.",
     participantReasons: [
       { agent: "HERALD", reason: "Chairs the product room.", participated: true },
       { agent: "SPARK", reason: "Presents one bounded idea.", participated: true },

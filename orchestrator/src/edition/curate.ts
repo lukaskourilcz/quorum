@@ -9,7 +9,7 @@ import {
   type EditionModelGateway
 } from "./types.js";
 
-export const CURATE_SYSTEM = `You are HERALD, the senior editor of Caught Up.
+export const CURATE_SYSTEM = `You are HERALD, the senior editor of DNESKAi.
 Select three to eight items that explain what changed and why a well-informed reader
 should care. Original reporting and first-party announcements outrank rewrites. Drop
 duplicates, search bait and repeated stories without a new fact. Preserve each claim's
@@ -121,7 +121,7 @@ export async function curate(
     user: `Publication date: ${date}\n\n${renderDigestDataBlock(pool)}`,
     tool: {
       name: "emit_brief",
-      description: "Emit the structured Caught Up daily brief.",
+      description: "Emit the structured DNESKAi daily brief.",
       // The provider enforces the bound, so an out-of-range index cannot reach the parse and
       // destroy a paid edition. On 3 August the editor answered index 54 for a 50-item pool.
       inputSchema: boundedToolInputSchema(toolInputSchema, pool.length - 1)

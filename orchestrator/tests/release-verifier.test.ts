@@ -106,8 +106,8 @@ describe("a failing signal is not outvoted by a passing one", () => {
 });
 
 describe("the Czech page lives at a different path on each site", () => {
-  it("is the root on Caught Up and the /cs segment on MMA Files", () => {
-    // Caught Up moved Czech onto the URLs English used to hold, so /cs there is a 308.
+  it("is the root on DNESKAi and the /cs segment on MMA Files", () => {
+    // DNESKAi moved Czech onto the URLs English used to hold, so /cs there is a 308.
     // safeFetch would follow it and the proof would still pass, but a release check should
     // read the page rather than the redirect that points at it.
     expect(czechArticlePath("caught-up", "a-slug")).toBe("/articles/a-slug");

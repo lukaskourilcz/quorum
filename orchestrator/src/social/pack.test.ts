@@ -17,7 +17,7 @@ afterEach(async () => {
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
 });
 
-describe("Caught Up social pack composer", () => {
+describe("DNESKAi social pack composer", () => {
   it("renders accessible localized carousel sets and four draft-locked queue items", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-"));
     roots.push(root);

@@ -58,7 +58,7 @@ describe("public MeetingRecord v2 boundary", () => {
     });
   });
 
-  it("accepts the genuine Caught Up room with the full registered team", () => {
+  it("accepts the genuine DNESKAi room with the full registered team", () => {
     expect(parsePublicMeetingRecord(liveCaughtUpEdition)).toMatchObject({
       id: "2026-08-01-cu-edition",
       kind: "cu-edition",

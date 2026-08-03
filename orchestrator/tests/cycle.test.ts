@@ -104,7 +104,7 @@ describe("cycle preflight", () => {
     expect(() => RunnablePhaseSchema.parse("pm")).toThrow();
   });
 
-  it("runs both Caught Up phases through fixture-only meeting and calendar steps", async () => {
+  it("runs both DNESKAi phases through fixture-only meeting and calendar steps", async () => {
     const phases = [
       { phase: "cu-edition" as const, now: new Date("2026-08-04T03:00:00.000Z") },
       { phase: "cu-product" as const, now: new Date("2026-08-04T15:00:00.000Z") }

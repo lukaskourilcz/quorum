@@ -35,7 +35,7 @@ describe("Carousel Studio preview route", () => {
     expect(response.headers.get("etag")).toMatch(/^"[a-f0-9]{64}"$/);
     expect(body).toMatch(/^<svg /);
     expect(body).toContain('width="1080" height="1080"');
-    expect(body).toContain("Caught Up");
+    expect(body).toContain("DNESKAi");
   });
 
   it("keeps invalid preview coordinates unavailable", async () => {

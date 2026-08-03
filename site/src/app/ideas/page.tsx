@@ -11,7 +11,7 @@ import { formatDate } from "@/lib/utils";
 import { getPublicStandups } from "@/lib/standup-records";
 
 export const metadata: Metadata = {
-  description: "The public history of every Caught Up product idea and decision.",
+  description: "The public history of every DNESKAi product idea and decision.",
   title: "Idea history"
 };
 
@@ -49,7 +49,7 @@ export default async function IdeasPage({
       <PageIntro
         eyebrow="Saved idea history"
         title="Every idea and what happened to it"
-        description="Each Caught Up product idea keeps its source, status changes, related ideas and any new information that brought it back."
+        description="Each DNESKAi product idea keeps its source, status changes, related ideas and any new information that brought it back."
         aside={<div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-8"><p className="mono-label text-[0.65625rem] text-[var(--fog)]">Saved ideas</p><p className="mt-4 text-7xl font-semibold tracking-[-0.07em]">{ideas.length}</p><p className="mt-3 text-sm text-[var(--fog)]">One current view for each idea</p></div>}
       />
       <section className="mx-auto max-w-[var(--container)] px-5 py-18 md:px-10 md:py-24">
