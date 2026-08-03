@@ -50,11 +50,11 @@ export const ArticlePackageSchema = openObject({
 const SocialVariantSchema = openObject({
   id: z.enum(["A", "B"]),
   carousel: openObject({
-    en: LiveTemplateReferenceSchema,
+    en: LiveTemplateReferenceSchema.optional(),
     cs: LiveTemplateReferenceSchema
   }),
   captions: openObject({
-    en: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) }),
+    en: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) }).optional(),
     cs: openObject({ instagram: z.string().trim().min(1).max(2_200), threads: z.string().trim().min(1).max(500) })
   }),
   designAxes: openObject({

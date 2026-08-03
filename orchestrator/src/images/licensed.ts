@@ -316,7 +316,7 @@ export async function materializeLicensedPhoto(input: {
   candidate: LicensedPhotoCandidate;
   venture: "caught-up" | "mma-files";
   slug: string;
-  altEn: string;
+  altEn?: string;
   altCs: string;
   fetchBytes?: (url: string) => Promise<Uint8Array>;
 }): Promise<ArticleImage> {
@@ -351,7 +351,7 @@ export async function materializeLicensedPhoto(input: {
     thumb_path: `public/images/${directory}/${safeSlug}/thumb.webp`,
     width: 1_600,
     height: 900,
-    alt_en: input.altEn,
+    ...(input.altEn ? { alt_en: input.altEn } : {}),
     alt_cs: input.altCs,
     license: {
       name: candidate.license,

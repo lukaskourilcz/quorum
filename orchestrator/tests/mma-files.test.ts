@@ -33,15 +33,7 @@ const slate = EditorialSlateSchema.parse({
 });
 
 const gateway: MmaFilesEditorialGateway = {
-  async writeEnglish() {
-    return {
-      title: "Alex Example meets Sam Example in Prague",
-      dek: "The verified files show two different routes through the matchup.",
-      bodyMDX: "## The matchup\n\n[Alex Example](/fighters/ufc/alex-example) brings a 12-2 record. [^source-1]\n\n[Sam Example](/fighters/ufc/sam-example) brings a 10-3 record. [^source-1]",
-      imageAlt: "A fixture matchup card for Alex Example and Sam Example"
-    };
-  },
-  async localizeCzech() {
+  async writeCzech() {
     return {
       title: "Alex Example se v Praze utká se Samem Examplem",
       dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
@@ -77,7 +69,7 @@ async function production(root: string, selectedGateway = gateway) {
   });
 }
 
-describe("MMA Files bilingual production", () => {
+describe("MMA Files article production", () => {
   it("replays a dry article slot idempotently throughout the same Prague day", async () => {
     const root = await tempRoot("mma-files-dry-replay-");
     const first = await runDryArticleProduction({
@@ -102,7 +94,7 @@ describe("MMA Files bilingual production", () => {
     expect(stylebook.match(/https:\/\/www\.fights\.cz/g)).toHaveLength(10);
   });
 
-  it("publishes only when both languages, source markers and fighter links pass", async () => {
+  it("publishes only when the Czech copy, source markers and fighter links pass", async () => {
     const root = await tempRoot("mma-files-production-");
     const first = await production(root);
     const replay = await production(root);
@@ -110,7 +102,8 @@ describe("MMA Files bilingual production", () => {
     expect(first.violations).toEqual([]);
     expect(hasValidArticlePackageHash(first.article)).toBe(true);
     expect(first.socialPath).toMatch(/social\/packs/);
-    expect(first.mediaPaths).toHaveLength(10);
+    // Half of ten. The desk publishes one language, so it renders one language's slides.
+    expect(first.mediaPaths).toHaveLength(6);
     expect(replay.idempotent).toBe(true);
     expect(replay.article.packageHash).toBe(first.article.packageHash);
     expect(await loadArticlePackages(root)).toEqual([first.article]);
@@ -120,8 +113,9 @@ describe("MMA Files bilingual production", () => {
     const root = await tempRoot("mma-files-blocked-");
     const bad: MmaFilesEditorialGateway = {
       ...gateway,
-      async writeEnglish() {
-        return { title: "An epic showdown", dek: "Fans are in for a treat.", bodyMDX: "> A quote with no source\n\nAlex has 14 wins.", imageAlt: "A generic fight graphic" };
+      async writeCzech() {
+        // Czech slop, because Czech is the copy the desk now writes and the only copy reviewed.
+        return { title: "Epický souboj", dek: "Fanoušci se mají na co těšit.", bodyMDX: "> Citát bez zdroje\n\nAlex má 14 výher.", imageAlt: "Obecná grafika k zápasu" };
       }
     };
     const result = await production(root, bad);
@@ -141,18 +135,18 @@ describe("MMA Files bilingual production", () => {
     expect(reviewArticleCopy(czech, "cs", { mode: "data-only" }).map((item) => item.code)).not.toContain("czech-declension");
     const recap = structuredClone(article);
     recap.format = "post-event-recap";
-    expect(reviewArticleCopy(recap, "en", { mode: "data-only" }).map((item) => item.code)).toContain("recap-honesty");
+    expect(reviewArticleCopy(recap, "cs", { mode: "data-only" }).map((item) => item.code)).toContain("recap-honesty");
   });
 
-  it("renders one deterministic hero and eight deterministic social slides without human imagery", async () => {
+  it("renders one deterministic hero and four deterministic social slides without human imagery", async () => {
     const root = await tempRoot("mma-files-render-");
     const article = (await production(root)).article;
     const pack = buildSocialVariantPack(article);
     const first = renderSocialVariants(pack, article);
     const second = renderSocialVariants(pack, article);
     expect(first).toEqual(second);
-    expect(first.map((render) => render.key)).toEqual(["A-en-01", "A-en-02", "A-cs-01", "A-cs-02", "B-en-01", "B-en-02", "B-cs-01", "B-cs-02"]);
-    expect(new Set(first.map((render) => render.sha256)).size).toBe(8);
+    expect(first.map((render) => render.key)).toEqual(["A-cs-01", "A-cs-02", "B-cs-01", "B-cs-02"]);
+    expect(new Set(first.map((render) => render.sha256)).size).toBe(4);
     expect(renderArticleHero(article)).toBe(renderArticleHero(article));
     expect(`${renderArticleHero(article)}${first.map((render) => render.svg).join("")}`).not.toMatch(/<image|generated human/iu);
   });
@@ -230,7 +224,7 @@ describe("article slot immutability", () => {
       },
       format: "fighter-profile" as const,
       sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
-      image: deterministicArticleImage({ venture: "mma-files", slug, title: "Title", altEn: "Alt", altCs: "Popis" }),
+      image: deterministicArticleImage({ venture: "mma-files", slug, title: "Title",}),
       heroSpec: { template: "fighter-file", bindings: { headline: "Headline" } },
       fighterRefs: ["ufc:a"],
       publishAt: "2026-08-02T06:00:00.000Z",
@@ -275,7 +269,7 @@ describe("bilingual fighter parity", () => {
       },
       format: "fighter-profile" as const,
       sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
-      image: deterministicArticleImage({ venture: "mma-files", slug: "parity", title: "Title", altEn: "Alt", altCs: "Popis" }),
+      image: deterministicArticleImage({ venture: "mma-files", slug: "parity", title: "Title",}),
       heroSpec: { template: "fighter-file", bindings: { headline: "Headline" } },
       fighterRefs: [],
       publishAt: "2026-08-02T06:00:00.000Z",
@@ -321,7 +315,7 @@ describe("bilingual figure parity", () => {
       },
       format: "fighter-profile" as const,
       sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
-      image: deterministicArticleImage({ venture: "mma-files", slug: "figures", title: "Title", altEn: "Alt", altCs: "Popis" }),
+      image: deterministicArticleImage({ venture: "mma-files", slug: "figures", title: "Title",}),
       heroSpec: { template: "fighter-file", bindings: { headline: "Headline" } },
       fighterRefs: [],
       publishAt: "2026-08-02T06:00:00.000Z",
@@ -374,7 +368,7 @@ describe("grounding markers do not reach the reader", () => {
       localizations: { en: copy, cs: copy },
       format: "fighter-profile" as const,
       sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
-      image: deterministicArticleImage({ venture: "mma-files", slug: "grounding", title: "T", altEn: "A", altCs: "P" }),
+      image: deterministicArticleImage({ venture: "mma-files", slug: "grounding", title: "T",}),
       heroSpec: { template: "fighter-file", bindings: { headline: "H" } },
       fighterRefs: [],
       publishAt: "2026-08-02T06:00:00.000Z",

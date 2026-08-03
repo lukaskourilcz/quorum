@@ -13,10 +13,7 @@ describe("post-deploy release verifier", () => {
     const image = deterministicArticleImage({
       venture: "caught-up",
       slug: "2026-08-01-fixture",
-      title: "A verified fixture",
-      altEn: "Fixture cover",
-      altCs: "Zkušební obálka"
-    });
+      title: "A verified fixture",});
     const checks = await verifyReleaseSnapshot({
       venture: "caught-up",
       slug: "2026-08-01-fixture",
@@ -37,7 +34,7 @@ describe("post-deploy release verifier", () => {
   });
 
   it("fails when a locale is stale or the content hash is absent", async () => {
-    const image = deterministicArticleImage({ venture: "mma-files", slug: "fixture", title: "Fixture", altEn: "Fixture", altCs: "Zkouška" });
+    const image = deterministicArticleImage({ venture: "mma-files", slug: "fixture", title: "Fixture",});
     const checks = await verifyReleaseSnapshot({
       venture: "mma-files",
       slug: "fixture",

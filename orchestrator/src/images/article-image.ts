@@ -104,8 +104,6 @@ export function deterministicArticleImage(input: {
   venture: "caught-up" | "mma-files";
   slug: string;
   title: string;
-  altEn: string;
-  altCs: string;
   /** Publication date and subject tags, the only words the cover carries. */
   date?: string;
   tags?: readonly string[];

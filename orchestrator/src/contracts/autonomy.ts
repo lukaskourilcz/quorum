@@ -113,7 +113,10 @@ export const ArticleImageSchema = openObject({
   thumb_path: AssetPathSchema,
   width: z.number().int().min(640).max(4_000),
   height: z.number().int().min(360).max(3_000),
-  alt_en: z.string().trim().min(1).max(300),
+  // Czech alt text is required; English is optional and on its way out. Filling alt_en with
+  // Czech to satisfy a schema was the alternative and it is not on the table — a screen reader
+  // set to English would read Czech and announce it as English.
+  alt_en: z.string().trim().min(1).max(300).optional(),
   alt_cs: z.string().trim().min(1).max(300),
   license: ImageLicenseSchema,
   origin: z.enum(["photo", "svg"]),

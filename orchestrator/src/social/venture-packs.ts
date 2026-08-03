@@ -74,6 +74,10 @@ export async function composeMmaFilesSocialQueue(input: {
       const variant = deterministicVariant(id);
       const selected = input.pack.variants.find((item) => item.id === variant)!;
       const reference = selected.carousel[locale];
+      const caption = selected.captions[locale];
+      // A queue item for a locale the article was never written in would carry a destination
+      // that 404s once the route goes, and a queue item cannot be edited after it publishes.
+      if (!reference || !caption) continue;
       const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
       const renders = await renderCarouselPng({ template: resolveLiveCarouselTemplate(reference.template_id, reference.version), payload: reference.content, brand: CAROUSEL_BRANDS["mma-files"], format });
       const assetPaths: string[] = [];
@@ -91,7 +95,7 @@ export async function composeMmaFilesSocialQueue(input: {
         variant,
         channel,
         destination,
-        text: selected.captions[locale][channel],
+        text: caption[channel],
         assetPaths,
         altText: `MMA Files ${variant} carousel: ${input.article.localizations[locale]!.title}`,
         evidenceRefs,

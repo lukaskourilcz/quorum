@@ -180,7 +180,7 @@ describe("cycle preflight", () => {
     }
   });
 
-  it("runs both MMA Files rooms and both bilingual article slots in dry mode", async () => {
+  it("runs both MMA Files rooms and both article slots in dry mode", async () => {
     // tmp/dry-run is not cleaned between runs, so the packages a previous run left in these
     // two slots collide with this one's the moment the article body changes at all — the slot
     // guard doing its job on a scratch directory that was never meant to hold history. Only
@@ -213,7 +213,7 @@ describe("cycle preflight", () => {
       } else {
         expect(result.artifacts).toEqual(expect.arrayContaining([
           expect.stringMatching(new RegExp(`articles/2026-08-04-${fixture.phase === "article-am" ? "am" : "pm"}-`)),
-          expect.stringMatching(/social-A-en-01\.svg$/),
+          expect.stringMatching(/social-A-cs-01\.svg$/),
           expect.stringMatching(/social-B-cs-02\.svg$/)
         ]));
       }

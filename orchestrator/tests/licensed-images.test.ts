@@ -130,8 +130,7 @@ describe("a cover never repeats the article", () => {
     // once as the page title and once as the picture below it.
     const title = "AI agents cheat to win and the platforms are just starting to notice";
     const image = deterministicArticleImage({
-      venture: "caught-up", slug: "ai-agents", title,
-      altEn: "cover", altCs: "obalka", date: "2026-08-03", tags: ["ai", "safety"]
+      venture: "caught-up", slug: "ai-agents", title, date: "2026-08-03", tags: ["ai", "safety"]
     });
     const svg = Buffer.from(image.hero_bytes_base64, "base64").toString();
     for (const word of ["cheat", "platforms are", "starting to notice"]) {
@@ -143,7 +142,7 @@ describe("a cover never repeats the article", () => {
 
   it("gives two different articles two different covers, and one article the same one twice", () => {
     const make = (slug: string) => deterministicArticleImage({
-      venture: "caught-up", slug, title: slug, altEn: "a", altCs: "b", date: "2026-08-03", tags: ["ai"]
+      venture: "caught-up", slug, title: slug, date: "2026-08-03", tags: ["ai"]
     }).hero_bytes_base64;
     expect(make("first-story")).not.toBe(make("second-story"));
     expect(make("first-story")).toBe(make("first-story"));
@@ -183,8 +182,6 @@ describe("the cover's alt describes the cover", () => {
     // not there. That alt is right for a photograph and wrong for a generated plate.
     const image = deterministicArticleImage({
       venture: "caught-up", slug: "s", title: "t",
-      altEn: "A chessboard with pieces casting shadows shaped like daggers",
-      altCs: "Šachovnice s figurkami",
       date: "2026-08-03", tags: ["ai", "safety"]
     });
     expect(image.alt_en).not.toContain("chessboard");

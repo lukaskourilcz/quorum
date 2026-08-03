@@ -45,7 +45,9 @@ export interface SocialRender {
 
 export function renderSocialVariants(pack: SocialVariantPack, article: ArticlePackage): SocialRender[] {
   return pack.variants.flatMap((variant) => (["en", "cs"] as const).flatMap((locale) => {
+    // Czech is always there; a variant with no English carousel renders one locale, not a crash.
     const reference = variant.carousel[locale];
+    if (!reference) return [];
     return renderCarouselSvg({
       template: resolveLiveCarouselTemplate(reference.template_id, reference.version),
       payload: reference.content,

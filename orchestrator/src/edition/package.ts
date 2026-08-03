@@ -73,7 +73,7 @@ function frontmatter(
       path: image.hero_path.replace(/^public/u, ""),
       thumbnail_path: image.thumb_path.replace(/^public/u, ""),
       prompt: article.illustrationPrompt,
-      alt: locale === "en" ? image.alt_en : image.alt_cs,
+      alt: (locale === "en" ? image.alt_en : image.alt_cs) ?? image.alt_cs,
       width: image.width,
       height: image.height,
       origin: image.origin,
@@ -118,9 +118,9 @@ export function buildEditionPackage(
   const image = context.image ?? deterministicArticleImage({
     venture: "caught-up",
     slug: article.slug,
-    title: article.byLocale.en.title,
-    altEn: article.byLocale.en.illustrationAlt,
-    altCs: article.byLocale.cs.illustrationAlt,
+    // The cover fingerprint is seeded from the title, so taking it from Czech re-seeds it and
+    // future covers get a different bar pattern. Nothing published is invalidated by that.
+    title: article.byLocale.cs.title,
     date: article.date,
     tags: article.tags
   });

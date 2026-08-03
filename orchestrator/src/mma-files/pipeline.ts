@@ -11,7 +11,7 @@ import { composeMmaFilesSocialQueue } from "../social/venture-packs.js";
 // Czech is the locale that is always there, so it is the one the shape is taken from. Reading
 // it off "en" made the alias optional the moment English became optional.
 type Localization = ArticlePackage["localizations"]["cs"];
-type EnglishDraft = Localization & { imageCandidateIndex?: number };
+type CzechDraft = Localization & { imageCandidateIndex?: number };
 type ArticleSource = ArticlePackage["sources"][number];
 
 export interface ArticleEvidencePacket {
@@ -24,20 +24,14 @@ export interface ArticleEvidencePacket {
 }
 
 export interface MmaFilesEditorialGateway {
-  writeEnglish(input: {
+  /** The desk publishes in Czech. One call writes the article; nothing translates it after. */
+  writeCzech(input: {
     slate: EditorialSlate;
     slot: "am" | "pm";
     stylebook: string;
     evidence: ArticleEvidencePacket;
     imageCandidates: readonly LicensedPhotoCandidate[];
-  }): Promise<EnglishDraft>;
-  localizeCzech(input: {
-    english: Localization;
-    slate: EditorialSlate;
-    slot: "am" | "pm";
-    stylebook: string;
-    evidence: ArticleEvidencePacket;
-  }): Promise<Localization>;
+  }): Promise<CzechDraft>;
 }
 
 export interface ArticleProductionResult {
@@ -71,22 +65,27 @@ export async function produceMmaFilesArticle(input: {
   const stylebook = input.stylebookRaw ?? await loadStylebook();
   const stylebookProblems = validateStylebook(stylebook);
   if (stylebookProblems.length) throw new Error(`STYLEBOOK.md failed validation: ${stylebookProblems.join(", ")}`);
-  const en = await input.gateway.writeEnglish({
-    slate: input.slate,
-    slot: input.slot,
-    stylebook: stylebookPacket(stylebook, "en"),
-    evidence: input.evidence,
-    imageCandidates: input.imageCandidates ?? []
-  });
-  const { imageCandidateIndex, imageAlt: enImageAlt, ...enLocalization } = en;
-  const localizedCzech = await input.gateway.localizeCzech({
-    english: enLocalization,
+  // One Czech call, where there used to be an English one and a translation of it. The desk
+  // publishes in Czech only, so the English draft was work paid for and thrown away: 51% of
+  // the article cost by the ledger.
+  //
+  // imageCandidates and imageCandidateIndex have to travel with this call. They only ever
+  // reached the English writer, and the Czech one's index was discarded — so a Czech writer
+  // that is not handed the candidates picks no photo, every article falls back to the
+  // deterministic SVG, image.origin flips to "svg", and that in turn short-circuits the
+  // attribution check in the release verifier to a pass. Nothing would error; the photos
+  // would just stop, quietly, and the proof would still be green.
+  const cs = await input.gateway.writeCzech({
     slate: input.slate,
     slot: input.slot,
     stylebook: stylebookPacket(stylebook, "cs"),
-    evidence: input.evidence
+    evidence: input.evidence,
+    imageCandidates: input.imageCandidates ?? []
   });
-  const { imageAlt: csImageAlt, imageCandidateIndex: _ignoredCzechSelection, ...csLocalization } = localizedCzech;
+  // The rest-destructure stays. openObject is z.looseObject, so a surviving imageCandidateIndex
+  // would be persisted into the localization and folded into the package hash, changing the
+  // shape of every future article away from the sealed { title, dek, bodyMDX }.
+  const { imageCandidateIndex, imageAlt: csImageAlt, ...csLocalization } = cs;
   const candidate = imageCandidateIndex === undefined
     ? undefined
     : input.imageCandidates?.[Math.min(imageCandidateIndex, (input.imageCandidates?.length ?? 1) - 1)];
@@ -97,7 +96,6 @@ export async function produceMmaFilesArticle(input: {
         candidate,
         venture: "mma-files",
         slug: input.slug,
-        altEn: enImageAlt ?? `Editorial cover for ${enLocalization.title}`,
         altCs: csImageAlt ?? `Redakční obrázek k článku ${csLocalization.title}`
       });
     } catch {
@@ -107,15 +105,13 @@ export async function produceMmaFilesArticle(input: {
   const content = {
     schemaVersion: "article/1" as const,
     slug: input.slug,
-    localizations: { en: enLocalization, cs: csLocalization },
+    localizations: { cs: csLocalization },
     format: assignment.format,
     sources: input.evidence.sources,
     image: articleImage ?? deterministicArticleImage({
       venture: "mma-files",
       slug: input.slug,
-      title: enLocalization.title,
-      altEn: `Editorial cover for ${enLocalization.title}`,
-      altCs: `Redakční obrázek k článku ${csLocalization.title}`,
+      title: csLocalization.title,
       date: input.publishAt.toISOString().slice(0, 10),
       tags: [assignment.format, ...input.evidence.fighterRefs.map((reference) => reference.split(":").at(-1) ?? "")].filter(Boolean)
     }),
@@ -136,7 +132,6 @@ export async function produceMmaFilesArticle(input: {
   const finalContent = {
     ...content,
     localizations: {
-      en: { ...content.localizations.en, bodyMDX: stripSourceMarkers(content.localizations.en.bodyMDX) },
       cs: { ...content.localizations.cs, bodyMDX: stripSourceMarkers(content.localizations.cs.bodyMDX) }
     },
     status: violations.length ? "blocked" as const : "published" as const

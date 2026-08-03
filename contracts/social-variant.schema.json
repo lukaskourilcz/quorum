@@ -131,7 +131,6 @@
                 }
               },
               "required": [
-                "en",
                 "cs"
               ],
               "additionalProperties": {}
@@ -181,7 +180,6 @@
                 }
               },
               "required": [
-                "en",
                 "cs"
               ],
               "additionalProperties": {}
@@ -344,7 +342,6 @@
                 }
               },
               "required": [
-                "en",
                 "cs"
               ],
               "additionalProperties": {}
@@ -394,7 +391,6 @@
                 }
               },
               "required": [
-                "en",
                 "cs"
               ],
               "additionalProperties": {}
