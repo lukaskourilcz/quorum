@@ -34,9 +34,8 @@ import {
   titleSimilarity
 } from "../src/edition/quality.js";
 import { reviewArticleText } from "../src/edition/stet.js";
-import { reviewTranslationParity } from "../src/edition/localize.js";
 import type { LocalizedContent } from "../src/edition/types.js";
-import { removeEmptyEnglishAdverbs } from "../src/edition/write.js";
+import { removeEmptyCzechAdverbs } from "../src/edition/localize.js";
 
 const fixtureRoot = path.join(
   repoRoot,
@@ -96,8 +95,7 @@ describe("edition configuration and quality", () => {
     expect(EditionQualityConfigSchema.parse(config).quality.enforcement).toBe("enforce");
     expect(config.models).toEqual({
       curation: "claude-sonnet-4-6",
-      writing: "claude-sonnet-4-6",
-      localization: "claude-sonnet-4-6"
+      writing: "claude-sonnet-4-6"
     });
     expect(config.quality.minimumSignalStrength).toBe(45);
     expect(config.budgets.editionProductionUsd).toBe(0.35);
@@ -127,17 +125,17 @@ describe("edition configuration and quality", () => {
     })).toBe(36.75);
   });
 
-  it("reserves the English and Czech first-pass call graph inside the production cap", async () => {
+  it("reserves the one-call first-pass graph inside the production cap", async () => {
     const responses = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const result = await produceEdition(
       await productionInput(responses, 10, true)
     );
     expect(result.package.status).toBe("edition");
-    expect(result.report.measuredCostUsd).toBe(0.194);
+    // $0.194 when the desk wrote English and then paid to translate it.
+    expect(result.report.measuredCostUsd).toBe(0.134);
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
       "curate",
-      "write",
-      "localize"
+      "write"
     ]);
   });
 
@@ -150,22 +148,22 @@ describe("edition configuration and quality", () => {
     );
     expect(result.package.status).toBe("edition");
     if (result.package.status === "edition") {
-      expect(result.package.article.en!.frontmatter.slug).toBe(
+      expect(result.package.article.cs.frontmatter.slug).toBe(
         "2026-08-04-openai-pricing-update"
       );
     }
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
       "curate",
       "write",
-      "localize"
+      
     ]);
   });
 
   it("accounts for a rejected unsupplied URL before regenerating", async () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const invalid = structuredClone(base[1]!);
-    const invalidValue = invalid.value as { en: { body_mdx: string } };
-    invalidValue.en.body_mdx += "\n\n[Unapproved source](https://variety.com/)";
+    const invalidValue = invalid.value as { cs: { body_mdx: string } };
+    invalidValue.cs.body_mdx += "\n\n[Unapproved source](https://variety.com/)";
     const rewrite = structuredClone(base[1]!);
     rewrite.usage.stage = "rewrite";
     const result = await produceEdition(
@@ -175,16 +173,15 @@ describe("edition configuration and quality", () => {
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
       "curate",
       "write",
-      "rewrite",
-      "localize"
+      "rewrite"
     ]);
-    expect(result.report.measuredCostUsd).toBe(0.284);
+    expect(result.report.measuredCostUsd).toBe(0.224);
   });
 
   it("accounts for malformed tool data before regenerating", async () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const malformed = structuredClone(base[1]!);
-    (malformed.value as { en: unknown }).en = "not a locale object";
+    (malformed.value as { cs: unknown }).cs = "not a locale object";
     const rewrite = structuredClone(base[1]!);
     rewrite.usage.stage = "rewrite";
     const result = await produceEdition(
@@ -194,10 +191,9 @@ describe("edition configuration and quality", () => {
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
       "curate",
       "write",
-      "rewrite",
-      "localize"
+      "rewrite"
     ]);
-    expect(result.report.measuredCostUsd).toBe(0.284);
+    expect(result.report.measuredCostUsd).toBe(0.224);
   });
 
   it("replaces a repeated lead source in Watchlist with a verified runner-up", async () => {
@@ -214,7 +210,7 @@ describe("edition configuration and quality", () => {
     );
     expect(result.package.status).toBe("edition");
     if (result.package.status === "edition") {
-      const finalWire = result.package.article.en!.frontmatter.wire ?? [];
+      const finalWire = result.package.article.cs.frontmatter.wire ?? [];
       expect(finalWire).toHaveLength(4);
       expect(finalWire.map((item) => item.url)).not.toContain(
         "https://www.anthropic.com/news/example-price-update"
@@ -279,12 +275,13 @@ describe("STET article register", () => {
     );
   });
 
-  it("removes a recoverable empty adverb before the English release review", async () => {
+  it("removes a recoverable empty adverb before the release review", async () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const writer = structuredClone(base[1]!);
-    const value = writer.value as { en: { dek: string; dispatches: Array<{ body: string }> } };
-    value.en.dek = "This actually changes the budget for smaller teams.";
-    value.en.dispatches[0]!.body = "Importantly, the source document is public.";
+    const value = writer.value as { cs: { dek: string; dispatches: Array<{ body: string }> } };
+    // Czech empty adverbs, since Czech is the register now reviewed.
+    value.cs.dek = "Skutečně to mění rozpočet menším týmům.";
+    value.cs.dispatches[0]!.body = "Upřímně, zdrojový dokument je veřejný.";
 
     const result = await produceEdition(
       await productionInput([base[0]!, writer, base[2]!])
@@ -293,12 +290,12 @@ describe("STET article register", () => {
     expect(result.package.status).toBe("edition");
     expect(result.report.stet?.passed).toBe(true);
     if (result.package.status === "edition") {
-      expect(result.package.article.en!.frontmatter.dek).toBe(
-        "This changes the budget for smaller teams."
+      expect(result.package.article.cs.frontmatter.dek).toBe(
+        "To mění rozpočet menším týmům."
       );
     }
-    expect(removeEmptyEnglishAdverbs("Actually, this is really useful.")).toBe(
-      "this is useful."
+    expect(removeEmptyCzechAdverbs("Upřímně, je to skutečně užitečné.")).toBe(
+      "Je to užitečné."
     );
   });
 
@@ -307,12 +304,12 @@ describe("STET article register", () => {
     expect(reviewArticleText(good)).toEqual([]);
   });
 
-  it("allows one rewrite and converts a second STET block to NO_EDITION", async () => {
+  it("allows one rewrite and converts a second block to NO_EDITION", async () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const slop = structuredClone(base[1]!);
-    const article = slop.value as { en: { body_mdx: string }; cs: { body_mdx: string } };
-    article.en.body_mdx = "## Draft\n\nWe should leverage synergies in this rapidly evolving landscape.";
-    article.cs.body_mdx = "## Koncept\n\nWe should leverage synergies in this rapidly evolving landscape.";
+    const article = slop.value as { cs: { body_mdx: string } };
+    // Czech slop, because Czech is what the desk writes and the only register reviewed.
+    article.cs.body_mdx = "## Koncept\n\nPojďme se podívat na tuto revoluční změnu.";
     const rewrite = structuredClone(slop);
     rewrite.usage.stage = "rewrite";
     const result = await produceEdition(await productionInput([base[0]!, slop, rewrite]));
@@ -335,77 +332,7 @@ describe("language desk registers and parity", () => {
     expect(ENGLISH_BENCHMARK_URLS.every((url) => new URL(url).hostname === "techcrunch.com")).toBe(true);
   });
 
-  it("blocks Czech filler and catches URL, number and section drift", () => {
-    expect(reviewArticleText(
-      "Pojďme se podívat na revoluční řešení, které dává smysl pro firmy.",
-      "cs"
-    ).map((violation) => violation.code)).toEqual(
-      expect.arrayContaining(["throat_clearing", "hype", "literal_calque"])
-    );
-    const english: LocalizedContent = {
-      title: "Vendor cuts price 40%",
-      dek: "The change applies in 2026.",
-      alternativeHeadlines: ["One alternative"],
-      bodyMdx: "## Change\n\nSource: https://example.com/source. Price fell 40%.",
-      illustrationAlt: "A price card",
-      dispatches: [{
-        title: "Rate card",
-        body: "The vendor published the rate.",
-        source_url: "https://example.com/source",
-        topic: "pricing"
-      }],
-      whyItMatters: ["Budgets change."],
-      whatChanged: ["The rate fell."],
-      uncertainty: ["Duration is unknown."]
-    };
-    const czech: LocalizedContent = {
-      ...english,
-      title: "Dodavatel snížil cenu o 30 %",
-      dek: "Změna platí v roce 2027.",
-      bodyMdx: "### Změna\n\nZdroj: https://example.com/other. Cena klesla o 30 %.",
-      dispatches: [{
-        ...english.dispatches[0]!,
-        source_url: "https://example.com/other",
-        topic: "ceny"
-      }]
-    };
-    const codes = reviewTranslationParity(english, czech).violations.map(
-      (violation) => violation.code
-    );
-    expect(codes).toEqual(expect.arrayContaining([
-      "source_url_drift",
-      "number_drift",
-      "section_drift",
-      "dispatch_source_drift",
-      "dispatch_topic_drift"
-    ]));
-  });
 
-  it("allows one Czech repair and blocks a second failed adaptation", async () => {
-    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
-    const repair = structuredClone(base[2]!);
-    repair.usage.stage = "localize_rewrite";
-    const slop = structuredClone(base[2]!);
-    const slopValue = slop.value as { body_mdx: string };
-    slopValue.body_mdx += "\n\nPojďme se podívat na tuto revoluční změnu.";
-
-    const repaired = await produceEdition(
-      await productionInput([base[0]!, base[1]!, slop, repair])
-    );
-    expect(repaired.package.status).toBe("edition");
-    expect(repaired.report.hacekBlocks).toBe(1);
-
-    const failedRepair = structuredClone(slop);
-    failedRepair.usage.stage = "localize_rewrite";
-    const blocked = await produceEdition(
-      await productionInput([base[0]!, base[1]!, slop, failedRepair])
-    );
-    expect(blocked.package.status).toBe("no_edition");
-    if (blocked.package.status === "no_edition") {
-      expect(blocked.package.board.noEditionReason).toBe("hacek_block_after_rewrite");
-    }
-    expect(blocked.report.hacekBlocks).toBe(2);
-  });
 });
 
 describe("edition dry production", () => {
@@ -414,10 +341,15 @@ describe("edition dry production", () => {
     expect(result.status).toBe("edition");
     // The golden hash moved with the fallback cover, which no longer sets the article's own
     // headline in type. Nothing else about the package changed.
-    // Re-golded when the deterministic cover started taking its fingerprint from the Czech
-    // title rather than the English one. Same bytes-in, bytes-out contract; different cover.
-    expect(result.packageHash).toBe("daf09e01f111da9563d25260eb2adb5043134f26d17b69f6b4e714ffa8dbb36c");
-    expect(result.report.measuredCostUsd).toBe(0.194);
+    // Re-golded twice in this migration: once when the deterministic cover started taking its
+    // fingerprint from the Czech title, and again when the package stopped carrying an English
+    // half. Same bytes-in, bytes-out contract.
+    expect(result.packageHash).toBe("f463391bd05b1eb63dca1554c1e0e2e95441370b635d84ff9273c4d4590d58cf");
+    // The shape itself, not just its hash: one article file, and it is the Czech one.
+    const mdx = result.files.filter((file) => file.endsWith(".mdx")).map((file) => file.split("/").pop());
+    expect(mdx).toHaveLength(1);
+    expect(mdx[0]).toMatch(/\.cs\.mdx$/);
+    expect(result.report.measuredCostUsd).toBe(0.134);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(
       await readFile(

@@ -58,7 +58,10 @@ function frontmatter(
   context: EditionPackageContext,
   image: ArticleImage
 ): ArticleFrontmatterV2 {
+  // Czech is the locale the desk writes; a caller asking for one the article does not have
+  // is a bug in the caller, not something to paper over with the other language's words.
   const localized = article.byLocale[locale];
+  if (!localized) throw new Error(`edition package: article has no ${locale} locale`);
   return {
     schema_version: 2,
     title: localized.title,
@@ -94,7 +97,6 @@ function frontmatter(
       models: {
         curation: config.models.curation,
         writing: config.models.writing,
-        localization: config.models.localization
       },
       source_candidates: context.sourceCandidates,
       cited_sources: article.sources.length,
@@ -131,10 +133,14 @@ export function buildEditionPackage(
     status: "edition" as const,
     image,
     article: {
-      en: {
-        frontmatter: frontmatter(article, "en", config, context, image),
-        body: article.byLocale.en.bodyMdx
-      },
+      ...(article.byLocale.en
+        ? {
+            en: {
+              frontmatter: frontmatter(article, "en", config, context, image),
+              body: article.byLocale.en.bodyMdx
+            }
+          }
+        : {}),
       cs: {
         frontmatter: frontmatter(article, "cs", config, context, image),
         body: article.byLocale.cs.bodyMdx
@@ -166,7 +172,6 @@ export function buildEditionPackage(
       models: {
         curation: config.models.curation,
         writing: config.models.writing,
-        localization: config.models.localization
       },
       ...(context.costUsd === undefined ? {} : { costUsd: context.costUsd })
     },
@@ -174,7 +179,7 @@ export function buildEditionPackage(
   };
   const idempotencyKey = editionPackageHash(preliminary);
   preliminary.idempotencyKey = idempotencyKey;
-  preliminary.article.en.frontmatter.generation.package_hash = idempotencyKey;
+  if (preliminary.article.en) preliminary.article.en.frontmatter.generation.package_hash = idempotencyKey;
   preliminary.article.cs.frontmatter.generation.package_hash = idempotencyKey;
   return EditionPackageSchema.parse(preliminary);
 }
@@ -201,7 +206,6 @@ export function buildNoEditionPackage(input: {
       models: {
         curation: input.config.models.curation,
         writing: input.config.models.writing,
-        localization: input.config.models.localization
       },
       ...(input.costUsd === undefined ? {} : { costUsd: input.costUsd })
     },

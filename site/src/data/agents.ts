@@ -123,7 +123,6 @@ const textModelRoles = modelSource.roles as Record<
 const editionModels = editionQualitySource.models as {
   curation: string;
   writing: string;
-  localization: string;
 };
 
 const modelLabels: Record<string, string> = {
@@ -240,16 +239,10 @@ const curationCall: CallEstimateProfile = {
   basis: "Typical edition curation run: a 20,000-character source packet and up to 1,500 response tokens"
 };
 
-const englishEditionCall: CallEstimateProfile = {
+const czechEditionCall: CallEstimateProfile = {
   promptChars: 16_000,
   maxOutputTokens: 2_000,
-  basis: "Typical 1,100-word English edition: a 16,000-character source packet and up to 2,000 response tokens"
-};
-
-const czechEditionCall: CallEstimateProfile = {
-  promptChars: 14_000,
-  maxOutputTokens: 2_000,
-  basis: "Typical 1,100-word Czech edition: a 14,000-character source packet and up to 2,000 response tokens"
+  basis: "Typical 1,100-word Czech edition: a 16,000-character source packet and up to 2,000 response tokens"
 };
 
 const mmaArticleCall: CallEstimateProfile = {
@@ -351,16 +344,13 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   STET: [
-    configuredEditionModel(editionModels.writing, "Caught Up English edition", englishEditionCall),
+    configuredEditionModel(editionModels.writing, "Caught Up Czech edition", czechEditionCall),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
+  // HACEK adapted the English edition and the English article into Czech. Both magazines are
+  // written in Czech now, so there is nothing to adapt and no model call attached to the role.
+  // Whether the agent keeps a seat in the room is an org decision, not a language one.
   HACEK: [
-    configuredEditionModel(
-      editionModels.localization,
-      "Caught Up Czech edition",
-      czechEditionCall
-    ),
-    configuredEditionModel(editionModels.localization, "MMA Files Czech edition", mmaArticleCall),
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   SPARK: [configuredTextModel("OPENAI_SPECIALIST", "Caught Up idea and project meetings", sparkMeetingCall)],
@@ -370,7 +360,7 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   ],
   PALATE: [configuredTextModel("ANTHROPIC_SPECIALIST", "Taste and project meetings")],
   JAB: [
-    configuredEditionModel(editionModels.localization, "MMA Files English articles", mmaArticleCall),
+    configuredEditionModel(editionModels.writing, "MMA Files Czech articles", mmaArticleCall),
     configuredTextModel("OPENAI_SPECIALIST", "MMA Files editorial rooms")
   ]
 };

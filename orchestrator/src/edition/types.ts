@@ -67,11 +67,13 @@ export interface WrittenArticle {
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   selectedImageCandidateIndex?: number;
-  byLocale: { en: LocalizedContent; cs: LocalizedContent };
+  /** Czech is what the desk writes. English is optional and no longer produced. */
+  byLocale: { en?: LocalizedContent; cs: LocalizedContent };
   usage: EditionUsage[];
 }
 
-export interface EnglishArticle {
+/** What one writing call returns: the article, in the one language it was written in. */
+export interface CzechArticle {
   slug: string;
   date: string;
   tags: string[];
@@ -79,7 +81,7 @@ export interface EnglishArticle {
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   selectedImageCandidateIndex?: number;
-  en: LocalizedContent;
+  cs: LocalizedContent;
   usage: EditionUsage[];
 }
 

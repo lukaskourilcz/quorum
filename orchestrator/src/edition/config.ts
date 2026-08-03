@@ -27,13 +27,11 @@ export const EditionQualityConfigSchema = z.object({
     briefsMaximum: z.number().int().min(2).max(4),
     watchlistMaximum: z.number().int().min(4).max(6),
     maximumOutputTokens: z.number().int().positive(),
-    maximumLocalizationOutputTokens: z.number().int().positive(),
     maximumCurationCandidates: z.number().int().positive()
   }),
   models: z.object({
     curation: z.literal("claude-sonnet-4-6"),
-    writing: z.literal("claude-sonnet-4-6"),
-    localization: z.literal("claude-sonnet-4-6")
+    writing: z.literal("claude-sonnet-4-6")
   }),
   budgets: z.object({
     warningCostPerRun: z.number().nonnegative(),
@@ -47,6 +45,8 @@ export const EditionQualityConfigSchema = z.object({
     maximumRewriteAttempts: z.literal(1),
     minimumScore: z.number().int().min(0).max(50)
   }),
+  // Kept after the localization stage retired: the one remaining review holds the stricter of
+  // stet.minimumScore and this, so collapsing two gates into one cannot lower the bar.
   hacek: z.object({
     maximumRewriteAttempts: z.literal(1),
     minimumScore: z.number().int().min(0).max(50)

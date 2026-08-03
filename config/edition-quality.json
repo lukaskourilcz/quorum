@@ -21,14 +21,12 @@
     "targetWords": 1100,
     "briefsMaximum": 4,
     "watchlistMaximum": 6,
-    "maximumOutputTokens": 5000,
-    "maximumLocalizationOutputTokens": 5000,
+    "maximumOutputTokens": 6500,
     "maximumCurationCandidates": 50
   },
   "models": {
     "curation": "claude-sonnet-4-6",
-    "writing": "claude-sonnet-4-6",
-    "localization": "claude-sonnet-4-6"
+    "writing": "claude-sonnet-4-6"
   },
   "budgets": {
     "warningCostPerRun": 0.6,

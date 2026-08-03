@@ -13,16 +13,14 @@ import {
 } from "./quality.js";
 import { EditionRunReporter, type EditionRunReport } from "./report.js";
 import {
-  hacekFeedback,
   reviewCzechArticle,
-  reviewEnglishArticle,
   stetFeedback,
   type StetReview
 } from "./stet.js";
 import type {
   CuratedBrief,
+  CzechArticle,
   EditionModelGateway,
-  EnglishArticle,
   WrittenArticle
 } from "./types.js";
 import type { LicensedPhotoCandidate } from "../images/licensed.js";
@@ -30,11 +28,6 @@ import { materializeLicensedPhoto } from "../images/licensed.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
 import { BudgetError } from "../budget.js";
-import {
-  localizeToCzech,
-  parityFeedback,
-  reviewTranslationParity
-} from "./localize.js";
 
 export interface EditionProductionInput {
   date: string;
@@ -137,9 +130,9 @@ function noEdition(
   };
 }
 
-function articleRationale(article: EnglishArticle, fallback: string): string {
+function articleRationale(article: CzechArticle, fallback: string): string {
   if (!fallback) {
-    return `${article.en.title} led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.`.slice(0, 280);
+    return `${article.cs.title} led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.`.slice(0, 280);
   }
   return fallback;
 }
@@ -179,7 +172,7 @@ export async function produceEdition(
     attempt <= input.config.budgets.maximumRegenerationAttemptsPerDate;
     attempt += 1
   ) {
-    let english: EnglishArticle;
+    let english: CzechArticle;
     try {
       english = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
         write(brief, input.items, input.config, input.gateway, feedback, input.imageCandidates, input.now, input.readBody)
@@ -222,10 +215,10 @@ export async function produceEdition(
     // time write() returns, and one full pass costs about $0.22 of a $0.35 per-edition cap
     // while a rewrite reserves $0.14 — so a violation discovered after the Czech desk had
     // been paid was terminal, and the two configured regenerations could never run. The
-    // thresholds and the post-localization gate are untouched; this only fails earlier, and
-    // it can never pass anything the final gate would reject.
+    // thresholds are untouched; this only fails earlier, and it can never pass anything the
+    // final gate would reject.
     const draftMetrics = qualityMetrics(
-      { ...english, byLocale: { en: english.en, cs: english.en } },
+      { ...english, byLocale: { cs: english.cs } },
       input,
       reporter.totalCostUsd()
     );
@@ -250,7 +243,7 @@ export async function produceEdition(
       input.deriveWhyThisStory ? "" : input.whyThisStory
     );
     const stet = await reporter.stage(`stet_${attempt}`, () =>
-      reviewEnglishArticle(english, rationale, input.config)
+      reviewCzechArticle(english, rationale, input.config)
     );
     reporter.stet = stet;
     if (!stet.passed) {
@@ -267,81 +260,9 @@ export async function produceEdition(
       continue;
     }
 
-    let article: WrittenArticle | null = null;
-    let localizationFeedback: string[] = [];
-    for (
-      let localizationAttempt = 0;
-      localizationAttempt <= input.config.hacek.maximumRewriteAttempts;
-      localizationAttempt += 1
-    ) {
-      let localized: WrittenArticle;
-      try {
-        localized = await reporter.stage(
-          localizationAttempt === 0 ? `hacek_${attempt}` : `hacek_${attempt}_rewrite`,
-          () => localizeToCzech(
-            english,
-            input.config,
-            input.gateway,
-            localizationFeedback
-          )
-        );
-        localized.usage.forEach((usage) => reporter.addUsage(usage));
-      } catch (error) {
-        // A localization the provider already billed for still costs money when it fails to
-        // parse. The write stage records that (see the InvalidArticleError branch above); this
-        // one discarded it, so the ledger under-reported and the day and month caps, which are
-        // derived from that same ledger, drifted a little further open on every bad Czech pass.
-        if (error instanceof InvalidModelOutputError) reporter.addUsage(error.usage);
-        reporter.warn(`hacek_invalid:${error instanceof Error ? error.message : "unknown"}`);
-        reporter.hacekBlocks += 1;
-        if (localizationAttempt >= input.config.hacek.maximumRewriteAttempts) {
-          return noEdition(input, reporter, "hacek_invalid_after_rewrite");
-        }
-        localizationFeedback = [
-          "Return a complete schema-valid Czech adaptation of every English field."
-        ];
-        continue;
-      }
-
-      const czech = await reporter.stage(
-        `hacek_register_${attempt}_${localizationAttempt}`,
-        () => reviewCzechArticle(localized, input.config)
-      );
-      const parity = await reporter.stage(
-        `hacek_parity_${attempt}_${localizationAttempt}`,
-        () => reviewTranslationParity(localized.byLocale.en, localized.byLocale.cs)
-      );
-      const parityViolations = parity.violations.map((violation) => ({
-        code: violation.code,
-        locale: "cs" as const,
-        message: violation.message
-      }));
-      const hacek: StetReview = {
-        passed: czech.passed && parity.passed,
-        score: Math.max(0, czech.score - parityViolations.length * 5),
-        violations: [...czech.violations, ...parityViolations]
-      };
-      reporter.hacek = hacek;
-      if (!hacek.passed) {
-        reporter.hacekBlocks += 1;
-        hacek.violations.forEach((violation) =>
-          reporter.warn(`hacek:${violation.code}`)
-        );
-        if (localizationAttempt >= input.config.hacek.maximumRewriteAttempts) {
-          return noEdition(input, reporter, "hacek_block_after_rewrite");
-        }
-        localizationFeedback = [
-          ...hacekFeedback(czech),
-          ...parityFeedback(parity)
-        ];
-        continue;
-      }
-      article = localized;
-      break;
-    }
-    if (!article) {
-      return noEdition(input, reporter, "hacek_missing_adaptation");
-    }
+    // The article is what the desk wrote. Nothing adapts it afterwards, so there is no second
+    // telling to review, no parity to check between two tellings, and no second model call.
+    const article: WrittenArticle = { ...english, byLocale: { cs: english.cs } };
 
     const metrics = qualityMetrics(article, input, reporter.totalCostUsd());
     const quality = await reporter.stage(`quality_${attempt}`, () =>
@@ -361,7 +282,7 @@ export async function produceEdition(
               candidate,
               venture: "caught-up",
               slug: article.slug,
-              altEn: article.byLocale.en.illustrationAlt,
+              ...(article.byLocale.en ? { altEn: article.byLocale.en.illustrationAlt } : {}),
               altCs: article.byLocale.cs.illustrationAlt
             });
           } catch (error) {

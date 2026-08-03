@@ -1,5 +1,5 @@
 import type { EditionQualityConfig } from "./config.js";
-import type { EnglishArticle, LocalizedContent, WrittenArticle } from "./types.js";
+import type { CzechArticle, LocalizedContent, WrittenArticle } from "./types.js";
 
 interface StetRule {
   code: string;
@@ -154,34 +154,30 @@ function localizedText(value: LocalizedContent): string {
   ].join("\n");
 }
 
-export function reviewEnglishArticle(
-  article: EnglishArticle,
+/**
+ * The article review. One article, one language, one pass.
+ *
+ * There used to be two: an English review of the written draft and a Czech review of the
+ * translation, with separate score floors. With one telling there is one review, and it holds
+ * the stricter of the two floors so collapsing the stages cannot quietly lower the bar.
+ *
+ * whyThisStory is reviewed separately and against the board rules, because it is not article
+ * prose — it is the room's rationale, generated in English, published on the edition page and
+ * in the room summary. Nothing else checks it: the package schema only bounds its length.
+ */
+export function reviewCzechArticle(
+  article: CzechArticle,
   whyThisStory: string,
   config: EditionQualityConfig
 ): StetReview {
   const violations = [
-    ...reviewArticleText(localizedText(article.en), "en"),
+    ...reviewArticleText(localizedText(article.cs), "cs"),
     ...reviewArticleText(whyThisStory, "board")
   ];
   const score = Math.max(0, 50 - violations.length * 5);
+  const floor = Math.max(config.stet.minimumScore, config.hacek.minimumScore);
   return {
-    passed: violations.length === 0 && score >= config.stet.minimumScore,
-    score,
-    violations
-  };
-}
-
-export function reviewCzechArticle(
-  article: WrittenArticle,
-  config: EditionQualityConfig
-): StetReview {
-  const violations = reviewArticleText(
-    localizedText(article.byLocale.cs),
-    "cs"
-  );
-  const score = Math.max(0, 50 - violations.length * 5);
-  return {
-    passed: violations.length === 0 && score >= config.hacek.minimumScore,
+    passed: violations.length === 0 && score >= floor,
     score,
     violations
   };
