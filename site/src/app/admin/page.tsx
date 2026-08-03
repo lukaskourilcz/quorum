@@ -8,6 +8,7 @@ import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
+import { ArticleDecksPanel } from "@/components/admin/article-decks-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { Mark } from "@/components/brand/mark";
@@ -22,6 +23,7 @@ import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { getPublicMoneySnapshot } from "@/lib/money-records";
+import { readAdminDecks } from "@/lib/admin-decks";
 import { readCarouselStudio } from "@/lib/carousel-studio";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { readAdminSnapshot, type AdminSocialPack } from "@/lib/admin-state";
@@ -215,7 +217,7 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string }>;
 }) {
-  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, carouselStudio, agentControls, autonomy, fixedCosts, money] = await Promise.all([
+  const [{ venture: requestedVenture, tab: requestedTab }, state, portfolio, standups, fightaiq, mmaFiles, carouselStudio, decks, agentControls, autonomy, fixedCosts, money] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
@@ -223,6 +225,7 @@ export default async function AdminPage({
     readAdminFightAiQ(),
     readAdminMmaFiles(),
     readCarouselStudio(),
+    readAdminDecks(),
     readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
@@ -420,6 +423,8 @@ export default async function AdminPage({
             <FightAiQAdminPanel snapshot={fightaiq} tab={selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources"} />
           ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab) ? (
             <MmaFilesAdminPanel snapshot={mmaFiles} tab={selectedTab as "articles" | "calendar" | "social-lab"} />
+          ) : selectedVenture.id === "carousel-studio" && selectedTab === "decks" ? (
+            <div className="mt-8"><ArticleDecksPanel decks={decks} /></div>
           ) : selectedVenture.id === "carousel-studio" && selectedTab && ["templates", "inspiration", "social-lab"].includes(selectedTab) ? (
             <CarouselStudioAdminPanel snapshot={carouselStudio} tab={selectedTab as "templates" | "inspiration" | "social-lab"} />
           ) : visibleCards.length ? (

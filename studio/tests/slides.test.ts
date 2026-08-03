@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { repoRoot } from "../src/paths.js";
 import {
   MAX_SLIDES,
   MAX_SLIDE_WORDS,
@@ -11,7 +11,7 @@ import {
   proseFromMdx,
   reviewDeck,
   wordCount
-} from "../src/social/slides.js";
+} from "../src/index.js";
 
 const OUTRO = "Celý ozdrojovaný text najdete v MMA Files.";
 
@@ -48,6 +48,14 @@ describe("Czech sentence boundaries", () => {
     expect(slides[0]).toContain("14. září 2024");
   });
 
+  it("does not split inside an abbreviation", () => {
+    // An MMA card is written "Grasso vs. Shevchenko 2". Splitting on "vs." ended the slide at
+    // the first name with the opponent on the next one. Found by looking at a rendered slide.
+    const slides = packIntoSlides("Odveta proběhla na UFC Fight Night: Grasso vs. Shevchenko 2. Skončila remízou.");
+    expect(slides.join(" ")).toContain("Grasso vs. Shevchenko 2");
+    expect(slides.some((slide) => slide.trim().endsWith("vs."))).toBe(false);
+  });
+
   it("never starts a slide in lower case", () => {
     const slides = packIntoSlides("Odveta přišla 16. září 2023 a skončila remízou. Rozhodli to sudí.");
     for (const slide of slides) expect(/^[\p{Ll}]/u.test(slide.trim())).toBe(false);
@@ -67,6 +75,7 @@ describe("MDX becomes the prose a reader sees", () => {
 
 describe("a deck built from the one published article", () => {
   it("lands inside five to ten slides with nothing over the cap", async () => {
+    const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
     const article = JSON.parse(await readFile(
       path.join(repoRoot, "state/ventures/mma-files/articles/2026-08-02-am-ufc-valentina-shevchenko.json"),
       "utf8"

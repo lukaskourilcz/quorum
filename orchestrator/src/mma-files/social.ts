@@ -1,7 +1,7 @@
 import type { ArticlePackage, SocialVariantPack } from "../contracts/mma-files.js";
 import { SocialVariantPackSchema } from "../contracts/mma-files.js";
 import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
-import { buildArticleDeck, deckStyleFor, reviewDeck } from "../social/slides.js";
+import { buildArticleDeck, deckStyleFor, reviewDeck } from "@boardlessai/carousel-studio";
 import { articleRef } from "./hash.js";
 
 export const MMA_FILES_ASSIGNMENT_PROTOCOL = "state/ventures/mma-files/social/ASSIGNMENT.md";

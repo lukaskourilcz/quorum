@@ -72,7 +72,8 @@ const VentureDefinitionSchema = openObject({
     "calendar",
     "social-lab",
     "templates",
-    "inspiration"
+    "inspiration",
+    "decks"
   ])),
   productionJobs: z.array(openObject({
     kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),

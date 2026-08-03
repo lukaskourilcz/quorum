@@ -48,6 +48,9 @@ function brandTokenCheck(template: CarouselTemplate, brand: BrandTokens): Templa
         expect(layer.fillToken);
         if (layer.strokeToken) expect(layer.strokeToken);
       }
+      // A mesh names a colour per blob. Skipping them let a template report clean and then
+      // throw at render time, which is the worst of both: a green check and a broken deck.
+      if (layer.type === "mesh") layer.blobs.forEach((blob) => expect(blob.colorToken));
     });
   });
   return failures.size
@@ -55,15 +58,50 @@ function brandTokenCheck(template: CarouselTemplate, brand: BrandTokens): Templa
     : { id: "brand-tokens", status: "pass", detail: `All layers bind to ${brand.id} tokens` };
 }
 
+/**
+ * Text contrast, measured against everything that can end up behind the text.
+ *
+ * The slide's background token used to be the whole answer, and it stopped being the whole
+ * answer the moment a mesh or a photograph could sit between it and the words. A gradient blob
+ * is a colour behind the text as surely as the background is, so each one is checked too, and
+ * the slide passes only if the text clears 4.5:1 against the worst of them.
+ *
+ * A photograph cannot be checked here — its pixels are the article's, not the template's — so a
+ * slide carrying one relies on the scrim the image layer draws. That is a real limit and is
+ * stated rather than papered over.
+ */
+/** Source-over compositing of one colour on another, which is what the renderer draws. */
+function composite(base: string, over: string, alpha: number): string {
+  const parse = (value: string) => [1, 3, 5].map((offset) => Number.parseInt(value.slice(offset, offset + 2), 16));
+  const [br, bg, bb] = parse(base);
+  const [or, og, ob] = parse(over);
+  const mix = (b: number, o: number) => Math.round(b * (1 - alpha) + o * alpha);
+  return `#${[mix(br!, or!), mix(bg!, og!), mix(bb!, ob!)].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
+}
+
 function contrastCheck(template: CarouselTemplate, brand: BrandTokens): TemplateCheck {
   const failures: string[] = [];
   template.slides.forEach((slide) => {
     const background = brand.colors[slide.backgroundToken];
     if (!background) return;
+    // A blob is composited over the background at its own opacity, so that is what sits behind
+    // the text — not the blob's full colour. Comparing against the raw colour fails designs a
+    // reader would find perfectly legible, and a check that cries wolf gets its threshold
+    // lowered by the next person, which is how a contrast floor quietly dies.
+    const behindText = [background, ...slide.layers.flatMap((layer) =>
+      layer.type === "mesh"
+        ? layer.blobs.flatMap((blob) => {
+            const colour = brand.colors[blob.colorToken];
+            return colour ? [composite(background, colour, blob.opacity)] : [];
+          })
+        : []
+    )];
     slide.layers.forEach((layer) => {
       if (layer.type !== "text" && layer.type !== "logo") return;
       const foreground = brand.colors[layer.colorToken];
-      if (foreground && contrastRatio(foreground, background) < 4.5) {
+      if (!foreground) return;
+      const worst = Math.min(...behindText.map((colour) => contrastRatio(foreground, colour)));
+      if (worst < 4.5) {
         failures.push(`${slide.id}:${layer.type === "text" ? layer.slot : "logo"}`);
       }
     });

@@ -110,7 +110,9 @@ describe("Caught Up social pack composer", () => {
     expect(replay!.queueItems).toEqual(result!.queueItems);
     expect(await readFile(path.join(replayRoot, "site", "public", pack.instagram.frames[0]!.slice(1))))
       .toEqual(await readFile(path.join(root, "site", "public", pack.instagram.frames[0]!.slice(1))));
-  }, 15_000);
+  // Two locales, two genuinely different canvases, up to ten slides each: forty rasterisations
+  // where the fixed five-slide template did ten. Real work, not waste.
+  }, 90_000);
 
   it("does not manufacture a pack for NO_EDITION", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-"));

@@ -9,15 +9,27 @@
       "ledgerNamespace": "caught-up",
       "growth_objective": {
         "label": "Publish reliably while widening the healthy source mix",
-        "components": ["edition-cadence", "source-coverage"]
+        "components": [
+          "edition-cadence",
+          "source-coverage"
+        ]
       },
-      "adminTabs": ["plans", "visuals"],
+      "adminTabs": [
+        "plans",
+        "visuals"
+      ],
       "meetings": [
         {
           "kind": "cu-edition",
           "label": "Caught Up edition room",
           "cadence": "daily@05:00",
-          "cast": ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"],
+          "cast": [
+            "HERALD",
+            "STET",
+            "HACEK",
+            "SPARK",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.08,
           "packet": {
             "topicType": "edition",
@@ -33,7 +45,12 @@
           "kind": "cu-product",
           "label": "Caught Up product room",
           "cadence": "daily@17:00",
-          "cast": ["HERALD", "SPARK", "VAULT", "AUDIT"],
+          "cast": [
+            "HERALD",
+            "SPARK",
+            "VAULT",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.08,
           "packet": {
             "topicType": "product",
@@ -55,15 +72,25 @@
       "ledgerNamespace": "titty-tuesdays",
       "growth_objective": {
         "label": "Build a complete inventory of campaigns that are ready to launch",
-        "components": ["campaign-inventory"]
+        "components": [
+          "campaign-inventory"
+        ]
       },
-      "adminTabs": ["plans", "ideas", "visuals"],
+      "adminTabs": [
+        "plans",
+        "ideas",
+        "visuals"
+      ],
       "meetings": [
         {
           "kind": "tt-marketing",
           "label": "Titty Tuesdays marketing room",
           "cadence": "daily@11:00",
-          "cast": ["PULSE", "ANGLE", "AUDIT"],
+          "cast": [
+            "PULSE",
+            "ANGLE",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.08,
           "packet": {
             "topicType": "social",
@@ -85,15 +112,25 @@
       "ledgerNamespace": "incubator",
       "growth_objective": {
         "label": "Produce evidence-backed content venture proposals",
-        "components": ["evidence-backed-proposals"]
+        "components": [
+          "evidence-backed-proposals"
+        ]
       },
-      "adminTabs": ["niche-proposals"],
+      "adminTabs": [
+        "niche-proposals"
+      ],
       "meetings": [
         {
           "kind": "incubator-scan",
           "label": "Incubator evidence scan",
           "cadence": "daily@07:00",
-          "cast": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"],
+          "cast": [
+            "PULSE",
+            "ANGLE",
+            "SCOUT",
+            "COHORT",
+            "VAULT"
+          ],
           "envelopeUsd": 0.06,
           "packet": {
             "topicType": "growth",
@@ -109,7 +146,14 @@
           "kind": "incubator-synthesis",
           "label": "Incubator proposal synthesis",
           "cadence": "daily@21:00",
-          "cast": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"],
+          "cast": [
+            "PULSE",
+            "ANGLE",
+            "SCOUT",
+            "COHORT",
+            "VAULT",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.06,
           "packet": {
             "topicType": "growth",
@@ -132,15 +176,31 @@
       "ledgerNamespace": "fightaiq",
       "growth_objective": {
         "label": "Improve verified fight coverage and build readiness dossiers",
-        "components": ["event-fighter-coverage", "two-source-agreement", "readiness-dossiers"]
+        "components": [
+          "event-fighter-coverage",
+          "two-source-agreement",
+          "readiness-dossiers"
+        ]
       },
-      "adminTabs": ["fighters", "bouts", "events", "slates", "sources"],
+      "adminTabs": [
+        "fighters",
+        "bouts",
+        "events",
+        "slates",
+        "sources"
+      ],
       "meetings": [
         {
           "kind": "mma-intake",
           "label": "FightAIQ morning data check",
           "cadence": "daily@08:00",
-          "cast": ["FORGE", "CORNER", "SPOTTER", "TAPE", "SONAR"],
+          "cast": [
+            "FORGE",
+            "CORNER",
+            "SPOTTER",
+            "TAPE",
+            "SONAR"
+          ],
           "envelopeUsd": 0.06,
           "packet": {
             "topicType": "evidence",
@@ -156,7 +216,14 @@
           "kind": "mma-analysis",
           "label": "FightAIQ evening model check",
           "cadence": "daily@19:00",
-          "cast": ["FORGE", "SIGMA", "VIG", "TAPE", "PIVOT", "AUDIT"],
+          "cast": [
+            "FORGE",
+            "SIGMA",
+            "VIG",
+            "TAPE",
+            "PIVOT",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.06,
           "packet": {
             "topicType": "finance",
@@ -178,15 +245,28 @@
       "ledgerNamespace": "carousel-studio",
       "growth_objective": {
         "label": "Grow a checked library of original, reusable carousel layouts",
-        "components": ["live-template-library"]
+        "components": [
+          "live-template-library"
+        ]
       },
-      "adminTabs": ["templates", "inspiration", "social-lab"],
+      "adminTabs": [
+        "templates",
+        "decks",
+        "inspiration",
+        "social-lab"
+      ],
       "meetings": [
         {
           "kind": "studio",
           "label": "Carousel Studio room",
           "cadence": "daily@13:00",
-          "cast": ["EASEL", "MOTIF", "KEEPER", "AUDIT", "SCRIBE"],
+          "cast": [
+            "EASEL",
+            "MOTIF",
+            "KEEPER",
+            "AUDIT",
+            "SCRIBE"
+          ],
           "envelopeUsd": 0.06,
           "packet": {
             "topicType": "social",
@@ -208,15 +288,27 @@
       "ledgerNamespace": "mma-files",
       "growth_objective": {
         "label": "Fill evidenced article slots and render verified FightAIQ coverage",
-        "components": ["slot-fill", "rendered-fightaiq-coverage"]
+        "components": [
+          "slot-fill",
+          "rendered-fightaiq-coverage"
+        ]
       },
-      "adminTabs": ["articles", "calendar", "social-lab"],
+      "adminTabs": [
+        "articles",
+        "calendar",
+        "social-lab"
+      ],
       "meetings": [
         {
           "kind": "mag-editorial",
           "label": "MMA Files morning story meeting",
           "cadence": "daily@09:00",
-          "cast": ["CANVAS", "JAB", "QUILL", "AUDIT"],
+          "cast": [
+            "CANVAS",
+            "JAB",
+            "QUILL",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.05,
           "packet": {
             "topicType": "edition",
@@ -232,7 +324,13 @@
           "kind": "mag-desk",
           "label": "MMA Files evening desk review",
           "cadence": "daily@20:00",
-          "cast": ["CANVAS", "JAB", "REACH", "PIVOT", "AUDIT"],
+          "cast": [
+            "CANVAS",
+            "JAB",
+            "REACH",
+            "PIVOT",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.05,
           "packet": {
             "topicType": "edition",

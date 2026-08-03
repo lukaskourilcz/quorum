@@ -7,7 +7,7 @@ import {
 } from "@boardlessai/carousel-studio";
 import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
-import { buildArticleDeck, deckStyleFor, reviewDeck } from "./slides.js";
+import { buildArticleDeck, deckStyleFor, reviewDeck } from "@boardlessai/carousel-studio";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";

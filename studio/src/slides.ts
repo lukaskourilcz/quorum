@@ -36,14 +36,27 @@ export interface ArticleDeckInput {
 }
 
 /**
+ * Abbreviations whose trailing period does not end a sentence.
+ *
+ * "vs." is the one that matters most here and was found by looking at a rendered slide: an MMA
+ * card is written "Grasso vs. Shevchenko 2", and splitting on it ended the slide at "Grasso
+ * vs." with the opponent on the next one.
+ */
+const ABBREVIATIONS = ["vs", "tj", "tzv", "např", "atd", "apod", "mj", "st", "sv", "č", "str", "roč", "resp", "cca"];
+
+/**
  * A sentence boundary in Czech.
  *
  * Not simply "a period followed by a space". Czech writes ordinals with a trailing period, so
- * "UFC 306 dne 14. září 2024" contains two of them and a naive split puts "září 2024 a
- * vyústila…" on its own slide, starting mid-sentence in lower case. The period after a bare
- * number is an ordinal, and a real sentence starts with a capital, a digit or an opening quote.
+ * "UFC 306 dne 14. září 2024" holds two of them and a naive split puts "září 2024 a vyústila…"
+ * on its own slide, starting mid-sentence in lower case. Abbreviations do the same thing in the
+ * middle of a name. So a boundary needs: no digit before the period, no known abbreviation
+ * before it, and a capital, digit or opening quote after it.
  */
-const SENTENCE_END = /(?<![\d])(?<=[.!?…])\s+(?=[\p{Lu}\d"„«(])/u;
+const SENTENCE_END = new RegExp(
+  `(?<!\\d)(?<!(?:^|[^\\p{L}])(?:${ABBREVIATIONS.join("|")}))(?<=[.!?…])\\s+(?=[\\p{Lu}\\d"„«(])`,
+  "u"
+);
 
 function words(value: string): string[] {
   return value.trim().split(/\s+/u).filter(Boolean);

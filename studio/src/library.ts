@@ -40,13 +40,13 @@ const text = (
   ...options
 });
 
-const logo = (y = 0.07): CarouselLayer => ({
+const logo = (y = 0.07, colorToken = "accent"): CarouselLayer => ({
   type: "logo",
   x: 0.08,
   y,
   width: 0.44,
   height: 0.06,
-  colorToken: "accent",
+  colorToken,
   fontToken: "headline"
 });
 
@@ -209,7 +209,12 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
           // On a cover the wordmark drops below the photograph. Over the image it sat on
           // whatever the photograph happened to be, which for a bright frame is unreadable and
           // for a dark one is luck rather than design.
-          logo(cover ? heroBottom + 0.03 : 0.07),
+          // The wordmark is foreground on a deck, not accent. Measured: an accent wordmark over
+          // an accent gradient blob only clears 4.5:1 once the blob drops to 0.12 opacity, which
+          // is a gradient you cannot see. Foreground clears it at every opacity the design uses,
+          // so the gradient keeps its strength and the mark stays readable. The accent is still
+          // there, in the rule and the progress indicator.
+          logo(cover ? heroBottom + 0.03 : 0.07, "foreground"),
           // On a cover the headline sits between the wordmark and the rule, so its height is
           // whatever is left rather than a constant — a fixed block ran the last line straight
           // through the accent rule on the taller heroes.

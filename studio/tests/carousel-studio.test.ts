@@ -147,3 +147,36 @@ describe("a deck template sized to the article", () => {
     expect(rendered.flatMap((slide) => slide.truncatedSlots)).toEqual([articleSlideSlot(2)]);
   });
 });
+
+describe("a gradient behind the words", () => {
+  it("counts every mesh blob as something the text sits on", () => {
+    // The check measured text against the slide background alone, which stopped being the whole
+    // answer the moment a gradient could sit between it and the words. A blob is composited at
+    // its own opacity, because comparing against the raw colour fails designs a reader would
+    // find perfectly legible — and a check that cries wolf gets its threshold lowered.
+    const brand = CAROUSEL_BRANDS["mma-files"];
+    const template = articleDeckTemplate(5, "mesh");
+    expect(mayGoLive(validateTemplateForBrand(template, brand, "instagram-portrait"))).toBe(true);
+
+    const loud = structuredClone(template) as typeof template;
+    for (const slide of loud.slides) {
+      for (const layer of slide.layers) {
+        if (layer.type === "mesh") for (const blob of layer.blobs) blob.opacity = 1;
+      }
+    }
+    const checks = validateTemplateForBrand(loud, brand, "instagram-portrait");
+    expect(mayGoLive(checks), "a fully opaque accent field under the text must fail").toBe(false);
+    expect(checks.find((check) => check.id === "contrast")?.detail).toMatch(/Contrast below/u);
+  });
+
+  it("refuses a mesh blob naming a colour the brand does not have", () => {
+    // Blob tokens were never visited, so a template reported clean and then threw at render:
+    // a green check and a broken deck.
+    const template = structuredClone(articleDeckTemplate(5, "mesh")) as ReturnType<typeof articleDeckTemplate>;
+    for (const layer of template.slides[0]!.layers) {
+      if (layer.type === "mesh") layer.blobs[0]!.colorToken = "not-a-token";
+    }
+    const checks = validateTemplateForBrand(template, CAROUSEL_BRANDS["mma-files"], "instagram-portrait");
+    expect(checks.find((check) => check.id === "brand-tokens")?.status).toBe("fail");
+  });
+});

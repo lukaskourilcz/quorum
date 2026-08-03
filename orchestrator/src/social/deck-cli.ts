@@ -7,13 +7,13 @@ import {
   articleDeckTemplate,
   articleSlideSlot,
   renderCarouselPng,
+  toRenderablePng,
   type DeckStyle
 } from "@boardlessai/carousel-studio";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
 import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { repoRoot, stateRoot } from "../paths.js";
-import sharp from "sharp";
-import { buildArticleDeck, reviewDeck, wordCount, type Slide } from "./slides.js";
+import { buildArticleDeck, reviewDeck, wordCount, type Slide } from "@boardlessai/carousel-studio";
 
 /**
  * Render one article's carousel to look at, without publishing anything.
@@ -42,12 +42,7 @@ function valueAfter(args: string[], name: string): string | undefined {
  * image, just the background. Verified by rendering all three encodings and sampling the pixels.
  */
 async function heroPng(base64: string | undefined): Promise<Buffer | null> {
-  if (!base64) return null;
-  try {
-    return await sharp(Buffer.from(base64, "base64")).png().toBuffer();
-  } catch {
-    return null;
-  }
+  return base64 ? toRenderablePng(Buffer.from(base64, "base64")) : null;
 }
 
 async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "mma-files"; slug: string; slides: Slide[]; hero: string | undefined }> {

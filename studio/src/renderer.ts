@@ -193,3 +193,23 @@ export async function renderCarouselPng(input: {
     return { ...slide, png, pngHash: createHash("sha256").update(png).digest("hex") };
   }));
 }
+
+/**
+ * Decode any stored image into the PNG bytes an image layer can embed.
+ *
+ * librsvg draws nothing at all for a WebP data URI — no error, no image, just the background —
+ * and heroes are stored as WebP. Verified by rendering all three encodings and sampling pixels.
+ * This lives beside the renderer because it is the renderer's requirement, not the caller's
+ * problem, and it keeps sharp out of every package that wants a slide.
+ *
+ * Returns null rather than throwing: a hero that will not decode is a slide without a
+ * photograph, which is a worse slide and not a failed render.
+ */
+export async function toRenderablePng(bytes: Buffer | Uint8Array): Promise<Buffer | null> {
+  try {
+    const { default: sharp } = await import("sharp");
+    return await sharp(Buffer.from(bytes)).png().toBuffer();
+  } catch {
+    return null;
+  }
+}
