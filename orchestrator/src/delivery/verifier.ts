@@ -85,8 +85,9 @@ export async function verifyReleaseSnapshot(snapshot: ReleaseSnapshot, now = new
   return [
     // Reported under its own name. Recording "no English was asked for" as an english-route
     // pass kept the proof at nine checks and above the contract's minimum of eight, but it
-    // also made receipts/caught-up#bilingual_hero_rate — a KPI whose own label is "Editions
-    // delivered in English and Czech" — read 1 on a day nothing bilingual shipped.
+    // also fed a KPI that counted "delivered in English and Czech", which then read 1 on a day
+    // nothing bilingual shipped. That KPI now counts Czech delivery, which is what the desk
+    // promises, and this check is reported under its own name either way.
     en === null
       ? check("english-absent", true, "This package has no English locale", now)
       : check("english-route", en.route, `${snapshot.pages.en!.status} ${snapshot.pages.en!.url}`, now),

@@ -29,22 +29,24 @@ waiting for, in the order that unblocks the most.
 These are not setup steps. They are choices the migration surfaced that are
 yours, not the runtime's.
 
-- [ ] **Decide what happens to HACEK.** HACEK was the Czech language editor: it
-  adapted the English edition and the English article into Czech. Both magazines
-  are written in Czech now, so the role has no model call attached to it. The
-  agent still holds a seat in the DNESKAi edition room and its approved role
-  record still names `orchestrator/src/edition/localize.ts`, which now holds the
-  Czech register and the copy repair rather than a translation stage. Removing an
-  agent from a room is an org change and goes through PEOPLE, so nothing was
-  touched. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **HACEK needs a responsibility change, from PEOPLE not from me.** I said
+  earlier that HACEK had been left with nothing; that was wrong and I checked it
+  properly. HACEK keeps its seat in the DNESKAi edition room, keeps
+  `editorial:czech` and `social:czech`, and still owns the Czech register and the
+  copy repair in `orchestrator/src/edition/localize.ts`. What it lost is the
+  production call that adapted an English article, and with it the
+  `translation:fidelity` capability, which nothing now exercises. Recording that
+  is a Tier A/B organization change and belongs to PEOPLE through the maintenance
+  module — an interactive session must not write it by hand, so nothing was
+  changed. Raise it at the next org review. [imp:2] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Decide what `bilingual_hero_rate` should measure.** The KPI is literally
-  named "Editions delivered in English and Czech" and the company has stopped
-  doing that on purpose. It now reads honestly — a Czech-only edition scores
-  zero — rather than borrowing a pass from a check that no longer runs. Either
-  retire it or replace it with the thing you actually want counted. The runtime
-  cannot lower a target or rewrite a past snapshot, so this is yours.
-  [imp:2] [owner:me] [time:15m] [kind:decision]
+- [x] **The bilingual KPI now counts what the desk promises.** It was "Editions
+  delivered in English and Czech with a hero image", a practice the company
+  stopped on purpose, and it counted an `english-route` check that a Czech-only
+  package no longer emits. It is now `caught-up.published-hero-rate`, "Editions
+  delivered in Czech with a hero image" — same target of 1, same ratio, counting
+  the Czech page and the hero image. No target was lowered and no past snapshot
+  was rewritten.
 
 - [ ] **Rename the DNESKAi Vercel project and decide on a domain.** The
   publication is DNESKAi everywhere a reader can see. The deployment is still at

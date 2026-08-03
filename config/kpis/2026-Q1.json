@@ -94,10 +94,10 @@
       "ramp_days": 14
     },
     {
-      "id": "caught-up.bilingual-hero-rate",
+      "id": "caught-up.published-hero-rate",
       "venture": "caught-up",
-      "name": "Editions delivered in English and Czech with a hero image",
-      "metric_source": "receipts/caught-up#bilingual_hero_rate",
+      "name": "Editions delivered in Czech with a hero image",
+      "metric_source": "receipts/caught-up#published_hero_rate",
       "target": 1,
       "direction": "at-least",
       "unit": "ratio",

@@ -82,7 +82,7 @@ describe("quarterly measurement collector", () => {
     });
     expect(result.measurements["state/meetings#valid_result_rate"]).toBeCloseTo(2 / 3);
     expect(result.measurements["receipts/caught-up#editions_delivered"]).toBe(1);
-    expect(result.measurements["receipts/caught-up#bilingual_hero_rate"]).toBe(1);
+    expect(result.measurements["receipts/caught-up#published_hero_rate"]).toBe(1);
     expect(result.measurements["receipts/delivery#pass_within_one_retry_rate"]).toBe(1);
   });
 
@@ -197,5 +197,49 @@ describe("quarterly measurement collector", () => {
       mmaFilesIndexingEnabled: false
     });
     expect(result.measurements["state/mma/events#announced_event_coverage_rate"]).toBe(0.5);
+  });
+});
+
+describe("the published-hero measure counts what the desk promises", () => {
+  it("does not read a synthetic english-absent pass as a delivery", async () => {
+    // The measure counted english-route among its passing checks. A Czech-only package records
+    // english-absent instead, so the old measure would have gone on reporting success for a
+    // locale nobody was served — a check that passes because nothing was asked of it is not a
+    // delivery. It now counts the Czech page and the hero image, and nothing else.
+    const { root, stateRoot } = await fixtureRoot();
+    await writeJson(path.join(stateRoot, "edition/deliveries/2026-08-03.json"), {
+      schemaVersion: 1,
+      date: "2026-08-03",
+      packageHash: "a".repeat(64),
+      status: "delivered",
+      targetRepository: "lukaskourilcz/aifirst",
+      targetCommit: "b".repeat(40),
+      deliveredAt: "2026-08-03T07:00:00.000Z",
+      tags: []
+    });
+    const proof = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/release-proof.valid.json"), "utf8")) as {
+      startedAt: string;
+      completedAt: string;
+      checks: Array<{ name: string; checkedAt: string; detail: string }>;
+    };
+    proof.startedAt = "2026-08-03T07:01:00.000Z";
+    proof.completedAt = "2026-08-03T07:03:00.000Z";
+    for (const check of proof.checks) check.checkedAt = "2026-08-03T07:02:00.000Z";
+    const english = proof.checks.find((check) => check.name === "english-route");
+    if (english) {
+      english.name = "english-absent";
+      english.detail = "This package has no English locale";
+    }
+    await writeJson(path.join(stateRoot, "release-proofs/caught-up/2026-08-03.json"), proof);
+    const result = await collectQuarterlyMeasurements({
+      repoRoot: root,
+      stateRoot,
+      kpiSet,
+      now: new Date("2026-08-03T12:00:00.000Z"),
+      metricsIngestionEnabled: false,
+      mmaFilesIndexingEnabled: false
+    });
+    expect(proof.checks.some((check) => check.name === "english-route")).toBe(false);
+    expect(result.measurements["receipts/caught-up#published_hero_rate"]).toBe(1);
   });
 });

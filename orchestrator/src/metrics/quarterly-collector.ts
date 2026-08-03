@@ -234,14 +234,13 @@ export async function collectQuarterlyMeasurements(input: {
     .filter((result) => result.success)
     .map((result) => result.data)
     .filter((proof) => proof.venture === "caught-up" && proof.status === "passed" && dateInPeriod(proof.completedAt, periodStart, periodEnd));
-  // Only an editon that really served both pages counts. english-route is emitted solely when
-  // the package carried an English half, so a Czech-only edition scores zero here rather than
-  // borrowing a pass from a check that was never run. The measure stays honest; whether the
-  // company still wants this KPI once Czech-only is deliberate is the owner's call, and it is
-  // raised in state/INBOX.md rather than quietly rewritten here.
-  measurements["receipts/caught-up#bilingual_hero_rate"] = deliveredEditions > 0 && caughtUpProofs.length > 0
+  // What the desk actually promises now: an edition that reached readers in Czech with a hero
+  // image on it. This counted English too, and the day the desk stopped writing English the
+  // measure would have gone on reporting success for a locale nobody was served — an
+  // english-route check that passes because no English was asked for is not a delivery.
+  measurements["receipts/caught-up#published_hero_rate"] = deliveredEditions > 0 && caughtUpProofs.length > 0
     ? Math.min(1, caughtUpProofs.filter((proof) =>
-        ["english-route", "czech-route", "hero-image"].every((name) => proof.checks.some((check) => check.name === name && check.status === "pass"))
+        ["czech-route", "hero-image"].every((name) => proof.checks.some((check) => check.name === name && check.status === "pass"))
       ).length / deliveredEditions)
     : null;
 
