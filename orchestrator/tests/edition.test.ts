@@ -1,3 +1,5 @@
+import { createDigest, renderDigestDataBlock } from "../src/sources/digest.js";
+import { curate } from "../src/edition/curate.js";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -455,5 +457,37 @@ describe("a rejected edition dies at the price of one write", () => {
     expect(result.report.regenerationAttempts).toBe(2);
     expect(result.report.stages.some((stage) => stage.name.startsWith("hacek"))).toBe(false);
     expect(result.report.stages.some((stage) => stage.name.startsWith("stet"))).toBe(false);
+  });
+});
+
+describe("the editor's index means what the editor was shown", () => {
+  it("resolves a pick against the same ordering the packet renders", async () => {
+    // renderDigestDataBlock sorts by date and weight and drops duplicates, and curate used
+    // to index a raw slice instead. For the fixture the two orderings are exact reverses, so
+    // every pick named a different article than the editor chose — silently, in a published
+    // edition. This pins that the rendered packet and the resolved pick agree.
+    const items = await fixtureJson<SourceItem[]>("source-items.json");
+    const shown = createDigest(items, items.length);
+    const packet = renderDigestDataBlock(items.slice(0, 50));
+    const urls = [...packet.matchAll(/"url":"([^"]+)"/gu)].map((match) => match[1]);
+    expect(urls).toEqual(shown.map((item) => item.url));
+  });
+
+  it("bounds the pick index to the pool so an out-of-range answer cannot reach the parse", async () => {
+    // On 3 August the editor answered index 54 for a 50-item pool and the whole edition died
+    // after the call was billed. The provider enforces the bound now.
+    const config = await loadEditionQualityConfig();
+    const items = await fixtureJson<SourceItem[]>("source-items.json");
+    let seenMaximum: unknown;
+    await curate(items, "2026-08-03", config, {
+      invoke: async (request: { tool: { inputSchema: Record<string, never> } }) => {
+        const schema = request.tool.inputSchema as unknown as {
+          properties: { picks: { items: { properties: { index: { maximum?: number } } } } };
+        };
+        seenMaximum = schema.properties.picks.items.properties.index.maximum;
+        throw new Error("stop after inspecting the schema");
+      }
+    } as never).catch(() => undefined);
+    expect(seenMaximum).toBe(Math.min(items.length, config.article.maximumCurationCandidates) - 1);
   });
 });

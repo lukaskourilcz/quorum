@@ -6,25 +6,25 @@
       "angle": "Four primary sources show lower published prices and the limits attached to them.",
       "picks": [
         {
-          "index": 0,
+          "index": 9,
           "why": "Anthropic published a lower production price.",
           "evidence": "company_claim",
           "topic": "pricing"
         },
         {
-          "index": 1,
+          "index": 8,
           "why": "OpenAI changed its public API price table.",
           "evidence": "confirmed_fact",
           "topic": "pricing"
         },
         {
-          "index": 2,
+          "index": 7,
           "why": "DeepMind documented the limits of a lower-cost inference tier.",
           "evidence": "company_claim",
           "topic": "inference"
         },
         {
-          "index": 3,
+          "index": 6,
           "why": "The research post supplies measured serving-cost context.",
           "evidence": "analysis",
           "topic": "inference"
@@ -46,7 +46,10 @@
     "tool": "emit_article",
     "value": {
       "slug": "2026-08-04-production-inference-price-cut",
-      "tags": ["models", "pricing"],
+      "tags": [
+        "models",
+        "pricing"
+      ],
       "illustration_prompt": "A clean editorial still life of four paper price tables beside a calculator, no text or logos",
       "wire": [
         {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { curationOwnedViolations } from "./quality.js";
-import { renderDigestDataBlock } from "../sources/digest.js";
+import { createDigest, renderDigestDataBlock } from "../sources/digest.js";
 import type { SourceItem } from "../sources/types.js";
 import type { EditionQualityConfig } from "./config.js";
 import {
@@ -70,6 +70,26 @@ const toolInputSchema = {
   additionalProperties: false
 } as const;
 
+/** The emit_brief schema with the pick index bounded to the pool the editor was shown. */
+function boundedToolInputSchema(schema: typeof toolInputSchema, maximum: number) {
+  return {
+    ...schema,
+    properties: {
+      ...schema.properties,
+      picks: {
+        ...schema.properties.picks,
+        items: {
+          ...schema.properties.picks.items,
+          properties: {
+            ...schema.properties.picks.items.properties,
+            index: { type: "integer" as const, minimum: 0, maximum }
+          }
+        }
+      }
+    }
+  };
+}
+
 /** A pick list that cannot pass the gates it alone decides. Thrown before anything is written. */
 export class CurationGateError extends Error {
   constructor(readonly violations: readonly string[], readonly usage: unknown) {
@@ -86,17 +106,25 @@ export async function curate(
   sources?: Parameters<typeof curationOwnedViolations>[0]["registry"]
 ): Promise<CuratedBrief> {
   if (items.length < 3) throw new Error("curate: at least three source items are required");
-  const pool = items.slice(0, config.article.maximumCurationCandidates);
+  // Index the very list the editor is shown. renderDigestDataBlock re-sorts by date and
+  // weight and drops duplicates, so rendering a raw slice meant the editor picked index i
+  // from one ordering while this function resolved pool[i] in another: every pick could
+  // silently name a different article than the one chosen, and a deduplicated pool could
+  // even be shorter than the indices on offer. Building the digest once removes the gap.
+  const pool = createDigest(items, items.length).slice(0, config.article.maximumCurationCandidates);
+  if (pool.length < 3) throw new Error("curate: at least three distinct source items are required");
   const response = await gateway.invoke({
     model: config.models.curation,
     stage: "curate",
     maxOutputTokens: 1_500,
-    system: CURATE_SYSTEM,
+    system: `${CURATE_SYSTEM}\n\nThe packet holds ${pool.length} items, numbered 0 to ${pool.length - 1}. An index outside that range kills the edition after this call is billed.`,
     user: `Publication date: ${date}\n\n${renderDigestDataBlock(pool)}`,
     tool: {
       name: "emit_brief",
       description: "Emit the structured Caught Up daily brief.",
-      inputSchema: toolInputSchema
+      // The provider enforces the bound, so an out-of-range index cannot reach the parse and
+      // destroy a paid edition. On 3 August the editor answered index 54 for a 50-item pool.
+      inputSchema: boundedToolInputSchema(toolInputSchema, pool.length - 1)
     },
     parse: (value) => ToolOutputSchema.parse(value)
   });

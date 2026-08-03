@@ -50,6 +50,27 @@ export class ModelOutputParseError extends Error {
   }
 }
 
+/**
+ * Strip a markdown code fence from a model's reply before the caller parses it.
+ *
+ * Every guarded call asks for JSON and every caller parses it as JSON, but a model will
+ * sometimes wrap the object in ```json anyway. Two call sites stripped it and five did not,
+ * so on 3 August VAULT answered the morning company meeting with a fenced object, JSON.parse
+ * threw on the backtick, and the whole board died on a reply that was correct in every way
+ * except its wrapper — billed, and nothing produced. Doing it here rather than at each call
+ * site is the point: a new caller cannot forget.
+ *
+ * Only an outer fence is removed. Text that is not fenced is returned untouched, so a reply
+ * that is genuinely malformed still fails exactly as before.
+ */
+export function unfenceModelJson(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed.startsWith("```")) return text;
+  return trimmed
+    .replace(/^```[a-z]*\s*/iu, "")
+    .replace(/\s*```$/u, "");
+}
+
 export async function guardedJsonCall<T>(
   request: GuardedCallInput<T>
 ): Promise<{ value: T; cached: boolean; usd: number }> {
@@ -144,7 +165,7 @@ export async function guardedJsonCall<T>(
   // cost money while the day's Results row shows nothing.
   let value: T;
   try {
-    value = request.parse(response.text);
+    value = request.parse(unfenceModelJson(response.text));
   } catch (error) {
     throw new ModelOutputParseError(request.agent, actual.estimatedUsd, error);
   }
