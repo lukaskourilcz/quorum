@@ -1,3 +1,5 @@
+import { deterministicArticleImage } from "../src/images/article-image.js";
+import { imageSubjectQuery } from "../src/images/subject-query.js";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { validateLicensedImageCandidate } from "../src/images/article-image.js";
@@ -5,15 +7,16 @@ import {
   discoverLicensedPhotos,
   materializeLicensedPhoto,
   type LicensedPhotoCandidate,
-  candidatesNaming
+  candidatesNaming,
+  candidateHosted
 } from "../src/images/licensed.js";
 
 const candidate: LicensedPhotoCandidate = {
   id: "openverse:fixture-photo",
   provider: "openverse",
   title: "Fixture newsroom",
-  thumbnailUrl: "https://images.example/fixture-thumb.jpg",
-  downloadUrl: "https://images.example/fixture.jpg",
+  thumbnailUrl: "https://live.staticflickr.com/fixture-thumb.jpg",
+  downloadUrl: "https://live.staticflickr.com/fixture.jpg",
   width: 1_800,
   height: 1_000,
   license: "CC BY",
@@ -118,5 +121,56 @@ describe("a hero photo has to name its subject", () => {
 
   it("returns nothing rather than guess when there is no subject to match", () => {
     expect(candidatesNaming([candidate("Anything")], "")).toEqual([]);
+  });
+});
+
+describe("a cover never repeats the article", () => {
+  it("draws no part of the headline", () => {
+    // The old cover set the headline in large type, so a reader met the same sentence twice:
+    // once as the page title and once as the picture below it.
+    const title = "AI agents cheat to win and the platforms are just starting to notice";
+    const image = deterministicArticleImage({
+      venture: "caught-up", slug: "ai-agents", title,
+      altEn: "cover", altCs: "obalka", date: "2026-08-03", tags: ["ai", "safety"]
+    });
+    const svg = Buffer.from(image.hero_bytes_base64, "base64").toString();
+    for (const word of ["cheat", "platforms are", "starting to notice"]) {
+      expect(svg, `cover must not carry "${word}"`).not.toContain(word);
+    }
+    expect(svg).toContain("2026-08-03");
+    expect(svg).toContain("AI");
+  });
+
+  it("gives two different articles two different covers, and one article the same one twice", () => {
+    const make = (slug: string) => deterministicArticleImage({
+      venture: "caught-up", slug, title: slug, altEn: "a", altCs: "b", date: "2026-08-03", tags: ["ai"]
+    }).hero_bytes_base64;
+    expect(make("first-story")).not.toBe(make("second-story"));
+    expect(make("first-story")).toBe(make("first-story"));
+  });
+});
+
+describe("the subject query", () => {
+  it("turns a day's tags into something an archive is indexed on", () => {
+    // Three concatenated headlines truncated to 100 characters returned nothing from every
+    // archive, which is why the edition shipped a cover instead of a photograph.
+    expect(imageSubjectQuery([["ai", "safety"], ["ai", "platforms"], ["cybersecurity"]]))
+      .toBe("artificial intelligence cybersecurity");
+  });
+
+  it("says nothing rather than guess when no tag has a visual meaning", () => {
+    // primary-source and analysis describe how a story was sourced, not what it looks like.
+    expect(imageSubjectQuery([["primary-source"], ["news"], ["analysis"]])).toBe("");
+  });
+});
+
+describe("the downloader's allowlist is fixed", () => {
+  it("drops a candidate served from a host the downloader may not reach", () => {
+    // materializeLicensedPhoto used to add whatever host the search response named to its own
+    // allowlist, which is the one thing an allowlist exists to prevent.
+    expect(candidateHosted({ downloadUrl: "https://live.staticflickr.com/x.jpg" })).toBe(true);
+    expect(candidateHosted({ downloadUrl: "https://upload.wikimedia.org/x.jpg" })).toBe(true);
+    expect(candidateHosted({ downloadUrl: "https://images.example/x.jpg" })).toBe(false);
+    expect(candidateHosted({ downloadUrl: "not a url" })).toBe(false);
   });
 });

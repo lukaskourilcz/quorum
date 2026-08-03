@@ -27,7 +27,32 @@ export interface LicensedImageSearchResult {
 type JsonFetcher = (url: string, options: { headers?: Record<string, string> }) => Promise<unknown>;
 
 const API_HOSTS = ["api.openverse.org", "commons.wikimedia.org", "api.pexels.com", "pixabay.com"];
-const DOWNLOAD_HOSTS = ["upload.wikimedia.org", "images.pexels.com", "cdn.pixabay.com", "pixabay.com"];
+// Openverse aggregates, so its images live on the original provider's CDN. Only hosts named
+// here are downloadable; a candidate served from anywhere else is dropped by candidateHosted.
+const DOWNLOAD_HOSTS = [
+  "upload.wikimedia.org",
+  "images.pexels.com",
+  "cdn.pixabay.com",
+  "pixabay.com",
+  "live.staticflickr.com",
+  "farm1.staticflickr.com",
+  "farm2.staticflickr.com",
+  "farm3.staticflickr.com",
+  "farm4.staticflickr.com",
+  "farm5.staticflickr.com",
+  "farm6.staticflickr.com",
+  "farm8.staticflickr.com",
+  "farm9.staticflickr.com"
+];
+
+/** Whether a candidate's bytes sit on a host the downloader is allowed to reach. */
+export function candidateHosted(candidate: { downloadUrl: string }): boolean {
+  try {
+    return DOWNLOAD_HOSTS.includes(new URL(candidate.downloadUrl).hostname);
+  } catch {
+    return false;
+  }
+}
 
 async function defaultJsonFetcher(url: string, options: { headers?: Record<string, string> }): Promise<unknown> {
   const response = await safeFetch(url, {
@@ -99,7 +124,9 @@ async function searchOpenverse(query: string, fetchJson: JsonFetcher): Promise<L
       license,
       author,
       sourceUrl,
-      attributionHtml: `${author} · ${license} · Openverse source`
+      // Openverse's terms require an app to indicate it was made using Openverse without
+      // implying endorsement, and CC BY requires the licence to be named beside the author.
+      attributionHtml: `${author} · ${license} · found via Openverse (not endorsed by Openverse)`
     });
     return candidate ? [candidate] : [];
   });
@@ -260,7 +287,11 @@ export async function discoverLicensedPhotos(input: {
   const candidates: LicensedPhotoCandidate[] = [];
   for (const list of providerResults) {
     for (const candidate of list) {
+      if (!candidateHosted(candidate)) continue;
       if (candidates.some((item) => item.sourceUrl === candidate.sourceUrl)) continue;
+      // The same event photographed five times is one picture as far as an editor is
+      // concerned; offering it four times out of four wastes the whole shortlist.
+      if (candidates.some((item) => item.title === candidate.title)) continue;
       candidates.push(candidate);
       if (candidates.length >= maximum) break;
     }
@@ -292,9 +323,12 @@ export async function materializeLicensedPhoto(input: {
   const candidate = safeCandidate(input.candidate);
   if (!candidate) throw new Error("Licensed image candidate failed validation");
   const fetchBytes = input.fetchBytes ?? (async (url: string) => {
-    const urlHost = new URL(url).hostname;
+    // The allowlist is fixed. It used to add whatever host the search response named, which
+    // is the one thing an allowlist exists to prevent: a hostile or compromised API answer
+    // could point the downloader anywhere it liked. A candidate hosted somewhere we do not
+    // recognise is dropped instead, which costs a picture and keeps the guarantee.
     const response = await safeFetch(url, {
-      allowHosts: [...new Set([...DOWNLOAD_HOSTS, urlHost])],
+      allowHosts: DOWNLOAD_HOSTS,
       maxBytes: 12_000_000,
       timeoutMs: 12_000
     });

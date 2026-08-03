@@ -120,7 +120,9 @@ export function buildEditionPackage(
     slug: article.slug,
     title: article.byLocale.en.title,
     altEn: article.byLocale.en.illustrationAlt,
-    altCs: article.byLocale.cs.illustrationAlt
+    altCs: article.byLocale.cs.illustrationAlt,
+    date: article.date,
+    tags: article.tags
   });
   const preliminary = {
     schemaVersion: "edition-package/1" as const,

@@ -113,7 +113,9 @@ export async function produceMmaFilesArticle(input: {
       slug: input.slug,
       title: enLocalization.title,
       altEn: `Editorial cover for ${enLocalization.title}`,
-      altCs: `Redakční obrázek k článku ${csLocalization.title}`
+      altCs: `Redakční obrázek k článku ${csLocalization.title}`,
+      date: input.publishAt.toISOString().slice(0, 10),
+      tags: [assignment.format, ...input.evidence.fighterRefs.map((reference) => reference.split(":").at(-1) ?? "")].filter(Boolean)
     }),
     heroSpec: input.evidence.heroSpec,
     fighterRefs: input.evidence.fighterRefs,

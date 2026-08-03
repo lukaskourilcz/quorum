@@ -18,6 +18,7 @@ import type { SourceRegistry } from "../sources/types.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
 import { discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { imageSubjectQuery } from "../images/subject-query.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 
 interface NetworkAllowlist {
@@ -208,7 +209,8 @@ export async function runLiveEdition(input: {
     let imageCandidates: LicensedPhotoCandidate[] = [];
     if (input.licensedImageSearchEnabled) {
       const imageSearch = await discoverLicensedPhotos({
-        query: digest.slice(0, 3).map((item) => item.title).join(" ").slice(0, 100),
+        // The subject the day is about, not its headlines. See imageSubjectQuery.
+        query: imageSubjectQuery(digest.slice(0, 12).map((item) => item.tags)),
         pexelsKey: process.env.PEXELS_API_KEY,
         pixabayKey: process.env.PIXABAY_API_KEY
       });

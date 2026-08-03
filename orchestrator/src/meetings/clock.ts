@@ -4,6 +4,7 @@ import {
   type ScheduledPhase
 } from "../types.js";
 import {
+  CRON_LEAD_HOURS,
   readVentureRegistry,
   resolveScheduledClock
 } from "../ventures/registry.js";
@@ -91,7 +92,8 @@ export function resolveCronPhase(cron: string, at: Date): ScheduledPhase | null 
     }
   }
   if (firedHour === null || smallestLateness > 6 * 60) return null;
-  const pragueHour = (firedHour + pragueUtcOffsetHours(at)) % 24;
+  // The same lead cronPayloads subtracts when it writes the cron is added back here.
+  const pragueHour = (firedHour + pragueUtcOffsetHours(at) + CRON_LEAD_HOURS) % 24;
   return MEETING_CLOCK.find((slot) => slot.hour === pragueHour)?.phase ?? null;
 }
 

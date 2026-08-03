@@ -409,7 +409,9 @@ describe("edition dry production", () => {
   it("builds the deterministic golden package without leaking injected instructions", async () => {
     const result = await runEditionDry();
     expect(result.status).toBe("edition");
-    expect(result.packageHash).toBe("a228c755075cc700f01c623777b2c179cd31a3ddaee7393c2abeed275aa41ed0");
+    // The golden hash moved with the fallback cover, which no longer sets the article's own
+    // headline in type. Nothing else about the package changed.
+    expect(result.packageHash).toBe("8c25d180bd4d5b96ca0b4513cfc0b4e2521915bcd9a1ed745cce26a40b14e704");
     expect(result.report.measuredCostUsd).toBe(0.194);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(

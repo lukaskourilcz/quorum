@@ -48,20 +48,52 @@ function lines(value: string, maximum: number): string[] {
   return result.slice(0, 4);
 }
 
+/**
+ * The cover drawn when no honestly licensed photograph fits.
+ *
+ * It used to set the article's own headline in large type, so a reader met the same sentence
+ * twice: once as the page title and once as the picture beneath it. A cover that repeats the
+ * headline adds nothing and looks like a placeholder, which is what the owner called it.
+ *
+ * What is drawn instead is a deterministic field seeded by the article's fingerprint: the
+ * same article always yields the same cover, different articles look plainly different, and
+ * nothing is claimed that the article does not contain. The only words are the venture, the
+ * publication date and the subject tags — chrome a reader can use, not prose they have
+ * already read.
+ */
 function frameSvg(input: {
   width: number;
   height: number;
   venture: "caught-up" | "mma-files";
-  title: string;
   fingerprint: string;
+  date: string;
+  tags: readonly string[];
 }): string {
   const accent = input.venture === "caught-up" ? "#79f2c0" : "#ef6c35";
   const brand = input.venture === "caught-up" ? "CAUGHT UP" : "MMA FILES";
-  const fontSize = Math.round(input.width * 0.057);
-  const title = lines(input.title, input.width >= 1_000 ? 32 : 28)
-    .map((line, index) => `<text x="7%" y="${42 + index * 11}%" fill="#f7f4ec" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="700">${escapeXml(line)}</text>`)
-    .join("");
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${input.width}" height="${input.height}" viewBox="0 0 ${input.width} ${input.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(input.title)}</title><desc id="desc">Deterministic ${brand} article cover.</desc><rect width="100%" height="100%" fill="#101116"/><rect x="4%" y="7%" width="92%" height="86%" rx="24" fill="#181a20" stroke="${accent}" stroke-width="4"/><text x="7%" y="19%" fill="${accent}" font-family="Arial, sans-serif" font-size="${Math.round(fontSize * 0.48)}" font-weight="700">${brand} · FRAME</text>${title}<text x="7%" y="86%" fill="#9da1aa" font-family="monospace" font-size="${Math.round(fontSize * 0.32)}">${input.fingerprint}</text></svg>`;
+  const unit = input.width / 32;
+  const seed = input.fingerprint.padEnd(16, "0");
+  const nibble = (index: number) => Number.parseInt(seed[index % seed.length]!, 16);
+
+  // Sixteen columns whose heights and opacities come from the fingerprint. A tall bar next to
+  // a short one reads as a chart, which is what a briefing about measured things should look
+  // like, and no two fingerprints give the same skyline.
+  // The field is bounded by the frame and by the text block above it, so a tall bar can never
+  // run off the canvas or through the wordmark.
+  const floor = input.height - unit * 3;
+  const ceiling = unit * 9.5;
+  const span = Math.max(unit, floor - ceiling);
+  const columns = Array.from({ length: 16 }, (_, index) => {
+    const height = span * (0.18 + (nibble(index) / 15) * 0.82);
+    const x = unit * 2 + index * unit * 1.75;
+    const y = floor - height;
+    const opacity = (0.18 + (nibble(index + 7) / 15) * 0.62).toFixed(2);
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(unit * 1.1).toFixed(1)}" height="${height.toFixed(1)}" rx="${(unit * 0.18).toFixed(1)}" fill="${accent}" opacity="${opacity}"/>`;
+  }).join("");
+
+  const label = Math.round(input.width * 0.022);
+  const tagLine = input.tags.slice(0, 4).map((tag) => tag.toUpperCase()).join("   ");
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${input.width}" height="${input.height}" viewBox="0 0 ${input.width} ${input.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(brand)} cover</title><desc id="desc">A generated ${escapeXml(brand)} cover; the article's own words are not repeated here.</desc><rect width="100%" height="100%" fill="#101116"/><rect x="${unit * 1.2}" y="${unit * 1.2}" width="${input.width - unit * 2.4}" height="${input.height - unit * 2.4}" rx="${unit * 0.7}" fill="#181a20" stroke="${accent}" stroke-width="${Math.max(2, unit * 0.09).toFixed(1)}"/>${columns}<text x="${unit * 2}" y="${unit * 4}" fill="${accent}" font-family="Arial, sans-serif" font-size="${label}" font-weight="700" letter-spacing="${(label * 0.16).toFixed(1)}">${escapeXml(brand)}</text><text x="${unit * 2}" y="${unit * 6}" fill="#f7f4ec" font-family="monospace" font-size="${Math.round(label * 1.05)}">${escapeXml(input.date)}</text>${tagLine ? `<text x="${unit * 2}" y="${unit * 7.7}" fill="#9da1aa" font-family="monospace" font-size="${Math.round(label * 0.82)}" letter-spacing="${(label * 0.1).toFixed(1)}">${escapeXml(tagLine)}</text>` : ""}<text x="${input.width - unit * 2}" y="${input.height - unit * 1.9}" text-anchor="end" fill="#6c7079" font-family="monospace" font-size="${Math.round(label * 0.72)}">FRAME · ${escapeXml(input.fingerprint)}</text></svg>`;
 }
 
 export function deterministicArticleImage(input: {
@@ -70,6 +102,9 @@ export function deterministicArticleImage(input: {
   title: string;
   altEn: string;
   altCs: string;
+  /** Publication date and subject tags, the only words the cover carries. */
+  date?: string;
+  tags?: readonly string[];
 }): ArticleImage {
   const safeSlug = input.slug.toLowerCase().replace(/[^a-z0-9-]+/gu, "-").replace(/^-|-$/gu, "");
   const fingerprint = createHash("sha256")
@@ -77,8 +112,10 @@ export function deterministicArticleImage(input: {
     .digest("hex")
     .slice(0, 16);
   const directory = input.venture === "caught-up" ? "editions" : "articles";
-  const hero = frameSvg({ width: 1_600, height: 900, venture: input.venture, title: input.title, fingerprint });
-  const thumb = frameSvg({ width: 640, height: 360, venture: input.venture, title: input.title, fingerprint });
+  const date = input.date ?? new Date().toISOString().slice(0, 10);
+  const tags = input.tags ?? [];
+  const hero = frameSvg({ width: 1_600, height: 900, venture: input.venture, fingerprint, date, tags });
+  const thumb = frameSvg({ width: 640, height: 360, venture: input.venture, fingerprint, date, tags });
   return ArticleImageSchema.parse({
     hero_path: `public/images/${directory}/${safeSlug}/hero.svg`,
     thumb_path: `public/images/${directory}/${safeSlug}/thumb.svg`,

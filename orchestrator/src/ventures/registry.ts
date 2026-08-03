@@ -115,13 +115,28 @@ export function composeMeetingRouteDefinition(
   };
 }
 
+/**
+ * How many hours before its Prague slot each cron is scheduled.
+ *
+ * GitHub delivers scheduled workflows late — 13 to 54 minutes on 2 August, and about three
+ * hours on 3 August — and a run that arrives after its slot has passed is a meeting that did
+ * not happen. A job takes three to six minutes, so an hour of lead absorbs any delay up to an
+ * hour and still lands inside the slot. It does not manufacture punctuality: a delay longer
+ * than the lead still misses, and nothing this repository can do changes when GitHub fires.
+ *
+ * resolveCronPhase adds this same lead back when it maps a fired cron to its meeting, so the
+ * two can never disagree about which room a cron belongs to.
+ */
+export const CRON_LEAD_HOURS = 1;
+
 export function cronPayloads(registry: VentureRegistry): Array<{
   cron: string;
   phase: ScheduledPhase;
 }> {
   return resolveScheduledClock(registry).flatMap((slot) => [
-    { cron: `0 ${(slot.hour + 22) % 24} * * *`, phase: slot.phase },
-    { cron: `0 ${(slot.hour + 23) % 24} * * *`, phase: slot.phase }
+    // Prague is UTC+2 under CEST and UTC+1 under CET; the lead comes off both.
+    { cron: `0 ${(slot.hour - 2 - CRON_LEAD_HOURS + 48) % 24} * * *`, phase: slot.phase },
+    { cron: `0 ${(slot.hour - 1 - CRON_LEAD_HOURS + 48) % 24} * * *`, phase: slot.phase }
   ]);
 }
 

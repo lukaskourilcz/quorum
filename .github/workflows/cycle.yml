@@ -2,6 +2,7 @@ name: Guarded council cycle
 
 on:
   schedule:
+    - cron: "0 2 * * *"
     - cron: "0 3 * * *"
     - cron: "0 4 * * *"
     - cron: "0 5 * * *"
@@ -12,14 +13,13 @@ on:
     - cron: "0 10 * * *"
     - cron: "0 11 * * *"
     - cron: "0 12 * * *"
-    - cron: "0 13 * * *"
+    - cron: "0 14 * * *"
     - cron: "0 15 * * *"
     - cron: "0 16 * * *"
     - cron: "0 17 * * *"
     - cron: "0 18 * * *"
     - cron: "0 19 * * *"
     - cron: "0 20 * * *"
-    - cron: "0 21 * * *"
   workflow_dispatch:
     inputs:
       phase:

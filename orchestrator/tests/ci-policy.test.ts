@@ -40,7 +40,7 @@ describe("automation policy", () => {
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
     expect(cycle.match(/- cron: "0 \d{1,2} \* \* \*"/g)).toHaveLength(18);
-    for (const hour of [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21]) {
+    for (const hour of [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20]) {
       expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
     }
     // The fired cron is what names the meeting, so it has to reach the resolver.

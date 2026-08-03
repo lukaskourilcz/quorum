@@ -1,7 +1,10 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { parseVentureRegistry } from "../src/ventures/registry.js";
+import { parseVentureRegistry,
+  CRON_LEAD_HOURS,
+  resolveScheduledClock
+} from "../src/ventures/registry.js";
 import {
   budgetDecisionStatus,
   resolveEffectivePortfolioSchedule
@@ -88,18 +91,20 @@ describe("portfolio schedule and budget gate", () => {
   });
 
   it("emits correct summer/winter cron pairs for meetings and article slots", async () => {
-    const payloads = cronPayloads(await loadVentureRegistry());
+    const registry = await loadVentureRegistry();
+    const payloads = cronPayloads(registry);
     expect(payloads).toHaveLength(30);
-    expect(payloads.filter((item) => item.phase === "incubator-scan").map((item) => item.cron)).toEqual(["0 5 * * *", "0 6 * * *"]);
-    expect(payloads.filter((item) => item.phase === "tt-marketing").map((item) => item.cron)).toEqual(["0 9 * * *", "0 10 * * *"]);
-    expect(payloads.filter((item) => item.phase === "incubator-synthesis").map((item) => item.cron)).toEqual(["0 19 * * *", "0 20 * * *"]);
-    expect(payloads.filter((item) => item.phase === "mma-intake").map((item) => item.cron)).toEqual(["0 6 * * *", "0 7 * * *"]);
-    expect(payloads.filter((item) => item.phase === "mma-analysis").map((item) => item.cron)).toEqual(["0 17 * * *", "0 18 * * *"]);
-    expect(payloads.filter((item) => item.phase === "mag-editorial").map((item) => item.cron)).toEqual(["0 7 * * *", "0 8 * * *"]);
-    expect(payloads.filter((item) => item.phase === "article-am").map((item) => item.cron)).toEqual(["0 8 * * *", "0 9 * * *"]);
-    expect(payloads.filter((item) => item.phase === "article-pm").map((item) => item.cron)).toEqual(["0 16 * * *", "0 17 * * *"]);
-    expect(payloads.filter((item) => item.phase === "mag-desk").map((item) => item.cron)).toEqual(["0 18 * * *", "0 19 * * *"]);
-    expect(payloads.filter((item) => item.phase === "studio").map((item) => item.cron)).toEqual(["0 11 * * *", "0 12 * * *"]);
+    // Assert the rule rather than a snapshot of it: every slot gets exactly two firings, the
+    // summer one CRON_LEAD_HOURS + 2 hours before its Prague hour and the winter one
+    // CRON_LEAD_HOURS + 1 before, so changing the lead cannot leave this test agreeing with
+    // a schedule that no longer exists.
+    for (const slot of resolveScheduledClock(registry)) {
+      const hours = payloads.filter((item) => item.phase === slot.phase).map((item) => Number(item.cron.split(" ")[1]));
+      expect(hours, `${slot.phase} at ${slot.hour}:00 Prague`).toEqual([
+        (slot.hour - 2 - CRON_LEAD_HOURS + 48) % 24,
+        (slot.hour - 1 - CRON_LEAD_HOURS + 48) % 24
+      ]);
+    }
     // One entry per UTC hour, never a multi-hour expression: GitHub reports the whole cron
     // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
     // 12:00 UTC is both studio's winter slot and the afternoon meeting's summer one.
