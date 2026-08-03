@@ -34,7 +34,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-02T22:13:03.136Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-03T08:33:38.994Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -42,11 +42,11 @@ Refreshed from committed state: **2026-08-02T22:13:03.136Z**. This block is gene
 | Agent roster | 40 active: 21 Anthropic, 19 OpenAI |
 | Scheduled specialist/service rooms | 10; combined maximum room envelopes $0.64 if every room is commissioned |
 | Approved spend boundary | $50 all-in monthly; $42 model/API share; $2.20 daily model/API pace |
-| Recorded API spend | $0.50 this month; $0.52 cumulative |
+| Recorded API spend | $1.20 this month; $1.22 cumulative |
 | Entered fixed costs | $0.00 monthly |
 | Recognized revenue | $0.00 |
-| KPI quarter | 2026-Q1; open; 22 on track, 0 at risk, 0 off track, 15 unavailable |
-| Critical KPI gaps | company.valid-window-rate, company.monthly-all-in-usd, carousel-studio.engine-post-rate |
+| KPI quarter | 2026-Q1; open; 17 on track, 0 at risk, 8 off track, 12 unavailable |
+| Critical KPI gaps | company.monthly-all-in-usd, carousel-studio.engine-post-rate |
 | FightAIQ analysis | approved by D8; production still requires `FIGHTAIQ_ANALYSIS_ENABLED=true` plus live and evidence gates |
 | Visitor/engagement measurement | disabled (`METRICS_INGESTION_ENABLED=false`) |
 | Global social posting | stopped while `SOCIAL_KILL_SWITCH=true`; project counters and credentials remain separate gates |

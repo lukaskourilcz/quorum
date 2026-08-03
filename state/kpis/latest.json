@@ -3,9 +3,9 @@
   "quarterId": "2026-Q1",
   "quarterStart": "2026-08-03",
   "quarterEnd": "2026-10-31",
-  "evaluatedAt": "2026-08-02T12:00:00.000Z",
-  "elapsedDays": 0,
-  "daysRemaining": 90,
+  "evaluatedAt": "2026-08-03T08:33:18.686Z",
+  "elapsedDays": 1,
+  "daysRemaining": 89,
   "complete": false,
   "statuses": [
     {
@@ -13,15 +13,15 @@
       "venture": "company",
       "name": "Scheduled windows with a valid recorded result",
       "unit": "ratio",
-      "actual": null,
+      "actual": 0.33333333,
       "target": 0.95,
       "direction": "at-least",
       "critical": true,
-      "status": "unavailable",
-      "paceTarget": null,
-      "attainmentRatio": null,
+      "status": "on-track",
+      "paceTarget": 0.01055556,
+      "attainmentRatio": 0.35087719,
       "rampActive": false,
-      "reason": "No verified measurement is connected."
+      "reason": null
     },
     {
       "id": "company.monthly-all-in-usd",
@@ -43,12 +43,12 @@
       "venture": "company",
       "name": "Highest monthly API cost",
       "unit": "usd",
-      "actual": 0,
+      "actual": 0.025716999999999997,
       "target": 42,
       "direction": "at-most",
       "critical": true,
       "status": "on-track",
-      "paceTarget": 0,
+      "paceTarget": 0.46666667,
       "attainmentRatio": 1,
       "rampActive": false,
       "reason": null
@@ -65,8 +65,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "company.delivery-verifier-pass-rate",
@@ -92,8 +92,8 @@
       "target": 1,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.01111111,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -107,8 +107,8 @@
       "target": 20,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.22222222,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -125,8 +125,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "caught-up.bilingual-hero-rate",
@@ -140,7 +140,7 @@
       "status": "unavailable",
       "paceTarget": null,
       "attainmentRatio": null,
-      "rampActive": false,
+      "rampActive": true,
       "reason": "No verified measurement is connected."
     },
     {
@@ -155,8 +155,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "caught-up.followers",
@@ -170,7 +170,7 @@
       "status": "unavailable",
       "paceTarget": null,
       "attainmentRatio": null,
-      "rampActive": false,
+      "rampActive": true,
       "reason": "Phase 3 measurement is not available yet."
     },
     {
@@ -183,7 +183,7 @@
       "direction": "at-least",
       "critical": false,
       "status": "on-track",
-      "paceTarget": 0,
+      "paceTarget": 0.33333333,
       "attainmentRatio": 1.06666667,
       "rampActive": false,
       "reason": null
@@ -200,8 +200,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "mma-files.complete-article-rate",
@@ -215,7 +215,7 @@
       "status": "unavailable",
       "paceTarget": null,
       "attainmentRatio": null,
-      "rampActive": false,
+      "rampActive": true,
       "reason": "No verified measurement is connected."
     },
     {
@@ -245,8 +245,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "mma-files.followers",
@@ -260,7 +260,7 @@
       "status": "unavailable",
       "paceTarget": null,
       "attainmentRatio": null,
-      "rampActive": false,
+      "rampActive": true,
       "reason": "Phase 3 measurement is not available yet."
     },
     {
@@ -268,30 +268,30 @@
       "venture": "fightaiq",
       "name": "Active UFC and Oktagon roster card coverage",
       "unit": "ratio",
-      "actual": null,
+      "actual": 0.029498525073746312,
       "target": 1,
       "direction": "at-least",
       "critical": false,
-      "status": "unavailable",
-      "paceTarget": null,
-      "attainmentRatio": null,
+      "status": "on-track",
+      "paceTarget": 0.01111111,
+      "attainmentRatio": 0.02949853,
       "rampActive": false,
-      "reason": "No verified measurement is connected."
+      "reason": null
     },
     {
       "id": "fightaiq.average-card-completeness",
       "venture": "fightaiq",
       "name": "Average fighter card completeness",
       "unit": "score",
-      "actual": null,
+      "actual": 88.75,
       "target": 60,
       "direction": "at-least",
       "critical": false,
-      "status": "unavailable",
-      "paceTarget": null,
-      "attainmentRatio": null,
+      "status": "on-track",
+      "paceTarget": 0.66666667,
+      "attainmentRatio": 1.47916667,
       "rampActive": false,
-      "reason": "No verified measurement is connected."
+      "reason": null
     },
     {
       "id": "fightaiq.event-card-minimum-completeness",
@@ -332,8 +332,8 @@
       "target": 8,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.08888889,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -347,8 +347,8 @@
       "target": 3,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.03333333,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -365,8 +365,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "titty-tuesdays.tuesday-posts",
@@ -380,8 +380,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "titty-tuesdays.followers",
@@ -395,7 +395,7 @@
       "status": "unavailable",
       "paceTarget": null,
       "attainmentRatio": null,
-      "rampActive": false,
+      "rampActive": true,
       "reason": "Phase 3 measurement is not available yet."
     },
     {
@@ -407,8 +407,8 @@
       "target": 1,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.01111111,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -422,8 +422,8 @@
       "target": 2,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.02222222,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -437,8 +437,8 @@
       "target": 1,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
+      "status": "off-track",
+      "paceTarget": 0.01111111,
       "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
@@ -453,7 +453,7 @@
       "direction": "at-least",
       "critical": false,
       "status": "on-track",
-      "paceTarget": 0,
+      "paceTarget": 0.11111111,
       "attainmentRatio": 1,
       "rampActive": false,
       "reason": null
@@ -470,8 +470,8 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "carousel-studio.engine-post-rate",
@@ -485,7 +485,7 @@
       "status": "unavailable",
       "paceTarget": null,
       "attainmentRatio": null,
-      "rampActive": false,
+      "rampActive": true,
       "reason": "No verified measurement is connected."
     },
     {
@@ -498,7 +498,7 @@
       "direction": "at-least",
       "critical": true,
       "status": "on-track",
-      "paceTarget": 0,
+      "paceTarget": 0.01111111,
       "attainmentRatio": 1,
       "rampActive": false,
       "reason": null
@@ -515,21 +515,21 @@
       "status": "on-track",
       "paceTarget": 0,
       "attainmentRatio": 0,
-      "rampActive": false,
-      "reason": null
+      "rampActive": true,
+      "reason": "Pace starts after the 14-day Q1 ramp."
     },
     {
       "id": "board.starvation-resolution-rate",
       "venture": "board",
       "name": "Starvation-list items commissioned or skipped with a reason",
       "unit": "ratio",
-      "actual": 1,
+      "actual": 0,
       "target": 1,
       "direction": "at-least",
       "critical": false,
-      "status": "on-track",
-      "paceTarget": 0,
-      "attainmentRatio": 1,
+      "status": "off-track",
+      "paceTarget": 0.01111111,
+      "attainmentRatio": 0,
       "rampActive": false,
       "reason": null
     },

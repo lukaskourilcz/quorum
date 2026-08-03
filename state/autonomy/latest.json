@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-01T22:40:00.000Z",
+  "generatedAt": "2026-08-03T08:33:18.686Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -56,16 +56,16 @@
         {
           "id": "event-fighter-coverage",
           "label": "Verified fighter files",
-          "value": 0,
+          "value": 58,
           "unit": "count",
-          "detail": "0 valid UFC or Oktagon fighter files."
+          "detail": "58 valid UFC or Oktagon fighter files."
         },
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0,
+          "value": 0.0101,
           "unit": "ratio",
-          "detail": "0 of 0 fighter fields are corroborated."
+          "detail": "2 of 199 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -77,32 +77,47 @@
       ]
     },
     {
+      "venture": "carousel-studio",
+      "objective": "Grow a checked library of original, reusable carousel layouts",
+      "signals": [
+        {
+          "id": "live-template-library",
+          "label": "Live carousel templates",
+          "value": 10,
+          "unit": "count",
+          "detail": "10 templates passed every brand and format check."
+        }
+      ]
+    },
+    {
       "venture": "mma-files",
       "objective": "Fill evidenced article slots and render verified FightAIQ coverage",
       "signals": [
         {
           "id": "slot-fill",
           "label": "Evidenced slot fill",
-          "value": 0,
+          "value": 0.3333,
           "unit": "ratio",
-          "detail": "0 published articles for 2 assigned slots."
+          "detail": "1 published articles for 3 assigned slots."
         },
         {
           "id": "rendered-fightaiq-coverage",
           "label": "FightAIQ files rendered",
-          "value": 0,
+          "value": 2,
           "unit": "count",
-          "detail": "0 distinct fighter references reached published articles."
+          "detail": "2 distinct fighter references reached published articles."
         }
       ]
     }
   ],
   "quality": {
-    "killedSlotReasons": {},
-    "vetoRate": 0,
+    "killedSlotReasons": {
+      "evidence": 1
+    },
+    "vetoRate": 0.0625,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0,
+    "sourceAgreementRate": 0.0101,
     "verifierPassRate": 0
   }
 }
