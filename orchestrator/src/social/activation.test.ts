@@ -68,7 +68,7 @@ function queueItem(): QueueItem {
     experimentId: null,
     channel: "threads" as const,
     objective: "trust" as const,
-    audience: "DNESKAi readers",
+    audience: "Caught Up readers",
     destination: "https://caught-up.example/articles/fixture",
     utm: { source: "threads" as const, medium: "organic_social" as const, campaign: "fixture", content: "B" },
     content: { text: "A fixture post with a verified destination.", altText: null, assetPaths: [], factualClaimRefs: ["fixture:proof"], rendererVersion: "carousel-studio-1" as const, contentHash: "0".repeat(64) },
@@ -84,14 +84,14 @@ function queueItem(): QueueItem {
 }
 
 describe("per-venture social activation", () => {
-  it("keeps NO_EDITION neutral and resets DNESKAi after a failure", () => {
+  it("keeps NO_EDITION neutral and resets Caught Up after a failure", () => {
     expect(caughtUpUnlockCounter(["passed", "no-edition", "passed"])).toBe(2);
     expect(caughtUpUnlockCounter(["passed", "no-edition", "failed", "no-edition", "passed"])).toBe(1);
     expect(mmaFilesUnlockCounter(Array.from({ length: 10 }, () => "passed" as const))).toBe(10);
     expect(mmaFilesUnlockCounter(["passed", "failed", "passed"])).toBe(1);
   });
 
-  it("unlocks DNESKAi only after seven valid proofs and all brand credentials", async () => {
+  it("unlocks Caught Up only after seven valid proofs and all brand credentials", async () => {
     const repoRoot = await root();
     const stateRoot = path.join(repoRoot, "state");
     await mkdir(path.join(stateRoot, "release-proofs", "caught-up"), { recursive: true });

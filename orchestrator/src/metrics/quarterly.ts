@@ -208,7 +208,7 @@ function scopeResult(venture: string, statuses: readonly QuarterlyKpiEvaluation[
 }
 
 const VENTURE_LABELS: Record<string, string> = {
-  "caught-up": "DNESKAi",
+  "caught-up": "Caught Up",
   "mma-files": "MMA Files",
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",

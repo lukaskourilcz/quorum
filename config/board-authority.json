@@ -53,7 +53,7 @@
         },
         {
           "id": "caught_up_code",
-          "description": "Approve any DNESKAi code change; delivery may write content and board data only."
+          "description": "Approve any Caught Up code change; delivery may write content and board data only."
         }
       ]
     },
@@ -66,7 +66,7 @@
         },
         {
           "id": "bundle_ceiling",
-          "description": "The DNESKAi 110 kB page-entry gzip ceiling remains mandatory."
+          "description": "The Caught Up 110 kB page-entry gzip ceiling remains mandatory."
         },
         {
           "id": "accessibility_gates",

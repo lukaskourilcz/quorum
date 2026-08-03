@@ -75,10 +75,10 @@ describe("one daily portfolio digest", () => {
       schedule: [],
       dailyBudgetUsd: 0.7,
       operations: [
-        operation("delivery", "DNESKAi delivery recorded."),
-        operation("release-proof", "DNESKAi release proof passed."),
+        operation("delivery", "Caught Up delivery recorded."),
+        operation("release-proof", "Caught Up release proof passed."),
         operation("failure", "No delivery failure was recorded."),
-        operation("social-gate", "DNESKAi health counter 4/7.")
+        operation("social-gate", "Caught Up health counter 4/7.")
       ]
     });
     const text = renderDailyDigestText(digest);

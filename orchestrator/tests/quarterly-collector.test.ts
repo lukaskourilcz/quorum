@@ -42,7 +42,7 @@ async function fixtureRoot() {
 }
 
 describe("quarterly measurement collector", () => {
-  it("counts only valid window outcomes and validated DNESKAi deliveries", async () => {
+  it("counts only valid window outcomes and validated Caught Up deliveries", async () => {
     const { root, stateRoot } = await fixtureRoot();
     await writeJson(path.join(stateRoot, "calendar/2026-08-03.json"), {
       schemaVersion: "calendar/1",

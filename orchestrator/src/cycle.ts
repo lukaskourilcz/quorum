@@ -266,10 +266,10 @@ async function runCaughtUpDryCycle(
   now: Date
 ): Promise<CycleResult> {
   if (!isCaughtUpPhase(options.phase)) {
-    throw new Error(`Not a DNESKAi phase: ${options.phase}`);
+    throw new Error(`Not a Caught Up phase: ${options.phase}`);
   }
   if (!options.dry) {
-    throw new Error("DNESKAi scheduled phases remain dry until the Phase 9 cutover");
+    throw new Error("Caught Up scheduled phases remain dry until the Phase 9 cutover");
   }
   const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
@@ -292,7 +292,7 @@ async function runCaughtUpDryCycle(
     ? PRODUCT_ROOM_RESERVE_USD
     : meetingCap;
   if (estimatedWorstCaseUsd > meetingCap) {
-    throw new Error(`DNESKAi ${options.phase} reserve exceeds the meeting cap`);
+    throw new Error(`Caught Up ${options.phase} reserve exceeds the meeting cap`);
   }
   const room = routeBoardroom(routing, {
     roomId: `ROOM-${cycleId.toUpperCase()}`,
@@ -431,7 +431,7 @@ async function runCaughtUpLiveEditionCycle(
   now: Date
 ): Promise<CycleResult> {
   if (options.phase !== "cu-edition" || options.dry) {
-    throw new Error("Live DNESKAi edition runner requires a non-dry cu-edition phase");
+    throw new Error("Live Caught Up edition runner requires a non-dry cu-edition phase");
   }
   const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
@@ -556,7 +556,7 @@ async function runCaughtUpLiveEditionCycle(
     const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
     if (!caughtUpBaseUrl) {
       await recordMissingSocialPackConfiguration(stateRoot);
-      console.warn("DNESKAi social pack skipped: CAUGHT_UP_SITE_URL is not configured");
+      console.warn("Caught Up social pack skipped: CAUGHT_UP_SITE_URL is not configured");
     } else {
       try {
         const slug = produced.package.article.cs.frontmatter.slug;
@@ -577,7 +577,7 @@ async function runCaughtUpLiveEditionCycle(
         if (social) socialArtifacts.push(...social.artifactPaths);
       } catch (error) {
         const detail = error instanceof Error ? error.message : "unknown composer failure";
-        console.warn(`DNESKAi social pack failed: ${detail}`);
+        console.warn(`Caught Up social pack failed: ${detail}`);
         await recordSocialPackFailure(stateRoot, detail);
       }
     }
@@ -630,7 +630,7 @@ async function runCaughtUpLiveProductCycle(
   now: Date
 ): Promise<CycleResult> {
   if (options.phase !== "cu-product" || options.dry) {
-    throw new Error("Live DNESKAi product runner requires a non-dry cu-product phase");
+    throw new Error("Live Caught Up product runner requires a non-dry cu-product phase");
   }
   const [routing, stages, ventureRegistry, agentControls, fixedMonthlyUsd] = await Promise.all([
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
@@ -650,7 +650,7 @@ async function runCaughtUpLiveProductCycle(
   const meetingCap = Math.min(definition.envelopeUsd, limits.caughtUpMeetingUsd);
   if (PRODUCT_ROOM_RESERVE_USD > meetingCap) {
     throw new Error(
-      `Product-room reserve ${PRODUCT_ROOM_RESERVE_USD} exceeds DNESKAi meeting cap ${meetingCap}`
+      `Product-room reserve ${PRODUCT_ROOM_RESERVE_USD} exceeds Caught Up meeting cap ${meetingCap}`
     );
   }
   const date = pragueClockParts(now).date;
@@ -845,7 +845,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     };
   }
   if (!options.dry && options.phase === "founding") {
-    throw new Error("A live founding cycle is not permitted; DNESKAi was adopted by owner decision");
+    throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
   }
   if (isCaughtUpPhase(options.phase)) {
     if (options.dry) return runCaughtUpDryCycle(options, cycleId, now);

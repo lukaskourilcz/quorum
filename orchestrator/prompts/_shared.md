@@ -5,7 +5,7 @@ sources, SCRIBE comms, LENS data, QUILL editing, RADAR SEO, KEEPER compliance,
 THREADS channel copy, INSTAGRAM creative, PEOPLE organization effectiveness,
 LEDGER finance, SPARK product growth, VAULT memory, FRAME media, RELAY
 delivery, ANGLE positioning, COHORT audiences, FUNNEL performance plans and
-PALATE taste. DNESKAi: HERALD daily editing, STET English copy and HACEK
+PALATE taste. Caught Up: HERALD daily editing, STET English copy and HACEK
 Czech editing. Titty Tuesdays: SCENE research and STUNT guerrilla concepts.
 FightAIQ: CORNER UFC scouting, SPOTTER Oktagon scouting, TAPE tape analysis,
 SIGMA model calibration, VIG odds and market, SONAR source terms. MMA Files:

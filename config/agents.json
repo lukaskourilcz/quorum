@@ -660,9 +660,9 @@
       "kind": "specialist",
       "provider": "Anthropic",
       "ventures": ["caught-up"],
-      "department": "Editorial (DNESKAi)",
-      "title": "Editor-in-Chief, DNESKAi",
-      "mission": "Own the daily DNESKAi edition: chair the edition room, choose the one story that matters, and answer for its quality.",
+      "department": "Editorial (Caught Up)",
+      "title": "Editor-in-Chief, Caught Up",
+      "mission": "Own the daily Caught Up edition: chair the edition room, choose the one story that matters, and answer for its quality.",
       "responsibilities": [
         "Chair the edition room and commission production",
         "Hold the shortlist to at most three candidates",
@@ -714,9 +714,9 @@
       "ventures": "global",
       "department": "Editorial Quality",
       "title": "Portfolio Copy Quality Agent",
-      "mission": "Review DNESKAi and MMA Files articles plus public transcripts for grammar, wording, format, register fit and generated-text tells before anything ships.",
+      "mission": "Review Caught Up and MMA Files articles plus public transcripts for grammar, wording, format, register fit and generated-text tells before anything ships.",
       "responsibilities": [
-        "Block copy review of DNESKAi and MMA Files drafts",
+        "Block copy review of Caught Up and MMA Files drafts",
         "Run the boardroom-register pass on transcripts",
         "Maintain the banned-construction list with the stop-slop skill",
         "Force one rewrite when quality fails"
@@ -765,7 +765,7 @@
       "ventures": ["caught-up", "mma-files"],
       "department": "Czech Editorial",
       "title": "Czech Language Editor",
-      "mission": "Turn each cleared DNESKAi or MMA Files English article into natural Czech without changing its facts, sources, uncertainty or intent.",
+      "mission": "Turn each cleared Caught Up or MMA Files English article into natural Czech without changing its facts, sources, uncertainty or intent.",
       "responsibilities": [
         "Adapt each cleared English article in the venture-specific Czech register",
         "Review Czech social copy only when that venture's social production is enabled",
@@ -814,9 +814,9 @@
       "kind": "specialist",
       "provider": "OpenAI",
       "ventures": "global",
-      "department": "Product Growth (DNESKAi)",
+      "department": "Product Growth (Caught Up)",
       "title": "Product Growth Agent",
-      "mission": "Grow DNESKAi. Bring exactly one new, ledger-checked idea to every venture morning meeting and carry it into the product room.",
+      "mission": "Grow Caught Up. Bring exactly one new, ledger-checked idea to every venture morning meeting and carry it into the product room.",
       "responsibilities": [
         "Bring one ledger-checked idea per venture morning",
         "Carry venture-board context into the product room",
@@ -826,7 +826,7 @@
       "notResponsibleFor": [
         "Edition content",
         "Executing spend",
-        "Venture ideas unrelated to DNESKAi"
+        "Venture ideas unrelated to Caught Up"
       ],
       "decisionRights": [
         "Propose ideas and experiments without deciding them alone"
@@ -968,7 +968,7 @@
       "ventures": "global",
       "department": "Operations",
       "title": "Delivery & Notifications Agent",
-      "mission": "Make the handoff land: own the delivery contract to DNESKAi, the one daily portfolio digest, the calendar feed, and the reconciliation of anything uncertain.",
+      "mission": "Make the handoff land: own the delivery contract to Caught Up, the one daily portfolio digest, the calendar feed, and the reconciliation of anything uncertain.",
       "responsibilities": [
         "Validate every EditionPackage before commit",
         "Track delivery through build to live",
@@ -977,7 +977,7 @@
       ],
       "notResponsibleFor": [
         "Edition or digest content",
-        "Code changes to DNESKAi",
+        "Code changes to Caught Up",
         "Payments"
       ],
       "decisionRights": [

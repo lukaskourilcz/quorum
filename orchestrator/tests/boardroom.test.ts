@@ -53,14 +53,14 @@ describe("Boardroom routing", () => {
     expect(selected).not.toContain("INSTAGRAM");
   });
 
-  it("routes the fixed DNESKAi edition cast and morning product bridge", async () => {
+  it("routes the fixed Caught Up edition cast and morning product bridge", async () => {
     const config = await loadRoutingConfig(
       path.join(configRoot, "agent-routing.json")
     );
     const edition = routeBoardroom(config, {
       roomId: "ROOM-CU-EDITION-001",
       topicType: "edition",
-      objective: "Select one DNESKAi story or record NO_EDITION",
+      objective: "Select one Caught Up story or record NO_EDITION",
       evidenceRefs: ["DIGEST-001"],
       decisionNeeded: "EDITION",
       riskTags: [],
@@ -89,7 +89,7 @@ describe("Boardroom routing", () => {
     const product = routeBoardroom(config, {
       roomId: "ROOM-CU-PRODUCT-001",
       topicType: "product",
-      objective: "Record a verdict on the morning DNESKAi idea",
+      objective: "Record a verdict on the morning Caught Up idea",
       evidenceRefs: [],
       decisionNeeded: "IDEA_VERDICT",
       riskTags: [],
@@ -103,7 +103,7 @@ describe("Boardroom routing", () => {
     const morning = routeBoardroom(config, {
       roomId: "ROOM-VENTURE-MORNING-001",
       topicType: "council",
-      objective: "Choose the morning venture action and hear one DNESKAi idea",
+      objective: "Choose the morning venture action and hear one Caught Up idea",
       evidenceRefs: [],
       decisionNeeded: "PLAN",
       riskTags: [],
@@ -121,7 +121,7 @@ describe("Boardroom routing", () => {
     expect(() => routeBoardroom(config, {
       roomId: "ROOM-TT-HERALD-BLOCK",
       topicType: "edition",
-      objective: "Attempt to seat the DNESKAi editor in another venture",
+      objective: "Attempt to seat the Caught Up editor in another venture",
       evidenceRefs: [],
       decisionNeeded: "EDITION",
       riskTags: [],

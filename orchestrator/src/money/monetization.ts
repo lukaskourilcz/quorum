@@ -120,7 +120,7 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     note: "First-party sponsorship only. Programmatic advertising remains outside the approved scope.",
     proposal: {
       summary: "A first-party sponsor kit with fixed placements and clear editorial separation.",
-      channels: ["DNESKAi sponsor block", "Owner-approved sponsor kit"],
+      channels: ["Caught Up sponsor block", "Owner-approved sponsor kit"],
       ownerChecklist: [
         "Approve the sponsor kit and price list.",
         "Approve placement rules and sponsor acceptance criteria.",

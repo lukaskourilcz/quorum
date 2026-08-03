@@ -62,7 +62,7 @@ function lines(value: string, maximum: number): string[] {
  * already read.
  */
 function brandName(venture: "caught-up" | "mma-files"): string {
-  return venture === "caught-up" ? "DNESKAi" : "MMA Files";
+  return venture === "caught-up" ? "Caught Up" : "MMA Files";
 }
 
 function frameSvg(input: {
@@ -74,7 +74,7 @@ function frameSvg(input: {
   tags: readonly string[];
 }): string {
   const accent = input.venture === "caught-up" ? "#79f2c0" : "#ef6c35";
-  const brand = input.venture === "caught-up" ? "DNESKAI" : "MMA FILES";
+  const brand = input.venture === "caught-up" ? "CAUGHT UP" : "MMA FILES";
   const unit = input.width / 32;
   const seed = input.fingerprint.padEnd(16, "0");
   const nibble = (index: number) => Number.parseInt(seed[index % seed.length]!, 16);

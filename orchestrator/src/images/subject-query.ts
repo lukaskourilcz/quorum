@@ -1,7 +1,7 @@
 /**
  * Turn an edition's source tags into something a photo archive is actually indexed on.
  *
- * DNESKAi searched with three concatenated news headlines truncated to 100 characters —
+ * Caught Up searched with three concatenated news headlines truncated to 100 characters —
  * "AI agents cheat to win platforms fight back OpenAI Hugging Face cyberattacks rise" — and
  * every archive returned nothing, so the edition shipped a fallback that printed its own
  * headline as a picture. An archive is indexed on concrete nouns. Querying "artificial

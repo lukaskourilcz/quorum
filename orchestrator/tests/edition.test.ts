@@ -341,10 +341,10 @@ describe("edition dry production", () => {
     expect(result.status).toBe("edition");
     // The golden hash moved with the fallback cover, which no longer sets the article's own
     // headline in type. Nothing else about the package changed.
-    // Re-golded three times in this migration: the deterministic cover took its fingerprint
+    // Re-golded twice in this migration: the deterministic cover took its fingerprint
     // from the Czech title, the package stopped carrying an English half, and the wordmark
-    // drawn on the cover became DNESKAI. Same bytes-in, bytes-out contract throughout.
-    expect(result.packageHash).toBe("1514f67413946e8360762a0f7d2fdfbdc7976f3b815f5c43c6d6d3d7c4af8277");
+    // drawn on the cover became CAUGHT UP. Same bytes-in, bytes-out contract throughout.
+    expect(result.packageHash).toBe("f463391bd05b1eb63dca1554c1e0e2e95441370b635d84ff9273c4d4590d58cf");
     // The shape itself, not just its hash: one article file, and it is the Czech one.
     const mdx = result.files.filter((file) => file.endsWith(".mdx")).map((file) => file.split("/").pop());
     expect(mdx).toHaveLength(1);

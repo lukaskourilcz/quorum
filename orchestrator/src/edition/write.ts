@@ -146,7 +146,7 @@ const toolInputSchema = {
   additionalProperties: false
 } as const;
 
-export const WRITE_SYSTEM = `You are STET's Czech writing desk at DNESKAi.
+export const WRITE_SYSTEM = `You are STET's Czech writing desk at Caught Up.
 
 Write the daily feature in native Czech. Nothing translates it afterwards, so this is
 the text readers get. Write calm, direct prose. State what changed. Distinguish
@@ -456,7 +456,7 @@ ${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
 ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     tool: {
       name: "emit_article",
-      description: "Emit the English DNESKAi feature and supplied-source watchlist.",
+      description: "Emit the English Caught Up feature and supplied-source watchlist.",
       inputSchema: toolInputSchema
     },
     parse: (value) => ToolOutputSchema.parse(value)

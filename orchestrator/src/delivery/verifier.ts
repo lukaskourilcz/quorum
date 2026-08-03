@@ -185,7 +185,7 @@ async function githubChecks(input: { repository: string; commit: string; token: 
 /**
  * Where the Czech article lives on each site.
  *
- * The two differ. DNESKAi serves Czech at the root, because Czech took over the URLs English
+ * The two differ. Caught Up serves Czech at the root, because Czech took over the URLs English
  * used to hold and /cs now redirects there; MMA Files keeps its /cs segment. Fetching the
  * redirecting form would still pass — safeFetch follows same-host redirects — but a release
  * proof should read the page rather than the redirect that points at it.

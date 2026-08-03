@@ -68,7 +68,7 @@ describe("budget guard", () => {
     }))).toThrowError(expect.objectContaining({ code: "MONTHLY_OPERATING_CAP" }));
   });
 
-  it("keeps the adopted DNESKAi envelopes inside the operating cap", () => {
+  it("keeps the adopted Caught Up envelopes inside the operating cap", () => {
     expect(DEFAULT_BUDGET_LIMITS).toMatchObject({
       maxCycleUsd: 0.2,
       caughtUpMeetingUsd: 0.08,

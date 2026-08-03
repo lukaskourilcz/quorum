@@ -148,7 +148,7 @@ function productRecord(input: {
     fixture: true,
     status: "HELD",
     stage: input.stage,
-    operatingBrief: "Review the morning DNESKAi idea and record a bounded ledger verdict.",
+    operatingBrief: "Review the morning Caught Up idea and record a bounded ledger verdict.",
     participantReasons: participants(input.room),
     ledger: {
       estimatedCycleUsd: input.estimatedCycleUsd,
@@ -414,7 +414,7 @@ export async function createLiveProductMeeting(input: {
   const response = input.response;
   const outcome = response?.verdict ?? "defer";
   const summary = response?.summary
-    ?? "Defer. The morning shift did not leave a VAULT-screened DNESKAi idea.";
+    ?? "Defer. The morning shift did not leave a VAULT-screened Caught Up idea.";
   const evidenceRefs = idea?.revival ? [idea.revival.evidenceRef] : [];
   const voteMatrix = response
     ? response.votes.map((vote) => ({
@@ -473,7 +473,7 @@ export async function createLiveProductMeeting(input: {
       openedAt,
       closedAt,
       gavel: "HERALD",
-      setting: "Live DNESKAi product room. Participants receive the compact idea index, not the raw JSONL ledger.",
+      setting: "Live Caught Up product room. Participants receive the compact idea index, not the raw JSONL ledger.",
       turns: [
         {
           agent: "HERALD",

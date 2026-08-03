@@ -155,7 +155,7 @@ function renderNicheProposalMarkdown(proposal: NicheProposal): string {
     "",
     `- Cadence: ${proposal.contentShape.cadence}`,
     `- Formats: ${proposal.contentShape.formats.join(", ")}`,
-    `- DNESKAi reuse: ${proposal.contentShape.caughtUpReuseNotes}`,
+    `- Caught Up reuse: ${proposal.contentShape.caughtUpReuseNotes}`,
     "",
     "## Risks",
     "",
@@ -803,7 +803,7 @@ export async function runPortfolioCycle(input: {
   }
   // Record every idea a seat raised, into that venture's own ledger namespace.
   //
-  // Before this, `screenAndRecordIdea` had exactly one caller, in the DNESKAi morning
+  // Before this, `screenAndRecordIdea` had exactly one caller, in the Caught Up morning
   // path, so state/ideas/{global,incubator,titty-tuesdays}/ledger.jsonl were all empty
   // files: rooms had no field to return an idea in and nothing to write it to. Capture
   // runs on the deterministic adjudicator, so it adds no model call to a room that has

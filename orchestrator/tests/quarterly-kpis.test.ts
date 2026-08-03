@@ -160,7 +160,7 @@ describe("quarter-end KPI protocol", () => {
     };
     expect(queue.items).toHaveLength(1);
     expect(queue.items[0]).toMatchObject({
-      question: "Strategy reassessment: DNESKAi",
+      question: "Strategy reassessment: Caught Up",
       decision_at_stake: "continue / pivot / stop"
     });
     const packet = JSON.parse(await readFile(path.join(root, result.ownerDigestPath), "utf8")) as {

@@ -82,7 +82,7 @@ function queueItem(input: {
     experimentId: null,
     channel: input.channel,
     objective: "trust" as const,
-    audience: `DNESKAi readers (${input.locale})`,
+    audience: `Caught Up readers (${input.locale})`,
     destination: input.destination,
     utm: {
       source: input.channel,
@@ -140,7 +140,7 @@ export async function composeEditionSocialPack(input: {
   const editionPackage = input.editionPackage;
   if (editionPackage.status !== "edition") return null;
   if (input.meeting.kind !== "cu-edition" || input.meeting.date !== input.editionPackage.date) {
-    throw new Error("Social pack requires the matching DNESKAi edition meeting");
+    throw new Error("Social pack requires the matching Caught Up edition meeting");
   }
   const destinations = {
     ...(input.destinations.en ? { en: parseSafeHttpsUrl(input.destinations.en).toString() } : {}),
