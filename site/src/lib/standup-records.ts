@@ -187,19 +187,21 @@ export function parsePublicStandupRecord(value: unknown): PublicStandup | null {
           : [];
       })
     : [];
-  const proposalCountValid = proposals.length === 4 || (
-    phase === "morning" &&
-    proposals.length === 5 &&
-    proposals.filter((proposal) => proposal.agent === "SPARK").length === 1
-  );
-  const isIdleCheckpoint =
-    (status === "NO_ACTION" || status === "PAUSED") &&
-    participants.every((participant) => !participant.participated) &&
-    proposals.length === 0 &&
-    voteMatrix.length === 0;
+  // How many proposals a room produced, and how many seats voted, is what the meeting
+  // decided — not whether the record is real. This used to demand exactly four proposals
+  // and exactly four votes, five for a morning carrying SPARK, and discard anything else.
+  // On 3 August the morning board met, six seats spoke, it cost $0.0249 and it returned
+  // three proposals and two votes, so the whole record was dropped and the calendar showed
+  // the slot as "Did not happen". The orchestrator's own StandupSchema puts no length on
+  // either array, so the site was asserting a shape nothing promised. A record still has to
+  // name at least one participant: a standup with nobody in it is not a record of a meeting.
+  // A room that claims it decided something has to show the work: at least one proposal and
+  // at least one recorded vote. A room that decided nothing may legitimately have neither,
+  // and the deterministic afternoon and night checkpoints always do.
+  const claimsADecision = status === "PLAN";
   if (
     participants.length === 0 ||
-    (!isIdleCheckpoint && (!proposalCountValid || voteMatrix.length !== 4))
+    (claimsADecision && (proposals.length === 0 || voteMatrix.length === 0))
   ) {
     return null;
   }
