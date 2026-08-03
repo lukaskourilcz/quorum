@@ -5,7 +5,9 @@ import {
   renderCarouselPng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
+import { articleSlideSlot } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
+import { buildArticleDeck, reviewDeck } from "./slides.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";
@@ -154,20 +156,36 @@ export async function composeEditionSocialPack(input: {
     ? input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET")
     : Math.max(0, input.meeting.roomTranscript.turns.findIndex((turn) => turn.mode === "raises-concern"));
   const bestTurn = input.meeting.roomTranscript.turns[bestTurnIndex] ?? input.meeting.roomTranscript.turns[0]!;
-  const visualReference = (locale: SocialLocale): TemplateReference => {
-    const article = editionPackage.article[locale]!.frontmatter;
+  /**
+   * The carousel is the edition, split.
+   *
+   * It was five slides carrying one point each from what_changed, why_it_matters and
+   * uncertainty — the first of each, and the rest of the editor's argument dropped. The deck
+   * takes up to three of each, so the reader gets the reasoning rather than a sample of it.
+   *
+   * Never the body. An eleven-hundred-word edition would be thirty-seven slides, and the
+   * frontmatter arrays are already the editor's own summary of the same text.
+   */
+  const visualReference = (locale: SocialLocale): TemplateReference | null => {
+    const article = editionPackage.article?.[locale]?.frontmatter;
+    if (!article) return null;
+    const slides = buildArticleDeck({
+      title: article.title,
+      dek: article.dek,
+      points: [
+        ...article.what_changed.slice(0, 3),
+        ...article.why_it_matters.slice(0, 3),
+        ...article.uncertainty.slice(0, 1)
+      ],
+      outro: locale === "cs" ? "Jedno vydání a máte přehled." : "One edition and you are caught up."
+    });
+    if (!reviewDeck(slides).publishable) return null;
     return {
-      template_id: "five-slide-story",
+      template_id: `article-deck-${slides.length}`,
       version: "1.0.0",
       content: {
         locale,
-        strings: {
-        "story-title": article.title,
-        "story-one": article.what_changed[0]!,
-        "story-two": article.why_it_matters[0]!,
-        "story-three": article.uncertainty[0]!,
-        "story-takeaway": article.dek
-        }
+        strings: Object.fromEntries(slides.map((slide, index) => [articleSlideSlot(index), slide.text]))
       }
     };
   };
@@ -177,9 +195,14 @@ export async function composeEditionSocialPack(input: {
   // only the first day ever reached the inbox.
   const visualRefs: Partial<Record<SocialLocale, TemplateReference>> = Object.fromEntries(
     (["en", "cs"] as const)
-      .filter((locale) => editionPackage.article?.[locale])
-      .map((locale) => [locale, visualReference(locale)])
+      .map((locale) => [locale, visualReference(locale)] as const)
+      .filter((entry): entry is readonly [SocialLocale, TemplateReference] => entry[1] !== null)
   );
+  // An edition too thin for a deck gets no social pack. The edition itself still ships.
+  if (!visualRefs.cs && !visualRefs.en) {
+    console.warn(JSON.stringify({ event: "carousel_skipped", date: editionPackage.date, reason: "deck below the five-slide minimum" }));
+    return null;
+  }
   const quoteVisual: TemplateReference = {
     template_id: "quote-card",
     version: "1.0.0",

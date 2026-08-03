@@ -38,15 +38,32 @@ describe("Caught Up social pack composer", () => {
     expect(pack.instagram.frames).not.toEqual(pack.threads.frames);
     expect(pack.instagram).toEqual(pack.byLocale.en!.instagram);
     expect(pack.threads).toEqual(pack.byLocale.en!.threads);
-    expect(pack.byLocale.en!.instagram.frames).toHaveLength(5);
-    expect(pack.byLocale.cs.instagram.frames).toHaveLength(5);
-    expect(pack.byLocale.en!.threads.frames).toHaveLength(5);
-    expect(pack.byLocale.cs.threads.frames).toHaveLength(5);
+    // The frame count follows the edition now — five to ten — rather than a fixed template,
+    // so it is bounded rather than restated.
+    for (const frames of [
+      pack.byLocale.en!.instagram.frames,
+      pack.byLocale.cs.instagram.frames,
+      pack.byLocale.en!.threads.frames,
+      pack.byLocale.cs.threads.frames
+    ]) {
+      expect(frames.length).toBeGreaterThanOrEqual(5);
+      expect(frames.length).toBeLessThanOrEqual(10);
+    }
+    expect(pack.byLocale.cs.instagram.frames).toHaveLength(pack.byLocale.en!.instagram.frames.length);
     expect(pack.byLocale.en!.instagram.frames).not.toEqual(pack.byLocale.cs.instagram.frames);
     expect(pack.byLocale.en!.destination).toContain("/articles/");
     expect(pack.byLocale.en!.destination).not.toContain("/en/articles/");
     expect(pack.byLocale.cs.destination).toContain("/cs/articles/");
-    expect(Object.keys(pack.altTexts)).toHaveLength(21);
+    // One alt text per rendered frame plus the quote card. Derived, because the frame count
+    // now depends on the edition.
+    const frameTotal = new Set([
+      ...pack.byLocale.en!.instagram.frames,
+      ...pack.byLocale.cs.instagram.frames,
+      ...pack.byLocale.en!.threads.frames,
+      ...pack.byLocale.cs.threads.frames,
+      pack.quoteCard.frame
+    ]).size;
+    expect(Object.keys(pack.altTexts)).toHaveLength(frameTotal);
     expect(pack.instagram.caption).not.toBe(pack.threads.text);
     expect(pack.byLocale.cs.instagram.caption).not.toBe(pack.byLocale.cs.threads.text);
     for (const frame of [
