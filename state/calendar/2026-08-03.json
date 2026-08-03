@@ -92,7 +92,9 @@
       "at": "2026-08-03T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "missed"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-03-mag-desk",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-03T19:00:00.000Z",
