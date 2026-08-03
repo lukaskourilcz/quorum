@@ -59,6 +59,7 @@ function liveStandup(audit: "approve" | "hold" = "approve") {
         summary: "Check that the latest committed shift record is complete."
       },
       positions: positions(audit),
+      droppedSeats: [],
       scope: "Internal only.",
       actualCycleUsd: 0.0123,
       monthCapUsd: 30,
@@ -105,6 +106,7 @@ describe("live shift standup", () => {
           summary: "Check that the latest committed shift record is complete."
         },
         positions: positions(),
+        droppedSeats: [],
         scope: "Internal only.",
         actualCycleUsd: 0.0123,
         monthCapUsd: 30,

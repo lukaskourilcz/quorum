@@ -1156,12 +1156,23 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     let priorityStateChanged = false;
     let selectedPriorityId: string | null = null;
     let selectedPriorityVenture: string | null = null;
+    // Why no room was commissioned, in words, so the standup can say it instead of a console line
+    // nobody reads. Every branch below that declines to commission sets this.
+    let commissionBlockedReason = "The council did not reach the commission gate.";
     if (measuredCouncil && venturePhase === "morning") {
       const approvals = measuredCouncil.positions.filter((position) => position.recommendation === "approve");
       const auditApproved = approvals.some((position) => position.agent === "AUDIT");
       const request = measuredCouncil.positions.find((position) =>
         position.agent !== "AUDIT" && position.meetingRequest !== null
       );
+      if (!(auditApproved && approvals.length >= 3 && request?.meetingRequest)) {
+        commissionBlockedReason = [
+          `${measuredCouncil.positions.length} of ${4} seats returned a position`,
+          `${approvals.length} approved`,
+          auditApproved ? "AUDIT approved" : "AUDIT did not approve",
+          request?.meetingRequest ? "a room was requested" : "no seat requested a room"
+        ].join("; ") + ". The gate needs AUDIT plus three approvals.";
+      }
       if (auditApproved && approvals.length >= 3 && request?.meetingRequest) {
         const [meetingPolicy, ventureRegistry] = await Promise.all([
           loadMeetingPolicy(),
@@ -1171,7 +1182,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           const target = getVentureMeetingDefinition(ventureRegistry, request.meetingRequest.phase);
           const priority = morningContext?.openPriorities.find((item) => item.id === request.meetingRequest?.priorityItemId);
           if (!priority || priority.venture !== target.ventureId) {
-            console.warn("Council meeting request did not match an open priority item for the target venture");
+            commissionBlockedReason = "The requested room did not cite an open priority item belonging to that venture.";
+            console.warn(commissionBlockedReason);
           } else {
             const local = pragueClockParts(now);
             try {
@@ -1258,9 +1270,15 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             outcome: selectedPriorityVenture === entry.ventureId ? "commissioned" as const : "why-not" as const,
             reason: selectedPriorityVenture === entry.ventureId
               ? "The board commissioned the venture's selected open priority item."
-              : morningContext.openPriorities.some((item) => item.venture === entry.ventureId)
-                ? "The board used its single commission on a higher-priority bounded decision."
-                : "No open priority item for this venture had a concrete decision at stake.",
+              // Only true when a commission actually happened. On 3 August the board commissioned
+              // nothing and every venture was still told its turn had gone to a higher priority —
+              // wording that reads as accountability while recording the opposite of what
+              // occurred. When no room was commissioned, the reason is why the board could not.
+              : selectedPriorityVenture === null
+                ? commissionBlockedReason
+                : morningContext.openPriorities.some((item) => item.venture === entry.ventureId)
+                  ? "The board used its single commission on a higher-priority bounded decision."
+                  : "No open priority item for this venture had a concrete decision at stake.",
             priorityItemId: selectedPriorityVenture === entry.ventureId ? selectedPriorityId : null
           }))
         })

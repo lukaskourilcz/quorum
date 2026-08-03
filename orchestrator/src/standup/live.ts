@@ -159,6 +159,8 @@ export async function collectLiveCouncil(input: {
 }): Promise<{
   item: z.infer<typeof QueueItemSchema>;
   positions: RecordedPosition[];
+  /** Seats asked twice and still unreadable. Empty on a full council. */
+  droppedSeats: Array<{ agent: string; reason: string }>;
   scope: string;
   actualCycleUsd: number;
   monthAllInUsd: number;
@@ -172,6 +174,8 @@ export async function collectLiveCouncil(input: {
   ]);
   const shift = getShiftDefinition(input.phase);
   const positions: RecordedPosition[] = [];
+  /** Seats that could not be seated, so the standup can say so instead of a console line. */
+  const dropped: Array<{ agent: string; reason: string }> = [];
 
   for (const agent of COUNCIL) {
     const model = modelConfig.roles[agent];
@@ -181,7 +185,7 @@ export async function collectLiveCouncil(input: {
       "budget/ledger.json",
       { entries: [] }
     );
-    const response = await guardedJsonCall({
+    const callFor = () => ({
       stateRoot,
       cycleId: input.cycleId,
       phase: input.phase,
@@ -200,7 +204,7 @@ export async function collectLiveCouncil(input: {
       }),
       maxOutputTokens: Math.min(model.maxOutputTokens, 400),
       budgetContext: input.budgetContext(ledger.entries),
-      parse: (text) => {
+      parse: (text: string) => {
         const value = PositionSchema.parse(JSON.parse(text));
         if (value.agent !== agent) {
           throw new Error(`Council response identity mismatch for ${agent}`);
@@ -210,7 +214,8 @@ export async function collectLiveCouncil(input: {
         }
         return value;
       }
-    }).catch((error: unknown) => {
+    });
+    const response = await guardedJsonCall(callFor()).catch((error: unknown) => {
       // One seat's unparsable reply must not kill the morning. This is the cycle that seeds
       // the priority queue, commissions the day's specialist room and writes the standup the
       // Caught Up product room reads, so losing it costs far more than one opinion. The
@@ -218,19 +223,35 @@ export async function collectLiveCouncil(input: {
       // a position, not an accounting entry. Anything that is not a parse failure — a budget
       // stop, a provider outage — still propagates and stops the cycle.
       if (error instanceof ModelOutputParseError) {
-        console.warn(JSON.stringify({
-          event: "council_position_unparsable",
-          agent,
-          phase: input.phase,
-          usd: error.usd,
-          reason: error.message
-        }));
-        return null;
+        return { parseFailure: error };
       }
       throw error;
     });
-    if (response === null) continue;
-    positions.push({ ...response.value, sentAt: new Date().toISOString() });
+
+    // A seat is asked twice before it is given up on.
+    //
+    // Dropping it on the first unparsable reply looks harmless — one opinion out of four — but
+    // the commission gate wants three approvals, so a room that seats four and loses two cannot
+    // reach three votes of any kind. That is what happened on 3 August: VIZE and FORGE both
+    // failed to parse, the vote matrix recorded PULSE and AUDIT, and the day commissioned
+    // nothing. The retry costs one more call on a seat that already failed, and only then.
+    let seated = response;
+    if (seated !== null && "parseFailure" in seated) {
+      const first = seated.parseFailure;
+      seated = await guardedJsonCall(callFor()).catch((error: unknown) => {
+        if (error instanceof ModelOutputParseError) return { parseFailure: error };
+        throw error;
+      });
+      if (seated !== null && "parseFailure" in seated) {
+        dropped.push({
+          agent,
+          reason: `Unparsable on both attempts: ${first.message}`.slice(0, 240)
+        });
+        continue;
+      }
+    }
+    if (seated === null) continue;
+    positions.push({ ...seated.value, sentAt: new Date().toISOString() });
   }
 
   // A council that lost every seat has decided nothing; recording that as a held meeting
@@ -253,6 +274,7 @@ export async function collectLiveCouncil(input: {
   return {
     item: work.item,
     positions,
+    droppedSeats: dropped,
     scope: work.scope,
     actualCycleUsd,
     monthAllInUsd: Number((
