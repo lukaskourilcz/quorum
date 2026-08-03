@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "runId": "9de5332d-250d-4311-99f4-a178178a2ff6",
+  "date": "2026-08-03",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-03T08:40:12.571Z",
+  "completedAt": "2026-08-03T08:43:19.718Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-03T08:40:13.045Z",
+      "completedAt": "2026-08-03T08:40:32.907Z",
+      "durationMs": 19862
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-03T08:40:32.907Z",
+      "completedAt": "2026-08-03T08:41:41.723Z",
+      "durationMs": 68816
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-03T08:41:41.724Z",
+      "completedAt": "2026-08-03T08:41:41.725Z",
+      "durationMs": 1
+    },
+    {
+      "name": "hacek_0",
+      "status": "success",
+      "startedAt": "2026-08-03T08:41:41.725Z",
+      "completedAt": "2026-08-03T08:43:19.702Z",
+      "durationMs": 97977
+    },
+    {
+      "name": "hacek_register_0_0",
+      "status": "success",
+      "startedAt": "2026-08-03T08:43:19.702Z",
+      "completedAt": "2026-08-03T08:43:19.704Z",
+      "durationMs": 2
+    },
+    {
+      "name": "hacek_parity_0_0",
+      "status": "success",
+      "startedAt": "2026-08-03T08:43:19.704Z",
+      "completedAt": "2026-08-03T08:43:19.704Z",
+      "durationMs": 0
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-03T08:43:19.705Z",
+      "completedAt": "2026-08-03T08:43:19.705Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-03T08:43:19.705Z",
+      "completedAt": "2026-08-03T08:43:19.717Z",
+      "durationMs": 12
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11488,
+      "outputTokens": 909,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.048099
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 5365,
+      "outputTokens": 2981,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1198,
+      "costUsd": 0.0653025
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "localize",
+      "inputTokens": 3815,
+      "outputTokens": 4000,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.071445
+    }
+  ],
+  "measuredCostUsd": 0.1848465,
+  "quality": {
+    "metrics": {
+      "successfulSources": 32,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 84,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.07692307692307693,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1848465
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "hacek": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "packageStatus": "edition",
+  "warnings": [],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
