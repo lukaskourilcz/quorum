@@ -44,19 +44,22 @@
       "at": "2026-08-03T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "missing_editorial_slate"
     },
     {
       "at": "2026-08-03T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "missed"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-03-tt-marketing",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-03T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "studio",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-03T12:00:00.000Z",
