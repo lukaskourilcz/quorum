@@ -131,10 +131,23 @@ export interface CycleResult {
 }
 
 /** A completed article is final for its date; a no-edition board status is provisional. */
+/**
+ * Whether a second edition today is the owner asking for one rather than a cron repeating itself.
+ *
+ * The once-a-day guard is there because eighteen crons resolve to a phase and a re-run must not
+ * publish the same day twice. It also stops a manual dispatch, which is the owner standing at the
+ * keyboard asking for a new article — and there was no way to say so. The workflow sets this only
+ * for a `workflow_dispatch` with dry disabled, so a schedule can never take this branch.
+ */
+export function manualEditionOverride(env: NodeJS.ProcessEnv = process.env): boolean {
+  return env.CYCLE_FORCE_NEW_EDITION?.trim().toLowerCase() === "true";
+}
+
 export async function hasDeliveredPublishedEdition(
   date: string,
   root = stateRoot
 ): Promise<boolean> {
+  if (manualEditionOverride()) return false;
   const receipt = await readJson<{
     status?: unknown;
     editionStatus?: unknown;

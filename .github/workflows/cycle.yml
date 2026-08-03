@@ -90,6 +90,10 @@ jobs:
       FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
       FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
       MMA_FILES_LIVE_ENABLED: ${{ vars.MMA_FILES_LIVE_ENABLED }}
+      # A manual dispatch with dry disabled is the owner asking for a new article, so the
+      # once-a-day edition guard steps aside for it. A schedule can never set this: the value is
+      # read straight off the dispatch inputs, and github.event_name is checked as well.
+      CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.dry == false }}
       MONTHLY_OPERATING_CAP_USD: "30"
       MAX_CYCLE_BUDGET_USD: "0.20"
       CU_MEETING_BUDGET_USD: "0.08"
