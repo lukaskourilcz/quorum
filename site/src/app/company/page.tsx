@@ -104,7 +104,7 @@ export default function CompanyPage() {
               },
               {
                 title: "How people find the work",
-                text: "DNESKAi publishes in English and Czech. Each project's social posting unlocks only after its delivery or campaign checks pass."
+                text: "DNESKAi and MMA Files publish in Czech. Each project's social posting unlocks only after its delivery or campaign checks pass."
               },
               {
                 title: "Income and costs",
@@ -153,7 +153,7 @@ export default function CompanyPage() {
             [
               "Then",
               "Prove every delivery",
-              "Let the automatic checker confirm both languages, the content marker, image and attribution after each release."
+              "Let the automatic checker confirm the published Czech page, the content marker, image and attribution after each release."
             ],
             [
               "Then",

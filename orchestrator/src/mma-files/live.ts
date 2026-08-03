@@ -65,10 +65,86 @@ const RECORD_DIRECTORIES = ["fighters", "bouts"] as const;
 // bouts is what a profile actually discusses.
 const MAX_BOUTS_IN_EVIDENCE = 6;
 
+// Everything the writer ever sees of the records. It used to be one cut across the whole
+// concatenation, and the first file alone overran it: the Shevchenko packet declared nine
+// source files totalling 116,314 characters, so the cut landed inside file one and the writer
+// received exactly one card — an opponent's — while the six bout files the packet declared as
+// sources arrived as nothing at all.
+const MAX_EVIDENCE_CHARS = 24_000;
+
+const EVIDENCE_TRUNCATION_MARK = "\n…[record truncated]";
+
 interface MmaRecord {
   file: string;
   value: Record<string, unknown>;
   raw: string;
+}
+
+/**
+ * A fighter card as the writer needs it.
+ *
+ * Two blocks never survive. `changeLog` is the intake audit trail — 28,103 of the 51,068
+ * characters of the Shevchenko card are entries recording which scrape touched which field.
+ * `sources` is the scraper's provenance, publisher names and `retrievedAt` stamps; the
+ * `[source:repo/path]` markers the style gate demands come from the FILE lines the packet is
+ * built from, never from inside a card, so dropping it costs the article no citation.
+ *
+ * Opponent cards additionally travel without their own career history. The subject's history is
+ * the article; an opponent's is prompt weight the piece never uses, and every name in it is a
+ * fighter the writer might mention but has no declared ref to link.
+ */
+function cardEvidence(record: MmaRecord, isSubject: boolean): string {
+  const { changeLog: _changeLog, sources: _sources, ...rest } = record.value;
+  return JSON.stringify(isSubject ? rest : { ...rest, history: undefined });
+}
+
+/**
+ * Split a character budget across records so no record is starved by the ones ahead of it.
+ *
+ * Equal shares, with whatever a small record does not use handed back to the large ones. On the
+ * packet this was written for — six bout files of ~1,500 characters and three trimmed cards —
+ * every bout clears its share outright and the subject card absorbs what is left over.
+ */
+function evidenceAllowances(sizes: readonly number[], total: number): number[] {
+  const allowances = sizes.map(() => 0);
+  let pending = sizes.map((size, index) => ({ size, index }));
+  let remaining = Math.max(total, 0);
+  while (pending.length > 0) {
+    const share = Math.floor(remaining / pending.length);
+    const fitting = pending.filter((entry) => entry.size <= share);
+    if (fitting.length === 0) {
+      for (const entry of pending) allowances[entry.index] = share;
+      break;
+    }
+    for (const entry of fitting) {
+      allowances[entry.index] = entry.size;
+      remaining -= entry.size;
+    }
+    pending = pending.filter((entry) => entry.size > share);
+  }
+  return allowances;
+}
+
+/** The evidence blob, with every declared file guaranteed a share of `MAX_EVIDENCE_CHARS`. */
+function renderEvidenceText(used: readonly { file: string; raw: string }[]): string {
+  const headers = used.map(({ file }) => `FILE ${path.relative(repoRoot, file)}\n`);
+  const overhead = headers.reduce((sum, header) => sum + header.length, 0) + Math.max(used.length - 1, 0) * 2;
+  const allowances = evidenceAllowances(used.map(({ raw }) => raw.length), MAX_EVIDENCE_CHARS - overhead);
+  return used
+    .map(({ raw }, index) => {
+      const allowance = allowances[index] ?? 0;
+      if (raw.length <= allowance) return `${headers[index]}${raw}`;
+      // The cut lands mid-JSON, so it is labelled: an unmarked truncated record reads as a
+      // record that simply ends, and a writer cannot tell a missing field from a cut one.
+      const body = allowance <= EVIDENCE_TRUNCATION_MARK.length
+        ? raw.slice(0, allowance)
+        : `${raw.slice(0, allowance - EVIDENCE_TRUNCATION_MARK.length)}${EVIDENCE_TRUNCATION_MARK}`;
+      return `${headers[index]}${body}`;
+    })
+    .join("\n\n")
+    // Long enough record paths could in principle push the headers alone past the budget, and
+    // the allowances are then all zero; this keeps the stated ceiling true in that case too.
+    .slice(0, MAX_EVIDENCE_CHARS);
 }
 
 function boutParticipants(value: Record<string, unknown>): string[] {
@@ -136,19 +212,17 @@ export async function articleEvidenceFor(root: string, slate: EditorialSlate, sl
   const eventRef = [...subjects].find((subject) => subject.includes(":event:"))
     ?? (eventRefs.size === 1 ? [...eventRefs][0] : undefined);
 
-  // Opponent cards travel without their own career history. The subject's history is the
-  // article; an opponent's is prompt weight the piece never uses, and every name in it is a
-  // fighter the writer might mention but has no declared ref to link.
   const used = [
     ...cards.map((record) => ({
       file: record.file,
-      raw: subjects.has(record.value.id as string)
-        ? record.raw
-        : JSON.stringify({ ...record.value, history: undefined })
+      raw: cardEvidence(record, subjects.has(record.value.id as string))
     })),
     ...bouts.map((record) => ({ file: record.file, raw: record.raw }))
   ];
   return {
+    // Every file listed here is a source the article may cite, so every file listed here has to
+    // reach the writer. `renderEvidenceText` is what makes that true — declaring nine sources
+    // and delivering one is how a "sourced" article ends up written from a single opponent card.
     sources: used.map(({ file }) => ({ kind: "internal" as const, ref: path.relative(repoRoot, file) })),
     fighterRefs,
     ...(eventRef ? { eventRef } : {}),
@@ -156,7 +230,7 @@ export async function articleEvidenceFor(root: string, slate: EditorialSlate, sl
       template: assignment.format === "fighter-profile" ? "fighter-file" : "fight-desk",
       bindings: { headline: assignment.subjectRefs.join(" · ").slice(0, 120) }
     },
-    evidenceText: used.map(({ file, raw }) => `FILE ${path.relative(repoRoot, file)}\n${raw}`).join("\n\n").slice(0, 24_000)
+    evidenceText: renderEvidenceText(used)
   };
 }
 
@@ -356,6 +430,24 @@ export async function deriveEditorialSlate(
   });
 }
 
+/**
+ * Rewrite the published-work index, reporting a failure rather than raising it.
+ *
+ * Rebuilding derived bookkeeping must never discard the work it describes, so both callers below
+ * treat a failure as a warning: one runs before anything has happened, the other after an article
+ * has already passed every gate and been stored.
+ */
+async function refreshArticleIndex(context: { cycleId: string; date: string; slot: "am" | "pm" }): Promise<string | null> {
+  return regenerateArticleIndex(stateRoot).catch((error: unknown) => {
+    console.warn(JSON.stringify({
+      event: "article_index_regeneration_failed",
+      ...context,
+      reason: error instanceof Error ? error.message : String(error)
+    }));
+    return null;
+  });
+}
+
 export async function runLiveArticleProduction(input: {
   cycleId: string;
   slot: "am" | "pm";
@@ -365,6 +457,13 @@ export async function runLiveArticleProduction(input: {
   const disabledAgents = disabledAgentsForVenture(agentControls, "mma-files");
   const date = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(input.now);
   const runPath = `ventures/mma-files/runs/${date}-${input.slot}.json`;
+  // `composePortfolioContext` reads ventures/mma-files/articles/INDEX.md straight off disk when
+  // it builds the mag-editorial and mag-desk packets, so the file has to be current before those
+  // rooms sit — not merely current by the time this function returns. The only other writer is
+  // the end of this function, which a killed or throwing slot never reaches; rebuilding here
+  // means every article slot leaves the rooms an index that matches the stored packages, however
+  // the slot itself ends.
+  await refreshArticleIndex({ cycleId: input.cycleId, date, slot: input.slot });
   let storedSlate: EditorialSlate | null = null;
   try {
     storedSlate = EditorialSlateSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "ventures", "mma-files", "slates", `${date}.json`), "utf8")));
@@ -404,86 +503,104 @@ export async function runLiveArticleProduction(input: {
     });
     return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
   }
-  const assignment = slate.slots.find((candidate) => candidate.slot === input.slot);
-  const evidence = await articleEvidenceFor(stateRoot, slate, input.slot);
-  if (!assignment || assignment.status === "killed" || !evidence) {
-    const reason = assignment?.status === "killed" ? assignment.killedReason : "missing_sourced_subject";
-    await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, ...(derivedSlate ? { slateSource: "derived" } : {}), spentUsd: 0, generatedAt: input.now.toISOString() });
-    return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
-  }
-  // Search on the subject's name rather than its record id. "ufc valentina-shevchenko" is a
-  // query no photo archive is indexed for, and what came back was a US Air Force range
-  // photograph of two other people, which then ran as the hero of her profile.
-  const subject = assignment.subjectRefs
-    .map((reference) => reference.split(":").at(-1)?.replaceAll("-", " ") ?? "")
-    .filter(Boolean)
-    .join(" ");
-  const imageSearch = await discoverLicensedPhotos({
-    query: subject.slice(0, 100),
-    pexelsKey: process.env.PEXELS_API_KEY,
-    pixabayKey: process.env.PIXABAY_API_KEY
-  });
-  if (imageSearch.skippedProviders.length > 0) {
-    const relative = "NEEDS_YOUR_HELP_NOW.md";
-    const current = await readText(repoRoot, relative, "# Needs your help now\n");
-    const additions = imageSearch.skippedProviders
-      .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
-      .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
-    if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
-  }
-  const socialUnlocked = await socialContentGenerationEnabled(stateRoot, "mma-files");
-  const result = await produceMmaFilesArticle({
-    root: stateRoot,
-    slate,
-    slot: input.slot,
-    slug: slugFor(assignment.subjectRefs, input.slot),
-    publishAt: input.now,
-    mode: "live-analysis",
-    evidence,
-    imageCandidates: candidatesNaming(imageSearch.candidates, subject),
-    publicRepoRoot: repoRoot,
-    socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
-    gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
-    socialProductionEnabled: socialUnlocked && !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
-  });
-  // Record why a blocked article was blocked. The gate's violations were computed, used to
-  // set the status, and discarded, so a blocked run reported a hash and nothing else — the
-  // day looked like a silent no-op from every angle except re-running the gate by hand.
-  await atomicWriteJson(stateRoot, runPath, {
-    schemaVersion: 1,
-    cycleId: input.cycleId,
-    date,
-    slot: input.slot,
-    status: result.article.status,
-    articleRef: result.article.packageHash,
-    // A derived slate is not a room product, and it is never written to slates/, so the run
-    // record is the only place the trail can say the subject came from the records rather than
-    // from CANVAS.
-    ...(derivedSlate ? { slateSource: "derived", subjectRefs: assignment.subjectRefs } : {}),
-    ...(result.supersededHash ? { supersededHash: result.supersededHash } : {}),
-    ...(result.violations.length > 0
-      ? { violations: result.violations.slice(0, 20).map(({ code, locale, message }) => ({ code, locale, message })) }
-      : {}),
-    spentUsd: null,
-    generatedAt: input.now.toISOString()
-  });
-  // The article is stored, so the published-work index the magazine rooms read is now stale.
-  // Rebuilding it here is what keeps it written at all — it is loaded into both rooms and had
-  // no writer anywhere. A failure to rebuild derived bookkeeping must not discard an article
-  // that has already passed every gate and been stored, so it is reported, not thrown.
-  const indexPath = await regenerateArticleIndex(stateRoot).catch((error: unknown) => {
-    console.warn(JSON.stringify({
-      event: "article_index_regeneration_failed",
+  // Everything below can throw, and until now none of it was covered. `articleEvidenceFor`
+  // JSON-parses every fighter and bout record on disk; `discoverLicensedPhotos` talks to four
+  // HTTP providers; `produceMmaFilesArticle` validates the stylebook, makes the model call and
+  // enforces the immutable-slot guard. Each of those throws walked straight out of the phase and
+  // left `runs/<date>-<slot>.json` unwritten — the same silence the derived-slate fallback above
+  // exists to remove, arriving one step later instead. The guarantee is the run record, not a
+  // successful article: a throw becomes a killed record naming what threw.
+  try {
+    const assignment = slate.slots.find((candidate) => candidate.slot === input.slot);
+    const evidence = await articleEvidenceFor(stateRoot, slate, input.slot);
+    if (!assignment || assignment.status === "killed" || !evidence) {
+      const reason = assignment?.status === "killed" ? assignment.killedReason : "missing_sourced_subject";
+      await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, ...(derivedSlate ? { slateSource: "derived" } : {}), spentUsd: 0, generatedAt: input.now.toISOString() });
+      return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
+    }
+    // Search on the subject's name rather than its record id. "ufc valentina-shevchenko" is a
+    // query no photo archive is indexed for, and what came back was a US Air Force range
+    // photograph of two other people, which then ran as the hero of her profile.
+    const subject = assignment.subjectRefs
+      .map((reference) => reference.split(":").at(-1)?.replaceAll("-", " ") ?? "")
+      .filter(Boolean)
+      .join(" ");
+    const imageSearch = await discoverLicensedPhotos({
+      query: subject.slice(0, 100),
+      pexelsKey: process.env.PEXELS_API_KEY,
+      pixabayKey: process.env.PIXABAY_API_KEY
+    });
+    if (imageSearch.skippedProviders.length > 0) {
+      const relative = "NEEDS_YOUR_HELP_NOW.md";
+      const current = await readText(repoRoot, relative, "# Needs your help now\n");
+      const additions = imageSearch.skippedProviders
+        .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
+        .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
+      if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
+    }
+    const socialUnlocked = await socialContentGenerationEnabled(stateRoot, "mma-files");
+    const result = await produceMmaFilesArticle({
+      root: stateRoot,
+      slate,
+      slot: input.slot,
+      slug: slugFor(assignment.subjectRefs, input.slot),
+      publishAt: input.now,
+      mode: "live-analysis",
+      evidence,
+      imageCandidates: candidatesNaming(imageSearch.candidates, subject),
+      publicRepoRoot: repoRoot,
+      socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
+      gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
+      socialProductionEnabled: socialUnlocked && !disabledAgents.has("REACH") && !disabledAgents.has("FRAME")
+    });
+    // Record why a blocked article was blocked. The gate's violations were computed, used to
+    // set the status, and discarded, so a blocked run reported a hash and nothing else — the
+    // day looked like a silent no-op from every angle except re-running the gate by hand.
+    await atomicWriteJson(stateRoot, runPath, {
+      schemaVersion: 1,
       cycleId: input.cycleId,
       date,
       slot: input.slot,
-      reason: error instanceof Error ? error.message : String(error)
-    }));
-    return null;
-  });
-  return {
-    status: result.article.status === "published" ? "published" : "blocked",
-    artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, ...(indexPath ? [indexPath] : []), "budget/ledger.json"],
-    estimatedWorstCaseUsd: 0.16
-  };
+      status: result.article.status,
+      articleRef: result.article.packageHash,
+      // A derived slate is not a room product, and it is never written to slates/, so the run
+      // record is the only place the trail can say the subject came from the records rather than
+      // from CANVAS.
+      ...(derivedSlate ? { slateSource: "derived", subjectRefs: assignment.subjectRefs } : {}),
+      ...(result.supersededHash ? { supersededHash: result.supersededHash } : {}),
+      ...(result.violations.length > 0
+        ? { violations: result.violations.slice(0, 20).map(({ code, locale, message }) => ({ code, locale, message })) }
+        : {}),
+      spentUsd: null,
+      generatedAt: input.now.toISOString()
+    });
+    // A package was stored, so the index rebuilt at the top of this function is stale again.
+    const indexPath = await refreshArticleIndex({ cycleId: input.cycleId, date, slot: input.slot });
+    return {
+      status: result.article.status === "published" ? "published" : "blocked",
+      artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, ...(indexPath ? [indexPath] : []), "budget/ledger.json"],
+      estimatedWorstCaseUsd: 0.16
+    };
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    // Also on stderr: the run record is the durable trail, but a phase that swallows a throw and
+    // exits zero would otherwise show a clean CI log for a day that produced nothing.
+    console.warn(JSON.stringify({ event: "article_production_failed", cycleId: input.cycleId, date, slot: input.slot, reason: detail.slice(0, 300) }));
+    await atomicWriteJson(stateRoot, runPath, {
+      schemaVersion: 1,
+      cycleId: input.cycleId,
+      date,
+      slot: input.slot,
+      status: "killed",
+      reason: "article_production_failed",
+      detail: detail.slice(0, 300),
+      ...(derivedSlate ? { slateSource: "derived" } : {}),
+      // The throw can land on either side of the writing call, so what this slot spent is only
+      // knowable from budget/ledger.json. `null` is the same "read the ledger" the completed
+      // path writes; `0` would be a claim this code cannot make.
+      spentUsd: null,
+      generatedAt: input.now.toISOString()
+    });
+    return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0.16 };
+  }
 }

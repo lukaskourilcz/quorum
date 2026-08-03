@@ -34,7 +34,8 @@ import {
   phaseNeedsAgenda,
   readMeetingAgendaQueue,
   requestMeetingAgenda,
-  starvationList
+  starvationList,
+  type MeetingPolicy
 } from "./meetings/agenda.js";
 import {
   createLiveEditionMeeting,
@@ -68,7 +69,12 @@ import {
   recordSocialPackFailure
 } from "./social/pack.js";
 import { socialContentGenerationEnabled } from "./social/activation.js";
-import { collectLiveCouncil, createLiveStandup } from "./standup/live.js";
+import {
+  COUNCIL_SEATS,
+  collectLiveCouncil,
+  createLiveStandup,
+  type RecordedPosition
+} from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
 import { StandupSchema } from "./standup/schema.js";
@@ -80,8 +86,11 @@ import {
   composeMeetingRouteDefinition,
   getVentureMeetingDefinition,
   loadVentureRegistry,
-  parseCadenceHour
+  parseCadenceHour,
+  type VentureMeetingDefinition
 } from "./ventures/registry.js";
+import type { VentureRegistry } from "./contracts/venture-registry.js";
+import type { PriorityItem } from "./contracts/autonomy.js";
 import {
   caughtUpSocialProductionEnabled,
   disabledAgentsForVenture,
@@ -141,6 +150,95 @@ export interface CycleResult {
  */
 export function manualEditionOverride(env: NodeJS.ProcessEnv = process.env): boolean {
   return env.CYCLE_FORCE_NEW_EDITION?.trim().toLowerCase() === "true";
+}
+
+/**
+ * StandupSchema caps a starvation-review reason at 280 characters, and that is where every
+ * reason below is published. An over-long one would not be truncated, it would fail the parse
+ * and take the whole cycle down — so a scheduler message or a long transition list is cut here
+ * rather than allowed to decide whether the morning gets written at all.
+ */
+const PUBLISHED_REASON_LIMIT = 280;
+
+function publishableReason(reason: string): string {
+  return reason.length <= PUBLISHED_REASON_LIMIT
+    ? reason
+    : `${reason.slice(0, PUBLISHED_REASON_LIMIT - 1)}…`;
+}
+
+export type MorningCommission =
+  | {
+      commission: true;
+      requestedBy: RecordedPosition["agent"];
+      request: NonNullable<RecordedPosition["meetingRequest"]>;
+      target: { ventureId: string; meeting: VentureMeetingDefinition };
+      priority: PriorityItem;
+    }
+  | { commission: false; reason: string };
+
+/**
+ * Decide whether the morning board commissions one specialist room, and say why when it does not.
+ *
+ * Pure, because the reason is published: the standup's starvation review prints it to every
+ * venture that did not get the day's single commission. Refusing a room the board may not open
+ * used to write no reason at all, so the standup fell back to the caller's default — "the council
+ * did not reach the commission gate" — which is the wrong sentence for a council that reached it
+ * and then named the wrong room. Every return below carries its own.
+ */
+export function resolveMorningCommission(input: {
+  positions: readonly RecordedPosition[];
+  openPriorities: readonly PriorityItem[];
+  policy: MeetingPolicy;
+  registry: VentureRegistry;
+  sourcePhase: string;
+}): MorningCommission {
+  const approvals = input.positions.filter((position) => position.recommendation === "approve");
+  const auditApproved = approvals.some((position) => position.agent === "AUDIT");
+  const requester = input.positions.find((position) =>
+    position.agent !== "AUDIT" && position.meetingRequest !== null
+  );
+  const request = requester?.meetingRequest ?? null;
+  if (!auditApproved || approvals.length < 3 || !request || !requester) {
+    return {
+      commission: false,
+      reason: publishableReason([
+        `${input.positions.length} of ${COUNCIL_SEATS} seats returned a position`,
+        `${approvals.length} approved`,
+        auditApproved ? "AUDIT approved" : "AUDIT did not approve",
+        request ? "a room was requested" : "no seat requested a room"
+      ].join("; ") + ". The gate needs AUDIT plus three approvals.")
+    };
+  }
+  if (!mayRequestMeeting(input.policy, input.sourcePhase, request.phase)) {
+    const allowed = (input.policy.transitions[input.sourcePhase] ?? []).join(", ");
+    return {
+      commission: false,
+      reason: publishableReason(`${requester.agent} asked for the ${request.phase} room, which the ${input.sourcePhase} board may not commission. It may commission ${allowed.length > 0 ? allowed : "no room at all"}.`)
+    };
+  }
+  const target = getVentureMeetingDefinition(input.registry, request.phase);
+  const priority = input.openPriorities.find((item) => item.id === request.priorityItemId);
+  if (!priority || priority.venture !== target.ventureId) {
+    return {
+      commission: false,
+      reason: publishableReason(`${requester.agent} asked for the ${request.phase} room, which belongs to ${target.ventureId}, against ${priority ? `an open ${priority.venture} priority item` : "a priority item that is not open"}. A room is only commissioned for its own venture's item.`)
+    };
+  }
+  return { commission: true, requestedBy: requester.agent, request, target, priority };
+}
+
+/**
+ * Why a commission that passed every gate still did not reach the agenda queue.
+ *
+ * requestMeetingAgenda enforces the queue-wide and per-venture pending caps and re-parses the
+ * agenda contract, so it can refuse work the gate above has already approved. That refusal used
+ * to be a console line only, and the standup published the default reason as if the council had
+ * never agreed on anything.
+ */
+export function schedulerBlockedReason(phase: string, error: unknown): string {
+  return publishableReason(`The council commissioned the ${phase} room but the agenda queue refused it: ${
+    error instanceof Error ? error.message : "unknown scheduler error"
+  }`);
 }
 
 export async function hasDeliveredPublishedEdition(
@@ -1157,68 +1255,61 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     let selectedPriorityId: string | null = null;
     let selectedPriorityVenture: string | null = null;
     // Why no room was commissioned, in words, so the standup can say it instead of a console line
-    // nobody reads. Every branch below that declines to commission sets this.
-    let commissionBlockedReason = "The council did not reach the commission gate.";
+    // nobody reads. Both blocks below overwrite it — resolveMorningCommission for every way the
+    // gate itself declines, schedulerBlockedReason for a commission the agenda queue refuses — so
+    // this default is only ever published by a morning that called no live council, which means a
+    // dry run.
+    let commissionBlockedReason = "No live council was called this morning, so nothing reached the commission gate.";
     if (measuredCouncil && venturePhase === "morning") {
-      const approvals = measuredCouncil.positions.filter((position) => position.recommendation === "approve");
-      const auditApproved = approvals.some((position) => position.agent === "AUDIT");
-      const request = measuredCouncil.positions.find((position) =>
-        position.agent !== "AUDIT" && position.meetingRequest !== null
-      );
-      if (!(auditApproved && approvals.length >= 3 && request?.meetingRequest)) {
-        commissionBlockedReason = [
-          `${measuredCouncil.positions.length} of ${4} seats returned a position`,
-          `${approvals.length} approved`,
-          auditApproved ? "AUDIT approved" : "AUDIT did not approve",
-          request?.meetingRequest ? "a room was requested" : "no seat requested a room"
-        ].join("; ") + ". The gate needs AUDIT plus three approvals.";
-      }
-      if (auditApproved && approvals.length >= 3 && request?.meetingRequest) {
-        const [meetingPolicy, ventureRegistry] = await Promise.all([
-          loadMeetingPolicy(),
-          loadVentureRegistry()
-        ]);
-        if (mayRequestMeeting(meetingPolicy, venturePhase, request.meetingRequest.phase)) {
-          const target = getVentureMeetingDefinition(ventureRegistry, request.meetingRequest.phase);
-          const priority = morningContext?.openPriorities.find((item) => item.id === request.meetingRequest?.priorityItemId);
-          if (!priority || priority.venture !== target.ventureId) {
-            commissionBlockedReason = "The requested room did not cite an open priority item belonging to that venture.";
-            console.warn(commissionBlockedReason);
-          } else {
-            const local = pragueClockParts(now);
-            try {
-              const scheduled = await requestMeetingAgenda({
-                root: artifactRoot,
-                policy: meetingPolicy,
-                ventureId: target.ventureId,
-                phase: request.meetingRequest.phase,
-                requestedBy: request.agent,
-                sourcePhase: venturePhase,
-                sourceMeetingRef: `standups/${local.date}-morning`,
-                summary: request.meetingRequest.summary,
-                evidenceRefs: request.meetingRequest.evidenceRefs,
-                notBefore: nextAgendaDate({
-                  currentDate: local.date,
-                  currentHour: local.hour,
-                  targetHour: parseCadenceHour(target.meeting.cadence)
-                }),
-                now
-              });
-              meetingAgendaIds.push(scheduled.agenda.id);
-              meetingAgendaStateChanged = scheduled.created;
-              await selectPriorityItem({
-                root: artifactRoot,
-                itemId: priority.id,
-                meetingRef: `standups/${local.date}-morning`,
-                now
-              });
-              selectedPriorityId = priority.id;
-              selectedPriorityVenture = priority.venture;
-              priorityStateChanged = true;
-            } catch (error) {
-              console.warn(`Council meeting request was not queued: ${error instanceof Error ? error.message : "unknown scheduler error"}`);
-            }
-          }
+      const [meetingPolicy, ventureRegistry] = await Promise.all([
+        loadMeetingPolicy(),
+        loadVentureRegistry()
+      ]);
+      const commission = resolveMorningCommission({
+        positions: measuredCouncil.positions,
+        openPriorities: morningContext?.openPriorities ?? [],
+        policy: meetingPolicy,
+        registry: ventureRegistry,
+        sourcePhase: venturePhase
+      });
+      if (!commission.commission) {
+        commissionBlockedReason = commission.reason;
+        console.warn(commissionBlockedReason);
+      } else {
+        const { request, target, priority } = commission;
+        const local = pragueClockParts(now);
+        try {
+          const scheduled = await requestMeetingAgenda({
+            root: artifactRoot,
+            policy: meetingPolicy,
+            ventureId: target.ventureId,
+            phase: request.phase,
+            requestedBy: commission.requestedBy,
+            sourcePhase: venturePhase,
+            sourceMeetingRef: `standups/${local.date}-morning`,
+            summary: request.summary,
+            evidenceRefs: request.evidenceRefs,
+            notBefore: nextAgendaDate({
+              currentDate: local.date,
+              currentHour: local.hour,
+              targetHour: parseCadenceHour(target.meeting.cadence)
+            }),
+            now
+          });
+          meetingAgendaIds.push(scheduled.agenda.id);
+          meetingAgendaStateChanged = scheduled.created;
+          await selectPriorityItem({
+            root: artifactRoot,
+            itemId: priority.id,
+            meetingRef: `standups/${local.date}-morning`,
+            now
+          });
+          selectedPriorityId = priority.id;
+          selectedPriorityVenture = priority.venture;
+          priorityStateChanged = true;
+        } catch (error) {
+          commissionBlockedReason = schedulerBlockedReason(request.phase, error);
+          console.warn(commissionBlockedReason);
         }
       }
       for (const item of morningContext?.openPriorities ?? []) {

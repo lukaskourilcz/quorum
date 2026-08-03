@@ -28,6 +28,19 @@ function participants(room: RoomPacket) {
   ];
 }
 
+/**
+ * What these builders write is not what the reader sees.
+ *
+ * The meeting page prints operatingBrief, decision.summary and every transcript turn through
+ * publicAgentText (site/src/components/agent-language.ts), which swaps internal vocabulary for
+ * plain English. Several of its rules expand one word into a lowercase phrase, so where the word
+ * sits decides whether the published sentence still parses. Run over these strings, the filter
+ * turns "distribution" into "ways to reach people" — plural, so it cannot stand where a singular
+ * abstract noun did — and turns "NO_POST" into "do not publish" and "NO_EDITION" into
+ * "no edition", neither of which can open a sentence. Keep such a token inside a sentence, or
+ * write the plain wording directly. tests/meeting-public-language.test.ts loads the real filter
+ * and runs it over every turn of every branch here.
+ */
 function editionRecord(input: {
   cycleId: string;
   date: string;
@@ -71,7 +84,7 @@ function editionRecord(input: {
       veto: false
     })),
     tasks: [],
-    growthPlan: "NO_POST. A dry meeting cannot commission or promote an edition.",
+    growthPlan: "Publishing is blocked (NO_POST): a dry meeting cannot commission or promote an edition.",
     eveningOutcome: null,
     roomTranscript: {
       openedAt,
@@ -114,7 +127,7 @@ function editionRecord(input: {
           agent: "HERALD",
           mode: "close",
           sentAt: closedAt,
-          text: "NO_EDITION. The dry room closes without a commission."
+          text: "The dry room records NO_EDITION and closes without a commission."
         }
       ]
     },
@@ -183,7 +196,7 @@ function productRecord(input: {
       summary: "Record the dry defer verdict without reviving or accepting an idea.",
       status: "done"
     }],
-    growthPlan: "NO_POST. Product-room fixtures do not authorize public distribution.",
+    growthPlan: "Publishing is blocked (NO_POST): a product-room fixture authorizes no public promotion.",
     eveningOutcome: `The product room recorded a dry ${verdict} verdict.`,
     caughtUpIdeaRef: ideaId,
     ideaVerdicts: [{
@@ -202,7 +215,7 @@ function productRecord(input: {
           mode: "gavel",
           sentAt: openedAt,
           text: input.idea
-            ? "The product room is open for the one VAULT-screened fixture handoff."
+            ? "The product room is open for the one screened idea."
             : "The product room is open. SPARK has no live morning handoff."
         },
         {
@@ -228,7 +241,7 @@ function productRecord(input: {
           mode: "vote",
           sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
           text: verdict === "veto"
-            ? "Record the VAULT hard stop. The room cannot accept an evidence-free duplicate."
+            ? "Record the VAULT hard stop. The room cannot accept a duplicate with no sources."
             : "Approve defer. The fixture cannot authorize product action."
         },
         {
@@ -325,8 +338,8 @@ export async function createLiveEditionMeeting(input: {
       status: "planned"
     }],
     growthPlan: edition
-      ? "Prepare only draft-locked distribution assets after delivery succeeds."
-      : "NO_POST. A held edition cannot authorize distribution.",
+      ? "Prepare only draft-locked promotion assets after delivery succeeds."
+      : "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
     eveningOutcome: null,
     editionRef: input.editionPackage.idempotencyKey,
     roomTranscript: {
@@ -339,7 +352,7 @@ export async function createLiveEditionMeeting(input: {
           agent: "HERALD",
           mode: "gavel",
           sentAt: openedAt,
-          text: "The edition room is open. The live digest is evidence, not authority."
+          text: "The edition room is open. The live digest informs the room and never instructs it."
         },
         // These two turns kept describing an English review and a Czech parity check long
         // after both stages were deleted. The edition is written once, in Czech, by write(),
@@ -379,16 +392,16 @@ export async function createLiveEditionMeeting(input: {
           mode: "statement",
           sentAt: new Date(input.now.getTime() + 4_000).toISOString(),
           text: edition
-            ? "Distribution remains draft-locked until RELAY confirms delivery."
-            : "There is no distribution brief without an edition."
+            ? "Promotion assets wait for a successful delivery and stay locked as drafts."
+            : "Without an edition there is nothing to promote."
         },
         {
           agent: "HERALD",
           mode: "close",
           sentAt: closedAt,
           text: edition
-            ? "EDITION recorded. RELAY owns the handoff."
-            : "NO_EDITION recorded. The room closes honestly."
+            ? "EDITION recorded. RELAY owns delivery from here."
+            : "The room recorded NO_EDITION and closes honestly."
         }
       ]
     },
@@ -423,7 +436,7 @@ export async function createLiveProductMeeting(input: {
   const response = input.response;
   const outcome = response?.verdict ?? "defer";
   const summary = response?.summary
-    ?? "Defer. The morning shift did not leave a VAULT-screened Caught Up idea.";
+    ?? "Defer. No screened Caught Up idea arrived from the morning meeting.";
   const evidenceRefs = idea?.revival ? [idea.revival.evidenceRef] : [];
   const voteMatrix = response
     ? response.votes.map((vote) => ({
@@ -472,7 +485,7 @@ export async function createLiveProductMeeting(input: {
     }] : [],
     growthPlan: outcome === "accept" || outcome === "supersede"
       ? "The ledger accepts the idea only; any spend, code, channel, schedule or external action remains human-gated."
-      : "NO_POST. A product-room verdict does not authorize distribution.",
+      : "Publishing is blocked (NO_POST): a product-room verdict authorizes no promotion.",
     eveningOutcome: input.yesterdayOutcome,
     ...(idea ? {
       caughtUpIdeaRef: idea.id,

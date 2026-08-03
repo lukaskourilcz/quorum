@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { curationOwnedViolations } from "./quality.js";
 import { createDigest, renderDigestDataBlock } from "../sources/digest.js";
+import { InvalidModelOutputError } from "./models.js";
 import type { SourceItem } from "../sources/types.js";
 import type { EditionQualityConfig } from "./config.js";
 import {
@@ -129,10 +130,16 @@ export async function curate(
     parse: (value) => ToolOutputSchema.parse(value)
   });
   const seen = new Set<number>();
+  // Both rejections below describe a payload the provider already billed us for, so they are
+  // thrown as InvalidModelOutputError with that call's usage attached rather than as a bare Error.
+  // produceEdition records usage only from the two error types that carry it; a plain Error meant
+  // the curation call vanished from the ledger and the day's finance line under-reported a
+  // failure that had been paid for. This happened on 3 August, when the editor answered index 54
+  // for a fifty-item pool. The checks themselves are unchanged — only what they throw.
   const picks = response.value.picks.map((pick) => {
     const item = pool[pick.index];
-    if (!item) throw new Error(`curate: pick index ${pick.index} is outside the source pool`);
-    if (seen.has(pick.index)) throw new Error(`curate: duplicate pick index ${pick.index}`);
+    if (!item) throw new InvalidModelOutputError(`curate: pick index ${pick.index} is outside the source pool`, response.usage);
+    if (seen.has(pick.index)) throw new InvalidModelOutputError(`curate: duplicate pick index ${pick.index}`, response.usage);
     seen.add(pick.index);
     return {
       itemId: item.externalId,

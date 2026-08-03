@@ -21,9 +21,9 @@ import {
 import ventureRegistrySource from "../../../config/ventures.json";
 import {
   agentById,
-  type AgentApiModel,
   type AgentId
 } from "@/data/agents";
+import { calendarCostContexts } from "@/lib/calendar-cost";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -64,58 +64,6 @@ const configuredMeetingCast = new Map<string, readonly AgentId[]>(
     ] as const)
   )
 );
-
-const calendarCostContexts: Partial<
-  Record<CalendarKind, Partial<Record<AgentId, AgentApiModel["context"]>>>
-> = {
-  "venture-morning": {
-    VIZE: "Company council meetings",
-    FORGE: "Company council meetings",
-    PULSE: "Company and project meetings",
-    AUDIT: "Company and project meetings",
-    SPARK: "DNESKAi idea and project meetings",
-    VAULT: "DNESKAi idea checks"
-  },
-  "venture-afternoon": {
-    VIZE: "Company council meetings",
-    FORGE: "Company council meetings",
-    PULSE: "Company and project meetings",
-    AUDIT: "Company and project meetings"
-  },
-  "venture-night": {
-    VIZE: "Company council meetings",
-    FORGE: "Company council meetings",
-    PULSE: "Company and project meetings",
-    AUDIT: "Company and project meetings"
-  },
-  "cu-edition": {
-    HERALD: "DNESKAi daily edition curation",
-    STET: "DNESKAi English edition",
-    HACEK: "DNESKAi Czech edition",
-    SPARK: "DNESKAi idea and project meetings",
-    AUDIT: "Company and project meetings"
-  },
-  "cu-product": {
-    HERALD: "DNESKAi product room",
-    SPARK: "DNESKAi idea and project meetings",
-    VAULT: "DNESKAi idea checks",
-    AUDIT: "Company and project meetings"
-  },
-  "mag-editorial": {
-    JAB: "MMA Files editorial rooms"
-  },
-  "mag-desk": {
-    JAB: "MMA Files editorial rooms"
-  },
-  "article-am": {
-    JAB: "MMA Files English articles",
-    HACEK: "MMA Files Czech edition"
-  },
-  "article-pm": {
-    JAB: "MMA Files English articles",
-    HACEK: "MMA Files Czech edition"
-  }
-};
 
 function calendarParticipants(kind: CalendarKind): readonly AgentId[] {
   if (kind === "venture-morning") return morningDecisionRoom;

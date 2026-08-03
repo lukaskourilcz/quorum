@@ -11,6 +11,7 @@ import type { EditionModelGateway } from "./types.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import { validateEditionForDelivery } from "../delivery/validate.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
+import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
 import { runScrapersDetailed, type ScrapeRunResult } from "../sources/run.js";
 import { createDigest } from "../sources/digest.js";
 import { loadSourceRegistry } from "../sources/registry.js";
@@ -173,10 +174,19 @@ export async function runLiveEdition(input: {
     .filter((entry) => sameUtcDay(new Date(entry.ts), input.now))
     .reduce((sum, entry) => sum + entry.usd, 0)
     .toFixed(8));
-  const monthlyCap = envCap("MONTHLY_BUDGET_USD", 15);
-  const dailyCap = envCap("DAILY_BUDGET_USD", 0.7);
-  const productionCap = envCap("EDITION_PRODUCTION_BUDGET_USD", 0.35);
-  const operatingCap = envCap("MONTHLY_OPERATING_CAP_USD", 50);
+  // The fallbacks a run uses when the environment sets nothing come from the newest countersigned
+  // decision, not from literals here. They were literals: $50 all-in, which is budget-2026-08d's
+  // figure, superseded on 2 August by budget-2026-08e at $30; and $15 a month API with $0.70 a day,
+  // which predate that raise entirely against 08e's $25 and $1.00. So an unconfigured run enforced
+  // an all-in limit $20 looser than the owner approved and a daily pace tighter than it. That is
+  // the drift portfolio/limits.ts exists to stop: one resolver, and phases tighten it rather than
+  // restating it. This resolves to $25 / $1.00 / $30 / $0.35 today. envCap still runs on top, so a
+  // malformed env value is rejected outright rather than silently falling back to these.
+  const resolved = await loadRuntimeBudgetLimits();
+  const monthlyCap = envCap("MONTHLY_BUDGET_USD", resolved.monthlyApiUsd);
+  const dailyCap = envCap("DAILY_BUDGET_USD", resolved.dailyUsd);
+  const productionCap = envCap("EDITION_PRODUCTION_BUDGET_USD", resolved.editionProductionUsd);
+  const operatingCap = envCap("MONTHLY_OPERATING_CAP_USD", resolved.monthlyOperatingUsd);
   const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
   const reporter = new EditionRunReporter(input.date, "production");
   const successfulSources = sourceRun.sources.filter((source) => source.status === "success").length;

@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
+import { KpiSetSchema } from "../src/contracts/kpi-set.js";
+import { runLiveEdition } from "../src/edition/live.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../src/portfolio/limits.js";
 import { resolveEffectivePortfolioSchedule } from "../src/portfolio/schedule.js";
+import { loadSourceRegistry } from "../src/sources/registry.js";
+import { atomicWriteJson } from "../src/state.js";
 import { loadVentureRegistry } from "../src/ventures/registry.js";
 import { repoRoot, stateRoot } from "../src/paths.js";
 
@@ -219,6 +224,74 @@ describe("every phase reaches the countersigned caps", () => {
       expect(phase.dailyUsd).toBe(1);
       expect(phase.monthlyApiUsd).toBe(25);
       expect(phase.monthlyOperatingUsd).toBe(30);
+    } finally {
+      Object.assign(process.env, previous);
+    }
+  });
+
+  it("publishes and falls back to the same caps the resolver reaches", async () => {
+    // Two more copies of the superseded budget-2026-08d figures. config/kpis/2026-Q1.json is read
+    // by the public money page, so it was telling readers the company runs to $50 all-in and $42
+    // of API — $20 and $17 above what the owner countersigned — and grading itself against those
+    // numbers. edition/live.ts held its own $15 / $0.70 / $50 fallbacks for a run whose env sets
+    // nothing. Neither is allowed to restate a cap; both must reach the resolver's answer.
+    const previous = { ...process.env };
+    for (const name of ["DAILY_BUDGET_USD", "MONTHLY_BUDGET_USD", "MONTHLY_OPERATING_CAP_USD", "EDITION_PRODUCTION_BUDGET_USD"]) {
+      delete process.env[name];
+    }
+    try {
+      const limits = await loadRuntimeBudgetLimits();
+      const kpis = KpiSetSchema.parse(JSON.parse(await readFile(path.join(repoRoot, "config/kpis/2026-Q1.json"), "utf8")));
+      const target = (id: string) => kpis.kpis.find((kpi) => kpi.id === id);
+      expect(target("company.monthly-all-in-usd")).toMatchObject({ target: limits.monthlyOperatingUsd, direction: "at-most" });
+      expect(target("company.monthly-api-usd")).toMatchObject({ target: limits.monthlyApiUsd, direction: "at-most" });
+
+      // And the API share the live edition enforces with nothing in the environment, read through
+      // the gate rather than off the source. The scrape returns nothing, so a run the budget lets
+      // through stops at the source gate instead — which is how "the budget did not stop this"
+      // shows up. Spend is dated to the 1st so only the monthly figure is in play, not the daily.
+      const registry = await loadSourceRegistry();
+      const reasonAfterSpending = async (usd: number) => {
+        const root = await mkdtemp(path.join(os.tmpdir(), "edition-caps-"));
+        await atomicWriteJson(root, "budget/ledger.json", {
+          schemaVersion: 1,
+          entries: [{
+            ts: "2026-08-01T04:00:00.000Z",
+            cycleId: "cycle-prior",
+            requestHash: "prior",
+            phase: "cu-edition",
+            ventureId: "caught-up",
+            agent: "HERALD",
+            provider: "anthropic",
+            model: "claude-sonnet-4-6",
+            serviceTier: "default",
+            tokensIn: 1,
+            cachedTokensIn: 0,
+            tokensOut: 1,
+            toolUses: 1,
+            usd,
+            kind: "text"
+          }]
+        });
+        const result = await runLiveEdition({
+          cycleId: "20260804030000-cu-edition",
+          date: "2026-08-04",
+          now: new Date("2026-08-04T03:55:00.000Z"),
+          meetingRef: "meetings/2026-08-04-cu-edition",
+          roomUrl: "https://boardless.example/meetings/2026-08-04-cu-edition",
+          root,
+          dependencies: {
+            loadRegistry: async () => registry,
+            scrape: async () => ({ items: [], sources: [] }),
+            gateway: { invoke: async () => { throw new Error("provider must not be called"); } } as never
+          }
+        });
+        await rm(root, { recursive: true, force: true });
+        return result.package.board.noEditionReason;
+      };
+      // $5 of headroom is inside the countersigned $25 share and outside the superseded $15 one.
+      expect(await reasonAfterSpending(limits.monthlyApiUsd - 5)).toMatch(/^source_gate:/u);
+      expect(await reasonAfterSpending(limits.monthlyApiUsd - 0.1)).toBe("budget_exhausted");
     } finally {
       Object.assign(process.env, previous);
     }

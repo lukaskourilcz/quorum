@@ -348,8 +348,9 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
   // HACEK adapted the English edition and the English article into Czech. Both magazines are
-  // written in Czech now, so there is nothing to adapt and no model call attached to the role.
-  // Whether the agent keeps a seat in the room is an org decision, not a language one.
+  // written in Czech now, so there is nothing to adapt and no edition or article call left on
+  // the role. The one call below is the specialist meeting call it makes when a room selects
+  // it. Whether the agent keeps a seat in the room is an org decision, not a language one.
   HACEK: [
     configuredTextModel("ANTHROPIC_SPECIALIST", "Project meetings when selected")
   ],
@@ -496,8 +497,8 @@ const profileCopy: Record<
     publicTrackRecord: null
   },
   HACEK: {
-    operatingPrinciple: "Překlad není převod slov, ale přesný český článek.",
-    output: "Project-specific Czech article and language check",
+    operatingPrinciple: "Nepřekládá se. Text musí být přesná čeština hned napoprvé.",
+    output: "Czech style rules the copy check applies",
     currentFocus: "DNESKAi and MMA Files Czech editions",
     publicTrackRecord: null
   },
@@ -598,20 +599,20 @@ const profileCopy: Record<
     publicTrackRecord: null
   },
   CANVAS: {
-    operatingPrinciple: "A slot ships only when both languages tell the sourced story well.",
+    operatingPrinciple: "A slot ships only when the Czech article tells the sourced story well.",
     output: "Two-slot editorial slate and publish-or-kill verdict",
     currentFocus: "MMA Files newsroom",
     publicTrackRecord: null
   },
   JAB: {
     operatingPrinciple: "Write the new fact first and never fill a gap from memory.",
-    output: "Sourced English draft and Czech localization brief",
-    currentFocus: "MMA Files English articles",
+    output: "Sourced Czech article with every fighter linked",
+    currentFocus: "MMA Files Czech articles",
     publicTrackRecord: null
   },
   REACH: {
     operatingPrinciple: "Change one declared design choice at a time.",
-    output: "Two bilingual social variants with reproducible images",
+    output: "Two Czech social variants with reproducible images",
     currentFocus: "MMA Files social drafts",
     publicTrackRecord: null
   },

@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 
-const mmaFilesUrl = "https://mma-files.vercel.app/en/data-desk";
+// The magazine is Czech-only and redirects /en to /cs, so linking /en costs the reader a
+// redirect and promises an English edition that is not written.
+const mmaFilesUrl = "https://mma-files.vercel.app/cs/data-desk";
 
 export async function FightAiQVenturePage() {
   return (
@@ -51,7 +53,7 @@ export async function FightAiQVenturePage() {
         <SectionHeading
           eyebrow="Where to look"
           title="Public data in the magazine. Controls in admin."
-          description="Readers get one bilingual destination. You still review source gaps, agent switches and meeting output in the protected BoardlessAI admin."
+          description="Readers get one Czech destination. You still review source gaps, agent switches and meeting output in the protected BoardlessAI admin."
         />
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-7">

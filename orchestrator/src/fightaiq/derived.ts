@@ -83,6 +83,35 @@ function historyEntry(bout: BoutRecord, fighterRef: string): HistoryBout | null 
   };
 }
 
+interface DerivedBlock {
+  history: readonly HistoryBout[];
+  statsProfiles: FighterRecord["statsProfiles"];
+  rating: FighterRecord["rating"];
+  discrepancies: FighterRecord["discrepancies"];
+  qualityGaps: readonly string[];
+  modelEligible: boolean;
+}
+
+/**
+ * What a rebuild worked out, with the two timestamps it stamps unconditionally taken out.
+ *
+ * `statsProfiles[].updatedAt` and `rating.updatedAt` are both set to the current run's clock every
+ * time this function is called, so a comparison that includes them is structurally always true.
+ * That is what it was: measured against the real store, a second sweep an hour after the first —
+ * with nothing learned in between — reported all ninety-two cards as changed and gave each one a
+ * `rating-rebuild` change-log entry recording no change at all.
+ */
+function derivedFacts(block: DerivedBlock): string {
+  return JSON.stringify({
+    history: block.history,
+    statsProfiles: block.statsProfiles.map((profile) => ({ ...profile, updatedAt: "" })),
+    rating: { ...block.rating, updatedAt: "" },
+    discrepancies: block.discrepancies,
+    qualityGaps: block.qualityGaps,
+    modelEligible: block.modelEligible
+  });
+}
+
 export function rebuildDerivedFighterData(input: {
   fighters: readonly FighterRecord[];
   bouts: readonly BoutRecord[];
@@ -168,15 +197,27 @@ export function rebuildDerivedFighterData(input: {
       asOfBoutRef: history.at(-1)?.boutRef ?? null,
       updatedAt: timestamp
     };
-    const changed = JSON.stringify({ history: fighter.history, statsProfiles: fighter.statsProfiles, rating: fighter.rating, discrepancies: fighter.discrepancies, qualityGaps: fighter.quality.gaps }) !== JSON.stringify({ history, statsProfiles, rating, discrepancies, qualityGaps });
+    const modelEligible = recordMismatch ? false : computeModelEligibility(fighter.criticalFields, fighter.fields, discrepancies);
+    const changed = derivedFacts({
+      history: fighter.history,
+      statsProfiles: fighter.statsProfiles,
+      rating: fighter.rating,
+      discrepancies: fighter.discrepancies,
+      qualityGaps: fighter.quality.gaps,
+      modelEligible: fighter.modelEligible
+    }) !== derivedFacts({ history, statsProfiles, rating, discrepancies, qualityGaps, modelEligible });
     return FighterCardSchema.parse({
       ...fighter,
       history,
-      statsProfiles,
-      rating,
+      // The card keeps the timestamps it arrived with when nothing was worked out. These two are
+      // the only difference between a rebuild that learned something and one that did not, so
+      // stamping them regardless would leave the card on disk different after every run even with
+      // the guard above fixed — and the caller in portfolio/evidence.ts writes what it is handed.
+      statsProfiles: changed ? statsProfiles : fighter.statsProfiles,
+      rating: changed ? rating : fighter.rating,
       discrepancies,
       quality: { ...fighter.quality, gaps: qualityGaps },
-      modelEligible: recordMismatch ? false : computeModelEligibility(fighter.criticalFields, fighter.fields, discrepancies),
+      modelEligible,
       changeLog: changed ? [...fighter.changeLog, {
         at: timestamp,
         kind: "rating-rebuild",

@@ -160,7 +160,7 @@ describe("editorial slate derived from the records on disk", () => {
 });
 
 describe("published-article index", () => {
-  // preparePortfolioContext loads ventures/mma-files/articles/INDEX.md into both magazine rooms
+  // composePortfolioContext loads ventures/mma-files/articles/INDEX.md into both magazine rooms
   // as the record of what has already run, and nothing ever wrote the file: the rooms were told
   // the desk had never published anything, so a subject could be assigned twice.
   it("writes every stored package into the index the magazine rooms read", async () => {

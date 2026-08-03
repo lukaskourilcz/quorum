@@ -1,8 +1,10 @@
 import { createDigest, renderDigestDataBlock } from "../src/sources/digest.js";
 import { curate } from "../src/edition/curate.js";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { appendEditionUsage } from "../src/edition/live.js";
 import { EditionPackageSchema } from "../src/contracts/edition-package.js";
 import { repoRoot } from "../src/paths.js";
 import { loadSourceRegistry } from "../src/sources/registry.js";
@@ -428,6 +430,47 @@ describe("the editor's index means what the editor was shown", () => {
       }
     } as never).catch(() => undefined);
     expect(seenMaximum).toBe(Math.min(items.length, config.article.maximumCurationCandidates) - 1);
+  });
+
+  it("bills an out-of-range pick to the ledger instead of losing the call", async () => {
+    // The bound above is enforced by the provider, so this is the case where it is not honoured:
+    // the call is made, the tokens are charged, and the payload names an index the pool does not
+    // have. It used to throw a bare Error, which produceEdition cannot take usage from, so the
+    // paid curation call never reached state/budget/ledger.json. It happened on 3 August.
+    const usage = {
+      provider: "anthropic" as const,
+      model: "claude-sonnet-4-6",
+      stage: "curate" as const,
+      inputTokens: 9_000,
+      outputTokens: 400,
+      cacheReadTokens: 0,
+      cacheWriteTokens: 0,
+      costUsd: 0.033
+    };
+    const gateway = {
+      invoke: async (request: { parse: (value: unknown) => unknown }) => ({
+        value: request.parse({
+          headline: "Out of range",
+          angle: "The editor named an index the packet does not hold.",
+          picks: [0, 1, 9_999].map((index) => ({ index, why: "reason", evidence: "confirmed_fact" }))
+        }),
+        usage
+      })
+    };
+    const result = await produceEdition({ ...(await productionInput([])), gateway: gateway as never });
+    expect(result.package.status).toBe("no_edition");
+    expect(result.report.usage).toEqual([usage]);
+    expect(result.report.measuredCostUsd).toBe(0.033);
+
+    // And the whole way through to the ledger the finance page reads.
+    const root = await mkdtemp(path.join(os.tmpdir(), "edition-ledger-"));
+    const monthUsd = await appendEditionUsage(root, "cycle-out-of-range", new Date("2026-08-04T04:00:00.000Z"), result.report);
+    expect(monthUsd).toBe(0.033);
+    const ledger = JSON.parse(await readFile(path.join(root, "budget", "ledger.json"), "utf8")) as {
+      entries: Array<{ agent: string; usd: number; phase: string }>;
+    };
+    expect(ledger.entries).toEqual([expect.objectContaining({ agent: "HERALD", usd: 0.033, phase: "cu-edition" })]);
+    await rm(root, { recursive: true, force: true });
   });
 });
 

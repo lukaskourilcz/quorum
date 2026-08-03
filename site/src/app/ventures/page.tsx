@@ -105,13 +105,13 @@ export default function VenturesPage() {
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--magenta-spark)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
               <Badge tone="accent">Project 004</Badge>
-              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">BILINGUAL MAGAZINE</p>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--magenta-spark)]">CZECH MAGAZINE</p>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">MMA Files</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Two daily English and Czech article slots, backed by FightAIQ files.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Finished bilingual articles and FightAIQ data are delivered to the public magazine. Social posting stays off until you turn it on separately.</p>
-              <a className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="https://mma-files.vercel.app/en" rel="noreferrer" target="_blank">Open MMA Files <ArrowRight aria-hidden="true" className="size-4" /></a>
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Two daily Czech article slots, backed by FightAIQ files.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Finished Czech articles and FightAIQ data are delivered to the public magazine. Social posting stays off until you turn it on separately.</p>
+              <a className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="https://mma-files.vercel.app/cs" rel="noreferrer" target="_blank">Open MMA Files <ArrowRight aria-hidden="true" className="size-4" /></a>
             </div>
           </div>
         </article>

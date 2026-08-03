@@ -12,7 +12,8 @@ import { buildBackfillQueue, fighterSlug, materializeWikimediaRoster, projectWik
 import { loadRosterPolicy } from "../src/fightaiq/roster-policy.js";
 import { configRoot } from "../src/paths.js";
 import { enrichWikimediaBackfill, parseWikipediaFighterPage } from "../src/fightaiq/wikimedia-backfill.js";
-import { loadBoutRecords, saveBoutRecord, upcomingBoutRecords } from "../src/fightaiq/store.js";
+import { loadBoutRecords, loadFighterRecords, saveBoutRecord, upcomingBoutRecords } from "../src/fightaiq/store.js";
+import { enrichWikidataProfiles } from "../src/fightaiq/wikidata.js";
 import { atomicWriteJson } from "../src/state.js";
 
 describe("FightAIQ roster and history automation", () => {
@@ -235,6 +236,66 @@ describe("FightAIQ roster and history automation", () => {
     expect(contradicted[0]?.discrepancies).toContainEqual(expect.objectContaining({ field: "record", status: "open" }));
     expect(contradicted[0]?.quality.gaps).toContain("record-history-mismatch");
     expect(contradicted[0]?.modelEligible).toBe(false);
+
+    // A later rebuild that learns nothing must hand the card back untouched. The one above runs
+    // both sweeps off the same clock, which is not what happens: mma-intake runs again hours
+    // later, and the rebuild stamps that later clock onto statsProfiles[].updatedAt and
+    // rating.updatedAt before comparing. Those two stamps were inside the comparison, which made
+    // it always true — all ninety-two real cards were rewritten and gained a `rating-rebuild`
+    // change-log entry recording no change, every run. An hour apart cannot move layoffDays here:
+    // the bout is at 18:00 the previous day, so its whole-day floor is 0 at both clocks.
+    const later = rebuildDerivedFighterData({ fighters: first, bouts: [completed], now: new Date("2026-08-09T09:00:00.000Z") });
+    expect(later).toEqual(first);
+    expect(later[0]?.changeLog.length).toBe(first[0]?.changeLog.length);
+    expect(later[0]?.statsProfiles[0]?.updatedAt).toBe(first[0]?.statsProfiles[0]?.updatedAt);
+    expect(later[0]?.rating.updatedAt).toBe(first[0]?.rating.updatedAt);
+  });
+
+  it("writes nothing on a second Wikidata sweep that reads the same item", async () => {
+    // The sweep stamps `retrievedAt` on every field it touches and on its own source entry, so a
+    // card built from an unchanged item never equals the card it came from. With those stamps in
+    // the no-op comparison the guard could not fire: measured against the real store, three
+    // consecutive sweeps of one replayed item each rewrote all ninety-two files.
+    const root = await mkdtemp(path.join(os.tmpdir(), "wikidata-sweep-"));
+    const card = FighterCardSchema.parse(fighterFixture);
+    await atomicWriteJson(root, `mma/fighters/${card.id}.json`, card);
+    const requests: string[] = [];
+    const fetchImpl = (async (input: string | URL | Request) => {
+      requests.push(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
+      return new Response(JSON.stringify({
+        entities: {
+          Q123456: {
+            id: "Q123456",
+            labels: { en: { value: "Alex Example" } },
+            sitelinks: { enwiki: { title: "Alex Example" } },
+            claims: {
+              P569: [{ rank: "preferred", mainsnak: { datavalue: { value: { time: "+1994-03-12T00:00:00Z", precision: 11 } } } }],
+              P2048: [{ rank: "preferred", mainsnak: { datavalue: { value: { amount: "+178", unit: "http://www.wikidata.org/entity/Q174728" } } } }]
+            }
+          }
+        }
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }) as typeof fetch;
+    const options = {
+      root,
+      context: { allowHosts: ["www.wikidata.org"], now: new Date("2026-08-09T08:00:00.000Z") },
+      fetchImpl,
+      resolveImpl: async () => ["93.184.216.34"]
+    };
+
+    const first = await enrichWikidataProfiles({ ...options, fighters: [card], retrievedAt: new Date("2026-08-09T08:00:00.000Z") });
+    expect(first.paths).toEqual([`mma/fighters/${card.id}.json`]);
+    const stored = await loadFighterRecords(path.join(root, "mma", "fighters"));
+    expect(stored[0]?.fields.heightCm?.value).toBe(178);
+    expect(stored[0]?.fields.dateOfBirth?.value).toBe("1994-03-12");
+    const onDisk = await readFile(path.join(root, "mma", "fighters", `${card.id}.json`), "utf8");
+
+    // Same item, read again an hour later. The values have not moved, so the file must not either.
+    const second = await enrichWikidataProfiles({ ...options, fighters: stored, retrievedAt: new Date("2026-08-09T09:00:00.000Z") });
+    expect(second.matched).toBe(1);
+    expect(second.paths).toEqual([]);
+    expect(await readFile(path.join(root, "mma", "fighters", `${card.id}.json`), "utf8")).toBe(onDisk);
+    expect(requests).toHaveLength(2);
   });
 
   it("contains no paid-only or retired FightAIQ source entry", async () => {

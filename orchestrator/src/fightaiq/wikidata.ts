@@ -129,6 +129,27 @@ export async function fetchWikidataProfiles(input: {
 const PROFILE_FIELDS = ["name", "division", "record", "stance", "heightCm", "reachCm", "dateOfBirth", "team"] as const;
 
 /**
+ * A card reduced to what it asserts, with the clock readings taken out.
+ *
+ * Every sourced field carries the moment it was last read, and so does every entry in `sources`.
+ * A sweep stamps the current time on both whether or not the value underneath moved, so a card
+ * built from an unchanged Wikidata item never equals the card it came from. Comparing whole cards
+ * therefore compared each one against a version of itself it could not match: measured against the
+ * real store, three consecutive sweeps of the same replayed item each rewrote all ninety-two
+ * files. What survives here is everything a reader would call a fact — the field values and their
+ * sourceRefs, the source entries, the identity, the discrepancies and the derived quality numbers.
+ */
+function assertedFacts(card: FighterRecord): string {
+  return JSON.stringify({
+    ...card,
+    fields: Object.fromEntries(
+      Object.entries(card.fields).map(([name, field]) => [name, { ...field, retrievedAt: "" }])
+    ),
+    sources: card.sources.map((source) => ({ ...source, retrievedAt: "" }))
+  });
+}
+
+/**
  * Writes what Wikidata holds onto the cards, as a second provider beside Wikipedia.
  *
  * Values are merged, never overwritten: a field the two disagree about keeps the value it has and
@@ -216,13 +237,14 @@ export async function enrichWikidataProfiles(input: {
       corroboration: Number((corroborated / PROFILE_FIELDS.length).toFixed(4)),
       modelEligible: modelEligible(fighter, fields, discrepancies)
     });
-    // Compared before the log entry is added, not after.
+    // Compared on the facts alone, and before the log entry is added rather than after.
     //
-    // Appending the entry first meant every card differed from itself on every run: the no-op
-    // guard below could never fire, so a daily sweep that learned nothing still rewrote all
-    // ninety-two files and grew ninety-two change-log entries. What counts as a change is the
-    // facts, so the log and the timestamp are only added once the facts have moved.
-    if (JSON.stringify(card) === JSON.stringify(fighter)) continue;
+    // Both halves matter. Appending the entry first meant every card differed from itself; so did
+    // comparing the per-field and per-source `retrievedAt`, which this sweep rewrites on every run
+    // by design. With either one left in, the guard below could never fire, and a daily sweep that
+    // learned nothing still rewrote all ninety-two files and grew ninety-two change-log entries.
+    // The log and the timestamp are only stamped once the facts themselves have moved.
+    if (assertedFacts(card) === assertedFacts(fighter)) continue;
     const written = FighterCardSchema.parse({
       ...card,
       changeLog: [...fighter.changeLog, {

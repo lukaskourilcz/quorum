@@ -11,7 +11,7 @@ export class ArticleSlotConflictError extends Error {}
 export const ARTICLE_INDEX_PATH = "ventures/mma-files/articles/INDEX.md";
 
 // The two magazine rooms read this index as their entire "what we already published" context.
-// `preparePortfolioContext` appends it last in a packet cut at 18,000 characters, after the
+// `composePortfolioContext` appends it last in a packet cut at 18,000 characters, after the
 // stylebook, the bridge and the day's slate — so a growing index evicts nothing ahead of it and
 // instead absorbs the cut itself: the table would end mid-row, with the count line under it
 // gone. Bounding the render here drops whole rows, oldest first, and keeps the count.
@@ -141,7 +141,7 @@ export function renderArticleIndex(articles: readonly ArticlePackage[]): string 
   const render = () => [
     "# MMA Files article index",
     "",
-    "> Generated from the stored article packages after every article slot runs. This is the desk's record of what has already been published: a subject listed here is not fresh.",
+    "> Generated from the stored article packages, at the start and end of every article slot. This is the desk's record of what has already been published: a subject listed here is not fresh.",
     "",
     "| Published | Slot | Status | Format | Czech title | Subjects covered |",
     "| --- | --- | --- | --- | --- | --- |",
@@ -161,11 +161,14 @@ export function renderArticleIndex(articles: readonly ArticlePackage[]): string 
 /**
  * Rewrite the index from the packages on disk.
  *
- * `preparePortfolioContext` loads `ventures/mma-files/articles/INDEX.md` into both the
+ * `composePortfolioContext` loads `ventures/mma-files/articles/INDEX.md` into both the
  * mag-editorial and mag-desk packets, and nothing had ever written the file — so the rooms were
  * handed an empty string and told, in effect, that the desk had never published anything. VAULT
  * judges a subject repeat against this list, which is how a subject already on file can be
  * assigned a second time.
+ *
+ * Both callers are in `runLiveArticleProduction`: once before the slot runs, so the file is
+ * current for the next room even when the slot dies, and once after a package is stored.
  */
 export async function regenerateArticleIndex(root: string): Promise<string> {
   await atomicWriteText(root, ARTICLE_INDEX_PATH, renderArticleIndex(await loadArticlePackages(root)));

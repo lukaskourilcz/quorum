@@ -127,6 +127,66 @@ describe("automation policy", () => {
     expect(health).toContain('timezone: "Europe/Prague"');
   });
 
+  it("keeps the two failure-path steps reachable on the runs they exist for", async () => {
+    const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
+
+    const conditionFor = (stepName: string): string => {
+      const start = cycle.indexOf(`- name: ${stepName}\n`);
+      expect(start, `${stepName} is missing from cycle.yml`).toBeGreaterThan(-1);
+      const block = cycle.slice(start);
+      const end = block.indexOf("\n      - name: ", 1);
+      const step = end === -1 ? block : block.slice(0, end);
+      const condition = step.match(/^ {8}if: (.*)$/mu);
+      expect(condition, `${stepName} has no if: condition`).not.toBeNull();
+      return condition?.[1] ?? "";
+    };
+
+    // "Run cycle" captures the cycle's exit status and returns 0 on every path, so its
+    // outcome is 'success' even for a cycle that failed. A calendar note gated on
+    // steps.run.outcome was therefore unreachable for precisely the runs it exists for. The
+    // output the step deliberately writes is the only usable signal: 'true' when the cycle
+    // failed, 'false' when it finished, empty when an earlier step failed and it never ran.
+    expect(cycle).toMatch(
+      /cycle_status" -eq 0; then\s+echo "failed=false"[\s\S]{0,80}else\s+echo "failed=true"/u
+    );
+    const calendarIf = conditionFor("Say on the calendar why this run did not finish");
+    expect(calendarIf).toContain("failure()");
+    expect(calendarIf).toContain("steps.run.outputs.failed != 'false'");
+    expect(calendarIf, "outcome is always 'success' here; it can gate nothing").not.toContain(
+      "steps.run.outcome"
+    );
+
+    // The ledger commit is a failure path. Under always() it fired on healthy runs too and
+    // pushed state to main before the post-cycle gate had passed on it.
+    const spendIf = conditionFor("Record spend from a failed cycle");
+    expect(spendIf, "a healthy run must not push state ahead of the gate").not.toContain(
+      "always()"
+    );
+    expect(spendIf).toContain("failure()");
+    expect(spendIf).toContain("steps.run.outputs.failed == 'true'");
+    expect(spendIf).toContain("steps.mode.outputs.dry != 'true'");
+
+    // Order is part of the guarantee. Standing after the post-cycle gate and the smoke test,
+    // it also catches a cycle that exited 0, billed for calls and then tripped one of them;
+    // standing before the calendar note, it commits the ledger before that step's
+    // `git reset --hard` would discard it.
+    const at = (stepName: string): number => {
+      const index = cycle.indexOf(`- name: ${stepName}\n`);
+      expect(index, `${stepName} is missing from cycle.yml`).toBeGreaterThan(-1);
+      return index;
+    };
+    expect(at("Record spend from a failed cycle")).toBeGreaterThan(at("Post-cycle release gate"));
+    expect(at("Record spend from a failed cycle")).toBeGreaterThan(
+      at("Production route and link smoke")
+    );
+    expect(at("Record spend from a failed cycle")).toBeLessThan(
+      at("Commit one atomic runtime cycle")
+    );
+    expect(at("Record spend from a failed cycle")).toBeLessThan(
+      at("Say on the calendar why this run did not finish")
+    );
+  });
+
   it("keeps channel scopes inside the owner-countersigned posting-only decision", async () => {
     const channels = JSON.parse(
       await readFile(path.join(repoRoot, "config", "channels.json"), "utf8")

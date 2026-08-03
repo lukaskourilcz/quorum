@@ -11,6 +11,9 @@ describe("MMA Files owns public fight data", () => {
     const header = await readFile(path.join(siteRoot, "src/components/site-header.tsx"), "utf8");
     expect(header).not.toContain('href: "/fighters"');
     const venture = await readFile(path.join(siteRoot, "src/components/fightaiq-venture-page.tsx"), "utf8");
-    expect(venture).toContain("https://mma-files.vercel.app/en/data-desk");
+    // The magazine is Czech-only and 307s /en to /cs, so the link names the locale it lands on.
+    // What this guard protects is that the data desk lives in the magazine and BoardlessAI still
+    // points at it, not which locale prefix the URL carried when the guard was written.
+    expect(venture).toContain("https://mma-files.vercel.app/cs/data-desk");
   });
 });

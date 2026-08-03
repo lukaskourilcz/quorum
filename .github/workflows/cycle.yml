@@ -401,39 +401,11 @@ jobs:
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         run: pnpm budget:alert
 
-      # The ledger is the only record of what the providers billed, and it lives in the
-      # workspace until something commits it. The atomic cycle commit runs after the release
-      # gates and carries no always(), so a run that paid for calls and then failed took its
-      # own ledger to the grave with the runner: two runs on 2 August spent about $0.10
-      # between them and the month reads as if neither happened. Only spend and the failure
-      # notice are committed here, so the atomic cycle commit still owns everything else.
-      - name: Record spend from a failed cycle
-        # Any failure, not only one the cycle reported. A cycle can exit 0 having billed for
-        # calls and then trip the post-cycle gate or the smoke test, and the atomic commit
-        # below carries no always() — so the ledger died with the runner either way. The
-        # porcelain check makes this a no-op when the atomic commit already took it.
-        if: ${{ always() && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
-        run: |
-          if test -n "$(git status --porcelain --untracked-files=all -- state/budget state/notify)"; then
-            git config user.name "boardlessai-cycle[bot]"
-            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
-            git add -A -- state/budget state/notify
-            git commit -m "ledger(${{ steps.mode.outputs.phase }}): record spend the cycle commit did not take"
-            pushed=false
-            for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
-              git fetch origin "$GITHUB_REF_NAME"
-              # --autostash because a failed cycle leaves unrelated unstaged state behind, and
-              # a plain rebase refuses to start on a dirty tree — which would drop this commit.
-              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
-            done
-            if test "$pushed" != "true"; then
-              echo "Could not push the record after three attempts." >&2
-              exit 1
-            fi
-          fi
-
-      - name: Fail closed after recording the final-cycle failure
+      # Ends the job for a cycle that reported failure, before the post-cycle gate and every
+      # delivery step below. The ledger is not lost by ending it here: "Record spend from a
+      # failed cycle" further down carries failure(), so it still runs after this step has
+      # failed the job.
+      - name: Fail closed on a cycle that reported failure
         if: ${{ steps.mode.outputs.skip != 'true' && steps.run.outputs.failed == 'true' }}
         run: exit 1
 
@@ -481,6 +453,42 @@ jobs:
             sleep 1
           done
           pnpm site:smoke
+
+      # The ledger is the only record of what the providers billed, and it lives in the
+      # workspace until something commits it. The atomic cycle commit below carries no
+      # always(), so a run that paid for calls and then failed took its own ledger to the grave
+      # with the runner: two runs on 2 August spent about $0.10 between them and the month reads
+      # as if neither happened. Only spend and the pending notices are committed here; the
+      # atomic cycle commit still owns everything else.
+      - name: Record spend from a failed cycle
+        # A failure path only. Under always() this also fired on healthy runs, pushing state to
+        # main before the post-cycle gate above had passed on it. Two ways in, because the two
+        # kinds of failure look different from here: failure() covers any step that failed
+        # outright — the gate, the smoke test, "Fail closed on a cycle that reported failure" —
+        # and the outputs clause covers a failed cycle directly, since "Run cycle" captures its
+        # own exit status and returns 0. Standing after the gate and the smoke test means a
+        # cycle that exited 0, billed for calls and then tripped either of them is covered too.
+        # The porcelain check makes this a no-op when there is nothing left to record.
+        if: ${{ (failure() || steps.run.outputs.failed == 'true') && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        run: |
+          if test -n "$(git status --porcelain --untracked-files=all -- state/budget state/notify)"; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git add -A -- state/budget state/notify
+            git commit -m "ledger(${{ steps.mode.outputs.phase }}): record spend the cycle commit did not take"
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              # --autostash because a failed cycle leaves unrelated unstaged state behind, and
+              # a plain rebase refuses to start on a dirty tree — which would drop this commit.
+              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+            done
+            if test "$pushed" != "true"; then
+              echo "Could not push the record after three attempts." >&2
+              exit 1
+            fi
+          fi
 
       - name: Commit one atomic runtime cycle
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
@@ -1017,14 +1025,20 @@ jobs:
         run: exit 1
 
       # A red slot on the calendar with nothing anywhere saying why is the thing the owner keeps
-      # having to ask about. The gate has its own recorder above; this catches everything else —
-      # a push race, a network failure, a step that threw — so the slot reads "Skipped" with the
-      # reason instead of "Did not happen" with silence.
+      # having to ask about. The release gate has its own recorder above; this covers the two
+      # other ways a meeting never happens — the cycle itself failed, or a step before it did,
+      # so the room never opened — and the slot reads "Skipped" with the reason instead of
+      # "Did not happen" with silence.
       - name: Say on the calendar why this run did not finish
-        # Not when the meeting itself already ran and committed. A delivery step failing after
-        # the cycle pushed is a delivery problem, and calling it "the meeting never finished" on the
-        # calendar is the opposite of what happened.
-        if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outcome != 'success' }}
+        # Read the output "Run cycle" writes, not its outcome. That step captures the cycle's
+        # exit status and returns 0 on every path, so steps.run.outcome is 'success' even for a
+        # cycle that failed and the old `outcome != 'success'` clause could never be true once
+        # the step had run. `failed` is written on both of its branches: 'true' for a cycle that
+        # failed, 'false' for one that finished, and empty when an earlier step failed and this
+        # one was skipped — so != 'false' is exactly the two cases worth a note. It stays quiet
+        # for a meeting that ran: a delivery step failing after that is a delivery problem, and
+        # calling it "the meeting never finished" is the opposite of what happened.
+        if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
