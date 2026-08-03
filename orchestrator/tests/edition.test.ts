@@ -411,7 +411,7 @@ describe("edition dry production", () => {
     expect(result.status).toBe("edition");
     // The golden hash moved with the fallback cover, which no longer sets the article's own
     // headline in type. Nothing else about the package changed.
-    expect(result.packageHash).toBe("8c25d180bd4d5b96ca0b4513cfc0b4e2521915bcd9a1ed745cce26a40b14e704");
+    expect(result.packageHash).toBe("45ae72b915f94aed934fdd3df6394c0894caf5966822f161ac7f5180754bfb01");
     expect(result.report.measuredCostUsd).toBe(0.194);
     expect(result.report.quality?.result.passed).toBe(true);
     const artifact = JSON.parse(

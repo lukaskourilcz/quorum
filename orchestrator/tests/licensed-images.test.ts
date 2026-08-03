@@ -174,3 +174,22 @@ describe("the downloader's allowlist is fixed", () => {
     expect(candidateHosted({ downloadUrl: "not a url" })).toBe(false);
   });
 });
+
+describe("the cover's alt describes the cover", () => {
+  it("ignores an alt written for an illustration that was never drawn", () => {
+    // The writer produces illustration_alt before any image is attached, so the 3 August
+    // edition shipped this plate under "A chessboard with pieces casting shadows shaped like
+    // daggers and question marks" — a screen-reader user was told about a chessboard that is
+    // not there. That alt is right for a photograph and wrong for a generated plate.
+    const image = deterministicArticleImage({
+      venture: "caught-up", slug: "s", title: "t",
+      altEn: "A chessboard with pieces casting shadows shaped like daggers",
+      altCs: "Šachovnice s figurkami",
+      date: "2026-08-03", tags: ["ai", "safety"]
+    });
+    expect(image.alt_en).not.toContain("chessboard");
+    expect(image.alt_en).toContain("2026-08-03");
+    expect(image.alt_en).toContain("no photograph");
+    expect(image.alt_cs).toContain("bez fotografie");
+  });
+});

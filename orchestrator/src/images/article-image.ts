@@ -61,6 +61,10 @@ function lines(value: string, maximum: number): string[] {
  * publication date and the subject tags — chrome a reader can use, not prose they have
  * already read.
  */
+function brandName(venture: "caught-up" | "mma-files"): string {
+  return venture === "caught-up" ? "Caught Up" : "MMA Files";
+}
+
 function frameSvg(input: {
   width: number;
   height: number;
@@ -116,13 +120,21 @@ export function deterministicArticleImage(input: {
   const tags = input.tags ?? [];
   const hero = frameSvg({ width: 1_600, height: 900, venture: input.venture, fingerprint, date, tags });
   const thumb = frameSvg({ width: 640, height: 360, venture: input.venture, fingerprint, date, tags });
+  // The alt describes the cover that was drawn, not the illustration the writer imagined.
+  // The writer produces illustration_alt before anything is attached, so the 3 August edition
+  // shipped this plate under "A chessboard with pieces casting shadows shaped like daggers" —
+  // a screen-reader user was told about a chessboard that is not there. A caller's alt is
+  // right for a photograph and wrong for this, so this one supplies its own.
+  const subject = tags.slice(0, 3).join(", ");
+  const altEn = `${brandName(input.venture)} cover for ${date}${subject ? `, marked ${subject}` : ""}. A generated panel of coloured bars, carrying no photograph.`;
+  const altCs = `Obálka ${brandName(input.venture)} k ${date}${subject ? `, témata ${subject}` : ""}. Generovaný panel barevných sloupců, bez fotografie.`;
   return ArticleImageSchema.parse({
     hero_path: `public/images/${directory}/${safeSlug}/hero.svg`,
     thumb_path: `public/images/${directory}/${safeSlug}/thumb.svg`,
     width: 1_600,
     height: 900,
-    alt_en: input.altEn,
-    alt_cs: input.altCs,
+    alt_en: altEn,
+    alt_cs: altCs,
     license: {
       name: "BoardlessAI deterministic",
       author: "BoardlessAI FRAME",
