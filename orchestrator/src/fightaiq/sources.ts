@@ -362,30 +362,27 @@ export async function fetchCitoFighters(input: { apiKey: string; context: Source
   return projectCitoFighters(value);
 }
 
+/**
+ * The upcoming-event probe. One call, and the cheapest signal that a card exists at all.
+ *
+ * It used to follow each event with `/ufc/events/{slug}/bouts` to fill a card. That endpoint has
+ * returned `rowCount: 0` for every event on every run since the probe was added — three calls a
+ * day, three of the five reserved, for nothing. Cards come from Wikipedia instead, which
+ * publishes scheduled bouts; this call is left doing the one thing it does well.
+ *
+ * The limit was 3, which made any card beyond the next three UFC events invisible — a horizon
+ * question cannot be answered by a window narrower than the horizon.
+ */
 export async function fetchCitoUpcomingEvents(input: { apiKey: string; context: SourceFetchContext } & CitoFetchOptions): Promise<CitoEventSummary[]> {
   if (!input.apiKey.trim()) return [];
-  const options = {
-    headers: { "x-api-key": input.apiKey },
-    fetchImpl: input.fetchImpl,
-    resolveImpl: input.resolveImpl
-  };
-  const value = await fetchJson<unknown>("https://api.citoapi.com/api/v1/ufc/events/upcoming?page=1&limit=3", input.context, options);
-  const events = projectCitoEvents(value);
-  return Promise.all(events.map(async (event) => {
-    if (event.bouts.length > 0) return event;
-    const key = encodeURIComponent(event.slug || event.id);
-    try {
-      const boutValue = await fetchJson<unknown>(`https://api.citoapi.com/api/v1/ufc/events/${key}/bouts`, input.context, options);
-      const bouts = projectCitoBouts(boutValue);
-      // A recognised envelope with no rows and an envelope this projector does not recognise
-      // both yield an empty array, so the count is recorded either way and the two read the
-      // same in the snapshot only because they are the same outcome: no card was obtained.
-      return { ...event, bouts, boutFetch: { ok: true, rowCount: bouts.length, reason: null } };
-    } catch (error) {
-      return {
-        ...event,
-        boutFetch: { ok: false, rowCount: 0, reason: error instanceof Error ? error.message.slice(0, 200) : "request failed" }
-      };
+  const value = await fetchJson<unknown>(
+    "https://api.citoapi.com/api/v1/ufc/events/upcoming?page=1&limit=10",
+    input.context,
+    {
+      headers: { "x-api-key": input.apiKey },
+      fetchImpl: input.fetchImpl,
+      resolveImpl: input.resolveImpl
     }
-  }));
+  );
+  return projectCitoEvents(value);
 }

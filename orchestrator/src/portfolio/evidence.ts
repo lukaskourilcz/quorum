@@ -78,6 +78,36 @@ function cleanFailure(error: unknown): string {
     .slice(0, 300);
 }
 
+/**
+ * How far ahead a scheduled card counts as worth enriching.
+ *
+ * Deliberately wider than the three-day fight-week window in store.ts, which is an editorial
+ * signal about what to write. This one decides whether to gather at all, and gathering has to
+ * start early enough that a critical field can be corroborated before the card, not on the
+ * morning of it.
+ */
+const INTAKE_HORIZON_DAYS = 14;
+
+/**
+ * Cito's free tier, as named in the owner checklist: 500 calls a month and 200 a day.
+ *
+ * Constants rather than literals buried in a condition, because a test has to be able to say
+ * "the guard stops when the reservation would cross the cap" without restating the numbers and
+ * quietly agreeing with whatever the code happens to do.
+ */
+export const CITO_MONTHLY_CALL_CAP = 500;
+export const CITO_DAILY_CALL_CAP = 200;
+/** Calls one run may make: the upcoming-event probe, plus a fighter page when a card is due. */
+export const CITO_CALL_RESERVATION = 2;
+
+export function withinIntakeHorizon(startsAt: string | null, now: Date): boolean {
+  if (!startsAt) return false;
+  const starts = Date.parse(startsAt);
+  if (Number.isNaN(starts)) return false;
+  const days = (starts - now.getTime()) / 86_400_000;
+  return days >= 0 && days <= INTAKE_HORIZON_DAYS;
+}
+
 export async function refreshFightAiQEvidence(input: {
   root: string;
   date: string;
@@ -138,7 +168,10 @@ export async function refreshFightAiQEvidence(input: {
   const citoQuota = await readJson<{ month?: string; day?: string; monthlyCalls?: number; dailyCalls?: number; nextFighterPage?: number; currentCycleFighterRefs?: string[] }>(input.root, citoQuotaPath, {});
   const citoMonthlyCalls = citoQuota.month === month ? citoQuota.monthlyCalls ?? 0 : 0;
   const citoDailyCalls = citoQuota.day === input.date ? citoQuota.dailyCalls ?? 0 : 0;
-  const citoCallReservation = 5;
+  // It reserved five, three of which went to a bouts endpoint that returned nothing on every
+  // run. The reservation still covers whatever the run may spend, so it is the ceiling of the
+  // plan below rather than a number chosen for comfort.
+  const citoCallReservation = CITO_CALL_RESERVATION;
   let citoQuotaRecorded = false;
   let citoRosterCycleComplete = false;
   let citoRosterCycleRefs: string[] = [];
@@ -146,14 +179,18 @@ export async function refreshFightAiQEvidence(input: {
     results.push({ sourceId: "cito-ufc", status: "skipped", reason: "Source is not wired.", items: [] });
   } else if (!citoKey) {
     results.push({ sourceId: "cito-ufc", status: "skipped", reason: "CITO_API_KEY is unavailable.", items: [] });
-  } else if (citoMonthlyCalls + citoCallReservation > 500 || citoDailyCalls + citoCallReservation > 200) {
+  } else if (citoMonthlyCalls + citoCallReservation > CITO_MONTHLY_CALL_CAP || citoDailyCalls + citoCallReservation > CITO_DAILY_CALL_CAP) {
     results.push({ sourceId: "cito-ufc", status: "skipped", reason: "The free-tier quota guard stopped this run before a request.", items: [] });
   } else {
     try {
-      [citoFighters, citoEvents] = await Promise.all([
-        fetchCitoFighters({ apiKey: citoKey, context, page: citoQuota.nextFighterPage ?? 1 }),
-        fetchCitoUpcomingEvents({ apiKey: citoKey, context })
-      ]);
+      // Events first, then the fighters on those cards. The two used to run together, so the
+      // roster was paged fifty at a time whether or not a card existed — the owner's exact
+      // complaint. Now nothing is enriched until something is scheduled.
+      citoEvents = await fetchCitoUpcomingEvents({ apiKey: citoKey, context });
+      const inHorizon = citoEvents.filter((event) => withinIntakeHorizon(event.startsAt, input.now));
+      citoFighters = inHorizon.length > 0
+        ? await fetchCitoFighters({ apiKey: citoKey, context, page: citoQuota.nextFighterPage ?? 1 })
+        : [];
       const items = [
         ...citoFighters.map((fighter) => ({ kind: "fighter", ...fighter })),
         ...citoEvents.map((event) => ({ kind: "event", ...event }))
@@ -161,7 +198,9 @@ export async function refreshFightAiQEvidence(input: {
       results.push({
         sourceId: "cito-ufc",
         status: items.length > 0 ? "success" : "skipped",
-        reason: items.length > 0 ? null : "No UFC fighter or upcoming-event records were returned.",
+        reason: items.length > 0
+          ? null
+          : "No UFC fighter or upcoming-event records were returned.",
         items
       });
       const currentPage = citoQuota.nextFighterPage ?? 1;

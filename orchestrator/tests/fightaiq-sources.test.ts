@@ -85,43 +85,42 @@ describe("FightAIQ source controls", () => {
   });
 });
 
-describe("an event with no card says why", () => {
+describe("the upcoming-event probe is one call", () => {
   const context = { allowHosts: ["api.citoapi.com"], now: new Date("2026-08-02T00:00:00Z") };
   const resolveImpl = async () => ["203.0.113.10"];
-  const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
-    status,
+  const json = (body: unknown) => new Response(JSON.stringify(body), {
+    status: 200,
     headers: { "content-type": "application/json" }
   });
   const oneEvent = {
     data: [{ id: "11111111-2222-3333-4444-555555555555", slug: "ufc-330", name: "UFC 330", startDate: "2026-08-08T18:00:00Z" }]
   };
 
-  it("records the failure instead of returning an event that looks cardless", async () => {
-    // Every intake since founding recorded three upcoming events with empty cards and status
-    // "success". Intake drops an event with no bouts, so the store holds 612 fighters, 572
-    // bouts and no events at all, and nothing said whether the card was empty or refused.
-    const fetchImpl = vi.fn(async (url: string | URL | Request) =>
-      String(url).includes("/bouts") ? json({ message: "Not Found" }, 404) : json(oneEvent));
-    const [event] = await fetchCitoUpcomingEvents({
+  it("asks for the schedule and never for a card", async () => {
+    // Each event used to be followed by /ufc/events/{slug}/bouts. That endpoint returned
+    // rowCount 0 for every event on every run it was live — three of the five reserved calls a
+    // day, for nothing. Cards come from Wikipedia, which actually publishes scheduled bouts.
+    const fetchImpl = vi.fn(async (_url: string | URL | Request) => json(oneEvent));
+    const events = await fetchCitoUpcomingEvents({
       apiKey: "fixture-key",
       context,
       fetchImpl: fetchImpl as typeof fetch,
       resolveImpl
     });
-    expect(event!.bouts).toEqual([]);
-    expect(event!.boutFetch?.ok).toBe(false);
-    expect(event!.boutFetch?.reason).toContain("404");
+    expect(events).toHaveLength(1);
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+    expect(String(fetchImpl.mock.calls[0]![0])).not.toContain("/bouts");
   });
 
-  it("records a successful fetch that genuinely returned no bouts", async () => {
-    const fetchImpl = vi.fn(async (url: string | URL | Request) =>
-      String(url).includes("/bouts") ? json({ data: [] }) : json(oneEvent));
-    const [event] = await fetchCitoUpcomingEvents({
+  it("asks past the next three events, because a horizon needs a window at least as wide", () => {
+    const fetchImpl = vi.fn(async (_url: string | URL | Request) => json(oneEvent));
+    return fetchCitoUpcomingEvents({
       apiKey: "fixture-key",
       context,
       fetchImpl: fetchImpl as typeof fetch,
       resolveImpl
+    }).then(() => {
+      expect(String(fetchImpl.mock.calls[0]![0])).toContain("limit=10");
     });
-    expect(event!.boutFetch).toEqual({ ok: true, rowCount: 0, reason: null });
   });
 });
