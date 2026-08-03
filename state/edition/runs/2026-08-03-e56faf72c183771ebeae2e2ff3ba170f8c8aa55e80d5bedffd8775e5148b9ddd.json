@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "runId": "f0d88313-86fa-4a7c-be37-9b8d85bb90f8",
+  "date": "2026-08-03",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-03T06:23:20.673Z",
+  "completedAt": "2026-08-03T06:23:44.447Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "failed",
+      "startedAt": "2026-08-03T06:23:21.301Z",
+      "completedAt": "2026-08-03T06:23:44.444Z",
+      "durationMs": 23143,
+      "errorCode": "Error",
+      "errorMessage": "curate: pick index 54 is outside the source pool"
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [],
+  "packageStatus": "no_edition",
+  "warnings": [
+    "curation_failed:curate: pick index 54 is outside the source pool"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
