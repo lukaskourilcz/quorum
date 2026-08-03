@@ -1,0 +1,110 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+import { repoRoot } from "../src/paths.js";
+import {
+  MAX_SLIDES,
+  MAX_SLIDE_WORDS,
+  MIN_SLIDES,
+  buildArticleDeck,
+  packIntoSlides,
+  proseFromMdx,
+  reviewDeck,
+  wordCount
+} from "../src/social/slides.js";
+
+const OUTRO = "Celý ozdrojovaný text najdete v MMA Files.";
+
+describe("slides never exceed thirty words", () => {
+  it("packs whole sentences up to the cap and starts a new slide rather than overflowing", () => {
+    const prose = "Prvni veta ma pet slov. Druha veta je o neco delsi a ma deset slov celkem. Treti.";
+    for (const slide of packIntoSlides(prose)) {
+      expect(wordCount(slide)).toBeLessThanOrEqual(MAX_SLIDE_WORDS);
+    }
+  });
+
+  it("splits one over-long sentence at a clause boundary, not mid-phrase", () => {
+    // Czech runs long compound sentences; a comma is where a reader expects to pause.
+    const long = `${"slovo ".repeat(20)}, ${"dalsi ".repeat(20)}.`;
+    const slides = packIntoSlides(long);
+    expect(slides.length).toBeGreaterThan(1);
+    for (const slide of slides) expect(wordCount(slide)).toBeLessThanOrEqual(MAX_SLIDE_WORDS);
+    expect(slides[0]!.trim().endsWith(","), "the first piece ends at the clause boundary").toBe(true);
+  });
+
+  it("still splits when a sentence has no clause boundary at all", () => {
+    const slides = packIntoSlides(`${"slovo ".repeat(75)}.`);
+    expect(slides.length).toBe(3);
+    for (const slide of slides) expect(wordCount(slide)).toBeLessThanOrEqual(MAX_SLIDE_WORDS);
+  });
+});
+
+describe("Czech sentence boundaries", () => {
+  it("does not split inside an ordinal date", () => {
+    // "UFC 306 dne 14. září 2024" holds two periods. Splitting on the ordinal put
+    // "září 2024 a vyústila…" on its own slide, beginning mid-sentence in lower case.
+    const slides = packIntoSlides("Třetí duel rozhodl sérii na UFC 306 dne 14. září 2024. Shevchenko zvítězila.");
+    expect(slides).toHaveLength(1);
+    expect(slides[0]).toContain("14. září 2024");
+  });
+
+  it("never starts a slide in lower case", () => {
+    const slides = packIntoSlides("Odveta přišla 16. září 2023 a skončila remízou. Rozhodli to sudí.");
+    for (const slide of slides) expect(/^[\p{Ll}]/u.test(slide.trim())).toBe(false);
+  });
+});
+
+describe("MDX becomes the prose a reader sees", () => {
+  it("keeps a link's words and drops its address, the markers and the syntax", () => {
+    const mdx = "## Nadpis\n\n[Alex Example](/fighters/ufc/alex) má bilanci 12-2. [^source-1]\n\n- odrážka";
+    const prose = proseFromMdx(mdx);
+    expect(prose).toContain("Alex Example");
+    expect(prose).not.toContain("/fighters/");
+    expect(prose).not.toContain("source-1");
+    expect(prose).not.toContain("##");
+  });
+});
+
+describe("a deck built from the one published article", () => {
+  it("lands inside five to ten slides with nothing over the cap", async () => {
+    const article = JSON.parse(await readFile(
+      path.join(repoRoot, "state/ventures/mma-files/articles/2026-08-02-am-ufc-valentina-shevchenko.json"),
+      "utf8"
+    )) as { localizations: { cs: { title: string; dek: string; bodyMDX: string } } };
+    const cs = article.localizations.cs;
+    const review = reviewDeck(buildArticleDeck({ title: cs.title, dek: cs.dek, bodyMdx: cs.bodyMDX, outro: OUTRO }));
+    expect(review.problems).toEqual([]);
+    expect(review.publishable).toBe(true);
+    expect(review.slides.length).toBeGreaterThanOrEqual(MIN_SLIDES);
+    expect(review.slides.length).toBeLessThanOrEqual(MAX_SLIDES);
+    expect(review.slides[0]!.kind).toBe("cover");
+    expect(review.slides.at(-1)!.kind).toBe("outro");
+  });
+});
+
+describe("a deck the article cannot fill", () => {
+  it("comes back short and unpublishable rather than padded", () => {
+    // Reaching a slide count by inventing a slide is how a carousel starts saying things the
+    // article does not. A thin piece produces a thin deck and the caller decides.
+    const review = reviewDeck(buildArticleDeck({
+      title: "Krátký titulek",
+      dek: "Krátký popis.",
+      bodyMdx: "Jedna věta.",
+      outro: OUTRO
+    }));
+    expect(review.slides.length).toBeLessThan(MIN_SLIDES);
+    expect(review.publishable).toBe(false);
+    expect(review.problems.join(" ")).toMatch(/at least/u);
+  });
+
+  it("caps a very long article at ten rather than running on", () => {
+    const review = reviewDeck(buildArticleDeck({
+      title: "Titulek",
+      dek: "Popis.",
+      bodyMdx: Array.from({ length: 60 }, (_, index) => `Veta cislo ${index + 1} je zde.`).join(" "),
+      outro: OUTRO
+    }));
+    expect(review.slides).toHaveLength(MAX_SLIDES);
+    expect(review.publishable).toBe(true);
+  });
+});
