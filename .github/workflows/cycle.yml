@@ -273,13 +273,58 @@ jobs:
           fi
 
       - name: Pre-cycle release gate
+        id: gate
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         run: |
-          pnpm agents:validate
-          pnpm lint
-          pnpm typecheck
-          pnpm test
-          pnpm build
+          # Captured, not left to abort the job. An uncaught failure here skipped every
+          # remaining step including the skip recorder, so a commit that did not compile showed
+          # up as a red meeting on the calendar — indistinguishable from a meeting that ran and
+          # failed. The gate still stops the cycle; it just says so now.
+          set +e
+          {
+            pnpm agents:validate \
+              && pnpm lint \
+              && pnpm typecheck \
+              && pnpm test \
+              && pnpm build
+          } > "$RUNNER_TEMP/release-gate.log" 2>&1
+          gate_status=$?
+          set -e
+          if test "$gate_status" -ne 0; then
+            tail -40 "$RUNNER_TEMP/release-gate.log" >&2
+            echo "failed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "failed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Record that the repository gate stopped this meeting
+        if: ${{ github.event_name == 'schedule' && steps.gate.outputs.failed == 'true' }}
+        env:
+          PHASE: ${{ steps.mode.outputs.phase }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          # The meeting did not fail. It never opened, because main did not build. Saying that
+          # on the calendar is the difference between "look into this" and "a room went wrong".
+          reason="The repository release gate failed at commit ${COMMIT:0:12}, so the room did not open."
+          pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
+            --phase "$PHASE" --reason "$reason"
+          if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git add -A -- state/meetings/skips
+            git commit -m "skip(${PHASE}): repository release gate failed"
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+            done
+          fi
+
+      - name: Stop when the release gate failed
+        if: ${{ steps.gate.outputs.failed == 'true' }}
+        run: |
+          echo "The repository release gate failed; the cycle did not run."
+          exit 1
 
       - name: Run cycle
         id: run

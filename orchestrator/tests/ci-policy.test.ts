@@ -96,7 +96,11 @@ describe("automation policy", () => {
     // so anything else the run touched is left unstaged, and a plain rebase refuses to start —
     // which discarded a company meeting that had already run and already been paid for.
     expect(cycle).not.toMatch(/git rebase "origin/u);
-    expect(cycle.match(/git rebase --autostash "origin/gu)).toHaveLength(5);
+    expect(cycle.match(/git rebase --autostash "origin/gu)).toHaveLength(6);
+    // A failing release gate records why the room did not open, rather than ending the job on
+    // the spot and leaving the calendar to show a red meeting that never ran.
+    expect(cycle).toContain("Record that the repository gate stopped this meeting");
+    expect(cycle).toContain("Stop when the release gate failed");
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");
