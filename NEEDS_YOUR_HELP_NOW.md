@@ -96,18 +96,6 @@ waiting for, in the order that unblocks the most.
 
 ## Deliberately deferred
 
-12. [ ] **Decide what to do with `claude/quorum-research-docs-3uf6e3`.** The last remaining
-    branch, 23 July, 256 commits behind `main`. It holds one thing worth a decision: an
-    OpenAI-compatible adapter covering Google Gemini, Groq and OpenRouter, plus a Jina reader,
-    written to fail closed without a key. Merging it as it stands is not an option — a test
-    merge conflicts in seven files including `orchestrator/src/llm/call.ts` and
-    `orchestrator/src/cycle.ts`, resurrects `stack-and-scaling.md` after its rename to
-    `scaling.md`, and reverts `NEEDED.md` and `about-project.md` to their July state. Beyond
-    the conflicts, it adds three model providers and four hosts to the network allowlist,
-    which is a new cost and egress surface and therefore your decision, not the council's.
-    Either say the providers are wanted and they get rebuilt against today's budget resolver,
-    or say they are not and the branch is deleted. [imp:2] [owner:me] [time:10m] [kind:decision]
-
 
 11. [ ] **Analytics.** Name the exact decisions the data would change, then approve the
     provider, legal posture and data minimisation before setting
@@ -124,6 +112,10 @@ waiting for, in the order that unblocks the most.
   mints carry it. Verified with `Delivery doctor`.
 - [x] **The delivery App covers both `lukaskourilcz/aifirst` and `lukaskourilcz/mma-files`,**
   with Contents read/write as the only write permission.
+- [x] **The repository holds one branch.** Four were ancestors of `main` with nothing unique
+  in them. The fifth carried Gemini, Groq and OpenRouter adapters; the owner declined the
+  providers on 3 August, so it was deleted (`01b9445`). Anthropic and OpenAI remain the only
+  model providers, and `config/network-allowlist.json` gains no new host.
 
 ## Completion rule
 
