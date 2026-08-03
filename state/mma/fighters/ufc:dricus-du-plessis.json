@@ -339,7 +339,7 @@
         "fightsPerYear": 2.720154,
         "layoffDays": 16
       },
-      "updatedAt": "2026-08-03T18:14:46.640Z"
+      "updatedAt": "2026-08-03T18:26:54.227Z"
     }
   ],
   "rating": {
@@ -349,7 +349,7 @@
     "volatility": 0.05998999,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-de7ea506536dccdb23ea",
-    "updatedAt": "2026-08-03T18:14:46.640Z"
+    "updatedAt": "2026-08-03T18:26:54.227Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1749,11 +1749,62 @@
         "source:wikipedia:42944791"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:25:38.019Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26689399",
+        "source:wikipedia:62595898",
+        "source:wikipedia:42944791"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:25:47.439Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26689399",
+        "source:wikipedia:62595898",
+        "source:wikipedia:42944791"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:26:54.227Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26689399",
+        "source:wikipedia:62595898",
+        "source:wikipedia:42944791"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:14:46.640Z"
+  "updatedAt": "2026-08-03T18:26:54.227Z"
 }

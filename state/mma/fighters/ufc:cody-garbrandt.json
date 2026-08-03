@@ -197,7 +197,7 @@
         "fightsPerYear": 1.337885,
         "layoffDays": 23
       },
-      "updatedAt": "2026-08-03T18:14:46.640Z"
+      "updatedAt": "2026-08-03T18:26:54.227Z"
     }
   ],
   "rating": {
@@ -207,7 +207,7 @@
     "volatility": 0.05999744,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-a1fe45c21699c6fce4eb",
-    "updatedAt": "2026-08-03T18:14:46.640Z"
+    "updatedAt": "2026-08-03T18:26:54.227Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1557,11 +1557,56 @@
         "source:wikipedia:47163936"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:25:38.019Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:25:47.439Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-03T18:26:54.227Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:14:46.640Z"
+  "updatedAt": "2026-08-03T18:26:54.227Z"
 }

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:ufc-330-makhachev-vs-machado-garry",
+  "org": "ufc",
+  "name": "UFC 330: Makhachev vs. Machado Garry",
+  "venue": "Xfinity Mobile Arena",
+  "startsAtLocal": "2026-08-15T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-08-15T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-08-03:List of UFC events"
+  ],
+  "bouts": [
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:islam-makhachev-vs-ian-machado-garry-1",
+      "red": "ufc:islam-makhachev",
+      "blue": "ufc:ian-machado-garry",
+      "division": "welterweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:mackenzie-dern-vs-gillian-robertson-2",
+      "red": "ufc:mackenzie-dern",
+      "blue": "ufc:gillian-robertson",
+      "division": "womens-strawweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:mansur-abdul-malik-vs-dustin-stoltzfus-3",
+      "red": "ufc:mansur-abdul-malik",
+      "blue": "ufc:dustin-stoltzfus",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jeremiah-wells-vs-myktybek-orolbai-4",
+      "red": "ufc:jeremiah-wells",
+      "blue": "ufc:myktybek-orolbai",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jalin-turner-vs-kaue-fernandes-5",
+      "red": "ufc:jalin-turner",
+      "blue": "ufc:kaue-fernandes",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:neil-magny-vs-ramiz-brahimaj-6",
+      "red": "ufc:neil-magny",
+      "blue": "ufc:ramiz-brahimaj",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:donte-johnson-vs-eric-mcconico-7",
+      "red": "ufc:donte-johnson",
+      "blue": "ufc:eric-mcconico",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:vicente-luque-vs-tresean-gore-8",
+      "red": "ufc:vicente-luque",
+      "blue": "ufc:tresean-gore",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:edson-barboza-vs-esteban-ribovics-9",
+      "red": "ufc:edson-barboza",
+      "blue": "ufc:esteban-ribovics",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-08-03T18:26:54.227Z"
+}

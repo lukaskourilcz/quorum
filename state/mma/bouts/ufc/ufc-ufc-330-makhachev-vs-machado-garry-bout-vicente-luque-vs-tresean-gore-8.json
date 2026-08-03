@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-vicente-luque-vs-tresean-gore-8",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-330-makhachev-vs-machado-garry",
+    "name": "UFC 330: Makhachev vs. Machado Garry",
+    "startsAtUtc": "2026-08-15T00:00:00.000Z",
+    "venue": "Xfinity Mobile Arena"
+  },
+  "fighters": {
+    "red": "ufc:vicente-luque",
+    "blue": "ufc:tresean-gore"
+  },
+  "division": "middleweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-03T18:21:31.449Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-03:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-03T18:21:31.449Z",
+    "lastSeenAt": "2026-08-03T18:26:54.227Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-03:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-03:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-03T18:21:31.449Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-03:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-03T18:21:31.449Z"
+}

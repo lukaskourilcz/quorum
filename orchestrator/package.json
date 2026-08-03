@@ -18,6 +18,7 @@
     "docs:refresh": "tsx src/docs/ecosystem-cli.ts",
     "edition:dry": "tsx src/edition/dry-run.ts",
     "fightaiq:backfill": "tsx src/fightaiq/backfill-cli.ts",
+    "fightaiq:events": "tsx src/fightaiq/events-cli.ts",
     "fightaiq:roster-sync": "tsx src/fightaiq/roster-sync-cli.ts",
     "ideas:migrate": "tsx src/ideas/migrate-cli.ts",
     "mma:delivery": "tsx src/mma-files/publish-cli.ts",
