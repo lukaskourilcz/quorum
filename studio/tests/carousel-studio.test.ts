@@ -8,6 +8,8 @@ import {
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
   SEED_TEMPLATES,
+  articleDeckTemplate,
+  articleSlideSlot,
   deprecateTemplate,
   fitText,
   fixturePayload,
@@ -87,5 +89,45 @@ describe("carousel-template/1", () => {
       expect(bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))).toBe(false);
     }
     expect(JSON.stringify(SEED_TEMPLATES)).not.toMatch(/(?:https?:|data:image|\.png|\.jpe?g|\.webp)/i);
+  });
+});
+
+describe("a deck template sized to the article", () => {
+  it("builds a real template at every length the deck builder can produce", () => {
+    // Every other template here has a fixed slide array, which is right for a poster and wrong
+    // for an article: how many slides a piece deserves is a property of the piece.
+    for (let count = 5; count <= 10; count += 1) {
+      const template = articleDeckTemplate(count);
+      expect(template.slides).toHaveLength(count);
+      expect(template.requiredSlots).toHaveLength(count);
+      const strings = Object.fromEntries(
+        Array.from({ length: count }, (_, index) => [articleSlideSlot(index), "Krátký text na slide."])
+      );
+      const rendered = renderCarouselSvg({
+        template,
+        payload: { locale: "cs", strings },
+        brand: CAROUSEL_BRANDS["mma-files"],
+        format: "instagram-portrait"
+      });
+      expect(rendered).toHaveLength(count);
+      expect(rendered.flatMap((slide) => slide.truncatedSlots)).toEqual([]);
+    }
+  });
+
+  it("reports the slot whose text was clipped instead of clipping it quietly", () => {
+    // fitText has always known; the renderer discarded the answer, so an over-long slide became
+    // an ellipsis and nothing said so. A word limit enforced by silent cutting is not a limit.
+    const template = articleDeckTemplate(5);
+    const strings = Object.fromEntries(
+      Array.from({ length: 5 }, (_, index) => [articleSlideSlot(index), "Krátký text na slide."])
+    );
+    strings[articleSlideSlot(2)] = "slovo ".repeat(150);
+    const rendered = renderCarouselSvg({
+      template,
+      payload: { locale: "cs", strings },
+      brand: CAROUSEL_BRANDS["mma-files"],
+      format: "instagram-portrait"
+    });
+    expect(rendered.flatMap((slide) => slide.truncatedSlots)).toEqual([articleSlideSlot(2)]);
   });
 });

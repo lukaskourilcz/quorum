@@ -38,6 +38,8 @@ function layerSvg(input: {
   width: number;
   height: number;
   accentToken?: string;
+  /** Collector for slots whose text had to be clipped to fit. */
+  truncatedSlots?: string[];
 }): string {
   const { layer, payload, brand, width, height } = input;
   const x = px(layer.x, width);
@@ -71,6 +73,7 @@ function layerSvg(input: {
     maxLines: layer.maxLines,
     maxChars: layer.maxChars
   });
+  if (fitted.truncated) input.truncatedSlots?.push(layer.slot);
   const anchor = layer.align === "start" ? "start" : layer.align;
   const textX = layer.align === "start" ? x : layer.align === "middle" ? x + w / 2 : x + w;
   const lineHeight = fitted.fontSize * 1.12;
@@ -86,6 +89,8 @@ export interface RenderedSlide {
   format: CarouselFormat;
   svg: string;
   svgHash: string;
+  /** Slots whose text did not fit and were clipped. Empty when the slide rendered whole. */
+  truncatedSlots: string[];
 }
 
 export function renderCarouselSvg(input: {
@@ -106,13 +111,18 @@ export function renderCarouselSvg(input: {
   return template.slides.map((slide, index) => {
     const variant = payload.variant ? slide.variants.find((candidate) => candidate.id === payload.variant) : undefined;
     const backgroundToken = variant?.backgroundToken ?? slide.backgroundToken;
+    // Which slots did not fit, per slide. fitText has always known; the renderer discarded the
+    // answer, so an over-long slide clipped to an ellipsis and nothing said so. A word limit
+    // that the renderer silently enforces by cutting is not a limit, it is a surprise.
+    const truncatedSlots: string[] = [];
     const content = slide.layers.map((layer) => layerSvg({
       layer,
       payload,
       brand,
       width: canvas.width,
       height: canvas.height,
-      accentToken: variant?.accentToken
+      accentToken: variant?.accentToken,
+      truncatedSlots
     })).join("");
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by Carousel Studio.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(brand, backgroundToken)}"/>${content}</svg>`;
     return {
@@ -120,7 +130,8 @@ export function renderCarouselSvg(input: {
       index,
       format: input.format,
       svg,
-      svgHash: createHash("sha256").update(svg).digest("hex")
+      svgHash: createHash("sha256").update(svg).digest("hex"),
+      truncatedSlots
     };
   });
 }

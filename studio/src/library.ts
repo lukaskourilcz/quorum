@@ -89,6 +89,58 @@ const template = (input: Omit<CarouselTemplate, "schemaVersion" | "version" | "s
   ...input
 });
 
+/**
+ * The slot a deck's Nth slide fills. One-based, zero-padded, so slots sort the way slides read.
+ */
+export function articleSlideSlot(index: number): string {
+  return `slide-${String(index + 1).padStart(2, "0")}`;
+}
+
+/**
+ * A deck template sized to the article rather than the other way round.
+ *
+ * Every other template here has a fixed slide array, which is right for a poster or a quote
+ * card and wrong for an article: the number of slides a piece deserves is a property of the
+ * piece. This builds one template per length, so a five-slide deck and a ten-slide deck are
+ * both real templates that the renderer can check rather than a template being stretched.
+ *
+ * The first and last slides sit on `surface` and carry the cover and the closing line; the
+ * middle sits on `background` and carries the argument. maxChars is generous because the word
+ * cap upstream is the real limit — this one exists so a slot cannot silently swallow a page.
+ */
+export function articleDeckTemplate(slideCount: number): CarouselTemplate {
+  const slots = Array.from({ length: slideCount }, (_, index) => articleSlideSlot(index));
+  return template({
+    id: `article-deck-${slideCount}`,
+    name: `Article deck (${slideCount} slides)`,
+    description: "A cover, the article's own points one per slide, and a closing line.",
+    requiredSlots: slots,
+    slides: slots.map((slot, index) => {
+      const last = index === slideCount - 1;
+      const cover = index === 0;
+      return {
+        id: `slide-article-${String(index + 1).padStart(2, "0")}`,
+        backgroundToken: cover || last ? "surface" : "background",
+        variants: [],
+        layers: [
+          logo(),
+          text(slot, 0.1, 0.3, 0.78, 0.4, {
+            fontToken: "headline",
+            fontWeight: cover ? 900 : 800,
+            minFontSize: 30,
+            maxFontSize: cover ? 78 : 62,
+            maxChars: 260,
+            maxLines: 8,
+            align: last ? "middle" : "start"
+          }),
+          shape(0.76, 0.83, 0.04 + (index / Math.max(1, slideCount - 1)) * 0.16, 0.025, "muted", 0.5),
+          rule(0.1, 0.75, last ? 0.68 : 0.28)
+        ]
+      };
+    })
+  });
+}
+
 export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
   template({
     id: "quote-card",
