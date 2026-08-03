@@ -54,6 +54,8 @@ export interface EditionProductionInput {
   socialPackEnabled?: boolean;
   heroEnabled?: boolean;
   imageCandidates?: readonly LicensedPhotoCandidate[];
+  /** How a picked article's text is fetched. Injected by tests so none reaches the network. */
+  readBody?: (url: string, at: Date) => Promise<string | null>;
 }
 
 export interface EditionProductionResult {
@@ -180,7 +182,7 @@ export async function produceEdition(
     let english: EnglishArticle;
     try {
       english = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
-        write(brief, input.items, input.config, input.gateway, feedback, input.imageCandidates)
+        write(brief, input.items, input.config, input.gateway, feedback, input.imageCandidates, input.now, input.readBody)
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {

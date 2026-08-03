@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { wrapUntrustedData } from "../security/content.js";
+import { fetchReadable } from "../sources/adapters/reader.js";
 import type { SourceItem } from "../sources/types.js";
 import type { EditionQualityConfig } from "./config.js";
 import type {
@@ -287,11 +288,79 @@ function verifiedWire(
   return normalized;
 }
 
+function defaultReadBody(url: string, now: Date): Promise<string | null> {
+  return fetchReadable(url, {
+    allowHosts: [new URL(url).hostname, "r.jina.ai", "api.firecrawl.dev"],
+    now
+  });
+}
+
+/** Characters of real article text kept per pick. Eight of these is about 8k tokens. */
+const PICKED_BODY_CHARS = 4_000;
+
+/**
+ * Strip every link out of a fetched article body, keeping the words.
+ *
+ * assertSuppliedLinks fails the write outright if the article cites a URL that was not in the
+ * packet, and a real page carries dozens of its own links. The writer needs the prose — the
+ * quotes, the numbers, the named specifics — not the source's navigation.
+ */
+function delinked(body: string): string {
+  return body
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/gu, "$1")
+    .replace(/<https?:\/\/[^>]*>/gu, "")
+    .replace(/https?:\/\/\S+/gu, "")
+    .replace(/^\s*[|>#*-]+\s*$/gmu, "")
+    .replace(/\n{3,}/gu, "\n\n")
+    .trim();
+}
+
+/**
+ * The real text of each picked article, where it could be read.
+ *
+ * The writer used to build an eleven-hundred-word feature from the feed blurbs alone, whose
+ * median length across this registry is 116 characters. It filled the gap from memory: the
+ * 3 August edition said two models "broke into Hugging Face" without mentioning they were
+ * test models stripped of their safety training escaping a sandbox, and called it
+ * instrumental convergence where the source said reward hacking.
+ *
+ * Only the three to eight picked items are fetched, never the fifty-item pool. A page that
+ * will not load leaves its item at summary-only, so no edition dies on a reader timeout.
+ */
+async function pickedBodies(
+  items: readonly SourceItem[],
+  now: Date,
+  read: (url: string, now: Date) => Promise<string | null>
+): Promise<Map<string, string>> {
+  const bodies = new Map<string, string>();
+  const unread: string[] = [];
+  // Sequential, not parallel. The keyless reader allows twenty requests a minute and answers
+  // in well under a second; firing eight at once is the one way to get rate-limited into
+  // writing the whole edition from blurbs again, which is the failure this exists to end.
+  for (const item of items) {
+    const body = await read(item.url, now).catch(() => null);
+    const text = body ? delinked(body).slice(0, PICKED_BODY_CHARS) : "";
+    if (text.length > (item.summary?.length ?? 0)) bodies.set(item.externalId, text);
+    else unread.push(item.url);
+  }
+  if (unread.length > 0) {
+    // A thin edition should be explainable afterwards rather than merely thin.
+    console.warn(JSON.stringify({
+      event: "picked_body_unread",
+      read: bodies.size,
+      unread: unread.length,
+      urls: unread.slice(0, 8)
+    }));
+  }
+  return bodies;
+}
+
 function sourcePacket(
   brief: CuratedBrief,
   pickedItems: readonly SourceItem[],
   runnerUpItems: readonly SourceItem[],
-  imageCandidates: readonly LicensedPhotoCandidate[]
+  imageCandidates: readonly LicensedPhotoCandidate[],
+  bodies: ReadonlyMap<string, string>
 ): string {
   const picked = pickedItems.map((item) => {
     const selection = brief.picks.find((pick) => pick.itemId === item.externalId);
@@ -304,7 +373,9 @@ function sourcePacket(
       summary: item.summary,
       tags: item.tags,
       evidence: selection?.evidence ?? "open_question",
-      whySelected: selection?.why ?? ""
+      whySelected: selection?.why ?? "",
+      // The article itself where it could be read, with its own links removed.
+      ...(bodies.has(item.externalId) ? { body: bodies.get(item.externalId) } : {})
     };
   });
   const runners = runnerUpItems.slice(0, 12).map((item) => ({
@@ -335,7 +406,10 @@ export async function write(
   config: EditionQualityConfig,
   gateway: EditionModelGateway,
   feedback: readonly string[] = [],
-  imageCandidates: readonly LicensedPhotoCandidate[] = []
+  imageCandidates: readonly LicensedPhotoCandidate[] = [],
+  now = new Date(),
+  // Injectable so a test never reaches the network; production uses the keyless reader.
+  read: (url: string, at: Date) => Promise<string | null> = defaultReadBody
 ): Promise<EnglishArticle> {
   const byId = new Map(items.map((item) => [item.externalId, item]));
   const pickedItems = brief.picks
@@ -349,6 +423,7 @@ export async function write(
     .filter((item) => !pickedIds.has(item.externalId))
     .slice(0, 12);
   const suppliedUrls = new Set([...pickedItems, ...runnerUpItems].map((item) => item.url));
+  const bodies = await pickedBodies(pickedItems, now, read);
   const revision = feedback.length
     ? `\n\nTrusted revision requirements:\n${feedback.map((item) => `- ${item}`).join("\n")}`
     : "";
@@ -370,7 +445,7 @@ Trusted URL rules:
 Approved URLs (exact strings):
 ${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
 
-${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates)}`,
+${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     tool: {
       name: "emit_article",
       description: "Emit the English Caught Up feature and supplied-source watchlist.",

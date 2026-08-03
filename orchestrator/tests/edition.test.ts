@@ -76,6 +76,9 @@ async function productionInput(
       errorMessage: null
     })),
     recentEditionTags: [["policy"], ["hardware"], ["research"], ["media"]],
+    // No test reaches the network. Production reads each picked article through the keyless
+    // reader; here every fixture URL is fictional and would only time out.
+    readBody: async () => null,
     meetingRef: "meetings/2026-08-04-cu-edition",
     roomUrl: "https://boardless.example/meetings/2026-08-04-cu-edition",
     whyThisStory: "Four independent sources document a price cut that changes production budgets.",
@@ -491,5 +494,37 @@ describe("the editor's index means what the editor was shown", () => {
       }
     } as never).catch(() => undefined);
     expect(seenMaximum).toBe(Math.min(items.length, config.article.maximumCurationCandidates) - 1);
+  });
+});
+
+describe("the writer is given the articles, not just their blurbs", () => {
+  it("puts the fetched body beside the summary and keeps it link-free", async () => {
+    // The median feed summary across this registry is 116 characters, and an ~1,100-word
+    // feature was being written from three to eight of them. The 3 August edition said two
+    // models "broke into Hugging Face" without mentioning they were test models stripped of
+    // their safety training escaping a sandbox.
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const seen: string[] = [];
+    const gateway = {
+      invoke: async (request: { user: string }) => {
+        seen.push(request.user);
+        const next = base.shift()!;
+        return { value: next.value, usage: next.usage };
+      }
+    };
+    const input = await productionInput([], 10);
+    await produceEdition({
+      ...input,
+      gateway: gateway as never,
+      // A real page carries dozens of its own links; assertSuppliedLinks fails the write if
+      // any of them is cited, so the body must arrive de-linked.
+      readBody: async () => "Sam Altman [said](https://x.test/a) the models were <https://y.test/b> stripped of safety training. See https://z.test/c for detail."
+    }).catch(() => undefined);
+    const writePacket = seen.find((packet) => packet.includes("\"picked\""));
+    expect(writePacket, "the writer received a packet").toBeDefined();
+    expect(writePacket).toContain("stripped of safety training");
+    for (const link of ["https://x.test/a", "https://y.test/b", "https://z.test/c"]) {
+      expect(writePacket, `packet must not carry ${link}`).not.toContain(link);
+    }
   });
 });

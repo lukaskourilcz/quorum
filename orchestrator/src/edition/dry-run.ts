@@ -48,6 +48,8 @@ export async function runEditionDry(): Promise<{
     `edition-dry-${date}`
   );
   const result = await produceEdition({
+    // A dry run never reaches the network; production reads each picked article for real.
+    readBody: async () => null,
     date,
     now,
     items,
