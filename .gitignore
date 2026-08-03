@@ -31,3 +31,6 @@ site/.playwright/
 
 # Carousel previews are regenerable renders for looking at, not canonical state.
 state/social/previews/
+
+# The cached release-gate verdict for one commit; see .github/workflows/cycle.yml
+.release-gate-verdict

@@ -95,12 +95,32 @@ describe("automation policy", () => {
     // Every push retry rebases with --autostash. The cycle commits only its allowlisted paths,
     // so anything else the run touched is left unstaged, and a plain rebase refuses to start —
     // which discarded a company meeting that had already run and already been paid for.
-    expect(cycle).not.toMatch(/git rebase "origin/u);
-    expect(cycle.match(/git rebase --autostash "origin/gu)).toHaveLength(6);
+    // Asserted as a property rather than a count: every rebase in every workflow carries
+    // --autostash. Pinning the number meant adding a retry loop failed this test for being new,
+    // which says nothing about whether the loop is safe.
+    for (const [name, workflow] of [["cycle", cycle], ["social", social], ["health", health]] as const) {
+      const rebases = workflow.match(/git (?:-C "[^"]+" )?rebase [^\n]*/gu) ?? [];
+      for (const line of rebases) {
+        if (line.includes("--abort")) continue;
+        expect(line, `${name}.yml rebases without --autostash: ${line}`).toContain("--autostash");
+      }
+    }
+    expect((cycle.match(/git rebase --autostash/gu) ?? []).length).toBeGreaterThanOrEqual(6);
     // A failing release gate records why the room did not open, rather than ending the job on
     // the spot and leaving the calendar to show a red meeting that never ran.
     expect(cycle).toContain("Record that the repository gate stopped this meeting");
     expect(cycle).toContain("Stop when the release gate failed");
+    // A run that dies for any other reason also says so on the calendar. Three runs failed on
+    // 3 August and every one of them left a red slot with nothing anywhere explaining it.
+    expect(cycle).toContain("Say on the calendar why this run did not finish");
+    // The gate's verdict is remembered per commit, so eighteen crons do not re-verify the same
+    // bytes eighteen times. Only a pass writes the marker: a failure must be retried, not
+    // inherited.
+    expect(cycle).toContain("release-gate-v1-${{ github.sha }}");
+    expect(cycle).toMatch(/failed=false[\s\S]{0,400}\.release-gate-verdict/u);
+    expect(cycle).not.toMatch(/failed=true[\s\S]{0,200}> \.release-gate-verdict/u);
+    // Every run says which meeting it is, in the log and on the run page.
+    expect(cycle).toContain("::notice title=Cycle phase::");
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");

@@ -11,6 +11,16 @@ import { SocialPackSchema } from "../contracts/social-pack.js";
 import { QueueItemSchema, assertQueueItemPublishable, queuePayloadHash } from "./queue.js";
 import { composeEditionSocialPack } from "./pack.js";
 
+/**
+ * How long a sharp-backed render may take before the suite calls it hung.
+ *
+ * These three tests rasterise full carousel sets. Alone they take 7.4, 1.7 and 3.3 seconds; on a
+ * loaded CI runner the first one crossed the limit and failed the pre-cycle release gate, so the
+ * 16:28 meeting on 3 August never opened — a healthy cycle lost to a slow image encoder. The
+ * config-level testTimeout did not apply to it; a per-test value does.
+ */
+const RENDER_TIMEOUT_MS = 90_000;
+
 const roots: string[] = [];
 
 afterEach(async () => {
@@ -139,7 +149,7 @@ describe("Caught Up social pack composer", () => {
       repoRoot: root,
       stateRoot: path.join(root, "state")
     })).toBeNull();
-  });
+  }, RENDER_TIMEOUT_MS);
 
   it("rejects a non-HTTPS destination before writing public assets", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-"));
@@ -182,7 +192,7 @@ describe("a Czech-only edition composes", () => {
     // Two queue items, not four: one locale times two channels.
     expect(result!.queueItems).toHaveLength(2);
     expect(result!.queueItems.every((item) => item.locale === "cs")).toBe(true);
-  });
+  }, RENDER_TIMEOUT_MS);
 });
 
 describe("every composed queue item survives the publisher's own gate", () => {
@@ -212,5 +222,5 @@ describe("every composed queue item survives the publisher's own gate", () => {
       // The real gate, not a restatement of it: whatever the composer emits must pass here.
       expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).not.toThrow();
     }
-  });
+  }, RENDER_TIMEOUT_MS);
 });

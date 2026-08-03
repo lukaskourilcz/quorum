@@ -23,6 +23,16 @@ import { atomicWriteJson } from "../src/state.js";
  * event-first rework cannot quietly drop a free-tier stop while narrowing the call count.
  */
 
+/**
+ * How long a run that reaches real sources may take before the suite calls it hung.
+ *
+ * These exercise the Cito quota guard through the whole evidence sweep, so they make live
+ * requests to the sources the sweep is wired to and take seven to ten seconds each on a quiet
+ * machine. The pre-cycle release gate runs this suite: a slow network here is a meeting that
+ * never opens, which is the wrong thing to fail on.
+ */
+const LIVE_SOURCE_TIMEOUT_MS = 90_000;
+
 const roots: string[] = [];
 
 async function stateRoot(): Promise<string> {
@@ -81,7 +91,7 @@ describe("the Cito free-tier guard", () => {
     const { cito } = await citoResult(root, "2026-08-03");
     expect(cito?.status).toBe("skipped");
     expect(cito?.reason).toMatch(/free-tier quota guard/iu);
-  });
+  }, LIVE_SOURCE_TIMEOUT_MS);
 
   it("refuses the run when the daily reservation would cross 200", async () => {
     const root = await stateRoot();
@@ -94,7 +104,7 @@ describe("the Cito free-tier guard", () => {
     const { cito } = await citoResult(root, "2026-08-03");
     expect(cito?.status).toBe("skipped");
     expect(cito?.reason).toMatch(/free-tier quota guard/iu);
-  });
+  }, LIVE_SOURCE_TIMEOUT_MS);
 
   it("counts a new month and a new day from zero", async () => {
     const root = await stateRoot();
@@ -107,7 +117,7 @@ describe("the Cito free-tier guard", () => {
     });
     const { cito } = await citoResult(root, "2026-08-03");
     expect(cito?.reason ?? "").not.toMatch(/free-tier quota guard/iu);
-  });
+  }, LIVE_SOURCE_TIMEOUT_MS);
 
   it("lets a run through when the reservation exactly reaches the cap", async () => {
     // Exactly at the cap is inside the free tier. Stopping here would throw away a run the
@@ -121,7 +131,7 @@ describe("the Cito free-tier guard", () => {
     });
     const { cito } = await citoResult(root, "2026-08-03");
     expect(cito?.reason ?? "").not.toMatch(/free-tier quota guard/iu);
-  });
+  }, LIVE_SOURCE_TIMEOUT_MS);
 
   it("stops without a key rather than calling anonymously", async () => {
     const root = await stateRoot();
@@ -129,7 +139,7 @@ describe("the Cito free-tier guard", () => {
     const { cito } = await citoResult(root, "2026-08-03");
     expect(cito?.status).toBe("skipped");
     expect(cito?.reason).toMatch(/CITO_API_KEY/u);
-  });
+  }, LIVE_SOURCE_TIMEOUT_MS);
 });
 
 describe("nothing is enriched until a card is scheduled", () => {

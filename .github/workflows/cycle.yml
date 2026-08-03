@@ -232,6 +232,23 @@ jobs:
               exit 1
             fi
           fi
+          # Which meeting this run is, in the log and at the top of the run page.
+          #
+          # A failed run named only "Guarded council cycle", so working out which meeting had been
+          # lost meant downloading the log archive and matching timestamps against the cron table.
+          # Three runs failed on 3 August and none of them said what they were.
+          echo "::notice title=Cycle phase::phase=$phase dry=$dry skip=$skip ${skip_reason:+reason=$skip_reason}"
+          {
+            echo "### ${phase}"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| phase | \`${phase}\` |"
+            echo "| dry | \`${dry}\` |"
+            echo "| skip | \`${skip}\` |"
+            test -n "$skip_reason" && echo "| reason | ${skip_reason} |"
+            echo "| trigger | \`${EVENT_NAME}${EVENT_SCHEDULE:+ ${EVENT_SCHEDULE}}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
@@ -272,9 +289,23 @@ jobs:
             fi
           fi
 
+      # Eighteen crons a day each ran agents:validate, lint, typecheck, test and build — better
+      # than two minutes of runner time on 3 August — against the same unchanged commit, every
+      # time. The gate asks one question: does this commit build and pass? That answer cannot
+      # change while the commit and the lockfile do not, so it is remembered rather than
+      # recomputed. Nothing is skipped and no test is dropped: a new commit still runs the full
+      # gate before any meeting opens, exactly as before.
+      - name: Reuse this commit's release-gate verdict
+        id: gate-cache
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .release-gate-verdict
+          key: release-gate-v1-${{ github.sha }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Pre-cycle release gate
         id: gate
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
+        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' && steps.gate-cache.outputs.cache-hit != 'true' }}
         run: |
           # Captured, not left to abort the job. An uncaught failure here skipped every
           # remaining step including the skip recorder, so a commit that did not compile showed
@@ -295,6 +326,9 @@ jobs:
             echo "failed=true" >> "$GITHUB_OUTPUT"
           else
             echo "failed=false" >> "$GITHUB_OUTPUT"
+            # Only a pass is remembered. A failure leaves no marker, so the next run for this
+            # commit runs the gate again rather than inheriting a verdict it never earned.
+            echo "$GITHUB_SHA" > .release-gate-verdict
           fi
 
       - name: Record that the repository gate stopped this meeting
@@ -401,10 +435,31 @@ jobs:
 
       - name: Post-cycle release gate
         if: ${{ steps.mode.outputs.skip != 'true' }}
+        env:
+          GATE_BASE: ${{ github.sha }}
         run: |
+          # Everything the cycle can write, verified. A cycle writes state, docs and social
+          # assets; the tests read state, the site build renders it and agents:validate reads
+          # config, so all of those have to run again on what the cycle just produced.
+          #
+          # Lint and typecheck read source. If the cycle changed no source file — which is the
+          # normal case, because its commit allowlist is state and docs — they are being asked
+          # the same question about the same bytes the pre-cycle gate already answered, and two
+          # more minutes of runner time buys a guaranteed-identical result. So they run when
+          # source actually moved, and are reported as skipped when it did not.
+          changed="$(git diff --name-only "$GATE_BASE" -- \
+            ':(glob)**/*.ts' ':(glob)**/*.tsx' ':(glob)**/*.js' ':(glob)**/*.mjs' \
+            ':(glob)**/*.json' ':(glob)**/*.css' 'package.json' 'pnpm-lock.yaml' \
+            ':(exclude)state/**' ':(exclude)config/kpis/**' || true)"
           pnpm agents:validate
-          pnpm lint
-          pnpm typecheck
+          if test -n "$changed"; then
+            echo "Source moved during this cycle; running lint and typecheck:"
+            printf '%s\n' "$changed" | head -20
+            pnpm lint
+            pnpm typecheck
+          else
+            echo "No source file changed during this cycle; the pre-cycle lint and typecheck still hold."
+          fi
           pnpm test
           pnpm build
           git diff --check
@@ -589,7 +644,7 @@ jobs:
                 break
               fi
               git -C "$clone_root" fetch --depth 1 origin main
-              if ! git -C "$clone_root" rebase origin/main; then
+              if ! git -C "$clone_root" rebase --autostash origin/main; then
                 git -C "$clone_root" rebase --abort || true
                 break
               fi
@@ -831,7 +886,7 @@ jobs:
                 break
               fi
               git -C "$clone_root" fetch --depth 1 origin main
-              if ! git -C "$clone_root" rebase origin/main; then
+              if ! git -C "$clone_root" rebase --autostash origin/main; then
                 git -C "$clone_root" rebase --abort || true
                 break
               fi
@@ -956,3 +1011,32 @@ jobs:
       - name: Fail closed on MMA Files delivery reconciliation
         if: ${{ steps.mma-target.outputs.status == 'needs_reconciliation' || steps.mma-proof.outputs.status == 'failed' }}
         run: exit 1
+
+      # A red slot on the calendar with nothing anywhere saying why is the thing the owner keeps
+      # having to ask about. The gate has its own recorder above; this catches everything else —
+      # a push race, a network failure, a step that threw — so the slot reads "Skipped" with the
+      # reason instead of "Did not happen" with silence.
+      - name: Say on the calendar why this run did not finish
+        if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' }}
+        env:
+          PHASE: ${{ steps.mode.outputs.phase }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          test -n "$PHASE" || exit 0
+          git fetch origin "$GITHUB_REF_NAME"
+          git checkout -- . 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          reason="The run for this meeting failed before it finished. See ${RUN_URL}"
+          pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
+            --phase "$PHASE" --reason "$reason" || exit 0
+          if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git add -A -- state/meetings/skips
+            git commit -m "skip(${PHASE}): the run failed before the meeting finished"
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+            done
+          fi

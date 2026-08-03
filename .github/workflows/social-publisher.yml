@@ -99,7 +99,7 @@ jobs:
           git commit -m "social(${GITHUB_RUN_NUMBER})"
           for attempt in 1 2 3; do
             git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}"
+            git rebase --autostash "origin/${GITHUB_REF_NAME}"
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
             fi

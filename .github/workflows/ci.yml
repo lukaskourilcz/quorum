@@ -1,7 +1,22 @@
 name: CI
 
 on:
+  # The council pushes about eighteen commits a day and every one of them started a full CI run —
+  # agents:validate, lint, typecheck, the whole suite, a production build and a route smoke — on
+  # content the cycle's own post-cycle gate had just run the same five commands against, in the
+  # same job, minutes earlier. That is roughly eighty minutes of runner time a day spent asking a
+  # question that was already answered.
+  #
+  # These paths are what a cycle writes. A push that touches only them is covered by the gate that
+  # produced it. Anything else — source, workflows, config, contracts — still runs the full CI, and
+  # pull requests are never filtered, so a human change is verified exactly as before.
   push:
+    paths-ignore:
+      - "state/**"
+      - "docs/ECOSYSTEM.md"
+      - "NEEDS_YOUR_HELP_NOW.md"
+      - "NEEDED.md"
+      - "site/public/social/**"
   pull_request:
   workflow_dispatch:
 
