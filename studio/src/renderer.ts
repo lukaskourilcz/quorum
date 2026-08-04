@@ -129,14 +129,29 @@ export interface RenderedSlide {
   truncatedSlots: string[];
 }
 
-export function renderCarouselSvg(input: {
+export interface CarouselRenderInput {
   template: CarouselTemplate;
   payload: CarouselPayload;
   brand: BrandTokens;
   format: CarouselFormat;
   /** Decoded PNG bytes per image slot. WebP will not decode inside an SVG data URI. */
   images?: Readonly<Record<string, Buffer>>;
-}): RenderedSlide[] {
+}
+
+/**
+ * Build the deck's slides — or, given `wanted`, only that one.
+ *
+ * `wanted` narrows which slides get built, never how one is built. The slide keeps its real deck
+ * index, and the index is the only thing about a slide that its neighbours contribute: it seeds
+ * the per-layer SVG ids and it numbers the title. So slide four rendered alone is the same string
+ * as slide four rendered fourth, which is what lets a preview serve one slide and still be the
+ * bytes the pipeline would ship.
+ *
+ * Everything that judges the whole template — required slots, brand checks — still runs over the
+ * whole template. A deck that would fail on slide nine must not quietly pass because the caller
+ * only asked for slide one.
+ */
+function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlide[] {
   const template = CarouselTemplateSchema.parse(input.template);
   const payload = CarouselPayloadSchema.parse(input.payload);
   const brand = BrandTokensSchema.parse(input.brand);
@@ -146,7 +161,7 @@ export function renderCarouselSvg(input: {
   const failed = checks.filter((check) => check.status === "fail");
   if (failed.length) throw new Error(`Template checks failed: ${failed.map((check) => check.detail).join("; ")}`);
   const canvas = template.formats[input.format];
-  return template.slides.map((slide, index) => {
+  const build = (slide: CarouselTemplate["slides"][number], index: number): RenderedSlide => {
     const variant = payload.variant ? slide.variants.find((candidate) => candidate.id === payload.variant) : undefined;
     const backgroundToken = variant?.backgroundToken ?? slide.backgroundToken;
     // Which slots did not fit, per slide. fitText has always known; the renderer discarded the
@@ -174,24 +189,55 @@ export function renderCarouselSvg(input: {
       svgHash: createHash("sha256").update(svg).digest("hex"),
       truncatedSlots
     };
-  });
+  };
+  if (wanted === undefined) return template.slides.map(build);
+  const slide = template.slides[wanted];
+  return slide ? [build(slide, wanted)] : [];
 }
 
-export async function renderCarouselPng(input: {
-  template: CarouselTemplate;
-  payload: CarouselPayload;
-  brand: BrandTokens;
-  format: CarouselFormat;
-  images?: Readonly<Record<string, Buffer>>;
-}): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
+export function renderCarouselSvg(input: CarouselRenderInput): RenderedSlide[] {
+  return renderSlides(input);
+}
+
+/**
+ * One slide of the deck, identical to `renderCarouselSvg(input)[index]`.
+ *
+ * Null when the deck has no such slide, which is a 404 and not an error.
+ */
+export function renderCarouselSlideSvg(input: CarouselRenderInput & { index: number }): RenderedSlide | null {
+  return renderSlides(input, input.index)[0] ?? null;
+}
+
+async function rasterise(
+  slides: readonly RenderedSlide[]
+): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
   const { default: sharp } = await import("sharp");
-  const slides = renderCarouselSvg(input);
   return Promise.all(slides.map(async (slide) => {
     const png = await sharp(Buffer.from(slide.svg))
       .png({ compressionLevel: 9, effort: 10, palette: true })
       .toBuffer();
     return { ...slide, png, pngHash: createHash("sha256").update(png).digest("hex") };
   }));
+}
+
+export async function renderCarouselPng(
+  input: CarouselRenderInput
+): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
+  return rasterise(renderSlides(input));
+}
+
+/**
+ * One slide's PNG, identical to `(await renderCarouselPng(input))[index]`.
+ *
+ * A preview that shows a reader one slide should cost one rasterisation. Going through
+ * `renderCarouselPng` and discarding the rest cost a whole deck per slide, so opening a ten-slide
+ * deck rasterised a hundred images to show ten.
+ */
+export async function renderCarouselSlidePng(
+  input: CarouselRenderInput & { index: number }
+): Promise<(RenderedSlide & { png: Buffer; pngHash: string }) | null> {
+  const [rendered] = await rasterise(renderSlides(input, input.index));
+  return rendered ?? null;
 }
 
 /**

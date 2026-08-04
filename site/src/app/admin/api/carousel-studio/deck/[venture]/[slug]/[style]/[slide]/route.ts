@@ -4,7 +4,7 @@ import {
   DECK_STYLES,
   articleDeckTemplate,
   articleSlideSlot,
-  renderCarouselPng,
+  renderCarouselSlidePng,
   type DeckStyle
 } from "@boardlessai/carousel-studio";
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
@@ -44,14 +44,18 @@ export async function GET(
   const hero = await readArticleHeroPng(deck.venture, deck.slug);
 
   try {
-    const rendered = await renderCarouselPng({
+    // This slide, not the deck it belongs to. The whole-deck renderer next door rasterises every
+    // slide, so serving ten of them one request at a time rasterised a hundred images and threw
+    // ninety away — a page of thumbnails that took ten seconds to fill. Same renderer, same
+    // checks, same bytes: the index is all a slide borrows from its neighbours.
+    const render = await renderCarouselSlidePng({
       template,
       payload: { locale: "cs", strings },
       brand,
       format: "instagram-portrait",
+      index: slideIndex,
       ...(hero ? { images: { [ARTICLE_HERO_SLOT]: hero } } : {})
     });
-    const render = rendered[slideIndex];
     if (!render) return Response.json({ error: "Slide not found." }, { status: 404 });
     return new Response(new Uint8Array(render.png), {
       headers: {

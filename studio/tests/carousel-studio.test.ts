@@ -17,6 +17,8 @@ import {
   fixturePayload,
   mayGoLive,
   renderCarouselPng,
+  renderCarouselSlidePng,
+  renderCarouselSlideSvg,
   renderCarouselSvg,
   resolveLifecycleStatus,
   validateTemplateForBrand
@@ -145,6 +147,66 @@ describe("a deck template sized to the article", () => {
       format: "instagram-portrait"
     });
     expect(rendered.flatMap((slide) => slide.truncatedSlots)).toEqual([articleSlideSlot(2)]);
+  });
+});
+
+describe("one slide without its deck", () => {
+  const deckInput = (count: number, style: Parameters<typeof articleDeckTemplate>[1]) => ({
+    template: articleDeckTemplate(count, style),
+    payload: {
+      locale: "cs" as const,
+      strings: Object.fromEntries(
+        Array.from({ length: count }, (_, index) => [articleSlideSlot(index), `Krátký text na slide ${index + 1}.`])
+      )
+    },
+    brand: CAROUSEL_BRANDS["mma-files"],
+    format: "instagram-portrait" as const
+  });
+
+  it("renders exactly the string the whole-deck render would put at that index", () => {
+    // The preview page shows one slide per request. Rendering the deck to reach it cost ten
+    // rasterisations per slide; rendering the slide alone is only correct if it is the same
+    // slide, down to the SVG ids, which are seeded from the index it sits at.
+    for (const style of ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const) {
+      for (let count = 5; count <= 10; count += 1) {
+        const input = deckInput(count, style);
+        const deck = renderCarouselSvg(input);
+        for (let index = 0; index < count; index += 1) {
+          const alone = renderCarouselSlideSvg({ ...input, index });
+          expect(alone, `${style}/${count}/${index}`).toEqual(deck[index]);
+        }
+      }
+    }
+  });
+
+  it("rasterises the same bytes as the deck render, and only that slide", async () => {
+    const input = deckInput(6, "mesh");
+    const deck = await renderCarouselPng(input);
+    for (let index = 0; index < 6; index += 1) {
+      const alone = await renderCarouselSlidePng({ ...input, index });
+      expect(alone!.pngHash, `slide ${index}`).toBe(deck[index]!.pngHash);
+      expect(alone!.png.equals(deck[index]!.png)).toBe(true);
+      expect(alone!.index).toBe(index);
+    }
+  }, 60_000);
+
+  it("still checks the whole template, not just the slide asked for", () => {
+    // Narrowing what gets drawn must not narrow what gets checked. A deck whose fifth slide names
+    // a colour the brand does not have is a broken deck, and asking for its first slide is not a
+    // way to be told otherwise.
+    const input = deckInput(6, "mesh");
+    const broken = structuredClone(input.template) as typeof input.template;
+    for (const layer of broken.slides[4]!.layers) {
+      if (layer.type === "mesh") layer.blobs[0]!.colorToken = "not-a-token";
+    }
+    expect(() => renderCarouselSvg({ ...input, template: broken })).toThrow(/Template checks failed/u);
+    expect(() => renderCarouselSlideSvg({ ...input, template: broken, index: 0 })).toThrow(/Template checks failed/u);
+  });
+
+  it("returns null for a slide the deck does not have", () => {
+    const input = deckInput(5, "mesh");
+    expect(renderCarouselSlideSvg({ ...input, index: 5 })).toBeNull();
+    expect(renderCarouselSlideSvg({ ...input, index: -1 })).toBeNull();
   });
 });
 
