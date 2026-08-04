@@ -15,7 +15,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-morning",
       "status": "held",
-      "meetingRef": "meetings/20260803083318-morning",
+      "meetingRef": "standups/2026-08-03-morning",
       "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
@@ -108,7 +108,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-night",
       "status": "held",
-      "meetingRef": "meetings/20260803203958-night",
+      "meetingRef": "standups/2026-08-03-night",
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {

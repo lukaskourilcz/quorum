@@ -1,6 +1,6 @@
 # Needs your help now — one owner checklist
 
-Updated: 2026-08-03
+Updated: 2026-08-04
 
 The only canonical list of human-owned setup across all six ventures. Git cannot inspect a
 secret's value or an external account's settings, so an item stays unchecked until you have
@@ -15,14 +15,26 @@ to translate it. Measured: MMA Files was spending 51% of an article on a draft
 nobody read, DNESKAi 39% of an edition. Both sites serve Czech and no longer
 offer English; no indexed URL broke doing it.
 
-MMA Files publishes. The first council-produced article — a Valentina Shevchenko profile —
-is live in Czech and passed all nine release checks. The delivery App can read
-the commit, its status and its check runs on both target repositories; `Delivery doctor`
-(Actions → run manually) confirms that in about a minute and names the exact permission if
-it ever regresses.
+Both magazines publish. MMA Files delivered its first council-produced article on 2 August — a
+Valentina Shevchenko profile, live in Czech, past all nine release checks. DNESKAi delivered its
+first edition on 3 August; its 1 and 4 August deliveries recorded `no_edition`, which is a
+gated outcome at $0 rather than a failure. The delivery App can read the commit, its status and
+its check runs on both target repositories; `Delivery doctor` (Actions → run manually) confirms
+that in about a minute and names the exact permission if it ever regresses.
 
-Nothing else publishes yet. The three sections below are what each remaining venture is
-waiting for, in the order that unblocks the most.
+The article desk survives a quiet editorial room. On 3 August the 09:00 room left no record and
+no slate, and both article slots died with `missing_editorial_slate`. A slot now replays the
+desk's own deterministic subject choice from the fighter and event cards on disk instead, and
+says in its run file that the slate was derived.
+
+The priority queue and the agenda loop run without you. Every live 06:00 board writes one open
+priority item per agenda venture from that venture's `growth_objective` in
+`config/ventures.json`, then spends at most one of them commissioning a single specialist room;
+a room that opens can queue a follow-up agenda for another phase. A phase with no due agenda
+records `PAUSED` at $0.
+
+Carousel Studio, the company's own opportunity record and social posting are what is still
+waiting. The sections below are those, in the order that unblocks the most.
 
 ## 0. Decisions the Czech-only move handed you
 
@@ -73,6 +85,27 @@ yours, not the runtime's.
   that sealed package hashes and your existing settings keep working. The public
   URL is the one part only you can change. [imp:3] [owner:me] [time:20m] [kind:setup]
 
+- [ ] **Decide what `config/kpis.json` is for. Nothing measures it.** Renaming
+  HACEK's third KPI turned up the larger fact: none of that file's 89 KPIs
+  produces a number anywhere, and HACEK's three are not a special case.
+  `collectKpis` in `orchestrator/src/metrics/collect.ts` is the only code that
+  turns those definitions into observations, and nothing imports it — no runtime
+  module and no test; `evaluateKpi` is reachable only through it. The single
+  runtime read of the file, `orchestrator/src/org/maintenance.ts`, counts how
+  many entries name an agent as owner during an org change and never looks at
+  `metric`, `target` or `dir`. The KPI artifact the runtime does emit,
+  `state/kpis/latest.json`, holds 37 statuses and is built from the separate
+  quarterly set in `config/kpis/2026-Q1.json`; the two id sets share not one id,
+  so no `vize.*`, `forge.*` or `localization.*` reading exists to look up. Two
+  live prompts describe the missing half as though it were there:
+  `orchestrator/prompts/_shared.md` tells every agent its owned KPIs arrive with
+  an `ok|warn|fail|n-a` status, and `retro.md` says a tightened target "is
+  written to `config/kpis.json`" — no code writes it. Three honest ways out, and
+  which one is a call about what the company wants to pay for: wire collectors
+  for the handful of metrics worth measuring, cut the file down to what the
+  quarterly set already measures, or keep all 89 and relabel the file as the
+  role-ownership record it actually is. [imp:3] [owner:me] [time:45m] [kind:decision]
+
 ## 1. Blocking a venture right now
 
 1. [ ] **Add 3–5 inspiration links for Carousel Studio.** In `/admin`, under Carousel
@@ -83,71 +116,72 @@ yours, not the runtime's.
    individual pages. No credential or account is needed for this venture.
    [imp:5] [owner:me] [time:15m] [kind:setup]
 
-2. [ ] **Set the `/admin` credentials in Vercel production.** Two documented unblock
-   actions — adding a priority item and entering fixed costs — both run through `/admin`,
+2. [ ] **Set the `/admin` credentials in Vercel production.** Both remaining unblock actions —
+   the Carousel Studio links above and the fixed monthly costs below — run through `/admin`,
    and it needs `ADMIN_USER`, `ADMIN_PASSWORD` and a fine-grained
    `BOARDLESSAI_GITHUB_TOKEN` with Contents read/write on this repository (plus
    `BOARDLESSAI_GITHUB_REPOSITORY` and `BOARDLESSAI_GITHUB_BRANCH` if you are not using the
    defaults). Without them the checklist points at a door that will not open.
    [imp:5] [owner:me] [time:10m] [kind:setup]
 
-3. [ ] **Add a priority item through `/admin`.** Six specialist phases need a due agenda,
-   an agenda needs an open priority item, and the only automatic producer is the quarter-end
-   protocol, which does not run until 2026-10-31. Until one item exists, Titty Tuesdays
-   marketing and Carousel Studio record a $0 skip every day. Needs item 2 first.
-   [imp:4] [owner:me] [time:10m] [kind:setup]
-
-4. [ ] **Add the first opportunity record to `state/OPPORTUNITIES.json`.** The DISCOVERY
-   gate reads this file, and the task allowlist deliberately does not let any agent write
-   it — the narrow write scope is a guard, so do not widen it. Needs a score ≥35/50, no
-   dimension below 2, and ≥3 independent non-fixture evidence refs in `state/EVIDENCE.jsonl`.
-   Until then the company board returns `NO_ACTION` every cycle, which is the gate working,
-   not a fault. [imp:5] [owner:me] [time:60m] [kind:decision]
+3. [ ] **Add the first opportunity record to `state/OPPORTUNITIES.json`.** The file still holds
+   only fixtures, so the opportunity gate scores every shift `INSUFFICIENT_EVIDENCE` — the
+   newest scorecard reads 34/50 against `FIX-OPP-003`, one point under the gate, with no
+   eligible evidence — and each shift record carries an empty evidence list as a result. The
+   task allowlist deliberately does not let any agent write this file; the narrow write scope
+   is a guard, so do not widen it. Needs a score ≥35/50, no dimension below 2, and ≥3
+   independent non-fixture evidence refs in `state/EVIDENCE.jsonl`. This is no longer what
+   holds the stage: the company entered VALIDATION on 1 August through the owner-only stage
+   mechanism in `config/stages.json`. [imp:5] [owner:me] [time:60m] [kind:decision]
 
 ## 2. Verify once, then leave alone
 
-5. [ ] **Vercel production settings.** BoardlessAI tracks `main` at
-   `https://boardless-ai.vercel.app`; Caught Up at `https://caughtup-ai.vercel.app`; MMA
+4. [ ] **Vercel production settings.** BoardlessAI tracks `main` at
+   `https://boardless-ai.vercel.app`; DNESKAi at `https://caughtup-ai.vercel.app`; MMA
    Files at `https://mma-files.vercel.app` with `NEXT_PUBLIC_DEMO_MODE=false`. The delivery
-   step builds its clone with demo mode off, so leaving production on demo makes a delivered
-   article's route 404 and fails every page check. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false`
-   until each magazine has ten articles, per `social-2026-08a` — separate switch, do not
-   change it yet. [imp:4] [owner:me] [time:10m] [kind:setup]
+   step builds its clone with demo mode off (`cycle.yml` passes `NEXT_PUBLIC_DEMO_MODE=false`),
+   so leaving production on demo makes a delivered article's route 404 and fails every page
+   check. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on both magazines until each has a body of
+   work worth indexing. That variable lives in the magazine projects, not this repository, and
+   `social-2026-08a` does not cover it — it is your call, separate from the social stop, and
+   the answer today is still no. [imp:4] [owner:me] [time:10m] [kind:setup]
 
-6. [ ] **The two FightAIQ free-tier keys in Actions secrets.** `CITO_API_KEY` is bounded
+5. [ ] **The two FightAIQ free-tier keys in Actions secrets.** `CITO_API_KEY` is bounded
    below 500 calls/month, 200/day and five per run. `THE_ODDS_API_KEY` is optional and stops
    at the provider's zero quota. Do not add GNews, Guardian, NYTimes or any paid data API;
    Wikimedia and reviewed imports are the $0 baseline. [imp:3] [owner:me] [time:5m] [kind:setup]
 
-7. [ ] **Enter actual fixed monthly costs in `/admin`.** Each subscription with its monthly
+6. [ ] **Enter actual fixed monthly costs in `/admin`.** Each subscription with its monthly
    USD amount, category and first-paid date. An empty registry means "not entered", not
    "free", and the all-in cap is computed from it. Do not enter example prices.
    [imp:3] [owner:me] [time:15m] [kind:setup]
 
-8. [ ] **Review the Q1 target seeds** in `config/kpis/2026-Q1.json`. Confirm the 2026-08-03
+7. [ ] **Review the Q1 target seeds** in `config/kpis/2026-Q1.json`. Confirm the 2026-08-03
    start and the values, or save your own, before using the quarter for decisions. The
    runtime cannot lower a target or rewrite a past snapshot.
    [imp:2] [owner:me] [time:15m] [kind:decision]
 
-9. [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`.** They widen the licensed
+8. [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`.** They widen the licensed
    photo search. Not a blocker: Openverse, Wikimedia Commons and the deterministic FRAME
    hero remain available, and a photo is now only used when its own title, author or URL
    names the article's subject. [imp:1] [owner:me] [time:5m] [kind:setup]
 
 ## 3. Only before social posting
 
-10. [ ] **Connect Instagram and Threads per brand.** Carousel Studio has no accounts.
+9. [ ] **Connect Instagram and Threads per brand.** Carousel Studio has no accounts.
 
     | Venture | Actions secrets | Repository variables |
     | --- | --- | --- |
-    | Caught Up | `CAUGHT_UP_THREADS_ACCESS_TOKEN`, `CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN` | `CAUGHT_UP_THREADS_USER_ID`, `CAUGHT_UP_INSTAGRAM_USER_ID` |
+    | DNESKAi | `CAUGHT_UP_THREADS_ACCESS_TOKEN`, `CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN` | `CAUGHT_UP_THREADS_USER_ID`, `CAUGHT_UP_INSTAGRAM_USER_ID` |
     | MMA Files | `MMA_FILES_THREADS_ACCESS_TOKEN`, `MMA_FILES_INSTAGRAM_ACCESS_TOKEN` | `MMA_FILES_THREADS_USER_ID`, `MMA_FILES_INSTAGRAM_USER_ID` |
     | Titty Tuesdays | `TITTY_TUESDAYS_THREADS_ACCESS_TOKEN`, `TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN` | `TITTY_TUESDAYS_THREADS_USER_ID`, `TITTY_TUESDAYS_INSTAGRAM_USER_ID` |
 
     Decision `social-2026-08a` keeps all of this closed until each magazine has rendered ten
-    articles. MMA Files has one. Keep `SOCIAL_KILL_SWITCH=true`; setting it to `false`
-    removes only the owner stop, and each venture's counter, credentials, roles and safety
-    checks still have to pass. [imp:2] [owner:me] [time:45m] [kind:setup]
+    articles. `state/social/activation.json` reads DNESKAi 1/7, MMA Files 1/10 and Titty
+    Tuesdays 0/4 — the runtime's own per-venture thresholds, which are not all ten. Keep
+    `SOCIAL_KILL_SWITCH=true`; setting it to `false` removes only the owner stop, and each
+    venture's counter, credentials, roles and safety checks still have to pass.
+    [imp:2] [owner:me] [time:45m] [kind:setup]
 
 ## 4. One scheduling key that does nothing
 
@@ -166,14 +200,20 @@ yours, not the runtime's.
 
 ## Deliberately deferred
 
-
-11. [ ] **Analytics.** Name the exact decisions the data would change, then approve the
+10. [ ] **Analytics.** Name the exact decisions the data would change, then approve the
     provider, legal posture and data minimisation before setting
     `METRICS_INGESTION_ENABLED=true`. Until then follower and engagement KPIs stay honestly
     unavailable and no analytics credential is required. [imp:1] [owner:me] [time:0m] [kind:decision]
 
 ## Already done
 
+- [x] **"Add a priority item through `/admin`" is retired, not done by you.** It was on this
+  list because an agenda-gated room needs a due agenda, an agenda needs an open priority item,
+  and the admin UI was the only writer. The 06:00 board now seeds one item per agenda venture
+  from that venture's `growth_objective`, so the loop starts from inside the system; five
+  items were written on 3 August. The item's other claim — that Titty Tuesdays marketing and
+  Carousel Studio skipped for want of one — was wrong in a second way: an empty queue was not
+  what stopped them, and the rooms record `PAUSED` at $0, not a skip.
 - [x] **The six repository variables and both model API keys.** All present as of
   2026-08-02. `PORTFOLIO_LIVE_ENABLED` was set at 12:26 UTC, which is why the morning half
   of that day correctly skipped.

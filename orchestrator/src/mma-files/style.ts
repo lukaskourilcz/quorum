@@ -137,26 +137,51 @@ export async function loadStylebook(
   return readFile(path.join(root, "state", "ventures", "mma-files", "STYLEBOOK.md"), "utf8");
 }
 
-export function stylebookPacket(raw: string, locale: MmaFilesLocale): string {
-  const start = locale === "en" ? "## English desk" : "## Czech desk";
-  const end = locale === "en" ? "## Czech desk" : null;
+/**
+ * The stylebook text a writer is handed.
+ *
+ * The desk writes Czech, so the packet is "## Czech desk" to the end of the file. The locale
+ * argument survives because it is what the call site reads as, and it is typed "cs" because
+ * there is nothing else to slice: STYLEBOOK.md used to open with an English desk section that
+ * no packet ever carried, and that section is gone.
+ */
+export function stylebookPacket(raw: string, locale: Extract<MmaFilesLocale, "cs">): string {
+  const start = "## Czech desk";
   const startIndex = raw.indexOf(start);
   if (startIndex < 0) throw new Error(`STYLEBOOK.md is missing ${start}`);
-  const endIndex = end ? raw.indexOf(end, startIndex + start.length) : raw.length;
-  const packet = raw.slice(startIndex, endIndex < 0 ? raw.length : endIndex).trim();
-  if (!packet.includes("Slop tells") && !packet.includes("Znaky strojového textu")) {
+  const packet = raw.slice(startIndex).trim();
+  if (!packet.includes("### Znaky strojového textu")) {
     throw new Error(`STYLEBOOK.md is missing the ${locale} slop-tells section`);
   }
   return packet;
 }
 
+/**
+ * Every heading the writer packet promises, and therefore every heading a writer can lose.
+ *
+ * This is exactly the set inside the slice stylebookPacket takes, which is why the test asserts
+ * the two match: a heading required here but absent from the packet is a check that guards
+ * nothing, and a heading in the packet but missing here can be deleted from the stylebook
+ * without anything failing. The list held four English headings until 2026-08-04, when the
+ * English desk section was removed; those four guarded prose no writer was ever sent, while
+ * "### Titulky a rytmus" and "### České studijní zdroje" travelled in every Czech packet
+ * unguarded. Both gaps are closed here.
+ */
+export const REQUIRED_STYLEBOOK_HEADINGS = [
+  "## Czech desk",
+  "### Začátky článků",
+  "### Reporty a pozvánky",
+  "### Titulky a rytmus",
+  "### Slovník a skloňování",
+  "### Znaky strojového textu",
+  "### České studijní zdroje"
+] as const;
+
 export function validateStylebook(raw: string): string[] {
   const violations: string[] = [];
-  for (const heading of [
-    "## English desk", "### Ledes", "### Recaps and previews", "### Slop tells",
-    "## Czech desk", "### Začátky článků", "### Reporty a pozvánky",
-    "### Slovník a skloňování", "### Znaky strojového textu"
-  ]) if (!raw.includes(heading)) violations.push(`missing:${heading}`);
+  for (const heading of REQUIRED_STYLEBOOK_HEADINGS) {
+    if (!raw.includes(heading)) violations.push(`missing:${heading}`);
+  }
   const borrowedFragments = [...raw.matchAll(/[“"]([^”"]+)[”"]/gu)]
     .map((match) => match[1]!)
     .filter((fragment) => !fragment.startsWith("http"));

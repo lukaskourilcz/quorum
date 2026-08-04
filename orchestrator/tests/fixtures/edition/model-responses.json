@@ -156,54 +156,5 @@
       "cacheWriteTokens": 0,
       "costUsd": 0.09
     }
-  },
-  {
-    "tool": "emit_czech_article",
-    "value": {
-      "title": "Produkční inference dostává nižší cenu",
-      "dek": "Čtyři poskytovatelé a výzkumné týmy zveřejnili nižší sazby s limity důležitými pro produkční rozpočty.",
-      "alternative_headlines": [
-        "Nižší ceny API mění rozpočet inference",
-        "Levnější modely přicházejí s limity propustnosti"
-      ],
-      "body_mdx": "## Zveřejněná změna\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) a [OpenAI](https://openai.com/index/example-api-pricing) zveřejnily nižší produkční ceny. Každý poskytovatel ovládá vlastní ceník, takže týmy musí přepočítat náklady podle své zátěže.\n\n## Limity\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) spojil levnější tarif s limity propustnosti. [Google Research](https://research.google/blog/example-serving-costs/) doplnil naměřený kontext nákladů na provoz. Zákazníci mohou porovnat zveřejněná tvrzení se svými požadavky na odezvu.\n\n## Otevřená otázka\n\nZdroje neuvádějí, jak dlouho ceny vydrží ani zda velcí zákazníci dostávají jiné podmínky.",
-      "illustration_alt": "Čtyři papírové ceníky položené vedle kalkulačky",
-      "why_it_matters": [
-        "Týmy s produkční inferencí mohou přepočítat měsíční účet za modely.",
-        "Limity propustnosti mohou zrušit úsporu u aplikací citlivých na odezvu."
-      ],
-      "what_changed": [
-        "Poskytovatelé zveřejnili nižší sazby API a jeden nový tarif inference.",
-        "Výzkumníci doplnili naměřený kontext provozních nákladů."
-      ],
-      "uncertainty": [
-        "Poskytovatelé nezveřejnili dobu platnosti nových sazeb.",
-        "Podmínky podnikových smluv zůstávají neveřejné."
-      ],
-      "dispatches": [
-        {
-          "title": "Anthropic mění ceník",
-          "body": "Anthropic zveřejnil nižší produkční cenu a popsal dotčené použití API.",
-          "source_url": "https://www.anthropic.com/news/example-price-update",
-          "topic": "pricing"
-        },
-        {
-          "title": "DeepMind stanovuje limity propustnosti",
-          "body": "DeepMind připojil k levnějšímu tarifu inference jasné limity propustnosti.",
-          "source_url": "https://deepmind.google/blog/example-inference-tier/",
-          "topic": "inference"
-        }
-      ]
-    },
-    "usage": {
-      "provider": "anthropic",
-      "model": "claude-sonnet-4-6",
-      "stage": "localize",
-      "inputTokens": 4500,
-      "outputTokens": 2600,
-      "cacheReadTokens": 4000,
-      "cacheWriteTokens": 0,
-      "costUsd": 0.06
-    }
   }
 ]

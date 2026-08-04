@@ -75,8 +75,8 @@ The board consists of VIZE, FORGE, PULSE and AUDIT. It may prioritize already al
 work, vote, hold, or commission one bounded specialist agenda. AUDIT can veto a
 specific rule breach. A vote cannot override a human-only gate.
 
-Specialists collect evidence, design, write, translate, check, calculate or deliver
-within their packet. They do not approve their own release or expand their own scope.
+Specialists collect evidence, design, write, check, calculate or deliver within
+their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
@@ -84,19 +84,19 @@ become instructions. Numeric and factual claims must retain evidence references.
 
 ### Caught Up
 
-Promise: one useful AI-news briefing in English and Czech, with a hero image and a
-clear reader destination. Inputs come from the allowed source registry. HERALD chooses
-the story, STET edits the English surface, HACEK creates natural Czech, AUDIT can veto,
+Promise: one useful AI-news briefing in Czech, with a hero image and a clear reader
+destination. Inputs come from the allowed source registry. HERALD chooses the story,
+STET edits the Czech copy, HACEK owns the register it is written to, AUDIT can veto,
 FRAME supplies exactly one licensed image or deterministic fallback, and RELAY delivers
 a hash-checked edition package to `lukaskourilcz/aifirst`.
 
 The target repository runs its own CI and Vercel deployment. BoardlessAI then checks
-the target commit, both language routes, content marker, image dimensions and
-attribution. One verification failure retries the same package without a model call;
-a second failure reverts and pauses only Caught Up. Social publishing stays locked
-until seven consecutive release proofs, complete credentials, project checks and the
-global switch all pass. THREADS and INSTAGRAM remain disabled, but their contracts are
-Carousel Studio-ready.
+the target commit, the article route for every locale the package carries, content
+marker, image dimensions and attribution. One verification failure retries the same
+package without a model call; a second failure reverts and pauses only Caught Up.
+Social publishing stays locked until seven consecutive release proofs, complete
+credentials, project checks and the global switch all pass. THREADS and INSTAGRAM
+remain disabled, but their contracts are Carousel Studio-ready.
 
 ### Titty Tuesdays
 
@@ -138,14 +138,15 @@ reader-facing data belongs only in MMA Files; BoardlessAI shows operational stat
 
 ### MMA Files
 
-Promise: publish direct, sourced MMA journalism in English and natural Czech, and act
-as the only public home for FightAIQ fighter/bout/prediction data. CANVAS assigns the
-two daily slots, JAB drafts, STET removes generated-text tells, HACEK translates,
-AUDIT checks the release, FRAME supplies the hero, and RELAY delivers to
-`lukaskourilcz/mma-files` with the same retry/revert proof used by Caught Up.
+Promise: publish direct, sourced MMA journalism in natural Czech, and act as the only
+public home for FightAIQ fighter/bout/prediction data. CANVAS assigns the two daily
+slots, JAB drafts in Czech, STET removes generated-text tells, HACEK owns the register
+and the copy repair, AUDIT checks the release, FRAME supplies the hero, and RELAY
+delivers to `lukaskourilcz/mma-files` with the same retry/revert proof used by Caught
+Up.
 
 An article is killed before any model call when its source packet is incomplete.
-REACH and SPLIT are currently disabled. REACH's bilingual A/B draft contract already
+REACH and SPLIT are currently disabled. REACH's Czech A/B draft contract already
 uses live Carousel Studio templates; SPLIT remains measurement-only and idle. Social
 unlock requires ten consecutive article proofs, credentials, project safety and the
 global switch. Indexing remains an independent owner decision.
@@ -266,7 +267,7 @@ envelope before any call.
 | LEDGER | costs, budget and unit economics | cannot create payments or invent revenue |
 | HERALD | Caught Up story selection and edition quality | cannot bypass evidence/AUDIT/STET |
 | STET | remove wording errors and generated-text tells | cannot change supported facts |
-| HACEK | natural Czech translation/editorial register | cannot change uncertainty or intent |
+| HACEK | the Czech editorial register and copy floor | cannot change uncertainty or intent |
 | SPARK | one ledger-checked Caught Up product idea | cannot recycle rejected ideas without evidence |
 | VAULT | idea memory and duplicate control | cannot approve an idea |
 | FRAME | article heroes and deterministic visual rendering | social path is Carousel Studio only; no publishing |
@@ -285,7 +286,7 @@ envelope before any call.
 | SONAR | source terms, cost and overlap review | cannot wire a source before terms approval |
 | CANVAS | MMA Files assignments and release quality | kills unsupported slots before spend |
 | JAB | direct sourced MMA reporting | cannot promote unsupported detail into copy |
-| REACH | bilingual MMA social variants | disabled; drafts use only live Carousel Studio templates |
+| REACH | Czech MMA social variants | disabled; drafts use only live Carousel Studio templates |
 | SPLIT | future social test analysis | disabled while metrics ingestion is false |
 | EASEL | original carousel-template data | cannot copy a source or edit renderer code |
 | MOTIF | cited textual layout observations | cannot crawl collections or download inspiration images |
@@ -294,7 +295,7 @@ envelope before any call.
 ## Content, social and Carousel Studio flow
 
 Caught Up and MMA Files spend on article language work only after source gates pass.
-Both produce English and Czech; both use one licensed hero/fallback; both are delivered
+Both publish in Czech only; both use one licensed hero/fallback; both are delivered
 through a repository-scoped App and verified after deployment. Social payload
 generation is separately gated, so locked social projects make no caption/model calls.
 
@@ -343,7 +344,7 @@ prepare a proposal but never activate an earning method.
 
 - `AUTONOMY_KILL_SWITCH`, project live switches, `SOCIAL_KILL_SWITCH`, pause files and
   budget stops deny work independently.
-- Caught Up and MMA Files release only evidence-valid bilingual packages and prove the
+- Caught Up and MMA Files release only evidence-valid Czech packages and prove the
   deployed result; failure is retried once, then reverted and project-paused.
 - FightAIQ needs source/card/bout gates and D8; no bet or advice path exists.
 - Template founding cannot create credentials, accounts, commerce, legal or personal-

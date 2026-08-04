@@ -118,11 +118,10 @@ export async function appendEditionUsage(
     requestHash: requestHash(cycleId, index, usage),
     phase: "cu-edition",
     ventureId: "caught-up",
-    agent: usage.stage === "curate"
-      ? "HERALD"
-      : usage.stage === "localize" || usage.stage === "localize_rewrite"
-        ? "HACEK"
-        : "STET",
+    // HERALD curates; STET writes and pays for its own regeneration. The HACEK branch that used
+    // to sit here charged the retired `localize` stages, so the ledger described a second call
+    // that no longer runs. Every stage in EDITION_USAGE_STAGES lands on one of these two.
+    agent: usage.stage === "curate" ? "HERALD" : "STET",
     provider: "anthropic",
     model: usage.model,
     serviceTier: "default",

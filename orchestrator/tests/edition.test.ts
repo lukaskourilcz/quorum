@@ -36,7 +36,14 @@ import {
   titleSimilarity
 } from "../src/edition/quality.js";
 import { reviewArticleText } from "../src/edition/stet.js";
-import type { LocalizedContent } from "../src/edition/types.js";
+import {
+  EDITION_USAGE_STAGES,
+  type EditionUsage,
+  type EditionUsageStage,
+  type LocalizedContent
+} from "../src/edition/types.js";
+import type { EditionRunReport } from "../src/edition/report.js";
+import { atomicWriteJson } from "../src/state.js";
 import { removeEmptyCzechAdverbs } from "../src/edition/localize.js";
 
 const fixtureRoot = path.join(
@@ -146,7 +153,7 @@ describe("edition configuration and quality", () => {
     const writer = structuredClone(responses[1]!);
     (writer.value as { slug: string }).slug = "OpenAI / pricing — update!";
     const result = await produceEdition(
-      await productionInput([responses[0]!, writer, responses[2]!], 10, true)
+      await productionInput([responses[0]!, writer], 10, true)
     );
     expect(result.package.status).toBe("edition");
     if (result.package.status === "edition") {
@@ -156,8 +163,7 @@ describe("edition configuration and quality", () => {
     }
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
       "curate",
-      "write",
-      
+      "write"
     ]);
   });
 
@@ -169,7 +175,7 @@ describe("edition configuration and quality", () => {
     const rewrite = structuredClone(base[1]!);
     rewrite.usage.stage = "rewrite";
     const result = await produceEdition(
-      await productionInput([base[0]!, invalid, rewrite, base[2]!])
+      await productionInput([base[0]!, invalid, rewrite])
     );
     expect(result.package.status).toBe("edition");
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
@@ -187,7 +193,7 @@ describe("edition configuration and quality", () => {
     const rewrite = structuredClone(base[1]!);
     rewrite.usage.stage = "rewrite";
     const result = await produceEdition(
-      await productionInput([base[0]!, malformed, rewrite, base[2]!])
+      await productionInput([base[0]!, malformed, rewrite])
     );
     expect(result.package.status).toBe("edition");
     expect(result.report.usage.map((usage) => usage.stage)).toEqual([
@@ -208,7 +214,7 @@ describe("edition configuration and quality", () => {
       source: "anthropic-news"
     };
     const result = await produceEdition(
-      await productionInput([base[0]!, writer, base[2]!])
+      await productionInput([base[0]!, writer])
     );
     expect(result.package.status).toBe("edition");
     if (result.package.status === "edition") {
@@ -245,23 +251,23 @@ describe("edition configuration and quality", () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const rewriteOne = structuredClone(base[1]!);
     const rewriteTwo = structuredClone(base[1]!);
-    const localizationOne = structuredClone(base[2]!);
-    const localizationTwo = structuredClone(base[2]!);
     rewriteOne.usage.stage = "rewrite";
     rewriteTwo.usage.stage = "rewrite";
     const result = await produceEdition(
-      await productionInput([
-        base[0]!,
-        base[1]!,
-        base[2]!,
-        rewriteOne,
-        localizationOne,
-        rewriteTwo,
-        localizationTwo
-      ], 1)
+      await productionInput([base[0]!, base[1]!, rewriteOne, rewriteTwo], 1)
     );
     expect(result.package.status).toBe("no_edition");
     expect(result.report.regenerationAttempts).toBe(2);
+    // Both regenerations are the quality gate's. Until the retired Czech-rewrite fixture was
+    // deleted, the third call drew `emit_czech_article` against an `emit_article` request and
+    // one of the two attempts was that mismatch, not a quality block.
+    expect(result.report.warnings.some((warning) => warning.startsWith("content_invalid:"))).toBe(false);
+    expect(result.report.usage.map((usage) => usage.stage)).toEqual([
+      "curate",
+      "write",
+      "rewrite",
+      "rewrite"
+    ]);
     expect(result.report.quality?.result.action).toBe("no_edition");
     if (result.package.status === "no_edition") {
       expect(result.package.board.noEditionReason).toMatch(/^quality_block:/);
@@ -286,7 +292,7 @@ describe("STET article register", () => {
     value.cs.dispatches[0]!.body = "Upřímně, zdrojový dokument je veřejný.";
 
     const result = await produceEdition(
-      await productionInput([base[0]!, writer, base[2]!])
+      await productionInput([base[0]!, writer])
     );
 
     expect(result.package.status).toBe("edition");
@@ -470,6 +476,108 @@ describe("the editor's index means what the editor was shown", () => {
       entries: Array<{ agent: string; usd: number; phase: string }>;
     };
     expect(ledger.entries).toEqual([expect.objectContaining({ agent: "HERALD", usd: 0.033, phase: "cu-edition" })]);
+    await rm(root, { recursive: true, force: true });
+  });
+});
+
+describe("the edition ledger names the agent that spent", () => {
+  function usageFor(stage: EditionUsageStage, costUsd: number): EditionUsage {
+    return {
+      provider: "anthropic",
+      model: "claude-sonnet-4-6",
+      stage,
+      inputTokens: 1_000,
+      outputTokens: 500,
+      cacheReadTokens: 0,
+      cacheWriteTokens: 0,
+      costUsd
+    };
+  }
+
+  function reportWith(usage: EditionUsage[]): EditionRunReport {
+    return {
+      schemaVersion: 1,
+      runId: "edition-ledger-attribution",
+      date: "2026-08-04",
+      mode: "production",
+      status: "edition",
+      startedAt: "2026-08-04T03:55:00.000Z",
+      completedAt: "2026-08-04T03:56:00.000Z",
+      stages: [],
+      regenerationAttempts: 0,
+      stetBlocks: 0,
+      hacekBlocks: 0,
+      usage,
+      warnings: []
+    };
+  }
+
+  it("charges each remaining stage to the agent that made the call", async () => {
+    // Two model calls remain: HERALD curates, STET writes and pays for its own regeneration.
+    // EditionUsage.stage also declared `localize` and `localize_rewrite`, and appendEditionUsage
+    // routed both to HACEK — a second call that was removed when Caught Up went Czech-only. The
+    // declared list and the ledger routing both described a spender that no longer exists.
+    expect([...EDITION_USAGE_STAGES]).toEqual(["curate", "write", "rewrite"]);
+
+    const root = await mkdtemp(path.join(os.tmpdir(), "edition-attribution-"));
+    const report = reportWith(EDITION_USAGE_STAGES.map((stage) => usageFor(stage, 0.01)));
+    const monthUsd = await appendEditionUsage(root, "cycle-attribution", new Date("2026-08-04T04:00:00.000Z"), report);
+    const ledger = JSON.parse(await readFile(path.join(root, "budget", "ledger.json"), "utf8")) as {
+      entries: Array<{ agent: string }>;
+    };
+    expect(ledger.entries.map((entry) => entry.agent)).toEqual(["HERALD", "STET", "STET"]);
+    expect(ledger.entries.map((entry) => entry.agent)).not.toContain("HACEK");
+    expect(monthUsd).toBe(0.03);
+    await rm(root, { recursive: true, force: true });
+  });
+
+  it("leaves no agent in the ledger routing that no longer makes a call", async () => {
+    // The routing is a branch over stage names, so a dead branch is only visible in the source:
+    // no input can reach it once nothing emits the stage. Reading it is the way to keep it gone.
+    const source = await readFile(path.join(repoRoot, "orchestrator", "src", "edition", "live.ts"), "utf8");
+    const body = source.slice(source.indexOf("export async function appendEditionUsage"));
+    const agents = [...new Set([...body.matchAll(/"(HERALD|STET|HACEK)"/g)].map((match) => match[1]))];
+    expect(agents.sort()).toEqual(["HERALD", "STET"]);
+  });
+
+  it("still reads the HACEK rows the retired call already wrote", async () => {
+    // Retiring the stages narrows the write side only. state/budget/ledger.json holds real
+    // HACEK entries from when the second call ran; they carry an `agent` and never a `stage`,
+    // so nothing about them parses through EditionUsage. They must keep loading and keep
+    // counting toward the month, or the cap would be computed against a shortened history.
+    const root = await mkdtemp(path.join(os.tmpdir(), "edition-history-"));
+    const historical = {
+      ts: "2026-08-02T04:10:00.000Z",
+      cycleId: "20260802041000-cu-edition",
+      requestHash: "historical-hacek-entry-0000000000000000",
+      phase: "cu-edition",
+      ventureId: "caught-up",
+      agent: "HACEK",
+      provider: "anthropic",
+      model: "claude-sonnet-4-6",
+      serviceTier: "default",
+      tokensIn: 4_500,
+      cachedTokensIn: 4_000,
+      tokensOut: 2_600,
+      toolUses: 1,
+      usd: 0.06,
+      kind: "text"
+    };
+    await atomicWriteJson(root, "budget/ledger.json", { schemaVersion: 1, entries: [historical] });
+
+    const monthUsd = await appendEditionUsage(
+      root,
+      "cycle-after-retirement",
+      new Date("2026-08-04T04:00:00.000Z"),
+      reportWith([usageFor("write", 0.02)])
+    );
+    const ledger = JSON.parse(await readFile(path.join(root, "budget", "ledger.json"), "utf8")) as {
+      entries: Array<{ agent: string; usd: number }>;
+    };
+    expect(ledger.entries[0]).toEqual(historical);
+    expect(ledger.entries.map((entry) => entry.agent)).toEqual(["HACEK", "STET"]);
+    // The August total still includes the retired call's $0.06.
+    expect(monthUsd).toBe(0.08);
     await rm(root, { recursive: true, force: true });
   });
 });

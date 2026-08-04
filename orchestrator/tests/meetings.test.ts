@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -349,6 +350,42 @@ describe("meeting calendar", () => {
     const records = await loadMeetingRecords(path.join(repoRoot, "state"));
     expect(records.some((record) => record.kind === "venture" && record.phase === "morning"))
       .toBe(true);
+  });
+
+  // A venture record only ever reaches the calendar from standups/: the meetings/<cycleId>.json
+  // a venture cycle also writes is a thin room summary on schemaVersion 1, so it fails
+  // MeetingRecordSchema and loadMeetingRecords drops it. The reference used to be built from the
+  // cycle id anyway, which named that summary file rather than the standup the record was read
+  // from. It resolved only where a cycle happened to leave both files behind. On 1 August the
+  // morning and afternoon standups were published without their summaries, and the calendar
+  // carried two references to files that were never written.
+  it("references the file each venture record was actually read from", async () => {
+    const stateDirectory = path.join(repoRoot, "state");
+    const records = await loadMeetingRecords(stateDirectory);
+    const feed = buildCalendarFeed({
+      weekOf: mondayOfWeek("2026-08-01"),
+      records,
+      now: new Date("2026-08-04T00:00:00.000Z")
+    });
+    const references = feed.slots
+      .map((slot) => slot.meetingRef)
+      .filter((reference): reference is string => Boolean(reference));
+    expect(references.length).toBeGreaterThan(0);
+    expect(references.filter((reference) => !existsSync(path.join(stateDirectory, `${reference}.json`))))
+      .toEqual([]);
+  });
+
+  it("names a venture slot by its standup file rather than its cycle id", async () => {
+    const records = await loadMeetingRecords(path.join(repoRoot, "state"));
+    const venture = records.find((record) => record.kind === "venture" && record.phase === "morning");
+    expect(venture).toBeDefined();
+    const feed = buildCalendarFeed({
+      weekOf: mondayOfWeek(venture!.date),
+      records: [venture!],
+      now: new Date("2026-08-04T00:00:00.000Z")
+    });
+    expect(feed.slots.find((slot) => slot.kind === "venture-morning" && slot.meetingRef)?.meetingRef)
+      .toBe(`standups/${venture!.date}-${venture!.phase}`);
   });
 
 });

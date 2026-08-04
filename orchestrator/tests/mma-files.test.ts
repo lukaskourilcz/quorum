@@ -11,7 +11,7 @@ import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.
 import { articlePackageHash, hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
-import { loadStylebook, reviewArticleCopy, reviewBilingualParity, stripSourceMarkers, validateStylebook } from "../src/mma-files/style.js";
+import { REQUIRED_STYLEBOOK_HEADINGS, loadStylebook, reviewArticleCopy, reviewBilingualParity, stripSourceMarkers, stylebookPacket, validateStylebook } from "../src/mma-files/style.js";
 import { ArticleSlotConflictError, loadArticlePackages, storeArticlePackage } from "../src/mma-files/store.js";
 import { deterministicArticleImage } from "../src/images/article-image.js";
 import { repoRoot, stateRoot } from "../src/paths.js";
@@ -104,11 +104,48 @@ describe("MMA Files article production", () => {
     expect(replay.article.packageHash).toBe(first.article.packageHash);
   });
 
-  it("keeps the style study complete, separated by language and fragment-safe", async () => {
+  it("keeps the Czech style study complete and fragment-safe", async () => {
     const stylebook = await loadStylebook(repoRoot);
     expect(validateStylebook(stylebook)).toEqual([]);
-    expect(stylebook.match(/https:\/\/www\.mmafighting\.com/g)).toHaveLength(10);
     expect(stylebook.match(/https:\/\/www\.fights\.cz/g)).toHaveLength(10);
+    // The desk publishes in Czech. An English desk section sat in this file carrying its own
+    // ledes, recaps and slop tells, and stylebookPacket never sliced it, so it went to no
+    // writer and shaped no article while riding along in every room packet built from the file.
+    expect(stylebook).not.toContain("## English desk");
+    expect(stylebook.match(/https:\/\/www\.mmafighting\.com/g)).toBeNull();
+  });
+
+  it("requires every heading the Czech writer packet carries, and only those", async () => {
+    const stylebook = await loadStylebook(repoRoot);
+    const packet = stylebookPacket(stylebook, "cs");
+    // Both directions, or the check is half a check. Asserting only required -> packet lets a
+    // new section be added to the Czech desk and travel to every writer with nothing guarding
+    // it: insert "### Nový nehlídaný oddíl" and the old loop stayed green while the writer
+    // received a section that could be deleted again without a single failure.
+    const delivered = new Set(packet.match(/^#{2,3} .+$/gmu) ?? []);
+    expect(delivered).toEqual(new Set(REQUIRED_STYLEBOOK_HEADINGS));
+    for (const heading of REQUIRED_STYLEBOOK_HEADINGS) {
+      // And the demand has to bite. Rename the heading and the validator must say so, or the
+      // section can leave the stylebook with every gate still green.
+      expect(validateStylebook(stylebook.replace(heading, "### přejmenovaný oddíl")))
+        .toContain(`missing:${heading}`);
+    }
+  });
+
+  it("refuses a Czech packet that lost its machine-text tells", () => {
+    // The tells are the one section the copy gate mirrors phrase for phrase. A stylebook that
+    // still has the heading structure but not this section must not reach a writer.
+    const withoutTells = "## Czech desk\n\n### Začátky článků\n\n- První věta řekne, co je nové.\n";
+    expect(() => stylebookPacket(withoutTells, "cs")).toThrow(/slop-tells/u);
+    expect(validateStylebook(withoutTells)).toContain("missing:### Znaky strojového textu");
+    // The two shapes the guard used to wave through. It accepted the English heading "Slop
+    // tells" or the bare Czech string anywhere in the packet, so a stylebook that kept the
+    // deleted English desk's heading passed, and so did one that only mentions the section in
+    // running prose. Neither hands a writer the phrase list, which is the whole point of it.
+    const englishHeading = `${withoutTells}\n### Slop tells\n\n- Avoid the phrase “epic showdown”.\n`;
+    expect(() => stylebookPacket(englishHeading, "cs")).toThrow(/slop-tells/u);
+    const mentionedInProse = `${withoutTells}\n Znaky strojového textu sepíšeme příště.\n`;
+    expect(() => stylebookPacket(mentionedInProse, "cs")).toThrow(/slop-tells/u);
   });
 
   it("publishes only when the Czech copy, source markers and fighter links pass", async () => {
