@@ -188,19 +188,23 @@
       "at": "2026-08-04T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The repository release gate failed at commit 34aef4b3709c, so the room did not open."
     },
     {
       "at": "2026-08-04T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-pm",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "Missing fresh, source-backed subject."
     },
     {
       "at": "2026-08-04T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-04-mma-analysis",
+      "decisionOneLiner": "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction."
     },
     {
       "at": "2026-08-04T18:00:00.000Z",

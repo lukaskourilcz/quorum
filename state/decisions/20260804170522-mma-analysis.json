@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260804170522-mma-analysis",
+  "phase": "mma-analysis",
+  "outcome": "PLAN",
+  "summary": "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction.",
+  "evidenceRefs": [
+    "source:cito-ufc:2026-08-04",
+    "source:wikimedia:2026-08-04",
+    "meeting:2026-08-03-mma-analysis",
+    "source:the-odds-api:2026-08-04",
+    "source:wikipedia-schedule:2026-08-04"
+  ],
+  "agendaRef": "meeting-agendas/queue.json#agenda-cc40ad2fd8c7f880",
+  "generatedAt": "2026-08-04T17:12:22.262Z"
+}

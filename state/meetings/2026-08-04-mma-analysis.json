@@ -1,0 +1,279 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804170522-mma-analysis",
+  "date": "2026-08-04",
+  "phase": "mma-analysis",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Review the latest versioned model run, captured market prices and calibration notes within the current mode gate Assigned agenda: Prioritize height/reach backfill for 50 fighters across UFC 330 and Gamrot cards before model run. Two independent sources required per fighter per field. Wikimedia and cito-ufc are live; confirm no open discrepancies.",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "VIG",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.020342,
+    "monthAllInUsd": 1.843223850000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction.",
+    "evidenceRefs": [
+      "source:cito-ufc:2026-08-04",
+      "source:wikimedia:2026-08-04",
+      "meeting:2026-08-03-mma-analysis",
+      "source:the-odds-api:2026-08-04",
+      "source:wikipedia-schedule:2026-08-04"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "No BUILD task assigned. This is MMA-ANALYSIS phase with a data backfill agenda (50 fighters, height/reach via two independent sources). Sources live and healthy. No model run blocked. Waiting for backfill completion signal before next gate.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-04",
+        "source:wikimedia:2026-08-04"
+      ]
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "No model run is eligible. All 50 fighters lack at least one critical height/reach field, and the packet provides source availability but no fighter-level agreements or discrepancy clearance. Backfill and independently reconcile before modeling.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "meeting:2026-08-03-mma-analysis"
+      ]
+    },
+    {
+      "agent": "VIG",
+      "summary": "No ModelRun, captured odds, or complete fighter fields are available. UFC and Oktagon checked; height/reach backfill remains the gate. No market comparison or probability is permissible.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "source:wikimedia:2026-08-04",
+        "meeting:2026-08-03-mma-analysis"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "50 fighters across UFC 330 and Gamrot need height/reach backfill. Wikimedia and cito-ufc both live; no open discrepancies reported yet. Two independent sources required per field before model use. Backfill work continues; no adjustment entries warranted until critical fields are",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "source:wikipedia-schedule:2026-08-04"
+      ]
+    },
+    {
+      "agent": "PIVOT",
+      "summary": "Height/reach backfill for 50 fighters across UFC 330 and Gamrot cards is in progress. Wikimedia and cito-ufc sources confirm 0 complete records on all critical fields. No open discrepancies detected. Continue file work; model run gates on two-source verification.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-04",
+        "source:cito-ufc:2026-08-04"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Source packet reports Wikimedia and cito-ufc success, but provides no fighter-level height/reach values or discrepancy log. No model run or probabilities are available. Keep UFC and Oktagon in scope; backfill and reconcile before modeling.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "meeting:2026-08-03-mma-analysis"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "VIG",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "PIVOT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260804170522-MMA-ANALYSIS-02",
+      "owner": "SIGMA",
+      "summary": "Complete height and reach for all 50 fighters using Wikimedia and cito-ufc, record field-level agreement or discrepancy, then request model readiness review.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260804170522-MMA-ANALYSIS-03",
+      "owner": "VIG",
+      "summary": "Complete two-provider height/reach confirmation for 50 fighters across UFC 330 and Gamrot, resolve discrepancies, then issue a versioned ModelRun.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260804170522-MMA-ANALYSIS-04",
+      "owner": "TAPE",
+      "summary": "Confirm height and reach for all 50 fighters using two independent sources per field. Flag any open discrepancies between wikimedia and cito-ufc before model run.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260804170522-MMA-ANALYSIS-05",
+      "owner": "PIVOT",
+      "summary": "Cross-verify heightCm and reachCm for all 50 fighters against a third independent source (UFC official or verified sports database). Two agreeing sources unlock model eligibility.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260804170522-MMA-ANALYSIS-06",
+      "owner": "AUDIT",
+      "summary": "Export fighter-level height and reach values with provider IDs, timestamps, and discrepancy status for all 50 fighters across both UFC cards; block model input until every critical field has two agreeing providers.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "agendaRef": "meeting-agendas/queue.json#agenda-cc40ad2fd8c7f880",
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:cito-ufc:2026-08-04",
+      "source:wikimedia:2026-08-04",
+      "meeting:2026-08-03-mma-analysis",
+      "source:the-odds-api:2026-08-04",
+      "source:wikipedia-schedule:2026-08-04"
+    ]
+  },
+  "generatedAt": "2026-08-04T17:12:22.262Z",
+  "kind": "mma-analysis",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T17:05:22.262Z",
+    "closedAt": "2026-08-04T17:12:22.262Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-04T17:05:22.262Z",
+        "text": "Review the latest versioned model run, captured market prices and calibration notes within the current mode gate Assigned agenda: Prioritize height/reach backfill for 50 fighters across UFC 330 and Gamrot cards before model run. Two independent sources required per fighter per field. Wikimedia and cito-ufc are live; confirm no open discrepancies."
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-04T17:06:22.262Z",
+        "text": "No BUILD task assigned. This is MMA-ANALYSIS phase with a data backfill agenda (50 fighters, height/reach via two independent sources). Sources live and healthy. No model run blocked. Waiting for backfill completion signal before next gate.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-04",
+          "source:wikimedia:2026-08-04"
+        ]
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "statement",
+        "sentAt": "2026-08-04T17:07:22.262Z",
+        "text": "No model run is eligible. All 50 fighters lack at least one critical height/reach field, and the packet provides source availability but no fighter-level agreements or discrepancy clearance. Backfill and independently reconcile before modeling.",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "meeting:2026-08-03-mma-analysis"
+        ]
+      },
+      {
+        "agent": "VIG",
+        "mode": "statement",
+        "sentAt": "2026-08-04T17:08:22.262Z",
+        "text": "No ModelRun, captured odds, or complete fighter fields are available. UFC and Oktagon checked; height/reach backfill remains the gate. No market comparison or probability is permissible.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "source:wikimedia:2026-08-04",
+          "meeting:2026-08-03-mma-analysis"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-04T17:09:22.262Z",
+        "text": "50 fighters across UFC 330 and Gamrot need height/reach backfill. Wikimedia and cito-ufc both live; no open discrepancies reported yet. Two independent sources required per field before model use. Backfill work continues; no adjustment entries warranted until critical fields are",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "source:wikipedia-schedule:2026-08-04"
+        ]
+      },
+      {
+        "agent": "PIVOT",
+        "mode": "statement",
+        "sentAt": "2026-08-04T17:10:22.262Z",
+        "text": "Height/reach backfill for 50 fighters across UFC 330 and Gamrot cards is in progress. Wikimedia and cito-ufc sources confirm 0 complete records on all critical fields. No open discrepancies detected. Continue file work; model run gates on two-source verification.",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-04",
+          "source:cito-ufc:2026-08-04"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-04T17:11:22.262Z",
+        "text": "Source packet reports Wikimedia and cito-ufc success, but provides no fighter-level height/reach values or discrepancy log. No model run or probabilities are available. Keep UFC and Oktagon in scope; backfill and reconcile before modeling.",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "meeting:2026-08-03-mma-analysis"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-04T17:12:22.262Z",
+        "text": "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction."
+      }
+    ]
+  }
+}

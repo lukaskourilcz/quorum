@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260804170522-mma-analysis",
+  "phase": "mma-analysis",
+  "estimatedWorstCaseUsd": 0.041763,
+  "actualUsd": 0.020342,
+  "participants": [
+    "FORGE",
+    "SIGMA",
+    "VIG",
+    "TAPE",
+    "PIVOT",
+    "AUDIT"
+  ],
+  "agendaId": "agenda-cc40ad2fd8c7f880",
+  "generatedAt": "2026-08-04T17:12:22.262Z"
+}

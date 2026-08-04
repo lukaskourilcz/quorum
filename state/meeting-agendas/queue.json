@@ -49,7 +49,9 @@
       "requestedAt": "2026-08-04T07:29:35.203Z",
       "notBefore": "2026-08-04",
       "expiresAt": "2026-08-07T23:59:59.000Z",
-      "status": "pending"
+      "status": "consumed",
+      "consumedBy": "20260804170522-mma-analysis",
+      "consumedAt": "2026-08-04T17:05:22.262Z"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -70,5 +72,5 @@
       "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-04T08:44:00.833Z"
+  "updatedAt": "2026-08-04T17:05:22.262Z"
 }
