@@ -2,6 +2,6 @@
   "schemaVersion": "meeting-skip/1",
   "date": "2026-08-04",
   "phase": "night",
-  "reason": "The repository release gate failed at commit 88672d8be1ae, so the room did not open.",
-  "decidedAt": "2026-08-04T20:04:10.329Z"
+  "reason": "The repository release gate failed at commit 1cdfb05e2c45, so the room did not open.",
+  "decidedAt": "2026-08-04T20:22:12.142Z"
 }
