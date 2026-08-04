@@ -62,7 +62,11 @@ export async function GET(
         "X-Content-Type-Options": "nosniff"
       }
     });
-  } catch {
+  } catch (error) {
+    // Said out loud, because the silent version of this line is why a deployed renderer that
+    // could not load its image library went unexplained: every slide answered 500 and the only
+    // record anywhere was the status code.
+    console.error(`Carousel slide render failed for ${venture}/${slug}/${style}/${slide}:`, error);
     return Response.json({ error: "Slide could not be rendered." }, { status: 500 });
   }
 }

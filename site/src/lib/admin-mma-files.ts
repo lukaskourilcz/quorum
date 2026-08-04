@@ -8,6 +8,25 @@ const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process
 
 type Locale = "en" | "cs";
 
+/**
+ * An article's hero, with the credit that has to travel with it.
+ *
+ * Half of this used to be guessed. The URL assumed every hero was a deterministic SVG plate, so
+ * the day the desk started buying licensed photographs the preview asked for a hero.svg that was
+ * never written and showed a broken image instead. The credit was not read at all, which is the
+ * more serious half: a CC BY or CC BY-SA photograph shown without its attribution is a licence
+ * breach, so an image whose credit cannot be read is not displayed here at all.
+ */
+export interface AdminMmaHero {
+  url: string;
+  /** Czech alt is required by the package contract; English is optional and falls back to it. */
+  alt: Record<Locale, string>;
+  /** The attribution line, flattened to text — never injected as markup. */
+  credit: string;
+  license: string;
+  sourceUrl: string;
+}
+
 export interface AdminMmaArticle {
   id: string;
   slug: string;
@@ -22,7 +41,7 @@ export interface AdminMmaArticle {
   modelVersion: string | null;
   packageHash: string;
   contentHash: string;
-  heroUrl: string;
+  hero: AdminMmaHero | null;
   ratings: RatingRecord[];
 }
 
@@ -129,6 +148,38 @@ function mediaUrl(relative: string): string {
   return `/admin/api/mma-files/media?path=${encodeURIComponent(relative)}`;
 }
 
+/**
+ * Read the hero the package actually stored, or nothing.
+ *
+ * The extension comes from `hero_path` because that is what storeArticleMedia wrote the file
+ * under — photographs are WebP, deterministic plates are SVG, and hardcoding either one turns
+ * the other half of the archive into a 404. Attribution is required rather than optional: an
+ * unattributed CC BY photograph on screen is the licence problem, so an unreadable credit
+ * removes the picture instead of the credit.
+ */
+function hero(value: unknown, mediaBase: string): AdminMmaHero | null {
+  const image = record(value);
+  const license = record(image?.license);
+  const heroPath = text(image?.hero_path, 300);
+  const altCs = text(image?.alt_cs, 300);
+  const altEn = text(image?.alt_en, 300);
+  const name = text(license?.name, 80);
+  const sourceUrl = text(license?.source_url, 500);
+  const attribution = text(license?.attribution_html, 2_000);
+  // Flattened the same way orchestrator/src/delivery/verifier.ts flattens it before looking for
+  // the credit on the published page, so admin shows the string the verifier will hunt for.
+  const credit = attribution?.replaceAll(/<[^>]+>/gu, " ").replaceAll(/\s+/gu, " ").trim();
+  const extension = heroPath ? /\.(webp|png|svg)$/u.exec(heroPath)?.[1] : undefined;
+  if (!extension || !altCs || !name || !credit || !sourceUrl?.startsWith("https://")) return null;
+  return {
+    url: mediaUrl(`${mediaBase}/hero.${extension}`),
+    alt: { cs: altCs, en: altEn ?? altCs },
+    credit,
+    license: name,
+    sourceUrl
+  };
+}
+
 function parseArticle(raw: string, ratingRecords: readonly RatingRecord[]): AdminMmaArticle | null {
   let input: Record<string, unknown> | null = null;
   try { input = record(JSON.parse(raw)); } catch { return null; }
@@ -158,7 +209,7 @@ function parseArticle(raw: string, ratingRecords: readonly RatingRecord[]): Admi
     modelVersion,
     packageHash: packageHashValue,
     contentHash: `sha256:${packageHashValue.slice(0, 12)}`,
-    heroUrl: mediaUrl(`${mediaBase}/hero.svg`),
+    hero: hero(input.image, mediaBase),
     ratings: history(ratingRecords, id)
   };
 }

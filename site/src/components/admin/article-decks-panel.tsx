@@ -81,6 +81,14 @@ function Deck({ deck }: { deck: AdminDeck }) {
           ))}
         </ol>
       </div>
+
+      {deck.heroCredit ? (
+        // The slide has nowhere to print this, and most of these photographs are CC BY: whoever
+        // publishes the carousel has to carry the credit in the caption or it is a breach.
+        <p className="border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--fog)]">
+          Foto na první slajd: {deck.heroCredit} — uveďte v popisku.
+        </p>
+      ) : null}
     </article>
   );
 }

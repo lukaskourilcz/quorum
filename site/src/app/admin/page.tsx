@@ -399,10 +399,6 @@ export default async function AdminPage({
             ))}
           </nav>
 
-          {selectedAgentControls ? (
-            <AgentSwitches initialAgents={selectedAgentControls.agents} ventureId={selectedAgentControls.ventureId} />
-          ) : null}
-
           {unreadableFiles.length ? (
             <Callout className="mt-6" tone="warning">
               {unreadableFiles.length} saved {unreadableFiles.length === 1 ? "file cannot" : "files cannot"} be read: {unreadableFiles.join(", ")}.
@@ -442,6 +438,12 @@ export default async function AdminPage({
               No {selectedTab ? tabLabel(selectedTab) : "saved"} items are stored for {selectedVenture.name} yet. The admin does not add fake examples.
             </Callout>
           )}
+
+          {/* Below the venture's own content, not above it. Sitting between the section tabs and
+              what they open meant scrolling past forty switches to reach any subsection. */}
+          {selectedAgentControls ? (
+            <AgentSwitches initialAgents={selectedAgentControls.agents} ventureId={selectedAgentControls.ventureId} />
+          ) : null}
         </section>
       )}
     </main>

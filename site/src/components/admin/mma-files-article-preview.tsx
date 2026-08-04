@@ -68,7 +68,22 @@ export function MmaFilesArticlePreview({ article }: { article: AdminMmaArticle }
       <Button aria-pressed={locale === "en"} onClick={() => setLocale("en")} type="button" variant={locale === "en" ? "accent" : "secondary"}>English</Button>
       <Button aria-pressed={locale === "cs"} onClick={() => setLocale("cs")} type="button" variant={locale === "cs" ? "accent" : "secondary"}>Česky</Button>
     </div>
-    <Image alt={`${copy.title} typographic cover`} className="h-auto w-full rounded-[var(--radius-button)] border border-[var(--border)]" height={900} src={article.heroUrl} unoptimized width={1600} />
+    {article.hero ? (
+      <figure className="m-0">
+        {/* The package's own alt text, in the language on screen. The old string described a
+            typographic plate no matter what the picture was, which for a photograph of two
+            people at a range is not a description of anything. */}
+        <Image alt={withoutSourceMarkers(article.hero.alt[locale])} className="h-auto w-full rounded-[var(--radius-button)] border border-[var(--border)]" height={900} src={article.hero.url} unoptimized width={1600} />
+        <figcaption className="mt-2 text-xs text-[var(--fog)]">
+          {article.hero.credit}{" · "}
+          <a className="underline underline-offset-4 hover:text-[var(--foreground)]" href={article.hero.sourceUrl} rel="noreferrer" target="_blank">zdroj</a>
+        </figcaption>
+      </figure>
+    ) : (
+      <p className="rounded-[var(--radius-button)] border border-[var(--border)] px-4 py-3 text-sm text-[var(--fog)]">
+        Balíček nenese čitelný obrázek s uvedením autora, takže se tu žádný nezobrazuje.
+      </p>
+    )}
     <article className="mt-7">
       <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--fog)]">{article.format.replaceAll("-", " ")} · {article.slot.toUpperCase()}</p>
       <h3 className="mt-2 text-3xl font-semibold tracking-[-0.04em]">{copy.title}</h3>

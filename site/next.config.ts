@@ -28,7 +28,16 @@ const nextConfig: NextConfig = {
     "/api/cron/[phase]": ["../config/ventures.json"]
   },
   poweredByHeader: false,
-  reactStrictMode: true
+  reactStrictMode: true,
+  // sharp loads its libvips binding through `require('@img/sharp-' + platform)`, a specifier no
+  // bundler can resolve statically. Bundled, its JavaScript is inlined and the binding is never
+  // traced, so the deployed function ships a sharp that cannot start — which is what happened:
+  // every admin deck slide answered 500 while the SVG template previews next door were fine,
+  // because only the deck path rasterises. Listing it here keeps it a real runtime dependency,
+  // which is what makes the trace pick up the platform binaries. It is also declared in this
+  // package's dependencies, because a function resolves `sharp` from `site/node_modules` and
+  // pnpm only links it there for the package that asks for it.
+  serverExternalPackages: ["sharp"]
 };
 
 export default nextConfig;

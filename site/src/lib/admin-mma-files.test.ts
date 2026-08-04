@@ -16,7 +16,7 @@ function canonical(value: unknown): unknown {
   return value;
 }
 
-function article() {
+function article(image?: Record<string, unknown>) {
   const content = {
     schemaVersion: "article/1",
     slug: "fixture-preview",
@@ -41,7 +41,8 @@ function article() {
       },
       origin: "svg",
       hero_bytes_base64: "PHN2Zy8+",
-      thumb_bytes_base64: "PHN2Zy8+"
+      thumb_bytes_base64: "PHN2Zy8+",
+      ...image
     },
     heroSpec: { template: "type-led", bindings: { headline: "Fixture" } },
     fighterRefs: ["ufc:alex-example"],
@@ -89,5 +90,67 @@ describe("MMA Files admin projection", () => {
     expect(snapshot.socialPacks[0]?.variants.map((variant) => variant.id)).toEqual(["A", "B"]);
     expect(snapshot.calendar[0]?.slots.map((slot) => slot.articleStatus)).toEqual(["published", null]);
     expect(snapshot.socialPacks[0]?.variants[0].captions.en).toEqual({ instagram: "English A", threads: "English A short" });
+  });
+});
+
+/**
+ * The hero the package stored, and the credit the licence requires.
+ *
+ * Both used to be guessed. The URL was built as hero.svg no matter what the package said, so a
+ * licensed WebP photograph — every photo article since the desk started buying them — asked for
+ * a file that was never written. The licence block was not read at all, which matters more: CC BY
+ * and CC BY-SA oblige whoever shows the picture to name the author.
+ */
+describe("an article's hero in the admin projection", () => {
+  async function snapshotOf(image: Record<string, unknown>) {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-hero-"));
+    roots.push(root);
+    await mkdir(path.join(root, "state/ventures/mma-files/articles"), { recursive: true });
+    await writeFile(
+      path.join(root, "state/ventures/mma-files/articles/2026-08-01-am-fixture-preview.json"),
+      JSON.stringify(article(image))
+    );
+    return readAdminMmaFiles(root);
+  }
+
+  it("points at the encoding the package actually stored", async () => {
+    const snapshot = await snapshotOf({
+      hero_path: "public/images/articles/fixture-preview/hero.webp",
+      thumb_path: "public/images/articles/fixture-preview/thumb.webp",
+      origin: "photo",
+      license: {
+        name: "CC BY",
+        author: "Prensa TV Pública",
+        source_url: "https://commons.wikimedia.org/w/index.php?curid=39657163",
+        attribution_html: "<span>Prensa TV Pública</span> · CC BY"
+      }
+    });
+    const hero = snapshot.articles[0]?.hero;
+    expect(hero?.url).toContain(encodeURIComponent("2026-08-01-am-fixture-preview/hero.webp"));
+    expect(hero?.url).not.toContain("hero.svg");
+    // Markup in the stored line is flattened, never handed to the page as HTML.
+    expect(hero?.credit).toBe("Prensa TV Pública · CC BY");
+    expect(hero?.license).toBe("CC BY");
+  });
+
+  it("reads the package's own alt text, and falls back to Czech when English is absent", async () => {
+    const both = await snapshotOf({});
+    expect(both.articles[0]?.hero?.alt).toEqual({ en: "Fixture cover", cs: "Zkušební obálka" });
+    const czechOnly = await snapshotOf({ alt_en: undefined });
+    expect(czechOnly.articles[0]?.hero?.alt).toEqual({ en: "Zkušební obálka", cs: "Zkušební obálka" });
+  });
+
+  it("drops the picture rather than showing it without a credit", async () => {
+    const snapshot = await snapshotOf({
+      license: {
+        name: "CC BY-SA",
+        author: "Somebody",
+        source_url: "https://commons.wikimedia.org/",
+        attribution_html: "   "
+      }
+    });
+    // The article still reads; only the unattributable image is withheld.
+    expect(snapshot.articles[0]?.slug).toBe("fixture-preview");
+    expect(snapshot.articles[0]?.hero).toBeNull();
   });
 });

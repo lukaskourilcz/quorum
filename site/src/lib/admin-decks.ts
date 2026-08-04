@@ -34,12 +34,28 @@ export interface AdminDeck {
   problems: string[];
   /** Whether the article carries a hero for the opening slide. */
   hasHero: boolean;
+  /**
+   * The credit the opening slide's photograph carries, as plain text.
+   *
+   * Shown because the slide itself has nowhere to put it. Most of these heroes are CC BY or
+   * CC BY-SA, and a carousel that reaches a feed without the credit is a licence breach rather
+   * than a formatting slip, so the owner should be able to read it next to the deck.
+   */
+  heroCredit: string | null;
 }
 
 const OUTRO = {
   "mma-files": "Celý ozdrojovaný text najdete v MMA Files.",
   "caught-up": "Jedno vydání a máte přehled."
 } as const;
+
+/** The attribution line, flattened the way the delivery verifier flattens it. */
+function creditOf(image: { license?: { attribution_html?: string } } | undefined): string | null {
+  const attribution = image?.license?.attribution_html;
+  if (typeof attribution !== "string") return null;
+  const credit = attribution.replaceAll(/<[^>]+>/gu, " ").replaceAll(/\s+/gu, " ").trim();
+  return credit.length > 0 ? credit : null;
+}
 
 function reviewed(input: {
   venture: AdminDeck["venture"];
@@ -49,6 +65,7 @@ function reviewed(input: {
   seed: string;
   slides: Slide[];
   hasHero: boolean;
+  heroCredit: string | null;
 }): AdminDeck {
   const review = reviewDeck(input.slides);
   return {
@@ -61,7 +78,8 @@ function reviewed(input: {
     longestSlideWords: review.slides.reduce((longest, slide) => Math.max(longest, wordCount(slide.text)), 0),
     publishable: review.publishable,
     problems: review.problems,
-    hasHero: input.hasHero
+    hasHero: input.hasHero,
+    heroCredit: input.heroCredit
   };
 }
 
@@ -85,7 +103,7 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       slug?: string;
       publishAt?: string;
       status?: string;
-      image?: { hero_bytes_base64?: string };
+      image?: { hero_bytes_base64?: string; license?: { attribution_html?: string } };
       localizations?: { cs?: { title?: string; dek?: string; bodyMDX?: string } };
     };
     const cs = article.localizations?.cs;
@@ -97,6 +115,7 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       date: (article.publishAt ?? "").slice(0, 10),
       seed: article.slug,
       hasHero: Boolean(article.image?.hero_bytes_base64),
+      heroCredit: creditOf(article.image),
       slides: buildArticleDeck({
         title: cs.title,
         dek: cs.dek,
@@ -110,7 +129,7 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
     const pkg = raw as {
       date?: string;
       status?: string;
-      image?: { hero_bytes_base64?: string };
+      image?: { hero_bytes_base64?: string; license?: { attribution_html?: string } };
       article?: { cs?: { frontmatter?: Record<string, unknown> } };
     };
     const frontmatter = pkg.article?.cs?.frontmatter as
@@ -124,6 +143,7 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       date: pkg.date ?? "",
       seed: pkg.date ?? frontmatter.slug,
       hasHero: Boolean(pkg.image?.hero_bytes_base64),
+      heroCredit: creditOf(pkg.image),
       slides: buildArticleDeck({
         title: frontmatter.title,
         dek: frontmatter.dek,
