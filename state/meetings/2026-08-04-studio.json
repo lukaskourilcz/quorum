@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804120128-studio",
+  "date": "2026-08-04",
+  "phase": "studio",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+  "participantReasons": [
+    {
+      "agent": "EASEL",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "MOTIF",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 1.8228818500000008,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "EASEL",
+      "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "EASEL",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "NO_ACTION. A wake-up without a due agenda does not authorize work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-04T12:01:28.340Z",
+  "kind": "studio",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T12:01:28.339Z",
+    "closedAt": "2026-08-04T12:01:28.340Z",
+    "gavel": "EASEL",
+    "setting": "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+    "turns": [
+      {
+        "agent": "EASEL",
+        "mode": "close",
+        "sentAt": "2026-08-04T12:01:28.340Z",
+        "text": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      }
+    ]
+  }
+}

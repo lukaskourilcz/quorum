@@ -174,13 +174,15 @@
       "at": "2026-08-04T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "studio",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-04-studio",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-04T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-04T15:00:00.000Z",
