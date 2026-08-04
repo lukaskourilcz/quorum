@@ -2,7 +2,7 @@ name: Production health
 
 on:
   schedule:
-    - cron: "15 8 * * *"
+    - cron: "55 7 * * *"
       timezone: "Europe/Prague"
   workflow_dispatch:
 

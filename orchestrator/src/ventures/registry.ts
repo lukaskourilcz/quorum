@@ -118,25 +118,112 @@ export function composeMeetingRouteDefinition(
 /**
  * How many hours before its Prague slot each cron is scheduled.
  *
- * GitHub delivers scheduled workflows late — 13 to 54 minutes on 2 August, and about three
- * hours on 3 August — and a run that arrives after its slot has passed is a meeting that did
- * not happen. A job takes three to six minutes, so an hour of lead absorbs any delay up to an
- * hour and still lands inside the slot. It does not manufacture punctuality: a delay longer
- * than the lead still misses, and nothing this repository can do changes when GitHub fires.
+ * A lead is a translation, not a correction. It moves every delivery earlier by the same fixed
+ * amount, so it shifts where the middle of the distribution sits and leaves the spread exactly as
+ * wide as it was. GitHub's queue is the spread: the same crons were delivered 13 to 54 minutes
+ * late on 2 August, up to 3h20m on 3 August, and 2h23m to 2h55m on 4 August — a range of about
+ * three hours, redrawn daily by load this repository has no part in. No value of this constant
+ * makes a run land on its slot, and no value of it narrows that range by a minute.
  *
- * resolveCronPhase adds this same lead back when it maps a fired cron to its meeting, so the
+ * Which is why it stays at one. Covering 4 August's worst delivery would take a four-hour lead,
+ * and that price is paid on every punctual day rather than on the late ones: the 06:00 Prague
+ * morning board would be scheduled to fire at 02:00 Prague, four hours before the hour its own
+ * name claims, and a fast queue would duly run it there. An hour absorbs the whole of a
+ * 2 August-shaped delay and keeps the cost of being early to a size the schedule can carry.
+ * CRON_MINUTE now adds five minutes to that cost rather than subtracting from it: the cron fires
+ * at :55 of the hour before the one it belongs to, so a punctual firing is 1h05m before its slot.
+ * That is the whole price of the head start, and it is paid in Prague wall-clock terms: the
+ * 06:00 morning board's summer cron is `55 2 * * *` UTC, which is 04:55 in Prague — an hour and
+ * five minutes before the hour the meeting's own name claims.
+ *
+ * What makes a late meeting a meeting rather than a loss is therefore not this constant but
+ * CRON_DELIVERY_WINDOW_HOURS in meetings/clock.ts: the fired cron names its room for six hours,
+ * and the calendar holds the slot open for the same span rather than calling it missed the
+ * instant its hour passes. Widening that window is the lever that survives a queue that moves
+ * again, because it acts on the spread; this lead only decides where inside the span a punctual
+ * run lands.
+ *
+ * resolveCronDelivery adds this same lead back when it maps a fired cron to its meeting, so the
  * two can never disagree about which room a cron belongs to.
  */
 export const CRON_LEAD_HOURS = 1;
+
+/**
+ * The minute every scheduled workflow in this repository fires on.
+ *
+ * GitHub delivers scheduled workflows from a shared queue and documents that high load times
+ * include the start of every hour. Every cron here used to sit on minute 0 — the most contended
+ * minute on the platform — which is a delay this repository was volunteering for on top of
+ * whatever the queue was already doing. 55 clears that pile-up and the three others at 15, 30
+ * and 45, and it buys five minutes of head start: the job is already queued when the hour it
+ * belongs to begins.
+ *
+ * The honest cost, against the 17 this briefly used: 55 is a multiple of five, so it shares its
+ * minute with every-5 and every-10 step schedule, which 17 did not. That is a smaller crowd than
+ * minute 0's by a wide margin, and the head start is what the trade buys.
+ *
+ * One value across every workflow, so the arrangement stays uniform and readable. It cannot move
+ * which meeting a cron names — cronSlotHour is the only thing that decides that.
+ */
+export const CRON_MINUTE = 55;
+
+/**
+ * The minute at or past which a cron belongs to the hour AFTER the one it fires in.
+ *
+ * The hour a cron fires in stopped being the hour it belongs to the moment CRON_MINUTE moved into
+ * the second half of the hour: `55 2 * * *` fires at 02:55 and is reaching for 03:00, not for the
+ * hour it is leaving. Without this rule resolveCronDelivery reads the literal 2 and hands every
+ * firing the meeting one slot earlier — and silently, because cronPayloads writes the cron from
+ * the same registry the resolver reads back, so both sides move together and every test still
+ * agrees with itself.
+ *
+ * The rule is written once, here, and both directions are derived from it: cronSlotHour maps a
+ * firing forward to its hour, cronPayloads subtracts CRON_HOUR_CARRY to write the cron. Scattering
+ * `+ 1` at each call site is what makes a schedule drift a slot at a time.
+ *
+ * The midpoint is the boundary because a cron in the second half of an hour is reaching for the
+ * hour it is about to enter. 30 is itself a forbidden firing minute — it is one of the four
+ * contention points — so no cron this repository deploys can sit exactly on the boundary and make
+ * the rule's tie-breaking direction load-bearing.
+ */
+export const CRON_HOUR_CARRY_MINUTE = 30;
+
+/** How many hours ahead of its firing hour a cron on CRON_MINUTE belongs: 1 today, 0 before. */
+export const CRON_HOUR_CARRY = CRON_MINUTE >= CRON_HOUR_CARRY_MINUTE ? 1 : 0;
+
+/** The UTC hour a cron belongs to, which is not always the UTC hour it fires in. */
+export function cronSlotHour(fireHour: number, fireMinute: number): number {
+  return (fireHour + (fireMinute >= CRON_HOUR_CARRY_MINUTE ? 1 : 0)) % 24;
+}
+
+/**
+ * Minutes from a cron's firing to the top of the hour it belongs to.
+ *
+ * Positive when the cron fires ahead of its hour, which is the head start CRON_MINUTE buys;
+ * negative when it fires inside it, which is what a minute below the carry boundary does. It is
+ * the offset resolveCronDelivery removes so that lateness is always counted from the hour, never
+ * from wherever inside or before it the firing happens to sit.
+ */
+export function cronHeadStartMinutes(fireMinute: number): number {
+  return (fireMinute >= CRON_HOUR_CARRY_MINUTE ? 60 : 0) - fireMinute;
+}
 
 export function cronPayloads(registry: VentureRegistry): Array<{
   cron: string;
   phase: ScheduledPhase;
 }> {
   return resolveScheduledClock(registry).flatMap((slot) => [
-    // Prague is UTC+2 under CEST and UTC+1 under CET; the lead comes off both.
-    { cron: `0 ${(slot.hour - 2 - CRON_LEAD_HOURS + 48) % 24} * * *`, phase: slot.phase },
-    { cron: `0 ${(slot.hour - 1 - CRON_LEAD_HOURS + 48) % 24} * * *`, phase: slot.phase }
+    // Prague is UTC+2 under CEST and UTC+1 under CET; the lead comes off both. CRON_HOUR_CARRY
+    // comes off as well, because firing at CRON_MINUTE means firing in the hour before the one
+    // the meeting belongs to — the inverse of what cronSlotHour does when the firing comes back.
+    {
+      cron: `${CRON_MINUTE} ${(slot.hour - 2 - CRON_LEAD_HOURS - CRON_HOUR_CARRY + 48) % 24} * * *`,
+      phase: slot.phase
+    },
+    {
+      cron: `${CRON_MINUTE} ${(slot.hour - 1 - CRON_LEAD_HOURS - CRON_HOUR_CARRY + 48) % 24} * * *`,
+      phase: slot.phase
+    }
   ]);
 }
 

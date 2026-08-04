@@ -2,6 +2,14 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { repoRoot } from "../src/paths.js";
+import {
+  CRON_HOUR_CARRY,
+  CRON_HOUR_CARRY_MINUTE,
+  CRON_MINUTE,
+  cronSlotHour,
+  readVentureRegistry,
+  scheduledCronExpressions
+} from "../src/ventures/registry.js";
 
 const workflowRoot = path.join(repoRoot, ".github", "workflows");
 
@@ -39,15 +47,23 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    expect(cycle.match(/- cron: "0 \d{1,2} \* \* \*"/g)).toHaveLength(18);
+    expect(
+      cycle.match(new RegExp(`- cron: "${CRON_MINUTE} \\d{1,2} \\* \\* \\*"`, "g"))
+    ).toHaveLength(18);
+    // The hours meetings BELONG to, which is the list this schedule has always been described by.
+    // The cron that serves each fires CRON_HOUR_CARRY hours earlier, at CRON_MINUTE.
     for (const hour of [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20]) {
-      expect(cycle).toContain(`cron: "0 ${hour} * * *"`);
+      expect(cycle).toContain(`cron: "${CRON_MINUTE} ${(hour - CRON_HOUR_CARRY + 24) % 24} * * *"`);
     }
     // The fired cron is what names the meeting, so it has to reach the resolver.
     expect(cycle).toContain("EVENT_SCHEDULE: ${{ github.event.schedule }}");
     expect(cycle).toContain('--scheduled --cron "$EVENT_SCHEDULE"');
     for (const hour of [4, 5, 8, 17, 18, 20]) {
-      expect(cycle.match(new RegExp(`cron: "0 ${hour} \\* \\* \\*"`, "g"))).toHaveLength(1);
+      expect(
+        cycle.match(
+          new RegExp(`cron: "${CRON_MINUTE} ${(hour - CRON_HOUR_CARRY + 24) % 24} \\* \\* \\*"`, "g")
+        )
+      ).toHaveLength(1);
     }
     expect(cycle).not.toContain('timezone: "Europe/Prague"');
     expect(cycle).toContain("clock-cli.ts --scheduled");
@@ -72,7 +88,25 @@ describe("automation policy", () => {
     expect(cycle).toContain("pnpm mma:delivery");
     expect(cycle).toContain("data/boardless/articles.json");
     expect(cycle).toContain("data/boardless/fightaiq.json");
-    expect(cycle).toContain("forcing fixture-only dry mode");
+    // Every gate that forces dry mode goes through force_dry, which on a schedule also raises
+    // skip so the reason is recorded. A scheduled dry run writes only to tmp/dry-run/state and
+    // is never committed, so a gate that only set dry=true ended the job green having left
+    // nothing at all and the slot went red unexplained.
+    expect(cycle).toContain("force_dry() {");
+    // On "$scheduled" and not on the event name, because a slot is now claimed by two kinds of
+    // firing: a GitHub cron, and the Vercel cron that reaches this workflow as a dispatch because
+    // that is the only trigger GitHub starts promptly. A gate that forced dry on the punctual one
+    // while reading github.event_name would raise no skip and leave the slot red and unexplained.
+    expect(cycle).toMatch(/force_dry\(\) \{\n(?:.*\n)*?\s*if test "\$scheduled" = "true"; then\n\s*skip=true\n\s*skip_reason="\$1"/u);
+    // No path may turn dry on without also raising skip, which is what makes the reason reach
+    // the recorder. Checked as a property over every occurrence rather than a fixed count, so a
+    // gate added later cannot reintroduce the silent shape by being new.
+    const lines = cycle.split("\n");
+    for (const [index, line] of lines.entries()) {
+      if (line.trim() !== "dry=true") continue;
+      const window = lines.slice(Math.max(0, index - 3), index + 5).join("\n");
+      expect(window, `dry=true at line ${index + 1} raises no skip`).toContain("skip=true");
+    }
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain("runtime_paths=(");
     expect(cycle).toContain("state/kpis state/money state/mma state/notify state/social");
@@ -139,6 +173,68 @@ describe("automation policy", () => {
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");
     expect(health).toContain('timezone: "Europe/Prague"');
+  });
+
+  // GitHub runs scheduled workflows off a shared queue and says outright that high load times
+  // include the start of every hour. Minute 0 is therefore the worst minute on the platform to
+  // ask for, and this repository asked for it eighteen times a day: on 4 August every scheduled
+  // run was delivered 2h23m to 2h55m after its cron, and on 2 August the same workflow ran 13 to
+  // 54 minutes late. Moving off it does not shorten GitHub's queue — nothing here can — it only
+  // stops the repository from joining the longest one. 15, 30 and 45 are the next three pile-ups
+  // and are refused for the same reason.
+  //
+  // Asserted over every workflow file rather than the three that have crons today, so a schedule
+  // added later cannot quietly land back on minute 0 by being new.
+  it("keeps every schedule off the minutes GitHub is most contended on", async () => {
+    const names = (await readdir(workflowRoot)).filter((name) => name.endsWith(".yml"));
+    const schedules: Array<{ file: string; expression: string }> = [];
+    for (const name of names) {
+      const source = await readFile(path.join(workflowRoot, name), "utf8");
+      for (const match of source.matchAll(/^\s*- cron: "([^"]+)"/gmu)) {
+        schedules.push({ file: name, expression: match[1]! });
+      }
+    }
+    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(20);
+
+    for (const { file, expression } of schedules) {
+      const minute = expression.trim().split(/\s+/u)[0]!;
+      expect(
+        ["0", "15", "30", "45"],
+        `${file}: "${expression}" fires on a minute GitHub is most contended on`
+      ).not.toContain(minute);
+      // One minute across every workflow, so the arrangement stays uniform and the hour a cron
+      // fires in is always exactly CRON_HOUR_CARRY behind the hour it serves.
+      expect(
+        Number(minute),
+        `${file}: "${expression}" does not use CRON_MINUTE, so the hour-to-slot mapping stops being obvious`
+      ).toBe(CRON_MINUTE);
+    }
+  });
+
+  // The minute and the hour are one decision, not two. CRON_MINUTE sits past the carry boundary,
+  // which is what makes a cron belong to the hour AFTER the one it fires in, and cronPayloads
+  // subtracts that same carry when it writes the hour. Move one without the other and every
+  // meeting shifts by an hour — silently, because the resolver reads the schedule back out of the
+  // same registry that wrote it, so both sides move together and agree with the mistake. These
+  // assertions are the independent check: the constants must stay consistent with each other, and
+  // the deployed workflow must hold exactly what the generator produces.
+  it("pins the minute and the hour carry to each other and to the deployed schedule", async () => {
+    expect(
+      CRON_MINUTE >= CRON_HOUR_CARRY_MINUTE,
+      "CRON_MINUTE below the boundary means crons fire inside the hour they serve"
+    ).toBe(true);
+    expect(CRON_HOUR_CARRY, "the carry must follow from CRON_MINUTE, never be set by hand").toBe(1);
+    // Stated as an instance rather than by re-deriving it: a cron firing at CRON_MINUTE of hour 2
+    // serves hour 3. Re-running cronSlotHour's own arithmetic here would assert nothing.
+    expect(cronSlotHour(2, CRON_MINUTE)).toBe(3);
+    expect(cronSlotHour(23, CRON_MINUTE), "the carry wraps at midnight").toBe(0);
+
+    const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
+    const deployed = [...cycle.matchAll(/^\s*- cron: "([^"]+)"/gmu)].map((match) => match[1]!);
+    expect(
+      [...deployed].sort(),
+      "cycle.yml and cronPayloads disagree about when the council meets"
+    ).toEqual([...scheduledCronExpressions(readVentureRegistry())].sort());
   });
 
   it("keys the release-gate verdict on content, not on the moving cycle sha", async () => {

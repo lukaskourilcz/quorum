@@ -5,7 +5,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseVentureRegistry,
+  CRON_HOUR_CARRY,
   CRON_LEAD_HOURS,
+  CRON_MINUTE,
+  cronSlotHour,
   resolveScheduledClock
 } from "../src/ventures/registry.js";
 import {
@@ -100,22 +103,38 @@ describe("portfolio schedule and budget gate", () => {
     // Assert the rule rather than a snapshot of it: every slot gets exactly two firings, the
     // summer one CRON_LEAD_HOURS + 2 hours before its Prague hour and the winter one
     // CRON_LEAD_HOURS + 1 before, so changing the lead cannot leave this test agreeing with
-    // a schedule that no longer exists.
+    // a schedule that no longer exists. CRON_HOUR_CARRY comes off both because the crons fire at
+    // CRON_MINUTE of the hour before the one they serve.
     for (const slot of resolveScheduledClock(registry)) {
       const hours = payloads.filter((item) => item.phase === slot.phase).map((item) => Number(item.cron.split(" ")[1]));
       expect(hours, `${slot.phase} at ${slot.hour}:00 Prague`).toEqual([
-        (slot.hour - 2 - CRON_LEAD_HOURS + 48) % 24,
-        (slot.hour - 1 - CRON_LEAD_HOURS + 48) % 24
+        (slot.hour - 2 - CRON_LEAD_HOURS - CRON_HOUR_CARRY + 48) % 24,
+        (slot.hour - 1 - CRON_LEAD_HOURS - CRON_HOUR_CARRY + 48) % 24
       ]);
+      // And the carry survives the round trip: each firing names back the hour it was written
+      // from. Without this the pair above is satisfied by any consistent off-by-one.
+      for (const hour of hours) {
+        expect(cronSlotHour(hour, CRON_MINUTE), `${slot.phase} firing at ${hour}:${CRON_MINUTE}`).toBe(
+          (hour + CRON_HOUR_CARRY) % 24
+        );
+      }
     }
     // One entry per UTC hour, never a multi-hour expression: GitHub reports the whole cron
     // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
     // 12:00 UTC is both studio's winter slot and the afternoon meeting's summer one.
     const expressions = scheduledCronExpressions(await loadVentureRegistry());
     expect(expressions).toHaveLength(18);
-    expect(expressions.every((expression) => /^0 \d{1,2} \* \* \*$/u.test(expression))).toBe(true);
-    expect(expressions).toContain("0 11 * * *");
-    expect(expressions).toContain("0 12 * * *");
+    // Every firing sits on CRON_MINUTE, off the start-of-hour queue GitHub warns about, and the
+    // generator emits the same strings the workflow deploys — otherwise the resolver is only
+    // ever exercised on expressions github.event.schedule will never send it.
+    expect(
+      expressions.every((expression) =>
+        new RegExp(`^${CRON_MINUTE} \\d{1,2} \\* \\* \\*$`, "u").test(expression)
+      )
+    ).toBe(true);
+    // The two hours studio's variants belong to, written as the firings that serve them.
+    expect(expressions).toContain(`${CRON_MINUTE} ${11 - CRON_HOUR_CARRY} * * *`);
+    expect(expressions).toContain(`${CRON_MINUTE} ${12 - CRON_HOUR_CARRY} * * *`);
   });
 
   it("runs PALATE only as a pre-step on each taste venture's first meeting", async () => {

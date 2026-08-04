@@ -2,7 +2,7 @@ name: Guarded social publisher
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "55 * * * *"
       timezone: "Europe/Prague"
   workflow_dispatch:
     inputs:

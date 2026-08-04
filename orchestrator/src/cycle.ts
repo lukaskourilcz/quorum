@@ -100,10 +100,15 @@ import {
   enabledAgentsForVenture,
   loadVentureAgentControls
 } from "./ventures/agent-controls.js";
-import type { RunnablePhase, Stage } from "./types.js";
+import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js";
+import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
-import { runLiveArticleProduction } from "./mma-files/live.js";
+import {
+  recordClosedArticleSlot,
+  runLiveArticleProduction,
+  type ClosedArticleSlotReason
+} from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
 import { ensurePriorityItem, openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
@@ -124,7 +129,13 @@ export interface CycleResult {
   cycleId: string;
   phase: RunnablePhase;
   dry: boolean;
-  status: "dry_complete" | "paused" | "live_complete" | "preflight_complete";
+  status:
+    | "dry_complete"
+    | "paused"
+    | "live_complete"
+    | "preflight_complete"
+    /** This slot already had a record for today, so nothing was called and nothing was written. */
+    | "already_recorded";
   decision:
     | "INSUFFICIENT_EVIDENCE"
     | "NO_ACTION"
@@ -140,6 +151,8 @@ export interface CycleResult {
   selectedAgents: string[];
   skippedAgents: string[];
   artifacts: string[];
+  /** Set only on "already_recorded": the record that made this firing a no-op. */
+  alreadyRecordedAt?: string;
 }
 
 /** A completed article is final for its date; a no-edition board status is provisional. */
@@ -1018,6 +1031,54 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   if (!options.dry && options.phase === "founding") {
     throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
   }
+  // Two schedules now reach for the same slot: GitHub's `schedule` trigger and the Vercel cron
+  // that dispatches this workflow punctually. Both will exist through the transition, so a slot
+  // can be fired for twice — two paid councils, two records, a day that reads as if the meeting
+  // happened twice. This is where that stops, before any provider is called.
+  //
+  // What makes it un-raceable is not this read. It is `concurrency: guarded-cycle-<ref>` with
+  // `cancel-in-progress: false` in cycle.yml: GitHub grants that group to one run at a time and
+  // grants it BEFORE the job's first step, so the second run's `actions/checkout` happens after
+  // the first has committed and pushed its record.
+  //
+  // This read sees the checkout and only the checkout, which is `github.sha` — fixed when the run
+  // was created, not when it started. A firing that sat in a queue can therefore be looking at a
+  // tree from before the other schedule committed. cycle.yml asks the same question of the branch
+  // tip as well, before it gets this far, which is what covers that case; this is the layer that
+  // covers every other caller — a local `pnpm cycle`, a future workflow — and the one that
+  // guarantees no provider is called even if the step above is bypassed.
+  //
+  // What neither layer covers, stated rather than implied:
+  //   - A run in flight. No record exists until the run commits, so two firings that somehow
+  //     execute concurrently both see nothing. Only the concurrency group prevents that, and
+  //     only for runs in the same group — a job run outside this workflow is not covered.
+  //   - A first run that produced no record: one that failed before writing, or whose push was
+  //     dropped after three retries. The second firing then correctly holds the meeting.
+  //   - Anything but the current Prague day. Yesterday's record never blocks today's slot.
+  //   - Manual work. The gate is MEETING_TRIGGER, so only a firing that claims a slot is
+  //     stopped; an owner dispatching a phase deliberately still gets the run they asked for.
+  const scheduledPhase = ScheduledPhaseSchema.safeParse(options.phase);
+  if (!options.dry && scheduledPhase.success && process.env.MEETING_TRIGGER === "schedule") {
+    const recorded = await findSlotRecord(stateRoot, scheduledPhase.data, now);
+    // A no-op, not a failure. A second firing for a slot that already ran is the transition
+    // working, so it exits the way a healthy run does and says what it found.
+    if (recorded) {
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: false,
+        status: "already_recorded",
+        decision: "NO_ACTION",
+        estimatedWorstCaseUsd: 0,
+        selectedAgents: [],
+        skippedAgents: [],
+        // Empty, because this run wrote nothing. The record it found is named separately: the
+        // artifact list means "what this cycle produced" everywhere else and must keep meaning it.
+        artifacts: [],
+        alreadyRecordedAt: path.relative(repoRoot, path.join(stateRoot, recorded))
+      };
+    }
+  }
   // The quiet-day wrapper sits inside the lock, so the skip record and the calendar it rebuilds
   // are written under the same exclusion as the records of a room that ran.
   const quietly = (run: () => Promise<CycleResult>) => () =>
@@ -1048,16 +1109,41 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (options.phase === "article-am" || options.phase === "article-pm") {
+    const slot = options.phase === "article-am" ? "am" : "pm";
     if (!options.dry) {
       const budgetFifty = await readFile(path.join(stateRoot, "decisions", "2026-08-04-budget-fifty.md"), "utf8");
-      if (
-        signedOwnerDecision(budgetFifty) !== "countersigned" ||
-        process.env.PORTFOLIO_LIVE_ENABLED !== "true" ||
-        process.env.MMA_FILES_LIVE_ENABLED !== "true"
-      ) {
-        return { cycleId, phase: options.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
+      const closedBy: ClosedArticleSlotReason | null =
+        signedOwnerDecision(budgetFifty) !== "countersigned"
+          ? "budget_decision_not_countersigned"
+          : process.env.PORTFOLIO_LIVE_ENABLED !== "true"
+            ? "portfolio_gate_closed"
+            : process.env.MMA_FILES_LIVE_ENABLED !== "true"
+              ? "mma_files_gate_closed"
+              : null;
+      if (closedBy) {
+        // A closed gate used to return here with artifacts: [] and write nothing, so the slot
+        // was indistinguishable on the calendar from one nobody reached — the shape of an empty
+        // day that took a full audit to explain. Only a scheduled wake-up leaves the record,
+        // exactly as portfolio/run.ts does for the rooms it closes: a manual or local
+        // invocation of a shut slot is not a missed meeting and must not write one.
+        const recorded = process.env.MEETING_TRIGGER === "schedule"
+          ? await recordClosedArticleSlot({ cycleId, slot, now, reason: closedBy })
+          : null;
+        // Null when the slot already had a record and this run left it alone, so the artifact
+        // list names only what this cycle actually wrote.
+        const artifacts = recorded ? [recorded] : [];
+        return {
+          cycleId,
+          phase: options.phase,
+          dry: false,
+          status: "paused",
+          decision: "PAUSED",
+          estimatedWorstCaseUsd: 0,
+          selectedAgents: [],
+          skippedAgents: [],
+          artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
+        };
       }
-      const slot = options.phase === "article-am" ? "am" : "pm";
       return quietWhenBudgetStops({ phase: options.phase, cycleId, now, root: stateRoot }, async () => {
         const result = await runLiveArticleProduction({ cycleId, slot, now });
         const articleAgents = ["JAB", "HACEK", "STET", "REACH", "FRAME"] as const;
@@ -1078,7 +1164,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       });
     }
     const root = path.join(repoRoot, "tmp", "dry-run", "state");
-    const result = await runDryArticleProduction({ root, slot: options.phase === "article-am" ? "am" : "pm", now });
+    const result = await runDryArticleProduction({ root, slot, now });
     return {
       cycleId,
       phase: options.phase,

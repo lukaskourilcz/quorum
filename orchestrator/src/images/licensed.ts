@@ -17,6 +17,22 @@ export interface LicensedPhotoCandidate {
   author: string;
   sourceUrl: string;
   attributionHtml: string;
+  /**
+   * The Wikidata item whose P18 named this file — set only by `fighterIdentityPhoto`.
+   *
+   * It marks a picture that is linked to the subject as an entity rather than matched against
+   * their name, and two rules read it: `heroReady` stops filtering on orientation, and
+   * `heroCropAnchor` cuts the 16:9 hero from the top of the frame rather than from wherever
+   * sharp finds the most detail. Both are explained where they are enforced.
+   */
+  identityOf?: string;
+  /**
+   * Czech alt text the file's own metadata yields, which outranks anything the writer produces.
+   *
+   * Only a candidate that carries a description of itself can set this. The writer is shown
+   * captions and no pixels, so an alt it writes is a guess about a picture it has not seen.
+   */
+  altCs?: string;
 }
 
 export interface LicensedImageSearchResult {
@@ -81,24 +97,55 @@ function openverseLicense(value: unknown): LicensedPhotoCandidate["license"] | n
   return null;
 }
 
-function wikimediaLicense(value: unknown): LicensedPhotoCandidate["license"] | null {
+/**
+ * A Commons `LicenseShortName` mapped onto a licence the site may publish under, or null.
+ *
+ * The non-commercial and no-derivatives clauses are matched before anything else, because they
+ * are prefixes of the permissive names and this used to read them as such: "CC BY-NC 4.0" fell
+ * through to the `cc by` branch and came back as plain "CC BY", and "CC BY-ND 2.0" with it. The
+ * validator that exists to refuse those licences was then handed a laundered string and passed
+ * it, so the only guard against publishing an NC file commercially could never fire. Its test
+ * did not catch it either — it calls the validator with the literal "CC BY-NC" and never goes
+ * through this mapping.
+ */
+export function wikimediaLicense(value: unknown): LicensedPhotoCandidate["license"] | null {
   const normalized = text(value).toLowerCase();
+  if (/\bnc\b|noncommercial|non-commercial|\bnd\b|noderiv/u.test(normalized)) return null;
   if (normalized.includes("public domain") || normalized === "cc0") return "CC0";
   if (/cc\s*by-sa/u.test(normalized)) return "CC BY-SA";
   if (/cc\s*by/u.test(normalized)) return "CC BY";
   return null;
 }
 
-function safeCandidate(candidate: LicensedPhotoCandidate): LicensedPhotoCandidate | null {
-  if (candidate.width < 640 || candidate.height < 360 || candidate.width <= candidate.height) return null;
-  if (!candidate.thumbnailUrl.startsWith("https://") || !candidate.downloadUrl.startsWith("https://")) return null;
-  const problems = validateLicensedImageCandidate({
+/**
+ * Whether a candidate can become the hero at all: big enough, right shape, properly licensed.
+ *
+ * One definition, called by every producer of candidates. `fighterIdentityPhoto` needs it too —
+ * it resolves a file the subject's item names, and 16 of the 55 the roster names are narrower
+ * than 640px. Offering one of those anyway meant the writer was shown a photograph, chose it,
+ * and `materializeLicensedPhoto` then threw; the article still got its FRAME cover, but by way
+ * of a failure rather than a decision, and the log said an image search had succeeded.
+ */
+export function heroReady(candidate: LicensedPhotoCandidate): boolean {
+  if (candidate.width < 640 || candidate.height < 360) return false;
+  // Landscape-only is a search filter, not a quality rule. A stock archive answering a phrase
+  // returns whatever it has, and a tall frame there is usually a crop of something incidental —
+  // but a P18 file is a portrait of a named person, and only 12 of the 55 the roster names are
+  // wider than they are tall. Rejecting the other 43 would have thrown away four fifths of the
+  // only pictures that are provably of the right subject, so an identity-linked file is judged
+  // on size and licence alone.
+  if (!candidate.identityOf && candidate.width <= candidate.height) return false;
+  if (!candidate.thumbnailUrl.startsWith("https://") || !candidate.downloadUrl.startsWith("https://")) return false;
+  return validateLicensedImageCandidate({
     license: candidate.license,
     author: candidate.author,
     sourceUrl: candidate.sourceUrl,
     attributionHtml: candidate.attributionHtml
-  });
-  return problems.length === 0 ? candidate : null;
+  }).length === 0;
+}
+
+function safeCandidate(candidate: LicensedPhotoCandidate): LicensedPhotoCandidate | null {
+  return heroReady(candidate) ? candidate : null;
 }
 
 async function searchOpenverse(query: string, fetchJson: JsonFetcher): Promise<LicensedPhotoCandidate[]> {
@@ -236,15 +283,26 @@ async function searchPixabay(query: string, key: string, fetchJson: JsonFetcher)
 }
 
 /**
- * Keep only photographs whose own metadata names the subject.
+ * Keep only photographs whose own metadata names the subject. For subjects that are not people.
  *
- * A stock search for "ufc valentina-shevchenko" returned a US Air Force range photograph of
- * two people who are not her, and it shipped as the hero of her profile, credited to the
- * airman who took it. A generic query returns generic results, and an article about a named
- * person carrying a photograph of different named people is a misattribution, not a
- * decoration. So a candidate has to earn its place: every word of the subject's name must
- * appear in the candidate's own title, author or source URL. Nothing matching is the correct
- * answer often, and the deterministic FRAME hero covers it.
+ * This was written for a person and could not do that job. A stock search for "ufc
+ * valentina-shevchenko" returned a US Air Force range photograph of two people who are not her;
+ * requiring every word of the name fixed that case and not the class, because a name is not an
+ * identity. "Gustavo Lopez" is an OKTAGON bantamweight and an Argentinian subsecretario de
+ * Presidencia, the politician's file passed this filter on 4 August 2026, and `captionResidual`
+ * below then ranked it first — its caption is "678 - Gustavo Lopez", which is almost purely the
+ * name. A person is now resolved through their Wikidata item instead; see `fighterIdentityPhoto`.
+ *
+ * What is left is the case this can answer. MMA Files assigns a fight-week preview an event ref
+ * such as `ufc:event:ufc-330-makhachev-vs-machado-garry`, and an event is a name: it has no
+ * entity photograph to be confused about, its own poster and arena shots are what carry that
+ * name, and the worst outcome of a wrong match is the wrong arena rather than the wrong human
+ * being. Nothing matching is still a frequent and correct answer, covered by the FRAME hero.
+ *
+ * Keeping people away from this is the caller's job and it is done by ref shape, not by what is
+ * on disk: `articleImageCandidates` reaches here only when every subject ref matches
+ * `org:event:slug`. Anything else — a fighter, a killed slot's placeholder, a ref of no shape it
+ * recognises — never arrives.
  */
 export function candidatesNaming(
   candidates: readonly LicensedPhotoCandidate[],
@@ -328,11 +386,45 @@ export async function discoverLicensedPhotos(input: {
   return { candidates, skippedProviders };
 }
 
-async function webpVariant(bytes: Uint8Array, width: number, height: number, maximumBytes: number): Promise<Buffer> {
+/**
+ * Where the 16:9 hero is cut out of a taller frame.
+ *
+ * `attention` asks sharp for the busiest region, which is right for a stock photograph of a
+ * place or an object. It is wrong for a portrait, and provably so: run against Commons file
+ * "Charles Oliveira do Bronxs.jpg", a 3024x4032 portrait, attention returned a band containing
+ * a championship belt and a torso and no face at all. Under an alt saying the picture is of
+ * Charles Oliveira, that is the same lie by a different route.
+ *
+ * `top` takes the band from the top edge. A person photographed in portrait has their head near
+ * the top, so this keeps the face; checked by eye against the crops of Oliveira, Belal Muhammad,
+ * Conor McGregor, Ilia Topuria, Amanda Ribas, Rose Namajunas, Brandon Moreno, Leon Edwards and
+ * Sean O'Malley, every one of which held the face after the switch.
+ */
+export type CropAnchor = "attention" | "top";
+
+/**
+ * Which anchor a candidate gets. Exported because it is the whole of the decision.
+ *
+ * The pixel difference cannot be shown in a test: sharp's attention strategy scores luminance
+ * frequency, saturation and skin tones, and on any synthetic frame those are flat enough that it
+ * returns the same band as `top`. It separates on real photographs, which is where it was
+ * checked — see the note above `CropAnchor`.
+ */
+export function heroCropAnchor(candidate: Pick<LicensedPhotoCandidate, "identityOf">): CropAnchor {
+  return candidate.identityOf ? "top" : "attention";
+}
+
+async function webpVariant(
+  bytes: Uint8Array,
+  width: number,
+  height: number,
+  maximumBytes: number,
+  anchor: CropAnchor
+): Promise<Buffer> {
   for (const quality of [82, 74, 66, 58]) {
     const output = await sharp(bytes, { failOn: "warning" })
       .rotate()
-      .resize(width, height, { fit: "cover", position: "attention" })
+      .resize(width, height, { fit: "cover", position: anchor })
       .webp({ quality, effort: 5 })
       .toBuffer();
     if (output.byteLength <= maximumBytes) return output;
@@ -368,9 +460,10 @@ export async function materializeLicensedPhoto(input: {
   if (!metadata.width || !metadata.height || metadata.width < 640 || metadata.height < 360) {
     throw new Error("Licensed asset dimensions are too small");
   }
+  const anchor = heroCropAnchor(candidate);
   const [hero, thumb] = await Promise.all([
-    webpVariant(source, 1_600, 900, 800_000),
-    webpVariant(source, 640, 360, 300_000)
+    webpVariant(source, 1_600, 900, 800_000, anchor),
+    webpVariant(source, 640, 360, 300_000, anchor)
   ]);
   const safeSlug = input.slug.toLowerCase().replace(/[^a-z0-9-]+/gu, "-").replace(/^-|-$/gu, "");
   const directory = input.venture === "caught-up" ? "editions" : "articles";

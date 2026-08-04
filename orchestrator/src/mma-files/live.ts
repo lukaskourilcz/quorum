@@ -11,7 +11,8 @@ import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditor
 import { loadArticlePackages, regenerateArticleIndex } from "./store.js";
 import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
-import { candidatesNaming, discoverLicensedPhotos } from "../images/licensed.js";
+import { candidatesNaming, discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { fighterIdentityPhoto } from "../images/fighter-photo.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
@@ -30,6 +31,52 @@ export interface LiveArticleResult {
   status: "published" | "blocked" | "killed";
   artifacts: string[];
   estimatedWorstCaseUsd: number;
+}
+
+/** Why a gate closed an article slot before any of the pipeline ran. One token per gate. */
+export type ClosedArticleSlotReason =
+  | "budget_decision_not_countersigned"
+  | "portfolio_gate_closed"
+  | "mma_files_gate_closed";
+
+/**
+ * Record that a gate closed this article slot, so the slot says so instead of saying nothing.
+ *
+ * The two article slots carry their outcome in a run file and nowhere else — MeetingRecord has
+ * no article kind, so a meeting record for one would be dropped by the calendar's recordKind.
+ * When a gate was shut, cycle.ts returned `status: "paused", artifacts: []` and wrote no run
+ * file at all, so the slot fell through to the calendar's last branch and rendered red with
+ * nothing anywhere saying why. This is the same repair portfolio/run.ts already made for the
+ * closed rooms, in the one shape an article slot can be read from.
+ *
+ * Returns null when the slot already has a record. Re-running a scheduled workflow keeps
+ * event_name "schedule", so a re-run of a slot that published hours ago would otherwise replace
+ * "published" with "blocked" — a record stating something that did not happen. Nothing here runs
+ * the pipeline, so it has no outcome that should ever displace a real one.
+ */
+export async function recordClosedArticleSlot(input: {
+  cycleId: string;
+  slot: "am" | "pm";
+  now: Date;
+  reason: ClosedArticleSlotReason;
+}): Promise<string | null> {
+  const date = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(input.now);
+  const runPath = `ventures/mma-files/runs/${date}-${input.slot}.json`;
+  const existing = await readFile(path.join(stateRoot, runPath), "utf8").then(() => true, () => false);
+  if (existing) return null;
+  await atomicWriteJson(stateRoot, runPath, {
+    schemaVersion: 1,
+    cycleId: input.cycleId,
+    date,
+    slot: input.slot,
+    // "blocked" and not "killed": nothing about the subject or the sources failed. The room was
+    // never allowed to open, and reopening the gate is all it would take.
+    status: "blocked",
+    reason: input.reason,
+    spentUsd: 0,
+    generatedAt: input.now.toISOString()
+  });
+  return runPath;
 }
 
 async function jsonFiles(directory: string): Promise<string[]> {
@@ -261,7 +308,7 @@ export const MMA_FILES_WRITE_SYSTEM = [
   "Link a fighter as [Name](/fighters/org/slug), taking org and slug from the packet's fighterRefs, which are written org:slug. Link every ref at least once and link no fighter that is not one of them.",
   "Do not add odds, probabilities, hype or facts.",
   "If licensed image candidates exist, choose the most accurate fit by numeric imageCandidateIndex.",
-  "Write factual Czech imageAlt text.",
+  "For imageAlt, describe only what a candidate's own caption states. You are shown captions, never pictures, so do not write a pose, a stance, a setting or an action that no caption gives you. If no candidate is supplied, say what the article is about instead of describing an image.",
   "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\",\"imageCandidateIndex\":0}."
 ].join(" ");
 
@@ -511,6 +558,102 @@ async function storedArticleForSlot(publishAt: Date, slot: "am" | "pm"): Promise
  * below treat a failure as a warning: one runs before anything has happened, the other two once
  * a package is already stored.
  */
+/**
+ * A subject ref that denotes a person: `org:slug`, the shape every fighter card id has.
+ *
+ * The shape is the whole test, and deliberately so. Whether we hold a card for the person is a
+ * fact about this repository; whether the ref names a human being is a fact about the ref, and it
+ * is the second one that decides how a photograph may be found. `state/mma/bouts` names 874
+ * distinct fighters and `state/mma/fighters` holds 92 cards, so 791 of those refs are people we
+ * have no card for. A slate ref need not name any card at all either: `SlateSlotSchema` types it
+ * as a plain string and `runPortfolioCycle` stores CANVAS's slate after a bare schema parse, so
+ * `ufc:gustavo-lopez` — one character off the real `oktagon:gustavo-lopez` — is a ref this
+ * function has to answer for.
+ *
+ * `ArticlePackageSchema.fighterRefs` enforces the same pattern on what an article may declare,
+ * and all 92 card ids match it. The colon is excluded from the tail, so `ufc:event:...` is not a
+ * person by this test.
+ */
+const PERSON_SUBJECT_REF = /^(?:ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+
+/** A subject ref that denotes an event: `org:event:slug`, as `ArticlePackageSchema.eventRef` has it. */
+const EVENT_SUBJECT_REF = /^(?:ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+
+/**
+ * The photographs offered for an article, chosen by what the subject is.
+ *
+ * A subject ref is either a person or it is not, and the two cannot share a method. For a person
+ * the question "is this a photograph of them?" is a question about identity, and no reading of a
+ * caption answers it: "Gustavo Lopez" is an OKTAGON bantamweight and also an Argentinian
+ * subsecretario de Presidencia, and on 4 August the article about the first ran a Commons file
+ * of the second. So a fighter is resolved through their own Wikidata item — see
+ * `fighterIdentityPhoto` — and when the item names no image the answer is that there is no
+ * photograph, which the caller turns into the FRAME cover.
+ *
+ * The routing is on the ref's shape and not on what is on disk. It used to be the latter — a card
+ * with that exact id was looked up, and anything that missed fell through to the name search — so
+ * every person we hold no card for, and every ref with a typo in it, took the path the identity
+ * lookup exists to replace. Run against the live services on 4 August 2026, before this changed:
+ * `oktagon:alexander-gladkov`, a fighter named in three bout records with no card, returned
+ * "Gladkov Alexander.jpg" first, a Russian operetta singer; `ufc:gustavo-lopez` returned the
+ * subsecretario again. Both arrived with no `identityOf`, so `produceMmaFilesArticle` also fell
+ * back to the alt text the writer invented for a picture it never saw.
+ *
+ * A fight-week preview is assigned an event ref such as `ufc:event:ufc-330-...`, which is not a
+ * person and has no identity to confuse. `candidatesNaming` is the method for those and only for
+ * those: an event is named by its own poster and venue photographs, and a wrong match there is a
+ * picture of the wrong arena rather than a picture of the wrong human being. Anything that is
+ * neither shape — a killed slot's `missing:<date>:<slot>` placeholder, or whatever else a model
+ * writes into a slate — gets no photograph at all. An unclassifiable ref is not evidence that the
+ * subject is not a person, and guessing wrong there costs a human being their likeness.
+ */
+export async function articleImageCandidates(
+  root: string,
+  subjectRefs: readonly string[]
+): Promise<LicensedPhotoCandidate[]> {
+  // `missing:<date>:<slot>` is the placeholder a killed slot carries, not a subject. Its tail is
+  // the slot letter, so letting it through fanned four HTTP providers out on the query "am". It
+  // fails both shape tests below on its own; dropping it first keeps it out of the all-events
+  // check, which a mixed list would otherwise fail for the wrong reason.
+  const refs = subjectRefs.filter((reference) => !reference.startsWith("missing:"));
+
+  if (refs.some((reference) => PERSON_SUBJECT_REF.test(reference))) {
+    const fighters = await loadFighterRecords(path.join(root, "mma", "fighters"));
+    const subject = fighters.find((fighter) => refs.includes(fighter.id));
+    const qid = subject?.identity.wikidataId;
+    // No card, or a card naming no Wikidata item, means we cannot establish that any file depicts
+    // this person. That is an answer — the FRAME cover — and not a reason to go looking by name.
+    if (!subject || !qid) return [];
+    // A network failure here costs the article its photograph and nothing else: the caller sees
+    // an empty list, which is the same answer as an item with no P18, and draws the FRAME cover.
+    const photo = await fighterIdentityPhoto({ wikidataId: qid, fallbackName: subject.canonicalName })
+      .catch(() => null);
+    return photo ? [photo] : [];
+  }
+
+  // Every surviving ref has to be an event before a name search is allowed to run.
+  if (refs.length === 0 || !refs.every((reference) => EVENT_SUBJECT_REF.test(reference))) return [];
+  const query = refs
+    .map((reference) => reference.split(":").at(-1)?.replaceAll("-", " ") ?? "")
+    .filter(Boolean)
+    .join(" ");
+  if (!query) return [];
+  const search = await discoverLicensedPhotos({
+    query: query.slice(0, 100),
+    pexelsKey: process.env.PEXELS_API_KEY,
+    pixabayKey: process.env.PIXABAY_API_KEY
+  });
+  if (search.skippedProviders.length > 0) {
+    const relative = "NEEDS_YOUR_HELP_NOW.md";
+    const current = await readText(repoRoot, relative, "# Needs your help now\n");
+    const additions = search.skippedProviders
+      .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
+      .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
+    if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
+  }
+  return candidatesNaming(search.candidates, query);
+}
+
 async function refreshArticleIndex(context: { cycleId: string; date: string; slot: "am" | "pm" }): Promise<string | null> {
   return regenerateArticleIndex(stateRoot).catch((error: unknown) => {
     console.warn(JSON.stringify({
@@ -592,26 +735,7 @@ export async function runLiveArticleProduction(input: {
       await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, ...(derivedSlate ? { slateSource: "derived" } : {}), spentUsd: 0, generatedAt: input.now.toISOString() });
       return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
     }
-    // Search on the subject's name rather than its record id. "ufc valentina-shevchenko" is a
-    // query no photo archive is indexed for, and what came back was a US Air Force range
-    // photograph of two other people, which then ran as the hero of her profile.
-    const subject = assignment.subjectRefs
-      .map((reference) => reference.split(":").at(-1)?.replaceAll("-", " ") ?? "")
-      .filter(Boolean)
-      .join(" ");
-    const imageSearch = await discoverLicensedPhotos({
-      query: subject.slice(0, 100),
-      pexelsKey: process.env.PEXELS_API_KEY,
-      pixabayKey: process.env.PIXABAY_API_KEY
-    });
-    if (imageSearch.skippedProviders.length > 0) {
-      const relative = "NEEDS_YOUR_HELP_NOW.md";
-      const current = await readText(repoRoot, relative, "# Needs your help now\n");
-      const additions = imageSearch.skippedProviders
-        .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
-        .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
-      if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
-    }
+    const imageCandidates = await articleImageCandidates(stateRoot, assignment.subjectRefs);
     const socialUnlocked = await socialContentGenerationEnabled(stateRoot, "mma-files");
     const result = await produceMmaFilesArticle({
       root: stateRoot,
@@ -621,7 +745,7 @@ export async function runLiveArticleProduction(input: {
       publishAt: input.now,
       mode: "live-analysis",
       evidence,
-      imageCandidates: candidatesNaming(imageSearch.candidates, subject),
+      imageCandidates,
       publicRepoRoot: repoRoot,
       socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
       gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),

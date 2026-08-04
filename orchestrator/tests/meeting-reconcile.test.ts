@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { MeetingSkipSchema } from "../src/contracts/meeting-skip.js";
+import { pragueSlotInstant } from "../src/meetings/calendar.js";
 import { MEETING_CLOCK } from "../src/meetings/clock.js";
 import {
   NO_RECORD_REASON,
@@ -12,6 +13,7 @@ import {
   reconcileMeetingDay
 } from "../src/meetings/reconcile-cli.js";
 import { createOfflineCaughtUpMeeting } from "../src/meetings/record.js";
+import { CRON_HOUR_CARRY, CRON_MINUTE } from "../src/ventures/registry.js";
 import { configRoot, repoRoot } from "../src/paths.js";
 
 /** A finished Prague day, read at health.yml's cron the next morning: 08:15 UTC, 10:15 Prague. */
@@ -127,6 +129,27 @@ describe("a day with no record of its slots still gets one", () => {
     await expect(reconcileMeetingDay(root, "2026-08-09", NOW)).rejects.toThrow(/finished Prague day/);
   });
 
+  it("never writes off a slot whose run could still arrive", async () => {
+    // The filter reads "!== missed", and "late" is now a status of its own, so a slot still inside
+    // its delivery window is left alone rather than told "no record of this slot exists" — which
+    // would be false by the time anybody read it. Asserted rather than assumed: this is the one
+    // place where the calendar's new status decides whether a claim gets written to disk.
+    const root = await emptyRoot();
+    const lastSlot = MEETING_CLOCK.reduce((latest, slot) => slot.hour > latest.hour ? slot : latest);
+    // The night shift sits at 22:00 Prague and its window closes at 03:00 the next morning, so
+    // 01:00 is past midnight — a finished Prague day, which the guard lets through — while the
+    // slot is still inside its window. Only the status stops it here.
+    const soonAfterMidnight = new Date(pragueSlotInstant(DATE, lastSlot.hour).getTime() + 3 * 60 * 60_000);
+    const early = await reconcileMeetingDay(root, DATE, soonAfterMidnight);
+    expect(early.recorded).not.toContain(`state/meetings/skips/${DATE}-${lastSlot.phase}.json`);
+    expect(await exists(skipPath(root, lastSlot.phase))).toBe(false);
+
+    // health.yml runs at 08:15 Prague, by which point every slot of the finished day is hours
+    // past its window, so the same slot is reconciled on the pass that actually happens.
+    const atHealthCheck = await reconcileMeetingDay(root, DATE, NOW);
+    expect(atHealthCheck.recorded).toContain(`state/meetings/skips/${DATE}-${lastSlot.phase}.json`);
+  });
+
   it("reads yesterday off the Prague calendar, not off UTC", async () => {
     expect(previousPragueDate(NOW)).toBe(DATE);
     // 22:30 UTC is already the next day in Prague, and the day to reconcile moves with it.
@@ -148,9 +171,11 @@ describe("something actually runs the reconciler every day", () => {
       }>;
     };
     // One daily cron carries this job. GitHub reads it in UTC — the `timezone` key beside it is
-    // not honoured, so the job lands around 10:15 Prague in summer and 09:15 in winter, both
+    // not honoured, so the job lands around 09:55 Prague in summer and 08:55 in winter, both
     // well after the last slot of the day it reconciles. Tracked in NEEDS_YOUR_HELP_NOW.md.
-    expect(source).toContain('- cron: "15 8 * * *"');
+    // The minute is CRON_MINUTE and the hour is one below the hour this job belongs to, the same
+    // arrangement every scheduled workflow uses; ci-policy.test.ts is what holds all of them to it.
+    expect(source).toContain(`- cron: "${CRON_MINUTE} ${8 - CRON_HOUR_CARRY} * * *"`);
     const job = workflow.jobs.reconcile;
     expect(job, "health.yml must carry the reconcile job").toBeDefined();
     // The health check itself is gated on HEALTH_CHECK_ENABLED and a production URL secret;

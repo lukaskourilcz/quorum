@@ -50,6 +50,7 @@
             "enum": [
               "scheduled",
               "held",
+              "late",
               "missed",
               "not-needed",
               "skipped"

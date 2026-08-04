@@ -80,6 +80,19 @@ import {
   regenerateIdeaIndex,
   screenAndRecordIdea
 } from "../ideas/ledger.js";
+import {
+  INCUBATOR_CONTEXT_CHARS,
+  INCUBATOR_TASTE_CHARS,
+  assertSweptToPacketPath,
+  boundIncubatorPacket,
+  incubatorScanBrief,
+  incubatorScanTriggerPreview,
+  readIncubatorPacketItems,
+  readIncubatorReadItems,
+  recordIncubatorPacketRead,
+  unreadPacketItems,
+  type IncubatorPacketItem
+} from "../incubator/packet.js";
 
 export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "studio";
 
@@ -347,6 +360,106 @@ export async function recordBudgetStop(input: {
   return artifacts;
 }
 
+/**
+ * Why a scheduled room did not open, in each of the four places the record says it.
+ *
+ * A published record used to carry one caller-supplied sentence and three hard-coded ones. The
+ * hard-coded three all described the agenda queue — every seat "not called because no bounded
+ * agenda was due", a growth plan about wake-ups without agendas, and a transcript setting
+ * saying the scheduler had checked the queue — while the sentence above them said the owner's
+ * gate was shut, or that the source sweep had found nothing. Three of the four were then false
+ * on two of the three paths that write this record, and site/src/lib/meeting-record-model.ts
+ * publishes all four. Each caller now supplies its own, so a seat's reason is the reason that
+ * actually applied to that seat on that morning.
+ */
+interface RoomStayedShut {
+  /** operatingBrief, the decision summary, the chair's proposal and the single closing turn. */
+  brief: string;
+  /** Why each registered seat was not called. Published beside the seat's name. */
+  seat: string;
+  /** roomTranscript.setting: what the scheduler actually did before it closed the slot. */
+  setting: string;
+  /** growthPlan: what the closed slot authorizes, which is nothing. */
+  growthPlan: string;
+}
+
+function shutByOwnerGate(): RoomStayedShut {
+  return {
+    brief: "The owner's portfolio gate is closed, so the room did not open and no model was called.",
+    seat: "registered for this room but not called because the owner's portfolio gate is closed",
+    setting: "The scheduler read the owner's portfolio gate before opening anything. It is closed, so no agenda was read, no specialist meeting opened and no model was called.",
+    growthPlan: "Nothing is authorized (NO_ACTION): a room the owner's gate holds closed produces no work, spend, publishing or outreach."
+  };
+}
+
+function shutByBudgetShape(): RoomStayedShut {
+  return {
+    brief: "The countersigned budget shape does not fund this room, so it did not open and no model was called.",
+    seat: "registered for this room but not called because the countersigned budget shape does not fund it",
+    setting: "The scheduler resolved the countersigned budget shape before opening anything. This room is not in it at any level of spend, so no agenda was read, no specialist meeting opened and no model was called.",
+    growthPlan: "Nothing is authorized (NO_ACTION): a room outside the countersigned budget shape produces no work, spend, publishing or outreach."
+  };
+}
+
+/**
+ * The other half of `phaseEnabled`, told apart from the shape rather than blamed on it.
+ *
+ * `resolveEffectivePortfolioSchedule` drops rooms for two unrelated reasons: the countersigned
+ * shape never included them, or the month has spent down to a rung of the degradation ladder.
+ * The record used to name the shape for both, which reads as a decision the owner made when it
+ * is really this month's spend. The caller separates them by resolving the same schedule at
+ * full headroom and seeing whether the room survives there.
+ */
+function shutByLowHeadroom(input: { remainingUsd: number; capUsd: number }): RoomStayedShut {
+  const spend = `$${input.remainingUsd.toFixed(2)} of the $${input.capUsd.toFixed(2)} monthly model-API budget is left`;
+  return {
+    brief: `${spend}, which is below the rung that funds this room, so it did not open and no model was called.`,
+    seat: `registered for this room but not called because ${spend} — below the rung that funds it`,
+    setting: `The scheduler priced the month before opening anything: ${spend}. The degradation ladder closes this room at that level, so no agenda was read, no specialist meeting opened and no model was called.`,
+    growthPlan: "Nothing is authorized (NO_ACTION): a room the month's remaining budget cannot fund produces no work, spend, publishing or outreach."
+  };
+}
+
+function shutByNoAgenda(): RoomStayedShut {
+  return {
+    brief: "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    seat: "registered for this room but not called because no bounded agenda was due",
+    setting: "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+    growthPlan: "Nothing is authorized (NO_ACTION): a wake-up without a due agenda produces no work, spend, publishing or outreach."
+  };
+}
+
+function shutByNoMaterialChange(): RoomStayedShut {
+  return {
+    brief: "The guarded source refresh found no material change and no agenda was due, so no specialist model was called.",
+    seat: "registered for this room but not called because the guarded source refresh found no material change and no agenda was due",
+    // "the previous snapshot on file", not "what the room has read": refreshFightAiQEvidence
+    // compares content hashes it writes itself, before any seat is called.
+    setting: "The scheduler ran the guarded source refresh and compared it with the previous snapshot on file. Nothing material had changed, so no specialist meeting opened and no model was called.",
+    growthPlan: "Nothing is authorized (NO_ACTION): a wake-up on unchanged sources produces no work, spend, publishing or outreach."
+  };
+}
+
+/** The incubator scan's two ways of finding nothing to read, told apart because they differ. */
+function shutByEmptySweep(): RoomStayedShut {
+  return {
+    brief: "The guarded source sweep returned no items at all, so there was nothing to put in front of a seat and no model was called.",
+    seat: "registered for this room but not called because the source sweep returned no items to read",
+    setting: "The scheduler ran the guarded source sweep. It returned no items, so the packet was empty, no specialist meeting opened and no model was called.",
+    growthPlan: "Nothing is authorized (NO_ACTION): an empty sweep produces no work, spend, publishing or outreach."
+  };
+}
+
+function shutByNothingUnread(input: { offered: number; shown: number }): RoomStayedShut {
+  const counted = `The sweep kept ${input.offered} item${input.offered === 1 ? "" : "s"} and ${input.shown} of them fit this room's context budget`;
+  return {
+    brief: `${counted}; each of those was already read in an earlier scan, so no model was called.`,
+    seat: "registered for this room but not called because the sweep brought nothing this room has not already read",
+    setting: `${counted}. Each of those was already in this room's read log, so no specialist meeting opened and no model was called. Items past the budget were shown to no seat and counted for nothing.`,
+    growthPlan: "Nothing is authorized (NO_ACTION): re-reading items this room has already read produces no work, spend, publishing or outreach."
+  };
+}
+
 async function recordNoAgendaCycle(input: {
   phase: PortfolioPhase;
   cycleId: string;
@@ -357,7 +470,7 @@ async function recordNoAgendaCycle(input: {
   expectedCast: readonly FoundingAgent[];
   monthAllInUsd: number;
   monthCapUsd: number;
-  reason: string;
+  shut: RoomStayedShut;
   preparationArtifacts?: readonly string[];
 }): Promise<PortfolioCycleResult> {
   const chair = portfolioChair(input.phase);
@@ -375,10 +488,10 @@ async function recordNoAgendaCycle(input: {
     fixture: false,
     status: "PAUSED",
     stage: input.stage,
-    operatingBrief: input.reason,
+    operatingBrief: input.shut.brief,
     participantReasons: input.expectedCast.map((agent) => ({
       agent,
-      reason: "registered for this room but not called because no bounded agenda was due",
+      reason: input.shut.seat,
       participated: false
     })),
     ledger: {
@@ -389,18 +502,23 @@ async function recordNoAgendaCycle(input: {
     },
     decision: {
       outcome: "NO_ACTION",
-      summary: input.reason,
+      summary: input.shut.brief,
       evidenceRefs: []
     },
-    proposals: [{ agent: chair, summary: input.reason, evidenceRefs: [] }],
+    proposals: [{ agent: chair, summary: input.shut.brief, evidenceRefs: [] }],
     voteMatrix: [{ voter: chair, firstChoice: "NO_ACTION", veto: false }],
     tasks: [],
-    growthPlan: "NO_ACTION. A wake-up without a due agenda does not authorize work, spend, publishing or outreach.",
+    growthPlan: input.shut.growthPlan,
     eveningOutcome: null,
     ...(fightDesk ? {
       sharperData: {
         outcome: "nothing-new",
-        summary: "No specialist room opened because neither an assigned agenda nor a material source change was due.",
+        // The tightest limit this record has (280), not the only one: roomTranscript.setting and
+        // every turns[].text cap at 800, and those take caller strings too. A record that fails
+        // to parse takes the whole scheduled run out with exit 1, so each of the three is cut to
+        // its own schema limit rather than allowed to decide whether the slot gets a record at
+        // all. The untruncated sentence is published four lines up.
+        summary: input.shut.brief.slice(0, 280),
         evidenceRefs: []
       }
     } : {}),
@@ -408,12 +526,16 @@ async function recordNoAgendaCycle(input: {
       openedAt: input.now.toISOString(),
       closedAt,
       gavel: chair,
-      setting: "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+      // Both cut to RoomTranscriptSchema's 800. Today every RoomStayedShut is a fixed sentence
+      // well inside it, but two of them interpolate caller values — the month's figures and the
+      // sweep's counts — and the reason a closed slot gets a record at all must not depend on how
+      // long a future reason runs.
+      setting: input.shut.setting.slice(0, 800),
       turns: [{
         agent: chair,
         mode: "close",
         sentAt: closedAt,
-        text: input.reason
+        text: input.shut.brief.slice(0, 800)
       }]
     },
     generatedAt: closedAt
@@ -434,7 +556,7 @@ async function recordNoAgendaCycle(input: {
       cycleId: input.cycleId,
       phase: input.phase,
       outcome: "NO_ACTION",
-      summary: input.reason,
+      summary: input.shut.brief,
       evidenceRefs: [],
       generatedAt: closedAt
     }),
@@ -511,7 +633,12 @@ function allowedIndividualUrl(value: string): boolean {
   return url.pathname.replace(/\/+$/u, "").length > 1;
 }
 
-export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>, now = new Date()): Promise<{ text: string; evidenceRefs: string[] }> {
+export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>, now = new Date()): Promise<{
+  text: string;
+  evidenceRefs: string[];
+  /** The incubator packet items that ended up in `text`, and therefore the only ones a seat read. */
+  incubatorItems?: IncubatorPacketItem[];
+}> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
   if (phase === "studio") {
     const inspiration = await readJson<{ links?: Array<{ url?: string; label?: string }> }>(root, "ventures/carousel-studio/inspiration/owner-links.json", {});
@@ -597,10 +724,32 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
     };
   }
-  const evidence = await readJson<{ refs?: string[]; packet?: string }>(root, "ventures/incubator/evidence.json", {});
-  const scan = phase === "incubator-synthesis" ? await readText(root, `meetings/${date}-incubator-scan.json`) : "";
-  const refs = (evidence.refs ?? []).filter((reference) => typeof reference === "string" && reference.length > 0 && reference.length <= 160);
-  return { text: `${evidence.packet ?? ""}\n${taste ?? ""}\n${scan}`.slice(0, 18_000), evidenceRefs: refs };
+  // The incubator rooms. Every block is bounded before it is joined, and the join is not cut
+  // afterwards — that is the whole difference from what stood here.
+  //
+  // The packet is cut to whole items and the citation allowlist is narrowed to the sources those
+  // items came from, so the room can only cite what it was shown. It used to be the raw
+  // serialised digest, allowlisted against every source id in the file. The three blocks were
+  // then concatenated and cut to the ceiling by characters, which moved the damage rather than
+  // removing it: the last block ended wherever the ceiling fell, mid-token and unparseable.
+  // `incubatorScanBrief` bounds the scan by dropping whole transcript turns, and the taste packet
+  // is prose, so a clip there costs a sentence rather than a syntax error. INCUBATOR_CONTEXT_CHARS
+  // carries the cost arithmetic and the measurement behind these three budgets.
+  const packet = boundIncubatorPacket(await readIncubatorPacketItems(root));
+  const scan = phase === "incubator-synthesis"
+    ? incubatorScanBrief(await readText(root, `meetings/${date}-incubator-scan.json`))
+    : "";
+  const text = `${packet.text}\n${(taste ?? "").slice(0, INCUBATOR_TASTE_CHARS)}\n${scan}`;
+  // The three budgets sum below the ceiling, so this never trims. It is the assertion that they
+  // still do — a budget raised past the ceiling would otherwise reintroduce the cut in silence.
+  if (text.length > INCUBATOR_CONTEXT_CHARS) {
+    throw new Error(`Incubator context ${text.length} exceeds ${INCUBATOR_CONTEXT_CHARS}; the per-block budgets no longer sum below the ceiling`);
+  }
+  return {
+    text,
+    evidenceRefs: packet.evidenceRefs.filter((reference) => reference.length <= 160),
+    incubatorItems: packet.items
+  };
 }
 
 export async function runPortfolioCycle(input: {
@@ -654,8 +803,13 @@ export async function runPortfolioCycle(input: {
       return { cycleId: input.cycleId, phase: input.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
     }
     const closedBy = process.env.PORTFOLIO_LIVE_ENABLED !== "true"
-      ? "The owner's portfolio gate is closed, so the room did not open and no model was called."
-      : "The countersigned budget shape closed this room, so it did not open and no model was called.";
+      ? shutByOwnerGate()
+      : phaseEnabled(resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: enforcedMonthlyApiUsd }), input.phase)
+        ? shutByLowHeadroom({
+            remainingUsd: Math.max(0, enforcedMonthlyApiUsd - spent),
+            capUsd: enforcedMonthlyApiUsd
+          })
+        : shutByBudgetShape();
     return recordNoAgendaCycle({
       phase: input.phase,
       cycleId: input.cycleId,
@@ -668,7 +822,7 @@ export async function runPortfolioCycle(input: {
       ),
       monthAllInUsd: spent,
       monthCapUsd: schedule.monthlyOperatingUsd,
-      reason: closedBy
+      shut: closedBy
     });
   }
   const limits = environmentBudgetLimits(schedule);
@@ -748,13 +902,34 @@ export async function runPortfolioCycle(input: {
       expectedCast,
       monthAllInUsd: spent,
       monthCapUsd: schedule.monthlyOperatingUsd,
-      reason: "No bounded agenda was due, so the specialist room did not open and no model was called."
+      shut: shutByNoAgenda()
     });
   }
   let sourceMaterialChanged = true;
+  let noChange = shutByNoMaterialChange();
   if (!input.dry && input.phase === "incubator-scan") {
+    // Order matters and is the point of this block: sweep first, then decide. The trigger reads
+    // the file the sweep has just written, so a decision taken before the sweep would read
+    // yesterday's packet — or, the first time, no packet at all — and close the room on it.
     const evidence = await refreshIncubatorEvidence({ root, now: input.now });
     preparationArtifacts.push(...evidence.artifactPaths);
+    assertSweptToPacketPath(evidence.artifactPaths);
+    // Bound before comparing. The room is shown whole items up to its context budget, so an
+    // unread item outside that window must not open a room that will never show it — that is a
+    // room paid for daily that can never mark the item read. The digest sorts newest first, so
+    // the window is the newest end of it; an item published long ago and only now fetched can
+    // sit outside the window and stay unread.
+    const shown = boundIncubatorPacket(await readIncubatorPacketItems(root));
+    const unread = unreadPacketItems(shown.items, (await readIncubatorReadItems(root)).keys);
+    sourceMaterialChanged = unread.length > 0;
+    noChange = shown.offered === 0
+      ? shutByEmptySweep()
+      : shutByNothingUnread({ offered: shown.offered, shown: shown.items.length });
+  }
+  if (input.dry && input.phase === "incubator-scan") {
+    // The dry run's only honest statement about this room: what the live state root would
+    // decide today. It sweeps nothing, spends nothing and writes nothing here.
+    console.log(JSON.stringify(await incubatorScanTriggerPreview(stateRoot), null, 2));
   }
   if (!input.dry && input.phase === "mma-intake") {
     const evidence = await refreshFightAiQEvidence({ root, date, now: input.now });
@@ -780,7 +955,7 @@ export async function runPortfolioCycle(input: {
       expectedCast,
       monthAllInUsd: spent,
       monthCapUsd: schedule.monthlyOperatingUsd,
-      reason: "The guarded source refresh found no material change and no agenda was due, so no specialist model was called.",
+      shut: noChange,
       preparationArtifacts
     });
   }
@@ -1250,6 +1425,14 @@ export async function runPortfolioCycle(input: {
       atomicWriteText(root, proposalMarkdownPaths[index]!, renderNicheProposalMarkdown(proposal))
     ])
   ]);
+  // What the incubator room read, written where the room's other output is written and nowhere
+  // earlier. The items come from the packet the seats were handed, so the log can only ever
+  // claim what was in front of them; a room the palate pre-step or a cap ended before any seat
+  // spoke returns above this line and leaves the log alone, which is what keeps the next scan
+  // able to see those items as unread.
+  const incubatorReadPaths = !input.dry && input.phase === "incubator-scan" && context.incubatorItems?.length
+    ? [await recordIncubatorPacketRead({ root, items: context.incubatorItems, cycleId: input.cycleId, now: input.now })]
+    : [];
   const ttSocialUnlocked = !input.dry && await socialContentGenerationEnabled(root, "titty-tuesdays");
   const ttSocialArtifacts = ttSocialUnlocked && marketingPlan?.status === "approved"
     ? await composeTittyTuesdaysSocialQueue({
@@ -1273,7 +1456,23 @@ export async function runPortfolioCycle(input: {
   if (!input.dry && !contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto")) {
     const chair = portfolioChair(input.phase);
     const followUp = contributions.find((contribution) => contribution.agent === chair)?.followUpRequest;
-    if (followUp && mayRequestMeeting(meetingPolicy, input.phase, followUp.phase)) {
+    // Do not queue an agenda for a room the effective schedule has switched off.
+    //
+    // `mayRequestMeeting` answers a policy question — may this phase hand work to that one — and
+    // incubator-scan may hand work to incubator-synthesis. Whether that room can ever sit is a
+    // different question, and today the answer is no: decisions/2026-08-01-budget-raise.md is
+    // still "pending owner countersignature" with neither shape ticked, so the schedule takes its
+    // own stated fallback — shape B, "run one daily incubator meeting" — which drops
+    // incubator-synthesis. The workflow reads the same flag and skips the phase before the cycle
+    // starts. An agenda queued for it would sit in the queue until its three-day TTL expired with
+    // no room able to consume it, and the scan's record would claim it had handed work onward.
+    // The scan is therefore terminal under the current shape: it can surface and log candidates,
+    // and nothing downstream turns them into a proposal or founds a venture until the owner
+    // countersigns shape A. Refusing the request keeps that visible instead of burying it in an
+    // expiring queue entry.
+    if (followUp && !phaseEnabled(schedule, followUp.phase)) {
+      console.warn(`Follow-up meeting request was not queued: ${followUp.phase} is not in the effective budget shape, so no room could consume it`);
+    } else if (followUp && mayRequestMeeting(meetingPolicy, input.phase, followUp.phase)) {
       const target = getVentureMeetingDefinition(registry, followUp.phase);
       const currentHour = pragueClockParts(input.now).hour;
       try {
@@ -1312,6 +1511,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(studioLifecycle?.artifacts ?? []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, ...incubatorReadPaths, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(studioLifecycle?.artifacts ?? []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

@@ -8,8 +8,24 @@ import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-re
 import { MeetingSkipSchema, type MeetingSkip } from "../contracts/meeting-skip.js";
 import { atomicWriteJson } from "../state.js";
 import { StandupSchema } from "../standup/schema.js";
-import { MEETING_CLOCK, PRAGUE_TIME_ZONE } from "./clock.js";
+import { CRON_DELIVERY_WINDOW_HOURS, MEETING_CLOCK, PRAGUE_TIME_ZONE } from "./clock.js";
 import { meetingRef } from "./record.js";
+import { CRON_LEAD_HOURS } from "../ventures/registry.js";
+
+/**
+ * How long past its Prague instant a slot is still waiting rather than lost.
+ *
+ * The cron fires CRON_LEAD_HOURS before the slot and resolveCronDelivery will still name the
+ * meeting up to CRON_DELIVERY_WINDOW_HOURS after that cron, so the last moment a run can arrive
+ * and still open this room is that many hours past the slot. Deriving it from the two constants
+ * the resolver already enforces is what stops the calendar and the resolver disagreeing about
+ * when a slot is beyond rescue.
+ */
+export const SLOT_DELIVERY_GRACE_MS =
+  (CRON_DELIVERY_WINDOW_HOURS - CRON_LEAD_HOURS) * 3_600_000;
+
+/** What the calendar says about a slot whose run has not arrived but still can. */
+export const LATE_SLOT_REASON = "The run for this slot has not arrived yet.";
 
 function addDays(date: string, days: number): string {
   const value = new Date(`${date}T12:00:00.000Z`);
@@ -125,15 +141,26 @@ export function buildCalendarFeed(input: {
         });
         continue;
       }
+      // A slot whose instant has passed is not yet a slot that was missed. GitHub queues these
+      // workflows: on 4 August it delivered the day's crons 2h23m to 2h55m late, so every
+      // meeting ran and every one was called "missed" first. The slot audited that morning as
+      // "two runs succeeded and wrote nothing" was article-am, which had simply not been
+      // delivered yet: its cron arrived 2h41m late and it published at 09:49 UTC, cycle(104),
+      // 1h49m after its slot — the whole of which the board spent saying it did not happen.
+      // The slot stays "late" for as long as a run for it can still arrive and name it, and
+      // only then is it lost.
+      const elapsed = input.now.getTime() - at.getTime();
       const status = record?.status === "PAUSED"
         ? "not-needed"
         : record
           ? "held"
           : skip
             ? "skipped"
-            : at.getTime() < input.now.getTime()
-              ? "missed"
-              : "scheduled";
+            : elapsed <= 0
+              ? "scheduled"
+              : elapsed <= SLOT_DELIVERY_GRACE_MS
+                ? "late"
+                : "missed";
       slots.push({
         at: at.toISOString(),
         tz: PRAGUE_TIME_ZONE,
@@ -146,7 +173,9 @@ export function buildCalendarFeed(input: {
             }
           : skip
             ? { decisionOneLiner: skip.slice(0, 180) }
-            : {})
+            : status === "late"
+              ? { decisionOneLiner: LATE_SLOT_REASON }
+              : {})
       });
     }
   }

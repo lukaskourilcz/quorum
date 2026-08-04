@@ -8,7 +8,10 @@ export const CalendarFeedSchema = openObject({
     at: DateTimeSchema,
     tz: z.literal("Europe/Prague"),
     kind: z.enum(["venture-morning", "venture-afternoon", "venture-night", "cu-edition", "cu-product", "tt-marketing", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "article-am", "article-pm", "studio"]),
-    status: z.enum(["scheduled", "held", "missed", "not-needed", "skipped"]),
+    // "late" is the window between a slot's Prague instant and the moment its run can no longer
+    // be delivered. It is not "missed": until that window closes the meeting can still happen,
+    // and on 4 August every one of the day's runs arrived inside it.
+    status: z.enum(["scheduled", "held", "late", "missed", "not-needed", "skipped"]),
     meetingRef: MeetingRefSchema.optional(),
     decisionOneLiner: z.string().trim().min(1).max(180).optional()
   }))

@@ -2,24 +2,24 @@ name: Guarded council cycle
 
 on:
   schedule:
-    - cron: "0 2 * * *"
-    - cron: "0 3 * * *"
-    - cron: "0 4 * * *"
-    - cron: "0 5 * * *"
-    - cron: "0 6 * * *"
-    - cron: "0 7 * * *"
-    - cron: "0 8 * * *"
-    - cron: "0 9 * * *"
-    - cron: "0 10 * * *"
-    - cron: "0 11 * * *"
-    - cron: "0 12 * * *"
-    - cron: "0 14 * * *"
-    - cron: "0 15 * * *"
-    - cron: "0 16 * * *"
-    - cron: "0 17 * * *"
-    - cron: "0 18 * * *"
-    - cron: "0 19 * * *"
-    - cron: "0 20 * * *"
+    - cron: "55 1 * * *"
+    - cron: "55 2 * * *"
+    - cron: "55 3 * * *"
+    - cron: "55 4 * * *"
+    - cron: "55 5 * * *"
+    - cron: "55 6 * * *"
+    - cron: "55 7 * * *"
+    - cron: "55 8 * * *"
+    - cron: "55 9 * * *"
+    - cron: "55 10 * * *"
+    - cron: "55 11 * * *"
+    - cron: "55 13 * * *"
+    - cron: "55 14 * * *"
+    - cron: "55 15 * * *"
+    - cron: "55 16 * * *"
+    - cron: "55 17 * * *"
+    - cron: "55 18 * * *"
+    - cron: "55 19 * * *"
   workflow_dispatch:
     inputs:
       phase:
@@ -43,6 +43,23 @@ on:
           - mag-desk
           - studio
           - night
+      trigger:
+        # What kind of firing this dispatch is, which decides whether it claims a slot.
+        #
+        # GitHub's `schedule` trigger is best effort and has been badly late: 13 to 54 minutes on
+        # 2 August, 2h23m to 2h55m on 4 August. `workflow_dispatch` starts within seconds, so the
+        # punctual path is a Vercel cron calling the GitHub API on the slot's own hour. Such a
+        # dispatch is a scheduled meeting in every way that matters — it must run live, it owns
+        # the slot, and it owes the calendar a record or a stated reason — so `vercel-cron` makes
+        # every gate below treat it exactly as a cron firing would be treated. `manual` is the
+        # owner at the keyboard: it claims no slot and keeps the dry run it asked for.
+        description: Which schedule this dispatch came from
+        required: false
+        default: manual
+        type: choice
+        options:
+          - manual
+          - vercel-cron
       dry:
         description: Never call paid APIs or write canonical state
         required: true
@@ -93,7 +110,11 @@ jobs:
       # A manual dispatch with dry disabled is the owner asking for a new article, so the
       # once-a-day edition guard steps aside for it. A schedule can never set this: the value is
       # read straight off the dispatch inputs, and github.event_name is checked as well.
-      CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.dry == false }}
+      #
+      # Neither can the Vercel cron. It is a schedule wearing a dispatch's clothes, and handing it
+      # the owner's override would let a slot that already produced an edition produce a second
+      # one — the exact double-fire the transition to two schedules has to avoid.
+      CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}
       # TEMPORARY, 2026-08-04 to 2026-08-09. The owner doubled the four caps below because
       # testing, not production work, was consuming them, and a cap hit was stopping articles
       # from shipping. On 2026-08-04 the edition run billed three calls for about $0.25 and
@@ -168,6 +189,7 @@ jobs:
           EVENT_SCHEDULE: ${{ github.event.schedule }}
           INPUT_PHASE: ${{ inputs.phase }}
           INPUT_DRY: ${{ inputs.dry }}
+          INPUT_TRIGGER: ${{ inputs.trigger }}
           INPUT_DELIVERY_ONLY: ${{ inputs.delivery_only }}
           HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
           HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
@@ -182,10 +204,34 @@ jobs:
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
           skip_reason=""
+          duplicate=false
           delivery_only="${INPUT_DELIVERY_ONLY:-false}"
-          if test "$EVENT_NAME" = "schedule"; then
+          firing_outcome="meeting"
+          firing_slot=""
+          firing_reason=""
+          # Whether this run claims a meeting slot, which is a different question from which
+          # GitHub event carried it. A cron firing claims one. So does the Vercel cron, which
+          # reaches this workflow as a dispatch because that is the only trigger that starts
+          # within seconds. Everything below that decides live mode, records a skip or owes the
+          # calendar an explanation keys on this, not on the event name; only the two lines that
+          # read github.event.schedule stay on the event, because a dispatch carries no cron.
+          scheduled=false
+          if test "$EVENT_NAME" = "schedule" || test "$INPUT_TRIGGER" = "vercel-cron"; then
+            scheduled=true
             dry=false
-            phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled --cron "$EVENT_SCHEDULE")"
+          fi
+          if test "$EVENT_NAME" = "schedule"; then
+            # --json, because "skip" alone cannot say which kind of skip it is, and the two need
+            # opposite handling. An inactive daylight-saving cron has no meeting behind it and
+            # must leave nothing behind either. A cron GitHub delivered past the six-hour window
+            # does have one, and it is owed a stated reason: without it the slot goes red with
+            # nothing anywhere explaining it, which is the state this whole recorder chain exists
+            # to prevent. The worst delivery seen is 3h20m, on 3 August, against that window.
+            firing="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled --cron "$EVENT_SCHEDULE" --json)"
+            phase="$(printf '%s' "$firing" | jq -r '.phase')"
+            firing_outcome="$(printf '%s' "$firing" | jq -r '.outcome')"
+            firing_slot="$(printf '%s' "$firing" | jq -r '.slot // ""')"
+            firing_reason="$(printf '%s' "$firing" | jq -r '.reason // ""')"
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
           fi
@@ -193,7 +239,14 @@ jobs:
           if test "$phase" = "skip"; then
             skip=true
             dry=true
-            skip_reason="The inactive DST cron variant has no Prague wall-clock meeting."
+            if test "$firing_outcome" = "beyond-window"; then
+              # The slot is named from the cron even though no room can be opened for it, so the
+              # recorder below has a phase to file the skip under.
+              phase="$firing_slot"
+              skip_reason="$firing_reason"
+            else
+              skip_reason="The inactive DST cron variant has no Prague wall-clock meeting."
+            fi
             echo "$skip_reason"
           fi
           if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk" || test "$phase" = "studio"; }; then
@@ -234,20 +287,35 @@ jobs:
               echo "$skip_reason"
             fi
           fi
-          if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
+          # A scheduled run forced into dry mode leaves nothing at all behind. The dry cycle writes
+          # to tmp/dry-run/state, which dies with the runner; the skip recorder below needs
+          # skip=true and never saw it; the commit step is gated on dry != true. The job then ends
+          # green having recorded nothing, and the slot goes red with no explanation — the exact
+          # shape this recorder chain exists to remove. On a schedule a forced dry is therefore a
+          # skip carrying its reason. A manual dispatch keeps the dry run it asked for: no slot is
+          # claimed by it, so nothing is left unexplained.
+          force_dry() {
             dry=true
-            echo "Caught Up live mode awaits the explicit repository-variable approval gate."
+            echo "$1"
+            if test "$scheduled" = "true"; then
+              skip=true
+              skip_reason="$1"
+            fi
+          }
+          if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
+            force_dry "Caught Up live mode awaits the explicit repository-variable approval gate."
           fi
           if { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
-            dry=true
-            echo "Repository delivery credentials are missing; forcing fixture-only dry mode."
+            force_dry "Repository delivery credentials are missing, so this room could not deliver what it produced."
           fi
           if test "$delivery_only" != "true" && { test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; }; then
-            dry=true
-            echo "One or more council credentials are missing; forcing fixture-only dry mode."
+            force_dry "One or more council credentials are missing, so no agent could be called."
           fi
           if test "$delivery_only" = "true"; then
-            if test "$EVENT_NAME" != "workflow_dispatch" || test "$dry" = "true"; then
+            # "$scheduled" as well as the event, because delivery-only is the owner's mode and the
+            # Vercel cron arrives as a dispatch. It never sends this input, so this refuses a call
+            # made with the dispatch token by hand rather than anything the route can produce.
+            if test "$EVENT_NAME" != "workflow_dispatch" || test "$scheduled" = "true" || test "$dry" = "true"; then
               echo "Delivery-only mode requires a manual dispatch with dry=false and all matching gates open." >&2
               exit 1
             fi
@@ -258,6 +326,56 @@ jobs:
             if test "$phase" != "cu-edition" && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
               echo "MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true." >&2
               exit 1
+            fi
+          fi
+          # The double-fire guard, asked before anything is compiled, built or paid for.
+          #
+          # Two schedules now reach for the same slot: GitHub's crons and the Vercel cron that
+          # dispatches this workflow on the hour. Both exist through the transition, so a slot can
+          # be fired for twice. Neither dispatcher can tell — the Vercel route cannot see whether a
+          # run is in flight, and GitHub's queue does not know what it already delivered — but the
+          # run itself can, because the slot's record is a committed file named by the Prague date
+          # and the phase.
+          #
+          # It is asked twice, of two different things, because neither alone is enough.
+          #
+          # The checkout answers first. `concurrency: guarded-cycle-<ref>` above serialises runs
+          # and is granted before the job's first step, so by the time this checkout happened the
+          # earlier run had finished and pushed.
+          #
+          # The branch tip answers second, and it is the one that closes the hole. A run's checkout
+          # is `github.sha`, fixed when the run was created rather than when it starts; a firing
+          # that sat in a queue is looking at a tree from before the other schedule committed, and
+          # would see nothing on disk however carefully it looked. `git cat-file -e` against
+          # origin's tip is the same question asked of the branch as it is now.
+          #
+          # What neither covers, plainly: a run still in flight. Nothing is committed until it
+          # finishes, so two firings that genuinely overlap both see an empty slot. Only the
+          # concurrency group prevents that, and only for runs in this group. A first run that
+          # failed or could not push also leaves nothing, and the second firing then correctly
+          # holds the meeting rather than skipping a slot that never happened.
+          #
+          # This is a skip and not a failure. A second firing for a slot that already ran is the
+          # transition working as intended, so the job ends green. `duplicate` keeps the skip
+          # recorder quiet: the slot already has a real record, and filing a skip beside it would
+          # tell the calendar a meeting was called off that in fact took place.
+          if test "$scheduled" = "true" && test "$skip" != "true" && test "$dry" != "true" && test "$phase" != "skip"; then
+            slot="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/slot-record-cli.ts --phase "$phase")"
+            candidate="$(printf '%s' "$slot" | jq -r '.path // ""')"
+            recorded=""
+            if test "$(printf '%s' "$slot" | jq -r '.recorded')" = "true"; then
+              recorded="$candidate"
+            elif test -n "$candidate" && git fetch --quiet origin "$GITHUB_REF_NAME" \
+              && git cat-file -e "origin/${GITHUB_REF_NAME}:${candidate}" 2> /dev/null; then
+              recorded="$candidate"
+              echo "The record is on ${GITHUB_REF_NAME} but not in this run's checkout, which predates it."
+            fi
+            if test -n "$recorded"; then
+              skip=true
+              dry=true
+              duplicate=true
+              skip_reason="This slot already has ${recorded} for today, so this second firing ran nothing."
+              echo "$skip_reason"
             fi
           fi
           # Which meeting this run is, in the log and at the top of the run page.
@@ -275,12 +393,14 @@ jobs:
             echo "| dry | \`${dry}\` |"
             echo "| skip | \`${skip}\` |"
             test -n "$skip_reason" && echo "| reason | ${skip_reason} |"
-            echo "| trigger | \`${EVENT_NAME}${EVENT_SCHEDULE:+ ${EVENT_SCHEDULE}}\` |"
+            echo "| trigger | \`${EVENT_NAME}${EVENT_SCHEDULE:+ ${EVENT_SCHEDULE}}${INPUT_TRIGGER:+ ${INPUT_TRIGGER}}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
           echo "phase=$phase" >> "$GITHUB_OUTPUT"
           echo "dry=$dry" >> "$GITHUB_OUTPUT"
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
           echo "skip_reason=$skip_reason" >> "$GITHUB_OUTPUT"
+          echo "scheduled=$scheduled" >> "$GITHUB_OUTPUT"
+          echo "duplicate=$duplicate" >> "$GITHUB_OUTPUT"
           echo "delivery_only=$delivery_only" >> "$GITHUB_OUTPUT"
 
       # Skipped on a delivery-only dispatch, where "Run cycle" does not run, so this gate and
@@ -290,8 +410,10 @@ jobs:
       # A skipped slot has to leave something behind. The reason lived only in this log,
       # which expires, so the calendar showed eleven slots on 2 August as plain "missed" with
       # no way to tell a gate decision from a meeting nobody reached.
+      # Not on a duplicate. That slot already holds a record of the meeting actually happening,
+      # and a skip filed next to it would claim the room was called off when it was not.
       - name: Record why a scheduled meeting was skipped
-        if: ${{ github.event_name == 'schedule' && steps.mode.outputs.skip == 'true' && steps.mode.outputs.phase != 'skip' }}
+        if: ${{ steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip == 'true' && steps.mode.outputs.duplicate != 'true' && steps.mode.outputs.phase != 'skip' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           REASON: ${{ steps.mode.outputs.skip_reason }}
@@ -391,7 +513,7 @@ jobs:
           fi
 
       - name: Record that the repository gate stopped this meeting
-        if: ${{ github.event_name == 'schedule' && steps.gate.outputs.failed == 'true' }}
+        if: ${{ steps.mode.outputs.scheduled == 'true' && steps.gate.outputs.failed == 'true' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           COMMIT: ${{ github.sha }}
@@ -406,11 +528,22 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
             git commit -m "skip(${PHASE}): repository release gate failed"
+            # The loop's result is checked, as the skip recorder above already does. Left
+            # unchecked, three failed pushes dropped the skip with no signal at all and the run
+            # ended red with nothing on the calendar — precisely the "cause is unknown" state
+            # NO_RECORD_REASON exists to describe. The step after this one fails the run anyway,
+            # so this exit changes no outcome; what it changes is that the log says which record
+            # was lost.
+            pushed=false
             for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
               git fetch origin "$GITHUB_REF_NAME"
               git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
             done
+            if test "$pushed" != "true"; then
+              echo "Could not push the release-gate skip for ${PHASE} after three attempts." >&2
+              exit 1
+            fi
           fi
 
       - name: Stop when the release gate failed
@@ -425,7 +558,11 @@ jobs:
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           DRY: ${{ steps.mode.outputs.dry }}
-          MEETING_TRIGGER: ${{ github.event_name }}
+          # "schedule" for the Vercel cron too. The cycle reads this to decide whether the run
+          # claims a slot — whether a closed gate leaves a record, and whether the double-fire
+          # guard in runCycle applies — and a punctual firing claims its slot exactly as a late
+          # cron does. An owner's manual dispatch still reads "workflow_dispatch" and claims none.
+          MEETING_TRIGGER: ${{ steps.mode.outputs.scheduled == 'true' && 'schedule' || github.event_name }}
         run: |
           args=(--phase "$PHASE" --explain-budget --explain-routing)
           if test "$DRY" = "true"; then
@@ -549,6 +686,12 @@ jobs:
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
+          # The Vercel cron reads as a schedule here as well, so a punctual run that finished
+          # without writing anything still leaves the stated reason a scheduled slot is owed
+          # instead of the quiet exit 0 a manual dispatch gets.
+          EVENT_NAME: ${{ steps.mode.outputs.scheduled == 'true' && 'schedule' || github.event_name }}
+          PHASE: ${{ steps.mode.outputs.phase }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
@@ -563,12 +706,39 @@ jobs:
               git add -A -- "$runtime_path"
             fi
           done
-          if git diff --cached --quiet; then
-            echo "Cycle produced no canonical state change."
-            exit 0
-          fi
           git config user.name "boardlessai-cycle[bot]"
           git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          # A live cycle that staged nothing used to end the run green, right here, with no commit
+          # and no record anywhere — the terminal silent path, and the last one on the write side.
+          # It happens when every write a phase made landed outside runtime_paths above, or when a
+          # phase returned without writing at all. Either way a scheduled slot has nothing to show,
+          # so it is told that in as many words rather than left red and unexplained, and the run
+          # then fails: a scheduled meeting that produced no canonical state is a defect, and a
+          # green run is how it stayed invisible. A dispatch claims no slot, so it keeps the old
+          # quiet exit and only says so in the log.
+          if git diff --cached --quiet; then
+            echo "Cycle produced no canonical state change."
+            test "$EVENT_NAME" = "schedule" || exit 0
+            if test -n "$PHASE" && test "$PHASE" != "skip"; then
+              pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
+                --phase "$PHASE" \
+                --reason "The cycle ran and finished but wrote no record of this meeting. See ${RUN_URL}"
+              if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
+                git add -A -- state/meetings/skips
+                git commit -m "skip(${PHASE}): the cycle wrote no canonical state"
+                pushed=false
+                for attempt in 1 2 3; do
+                  if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+                  git fetch origin "$GITHUB_REF_NAME"
+                  git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+                done
+                if test "$pushed" != "true"; then
+                  echo "Could not push the record after three attempts." >&2
+                fi
+              fi
+            fi
+            exit 1
+          fi
           git commit -m "cycle(${CYCLE_NUMBER})"
           pushed=false
           for attempt in 1 2 3; do
@@ -1093,15 +1263,36 @@ jobs:
         # one was skipped — so != 'false' is exactly the two cases worth a note. It stays quiet
         # for a meeting that ran: a delivery step failing after that is a delivery problem, and
         # calling it "the meeting never finished" is the opposite of what happened.
-        if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
+        if: ${{ failure() && steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          INPUT_PHASE: ${{ inputs.phase }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          test -n "$PHASE" || exit 0
           git fetch origin "$GITHUB_REF_NAME"
           git checkout -- . 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
+          # PHASE is empty when "Resolve guarded cycle mode" is itself what failed — so the run
+          # that failed earliest was the one guaranteed to leave no trace at all. The cron that
+          # fired names the slot on its own, exactly as the mode step derives it, so the name is
+          # recovered here rather than given up on. If that resolution also fails there is
+          # genuinely nothing to file the skip under and the step stops, which is the one case
+          # left where a run can end without naming its slot.
+          #
+          # A Vercel-cron firing carries no cron expression, so the fallback reads the dispatch
+          # input the route set instead. Same recovery, different place the slot's name was
+          # written down; without it the punctual path would be the one shape of scheduled run
+          # that can still fail early and leave the slot unexplained.
+          if test -z "$PHASE"; then
+            PHASE="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts \
+              --scheduled --cron "$EVENT_SCHEDULE" --json | jq -r '.slot // ""')" || PHASE=""
+          fi
+          if test -z "$PHASE"; then
+            PHASE="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts \
+              --phase "$INPUT_PHASE")" || PHASE=""
+          fi
+          test -n "$PHASE" && test "$PHASE" != "skip" || exit 0
           reason="The run for this meeting failed before it finished. See ${RUN_URL}"
           pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
             --phase "$PHASE" --reason "$reason" || exit 0
@@ -1110,9 +1301,18 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
             git commit -m "skip(${PHASE}): the run failed before the meeting finished"
+            # Checked, like the skip recorder at the top of the job. Three failed pushes used to
+            # drop this record silently, leaving the run red and the slot unexplained — the one
+            # outcome this step exists to prevent. The run has already failed, so the exit only
+            # makes the loss visible in the log.
+            pushed=false
             for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
               git fetch origin "$GITHUB_REF_NAME"
               git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
             done
+            if test "$pushed" != "true"; then
+              echo "Could not push the failure skip for ${PHASE} after three attempts." >&2
+              exit 1
+            fi
           fi
