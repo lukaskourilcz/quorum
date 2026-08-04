@@ -15,6 +15,6 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
-| — | No ideas recorded | — | — |
+| idea-2026-08-04-f66c928d | Single-Gap Specialist Agenda Brief | vetoed | VAULT hard stop: Both propose identical bounded internal briefs selecting one open evidence gap with specialist follow-… |
 
 Omitted older kill-list entries: 0.

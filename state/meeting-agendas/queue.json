@@ -17,7 +17,22 @@
       "status": "consumed",
       "consumedBy": "20260803095550-mma-intake",
       "consumedAt": "2026-08-03T09:55:50.919Z"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-2ab0f25e6b6b3000",
+      "ventureId": "mma-files",
+      "phase": "mag-desk",
+      "requestedBy": "FORGE",
+      "sourcePhase": "morning",
+      "sourceMeetingRef": "standups/2026-08-04-morning",
+      "summary": "Slot-fill sits at 33% with only 1 of 3 slots published despite 92 verified fighter files; mag-desk can identify the concrete blocking gap between verified coverage and rendered articles.",
+      "evidenceRefs": [],
+      "requestedAt": "2026-08-04T05:49:06.490Z",
+      "notBefore": "2026-08-04",
+      "expiresAt": "2026-08-07T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-03T09:55:50.919Z"
+  "updatedAt": "2026-08-04T05:49:06.490Z"
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-03T08:33:18.686Z",
+  "generatedAt": "2026-08-04T05:49:06.490Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -10,9 +10,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0,
+          "value": 1,
           "unit": "ratio",
-          "detail": "0 delivered, 0 failed; NO_EDITION is neutral."
+          "detail": "1 delivered, 0 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -56,16 +56,16 @@
         {
           "id": "event-fighter-coverage",
           "label": "Verified fighter files",
-          "value": 58,
+          "value": 92,
           "unit": "count",
-          "detail": "58 valid UFC or Oktagon fighter files."
+          "detail": "92 valid UFC or Oktagon fighter files."
         },
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0.0101,
+          "value": 0.3444,
           "unit": "ratio",
-          "detail": "2 of 199 fighter fields are corroborated."
+          "detail": "187 of 543 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -114,10 +114,10 @@
     "killedSlotReasons": {
       "evidence": 1
     },
-    "vetoRate": 0.0625,
+    "vetoRate": 0.0476,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0.0101,
+    "sourceAgreementRate": 0.3444,
     "verifierPassRate": 0
   }
 }

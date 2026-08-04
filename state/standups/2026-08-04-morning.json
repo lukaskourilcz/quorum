@@ -1,0 +1,511 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260804054906-morning",
+  "date": "2026-08-04",
+  "phase": "morning",
+  "episode": {
+    "id": "EP-20260804-MORNING",
+    "shift": "morning",
+    "title": "Morning briefing",
+    "hours": "06:00–14:00",
+    "nextShift": "afternoon",
+    "handoff": "Pass priorities, evidence gaps and blocked work to the afternoon shift."
+  },
+  "fixture": false,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea: idea-2026-08-04-f66c928d.",
+  "participantReasons": [
+    {
+      "agent": "VIZE",
+      "reason": "owns council objective",
+      "participated": true
+    },
+    {
+      "agent": "FORGE",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "PULSE",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "SPARK",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HERALD",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VAULT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FRAME",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RELAY",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FUNNEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PALATE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCENE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STUNT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CANVAS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "REACH",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPLIT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "EASEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MOTIF",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.036254,
+    "actualCycleUsd": 0.0289724,
+    "monthAllInUsd": 1.73635785,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "VIZE",
+      "summary": "Caught Up remains the sole active venture; other ventures' priority items exist but their designated rooms aren't available this shift per the routing table (incubator maps to incubator-scan, which isn't listed as approved here). Recommend holding specialist commissioning pending scope confirmation.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "FORGE",
+      "summary": "Reviewed OPS-OBSERVE scope for setting bounded specialist agendas. Caught Up shows healthy cadence (32 sources, 1/1 edition success). Other ventures show zero-output metrics across proposals, campaigns, templates, and readiness dossiers, but this item only sets agendas, not spend or execution.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "PULSE",
+      "summary": "The bounded agenda-setting item is within scope: it reviews operating evidence and may request one specialist follow-up without authorizing spend, publishing, account changes, or code changes. Current records show several open evidence gaps across ventures.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "OPS-OBSERVE is bounded internal coordination within the approved morning scope. The record supports selecting one open evidence gap for a specialist agenda, but no work has yet occurred and no external action is authorized.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SPARK",
+      "summary": "Single-Gap Specialist Agenda Brief: Create a bounded internal brief selecting one open Caught Up evidence gap, stating the question, evidence needed, and one optional specialist follow-up. No spend, publishing, account changes, code changes, or execution is authorized.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "VIZE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    },
+    {
+      "voter": "FORGE",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    },
+    {
+      "voter": "PULSE",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "OPS-OBSERVE",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "OPS-OBSERVE",
+      "owner": "VIZE",
+      "summary": "Review the current operating record and request at most one allowlisted specialist room when a concrete decision or evidence gap needs it. Content-critical service rooms keep their fixed delivery windows.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "NO_POST — this shift is an internal operating record, not a market or publishing event.",
+  "operatingSignals": {
+    "snapshotRef": "state/autonomy/latest.json",
+    "growth": [
+      {
+        "venture": "caught-up",
+        "objective": "Publish reliably while widening the healthy source mix",
+        "signals": [
+          {
+            "id": "edition-cadence",
+            "label": "Edition cadence",
+            "value": 1,
+            "unit": "ratio",
+            "detail": "1 delivered, 0 failed; NO_EDITION is neutral."
+          },
+          {
+            "id": "source-coverage",
+            "label": "Healthy source breadth",
+            "value": 32,
+            "unit": "count",
+            "detail": "32 enabled allowlisted sources."
+          }
+        ]
+      },
+      {
+        "venture": "titty-tuesdays",
+        "objective": "Build a complete inventory of campaigns that are ready to launch",
+        "signals": [
+          {
+            "id": "campaign-inventory",
+            "label": "Launch-ready campaigns",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 campaign plans pass the complete-plan checks."
+          }
+        ]
+      },
+      {
+        "venture": "incubator",
+        "objective": "Produce evidence-backed content venture proposals",
+        "signals": [
+          {
+            "id": "evidence-backed-proposals",
+            "label": "Evidence-backed proposals",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 valid incubator proposals."
+          }
+        ]
+      },
+      {
+        "venture": "fightaiq",
+        "objective": "Improve verified fight coverage and build readiness dossiers",
+        "signals": [
+          {
+            "id": "event-fighter-coverage",
+            "label": "Verified fighter files",
+            "value": 92,
+            "unit": "count",
+            "detail": "92 valid UFC or Oktagon fighter files."
+          },
+          {
+            "id": "two-source-agreement",
+            "label": "Two-source agreement",
+            "value": 0.3444,
+            "unit": "ratio",
+            "detail": "187 of 543 fighter fields are corroborated."
+          },
+          {
+            "id": "readiness-dossiers",
+            "label": "Readiness dossiers",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 completed-event review dossiers."
+          }
+        ]
+      },
+      {
+        "venture": "carousel-studio",
+        "objective": "Grow a checked library of original, reusable carousel layouts",
+        "signals": [
+          {
+            "id": "live-template-library",
+            "label": "Live carousel templates",
+            "value": 10,
+            "unit": "count",
+            "detail": "10 templates passed every brand and format check."
+          }
+        ]
+      },
+      {
+        "venture": "mma-files",
+        "objective": "Fill evidenced article slots and render verified FightAIQ coverage",
+        "signals": [
+          {
+            "id": "slot-fill",
+            "label": "Evidenced slot fill",
+            "value": 0.3333,
+            "unit": "ratio",
+            "detail": "1 published articles for 3 assigned slots."
+          },
+          {
+            "id": "rendered-fightaiq-coverage",
+            "label": "FightAIQ files rendered",
+            "value": 2,
+            "unit": "count",
+            "detail": "2 distinct fighter references reached published articles."
+          }
+        ]
+      }
+    ],
+    "quality": {
+      "killedSlotReasons": {
+        "evidence": 1
+      },
+      "vetoRate": 0.0476,
+      "firstPassRate": 0,
+      "retryRate": 0,
+      "sourceAgreementRate": 0.3444,
+      "verifierPassRate": 0
+    }
+  },
+  "starvationReview": [
+    {
+      "ventureId": "carousel-studio",
+      "outcome": "why-not",
+      "reason": "The board used its single commission on a higher-priority bounded decision.",
+      "priorityItemId": null
+    },
+    {
+      "ventureId": "incubator",
+      "outcome": "why-not",
+      "reason": "The board used its single commission on a higher-priority bounded decision.",
+      "priorityItemId": null
+    },
+    {
+      "ventureId": "mma-files",
+      "outcome": "commissioned",
+      "reason": "The board commissioned the venture's selected open priority item.",
+      "priorityItemId": "priority-ef8d44c0aaa3ba49"
+    },
+    {
+      "ventureId": "titty-tuesdays",
+      "outcome": "why-not",
+      "reason": "The board used its single commission on a higher-priority bounded decision.",
+      "priorityItemId": null
+    }
+  ],
+  "quarterlyKpis": {
+    "snapshotRef": "state/kpis/latest.json",
+    "quarterId": "2026-Q1",
+    "onTrack": 20,
+    "atRisk": 0,
+    "offTrack": 7,
+    "unavailable": 10,
+    "criticalMisses": [
+      "company.monthly-all-in-usd",
+      "carousel-studio.engine-post-rate"
+    ]
+  },
+  "eveningOutcome": null,
+  "caughtUpIdeaRef": "idea-2026-08-04-f66c928d",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T05:49:06.490Z",
+    "closedAt": "2026-08-04T05:49:25.538Z",
+    "gavel": "VIZE",
+    "setting": "Live Morning shift council. The room can assess only the approved operating item; pre-revenue authority and human approval gates remain binding.",
+    "turns": [
+      {
+        "agent": "VIZE",
+        "mode": "gavel",
+        "sentAt": "2026-08-04T05:49:06.490Z",
+        "text": "The morning shift opens. We are reviewing Set today's bounded specialist agendas; the scope is internal and no external action is on the table."
+      },
+      {
+        "agent": "LEDGER",
+        "mode": "reads-ledger",
+        "addressedTo": "VIZE",
+        "sentAt": "2026-08-04T05:49:06.491Z",
+        "text": "The recorded API cost for this cycle is $0.0290. Month-to-date API cost is $1.7364 against the $30.00 all-in operating limit."
+      },
+      {
+        "agent": "VIZE",
+        "mode": "statement",
+        "sentAt": "2026-08-04T05:49:10.255Z",
+        "text": "Caught Up remains the sole active venture; other ventures' priority items exist but their designated rooms aren't available this shift per the routing table (incubator maps to incubator-scan, which isn't listed as approved here). Recommend holding specialist commissioning pending scope confirmation."
+      },
+      {
+        "agent": "FORGE",
+        "mode": "response",
+        "sentAt": "2026-08-04T05:49:15.362Z",
+        "text": "Reviewed OPS-OBSERVE scope for setting bounded specialist agendas. Caught Up shows healthy cadence (32 sources, 1/1 edition success). Other ventures show zero-output metrics across proposals, campaigns, templates, and readiness dossiers, but this item only sets agendas, not spend or execution."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "response",
+        "sentAt": "2026-08-04T05:49:20.621Z",
+        "text": "The bounded agenda-setting item is within scope: it reviews operating evidence and may request one specialist follow-up without authorizing spend, publishing, account changes, or code changes. Current records show several open evidence gaps across ventures."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "raises-concern",
+        "sentAt": "2026-08-04T05:49:22.598Z",
+        "text": "OPS-OBSERVE is bounded internal coordination within the approved morning scope. The record supports selecting one open evidence gap for a specialist agenda, but no work has yet occurred and no external action is authorized."
+      },
+      {
+        "agent": "SPARK",
+        "mode": "statement",
+        "sentAt": "2026-08-04T05:49:06.492Z",
+        "text": "Single-Gap Specialist Agenda Brief. VAULT recorded duplicate_of; idea-2026-08-04-f66c928d is the one Caught Up handoff for the product room.",
+        "evidenceRefs": [
+          "idea-2026-08-04-f66c928d"
+        ]
+      },
+      {
+        "agent": "VIZE",
+        "mode": "close",
+        "sentAt": "2026-08-04T05:49:25.538Z",
+        "text": "The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved."
+      }
+    ]
+  },
+  "generatedAt": "2026-08-04T05:49:25.538Z"
+}
