@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-4daee387208e05ea",
+  "venture": "mma-files",
+  "packageHash": "53be0749735dd2e96db2ea20d5a1eb6433146867138e13328fd19f48efe5c437",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "89fb06977ff2b451b6dd578ba5d98885c450093e",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 89fb06977ff2b451b6dd578ba5d98885c450093e is readable",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/oktagon-gustavo-lopez?boardless_verify=53be0749735d-1785837110278",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and oktagon-gustavo-lopez match",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 53be0749735dd2e96db2ea20d5a1eb6433146867138e13328fd19f48efe5c437",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/oktagon-gustavo-lopez/hero.webp?boardless_verify=53be0749735d-1785837110278",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Prensa TV Pública · CC BY",
+      "checkedAt": "2026-08-04T09:51:50.278Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-04T09:51:07.525Z",
+  "completedAt": "2026-08-04T09:51:51.063Z"
+}
