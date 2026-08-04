@@ -6,6 +6,7 @@ import { PriorityQueueSchema, type PriorityItem } from "../src/contracts/autonom
 import {
   addPriorityItem,
   archivePriorityItem,
+  ensurePriorityItem,
   openPriorityItems,
   PRIORITY_QUEUE_CAP,
   PRIORITY_QUEUE_PATH,
@@ -72,7 +73,8 @@ describe("agentic priority queue", () => {
     await skipPriorityItem({ root, itemId: skipped.id, reason: "The evidence file is incomplete.", now });
     await archivePriorityItem({ root, itemId: archived.id, now });
     const queue = await readPriorityQueue(root, now);
-    expect(openPriorityItems(queue)).toEqual([]);
+    // The declined question comes back: "why-not" is a morning's answer, not a closed question.
+    expect(openPriorityItems(queue).map((item) => item.status)).toEqual(["why-not"]);
     expect(queue.items.map((item) => item.status)).toEqual(["selected", "why-not", "archived"]);
   });
 
@@ -149,5 +151,47 @@ describe("agentic priority queue", () => {
     });
     expect(PriorityQueueSchema.safeParse(build(PRIORITY_QUEUE_CAP)).success).toBe(true);
     expect(PriorityQueueSchema.safeParse(build(PRIORITY_QUEUE_CAP + 1)).success).toBe(false);
+  });
+});
+
+describe("what the board is allowed to commission", () => {
+  it("hands back a question it declined on an earlier morning", async () => {
+    // Every morning skips the items it did not select to "why-not". While that status was
+    // filtered out, the board was handed an empty list from the second morning onwards and its
+    // own prompt then told it that an empty list means request nothing — so it met daily and
+    // could not have commissioned a room if it had wanted to.
+    const root = await mkdtemp(path.join(os.tmpdir(), "priority-reconsider-"));
+    const seeded = await ensurePriorityItem({
+      root,
+      venture: "incubator",
+      question: "What is the next niche magazine worth researching?",
+      decisionAtStake: "Whether to open a research room for it.",
+      now: new Date("2026-08-01T04:00:00.000Z"),
+      expires: new Date("2026-08-08T04:00:00.000Z")
+    });
+    await skipPriorityItem({
+      root,
+      itemId: seeded.item.id,
+      reason: "The board used its single commission elsewhere.",
+      now: new Date("2026-08-01T04:05:00.000Z")
+    });
+    const queue = await readPriorityQueue(root, new Date("2026-08-02T04:00:00.000Z"));
+    expect(queue.items.find((item) => item.id === seeded.item.id)?.status).toBe("why-not");
+    expect(openPriorityItems(queue).map((item) => item.id)).toContain(seeded.item.id);
+  });
+
+  it("does not hand back one that was archived", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "priority-archived-"));
+    const seeded = await ensurePriorityItem({
+      root,
+      venture: "incubator",
+      question: "A question that has been settled for good.",
+      decisionAtStake: "Whether anything further is owed to it.",
+      now: new Date("2026-08-01T04:00:00.000Z"),
+      expires: new Date("2026-08-08T04:00:00.000Z")
+    });
+    await archivePriorityItem({ root, itemId: seeded.item.id, now: new Date("2026-08-01T04:05:00.000Z") });
+    const queue = await readPriorityQueue(root, new Date("2026-08-02T04:00:00.000Z"));
+    expect(openPriorityItems(queue)).toEqual([]);
   });
 });

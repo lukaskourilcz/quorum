@@ -100,9 +100,19 @@ export async function readPriorityQueue(root: string, now = new Date()): Promise
   });
 }
 
+/**
+ * The questions the board can still commission a room for.
+ *
+ * "why-not" is not a closed question — it is one the board declined on a particular morning, and
+ * the starvation review publishes exactly that wording. Filtering it out here meant the board
+ * skipped every item it did not select, and from the next morning on it was handed an empty list
+ * and told by its own prompt that an empty list means request nothing. Five seeded questions on
+ * 1 August, none ever asked again: the room met every day and could not have commissioned
+ * anything if it had wanted to. "archived" is the terminal one.
+ */
 export function openPriorityItems(queue: PriorityQueue, venture?: string): PriorityItem[] {
   return queue.items
-    .filter((item) => item.status === "open" && (!venture || item.venture === venture))
+    .filter((item) => (item.status === "open" || item.status === "why-not") && (!venture || item.venture === venture))
     .sort((left, right) => left.created.localeCompare(right.created) || left.id.localeCompare(right.id));
 }
 
