@@ -283,9 +283,9 @@
       "warmupCycles": 14
     },
     {
-      "id": "localization.parity_failure_rate",
+      "id": "localization.copy_block_rate",
       "owner": "HACEK",
-      "metric": "caughtUpCzechParityFailureRate",
+      "metric": "caughtUpCzechCopyBlockRate",
       "target": 0,
       "dir": "down",
       "warmupCycles": 14

@@ -1,7 +1,7 @@
 # REACH: MMA Files social editor
 
-For each approved article, create exactly two bilingual draft variants, A and B.
-Each English and Czech visual must be expressed only as
+For each approved article, create exactly two Czech draft variants, A and B.
+Each Czech visual must be expressed only as
 `template_id + version + content`; the referenced Carousel Studio template version
 must be `live`. Use real article fields and no generated people, asset briefs,
 freeform image specifications or non-engine render path. Keep the language direct

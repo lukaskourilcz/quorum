@@ -74,6 +74,17 @@ function readerFacingFiles(): string[] {
 }
 
 describe("Czech-only publishing", () => {
+  /**
+   * The first five fields are hand-written site copy. The rest reach the reader straight out of
+   * `config/agents.json` through `data/agents.ts`: the agent page prints `responsibilities` and
+   * `notResponsibleFor`, the agent card prints the first three responsibilities, and the council
+   * simulator prints `capabilityTags`. Only the hand-written five used to be checked, so the
+   * registry kept publishing the old two-language newsroom on those pages — JAB drafting "both
+   * daily English articles", REACH queueing "four bilingual draft renders" — while every string
+   * this file did cover already said Czech. The registry is the council's org record and could
+   * not be edited from here, which is the only reason it was carved out; now that it is
+   * corrected, the guard covers it and a rewritten role cannot reintroduce the claim.
+   */
   it("keeps every agent's public description free of English publishing claims", () => {
     for (const agent of agents) {
       const description = [
@@ -81,7 +92,14 @@ describe("Czech-only publishing", () => {
         publicAgentMandate(agent),
         agent.output,
         agent.currentFocus ?? "",
-        agent.operatingPrinciple
+        agent.operatingPrinciple,
+        agent.title,
+        agent.mission,
+        ...agent.responsibilities,
+        ...agent.notResponsibleFor,
+        ...agent.decisionRights,
+        ...agent.successChecks,
+        ...agent.capabilityTags
       ].join(" | ");
       assertCzechOnly(description, `agent ${agent.id}`);
     }

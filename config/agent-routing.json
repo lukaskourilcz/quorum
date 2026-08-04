@@ -73,7 +73,7 @@
       "status": "active"
     },
     "HACEK": {
-      "capabilities": ["editorial:czech", "translation:fidelity", "social:czech"],
+      "capabilities": ["editorial:czech", "editorial:register", "social:czech"],
       "status": "active"
     },
     "SPARK": {
@@ -141,15 +141,15 @@
       "status": "active"
     },
     "CANVAS": {
-      "capabilities": ["editorial:chair", "mma:newsroom", "language:bilingual"],
+      "capabilities": ["editorial:chair", "mma:newsroom", "language:czech"],
       "status": "active"
     },
     "JAB": {
-      "capabilities": ["editorial:writing", "mma:reporting", "language:english"],
+      "capabilities": ["editorial:writing", "mma:reporting", "language:czech"],
       "status": "active"
     },
     "REACH": {
-      "capabilities": ["social:editorial", "media:compose", "language:bilingual"],
+      "capabilities": ["social:editorial", "media:compose", "language:czech"],
       "status": "active"
     },
     "SPLIT": {

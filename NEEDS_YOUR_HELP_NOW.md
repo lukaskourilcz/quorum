@@ -16,7 +16,7 @@ nobody read, DNESKAi 39% of an edition. Both sites serve Czech and no longer
 offer English; no indexed URL broke doing it.
 
 MMA Files publishes. The first council-produced article — a Valentina Shevchenko profile —
-is live in English and Czech and passed all nine release checks. The delivery App can read
+is live in Czech and passed all nine release checks. The delivery App can read
 the commit, its status and its check runs on both target repositories; `Delivery doctor`
 (Actions → run manually) confirms that in about a minute and names the exact permission if
 it ever regresses.
@@ -29,16 +29,34 @@ waiting for, in the order that unblocks the most.
 These are not setup steps. They are choices the migration surfaced that are
 yours, not the runtime's.
 
-- [ ] **HACEK needs a responsibility change, from PEOPLE not from me.** I said
-  earlier that HACEK had been left with nothing; that was wrong and I checked it
-  properly. HACEK keeps its seat in the DNESKAi edition room, keeps
-  `editorial:czech` and `social:czech`, and still owns the Czech register and the
-  copy repair in `orchestrator/src/edition/localize.ts`. What it lost is the
-  production call that adapted an English article, and with it the
-  `translation:fidelity` capability, which nothing now exercises. Recording that
-  is a Tier A/B organization change and belongs to PEOPLE through the maintenance
-  module — an interactive session must not write it by hand, so nothing was
-  changed. Raise it at the next org review. [imp:2] [owner:me] [time:10m] [kind:decision]
+- [x] **HACEK's registry entry now says what HACEK does.** You authorised the
+  `config/agents.json` edit directly, so the record no longer describes the
+  removed translation stage. HACEK keeps its seat in the DNESKAi edition room,
+  keeps `editorial:czech` and `social:czech`, and still owns the Czech register
+  and the copy repair in `orchestrator/src/edition/localize.ts`. What it lost is
+  the production call that adapted an English article; `translation:fidelity`,
+  which nothing exercised, is now `editorial:register`. JAB, REACH and CANVAS
+  carried the same stale two-language wording and were corrected with it.
+
+- [x] **Six runtime prompts no longer describe the two-language newsroom.** You
+  authorised these directly. `hacek.md` opened "Receive only an English article"
+  and now receives the Czech article the desk already wrote; `jab.md` drafted "the
+  English article" and now drafts the Czech one and picks the licensed image;
+  `reach.md` asked for "two bilingual draft variants", `canvas.md` for a "two-slot
+  bilingual fight newsroom", both now Czech. Two more turned up that the first
+  pass had not named: `magazine.md` called the room "bounded bilingual" and told
+  it to "keep English and Czech together", and `_shared.md` — the preamble on
+  every council call — introduced "STET English copy" and "JAB English reporting".
+  These are read into live rooms, so each was an instruction a model acted on.
+
+- [x] **HACEK's third KPI now counts something that happens.**
+  `localization.parity_failure_rate` measured agreement between two tellings and
+  there is only one, so it could never move off zero. It is now
+  `localization.copy_block_rate` (`caughtUpCzechCopyBlockRate`), the share of
+  editions the Czech copy gate blocks — same target of 0, same direction, same
+  14-cycle warm-up, following the `published-hero-rate` rename. No target was
+  lowered and no past snapshot was rewritten. Like HACEK's other two, it still has
+  no collector wired, so it reads "No verified measurement is connected."
 
 - [x] **The bilingual KPI now counts what the desk promises.** It was "Editions
   delivered in English and Czech with a hero image", a practice the company

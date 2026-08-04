@@ -47,7 +47,7 @@
     "minimumOwnedKpis": 3,
     "requiredCapabilities": [
       "editorial:czech",
-      "translation:fidelity",
+      "editorial:register",
       "social:czech"
     ],
     "promptPath": "orchestrator/prompts/hacek.md",

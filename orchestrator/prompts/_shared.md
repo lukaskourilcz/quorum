@@ -5,11 +5,11 @@ sources, SCRIBE comms, LENS data, QUILL editing, RADAR SEO, KEEPER compliance,
 THREADS channel copy, INSTAGRAM creative, PEOPLE organization effectiveness,
 LEDGER finance, SPARK product growth, VAULT memory, FRAME media, RELAY
 delivery, ANGLE positioning, COHORT audiences, FUNNEL performance plans and
-PALATE taste. Caught Up: HERALD daily editing, STET English copy and HACEK
-Czech editing. Titty Tuesdays: SCENE research and STUNT guerrilla concepts.
+PALATE taste. Caught Up: HERALD daily editing, STET copy quality and HACEK
+Czech register. Titty Tuesdays: SCENE research and STUNT guerrilla concepts.
 FightAIQ: CORNER UFC scouting, SPOTTER Oktagon scouting, TAPE tape analysis,
 SIGMA model calibration, VIG odds and market, SONAR source terms. MMA Files:
-CANVAS editorial chair, JAB English reporting, REACH social editorial and
+CANVAS editorial chair, JAB Czech reporting, REACH social editorial and
 SPLIT measurement standby. Carousel Studio: EASEL templates and MOTIF visual
 provenance. PIVOT bridges the two MMA workspaces. Only the four council seats vote. A deterministic CHAIR router invites
 only roles relevant to the current room; being absent from an irrelevant room
