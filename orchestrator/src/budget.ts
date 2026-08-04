@@ -191,6 +191,83 @@ function isSameUtcDay(left: Date, right: Date): boolean {
   return left.toISOString().slice(0, 10) === right.toISOString().slice(0, 10);
 }
 
+/**
+ * Model-API spend already on the ledger for `now`'s UTC day.
+ *
+ * assertSharedReservation enforces the daily cap against exactly this slice, and the
+ * pre-checks below read it through the same function, so a caller that asks "will today's
+ * cap take this?" before opening a room gets the answer the reservation itself would give.
+ */
+export function daySpendUsd(
+  ledger: readonly BudgetLedgerEntry[],
+  now: Date
+): number {
+  return ledger
+    .filter((entry) => isSameUtcDay(new Date(entry.ts), now))
+    .reduce((sum, entry) => sum + entry.usd, 0);
+}
+
+export interface DailyBudgetStatus {
+  spentUsd: number;
+  capUsd: number;
+  remainingUsd: number;
+}
+
+/** Today's spend against the daily cap in force. Reads a cap; it never sets or moves one. */
+export function dailyBudgetStatus(
+  ledger: readonly BudgetLedgerEntry[],
+  now: Date,
+  limits: BudgetLimits = DEFAULT_BUDGET_LIMITS
+): DailyBudgetStatus {
+  const spentUsd = Number(daySpendUsd(ledger, now).toFixed(8));
+  return {
+    spentUsd,
+    capUsd: limits.dailyUsd,
+    remainingUsd: Number(Math.max(0, limits.dailyUsd - spentUsd).toFixed(8))
+  };
+}
+
+/**
+ * Whether reserving `usd` today would be refused by the daily cap.
+ *
+ * assertSharedReservation calls this to decide whether to throw DAILY_CAP, so asking first
+ * and being refused later are the same test on the same numbers. Asking is the only thing
+ * this adds: the cap's value, its slice of the ledger and its verdict are untouched.
+ */
+export function exceedsDailyCap(
+  usd: number,
+  ledger: readonly BudgetLedgerEntry[],
+  now: Date,
+  limits: BudgetLimits = DEFAULT_BUDGET_LIMITS
+): boolean {
+  return daySpendUsd(ledger, now) + usd > limits.dailyUsd;
+}
+
+function money(value: number): string {
+  return `$${value.toFixed(2)}`;
+}
+
+/**
+ * What a room says on the calendar when a cap stopped it, in plain English.
+ *
+ * MeetingSkipSchema rejects a reason over 240 characters and the week board prints the first
+ * 180, so the phase, the cap and the two amounts come first and only the closing clause is at
+ * risk of being cut. A refused reservation is not a failure and this is the sentence that has
+ * to say so — the alternative the owner was reading is "the run failed before it finished".
+ */
+export function budgetStopReason(input: {
+  phase: string;
+  status: DailyBudgetStatus;
+  /** The room's reservation when it was refused before opening; null once seats were called. */
+  reservationUsd: number | null;
+  code?: BudgetErrorCode;
+}): string {
+  if (input.reservationUsd !== null) {
+    return `The ${input.phase} room did not open: the day's ${money(input.status.capUsd)} model-API cap has ${money(input.status.remainingUsd)} left and the room reserves ${money(input.reservationUsd)}. No model was called; spending resumes tomorrow.`;
+  }
+  return `The ${input.phase} room stopped early: a budget cap refused the next seat (${input.code ?? "DAILY_CAP"}). ${money(input.status.spentUsd)} of the day's ${money(input.status.capUsd)} model-API cap is spent. The rest were not called.`;
+}
+
 function isSameUtcMonth(left: Date, right: Date): boolean {
   return left.toISOString().slice(0, 7) === right.toISOString().slice(0, 7);
 }
@@ -305,9 +382,6 @@ function assertSharedReservation(
   const cycleSpend = context.ledger
     .filter((entry) => entry.cycleId === context.cycleId)
     .reduce((sum, entry) => sum + entry.usd, 0);
-  const daySpend = context.ledger
-    .filter((entry) => isSameUtcDay(new Date(entry.ts), context.now))
-    .reduce((sum, entry) => sum + entry.usd, 0);
   const monthSpend = context.ledger
     .filter((entry) => isSameUtcMonth(new Date(entry.ts), context.now))
     .reduce((sum, entry) => sum + entry.usd, 0);
@@ -321,7 +395,7 @@ function assertSharedReservation(
   if (cycleSpend + usd > limits.maxCycleUsd) {
     throw new BudgetError("CYCLE_CAP", "Cycle cap exceeded");
   }
-  if (daySpend + usd > limits.dailyUsd) {
+  if (exceedsDailyCap(usd, context.ledger, context.now, limits)) {
     throw new BudgetError("DAILY_CAP", "Daily API cap exceeded");
   }
   if (monthSpend + usd > limits.monthlyApiUsd) {

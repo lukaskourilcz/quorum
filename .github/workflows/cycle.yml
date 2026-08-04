@@ -294,18 +294,47 @@ jobs:
           fi
 
       # Eighteen crons a day each ran agents:validate, lint, typecheck, test and build — better
-      # than two minutes of runner time on 3 August — against the same unchanged commit, every
-      # time. The gate asks one question: does this commit build and pass? That answer cannot
-      # change while the commit and the lockfile do not, so it is remembered rather than
-      # recomputed. Nothing is skipped and no test is dropped: a new commit still runs the full
-      # gate before any meeting opens, exactly as before.
-      - name: Reuse this commit's release-gate verdict
+      # than two minutes of runner time on 3 August — against the same source, every time. The
+      # gate asks one question: does this tree build and pass? That answer cannot change while
+      # the source, the config, the schemas, the prompts, the mirrored skill trees, the
+      # workflows and the lockfile do not, so it is remembered rather than recomputed.
+      #
+      # Keyed on those bytes and not on github.sha, which was the whole reason the step never
+      # paid off: a successful cycle ends by pushing a cycle(NNN) commit, so the sha is
+      # different on the next cron and the entry it saved could never be found again. The gate
+      # was re-run in full on nearly every run — exactly what this step exists to stop.
+      #
+      # state/ is deliberately absent. It is what the cycles write, and the post-cycle gate
+      # below runs agents:validate, test and build over it before the cycle commit is pushed,
+      # so it arrives on main already verified; the records written on the failure and skip
+      # paths are covered the same way by the post-cycle gate of the next run that opens a
+      # room. Letting state into the key would move the key on every cycle and put us straight
+      # back where we started.
+      #
+      # hashFiles takes patterns, not gitignore syntax, and has no exclude — so every pattern
+      # below is anchored at a directory that holds only checked-in source. A leading `**`
+      # walks the whole workspace instead: state/, and, because this step runs after `pnpm
+      # install`, the 8000-odd .ts files under node_modules/.pnpm as well.
+      - name: Reuse the release-gate verdict for this source tree
         id: gate-cache
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .release-gate-verdict
-          key: release-gate-v1-${{ github.sha }}-${{ hashFiles('pnpm-lock.yaml') }}
+          # No restore-keys: a prefix match would hand this tree a verdict earned by other
+          # bytes. Either the content is identical and the entry is found, or the gate runs.
+          key: >-
+            release-gate-v2-${{ hashFiles(
+            'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'tsconfig.base.json',
+            'config/**', 'contracts/**', 'scripts/**', '.github/workflows/**',
+            '.claude/skills/**', '.agents/skills/**',
+            'orchestrator/package.json', 'orchestrator/tsconfig*.json',
+            'orchestrator/vitest.config.ts', 'orchestrator/src/**', 'orchestrator/tests/**',
+            'orchestrator/prompts/**',
+            'site/package.json', 'site/tsconfig.json', 'site/*.ts', 'site/*.mjs',
+            'site/src/**', 'site/tests/**',
+            'studio/package.json', 'studio/tsconfig*.json', 'studio/vitest.config.ts',
+            'studio/src/**', 'studio/tests/**') }}
 
       - name: Pre-cycle release gate
         id: gate
@@ -330,8 +359,10 @@ jobs:
             echo "failed=true" >> "$GITHUB_OUTPUT"
           else
             echo "failed=false" >> "$GITHUB_OUTPUT"
-            # Only a pass is remembered. A failure leaves no marker, so the next run for this
-            # commit runs the gate again rather than inheriting a verdict it never earned.
+            # Only a pass is remembered. A failure leaves no marker, nothing is saved under
+            # the key, and the next run over this same source runs the gate again rather than
+            # inheriting a verdict it never earned. The marker's contents are never read back;
+            # it records which commit first earned the verdict for this source tree.
             echo "$GITHUB_SHA" > .release-gate-verdict
           fi
 

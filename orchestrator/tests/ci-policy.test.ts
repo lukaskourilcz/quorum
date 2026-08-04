@@ -113,18 +113,95 @@ describe("automation policy", () => {
     // A run that dies for any other reason also says so on the calendar. Three runs failed on
     // 3 August and every one of them left a red slot with nothing anywhere explaining it.
     expect(cycle).toContain("Say on the calendar why this run did not finish");
-    // The gate's verdict is remembered per commit, so eighteen crons do not re-verify the same
-    // bytes eighteen times. Only a pass writes the marker: a failure must be retried, not
-    // inherited.
-    expect(cycle).toContain("release-gate-v1-${{ github.sha }}");
-    expect(cycle).toMatch(/failed=false[\s\S]{0,400}\.release-gate-verdict/u);
-    expect(cycle).not.toMatch(/failed=true[\s\S]{0,200}> \.release-gate-verdict/u);
+    // The gate's verdict is remembered per source tree, so eighteen crons do not re-verify the
+    // same bytes eighteen times. Only a pass writes the marker: a failure must be retried, not
+    // inherited. What the key is made of is pinned by its own test below.
+    expect(cycle).toContain("- name: Reuse the release-gate verdict for this source tree");
+    // Pinned by where the write sits inside the step rather than by a character budget, which
+    // a longer comment silently breaks: the marker is written once, after the else that
+    // records a pass, so a failure leaves nothing behind and is retried rather than inherited.
+    const gateStep = cycle.slice(
+      cycle.indexOf("- name: Pre-cycle release gate\n"),
+      cycle.indexOf("- name: Record that the repository gate stopped this meeting\n")
+    );
+    expect(gateStep.split("> .release-gate-verdict")).toHaveLength(2);
+    const failBranch = gateStep.indexOf('echo "failed=true"');
+    const passBranch = gateStep.indexOf('echo "failed=false"');
+    expect(failBranch).toBeGreaterThan(-1);
+    expect(passBranch, "the pass branch is the else").toBeGreaterThan(failBranch);
+    expect(
+      gateStep.indexOf("> .release-gate-verdict"),
+      "only a pass may write the marker"
+    ).toBeGreaterThan(passBranch);
     // Every run says which meeting it is, in the log and on the run page.
     expect(cycle).toContain("::notice title=Cycle phase::");
     expect(cycle).not.toContain("git add state\n");
     expect(social).toContain('timezone: "Europe/Prague"');
     expect(social).toContain("--dry-if-disabled");
     expect(health).toContain('timezone: "Europe/Prague"');
+  });
+
+  it("keys the release-gate verdict on content, not on the moving cycle sha", async () => {
+    const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
+
+    const start = cycle.indexOf("- name: Reuse the release-gate verdict for this source tree\n");
+    expect(start, "the release-gate cache step is missing from cycle.yml").toBeGreaterThan(-1);
+    const rest = cycle.slice(start);
+    const end = rest.indexOf("\n      - name: ", 1);
+    const step = end === -1 ? rest : rest.slice(0, end);
+    // The `key:` line plus every line folded into its block scalar.
+    const key = step.match(/^ {10}key:.*(?:\n {11,}.*)*/mu)?.[0] ?? "";
+    expect(key, "the cache step has no key").toContain("hashFiles(");
+
+    // The bug this pins. Every successful cycle pushes a cycle(NNN) commit, so github.sha
+    // is different on nearly every cron and a sha-keyed entry was almost never reused —
+    // which is the exact re-running this step was added to stop.
+    expect(key, "github.sha changes on every cycle commit, so it can never hit").not.toContain(
+      "github.sha"
+    );
+    // A prefix restore would hand this commit a verdict earned by different bytes.
+    expect(
+      step.match(/^\s*restore-keys:/mu),
+      "restore-keys would inherit a pass the current content never earned"
+    ).toBeNull();
+
+    const args = key.match(/hashFiles\(([\s\S]*?)\)\s*\}\}/u)?.[1] ?? "";
+    const patterns = [...args.matchAll(/'([^']+)'/gu)].flatMap((match) => match[1] ?? []);
+    expect(patterns.length).toBeGreaterThan(10);
+
+    // hashFiles has no exclude, so every pattern has to be anchored somewhere that holds
+    // only checked-in source. A leading ** reaches both state/ and node_modules/.
+    for (const pattern of patterns) {
+      expect(
+        pattern.startsWith("*"),
+        `${pattern} is unanchored and would reach state/ and node_modules/`
+      ).toBe(false);
+      expect(
+        pattern.split("/")[0],
+        `${pattern} lets cycle-written state decide the gate verdict`
+      ).not.toBe("state");
+      expect(pattern, `${pattern} would hash installed dependencies`).not.toContain(
+        "node_modules"
+      );
+    }
+
+    // What the gate actually reads has to be in the key, or a real source change inherits
+    // a stale pass.
+    for (const required of [
+      "package.json",
+      "pnpm-lock.yaml",
+      "config/**",
+      "contracts/**",
+      ".github/workflows/**"
+    ]) {
+      expect(patterns, `${required} decides whether this tree passes`).toContain(required);
+    }
+    for (const root of ["orchestrator/src/", "orchestrator/tests/", "site/src/"]) {
+      expect(
+        patterns.some((pattern) => pattern.startsWith(root)),
+        `${root} is source the gate compiles and runs`
+      ).toBe(true);
+    }
   });
 
   it("keeps the two failure-path steps reachable on the runs they exist for", async () => {

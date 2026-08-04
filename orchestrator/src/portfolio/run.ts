@@ -2,15 +2,21 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import {
+  BudgetError,
   BudgetLedgerEntrySchema,
+  type BudgetErrorCode,
   DEFAULT_BUDGET_LIMITS,
+  budgetStopReason,
+  dailyBudgetStatus,
   estimateTextCall,
+  exceedsDailyCap,
   type BudgetLedgerEntry,
   type BudgetLimits
 } from "../budget.js";
 import { loadRoutingConfig, routeBoardroom } from "../boardroom/router.js";
 import { AgendaPhaseSchema, type MeetingAgenda } from "../contracts/meeting-agenda.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
+import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
 import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { NicheProposalSchema, type NicheProposal } from "../contracts/niche-proposal.js";
@@ -124,7 +130,7 @@ export interface PortfolioCycleResult {
   phase: PortfolioPhase;
   dry: boolean;
   status: "dry_complete" | "paused" | "live_complete";
-  decision: "PLAN" | "PAUSED";
+  decision: "PLAN" | "PAUSED" | "NO_ACTION";
   estimatedWorstCaseUsd: number;
   selectedAgents: string[];
   skippedAgents: string[];
@@ -286,6 +292,58 @@ function buildRecord(input: {
     },
     generatedAt: times.at(-1)
   });
+}
+
+/**
+ * Say on the calendar that a cap ended this meeting, and leave the slot amber rather than red.
+ *
+ * A refused reservation used to leave the room runner as an uncaught BudgetError: the job
+ * exited 1, and the workflow step that notices a failed run wrote "The run for this meeting
+ * failed before it finished" onto the slot. Fourteen active phases reserve more than the day's
+ * cap allows, so from tomorrow the cap doing its job would have painted the rest of the day as
+ * a broken system. This writes the same MeetingSkip the other gates write — buildCalendarFeed
+ * renders that as "Skipped" with the reason, not "Did not happen" — and re-records the day in
+ * budget/exhaustions.json, which the finance alert and the daily digest read and which only
+ * index.ts used to write, on its way out with a non-zero exit code.
+ *
+ * It lives here rather than in cycle.ts because cycle.ts already imports this module; the
+ * reverse would be an import cycle.
+ */
+export async function recordBudgetStop(input: {
+  phase: string;
+  date: string;
+  now: Date;
+  root: string;
+  reason: string;
+  /** True when the daily cap is the one that refused, which is what the alert counts. */
+  dailyCapReached: boolean;
+}): Promise<string[]> {
+  const skipPath = `meetings/skips/${input.date}-${input.phase}.json`;
+  await atomicWriteJson(input.root, skipPath, MeetingSkipSchema.parse({
+    schemaVersion: "meeting-skip/1",
+    date: input.date,
+    phase: input.phase,
+    reason: input.reason.slice(0, 240),
+    decidedAt: input.now.toISOString()
+  }));
+  const artifacts = [skipPath];
+  if (input.dailyCapReached) {
+    const existing = await readJson<{ dates?: string[] }>(input.root, "budget/exhaustions.json", {});
+    await atomicWriteJson(input.root, "budget/exhaustions.json", {
+      schemaVersion: 1,
+      dates: [...new Set([...(existing.dates ?? []), input.date])].sort()
+    });
+    artifacts.push("budget/exhaustions.json");
+  }
+  artifacts.push(await writeCalendarFeed(input.root, buildCalendarFeed({
+    weekOf: mondayOfWeek(input.date),
+    records: await loadMeetingRecords(input.root),
+    skips: await loadMeetingSkips(input.root),
+    articleSlots: await loadArticleSlotOutcomes(input.root),
+    now: input.now
+  })));
+  console.warn(JSON.stringify({ event: "budget_stop", phase: input.phase, date: input.date, reason: input.reason }));
+  return artifacts;
 }
 
 async function recordNoAgendaCycle(input: {
@@ -612,6 +670,64 @@ export async function runPortfolioCycle(input: {
       reason: closedBy
     });
   }
+  const limits = environmentBudgetLimits(schedule);
+  const roomEnvelopeUsd = schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd;
+  /** End this room as a stated skip rather than as an uncaught BudgetError and exit 1. */
+  const stoppedByBudget = async (stop: {
+    /** The room's reservation when it was refused before opening; null once seats were called. */
+    reservationUsd: number | null;
+    code: BudgetErrorCode;
+    cast: readonly FoundingAgent[];
+  }): Promise<PortfolioCycleResult> => {
+    // Read the ledger again rather than reuse the copy from the top of the run: by the time a
+    // seat is refused mid-room, earlier seats of this same room are on it, and a reason that
+    // quoted the opening figure would understate the day.
+    const ledgerNow = (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries
+      .map((entry) => BudgetLedgerEntrySchema.parse(entry));
+    const artifacts = await recordBudgetStop({
+      phase: input.phase,
+      date,
+      now: input.now,
+      root,
+      reason: budgetStopReason({
+        phase: input.phase,
+        status: dailyBudgetStatus(ledgerNow, input.now, limits),
+        reservationUsd: stop.reservationUsd,
+        code: stop.code
+      }),
+      dailyCapReached: stop.code === "DAILY_CAP"
+    });
+    return {
+      cycleId: input.cycleId,
+      phase: input.phase,
+      dry: false,
+      status: "paused",
+      decision: "NO_ACTION",
+      estimatedWorstCaseUsd: 0,
+      selectedAgents: [],
+      skippedAgents: [...stop.cast],
+      artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact)))
+    };
+  };
+  // Ask the day's ledger before opening the room, so the reservation is refused before spend.
+  //
+  // Fourteen active phases reserve about $1.74 against the $1.00 daily cap, so the last rooms
+  // of a full day cannot be funded. Without this the room opened anyway, paid for the palate
+  // pass and some of its seats, and then took an uncaught BudgetError out of the process:
+  // exit 1, and the workflow wrote "the run failed before it finished" onto the slot. The test
+  // is assertSharedReservation's own — exceedsDailyCap is the function it calls to decide
+  // DAILY_CAP — applied to the room's declared envelope rather than to one seat, because a
+  // room that cannot be funded to the end is better not started. No cap is read differently,
+  // raised or bypassed here; the day simply stops earlier and says so.
+  if (!input.dry && exceedsDailyCap(roomEnvelopeUsd, entries, input.now, limits)) {
+    return stoppedByBudget({
+      reservationUsd: roomEnvelopeUsd,
+      code: "DAILY_CAP",
+      cast: definition.requiredParticipants.filter(
+        (agent) => !disabledAgentsForVenture(agentControls, definition.ventureId).has(agent)
+      )
+    });
+  }
   const preparationArtifacts: string[] = [];
   const scheduledWakeUp = !input.dry && process.env.MEETING_TRIGGER === "schedule";
   const agendaQueue = input.dry ? null : await readMeetingAgendaQueue(root, input.now);
@@ -702,31 +818,42 @@ export async function runPortfolioCycle(input: {
   });
   const selected = room.selectedParticipants.map(({ agent }) => agent).filter((agent) => cast.includes(agent));
   if (!input.dry && definition.preSteps.length > 0) {
-    await runPalatePass({
-      repoRoot,
-      ventureId: definition.ventureId,
-      now: input.now,
-      distiller: new GuardedPalateDistiller({
-        stateRoot,
-        cycleId: input.cycleId,
+    try {
+      await runPalatePass({
+        repoRoot,
         ventureId: definition.ventureId,
-        budgetContext: {
-          now: input.now,
+        now: input.now,
+        distiller: new GuardedPalateDistiller({
+          stateRoot,
           cycleId: input.cycleId,
-          stage: stages.current,
-          ledger: entries,
-          allInNonApiSpentUsd: fixedMonthlyUsd,
-          allInCommittedUsd: 0,
-          knownMonthlyForecastUsd: 0,
-          remainingScheduledCycles: 60,
-          limits: environmentBudgetLimits(schedule)
-        }
-      })
-    });
+          ventureId: definition.ventureId,
+          budgetContext: {
+            now: input.now,
+            cycleId: input.cycleId,
+            stage: stages.current,
+            ledger: entries,
+            allInNonApiSpentUsd: fixedMonthlyUsd,
+            allInCommittedUsd: 0,
+            knownMonthlyForecastUsd: 0,
+            remainingScheduledCycles: 60,
+            limits
+          }
+        })
+      });
+    } catch (error) {
+      // The palate pass is the first paid call of a room with a pre-step, so a cap that the
+      // envelope pre-check let through — because another phase spent between the two reads —
+      // lands here. assertTextReservation refuses before the provider is contacted, so nothing
+      // was billed and there is nothing to record but the reason.
+      if (!(error instanceof BudgetError)) throw error;
+      return stoppedByBudget({ reservationUsd: null, code: error.code, cast: selected });
+    }
   }
   const context = await composePortfolioContext(input.phase, root, date, registry, input.now);
   let contributions: Contribution[];
   let estimatedWorstCaseUsd = 0;
+  /** Set when a cap refused a seat, so the room closes on the seats it already paid for. */
+  let budgetStop: BudgetError | null = null;
   if (input.dry) {
     const dryChair = input.phase === "studio" ? "EASEL" : input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
     contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, templateProposal: null, inspirationObservations: [], idea: null, followUpRequest: null }));
@@ -783,15 +910,13 @@ export async function runPortfolioCycle(input: {
         system: call.system,
         input: call.prompt,
         maxOutputTokens: call.model.maxOutputTokens,
-        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits: environmentBudgetLimits(schedule) },
+        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits },
         parse: (text) => ContributionSchema.parse(parseJson(text))
       }).catch((error: unknown) => {
         // One seat returning unparsable JSON must cost that seat, not the room. A live
         // mma-intake run died on "Expected double-quoted property name in JSON at position
         // 824" and took every other agent's work with it. The spend is already recorded by
         // guardedJsonCall, so skipping here loses a contribution, not an accounting entry.
-        // Anything that is not a parse failure still propagates: a budget stop, a barrier
-        // violation or a provider outage should stop the room.
         if (error instanceof ModelOutputParseError) {
           console.warn(JSON.stringify({
             event: "contribution_unparsable",
@@ -802,8 +927,18 @@ export async function runPortfolioCycle(input: {
           }));
           return null;
         }
+        // A cap refusing the next seat ends the room, not the job. assertTextReservation runs
+        // before the provider is contacted, so this seat cost nothing and every seat already
+        // called is already on the ledger — the remaining ones are simply not called. It used
+        // to travel out of the process as exit 1 and the day's remaining slots then read as a
+        // failed system. A barrier violation or a provider outage still propagates.
+        if (error instanceof BudgetError) return error;
         throw error;
       });
+      if (response instanceof BudgetError) {
+        budgetStop = response;
+        break;
+      }
       if (response === null) continue;
       // Drop refs outside the packet rather than destroying a room that is already paid for.
       // The narrowed list is still strictly inside the allowlist, so nothing unciteable ever
@@ -820,8 +955,27 @@ export async function runPortfolioCycle(input: {
       }
       contributions.push({ agent: call.agent, ...response.value, evidenceRefs: citedRefs });
     }
+    if (budgetStop && contributions.length === 0) {
+      // No seat said anything, so there is no meeting to record — only a reason. A record here
+      // would read as a room that was held and decided nothing. Any seat that was billed before
+      // the cap refused the next one is on the ledger already, and the reason quotes the day's
+      // spend from that ledger, so nothing goes unaccounted for.
+      return stoppedByBudget({ reservationUsd: null, code: budgetStop.code, cast: selected });
+    }
     if (contributions.length === 0) {
       throw new Error(`Every seat in ${input.phase} returned unparsable output; the room produced nothing`);
+    }
+    if (budgetStop) {
+      // Seats were called and billed before the cap refused the next one. Their work is the
+      // room's real output and is written below exactly as any other room's is, so the meeting
+      // is recorded rather than thrown away; this line is what says the room was cut short.
+      console.warn(JSON.stringify({
+        event: "room_cut_short_by_budget",
+        phase: input.phase,
+        code: budgetStop.code,
+        seatsHeard: contributions.length,
+        seatsSeated: selected.length
+      }));
     }
   }
   // Record every idea a seat raised, into that venture's own ledger namespace.

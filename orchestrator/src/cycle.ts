@@ -1,7 +1,10 @@
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  BudgetError,
   DEFAULT_BUDGET_LIMITS,
+  budgetStopReason,
+  dailyBudgetStatus,
   estimateTextCall,
   type BudgetLedgerEntry,
   type BudgetLimits,
@@ -98,7 +101,7 @@ import {
   loadVentureAgentControls
 } from "./ventures/agent-controls.js";
 import type { RunnablePhase, Stage } from "./types.js";
-import { runPortfolioCycle } from "./portfolio/run.js";
+import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import { runLiveArticleProduction } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
@@ -939,6 +942,63 @@ async function runCaughtUpLiveProductCycle(
   };
 }
 
+/**
+ * Run one live phase and, if a cap refuses it, end the day quietly instead of exiting 1.
+ *
+ * Every runner below reserves before it calls a provider, so a BudgetError arriving here means
+ * the refused call was never made and never billed. It used to travel out of runCycle, out of
+ * index.ts and out of the process: the job exited 1 and the workflow's failure step wrote "The
+ * run for this meeting failed before it finished" onto the slot. From today fourteen active
+ * phases reserve about $1.74 against the $1.00 daily cap, so that sentence would have been the
+ * headline on most of the afternoon. The cap, the reservation and the refusal are unchanged —
+ * only what the run does afterwards is: it records the reason, leaves a "Skipped" slot, and
+ * exits 0.
+ *
+ * Anything that is not a BudgetError still propagates. A real failure must still be a failure.
+ */
+export async function quietWhenBudgetStops(
+  input: { phase: RunnablePhase; cycleId: string; now: Date; root: string },
+  run: () => Promise<CycleResult>
+): Promise<CycleResult> {
+  try {
+    return await run();
+  } catch (error) {
+    if (!(error instanceof BudgetError)) throw error;
+    const date = pragueClockParts(input.now).date;
+    // loadRuntimeBudgetLimits is the one resolver for the enforced caps. Reading the day's
+    // figures from it rather than restating them means the reason can never quote an amount
+    // the runtime does not enforce.
+    const [ledger, limits] = await Promise.all([
+      currentBudgetLedger(input.root),
+      loadRuntimeBudgetLimits()
+    ]);
+    const artifacts = await recordBudgetStop({
+      phase: input.phase,
+      date,
+      now: input.now,
+      root: input.root,
+      reason: budgetStopReason({
+        phase: input.phase,
+        status: dailyBudgetStatus(ledger, input.now, limits),
+        reservationUsd: null,
+        code: error.code
+      }),
+      dailyCapReached: error.code === "DAILY_CAP"
+    });
+    return {
+      cycleId: input.cycleId,
+      phase: input.phase,
+      dry: false,
+      status: "paused",
+      decision: "NO_ACTION",
+      estimatedWorstCaseUsd: 0,
+      selectedAgents: [],
+      skippedAgents: [],
+      artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(input.root, artifact)))
+    };
+  }
+}
+
 export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   const now = options.now ?? new Date();
   const cycleId = `${now.toISOString().replaceAll(/[-:.TZ]/g, "").slice(0, 14)}-${options.phase}`;
@@ -958,16 +1018,20 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   if (!options.dry && options.phase === "founding") {
     throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
   }
+  // The quiet-day wrapper sits inside the lock, so the skip record and the calendar it rebuilds
+  // are written under the same exclusion as the records of a room that ran.
+  const quietly = (run: () => Promise<CycleResult>) => () =>
+    quietWhenBudgetStops({ phase: options.phase, cycleId, now, root: stateRoot }, run);
   if (isCaughtUpPhase(options.phase)) {
     if (options.dry) return runCaughtUpDryCycle(options, cycleId, now);
     if (options.phase === "cu-edition") {
-      return withFileLock(stateRoot, ".lock", () =>
+      return withFileLock(stateRoot, ".lock", quietly(() =>
         runCaughtUpLiveEditionCycle(options, cycleId, now)
-      );
+      ));
     }
-    return withFileLock(stateRoot, ".lock", () =>
+    return withFileLock(stateRoot, ".lock", quietly(() =>
       runCaughtUpLiveProductCycle(options, cycleId, now)
-    );
+    ));
   }
   if (isPortfolioPhase(options.phase)) {
     const phase = options.phase;
@@ -979,7 +1043,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       explainRouting: options.explainRouting,
       now
     });
-    return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
+    // runPortfolioCycle handles its own cap stops and returns a skip rather than throwing; the
+    // wrapper is the backstop for a refusal on a path inside it that this change did not reach.
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (options.phase === "article-am" || options.phase === "article-pm") {
     if (!options.dry) {
@@ -991,26 +1057,25 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       ) {
         return { cycleId, phase: options.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
       }
-      const result = await runLiveArticleProduction({
-        cycleId,
-        slot: options.phase === "article-am" ? "am" : "pm",
-        now
+      const slot = options.phase === "article-am" ? "am" : "pm";
+      return quietWhenBudgetStops({ phase: options.phase, cycleId, now, root: stateRoot }, async () => {
+        const result = await runLiveArticleProduction({ cycleId, slot, now });
+        const articleAgents = ["JAB", "HACEK", "STET", "REACH", "FRAME"] as const;
+        const controls = await loadVentureAgentControls();
+        const enabledArticleAgents = enabledAgentsForVenture(controls, "mma-files", articleAgents);
+        const disabledArticleAgents = articleAgents.filter((agent) => !enabledArticleAgents.includes(agent));
+        return {
+          cycleId,
+          phase: options.phase,
+          dry: false,
+          status: "live_complete",
+          decision: "PLAN",
+          estimatedWorstCaseUsd: result.estimatedWorstCaseUsd,
+          selectedAgents: result.status === "killed" ? [] : enabledArticleAgents,
+          skippedAgents: result.status === "killed" ? [...articleAgents] : disabledArticleAgents,
+          artifacts: result.artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
+        };
       });
-      const articleAgents = ["JAB", "HACEK", "STET", "REACH", "FRAME"] as const;
-      const controls = await loadVentureAgentControls();
-      const enabledArticleAgents = enabledAgentsForVenture(controls, "mma-files", articleAgents);
-      const disabledArticleAgents = articleAgents.filter((agent) => !enabledArticleAgents.includes(agent));
-      return {
-        cycleId,
-        phase: options.phase,
-        dry: false,
-        status: "live_complete",
-        decision: "PLAN",
-        estimatedWorstCaseUsd: result.estimatedWorstCaseUsd,
-        selectedAgents: result.status === "killed" ? [] : enabledArticleAgents,
-        skippedAgents: result.status === "killed" ? [...articleAgents] : disabledArticleAgents,
-        artifacts: result.artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
-      };
     }
     const root = path.join(repoRoot, "tmp", "dry-run", "state");
     const result = await runDryArticleProduction({ root, slot: options.phase === "article-am" ? "am" : "pm", now });
@@ -1317,7 +1382,13 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         await skipPriorityItem({
           root: artifactRoot,
           itemId: item.id,
-          reason: "The 06:00 board did not select this item for today's single specialist commission.",
+          // "Not selected" is only true when something else was. On a morning that commissioned
+          // nothing, every item was told its turn went elsewhere — the same false framing the
+          // starvation review carried until this morning. commissionBlockedReason is the sentence
+          // that says what actually stopped the board.
+          reason: selectedPriorityId === null
+            ? commissionBlockedReason
+            : "The 06:00 board did not select this item for today's single specialist commission.",
           now
         });
         priorityStateChanged = true;
@@ -1498,5 +1569,5 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   if (options.dry) {
     return execute();
   }
-  return withFileLock(stateRoot, ".lock", execute);
+  return withFileLock(stateRoot, ".lock", quietly(execute));
 }
