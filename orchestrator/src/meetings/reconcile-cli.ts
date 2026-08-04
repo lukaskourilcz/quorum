@@ -31,9 +31,15 @@ function valueAfter(args: string[], flag: string): string | undefined {
  * the calendar, where a wrong cause reads as fact. Without a record the calendar falls through to
  * its "at < now" branch, which renders the slot red as "missed" and says nothing, which is exactly
  * the state the owner keeps having to ask about.
+ *
+ * It describes the missing meeting and not the missing files. The first version listed what was
+ * absent from the repository — "no meeting record, no article run and no skip" — which is the
+ * evidence for the sentence, not the sentence, and it ended on "The cause is unknown", which
+ * reads as an admission rather than an answer. What a visitor needs is that the meeting did not
+ * happen, that nobody knows why, and that it therefore cost nothing.
  */
 export const NO_RECORD_REASON =
-  "No record of this slot exists: no meeting record, no article run and no skip. The cause is unknown.";
+  "This meeting never ran, and nothing was written down about why. Nobody was asked anything and nothing was spent.";
 
 type SlotKind = CalendarFeed["slots"][number]["kind"];
 

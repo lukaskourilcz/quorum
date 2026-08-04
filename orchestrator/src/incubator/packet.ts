@@ -49,26 +49,48 @@ export const INCUBATOR_PACKET_CHARS = 5_000;
 export const INCUBATOR_ITEM_SUMMARY_CHARS = 200;
 
 /**
- * The other two blocks of the synthesis context, budgeted so their sum cannot reach the ceiling.
+ * The other two blocks of the synthesis context: what each is offered, not what it is promised.
  *
- * The packet block is not `INCUBATOR_PACKET_CHARS` exactly: `boundIncubatorPacket` fills 5,000
- * characters of JSON and then puts its counted header in front, so the block is at most about
- * 5,152 — the 5,001-character array the fill rule actually admits, a newline, and a header whose
- * only variable parts are two counts. With 1,200 and 1,600 behind it and the two newlines that
- * join the three, the worst case is roughly 7,954, under `INCUBATOR_CONTEXT_CHARS` by about 46.
- * Sweeping item counts and summary lengths for the shape that maximises the composition puts the
- * observed worst at 7,778.
+ * These are ceilings on a request, not a proof that the three blocks fit. The proof is in
+ * `composePortfolioContext`, which measures the packet block it actually built, gives the taste
+ * packet what is left above the scan brief's floor, and then gives the brief exactly the
+ * remainder — never more than `INCUBATOR_SCAN_CHARS`. Every block bounds itself against the
+ * budget it is handed, so the join fits whatever the three inputs contain.
  *
- * The margin is deliberately small and the arithmetic above is easy to invalidate, so
- * `composePortfolioContext` throws rather than trims if a future budget breaks it. What must not
- * come back is the cut these budgets replaced: the three blocks were joined and then sliced to
- * 8,000, so the last one ended wherever the ceiling fell. Measured on the 1 August scan record
- * behind a full packet, the synthesis room received 72.7% of that record, ending inside a string
- * literal, and the block it was handed did not parse — and a real HELD record, several times
- * that fixture's size, fares worse.
+ * That replaces an arithmetic claim that was false. The comment here used to say the three
+ * budgets were "budgeted so their sum cannot reach the ceiling", and the constants do sum below
+ * it: a full packet block is at most 5,146 — `boundIncubatorPacket` admits a 5,001-character
+ * array and puts a counted header and a newline in front, and that header runs to 144 characters
+ * at the forty items `createDigest` slices to — and 5,146 plus 1,200 plus 1,600 plus the two
+ * joining newlines is 7,948 against 8,000. What that assumed and the code did not deliver was the
+ * third term: `incubatorScanBrief` bounded only its transcript turns, so a record with more
+ * proposals or tasks than the fixture ran past 1,600 and took the join with it. Measured on a
+ * five-seat PLAN scan carrying one proposal and one task per seat at 300 characters each and no
+ * turns at all: a 3,413-character brief, and a composed context of 8,619 characters against the
+ * 8,000 ceiling, thrown rather than trimmed.
+ *
+ * What must not come back is the cut these budgets replaced: the three blocks were joined and
+ * then sliced to 8,000, so the last one ended wherever the ceiling fell. Measured on the
+ * 1 August scan record behind a full packet, the synthesis room received 72.7% of that record,
+ * ending inside a string literal, and the block it was handed did not parse.
  */
 export const INCUBATOR_TASTE_CHARS = 1_200;
 export const INCUBATOR_SCAN_CHARS = 1_600;
+
+/**
+ * What the composition always leaves the scan brief, and the smallest budget worth giving it.
+ *
+ * `incubatorScanBrief` honours any budget of two characters or more, so this is not what makes
+ * the ceiling hold — it is what keeps the last block worth reading. Its poorest projection still
+ * carries the record's date, status and outcome and the three omission counts: 254 characters on
+ * the five-seat fixture, and 362 with each of those three labels at its own 40-character maximum
+ * and three-digit omission counts. The counts are the one part of it nothing clips, and each
+ * extra digit costs three characters, so 400 is the smallest round number that leaves the room
+ * the scan's verdict with headroom for a record far longer than any room has yet produced.
+ * The taste packet is clipped to whatever sits above this line, so a packet block that ever grows
+ * costs the room prose about the venture's voice before it costs it this morning's own verdict.
+ */
+export const INCUBATOR_SCAN_FLOOR_CHARS = 400;
 
 /**
  * What one opening of this room actually costs, and what it costs the rest of the day.
@@ -248,63 +270,119 @@ const ScanRecordSchema = z.object({
 });
 
 /**
+ * How much of each field of the scan record the brief carries.
+ *
+ * Every one of these is clipped because nothing upstream clips it. `ScanRecordSchema` below
+ * accepts a string of any length in each field, and `MeetingRecordSchema` — the schema the
+ * record on disk actually satisfies — caps neither `decision.summary`, nor `growthPlan`, nor a
+ * proposal's or task's summary, nor how many proposals or tasks a room may record. The per-turn
+ * cap is the exception: `RoomTurnSchema` does cap a turn's text at 800, and 240 is this room's
+ * own tighter clip on top of it.
+ */
+const SCAN_LABEL_CHARS = 40;
+const SCAN_SUMMARY_CHARS = 280;
+const SCAN_ENTRY_CHARS = 240;
+
+/**
  * What the synthesis room is told its own scan decided, as a whole object rather than a prefix.
  *
  * The morning's scan record was pasted in raw and the composed context was then cut to
  * `INCUBATOR_CONTEXT_CHARS` by characters, so this block — always the last of the three — ended
  * wherever the ceiling fell: inside a string literal, unparseable, with the tail of the record
- * missing and nothing saying so. Rebuilding it as a projection fixes the cause rather than the
- * symptom. Only the fields the synthesis room argues from are carried, each clipped on its own,
- * and transcript turns are dropped from the end — whole turns — until the serialised object fits
- * its budget. The result is always valid JSON, and `turnsOmitted` tells the room what it is not
- * seeing instead of leaving it to infer completeness from a truncated string.
+ * missing and nothing saying so. Rebuilding it as a projection fixed the cause of that, but only
+ * for the one field the first version bounded. It clipped each element and dropped whole
+ * transcript turns, then returned whatever it had built whether or not that fit — and the
+ * element *counts* were never bounded at all. A five-seat PLAN scan with one proposal and one
+ * task per seat at 300 characters each measured 3,413 characters against a 1,600 budget, and the
+ * composed context that carried it measured 8,619 against a ceiling of 8,000. That threw, and
+ * nothing caught it: the slot got no meeting record at all.
+ *
+ * So the return is bounded by construction now. Whole elements are dropped from the end in the
+ * order this room can best afford to lose them — transcript turns, then tasks, then proposals —
+ * and each stage reports its own count, so a room shown six of nine turns is told it is shown
+ * six of nine rather than left to infer completeness. Below that the record's own scalars are
+ * clipped, and below that the object is empty. The result is always valid JSON and always inside
+ * `budgetChars`, for any budget of two characters or more and whatever the record contains.
  *
  * A record that is absent or will not parse yields a stated absence, not a crash and not silence.
  */
 export function incubatorScanBrief(raw: string, budgetChars = INCUBATOR_SCAN_CHARS): string {
+  // Even the stated absences are checked against the budget. They are short fixed sentences, but
+  // a caller that computed a small remainder must be able to add this length to another block's
+  // and stay under its ceiling — that is this function's whole contract to `composePortfolioContext`.
+  const stated = (reason: string): string => {
+    const text = JSON.stringify({ scanRecord: reason });
+    return text.length <= budgetChars ? text : "{}";
+  };
   if (raw.trim().length === 0) {
-    return JSON.stringify({ scanRecord: "none on file for today; argue only from the packet above" });
+    return stated("none on file for today; argue only from the packet above");
   }
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return JSON.stringify({ scanRecord: "on file but unreadable; argue only from the packet above" });
+    return stated("on file but unreadable; argue only from the packet above");
   }
   const record = ScanRecordSchema.safeParse(parsed);
   if (!record.success) {
-    return JSON.stringify({ scanRecord: "on file but not in the expected shape; argue only from the packet above" });
+    return stated("on file but not in the expected shape; argue only from the packet above");
   }
   const value = record.data;
+  const label = (text: string) => text.slice(0, SCAN_LABEL_CHARS);
   const turns = (value.roomTranscript?.turns ?? []).map((turn) => ({
-    agent: turn.agent,
-    text: turn.text.slice(0, 240)
+    agent: label(turn.agent),
+    text: turn.text.slice(0, SCAN_ENTRY_CHARS)
   }));
-  const base = {
-    scanRecord: value.date ?? "today",
-    status: value.status ?? "unknown",
-    outcome: value.decision?.outcome ?? "unknown",
-    summary: (value.decision?.summary ?? "").slice(0, 280),
-    proposals: (value.proposals ?? []).map((proposal) => ({
-      agent: proposal.agent,
-      summary: proposal.summary.slice(0, 240)
-    })),
-    tasks: (value.tasks ?? []).map((task) => ({ owner: task.owner, summary: task.summary.slice(0, 240) })),
-    growthPlan: (value.growthPlan ?? "").slice(0, 280)
-  };
-  // Drop whole turns from the end until the object fits. The turn count is reported either way,
-  // so a room that is shown six of nine turns is told it is shown six of nine.
+  const proposals = (value.proposals ?? []).map((proposal) => ({
+    agent: label(proposal.agent),
+    summary: proposal.summary.slice(0, SCAN_ENTRY_CHARS)
+  }));
+  const tasks = (value.tasks ?? []).map((task) => ({
+    owner: label(task.owner),
+    summary: task.summary.slice(0, SCAN_ENTRY_CHARS)
+  }));
+  const summary = (value.decision?.summary ?? "").slice(0, SCAN_SUMMARY_CHARS);
+  const growthPlan = (value.growthPlan ?? "").slice(0, SCAN_SUMMARY_CHARS);
+  const project = (keptProposals: number, keptTasks: number, keptTurns: number, scalarChars: number): string =>
+    JSON.stringify({
+      scanRecord: label(value.date ?? "today"),
+      status: label(value.status ?? "unknown"),
+      outcome: label(value.decision?.outcome ?? "unknown"),
+      summary: summary.slice(0, scalarChars),
+      proposals: proposals.slice(0, keptProposals),
+      proposalsOmitted: proposals.length - keptProposals,
+      tasks: tasks.slice(0, keptTasks),
+      tasksOmitted: tasks.length - keptTasks,
+      growthPlan: growthPlan.slice(0, scalarChars),
+      turns: turns.slice(0, keptTurns),
+      turnsOmitted: turns.length - keptTurns,
+      // Only when it is true, so the common brief carries no field that always says "no".
+      ...(scalarChars < SCAN_SUMMARY_CHARS
+        ? { clipped: "this record's own summary and growth plan did not fit either" }
+        : {})
+    });
   for (let kept = turns.length; kept >= 0; kept -= 1) {
-    const projection = {
-      ...base,
-      turns: turns.slice(0, kept),
-      turnsOmitted: turns.length - kept
-    };
-    const text = JSON.stringify(projection);
-    if (text.length <= budgetChars || kept === 0) return text;
+    const text = project(proposals.length, tasks.length, kept, SCAN_SUMMARY_CHARS);
+    if (text.length <= budgetChars) return text;
   }
-  /* c8 ignore next -- the kept === 0 branch above always returns first. */
-  return JSON.stringify({ scanRecord: "too large to summarise" });
+  // Turns are all gone and it still does not fit, so the record carries more tasks — or longer
+  // ones — than this budget holds. The last iteration above already tried keeping every task.
+  for (let kept = tasks.length - 1; kept >= 0; kept -= 1) {
+    const text = project(proposals.length, kept, 0, SCAN_SUMMARY_CHARS);
+    if (text.length <= budgetChars) return text;
+  }
+  for (let kept = proposals.length - 1; kept >= 0; kept -= 1) {
+    const text = project(kept, 0, 0, SCAN_SUMMARY_CHARS);
+    if (text.length <= budgetChars) return text;
+  }
+  // Nothing countable is left, so what does not fit is the record's own decision summary and
+  // growth plan. Clip those as well and say in the object that they were clipped.
+  const bare = project(0, 0, 0, 0);
+  if (bare.length <= budgetChars) return bare;
+  // A budget too small to hold even that. Two characters of valid JSON beat an over-budget
+  // string: a caller adding this length to another block's must stay under its ceiling, and a
+  // brief that broke that promise is what took a whole slot off the day.
+  return "{}";
 }
 
 export interface IncubatorScanTriggerPreview {

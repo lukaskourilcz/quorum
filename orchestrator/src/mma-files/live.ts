@@ -13,6 +13,7 @@ import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { candidatesNaming, discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
 import { fighterIdentityPhoto } from "../images/fighter-photo.js";
+import { illustrativeSportPhoto } from "../images/illustrative.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
@@ -587,8 +588,19 @@ const EVENT_SUBJECT_REF = /^(?:ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u;
  * caption answers it: "Gustavo Lopez" is an OKTAGON bantamweight and also an Argentinian
  * subsecretario de Presidencia, and on 4 August the article about the first ran a Commons file
  * of the second. So a fighter is resolved through their own Wikidata item — see
- * `fighterIdentityPhoto` — and when the item names no image the answer is that there is no
- * photograph, which the caller turns into the FRAME cover.
+ * `fighterIdentityPhoto` — and a photograph found any other way is never offered as being them.
+ *
+ * For a person this walks the certainty ladder in `PHOTO_CERTAINTY_LADDER`, taking the highest
+ * rung that answers:
+ *
+ *   entity-linked (the item's own P18)  →  illustrative (a curated photograph of the sport)
+ *   →  generated (the FRAME plate, which is what an empty return means)
+ *
+ * Rung two is the change of 4 August 2026 and it is the owner's decision: an article about a
+ * fighter does not need a photograph of that fighter, it needs never to claim one. 53 of the 92
+ * cards on file reach no P18 and every one of them used to fall to a drawn plate. What runs there
+ * now is a licensed cage or arena photograph whose alt text says it illustrates the sport and says
+ * nothing about who is in it — see `illustrativeSportPhoto`, where that guarantee is built.
  *
  * The routing is on the ref's shape and not on what is on disk. It used to be the latter — a card
  * with that exact id was looked up, and anything that missed fell through to the name search — so
@@ -620,15 +632,23 @@ export async function articleImageCandidates(
   if (refs.some((reference) => PERSON_SUBJECT_REF.test(reference))) {
     const fighters = await loadFighterRecords(path.join(root, "mma", "fighters"));
     const subject = fighters.find((fighter) => refs.includes(fighter.id));
-    const qid = subject?.identity.wikidataId;
-    // No card, or a card naming no Wikidata item, means we cannot establish that any file depicts
-    // this person. That is an answer — the FRAME cover — and not a reason to go looking by name.
-    if (!subject || !qid) return [];
-    // A network failure here costs the article its photograph and nothing else: the caller sees
-    // an empty list, which is the same answer as an item with no P18, and draws the FRAME cover.
-    const photo = await fighterIdentityPhoto({ wikidataId: qid, fallbackName: subject.canonicalName })
-      .catch(() => null);
-    return photo ? [photo] : [];
+    // Rung one. No card, or a card naming no Wikidata item, means we cannot establish that any
+    // file depicts this person, so the rung is simply skipped — it is never a reason to go looking
+    // by name. A network failure is the same answer as an item with no P18, for the same reason:
+    // neither establishes anything, and the ladder descends on "not established", not on "absent".
+    const identityPhoto = subject?.identity.wikidataId
+      ? await fighterIdentityPhoto({
+          wikidataId: subject.identity.wikidataId,
+          fallbackName: subject.canonicalName
+        }).catch(() => null)
+      : null;
+    if (identityPhoto) return [identityPhoto];
+    // Rung two. Nothing about the subject travels into this call: the seed decides which of the
+    // curated files is tried first and is never sent to Commons. The ref is the seed rather than
+    // the fighter's name so that a card we hold and a ref we do not recognise behave alike.
+    const illustrative = await illustrativeSportPhoto({ seed: refs.join("|") }).catch(() => null);
+    // Rung three is the empty list: the caller draws the FRAME plate.
+    return illustrative ? [illustrative] : [];
   }
 
   // Every surviving ref has to be an event before a name search is allowed to run.

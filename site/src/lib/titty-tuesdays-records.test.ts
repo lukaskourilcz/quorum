@@ -11,7 +11,9 @@ describe("Titty Tuesdays public snapshot", () => {
     expect(snapshot.season.products.every((product) => product.status === "concept")).toBe(true);
     expect(snapshot.apiSpendUsd).toBe(0);
     expect(snapshot.foundingStatus).toBe("countersigned");
-    expect(snapshot.budgetStatus).toBe("pending owner countersignature");
+    // The owner countersigned the budget raise on 2026-08-04. This reads the live decision, so
+    // asserting "pending" tested the state of the repository and broke when the state changed.
+    expect(snapshot.budgetStatus).toBe("countersigned");
     expect(snapshot.bootstrapMeetingId).toBe("2026-08-01-tt-marketing");
   });
 });

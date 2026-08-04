@@ -50,7 +50,14 @@ describe("portfolio schedule and budget gate", () => {
       loadVentureRegistry(),
       readFile(path.join(repoRoot, "state", "decisions", "2026-08-01-budget-raise.md"), "utf8")
     ]);
-    const fallback = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: pending, monthlyApiHeadroomUsd: 15 });
+    // The decision on disk is countersigned now, so reading it and asserting "pending" would
+    // test the state of the repository rather than the rule. This strips the signature back out
+    // and keeps the rule under test; the live file's own answer is asserted below.
+    const unsigned = pending
+      .replace(/^Status:\s*countersigned\s*$/mi, "Status: pending owner countersignature")
+      .replace(/^Selection:.*$/mi, "Selection: [ ] Shape A  [ ] Shape B")
+      .replace(/^Signature \/ explicit approval reference:.*$/mi, "Signature / explicit approval reference: ____________________");
+    const fallback = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: unsigned, monthlyApiHeadroomUsd: 15 });
     expect(fallback).toMatchObject({
       shape: "B",
       decisionStatus: "pending",
@@ -59,6 +66,12 @@ describe("portfolio schedule and budget gate", () => {
       envelopeByPhase: { "tt-marketing": 0.06 }
     });
     expect(fallback.activePhases).not.toContain("incubator-synthesis");
+
+    // And what the committed decision actually says today, so the countersignature cannot be
+    // reverted or corrupted without a test noticing.
+    const live = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: pending, monthlyApiHeadroomUsd: 15 });
+    expect(live.shape).toBe("A");
+    expect(live.activePhases).toContain("incubator-synthesis");
 
     const approved = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 18 });
     expect(approved).toMatchObject({ shape: "A", monthlyBudgetUsd: 18, dailyBudgetUsd: 1 });

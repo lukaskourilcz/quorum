@@ -36,5 +36,10 @@
     "typecheck": "pnpm -r typecheck",
     "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune",
     "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck"
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion@<1.1.18": "^1.1.18"
+    }
   }
 }

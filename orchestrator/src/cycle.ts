@@ -1517,7 +1517,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             ventureId: entry.ventureId,
             outcome: selectedPriorityVenture === entry.ventureId ? "commissioned" as const : "why-not" as const,
             reason: selectedPriorityVenture === entry.ventureId
-              ? "The board commissioned the venture's selected open priority item."
+              ? "The meeting used its one extra meeting on this project's open job."
               // Only true when a commission actually happened. On 3 August the board commissioned
               // nothing and every venture was still told its turn had gone to a higher priority —
               // wording that reads as accountability while recording the opposite of what
@@ -1525,8 +1525,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
               : selectedPriorityVenture === null
                 ? commissionBlockedReason
                 : morningContext.openPriorities.some((item) => item.venture === entry.ventureId)
-                  ? "The board used its single commission on a higher-priority bounded decision."
-                  : "No open priority item for this venture had a concrete decision at stake.",
+                  ? "This project had open jobs, but the one extra meeting the morning can call went to a more urgent one."
+                  : "Nothing open on this project needed a decision that a meeting could settle.",
             priorityItemId: selectedPriorityVenture === entry.ventureId ? selectedPriorityId : null
           }))
         })

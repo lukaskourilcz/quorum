@@ -445,7 +445,15 @@ describe("the scan is terminal under the current budget shape", () => {
       readFile(path.join(repoRoot, "state", "decisions", "2026-08-04-budget-fifty.md"), "utf8")
     ]);
     const schedule = resolveEffectivePortfolioSchedule({
-      registry, budgetDecisionRaw, budgetFiftyRaw, monthlyApiHeadroomUsd: 25
+      registry,
+      // Written when the raise was unsigned. The owner countersigned it on 2026-08-04, so
+      // reading the live file and asserting shape B would test the state of the repository
+      // rather than the rule these two cases are about. The signature is stripped back out.
+      budgetDecisionRaw: budgetDecisionRaw
+        .replace(/^Status:\s*countersigned\s*$/mi, "Status: pending owner countersignature")
+        .replace(/^Selection:.*$/mi, "Selection: [ ] Shape A  [ ] Shape B"),
+      budgetFiftyRaw,
+      monthlyApiHeadroomUsd: 25
     });
     // Not a headroom rung: this is at full headroom and the room is still absent.
     expect(schedule.shape).toBe("B");
@@ -472,9 +480,17 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
       "2026-08-04-budget-fifty.md",
       "2026-08-02-fightaiq-founding.md"
     ]) {
-      await cp(
-        path.join(repoRoot, "state", "decisions", decision),
-        path.join(testStateRoot, "decisions", decision)
+      const raw = await readFile(path.join(repoRoot, "state", "decisions", decision), "utf8");
+      // The budget raise was countersigned on 2026-08-04. These cases are about what happens
+      // while it is NOT, so the fixture copy has the signature stripped: copying the live file
+      // verbatim made them assert the state of the repository instead of the rule.
+      await writeFile(
+        path.join(testStateRoot, "decisions", decision),
+        decision === "2026-08-01-budget-raise.md"
+          ? raw
+              .replace(/^Status:\s*countersigned\s*$/mi, "Status: pending owner countersignature")
+              .replace(/^Selection:.*$/mi, "Selection: [ ] Shape A  [ ] Shape B")
+          : raw
       );
     }
     await atomicWriteJson(testStateRoot, "budget/ledger.json", { schemaVersion: 1, entries: [] });

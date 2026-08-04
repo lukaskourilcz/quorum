@@ -125,4 +125,26 @@ describe("the alt text attached to a photograph", () => {
     await run(CANDIDATE);
     expect(altsRequested).toEqual([INVENTED_ALT]);
   });
+
+  it("refuses the writer's line outright for an illustrative photograph", async () => {
+    // The rung-two photograph shows a cage and nobody the article is about, and the writer knows
+    // whose article it is writing. The 4 August alt above is exactly one sentence away from
+    // "Gustavo Lopez v kleci UFC" over a stock arena shot, which is the lie the rung exists to
+    // prevent — so this is not a preference between two strings. The branch that would return the
+    // writer's text is unreachable for this candidate.
+    const illustrativeAlt = "Ilustrační fotografie ze zápasů MMA: prázdná klec ve sportovní hale. Nejde o snímek osoby, o níž článek pojednává.";
+    await run({ ...CANDIDATE, illustrative: true, altCs: illustrativeAlt });
+    expect(altsRequested).toEqual([illustrativeAlt]);
+    expect(altsRequested[0]).not.toContain("Gustavo");
+    expect(altsRequested[0]).not.toContain("Lopez");
+  });
+
+  it("still names nobody if an illustrative candidate somehow arrives with no alt of its own", async () => {
+    // `illustrativeSportPhoto` always sets one, so this is the defence against the next caller
+    // that constructs a candidate by hand. The old `??` chain would have reached straight past a
+    // missing altCs to the writer's invented stance.
+    await run({ ...CANDIDATE, illustrative: true });
+    expect(altsRequested[0]).not.toContain(INVENTED_ALT);
+    expect(altsRequested[0]).toContain("Ilustrační fotografie ze zápasů MMA");
+  });
 });

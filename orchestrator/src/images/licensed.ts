@@ -27,12 +27,54 @@ export interface LicensedPhotoCandidate {
    */
   identityOf?: string;
   /**
+   * Marks a photograph that illustrates the sport and depicts nobody the article is about.
+   *
+   * Set only by `illustrativeSportPhoto`. Everything downstream that could turn a picture into a
+   * claim about a person reads it: `produceMmaFilesArticle` refuses the writer's alt text for such
+   * a candidate, because the writer knows the article's subject and an alt it writes about a stock
+   * cage photograph is one sentence away from naming them in it.
+   */
+  illustrative?: true;
+  /**
    * Czech alt text the file's own metadata yields, which outranks anything the writer produces.
    *
    * Only a candidate that carries a description of itself can set this. The writer is shown
    * captions and no pixels, so an alt it writes is a guess about a picture it has not seen.
    */
   altCs?: string;
+}
+
+/**
+ * How certain we are that an article's hero shows what the article is about. Three rungs.
+ *
+ * A fighter article does not need a photograph of that fighter every time; it needs never to
+ * present a photograph as being them when it is not. The rungs are ordered by certainty and the
+ * hero is the highest one that can be fetched:
+ *
+ * 1. `entity-linked` — the file the subject's own Wikidata item names through P18. An item is the
+ *    person rather than a string about them, so this is certain. `fighterIdentityPhoto` builds it.
+ *    Measured on 4 August 2026: 39 of the 92 fighter cards reach this rung.
+ * 2. `illustrative` — a curated, licensed photograph of the sport: a cage, a hall, a crowd. It is
+ *    honest precisely because it claims nothing, and the whole of that guarantee lives in its alt
+ *    text, which describes the photograph and never the article's subject. `illustrativeSportPhoto`
+ *    builds it. This rung is why the other 53 cards no longer fall straight to a drawn plate.
+ * 3. `generated` — the FRAME plate from `deterministicArticleImage`, drawn when even a stock
+ *    photograph cannot be fetched. It contains no photograph and says so.
+ *
+ * The rung a candidate sits on is a property of how it was found, not of how it looks, which is
+ * why it is read off the fields that record the finding rather than guessed from the picture.
+ */
+export const PHOTO_CERTAINTY_LADDER = ["entity-linked", "illustrative", "generated"] as const;
+
+export type PhotoCertainty = (typeof PHOTO_CERTAINTY_LADDER)[number];
+
+/** Which rung a candidate sits on; `generated` when there is no candidate at all. */
+export function photoCertaintyOf(
+  candidate: Pick<LicensedPhotoCandidate, "identityOf" | "illustrative"> | null | undefined
+): PhotoCertainty {
+  if (candidate?.identityOf) return "entity-linked";
+  if (candidate?.illustrative) return "illustrative";
+  return "generated";
 }
 
 export interface LicensedImageSearchResult {

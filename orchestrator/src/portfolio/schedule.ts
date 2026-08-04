@@ -1,3 +1,4 @@
+import { COUNTERSIGNED_MONTHLY_OPERATING_USD } from "../budget.js";
 import type { VentureRegistry } from "../contracts/venture-registry.js";
 import type { ScheduledPhase } from "../types.js";
 import { parseCadenceHour, resolveMeetingClock, resolveScheduledClock } from "../ventures/registry.js";
@@ -103,7 +104,7 @@ export function resolveEffectivePortfolioSchedule(input: {
     fiftyDecisionStatus,
     monthlyBudgetUsd: fullScheduleShape ? 25 : shape === "A" ? 18 : 15,
     dailyBudgetUsd: fullScheduleShape ? 1 : shape === "A" ? 1 : 0.7,
-    monthlyOperatingUsd: fullScheduleShape ? 30 : 20,
+    monthlyOperatingUsd: fullScheduleShape ? COUNTERSIGNED_MONTHLY_OPERATING_USD : 20,
     ttTranscriptMode,
     activePhases: (fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
       .map((slot) => slot.phase)

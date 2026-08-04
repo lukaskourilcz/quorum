@@ -19,13 +19,19 @@ import { heroReady, wikimediaLicense, type LicensedPhotoCandidate } from "./lice
  * a P18 on it cannot be a photograph of the subsecretario, whatever either of them is called.
  *
  * Q104839627 in fact has no P18, so the correct answer for that article was: there is no
- * photograph. That is what this returns — null — and the caller draws the deterministic FRAME
- * cover instead. That is the common case, and the owner should know the shape of it. Measured
- * against the live items on 4 August 2026: all 92 fighter cards carry a wikidataId, 55 of those
- * items name an image, and 39 of those files are large enough to fill a 1600x900 hero. So 39
- * fighters in 92 can be photographed and 53 run the FRAME cover — 36 of 80 in the UFC roster
- * and 3 of 12 in OKTAGON's, which is the thinner half by some way. No file was refused for its
- * licence; the 16 that failed were all narrower than 640px.
+ * photograph *of him*. That is what this returns — null — and the caller descends to the next rung
+ * of `PHOTO_CERTAINTY_LADDER`. Null is the common case and the owner should know the shape of it.
+ * Measured against the live items on 4 August 2026: all 92 fighter cards carry a wikidataId, 55 of
+ * those items name an image, and 39 of those files are large enough to fill a 1600x900 hero. So 39
+ * fighters in 92 can be photographed as themselves — 36 of the 80 UFC cards and 3 of the 12
+ * OKTAGON ones, which is the thinner half by some way. (The previous note here read those two
+ * figures as the count that *fails*, which they are not, and they do not sum to 53 either way.) No
+ * file was refused for its licence; the 16 that failed were all narrower than 640px.
+ *
+ * The other 53 used to run the deterministic FRAME plate. Since 4 August they run an illustrative
+ * photograph of the sport instead — see `illustrativeSportPhoto` — which is honest only because it
+ * never claims to be the fighter. Nothing about that changes what this function may return: an
+ * uncertain photograph of a person is still worse than no photograph of them.
  */
 
 const USER_AGENT = "BoardlessAI-FightAIQ/1.0 (https://boardless-ai.vercel.app; source review bot)";
@@ -128,10 +134,11 @@ export interface IdentityPhotoLookup {
 /**
  * Resolves the fighter's item to a hero-ready candidate, or null when there is no photograph.
  *
- * Null is a normal, publishable outcome and covers 37 of the 92 cards on file: the caller draws
- * the FRAME cover, which is a first-class hero rather than a placeholder. What must never happen
- * is the third possibility — a photograph of somebody else — so nothing here falls back to a
- * search when the item is silent.
+ * Null is a normal, publishable outcome and covers 53 of the 92 cards on file: the caller drops to
+ * rung two of `PHOTO_CERTAINTY_LADDER` and attaches a photograph of the sport that claims to be
+ * nobody, or to the FRAME plate if even that cannot be fetched. What must never happen is the
+ * third possibility — a photograph of somebody else offered as this person — so nothing here falls
+ * back to a search when the item is silent, and nothing downstream may relabel what it does find.
  */
 export async function fighterIdentityPhoto(input: IdentityPhotoLookup): Promise<LicensedPhotoCandidate | null> {
   if (!/^Q[1-9]\d*$/u.test(input.wikidataId)) return null;

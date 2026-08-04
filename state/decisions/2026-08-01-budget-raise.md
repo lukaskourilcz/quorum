@@ -4,7 +4,7 @@ Date: 2026-08-01
 
 Decider: Lukas Kouril, owner
 
-Status: pending owner countersignature
+Status: countersigned
 
 Decision id: `budget-2026-08`
 
@@ -33,10 +33,15 @@ shape A.
 
 ## Owner countersignature
 
-Selection: [ ] Shape A  [ ] Shape B
+Selection: [x] Shape A  [ ] Shape B
 
-Name: ____________________
+Name: Lukas Kouril
 
-Date: ____________________
+Date: 2026-08-04
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Given in writing to the interactive
+engineering session on 2026-08-04 — "dej tomu moji countersignature, I approve",
+in reply to being shown that incubator-synthesis was inactive because shape B
+was in force. Recorded by the session on the owner's instruction rather than
+typed by the owner, which is stated here so the provenance is not mistaken for
+a hand-entered signature.
