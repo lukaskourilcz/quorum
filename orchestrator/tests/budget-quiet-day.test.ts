@@ -121,10 +121,14 @@ describe("the daily cap is asked before a room opens, not discovered inside one"
   });
 
   it("refuses the later rooms of an over-subscribed day before they spend anything", () => {
-    // Thirteen model-calling phases reserving $0.134 each want $1.74 against a $1.00 cap. The
-    // day has to end somewhere; the question this pins is whether it ends by refusing rooms
-    // before they spend, or by overspending, or by a room dying mid-meeting.
-    const reservationUsd = 0.134;
+    // The day has to end somewhere; the question this pins is whether it ends by refusing rooms
+    // before they spend, or by overspending, or by a room dying mid-meeting. So the reservation
+    // is derived from the cap in force rather than written down: at $0.134 a room this read
+    // "$1.74 against a $1.00 cap" until the caps were doubled for the test week, after which the
+    // day was no longer over-subscribed and the precondition failed — on CI only, because the
+    // workflow sets DAILY_BUDGET_USD and a local run takes the default. A test about what
+    // happens past the cap has to build a day that passes it, whatever the cap is.
+    const reservationUsd = Number(((limits.dailyUsd / MODEL_PHASES.length) * 1.3).toFixed(6));
     const ledger: BudgetLedgerEntry[] = [];
     const refused: string[] = [];
     MODEL_PHASES.forEach((phase, index) => {
