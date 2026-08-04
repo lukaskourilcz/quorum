@@ -98,6 +98,35 @@ function paceStatus(kpi: QuarterlyKpi, actual: number, paceTarget: number): Quar
   return actual / paceTarget <= 1 / KPI_AT_RISK_RATIO ? "at-risk" : "off-track";
 }
 
+/**
+ * How a target relates to quarter time.
+ *
+ * `cumulative` (the default, and what every KPI written before this field did) means the
+ * target is a quarter total, so progress is judged against a pro-rata slice of it.
+ * `level` means the target applies at every instant - a rate, a share or an average is
+ * already whole on the day it is measured, and slicing it produces a verdict about nothing.
+ * Pacing a level metric is wrong in both directions: it calls an average edition turnaround
+ * of 3 minutes "off-track" against a 60-minute cap on day 2 of the quarter, and it calls a
+ * 30% pass rate "on-track" against a target of 100%. The second is the dangerous one - it
+ * hides a miss - so a level KPI is compared to its full target from the first evaluation.
+ *
+ * KpiSetSchema is a loose object, so this field rides on the KPI entry without a contract
+ * change. It is validated strictly rather than defaulted on failure: a misspelled mode must
+ * not quietly restore pro-rata scoring on a KPI that was marked level on purpose.
+ */
+const PaceModeSchema = z.enum(["cumulative", "level"]);
+export type PaceMode = z.infer<typeof PaceModeSchema>;
+
+function paceMode(kpi: QuarterlyKpi): PaceMode {
+  const declared = (kpi as unknown as Record<string, unknown>).pace;
+  if (declared === undefined) return "cumulative";
+  const parsed = PaceModeSchema.safeParse(declared);
+  if (!parsed.success) {
+    throw new Error(`Invalid pace mode for ${kpi.id}: ${JSON.stringify(declared)}`);
+  }
+  return parsed.data;
+}
+
 function unavailableReason(metricSource: string): string {
   return metricSource.startsWith("state/metrics/phase-3/")
     ? "Phase 3 measurement is not available yet."
@@ -135,7 +164,10 @@ export function evaluateQuarterlyKpis(input: {
     }
     const activeDays = Math.max(0, timing.elapsedDays - kpi.ramp_days);
     const availableDays = set.quarter_days - kpi.ramp_days;
-    const paceTarget = Number((kpi.target * (activeDays / availableDays)).toFixed(8));
+    // A level target is not sliced by elapsed time; it is the bar at every evaluation.
+    const paceTarget = paceMode(kpi) === "level"
+      ? kpi.target
+      : Number((kpi.target * (activeDays / availableDays)).toFixed(8));
     const rampActive = timing.elapsedDays > 0 && activeDays === 0;
     return QuarterlyKpiEvaluationSchema.parse({
       id: kpi.id,

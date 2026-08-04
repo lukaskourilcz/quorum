@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
+import { countOwnedKpis, parseKpiRegistry } from "../metrics/collect.js";
 import { repoRoot, stateRoot } from "../paths.js";
 import { assertOrgChangeApproved, OrgChangeSchema } from "./change.js";
 import { AgentRegistrySchema } from "./registry.js";
@@ -96,10 +97,13 @@ async function verifyPlanPostconditions(
       throw new Error(`org-maintenance: routing capability ${capability} is missing`);
     }
   }
-  const kpis = JSON.parse(kpisRaw) as { kpis?: Array<{ owner?: string }> };
-  const owned = kpis.kpis?.filter(
-    (kpi) => kpi.owner === plan.postconditions.agentId
-  ).length ?? 0;
+  // The KPI floor, read through the registry schema rather than an untyped cast. The cast
+  // counted owners out of whatever shape the file happened to hold, so a malformed entry
+  // silently became "not owned by this agent" and could only ever under-count the floor.
+  const owned = countOwnedKpis(
+    parseKpiRegistry(JSON.parse(kpisRaw) as unknown),
+    plan.postconditions.agentId
+  );
   if (owned < plan.postconditions.minimumOwnedKpis) {
     throw new Error("org-maintenance: KPI configuration is incomplete");
   }

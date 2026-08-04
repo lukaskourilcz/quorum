@@ -1,80 +1,17 @@
 # MMA Files stylebook
 
-Updated: 2026-08-01
+Updated: 2026-08-04
 
 Owners: CANVAS and STET
 
 This is a map of newsroom habits, not a collection of borrowed prose. The study read
-ten current Czech fight stories and ten current English fight stories. It records
-patterns only. No sample below reproduces an outlet's sentence.
+ten current Czech fight stories. It records patterns only. No sample below reproduces
+an outlet's sentence.
 
-## English desk
-
-### Ledes
-
-- Put the new fact, result or decision in the first sentence.
-- A feature may start with one concrete human moment, then name the stakes quickly.
-- Do not warm up with a history lesson. Add earlier results only after the news.
-- Separate what happened from what a fighter or promoter says it means.
-
-### Recaps and previews
-
-- Recaps move in fight order: decisive exchange, method and time, then the setup.
-- Name a dull or limited performance plainly when the record supports it.
-- Previews establish the booking, each fighter's recent form and why the pairing matters.
-- Rankings and records sit inside sentences; tables carry larger comparisons.
-- Quotes are short, attributed nearby and surrounded by reported context.
-
-### Headlines and rhythm
-
-- Lead with the fighter, booking or result. Use a short quote only when it adds news.
-- A one-sentence dek says what changed; it does not repeat the headline.
-- Most paragraphs hold one to three sentences. A short fact paragraph can reset pace.
-- Mix direct sentences with longer context. Avoid consecutive paragraphs of equal size.
-- Prefer active verbs such as won, stopped, booked, returned, missed and said.
-
-### Working vocabulary
-
-- Use knockout, technical knockout, submission, decision and draw precisely.
-- Say main event, co-main event, short-notice replacement, title shot and weight class.
-- Explain specialist statistics once in plain language before using the short label.
-- Never turn a probability into a promise or a fighter into a stereotype.
-
-### Slop tells
-
-Reject these phrases and close variants:
-
-- in the world of MMA
-- epic showdown
-- look no further
-- testament to
-- electrifying clash
-- fans are in for a treat
-- only time will tell
-- left an indelible mark
-- pivotal moment
-- delve into
-
-Also reject inflated claims, unnamed observers, canned conclusions, fake quotes and a
-string of same-length paragraphs.
-
-Two rules a machine checks literally:
-
-- Never use an em dash. Use a full stop, comma or colon. One em dash blocks the article.
-- A post-event recap must contain the exact words "what we said beforehand".
-
-### English study sources
-
-1. <https://www.mmafighting.com/ufc/501617/islam-makhachev-reveals-his-game-plan-for-ian-machado-garry-at-ufc-330-i-have-to-follow-him-he-runs-too-much>
-2. <https://www.mmafighting.com/ufc/501292/2-new-fights-added-to-noche-ufc-including-dan-iges-bantamweight-debut>
-3. <https://www.mmafighting.com/ufc/500597/steve-garcia-reflects-on-ufc-white-house-loss-and-heartbreaking-conversation-with-his-son-afterwards-it-broke-me>
-4. <https://www.mmafighting.com/ufc/501325/salahdine-parnasse-headlines-ufc-paris-in-octagon-debut-vs-dan-hooker>
-5. <https://www.mmafighting.com/ufc/501389/magomed-ankalaev-open-to-paulo-costa-fight-next-unless-hes-going-to-be-running-away>
-6. <https://www.mmafighting.com/ufc/501354/ufc-abu-dhabi-results-magomed-ankalaev-fends-off-bogdan-guskov-with-forgettable-5th-round-knockout>
-7. <https://www.mmafighting.com/ufc/500676/ufc-abu-dhabi-results-ankalaev-vs-guskov>
-8. <https://www.mmafighting.com/ufc/501312/test-that-boy-again-pros-react-to-ramazan-temirovs-nasty-knockout-of-steve-erceg-at-ufc-abu-dhabi>
-9. <https://www.mmafighting.com/ufc/501286/ufc-abu-dhabi-results-magomed-zaynukov-stays-undefeated-in-impressive-ufc-debut>
-10. <https://www.mmafighting.com/ufc/501233/ufc-abu-dhabi-video-valter-walker-picks-up-5th-1st-round-leg-lock-submission-in-a-row-calls-out-herb-dean>
+The desk writes and publishes in Czech. An English desk section, built from ten English
+fight stories, sat above this line until 2026-08-04. The packet handed to a writer only
+ever sliced the Czech desk, so no writer read that section and no gate checked copy
+against it. Its ten sources stay in this file's git history.
 
 ## Czech desk
 

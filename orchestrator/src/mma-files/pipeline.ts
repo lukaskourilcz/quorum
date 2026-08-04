@@ -85,7 +85,19 @@ export async function produceMmaFilesArticle(input: {
   // The rest-destructure stays. openObject is z.looseObject, so a surviving imageCandidateIndex
   // would be persisted into the localization and folded into the package hash, changing the
   // shape of every future article away from the sealed { title, dek, bodyMDX }.
-  const { imageCandidateIndex, imageAlt: csImageAlt, ...csLocalization } = cs;
+  const { imageCandidateIndex, imageAlt: csImageAlt, ...csDraft } = cs;
+  // Markers come out here, before anything reads the copy, and out of all three fields a reader
+  // sees rather than the body alone. Nothing asks the writer for one any more and no gate wants
+  // to see one, so this is a normalizer against habit rather than a step the review depends on.
+  // Stripping used to happen after `reviewArticle`, which meant the gate judged one body and the
+  // reader got another; every rule below now runs on the exact text that is hashed, stored,
+  // rendered into the deck and delivered.
+  const csLocalization = {
+    ...csDraft,
+    title: stripSourceMarkers(csDraft.title),
+    dek: stripSourceMarkers(csDraft.dek),
+    bodyMDX: stripSourceMarkers(csDraft.bodyMDX)
+  };
   const candidate = imageCandidateIndex === undefined
     ? undefined
     : input.imageCandidates?.[Math.min(imageCandidateIndex, (input.imageCandidates?.length ?? 1) - 1)];
@@ -125,15 +137,10 @@ export async function produceMmaFilesArticle(input: {
   };
   const draft = ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
   const violations = reviewArticle(draft, { mode: input.mode });
-  // The gate has now checked that every figure carries a marker, so the markers have done
-  // their work and come out before the package is hashed. They are repository paths, not
-  // citations a reader can follow, and the first published article printed one mid-sentence
-  // in both languages. The sources array still carries every path, so nothing is lost.
+  // Only the status changes between the reviewed draft and the stored package, so it is the
+  // only reason the content is hashed a second time.
   const finalContent = {
     ...content,
-    localizations: {
-      cs: { ...content.localizations.cs, bodyMDX: stripSourceMarkers(content.localizations.cs.bodyMDX) }
-    },
     status: violations.length ? "blocked" as const : "published" as const
   };
   const article = ArticlePackageSchema.parse({ ...finalContent, packageHash: articlePackageHash(finalContent) });

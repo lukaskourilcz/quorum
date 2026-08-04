@@ -1,4 +1,5 @@
 import type { RoomPacket } from "../boardroom/room.js";
+import { pragueClockParts } from "../meetings/clock.js";
 import {
   getShiftDefinition,
   isShiftPhase
@@ -31,7 +32,12 @@ export function createOfflineStandup(input: {
   const shift = isShiftPhase(input.phase)
     ? getShiftDefinition(input.phase)
     : null;
-  const date = input.now.toISOString().slice(0, 10);
+  // The Prague wall-clock day, which is the day every other record and the calendar use.
+  // This was the UTC day. Prague runs one or two hours ahead, so between midnight and 02:00
+  // local the UTC date is still yesterday: a night shift queued past midnight filed itself
+  // under the previous day, overwriting that day's record of the same phase, and the calendar
+  // — laid out in Prague days and keyed on this field — showed the real day's slot as missed.
+  const date = pragueClockParts(input.now).date;
   const shiftTask = shift
     ? {
         morning: {

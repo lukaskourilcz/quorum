@@ -32,6 +32,14 @@ export interface EditionRunReport {
   stet?: StetReview;
   hacek?: StetReview;
   packageStatus?: EditionPackage["status"];
+  /**
+   * Present only on a run that published over findings nobody resolved.
+   *
+   * `quality` and `stet` already carry the full verdicts, but they carry them the same way on a
+   * run that passed, so a reader has to reconstruct the decision. This states it: the article
+   * went out, these are the findings it went out over. See edition/publication-gate.ts.
+   */
+  unresolvedReview?: { notice: string; findings: string[] };
   warnings: string[];
 }
 
@@ -46,6 +54,7 @@ export class EditionRunReporter {
   quality?: { metrics: QualityMetrics; result: QualityResult };
   stet?: StetReview;
   hacek?: StetReview;
+  unresolvedReview?: { notice: string; findings: string[] };
 
   constructor(
     readonly date: string,
@@ -105,6 +114,7 @@ export class EditionRunReporter {
       ...(this.quality ? { quality: this.quality } : {}),
       ...(this.stet ? { stet: this.stet } : {}),
       ...(this.hacek ? { hacek: this.hacek } : {}),
+      ...(this.unresolvedReview ? { unresolvedReview: this.unresolvedReview } : {}),
       ...(packageStatus ? { packageStatus } : {}),
       warnings: [...this.warnings]
     };

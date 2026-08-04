@@ -43,6 +43,8 @@ interface EditionPackageContext {
   costUsd: number | undefined;
   socialPackEnabled?: boolean;
   image?: ArticleImage;
+  /** Set only when the article shipped over findings the review left open. */
+  unresolvedReview?: { notice: string; findings: string[] };
   hero?: {
     bytes: Buffer;
     alt: string;
@@ -154,6 +156,9 @@ export function buildEditionPackage(
     ...(context.socialPackEnabled === false
       ? {}
       : { socialPackRef: `state/social/packs/${article.date}.json` }),
+    // Part of the hashed package, so the findings cannot be edited off a delivered edition
+    // without the delivery validator refusing it.
+    ...(context.unresolvedReview ? { unresolvedReview: context.unresolvedReview } : {}),
     ...(context.hero
       ? {
           hero: {

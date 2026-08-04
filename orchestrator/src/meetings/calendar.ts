@@ -69,7 +69,14 @@ function slotKind(phase: (typeof MEETING_CLOCK)[number]["phase"]): CalendarFeed[
 }
 
 function recordReference(record: MeetingRecord): string {
-  if (record.kind === "venture") return `meetings/${record.cycleId}`;
+  // Every venture record loadMeetingRecords returns was read from standups/, so that is what a
+  // venture slot points at. A venture cycle also writes meetings/<cycleId>.json, but that file
+  // is a thin room summary on schemaVersion 1: it fails MeetingRecordSchema and is dropped by
+  // the loop below, so the calendar never holds it. Naming it from the cycle id anyway pointed
+  // the slot at a file the calendar had not read, and it resolved only where a cycle happened
+  // to leave both files behind. The 1 August morning and afternoon standups were published
+  // without their summaries, and the two slots referenced files that were never written.
+  if (record.kind === "venture") return `standups/${record.date}-${record.phase}`;
   if (record.kind === "tt-marketing" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "studio") {
     return `meetings/${record.date}-${record.kind}`;
   }

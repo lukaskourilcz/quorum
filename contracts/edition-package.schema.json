@@ -1174,6 +1174,31 @@
           ],
           "additionalProperties": {}
         },
+        "unresolvedReview": {
+          "type": "object",
+          "properties": {
+            "notice": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 400
+            },
+            "findings": {
+              "minItems": 1,
+              "maxItems": 40,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              }
+            }
+          },
+          "required": [
+            "notice",
+            "findings"
+          ],
+          "additionalProperties": {}
+        },
         "board": {
           "type": "object",
           "properties": {

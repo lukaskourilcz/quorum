@@ -4,6 +4,7 @@ import { z } from "zod";
 import { type BudgetLedgerEntry, type ReserveContext } from "../budget.js";
 import type { RoomPacket } from "../boardroom/room.js";
 import { AgendaPhaseSchema, type AgendaPhase } from "../contracts/meeting-agenda.js";
+import { pragueClockParts } from "../meetings/clock.js";
 import type { VentureRegistry } from "../contracts/venture-registry.js";
 import { configRoot, stateRoot } from "../paths.js";
 import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
@@ -440,6 +441,10 @@ export function createLiveStandup(input: {
   quarterlyKpis?: QuarterlyKpiPacketSummary;
 }): Standup {
   const shift = getShiftDefinition(input.phase);
+  // The Prague wall-clock day, matching createOfflineStandup and every other record. Both
+  // writers dated themselves in UTC, which is one or two hours behind Prague, so a shift that
+  // ran between local midnight and 02:00 recorded the previous day.
+  const date = pragueClockParts(input.now).date;
   const approved =
     input.council.positions.filter((position) => position.recommendation === "approve")
       .length >= 3 &&
@@ -456,10 +461,10 @@ export function createLiveStandup(input: {
   return StandupSchema.parse({
     schemaVersion: 1,
     cycleId: input.cycleId,
-    date: input.now.toISOString().slice(0, 10),
+    date,
     phase: input.phase,
     episode: {
-      id: `EP-${input.now.toISOString().slice(0, 10).replaceAll("-", "")}-${shift.phase.toUpperCase()}`,
+      id: `EP-${date.replaceAll("-", "")}-${shift.phase.toUpperCase()}`,
       shift: shift.phase,
       title: shift.episodeTitle,
       hours: `${shift.startsAt}–${shift.endsAt}`,

@@ -6,12 +6,12 @@ import { afterEach, describe, expect, it } from "vitest";
 import { ArticlePackageSchema, EditorialSlateSchema, type ArticlePackage } from "../src/contracts/mma-files.js";
 import { LocalStoreDelivery, shipArticleBacklog, type ArticleDeliveryAdapter } from "../src/mma-files/delivery.js";
 import { runDryArticleProduction } from "../src/mma-files/dry-run.js";
-import { articleEvidenceFor } from "../src/mma-files/live.js";
+import { MMA_FILES_WRITE_SYSTEM, articleEvidenceFor } from "../src/mma-files/live.js";
 import { renderArticleHero, renderSocialVariants } from "../src/mma-files/frame.js";
 import { articlePackageHash, hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { produceMmaFilesArticle, type MmaFilesEditorialGateway } from "../src/mma-files/pipeline.js";
 import { buildSocialVariantPack } from "../src/mma-files/social.js";
-import { loadStylebook, reviewArticleCopy, reviewBilingualParity, stripSourceMarkers, validateStylebook } from "../src/mma-files/style.js";
+import { REQUIRED_STYLEBOOK_HEADINGS, loadStylebook, reviewArticleCopy, reviewBilingualParity, stripSourceMarkers, stylebookPacket, validateStylebook } from "../src/mma-files/style.js";
 import { ArticleSlotConflictError, loadArticlePackages, storeArticlePackage } from "../src/mma-files/store.js";
 import { deterministicArticleImage } from "../src/images/article-image.js";
 import { repoRoot, stateRoot } from "../src/paths.js";
@@ -27,8 +27,10 @@ const slate = EditorialSlateSchema.parse({
     { slot: "pm", format: "fighter-profile", subjectRefs: ["oktagon:eva-example"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "QUILL", status: "assigned" }
   ],
   vaultVerdicts: [
-    { subjectRef: "ufc:event:fixture-prague", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#1" },
-    { subjectRef: "oktagon:eva-example", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#2" }
+    // Not a repository path. These two subjects are synthetic, so no file on disk backs them,
+    // and the path this used to name — state/ideas/mma-files/ledger.jsonl — has never existed.
+    { subjectRef: "ufc:event:fixture-prague", verdict: "fresh", evidenceRef: "FIXTURE:mma-files.test#1" },
+    { subjectRef: "oktagon:eva-example", verdict: "fresh", evidenceRef: "FIXTURE:mma-files.test#2" }
   ]
 });
 
@@ -40,20 +42,24 @@ const gateway: MmaFilesEditorialGateway = {
       // Long enough to build a real carousel. The fixture used to be two sentences, which is a
       // fine article for the copy gates and too thin for a five-slide deck, so the deck path
       // was never exercised by a test that claimed to cover article production.
+      //
+      // No source markers. The writer is no longer asked for one, so a fixture carrying them
+      // would be testing a contract the desk stopped issuing. A writer that emits one anyway is
+      // a separate case, covered in "no inline source marker survives to a reader" below.
       bodyMDX: [
         "## Zápas",
         "",
-        "[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2. [^source-1]",
+        "[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2.",
         "",
-        "[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3. [^source-1]",
+        "[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3.",
         "",
-        "Oba zápasníci se v hlavním zápase potkávají poprvé a soubor u obou uvádí shodně vedenou bilanci. [^source-1]",
+        "Oba zápasníci se v hlavním zápase potkávají poprvé a soubor u obou uvádí shodně vedenou bilanci.",
         "",
-        "Rozdíl je v cestě k výsledku: jeden vítězí častěji v postoji, druhý se opírá o zemní práci. [^source-1]",
+        "Rozdíl je v cestě k výsledku: jeden vítězí častěji v postoji, druhý se opírá o zemní práci.",
         "",
-        "Ověřená data neuvádějí u žádného z nich zranění, které by kartu ohrozilo. [^source-1]",
+        "Ověřená data neuvádějí u žádného z nich zranění, které by kartu ohrozilo.",
         "",
-        "Karta se koná v Praze a je to teprve druhý turnaj organizace v tomto městě. [^source-1]"
+        "Karta se koná v Praze a je to teprve druhý turnaj organizace v tomto městě."
       ].join("\n"),
       imageAlt: "Zkušební karta zápasu Alexe Examplea se Samem Examplem"
     };
@@ -104,14 +110,51 @@ describe("MMA Files article production", () => {
     expect(replay.article.packageHash).toBe(first.article.packageHash);
   });
 
-  it("keeps the style study complete, separated by language and fragment-safe", async () => {
+  it("keeps the Czech style study complete and fragment-safe", async () => {
     const stylebook = await loadStylebook(repoRoot);
     expect(validateStylebook(stylebook)).toEqual([]);
-    expect(stylebook.match(/https:\/\/www\.mmafighting\.com/g)).toHaveLength(10);
     expect(stylebook.match(/https:\/\/www\.fights\.cz/g)).toHaveLength(10);
+    // The desk publishes in Czech. An English desk section sat in this file carrying its own
+    // ledes, recaps and slop tells, and stylebookPacket never sliced it, so it went to no
+    // writer and shaped no article while riding along in every room packet built from the file.
+    expect(stylebook).not.toContain("## English desk");
+    expect(stylebook.match(/https:\/\/www\.mmafighting\.com/g)).toBeNull();
   });
 
-  it("publishes only when the Czech copy, source markers and fighter links pass", async () => {
+  it("requires every heading the Czech writer packet carries, and only those", async () => {
+    const stylebook = await loadStylebook(repoRoot);
+    const packet = stylebookPacket(stylebook, "cs");
+    // Both directions, or the check is half a check. Asserting only required -> packet lets a
+    // new section be added to the Czech desk and travel to every writer with nothing guarding
+    // it: insert "### Nový nehlídaný oddíl" and the old loop stayed green while the writer
+    // received a section that could be deleted again without a single failure.
+    const delivered = new Set(packet.match(/^#{2,3} .+$/gmu) ?? []);
+    expect(delivered).toEqual(new Set(REQUIRED_STYLEBOOK_HEADINGS));
+    for (const heading of REQUIRED_STYLEBOOK_HEADINGS) {
+      // And the demand has to bite. Rename the heading and the validator must say so, or the
+      // section can leave the stylebook with every gate still green.
+      expect(validateStylebook(stylebook.replace(heading, "### přejmenovaný oddíl")))
+        .toContain(`missing:${heading}`);
+    }
+  });
+
+  it("refuses a Czech packet that lost its machine-text tells", () => {
+    // The tells are the one section the copy gate mirrors phrase for phrase. A stylebook that
+    // still has the heading structure but not this section must not reach a writer.
+    const withoutTells = "## Czech desk\n\n### Začátky článků\n\n- První věta řekne, co je nové.\n";
+    expect(() => stylebookPacket(withoutTells, "cs")).toThrow(/slop-tells/u);
+    expect(validateStylebook(withoutTells)).toContain("missing:### Znaky strojového textu");
+    // The two shapes the guard used to wave through. It accepted the English heading "Slop
+    // tells" or the bare Czech string anywhere in the packet, so a stylebook that kept the
+    // deleted English desk's heading passed, and so did one that only mentions the section in
+    // running prose. Neither hands a writer the phrase list, which is the whole point of it.
+    const englishHeading = `${withoutTells}\n### Slop tells\n\n- Avoid the phrase “epic showdown”.\n`;
+    expect(() => stylebookPacket(englishHeading, "cs")).toThrow(/slop-tells/u);
+    const mentionedInProse = `${withoutTells}\n Znaky strojového textu sepíšeme příště.\n`;
+    expect(() => stylebookPacket(mentionedInProse, "cs")).toThrow(/slop-tells/u);
+  });
+
+  it("publishes only when the Czech copy and the fighter links pass", async () => {
     const root = await tempRoot("mma-files-production-");
     const first = await production(root);
     const replay = await production(root);
@@ -131,19 +174,19 @@ describe("MMA Files article production", () => {
     expect(await loadArticlePackages(root)).toEqual([first.article]);
   });
 
-  it("blocks machine filler, missing citations and incomplete fighter links without a social pack", async () => {
+  it("blocks machine filler and incomplete fighter links without a social pack", async () => {
     const root = await tempRoot("mma-files-blocked-");
     const bad: MmaFilesEditorialGateway = {
       ...gateway,
       async writeCzech() {
         // Czech slop, because Czech is the copy the desk now writes and the only copy reviewed.
-        return { title: "Epický souboj", dek: "Fanoušci se mají na co těšit.", bodyMDX: "> Citát bez zdroje\n\nAlex má 14 výher.", imageAlt: "Obecná grafika k zápasu" };
+        return { title: "Epický souboj", dek: "Fanoušci se mají na co těšit.", bodyMDX: "> Citát\n\nAlex má 14 výher.", imageAlt: "Obecná grafika k zápasu" };
       }
     };
     const result = await production(root, bad);
     expect(result.article.status).toBe("blocked");
     expect(result.socialPath).toBeNull();
-    expect(result.violations.map((violation) => violation.code)).toEqual(expect.arrayContaining(["stylebook-slop", "ungrounded-claim", "missing-fighter-link"]));
+    expect(result.violations.map((violation) => violation.code)).toEqual(expect.arrayContaining(["stylebook-slop", "missing-fighter-link"]));
   });
 
   it("catches Czech non-declension and requires honest recap comparison", async () => {
@@ -151,7 +194,7 @@ describe("MMA Files article production", () => {
     const result = await production(root);
     const article = result.article;
     const czech = structuredClone(article);
-    czech.localizations.cs.bodyMDX += "\n\nMluvil s Vémola. [^source-1]";
+    czech.localizations.cs.bodyMDX += "\n\nMluvil s Vémola.";
     expect(reviewArticleCopy(czech, "cs", { mode: "data-only" }).map((item) => item.code)).toContain("czech-declension");
     czech.localizations.cs.bodyMDX = czech.localizations.cs.bodyMDX.replace("s Vémola", "s Vémolou");
     expect(reviewArticleCopy(czech, "cs", { mode: "data-only" }).map((item) => item.code)).not.toContain("czech-declension");
@@ -375,7 +418,7 @@ describe("bilingual figure parity", () => {
   });
 });
 
-describe("grounding markers do not reach the reader", () => {
+describe("no inline source marker survives to a reader", () => {
   it("removes the markers and the space they leave behind", () => {
     // The first published article printed the repository path mid-sentence, in both languages.
     expect(stripSourceMarkers(
@@ -393,24 +436,158 @@ describe("grounding markers do not reach the reader", () => {
     expect(stripSourceMarkers(body)).toBe(body);
   });
 
-  it("still requires a marker on a figure, because the gate runs before the strip", () => {
-    const copy = { title: "T", dek: "D", bodyMDX: "She holds a record of 26-4-1.", imageAlt: "A" };
+  it("does not ask the writer for one", () => {
+    // The demand lived in a string literal inside the gateway call, where no test could see it.
+    // It is a constant now, and this is what reads it: the instruction must not ask for a
+    // marker, and must carry the rule that took its place — write only what the packet states.
+    const prohibition = "Write no citations in the copy: no file paths, no [source:path] or [^source-N] markers, no footnotes, no URLs.";
+    expect(MMA_FILES_WRITE_SYSTEM).toContain(prohibition);
+    // The only sentence allowed to mention a marker is the one forbidding it. The instruction
+    // this replaced said "Every figure and quote needs a [source:repo/path] marker".
+    expect(MMA_FILES_WRITE_SYSTEM.replace(prohibition, "")).not.toMatch(/\[source|\^source-|marker/iu);
+    expect(MMA_FILES_WRITE_SYSTEM).toContain("If the packet does not state something, leave it out");
+  });
+
+  it("publishes a figure that carries no marker", async () => {
+    // What ungrounded-claim used to block. Every line of the fixture body states a figure and
+    // none of them is decorated, which is the article the desk is now asked to write.
+    const root = await tempRoot("mma-files-unmarked-");
+    const result = await production(root);
+    expect(result.violations).toEqual([]);
+    expect(result.article.status).toBe("published");
+    expect(result.article.localizations.cs.bodyMDX).toContain("bilancí 12-2");
+  });
+
+  it("clears the headline and the standfirst too, not only the body", async () => {
+    const root = await tempRoot("mma-files-marked-title-");
+    const marked: MmaFilesEditorialGateway = {
+      ...gateway,
+      async writeCzech(input) {
+        const draft = await gateway.writeCzech(input);
+        return {
+          ...draft,
+          title: `${draft.title} [source:state/ventures/fightaiq/fighters/ufc/alex-example.json]`,
+          dek: `${draft.dek} [^source-1]`
+        };
+      }
+    };
+    const result = await production(root, marked);
+    const stored = result.article.localizations.cs;
+    expect(stored.title).toBe("Alex Example se v Praze utká se Samem Examplem");
+    expect(stored.dek).toBe("Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.");
+    expect(result.article.status).toBe("published");
+  });
+
+  it("reviews the text that ships, not a draft the reader never sees", async () => {
+    // A marker splitting a machine-written phrase hid it from the copy gate: the gate read
+    // "epický [^source-1] souboj" and matched nothing, the strip then closed the gap, and the
+    // reader got "epický souboj" in a package the gate had passed. Stripping before the review
+    // is what closes that; the phrase is caught on the same text the store receives.
+    const root = await tempRoot("mma-files-split-slop-");
+    const split: MmaFilesEditorialGateway = {
+      ...gateway,
+      async writeCzech() {
+        return {
+          title: "Alex Example se v Praze utká se Samem Examplem",
+          dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
+          bodyMDX: "[Alex Example](/fighters/ufc/alex-example) a [Sam Example](/fighters/ufc/sam-example) nastupují.\n\nJde o epický [^source-1] souboj dvou stylů.",
+          imageAlt: "Zkušební karta zápasu"
+        };
+      }
+    };
+    const result = await production(root, split);
+    expect(result.violations.map(({ code }) => code)).toContain("stylebook-slop");
+    expect(result.article.status).toBe("blocked");
+    expect(result.article.localizations.cs.bodyMDX).toContain("epický souboj");
+    expect(result.article.localizations.cs.bodyMDX).not.toContain("[^source-");
+  });
+});
+
+describe("what a fighter link may point at", () => {
+  it("blocks a profile link the evidence packet never supplied", async () => {
+    // The edition pipeline fails a write outright when the copy cites a URL that was not in the
+    // packet. A profile link is the only reference MMA Files copy shows a reader, so it gets the
+    // same rule: /fighters/ufc/khabib-nurmagomedov is a page this site has no record for, and
+    // "every supplied ref is linked" alone said nothing about a link nobody supplied.
+    const root = await tempRoot("mma-files-stray-link-");
+    const stray: MmaFilesEditorialGateway = {
+      ...gateway,
+      async writeCzech() {
+        return {
+          title: "Alex Example se v Praze utká se Samem Examplem",
+          dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
+          bodyMDX: [
+            "[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2.",
+            "",
+            "[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3.",
+            "",
+            "Oba trénovali s [Khabibem Nurmagomedovem](/fighters/ufc/khabib-nurmagomedov)."
+          ].join("\n"),
+          imageAlt: "Zkušební karta zápasu"
+        };
+      }
+    };
+    const result = await production(root, stray);
+    expect(result.article.status).toBe("blocked");
+    expect(result.violations.map(({ code }) => code)).toContain("unsupplied-fighter-link");
+    // And the two the packet did supply are not what fired.
+    expect(result.violations.map(({ message }) => message).join(" ")).toContain("khabib-nurmagomedov");
+  });
+
+  it("blocks a URL the article has no external source for", async () => {
+    // The same rule as the profile link, on the other kind of reference. An MMA evidence packet
+    // is made of repository records and supplies no URL, so a link out is one the writer brought
+    // with it — the desk's own study list lives in the stylebook and is not an article source.
+    const root = await tempRoot("mma-files-stray-url-");
+    const linkedOut: MmaFilesEditorialGateway = {
+      ...gateway,
+      async writeCzech() {
+        return {
+          title: "Alex Example se v Praze utká se Samem Examplem",
+          dek: "Ověřené profily ukazují dvě rozdílné cesty tímto zápasem.",
+          bodyMDX: [
+            "[Alex Example](/fighters/ufc/alex-example) nastupuje s bilancí 12-2.",
+            "",
+            "[Sam Example](/fighters/ufc/sam-example) nastupuje s bilancí 10-3.",
+            "",
+            "Podrobnosti uvádí [profil na webu](https://www.fights.cz/alex-example)."
+          ].join("\n"),
+          imageAlt: "Zkušební karta zápasu"
+        };
+      }
+    };
+    const result = await production(root, linkedOut);
+    expect(result.article.status).toBe("blocked");
+    expect(result.violations.map(({ code }) => code)).toContain("unsupplied-url");
+  });
+
+  it("catches an org the parity check does not recognize", () => {
+    // The parity matcher only knows ufc and oktagon because it compares two tellings of one
+    // article. Here an unknown org is the whole point: a link to an org this desk does not cover
+    // is a link to a page that does not exist, and a matcher restricted to two orgs skips it.
+    const copy = {
+      title: "T",
+      dek: "D",
+      bodyMDX: "[A](/fighters/ufc/alex-example) proti [B](/fighters/pfl/b-example).",
+      imageAlt: "A"
+    };
     const content = {
       schemaVersion: "article/1" as const,
-      slug: "grounding",
-      localizations: { en: copy, cs: copy },
+      slug: "stray-org",
+      localizations: { cs: copy },
       format: "fighter-profile" as const,
-      sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:a.json" }],
-      image: deterministicArticleImage({ venture: "mma-files", slug: "grounding", title: "T",}),
+      sources: [{ kind: "internal" as const, ref: "state/mma/fighters/ufc:alex-example.json" }],
+      image: deterministicArticleImage({ venture: "mma-files", slug: "stray-org", title: "T" }),
       heroSpec: { template: "fighter-file", bindings: { headline: "H" } },
-      fighterRefs: [],
+      fighterRefs: ["ufc:alex-example"],
       publishAt: "2026-08-02T06:00:00.000Z",
       slot: "am" as const,
       status: "draft" as const
     };
     const article = ArticlePackageSchema.parse({ ...content, packageHash: articlePackageHash(content) });
-    expect(reviewArticleCopy(article, "en", { mode: "data-only" }).map(({ code }) => code))
-      .toContain("ungrounded-claim");
+    const codes = reviewArticleCopy(article, "cs", { mode: "data-only" }).map(({ code }) => code);
+    expect(codes).toContain("unsupplied-fighter-link");
+    expect(codes).not.toContain("missing-fighter-link");
   });
 });
 

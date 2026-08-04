@@ -52,6 +52,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
+import { resolveSlateEvidence } from "../mma-files/slate-evidence.js";
 import { fetchReadable } from "../sources/adapters/reader.js";
 import { loadArticlePackages } from "../mma-files/store.js";
 import { fightAiQBrief } from "../fightaiq/brief.js";
@@ -1174,6 +1175,26 @@ export async function runPortfolioCycle(input: {
           ]
         });
       }
+    }
+    // Whichever branch above produced the slate, this is the last point before it is written to
+    // `ventures/mma-files/slates/` and read back as the desk's record. The dry branch copies a
+    // fixture and the live branch takes a model's object, so neither has checked that a ref
+    // shaped like a repository path names a file: that is how the fixture's
+    // `state/ideas/mma-files/ledger.jsonl#1` was stored as a real verdict. Resolution runs
+    // against `repoRoot` and not `root`, because the refs are repository-relative — a dry run
+    // writes into `tmp/dry-run/state` but still cites `state/...`.
+    if (editorialSlate) {
+      const checked = await resolveSlateEvidence(repoRoot, editorialSlate);
+      if (checked.removed.length) {
+        console.warn(JSON.stringify({
+          event: "slate_evidence_unresolvable",
+          phase: input.phase,
+          cycleId: input.cycleId,
+          removed: checked.removed,
+          reason: "The verdict cited a repository path that does not exist; the ref was dropped and the verdict notes it."
+        }));
+      }
+      editorialSlate = checked.slate;
     }
   }
   const auditVeto = contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");

@@ -6,7 +6,7 @@
     { "slot": "pm", "format": "fighter-profile", "subjectRefs": ["oktagon:eva-example"], "rationale": "The fighter file is complete enough for a useful introduction.", "assignedWriter": "QUILL", "status": "assigned" }
   ],
   "vaultVerdicts": [
-    { "subjectRef": "ufc:event:fixture-prague", "verdict": "fresh", "evidenceRef": "state/ideas/mma-files/ledger.jsonl#1" },
-    { "subjectRef": "oktagon:eva-example", "verdict": "fresh", "evidenceRef": "state/ideas/mma-files/ledger.jsonl#2" }
+    { "subjectRef": "ufc:event:fixture-prague", "verdict": "fresh", "evidenceRef": "FIXTURE:editorial-slate.valid" },
+    { "subjectRef": "oktagon:eva-example", "verdict": "fresh", "evidenceRef": "FIXTURE:editorial-slate.valid" }
   ]
 }

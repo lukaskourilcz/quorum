@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -8,6 +9,7 @@ import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
 import { NicheProposalSchema } from "../src/contracts/niche-proposal.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
+import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
@@ -29,6 +31,24 @@ describe("published contracts", () => {
   it.each(contractNames)("keeps the committed %s JSON Schema current", async (name) => {
     const committed = await readFile(path.join(repoRoot, "contracts", `${name}.schema.json`), "utf8");
     expect(committed).toBe(jsonSchemaText(name));
+  });
+
+  // A dry mag-editorial room copies this fixture into the slate it writes, so any path the
+  // fixture names is republished as the desk's own cited evidence. Both verdicts cited
+  // state/ideas/mma-files/ledger.jsonl, a file this repository has never held, and the copy
+  // reached state/ventures/mma-files/slates/2026-08-01.json. A verdict either names a file a
+  // reviewer can open or does not look like a file at all.
+  it("cites no missing file in the editorial-slate fixture", async () => {
+    const slate = await fixture("editorial-slate", "valid") as {
+      vaultVerdicts: ReadonlyArray<{ evidenceRef: string }>;
+    };
+    const repoPaths = slate.vaultVerdicts
+      .map((verdict) => verdict.evidenceRef)
+      // The same predicate the writer uses to decide which refs it has to resolve, so the fixture
+      // cannot be judged by a looser rule than the slates the fixture is copied into.
+      .filter((reference) => isRepoPathEvidenceRef(reference));
+    expect(repoPaths.filter((reference) => !existsSync(path.join(repoRoot, reference.split("#")[0]!))))
+      .toEqual([]);
   });
 });
 

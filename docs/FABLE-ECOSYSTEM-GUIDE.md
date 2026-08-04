@@ -17,7 +17,7 @@ deterministic checks and human-only approval gates.
 
 The system currently runs six workspaces:
 
-1. **Caught Up** — a daily bilingual AI-news briefing.
+1. **Caught Up** — a daily Czech AI-news briefing.
 2. **Titty Tuesdays** — a pre-commerce apparel/brand laboratory focused on future
    campaigns, not social production or sales.
 3. **Magazine Incubator** — a research-only way to find possible publication niches.
@@ -25,7 +25,7 @@ The system currently runs six workspaces:
    discovery and guarded deterministic analysis.
 5. **Carousel Studio** — an internal deterministic carousel renderer with a public
    template gallery and no image-model calls.
-6. **MMA Files** — a public English/Czech MMA magazine and the reader-facing home for
+6. **MMA Files** — a public Czech MMA magazine and the reader-facing home for
    FightAIQ data.
 
 BoardlessAI makes plans and content, records why a decision was made, counts external
@@ -127,8 +127,8 @@ vote cannot override a human-only gate.
 ### Specialist authority
 
 Specialists can collect approved evidence, compare records, propose work, write a
-draft, translate, edit or produce a deterministic artifact. They cannot approve their
-own release or expand their scope. A specialist room may ask for one allowlisted
+draft, edit or produce a deterministic artifact. They cannot approve their own
+release or expand their scope. A specialist room may ask for one allowlisted
 follow-up. That request creates another agenda; it does not authorize its result.
 
 ### External text
@@ -283,9 +283,9 @@ Specialist routing:
 
 - OpenAI specialists use configured `gpt-5.6-luna`.
 - Anthropic specialists normally use configured `claude-haiku-4-5-20251001`.
-- Caught Up curation, long-form writing and Czech localization use the quality path
+- Caught Up curation and the one long-form Czech writing call use the quality path
   `claude-sonnet-4-6`.
-- MMA Files English and Czech article calls use `claude-sonnet-4-6`.
+- The MMA Files article call uses `claude-sonnet-4-6`.
 - Licensed-photo search, image processing, deterministic SVG fallbacks and social
   templates make no image-model call.
 
@@ -369,10 +369,10 @@ brand tokens while sharing the same checked template engine.
 | Agent | Specialty | Boundary |
 | --- | --- | --- |
 | CANVAS | two-slot editor-in-chief and source sufficiency | kills thin/repeated assignments before production |
-| JAB | direct English MMA reporting | no unsupported figures, quotes, odds or hype |
-| HACEK | natural Czech version | preserves facts and uncertainty; not literal translation |
+| JAB | direct Czech MMA reporting | no unsupported figures, quotes, odds or hype |
+| HACEK | the Czech register the desk writes to | preserves facts and uncertainty; adapts no second-language draft |
 | QUILL/STET | structure, wording and generated-text review | do not invent facts during cleanup |
-| REACH | bilingual platform-native social variants | folded into the article call; posting remains gated |
+| REACH | Czech platform-native social variants | folded into the article call; posting remains gated |
 | SPLIT | Phase 3 measurement guard | stays idle and refuses reader/post metrics while the gate is false |
 | TAPE/PIVOT | data context and desk bridge | no betting instruction or hidden model feedback |
 | FRAME | deterministic hero/social visuals | photo fallback and social templates; no image-model call |
@@ -439,16 +439,16 @@ facts, taste and editorial accountability.
 
 ### Promise
 
-Caught Up gives a busy reader one consequential AI story per day in English and
-Czech. It also maintains a small product-improvement loop. The consumer site renders
-the content; BoardlessAI owns the source, decision and production trail.
+Caught Up gives a busy reader one consequential AI story per day, in Czech. It also
+maintains a small product-improvement loop. The consumer site renders the content;
+BoardlessAI owns the source, decision and production trail.
 
 ### Inputs
 
 - allowlisted source collection and source health;
 - candidate items with timestamps, links and source grouping;
 - recent edition/topic history for duplicate control;
-- project quality thresholds and English/Czech writing registers;
+- project quality thresholds and the Czech writing register;
 - owner ratings and accepted taste observations;
 - the current budget and live/delivery gates.
 
@@ -457,8 +457,8 @@ the content; BoardlessAI owns the source, decision and production trail.
 1. Source collection creates a bounded digest.
 2. HERALD chairs the 05:00 room and selects one story or records `NO_EDITION`.
 3. AUDIT can veto insufficient evidence; STET can hold low-quality copy.
-4. The quality path curates, writes English and produces natural Czech.
-5. Each language passes its own checks.
+4. The quality path curates and writes the article in Czech in one call.
+5. The Czech copy passes the quality and register checks.
 6. A deterministic search checks Openverse and Commons, then optional Pexels/Pixabay,
    for a machine-licensed photo; FRAME supplies an SVG if none passes.
 7. The chosen image is stripped, resized into hero/thumbnail variants and stored with
@@ -481,7 +481,7 @@ or authorize code/spend. The idea history remains project-namespaced.
 
 ### Social activation
 
-The existing production call writes English and Czech A/B captions for Threads and
+The existing production call writes Czech A/B captions for Threads and
 Instagram. After seven consecutive passed release proofs, complete Caught Up account
 credentials unlock posting automatically. `NO_EDITION` is neutral and a failed proof
 resets the counter. `SOCIAL_KILL_SWITCH=true` remains the immediate owner stop. No
@@ -624,7 +624,7 @@ public fighters/events section.
 
 ### Promise
 
-MMA Files is a public English/Czech publication with up to two evidence-backed slots
+MMA Files is a public Czech publication with up to two evidence-backed slots
 per day. It also renders the approved FightAIQ fighter/event data. Its reader app and
 BoardlessAI remain separate repositories.
 
@@ -635,23 +635,25 @@ BoardlessAI remain separate repositories.
 2. Each slot is assigned or killed with a reason.
 3. At 10:00 or 18:00 the job loads its exact assignment and evidence first.
 4. Missing/invalid evidence kills the slot at `$0` before a provider call.
-5. JAB writes direct English from the packet.
-6. HACEK creates the Czech article in the Czech combat-sports register.
-7. Local quality checks independently review both languages.
+5. JAB writes the article directly in Czech from the packet.
+6. HACEK owns the Czech combat-sports register it is written to and repairs the copy
+   before the gate reads it.
+7. Local quality checks review that Czech copy.
 8. A deterministic licensed-image search prefers a relevant real photo and falls back
    to FRAME SVG; hero/thumbnail variants and attribution are stored in the package.
 9. The bounded package is hashed and delivered with re-hosted assets to
    `data/boardless/articles.json` in the MMA Files repository.
 10. MMA Files validates the data and image contract in CI and Vercel deploys `main`.
-11. The release verifier checks CI, both languages, content hash, image dimensions and
-    attribution; it retries once, then reverts and pauses on a second failure.
+11. The release verifier checks CI, the Czech article route, content hash, image
+    dimensions and attribution; it retries once, then reverts and pauses on a second
+    failure.
 
 ### Style system
 
 The stylebook was derived from structural observations across ten Czech Fights.cz
-articles and ten English MMA Fighting articles. It captures pacing, attribution,
-sentence shape and common generated-text problems. It does not copy passages or treat
-another publication as evidence for a fact.
+articles. It captures pacing, attribution, sentence shape and common generated-text
+problems. It does not copy passages or treat another publication as evidence for a
+fact.
 
 ### Desk room
 
@@ -661,7 +663,7 @@ to restate that two article slots exist.
 
 ### Social activation
 
-REACH adds English/Czech, platform-native A/B captions inside the article call and
+REACH adds Czech, platform-native A/B captions inside the article call and
 FRAME builds deterministic post art. Ten consecutive passed article release proofs
 plus complete MMA Files account credentials unlock posting. The global kill switch is
 still a separate hard stop. SPLIT remains idle and no engagement result is collected.
@@ -790,9 +792,9 @@ the envelopes, remains the source of actual cost.
 
 ### Why models were not downgraded
 
-Caught Up and MMA Files public quality depends heavily on selection, English writing
-and Czech localization. Lowering those routes before an A/B quality review risks more
-owner corrections, failed editions and repeated calls. The current design first
+Caught Up and MMA Files public quality depends heavily on selection and Czech writing.
+Lowering those routes before an A/B quality review risks more owner corrections, failed
+editions and repeated calls. The current design first
 removes meetings that do not need to happen. That is the safer saving and preserves
 the output path the showcase depends on.
 

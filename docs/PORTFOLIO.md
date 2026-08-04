@@ -9,12 +9,12 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 
 | Project | State | What it does | Hard boundary |
 | --- | --- | --- | --- |
-| Caught Up | Operating in validation | Daily English and Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
+| Caught Up | Operating in validation | Daily Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
 | Magazine Incubator | Research and fenced founding | Finds evidence-backed publication ideas and can create a template-compliant content project | Anything needing a new account, more than `$0.15/day`, commerce, legal or personal-data work stops for the owner |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
-| MMA Files | Operating public magazine | Two daily bilingual article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
+| MMA Files | Operating public magazine | Two daily Czech article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -148,7 +148,7 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 
 ## Delivery boundaries
 
-- Caught Up receives hash-checked bilingual edition files in
+- Caught Up receives hash-checked Czech edition files in
   `lukaskourilcz/aifirst` and deploys at `caughtup-ai.vercel.app`.
 - MMA Files receives only bounded article and FightAIQ data files in
   `lukaskourilcz/mma-files` and deploys at `mma-files.vercel.app`.

@@ -45,12 +45,25 @@ const CommonFields = {
   reason: z.string().trim().min(1).max(280)
 };
 
+/**
+ * What the editorial review found on an article that was published anyway.
+ *
+ * Absent on an article that cleared every review, which is the normal case and the case the
+ * switch in orchestrator/src/edition/publication-gate.ts restores. Present, it is the package's
+ * own statement that the day shipped over open findings, and it lists them.
+ */
+const UnresolvedReviewSchema = openObject({
+  notice: z.string().trim().min(1).max(400),
+  findings: z.array(z.string().trim().min(1).max(120)).min(1).max(40)
+});
+
 const EditionSchema = openObject({
   ...CommonFields,
   status: z.literal("edition"),
   article: ArticleSchema,
   image: ArticleImageSchema,
   hero: HeroSchema.optional(),
+  unresolvedReview: UnresolvedReviewSchema.optional(),
   board: openObject({
     meetingRef: MeetingRefSchema,
     roomUrl: HttpsUrlSchema,

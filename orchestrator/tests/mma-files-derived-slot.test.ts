@@ -63,7 +63,9 @@ describe("a slate derived for one slot", () => {
     const slate = await deriveEditorialSlate(root, "2026-08-03", new Date("2026-08-03T08:00:00.000Z"));
     const verdict = slate!.vaultVerdicts.find((entry) => entry.subjectRef.includes(":event:"))!;
     expect(verdict.evidenceRef).toBe("state/mma/events/ufc/ufc-330-makhachev-vs-machado-garry.json");
-    // The ref must name a file that actually exists in the repository.
-    await expect(readFile(path.join(repoRoot, verdict.evidenceRef), "utf8")).resolves.toContain("event-card/1");
+    // The ref must name a file that actually exists in the repository. The line above is what
+    // makes the assertion below safe: `evidenceRef` is optional now that a verdict may instead
+    // carry a note about evidence that could not be resolved, and this one is neither.
+    await expect(readFile(path.join(repoRoot, verdict.evidenceRef!), "utf8")).resolves.toContain("event-card/1");
   });
 });

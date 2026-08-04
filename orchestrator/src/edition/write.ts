@@ -9,11 +9,17 @@ import type {
   EditionModelGateway,
   EditionUsage,
   LocalizedContent,
+  StructuredToolRequest,
 } from "./types.js";
 import { DispatchSchema, WireItemSchema } from "./types.js";
 import { CZECH_EDITORIAL_REGISTER } from "./registers.js";
 import { removeEmptyCzechAdverbs } from "./localize.js";
+import { InvalidModelOutputError } from "./models.js";
 import type { LicensedPhotoCandidate } from "../images/licensed.js";
+
+/** Lowercase ASCII words joined by single hyphens: every tag, and the slug's suffix. */
+const SLUG_SOURCE = "^[a-z0-9]+(?:-[a-z0-9]+)*$";
+const SLUG = new RegExp(SLUG_SOURCE);
 
 export const LocalizedOutputSchema = z.object({
   title: z.string().trim().min(1),
@@ -42,12 +48,15 @@ export class InvalidArticleError extends Error {
 
 const ToolOutputSchema = z.object({
   slug: z.string().trim().min(1),
-  tags: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1).max(6),
+  tags: z.array(z.string().regex(SLUG)).min(1).max(6),
   illustration_prompt: z.string().trim().min(1),
   image_candidate_index: z.number().int().min(0).max(3).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
   cs: LocalizedOutputSchema
 });
+
+/** Fewest tags ToolOutputSchema accepts. Repairs may not take the array below it. */
+const MINIMUM_TAGS = 1;
 
 export const localeSchema = {
   type: "object",
@@ -119,7 +128,11 @@ const toolInputSchema = {
       type: "array",
       minItems: 1,
       maxItems: 6,
-      items: { type: "string" }
+      // The slug rule lived only in the zod parse; the schema the provider reads said
+      // "string". On 2026-08-04 all six tags failed that pattern and the billed write call
+      // was thrown away (state/edition/runs/2026-08-04-18f2f821b302….json). State the
+      // pattern here so the shape is asked for rather than only checked afterwards.
+      items: { type: "string", pattern: SLUG_SOURCE }
     },
     illustration_prompt: { type: "string" },
     image_candidate_index: { type: "integer", minimum: 0, maximum: 3 },
@@ -174,7 +187,16 @@ ${CZECH_EDITORIAL_REGISTER}
 Return only emit_article tool data.`;
 
 const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}-?/;
-const SLUG_SUFFIX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Lowercase ASCII, diacritics folded away, every other run of characters a hyphen. */
+function slugify(raw: string): string {
+  return raw
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 /**
  * Tool calls occasionally use a human-readable title as a slug. The publication
@@ -185,17 +207,206 @@ export function normalizeArticleSlug(raw: string, date: string): string {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     throw new Error(`write: invalid publication date for slug: ${date}`);
   }
-  const normalized = raw
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-  const suffix = normalized.replace(DATE_PREFIX, "");
-  if (!suffix || !SLUG_SUFFIX.test(suffix)) {
+  const suffix = slugify(raw).replace(DATE_PREFIX, "");
+  if (!suffix || !SLUG.test(suffix)) {
     throw new Error("write: slug has no usable ASCII suffix");
   }
   return `${date}-${suffix}`;
+}
+
+/**
+ * One formatting repair applied to a billed tool payload before it was validated.
+ *
+ * Every repair is written into the run report on the usage entry for the call that
+ * needed it, so `state/edition/runs/<date>-<hash>.json` names what arrived and what it
+ * became. A silent repair would hide a drifting prompt: the desk would keep publishing
+ * while the contract it was given quietly stopped being the contract it follows.
+ */
+export interface ContractRepair {
+  /** Where in the tool payload, e.g. `cs` or `tags[2]`. */
+  field: string;
+  /** What the model sent, verbatim up to REPAIR_SAMPLE_CHARS. */
+  received: string;
+  /** What the parser saw instead. Absent when the value was dropped. */
+  became?: string;
+  reason:
+    | "json_string_parsed"
+    | "tag_slugified"
+    | "tag_unslugifiable_dropped"
+    | "tag_duplicate_dropped";
+}
+
+/**
+ * An EditionUsage carrying the repairs applied to the payload that call returned.
+ *
+ * `EditionUsage` values are copied verbatim into `EditionRunReport.usage`, which is what
+ * gets committed under `state/edition/runs/`. Annotating the usage entry therefore puts
+ * the repair record next to the call that paid for it, on both the success path and the
+ * `InvalidModelOutputError` path.
+ */
+export type RepairedEditionUsage = EditionUsage & { contractRepairs?: ContractRepair[] };
+
+/** Enough of a value to recognize it in the record without bloating the report. */
+const REPAIR_SAMPLE_CHARS = 120;
+
+function sample(value: unknown): string {
+  const text = typeof value === "string" ? value : JSON.stringify(value) ?? String(value);
+  return text.length > REPAIR_SAMPLE_CHARS
+    ? `${text.slice(0, REPAIR_SAMPLE_CHARS)}\u2026`
+    : text;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * The keywords `unwrapJsonStrings` reads while walking `toolInputSchema` and `localeSchema`.
+ *
+ * Not the subset those two schemas use: they also carry `minItems`, `maxItems`, `minimum`,
+ * `maximum`, `pattern`, `required` and `additionalProperties`, all of which the provider reads
+ * and the zod parse enforces afterwards. None of them tell the walker where a container sits,
+ * so none of them are declared here — a node typed against this interface is deliberately a
+ * narrower view of the same object, not a description of it.
+ */
+interface JsonSchemaNode {
+  readonly type?: string;
+  readonly properties?: { readonly [key: string]: JsonSchemaNode };
+  readonly items?: JsonSchemaNode;
+}
+
+/**
+ * Undo one level of JSON encoding, or refuse to.
+ *
+ * Returns the parsed value only when the text is JSON *and* decodes to the container
+ * kind the schema declares. A string that is not JSON, or that decodes to a scalar or
+ * to the other container kind, is handed back untouched so the zod parse rejects it
+ * with the same message as before.
+ */
+function parseContainerString(text: string, kind: string): unknown {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return undefined;
+  }
+  if (kind === "object" && isRecord(parsed)) return parsed;
+  if (kind === "array" && Array.isArray(parsed)) return parsed;
+  return undefined;
+}
+
+/**
+ * Walk the tool schema and decode any field that arrived JSON-encoded one level too deep.
+ *
+ * On 2026-08-04 `cs` came back as a string rather than the locale object, and the whole
+ * article \u2014 already written, already paid for \u2014 was discarded over the encoding of its
+ * envelope. The schema is the single source of truth for which fields are containers, so
+ * no separate list can drift away from it.
+ */
+function unwrapJsonStrings(
+  value: unknown,
+  schema: JsonSchemaNode,
+  path: string,
+  repairs: ContractRepair[]
+): unknown {
+  let current = value;
+  if (typeof current === "string" && (schema.type === "object" || schema.type === "array")) {
+    const parsed = parseContainerString(current, schema.type);
+    if (parsed === undefined) return current;
+    repairs.push({
+      field: path,
+      received: sample(current),
+      became: `${schema.type} decoded from that JSON string`,
+      reason: "json_string_parsed"
+    });
+    current = parsed;
+  }
+  if (schema.type === "object" && schema.properties && isRecord(current)) {
+    const repaired: Record<string, unknown> = { ...current };
+    for (const [key, child] of Object.entries(schema.properties)) {
+      if (!(key in repaired)) continue;
+      repaired[key] = unwrapJsonStrings(
+        repaired[key],
+        child,
+        path ? `${path}.${key}` : key,
+        repairs
+      );
+    }
+    return repaired;
+  }
+  const items = schema.items;
+  if (schema.type === "array" && items && Array.isArray(current)) {
+    return current.map((entry, index) =>
+      unwrapJsonStrings(entry, items, `${path}[${index}]`, repairs)
+    );
+  }
+  return current;
+}
+
+/**
+ * Turn human-readable tags back into the slugs the contract asks for.
+ *
+ * "Social Media" is the same tag as `social-media` written for a person, so it is a
+ * formatting fault and gets normalized. A tag that survives normalization as nothing at
+ * all is dropped on its own rather than taking the article with it \u2014 but only while at
+ * least MINIMUM_TAGS survive. Below that there is no article to save, so the original
+ * array goes back to the parser and fails exactly as it did before.
+ */
+function repairedTags(raw: unknown, repairs: ContractRepair[]): unknown {
+  if (!Array.isArray(raw) || !raw.every((tag) => typeof tag === "string")) return raw;
+  const tags = raw as string[];
+  if (tags.every((tag) => SLUG.test(tag))) return tags;
+  const kept: string[] = [];
+  const applied: ContractRepair[] = [];
+  tags.forEach((tag, index) => {
+    const slug = SLUG.test(tag) ? tag : slugify(tag);
+    if (!SLUG.test(slug)) {
+      applied.push({
+        field: `tags[${index}]`,
+        received: sample(tag),
+        reason: "tag_unslugifiable_dropped"
+      });
+      return;
+    }
+    if (kept.includes(slug)) {
+      applied.push({
+        field: `tags[${index}]`,
+        received: sample(tag),
+        became: slug,
+        reason: "tag_duplicate_dropped"
+      });
+      return;
+    }
+    if (slug !== tag) {
+      applied.push({
+        field: `tags[${index}]`,
+        received: sample(tag),
+        became: slug,
+        reason: "tag_slugified"
+      });
+    }
+    kept.push(slug);
+  });
+  if (kept.length < MINIMUM_TAGS) return raw;
+  repairs.push(...applied);
+  return kept;
+}
+
+/**
+ * Repair formatting faults in a tool payload; never repair a content fault.
+ *
+ * Nothing here changes what a valid article is. ToolOutputSchema still decides that, on
+ * the repaired value, with every field, count and pattern it enforced before.
+ */
+export function repairToolOutput(value: unknown, repairs: ContractRepair[]): unknown {
+  const unwrapped = unwrapJsonStrings(value, toolInputSchema, "", repairs);
+  if (!isRecord(unwrapped) || !("tags" in unwrapped)) return unwrapped;
+  return { ...unwrapped, tags: repairedTags(unwrapped.tags, repairs) };
+}
+
+function recordRepairs(usage: EditionUsage, repairs: readonly ContractRepair[]): void {
+  if (repairs.length === 0) return;
+  (usage as RepairedEditionUsage).contractRepairs = [...repairs];
 }
 
 export function localized(value: z.infer<typeof LocalizedOutputSchema>): LocalizedContent {
@@ -435,18 +646,20 @@ export async function write(
   const revision = feedback.length
     ? `\n\nTrusted revision requirements:\n${feedback.map((item) => `- ${item}`).join("\n")}`
     : "";
-  const response = await gateway.invoke({
+  const repairs: ContractRepair[] = [];
+  const request: StructuredToolRequest<z.infer<typeof ToolOutputSchema>> = {
     model: config.models.writing,
     stage: feedback.length ? "rewrite" : "write",
     maxOutputTokens: config.article.maximumOutputTokens,
     system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} English words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${revision}`,
     user: `Publication date: ${brief.date}
 
-Trusted URL rules:
+Trusted output rules:
 - Every URL in any output field must be an exact character-for-character match from the approved list below.
 - Do not cite a publication, homepage, search result or remembered URL that is not on this list.
 - If a claim has no approved URL, omit the claim instead of adding a citation.
-- The \`en\` field must be a JSON object, never a Markdown string or serialized JSON.
+- The \`cs\` field must be a JSON object, never a Markdown string or serialized JSON.
+- Every \`tags\` entry must be a slug: lowercase ASCII words joined by single hyphens, no spaces, capitals or diacritics. Write \`social-media\`, not \`Social Media\`.
 - Every Watchlist item must come from \`runnerUps\`, never from the selected lead-story sources.
 - If licensedImageCandidates is non-empty, set image_candidate_index to the best factual, non-misleading visual fit. Use only its numeric index; do not copy its URLs into article copy.
 
@@ -459,8 +672,19 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
       description: "Emit the English Caught Up feature and supplied-source watchlist.",
       inputSchema: toolInputSchema
     },
-    parse: (value) => ToolOutputSchema.parse(value)
-  });
+    parse: (value: unknown) => ToolOutputSchema.parse(repairToolOutput(value, repairs))
+  };
+  let response: { value: z.infer<typeof ToolOutputSchema>; usage: EditionUsage };
+  try {
+    response = await gateway.invoke(request);
+  } catch (error) {
+    // The call was billed whether or not its payload survived. Attach whatever was
+    // repaired before the rejection, so the report shows the full drift rather than only
+    // the fault that outlived the repairs.
+    if (error instanceof InvalidModelOutputError) recordRepairs(error.usage, repairs);
+    throw error;
+  }
+  recordRepairs(response.usage, repairs);
   let slug: string;
   let wire: z.infer<typeof ToolOutputSchema>["wire"];
   try {

@@ -373,7 +373,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-morning",
       "status": "held",
-      "meetingRef": "meetings/20260731093403-morning",
+      "meetingRef": "standups/2026-07-31-morning",
       "decisionOneLiner": "The council approved one bounded internal work item: Verify the public shift record. No external action, business claim or stage change was approved."
     },
     {
@@ -417,7 +417,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
       "status": "held",
-      "meetingRef": "meetings/20260731134924-afternoon",
+      "meetingRef": "standups/2026-07-31-afternoon",
       "decisionOneLiner": "The council approved one bounded internal work item: Prepare the next shift handoff. No external action, business claim or stage change was approved."
     },
     {
@@ -469,7 +469,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-morning",
       "status": "held",
-      "meetingRef": "meetings/20260801040000-morning",
+      "meetingRef": "standups/2026-08-01-morning",
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {
@@ -523,7 +523,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
       "status": "held",
-      "meetingRef": "meetings/20260801120000-afternoon",
+      "meetingRef": "standups/2026-08-01-afternoon",
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {
@@ -569,7 +569,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-night",
       "status": "held",
-      "meetingRef": "meetings/20260801201444-night",
+      "meetingRef": "standups/2026-08-01-night",
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {
@@ -631,7 +631,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
       "status": "held",
-      "meetingRef": "meetings/20260802120140-afternoon",
+      "meetingRef": "standups/2026-08-02-afternoon",
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {
