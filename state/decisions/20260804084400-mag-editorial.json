@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260804084400-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "PLAN",
+  "summary": "AM: assigned; PM: killed",
+  "evidenceRefs": [
+    "meeting:2026-08-03-mma-analysis",
+    "meeting:2026-08-03-mag-desk"
+  ],
+  "generatedAt": "2026-08-04T08:49:00.833Z"
+}

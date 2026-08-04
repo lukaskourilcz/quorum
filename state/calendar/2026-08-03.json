@@ -147,13 +147,15 @@
       "at": "2026-08-04T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "missed"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-04-mag-editorial",
+      "decisionOneLiner": "AM: assigned; PM: killed"
     },
     {
       "at": "2026-08-04T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-04T09:00:00.000Z",

@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804084400-mag-editorial",
+  "date": "2026-08-04",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.019449,
+    "monthAllInUsd": 1.7739608500000008,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-03-mma-analysis",
+      "meeting:2026-08-03-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Both slots killed. No fight-week event priority supplied, no FightAIQ files attached, no verified fighter subjects or bookings to assign. Bridge shows specialist rooms did not open. Magazine cannot run without source material.",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ]
+    },
+    {
+      "agent": "JAB",
+      "summary": "Nelze přiřadit ani jeden slot. Packet neobsahuje aktuální FightAIQ soubory, zápas, výsledek, citaci ani ověřený zdroj. AM navíc opakuje jediný publikovaný profil, PM nemá nový předmět.",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "No bounded agenda generated article assignments. Bridge reports specialist rooms did not open and no model was called. Article index shows one published slot (AM, 2026-08-02). Two PM and AM slots remain unassigned with no verified source material, fighter files, event bookings or",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Oba sloty zabít. Balíček neobsahuje ověřený FightAIQ soubor, zápas ani aktuální modelový výstup. Jediný evidovaný předmět je již publikovaný profil Shevchenko–Grasso.",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "EDITORIAL_ONLY. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-04.json",
+  "generatedAt": "2026-08-04T08:49:00.833Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T08:44:00.833Z",
+    "closedAt": "2026-08-04T08:49:00.833Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-04T08:44:00.833Z",
+        "text": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "veto",
+        "sentAt": "2026-08-04T08:45:00.833Z",
+        "text": "Both slots killed. No fight-week event priority supplied, no FightAIQ files attached, no verified fighter subjects or bookings to assign. Bridge shows specialist rooms did not open. Magazine cannot run without source material.",
+        "evidenceRefs": [
+          "meeting:2026-08-03-mma-analysis",
+          "meeting:2026-08-03-mag-desk"
+        ]
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-04T08:46:00.833Z",
+        "text": "Nelze přiřadit ani jeden slot. Packet neobsahuje aktuální FightAIQ soubory, zápas, výsledek, citaci ani ověřený zdroj. AM navíc opakuje jediný publikovaný profil, PM nemá nový předmět.",
+        "evidenceRefs": [
+          "meeting:2026-08-03-mma-analysis",
+          "meeting:2026-08-03-mag-desk"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "veto",
+        "sentAt": "2026-08-04T08:47:00.833Z",
+        "text": "No bounded agenda generated article assignments. Bridge reports specialist rooms did not open and no model was called. Article index shows one published slot (AM, 2026-08-02). Two PM and AM slots remain unassigned with no verified source material, fighter files, event bookings or",
+        "evidenceRefs": [
+          "meeting:2026-08-03-mma-analysis",
+          "meeting:2026-08-03-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-04T08:48:00.833Z",
+        "text": "Oba sloty zabít. Balíček neobsahuje ověřený FightAIQ soubor, zápas ani aktuální modelový výstup. Jediný evidovaný předmět je již publikovaný profil Shevchenko–Grasso.",
+        "evidenceRefs": [
+          "meeting:2026-08-03-mma-analysis",
+          "meeting:2026-08-03-mag-desk"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-04T08:49:00.833Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}

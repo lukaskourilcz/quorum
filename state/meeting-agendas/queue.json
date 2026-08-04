@@ -50,7 +50,25 @@
       "notBefore": "2026-08-04",
       "expiresAt": "2026-08-07T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-1f7e454d7495c427",
+      "ventureId": "fightaiq",
+      "phase": "mma-intake",
+      "requestedBy": "CANVAS",
+      "sourcePhase": "mag-editorial",
+      "sourceMeetingRef": "meetings/2026-08-04-mag-editorial",
+      "summary": "Supply fight-week event priority list with verified FightAIQ fighter files, booking details and dates. Specialist rooms must open and attach bounded agendas before mag-editorial slot assignment runs.",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ],
+      "requestedAt": "2026-08-04T08:44:00.833Z",
+      "notBefore": "2026-08-05",
+      "expiresAt": "2026-08-08T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-04T08:44:00.833Z"
 }

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-04",
+  "slots": [
+    {
+      "slot": "am",
+      "format": "fighter-profile",
+      "subjectRefs": [
+        "oktagon:gustavo-lopez"
+      ],
+      "rationale": "No card is inside the window, so the desk profiles the best-sourced fighter on file.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-04:pm"
+      ],
+      "rationale": "No new source-backed subject cleared the desk before the evening cutoff.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "Missing fresh, source-backed subject."
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-08-04:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-04-mag-editorial"
+    },
+    {
+      "subjectRef": "oktagon:gustavo-lopez",
+      "verdict": "fresh",
+      "evidenceRef": "meeting:2026-08-04-mag-editorial"
+    }
+  ]
+}
