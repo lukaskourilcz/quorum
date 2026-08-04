@@ -9,21 +9,38 @@
     "wikidataId": "Q27999203",
     "wikipediaTitle": "Alexandre Pantoja",
     "externalIds": {
-      "wikipediaPageId": "54180928"
+      "wikipediaPageId": "54180928",
+      "cito": "6a2a082e-2118-4e07-a641-bbf0e5de5974"
     }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:54180928"
       ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974"
+      ]
     }
   ],
   "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Alexandre Pantoja",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "evidenceTier": "secondary"
+    },
     {
       "id": "source:wikidata:Q27999203",
       "url": "https://www.wikidata.org/wiki/Q27999203",
@@ -38,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexandre_Pantoja",
       "publisher": "Wikipedia",
       "title": "Alexandre Pantoja",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -47,10 +64,11 @@
     "name": {
       "value": "Alexandre Pantoja",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -76,11 +94,12 @@
     "stance": {
       "value": "orthodox",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "verified",
+      "corroborated": true
     },
     "team": {
       "value": "Black House (formerly) American Top Team (2018–present)",
@@ -94,11 +113,12 @@
     "record": {
       "value": "30-6-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 165,
@@ -116,7 +136,22 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Flyweight",
+          "sourceRef": "source:wikipedia:54180928"
+        },
+        {
+          "value": "flyweight",
+          "sourceRef": "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974"
+        }
+      ],
+      "status": "resolved"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-7c34684e4be3cad73a9d",
@@ -384,9 +419,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 0.60377,
-        "layoffDays": 240
+        "layoffDays": 241
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -396,7 +431,7 @@
     "volatility": 0.05999364,
     "boutCount": 16,
     "asOfBoutRef": "ufc:bout:history-7d2dc31751ccb0197a31",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1802,11 +1837,51 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
-  "corroboration": 0.375,
+  "corroboration": 0.625,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

@@ -9,21 +9,38 @@
     "wikidataId": "Q48471390",
     "wikipediaTitle": "Alex Perez (fighter)",
     "externalIds": {
-      "wikipediaPageId": "58085526"
+      "wikipediaPageId": "58085526",
+      "cito": "08563cfe-baae-43d3-9984-e0dcb0d7f606"
     }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:77593874"
       ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+      ]
     }
   ],
   "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Alex Perez",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "evidenceTier": "secondary"
+    },
     {
       "id": "source:wikidata:Q48471390",
       "url": "https://www.wikidata.org/wiki/Q48471390",
@@ -38,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alex_Perez_(fighter)",
       "publisher": "Wikipedia",
       "title": "Alex Perez (fighter)",
-      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -56,10 +73,12 @@
     "name": {
       "value": "Alex Perez",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606",
         "source:wikidata:Q48471390",
+        "source:wikipedia:58085526",
         "source:wikipedia:77593874"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,6 +97,33 @@
         "source:wikidata:Q48471390"
       ],
       "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "flyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+      ],
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "26-10-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+      ],
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+      ],
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -160,9 +206,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 0.603208,
-        "layoffDays": 254
+        "layoffDays": 255
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -172,16 +218,14 @@
     "volatility": 0.05999764,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:history-0ccdd49e0d34e5150f0a",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "reachCm",
-      "team"
+      "team",
+      "record-history-incomplete"
     ],
     "lastReviewedAt": null
   },
@@ -1414,11 +1458,52 @@
         "source:wikipedia:77593874"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:77593874"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.375,
+  "completeness": 0.75,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

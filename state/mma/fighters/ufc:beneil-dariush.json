@@ -16,10 +16,19 @@
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:43536705"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
       ]
     }
   ],
@@ -38,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Beneil_Dariush",
       "publisher": "Wikipedia",
       "title": "Beneil Dariush",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +59,7 @@
         "source:wikidata:Q17505060",
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -698,9 +707,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 2.128098,
-        "layoffDays": 93
+        "layoffDays": 94
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -710,7 +719,7 @@
     "volatility": 0.06000704,
     "boutCount": 35,
     "asOfBoutRef": "ufc:bout:history-0ece9616e00d6efdfbac",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2057,11 +2066,38 @@
         "source:wikipedia:27167974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
+      ],
+      "note": "The completed roster crawl lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705",
+        "source:wikipedia:27167974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

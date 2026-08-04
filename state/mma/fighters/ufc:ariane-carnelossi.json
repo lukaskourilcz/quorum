@@ -16,10 +16,19 @@
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:68442521"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "former",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
       ]
     }
   ],
@@ -38,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Ariane_Carnelossi",
       "publisher": "Wikipedia",
       "title": "Ariane Carnelossi",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +59,7 @@
         "source:wikidata:Q108911384",
         "source:wikipedia:68442521"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -308,9 +317,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 0.855369,
-        "layoffDays": 58
+        "layoffDays": 59
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -320,7 +329,7 @@
     "volatility": 0.05999954,
     "boutCount": 11,
     "asOfBoutRef": "ufc:bout:history-8f1280fc61894233ce08",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1653,11 +1662,37 @@
         "source:wikipedia:68442521"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
+      ],
+      "note": "The completed roster crawl no longer lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

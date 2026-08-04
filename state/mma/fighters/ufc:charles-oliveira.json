@@ -16,10 +16,19 @@
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:43536705"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
       ]
     }
   ],
@@ -38,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Charles_Oliveira",
       "publisher": "Wikipedia",
       "title": "Charles Oliveira",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -59,7 +68,7 @@
         "source:wikipedia:27167974",
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -383,9 +392,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.233607,
-        "layoffDays": 149
+        "layoffDays": 150
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -395,7 +404,7 @@
     "volatility": 0.06000832,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-c6fc64313b7df511bca8",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2405,11 +2414,39 @@
         "source:wikipedia:43536705"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
+      ],
+      "note": "The completed roster crawl lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:27167974",
+        "source:wikipedia:44264537",
+        "source:wikipedia:43536705"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

@@ -1,7 +1,44 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-03T18:14:46.640Z",
+  "generatedAt": "2026-08-04T07:29:35.203Z",
   "items": [
+    {
+      "fighterRef": "ufc:amanda-lemos",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "stance",
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:billy-quarantillo",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:islam-makhachev",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T17:58:29.899Z"
+    },
     {
       "fighterRef": "ufc:aaron-pico",
       "priority": 620,
@@ -20,7 +57,7 @@
         "stance",
         "team"
       ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "name",
         "division",
@@ -43,7 +80,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "name",
         "division",
@@ -57,7 +94,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "division",
         "record"
@@ -70,7 +107,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "division",
         "record"
@@ -81,7 +118,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "division"
       ]
@@ -91,7 +128,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "division",
         "record"
@@ -102,41 +139,10 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
       "uncorroborated": [
         "division",
         "record"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:losene-keita",
-      "priority": 490,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:lucia-szabova",
-      "priority": 490,
-      "reason": "uncorroborated",
-      "gaps": [
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division"
       ]
     },
     {
@@ -156,15 +162,46 @@
       ]
     },
     {
-      "fighterRef": "ufc:alexander-volkov",
-      "priority": 480,
+      "fighterRef": "oktagon:losene-keita",
+      "priority": 490,
       "reason": "uncorroborated",
       "gaps": [
         "stance",
+        "heightCm",
+        "reachCm",
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:lucia-szabova",
+      "priority": 490,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record",
+        "stance",
+        "heightCm",
+        "reachCm"
+      ],
+      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alex-perez",
+      "priority": 480,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
         "team",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "",
       "uncorroborated": [
         "division",
         "record"
@@ -381,22 +418,20 @@
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
-        "division",
-        "record"
+        "division"
       ]
     },
     {
-      "fighterRef": "ufc:alexa-grasso",
+      "fighterRef": "ufc:alexander-volkov",
       "priority": 470,
       "reason": "uncorroborated",
       "gaps": [
-        "stance",
-        "record-history-mismatch"
+        "team",
+        "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
-        "division",
-        "record"
+        "division"
       ]
     },
     {
@@ -409,8 +444,7 @@
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
-        "division",
-        "record"
+        "division"
       ]
     },
     {
@@ -420,20 +454,6 @@
       "gaps": [
         "stance",
         "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:amanda-lemos",
-      "priority": 470,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "record-history-mismatch"
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
@@ -462,20 +482,6 @@
       "gaps": [
         "stance",
         "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:billy-quarantillo",
-      "priority": 470,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
@@ -692,6 +698,18 @@
       ]
     },
     {
+      "fighterRef": "ufc:alexa-grasso",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
       "fighterRef": "ufc:aljamain-sterling",
       "priority": 460,
       "reason": "uncorroborated",
@@ -700,8 +718,7 @@
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
-        "division",
-        "record"
+        "division"
       ]
     },
     {
@@ -778,20 +795,6 @@
       ]
     },
     {
-      "fighterRef": "ufc:alexander-hernandez",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
-    },
-    {
       "fighterRef": "ufc:amanda-ribas",
       "priority": 360,
       "reason": "missing-profile",
@@ -842,19 +845,6 @@
         "record",
         "stance",
         "heightCm",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
-    },
-    {
-      "fighterRef": "ufc:alex-perez",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
         "reachCm",
         "team"
       ],
@@ -1163,15 +1153,6 @@
       "reviewedAt": "2026-08-03T18:02:51.598Z"
     },
     {
-      "fighterRef": "ufc:islam-makhachev",
-      "priority": 310,
-      "reason": "missing-profile",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-03T17:58:29.899Z"
-    },
-    {
       "fighterRef": "ufc:petr-yan",
       "priority": 310,
       "reason": "missing-profile",
@@ -1197,6 +1178,15 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:11:44.232Z"
+    },
+    {
+      "fighterRef": "ufc:alexander-hernandez",
+      "priority": 310,
+      "reason": "missing-profile",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-04T07:29:35.203Z"
     }
   ]
 }

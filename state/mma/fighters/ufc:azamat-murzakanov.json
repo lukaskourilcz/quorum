@@ -16,10 +16,19 @@
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:56012507"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
       ]
     }
   ],
@@ -38,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Azamat_Murzakanov",
       "publisher": "Wikipedia",
       "title": "Azamat Murzakanov",
-      "retrievedAt": "2026-08-03T09:55:50.919Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +59,7 @@
         "source:wikidata:Q56000949",
         "source:wikipedia:56012507"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -157,9 +166,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 2.44582,
-        "layoffDays": 282
+        "layoffDays": 283
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -169,7 +178,7 @@
     "volatility": 0.05999735,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-bf99ff077221bfb5a5b6",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1355,11 +1364,36 @@
         "source:wikipedia:56012518"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
+      ],
+      "note": "The completed roster crawl lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.25,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

@@ -16,10 +16,19 @@
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:70178404"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
       ]
     }
   ],
@@ -38,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Andre_Petroski",
       "publisher": "Wikipedia",
       "title": "Andre Petroski",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +59,7 @@
         "source:wikidata:Q112033004",
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -60,7 +69,7 @@
         "source:wikidata:Q112033004",
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -69,7 +78,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -78,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -87,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +105,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -105,7 +114,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -147,7 +156,7 @@
     "gaps": [
       "stance"
     ],
-    "lastReviewedAt": "2026-08-03T18:14:46.640Z"
+    "lastReviewedAt": "2026-08-04T07:29:35.203Z"
   },
   "changeLog": [
     {
@@ -2069,11 +2078,40 @@
       ],
       "sourceRefs": [],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-04:List of current UFC fighters"
+      ],
+      "note": "The completed roster crawl lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178404"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 19 historical fight rows."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

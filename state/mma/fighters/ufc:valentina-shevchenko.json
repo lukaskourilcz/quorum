@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Valentina_Shevchenko",
       "publisher": "Wikipedia",
       "title": "Valentina Shevchenko",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q4522047",
         "source:wikipedia:44159133"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -409,9 +409,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 1.546764,
-        "layoffDays": 261
+        "layoffDays": 262
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -421,7 +421,7 @@
     "volatility": 0.06001017,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-dd4842d8223d37c6c9c8",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1913,11 +1913,29 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44159133",
+        "source:wikipedia:30387040",
+        "source:wikipedia:40078160",
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

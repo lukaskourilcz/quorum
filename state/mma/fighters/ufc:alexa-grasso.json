@@ -9,21 +9,38 @@
     "wikidataId": "Q19560601",
     "wikipediaTitle": "Alexa Grasso",
     "externalIds": {
-      "wikipediaPageId": "45441761"
+      "wikipediaPageId": "45441761",
+      "cito": "e8caf0f5-561e-4362-bf77-17481b3b4360"
     }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:45441761"
       ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360"
+      ]
     }
   ],
   "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Alexa Grasso",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "evidenceTier": "secondary"
+    },
     {
       "id": "source:wikidata:Q19560601",
       "url": "https://www.wikidata.org/wiki/Q19560601",
@@ -38,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexa_Grasso",
       "publisher": "Wikipedia",
       "title": "Alexa Grasso",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -47,10 +64,11 @@
     "name": {
       "value": "Alexa Grasso",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360",
         "source:wikidata:Q19560601",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -94,11 +112,12 @@
     "record": {
       "value": "17-5-1",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 165.1,
@@ -106,6 +125,15 @@
         "source:wikipedia:45441761"
       ],
       "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360"
+      ],
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -126,6 +154,20 @@
         {
           "value": "17-6-2",
           "sourceRef": "derived:ufc:alexa-grasso:history"
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Flyweight",
+          "sourceRef": "source:wikipedia:45441761"
+        },
+        {
+          "value": "womens-flyweight",
+          "sourceRef": "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360"
         }
       ],
       "status": "open"
@@ -533,9 +575,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 1.808504,
-        "layoffDays": 128
+        "layoffDays": 129
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -545,12 +587,11 @@
     "volatility": 0.06000634,
     "boutCount": 23,
     "asOfBoutRef": "ufc:bout:history-003f7730458fdcb19f97",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "stance",
       "record-history-mismatch"
     ],
     "lastReviewedAt": "2026-08-03T18:14:46.640Z"
@@ -1891,11 +1932,50 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.875,
-  "corroboration": 0.25,
+  "completeness": 1,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

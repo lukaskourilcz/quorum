@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "mma-results-run/1",
+  "status": "success",
+  "windowDays": 10,
+  "cards": [
+    {
+      "name": "Oktagon 92: Szabová vs. Pudilová",
+      "startsAtUtc": "2026-08-01T00:00:00.000Z",
+      "results": 117
+    },
+    {
+      "name": "UFC Fight Night: Medić vs. Rodriguez",
+      "startsAtUtc": "2026-08-01T00:00:00.000Z",
+      "results": 14
+    }
+  ],
+  "applied": [],
+  "untracked": 131,
+  "generatedAt": "2026-08-04T07:29:35.203Z"
+}

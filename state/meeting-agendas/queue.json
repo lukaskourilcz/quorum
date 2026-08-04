@@ -32,7 +32,25 @@
       "notBefore": "2026-08-04",
       "expiresAt": "2026-08-07T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-cc40ad2fd8c7f880",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-04-mma-intake",
+      "summary": "Prioritize height/reach backfill for 50 fighters across UFC 330 and Gamrot cards before model run. Two independent sources required per fighter per field. Wikimedia and cito-ufc are live; confirm no open discrepancies.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-04",
+        "source:cito-ufc:2026-08-04"
+      ],
+      "requestedAt": "2026-08-04T07:29:35.203Z",
+      "notBefore": "2026-08-04",
+      "expiresAt": "2026-08-07T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-04T05:49:06.490Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }

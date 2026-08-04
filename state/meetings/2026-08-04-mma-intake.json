@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804072935-mma-intake",
+  "date": "2026-08-04",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SONAR",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.018154,
+    "monthAllInUsd": 1.7545118500000008,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-04",
+      "source:cito-ufc:2026-08-04",
+      "source:wikimedia:2026-08-04",
+      "source:wikipedia-schedule:2026-08-04"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "MMA intake phase complete. UFC lead confirmed. Two scheduled cards (Gamrot vs. Salkilld in 4d, UFC 330 in 11d) verified across sources. Critical gap: 50 fighter records missing height/reach. No build task ready—file work must precede model use.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "source:wikimedia:2026-08-04",
+        "source:wikipedia-schedule:2026-08-04"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon roster pages resolved (12), but no critical fighter record is complete; no confirmed, weigh-in bout is inside the three-day window. No model use or card update is safe yet.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-04",
+        "source:wikipedia-schedule:2026-08-04"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "No fight-week cards inside three-day window. UFC 330 (11 days out) and UFC Fight Night: Gamrot vs. Salkilld (4 days out) both lack the density of late injury, weight-cut or public behavior data that triggers adjustment proposals. Fighter file gaps across 50 records—especially hei",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "source:wikimedia:2026-08-04",
+        "source:wikipedia-schedule:2026-08-04"
+      ]
+    },
+    {
+      "agent": "SONAR",
+      "summary": "Four sources ran clean today across UFC (80 rosters), Oktagon (12 rosters), odds and schedules. No new source scouting needed. Current gap: 50 fighters missing heightCm or reachCm. Next safe action: request adapter focus on wikimedia and cito-ufc roster pages for anthropometric f",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-04",
+        "source:cito-ufc:2026-08-04",
+        "source:wikimedia:2026-08-04",
+        "source:wikipedia-schedule:2026-08-04"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SONAR",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260804072935-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Resolve height and reach for the 50 fighters on upcoming cards. Wikimedia and cito-ufc differ or lack data; a third independent source (official promotion, verified legacy database) is needed before model use on any bout.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260804072935-MMA-INTAKE-04",
+      "owner": "SONAR",
+      "summary": "Cross-reference wikimedia and cito-ufc fighter rosters for heightCm and reachCm on 50 incomplete records. Prioritize nearest card (Gamrot vs. Salkilld, 4 days) fighters. Flag any source disagreement before file commit.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-04",
+      "source:cito-ufc:2026-08-04",
+      "source:wikimedia:2026-08-04",
+      "source:wikipedia-schedule:2026-08-04"
+    ]
+  },
+  "generatedAt": "2026-08-04T07:34:35.203Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T07:29:35.203Z",
+    "closedAt": "2026-08-04T07:34:35.203Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-04T07:29:35.203Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-04T07:30:35.203Z",
+        "text": "MMA intake phase complete. UFC lead confirmed. Two scheduled cards (Gamrot vs. Salkilld in 4d, UFC 330 in 11d) verified across sources. Critical gap: 50 fighter records missing height/reach. No build task ready—file work must precede model use.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "source:wikimedia:2026-08-04",
+          "source:wikipedia-schedule:2026-08-04"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-04T07:31:35.203Z",
+        "text": "Oktagon roster pages resolved (12), but no critical fighter record is complete; no confirmed, weigh-in bout is inside the three-day window. No model use or card update is safe yet.",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-04",
+          "source:wikipedia-schedule:2026-08-04"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-04T07:32:35.203Z",
+        "text": "No fight-week cards inside three-day window. UFC 330 (11 days out) and UFC Fight Night: Gamrot vs. Salkilld (4 days out) both lack the density of late injury, weight-cut or public behavior data that triggers adjustment proposals. Fighter file gaps across 50 records—especially hei",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "source:wikimedia:2026-08-04",
+          "source:wikipedia-schedule:2026-08-04"
+        ]
+      },
+      {
+        "agent": "SONAR",
+        "mode": "statement",
+        "sentAt": "2026-08-04T07:33:35.203Z",
+        "text": "Four sources ran clean today across UFC (80 rosters), Oktagon (12 rosters), odds and schedules. No new source scouting needed. Current gap: 50 fighters missing heightCm or reachCm. Next safe action: request adapter focus on wikimedia and cito-ufc roster pages for anthropometric f",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-04",
+          "source:cito-ufc:2026-08-04",
+          "source:wikimedia:2026-08-04",
+          "source:wikipedia-schedule:2026-08-04"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-04T07:34:35.203Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

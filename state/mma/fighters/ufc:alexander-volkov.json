@@ -3,27 +3,44 @@
   "id": "ufc:alexander-volkov",
   "slug": "alexander-volkov",
   "org": "ufc",
-  "canonicalName": "Alexander Volkov (fighter)",
+  "canonicalName": "Alexander Volkov",
   "aliases": [],
   "identity": {
     "wikidataId": "Q4123254",
     "wikipediaTitle": "Alexander Volkov (fighter)",
     "externalIds": {
-      "wikipediaPageId": "28754266"
+      "wikipediaPageId": "28754266",
+      "cito": "8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2"
     }
   },
   "organizationHistory": [
     {
       "org": "ufc",
       "from": null,
-      "to": null,
+      "to": "2026-08-04",
       "status": "unknown",
       "sourceRefs": [
         "source:wikipedia:28754266"
       ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-04",
+      "to": null,
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2"
+      ]
     }
   ],
   "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Alexander Volkov",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "evidenceTier": "secondary"
+    },
     {
       "id": "source:wikidata:Q4123254",
       "url": "https://www.wikidata.org/wiki/Q4123254",
@@ -38,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexander_Volkov_(fighter)",
       "publisher": "Wikipedia",
       "title": "Alexander Volkov (fighter)",
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +67,7 @@
         "source:wikidata:Q4123254",
         "source:wikipedia:28754266"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "verified",
       "corroborated": true
     },
@@ -75,11 +92,12 @@
     "record": {
       "value": "40-11-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2",
         "source:wikipedia:28754266"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "verified",
+      "corroborated": true
     },
     "dateOfBirth": {
       "value": "1988-10-24",
@@ -99,6 +117,15 @@
       "retrievedAt": "2026-08-03T18:14:46.640Z",
       "status": "verified",
       "corroborated": true
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2"
+      ],
+      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "status": "provisional",
+      "corroborated": false
     }
   },
   "criticalFields": [
@@ -131,6 +158,20 @@
         {
           "value": 200.66,
           "sourceRef": "source:wikipedia:28754266"
+        }
+      ],
+      "status": "resolved"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Heavyweight",
+          "sourceRef": "source:wikipedia:28754266"
+        },
+        {
+          "value": "heavyweight",
+          "sourceRef": "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2"
         }
       ],
       "status": "resolved"
@@ -253,9 +294,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.449375,
-        "layoffDays": 604
+        "layoffDays": 605
       },
-      "updatedAt": "2026-08-03T18:26:54.227Z"
+      "updatedAt": "2026-08-04T07:29:35.203Z"
     }
   ],
   "rating": {
@@ -265,12 +306,11 @@
     "volatility": 0.05999665,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-6dbedda89286821eeb49",
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-04T07:29:35.203Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "stance",
       "team",
       "record-history-incomplete"
     ],
@@ -2170,11 +2210,49 @@
         "source:wikipedia:28754266"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "source-refresh",
+      "fields": [
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-04:fighter:8b076bf2-bf60-42eb-b9c9-86fdef0d8eb2"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-04T07:29:35.203Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.25,
+  "completeness": 0.875,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-03T18:26:54.227Z"
+  "updatedAt": "2026-08-04T07:29:35.203Z"
 }
