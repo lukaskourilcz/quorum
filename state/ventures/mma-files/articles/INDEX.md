@@ -4,6 +4,7 @@
 
 | Published | Slot | Status | Format | Czech title | Subjects covered |
 | --- | --- | --- | --- | --- | --- |
+| 2026-08-04 | am | published | fighter-profile | Gustavo Lopez: bantamová váha mezi UFC a evropskými promotéry | oktagon:gustavo-lopez |
 | 2026-08-02 | am | published | fighter-profile | Valentina Shevchenko: tři zápasy s Grasso tvoří závěrečnou kapitolu k… | ufc:alexa-grasso ufc:valentina-shevchenko |
 
-Articles on file: 1. Rows shown: 1.
+Articles on file: 2. Rows shown: 2.
