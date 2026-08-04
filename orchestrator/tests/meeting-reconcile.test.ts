@@ -13,6 +13,7 @@ import {
   reconcileMeetingDay
 } from "../src/meetings/reconcile-cli.js";
 import { createOfflineCaughtUpMeeting } from "../src/meetings/record.js";
+import { CRON_HOUR_CARRY, CRON_MINUTE } from "../src/ventures/registry.js";
 import { configRoot, repoRoot } from "../src/paths.js";
 
 /** A finished Prague day, read at health.yml's cron the next morning: 08:15 UTC, 10:15 Prague. */
@@ -170,9 +171,11 @@ describe("something actually runs the reconciler every day", () => {
       }>;
     };
     // One daily cron carries this job. GitHub reads it in UTC — the `timezone` key beside it is
-    // not honoured, so the job lands around 10:15 Prague in summer and 09:15 in winter, both
+    // not honoured, so the job lands around 09:55 Prague in summer and 08:55 in winter, both
     // well after the last slot of the day it reconciles. Tracked in NEEDS_YOUR_HELP_NOW.md.
-    expect(source).toContain('- cron: "15 8 * * *"');
+    // The minute is CRON_MINUTE and the hour is one below the hour this job belongs to, the same
+    // arrangement every scheduled workflow uses; ci-policy.test.ts is what holds all of them to it.
+    expect(source).toContain(`- cron: "${CRON_MINUTE} ${8 - CRON_HOUR_CARRY} * * *"`);
     const job = workflow.jobs.reconcile;
     expect(job, "health.yml must carry the reconcile job").toBeDefined();
     // The health check itself is gated on HEALTH_CHECK_ENABLED and a production URL secret;

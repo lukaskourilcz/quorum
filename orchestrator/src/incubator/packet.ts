@@ -31,18 +31,70 @@ export const INCUBATOR_READ_ITEMS_LIMIT = 400;
 /**
  * Characters of packet the incubator rooms are shown, and how much of each item's summary.
  *
- * Measured, not guessed. `estimateTextCall` over the real prompts, personas and seat models
- * prices one incubator-scan room (5 seats) at $0.0334 with an empty context and $0.0591 with a
- * full 18,000-character one — against a $0.06 envelope that run.ts refuses to exceed, so a full
- * packet left $0.0009 of headroom and any prompt edit would have turned the room into a thrown
- * "call graph exceeds envelope" instead of research. The same measurement puts the 6-seat
- * incubator-synthesis room at $0.0705 on a full context: over its own $0.06 envelope, so that
- * room could not have opened at all. At the 8,000-character ceiling below the two rooms price
- * at $0.0448 and $0.0534, both inside the envelope with room for a prompt to grow.
+ * Measured, not guessed: `estimateTextCall` over the real prompts, personas and seat models,
+ * with the JSON-shape suffix taken from run.ts itself rather than approximated.
+ *
+ *                          empty context   8,000 chars   18,000 chars   envelope
+ *   incubator-scan  (5)       $0.0327        $0.0441        $0.0584      $0.06
+ *   incubator-synth (6)       $0.0388        $0.0525        $0.0696      $0.06
+ *
+ * The 18,000-character column is why this ceiling exists. It left the scan $0.0016 under an
+ * envelope run.ts refuses to exceed, so any prompt edit would have turned the room into a thrown
+ * "call graph exceeds envelope" instead of research — and it put the synthesis room $0.0096
+ * over its own envelope, so that room could not have opened at all. At 8,000 both sit inside
+ * the envelope with room for a prompt to grow.
  */
 export const INCUBATOR_CONTEXT_CHARS = 8_000;
 export const INCUBATOR_PACKET_CHARS = 5_000;
 export const INCUBATOR_ITEM_SUMMARY_CHARS = 200;
+
+/**
+ * The other two blocks of the synthesis context, budgeted so their sum cannot reach the ceiling.
+ *
+ * The packet block is not `INCUBATOR_PACKET_CHARS` exactly: `boundIncubatorPacket` fills 5,000
+ * characters of JSON and then puts its counted header in front, so the block is at most about
+ * 5,152 — the 5,001-character array the fill rule actually admits, a newline, and a header whose
+ * only variable parts are two counts. With 1,200 and 1,600 behind it and the two newlines that
+ * join the three, the worst case is roughly 7,954, under `INCUBATOR_CONTEXT_CHARS` by about 46.
+ * Sweeping item counts and summary lengths for the shape that maximises the composition puts the
+ * observed worst at 7,778.
+ *
+ * The margin is deliberately small and the arithmetic above is easy to invalidate, so
+ * `composePortfolioContext` throws rather than trims if a future budget breaks it. What must not
+ * come back is the cut these budgets replaced: the three blocks were joined and then sliced to
+ * 8,000, so the last one ended wherever the ceiling fell. Measured on the 1 August scan record
+ * behind a full packet, the synthesis room received 72.7% of that record, ending inside a string
+ * literal, and the block it was handed did not parse — and a real HELD record, several times
+ * that fixture's size, fares worse.
+ */
+export const INCUBATOR_TASTE_CHARS = 1_200;
+export const INCUBATOR_SCAN_CHARS = 1_600;
+
+/**
+ * What one opening of this room actually costs, and what it costs the rest of the day.
+ *
+ * incubator-scan is the incubator's first meeting and the venture has `taste: true`, so
+ * `registry.ts` gives it a `palate` pre-step — a Haiku call capped at `PALATE_PASS_BUDGET_USD`
+ * ($0.02) that runs before any seat. So one opening is the pre-step plus the room:
+ *
+ * - Room, measured with `estimateTextCall` over the real prompts, personas and seat models:
+ *   $0.0327 with an empty context, $0.0441 with a full 8,000-character one.
+ * - Palate pre-step: $0.00 today and up to $0.02 later. `runPalatePass` returns `no_ratings`
+ *   before it reaches the distiller while the incubator rating ledger is empty, which is the
+ *   current state; the first owner rating turns it on.
+ * - So an opening costs $0.0441 today and up to $0.0641 once ratings exist, against the room's
+ *   own $0.06 envelope. The envelope covers the room but not the pre-step, which is why the
+ *   pre-step is capped separately rather than out of the same $0.06.
+ *
+ * Against the $1.00 daily pace from budget-2026-08e, a full opening is 4.4% of the day now and
+ * 6.4% later. That is not the binding constraint: fourteen active phases reserve about $1.74
+ * against that $1.00, so `exceedsDailyCap` in ../portfolio/run.ts refuses whichever rooms are
+ * late enough in the day to find it spent. This room sits at 07:00, near the front of the queue,
+ * so it is normally funded and its cost is felt by the rooms behind it rather than by itself.
+ * The change trigger is what keeps that honest: on a morning with nothing unread the room does
+ * not open, and the day keeps the whole $0.0441.
+ */
+export const INCUBATOR_OPENING_USD_TODAY = 0.0441;
 
 const PacketItemSchema = z.object({
   sourceId: z.string().min(1),
@@ -183,9 +235,90 @@ export function boundIncubatorPacket(
   };
 }
 
+const ScanRecordSchema = z.object({
+  date: z.string().optional(),
+  status: z.string().optional(),
+  decision: z.object({ outcome: z.string().optional(), summary: z.string().optional() }).optional(),
+  proposals: z.array(z.object({ agent: z.string(), summary: z.string() })).optional(),
+  tasks: z.array(z.object({ owner: z.string(), summary: z.string() })).optional(),
+  growthPlan: z.string().optional(),
+  roomTranscript: z.object({
+    turns: z.array(z.object({ agent: z.string(), text: z.string() })).optional()
+  }).optional()
+});
+
+/**
+ * What the synthesis room is told its own scan decided, as a whole object rather than a prefix.
+ *
+ * The morning's scan record was pasted in raw and the composed context was then cut to
+ * `INCUBATOR_CONTEXT_CHARS` by characters, so this block — always the last of the three — ended
+ * wherever the ceiling fell: inside a string literal, unparseable, with the tail of the record
+ * missing and nothing saying so. Rebuilding it as a projection fixes the cause rather than the
+ * symptom. Only the fields the synthesis room argues from are carried, each clipped on its own,
+ * and transcript turns are dropped from the end — whole turns — until the serialised object fits
+ * its budget. The result is always valid JSON, and `turnsOmitted` tells the room what it is not
+ * seeing instead of leaving it to infer completeness from a truncated string.
+ *
+ * A record that is absent or will not parse yields a stated absence, not a crash and not silence.
+ */
+export function incubatorScanBrief(raw: string, budgetChars = INCUBATOR_SCAN_CHARS): string {
+  if (raw.trim().length === 0) {
+    return JSON.stringify({ scanRecord: "none on file for today; argue only from the packet above" });
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return JSON.stringify({ scanRecord: "on file but unreadable; argue only from the packet above" });
+  }
+  const record = ScanRecordSchema.safeParse(parsed);
+  if (!record.success) {
+    return JSON.stringify({ scanRecord: "on file but not in the expected shape; argue only from the packet above" });
+  }
+  const value = record.data;
+  const turns = (value.roomTranscript?.turns ?? []).map((turn) => ({
+    agent: turn.agent,
+    text: turn.text.slice(0, 240)
+  }));
+  const base = {
+    scanRecord: value.date ?? "today",
+    status: value.status ?? "unknown",
+    outcome: value.decision?.outcome ?? "unknown",
+    summary: (value.decision?.summary ?? "").slice(0, 280),
+    proposals: (value.proposals ?? []).map((proposal) => ({
+      agent: proposal.agent,
+      summary: proposal.summary.slice(0, 240)
+    })),
+    tasks: (value.tasks ?? []).map((task) => ({ owner: task.owner, summary: task.summary.slice(0, 240) })),
+    growthPlan: (value.growthPlan ?? "").slice(0, 280)
+  };
+  // Drop whole turns from the end until the object fits. The turn count is reported either way,
+  // so a room that is shown six of nine turns is told it is shown six of nine.
+  for (let kept = turns.length; kept >= 0; kept -= 1) {
+    const projection = {
+      ...base,
+      turns: turns.slice(0, kept),
+      turnsOmitted: turns.length - kept
+    };
+    const text = JSON.stringify(projection);
+    if (text.length <= budgetChars || kept === 0) return text;
+  }
+  /* c8 ignore next -- the kept === 0 branch above always returns first. */
+  return JSON.stringify({ scanRecord: "too large to summarise" });
+}
+
 export interface IncubatorScanTriggerPreview {
   event: "incubator_scan_trigger_preview";
   packetPath: string;
+  /**
+   * Whether a packet exists at all, which is not the same question as whether it holds items.
+   *
+   * Without this the preview reported the same all-zero body for "the last sweep returned
+   * nothing" and "no sweep has ever run here", and those call for opposite readings: the first
+   * says the room stays shut, the second says the room has never been reached. It is also what
+   * made the dry-run assertion vacuous — every root, including ones that do not exist, agreed.
+   */
+  packetOnDisk: boolean;
   itemsInPacket: number;
   itemsShownToRoom: number;
   itemsNoSeatHasRead: number;
@@ -203,16 +336,20 @@ export interface IncubatorScanTriggerPreview {
  * scheduled morning and can add items this preview has not seen.
  */
 export async function incubatorScanTriggerPreview(root: string): Promise<IncubatorScanTriggerPreview> {
+  const raw = await readJson<{ packet?: unknown } | null>(root, INCUBATOR_EVIDENCE_PATH, null);
   const shown = boundIncubatorPacket(await readIncubatorPacketItems(root));
   const unread = unreadPacketItems(shown.items, (await readIncubatorReadItems(root)).keys);
   return {
     event: "incubator_scan_trigger_preview",
     packetPath: INCUBATOR_EVIDENCE_PATH,
+    packetOnDisk: raw !== null,
     itemsInPacket: shown.offered,
     itemsShownToRoom: shown.items.length,
     itemsNoSeatHasRead: unread.length,
     wouldOpenOnThisPacket: unread.length > 0,
-    note: "Read-only preview of the live state root. A scheduled run sweeps first and decides on what that sweep returns."
+    note: raw === null
+      ? "No sweep has ever written a packet to this root, so there is nothing here to decide against. A scheduled run sweeps first, and every item that sweep returns is unread."
+      : "Read-only preview of the live state root. A scheduled run sweeps first and decides on what that sweep returns."
   };
 }
 

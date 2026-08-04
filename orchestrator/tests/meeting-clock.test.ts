@@ -1,18 +1,37 @@
 import { describe, expect, it } from "vitest";
 import { resolveCronPhase } from "../src/meetings/clock.js";
-import { readVentureRegistry, scheduledCronExpressions } from "../src/ventures/registry.js";
+import {
+  CRON_HOUR_CARRY,
+  CRON_MINUTE,
+  readVentureRegistry,
+  scheduledCronExpressions
+} from "../src/ventures/registry.js";
+
+/**
+ * The instant a cron fires, plus however many minutes GitHub delivered it late.
+ *
+ * Built from the expression's own minute rather than from the top of the hour. The crons fire at
+ * CRON_MINUTE of the hour before the one they serve, so an instant pinned to :00 is not late at
+ * all — it is most of an hour EARLY, and the resolver would rightly refuse it. Every delivery
+ * instant in this file goes through here so that cannot be got wrong one assertion at a time.
+ */
+function delivered(cron: string, [year, month, day]: [number, number, number], lateMinutes = 0): Date {
+  const [minute, hour] = cron.split(" ").map(Number);
+  return new Date(Date.UTC(year, month, day, hour!, minute! + lateMinutes));
+}
+
 /** The crons that carry a meeting in summer, read from the generator rather than pinned. */
 function summerCrons(): string[] {
-  return scheduledCronExpressions(readVentureRegistry()).filter((cron) =>
-    resolveCronPhase(cron, new Date(Date.UTC(2026, 7, 3, Number(cron.split(" ")[1]), 0))) !== null
+  return scheduledCronExpressions(readVentureRegistry()).filter(
+    (cron) => resolveCronPhase(cron, delivered(cron, [2026, 7, 3])) !== null
   );
 }
 
 /** The firings that belong to the winter variant and therefore carry no summer meeting. */
-function winterOnlyHours(): number[] {
-  return scheduledCronExpressions(readVentureRegistry())
-    .map((cron) => Number(cron.split(" ")[1]))
-    .filter((hour) => resolveCronPhase(`0 ${hour} * * *`, new Date(Date.UTC(2026, 7, 3, hour, 0))) === null);
+function winterOnlyCrons(): string[] {
+  return scheduledCronExpressions(readVentureRegistry()).filter(
+    (cron) => resolveCronPhase(cron, delivered(cron, [2026, 7, 3])) === null
+  );
 }
 
 
@@ -24,13 +43,32 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
     // On 2 August seven of fourteen meetings resolved to "skip" because the wall-clock
     // reading allows twenty minutes of grace and GitHub queued the crons up to 54 late.
     for (const cron of summerCrons()) {
-      const hour = Number(cron.split(" ")[1]);
-      const onTime = resolveCronPhase(cron, new Date(`2026-08-02T${String(hour).padStart(2, "0")}:00:00Z`));
+      const onTime = resolveCronPhase(cron, delivered(cron, [2026, 7, 2]));
       expect(onTime, `${cron} on time`).not.toBeNull();
       for (const late of LATE_BY) {
-        const at = new Date(Date.UTC(2026, 7, 2, hour, late));
-        expect(resolveCronPhase(cron, at), `${cron} ${late} minutes late`).toBe(onTime);
+        expect(
+          resolveCronPhase(cron, delivered(cron, [2026, 7, 2], late)),
+          `${cron} ${late} minutes late`
+        ).toBe(onTime);
       }
+    }
+  });
+
+  it("names the hour a cron belongs to, not the hour it fires in", () => {
+    // Every cron fires at CRON_MINUTE of the hour BEFORE the one it serves, so the hour field is
+    // one behind the meeting. Reading that field literally hands every firing the previous slot,
+    // and would do it without a single red test: cronPayloads writes the cron from the same
+    // registry this resolver reads back, so a missing carry moves both sides together and every
+    // round-trip assertion still agrees with itself. Only an independent answer catches it, so
+    // this pins that the literal hour resolves to something ELSE and that the resolver does not
+    // return that something.
+    expect(CRON_HOUR_CARRY, "the crons no longer fire in the hour they serve").toBe(1);
+    for (const cron of summerCrons()) {
+      const fireHour = Number(cron.split(" ")[1]);
+      const literal = resolveCronPhase(`0 ${fireHour} * * *`, new Date(Date.UTC(2026, 7, 3, fireHour)));
+      const actual = resolveCronPhase(cron, delivered(cron, [2026, 7, 3]));
+      expect(actual, `${cron} names a meeting`).not.toBeNull();
+      expect(actual, `${cron} answered the hour it fires in`).not.toBe(literal);
     }
   });
 
@@ -44,13 +82,25 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
   });
 
   it("keeps the two daylight-saving variants apart", () => {
-    // 03:00 UTC carries the 06:00 Prague morning board in summer and the 05:00 Caught Up
+    // The 03:00 UTC hour carries the 06:00 Prague morning board in summer and the 05:00 Caught Up
     // edition in winter — one firing, two meetings, told apart by the date alone.
+    //
+    // Both forms of that firing are asserted. The minute-0 pair is what actually fired on these
+    // dates, before the schedule moved; it also exercises the branch where a cron fires inside the
+    // hour it serves, which nothing this repository deploys does any more. The CRON_MINUTE pair is
+    // the same firing as the schedule writes it today: one hour earlier in the expression, at :55,
+    // carried back onto the same 03:00 hour. Same answer from both is the point.
     expect(resolveCronPhase("0 3 * * *", new Date("2026-08-02T03:00:00Z"))).toBe("morning");
     expect(resolveCronPhase("0 3 * * *", new Date("2026-01-15T03:00:00Z"))).toBe("cu-edition");
+    const asDeployed = `${CRON_MINUTE} ${3 - CRON_HOUR_CARRY} * * *`;
+    expect(resolveCronPhase(asDeployed, delivered(asDeployed, [2026, 7, 2]))).toBe("morning");
+    expect(resolveCronPhase(asDeployed, delivered(asDeployed, [2026, 0, 15]))).toBe("cu-edition");
     // The inactive variant of a slot has no meeting and must stay skipped.
-    for (const hour of winterOnlyHours()) {
-      expect(resolveCronPhase(`0 ${hour} * * *`, new Date(Date.UTC(2026, 7, 2, hour, 0))), `0 ${hour} in summer`).toBeNull();
+    for (const cron of winterOnlyCrons()) {
+      expect(
+        resolveCronPhase(cron, delivered(cron, [2026, 7, 2])),
+        `${cron} in summer`
+      ).toBeNull();
     }
     expect(resolveCronPhase("0 2 * * *", new Date("2026-01-15T02:00:00Z"))).toBeNull();
   });
@@ -64,19 +114,17 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
 
 describe("the fired cron is the final word", () => {
   it("covers all fifteen Prague slots and only those, from the summer crons", () => {
-    const summer = summerCrons()
-      .map((cron) => resolveCronPhase(cron, new Date(Date.UTC(2026, 7, 3, Number(cron.split(" ")[1]), 40))));
+    const summer = summerCrons().map((cron) => resolveCronPhase(cron, delivered(cron, [2026, 7, 3], 40)));
     expect(summer.filter(Boolean)).toHaveLength(15);
     expect(new Set(summer).size).toBe(15);
   });
 
   it("answers nothing for a firing that belongs to the other daylight-saving variant", () => {
-    // 10:00, 13:00 and 21:00 UTC are winter firings. In summer they must resolve to no
-    // meeting — and a caller must not then reach for the wall clock, which at 10:40 UTC is
-    // 12:40 in Prague and would hand back the 13:00 studio slot: the neighbouring-meeting
-    // failure this whole change exists to remove.
-    for (const hour of winterOnlyHours()) {
-      expect(resolveCronPhase(`0 ${hour} * * *`, new Date(Date.UTC(2026, 7, 3, hour, 40))), `0 ${hour}`).toBeNull();
+    // Three of the eighteen firings serve winter only. In summer they must resolve to no meeting
+    // — and a caller must not then reach for the wall clock, which would hand back a neighbouring
+    // slot: the failure this whole change exists to remove.
+    for (const cron of winterOnlyCrons()) {
+      expect(resolveCronPhase(cron, delivered(cron, [2026, 7, 3], 40)), cron).toBeNull();
     }
   });
 });

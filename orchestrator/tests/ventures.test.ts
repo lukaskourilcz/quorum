@@ -16,7 +16,11 @@ describe("venture registry migration", () => {
   // The clock is the promise: Caught Up meets at 05, 06, 14, 17 and 22 Prague, exactly as it
   // did before the venture registry existed. The cron hours are how early GitHub is asked to
   // fire, and they moved deliberately by CRON_LEAD_HOURS after GitHub delivered them up to
-  // three hours late; the fixture carries the current pair so a drift still fails here.
+  // three hours late; they moved again by CRON_HOUR_CARRY when the minute went to CRON_MINUTE,
+  // which gets the whole schedule off minute 0 — the start-of-hour rush GitHub warns about — and
+  // buys five minutes of head start by firing just before the hour each meeting belongs to.
+  // No move touches a Prague hour, and the fixture carries the current pair so a drift still
+  // fails here.
   it("keeps the Caught Up clock and cron payloads byte-equivalent", async () => {
     const registry = await loadVentureRegistry();
     const legacyPhases = new Set(legacy.clock.map(({ phase }) => phase));

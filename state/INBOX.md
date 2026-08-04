@@ -5,7 +5,35 @@ items in place. Lack of response never authorizes an action. -->
 
 ## Pending
 
-None.
+- [ ] HUMAN_APPROVAL DISPATCH-TOKEN-001 — Store a GitHub dispatch token and a
+  cron secret on the `quorum-site` Vercel project, so the council's meetings
+  start on their own hour instead of whenever GitHub's queue gets to them.
+  What this approves, exactly:
+  - **Which repository the token reaches:** `lukaskourilcz/quorum`, and no
+    other. It is a fine-grained personal access token scoped to that one
+    repository.
+  - **Which permission:** Actions, read and write. That is the entire scope and
+    it is what lets the token start `cycle.yml`.
+  - **Where it is stored:** as Production environment variables on the Vercel
+    project `quorum-site` (the one that deploys this repository and serves
+    boardless-ai.vercel.app) — `QUORUM_DISPATCH_TOKEN` holds the token, and
+    `CRON_SECRET` holds a random string of at least 16 characters that Vercel
+    sends as the Authorization bearer on its own cron requests.
+  - **That it can trigger paid model runs:** yes. A dispatch started with this
+    token runs the council live and calls the paid model APIs, exactly as a
+    GitHub cron firing does, and spends against the same $30/month all-in
+    operating cap from `budget-2026-08e`. It raises no limit and skips no
+    budget, gate or gating switch.
+  What it does not get: no access to repository contents, secrets, or any other
+  repository, and no say in what a run does. `site/src/app/api/cron/[phase]`
+  sends two workflow inputs and nothing else — the phase, and
+  `trigger=vercel-cron` — so it cannot ask for delivery-only mode, a different
+  branch, or a phase this repository does not schedule.
+  Why it is worth a token at all: GitHub delivered 4 August's scheduled runs
+  2h23m to 2h55m late and 2 August's 13 to 54 minutes late; `workflow_dispatch`
+  starts within seconds.
+  If `CRON_SECRET` is never set, the route refuses every request and nothing is
+  dispatched — an unset secret costs punctuality, never money.
 
 ## Resolved
 

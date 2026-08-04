@@ -108,7 +108,12 @@ export async function produceMmaFilesArticle(input: {
         candidate,
         venture: "mma-files",
         slug: input.slug,
-        altCs: csImageAlt ?? `Redakční obrázek k článku ${csLocalization.title}`
+        // The candidate's own alt wins when it has one. A photograph resolved through the
+        // subject's Wikidata item arrives with alt text built from the Commons file's
+        // description — written by somebody looking at the picture — whereas the writer is
+        // shown a caption and no pixels. Asked anyway, it invents: the 4 August article
+        // captioned a man in a suit at a lectern "Gustavo Lopez v zápasovém postoji".
+        altCs: candidate.altCs ?? csImageAlt ?? `Redakční obrázek k článku ${csLocalization.title}`
       });
     } catch {
       articleImage = undefined;

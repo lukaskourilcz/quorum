@@ -24,7 +24,14 @@ const {
   SLOT_DELIVERY_GRACE_MS
 } = await import("../src/meetings/calendar.js");
 const { CRON_DELIVERY_WINDOW_HOURS, MEETING_CLOCK, resolveCronDelivery } = await import("../src/meetings/clock.js");
-const { CRON_LEAD_HOURS, cronPayloads, readVentureRegistry } = await import("../src/ventures/registry.js");
+const {
+  CRON_LEAD_HOURS,
+  CRON_MINUTE,
+  cronHeadStartMinutes,
+  cronPayloads,
+  cronSlotHour,
+  readVentureRegistry
+} = await import("../src/ventures/registry.js");
 const { repoRoot } = await import("../src/paths.js");
 
 const testStateRoot = process.env.SCHEDULED_RUN_TEST_STATE_ROOT!;
@@ -81,18 +88,44 @@ describe("a scheduled slot is never left unexplained", () => {
     // running the resolver at the two instants either side of the boundary.
     const registry = readVentureRegistry();
     const summer = "2026-08-04";
+    /** The instant a cron actually fires: its own minute, in its own hour. */
+    const firingInstant = (expression: string): Date => {
+      const [minute, hour] = expression.split(" ").map(Number);
+      return new Date(`${summer}T${String(hour!).padStart(2, "0")}:${String(minute!).padStart(2, "0")}:00Z`);
+    };
+    /**
+     * The top of the hour a cron belongs to — the instant lateness is counted from.
+     *
+     * Not the firing. The crons fire CRON_MINUTE ahead of the hour they serve, and it is the hour,
+     * not the firing, that sits exactly CRON_LEAD_HOURS before the slot. Anchoring the window here
+     * is what makes it land on the calendar's boundary exactly; anchoring it on the firing would
+     * put the two a head start apart, which is the disagreement this test exists to forbid.
+     */
+    const anchorInstant = (expression: string): Date => {
+      const [minute, hour] = expression.split(" ").map(Number);
+      return new Date(
+        `${summer}T${String(cronSlotHour(hour!, minute!)).padStart(2, "0")}:00:00Z`
+      );
+    };
     for (const slot of MEETING_CLOCK) {
-      const cron = cronPayloads(registry).find(({ phase, cron: expression }) =>
-        phase === slot.phase && resolveCronDelivery(expression, new Date(`${summer}T${expression.split(" ")[1]!.padStart(2, "0")}:00:00Z`)).outcome === "meeting"
+      const cron = cronPayloads(registry).find(
+        ({ phase, cron: expression }) =>
+          phase === slot.phase &&
+          resolveCronDelivery(expression, firingInstant(expression)).outcome === "meeting"
       );
       if (!cron) continue;
-      const firedAt = new Date(`${summer}T${cron.cron.split(" ")[1]!.padStart(2, "0")}:00:00Z`);
+      const anchoredAt = anchorInstant(cron.cron);
       const at = pragueSlotInstant(summer, slot.hour);
-      // The cron fires CRON_LEAD_HOURS ahead of the slot, so the calendar's grace and the
-      // resolver's window describe the same last instant.
-      expect(at.getTime() - firedAt.getTime()).toBe(CRON_LEAD_HOURS * 3_600_000);
+      // The hour a cron belongs to sits CRON_LEAD_HOURS ahead of the slot, so the calendar's grace
+      // and the resolver's window describe the same last instant.
+      expect(at.getTime() - anchoredAt.getTime()).toBe(CRON_LEAD_HOURS * 3_600_000);
+      // And the firing itself is the head start further ahead again — the five minutes the
+      // schedule buys by sitting at CRON_MINUTE of the preceding hour.
+      expect(anchoredAt.getTime() - firingInstant(cron.cron).getTime()).toBe(
+        cronHeadStartMinutes(CRON_MINUTE) * 60_000
+      );
 
-      const lastGoodDelivery = new Date(firedAt.getTime() + CRON_DELIVERY_WINDOW_HOURS * 3_600_000);
+      const lastGoodDelivery = new Date(anchoredAt.getTime() + CRON_DELIVERY_WINDOW_HOURS * 3_600_000);
       expect(lastGoodDelivery.getTime() - at.getTime()).toBe(SLOT_DELIVERY_GRACE_MS);
       expect(resolveCronDelivery(cron.cron, lastGoodDelivery), `${cron.cron} at the window edge`).toMatchObject({
         outcome: "meeting",

@@ -26,14 +26,21 @@ vi.mock("../src/paths.js", async () => {
   return { ...actual, stateRoot: mkdtempSync(nodePath.join(nodeOs.tmpdir(), "mma-live-state-")) };
 });
 
-// The licensed-photo search fans out to Openverse and Wikimedia over HTTP before the article is
-// written. Nothing about the run record depends on what it returns, so it answers nothing here
-// rather than making the suite depend on two public APIs. `candidatesNaming` stays real and
-// filters an empty list to an empty list; `materializeLicensedPhoto` is then never reached, so
-// the article carries the deterministic FRAME hero.
+// Both ways of finding a photograph reach the public internet before the article is written:
+// an event subject fans out to Openverse and Wikimedia, and a fighter subject reads their
+// Wikidata item and then the Commons file it names. `plantFighter` copies real cards, which
+// carry real wikidataIds, so the second one would fire on every case here. Nothing about the run
+// record depends on what either returns, so both answer "no photograph" rather than making the
+// suite depend on public APIs. `candidatesNaming` stays real and filters an empty list to an
+// empty list; `materializeLicensedPhoto` is never reached, so the article carries the FRAME hero.
 vi.mock("../src/images/licensed.js", async () => {
   const actual = await vi.importActual<typeof import("../src/images/licensed.js")>("../src/images/licensed.js");
   return { ...actual, discoverLicensedPhotos: async () => ({ candidates: [], skippedProviders: [] }) };
+});
+
+vi.mock("../src/images/fighter-photo.js", async () => {
+  const actual = await vi.importActual<typeof import("../src/images/fighter-photo.js")>("../src/images/fighter-photo.js");
+  return { ...actual, fighterIdentityPhoto: async () => null };
 });
 
 // The model call is the one step that cannot run in a test: it is billed, and

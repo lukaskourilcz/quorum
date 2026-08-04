@@ -28,43 +28,43 @@
   ],
   "cronPayloads": [
     {
-      "cron": "0 2 * * *",
+      "cron": "55 1 * * *",
       "phase": "cu-edition"
     },
     {
-      "cron": "0 3 * * *",
+      "cron": "55 2 * * *",
       "phase": "cu-edition"
     },
     {
-      "cron": "0 3 * * *",
+      "cron": "55 2 * * *",
       "phase": "morning"
     },
     {
-      "cron": "0 4 * * *",
+      "cron": "55 3 * * *",
       "phase": "morning"
     },
     {
-      "cron": "0 11 * * *",
+      "cron": "55 10 * * *",
       "phase": "afternoon"
     },
     {
-      "cron": "0 12 * * *",
+      "cron": "55 11 * * *",
       "phase": "afternoon"
     },
     {
-      "cron": "0 14 * * *",
+      "cron": "55 13 * * *",
       "phase": "cu-product"
     },
     {
-      "cron": "0 15 * * *",
+      "cron": "55 14 * * *",
       "phase": "cu-product"
     },
     {
-      "cron": "0 19 * * *",
+      "cron": "55 18 * * *",
       "phase": "night"
     },
     {
-      "cron": "0 20 * * *",
+      "cron": "55 19 * * *",
       "phase": "night"
     }
   ]

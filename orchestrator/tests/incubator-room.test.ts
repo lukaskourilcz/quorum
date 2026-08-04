@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, rm } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -26,7 +26,11 @@ const sweep = vi.hoisted(() => ({
   items: [] as Array<Record<string, unknown>>
 }));
 
-const seats = vi.hoisted(() => ({ called: [] as string[] }));
+const seats = vi.hoisted(() => ({
+  called: [] as string[],
+  /** What the chair asks for next, when a case wants to drive the follow-up path. */
+  followUp: null as { phase: string; summary: string; evidenceRefs: string[] } | null
+}));
 
 vi.mock("../src/paths.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../src/paths.js")>();
@@ -78,7 +82,7 @@ vi.mock("../src/llm/call.js", async (importOriginal) => {
           templateProposal: null,
           inspirationObservations: [],
           idea: null,
-          followUpRequest: null
+          followUpRequest: request.agent === "PULSE" ? seats.followUp : null
         })),
         cached: false,
         usd: 0
@@ -88,24 +92,32 @@ vi.mock("../src/llm/call.js", async (importOriginal) => {
 });
 
 const { repoRoot } = await import("../src/paths.js");
-const { runPortfolioCycle } = await import("../src/portfolio/run.js");
+const { composePortfolioContext, runPortfolioCycle } = await import("../src/portfolio/run.js");
+const { loadVentureRegistry } = await import("../src/ventures/registry.js");
 const { atomicWriteJson, readJson } = await import("../src/state.js");
 const {
+  INCUBATOR_CONTEXT_CHARS,
   INCUBATOR_EVIDENCE_PATH,
+  INCUBATOR_OPENING_USD_TODAY,
   INCUBATOR_PACKET_CHARS,
   INCUBATOR_READ_ITEMS_LIMIT,
   INCUBATOR_READ_ITEMS_PATH,
+  INCUBATOR_SCAN_CHARS,
+  INCUBATOR_TASTE_CHARS,
   assertSweptToPacketPath,
   boundIncubatorPacket,
+  incubatorScanBrief,
   incubatorScanTriggerPreview,
   packetItemKey,
   readIncubatorReadItems,
   recordIncubatorPacketRead,
   unreadPacketItems
 } = await import("../src/incubator/packet.js");
-const { loadMeetingPolicy, phaseNeedsAgenda, phaseWakesOnChange } =
+const { loadMeetingPolicy, mayRequestMeeting, phaseNeedsAgenda, phaseWakesOnChange } =
   await import("../src/meetings/agenda.js");
-const { loadRatingLedger, runPalatePass } = await import("../src/taste/pipeline.js");
+const { phaseEnabled, resolveEffectivePortfolioSchedule } = await import("../src/portfolio/schedule.js");
+const { MeetingRecordSchema } = await import("../src/contracts/meeting-record.js");
+const { PALATE_PASS_BUDGET_USD, loadRatingLedger, runPalatePass } = await import("../src/taste/pipeline.js");
 
 function item(index: number, overrides: Record<string, unknown> = {}) {
   return {
@@ -161,6 +173,21 @@ describe("the incubator packet key survives everything upstream decides by race"
       .not.toBe(packetItemKey(base));
   });
 
+  it("gives the same key to the same story arriving under a different sourceId", () => {
+    // The case the whole invariant exists for, and the one nothing tested. Six concurrent
+    // workers race, `runScrapersDetailed` keeps whichever arrival reached the byUrl map first,
+    // so a URL two feeds both carry is filed under either feed's id depending on the race. The
+    // story is the same story. A key that read sourceId would call it new the next morning and
+    // open a paid room on material every seat had already read.
+    const story = { url: "https://example.invalid/shared-scoop", title: "Two Feeds Carry This" };
+    const viaFirstFeed = { ...story, sourceId: "feed-a" };
+    const viaSecondFeed = { ...story, sourceId: "feed-b" };
+    expect(packetItemKey(viaSecondFeed)).toBe(packetItemKey(viaFirstFeed));
+    // ...and the read log built from one arrival covers the other, which is what actually keeps
+    // the room shut.
+    expect(unreadPacketItems([viaSecondFeed], [packetItemKey(viaFirstFeed)])).toEqual([]);
+  });
+
   it("compares as a set, so digest order and the 40-item slice cannot fake a change", () => {
     // createDigest sorts, then slices to 40; ties fall back to insertion order and undated
     // items to fetchedAt, which is new every run. Membership, not position, decides here.
@@ -195,6 +222,108 @@ describe("the packet the room is shown is cut by whole items", () => {
   it("is deterministic, so the trigger and the room see the same items", () => {
     const items = Array.from({ length: 30 }, (_, index) => item(index));
     expect(boundIncubatorPacket(items).items).toEqual(boundIncubatorPacket(items).items);
+  });
+});
+
+describe("the synthesis room reads whole blocks, not a prefix of them", () => {
+  const scanRecord = JSON.stringify({
+    date: "2026-08-05",
+    status: "HELD",
+    decision: { outcome: "PLAN", summary: "S".repeat(400) },
+    proposals: [{ agent: "ANGLE", summary: "P".repeat(400) }],
+    tasks: [{ owner: "SCOUT", summary: "T".repeat(400) }],
+    growthPlan: "G".repeat(400),
+    roomTranscript: {
+      turns: Array.from({ length: 12 }, (_, index) => ({ agent: "PULSE", text: `turn ${index} ${"x".repeat(400)}` }))
+    }
+  });
+
+  it("hands the scan over as valid JSON however long the record is", () => {
+    // The defect this replaces: `${packet}\n${taste}\n${scan}` was cut to the context ceiling by
+    // characters, so the scan — always last — ended wherever 8,000 fell. Measured on the real
+    // 1 August record behind a full packet, the room got 72.7% of it, ending inside a string
+    // literal. Whole turns are dropped instead, so what arrives always parses.
+    const brief = incubatorScanBrief(scanRecord);
+    expect(brief.length).toBeLessThanOrEqual(INCUBATOR_SCAN_CHARS);
+    const parsed = JSON.parse(brief) as { turns: unknown[]; turnsOmitted: number; outcome: string };
+    expect(parsed.outcome).toBe("PLAN");
+    // It had to drop turns to fit, and it says how many rather than letting the room assume it
+    // has the whole transcript.
+    expect(parsed.turnsOmitted).toBeGreaterThan(0);
+    expect(parsed.turns.length + parsed.turnsOmitted).toBe(12);
+  });
+
+  it("keeps a short record whole and omits nothing", () => {
+    const brief = incubatorScanBrief(JSON.stringify({
+      date: "2026-08-05",
+      status: "HELD",
+      decision: { outcome: "NO_ACTION", summary: "nothing to argue" },
+      roomTranscript: { turns: [{ agent: "PULSE", text: "one turn" }] }
+    }));
+    expect(JSON.parse(brief)).toMatchObject({ turnsOmitted: 0, turns: [{ agent: "PULSE", text: "one turn" }] });
+  });
+
+  it("states an absent or unreadable record instead of crashing the room", () => {
+    expect(JSON.parse(incubatorScanBrief(""))).toMatchObject({ scanRecord: expect.stringContaining("none on file") });
+    expect(JSON.parse(incubatorScanBrief("{not json"))).toMatchObject({ scanRecord: expect.stringContaining("unreadable") });
+    expect(JSON.parse(incubatorScanBrief(JSON.stringify({ decision: 7 })))).toMatchObject({
+      scanRecord: expect.stringContaining("not in the expected shape")
+    });
+  });
+
+  it("keeps the three block budgets summing below the ceiling", () => {
+    // The arithmetic the context comment states, checked rather than asserted in prose. The
+    // packet block is not INCUBATOR_PACKET_CHARS exactly — boundIncubatorPacket fills that with
+    // JSON and then prefixes a counted header — so raising any budget to the ceiling minus the
+    // other two would overflow. composePortfolioContext throws if this ever stops holding; this
+    // catches it in review instead.
+    let worstPacket = 0;
+    for (const count of [1, 9, 10, 40, 99]) {
+      for (const summaryChars of [0, 50, 200, 2_000]) {
+        const items = Array.from({ length: count }, (_, index) => item(index, {
+          summary: "x".repeat(summaryChars),
+          title: "T".repeat(300),
+          url: `https://example.invalid/${"u".repeat(200)}-${index}`
+        }));
+        worstPacket = Math.max(worstPacket, boundIncubatorPacket(items).text.length);
+      }
+    }
+    // The header pushes the block past the JSON budget, which is the trap this guards.
+    expect(worstPacket).toBeGreaterThan(INCUBATOR_PACKET_CHARS - 200);
+    const worstTotal = worstPacket + 1 + INCUBATOR_TASTE_CHARS + 1 + INCUBATOR_SCAN_CHARS;
+    expect(worstTotal).toBeLessThan(INCUBATOR_CONTEXT_CHARS);
+  });
+
+  it("composes a full packet, taste and scan inside the ceiling without trimming", async () => {
+    // The end-to-end shape of the same claim, through the function the room actually calls. A
+    // full packet is the case that used to overflow; the composed text has to land under the
+    // ceiling on its own rather than by being cut to it.
+    const root = `${testStateRoot}-synthesis`;
+    const heavy = Array.from({ length: 40 }, (_, index) =>
+      item(index, { summary: "x".repeat(2_000) }));
+    await atomicWriteJson(root, INCUBATOR_EVIDENCE_PATH, {
+      schemaVersion: "incubator-evidence/1",
+      generatedAt: "2026-08-05T04:00:00.000Z",
+      refs: [...new Set(heavy.map((entry) => `source:${entry.sourceId}`))],
+      packet: JSON.stringify(heavy),
+      sourceResults: []
+    });
+    await mkdir(path.join(root, "meetings"), { recursive: true });
+    await writeFile(path.join(root, "meetings", "2026-08-05-incubator-scan.json"), scanRecord);
+    try {
+      const registry = await loadVentureRegistry();
+      const context = await composePortfolioContext(
+        "incubator-synthesis", root, "2026-08-05", registry, new Date("2026-08-05T19:00:00.000Z")
+      );
+      expect(context.text.length).toBeLessThanOrEqual(INCUBATOR_CONTEXT_CHARS);
+      // The scan block is the last one and it is still whole JSON — the property the character
+      // cut destroyed. Deleting the per-block budgets and cutting the join instead fails here.
+      const scanBlock = context.text.slice(context.text.lastIndexOf("\n") + 1);
+      expect(() => JSON.parse(scanBlock)).not.toThrow();
+      expect(JSON.parse(scanBlock)).toMatchObject({ scanRecord: "2026-08-05", outcome: "PLAN" });
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
 
@@ -256,6 +385,77 @@ describe("what one opening of the incubator room costs", () => {
     expect(result.status).toBe("no_ratings");
     expect(result.writes).toEqual([]);
   });
+
+  it("prices one opening inside the room envelope and states it against the daily cap", async () => {
+    // The figure the comments quote, recomputed from the same inputs the room uses, so a model
+    // or prompt change that moves the price makes the documented cost fail rather than quietly
+    // become wrong. The margins matter: the room must stay under its $0.06 envelope, because
+    // run.ts throws "call graph exceeds envelope" rather than opening a room it cannot fund.
+    const registry = await loadVentureRegistry();
+    const incubator = registry.ventures.find((venture) => venture.id === "incubator")!;
+    const scan = incubator.meetings.find((meeting) => meeting.kind === "incubator-scan")!;
+    expect(scan.envelopeUsd).toBe(0.06);
+    // The pre-step is real: taste is on and the scan is the venture's first meeting, which is
+    // exactly the condition registry.ts turns "palate" on for.
+    expect(incubator.taste).toBe(true);
+    expect(incubator.meetings[0]?.kind).toBe("incubator-scan");
+    expect(INCUBATOR_OPENING_USD_TODAY).toBeLessThan(scan.envelopeUsd);
+    // With the palate pass added once an owner rating exists, an opening is still inside the
+    // envelope-plus-pre-step budget and under 7% of the $1.00 daily pace.
+    expect(INCUBATOR_OPENING_USD_TODAY + PALATE_PASS_BUDGET_USD).toBeLessThan(0.07);
+  });
+});
+
+describe("the length limits a shut record has to respect", () => {
+  it("caps setting and every turn at 800, not only sharperData.summary at 280", async () => {
+    // The comment above recordNoAgendaCycle's sharperData used to call 280 "the only field of
+    // this record with a length limit". It is the tightest, not the only one: roomTranscript
+    // .setting and turns[].text cap at 800 and take caller strings too. A record that fails to
+    // parse takes the whole scheduled run out with exit 1, so this pins the limits the writer
+    // clips against — if the schema moves, the clipping in run.ts has to move with it.
+    const base = JSON.parse(await readFile(
+      path.join(repoRoot, "state", "meetings", "2026-08-04-incubator-scan.json"), "utf8"
+    )) as Record<string, unknown>;
+    const transcript = base.roomTranscript as { setting: string; turns: Array<{ text: string }> };
+
+    expect(MeetingRecordSchema.safeParse(base).success).toBe(true);
+    // 800 is accepted, 801 is not — for the setting...
+    for (const [chars, ok] of [[800, true], [801, false]] as const) {
+      const candidate = { ...base, roomTranscript: { ...transcript, setting: "s".repeat(chars) } };
+      expect(MeetingRecordSchema.safeParse(candidate).success).toBe(ok);
+    }
+    // ...and for a turn's text.
+    for (const [chars, ok] of [[800, true], [801, false]] as const) {
+      const turns = transcript.turns.map((turn, index) => index === 0 ? { ...turn, text: "t".repeat(chars) } : turn);
+      const candidate = { ...base, roomTranscript: { ...transcript, turns } };
+      expect(MeetingRecordSchema.safeParse(candidate).success).toBe(ok);
+    }
+  });
+});
+
+describe("the scan is terminal under the current budget shape", () => {
+  it("has no synthesis room to hand a follow-up to, and the schedule says so", async () => {
+    // Stated rather than implied. budget-2026-08-01 is unsigned, so the schedule falls back to
+    // shape B — "run one daily incubator meeting" — which drops incubator-synthesis. A scan
+    // chair's followUpRequest for it would otherwise queue an agenda that expires in three days
+    // with no room able to consume it, and the scan's record would claim it had handed work on.
+    const [registry, budgetDecisionRaw, budgetFiftyRaw] = await Promise.all([
+      loadVentureRegistry(),
+      readFile(path.join(repoRoot, "state", "decisions", "2026-08-01-budget-raise.md"), "utf8"),
+      readFile(path.join(repoRoot, "state", "decisions", "2026-08-04-budget-fifty.md"), "utf8")
+    ]);
+    const schedule = resolveEffectivePortfolioSchedule({
+      registry, budgetDecisionRaw, budgetFiftyRaw, monthlyApiHeadroomUsd: 25
+    });
+    // Not a headroom rung: this is at full headroom and the room is still absent.
+    expect(schedule.shape).toBe("B");
+    expect(phaseEnabled(schedule, "incubator-scan")).toBe(true);
+    expect(phaseEnabled(schedule, "incubator-synthesis")).toBe(false);
+    // The policy would still permit the hand-off, which is why run.ts checks the schedule too.
+    const policy = await loadMeetingPolicy();
+    expect(mayRequestMeeting(policy, "incubator-scan", "incubator-synthesis")).toBe(true);
+  });
+
 });
 
 describe("a scheduled incubator scan, through runPortfolioCycle", () => {
@@ -361,6 +561,57 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
     expect(log.keys).toContain(packetItemKey(item(4)));
   });
 
+  it("stays shut when the same stories come back under different sourceIds", async () => {
+    // The race, driven through the whole run rather than through the key alone. Yesterday's four
+    // items return with every sourceId reassigned, exactly as a re-run of the same six workers
+    // can file them. Nothing about the day's news has changed, so no seat may be called.
+    //
+    // This is the case a mutation to packetItemKey has to fail. Reading sourceId here turns four
+    // already-read items into four unread ones and opens the room, so `seats.called` fills and
+    // the record stops being PAUSED.
+    sweep.items = [item(4), item(1), item(2), item(3)].map((entry, index) => ({
+      ...entry,
+      sourceId: `rebalanced-worker-${index}`
+    }));
+    const before = await readIncubatorReadItems(testStateRoot);
+    const result = await run(new Date("2026-08-07T18:00:00.000Z"));
+    expect(sweep.calls).toBe(1);
+    expect(result.decision).toBe("PAUSED");
+    expect(seats.called).toEqual([]);
+    // The read log is untouched: no new key, and no re-keying of the four already there.
+    const after = await readIncubatorReadItems(testStateRoot);
+    expect(after.keys).toEqual(before.keys);
+    expect(after.lastReadBy).toBe(before.lastReadBy);
+  });
+
+  it("does not queue the chair's follow-up to a room the budget shape has switched off", async () => {
+    // The scan is terminal today, and this is where that becomes visible rather than implied.
+    // PULSE chairs the scan and asks for incubator-synthesis; the meeting policy permits that
+    // transition, so without the schedule check an agenda would be written into the queue, live
+    // for three days, for a phase the workflow skips before the cycle even starts. The record
+    // would then show the scan handing work to a room that never sits.
+    sweep.items = [item(21), item(22)];
+    seats.followUp = {
+      phase: "incubator-synthesis",
+      summary: "Argue these two candidates down to a proposal.",
+      evidenceRefs: []
+    };
+    try {
+      const result = await run(new Date("2026-08-07T20:00:00.000Z"));
+      expect(result.decision).toBe("PLAN");
+      expect(seats.called).toHaveLength(5);
+      // Nothing was written to the agenda queue: the run did not list it as an artifact...
+      expect(result.artifacts.some((artifact) => artifact.includes("meeting-agendas"))).toBe(false);
+      // ...and no queue file for a synthesis room exists in this state root at all.
+      const queue = await readJson<{ agendas?: Array<{ phase: string }> }>(
+        testStateRoot, "meeting-agendas/queue.json", {}
+      );
+      expect((queue.agendas ?? []).some((agenda) => agenda.phase === "incubator-synthesis")).toBe(false);
+    } finally {
+      seats.followUp = null;
+    }
+  });
+
   it("says the sweep came back empty rather than blaming the agenda queue", async () => {
     sweep.items = [];
     const result = await run(new Date("2026-08-08T05:00:00.000Z"));
@@ -374,8 +625,22 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
 
   it("lets a dry run say what the next scheduled run would decide, without sweeping", async () => {
     // The dry room writes to tmp/dry-run and calls no model, so the only thing it can honestly
-    // report about this room is the live state root's own answer. Deleting the preview, or
-    // pointing it at the dry root, fails here.
+    // report about this room is the live state root's own answer.
+    //
+    // The packet has to be non-empty for that to be worth asserting. While the live root held
+    // the empty packet the last sweep wrote, the preview reported all zeros — and so did the dry
+    // root, and so did any path at all, because tmp/dry-run/state/ventures/incubator/ does not
+    // exist and readJson falls back to its default. Swapping stateRoot for root in run.ts left
+    // this green. Seeding two unread items here gives the live root an answer no absent
+    // directory can produce, and the dry root's own answer is asserted to differ.
+    const seeded = [item(101), item(102)];
+    await atomicWriteJson(testStateRoot, INCUBATOR_EVIDENCE_PATH, {
+      schemaVersion: "incubator-evidence/1",
+      generatedAt: "2026-08-09T04:00:00.000Z",
+      refs: [...new Set(seeded.map((entry) => `source:${entry.sourceId}`))],
+      packet: JSON.stringify(seeded),
+      sourceResults: []
+    });
     const printed: string[] = [];
     const log = vi.spyOn(console, "log").mockImplementation((value: unknown) => {
       printed.push(String(value));
@@ -390,22 +655,58 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
         explainRouting: false,
         now: new Date("2026-08-09T05:00:00.000Z")
       });
+      log.mockRestore();
+      expect(sweep.calls).toBe(0);
+      const preview = printed
+        .map((line) => { try { return JSON.parse(line) as Record<string, unknown>; } catch { return null; } })
+        .find((value) => value?.event === "incubator_scan_trigger_preview");
+      // The live root's answer: two items on file, both shown, neither read by any earlier room.
+      expect(preview).toMatchObject({
+        packetPath: INCUBATOR_EVIDENCE_PATH,
+        packetOnDisk: true,
+        itemsInPacket: 2,
+        itemsShownToRoom: 2,
+        itemsNoSeatHasRead: 2,
+        wouldOpenOnThisPacket: true
+      });
+      expect(await incubatorScanTriggerPreview(testStateRoot)).toEqual(preview);
+      // The pin. The dry root has no packet at all, so pointing the preview there reports an
+      // absent packet — a different answer, and the one this test exists to reject.
+      const dryRoot = path.join(repoRoot, "tmp", "dry-run", "state");
+      const dryAnswer = await incubatorScanTriggerPreview(dryRoot);
+      expect(dryAnswer).toMatchObject({ packetOnDisk: false, itemsInPacket: 0, wouldOpenOnThisPacket: false });
+      expect(dryAnswer).not.toEqual(preview);
+      // ...and so does a path that does not exist, which is what made the old assertion vacuous.
+      expect(await incubatorScanTriggerPreview(`${testStateRoot}-nonexistent`)).toEqual(dryAnswer);
+      // An absent packet and an empty one are different states and must not read alike: both
+      // keep the room shut today, but only one of them means a sweep has ever run here.
+      const emptyRoot = `${testStateRoot}-empty-packet`;
+      await atomicWriteJson(emptyRoot, INCUBATOR_EVIDENCE_PATH, {
+        schemaVersion: "incubator-evidence/1",
+        generatedAt: "2026-08-09T04:00:00.000Z",
+        refs: [],
+        packet: "[]",
+        sourceResults: []
+      });
+      try {
+        const emptyAnswer = await incubatorScanTriggerPreview(emptyRoot);
+        expect(emptyAnswer).toMatchObject({ packetOnDisk: true, itemsInPacket: 0, wouldOpenOnThisPacket: false });
+        expect(emptyAnswer.note).not.toBe(dryAnswer.note);
+      } finally {
+        await rm(emptyRoot, { recursive: true, force: true });
+      }
     } finally {
       log.mockRestore();
+      // Put back the empty packet the last sweep left, which the next case reads. In a finally
+      // so that a failure here stays one failure instead of taking the next case with it.
+      await atomicWriteJson(testStateRoot, INCUBATOR_EVIDENCE_PATH, {
+        schemaVersion: "incubator-evidence/1",
+        generatedAt: "2026-08-08T04:00:00.000Z",
+        refs: [],
+        packet: "[]",
+        sourceResults: []
+      });
     }
-    expect(sweep.calls).toBe(0);
-    const preview = printed
-      .map((line) => { try { return JSON.parse(line) as Record<string, unknown>; } catch { return null; } })
-      .find((value) => value?.event === "incubator_scan_trigger_preview");
-    // The live root holds the empty packet the last sweep wrote and four keys already read.
-    expect(preview).toMatchObject({
-      packetPath: INCUBATOR_EVIDENCE_PATH,
-      itemsInPacket: 0,
-      itemsShownToRoom: 0,
-      itemsNoSeatHasRead: 0,
-      wouldOpenOnThisPacket: false
-    });
-    expect(await incubatorScanTriggerPreview(testStateRoot)).toEqual(preview);
   });
 
   it("blames the month's spend for a closed room, not a decision the owner signed", async () => {
@@ -448,11 +749,12 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
 
   it("leaves the read log alone when the room never opened", async () => {
     // The sweep replaces the packet before any seat is called, so a room that closes after the
-    // sweep must not leave a log claiming the packet was read. The two shut runs above wrote
-    // nothing, so the keys are still the four the two open rooms actually read.
+    // sweep must not leave a log claiming the packet was read. Three rooms above opened and read
+    // six items between them; every shut run since wrote nothing, so the log still ends at the
+    // last room that actually sat.
     const log = await readIncubatorReadItems(testStateRoot);
-    expect(log.keys).toHaveLength(4);
-    expect(log.lastReadBy).toBe("20260807050000-incubator-scan");
+    expect(log.keys).toHaveLength(6);
+    expect(log.lastReadBy).toBe("20260807200000-incubator-scan");
     const evidence = await readJson<{ packet?: string }>(testStateRoot, INCUBATOR_EVIDENCE_PATH, {});
     // ...even though the packet on disk is the empty one the last sweep wrote over it.
     expect(evidence.packet).toBe("[]");

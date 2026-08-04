@@ -82,8 +82,10 @@ import {
 } from "../ideas/ledger.js";
 import {
   INCUBATOR_CONTEXT_CHARS,
+  INCUBATOR_TASTE_CHARS,
   assertSweptToPacketPath,
   boundIncubatorPacket,
+  incubatorScanBrief,
   incubatorScanTriggerPreview,
   readIncubatorPacketItems,
   readIncubatorReadItems,
@@ -511,10 +513,11 @@ async function recordNoAgendaCycle(input: {
     ...(fightDesk ? {
       sharperData: {
         outcome: "nothing-new",
-        // The only field of this record with a length limit (280). It carries the same sentence
-        // as the brief, and a record that fails to parse takes the whole scheduled run out with
-        // exit 1 — so a long reason is cut here rather than allowed to decide whether the slot
-        // gets a record at all. The untruncated sentence is published four lines up.
+        // The tightest limit this record has (280), not the only one: roomTranscript.setting and
+        // every turns[].text cap at 800, and those take caller strings too. A record that fails
+        // to parse takes the whole scheduled run out with exit 1, so each of the three is cut to
+        // its own schema limit rather than allowed to decide whether the slot gets a record at
+        // all. The untruncated sentence is published four lines up.
         summary: input.shut.brief.slice(0, 280),
         evidenceRefs: []
       }
@@ -523,12 +526,16 @@ async function recordNoAgendaCycle(input: {
       openedAt: input.now.toISOString(),
       closedAt,
       gavel: chair,
-      setting: input.shut.setting,
+      // Both cut to RoomTranscriptSchema's 800. Today every RoomStayedShut is a fixed sentence
+      // well inside it, but two of them interpolate caller values — the month's figures and the
+      // sweep's counts — and the reason a closed slot gets a record at all must not depend on how
+      // long a future reason runs.
+      setting: input.shut.setting.slice(0, 800),
       turns: [{
         agent: chair,
         mode: "close",
         sentAt: closedAt,
-        text: input.shut.brief
+        text: input.shut.brief.slice(0, 800)
       }]
     },
     generatedAt: closedAt
@@ -717,17 +724,29 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
     };
   }
-  // The incubator rooms. The packet is cut to whole items first and the citation allowlist is
-  // narrowed to the sources those items came from, so the room can only cite what it was shown.
-  // It used to be the raw serialised digest, allowlisted against every source id in the file
-  // and cut at 18,000 characters with the taste packet and the scan record behind it. One item
-  // may carry a 2,000-character summary, so forty of them can run several times past that
-  // ceiling — and whenever they did, the room was handed a JSON string ending mid-token and the
-  // two blocks behind it never arrived. INCUBATOR_CONTEXT_CHARS carries the cost arithmetic.
+  // The incubator rooms. Every block is bounded before it is joined, and the join is not cut
+  // afterwards — that is the whole difference from what stood here.
+  //
+  // The packet is cut to whole items and the citation allowlist is narrowed to the sources those
+  // items came from, so the room can only cite what it was shown. It used to be the raw
+  // serialised digest, allowlisted against every source id in the file. The three blocks were
+  // then concatenated and cut to the ceiling by characters, which moved the damage rather than
+  // removing it: the last block ended wherever the ceiling fell, mid-token and unparseable.
+  // `incubatorScanBrief` bounds the scan by dropping whole transcript turns, and the taste packet
+  // is prose, so a clip there costs a sentence rather than a syntax error. INCUBATOR_CONTEXT_CHARS
+  // carries the cost arithmetic and the measurement behind these three budgets.
   const packet = boundIncubatorPacket(await readIncubatorPacketItems(root));
-  const scan = phase === "incubator-synthesis" ? await readText(root, `meetings/${date}-incubator-scan.json`) : "";
+  const scan = phase === "incubator-synthesis"
+    ? incubatorScanBrief(await readText(root, `meetings/${date}-incubator-scan.json`))
+    : "";
+  const text = `${packet.text}\n${(taste ?? "").slice(0, INCUBATOR_TASTE_CHARS)}\n${scan}`;
+  // The three budgets sum below the ceiling, so this never trims. It is the assertion that they
+  // still do — a budget raised past the ceiling would otherwise reintroduce the cut in silence.
+  if (text.length > INCUBATOR_CONTEXT_CHARS) {
+    throw new Error(`Incubator context ${text.length} exceeds ${INCUBATOR_CONTEXT_CHARS}; the per-block budgets no longer sum below the ceiling`);
+  }
   return {
-    text: `${packet.text}\n${taste ?? ""}\n${scan}`.slice(0, INCUBATOR_CONTEXT_CHARS),
+    text,
     evidenceRefs: packet.evidenceRefs.filter((reference) => reference.length <= 160),
     incubatorItems: packet.items
   };
@@ -1437,7 +1456,23 @@ export async function runPortfolioCycle(input: {
   if (!input.dry && !contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto")) {
     const chair = portfolioChair(input.phase);
     const followUp = contributions.find((contribution) => contribution.agent === chair)?.followUpRequest;
-    if (followUp && mayRequestMeeting(meetingPolicy, input.phase, followUp.phase)) {
+    // Do not queue an agenda for a room the effective schedule has switched off.
+    //
+    // `mayRequestMeeting` answers a policy question — may this phase hand work to that one — and
+    // incubator-scan may hand work to incubator-synthesis. Whether that room can ever sit is a
+    // different question, and today the answer is no: decisions/2026-08-01-budget-raise.md is
+    // still "pending owner countersignature" with neither shape ticked, so the schedule takes its
+    // own stated fallback — shape B, "run one daily incubator meeting" — which drops
+    // incubator-synthesis. The workflow reads the same flag and skips the phase before the cycle
+    // starts. An agenda queued for it would sit in the queue until its three-day TTL expired with
+    // no room able to consume it, and the scan's record would claim it had handed work onward.
+    // The scan is therefore terminal under the current shape: it can surface and log candidates,
+    // and nothing downstream turns them into a proposal or founds a venture until the owner
+    // countersigns shape A. Refusing the request keeps that visible instead of burying it in an
+    // expiring queue entry.
+    if (followUp && !phaseEnabled(schedule, followUp.phase)) {
+      console.warn(`Follow-up meeting request was not queued: ${followUp.phase} is not in the effective budget shape, so no room could consume it`);
+    } else if (followUp && mayRequestMeeting(meetingPolicy, input.phase, followUp.phase)) {
       const target = getVentureMeetingDefinition(registry, followUp.phase);
       const currentHour = pragueClockParts(input.now).hour;
       try {
