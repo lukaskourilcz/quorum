@@ -221,3 +221,27 @@ describe("agent architecture", () => {
     }
   });
 });
+
+/**
+ * The site does not import from the orchestrator package, so the two calendars each carry their
+ * own copy of the delivery window. A copy that drifts is worse than no copy: the board would keep
+ * calling a slot missed while the resolver could still open the room for it, which is the exact
+ * failure the window was introduced to remove.
+ */
+describe("the site and the orchestrator agree on the meeting delivery window", () => {
+  it("pins the site's grace to CRON_DELIVERY_WINDOW_HOURS minus CRON_LEAD_HOURS", async () => {
+    const { CRON_DELIVERY_WINDOW_HOURS } = await import("../src/meetings/clock.js");
+    const { CRON_LEAD_HOURS } = await import("../src/ventures/registry.js");
+    const { SLOT_DELIVERY_GRACE_MS } = await import("../src/meetings/calendar.js");
+
+    const source = await readFile(
+      path.join(repoRoot, "site", "src", "lib", "calendar-feed-model.ts"),
+      "utf8"
+    );
+    const expression = /export const SLOT_DELIVERY_GRACE_MINUTES = \((\d+) - (\d+)\) \* 60;/u.exec(source);
+    expect(expression, "the site declares its grace as (window - lead) * 60").not.toBeNull();
+    expect(Number(expression![1])).toBe(CRON_DELIVERY_WINDOW_HOURS);
+    expect(Number(expression![2])).toBe(CRON_LEAD_HOURS);
+    expect((CRON_DELIVERY_WINDOW_HOURS - CRON_LEAD_HOURS) * 60 * 60_000).toBe(SLOT_DELIVERY_GRACE_MS);
+  });
+});

@@ -64,6 +64,39 @@ function cronUtcHours(cron: string): number[] {
 }
 
 /**
+ * How long after its cron a delivered run may still name the meeting that cron was for.
+ *
+ * A firing beyond this is treated as belonging to no meeting rather than to a slot most of a
+ * day away, which is what a bare modulo would give. The calendar reads the same constant, so
+ * the window in which a slot is still waiting for its run and the window in which a delivered
+ * run can still be recorded against that slot are one number, not two that can drift apart —
+ * the discipline CRON_LEAD_HOURS already enforces between cronPayloads and this resolver.
+ *
+ * Six hours is the boundary and not an arbitrary grace: past it a delivered cron can no longer
+ * name its slot, so the meeting genuinely cannot be recorded any more. The worst delivery seen
+ * is 3h20m — cron `0 3` on 3 August, which arrived at 06:20 UTC — with 4 August's five runs
+ * between 2h23m and 2h55m. Six hours is under twice that, so the bound is not generous, and a
+ * queue that slipped much further would start discarding firings.
+ */
+export const CRON_DELIVERY_WINDOW_HOURS = 6;
+
+/** What a fired cron means, including the two ways it can mean no meeting. */
+export type CronDelivery =
+  /** The cron names this meeting and arrived inside the delivery window. */
+  | { outcome: "meeting"; phase: ScheduledPhase; latenessMinutes: number }
+  /**
+   * The cron arrived so late that it can no longer be attributed with confidence, or the hour
+   * it names has no Prague slot — the inactive daylight-saving variant of a cron. Neither is a
+   * meeting that failed to happen.
+   */
+  | { outcome: "no-meeting"; reason: "unparseable" | "no-slot" }
+  /**
+   * The cron names this meeting but was delivered past the window. The room can no longer be
+   * opened, and the slot is owed a stated reason rather than silence.
+   */
+  | { outcome: "beyond-window"; phase: ScheduledPhase; latenessMinutes: number };
+
+/**
  * Resolve the meeting a cron fired for, from the cron itself rather than from the clock.
  *
  * resolveScheduledPhase asks what meeting is due at the moment the job happens to run, inside
@@ -76,11 +109,15 @@ function cronUtcHours(cron: string): number[] {
  * A cron can list two hours, one per daylight-saving variant of the same slot, and the same
  * UTC hour can serve one venture's summer slot and another's winter slot; the firing is
  * therefore the most recent listed hour at or before the run, which is the only one that
- * could have triggered it. Six hours is a sanity bound, well past any delay observed.
+ * could have triggered it. CRON_DELIVERY_WINDOW_HOURS is the sanity bound.
+ *
+ * The three outcomes are kept apart because the caller has to write a different thing for each:
+ * a run that opens the room, a skip that names the slot it lost, and nothing at all for a
+ * firing that never had a meeting behind it.
  */
-export function resolveCronPhase(cron: string, at: Date): ScheduledPhase | null {
+export function resolveCronDelivery(cron: string, at: Date): CronDelivery {
   const hours = cronUtcHours(cron);
-  if (hours.length === 0) return null;
+  if (hours.length === 0) return { outcome: "no-meeting", reason: "unparseable" };
   const nowUtcMinutes = at.getUTCHours() * 60 + at.getUTCMinutes();
   let firedHour: number | null = null;
   let smallestLateness = Number.POSITIVE_INFINITY;
@@ -91,10 +128,20 @@ export function resolveCronPhase(cron: string, at: Date): ScheduledPhase | null 
       firedHour = hour;
     }
   }
-  if (firedHour === null || smallestLateness > 6 * 60) return null;
+  if (firedHour === null) return { outcome: "no-meeting", reason: "unparseable" };
   // The same lead cronPayloads subtracts when it writes the cron is added back here.
   const pragueHour = (firedHour + pragueUtcOffsetHours(at) + CRON_LEAD_HOURS) % 24;
-  return MEETING_CLOCK.find((slot) => slot.hour === pragueHour)?.phase ?? null;
+  const phase = MEETING_CLOCK.find((slot) => slot.hour === pragueHour)?.phase;
+  if (!phase) return { outcome: "no-meeting", reason: "no-slot" };
+  return smallestLateness > CRON_DELIVERY_WINDOW_HOURS * 60
+    ? { outcome: "beyond-window", phase, latenessMinutes: smallestLateness }
+    : { outcome: "meeting", phase, latenessMinutes: smallestLateness };
+}
+
+/** The meeting a cron fired for, or null when no room can be opened for that firing. */
+export function resolveCronPhase(cron: string, at: Date): ScheduledPhase | null {
+  const delivery = resolveCronDelivery(cron, at);
+  return delivery.outcome === "meeting" ? delivery.phase : null;
 }
 
 export function resolveScheduledPhase(

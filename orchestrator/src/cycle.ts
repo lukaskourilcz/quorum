@@ -103,7 +103,11 @@ import {
 import type { RunnablePhase, Stage } from "./types.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
-import { runLiveArticleProduction } from "./mma-files/live.js";
+import {
+  recordClosedArticleSlot,
+  runLiveArticleProduction,
+  type ClosedArticleSlotReason
+} from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
 import { ensurePriorityItem, openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
@@ -1048,16 +1052,41 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (options.phase === "article-am" || options.phase === "article-pm") {
+    const slot = options.phase === "article-am" ? "am" : "pm";
     if (!options.dry) {
       const budgetFifty = await readFile(path.join(stateRoot, "decisions", "2026-08-04-budget-fifty.md"), "utf8");
-      if (
-        signedOwnerDecision(budgetFifty) !== "countersigned" ||
-        process.env.PORTFOLIO_LIVE_ENABLED !== "true" ||
-        process.env.MMA_FILES_LIVE_ENABLED !== "true"
-      ) {
-        return { cycleId, phase: options.phase, dry: false, status: "paused", decision: "PAUSED", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [], artifacts: [] };
+      const closedBy: ClosedArticleSlotReason | null =
+        signedOwnerDecision(budgetFifty) !== "countersigned"
+          ? "budget_decision_not_countersigned"
+          : process.env.PORTFOLIO_LIVE_ENABLED !== "true"
+            ? "portfolio_gate_closed"
+            : process.env.MMA_FILES_LIVE_ENABLED !== "true"
+              ? "mma_files_gate_closed"
+              : null;
+      if (closedBy) {
+        // A closed gate used to return here with artifacts: [] and write nothing, so the slot
+        // was indistinguishable on the calendar from one nobody reached — the shape of an empty
+        // day that took a full audit to explain. Only a scheduled wake-up leaves the record,
+        // exactly as portfolio/run.ts does for the rooms it closes: a manual or local
+        // invocation of a shut slot is not a missed meeting and must not write one.
+        const recorded = process.env.MEETING_TRIGGER === "schedule"
+          ? await recordClosedArticleSlot({ cycleId, slot, now, reason: closedBy })
+          : null;
+        // Null when the slot already had a record and this run left it alone, so the artifact
+        // list names only what this cycle actually wrote.
+        const artifacts = recorded ? [recorded] : [];
+        return {
+          cycleId,
+          phase: options.phase,
+          dry: false,
+          status: "paused",
+          decision: "PAUSED",
+          estimatedWorstCaseUsd: 0,
+          selectedAgents: [],
+          skippedAgents: [],
+          artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
+        };
       }
-      const slot = options.phase === "article-am" ? "am" : "pm";
       return quietWhenBudgetStops({ phase: options.phase, cycleId, now, root: stateRoot }, async () => {
         const result = await runLiveArticleProduction({ cycleId, slot, now });
         const articleAgents = ["JAB", "HACEK", "STET", "REACH", "FRAME"] as const;
@@ -1078,7 +1107,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       });
     }
     const root = path.join(repoRoot, "tmp", "dry-run", "state");
-    const result = await runDryArticleProduction({ root, slot: options.phase === "article-am" ? "am" : "pm", now });
+    const result = await runDryArticleProduction({ root, slot, now });
     return {
       cycleId,
       phase: options.phase,

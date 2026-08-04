@@ -32,6 +32,52 @@ export interface LiveArticleResult {
   estimatedWorstCaseUsd: number;
 }
 
+/** Why a gate closed an article slot before any of the pipeline ran. One token per gate. */
+export type ClosedArticleSlotReason =
+  | "budget_decision_not_countersigned"
+  | "portfolio_gate_closed"
+  | "mma_files_gate_closed";
+
+/**
+ * Record that a gate closed this article slot, so the slot says so instead of saying nothing.
+ *
+ * The two article slots carry their outcome in a run file and nowhere else — MeetingRecord has
+ * no article kind, so a meeting record for one would be dropped by the calendar's recordKind.
+ * When a gate was shut, cycle.ts returned `status: "paused", artifacts: []` and wrote no run
+ * file at all, so the slot fell through to the calendar's last branch and rendered red with
+ * nothing anywhere saying why. This is the same repair portfolio/run.ts already made for the
+ * closed rooms, in the one shape an article slot can be read from.
+ *
+ * Returns null when the slot already has a record. Re-running a scheduled workflow keeps
+ * event_name "schedule", so a re-run of a slot that published hours ago would otherwise replace
+ * "published" with "blocked" — a record stating something that did not happen. Nothing here runs
+ * the pipeline, so it has no outcome that should ever displace a real one.
+ */
+export async function recordClosedArticleSlot(input: {
+  cycleId: string;
+  slot: "am" | "pm";
+  now: Date;
+  reason: ClosedArticleSlotReason;
+}): Promise<string | null> {
+  const date = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague", year: "numeric", month: "2-digit", day: "2-digit" }).format(input.now);
+  const runPath = `ventures/mma-files/runs/${date}-${input.slot}.json`;
+  const existing = await readFile(path.join(stateRoot, runPath), "utf8").then(() => true, () => false);
+  if (existing) return null;
+  await atomicWriteJson(stateRoot, runPath, {
+    schemaVersion: 1,
+    cycleId: input.cycleId,
+    date,
+    slot: input.slot,
+    // "blocked" and not "killed": nothing about the subject or the sources failed. The room was
+    // never allowed to open, and reopening the gate is all it would take.
+    status: "blocked",
+    reason: input.reason,
+    spentUsd: 0,
+    generatedAt: input.now.toISOString()
+  });
+  return runPath;
+}
+
 async function jsonFiles(directory: string): Promise<string[]> {
   const output: string[] = [];
   let entries;

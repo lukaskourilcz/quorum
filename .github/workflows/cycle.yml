@@ -183,9 +183,22 @@ jobs:
           dry="${INPUT_DRY:-true}"
           skip_reason=""
           delivery_only="${INPUT_DELIVERY_ONLY:-false}"
+          firing_outcome="meeting"
+          firing_slot=""
+          firing_reason=""
           if test "$EVENT_NAME" = "schedule"; then
             dry=false
-            phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled --cron "$EVENT_SCHEDULE")"
+            # --json, because "skip" alone cannot say which kind of skip it is, and the two need
+            # opposite handling. An inactive daylight-saving cron has no meeting behind it and
+            # must leave nothing behind either. A cron GitHub delivered past the six-hour window
+            # does have one, and it is owed a stated reason: without it the slot goes red with
+            # nothing anywhere explaining it, which is the state this whole recorder chain exists
+            # to prevent. The worst delivery seen is 3h20m, on 3 August, against that window.
+            firing="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled --cron "$EVENT_SCHEDULE" --json)"
+            phase="$(printf '%s' "$firing" | jq -r '.phase')"
+            firing_outcome="$(printf '%s' "$firing" | jq -r '.outcome')"
+            firing_slot="$(printf '%s' "$firing" | jq -r '.slot // ""')"
+            firing_reason="$(printf '%s' "$firing" | jq -r '.reason // ""')"
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
           fi
@@ -193,7 +206,14 @@ jobs:
           if test "$phase" = "skip"; then
             skip=true
             dry=true
-            skip_reason="The inactive DST cron variant has no Prague wall-clock meeting."
+            if test "$firing_outcome" = "beyond-window"; then
+              # The slot is named from the cron even though no room can be opened for it, so the
+              # recorder below has a phase to file the skip under.
+              phase="$firing_slot"
+              skip_reason="$firing_reason"
+            else
+              skip_reason="The inactive DST cron variant has no Prague wall-clock meeting."
+            fi
             echo "$skip_reason"
           fi
           if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk" || test "$phase" = "studio"; }; then
@@ -234,17 +254,29 @@ jobs:
               echo "$skip_reason"
             fi
           fi
-          if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
+          # A scheduled run forced into dry mode leaves nothing at all behind. The dry cycle writes
+          # to tmp/dry-run/state, which dies with the runner; the skip recorder below needs
+          # skip=true and never saw it; the commit step is gated on dry != true. The job then ends
+          # green having recorded nothing, and the slot goes red with no explanation — the exact
+          # shape this recorder chain exists to remove. On a schedule a forced dry is therefore a
+          # skip carrying its reason. A dispatch keeps the dry run it asked for: no slot is
+          # claimed by it, so nothing is left unexplained.
+          force_dry() {
             dry=true
-            echo "Caught Up live mode awaits the explicit repository-variable approval gate."
+            echo "$1"
+            if test "$EVENT_NAME" = "schedule"; then
+              skip=true
+              skip_reason="$1"
+            fi
+          }
+          if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
+            force_dry "Caught Up live mode awaits the explicit repository-variable approval gate."
           fi
           if { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
-            dry=true
-            echo "Repository delivery credentials are missing; forcing fixture-only dry mode."
+            force_dry "Repository delivery credentials are missing, so this room could not deliver what it produced."
           fi
           if test "$delivery_only" != "true" && { test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; }; then
-            dry=true
-            echo "One or more council credentials are missing; forcing fixture-only dry mode."
+            force_dry "One or more council credentials are missing, so no agent could be called."
           fi
           if test "$delivery_only" = "true"; then
             if test "$EVENT_NAME" != "workflow_dispatch" || test "$dry" = "true"; then
@@ -406,11 +438,22 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
             git commit -m "skip(${PHASE}): repository release gate failed"
+            # The loop's result is checked, as the skip recorder above already does. Left
+            # unchecked, three failed pushes dropped the skip with no signal at all and the run
+            # ended red with nothing on the calendar — precisely the "cause is unknown" state
+            # NO_RECORD_REASON exists to describe. The step after this one fails the run anyway,
+            # so this exit changes no outcome; what it changes is that the log says which record
+            # was lost.
+            pushed=false
             for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
               git fetch origin "$GITHUB_REF_NAME"
               git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
             done
+            if test "$pushed" != "true"; then
+              echo "Could not push the release-gate skip for ${PHASE} after three attempts." >&2
+              exit 1
+            fi
           fi
 
       - name: Stop when the release gate failed
@@ -549,6 +592,9 @@ jobs:
         if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
+          EVENT_NAME: ${{ github.event_name }}
+          PHASE: ${{ steps.mode.outputs.phase }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
@@ -563,12 +609,39 @@ jobs:
               git add -A -- "$runtime_path"
             fi
           done
-          if git diff --cached --quiet; then
-            echo "Cycle produced no canonical state change."
-            exit 0
-          fi
           git config user.name "boardlessai-cycle[bot]"
           git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          # A live cycle that staged nothing used to end the run green, right here, with no commit
+          # and no record anywhere — the terminal silent path, and the last one on the write side.
+          # It happens when every write a phase made landed outside runtime_paths above, or when a
+          # phase returned without writing at all. Either way a scheduled slot has nothing to show,
+          # so it is told that in as many words rather than left red and unexplained, and the run
+          # then fails: a scheduled meeting that produced no canonical state is a defect, and a
+          # green run is how it stayed invisible. A dispatch claims no slot, so it keeps the old
+          # quiet exit and only says so in the log.
+          if git diff --cached --quiet; then
+            echo "Cycle produced no canonical state change."
+            test "$EVENT_NAME" = "schedule" || exit 0
+            if test -n "$PHASE" && test "$PHASE" != "skip"; then
+              pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
+                --phase "$PHASE" \
+                --reason "The cycle ran and finished but wrote no record of this meeting. See ${RUN_URL}"
+              if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
+                git add -A -- state/meetings/skips
+                git commit -m "skip(${PHASE}): the cycle wrote no canonical state"
+                pushed=false
+                for attempt in 1 2 3; do
+                  if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+                  git fetch origin "$GITHUB_REF_NAME"
+                  git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+                done
+                if test "$pushed" != "true"; then
+                  echo "Could not push the record after three attempts." >&2
+                fi
+              fi
+            fi
+            exit 1
+          fi
           git commit -m "cycle(${CYCLE_NUMBER})"
           pushed=false
           for attempt in 1 2 3; do
@@ -1096,12 +1169,23 @@ jobs:
         if: ${{ failure() && github.event_name == 'schedule' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          test -n "$PHASE" || exit 0
           git fetch origin "$GITHUB_REF_NAME"
           git checkout -- . 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
+          # PHASE is empty when "Resolve guarded cycle mode" is itself what failed — so the run
+          # that failed earliest was the one guaranteed to leave no trace at all. The cron that
+          # fired names the slot on its own, exactly as the mode step derives it, so the name is
+          # recovered here rather than given up on. If that resolution also fails there is
+          # genuinely nothing to file the skip under and the step stops, which is the one case
+          # left where a run can end without naming its slot.
+          if test -z "$PHASE"; then
+            PHASE="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts \
+              --scheduled --cron "$EVENT_SCHEDULE" --json | jq -r '.slot // ""')" || PHASE=""
+          fi
+          test -n "$PHASE" && test "$PHASE" != "skip" || exit 0
           reason="The run for this meeting failed before it finished. See ${RUN_URL}"
           pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
             --phase "$PHASE" --reason "$reason" || exit 0
@@ -1110,9 +1194,18 @@ jobs:
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
             git commit -m "skip(${PHASE}): the run failed before the meeting finished"
+            # Checked, like the skip recorder at the top of the job. Three failed pushes used to
+            # drop this record silently, leaving the run red and the slot unexplained — the one
+            # outcome this step exists to prevent. The run has already failed, so the exit only
+            # makes the loss visible in the log.
+            pushed=false
             for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
               git fetch origin "$GITHUB_REF_NAME"
               git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
             done
+            if test "$pushed" != "true"; then
+              echo "Could not push the failure skip for ${PHASE} after three attempts." >&2
+              exit 1
+            fi
           fi

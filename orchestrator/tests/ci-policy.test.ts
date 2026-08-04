@@ -72,7 +72,21 @@ describe("automation policy", () => {
     expect(cycle).toContain("pnpm mma:delivery");
     expect(cycle).toContain("data/boardless/articles.json");
     expect(cycle).toContain("data/boardless/fightaiq.json");
-    expect(cycle).toContain("forcing fixture-only dry mode");
+    // Every gate that forces dry mode goes through force_dry, which on a schedule also raises
+    // skip so the reason is recorded. A scheduled dry run writes only to tmp/dry-run/state and
+    // is never committed, so a gate that only set dry=true ended the job green having left
+    // nothing at all and the slot went red unexplained.
+    expect(cycle).toContain("force_dry() {");
+    expect(cycle).toMatch(/force_dry\(\) \{\n(?:.*\n)*?\s*if test "\$EVENT_NAME" = "schedule"; then\n\s*skip=true\n\s*skip_reason="\$1"/u);
+    // No path may turn dry on without also raising skip, which is what makes the reason reach
+    // the recorder. Checked as a property over every occurrence rather than a fixed count, so a
+    // gate added later cannot reintroduce the silent shape by being new.
+    const lines = cycle.split("\n");
+    for (const [index, line] of lines.entries()) {
+      if (line.trim() !== "dry=true") continue;
+      const window = lines.slice(Math.max(0, index - 3), index + 5).join("\n");
+      expect(window, `dry=true at line ${index + 1} raises no skip`).toContain("skip=true");
+    }
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain("runtime_paths=(");
     expect(cycle).toContain("state/kpis state/money state/mma state/notify state/social");

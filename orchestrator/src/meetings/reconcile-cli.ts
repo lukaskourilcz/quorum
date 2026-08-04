@@ -66,6 +66,13 @@ export interface ReconcileResult {
  * recomputed here: a slot is missing precisely when the feed calls it "missed", which already
  * means no meeting record, no article-slot run and no existing skip. That keeps one definition
  * of the truth, so a slot can never be reconciled as absent while the calendar shows it held.
+ *
+ * "missed" and not "late": a slot inside its delivery window still has a run on the way, and
+ * the reason written below states that no record exists — which would be false by the time it
+ * was read. The window is SLOT_DELIVERY_GRACE_MS, five hours, so yesterday's last slot at 22:00
+ * Prague clears it at 03:00 today and the 08:15 reconcile job sees every slot of the finished
+ * day as missed. Run earlier than that by hand and the still-open slots are left alone, which
+ * is the conservative half of the same rule rather than a gap in it.
  */
 export async function reconcileMeetingDay(
   root: string,

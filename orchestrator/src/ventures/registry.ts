@@ -118,13 +118,18 @@ export function composeMeetingRouteDefinition(
 /**
  * How many hours before its Prague slot each cron is scheduled.
  *
- * GitHub delivers scheduled workflows late — 13 to 54 minutes on 2 August, and about three
- * hours on 3 August — and a run that arrives after its slot has passed is a meeting that did
- * not happen. A job takes three to six minutes, so an hour of lead absorbs any delay up to an
- * hour and still lands inside the slot. It does not manufacture punctuality: a delay longer
- * than the lead still misses, and nothing this repository can do changes when GitHub fires.
+ * GitHub delivers scheduled workflows late, and by more than this lead absorbs: 13 to 54 minutes
+ * on 2 August, up to 3h20m on 3 August, and 2h23m to 2h55m across 4 August's runs. So the hour
+ * buys back an hour and no more — on a day like 4 August every meeting still opened its room
+ * between 1h23m and 1h55m after its slot. Raising it would only help until the queue moves
+ * again, and nothing this repository can do changes when GitHub fires.
  *
- * resolveCronPhase adds this same lead back when it maps a fired cron to its meeting, so the
+ * What makes a late meeting a meeting rather than a loss is not this constant but
+ * CRON_DELIVERY_WINDOW_HOURS in meetings/clock.ts: the fired cron names its room for six hours,
+ * and the calendar holds the slot open for the same span rather than calling it missed the
+ * instant its hour passes. This lead only decides where inside that span an on-time run lands.
+ *
+ * resolveCronDelivery adds this same lead back when it maps a fired cron to its meeting, so the
  * two can never disagree about which room a cron belongs to.
  */
 export const CRON_LEAD_HOURS = 1;

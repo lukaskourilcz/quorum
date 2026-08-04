@@ -12,8 +12,10 @@ import {
   Clock3,
   FileText,
   FlaskConical,
+  Hourglass,
   Newspaper,
   PanelsTopLeft,
+  Radio,
   Shirt,
   Swords,
   type LucideIcon
@@ -151,6 +153,32 @@ function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string
       }
     };
   }
+  if (status === "ongoing") {
+    // Ember is the only brand accent no other status uses: held is success, missed is destructive,
+    // skipped and test are warning, and not-needed, late and scheduled are fog. It is also what
+    // the board already spends on "now" — the Today pill and today's column tint both use it.
+    return {
+      icon: Radio,
+      label: "Happening now",
+      tone: "text-[color-mix(in_srgb,var(--accent)_58%,var(--paper))]",
+      surface: {
+        backgroundColor: "color-mix(in srgb, var(--accent) 18%, var(--surface))",
+        backgroundImage: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 62%)"
+      }
+    };
+  }
+  // Neither red nor amber. Nothing has gone wrong and nothing is owed: the slot's hour has
+  // passed and its run has not landed yet, which on 4 August was true of every meeting the
+  // council held that day, each for between 1h23m and 1h55m before its run arrived. Quieter
+  // than "Skipped" because a skip is a decision somebody made and this is only a wait.
+  if (status === "late") {
+    return {
+      icon: Hourglass,
+      label: "Waiting on the run",
+      tone: "text-[var(--fog)]",
+      surface: { backgroundColor: "color-mix(in srgb, var(--fog) 14%, var(--surface))" }
+    };
+  }
   if (status === "missed") {
     return {
       icon: CircleMinus,
@@ -230,7 +258,10 @@ function projectSlotColor(kind: CalendarKind): string {
 const articleRunReasonCopy: Record<string, string> = {
   missing_editorial_slate: "The story meeting left no slate, so this slot had no subject.",
   missing_sourced_subject: "The slate carried no source-backed subject for this slot.",
-  no_sourced_subject_on_file: "No slate, and no source-backed subject left on file."
+  no_sourced_subject_on_file: "No slate, and no source-backed subject left on file.",
+  budget_decision_not_countersigned: "The budget decision this slot runs under is not countersigned yet.",
+  portfolio_gate_closed: "Portfolio work is switched off, so this slot did not open.",
+  mma_files_gate_closed: "MMA Files live publishing is switched off, so this slot did not open."
 };
 
 /**
@@ -406,7 +437,7 @@ export function WeekBoard({
           })}
         </div>
         <div aria-label="Meeting status" className="flex flex-wrap gap-x-4 gap-y-3">
-          {(["held", "missed", "skipped", "test", "not-needed", "scheduled"] as DisplayStatus[]).map((value) => {
+          {(["ongoing", "late", "held", "missed", "skipped", "test", "not-needed", "scheduled"] as DisplayStatus[]).map((value) => {
             const details = statusDetails(value);
             const StatusIcon = details.icon;
             return (

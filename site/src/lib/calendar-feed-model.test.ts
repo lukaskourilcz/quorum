@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { buildPublicCalendarFeed, calendarStaticWeeks, pragueSlotInstant } from "./calendar-feed-model";
+import {
+  LATE_SLOT_REASON,
+  ONGOING_CEILING_MINUTES,
+  SLOT_DELIVERY_GRACE_MINUTES,
+  buildPublicCalendarFeed,
+  calendarStaticWeeks,
+  pragueSlotInstant
+} from "./calendar-feed-model";
 import { meetingFixtures } from "../data/meeting-fixtures";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 
@@ -85,6 +92,85 @@ describe("a skipped slot says why", () => {
     const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "tt-marketing");
     expect(slot?.status).toBe("missed");
     expect(slot?.decisionOneLiner).toBeUndefined();
+  });
+});
+
+describe("a slot whose run is still going says so", () => {
+  // 11:00 Prague on 4 August is 09:00Z. Every `now` below is an offset from that instant.
+  const slotAt = pragueSlotInstant("2026-08-04", 11);
+  const minutesAfterSlot = (minutes: number) => new Date(slotAt.getTime() + minutes * 60_000);
+  const base = { weekOf: "2026-08-03", standups: [], meetings: [] };
+  const ttSlot = (feed: ReturnType<typeof buildPublicCalendarFeed>) =>
+    feed.slots.find((entry) => entry.at === slotAt.toISOString() && entry.kind === "tt-marketing");
+
+  it("reads ongoing rather than missed once its hour has passed", () => {
+    // Before this, a run in flight was indistinguishable from one that never started: both were
+    // simply past their start time with no record, so both printed "Did not happen".
+    expect(ttSlot(buildPublicCalendarFeed({ ...base, now: minutesAfterSlot(5) }))?.status)
+      .toBe("ongoing");
+  });
+
+  it("still reads scheduled before its hour arrives", () => {
+    expect(ttSlot(buildPublicCalendarFeed({ ...base, now: minutesAfterSlot(-1) }))?.status)
+      .toBe("scheduled");
+  });
+
+  it("walks scheduled, ongoing, late, missed and never skips a rung", () => {
+    // The ceiling ends "ongoing", not the slot's life: a run can still be delivered and still
+    // name the slot for SLOT_DELIVERY_GRACE_MINUTES, so only past that is anything lost.
+    const statusAt = (minutes: number) =>
+      ttSlot(buildPublicCalendarFeed({ ...base, now: minutesAfterSlot(minutes) }))?.status;
+    expect(statusAt(-1)).toBe("scheduled");
+    expect(statusAt(ONGOING_CEILING_MINUTES)).toBe("ongoing");
+    expect(statusAt(ONGOING_CEILING_MINUTES + 1)).toBe("late");
+    expect(statusAt(SLOT_DELIVERY_GRACE_MINUTES)).toBe("late");
+    expect(statusAt(SLOT_DELIVERY_GRACE_MINUTES + 1)).toBe("missed");
+  });
+
+  it("tells the reader a late slot is waiting rather than leaving the cell blank", () => {
+    // A missed cell says nothing on purpose — nobody knows why. A late one does know: the run has
+    // not arrived. Without the sentence the cell reads as an unexplained gap, which is the state
+    // every other recorder in this chain exists to remove.
+    const slot = ttSlot(buildPublicCalendarFeed({ ...base, now: minutesAfterSlot(90) }));
+    expect(slot?.status).toBe("late");
+    expect(slot?.decisionOneLiner).toBe(LATE_SLOT_REASON);
+    // The one word the cell must never carry while a run can still land.
+    expect(ttSlot(buildPublicCalendarFeed({ ...base, now: minutesAfterSlot(90) }))?.status).not.toBe("missed");
+  });
+
+  it("lets the ceiling be widened without moving the rung below it", () => {
+    const wide = { ...base, now: minutesAfterSlot(30), ongoingCeilingMinutes: 45 };
+    expect(ttSlot(buildPublicCalendarFeed(wide))?.status).toBe("ongoing");
+    expect(ttSlot(buildPublicCalendarFeed({ ...wide, now: minutesAfterSlot(46) }))?.status).toBe("late");
+    expect(ttSlot(buildPublicCalendarFeed({ ...wide, now: minutesAfterSlot(SLOT_DELIVERY_GRACE_MINUTES + 1) }))?.status)
+      .toBe("missed");
+  });
+});
+
+describe("the record, not the clock, ends the ongoing state", () => {
+  // The run commits its own record and that push redeploys the site, so the arrival of a record is
+  // the finish signal. These two assert the ordering that makes it one: a slot only three minutes
+  // into a fifteen-minute ceiling must still abandon "ongoing" the moment something is on file.
+  const slotAt = pragueSlotInstant("2026-08-04", 11);
+  const threeMinutesIn = new Date(slotAt.getTime() + 3 * 60_000);
+  const base = { weekOf: "2026-08-03", now: threeMinutesIn, standups: [], meetings: [] };
+  const ttSlot = (feed: ReturnType<typeof buildPublicCalendarFeed>) =>
+    feed.slots.find((entry) => entry.at === slotAt.toISOString() && entry.kind === "tt-marketing");
+
+  it("a committed record wins over the unspent ceiling", () => {
+    const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
+    expect(parsed).not.toBeNull();
+    const meeting = { ...parsed!, date: "2026-08-04", kind: "tt-marketing" as const };
+    expect(ttSlot(buildPublicCalendarFeed({ ...base, meetings: [meeting] }))?.status).toBe("held");
+  });
+
+  it("a committed skip wins over the unspent ceiling", () => {
+    const feed = buildPublicCalendarFeed({
+      ...base,
+      skips: [{ date: "2026-08-04", phase: "tt-marketing", reason: "The gate turned this slot off." }]
+    });
+    expect(ttSlot(feed)?.status).toBe("skipped");
+    expect(ttSlot(feed)?.decisionOneLiner).toBe("The gate turned this slot off.");
   });
 });
 
