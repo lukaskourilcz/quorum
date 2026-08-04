@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "runId": "ba1768f0-ad09-4473-b6e3-47e76ee3d6a5",
+  "date": "2026-08-04",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-04T05:00:13.716Z",
+  "completedAt": "2026-08-04T05:04:00.616Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-04T05:00:14.300Z",
+      "completedAt": "2026-08-04T05:00:34.591Z",
+      "durationMs": 20291
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-04T05:00:34.591Z",
+      "completedAt": "2026-08-04T05:02:27.342Z",
+      "durationMs": 112751,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      0\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      1\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+("
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-08-04T05:02:27.342Z",
+      "completedAt": "2026-08-04T05:03:58.007Z",
+      "durationMs": 90665
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-08-04T05:03:58.008Z",
+      "completedAt": "2026-08-04T05:04:00.614Z",
+      "durationMs": 2606,
+      "errorCode": "BudgetError",
+      "errorMessage": "Edition call reserve 0.138261 would exceed 0.35"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11919,
+      "outputTokens": 818,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.048027
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14207,
+      "outputTokens": 3564,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1430,
+      "costUsd": 0.1014435
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14212,
+      "outputTokens": 3779,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1641,
+      "costUsd": 0.10547475
+    }
+  ],
+  "measuredCostUsd": 0.25494525,
+  "quality": {
+    "metrics": {
+      "successfulSources": 32,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 81,
+      "maximumSingleSourceShare": 0.2857142857142857,
+      "sourceDiversity": 0.8163265306122449,
+      "duplicateStorySimilarity": 0.07142857142857142,
+      "repeatedTopicFrequency": 0.6666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.25494525
+    },
+    "result": {
+      "passed": false,
+      "enforced": true,
+      "violations": [
+        "maximum_repeated_topic_frequency"
+      ],
+      "action": "regenerate"
+    }
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      0\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      1\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      2\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      3\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      4\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"invalid_format\",\n    \"format\": \"regex\",\n    \"pattern\": \"/^[a-z0-9]+(?:-[a-z0-9]+)*$/\",\n    \"path\": [\n      \"tags\",\n      5\n    ],\n    \"message\": \"Invalid string: must match pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/\"\n  },\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"cs\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]",
+    "quality:maximum_repeated_topic_frequency",
+    "budget_stop:CYCLE_CAP"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

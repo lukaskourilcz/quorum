@@ -100,31 +100,36 @@
       "at": "2026-08-03T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-synthesis",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-03T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/20260803203958-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-04T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-04-cu-edition",
+      "decisionOneLiner": "NO_EDITION. budget_exhausted"
     },
     {
       "at": "2026-08-04T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-04T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-scan",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-04T06:00:00.000Z",

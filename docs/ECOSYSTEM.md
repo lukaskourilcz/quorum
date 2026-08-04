@@ -34,7 +34,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-03T20:39:58.392Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-03T23:30:17.293Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -55,7 +55,7 @@ Refreshed from committed state: **2026-08-03T20:39:58.392Z**. This block is gene
 
 | Project | Mode | Rooms | Disabled optional roles | Social readiness |
 | --- | --- | --- | --- | --- |
-| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (0/7) |
+| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (1/7) |
 | Titty Tuesdays | operating | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | locked (0/4) |
 | Magazine Incubator | exploration | incubator-scan 07:00; incubator-synthesis 21:00 | none | not applicable |
 | FightAIQ | operating | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
