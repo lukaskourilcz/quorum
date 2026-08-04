@@ -140,15 +140,17 @@ describe("the slot record a second firing looks for", () => {
       new Promise<string>((resolve, reject) => {
         execFile(
           "npx",
-          ["tsx", cli, "--phase", phase, "--at", "2026-08-04T08:00:00.000Z"],
+          ["tsx", cli, "--phase", phase, "--at", "1999-01-04T08:00:00.000Z"],
           { cwd: path.join(repoRoot, "orchestrator") },
           (error, stdout) => (error ? reject(error) : resolve(stdout.trim()))
         );
       });
-    // studio has no record for 2026-08-04 in this repository, and must still name where one
-    // would live so the workflow can ask the branch about it.
+    // A date this repository can never hold a record for. Dated on the day it was written,
+    // this asserted "studio has no record for 2026-08-04" — and the studio room recorded one
+    // that afternoon, so the test failed on the merge that carried it in. A fixture that reads
+    // live state has to pick an instant live state cannot reach.
     const absent = JSON.parse(await run("studio")) as { recorded: boolean; path?: string };
     expect(absent.recorded).toBe(false);
-    expect(absent.path).toBe("state/meetings/2026-08-04-studio.json");
+    expect(absent.path).toBe("state/meetings/1999-01-04-studio.json");
   });
 });
