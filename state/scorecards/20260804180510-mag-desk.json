@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260804180510-mag-desk",
+  "phase": "mag-desk",
+  "estimatedWorstCaseUsd": 0.031543,
+  "actualUsd": 0.021413,
+  "participants": [
+    "CANVAS",
+    "JAB",
+    "PIVOT",
+    "AUDIT"
+  ],
+  "agendaId": "agenda-2ab0f25e6b6b3000",
+  "generatedAt": "2026-08-04T18:09:10.583Z"
+}

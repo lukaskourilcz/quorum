@@ -31,7 +31,9 @@
       "requestedAt": "2026-08-04T05:49:06.490Z",
       "notBefore": "2026-08-04",
       "expiresAt": "2026-08-07T23:59:59.000Z",
-      "status": "pending"
+      "status": "consumed",
+      "consumedBy": "20260804180510-mag-desk",
+      "consumedAt": "2026-08-04T18:05:10.583Z"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -72,5 +74,5 @@
       "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-04T17:05:22.262Z"
+  "updatedAt": "2026-08-04T18:05:10.583Z"
 }

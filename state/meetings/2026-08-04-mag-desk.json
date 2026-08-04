@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260804180510-mag-desk",
+  "date": "2026-08-04",
+  "phase": "mag-desk",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Review both article slots, owner ratings, the social draft queue and the daily bridge; leave sourced provisional angles for tomorrow Assigned agenda: Slot-fill sits at 33% with only 1 of 3 slots published despite 92 verified fighter files; mag-desk can identify the concrete blocking gap between verified coverage and rendered articles.",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.021413,
+    "monthAllInUsd": 1.864636850000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "The bounded room recorded no action.",
+    "evidenceRefs": [
+      "meeting:2026-08-03-mma-analysis",
+      "meeting:2026-08-03-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Slot-fill is 33% (1 of 3 published) due to missing source-backed subjects, not process failure. AM slot (Gustavo Lopez) published today. PM slot killed for lack of fresh material. No blocked articles exist; the gap is upstream: no bounded agenda triggered mma-analysis, so no new",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ]
+    },
+    {
+      "agent": "JAB",
+      "summary": "Slot AM má zdrojované téma Gustavo Lopeze a je publikovaný. Slot PM je správně zabitý, protože chybí nový zdrojovaný subjekt. Další text nelze z tohoto balíku bezpečně připravit.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Provisional review: AM má konkrétní a čerstvý subjekt, PM je správně zabitý kvůli chybějícímu zdroji. Blokace slot-fill není v dodaných zápisech rozvedena, takže nelze navrhovat další článek bez nového podkladu.",
+      "evidenceRefs": [
+        "meeting:2026-08-03-mma-analysis",
+        "meeting:2026-08-03-mag-desk"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260804180510-MAG-DESK-01",
+      "owner": "CANVAS",
+      "summary": "MMA-analysis must open a bounded agenda to surface fresh fighter files or upcoming events. Current vault holds 92 verified files but none cleared editorial review since 2026-08-02. Desk waits on upstream input, not copy capacity.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260804180510-MAG-DESK-03",
+      "owner": "AUDIT",
+      "summary": "Nechat PM slot zabitý. Pro zítřek dodat konkrétní zdrojový subjekt a připravit článek až po kontrole, že nejde o opakování.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "EDITORIAL_ONLY. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "agendaRef": "meeting-agendas/queue.json#agenda-2ab0f25e6b6b3000",
+  "generatedAt": "2026-08-04T18:09:10.583Z",
+  "kind": "mag-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-04T18:05:10.583Z",
+    "closedAt": "2026-08-04T18:09:10.583Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-04T18:05:10.583Z",
+        "text": "Review both article slots, owner ratings, the social draft queue and the daily bridge; leave sourced provisional angles for tomorrow Assigned agenda: Slot-fill sits at 33% with only 1 of 3 slots published despite 92 verified fighter files; mag-desk can identify the concrete blocking gap between verified coverage and rendered articles."
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "veto",
+        "sentAt": "2026-08-04T18:06:10.583Z",
+        "text": "Slot-fill is 33% (1 of 3 published) due to missing source-backed subjects, not process failure. AM slot (Gustavo Lopez) published today. PM slot killed for lack of fresh material. No blocked articles exist; the gap is upstream: no bounded agenda triggered mma-analysis, so no new",
+        "evidenceRefs": [
+          "meeting:2026-08-03-mma-analysis",
+          "meeting:2026-08-03-mag-desk"
+        ]
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-04T18:07:10.583Z",
+        "text": "Slot AM má zdrojované téma Gustavo Lopeze a je publikovaný. Slot PM je správně zabitý, protože chybí nový zdrojovaný subjekt. Další text nelze z tohoto balíku bezpečně připravit."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-04T18:08:10.583Z",
+        "text": "Provisional review: AM má konkrétní a čerstvý subjekt, PM je správně zabitý kvůli chybějícímu zdroji. Blokace slot-fill není v dodaných zápisech rozvedena, takže nelze navrhovat další článek bez nového podkladu.",
+        "evidenceRefs": [
+          "meeting:2026-08-03-mma-analysis",
+          "meeting:2026-08-03-mag-desk"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-04T18:09:10.583Z",
+        "text": "The bounded room recorded no action."
+      }
+    ]
+  }
+}
