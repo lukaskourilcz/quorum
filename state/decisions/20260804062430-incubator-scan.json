@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260804062430-incubator-scan",
+  "phase": "incubator-scan",
+  "outcome": "NO_ACTION",
+  "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+  "evidenceRefs": [],
+  "generatedAt": "2026-08-04T06:24:30.247Z"
+}

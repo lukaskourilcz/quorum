@@ -123,19 +123,23 @@
       "at": "2026-08-04T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "missed"
+      "status": "held",
+      "meetingRef": "meetings/20260804054906-morning",
+      "decisionOneLiner": "The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-08-04T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-scan",
-      "status": "missed"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-04-incubator-scan",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-04T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-04T07:00:00.000Z",
