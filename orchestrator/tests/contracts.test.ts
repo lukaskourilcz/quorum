@@ -9,6 +9,7 @@ import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
 import { NicheProposalSchema } from "../src/contracts/niche-proposal.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
+import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
@@ -43,7 +44,9 @@ describe("published contracts", () => {
     };
     const repoPaths = slate.vaultVerdicts
       .map((verdict) => verdict.evidenceRef)
-      .filter((reference) => /^(state|config|site|orchestrator|contracts)\//u.test(reference));
+      // The same predicate the writer uses to decide which refs it has to resolve, so the fixture
+      // cannot be judged by a looser rule than the slates the fixture is copied into.
+      .filter((reference) => isRepoPathEvidenceRef(reference));
     expect(repoPaths.filter((reference) => !existsSync(path.join(repoRoot, reference.split("#")[0]!))))
       .toEqual([]);
   });

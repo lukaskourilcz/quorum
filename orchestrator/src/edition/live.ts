@@ -5,7 +5,11 @@ import type { BudgetLedgerEntry } from "../budget.js";
 import { buildNoEditionPackage } from "./package.js";
 import { BudgetedEditionModelGateway, AnthropicEditionModelGateway } from "./models.js";
 import { loadEditionQualityConfig } from "./config.js";
-import { produceEdition } from "./production.js";
+import {
+  produceEdition,
+  type EditionProductionInput,
+  type EditionProductionResult
+} from "./production.js";
 import { EditionRunReporter, type EditionRunReport } from "./report.js";
 import type { EditionModelGateway } from "./types.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
@@ -35,6 +39,12 @@ export interface LiveEditionDependencies {
   loadRegistry?: () => Promise<SourceRegistry>;
   scrape?: (registry: SourceRegistry, now: Date, allowHosts: string[]) => Promise<ScrapeRunResult>;
   gateway?: EditionModelGateway;
+  /**
+   * Injected by tests. The failures this file now has to survive happen after the model
+   * calls have been billed — package assembly, delivery validation — and the real gateway
+   * cannot reach them without a provider and a network read of the picked article.
+   */
+  produce?: (input: EditionProductionInput) => Promise<EditionProductionResult>;
 }
 
 export interface LiveEditionResult {
@@ -73,7 +83,22 @@ function envCap(name: string, fallback: number): number {
   return value;
 }
 
-async function recentEditionTags(root: string): Promise<string[][]> {
+/** Receipts scanned back from today before the search for published editions gives up. */
+const DELIVERY_RECEIPTS_SCANNED = 30;
+
+/** Editions the repeated-topic window holds. */
+const RECENT_EDITION_WINDOW = 4;
+
+/**
+ * The tags of the last few editions that actually published.
+ *
+ * A no-edition day gets a delivery receipt too, and it records `tags: []` (delivery/outbox.ts).
+ * Reading the four newest receipts therefore let a run of quiet days fill the window with days
+ * that carried no topics: the warm-up counted them as history, and each one displaced a real
+ * edition the window was meant to hold. Only receipts with tags are collected, and the scan is
+ * bounded so a long silence reads a fixed number of files rather than the whole archive.
+ */
+export async function recentEditionTags(root: string): Promise<string[][]> {
   const directory = path.join(root, "edition", "deliveries");
   let files: string[] = [];
   try {
@@ -82,9 +107,14 @@ async function recentEditionTags(root: string): Promise<string[][]> {
     return [];
   }
   const tags: string[][] = [];
-  for (const file of files.slice(0, 4)) {
+  for (const file of files.slice(0, DELIVERY_RECEIPTS_SCANNED)) {
+    if (tags.length >= RECENT_EDITION_WINDOW) break;
     const value = JSON.parse(await readFile(path.join(directory, file), "utf8")) as { tags?: unknown };
-    if (Array.isArray(value.tags) && value.tags.every((tag) => typeof tag === "string")) {
+    if (
+      Array.isArray(value.tags) &&
+      value.tags.length > 0 &&
+      value.tags.every((tag) => typeof tag === "string")
+    ) {
       tags.push(value.tags);
     }
   }
@@ -96,6 +126,12 @@ function sourceEvidence(sourceRun: ScrapeRunResult): string[] {
     .filter((source) => source.status === "success")
     .map((source) => `source:${source.sourceId}`)
     .slice(0, 12);
+}
+
+/** One line of our own error text, bounded, so a warning stays readable in the run report. */
+function failureDetail(error: unknown): string {
+  const message = error instanceof Error ? error.message : "unknown error";
+  return message.replace(/\s+/gu, " ").trim().slice(0, 200) || "unknown error";
 }
 
 function requestHash(cycleId: string, index: number, entry: { model: string; stage: string }): string {
@@ -239,7 +275,8 @@ export async function runLiveEdition(input: {
       input.dependencies?.gateway ?? new AnthropicEditionModelGateway(),
       productionCap
     );
-    const produced = await produceEdition({
+    const produce = input.dependencies?.produce ?? produceEdition;
+    const productionInput: EditionProductionInput = {
       date: input.date,
       now: input.now,
       items: digest,
@@ -264,26 +301,78 @@ export async function runLiveEdition(input: {
       reporter,
       socialPackEnabled: input.socialPackEnabled,
       imageCandidates
-    });
-    editionPackage = produced.package;
-    report = produced.report;
+    };
+    try {
+      const produced = await produce(productionInput);
+      editionPackage = produced.package;
+      report = produced.report;
+    } catch (error) {
+      // Everything produceEdition can name, it catches, and it pays for: curation, writing,
+      // budget and quality failures all come back as a stated no-edition carrying
+      // reporter.totalCostUsd(). What reaches here is the rest — package assembly, the
+      // schema parse after it — and it used to leave runLiveEdition entirely. Nothing below
+      // ran, so the run report was never written; and cycle.ts appends this run's usage to
+      // budget/ledger.json from the value this function returns, so the calls the provider
+      // had already billed left no ledger entry either and the next run believed it still
+      // had that headroom. The reporter is constructed in this function and handed to
+      // produceEdition, so it survives the throw holding every usage record the run accrued:
+      // state the failure and build the no-edition from it instead of losing both.
+      reporter.warn(`production_failed:${failureDetail(error)}`);
+      const costUsd = reporter.totalCostUsd();
+      editionPackage = buildNoEditionPackage({
+        date: input.date,
+        meetingRef: input.meetingRef,
+        roomUrl: input.roomUrl,
+        reason: "production_failed",
+        config,
+        ...(costUsd === undefined ? {} : { costUsd })
+      });
+      report = reporter.build("failed", editionPackage.status);
+    }
   }
-  validateEditionForDelivery(editionPackage);
+  // Delivery validation rejects a package the site cannot serve, and rejecting it is right —
+  // but it threw before the report was written, so the run that paid for the package left no
+  // record of the spend and no statement that an edition had been assembled at all. Downgrade
+  // to a stated no-edition instead. This direction only: an edition can become a no-edition
+  // here, and nothing in this branch can turn content a gate rejected into content that ships.
+  try {
+    validateEditionForDelivery(editionPackage);
+  } catch (error) {
+    reporter.warn(`delivery_invalid:${failureDetail(error)}`);
+    if (editionPackage.status === "edition") {
+      // Say what the money bought. The article is unpublishable, not unmentionable, and its
+      // slug is what makes the run report point at a specific piece of work.
+      reporter.warn(`delivery_invalid_article:${editionPackage.article.cs.frontmatter.slug}`);
+    }
+    const costUsd = reporter.totalCostUsd();
+    // buildNoEditionPackage parses the schema and sets idempotencyKey to its own hash of the
+    // result, and validateEditionForDelivery checks exactly those two things for a no-edition
+    // package and then returns. So this replacement is deliverable by construction.
+    editionPackage = buildNoEditionPackage({
+      date: input.date,
+      meetingRef: input.meetingRef,
+      roomUrl: input.roomUrl,
+      reason: "delivery_invalid",
+      config,
+      ...(costUsd === undefined ? {} : { costUsd })
+    });
+    report = reporter.build("failed", editionPackage.status);
+  }
   const hash = editionPackage.idempotencyKey;
   const outboxPath = shouldQueueEditionDelivery(editionPackage)
     ? `edition/outbox/${input.date}-${hash}.json`
     : null;
   const reportPath = `edition/runs/${input.date}-${hash}.json`;
-  await Promise.all([
-    ...(outboxPath ? [atomicWriteJson(root, outboxPath, editionPackage)] : []),
-    atomicWriteJson(root, reportPath, {
-      ...report,
-      sourceSummary: {
-        successfulSources,
-        candidateItems: digest.length,
-        evidenceRefs: sourceEvidence(sourceRun)
-      }
-    })
-  ]);
+  // Report before outbox rather than alongside it: if the delivery write fails, the spend and
+  // the reason are still on disk, where the other order can lose them.
+  await atomicWriteJson(root, reportPath, {
+    ...report,
+    sourceSummary: {
+      successfulSources,
+      candidateItems: digest.length,
+      evidenceRefs: sourceEvidence(sourceRun)
+    }
+  });
+  if (outboxPath) await atomicWriteJson(root, outboxPath, editionPackage);
   return { package: editionPackage, report, sourceRun, outboxPath, reportPath, monthApiUsd };
 }

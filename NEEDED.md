@@ -9,9 +9,14 @@ changed.
 
 GitHub **repository variables** (Settings → Secrets and variables → Actions → Variables),
 not secrets, read by `.github/workflows/cycle.yml`. A missing variable is not an error: the
-run records a skip and costs $0, which is why a misconfigured repository looks healthy and
-produces nothing. Since 2 August a skipped slot is written to `state/meetings/skips/` and
-shown on the calendar as **Skipped** with its reason, so this no longer looks like silence.
+run either records a skip or drops to a fixture-only dry pass, and costs $0 either way, which
+is why a misconfigured repository looks healthy and produces nothing. Since 2 August a skipped
+slot is written to `state/meetings/skips/` and shown on the calendar as **Skipped** with its
+reason, so this no longer looks like silence. Which kind you get: `CAUGHT_UP_LIVE_ENABLED`
+forces the dry pass; `PORTFOLIO_LIVE_ENABLED`, `MMA_FILES_LIVE_ENABLED`,
+`FIGHTAIQ_LIVE_ENABLED` and `FIGHTAIQ_ANALYSIS_ENABLED` set `skip`. `AUTONOMY_KILL_SWITCH`
+works the other way — it is a job-level `if`, so only setting it to `true` stops anything, and
+GitHub skips the job before any record is written.
 
 | Variable | Set to | Unlocks |
 | --- | --- | --- |
@@ -26,7 +31,9 @@ MMA Files needs **both** `PORTFOLIO_LIVE_ENABLED` and `MMA_FILES_LIVE_ENABLED`; 
 still skips. Leave `SOCIAL_KILL_SWITCH` as it is — it beats every per-channel unlock.
 
 Secrets for any model call: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`. Publishing additionally
-needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. All eight are set as of 2026-08-02.
+needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. The six variables above and both model
+keys were confirmed present on 2026-08-02. The two delivery App secrets were already working
+before that: `state/edition/deliveries/2026-08-01.json` records a delivery on 1 August.
 
 ## Diagnosing an empty day
 
@@ -43,12 +50,17 @@ needs `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. All eight are set as of 
 
 ## Why the meetings did not run on 2 August
 
-Fourteen crons fired and three meetings happened. Two separate causes, both now fixed:
+Fourteen crons fired that day, and at the point this was diagnosed three meetings had
+happened. `state/meetings/` ends 2 August with six records — `cu-edition`, `mag-editorial`,
+`mag-desk`, `mma-intake`, the afternoon council and the night council — and no morning
+council. Two separate causes, both now fixed:
 
 - The meeting was resolved from the wall clock at the moment the job started, inside a grace
   window capped at twenty minutes, and GitHub queued the crons 13 to 54 minutes late. Seven
   runs found no slot and skipped; one ran the *neighbouring* meeting. The fired cron now
-  names the meeting outright, so lateness no longer matters.
+  names the meeting outright — `cycle.yml` passes `github.event.schedule` to
+  `src/meetings/clock-cli.ts --scheduled --cron`, so lateness no longer matters, and the
+  eighteen cron entries are one per firing hour.
 - `PORTFOLIO_LIVE_ENABLED` was set at 12:26 UTC that day, so the morning portfolio phases
   correctly skipped before it existed.
 
@@ -58,17 +70,22 @@ Fourteen crons fired and three meetings happened. Two separate causes, both now 
   each agenda venture one open item written from that venture's own `growth_objective` in
   `config/ventures.json`, expiring after a week. A venture that already has an open item is
   skipped, so a re-run adds nothing. `/admin` can still add one, but nothing waits for it.
-- What actually rations the six agenda-gated phases is narrower: the 06:00 board commissions
-  at most one specialist room a day and spends one priority item doing it, so every other open
-  item that morning is recorded `why-not` with the reason. A room that does open can request a
-  follow-up agenda for a different phase — that is how the 2 August editorial room queued the
-  3 August intake. A phase with no due agenda records `PAUSED` at $0, which is the gate
-  working.
+- What actually rations the six agenda-gated phases (`agendaRequiredPhases` in
+  `config/meeting-policy.json`) is narrower: the 06:00 board may request one room per meeting
+  (`maxRequestsPerMeeting: 1`), so every item it does not select is recorded `why-not` with
+  the reason. On 3 August it selected none: all five seeded items read "The 06:00 board did
+  not select this item for today's single specialist commission." A room that does open can
+  request a follow-up agenda for a different phase — that is how the 2 August editorial room
+  queued the 3 August intake. A phase with no due agenda records `PAUSED` at $0, which is the
+  gate working: `state/meetings/2026-08-03-tt-marketing.json` is exactly that, `PAUSED` at
+  `actualCycleUsd: 0`.
 - The opportunity gate reads `state/OPPORTUNITIES.json` and no task type may write it. That
   narrow write scope is a guard; seed the file by hand rather than widening the allowlist. The
-  file is still fixture-only, so every shift scorecard records `INSUFFICIENT_EVIDENCE` with
-  its reasons. This no longer gates the stage — the company left DISCOVERY for VALIDATION on
-  1 August through the owner-only mechanism in `config/stages.json`.
+  file is still fixture-only, so every shift scorecard that runs the gate records
+  `INSUFFICIENT_EVIDENCE` with its reasons. This no longer gates the stage —
+  `config/stages.json` reads `"current": "VALIDATION"` under `stageChangeAuthority:
+  owner-only`. `state/BUSINESS.md` dates the entry 2026-08-01; the commit that flipped the
+  file from DISCOVERY is dated 31 July, so the two records disagree by a day.
 - Optional Pexels/Pixabay keys are not blockers. GNews, Guardian and NYTimes keys are not
   used. Carousel Studio needs no credential, account or separate deployment — only links.
 
@@ -128,8 +145,12 @@ Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STE
 - **The day's own account of itself is now true.** The digest reported $0.0693 against a
   $1.00 budget on a day the ledger held $0.6767, and called the slot that published the
   Shevchenko profile "not held"; both now read the ledger and the run files. Caught Up judges
-  its draft before paying the Czech desk, so its two configured rewrites are affordable
-  rather than refused instantly. A reverted release reaches the digest and the inbox.
+  its draft before paying for the expensive stage, so a first violation is no longer terminal.
+  Compare the two run files: on 2 August both rewrites were refused at `durationMs: 0`, and on
+  4 August the first rewrite made a full 90-second call and was judged on its merits — the
+  quality gate failed it on `maximum_repeated_topic_frequency`, which is a verdict rather than
+  a refusal. Only the second hit the $0.35 per-edition cap, and that day still ended
+  `no_edition`. A reverted release reaches the digest and the inbox.
 - **The fighter-profile rescue no longer repeats a subject.** It was deterministic with no
   repeat check, so a killed slate would have published a second Shevchenko profile every day
   at the full envelope. Already-published fighters are excluded; when the eligible list runs

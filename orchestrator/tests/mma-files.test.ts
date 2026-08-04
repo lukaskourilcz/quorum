@@ -27,8 +27,10 @@ const slate = EditorialSlateSchema.parse({
     { slot: "pm", format: "fighter-profile", subjectRefs: ["oktagon:eva-example"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "QUILL", status: "assigned" }
   ],
   vaultVerdicts: [
-    { subjectRef: "ufc:event:fixture-prague", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#1" },
-    { subjectRef: "oktagon:eva-example", verdict: "fresh", evidenceRef: "state/ideas/mma-files/ledger.jsonl#2" }
+    // Not a repository path. These two subjects are synthetic, so no file on disk backs them,
+    // and the path this used to name — state/ideas/mma-files/ledger.jsonl — has never existed.
+    { subjectRef: "ufc:event:fixture-prague", verdict: "fresh", evidenceRef: "FIXTURE:mma-files.test#1" },
+    { subjectRef: "oktagon:eva-example", verdict: "fresh", evidenceRef: "FIXTURE:mma-files.test#2" }
   ]
 });
 

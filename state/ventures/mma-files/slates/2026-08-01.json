@@ -27,12 +27,12 @@
     {
       "subjectRef": "ufc:event:fixture-prague",
       "verdict": "fresh",
-      "evidenceRef": "state/ideas/mma-files/ledger.jsonl#1"
+      "unresolvedEvidence": "Removed evidenceRef state/ideas/mma-files/ledger.jsonl#1: no such file in the repository."
     },
     {
       "subjectRef": "oktagon:eva-example",
       "verdict": "fresh",
-      "evidenceRef": "state/ideas/mma-files/ledger.jsonl#2"
+      "unresolvedEvidence": "Removed evidenceRef state/ideas/mma-files/ledger.jsonl#2: no such file in the repository."
     }
   ]
 }

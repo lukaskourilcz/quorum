@@ -88,15 +88,32 @@ const SlateSlotSchema = openObject({
   if (slot.status === "assigned" && slot.killedReason) context.addIssue({ code: "custom", message: "Assigned slots cannot carry a killed reason", path: ["killedReason"] });
 });
 
+/**
+ * One VAULT verdict, and the evidence it stands on.
+ *
+ * `evidenceRef` used to be required, so a verdict with no evidence a reviewer could open had
+ * exactly one way to validate: name something. A slate written from the editorial-slate fixture
+ * cited `state/ideas/mma-files/ledger.jsonl`, a file this repository has never held, and it was
+ * stored as the desk's own citation. A dead path is worse than an admitted gap, so a verdict now
+ * carries either a ref or `unresolvedEvidence` — a note saying what was removed and why — and
+ * never neither. Never both either: a ref that resolved leaves nothing unresolved, and a verdict
+ * carrying both would let the note be decoration next to a ref no one checked.
+ */
+const VaultVerdictSchema = openObject({
+  subjectRef: z.string().trim().min(1).max(240),
+  verdict: z.enum(["fresh", "repeat"]),
+  evidenceRef: z.string().trim().min(1).max(240).optional(),
+  unresolvedEvidence: z.string().trim().min(1).max(240).optional()
+}).superRefine((verdict, context) => {
+  if (!verdict.evidenceRef && !verdict.unresolvedEvidence) context.addIssue({ code: "custom", message: "A verdict needs an evidenceRef, or a note saying why it has none", path: ["evidenceRef"] });
+  if (verdict.evidenceRef && verdict.unresolvedEvidence) context.addIssue({ code: "custom", message: "A verdict that cites evidence has nothing unresolved to note", path: ["unresolvedEvidence"] });
+});
+
 export const EditorialSlateSchema = openObject({
   schemaVersion: z.literal("editorial-slate/1"),
   date: DateSchema,
   slots: z.tuple([SlateSlotSchema, SlateSlotSchema]),
-  vaultVerdicts: z.array(openObject({
-    subjectRef: z.string().trim().min(1).max(240),
-    verdict: z.enum(["fresh", "repeat"]),
-    evidenceRef: z.string().trim().min(1).max(240)
-  })).min(2)
+  vaultVerdicts: z.array(VaultVerdictSchema).min(2)
 }).superRefine((slate, context) => {
   if (slate.slots[0].slot !== "am" || slate.slots[1].slot !== "pm") context.addIssue({ code: "custom", message: "Editorial slots must be ordered am then pm", path: ["slots"] });
   const verdicts = new Map(slate.vaultVerdicts.map((verdict) => [verdict.subjectRef, verdict.verdict]));

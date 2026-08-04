@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BudgetLedgerEntrySchema } from "../budget.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { KpiSetSchema, type KpiSet } from "../contracts/kpi-set.js";
+import { IdeaLedgerEntrySchema } from "../contracts/idea-ledger.js";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
 import { BoutRecordSchema, EventCardSchema, FighterRecordSchema } from "../contracts/mma.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
@@ -55,6 +56,70 @@ async function jsonFiles(directory: string, recursive = false): Promise<unknown[
     if (value !== null) values.push(value);
   }
   return values;
+}
+
+/**
+ * Like {@link jsonFiles}, but reports the files it could not read instead of dropping them.
+ *
+ * `jsonFile` returns null for a file that exists and will not parse, and `jsonFiles` then
+ * skips it, so a corrupt input silently shrinks whatever denominator it belonged to. Any
+ * rate built on these records has to be able to say "N inputs were unreadable" instead.
+ */
+async function jsonFilesCounted(
+  directory: string
+): Promise<{ values: unknown[]; unreadable: number }> {
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { values: [], unreadable: 0 };
+    throw error;
+  }
+  const values: unknown[] = [];
+  let unreadable = 0;
+  for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name))) {
+    if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+    const value = await jsonFile(path.join(directory, entry.name));
+    if (value === null) unreadable += 1;
+    else values.push(value);
+  }
+  return { values, unreadable };
+}
+
+const EditionStageSchema = z.object({
+  name: z.string().min(1),
+  status: z.enum(["success", "failed", "skipped"])
+});
+
+/**
+ * The subset of `EditionRunReport` (orchestrator/src/edition/report.ts) these measurements
+ * read. Kept deliberately narrow: a run record carries far more, and widening this schema
+ * would turn an unrelated field change into an unreadable-input spike.
+ */
+const EditionRunSchema = z.object({
+  schemaVersion: z.literal(1),
+  date: z.string().min(1),
+  mode: z.enum(["dry_run", "production"]),
+  status: z.enum(["edition", "no_edition", "failed"]),
+  startedAt: z.string().min(1),
+  completedAt: z.string().min(1),
+  stages: z.array(EditionStageSchema),
+  stetBlocks: z.number().int().nonnegative(),
+  quality: z.object({ metrics: z.object({ signalStrength: z.number().finite() }) }).optional(),
+  stet: z.object({ passed: z.boolean() }).optional()
+});
+
+type EditionRun = z.infer<typeof EditionRunSchema>;
+
+function stageCount(run: EditionRun, prefix: string): number {
+  return run.stages.filter((stage) => stage.name.startsWith(prefix)).length;
+}
+
+function elapsedMinutes(run: EditionRun): number | null {
+  const started = Date.parse(run.startedAt);
+  const completed = Date.parse(run.completedAt);
+  if (!Number.isFinite(started) || !Number.isFinite(completed) || completed < started) return null;
+  return (completed - started) / 60_000;
 }
 
 async function jsonLines(file: string): Promise<unknown[]> {
@@ -143,7 +208,9 @@ export async function collectQuarterlyMeasurements(input: {
     sourcesRaw,
     storedRaw,
     studioTemplatesRaw,
-    studioObservationsRaw
+    studioObservationsRaw,
+    editionRunFiles,
+    ideaLedger
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -168,7 +235,9 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFile(path.join(input.repoRoot, "config", "sources.json")),
     jsonFile(path.join(input.stateRoot, "metrics", "quarterly.json")),
     jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"), true),
-    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "observations"))
+    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "observations")),
+    jsonFilesCounted(path.join(input.stateRoot, "edition", "runs")),
+    jsonLines(path.join(input.stateRoot, "ideas", "caught-up", "ledger.jsonl"))
   ]);
 
   const measurements: Record<string, number | null> = {};
@@ -192,6 +261,15 @@ export async function collectQuarterlyMeasurements(input: {
   const fixed = FixedCostRegistrySchema.safeParse(fixedRaw);
   measurements["state/metrics/quarterly#maximum_monthly_all_in_usd"] = budget.success && fixed.success && fixed.data.costs.length > 0
     ? (apiByMonth.size ? Math.max(...apiByMonth.values()) : 0) + sum(fixed.data.costs.map((cost) => cost.monthly_usd))
+    : null;
+
+  // Every model call is billed to the ledger with a kind, so image spend is separable from
+  // text spend. Zero here is a measured zero over a ledger that is actively written, not an
+  // absent counter: an image call charged to caught-up would land in this same file.
+  measurements["receipts/caught-up#media_cost_usd"] = budget.success
+    ? sum(periodBudget
+        .filter((entry) => entry.kind === "image" && entry.ventureId === "caught-up")
+        .map((entry) => entry.usd))
     : null;
 
   const dueSlots = calendars.flatMap((calendar) => {
@@ -229,6 +307,14 @@ export async function collectQuarterlyMeasurements(input: {
     quarterProofs.filter((proof) => proof.status === "passed" && typeof proof.retryCount === "number" && proof.retryCount <= 1).length,
     quarterProofs.length
   );
+  // The same proofs without the retry qualifier: did the release pass at all. A release that
+  // needed three retries counts here and not above, which is why these are two measures.
+  const passedProofs = quarterProofs.filter((proof) => proof.status === "passed").length;
+  measurements["receipts/delivery#release_pass_rate"] = ratio(passedProofs, quarterProofs.length);
+  measurements["receipts/delivery#release_failure_rate"] = ratio(
+    quarterProofs.length - passedProofs,
+    quarterProofs.length
+  );
   const caughtUpProofs = proofs
     .map((value) => ReleaseProofSchema.safeParse(value))
     .filter((result) => result.success)
@@ -243,6 +329,98 @@ export async function collectQuarterlyMeasurements(input: {
         ["czech-route", "hero-image"].every((name) => proof.checks.some((check) => check.name === name && check.status === "pass"))
       ).length / deliveredEditions)
     : null;
+
+  // --- Caught Up edition pipeline ------------------------------------------------------
+  // state/edition/runs is the only committed record of what the desk did on a given day.
+  //
+  // Every rate below picks its denominator from a run's TERMINAL status or from its stage
+  // list, never from the presence of a reviewer verdict. EditionRunReporter.stet is a single
+  // mutable field (orchestrator/src/edition/report.ts) that each attempt overwrites and
+  // build() emits as-is, so a run whose attempt 0 cleared the copy review and whose later
+  // rewrites all failed still ships a passing verdict next to status "no_edition".
+  // state/edition/runs/2026-08-02-a7b2d656....json is exactly that record: a passing review
+  // sitting on a run that produced nothing. A rate keyed on "has a verdict" would score it
+  // as a delivered pass for copy the gate never saw in final form.
+  const editionRunParses = editionRunFiles.values.map((value) => EditionRunSchema.safeParse(value));
+  const editionRuns = editionRunParses
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .filter((run) => run.mode === "production" && dateInPeriod(run.date, periodStart, periodEnd));
+  const deliveredRuns = editionRuns.filter((run) => run.status === "edition");
+  measurements["receipts/caught-up#no_edition_rate"] = ratio(
+    editionRuns.filter((run) => run.status !== "edition").length,
+    editionRuns.length
+  );
+  const scoredRuns = deliveredRuns.filter((run) => run.quality !== undefined);
+  measurements["receipts/caught-up#edition_signal_strength_average"] = scoredRuns.length > 0
+    ? Number((sum(scoredRuns.map((run) => run.quality!.metrics.signalStrength)) / scoredRuns.length).toFixed(8))
+    : null;
+  // Since the English and Czech reviews collapsed into one reviewCzechArticle pass, the stage
+  // named stet_<attempt> IS the Czech copy review and stetBlocks IS its block count; nothing
+  // increments hacekBlocks any more, so reading that field would report a flat, permanent 0.
+  // STET and HACEK therefore measure one stage against two bars, not two stages.
+  //
+  // The denominator is reviews performed, not runs and not deliveries. Each loop iteration
+  // records one stet_<attempt> stage and increments stetBlocks when that review failed, so
+  // both counters accumulate across attempts and neither depends on the surviving verdict
+  // field. Scoring delivered editions instead would read the publication decision rather than
+  // the review: until 2026-08-04 every delivered run carried a passing verdict by construction
+  // and the rate could only ever read 1, and since the switch in edition/publication-gate.ts a
+  // delivered run may carry a failing one. stetBlocks counts the failed review either way, so
+  // this rate answers "how often did the copy review fail" across both regimes.
+  const reviewed = editionRuns
+    .map((run) => ({ reviews: stageCount(run, "stet_"), blocks: run.stetBlocks }))
+    // stetBlocks rises once per blocked review, so it can never exceed the reviews recorded.
+    // A run that says otherwise is not readable as a review record.
+    .filter((counts) => counts.blocks <= counts.reviews);
+  const inconsistentReviewRuns = editionRuns.length - reviewed.length;
+  const copyReviews = sum(reviewed.map((counts) => counts.reviews));
+  const copyBlocks = sum(reviewed.map((counts) => counts.blocks));
+  measurements["receipts/caught-up#czech_register_pass_rate"] = ratio(copyReviews - copyBlocks, copyReviews);
+  measurements["receipts/caught-up#copy_block_rate"] = ratio(copyBlocks, copyReviews);
+  // Unreadable inputs are reported, not absorbed. The first two terms cover the whole runs
+  // directory, because a file that will not parse has no readable date to scope it by. The
+  // last two are in-quarter runs that dropped out of a denominator above for want of the
+  // field it needed - the shrinkage those metrics would otherwise have hidden.
+  measurements["state/edition/runs#unreadable_count"] =
+    editionRunFiles.unreadable
+    + editionRunParses.filter((result) => !result.success).length
+    + inconsistentReviewRuns
+    + (deliveredRuns.length - scoredRuns.length);
+  const rewriteStages = editionRuns.flatMap((run) =>
+    run.stages.filter((stage) => stage.name.startsWith("rewrite_"))
+  );
+  measurements["receipts/caught-up#rewrite_pass_rate"] = ratio(
+    rewriteStages.filter((stage) => stage.status === "success").length,
+    rewriteStages.length
+  );
+  const publishMinutes = deliveredRuns.flatMap((run) => {
+    const minutes = elapsedMinutes(run);
+    return minutes === null ? [] : [minutes];
+  });
+  measurements["receipts/caught-up#time_to_publish_minutes"] = publishMinutes.length > 0
+    ? Number((sum(publishMinutes) / publishMinutes.length).toFixed(8))
+    : null;
+  // RELAY delivers whatever the desk produced, including a no_edition marker; a delivered
+  // marker is a successful delivery, so this reads delivery status and not editionStatus.
+  measurements["receipts/caught-up#delivery_success_rate"] = ratio(
+    editions.filter((value) => value.status === "delivered").length,
+    editions.length
+  );
+
+  // VAULT writes similarTo on every idea it compares, so an empty similarTo is a recorded
+  // "nothing matched" rather than a missing check. The denominator is ideas proposed in the
+  // quarter, dated from the first statusHistory entry rather than the id, because the id is
+  // only a slug.
+  const caughtUpIdeas = ideaLedger
+    .map((value) => IdeaLedgerEntrySchema.safeParse(value))
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .filter((idea) => dateInPeriod(idea.statusHistory[0]?.at, periodStart, periodEnd));
+  measurements["state/ideas/caught-up#novelty_rate"] = ratio(
+    caughtUpIdeas.filter((idea) => idea.similarTo.length === 0).length,
+    caughtUpIdeas.length
+  );
 
   const publishedSocial = socialReceipts.map(record).filter((value): value is Record<string, unknown> => Boolean(value))
     .filter((value) => value.outcome === "published" && dateInPeriod(value.attemptedAt, periodStart, periodEnd));

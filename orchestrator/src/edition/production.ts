@@ -11,6 +11,11 @@ import {
   sourceDiversity,
   type QualityMetrics
 } from "./quality.js";
+import {
+  copyReviewFindings,
+  qualityFindings,
+  UNRESOLVED_REVIEW_NOTICE
+} from "./publication-gate.js";
 import { EditionRunReporter, type EditionRunReport } from "./report.js";
 import {
   reviewCzechArticle,
@@ -56,18 +61,57 @@ export interface EditionProductionResult {
   report: EditionRunReport;
 }
 
-function repeatedTopicFrequency(
-  tags: readonly string[],
+/**
+ * The recent editions that actually carried topics.
+ *
+ * A day with no edition still gets a delivery receipt, and that receipt records `tags: []`
+ * (`delivery/outbox.ts`). An empty list is the absence of a day, not evidence that the day's
+ * topics differed from today's, so it is dropped here before anything counts the window. Left
+ * in, empty days satisfied the warm-up — three no-edition days made the sample look full — and
+ * stood in the window as though they had been editions.
+ */
+function publishedEditionTags(
   recent: readonly (readonly string[])[]
+): readonly (readonly string[])[] {
+  return recent.filter((tags) => tags.length > 0);
+}
+
+/**
+ * How much of today's topic set recent editions have already carried — or 0 while the window is
+ * too short for that question to have an answer.
+ *
+ * The score is (article tags some recent edition already carried) / (article tags). Over t tags
+ * it can only land on k/t for whole k, and the gate fires on `> maximumRepeatedTopicFrequency`,
+ * so the shipped 0.5 means exactly "more than half the topic set is a rerun": t = 2 needs both
+ * tags, t = 3 needs 2 of 3 (0.67), t = 4 needs 3 (0.75), t = 5 needs 3 (0.6), t = 6 needs 4
+ * (0.67). One shared tag scores 1/t, which is at most 1/2 across every set the writer contract
+ * lets hold more than one tag, so a single recurring tag can never be a violation — `ai` on the
+ * list every day is what an AI magazine looks like, while the same six tags in the same order
+ * is a repeat. A one-tag article is the edge the arithmetic cannot soften: there the one tag is
+ * the whole topic set and 1/1 = 1.00 is a total rerun, which is the measure working rather than
+ * the old fault returning.
+ *
+ * The old score divided by the window instead of by the tag set: today's most-repeated tag over
+ * n priors scored 2/(n+1) on a single recurrence, so one shared tag out of six read as a total
+ * repeat, and the gate banned recurrence rather than measuring it.
+ *
+ * The metric keeps the name `repeatedTopicFrequency` and the violation code
+ * `maximum_repeated_topic_frequency` so committed run records under `state/edition/runs/` and
+ * the inbox items that cite the code still read against the same gate.
+ *
+ * A 0 returned during warm-up means unmeasured, not measured-zero; produceEdition warns so the
+ * run report says which of the two it was.
+ */
+function repeatedTopicShare(
+  tags: readonly string[],
+  published: readonly (readonly string[])[],
+  warmupEditions: number
 ): number {
-  if (tags.length === 0 || recent.length === 0) return 0;
-  return Math.max(
-    ...tags.map(
-      (tag) =>
-        (recent.filter((issueTags) => issueTags.includes(tag)).length + 1) /
-        (recent.length + 1)
-    )
-  );
+  if (tags.length === 0 || published.length < warmupEditions) return 0;
+  const carried = tags.filter((tag) =>
+    published.some((issueTags) => issueTags.includes(tag))
+  ).length;
+  return carried / tags.length;
 }
 
 function qualityMetrics(
@@ -98,7 +142,11 @@ function qualityMetrics(
     duplicateStorySimilarity: maximumTitleSimilarity(
       article.sources.map((source) => source.title)
     ),
-    repeatedTopicFrequency: repeatedTopicFrequency(article.tags, input.recentEditionTags),
+    repeatedTopicFrequency: repeatedTopicShare(
+      article.tags,
+      publishedEditionTags(input.recentEditionTags),
+      input.config.quality.repeatedTopicWarmupEditions
+    ),
     // Same cut as curate: relevance is only fair over the candidates the editor saw.
     primarySourceRelevant: input.items
       .slice(0, input.config.article.maximumCurationCandidates)
@@ -142,6 +190,17 @@ export async function produceEdition(
 ): Promise<EditionProductionResult> {
   const reporter =
     input.reporter ?? new EditionRunReporter(input.date, input.mode);
+  // While the sample is under the warm-up, `repeatedTopicShare` reports 0 because the share is
+  // not measurable yet, not because no topic repeated. Record which of the two this run is, so
+  // nobody reads the zero in the metrics block as a measurement. The count is of editions that
+  // published topics, the same list the score is measured against, so a run of no-edition days
+  // says the sample is thin instead of hiding behind a full-looking window.
+  const publishedRecent = publishedEditionTags(input.recentEditionTags);
+  if (publishedRecent.length < input.config.quality.repeatedTopicWarmupEditions) {
+    reporter.warn(
+      `repeated_topic_warmup:${publishedRecent.length}/${input.config.quality.repeatedTopicWarmupEditions}`
+    );
+  }
   let brief: CuratedBrief;
   try {
     brief = await reporter.stage("curate", () =>
@@ -224,18 +283,29 @@ export async function produceEdition(
     );
     const draftQuality = evaluateEditionQuality(draftMetrics, input.config, attempt);
     if (!draftQuality.passed) {
-      // The report carries the gate that stopped the run, whichever pass caught it.
+      // The report carries the gate that stopped the run, whichever pass caught it — and, since
+      // the switch in publication-gate.ts, the gate that merely spoke up as well.
       reporter.quality = { metrics: draftMetrics, result: draftQuality };
       draftQuality.violations.forEach((violation) => reporter.warn(`quality:${violation}`));
-      lastQualityViolations = draftQuality.violations;
-      if (attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate) {
-        return noEdition(input, reporter, `quality_block:${draftQuality.violations.join(",")}`);
+      const draftFindings = qualityFindings(draftQuality.violations);
+      if (draftFindings.blocking.length > 0) {
+        // Only the blocking codes. `lastQualityViolations` names the run's no-edition reason,
+        // and a waived finding did not stop anything.
+        lastQualityViolations = draftFindings.blocking;
+        if (attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate) {
+          return noEdition(input, reporter, `quality_block:${draftFindings.blocking.join(",")}`);
+        }
+        reporter.regenerationAttempts += 1;
+        // Only the blocking codes are worth a paid rewrite. Asking the desk to rewrite an
+        // article over a waived finding spends the regeneration budget on a verdict that is
+        // not going to stop the article anyway.
+        feedback = draftFindings.blocking.map(
+          (violation) => `Quality gate ${violation} must pass without inventing facts or sources.`
+        );
+        continue;
       }
-      reporter.regenerationAttempts += 1;
-      feedback = draftQuality.violations.map(
-        (violation) => `Quality gate ${violation} must pass without inventing facts or sources.`
-      );
-      continue;
+      // Waived findings only. They are on the record; the final gate below records them again
+      // against the metrics that actually ship, and the package carries them to the reader.
     }
 
     const rationale = articleRationale(
@@ -246,18 +316,25 @@ export async function produceEdition(
       reviewCzechArticle(english, rationale, input.config)
     );
     reporter.stet = stet;
+    const copyFindings = copyReviewFindings(stet);
     if (!stet.passed) {
+      // Counted whether or not it blocks. `stetBlocks` is the numerator of the copy-review KPIs
+      // in metrics/quarterly-collector.ts, and those measure how often the review failed; a
+      // review that failed and was published anyway is still a review that failed, and zeroing
+      // it here would report a clean register the desk never wrote.
       reporter.stetBlocks += 1;
       stet.violations.forEach((violation) => reporter.warn(`stet:${violation.code}`));
-      if (
-        reporter.stetBlocks > input.config.stet.maximumRewriteAttempts ||
-        attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate
-      ) {
-        return noEdition(input, reporter, "stet_block_after_rewrite");
+      if (copyFindings.blocking.length > 0) {
+        if (
+          reporter.stetBlocks > input.config.stet.maximumRewriteAttempts ||
+          attempt >= input.config.budgets.maximumRegenerationAttemptsPerDate
+        ) {
+          return noEdition(input, reporter, "stet_block_after_rewrite");
+        }
+        reporter.regenerationAttempts += 1;
+        feedback = stetFeedback(stet);
+        continue;
       }
-      reporter.regenerationAttempts += 1;
-      feedback = stetFeedback(stet);
-      continue;
     }
 
     // The article is what the desk wrote. Nothing adapts it afterwards, so there is no second
@@ -270,7 +347,21 @@ export async function produceEdition(
     );
     reporter.quality = { metrics, result: quality };
     quality.violations.forEach((violation) => reporter.warn(`quality:${violation}`));
-    if (quality.passed) {
+    const finalFindings = qualityFindings(quality.violations);
+    if (finalFindings.blocking.length === 0) {
+      // Everything the reviews found and nobody resolved, named so the owner reading the run
+      // file or the package knows exactly what shipped over which verdict.
+      const unresolved = [
+        ...finalFindings.waived.map((code) => `quality:${code}`),
+        ...copyFindings.waived.map((code) => `stet:${code}`)
+      ];
+      const unresolvedReview = unresolved.length === 0
+        ? undefined
+        : { notice: UNRESOLVED_REVIEW_NOTICE, findings: unresolved };
+      if (unresolvedReview) {
+        reporter.unresolvedReview = unresolvedReview;
+        reporter.warn(`shipped_with_unresolved_review:${unresolved.join(",")}`);
+      }
       const editionPackage = await reporter.stage("assemble_package", async () => {
         const candidate = article.selectedImageCandidateIndex === undefined
           ? undefined
@@ -298,7 +389,8 @@ export async function produceEdition(
           signalStrength: metrics.signalStrength,
           costUsd: reporter.totalCostUsd(),
           socialPackEnabled: input.socialPackEnabled,
-          ...(image ? { image } : {})
+          ...(image ? { image } : {}),
+          ...(unresolvedReview ? { unresolvedReview } : {})
         });
       });
       EditionPackageSchema.parse(editionPackage);
@@ -307,10 +399,10 @@ export async function produceEdition(
         report: reporter.build("edition", editionPackage.status)
       };
     }
-    lastQualityViolations = quality.violations;
+    lastQualityViolations = finalFindings.blocking;
     if (quality.action === "no_edition") break;
     reporter.regenerationAttempts += 1;
-    feedback = quality.violations.map(
+    feedback = finalFindings.blocking.map(
       (violation) => `Quality gate ${violation} must pass without inventing facts or sources.`
     );
   }

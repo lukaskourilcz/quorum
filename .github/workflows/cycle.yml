@@ -94,11 +94,35 @@ jobs:
       # once-a-day edition guard steps aside for it. A schedule can never set this: the value is
       # read straight off the dispatch inputs, and github.event_name is checked as well.
       CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.dry == false }}
+      # TEMPORARY, 2026-08-04 to 2026-08-09. The owner doubled the four caps below because
+      # testing, not production work, was consuming them, and a cap hit was stopping articles
+      # from shipping. On 2026-08-04 the edition run billed three calls for about $0.25 and
+      # delivered no edition: rewrite_1's article failed the quality gate on
+      # maximum_repeated_topic_frequency, and rewrite_2 — the attempt that would have replaced
+      # it — could not start, "Edition call reserve 0.138261 would exceed 0.35", in
+      # state/edition/runs/2026-08-04-18f2f821b302*.json. What the raise buys is more attempts
+      # at an article that passes the gate. It moves no quality threshold, and nothing here
+      # lets a rejected article ship.
+      #
+      # Each line below names the value it reverts to on 2026-08-09; NEEDS_YOUR_HELP_NOW.md
+      # carries the owner item for that revert, and orchestrator/tests/ci-policy.test.ts pins
+      # these values with their dates.
+      #
+      # DAILY_BUDGET_USD is doubled only where this block is what the run reads. The ten
+      # portfolio phases re-resolve it from the countersigned schedule and write their own
+      # value to $GITHUB_ENV in "Resolve guarded cycle mode" below, which wins over this job
+      # env; the edition path that was failing (cu-edition) is not one of them, so it reads
+      # the $2.00 here. The other three lines have no such override.
+      #
+      # The two monthly ceilings are deliberately NOT doubled. They are the real protection,
+      # the owner did not ask to move them, and they still stop the month: MONTHLY_BUDGET_USD
+      # is the $25 model/API share and MONTHLY_OPERATING_CAP_USD the $30 all-in cap, both from
+      # budget-2026-08e. Doubling a per-run cap lets one run try harder; it buys no extra month.
       MONTHLY_OPERATING_CAP_USD: "30"
-      MAX_CYCLE_BUDGET_USD: "0.20"
-      CU_MEETING_BUDGET_USD: "0.08"
-      EDITION_PRODUCTION_BUDGET_USD: "0.35"
-      DAILY_BUDGET_USD: "1.00"
+      MAX_CYCLE_BUDGET_USD: "0.40" # was "0.20"; reverts to "0.20" on 2026-08-09
+      CU_MEETING_BUDGET_USD: "0.16" # was "0.08"; reverts to "0.08" on 2026-08-09
+      EDITION_PRODUCTION_BUDGET_USD: "0.70" # was "0.35"; reverts to "0.35" on 2026-08-09
+      DAILY_BUDGET_USD: "2.00" # was "1.00"; reverts to "1.00" on 2026-08-09
       MONTHLY_BUDGET_USD: "25"
       DIGEST_BUDGET_USD: "0.02"
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}

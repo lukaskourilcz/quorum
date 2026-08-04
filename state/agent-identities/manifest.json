@@ -73,6 +73,19 @@
       "artifact": "none"
     }
   },
+  "pendingRegeneration": [
+    {
+      "agentId": "HACEK",
+      "recordedAt": "2026-08-04",
+      "recordedBy": "interactive-session",
+      "reason": "HACEK no longer translates. The registry role is the Czech register and copy floor, and HACEK makes no writing call. The translation motif the portrait was generated from describes a responsibility the agent has lost.",
+      "renderedMotif": "diacritic caron and paired translation pages",
+      "renderedMotifVerifiedBy": "Direct visual inspection of site/public/agents/hacek.webp on 2026-08-04: a caron over the head and a two-page ruled spread across the face. The picture matches the words; both are simply out of date.",
+      "blockedBy": "The approved route in this manifest is the interactive Codex imagegen session tool. No repository script reproduces it, and no session-independent generator for this asset set exists. Regenerating through the project OpenAI key would be a different route that charges project API spend, which this manifest records as never used.",
+      "resolution": "Regenerate through the approved route, then in one change update prompts.json roles.HACEK, this asset's sourceCallId, promptHash and sha256, config/agents.json visual.motif and visual.avatarAlt, and remove this entry.",
+      "wordsAndImageMatched": true
+    }
+  ],
   "assets": [
     {
       "id": "AVATAR-VIZE",

@@ -17,7 +17,8 @@
         "id": "first_validation_decision",
         "byCycle": 14
       }
-    ]
+    ],
+    "$comment": "This file is the role ownership and target registry, not a measurement pipeline. It answers 'who owns what bar', and orchestrator/src/org/maintenance.ts reads it to check a role still owns its KPI floor during an organization change. Numbers are produced by the quarterly path only: config/kpis/<quarter>.json -> orchestrator/src/metrics/quarterly-collector.ts -> state/kpis/latest.json. Every entry below therefore states its measurement explicitly. kind 'quarterly' means the id also appears in the current quarterly set and a real number is emitted under metricSource. kind 'none' means the metric is declared without a source: the bar stands and the owner stands, but nothing measures it today, and reason says exactly why."
   },
   "kpis": [
     {
@@ -26,63 +27,102 @@
       "metric": "selectedOpportunityScore",
       "target": 35,
       "dir": "up",
-      "stages": ["DISCOVERY", "VALIDATION"]
+      "stages": [
+        "DISCOVERY",
+        "VALIDATION"
+      ],
+      "measurement": {
+        "kind": "none",
+        "reason": "state/OPPORTUNITIES.json holds only fixture records (fixture: true, FIX-OPP-*). No opportunity has been selected, so there is no selected score to read."
+      }
     },
     {
       "id": "vize.stage_progress",
       "owner": "VIZE",
       "metric": "milestonesOnSchedule",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing records whether a milestone named in this file's meta.milestones was reached by its byCycle."
+      }
     },
     {
       "id": "vize.forecast_calibration",
       "owner": "VIZE",
       "metric": "forecastBrierScore",
       "target": 0.25,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "No forecast is committed together with a resolved outcome, so no Brier score can be computed."
+      }
     },
     {
       "id": "forge.release_success",
       "owner": "FORGE",
       "metric": "releaseSuccessRate",
       "target": 0.9,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/delivery#release_pass_rate"
+      }
     },
     {
       "id": "forge.task_completion",
       "owner": "FORGE",
       "metric": "taskCompletionRate",
       "target": 0.8,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "Tasks exist only as markdown checkboxes in state/decisions/*.md, and no committed rule says which decisions form the denominator."
+      }
     },
     {
       "id": "forge.change_failure",
       "owner": "FORGE",
       "metric": "changeFailureRate",
       "target": 0.1,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/delivery#release_failure_rate"
+      }
     },
     {
       "id": "forge.incidents",
       "owner": "FORGE",
       "metric": "incidentCount",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing writes an incident record."
+      }
     },
     {
       "id": "pulse.experiment_velocity",
       "owner": "PULSE",
       "metric": "eligibleExperimentsReviewedPerWindow",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "state/EXPERIMENTS.md is prose. No experiment is committed as a record carrying a review date."
+      }
     },
     {
       "id": "pulse.metadata",
       "owner": "PULSE",
       "metric": "metadataCompleteness",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing scores metadata completeness on a committed artifact."
+      }
     },
     {
       "id": "pulse.qualified_action_rate",
@@ -90,7 +130,11 @@
       "metric": "qualifiedActionRate",
       "target": 0.05,
       "dir": "up",
-      "requires": "analytics"
+      "requires": "analytics",
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the analytics capability; no analytics data is committed."
+      }
     },
     {
       "id": "pulse.opt_in_rate",
@@ -98,7 +142,11 @@
       "metric": "optInRate",
       "target": 0.02,
       "dir": "up",
-      "requires": "analytics"
+      "requires": "analytics",
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the analytics capability; no analytics data is committed."
+      }
     },
     {
       "id": "pulse.monetization_intent",
@@ -107,7 +155,16 @@
       "target": 1,
       "dir": "up",
       "requires": "analytics",
-      "stages": ["VALIDATION", "AUDIENCE", "MONETIZATION", "OPTIMIZATION"]
+      "stages": [
+        "VALIDATION",
+        "AUDIENCE",
+        "MONETIZATION",
+        "OPTIMIZATION"
+      ],
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the analytics capability; no analytics data is committed."
+      }
     },
     {
       "id": "pulse.gross_profit",
@@ -115,56 +172,91 @@
       "metric": "grossProfit30d",
       "target": 0.01,
       "dir": "up",
-      "stages": ["MONETIZATION", "OPTIMIZATION"]
+      "stages": [
+        "MONETIZATION",
+        "OPTIMIZATION"
+      ],
+      "measurement": {
+        "kind": "none",
+        "reason": "state/finance/ledger.json has no entries, so there is no revenue to net against cost."
+      }
     },
     {
       "id": "audit.lh_perf",
       "owner": "AUDIT",
       "metric": "lighthousePerformance",
       "target": 90,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No Lighthouse result is committed anywhere under state/."
+      }
     },
     {
       "id": "audit.lh_seo",
       "owner": "AUDIT",
       "metric": "lighthouseSeo",
       "target": 95,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No Lighthouse result is committed anywhere under state/."
+      }
     },
     {
       "id": "audit.links",
       "owner": "AUDIT",
       "metric": "brokenInternalLinks",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "No link-check result is committed."
+      }
     },
     {
       "id": "audit.content_quality",
       "owner": "AUDIT",
       "metric": "indexablePageQualityPassRate",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No per-page quality verdict is committed for the indexable pages."
+      }
     },
     {
       "id": "audit.claim_coverage",
       "owner": "AUDIT",
       "metric": "factualClaimCitationCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "Both records in state/CLAIMS.json are gated_unverified with no supporting evidence refs, so the published-claim denominator is empty."
+      }
     },
     {
       "id": "audit.security_incidents",
       "owner": "AUDIT",
       "metric": "securityIncidentCount",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing writes a security incident record."
+      }
     },
     {
       "id": "audit.json_hygiene",
       "owner": "AUDIT",
       "metric": "invalidJsonRate",
       "target": 0.05,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "No committed rule defines the file population an invalid-JSON rate would be measured over."
+      }
     },
     {
       "id": "people.routing_precision",
@@ -172,7 +264,11 @@
       "metric": "relevantParticipantPrecision",
       "target": 0.9,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Room records name the participants chosen and the reason, but nothing records whether a chosen participant turned out to be relevant, so precision has no ground truth."
+      }
     },
     {
       "id": "people.duplicate_work",
@@ -180,7 +276,11 @@
       "metric": "duplicateAgentWorkRate",
       "target": 0.05,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing marks one agent's work as duplicating another's."
+      }
     },
     {
       "id": "people.change_success",
@@ -188,21 +288,33 @@
       "metric": "orgChangesMeetingExpectedDeltaRate",
       "target": 0.7,
       "dir": "up",
-      "warmupCycles": 28
+      "warmupCycles": 28,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/org/changes.jsonl records expectedMetric, baseline and expectedDelta but never a measured outcome once reviewCycle has passed."
+      }
     },
     {
       "id": "people.self_approval_incidents",
       "owner": "PEOPLE",
       "metric": "orgSelfApprovalIncidentCount",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "assertOrgChangeApproved (orchestrator/src/org/change.ts) throws before a self-approved change can be applied, and the refusal is not logged. A count over state/org/changes.jsonl could therefore only ever be 0 - it would measure the guard's existence, not incidents."
+      }
     },
     {
       "id": "ledger.reconciliation",
       "owner": "LEDGER",
       "metric": "reconciledCostCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No committed rule defines which recorded costs must reconcile against which ledger."
+      }
     },
     {
       "id": "ledger.budget_variance",
@@ -210,21 +322,33 @@
       "metric": "absoluteMonthEndForecastErrorRate",
       "target": 0.1,
       "dir": "down",
-      "warmupCycles": 28
+      "warmupCycles": 28,
+      "measurement": {
+        "kind": "none",
+        "reason": "No month-end forecast is committed, so an actual has nothing to be compared against."
+      }
     },
     {
       "id": "ledger.over_budget",
       "owner": "LEDGER",
       "metric": "overBudgetCommitmentCount",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "Budget ledger entries carry no over-cap marker and refused commitments are never written, so the ledger cannot show an over-budget commitment."
+      }
     },
     {
       "id": "ledger.unreviewed_spend",
       "owner": "LEDGER",
       "metric": "pastDueSpendReviewCount",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "state/treasury/ledger.json has no entries and no review-due field, so no spend review can be past due."
+      }
     },
     {
       "id": "edition.on_time_rate",
@@ -232,7 +356,11 @@
       "metric": "caughtUpEditionOnTimeRate",
       "target": 0.95,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No committed schedule gives an edition a due time, so 'on time' has nothing to be measured against."
+      }
     },
     {
       "id": "edition.no_edition_rate",
@@ -240,7 +368,11 @@
       "metric": "caughtUpNoEditionRate",
       "target": 0.2,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#no_edition_rate"
+      }
     },
     {
       "id": "edition.signal_strength_avg",
@@ -248,7 +380,11 @@
       "metric": "caughtUpEditionSignalStrengthAverage",
       "target": 35,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#edition_signal_strength_average"
+      }
     },
     {
       "id": "copy.slop_block_rate",
@@ -256,7 +392,12 @@
       "metric": "caughtUpSlopBlockRate",
       "target": 0.2,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#copy_block_rate",
+        "note": "Shares its measurement with localization.copy_block_rate: one review stage, two bars."
+      }
     },
     {
       "id": "copy.rewrite_pass_rate",
@@ -264,7 +405,11 @@
       "metric": "caughtUpRewritePassRate",
       "target": 0.9,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#rewrite_pass_rate"
+      }
     },
     {
       "id": "copy.reader_complaints",
@@ -272,7 +417,11 @@
       "metric": "caughtUpCopyComplaintCount",
       "target": 0,
       "dir": "down",
-      "requires": "reader_feedback"
+      "requires": "reader_feedback",
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the reader_feedback capability; no reader feedback channel exists."
+      }
     },
     {
       "id": "localization.register_pass_rate",
@@ -280,7 +429,12 @@
       "metric": "caughtUpCzechRegisterPassRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#czech_register_pass_rate",
+        "note": "Counted over reviews performed (the stet_<attempt> stages and stetBlocks), not over runs or deliveries. The reporter keeps only the last attempt's verdict, so scoring runs by that field reports a pass for copy that was sent back; and every delivered run passes by construction, so scoring deliveries could only ever return 1."
+      }
     },
     {
       "id": "localization.copy_block_rate",
@@ -288,7 +442,12 @@
       "metric": "caughtUpCzechCopyBlockRate",
       "target": 0,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#copy_block_rate",
+        "note": "Since the English and Czech reviews collapsed into one reviewCzechArticle pass, STET and HACEK grade the same stage against different bars; this shares copy.slop_block_rate's measurement and keeps its own stricter target."
+      }
     },
     {
       "id": "localization.reader_complaints",
@@ -296,7 +455,11 @@
       "metric": "caughtUpCzechCopyComplaintCount",
       "target": 0,
       "dir": "down",
-      "requires": "reader_feedback"
+      "requires": "reader_feedback",
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the reader_feedback capability; no reader feedback channel exists."
+      }
     },
     {
       "id": "growth.idea_novelty_rate",
@@ -304,7 +467,11 @@
       "metric": "caughtUpIdeaNoveltyRate",
       "target": 0.8,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "state/ideas/caught-up#novelty_rate"
+      }
     },
     {
       "id": "growth.idea_shipped_rate",
@@ -312,7 +479,11 @@
       "metric": "caughtUpAcceptedIdeaShippedRate",
       "target": 0.5,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No idea in state/ideas/caught-up/ledger.jsonl has reached 'accepted', so the accepted-idea denominator is empty."
+      }
     },
     {
       "id": "growth.reader_growth",
@@ -320,7 +491,11 @@
       "metric": "caughtUpReaderGrowthRate",
       "target": 0.01,
       "dir": "up",
-      "requires": "analytics"
+      "requires": "analytics",
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the analytics capability; no analytics data is committed."
+      }
     },
     {
       "id": "memory.dupe_catch_rate",
@@ -328,7 +503,11 @@
       "metric": "caughtUpDuplicateCatchRate",
       "target": 0.9,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "similarTo records the near-duplicates VAULT found. A duplicate it missed is never written, so the catch denominator does not exist."
+      }
     },
     {
       "id": "memory.false_kill_rate",
@@ -336,35 +515,56 @@
       "metric": "caughtUpFalseDuplicateKillRate",
       "target": 0.05,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing records that a killed idea was killed wrongly."
+      }
     },
     {
       "id": "memory.index_freshness",
       "owner": "VAULT",
       "metric": "caughtUpIdeaIndexFreshnessRate",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No committed record timestamps the idea index against the ledger it indexes."
+      }
     },
     {
       "id": "media.asset_qa_pass_rate",
       "owner": "FRAME",
       "metric": "caughtUpMediaAssetQaPassRate",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No media asset QA verdict is committed."
+      }
     },
     {
       "id": "media.cost_usd",
       "owner": "FRAME",
       "metric": "caughtUpMediaCostUsd",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#media_cost_usd",
+        "note": "Budget ledger entries carry kind 'image', so image spend is separable from text spend. The current value is a measured zero over an actively written ledger, not an absent counter."
+      }
     },
     {
       "id": "media.alt_text_coverage",
       "owner": "FRAME",
       "metric": "caughtUpMediaAltTextCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No Caught Up media asset record is committed; the only altText under state/ belongs to agent portraits."
+      }
     },
     {
       "id": "ops.delivery_success_rate",
@@ -372,7 +572,11 @@
       "metric": "caughtUpDeliverySuccessRate",
       "target": 0.95,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#delivery_success_rate"
+      }
     },
     {
       "id": "ops.time_to_publish_min",
@@ -380,7 +584,11 @@
       "metric": "caughtUpTimeToPublishMinutes",
       "target": 60,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "quarterly",
+        "metricSource": "receipts/caught-up#time_to_publish_minutes"
+      }
     },
     {
       "id": "ops.daily_digest_delivery_rate",
@@ -389,7 +597,11 @@
       "target": 0.95,
       "dir": "up",
       "requires": "daily_digest_delivery",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Requires the daily_digest_delivery capability. state/notify/digest holds only digests that were sent; a digest that was due and missed is never written, so the denominator does not exist."
+      }
     },
     {
       "id": "angle.positioning_freshness",
@@ -397,7 +609,11 @@
       "metric": "activeVenturePositioningFreshnessRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No venture record carries a positioning timestamp, so freshness has nothing to age against."
+      }
     },
     {
       "id": "angle.campaign_trace_rate",
@@ -405,7 +621,11 @@
       "metric": "campaignBriefTraceRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No campaign brief record is committed."
+      }
     },
     {
       "id": "cohort.spec_coverage",
@@ -413,14 +633,22 @@
       "metric": "graduatedCampaignAudienceSpecCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No graduated campaign and no audience spec record is committed."
+      }
     },
     {
       "id": "cohort.validation_failures",
       "owner": "COHORT",
       "metric": "mergedAudienceSpecValidationFailures",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "No audience spec has been merged, so no validation failure can be recorded."
+      }
     },
     {
       "id": "funnel.plan_readiness",
@@ -428,28 +656,44 @@
       "metric": "seasonLaunchPlanReadinessRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/ventures/titty-tuesdays/plans does not exist; no season launch plan is committed."
+      }
     },
     {
       "id": "funnel.estimate_label_rate",
       "owner": "FUNNEL",
       "metric": "estimatedCostLabelCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No cost estimate record is committed to carry an estimate label."
+      }
     },
     {
       "id": "palate.evidence_link_rate",
       "owner": "PALATE",
       "metric": "tasteRuleRatingReferenceCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "state/taste holds no rating records, so no taste rule rating exists to carry a reference."
+      }
     },
     {
       "id": "palate.prompt_write_incidents",
       "owner": "PALATE",
       "metric": "unauthorizedPromptWriteCount",
       "target": 0,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing writes a prompt-write incident record."
+      }
     },
     {
       "id": "scene.report_coverage",
@@ -457,14 +701,22 @@
       "metric": "sceneDayReportCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No scene day report is committed."
+      }
     },
     {
       "id": "scene.source_coverage",
       "owner": "SCENE",
       "metric": "sceneClaimSourceCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No scene claim record is committed to carry a source."
+      }
     },
     {
       "id": "stunt.graduated_concepts",
@@ -472,14 +724,22 @@
       "metric": "graduatedStuntConceptsPerSeason",
       "target": 2,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No stunt concept record is committed."
+      }
     },
     {
       "id": "stunt.safety_note_coverage",
       "owner": "STUNT",
       "metric": "stuntSafetyNoteCoverage",
       "target": 1,
-      "dir": "up"
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No stunt concept record is committed to carry a safety note."
+      }
     },
     {
       "id": "corner.t3_readiness",
@@ -487,7 +747,11 @@
       "metric": "announcedBoutDossierReadinessAtT3",
       "target": 0.9,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Bout records carry a status but no dossier-readiness marker and no T-3 snapshot, so readiness at T-3 cannot be reconstructed after the fact."
+      }
     },
     {
       "id": "corner.citation_coverage",
@@ -495,7 +759,11 @@
       "metric": "fighterFieldCitationCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Fighter records carry a sources list for the record as a whole, not per field, so field-level citation coverage has no committed rule."
+      }
     },
     {
       "id": "spotter.t3_readiness",
@@ -503,7 +771,11 @@
       "metric": "oktagonBoutDossierReadinessAtT3",
       "target": 0.9,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Bout records carry a status but no dossier-readiness marker and no T-3 snapshot, so readiness at T-3 cannot be reconstructed after the fact."
+      }
     },
     {
       "id": "spotter.weighin_coverage",
@@ -511,7 +783,11 @@
       "metric": "oktagonWeighInOutcomeCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Oktagon bout records carry no weigh-in outcome fields; 'weigh-in' is only a value of status."
+      }
     },
     {
       "id": "tape.linked_adjustments",
@@ -519,7 +795,11 @@
       "metric": "evidenceLinkedAdjustmentRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No model adjustment record is committed."
+      }
     },
     {
       "id": "tape.adjustment_review",
@@ -527,7 +807,11 @@
       "metric": "monthlyAdjustmentOutcomeReview",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No monthly adjustment outcome review is committed."
+      }
     },
     {
       "id": "sigma.version_coverage",
@@ -535,7 +819,11 @@
       "metric": "publishedProbabilityModelVersionCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No published probability is committed to carry a model version."
+      }
     },
     {
       "id": "sigma.calibration_report",
@@ -543,7 +831,11 @@
       "metric": "weeklyCalibrationReportCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/mma/evaluation/calibration does not exist; no calibration report is committed."
+      }
     },
     {
       "id": "vig.clv_coverage",
@@ -551,7 +843,11 @@
       "metric": "publishedPickClosingLineCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No published pick is committed to carry a closing line."
+      }
     },
     {
       "id": "vig.pre_event_calls",
@@ -559,7 +855,11 @@
       "metric": "preEventDivergenceRecordRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No pre-event divergence record is committed."
+      }
     },
     {
       "id": "sonar.vetted_proposals",
@@ -567,7 +867,11 @@
       "metric": "vettedSourceProposalsPerWeek",
       "target": 2,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No source proposal record is committed."
+      }
     },
     {
       "id": "sonar.tos_coverage",
@@ -575,7 +879,11 @@
       "metric": "sourceProposalTermsVerdictCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No source proposal record is committed to carry a terms verdict."
+      }
     },
     {
       "id": "canvas.slot_accounting",
@@ -583,7 +891,11 @@
       "metric": "dailyArticleSlotAccountingRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/ventures/mma-files/runs holds one record per slot that ran, but no committed schedule says how many slots a day owes, so the accounting denominator is undefined."
+      }
     },
     {
       "id": "canvas.clean_publish_rate",
@@ -591,7 +903,11 @@
       "metric": "articleCleanPublishRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No article record carries a clean-publish verdict."
+      }
     },
     {
       "id": "jab.deadline_rate",
@@ -599,7 +915,11 @@
       "metric": "articleDraftDeadlineRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No committed slot deadline exists for an article draft to be measured against."
+      }
     },
     {
       "id": "jab.grounding_rate",
@@ -607,7 +927,11 @@
       "metric": "articleGroundingPassRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No article record carries a grounding-check verdict."
+      }
     },
     {
       "id": "reach.pack_coverage",
@@ -615,7 +939,11 @@
       "metric": "articleSocialVariantPackCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/social/packs holds no pack records."
+      }
     },
     {
       "id": "reach.axis_coverage",
@@ -623,7 +951,11 @@
       "metric": "socialVariantAxisCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No social variant record is committed to carry an axis."
+      }
     },
     {
       "id": "split.metrics_ingestion_incidents",
@@ -631,7 +963,11 @@
       "metric": "metricsIngestionIncidentCount",
       "target": 0,
       "dir": "down",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing writes a metrics ingestion incident record."
+      }
     },
     {
       "id": "split.phase_gate_compliance",
@@ -639,7 +975,11 @@
       "metric": "phaseThreeGateClosedRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No committed record states whether the phase-three gate was closed on a given day."
+      }
     },
     {
       "id": "pivot.bridge_freshness",
@@ -647,7 +987,11 @@
       "metric": "dailyMmaBridgeCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No daily MMA bridge record is committed."
+      }
     },
     {
       "id": "pivot.crossed_insights",
@@ -655,7 +999,11 @@
       "metric": "usedCrossDeskInsightsPerWeek",
       "target": 2,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing records that one desk used another desk's insight."
+      }
     },
     {
       "id": "easel.live_template_proposals",
@@ -663,7 +1011,11 @@
       "metric": "checkedTemplateProposalsPerQuarter",
       "target": 6,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/ventures/carousel-studio/templates does not exist; no template proposal record is committed."
+      }
     },
     {
       "id": "easel.check_pass_rate",
@@ -671,7 +1023,11 @@
       "metric": "templateProposalCheckPassRate",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/ventures/carousel-studio/templates does not exist; no template proposal record is committed."
+      }
     },
     {
       "id": "motif.cited_observations",
@@ -679,7 +1035,11 @@
       "metric": "citedStudioObservationsPerQuarter",
       "target": 12,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/ventures/carousel-studio/observations does not exist; no studio observation record is committed."
+      }
     },
     {
       "id": "motif.brand_coverage",
@@ -687,21 +1047,33 @@
       "metric": "studioObservationBrandCoverage",
       "target": 1,
       "dir": "up",
-      "warmupCycles": 14
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "state/ventures/carousel-studio/observations does not exist; no studio observation record is committed."
+      }
     },
     {
       "id": "council.cost_per_learning",
       "owner": "ALL",
       "metric": "usdPerValidatedLearning",
       "target": 0.65,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing marks a learning as validated, so the denominator does not exist."
+      }
     },
     {
       "id": "council.duplicate_rate",
       "owner": "ALL",
       "metric": "duplicateProposalRate",
       "target": 0.05,
-      "dir": "down"
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "Nothing marks a proposal as duplicating another."
+      }
     }
   ]
 }
