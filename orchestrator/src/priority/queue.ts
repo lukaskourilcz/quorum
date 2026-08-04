@@ -4,8 +4,10 @@ import {
   PriorityItemSchema,
   PriorityQueueSchema,
   type PriorityItem,
+  type PriorityProposalProvenance,
   type PriorityQueue
 } from "../contracts/autonomy.js";
+import { ideaSimilarity } from "../ideas/ledger.js";
 import { atomicWriteJson, readJson } from "../state.js";
 
 export const PRIORITY_QUEUE_PATH = "priority-queue.json";
@@ -13,6 +15,47 @@ export const PRIORITY_QUEUE_PATH = "priority-queue.json";
 // The items cap in PriorityQueueSchema, restated so the prune below can reason about it.
 // A test asserts the two stay equal.
 export const PRIORITY_QUEUE_CAP = 200;
+
+/**
+ * How many live questions one venture may hold at once.
+ *
+ * Until the board could propose, no such cap existed and none was needed: the morning seed loop
+ * skips a venture that already has a live item, so a venture held one and the ceiling was a side
+ * effect of the only writer. A proposing board is a second writer that does not consult that
+ * loop, so the ceiling has to become a rule. Three is the seeded objective plus two questions the
+ * board invented — enough for it to open a line of enquiry beside the standing objective, and
+ * short enough that a venture cannot bury its own objective under a week of proposals. The board
+ * may propose once a day and items live a week, so without this a venture would drift toward
+ * eight live questions of which seven came from a model.
+ */
+export const PRIORITY_QUEUE_VENTURE_CAP = 3;
+
+/**
+ * Wording overlap at or above which a proposed question is refused as one the queue already has.
+ *
+ * The same number and the same scorer as the ideas ledger's duplicate check, deliberately: that
+ * ledger has been screening model-written proposals for wording overlap since founding, and a
+ * second threshold tuned by guess would be a second thing to keep calibrated. See
+ * deterministicVaultAdjudicator in ideas/ledger.ts for the precedent.
+ */
+export const PRIORITY_DUPLICATE_AT = 0.85;
+
+/**
+ * A proposal the queue refused, with the guard that refused it.
+ *
+ * A distinct type because the refusal is published — the standup prints it — and because the
+ * caller must be able to tell "the board proposed something the queue would not take" from a
+ * disk error or a contract failure, which are not the board's doing and must still crash.
+ */
+export class PriorityProposalRefused extends Error {
+  constructor(
+    readonly guard: "duplicate" | "venture-cap" | "queue-cap",
+    message: string
+  ) {
+    super(message);
+    this.name = "PriorityProposalRefused";
+  }
+}
 
 // One week, the same window the morning seed gives an item in cycle.ts. A finished item
 // is kept for a full window past its own expiry so a recently resolved question is still
@@ -125,6 +168,7 @@ export async function addPriorityItem(input: {
   requestedBy?: string;
   now: Date;
   expires: Date;
+  proposal?: PriorityProposalProvenance;
 }): Promise<PriorityItem> {
   const queue = await readPriorityQueue(input.root, input.now);
   const id = `priority-${createHash("sha256")
@@ -143,7 +187,9 @@ export async function addPriorityItem(input: {
     expires: input.expires.toISOString(),
     status: "open",
     why_not_reason: null,
-    consumed_by: null
+    consumed_by: null,
+    origin: input.proposal ? "proposed" : "seeded",
+    proposal: input.proposal ?? null
   });
   await atomicWriteJson(input.root, PRIORITY_QUEUE_PATH, PriorityQueueSchema.parse({
     schemaVersion: "priority-queue/1",
@@ -153,6 +199,124 @@ export async function addPriorityItem(input: {
     updatedAt: input.now.toISOString()
   }));
   return item;
+}
+
+/**
+ * Items a proposal is checked against: everything on this venture's queue that is not archived.
+ *
+ * Wider than openPriorityItems on purpose. A "selected" item is the question the board is having
+ * a room answer right now, and re-proposing it while that room sits in the agenda queue is the
+ * most obvious way to get the same work commissioned twice. "why-not" is the one the brief calls
+ * out and the one the queue is currently full of — ten items, every one of them declined at some
+ * morning — so a check that skipped them would let the board re-propose its own back catalogue on
+ * day one. Only "archived" is excluded: those expired, and a question worth asking again a week
+ * later is a new question, not a duplicate.
+ */
+export function livePriorityItems(queue: PriorityQueue, venture: string): PriorityItem[] {
+  return queue.items.filter((item) => item.venture === venture && item.status !== "archived");
+}
+
+/**
+ * The item a proposed question duplicates, or null.
+ *
+ * Scoped to the venture. The same sentence under two ventures is two different jobs — "what is
+ * blocking the content pipeline" means something different for FightAIQ than for MMA Files — and
+ * refusing across ventures would let whichever venture asked first silence the rest.
+ */
+export function findDuplicatePriorityItem(input: {
+  queue: PriorityQueue;
+  venture: string;
+  question: string;
+  decisionAtStake: string;
+}): { item: PriorityItem; score: number } | null {
+  const proposed = { title: input.question.trim(), summary: input.decisionAtStake.trim() };
+  let best: { item: PriorityItem; score: number } | null = null;
+  for (const item of livePriorityItems(input.queue, input.venture)) {
+    const score = ideaSimilarity(proposed, {
+      title: item.question,
+      summary: item.decision_at_stake
+    });
+    if (!best || score > best.score) best = { item, score };
+  }
+  return best && best.score >= PRIORITY_DUPLICATE_AT ? best : null;
+}
+
+/**
+ * Put a question the board invented on the queue, or refuse it and say which guard refused.
+ *
+ * Separate from ensurePriorityItem rather than a flag on it, because the two have opposite
+ * defaults. The seed is idempotent and silent: it exists so a re-run adds nothing, and it matches
+ * only exact wording because the wording it writes is generated from config and never varies.
+ * A proposal is neither. It is model-written prose that will vary a little every day while
+ * meaning the same thing, so it needs fuzzy matching, and it must be refused out loud rather than
+ * quietly folded into an existing item, because the board is told whether its proposal landed and
+ * a silent no-op would read to it as a yes.
+ *
+ * Every refusal below throws PriorityProposalRefused, whose message the caller publishes. None of
+ * them is a bug: they are the queue declining work, which is a normal outcome the record states.
+ */
+export async function proposePriorityItem(input: {
+  root: string;
+  venture: string;
+  question: string;
+  decisionAtStake: string;
+  evidenceNeeded?: string[];
+  proposedBy: string;
+  meetingRef: string;
+  now: Date;
+  expires: Date;
+}): Promise<PriorityItem> {
+  const queue = await readPriorityQueue(input.root, input.now);
+
+  const duplicate = findDuplicatePriorityItem({
+    queue,
+    venture: input.venture,
+    question: input.question,
+    decisionAtStake: input.decisionAtStake
+  });
+  if (duplicate) {
+    throw new PriorityProposalRefused(
+      "duplicate",
+      `The queue already holds ${duplicate.item.id} for ${input.venture} at ${duplicate.score.toFixed(2)} wording overlap (${duplicate.item.status}). A question already on the queue is asked by selecting it, not by proposing it again.`
+    );
+  }
+
+  const live = livePriorityItems(queue, input.venture);
+  if (live.length >= PRIORITY_QUEUE_VENTURE_CAP) {
+    throw new PriorityProposalRefused(
+      "venture-cap",
+      `${input.venture} already holds ${live.length} live questions, at the ${PRIORITY_QUEUE_VENTURE_CAP}-question limit per project. Settle one before adding another.`
+    );
+  }
+
+  // Checked before the append rather than left to withinCap. withinCap would accept this item and
+  // evict the oldest finished one to stay under the cap — correct when the writer is the seed
+  // loop restoring a venture's standing question, wrong when the writer is the board, which must
+  // not be able to push a resolved question out of the record by inventing new ones.
+  if (queue.items.length >= PRIORITY_QUEUE_CAP) {
+    throw new PriorityProposalRefused(
+      "queue-cap",
+      `The priority queue holds ${queue.items.length} items, at its ${PRIORITY_QUEUE_CAP}-item limit. Nothing was dropped to make room for a proposal.`
+    );
+  }
+
+  return addPriorityItem({
+    root: input.root,
+    venture: input.venture,
+    question: input.question,
+    decisionAtStake: input.decisionAtStake,
+    ...(input.evidenceNeeded ? { evidenceNeeded: input.evidenceNeeded } : {}),
+    // requested_by carries the proposing seat too, so the admin UI and every existing reader that
+    // only knows about that field still attribute the question to the seat that asked for it.
+    requestedBy: input.proposedBy,
+    now: input.now,
+    expires: input.expires,
+    proposal: {
+      proposed_by: input.proposedBy,
+      meeting_ref: input.meetingRef,
+      proposed_at: input.now.toISOString()
+    } as PriorityProposalProvenance
+  });
 }
 
 export async function ensurePriorityItem(input: {

@@ -121,6 +121,88 @@
           "type": "null"
         }
       ]
+    },
+    "origin": {
+      "default": "seeded",
+      "type": "string",
+      "enum": [
+        "seeded",
+        "proposed"
+      ]
+    },
+    "proposal": {
+      "default": null,
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "proposed_by": {
+              "type": "string",
+              "enum": [
+                "VIZE",
+                "FORGE",
+                "PULSE",
+                "AUDIT",
+                "SCOUT",
+                "SCRIBE",
+                "LENS",
+                "QUILL",
+                "RADAR",
+                "KEEPER",
+                "THREADS",
+                "INSTAGRAM",
+                "PEOPLE",
+                "LEDGER",
+                "HERALD",
+                "STET",
+                "HACEK",
+                "SPARK",
+                "VAULT",
+                "FRAME",
+                "RELAY",
+                "ANGLE",
+                "COHORT",
+                "FUNNEL",
+                "PALATE",
+                "SCENE",
+                "STUNT",
+                "CORNER",
+                "SPOTTER",
+                "TAPE",
+                "SIGMA",
+                "VIG",
+                "SONAR",
+                "CANVAS",
+                "JAB",
+                "REACH",
+                "SPLIT",
+                "EASEL",
+                "MOTIF",
+                "PIVOT"
+              ]
+            },
+            "meeting_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "proposed_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            }
+          },
+          "required": [
+            "proposed_by",
+            "meeting_ref",
+            "proposed_at"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
   "required": [
@@ -135,7 +217,9 @@
     "expires",
     "status",
     "why_not_reason",
-    "consumed_by"
+    "consumed_by",
+    "origin",
+    "proposal"
   ],
   "additionalProperties": {},
   "$id": "https://boardless.ai/contracts/priority-item.schema.json"

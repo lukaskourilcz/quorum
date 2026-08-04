@@ -2,13 +2,16 @@ import { describe, expect, it } from "vitest";
 import { PriorityItemSchema } from "../src/contracts/autonomy.js";
 import type { PriorityItem } from "../src/contracts/autonomy.js";
 import {
+  councilVoteGate,
   resolveMorningCommission,
+  resolvePriorityProposal,
   schedulerBlockedReason
 } from "../src/cycle.js";
 import { loadMeetingPolicy, mayRequestMeeting, phaseNeedsAgenda } from "../src/meetings/agenda.js";
 import {
   commissionableRooms,
   parseCouncilPosition,
+  proposableVentureIds,
   roleSystem,
   type RecordedPosition
 } from "../src/standup/live.js";
@@ -38,17 +41,33 @@ function priority(overrides: Partial<PriorityItem> = {}): PriorityItem {
 
 function positions(overrides: {
   audit?: "approve" | "hold";
+  pulse?: "approve" | "hold";
   request?: RecordedPosition["meetingRequest"];
+  proposals?: Partial<Record<RecordedPosition["agent"], RecordedPosition["priorityProposal"]>>;
 } = {}): RecordedPosition[] {
   return (["VIZE", "FORGE", "PULSE", "AUDIT"] as const).map((agent, index) => ({
     agent,
     publicSummary: `${agent} recorded a bounded public position.`,
-    recommendation: agent === "AUDIT" ? overrides.audit ?? "approve" : "approve",
+    recommendation: agent === "AUDIT"
+      ? overrides.audit ?? "approve"
+      : agent === "PULSE"
+        ? overrides.pulse ?? "approve"
+        : "approve",
     risk: "Keep the work inside the internal operating queue.",
     meetingRequest: agent === "VIZE" ? overrides.request ?? null : null,
+    priorityProposal: overrides.proposals?.[agent] ?? null,
     sentAt: new Date(Date.parse("2026-08-03T04:00:00.000Z") + index * 1_000).toISOString()
   }));
 }
+
+const proposableVentures = proposableVentureIds(rooms);
+
+const validProposal = {
+  venture: "titty-tuesdays",
+  question: "Which campaign format has never been tested against the season brief?",
+  decisionAtStake: "Whether the next campaign slot repeats a tested format or trials a new one.",
+  evidenceNeeded: ["campaign-inventory"]
+};
 
 const validRequest = {
   priorityItemId: "priority-0123456789abcdef",
@@ -126,7 +145,8 @@ describe("parsing one council position", () => {
     const parsed = parseCouncilPosition({
       agent: "VIZE",
       text: reply({ meetingRequest: { ...validRequest, priorityItemId: "priority-1" } }),
-      openPriorities: [priority()]
+      openPriorities: [priority()],
+      proposableVentures
     });
 
     expect(parsed.position.recommendation).toBe("approve");
@@ -138,7 +158,8 @@ describe("parsing one council position", () => {
     const parsed = parseCouncilPosition({
       agent: "VIZE",
       text: reply({ meetingRequest: { ...validRequest, priorityItemId: "priority-fedcba9876543210" } }),
-      openPriorities: [priority()]
+      openPriorities: [priority()],
+      proposableVentures
     });
 
     expect(parsed.position.recommendation).toBe("approve");
@@ -150,7 +171,8 @@ describe("parsing one council position", () => {
     const parsed = parseCouncilPosition({
       agent: "VIZE",
       text: reply({ meetingRequest: validRequest }),
-      openPriorities: [priority()]
+      openPriorities: [priority()],
+      proposableVentures
     });
 
     expect(parsed.position.meetingRequest).toEqual(validRequest);
@@ -161,7 +183,8 @@ describe("parsing one council position", () => {
     const parsed = parseCouncilPosition({
       agent: "VIZE",
       text: reply({}),
-      openPriorities: [priority()]
+      openPriorities: [priority()],
+      proposableVentures
     });
 
     expect(parsed.position.meetingRequest).toBeNull();
@@ -172,13 +195,15 @@ describe("parsing one council position", () => {
     expect(() => parseCouncilPosition({
       agent: "FORGE",
       text: reply({ meetingRequest: null }),
-      openPriorities: []
+      openPriorities: [],
+      proposableVentures
     })).toThrow(/identity mismatch/);
 
     expect(() => parseCouncilPosition({
       agent: "VIZE",
       text: JSON.stringify({ agent: "VIZE", publicSummary: "x", risk: "y" }),
-      openPriorities: []
+      openPriorities: [],
+      proposableVentures
     })).toThrow();
   });
 });
@@ -317,6 +342,154 @@ describe("every published reason fits the standup record", () => {
     for (const outcome of declines) {
       if (outcome.commission) throw new Error("expected no commission");
       expect(outcome.reason.length).toBeLessThanOrEqual(limit);
+    }
+  });
+});
+
+describe("proposing a new priority question", () => {
+  it("tells the seats the fields, the one-per-meeting limit and that a topic is refused", () => {
+    const prompt = roleSystem("VIZE", rooms);
+
+    for (const field of ["venture", "question", "decisionAtStake", "evidenceNeeded"]) {
+      expect(prompt).toContain(field);
+    }
+    expect(prompt).toContain("at most one question");
+    expect(prompt).toContain("a topic, not work");
+    expect(prompt).toContain("AUDIT never proposes");
+    // Only ventures with a room this shift can open may be named, so a proposed question is
+    // always one the board could later commission.
+    for (const ventureId of proposableVentures) {
+      expect(prompt).toContain(ventureId);
+    }
+  });
+
+  it("tells a shift with no reachable room that it cannot propose either", () => {
+    expect(roleSystem("PULSE", [])).toContain("No new question can be proposed");
+  });
+
+  it("keeps the vote when the proposal is malformed", () => {
+    const parsed = parseCouncilPosition({
+      agent: "VIZE",
+      text: reply({ priorityProposal: { ...validProposal, decisionAtStake: "" } }),
+      openPriorities: [priority()],
+      proposableVentures
+    });
+
+    expect(parsed.position.recommendation).toBe("approve");
+    expect(parsed.position.priorityProposal).toBeNull();
+    expect(parsed.droppedPriorityProposal).toContain("does not match the contract");
+  });
+
+  it("refuses a question with no decision behind it", () => {
+    const { decisionAtStake: _omitted, ...topicOnly } = validProposal;
+    const parsed = parseCouncilPosition({
+      agent: "FORGE",
+      text: JSON.stringify({
+        agent: "FORGE",
+        publicSummary: "FORGE recorded a bounded public position.",
+        recommendation: "approve",
+        risk: "Keep the work inside the internal operating queue.",
+        priorityProposal: topicOnly
+      }),
+      openPriorities: [priority()],
+      proposableVentures
+    });
+
+    expect(parsed.position.priorityProposal).toBeNull();
+    expect(parsed.droppedPriorityProposal).toContain("decisionAtStake");
+  });
+
+  it("refuses a venture this shift can commission no room for", () => {
+    // caught-up owns only service rooms, so a question for it could never be answered.
+    expect(proposableVentures).not.toContain("caught-up");
+    const parsed = parseCouncilPosition({
+      agent: "VIZE",
+      text: reply({ priorityProposal: { ...validProposal, venture: "caught-up" } }),
+      openPriorities: [priority()],
+      proposableVentures
+    });
+
+    expect(parsed.position.priorityProposal).toBeNull();
+    expect(parsed.droppedPriorityProposal).toContain("caught-up");
+  });
+
+  it("keeps a well-formed proposal", () => {
+    const parsed = parseCouncilPosition({
+      agent: "VIZE",
+      text: reply({ priorityProposal: validProposal }),
+      openPriorities: [priority()],
+      proposableVentures
+    });
+
+    expect(parsed.position.priorityProposal).toEqual(validProposal);
+    expect(parsed.droppedPriorityProposal).toBeNull();
+  });
+
+  it("takes one proposal from a meeting that carried, and counts the rest", () => {
+    const decision = resolvePriorityProposal({
+      positions: positions({ proposals: { VIZE: validProposal, PULSE: validProposal } })
+    });
+
+    expect(decision.kind).toBe("take");
+    if (decision.kind !== "take") throw new Error("expected a proposal to be taken");
+    expect(decision.proposedBy).toBe("VIZE");
+    expect(decision.alsoProposed).toBe(1);
+  });
+
+  it("records nothing when no seat proposed", () => {
+    expect(resolvePriorityProposal({ positions: positions() }).kind).toBe("none");
+  });
+
+  it("refuses a proposal on the same gate the commission uses, and says the vote", () => {
+    const decision = resolvePriorityProposal({
+      positions: positions({ audit: "hold", proposals: { VIZE: validProposal } })
+    });
+
+    expect(decision.kind).toBe("refuse");
+    if (decision.kind !== "refuse") throw new Error("expected a refusal");
+    expect(decision.reason).toContain("AUDIT did not approve");
+    expect(decision.reason).toContain("AUDIT plus three approvals");
+    // Refused, but still attributed: a board that proposed and lost the vote is on the record.
+    expect(decision.proposedBy).toBe("VIZE");
+  });
+
+  it("refuses a proposal that has AUDIT but only two approvals", () => {
+    const decision = resolvePriorityProposal({
+      positions: positions({ pulse: "hold", proposals: { FORGE: validProposal } })
+    });
+
+    // VIZE, FORGE and AUDIT approve, PULSE holds — three approvals, so the gate carries.
+    expect(decision.kind).toBe("take");
+
+    const short = positions({ pulse: "hold", proposals: { FORGE: validProposal } })
+      .filter((position) => position.agent !== "VIZE");
+    expect(resolvePriorityProposal({ positions: short }).kind).toBe("refuse");
+  });
+
+  it("never lets AUDIT author work for itself to audit", () => {
+    const decision = resolvePriorityProposal({
+      positions: positions({ proposals: { AUDIT: validProposal } })
+    });
+
+    expect(decision.kind).toBe("none");
+  });
+
+  it("uses one vote gate for both the commission and the proposal", () => {
+    // The two paths must not be able to disagree about what "the meeting carried" means.
+    for (const audit of ["approve", "hold"] as const) {
+      const seats = positions({ audit, request: validRequest, proposals: { VIZE: validProposal } });
+      const gate = councilVoteGate(seats);
+      const commission = resolveMorningCommission({
+        policy,
+        registry,
+        sourcePhase: "morning",
+        positions: seats,
+        openPriorities: [priority()]
+      });
+      const proposal = resolvePriorityProposal({ positions: seats });
+
+      expect(commission.commission).toBe(gate.passed);
+      expect(proposal.kind).toBe(gate.passed ? "take" : "refuse");
     }
   });
 });

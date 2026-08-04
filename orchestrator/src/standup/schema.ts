@@ -126,6 +126,21 @@ export const StandupSchema = z.object({
       verifierPassRate: z.number().min(0).max(1)
     })
   }).optional(),
+  /**
+   * The one question a seat asked to add to the priority queue this meeting, and what became of
+   * it. Present only when a seat actually proposed something — a meeting where nobody proposed
+   * records nothing rather than a daily line saying so. A refused proposal is recorded as
+   * faithfully as an accepted one; a board that only publishes its wins is not a record.
+   */
+  priorityProposal: z.object({
+    proposedBy: FoundingAgentSchema,
+    venture: z.string().min(1).max(80),
+    question: z.string().min(1).max(280),
+    decisionAtStake: z.string().min(1).max(280),
+    outcome: z.enum(["accepted", "refused"]),
+    reason: z.string().min(1).max(280),
+    priorityItemId: z.string().min(1).nullable()
+  }).optional(),
   starvationReview: z.array(z.object({
     ventureId: z.string().min(1),
     outcome: z.enum(["commissioned", "why-not"]),

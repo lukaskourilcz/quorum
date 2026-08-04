@@ -40,6 +40,7 @@ function positions(): RecordedPosition[] {
     recommendation: "approve" as const,
     risk: "Keep the work inside the internal operating queue.",
     meetingRequest: null,
+    priorityProposal: null,
     sentAt: new Date(AFTER_PRAGUE_MIDNIGHT.getTime() + index * 1_000).toISOString()
   }));
 }

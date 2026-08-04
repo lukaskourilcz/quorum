@@ -80,7 +80,7 @@ import {
 } from "./standup/live.js";
 import { publicStandup } from "./standup/public.js";
 import { createOfflineStandup } from "./standup/run.js";
-import { StandupSchema } from "./standup/schema.js";
+import { StandupSchema, type Standup } from "./standup/schema.js";
 import {
   getShiftDefinition,
   isShiftPhase
@@ -111,7 +111,7 @@ import {
 } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
-import { ensurePriorityItem, openPriorityItems, readPriorityQueue, selectPriorityItem, skipPriorityItem, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
+import { ensurePriorityItem, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
 import { loadRuntimeBudgetLimits } from "./portfolio/limits.js";
@@ -201,6 +201,34 @@ export type MorningCommission =
  * did not reach the commission gate" — which is the wrong sentence for a council that reached it
  * and then named the wrong room. Every return below carries its own.
  */
+/**
+ * The vote half of the commission gate: AUDIT plus three approvals, and nothing about rooms.
+ *
+ * Extracted so a priority proposal passes the identical test rather than a second one written to
+ * look like it. Two hand-written copies of "AUDIT plus three" would drift the first time either
+ * moved, and the drift would be silent in the direction that matters — a board that can add work
+ * to its own queue on a weaker majority than it needs to spend a meeting.
+ */
+export function councilVoteGate(positions: readonly RecordedPosition[]): {
+  passed: boolean;
+  approvals: number;
+  auditApproved: boolean;
+  summary: string;
+} {
+  const approvals = positions.filter((position) => position.recommendation === "approve");
+  const auditApproved = approvals.some((position) => position.agent === "AUDIT");
+  return {
+    passed: auditApproved && approvals.length >= 3,
+    approvals: approvals.length,
+    auditApproved,
+    summary: [
+      `${positions.length} of ${COUNCIL_SEATS} seats returned a position`,
+      `${approvals.length} approved`,
+      auditApproved ? "AUDIT approved" : "AUDIT did not approve"
+    ].join("; ")
+  };
+}
+
 export function resolveMorningCommission(input: {
   positions: readonly RecordedPosition[];
   openPriorities: readonly PriorityItem[];
@@ -208,19 +236,16 @@ export function resolveMorningCommission(input: {
   registry: VentureRegistry;
   sourcePhase: string;
 }): MorningCommission {
-  const approvals = input.positions.filter((position) => position.recommendation === "approve");
-  const auditApproved = approvals.some((position) => position.agent === "AUDIT");
+  const gate = councilVoteGate(input.positions);
   const requester = input.positions.find((position) =>
     position.agent !== "AUDIT" && position.meetingRequest !== null
   );
   const request = requester?.meetingRequest ?? null;
-  if (!auditApproved || approvals.length < 3 || !request || !requester) {
+  if (!gate.passed || !request || !requester) {
     return {
       commission: false,
       reason: publishableReason([
-        `${input.positions.length} of ${COUNCIL_SEATS} seats returned a position`,
-        `${approvals.length} approved`,
-        auditApproved ? "AUDIT approved" : "AUDIT did not approve",
+        gate.summary,
         request ? "a room was requested" : "no seat requested a room"
       ].join("; ") + ". The gate needs AUDIT plus three approvals.")
     };
@@ -241,6 +266,65 @@ export function resolveMorningCommission(input: {
     };
   }
   return { commission: true, requestedBy: requester.agent, request, target, priority };
+}
+
+export type PriorityProposalDecision =
+  | { kind: "none" }
+  | {
+      kind: "take";
+      proposedBy: RecordedPosition["agent"];
+      request: NonNullable<RecordedPosition["priorityProposal"]>;
+      alsoProposed: number;
+    }
+  | {
+      kind: "refuse";
+      proposedBy: RecordedPosition["agent"];
+      request: NonNullable<RecordedPosition["priorityProposal"]>;
+      reason: string;
+    };
+
+/**
+ * Decide whether the room agreed to put a seat's new question on the priority queue.
+ *
+ * Pure and separate from the queue write, so the decision can be tested without a filesystem and
+ * so the write stays a write. Three rules live here and nowhere else:
+ *
+ * One proposal per meeting. Seats are read in council order and the first non-AUDIT seat carrying
+ * a proposal is the one taken; any others are counted and published, not queued. Counting rather
+ * than refusing the whole thing matters — two seats proposing is agreement, and punishing the
+ * board for it would teach it to stay quiet.
+ *
+ * AUDIT does not propose. It is the seat that has to be able to say no to work, and a seat that
+ * authors work cannot audit it. This mirrors the existing rule that AUDIT never requests a room.
+ *
+ * The vote gate decides. A proposal from a meeting that could not reach AUDIT plus three
+ * approvals is refused, and the refusal is recorded against the seat that made it rather than
+ * dropped, because "the board proposed something and did not have the votes" is a fact about the
+ * board that the record should keep.
+ */
+export function resolvePriorityProposal(input: {
+  positions: readonly RecordedPosition[];
+}): PriorityProposalDecision {
+  const proposers = input.positions.filter((position) =>
+    position.agent !== "AUDIT" && position.priorityProposal !== null
+  );
+  const first = proposers[0];
+  if (!first?.priorityProposal) return { kind: "none" };
+  const gate = councilVoteGate(input.positions);
+  if (!gate.passed) {
+    return {
+      kind: "refuse",
+      proposedBy: first.agent,
+      request: first.priorityProposal,
+      reason: publishableReason(`${gate.summary}. A new question is only added when the meeting itself carries: the gate needs AUDIT plus three approvals.`)
+    };
+  }
+  return {
+    kind: "take",
+    proposedBy: first.agent,
+    request: first.priorityProposal,
+    alsoProposed: proposers.length - 1
+  };
 }
 
 /**
@@ -1411,6 +1495,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     // this default is only ever published by a morning that called no live council, which means a
     // dry run.
     let commissionBlockedReason = "No live council was called this morning, so nothing reached the commission gate.";
+    // The one new question a seat asked for this morning, and what became of it. Stays null on a
+    // morning where no seat proposed, which is most of them, so the record says nothing rather
+    // than printing a daily "nobody proposed anything".
+    let priorityProposalRecord: NonNullable<Standup["priorityProposal"]> | null = null;
     if (measuredCouncil && venturePhase === "morning") {
       const [meetingPolicy, ventureRegistry] = await Promise.all([
         loadMeetingPolicy(),
@@ -1463,6 +1551,74 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           console.warn(commissionBlockedReason);
         }
       }
+      // The proposal is resolved after the commission and before the skip loop below.
+      //
+      // After, because a question proposed this morning was not on the list the board just voted
+      // over, so it cannot be the question this morning commissions — it is answerable from
+      // tomorrow. Before, because the skip loop walks the snapshot taken before the council ran;
+      // a new item is not in that snapshot and so is left "open" rather than being told on its
+      // first morning that it lost a selection it was never in.
+      const proposal = resolvePriorityProposal({ positions: measuredCouncil.positions });
+      if (proposal.kind !== "none") {
+        const local = pragueClockParts(now);
+        const meetingRef = `standups/${local.date}-morning`;
+        const base = {
+          proposedBy: proposal.proposedBy,
+          venture: proposal.request.venture,
+          question: proposal.request.question,
+          decisionAtStake: proposal.request.decisionAtStake
+        };
+        if (proposal.kind === "refuse") {
+          priorityProposalRecord = {
+            ...base,
+            outcome: "refused" as const,
+            reason: proposal.reason,
+            priorityItemId: null
+          };
+        } else {
+          try {
+            const added = await proposePriorityItem({
+              root: artifactRoot,
+              venture: proposal.request.venture,
+              question: proposal.request.question,
+              decisionAtStake: proposal.request.decisionAtStake,
+              evidenceNeeded: proposal.request.evidenceNeeded,
+              proposedBy: proposal.proposedBy,
+              meetingRef,
+              now,
+              // The same week the seed gives its items, so a question the board invented expires
+              // on the same terms as one the config handed it and cannot outlive its own answer.
+              expires: new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000))
+            });
+            priorityStateChanged = true;
+            priorityProposalRecord = {
+              ...base,
+              outcome: "accepted" as const,
+              reason: publishableReason(`${proposal.proposedBy} proposed it at the ${local.date} morning board and the meeting carried.${proposal.alsoProposed > 0 ? ` ${proposal.alsoProposed} further proposal${proposal.alsoProposed === 1 ? " was" : "s were"} not taken; a meeting adds one question.` : ""}`),
+              priorityItemId: added.id
+            };
+          } catch (error) {
+            // A queue guard refusing the board is a normal outcome and is published. Anything
+            // else — a disk failure, a contract violation — is not the board's doing and must
+            // still take the cycle down rather than be recorded as a polite refusal.
+            if (!(error instanceof PriorityProposalRefused)) throw error;
+            priorityProposalRecord = {
+              ...base,
+              outcome: "refused" as const,
+              reason: publishableReason(error.message),
+              priorityItemId: null
+            };
+          }
+        }
+        console.warn(JSON.stringify({
+          event: "council_priority_proposal",
+          phase: venturePhase,
+          outcome: priorityProposalRecord.outcome,
+          agent: priorityProposalRecord.proposedBy,
+          venture: priorityProposalRecord.venture,
+          reason: priorityProposalRecord.reason
+        }));
+      }
       for (const item of morningContext?.openPriorities ?? []) {
         if (item.id === selectedPriorityId) continue;
         await skipPriorityItem({
@@ -1492,7 +1648,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           council: measuredCouncil,
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
-          ...(caughtUpIdea ? { caughtUpIdea } : {})
+          ...(caughtUpIdea ? { caughtUpIdea } : {}),
+          ...(priorityProposalRecord ? { priorityProposal: priorityProposalRecord } : {})
         })
       : createOfflineStandup({
           cycleId,

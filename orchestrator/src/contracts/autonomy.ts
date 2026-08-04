@@ -3,6 +3,7 @@ import {
   ContractAgentIdSchema,
   DateTimeSchema,
   HttpsUrlSchema,
+  MeetingRefSchema,
   Sha256Schema,
   VentureIdSchema,
   openObject
@@ -14,6 +15,29 @@ export const PriorityStatusSchema = z.enum([
   "why-not",
   "archived"
 ]);
+
+/**
+ * Where a question came from, which is not the same fact as who asked for it.
+ *
+ * requested_by has always been a seat name, but every item wearing one was written by the
+ * morning seed loop out of a venture's declared growth objective in config/ventures.json —
+ * "VIZE" there means "the seed attributes this to the strategy seat", not "VIZE thought of it".
+ * A reader could not tell a question the board invented from one the config handed it, and once
+ * the board can invent questions that difference is the whole point: seeded work traces to a
+ * human-authored objective, proposed work traces to a model. They are not equally trustworthy
+ * and the record must not flatten them.
+ */
+export const PriorityOriginSchema = z.enum(["seeded", "proposed"]);
+
+/**
+ * The provenance a proposed item carries and a seeded one must not: which seat put the question
+ * on the table, at which meeting, and when.
+ */
+export const PriorityProposalSchema = openObject({
+  proposed_by: ContractAgentIdSchema,
+  meeting_ref: MeetingRefSchema,
+  proposed_at: DateTimeSchema
+});
 
 export const PriorityItemSchema = openObject({
   schemaVersion: z.literal("priority-item/1"),
@@ -27,7 +51,13 @@ export const PriorityItemSchema = openObject({
   expires: DateTimeSchema,
   status: PriorityStatusSchema,
   why_not_reason: z.string().trim().min(1).max(280).nullable(),
-  consumed_by: z.string().trim().min(1).max(160).nullable()
+  consumed_by: z.string().trim().min(1).max(160).nullable(),
+  // Defaulted, not required, because the ten items already on disk predate this field and the
+  // morning cycle parses every one of them before it can do anything else. A required field here
+  // would turn the first run after deploy into a zod error with no queue at all. "seeded" is also
+  // the true answer for all ten: the seed loop wrote every one of them.
+  origin: PriorityOriginSchema.default("seeded"),
+  proposal: PriorityProposalSchema.nullable().default(null)
 }).superRefine((item, context) => {
   if (Date.parse(item.expires) <= Date.parse(item.created)) {
     context.addIssue({ code: "custom", message: "Priority expiry must follow creation", path: ["expires"] });
@@ -43,6 +73,14 @@ export const PriorityItemSchema = openObject({
   }
   if (item.status !== "selected" && item.consumed_by) {
     context.addIssue({ code: "custom", message: "Only selected items may carry a consumer", path: ["consumed_by"] });
+  }
+  // The two fields have to agree or the provenance is decorative: an item could claim to be
+  // proposed and name nobody, or claim to be seeded while carrying a seat's name and a meeting.
+  if (item.origin === "proposed" && !item.proposal) {
+    context.addIssue({ code: "custom", message: "A proposed item must name the seat and meeting that proposed it", path: ["proposal"] });
+  }
+  if (item.origin === "seeded" && item.proposal) {
+    context.addIssue({ code: "custom", message: "Only a proposed item may carry proposal provenance", path: ["proposal"] });
   }
 });
 
@@ -219,6 +257,8 @@ export const MetricsPlaceholderSchema = openObject({
 
 export type PriorityItem = z.infer<typeof PriorityItemSchema>;
 export type PriorityQueue = z.infer<typeof PriorityQueueSchema>;
+export type PriorityOrigin = z.infer<typeof PriorityOriginSchema>;
+export type PriorityProposalProvenance = z.infer<typeof PriorityProposalSchema>;
 export type VentureTemplate = z.infer<typeof VentureTemplateSchema>;
 export type VentureTemplateCandidate = z.infer<typeof VentureTemplateCandidateSchema>;
 export type ArticleImage = z.infer<typeof ArticleImageSchema>;

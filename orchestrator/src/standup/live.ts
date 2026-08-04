@@ -62,21 +62,43 @@ const MeetingRequestSchema = z.object({
   evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12)
 });
 
+/**
+ * A question a seat wants added to the priority queue.
+ *
+ * The fields are the ones ensurePriorityItem already demands, under the names the seat sees, and
+ * that is the guard rather than a formality: a question with no venture belongs to no room and
+ * can never be commissioned, and a question with no decision behind it is a topic. Both are
+ * refused here, by the schema, before anything reaches the queue.
+ */
+const PriorityProposalRequestSchema = z.object({
+  venture: z.string().trim().min(1).max(80),
+  question: z.string().trim().min(1).max(280),
+  decisionAtStake: z.string().trim().min(1).max(280),
+  evidenceNeeded: z.array(z.string().trim().min(1).max(160)).max(12).default([])
+});
+
+export type PriorityProposalRequest = z.infer<typeof PriorityProposalRequestSchema>;
+
 const PositionSchema = z.object({
   agent: CouncilAgentSchema,
   publicSummary: z.string().min(1).max(420),
   recommendation: z.enum(["approve", "hold"]),
   risk: z.string().min(1).max(220),
-  meetingRequest: MeetingRequestSchema.nullable().default(null)
+  meetingRequest: MeetingRequestSchema.nullable().default(null),
+  priorityProposal: PriorityProposalRequestSchema.nullable().default(null)
 });
 
 /**
  * The half of a position the commission gate counts: the vote, the summary and the risk.
  *
- * meetingRequest is optional — null is a valid answer for every seat, and the only answer the
- * commission gate reads from AUDIT — so it is parsed separately and cannot invalidate this.
+ * meetingRequest and priorityProposal are optional — null is a valid answer for every seat, and
+ * the only answer the gate reads from AUDIT — so they are parsed separately and cannot
+ * invalidate this.
  */
-const PositionCoreSchema = PositionSchema.omit({ meetingRequest: true });
+const PositionCoreSchema = PositionSchema.omit({
+  meetingRequest: true,
+  priorityProposal: true
+});
 
 export interface RecordedPosition extends z.infer<typeof PositionSchema> {
   sentAt: string;
@@ -115,6 +137,17 @@ export function commissionableRooms(input: {
 }
 
 /**
+ * The ventures a seat may propose a new question for, derived from the rooms this shift can open.
+ *
+ * Exported so the prompt, the parser and the cycle all read one list. A question for a venture
+ * with no commissionable room is refused rather than queued: the board could never commission it,
+ * so it would sit on the queue looking like available work forever.
+ */
+export function proposableVentureIds(rooms: readonly CommissionableRoom[]): string[] {
+  return [...new Set(rooms.map((room) => room.ventureId))];
+}
+
+/**
  * Read one seat's reply, keeping its vote even when its optional follow-up request is unusable.
  *
  * A single schema over the whole object made the optional field fatal: a meetingRequest with a
@@ -128,33 +161,66 @@ export function parseCouncilPosition(input: {
   agent: CouncilAgent;
   text: string;
   openPriorities: readonly PriorityItem[];
-}): { position: z.infer<typeof PositionSchema>; droppedMeetingRequest: string | null } {
+  /**
+   * Ventures a seat may propose a question for: exactly the ventures whose rooms this shift can
+   * commission. A question for any other venture could never be answered by a room this board can
+   * open, so accepting it would add work the board is structurally unable to do — which is how a
+   * queue fills with questions nobody can take.
+   */
+  proposableVentures: readonly string[];
+}): {
+  position: z.infer<typeof PositionSchema>;
+  droppedMeetingRequest: string | null;
+  droppedPriorityProposal: string | null;
+} {
   const raw: unknown = JSON.parse(input.text);
   const core = PositionCoreSchema.parse(raw);
   if (core.agent !== input.agent) {
     throw new Error(`Council response identity mismatch for ${input.agent}`);
   }
-  const withoutRequest: z.infer<typeof PositionSchema> = { ...core, meetingRequest: null };
-  const field = (raw as Record<string, unknown>).meetingRequest;
-  if (field === null || field === undefined) {
-    return { position: withoutRequest, droppedMeetingRequest: null };
-  }
-  const request = MeetingRequestSchema.safeParse(field);
-  if (!request.success) {
-    return {
-      position: withoutRequest,
-      droppedMeetingRequest: `meetingRequest does not match the contract: ${request.error.issues
+  const fields = raw as Record<string, unknown>;
+
+  let meetingRequest: z.infer<typeof MeetingRequestSchema> | null = null;
+  let droppedMeetingRequest: string | null = null;
+  const requestField = fields.meetingRequest;
+  if (requestField !== null && requestField !== undefined) {
+    const request = MeetingRequestSchema.safeParse(requestField);
+    if (!request.success) {
+      droppedMeetingRequest = `meetingRequest does not match the contract: ${request.error.issues
         .map((issue) => `${issue.path.join(".") || "meetingRequest"} ${issue.message}`)
-        .join("; ")}`.slice(0, 240)
-    };
+        .join("; ")}`.slice(0, 240);
+    } else if (!input.openPriorities.some((item) => item.id === request.data.priorityItemId)) {
+      droppedMeetingRequest = `meetingRequest cited unknown or closed priority item ${request.data.priorityItemId}`;
+    } else {
+      meetingRequest = request.data;
+    }
   }
-  if (!input.openPriorities.some((item) => item.id === request.data.priorityItemId)) {
-    return {
-      position: withoutRequest,
-      droppedMeetingRequest: `meetingRequest cited unknown or closed priority item ${request.data.priorityItemId}`
-    };
+
+  // Same treatment as meetingRequest and for the same reason: an unusable optional field must
+  // cost the seat that field, not its vote. A council that loses two of four seats over a
+  // malformed proposal cannot reach three approvals, so a guard meant to refuse one bad question
+  // would instead stop the board deciding anything at all.
+  let priorityProposal: PriorityProposalRequest | null = null;
+  let droppedPriorityProposal: string | null = null;
+  const proposalField = fields.priorityProposal;
+  if (proposalField !== null && proposalField !== undefined) {
+    const proposal = PriorityProposalRequestSchema.safeParse(proposalField);
+    if (!proposal.success) {
+      droppedPriorityProposal = `priorityProposal does not match the contract: ${proposal.error.issues
+        .map((issue) => `${issue.path.join(".") || "priorityProposal"} ${issue.message}`)
+        .join("; ")}`.slice(0, 240);
+    } else if (!input.proposableVentures.includes(proposal.data.venture)) {
+      droppedPriorityProposal = `priorityProposal named venture ${proposal.data.venture}, which this shift cannot commission a room for`.slice(0, 240);
+    } else {
+      priorityProposal = proposal.data;
+    }
   }
-  return { position: { ...core, meetingRequest: request.data }, droppedMeetingRequest: null };
+
+  return {
+    position: { ...core, meetingRequest, priorityProposal },
+    droppedMeetingRequest,
+    droppedPriorityProposal
+  };
 }
 
 interface ModelConfig {
@@ -209,8 +275,12 @@ ${rooms.length === 0
   ? "No specialist room can be commissioned from this shift, so every seat returns meetingRequest:null."
   : `Every room belongs to one venture, and the request is thrown away unless the room you name belongs to the venture that owns the priority item you cite. Read that item's venture field and set phase to the room listed for it here: ${rooms.map((room) => `${room.ventureId} -> ${room.phase}`).join(", ")}. A priority item for any other venture has no room this shift can commission, so return meetingRequest:null instead of naming the nearest room.`}
 
+${rooms.length === 0
+  ? "No new question can be proposed from this shift either, so every seat returns priorityProposal:null."
+  : `The priority list is not fixed. If the work this project needs is not on it, VIZE, FORGE or PULSE may propose one new question in priorityProposal: venture (one of ${[...new Set(rooms.map((room) => room.ventureId))].join(", ")}), question, decisionAtStake, evidenceNeeded. AUDIT never proposes. A meeting adds at most one question, so propose only when the list genuinely lacks it; the first proposal is taken and later ones are refused. decisionAtStake must name the decision the answer would settle — a question with no decision behind it is a topic, not work, and is refused. A question the queue already holds in other words is refused as a duplicate, so select it instead. A proposal is added only if this meeting approves, and it is answerable from a later meeting, not this one.`}
+
 Return ONLY this valid JSON object:
-{"agent":"${agent}","publicSummary":"at most 70 words","recommendation":"approve|hold","risk":"at most 35 words","meetingRequest":null|{"priorityItemId":"priority-...","phase":"allowed phase","summary":"why this room is needed","evidenceRefs":[]}}`;
+{"agent":"${agent}","publicSummary":"at most 70 words","recommendation":"approve|hold","risk":"at most 35 words","meetingRequest":null|{"priorityItemId":"priority-...","phase":"allowed phase","summary":"why this room is needed","evidenceRefs":[]},"priorityProposal":null|{"venture":"venture id","question":"at most 40 words","decisionAtStake":"the decision it settles","evidenceNeeded":[]}}`;
 }
 
 function positionInput(input: {
@@ -288,6 +358,9 @@ export async function collectLiveCouncil(input: {
     policy: meetingPolicy,
     sourcePhase: input.phase
   });
+  // Derived from the same rooms list the prompt advertises, so the prompt and the parser cannot
+  // disagree about which ventures a seat may name.
+  const proposableVentures = proposableVentureIds(rooms);
   const shift = getShiftDefinition(input.phase);
   const positions: RecordedPosition[] = [];
   /** Seats that could not be seated, so the standup can say so instead of a console line. */
@@ -324,7 +397,8 @@ export async function collectLiveCouncil(input: {
         const parsed = parseCouncilPosition({
           agent,
           text,
-          openPriorities: input.businessContext.openPriorities
+          openPriorities: input.businessContext.openPriorities,
+          proposableVentures
         });
         if (parsed.droppedMeetingRequest !== null) {
           // The seat still votes: an optional field must not be able to take a position's vote
@@ -335,6 +409,14 @@ export async function collectLiveCouncil(input: {
             agent,
             phase: input.phase,
             reason: parsed.droppedMeetingRequest
+          }));
+        }
+        if (parsed.droppedPriorityProposal !== null) {
+          console.warn(JSON.stringify({
+            event: "council_priority_proposal_dropped",
+            agent,
+            phase: input.phase,
+            reason: parsed.droppedPriorityProposal
           }));
         }
         return parsed.position;
@@ -439,6 +521,7 @@ export function createLiveStandup(input: {
   caughtUpIdea?: IdeaScreeningResult;
   autonomy?: AutonomySnapshot;
   quarterlyKpis?: QuarterlyKpiPacketSummary;
+  priorityProposal?: NonNullable<Standup["priorityProposal"]>;
 }): Standup {
   const shift = getShiftDefinition(input.phase);
   // The Prague wall-clock day, matching createOfflineStandup and every other record. Both
@@ -457,6 +540,16 @@ export function createLiveStandup(input: {
   const summary = approved
     ? `The council approved one bounded internal work item: ${input.council.item.title}. No external action, business claim or stage change was approved.`
     : "The council held the internal work item. No external action, business claim or stage change was approved.";
+
+  // One sentence, used in three places: the seat's line on the standup page, its turn in the
+  // room transcript, and nothing else. Written once so the three cannot drift apart.
+  const proposalLine = input.priorityProposal
+    ? `I put a new question to the room for ${input.priorityProposal.venture}: "${input.priorityProposal.question}" It would settle: ${input.priorityProposal.decisionAtStake} ${
+        input.priorityProposal.outcome === "accepted"
+          ? `It is now on the project's question list and can be given a meeting from a later day. ${input.priorityProposal.reason}`
+          : `It was not added. ${input.priorityProposal.reason}`
+      }`.slice(0, 800)
+    : null;
 
   return StandupSchema.parse({
     schemaVersion: 1,
@@ -510,6 +603,16 @@ export function createLiveStandup(input: {
         evidenceRefs: input.caughtUpIdea.entry.revival
           ? [input.caughtUpIdea.entry.revival.evidenceRef]
           : []
+      }] : []),
+      // The standup page renders proposals[], the room page renders the transcript, and neither
+      // knows about priority questions. Putting the proposal through both existing lists is what
+      // makes it visible on the public record without a reader having to open the JSON.
+      ...(input.priorityProposal && proposalLine ? [{
+        agent: input.priorityProposal.proposedBy,
+        summary: proposalLine.slice(0, 420),
+        evidenceRefs: input.priorityProposal.priorityItemId
+          ? [input.priorityProposal.priorityItemId]
+          : []
       }] : [])
     ],
     voteMatrix: input.council.positions.map((position) => ({
@@ -535,6 +638,7 @@ export function createLiveStandup(input: {
       }
     } : {}),
     ...(input.quarterlyKpis ? { quarterlyKpis: input.quarterlyKpis } : {}),
+    ...(input.priorityProposal ? { priorityProposal: input.priorityProposal } : {}),
     eveningOutcome:
       input.phase === "night"
         ? `${approved ? "Approved" : "Held"} internal work item recorded for the next Morning shift.`
@@ -570,10 +674,19 @@ export function createLiveStandup(input: {
           sentAt: position.sentAt,
           text: position.publicSummary
         })),
+        ...(input.priorityProposal && proposalLine ? [{
+          agent: input.priorityProposal.proposedBy,
+          mode: "statement" as const,
+          sentAt: new Date(input.now.getTime() + 2).toISOString(),
+          text: proposalLine,
+          ...(input.priorityProposal.priorityItemId
+            ? { evidenceRefs: [input.priorityProposal.priorityItemId] }
+            : {})
+        }] : []),
         ...(input.caughtUpIdea ? [{
           agent: "SPARK" as const,
           mode: "statement" as const,
-          sentAt: new Date(input.now.getTime() + 2).toISOString(),
+          sentAt: new Date(input.now.getTime() + 3).toISOString(),
           text: `${input.caughtUpIdea.entry.title}. VAULT recorded ${input.caughtUpIdea.verdict}; ${input.caughtUpIdea.entry.id} is the one Caught Up handoff for the product room.`,
           evidenceRefs: [
             input.caughtUpIdea.entry.id,

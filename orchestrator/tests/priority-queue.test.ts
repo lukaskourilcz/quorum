@@ -10,6 +10,10 @@ import {
   openPriorityItems,
   PRIORITY_QUEUE_CAP,
   PRIORITY_QUEUE_PATH,
+  PRIORITY_QUEUE_VENTURE_CAP,
+  findDuplicatePriorityItem,
+  PriorityProposalRefused,
+  proposePriorityItem,
   readPriorityQueue,
   selectPriorityItem,
   skipPriorityItem
@@ -193,5 +197,202 @@ describe("what the board is allowed to commission", () => {
     await archivePriorityItem({ root, itemId: seeded.item.id, now: new Date("2026-08-01T04:05:00.000Z") });
     const queue = await readPriorityQueue(root, new Date("2026-08-02T04:00:00.000Z"));
     expect(openPriorityItems(queue)).toEqual([]);
+  });
+});
+
+describe("a seat proposing a new question", () => {
+  const week = new Date(NOW.getTime() + (7 * DAY_MS));
+
+  async function root(): Promise<string> {
+    return mkdtemp(path.join(os.tmpdir(), "boardless-proposal-"));
+  }
+
+  function proposal(dir: string, overrides: Record<string, unknown> = {}) {
+    return {
+      root: dir,
+      venture: "titty-tuesdays",
+      question: "Which campaign format has never been tested against the season brief?",
+      decisionAtStake: "Whether the next slot repeats a tested format or trials a new one.",
+      evidenceNeeded: ["campaign-inventory"],
+      proposedBy: "FORGE",
+      meetingRef: "standups/2026-08-01-morning",
+      now: NOW,
+      expires: week,
+      ...overrides
+    } as Parameters<typeof proposePriorityItem>[0];
+  }
+
+  it("records that the board proposed it, by whom and at which meeting", async () => {
+    const dir = await root();
+    const added = await proposePriorityItem(proposal(dir));
+
+    expect(added.origin).toBe("proposed");
+    expect(added.proposal).toEqual({
+      proposed_by: "FORGE",
+      meeting_ref: "standups/2026-08-01-morning",
+      proposed_at: NOW.toISOString()
+    });
+    // Readable back off disk, not just in the return value.
+    const stored = (await readPriorityQueue(dir, NOW)).items.find((entry) => entry.id === added.id);
+    expect(stored?.origin).toBe("proposed");
+    expect(stored?.proposal?.proposed_by).toBe("FORGE");
+  });
+
+  it("leaves a seeded item saying it was seeded", async () => {
+    const dir = await root();
+    const seeded = await addPriorityItem({
+      root: dir, venture: "titty-tuesdays", question: "What blocks the objective?",
+      decisionAtStake: "Which bounded action moves it.", now: NOW, expires: week
+    });
+
+    expect(seeded.origin).toBe("seeded");
+    expect(seeded.proposal).toBeNull();
+  });
+
+  it("reads a pre-existing item written before provenance existed as seeded", async () => {
+    // The ten items already on disk have no origin field. They must parse, and they must not
+    // claim to have been proposed by anyone.
+    const dir = await root();
+    await seedQueueFile(dir, [openItem(1)]);
+    const queue = await readPriorityQueue(dir, NOW);
+
+    expect(queue.items[0]!.origin).toBe("seeded");
+    expect(queue.items[0]!.proposal).toBeNull();
+  });
+
+  it("refuses a question the queue already holds in other words", async () => {
+    const dir = await root();
+    await proposePriorityItem(proposal(dir));
+
+    await expect(proposePriorityItem(proposal(dir, {
+      question: "Which campaign formats have never been tested against the season briefs?",
+      decisionAtStake: "Whether the next slot repeats a tested format or trials a new one."
+    }))).rejects.toThrow(PriorityProposalRefused);
+  });
+
+  it("refuses a re-proposal of a question the board itself declined", async () => {
+    // The queue is currently full of why-not items. Without this the board could re-propose its
+    // own declined questions every morning forever.
+    const dir = await root();
+    const added = await proposePriorityItem(proposal(dir));
+    await skipPriorityItem({ root: dir, itemId: added.id, reason: "Not selected today.", now: NOW });
+
+    const refusal = await proposePriorityItem(proposal(dir)).catch((error: unknown) => error);
+    expect(refusal).toBeInstanceOf(PriorityProposalRefused);
+    expect((refusal as PriorityProposalRefused).guard).toBe("duplicate");
+    expect((refusal as PriorityProposalRefused).message).toContain("why-not");
+  });
+
+  it("refuses a re-proposal of the question a room is already answering", async () => {
+    const dir = await root();
+    const added = await proposePriorityItem(proposal(dir));
+    await selectPriorityItem({ root: dir, itemId: added.id, meetingRef: "standups/x-morning", now: NOW });
+
+    await expect(proposePriorityItem(proposal(dir))).rejects.toThrow(PriorityProposalRefused);
+  });
+
+  it("lets the same wording through for a different project", async () => {
+    const dir = await root();
+    await proposePriorityItem(proposal(dir));
+    const other = await proposePriorityItem(proposal(dir, {
+      venture: "carousel-studio",
+      now: new Date(NOW.getTime() + 1_000)
+    }));
+
+    expect(other.venture).toBe("carousel-studio");
+  });
+
+  it("stops a project accumulating questions past its cap", async () => {
+    // Subjects with no shared vocabulary, so the venture cap is what refuses the last one and
+    // not the duplicate check standing in front of it.
+    const subjects = [
+      {
+        question: "Which garment fabric weight suits an autumn drop?",
+        decisionAtStake: "Whether autumn stock reuses summer fabric or changes weight."
+      },
+      {
+        question: "Does the photography backlog cover every listed size?",
+        decisionAtStake: "Whether a shoot is booked before the next listing batch."
+      },
+      {
+        question: "Has any retail partner replied to the wholesale enquiry?",
+        decisionAtStake: "Whether wholesale stays on the roadmap this quarter."
+      },
+      {
+        question: "Are shipping costs recorded per parcel anywhere?",
+        decisionAtStake: "Whether postage is priced into the next margin review."
+      }
+    ];
+    expect(subjects.length).toBeGreaterThan(PRIORITY_QUEUE_VENTURE_CAP);
+
+    const dir = await root();
+    for (let index = 0; index < PRIORITY_QUEUE_VENTURE_CAP; index += 1) {
+      await proposePriorityItem(proposal(dir, {
+        ...subjects[index]!,
+        now: new Date(NOW.getTime() + (index * 1_000))
+      }));
+    }
+
+    const refusal = await proposePriorityItem(proposal(dir, {
+      ...subjects[PRIORITY_QUEUE_VENTURE_CAP]!,
+      now: new Date(NOW.getTime() + 60_000)
+    })).catch((error: unknown) => error);
+
+    expect(refusal).toBeInstanceOf(PriorityProposalRefused);
+    expect((refusal as PriorityProposalRefused).guard).toBe("venture-cap");
+    expect((await readPriorityQueue(dir, NOW)).items.length).toBe(PRIORITY_QUEUE_VENTURE_CAP);
+  });
+
+  it("catches the exact re-seed that already happened on disk, and lets a real new subject through", () => {
+    // On 3 and 4 August the seed loop wrote the same five questions twice, because
+    // ensurePriorityItem matches open items only and the first set had gone why-not. Those pairs
+    // are the calibration case for this threshold: identical wording must be refused, while a
+    // question that merely borrows the seed's phrasing for a different subject must not be.
+    const seeded = {
+      question: "What is currently blocking this objective: Build a complete inventory of campaigns that are ready to launch?",
+      decisionAtStake: "Which next bounded action moves campaign-inventory for Titty Tuesdays."
+    };
+    const queue = PriorityQueueSchema.parse({
+      schemaVersion: "priority-queue/1",
+      items: [item(1, {
+        venture: "titty-tuesdays",
+        status: "why-not",
+        why_not_reason: "The 06:00 board did not select this item.",
+        question: seeded.question,
+        decision_at_stake: seeded.decisionAtStake,
+        expires: new Date(NOW.getTime() + (7 * DAY_MS)).toISOString()
+      })],
+      updatedAt: NOW.toISOString()
+    });
+    const against = (question: string, decisionAtStake: string) =>
+      findDuplicatePriorityItem({ queue, venture: "titty-tuesdays", question, decisionAtStake });
+
+    expect(against(seeded.question, seeded.decisionAtStake)).not.toBeNull();
+    expect(against(
+      "What is currently blocking this objective: Decide the pricing tier for the autumn drop?",
+      "Which next bounded action moves pricing for Titty Tuesdays."
+    )).toBeNull();
+  });
+
+  it("refuses at the global cap rather than evicting a resolved question to make room", async () => {
+    const dir = await root();
+    // A full queue of finished items from another venture: withinCap would happily drop the
+    // oldest to fit an append. A board proposal must not be able to buy space that way.
+    await seedQueueFile(dir, Array.from({ length: PRIORITY_QUEUE_CAP }, (_, index) =>
+      item(index, { expires: new Date(NOW.getTime() - DAY_MS).toISOString() })));
+
+    const refusal = await proposePriorityItem(proposal(dir)).catch((error: unknown) => error);
+
+    expect(refusal).toBeInstanceOf(PriorityProposalRefused);
+    expect((refusal as PriorityProposalRefused).guard).toBe("queue-cap");
+  });
+
+  it("fails loudly rather than returning quietly when it refuses", async () => {
+    const dir = await root();
+    await proposePriorityItem(proposal(dir));
+    const before = (await readPriorityQueue(dir, NOW)).items.length;
+
+    await expect(proposePriorityItem(proposal(dir))).rejects.toThrow(/already holds/);
+    expect((await readPriorityQueue(dir, NOW)).items.length).toBe(before);
   });
 });

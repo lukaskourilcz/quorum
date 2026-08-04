@@ -85,7 +85,13 @@ function validQueue(value: unknown): StoredQueue | null {
     if (
       item?.schemaVersion !== "priority-item/1" || typeof item.id !== "string" || !/^priority-[a-f0-9]{16}$/.test(item.id) ||
       typeof item.venture !== "string" || typeof item.question !== "string" || typeof item.decision_at_stake !== "string" ||
-      !Array.isArray(item.evidence_needed) || !item.evidence_needed.every((entry) => typeof entry === "string") || item.requested_by !== "VIZE" ||
+      !Array.isArray(item.evidence_needed) || !item.evidence_needed.every((entry) => typeof entry === "string") ||
+      // Any council seat, not only VIZE. A seat may now propose a question and the writer records
+      // who asked; the quarterly collector has written AUDIT here since before that. Insisting on
+      // one name did not reject the item — it returned null for the WHOLE queue, so /admin stopped
+      // rendering and the owner could no longer add or archive anything until the file was edited
+      // by hand. A field this reader does not recognise is not a corrupt queue.
+      typeof item.requested_by !== "string" || item.requested_by.length === 0 ||
       typeof item.created !== "string" || typeof item.expires !== "string" ||
       !["open", "selected", "why-not", "archived"].includes(String(item.status)) ||
       !(item.why_not_reason === null || typeof item.why_not_reason === "string") ||
