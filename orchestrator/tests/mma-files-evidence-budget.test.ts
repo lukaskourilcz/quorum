@@ -137,9 +137,9 @@ describe("article evidence packet", () => {
     const subjectRef = refs.find((ref) => ref.endsWith("ufc:valentina-shevchenko.json"))!;
     const opponentRef = refs.find((ref) => ref.endsWith("ufc:alexa-grasso.json"))!;
     // `changeLog` records which scrape touched which field, and the card's own `sources` block is
-    // the scraper's provenance — publisher names and retrieval stamps, never the
-    // [source:repo/path] marker the style gate wants, which comes from the FILE line above each
-    // record. Bout records still travel verbatim, so this is asserted per card.
+    // the scraper's provenance — publisher names and retrieval stamps, never what the package
+    // records as the article's sources, which is the list of FILE paths this packet is built
+    // from. Bout records still travel verbatim, so this is asserted per card.
     for (const ref of [subjectRef, opponentRef]) {
       expect(sections.get(ref)).not.toContain("\"changeLog\":");
       expect(sections.get(ref)).not.toContain("\"sources\":");

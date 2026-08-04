@@ -29,14 +29,18 @@ const czechToutWords = /\b(?:jistota|nemůže prohrát|garantovan[áýé]|snadn�
 const sourceMarker = /(?:\[\^source-\d+\]|\[source:[^\]]+\])/iu;
 
 /**
- * Remove the grounding markers from copy that is about to be read by a person.
+ * Remove any inline source marker from copy that is about to be read by a person.
  *
- * A marker is how a writer proves a figure came from a record, and reviewArticleCopy rejects
- * any line carrying a figure without one. It is not a citation a reader can use: it names a
- * path inside this repository, and the first published article printed
+ * Nothing asks for one any more. The writer's instruction used to demand a [source:repo/path]
+ * marker on every figure and reviewArticleCopy used to reject a figure without one; both are
+ * gone, because a marker names a path inside this repository rather than a citation a reader
+ * can follow, and the first published article printed
  * "[source:state/mma/fighters/ufc:valentina-shevchenko.json]" in the middle of a Czech
- * sentence. The article package keeps every one of those paths in its sources array, so the
- * provenance survives; only the prose is cleaned, and only after the gate has checked it.
+ * sentence. This stays as the normalizer that makes "no markers in the copy" true whatever the
+ * model emits out of habit, the way the edition pipeline repairs a formatting fault rather than
+ * throwing an already-billed article away over one. It runs before the copy gate, so the text
+ * reviewed is the text stored. Provenance is unaffected: the package's sources array is built
+ * from the files the evidence packet was read from, in code, and never from the prose.
  */
 export function stripSourceMarkers(body: string): string {
   return body
@@ -48,8 +52,6 @@ export function stripSourceMarkers(body: string): string {
     .replaceAll(/[ \t]+$/gmu, "")
     .trim();
 }
-const quoteLine = /^\s*>/u;
-const numericClaim = /(?:\d|%|\$|€|£)/u;
 const probabilityClaim = /(?:\bchance\b|\bprobabilit|\bpravděpodob|\bšanc[ei]\b)[^\n]{0,48}%|%[^\n]{0,48}(?:\bchance\b|\bprobabilit|\bpravděpodob|\bšanc[ei]\b)/iu;
 
 const uninflectedCzechNames = [
@@ -58,15 +60,33 @@ const uninflectedCzechNames = [
   /\bo\s+Procházka\b/iu
 ];
 
-function linesWithClaims(body: string): string[] {
-  return body.split(/\r?\n/u).filter((line) =>
-    (numericClaim.test(line) || quoteLine.test(line)) && !/^\s*(?:import|export)\b/u.test(line)
-  );
-}
-
 function fighterPath(reference: string): string {
   const [org, slug] = reference.split(":");
   return `/fighters/${org}/${slug}`;
+}
+
+/**
+ * Every fighter profile the body sends a reader to, however the path is spelled.
+ *
+ * Deliberately wider than `linkedFighters` below, which only recognizes the two orgs the desk
+ * covers because it compares two tellings of one article. Here an unrecognized org is the
+ * finding, not something to skip: `/fighters/pfl/somebody` points at a fighter this desk keeps
+ * no record of, and a matcher that ignored it would let exactly that through.
+ */
+function linkedFighterPaths(body: string): string[] {
+  return [...body.matchAll(/\[[^\]]+\]\((\/fighters\/[^)\s]+)\)/gu)].map((match) => match[1]!);
+}
+
+/**
+ * Every absolute URL in the body, markdown-linked or bare.
+ *
+ * The character class is the edition writer's, from `everyHttpsUrl`, widened to http because a
+ * plain-text link out is the thing being caught rather than a scheme being validated. Trailing
+ * punctuation can ride along on a bare URL; that only ever makes a match fail to be one of the
+ * supplied URLs, which is a finding either way.
+ */
+function bodyUrls(body: string): string[] {
+  return [...body.matchAll(/https?:\/\/[^\s)\]}'"<>]+/gu)].map((match) => match[0]);
 }
 
 function linkedFighters(body: string): Array<{ href: string; label: string }> {
@@ -212,30 +232,42 @@ export function reviewArticleCopy(
     add("tout-language", "Betting-tout language is not allowed.");
   }
   if (combined.includes("—")) add("em-dash", "Use a full stop, comma or colon instead of an em dash.");
-  // Two separate things: a claim must carry a marker, and the marker must name a source the
-  // article actually has. Requiring only the first accepted [source:anything-at-all] —
-  // verified, a marker naming a file that does not exist passed — which is exactly what a
-  // model reaches for when told every figure needs one. This is the last grounding gate once
-  // English is gone, so it resolves.
+  // Every reference the copy shows a reader, checked against what the packet supplied. Until
+  // 2026-08-04 the only rule here was `missing-fighter-link` below, and the grounding job was
+  // done by two marker rules: `ungrounded-claim`, which demanded a [source:repo/path] on every
+  // body line carrying a figure or a quote, and `unresolvable-source`, which demanded the
+  // marker name a source the article declares. Both are gone. The owner's decision is that MMA
+  // Files carries no inline markers, matching DNESKAi.
   //
-  // Its reach is the body. A number in a title or dek is not covered, which was already true
-  // when English existed and is stated here rather than left implied by "every figure".
-  const internalRefs = new Set(article.sources.flatMap((entry) => (entry.kind === "internal" ? [entry.ref] : [])));
-  for (const line of linesWithClaims(copy.bodyMDX)) {
-    if (!sourceMarker.test(line)) {
-      add("ungrounded-claim", `A figure or quote has no source marker: ${line.slice(0, 100)}`);
-      continue;
+  // What replaces them is the shape the edition pipeline uses. There, `assertSuppliedLinks`
+  // fails the write when any URL in the output was not in the packet, and the article's sources
+  // are copied from the picked items in code. MMA Files already had the second half —
+  // `produceMmaFilesArticle` sets `sources` from the evidence packet, which
+  // `articleEvidenceFor` builds from files it read off disk, so no prose can name a source and
+  // `unresolvable-source` now has nothing left to catch. The first half is what the two
+  // supplied-reference loops add: the profile links and the URLs the copy prints.
+  //
+  // What neither pipeline checks is that a figure in the prose appears in the evidence.
+  // `ungrounded-claim` never checked it either — it checked that a marker was present, and a
+  // model told to attach one attaches one — so nothing verified is lost here. The gap is real
+  // and is named in both pipelines rather than papered over: what stands against an invented
+  // number is that the writer is handed the records and nothing else, and is told to leave out
+  // what they do not state.
+  const suppliedFighterPaths = new Set(article.fighterRefs.map(fighterPath));
+  for (const href of linkedFighterPaths(copy.bodyMDX)) {
+    if (!suppliedFighterPaths.has(href)) {
+      add("unsupplied-fighter-link", `The article links ${href.slice(0, 100)}, which is not a fighter in this article's evidence.`);
     }
-    for (const [, named, numbered] of line.matchAll(/\[source:([^\]]+)\]|\[\^source-(\d+)\]/gu)) {
-      if (named !== undefined && !internalRefs.has(named)) {
-        add("unresolvable-source", `The marker [source:${named.slice(0, 80)}] names no source on this article.`);
-      }
-      if (numbered !== undefined) {
-        const index = Number(numbered);
-        if (!Number.isInteger(index) || index < 1 || index > article.sources.length) {
-          add("unresolvable-source", `The marker [^source-${numbered}] is outside this article's ${article.sources.length} sources.`);
-        }
-      }
+  }
+  // `assertSuppliedLinks` on an evidence packet made of files. An MMA article's sources are
+  // repository records, so `articleEvidenceFor` supplies no URL at all and the supplied set is
+  // normally empty: any URL in the copy is one the writer brought itself. The set is read off
+  // the package rather than assumed empty, because an external source is a shape the article
+  // contract allows and a future packet may use.
+  const suppliedUrls = new Set(article.sources.flatMap((entry) => (entry.kind === "external" ? [entry.url] : [])));
+  for (const url of bodyUrls(copy.bodyMDX)) {
+    if (!suppliedUrls.has(url)) {
+      add("unsupplied-url", `The article prints ${url.slice(0, 100)}, which is not a source on this article.`);
     }
   }
   for (const fighterRef of article.fighterRefs) {
@@ -262,11 +294,10 @@ export function reviewArticleCopy(
  * Cross-locale drift checks, for a package that carries two locales.
  *
  * With a single locale there is no second telling of the same fact to disagree with, so this
- * has nothing to compare and returns nothing. That is not a gate quietly going dark: every
- * figure still has to sit on a line carrying a source marker (`ungrounded-claim` in
- * reviewArticleCopy), and every fighter link is still checked against fighterRefs there. What
- * lapses with English is only the ability to catch a figure that survived one telling and was
- * mangled in the other.
+ * has nothing to compare and returns nothing. Every fighter link is still checked against
+ * fighterRefs in reviewArticleCopy, in both directions. What lapses with English is the ability
+ * to catch a figure that survived one telling and was mangled in the other — and with the
+ * marker rules gone, no rule anywhere now reads the figures in a single-locale body.
  */
 export function reviewBilingualParity(article: ArticlePackage): CopyViolation[] {
   const violations: CopyViolation[] = [];
