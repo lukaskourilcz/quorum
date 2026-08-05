@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-08-05",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-08-05",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-edition",
+        "held": true,
+        "bullets": [
+          {
+            "text": "NEEDS_RECONCILIATION. schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-05-17eb32d81474601883eff…",
+            "roomLink": "/meetings/2026-08-05-cu-edition"
+          }
+        ],
+        "costUsd": 0.2711025
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": true,
+        "bullets": [
+          {
+            "text": "The council held the internal work item. No external action, business claim or stage change was approved.",
+            "roomLink": "/standups/20260805091645-morning/room"
+          }
+        ],
+        "costUsd": 0.009298
+      },
+      {
+        "ventureId": "incubator",
+        "kind": "incubator-scan",
+        "held": true,
+        "bullets": [
+          {
+            "text": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche;…",
+            "roomLink": "/meetings/2026-08-05-incubator-scan"
+          }
+        ],
+        "costUsd": 0.016556
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-intake",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+            "roomLink": "/meetings/2026-08-05-mma-intake"
+          }
+        ],
+        "costUsd": 0.024678
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-editorial",
+        "held": true,
+        "bullets": [
+          {
+            "text": "AM: assigned; PM: killed",
+            "roomLink": "/meetings/2026-08-05-mag-editorial"
+          }
+        ],
+        "costUsd": 0.022247
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-am",
+        "held": true,
+        "bullets": [
+          {
+            "text": "The desk published this slot's article.",
+            "roomLink": "/calendar/2026-08-03"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "kind": "tt-marketing",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Concept: Receipt uses a quiet seasonal decision-note campaign to test adult audience interest in compact receipt typography without commerce,…",
+            "roomLink": "/meetings/2026-08-05-tt-marketing"
+          }
+        ],
+        "costUsd": 0.0181662
+      },
+      {
+        "ventureId": "incubator",
+        "kind": "studio",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+            "roomLink": "/meetings/2026-08-05-studio"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "afternoon",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260805120121-afternoon/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-product",
+        "held": true,
+        "bullets": [
+          {
+            "text": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence.",
+            "roomLink": "/meetings/2026-08-05-cu-product"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-pm",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Missing fresh, source-backed subject.",
+            "roomLink": "/calendar/2026-08-03"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-analysis",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+            "roomLink": "/meetings/2026-08-05-mma-analysis"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+            "roomLink": "/meetings/2026-08-05-mag-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "incubator",
+        "kind": "incubator-synthesis",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+            "roomLink": "/meetings/2026-08-05-incubator-synthesis"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "night",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260805200048-night/room"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "operations": [
+      {
+        "ventureId": "caught-up",
+        "type": "release-proof",
+        "status": "passed",
+        "text": "caught-up release proof passed; the public result was checked after delivery.",
+        "ref": "release-proofs/caught-up/17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "release-proof",
+        "status": "passed",
+        "text": "mma-files release proof passed; the public result was checked after delivery.",
+        "ref": "release-proofs/mma-files/c3daaa33b557f9a62014b9cb148f6dc2517c6f24d3e6fbb35bd34d345038290e.json"
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "delivery",
+        "status": "delivered",
+        "text": "caught-up delivery delivered; a saved receipt identifies the exact package.",
+        "ref": "edition/deliveries/2026-08-05.json"
+      },
+      {
+        "ventureId": "global",
+        "type": "failure",
+        "status": "none",
+        "text": "No social publishing failure was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "caught-up social check locked; ready count 1/7.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "mma-files social check locked; ready count 2/10.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "titty-tuesdays social check locked; ready count 0/4.",
+        "ref": "social/activation.json"
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.8760 against the $1.00 daily budget.",
+    "bodyWordCount": 255
+  },
+  "bodyWordCount": 327,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-08-05T20:00:49.605Z"
+}
