@@ -297,13 +297,17 @@
       "at": "2026-08-05T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-05-afternoon",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-05T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-05-cu-product",
+      "decisionOneLiner": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence."
     },
     {
       "at": "2026-08-05T16:00:00.000Z",

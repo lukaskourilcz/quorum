@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260805150137-cu-product",
+  "phase": "cu-product",
+  "estimatedWorstCaseUsd": 0.03,
+  "actualUsd": 0,
+  "participants": [
+    "HERALD",
+    "SPARK",
+    "VAULT",
+    "AUDIT"
+  ],
+  "ideaId": "idea-2026-08-05-bbffd7f5",
+  "vaultScreening": "VAULT hard stop: Both propose a single bounded internal card/brief naming one evidence gap, stating what decision it informs, identifying specialist expertise needed, with no execution or external action authorized.",
+  "growthIdeaNovelty": 0,
+  "yesterdayOutcome": "Yesterday's edition has a reconciled delivery receipt; no sentinel flag is recorded in Quorum state.",
+  "generatedAt": "2026-08-05T15:01:41.322Z"
+}

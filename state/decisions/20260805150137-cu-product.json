@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260805150137-cu-product",
+  "phase": "cu-product",
+  "outcome": "veto",
+  "summary": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence.",
+  "evidenceRefs": [],
+  "caughtUpIdeaRef": "idea-2026-08-05-bbffd7f5",
+  "generatedAt": "2026-08-05T15:01:41.322Z"
+}
