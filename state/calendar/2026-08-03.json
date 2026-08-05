@@ -264,7 +264,9 @@
       "at": "2026-08-05T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-05-mag-editorial",
+      "decisionOneLiner": "AM: assigned; PM: killed"
     },
     {
       "at": "2026-08-05T08:00:00.000Z",

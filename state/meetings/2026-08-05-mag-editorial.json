@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260805070204-mag-editorial",
+  "date": "2026-08-05",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.022247,
+    "monthAllInUsd": 2.3491641000000008,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+      "meeting:2026-08-04-mma-analysis",
+      "meeting:2026-08-04-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Nelze přiřadit ani jeden slot. Balíček obsahuje pouze kartu turnaje a index již vydaných textů, nikoli dva ověřené profily bojovníků, výsledky ani aktuální Stats záznam FightAIQ.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+        "meeting:2026-08-04-mma-analysis"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "UFC Fight Night: Gamrot vs. Salkilld card announced for 2026-08-08 at Meta Apex. Event confirms 11 bouts across divisions. AM and PM slots remain open: no Czech fighter tie-in, fighter profile, or storyline sourced from allowed evidence refs. Kill both slots pending verified assi",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+        "meeting:2026-08-04-mma-analysis",
+        "meeting:2026-08-04-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Nelze bezpečně zadat ani jeden slot. Event má pouze oznámené zápasy a v povolených podkladech chybějí dvě ověřené karty bojovníků i aktuální Stats predikce. Nevymýšlet preview ani výsledek.",
+      "evidenceRefs": [
+        "meeting:2026-08-04-mma-analysis",
+        "meeting:2026-08-04-mag-desk",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "EDITORIAL_ONLY. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-05.json",
+  "generatedAt": "2026-08-05T07:06:04.790Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-05T07:02:04.790Z",
+    "closedAt": "2026-08-05T07:06:04.790Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-05T07:02:04.790Z",
+        "text": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-05T07:03:04.790Z",
+        "text": "Nelze přiřadit ani jeden slot. Balíček obsahuje pouze kartu turnaje a index již vydaných textů, nikoli dva ověřené profily bojovníků, výsledky ani aktuální Stats záznam FightAIQ.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+          "meeting:2026-08-04-mma-analysis"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-08-05T07:04:04.790Z",
+        "text": "UFC Fight Night: Gamrot vs. Salkilld card announced for 2026-08-08 at Meta Apex. Event confirms 11 bouts across divisions. AM and PM slots remain open: no Czech fighter tie-in, fighter profile, or storyline sourced from allowed evidence refs. Kill both slots pending verified assi",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+          "meeting:2026-08-04-mma-analysis",
+          "meeting:2026-08-04-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-05T07:05:04.790Z",
+        "text": "Nelze bezpečně zadat ani jeden slot. Event má pouze oznámené zápasy a v povolených podkladech chybějí dvě ověřené karty bojovníků i aktuální Stats predikce. Nevymýšlet preview ani výsledek.",
+        "evidenceRefs": [
+          "meeting:2026-08-04-mma-analysis",
+          "meeting:2026-08-04-mag-desk",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-05T07:06:04.790Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}
