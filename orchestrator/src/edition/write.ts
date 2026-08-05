@@ -52,7 +52,7 @@ const ToolOutputSchema = z.object({
   illustration_prompt: z.string().trim().min(1),
   image_candidate_index: z.number().int().min(0).max(3).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
-  cs: LocalizedOutputSchema
+  ...LocalizedOutputSchema.shape
 });
 
 /** Fewest tags ToolOutputSchema accepts. Repairs may not take the array below it. */
@@ -120,7 +120,7 @@ export const localeSchema = {
   additionalProperties: false
 } as const;
 
-const toolInputSchema = {
+export const WRITE_TOOL_INPUT_SCHEMA = {
   type: "object",
   properties: {
     slug: { type: "string" },
@@ -151,11 +151,18 @@ const toolInputSchema = {
         additionalProperties: false
       }
     },
-    cs: localeSchema
+    ...localeSchema.properties
   },
-  // The zod schema and this list have to name the same key. Told to emit `en` while the
-  // parse demands `cs`, every write throws after being billed, three attempts deep.
-  required: ["slug", "tags", "illustration_prompt", "wire", "cs"],
+  // DNESKAi is Czech-only. Keeping the article inside a redundant `cs` object made the model
+  // serialize that object as a string on 1, 4 and 5 August. The provider boundary is flat now;
+  // the runtime wraps these fields in `cs` only after the tool payload has passed validation.
+  required: [
+    "slug",
+    "tags",
+    "illustration_prompt",
+    "wire",
+    ...localeSchema.required
+  ],
   additionalProperties: false
 } as const;
 
@@ -261,7 +268,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /**
- * The keywords `unwrapJsonStrings` reads while walking `toolInputSchema` and `localeSchema`.
+ * The keywords `unwrapJsonStrings` reads while walking `WRITE_TOOL_INPUT_SCHEMA` and
+ * `localeSchema`.
  *
  * Not the subset those two schemas use: they also carry `minItems`, `maxItems`, `minimum`,
  * `maximum`, `pattern`, `required` and `additionalProperties`, all of which the provider reads
@@ -399,7 +407,19 @@ function repairedTags(raw: unknown, repairs: ContractRepair[]): unknown {
  * the repaired value, with every field, count and pattern it enforced before.
  */
 export function repairToolOutput(value: unknown, repairs: ContractRepair[]): unknown {
-  const unwrapped = unwrapJsonStrings(value, toolInputSchema, "", repairs);
+  // Fixtures and an in-flight response from the former contract may still carry the locale
+  // envelope. Decode it if possible and flatten it before applying the current tool schema.
+  // The provider never sees `cs` in WRITE_TOOL_INPUT_SCHEMA, so new calls cannot reproduce the
+  // container-string failure this compatibility path exists to consume.
+  let compatible = value;
+  if (isRecord(compatible) && "cs" in compatible) {
+    const legacyLocale = unwrapJsonStrings(compatible.cs, localeSchema, "cs", repairs);
+    if (isRecord(legacyLocale)) {
+      const { cs: _legacyCs, ...rest } = compatible;
+      compatible = { ...rest, ...legacyLocale };
+    }
+  }
+  const unwrapped = unwrapJsonStrings(compatible, WRITE_TOOL_INPUT_SCHEMA, "", repairs);
   if (!isRecord(unwrapped) || !("tags" in unwrapped)) return unwrapped;
   return { ...unwrapped, tags: repairedTags(unwrapped.tags, repairs) };
 }
@@ -474,8 +494,8 @@ function assertSuppliedLinks(
   supplied: ReadonlySet<string>
 ): void {
   const emittedUrls = [
-    ...markdownUrls(output.cs.body_mdx),
-    ...output.cs.dispatches.flatMap((item) => item.source_url ?? []),
+    ...markdownUrls(output.body_mdx),
+    ...output.dispatches.flatMap((item) => item.source_url ?? []),
     ...everyHttpsUrl(output)
   ];
   const unknown = emittedUrls.find((url) => !supplied.has(url));
@@ -651,14 +671,14 @@ export async function write(
     model: config.models.writing,
     stage: feedback.length ? "rewrite" : "write",
     maxOutputTokens: config.article.maximumOutputTokens,
-    system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} English words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${revision}`,
+    system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} Czech words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${revision}`,
     user: `Publication date: ${brief.date}
 
 Trusted output rules:
 - Every URL in any output field must be an exact character-for-character match from the approved list below.
 - Do not cite a publication, homepage, search result or remembered URL that is not on this list.
 - If a claim has no approved URL, omit the claim instead of adding a citation.
-- The \`cs\` field must be a JSON object, never a Markdown string or serialized JSON.
+- Return the Czech article fields at the tool object's top level; do not wrap or serialize them.
 - Every \`tags\` entry must be a slug: lowercase ASCII words joined by single hyphens, no spaces, capitals or diacritics. Write \`social-media\`, not \`Social Media\`.
 - Every Watchlist item must come from \`runnerUps\`, never from the selected lead-story sources.
 - If licensedImageCandidates is non-empty, set image_candidate_index to the best factual, non-misleading visual fit. Use only its numeric index; do not copy its URLs into article copy.
@@ -669,8 +689,8 @@ ${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
 ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     tool: {
       name: "emit_article",
-      description: "Emit the English Caught Up feature and supplied-source watchlist.",
-      inputSchema: toolInputSchema
+      description: "Emit the Czech Caught Up feature and supplied-source watchlist.",
+      inputSchema: WRITE_TOOL_INPUT_SCHEMA
     },
     parse: (value: unknown) => ToolOutputSchema.parse(repairToolOutput(value, repairs))
   };
@@ -720,7 +740,7 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     ...(imageCandidates.length > 0
       ? { selectedImageCandidateIndex: Math.min(response.value.image_candidate_index ?? 0, imageCandidates.length - 1) }
       : {}),
-    cs: localized(response.value.cs),
+    cs: localized(response.value),
     usage: [response.usage]
   };
 }

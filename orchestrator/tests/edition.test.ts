@@ -36,7 +36,11 @@ import {
   titleSimilarity
 } from "../src/edition/quality.js";
 import { reviewArticleText } from "../src/edition/stet.js";
-import { localeSchema, type ContractRepair } from "../src/edition/write.js";
+import {
+  localeSchema,
+  WRITE_TOOL_INPUT_SCHEMA,
+  type ContractRepair
+} from "../src/edition/write.js";
 import {
   EDITION_USAGE_STAGES,
   type EditionUsage,
@@ -240,6 +244,37 @@ describe("edition configuration and quality", () => {
       { field: "tags[2]", received: "Models", became: "models", reason: "tag_duplicate_dropped" },
       { field: "tags[3]", received: "☆☆☆", reason: "tag_unslugifiable_dropped" }
     ]);
+  });
+
+  it("gives the Czech-only writer a flat locale contract and no English instruction", async () => {
+    expect(WRITE_TOOL_INPUT_SCHEMA.properties).not.toHaveProperty("cs");
+    expect(WRITE_TOOL_INPUT_SCHEMA.required).toEqual(expect.arrayContaining([
+      "title",
+      "dek",
+      "body_mdx",
+      "dispatches"
+    ]));
+    const source = await readFile(
+      path.join(repoRoot, "orchestrator", "src", "edition", "write.ts"),
+      "utf8"
+    );
+    expect(source).not.toContain("Target about ${config.article.targetWords} English words");
+    expect(source).not.toContain("Emit the English Caught Up feature");
+    expect(source).toContain("Target about ${config.article.targetWords} Czech words");
+    expect(source).toContain("Emit the Czech Caught Up feature");
+  });
+
+  it("accepts the flat Czech tool payload end to end", async () => {
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const writer = structuredClone(base[1]!);
+    const value = writer.value as Record<string, unknown> & { cs: Record<string, unknown> };
+    const { cs, ...rest } = value;
+    writer.value = { ...rest, ...cs };
+    const result = await produceEdition(
+      await productionInput([base[0]!, writer], 10, true)
+    );
+    expect(result.package.status).toBe("edition");
+    expect(result.report.usage.map((usage) => usage.stage)).toEqual(["curate", "write"]);
   });
 
   it("documents JsonSchemaNode as the walker's view, not the schemas' subset", async () => {
