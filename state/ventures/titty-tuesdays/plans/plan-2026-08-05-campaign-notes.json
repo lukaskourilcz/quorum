@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-2026-08-05-campaign-notes",
+  "ventureId": "titty-tuesdays",
+  "seasonId": "season-001",
+  "title": "Campaign notes for 2026-08-05",
+  "summary": "The room kept a short list of future campaign directions for owner review.",
+  "objective": "Keep a detailed record of future marketing ideas without producing assets or taking any public action.",
+  "tactics": [
+    {
+      "type": "content",
+      "description": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend.",
+      "assetsNeeded": [
+        "owner-approved campaign brief"
+      ],
+      "platformPolicyNote": "Planning only. Do not publish, generate social images or contact anyone."
+    },
+    {
+      "type": "content",
+      "description": "Four adult-only, pre-commerce crop-top concepts are grounded in the canonical season packet. Recommend testing one concept at a time with owner ratings as the decision gate; no publishing, spend, imagery, or commerce claims.",
+      "assetsNeeded": [
+        "owner-approved campaign brief"
+      ],
+      "platformPolicyNote": "Planning only. Do not publish, generate social images or contact anyone."
+    }
+  ],
+  "calendar": [
+    {
+      "week": 1,
+      "focus": "Owner reads the notes and decides whether any direction deserves a separate brief."
+    }
+  ],
+  "audienceRefs": [],
+  "kpis": [
+    "The owner can understand and rate each proposed direction without opening the meeting transcript."
+  ],
+  "postable_assets": [
+    {
+      "id": "asset-20260805-campaign-notes",
+      "captions": {
+        "instagram": {
+          "A": "Tuesday idea: the line does the work. The campaign stays typographic, clear and deliberate.",
+          "B": "A Tuesday campaign should earn attention with a sharp sentence, not a borrowed face."
+        },
+        "threads": {
+          "A": "A Tuesday idea built from type, timing and one clear point.",
+          "B": "The line is the visual. The idea is the reason to stop."
+        }
+      },
+      "visual": {
+        "template_id": "cover-cta",
+        "version": "1.0.0",
+        "content": {
+          "locale": "en",
+          "strings": {
+            "cover-title": "THE LINE IS THE VISUAL",
+            "cover-dek": "A Tuesday campaign idea made from type, not people.",
+            "cta": "Read the full campaign idea",
+            "destination": "titty-tuesdays.vercel.app"
+          }
+        }
+      }
+    }
+  ],
+  "status": "draft",
+  "originMeetingRef": "2026-08-05-tt-marketing"
+}

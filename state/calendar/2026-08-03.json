@@ -236,7 +236,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-05-cu-edition",
-      "decisionOneLiner": "EDITION. SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně led today's digest because its cited evidence cleared the source-diversity, uncertainty and"
+      "decisionOneLiner": "NEEDS_RECONCILIATION. schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/q"
     },
     {
       "at": "2026-08-05T04:00:00.000Z",
@@ -281,9 +281,9 @@
       "at": "2026-08-05T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "not-needed",
+      "status": "held",
       "meetingRef": "meetings/2026-08-05-tt-marketing",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      "decisionOneLiner": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend"
     },
     {
       "at": "2026-08-05T11:00:00.000Z",

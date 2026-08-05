@@ -1,70 +1,103 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260805090117-tt-marketing",
+  "cycleId": "20260805104458-tt-marketing",
   "date": "2026-08-05",
   "phase": "tt-marketing",
   "fixture": false,
-  "status": "PAUSED",
+  "status": "HELD",
   "stage": "VALIDATION",
-  "operatingBrief": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+  "operatingBrief": "Generate and record concrete marketing ideas for the future Titty Tuesdays eshop from the current season and owner taste. Keep every concept adult-only and pre-commerce: no publishing, ads, people, prices, stock, purchase links or availability claims.",
   "participantReasons": [
     {
       "agent": "PULSE",
-      "reason": "registered for this room but not called because no bounded agenda was due",
-      "participated": false
+      "reason": "chairs the bounded room",
+      "participated": true
     },
     {
       "agent": "ANGLE",
-      "reason": "registered for this room but not called because no bounded agenda was due",
-      "participated": false
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
     },
     {
       "agent": "AUDIT",
-      "reason": "registered for this room but not called because no bounded agenda was due",
-      "participated": false
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "COHORT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
     }
   ],
   "ledger": {
-    "estimatedCycleUsd": 0,
-    "actualCycleUsd": 0,
-    "monthAllInUsd": 2.387693100000001,
+    "estimatedCycleUsd": 0.08,
+    "actualCycleUsd": 0.011428,
+    "monthAllInUsd": 2.6915536000000007,
     "monthCapUsd": 30
   },
   "decision": {
-    "outcome": "NO_ACTION",
-    "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    "outcome": "PLAN",
+    "summary": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend.",
     "evidenceRefs": []
   },
   "proposals": [
     {
       "agent": "PULSE",
-      "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+      "summary": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Four adult-only, pre-commerce crop-top concepts are grounded in the canonical season packet. Recommend testing one concept at a time with owner ratings as the decision gate; no publishing, spend, imagery, or commerce claims.",
       "evidenceRefs": []
     }
   ],
   "voteMatrix": [
     {
       "voter": "PULSE",
-      "firstChoice": "NO_ACTION",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "plan",
       "veto": false
     }
   ],
   "tasks": [],
-  "growthPlan": "Nothing is authorized (NO_ACTION): a wake-up without a due agenda produces no work, spend, publishing or outreach.",
+  "growthPlan": "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled.",
   "eveningOutcome": null,
-  "generatedAt": "2026-08-05T09:01:17.168Z",
+  "generatedAt": "2026-08-05T10:47:58.976Z",
   "kind": "tt-marketing",
   "roomTranscript": {
-    "openedAt": "2026-08-05T09:01:17.167Z",
-    "closedAt": "2026-08-05T09:01:17.168Z",
+    "openedAt": "2026-08-05T10:44:58.976Z",
+    "closedAt": "2026-08-05T10:47:58.976Z",
     "gavel": "PULSE",
-    "setting": "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
     "turns": [
       {
         "agent": "PULSE",
+        "mode": "gavel",
+        "sentAt": "2026-08-05T10:44:58.976Z",
+        "text": "Generate and record concrete marketing ideas for the future Titty Tuesdays eshop from the current season and owner taste. Keep every concept adult-only and pre-commerce: no publishing, ads, people, prices, stock, purchase links or availability claims."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "statement",
+        "sentAt": "2026-08-05T10:45:58.976Z",
+        "text": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-05T10:46:58.976Z",
+        "text": "Four adult-only, pre-commerce crop-top concepts are grounded in the canonical season packet. Recommend testing one concept at a time with owner ratings as the decision gate; no publishing, spend, imagery, or commerce claims."
+      },
+      {
+        "agent": "PULSE",
         "mode": "close",
-        "sentAt": "2026-08-05T09:01:17.168Z",
-        "text": "No bounded agenda was due, so the specialist room did not open and no model was called."
+        "sentAt": "2026-08-05T10:47:58.976Z",
+        "text": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend."
       }
     ]
   }
