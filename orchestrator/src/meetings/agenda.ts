@@ -20,6 +20,7 @@ const MeetingPolicySchema = z.object({
   schemaVersion: z.literal("meeting-policy/1"),
   agendaRequiredPhases: z.array(AgendaPhaseSchema),
   changeTriggeredPhases: z.array(AgendaPhaseSchema),
+  standingAgendaPhases: z.array(AgendaPhaseSchema),
   servicePhases: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)),
   transitions: z.record(
     z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -38,6 +39,22 @@ const MeetingPolicySchema = z.object({
       code: "custom",
       message: `Meeting phases cannot be both agenda-required and change-triggered: ${overlap.join(", ")}`,
       path: ["changeTriggeredPhases"]
+    });
+  }
+  const classified = [
+    ...policy.agendaRequiredPhases,
+    ...policy.changeTriggeredPhases,
+    ...policy.standingAgendaPhases,
+    ...policy.servicePhases
+  ];
+  const classificationOverlap = [...new Set(classified.filter(
+    (phase, index) => classified.indexOf(phase) !== index
+  ))];
+  if (classificationOverlap.length > 0) {
+    context.addIssue({
+      code: "custom",
+      message: `Meeting phases must have one scheduling policy: ${classificationOverlap.join(", ")}`,
+      path: ["standingAgendaPhases"]
     });
   }
 });
@@ -75,6 +92,10 @@ export function phaseNeedsAgenda(policy: MeetingPolicy, phase: string): phase is
 
 export function phaseWakesOnChange(policy: MeetingPolicy, phase: string): phase is AgendaPhase {
   return policy.changeTriggeredPhases.includes(phase as AgendaPhase);
+}
+
+export function phaseHasStandingAgenda(policy: MeetingPolicy, phase: string): boolean {
+  return policy.standingAgendaPhases.includes(phase as AgendaPhase);
 }
 
 export function mayRequestMeeting(

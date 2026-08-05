@@ -228,7 +228,7 @@ This map prevents an arbitrary agent from scheduling an arbitrary paid room.
 | 08:00 | FightAIQ | Data intake | material source change or agenda | `$0.06` |
 | 09:00 | MMA Files | Story assignment | fixed service | `$0.05` |
 | 10:00 | MMA Files | Morning article | assigned slot + verified evidence | `$0.16` |
-| 11:00 | Titty Tuesdays | Campaign thinking | agenda | `$0.08` |
+| 11:00 | Titty Tuesdays | Future-eshop marketing ideas | standing agenda; optional focused question | `$0.08` |
 | 13:00 | Carousel Studio | Template review | agenda; deterministic rendering stays `$0` | `$0.06` |
 | 14:00 | BoardlessAI | Afternoon checkpoint | deterministic | `$0` |
 | 17:00 | Caught Up | Product decision | fixed service | `$0.08` |

@@ -52,7 +52,7 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   bounded visual-weight updates.
 - Caught Up source collection, bilingual article production, licensed-photo-first
   heroes, English/Czech language desks, verified GitHub App delivery and social packs.
-- Titty Tuesdays agenda-driven campaign rooms, 91-day turnover, platform-risk gate,
+- Titty Tuesdays standing daily campaign room, 91-day turnover, platform-risk gate,
   season concepts, public venture page and protected launch binder.
 - Agenda-led incubator scan and synthesis rooms, complete proposal contract, rating
   lifecycle, public shortlist and pre-signed content-project template founding.
@@ -229,9 +229,11 @@ wall clock lost seven of fourteen meetings on 2 August and ran an eighth as the
 neighbouring room. The runtime still accepts only the variant matching Prague today.
 A slot a gate turns off is recorded in `state/meetings/skips/` and shown on the
 calendar as **Skipped** with its reason. The morning council may place one bounded specialist
-agenda. Titty Tuesdays, both incubator rooms, Carousel Studio, FightAIQ analysis and
-the MMA Files desk open on scheduled runs only when an agenda is due. FightAIQ intake also opens
-after a material source change. Manual runs remain available for explicit tests.
+agenda. Titty Tuesdays opens every day with a standing agenda to generate future-eshop marketing
+ideas; a council agenda may focus that work. The incubator synthesis room, Carousel Studio,
+FightAIQ analysis and the MMA Files desk open only when an agenda is due. Incubator scan and
+FightAIQ intake also open after a material source change. Manual runs remain available for
+explicit tests.
 Afternoon and night are zero-model checkpoints.
 
 The owner countersigned `budget-2026-08e`, setting a `$30` all-in monthly limit,

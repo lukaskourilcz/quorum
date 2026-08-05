@@ -3,7 +3,13 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { VisualWeightsSchema } from "../src/contracts/visual-weights.js";
+import { loadMeetingPolicy, phaseHasStandingAgenda, phaseNeedsAgenda } from "../src/meetings/agenda.js";
 import { repoRoot } from "../src/paths.js";
+import {
+  assertTittyTuesdaysIdeaOutput,
+  parsePortfolioContribution,
+  portfolioIdeaInstruction
+} from "../src/portfolio/run.js";
 import { parseTasteDocument } from "../src/taste/model.js";
 import {
   createTittyTuesdaysBootstrapMeeting,
@@ -22,6 +28,56 @@ describe("Titty Tuesdays bootstrap", () => {
       adminTabs: ["plans", "ideas", "visuals"],
       meetings: [expect.objectContaining({ kind: "tt-marketing", cadence: "daily@11:00", envelopeUsd: 0.08 })]
     });
+    expect(venture?.meetings[0]?.packet.objectives.live).toContain("Generate and record concrete marketing ideas");
+    const policy = await loadMeetingPolicy();
+    expect(phaseNeedsAgenda(policy, "tt-marketing")).toBe(false);
+    expect(phaseHasStandingAgenda(policy, "tt-marketing")).toBe(true);
+  });
+
+  it("requires a core seat to produce a ledger-ready marketing idea", () => {
+    const contribution = {
+      stance: "plan",
+      summary: "Build a type-led concept for an adult audience.",
+      evidenceRefs: [],
+      task: null,
+      nicheProposals: [],
+      editorialSlate: null,
+      marketingPlan: null,
+      templateProposal: null,
+      inspirationObservations: [],
+      idea: {
+        title: "Tuesday Care Label",
+        summary: "Turn the TITTY TUESDAYS care label into a restrained campaign device for the current crop-top concepts. Planning only; no stock, price or purchase claim."
+      },
+      followUpRequest: null
+    };
+    const parsed = parsePortfolioContribution({
+      phase: "tt-marketing",
+      agent: "PULSE",
+      text: JSON.stringify(contribution)
+    });
+    expect(parsed.idea?.title).toBe("Tuesday Care Label");
+    expect(() => parsePortfolioContribution({
+      phase: "tt-marketing",
+      agent: "ANGLE",
+      text: JSON.stringify({ ...contribution, idea: null })
+    })).toThrow(/returned no Titty Tuesdays marketing idea/);
+    expect(() => assertTittyTuesdaysIdeaOutput("tt-marketing", [
+      { agent: "AUDIT", idea: null }
+    ])).toThrow(/produced no core marketing idea/);
+    expect(() => assertTittyTuesdaysIdeaOutput("tt-marketing", [
+      { agent: "PULSE", idea: contribution.idea },
+      { agent: "AUDIT", idea: null }
+    ])).not.toThrow();
+  });
+
+  it("puts the pre-commerce brand floor in the standing idea contract", () => {
+    const instruction = portfolioIdeaInstruction("tt-marketing");
+    expect(instruction).toContain("future Titty Tuesdays eshop");
+    expect(instruction).toContain("PULSE and ANGLE must each set idea");
+    expect(instruction).toContain("target adults");
+    expect(instruction).toContain("do not claim stock, price, availability or a purchase path");
+    expect(instruction).toContain("human imagery");
   });
 
   it("stores exactly four non-purchasable crop-top concepts", async () => {

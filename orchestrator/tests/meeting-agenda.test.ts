@@ -10,6 +10,8 @@ import {
   loadMeetingPolicy,
   mayRequestMeeting,
   nextAgendaDate,
+  phaseHasStandingAgenda,
+  phaseNeedsAgenda,
   readMeetingAgendaQueue,
   requestMeetingAgenda,
   starvationList
@@ -22,6 +24,9 @@ describe("meeting agenda queue", () => {
     expect(mayRequestMeeting(policy, "morning", "studio")).toBe(true);
     expect(mayRequestMeeting(policy, "studio", "studio")).toBe(true);
     expect(policy.agendaRequiredPhases).toContain("studio");
+    expect(phaseNeedsAgenda(policy, "tt-marketing")).toBe(false);
+    expect(phaseHasStandingAgenda(policy, "tt-marketing")).toBe(true);
+    expect(policy.servicePhases).not.toContain("tt-marketing");
     expect(mayRequestMeeting(policy, "tt-marketing", "mma-analysis")).toBe(false);
     expect(nextAgendaDate({ currentDate: "2026-08-01", currentHour: 6, targetHour: 11 }))
       .toBe("2026-08-01");

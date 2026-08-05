@@ -25,6 +25,7 @@ import type { AutonomySnapshot } from "../autonomy/signals.js";
 import type { PriorityItem } from "../contracts/autonomy.js";
 import {
   loadMeetingPolicy,
+  phaseHasStandingAgenda,
   phaseNeedsAgenda,
   phaseWakesOnChange,
   type MeetingPolicy,
@@ -129,10 +130,10 @@ export interface CommissionableRoom {
  * into the prompt, so a seat had to guess it. Reading it out of config/meeting-policy.json and
  * config/ventures.json rather than restating it means the prompt cannot drift from the gate.
  *
- * A transition target is listed only when an agenda changes whether the room opens: an
- * agenda-required phase cannot open without one, and a change-triggered phase opens on an
- * agenda even when its sources did not move. A service phase runs on its own cadence either
- * way, so an agenda for it decides nothing and is not worth a seat's single request.
+ * A transition target is listed when an agenda opens the room or gives a standing room a focused
+ * question. Agenda-required phases cannot open without one. Change-triggered phases open on an
+ * agenda even when their sources did not move. A standing room opens on its own cadence, then
+ * consumes an optional agenda as the question it should answer that day.
  */
 export function commissionableRooms(input: {
   registry: VentureRegistry;
@@ -141,7 +142,9 @@ export function commissionableRooms(input: {
 }): CommissionableRoom[] {
   return (input.policy.transitions[input.sourcePhase] ?? [])
     .filter((phase) =>
-      phaseNeedsAgenda(input.policy, phase) || phaseWakesOnChange(input.policy, phase))
+      phaseNeedsAgenda(input.policy, phase) ||
+      phaseWakesOnChange(input.policy, phase) ||
+      phaseHasStandingAgenda(input.policy, phase))
     .map((phase) => ({
       ventureId: getVentureMeetingDefinition(input.registry, phase).ventureId,
       phase

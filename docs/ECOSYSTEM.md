@@ -191,7 +191,7 @@ collisions and the public calendar uses the same source.
 | 08:00 | FightAIQ intake | material change or due agenda | `$0.06` |
 | 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
 | 10:00 | MMA Files article AM | assigned slot and evidence only | production cap `$0.35` |
-| 11:00 | Titty Tuesdays | due agenda only | `$0.08` |
+| 11:00 | Titty Tuesdays | standing future-eshop marketing ideation; optional focused agenda | `$0.08` |
 | 13:00 | Carousel Studio | due agenda only | `$0.06` |
 | 14:00 | Afternoon board | deterministic checkpoint | `$0` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |

@@ -175,7 +175,8 @@ a static reader path with Git and MDX as canon.
 
 The countersigned `$30` all-in limit and `$25` model/API share, human-only payments,
 per-project social gates, the global posting stop, sanitization boundary, evidence
-rules, security controls and release gates remain binding. Scheduled specialist
-windows additionally need a due
-agenda; FightAIQ intake may open for a material source change. Caught Up and MMA Files
-receive only bounded, hash-checked content through their approved repositories.
+rules, security controls and release gates remain binding. Titty Tuesdays carries a
+standing daily agenda for pre-commerce marketing ideas. Other agenda-gated specialist
+windows need a due agenda; FightAIQ intake may open for a material source change.
+Caught Up and MMA Files receive only bounded, hash-checked content through their
+approved repositories.

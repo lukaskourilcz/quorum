@@ -1389,8 +1389,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           // An agenda-gated room needs a due agenda; an agenda needs an open priority item;
           // and the council may only request a room against an item that already exists. The
           // sole writer of the queue was the admin UI, so with an empty queue no agent could
-          // ever open tt-marketing, incubator-scan, incubator-synthesis, mma-analysis,
-          // mag-desk or studio. The loop could not be entered from inside the system.
+          // ever open incubator synthesis, mma-analysis, mag-desk or studio. The loop could not
+          // be entered from inside the system. Titty Tuesdays now carries a standing agenda and
+          // does not depend on this bootstrap path.
           //
           // The seed is not invented: each venture states its own growth objective in
           // config/ventures.json, and that is what the queue is for. ensurePriorityItem is

@@ -75,7 +75,7 @@ credentials, evidence, cost limits or safety rules.
 | 08:00 | FightAIQ data check | material change or agenda |
 | 09:00 | MMA Files story meeting | fixed service |
 | 10:00 | MMA Files morning article | assigned slot and evidence only |
-| 11:00 | Titty Tuesdays campaign room | due agenda only |
+| 11:00 | Titty Tuesdays campaign room | standing future-eshop marketing ideation; optional focused agenda |
 | 13:00 | Carousel Studio room | due agenda only; deterministic rendering remains `$0` |
 | 14:00 | Board afternoon | `$0` checkpoint |
 | 17:00 | Caught Up product meeting | fixed service |
@@ -159,7 +159,7 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 ## Live switches
 
 - `CAUGHT_UP_LIVE_ENABLED` — Caught Up edition and product work.
-- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays and incubator rooms when an agenda is due.
+- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation and gated incubator rooms.
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.

@@ -139,6 +139,8 @@ const ContributionSchema = z.object({
 
 type Contribution = z.infer<typeof ContributionSchema> & { agent: FoundingAgent };
 
+const TITTY_TUESDAYS_CORE_IDEATORS = new Set<FoundingAgent>(["PULSE", "ANGLE"]);
+
 export interface PortfolioCycleResult {
   cycleId: string;
   phase: PortfolioPhase;
@@ -154,6 +156,41 @@ export interface PortfolioCycleResult {
 function parseJson(text: string): unknown {
   const normalized = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
   return JSON.parse(normalized);
+}
+
+export function portfolioIdeaInstruction(phase: PortfolioPhase): string {
+  if (phase === "tt-marketing") {
+    return "This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea to one concrete, ledger-ready campaign concept. Each idea must fit the current crop-top season, target adults, and stand alone without the transcript. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea when its role supports the concept.";
+  }
+  return "Set idea to {\"title\":\"<=80 chars\",\"summary\":\"<=280 chars\"} when this room surfaced a concrete idea worth keeping for later, otherwise null. It is recorded verbatim and must stand alone without the transcript.";
+}
+
+export function parsePortfolioContribution(input: {
+  phase: PortfolioPhase;
+  agent: FoundingAgent;
+  text: string;
+}): z.infer<typeof ContributionSchema> {
+  const contribution = ContributionSchema.parse(parseJson(input.text));
+  if (
+    input.phase === "tt-marketing" &&
+    TITTY_TUESDAYS_CORE_IDEATORS.has(input.agent) &&
+    contribution.idea === null
+  ) {
+    throw new Error(`${input.agent} returned no Titty Tuesdays marketing idea`);
+  }
+  return contribution;
+}
+
+export function assertTittyTuesdaysIdeaOutput(
+  phase: PortfolioPhase,
+  contributions: readonly Pick<Contribution, "agent" | "idea">[]
+): void {
+  if (phase !== "tt-marketing") return;
+  if (!contributions.some((contribution) =>
+    TITTY_TUESDAYS_CORE_IDEATORS.has(contribution.agent) && contribution.idea !== null
+  )) {
+    throw new Error("Titty Tuesdays marketing room produced no core marketing idea");
+  }
 }
 
 function renderNicheProposalMarkdown(proposal: NicheProposal): string {
@@ -1044,7 +1081,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. Set idea to {"title":"<=80 chars","summary":"<=280 chars"} when this room surfaced a concrete idea worth keeping for later, otherwise null; it is recorded verbatim and must stand alone without the transcript. The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|incubator-scan|incubator-synthesis|mma-intake|mma-analysis|mag-editorial|mag-desk|studio","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|incubator-scan|incubator-synthesis|mma-intake|mma-analysis|mag-editorial|mag-desk|studio","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -1087,7 +1124,7 @@ export async function runPortfolioCycle(input: {
         input: call.prompt,
         maxOutputTokens: call.model.maxOutputTokens,
         budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits },
-        parse: (text) => ContributionSchema.parse(parseJson(text))
+        parse: (text) => parsePortfolioContribution({ phase: input.phase, agent: call.agent, text })
       }).catch((error: unknown) => {
         // One seat returning unparsable JSON must cost that seat, not the room. A live
         // mma-intake run died on "Expected double-quoted property name in JSON at position
@@ -1154,6 +1191,7 @@ export async function runPortfolioCycle(input: {
       }));
     }
   }
+  if (!input.dry) assertTittyTuesdaysIdeaOutput(input.phase, contributions);
   // Record every idea a seat raised, into that venture's own ledger namespace.
   //
   // Before this, `screenAndRecordIdea` had exactly one caller, in the Caught Up morning
