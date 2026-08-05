@@ -2253,6 +2253,23 @@
       "toolUses": 0,
       "usd": 0.0032805,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-05T11:11:57.277Z",
+      "cycleId": "20260805111152-tt-marketing",
+      "requestHash": "3f70db16643d7f000bb436c79fa156257a015c090f752a22ff8bba5c49f21a00",
+      "phase": "tt-marketing",
+      "ventureId": "titty-tuesdays",
+      "agent": "PULSE",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 1877,
+      "cachedTokensIn": 0,
+      "tokensOut": 170,
+      "toolUses": 0,
+      "usd": 0.002897,
+      "kind": "text"
     }
   ]
 }
