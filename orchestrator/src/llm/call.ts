@@ -13,7 +13,9 @@ import {
   writeCachedResponse
 } from "./cache.js";
 import { AnthropicTextClient } from "./anthropic.js";
-import { OpenAiTextClient, type TextProviderResponse } from "./openai.js";
+import { ModelResponseTruncatedError, OpenAiTextClient, type TextProviderResponse } from "./openai.js";
+
+export { ModelResponseTruncatedError };
 import {
   readVentureRegistry,
   ventureIdForPhase

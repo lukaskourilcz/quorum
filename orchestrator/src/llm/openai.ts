@@ -17,6 +17,23 @@ export interface TextProviderResponse {
   cacheWriteTokensIn: number;
 }
 
+/**
+ * A reply the provider cut off at the output cap.
+ *
+ * Its own class, not a plain Error, because a caller has to be able to tell a truncation apart
+ * from a transport failure: a truncated seat is a usable-in-principle reply that our cap was too
+ * small for, and the council must retry it and, failing twice, drop that one seat — never let it
+ * throw away the whole morning. On 5 August a council seat crossed the 400-token cap the moment
+ * the prompt started asking seats to propose a new question, the plain Error propagated past the
+ * seat retry (which only caught parse failures), and the 04:00 board never opened.
+ */
+export class ModelResponseTruncatedError extends Error {
+  constructor(readonly model: string, readonly cap: number, reason: string) {
+    super(`Response ${reason} at the ${cap}-token cap for ${model}; raise maxOutputTokens`);
+    this.name = "ModelResponseTruncatedError";
+  }
+}
+
 export class OpenAiTextClient {
   private readonly client: OpenAI;
 
@@ -39,7 +56,7 @@ export class OpenAiTextClient {
     });
     if (response.status === "incomplete") {
       const reason = response.incomplete_details?.reason ?? "unknown";
-      throw new Error(`Response incomplete (${reason}) at the ${request.maxOutputTokens}-token cap for ${request.model}; raise maxOutputTokens`);
+      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, `incomplete (${reason})`);
     }
     return {
       text: response.output_text,

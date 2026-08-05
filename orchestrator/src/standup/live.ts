@@ -9,7 +9,7 @@ import type { VentureRegistry } from "../contracts/venture-registry.js";
 import { configRoot, stateRoot } from "../paths.js";
 import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
 import { getShiftDefinition, type ShiftDefinition } from "../shifts.js";
-import { guardedJsonCall , ModelOutputParseError } from "../llm/call.js";
+import { guardedJsonCall , ModelOutputParseError, ModelResponseTruncatedError } from "../llm/call.js";
 import { readJson } from "../state.js";
 import {
   CouncilAgentSchema,
@@ -37,6 +37,18 @@ import {
 import type { QuarterlyKpiPacketSummary } from "../money/daily.js";
 
 const COUNCIL: readonly CouncilAgent[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
+
+/**
+ * The output cap for one council seat.
+ *
+ * 400 was enough for a bare position — a public summary, a risk line, an optional meeting request.
+ * Then the prompt began asking seats to propose a new priority question (a venture, a decision at
+ * stake, evidence refs and a summary), a seat that did so crossed 400 tokens, and on 5 August the
+ * 04:00 board never opened: the reply was truncated, the truncation threw past the seat retry, and
+ * the whole cycle died on one seat. This fits the richer reply; the truncation is now also
+ * survivable below, so a seat that still overruns is dropped rather than fatal.
+ */
+const COUNCIL_MAX_OUTPUT_TOKENS = 700;
 
 /** How many seats a full shift council has, so the commission gate reports out of the real total. */
 export const COUNCIL_SEATS = COUNCIL.length;
@@ -391,7 +403,7 @@ export async function collectLiveCouncil(input: {
         scope: work.scope,
         businessContext: input.businessContext
       }),
-      maxOutputTokens: Math.min(model.maxOutputTokens, 400),
+      maxOutputTokens: Math.min(model.maxOutputTokens, COUNCIL_MAX_OUTPUT_TOKENS),
       budgetContext: input.budgetContext(ledger.entries),
       parse: (text: string) => {
         const parsed = parseCouncilPosition({
@@ -427,9 +439,11 @@ export async function collectLiveCouncil(input: {
       // the priority queue, commissions the day's specialist room and writes the standup the
       // Caught Up product room reads, so losing it costs far more than one opinion. The
       // spend is already recorded by guardedJsonCall before parsing, so skipping here drops
-      // a position, not an accounting entry. Anything that is not a parse failure — a budget
-      // stop, a provider outage — still propagates and stops the cycle.
-      if (error instanceof ModelOutputParseError) {
+      // a position, not an accounting entry. A truncation is caught here too: it is an unusable
+      // reply just like malformed JSON, and letting it through as a plain error is exactly what
+      // killed the 5 August morning. Anything else — a budget stop, a provider outage — still
+      // propagates and stops the cycle.
+      if (error instanceof ModelOutputParseError || error instanceof ModelResponseTruncatedError) {
         return { parseFailure: error };
       }
       throw error;
@@ -453,7 +467,7 @@ export async function collectLiveCouncil(input: {
     if (seated !== null && "parseFailure" in seated) {
       const first = seated.parseFailure;
       seated = await guardedJsonCall({ ...callFor(), attempt: 2 }).catch((error: unknown) => {
-        if (error instanceof ModelOutputParseError) return { parseFailure: error };
+        if (error instanceof ModelOutputParseError || error instanceof ModelResponseTruncatedError) return { parseFailure: error };
         throw error;
       });
       if (seated !== null && "parseFailure" in seated) {

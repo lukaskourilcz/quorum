@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import type { TextProviderResponse } from "./openai.js";
+import { ModelResponseTruncatedError, type TextProviderResponse } from "./openai.js";
 
 export interface AnthropicTextRequest {
   model: string;
@@ -39,7 +39,7 @@ export class AnthropicTextClient {
     // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the
     // cap" and hours spent hunting a syntax error at some byte offset.
     if (response.stop_reason === "max_tokens") {
-      throw new Error(`Response truncated at the ${request.maxOutputTokens}-token cap for ${request.model}; raise maxOutputTokens`);
+      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, "truncated");
     }
     const text = response.content
       .filter((block) => block.type === "text")
