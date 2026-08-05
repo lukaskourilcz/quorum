@@ -226,13 +226,16 @@
       "at": "2026-08-04T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The repository release gate failed at commit 1cdfb05e2c45, so the room did not open."
     },
     {
       "at": "2026-08-05T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-05-cu-edition",
+      "decisionOneLiner": "NO_EDITION. content_invalid_after_regeneration"
     },
     {
       "at": "2026-08-05T04:00:00.000Z",

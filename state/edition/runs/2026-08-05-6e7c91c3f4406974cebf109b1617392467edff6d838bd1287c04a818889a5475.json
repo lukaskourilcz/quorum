@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "runId": "075a8888-4f97-4cba-8fb1-0e60cc306d0b",
+  "date": "2026-08-05",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-05T03:05:18.364Z",
+  "completedAt": "2026-08-05T03:10:45.318Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-05T03:05:19.736Z",
+      "completedAt": "2026-08-05T03:05:42.946Z",
+      "durationMs": 23210
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-05T03:05:42.946Z",
+      "completedAt": "2026-08-05T03:07:26.154Z",
+      "durationMs": 103208,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"cs\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-08-05T03:07:26.154Z",
+      "completedAt": "2026-08-05T03:09:05.326Z",
+      "durationMs": 99172,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"cs\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-08-05T03:09:05.326Z",
+      "completedAt": "2026-08-05T03:10:45.316Z",
+      "durationMs": 99990,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"cs\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11548,
+      "outputTokens": 915,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.048369
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 15691,
+      "outputTokens": 3832,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1456,
+      "costUsd": 0.110013
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 16341,
+      "outputTokens": 4270,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1543,
+      "costUsd": 0.11885925
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 16341,
+      "outputTokens": 4298,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1544,
+      "costUsd": 0.119283
+    }
+  ],
+  "measuredCostUsd": 0.39652425,
+  "packageStatus": "no_edition",
+  "warnings": [
+    "repeated_topic_warmup:1/3",
+    "content_invalid:write: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"cs\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"cs\"\n    ],\n    \"message\": \"Invalid input: expected object, received string\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
