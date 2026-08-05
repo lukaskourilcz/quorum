@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260805190057-incubator-synthesis",
+  "date": "2026-08-05",
+  "phase": "incubator-synthesis",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "VAULT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 2.7406388000000006,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing is authorized (NO_ACTION): a wake-up without a due agenda produces no work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-05T19:00:57.735Z",
+  "kind": "incubator-synthesis",
+  "roomTranscript": {
+    "openedAt": "2026-08-05T19:00:57.734Z",
+    "closedAt": "2026-08-05T19:00:57.735Z",
+    "gavel": "PULSE",
+    "setting": "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-05T19:00:57.735Z",
+        "text": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      }
+    ]
+  }
+}
