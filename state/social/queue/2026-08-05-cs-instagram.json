@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "caught-up-2026-08-05-cs-instagram",
+  "venture": "caught-up",
+  "locale": "cs",
+  "variant": "A",
+  "campaignId": "caught-up-2026-08-05-cs",
+  "experimentId": null,
+  "channel": "instagram",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "caught-up-2026-08-05-cs",
+    "content": "edition-carousel-cs"
+  },
+  "content": {
+    "text": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nSpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup",
+    "altText": "Frame 1: Slide 1: SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně Frame 2: Slide 2: Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Frame 3: Slide 3: SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory. Frame 4: Slide 4: OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol. Frame 5: Slide 5: AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu. Frame 6: Slide 6: Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, Frame 7: Slide 7: nikoli z regulatorního arbitráže. Frame 8: Slide 8: Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co b",
+    "assetPaths": [
+      "/social/2026-08-05/cs/instagram/frame-01.png",
+      "/social/2026-08-05/cs/instagram/frame-02.png",
+      "/social/2026-08-05/cs/instagram/frame-03.png",
+      "/social/2026-08-05/cs/instagram/frame-04.png",
+      "/social/2026-08-05/cs/instagram/frame-05.png",
+      "/social/2026-08-05/cs/instagram/frame-06.png",
+      "/social/2026-08-05/cs/instagram/frame-07.png",
+      "/social/2026-08-05/cs/instagram/frame-08.png",
+      "/social/2026-08-05/cs/instagram/frame-09.png",
+      "/social/2026-08-05/cs/instagram/frame-10.png"
+    ],
+    "factualClaimRefs": [
+      "source:the-verge",
+      "source:variety",
+      "source:github-ai-releases",
+      "source:tensorfeed",
+      "source:the-register",
+      "source:mit-tech-review",
+      "source:spaceflight-news"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "35db0fd444f285ad16b66f5952453555a51383ab42548485dbb6fbbedd559a21"
+  },
+  "publishWindow": {
+    "notBefore": "2026-08-05T09:27:06.795Z",
+    "notAfter": "2026-08-08T09:27:06.795Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pass",
+    "brand": "pass",
+    "claims": "pass",
+    "quill": "pass",
+    "keeper": "pass",
+    "duplicate": "pass",
+    "accessibility": "pass",
+    "budget": "pass"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-08-05T09:27:06.795Z",
+  "attempt": null,
+  "receiptId": null
+}

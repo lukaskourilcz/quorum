@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "composerVersion": "carousel-studio-1",
+  "inputsHash": "fdfe519aa0cfc7a96df40d0eb5b3a5cf041f2e88cd34ee4ad22b0e5c35dcc489",
+  "frameHashes": {
+    "/social/2026-08-05/cs/instagram/frame-01.png": "74560d07446d155010ab1d4f3eae7c7121435715a810a9f8f394d56e1797a2cd",
+    "/social/2026-08-05/cs/instagram/frame-02.png": "b516c527405e47499f32f194b25146fe1af4a5b32a0c821a1ac154f116453e63",
+    "/social/2026-08-05/cs/instagram/frame-03.png": "ebbb859b84e22638968d987a8b0b5fe2aa56ace8f5298c758f8f9e2a0cd026cc",
+    "/social/2026-08-05/cs/instagram/frame-04.png": "e24aee829d00370b265efa8d9cb72bd90a2b86b5525fa9ae63379e58ec643c84",
+    "/social/2026-08-05/cs/instagram/frame-05.png": "1b5b0f983b934296340603dd7b4d5d84f7ab52becbdc92150a97b9f313f591af",
+    "/social/2026-08-05/cs/instagram/frame-06.png": "95987b0daf4f62f20e21d344bfe9c41427b7011b1911bc2f96e6f15f62186ab6",
+    "/social/2026-08-05/cs/instagram/frame-07.png": "0721dc1fa882cbbc650e2088fef88c3223ef06ed0b8a0b5cf4dddcbb4db472dc",
+    "/social/2026-08-05/cs/instagram/frame-08.png": "fdcbfa59aca11111176a3fdb5198a28e4daa22c1e97609d469ed9033a742fe0b",
+    "/social/2026-08-05/cs/instagram/frame-09.png": "39b11ed9ce0bf7008d190cae4eaf860d9d33407c7cb852576e658574f4e5abcb",
+    "/social/2026-08-05/cs/instagram/frame-10.png": "6a232875bd8441f5b416c4ffee83473b822bf7f939bb996a5d98e35e9deeced4",
+    "/social/2026-08-05/cs/threads/frame-01.png": "09e7589f4bf43ba7e45951283762543d2fb566818afef41ead5dc8f75b0ad4aa",
+    "/social/2026-08-05/cs/threads/frame-02.png": "1623899b64e4419bf9801f14eaa620e89e53ee5fec0a54fcc1a69b40b70369bb",
+    "/social/2026-08-05/cs/threads/frame-03.png": "6cf41c093f34d8a2b9fe521de38c16ce39824dcd9abf93e4d1d9f9ef901f8b1b",
+    "/social/2026-08-05/cs/threads/frame-04.png": "04808bf6550f25fed883d71ca14a9aa4a3b1dd4f370cf1154ae0780ad7cc910a",
+    "/social/2026-08-05/cs/threads/frame-05.png": "5ac18a41233becfc0f4948ce6e25582fbaefe9fddd3418c72abd2b6bbadc7074",
+    "/social/2026-08-05/cs/threads/frame-06.png": "5be606cbd69bcc158cd47fbb35eb30f1f4fe308502fdefd2e903ca065da93413",
+    "/social/2026-08-05/cs/threads/frame-07.png": "73435736be8a93038c9f9bc06a1d179b5afd4ea5221b3d55d3576399d0340b6d",
+    "/social/2026-08-05/cs/threads/frame-08.png": "307a50ebaf0203f4b159e9379a15b3f18503ebc045e7135484611a9055ed5200",
+    "/social/2026-08-05/cs/threads/frame-09.png": "589c0bb421bbda8d8cc1eed925885f164a8d269993fe6b0971792b06f10664b6",
+    "/social/2026-08-05/cs/threads/frame-10.png": "473fb5cef87921938372b1558eb43a8687ebe6f8fbbf617acc45e9a9a4d23623",
+    "/social/2026-08-05/quote.png": "2bd260030d215a97f7c7291df9a19944965c9d993bcc88a11bd1b8ff022eacd3"
+  },
+  "formats": [
+    "instagram-portrait",
+    "threads"
+  ],
+  "format": "png"
+}

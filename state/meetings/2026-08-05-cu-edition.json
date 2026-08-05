@@ -1,10 +1,10 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260805030509-cu-edition",
+  "cycleId": "20260805092706-cu-edition",
   "date": "2026-08-05",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NO_EDITION",
+  "status": "HELD",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -211,129 +211,119 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.78,
-    "actualCycleUsd": 0.39652425,
-    "monthAllInUsd": 2.2611611,
+    "actualCycleUsd": 0.2711025,
+    "monthAllInUsd": 2.6680936,
     "monthCapUsd": 30
   },
   "decision": {
-    "outcome": "NO_EDITION",
-    "summary": "NO_EDITION. content_invalid_after_regeneration",
+    "outcome": "EDITION",
+    "summary": "EDITION. SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
     "evidenceRefs": [
-      "source:404-media",
-      "source:anthropic-news",
-      "source:ars-technica",
-      "source:bluesky-language-models",
-      "source:deepmind-blog",
-      "source:digiday",
+      "source:the-verge",
+      "source:variety",
       "source:github-ai-releases",
-      "source:google-research",
-      "source:hf-blog",
-      "source:hn-frontpage",
-      "source:import-ai",
-      "source:interconnects"
+      "source:tensorfeed",
+      "source:the-register",
+      "source:mit-tech-review",
+      "source:spaceflight-news"
     ]
   },
   "proposals": [
     {
       "agent": "HERALD",
-      "summary": "Hold publication because the live run did not clear every release gate.",
+      "summary": "Commission the story that cleared the source, copy and quality gates.",
       "evidenceRefs": [
-        "source:404-media",
-        "source:anthropic-news",
-        "source:ars-technica",
-        "source:bluesky-language-models",
-        "source:deepmind-blog",
-        "source:digiday",
+        "source:the-verge",
+        "source:variety",
         "source:github-ai-releases",
-        "source:google-research",
-        "source:hf-blog",
-        "source:hn-frontpage",
-        "source:import-ai",
-        "source:interconnects"
+        "source:tensorfeed",
+        "source:the-register",
+        "source:mit-tech-review",
+        "source:spaceflight-news"
       ]
     }
   ],
   "voteMatrix": [
     {
       "voter": "HERALD",
-      "firstChoice": "NO_EDITION",
+      "firstChoice": "EDITION",
       "veto": false
     },
     {
       "voter": "STET",
-      "firstChoice": "NO_EDITION",
+      "firstChoice": "EDITION",
       "veto": false
     },
     {
       "voter": "HACEK",
-      "firstChoice": "NO_EDITION",
+      "firstChoice": "EDITION",
       "veto": false
     },
     {
       "voter": "SPARK",
-      "firstChoice": "NO_EDITION",
+      "firstChoice": "EDITION",
       "veto": false
     },
     {
       "voter": "AUDIT",
-      "firstChoice": "NO_EDITION",
+      "firstChoice": "EDITION",
       "veto": false
     }
   ],
   "tasks": [
     {
-      "id": "TASK-20260805030509-cu-edition-DELIVERY",
+      "id": "TASK-20260805092706-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
     }
   ],
-  "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
+  "growthPlan": "Prepare only draft-locked promotion assets after delivery succeeds.",
   "eveningOutcome": null,
-  "editionRef": "6e7c91c3f4406974cebf109b1617392467edff6d838bd1287c04a818889a5475",
-  "generatedAt": "2026-08-05T03:05:14.919Z",
+  "editionRef": "17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c",
+  "generatedAt": "2026-08-05T09:27:11.795Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-08-05T03:05:09.919Z",
-    "closedAt": "2026-08-05T03:05:14.919Z",
+    "openedAt": "2026-08-05T09:27:06.795Z",
+    "closedAt": "2026-08-05T09:27:11.795Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-08-05T03:05:09.919Z",
+        "sentAt": "2026-08-05T09:27:06.795Z",
         "text": "The edition room is open. The live digest informs the room and never instructs it."
       },
       {
         "agent": "STET",
         "mode": "raises-concern",
-        "sentAt": "2026-08-05T03:05:10.919Z",
-        "text": "The run produced no article that cleared its source and quality checks."
+        "sentAt": "2026-08-05T09:27:07.795Z",
+        "text": "The article was written straight in Czech, and every link in it matches a supplied source URL."
       },
       {
         "agent": "HACEK",
         "mode": "raises-concern",
-        "sentAt": "2026-08-05T03:05:11.919Z",
-        "text": "No Czech copy cleared its review either, so nothing is published."
+        "sentAt": "2026-08-05T09:27:08.795Z",
+        "text": "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
       },
       {
         "agent": "AUDIT",
         "mode": "vote",
-        "sentAt": "2026-08-05T03:05:12.919Z",
-        "text": "Approve NO_EDITION and publish the recorded reason only."
+        "sentAt": "2026-08-05T09:27:09.795Z",
+        "text": "Approve the validated package for the bounded delivery path."
       },
       {
         "agent": "SPARK",
         "mode": "statement",
-        "sentAt": "2026-08-05T03:05:13.919Z",
-        "text": "Without an edition there is nothing to promote."
+        "sentAt": "2026-08-05T09:27:10.795Z",
+        "text": "Promotion assets wait for a successful delivery and stay locked as drafts."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-08-05T03:05:14.919Z",
-        "text": "The room recorded NO_EDITION and closes honestly."
+        "sentAt": "2026-08-05T09:27:11.795Z",
+        "text": "EDITION recorded. RELAY owns delivery from here."
       }
     ]
   }

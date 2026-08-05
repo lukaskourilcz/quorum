@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260805092706-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "EDITION. SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:variety",
+    "source:github-ai-releases",
+    "source:tensorfeed",
+    "source:the-register",
+    "source:mit-tech-review",
+    "source:spaceflight-news"
+  ],
+  "editionRef": "17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c",
+  "generatedAt": "2026-08-05T09:27:11.795Z"
+}

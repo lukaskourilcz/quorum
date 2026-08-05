@@ -236,14 +236,15 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-05-cu-edition",
-      "decisionOneLiner": "NO_EDITION. content_invalid_after_regeneration"
+      "decisionOneLiner": "EDITION. SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně led today's digest because its cited evidence cleared the source-diversity, uncertainty and"
     },
     {
       "at": "2026-08-05T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "skipped",
-      "decisionOneLiner": "The run for this meeting failed before it finished. See https://github.com/lukaskourilcz/quorum/actions/runs/30978478801"
+      "status": "held",
+      "meetingRef": "standups/2026-08-05-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-08-05T05:00:00.000Z",

@@ -1,0 +1,230 @@
+{
+  "schemaVersion": "social-pack/1",
+  "date": "2026-08-05",
+  "editionRef": "17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c",
+  "byLocale": {
+    "cs": {
+      "destination": "https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje",
+      "instagram": {
+        "caption": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nSpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup",
+        "variants": {
+          "A": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nSpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup",
+          "B": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nSpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup"
+        },
+        "hashtags": [
+          "spacex",
+          "ai",
+          "openai",
+          "amd",
+          "space",
+          "telecoms",
+          "umelainteligence",
+          "technologie",
+          "aitech",
+          "caughtup"
+        ],
+        "frames": [
+          "/social/2026-08-05/cs/instagram/frame-01.png",
+          "/social/2026-08-05/cs/instagram/frame-02.png",
+          "/social/2026-08-05/cs/instagram/frame-03.png",
+          "/social/2026-08-05/cs/instagram/frame-04.png",
+          "/social/2026-08-05/cs/instagram/frame-05.png",
+          "/social/2026-08-05/cs/instagram/frame-06.png",
+          "/social/2026-08-05/cs/instagram/frame-07.png",
+          "/social/2026-08-05/cs/instagram/frame-08.png",
+          "/social/2026-08-05/cs/instagram/frame-09.png",
+          "/social/2026-08-05/cs/instagram/frame-10.png"
+        ],
+        "visual": {
+          "template_id": "deck-editorial-10",
+          "version": "1.0.0",
+          "content": {
+            "locale": "cs",
+            "strings": {
+              "slide-01": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně",
+              "slide-02": "Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť.",
+              "slide-03": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.",
+              "slide-04": "OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol.",
+              "slide-05": "AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu.",
+              "slide-06": "Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra,",
+              "slide-07": "nikoli z regulatorního arbitráže.",
+              "slide-08": "Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co bylo loni drahé na provoz ve větším měřítku, je dnes výrazně dostupnější. Konkurenti musejí reagovat.",
+              "slide-09": "AMD v jednom výdechu vykázala rekordní výsledky a přiznala, že většina jejího AI příjmu závisí na hrstce zákazníků, jejichž vlastní rentabilita zatím nebyla prokázána —",
+              "slide-10": "Jedno vydání a máte přehled."
+            }
+          }
+        }
+      },
+      "threads": {
+        "text": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný,…\n\nhttps://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje",
+        "variants": {
+          "A": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný,…\n\nhttps://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje",
+          "B": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní…\n\nhttps://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje"
+        },
+        "hashtags": [],
+        "frames": [
+          "/social/2026-08-05/cs/threads/frame-01.png",
+          "/social/2026-08-05/cs/threads/frame-02.png",
+          "/social/2026-08-05/cs/threads/frame-03.png",
+          "/social/2026-08-05/cs/threads/frame-04.png",
+          "/social/2026-08-05/cs/threads/frame-05.png",
+          "/social/2026-08-05/cs/threads/frame-06.png",
+          "/social/2026-08-05/cs/threads/frame-07.png",
+          "/social/2026-08-05/cs/threads/frame-08.png",
+          "/social/2026-08-05/cs/threads/frame-09.png",
+          "/social/2026-08-05/cs/threads/frame-10.png"
+        ],
+        "visual": {
+          "template_id": "deck-editorial-10",
+          "version": "1.0.0",
+          "content": {
+            "locale": "cs",
+            "strings": {
+              "slide-01": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně",
+              "slide-02": "Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť.",
+              "slide-03": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.",
+              "slide-04": "OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol.",
+              "slide-05": "AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu.",
+              "slide-06": "Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra,",
+              "slide-07": "nikoli z regulatorního arbitráže.",
+              "slide-08": "Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co bylo loni drahé na provoz ve větším měřítku, je dnes výrazně dostupnější. Konkurenti musejí reagovat.",
+              "slide-09": "AMD v jednom výdechu vykázala rekordní výsledky a přiznala, že většina jejího AI příjmu závisí na hrstce zákazníků, jejichž vlastní rentabilita zatím nebyla prokázána —",
+              "slide-10": "Jedno vydání a máte přehled."
+            }
+          }
+        }
+      }
+    }
+  },
+  "instagram": {
+    "caption": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nSpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup",
+    "hashtags": [
+      "spacex",
+      "ai",
+      "openai",
+      "amd",
+      "space",
+      "telecoms",
+      "umelainteligence",
+      "technologie",
+      "aitech",
+      "caughtup"
+    ],
+    "frames": [
+      "/social/2026-08-05/cs/instagram/frame-01.png",
+      "/social/2026-08-05/cs/instagram/frame-02.png",
+      "/social/2026-08-05/cs/instagram/frame-03.png",
+      "/social/2026-08-05/cs/instagram/frame-04.png",
+      "/social/2026-08-05/cs/instagram/frame-05.png",
+      "/social/2026-08-05/cs/instagram/frame-06.png",
+      "/social/2026-08-05/cs/instagram/frame-07.png",
+      "/social/2026-08-05/cs/instagram/frame-08.png",
+      "/social/2026-08-05/cs/instagram/frame-09.png",
+      "/social/2026-08-05/cs/instagram/frame-10.png"
+    ],
+    "visual": {
+      "template_id": "deck-editorial-10",
+      "version": "1.0.0",
+      "content": {
+        "locale": "cs",
+        "strings": {
+          "slide-01": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně",
+          "slide-02": "Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť.",
+          "slide-03": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.",
+          "slide-04": "OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol.",
+          "slide-05": "AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu.",
+          "slide-06": "Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra,",
+          "slide-07": "nikoli z regulatorního arbitráže.",
+          "slide-08": "Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co bylo loni drahé na provoz ve větším měřítku, je dnes výrazně dostupnější. Konkurenti musejí reagovat.",
+          "slide-09": "AMD v jednom výdechu vykázala rekordní výsledky a přiznala, že většina jejího AI příjmu závisí na hrstce zákazníků, jejichž vlastní rentabilita zatím nebyla prokázána —",
+          "slide-10": "Jedno vydání a máte přehled."
+        }
+      }
+    },
+    "variants": {
+      "A": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nSpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup",
+      "B": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nSpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nNa prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť. Tohoto dne OpenAI zlevnila modely GPT-5.6 a AMD zveřejnila výsledky, které investory znepokojilykoncentrací zákazníků.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný, harmonogram není.\n\nCelý článek: https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje\n\n#spacex #ai #openai #amd #space #telecoms #umelainteligence #technologie #aitech #caughtup"
+    }
+  },
+  "threads": {
+    "text": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný,…\n\nhttps://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje",
+    "hashtags": [],
+    "frames": [
+      "/social/2026-08-05/cs/threads/frame-01.png",
+      "/social/2026-08-05/cs/threads/frame-02.png",
+      "/social/2026-08-05/cs/threads/frame-03.png",
+      "/social/2026-08-05/cs/threads/frame-04.png",
+      "/social/2026-08-05/cs/threads/frame-05.png",
+      "/social/2026-08-05/cs/threads/frame-06.png",
+      "/social/2026-08-05/cs/threads/frame-07.png",
+      "/social/2026-08-05/cs/threads/frame-08.png",
+      "/social/2026-08-05/cs/threads/frame-09.png",
+      "/social/2026-08-05/cs/threads/frame-10.png"
+    ],
+    "visual": {
+      "template_id": "deck-editorial-10",
+      "version": "1.0.0",
+      "content": {
+        "locale": "cs",
+        "strings": {
+          "slide-01": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně",
+          "slide-02": "Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť.",
+          "slide-03": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.",
+          "slide-04": "OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol.",
+          "slide-05": "AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu.",
+          "slide-06": "Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra,",
+          "slide-07": "nikoli z regulatorního arbitráže.",
+          "slide-08": "Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co bylo loni drahé na provoz ve větším měřítku, je dnes výrazně dostupnější. Konkurenti musejí reagovat.",
+          "slide-09": "AMD v jednom výdechu vykázala rekordní výsledky a přiznala, že většina jejího AI příjmu závisí na hrstce zákazníků, jejichž vlastní rentabilita zatím nebyla prokázána —",
+          "slide-10": "Jedno vydání a máte přehled."
+        }
+      }
+    },
+    "variants": {
+      "A": "SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní mobilní sítě — záměr je veřejný,…\n\nhttps://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje",
+      "B": "SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.\n\nVstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra, nikoli z regulatorního arbitráže.\n\nOtevřené zůstává: SpaceX neupřesnila časový horizont ani cenu pozemní…\n\nhttps://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje"
+    }
+  },
+  "quoteCard": {
+    "frame": "/social/2026-08-05/quote.png",
+    "sourceTurnRef": "meetings/2026-08-05-cu-edition#turn-2",
+    "visual": {
+      "template_id": "quote-card",
+      "version": "1.0.0",
+      "content": {
+        "locale": "en",
+        "strings": {
+          "quote": "The article was written straight in Czech, and every link in it matches a supplied source URL.",
+          "attribution": "STET · 2026-08-05"
+        }
+      }
+    }
+  },
+  "provenance": {
+    "composerVersion": "carousel-studio-1",
+    "inputsHash": "fdfe519aa0cfc7a96df40d0eb5b3a5cf041f2e88cd34ee4ad22b0e5c35dcc489"
+  },
+  "altTexts": {
+    "/social/2026-08-05/cs/instagram/frame-01.png": "Slide 1: SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně",
+    "/social/2026-08-05/cs/instagram/frame-02.png": "Slide 2: Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť.",
+    "/social/2026-08-05/cs/instagram/frame-03.png": "Slide 3: SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.",
+    "/social/2026-08-05/cs/instagram/frame-04.png": "Slide 4: OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol.",
+    "/social/2026-08-05/cs/instagram/frame-05.png": "Slide 5: AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu.",
+    "/social/2026-08-05/cs/instagram/frame-06.png": "Slide 6: Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra,",
+    "/social/2026-08-05/cs/instagram/frame-07.png": "Slide 7: nikoli z regulatorního arbitráže.",
+    "/social/2026-08-05/cs/instagram/frame-08.png": "Slide 8: Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co bylo loni drahé na provoz ve větším měřítku, je dnes výrazně dostupnější. Konkurenti musejí reagovat.",
+    "/social/2026-08-05/cs/instagram/frame-09.png": "Slide 9: AMD v jednom výdechu vykázala rekordní výsledky a přiznala, že většina jejího AI příjmu závisí na hrstce zákazníků, jejichž vlastní rentabilita zatím nebyla prokázána —",
+    "/social/2026-08-05/cs/instagram/frame-10.png": "Slide 10: Jedno vydání a máte přehled.",
+    "/social/2026-08-05/cs/threads/frame-01.png": "Slide 1: SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně",
+    "/social/2026-08-05/cs/threads/frame-02.png": "Slide 2: Na prvním earnings callu v historii firmy Gwynne Shotwell a Elon Musk oznámili, že SpaceX hodlá vybudovat pozemní mobilní síť.",
+    "/social/2026-08-05/cs/threads/frame-03.png": "Slide 3: SpaceX poprvé veřejně potvrdila záměr vybudovat pozemní mobilní síť a přímo soutěžit s hlavními americkými operátory.",
+    "/social/2026-08-05/cs/threads/frame-04.png": "Slide 4: OpenAI snížila cenu GPT-5.6 Luna o 80 % a GPT-5.6 Terra o 20 %; Sol zůstal beze změny; přibyl Fast mode pro Sol.",
+    "/social/2026-08-05/cs/threads/frame-05.png": "Slide 5: AMD vykázala Q2 zisk +163 % meziročně, ale akcie klesly přes 8 % kvůli obavám z koncentrace zákazníků v AI segmentu.",
+    "/social/2026-08-05/cs/threads/frame-06.png": "Slide 6: Vstup SpaceX na trh pozemních mobilních operátorů by byl první vážnou strukturální konkurencí pro T-Mobile, AT&T a Verizon za poslední desetiletí — a vychází z licencovaného spektra,",
+    "/social/2026-08-05/cs/threads/frame-07.png": "Slide 7: nikoli z regulatorního arbitráže.",
+    "/social/2026-08-05/cs/threads/frame-08.png": "Slide 8: Cenové škrty OpenAI mění hranici ekonomické přijatelnosti pro agentní aplikace: co bylo loni drahé na provoz ve větším měřítku, je dnes výrazně dostupnější. Konkurenti musejí reagovat.",
+    "/social/2026-08-05/cs/threads/frame-09.png": "Slide 9: AMD v jednom výdechu vykázala rekordní výsledky a přiznala, že většina jejího AI příjmu závisí na hrstce zákazníků, jejichž vlastní rentabilita zatím nebyla prokázána —",
+    "/social/2026-08-05/cs/threads/frame-10.png": "Slide 10: Jedno vydání a máte přehled.",
+    "/social/2026-08-05/quote.png": "Quote from STET in the edition room: The article was written straight in Czech, and every link in it matches a supplied source URL."
+  }
+}
