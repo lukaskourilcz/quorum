@@ -107,14 +107,15 @@ jobs:
       FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
       FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
       MMA_FILES_LIVE_ENABLED: ${{ vars.MMA_FILES_LIVE_ENABLED }}
-      # A manual dispatch with dry disabled is the owner asking for a new article, so the
-      # once-a-day edition guard steps aside for it. A schedule can never set this: the value is
-      # read straight off the dispatch inputs, and github.event_name is checked as well.
+      # A live manual cu-edition dispatch is the owner asking for a new article, so the
+      # once-a-day edition guard steps aside for that phase only. Setting this on every manual
+      # phase also leaked the override into the pre-cycle tests and stopped recovery meetings
+      # before they could run.
       #
       # Neither can the Vercel cron. It is a schedule wearing a dispatch's clothes, and handing it
       # the owner's override would let a slot that already produced an edition produce a second
       # one — the exact double-fire the transition to two schedules has to avoid.
-      CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}
+      CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.phase == 'cu-edition' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}
       # TEMPORARY, 2026-08-04 to 2026-08-09. The owner doubled the four caps below because
       # testing, not production work, was consuming them, and a cap hit was stopping articles
       # from shipping. On 2026-08-04 the edition run billed three calls for about $0.25 and
