@@ -161,17 +161,34 @@ function parseJson(text: string): unknown {
 
 export function portfolioIdeaInstruction(phase: PortfolioPhase): string {
   if (phase === "tt-marketing") {
-    return "This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {\"title\":\"one title, at most 80 characters\",\"summary\":\"one standalone description, at most 280 characters\"}; use no other idea keys. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept.";
+    return "This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {\"title\":\"one title, at most 80 characters\",\"summary\":\"one standalone description, at most 280 characters\"}; use no other idea keys, and repeat the concept from summary inside idea rather than leaving idea null. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept.";
   }
   return "Set idea to {\"title\":\"<=80 chars\",\"summary\":\"<=280 chars\"} when this room surfaced a concrete idea worth keeping for later, otherwise null. It is recorded verbatim and must stand alone without the transcript.";
 }
 
-function repairTittyTuesdaysIdea(value: unknown): unknown {
+function repairTittyTuesdaysIdea(value: unknown, agent: FoundingAgent): unknown {
   if (!value || typeof value !== "object" || Array.isArray(value)) return value;
   const contribution = value as Record<string, unknown>;
   const rawIdea = contribution.idea;
-  if (!rawIdea || typeof rawIdea !== "object" || Array.isArray(rawIdea)) return value;
-  const idea = rawIdea as Record<string, unknown>;
+  const idea = rawIdea && typeof rawIdea === "object" && !Array.isArray(rawIdea)
+    ? rawIdea as Record<string, unknown>
+    : null;
+  if (!idea) {
+    if (!TITTY_TUESDAYS_CORE_IDEATORS.has(agent)) return value;
+    const plan = contribution.marketingPlan && typeof contribution.marketingPlan === "object" && !Array.isArray(contribution.marketingPlan)
+      ? contribution.marketingPlan as Record<string, unknown>
+      : null;
+    const summary = [contribution.summary, plan?.summary, plan?.objective]
+      .find((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
+      ?.trim();
+    const title = [plan?.title, contribution.headline, contribution.title, summary]
+      .find((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
+      ?.trim();
+    if (!title || !summary) return value;
+    // Preserve the provider's own words. This is a structural recovery only: it neither asks
+    // another model nor invents campaign content after the paid response has arrived.
+    return { ...contribution, idea: { title, summary } };
+  }
   const strings = Object.values(idea)
     .filter((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
     .map((candidate) => candidate.trim());
@@ -198,7 +215,7 @@ export function parsePortfolioContribution(input: {
   // phase keeps the stricter schema below.
   const schema = input.phase === "tt-marketing" ? ContributionSchema : EvidenceBoundContributionSchema;
   const contribution = schema.parse(
-    input.phase === "tt-marketing" ? repairTittyTuesdaysIdea(parsed) : parsed
+    input.phase === "tt-marketing" ? repairTittyTuesdaysIdea(parsed, input.agent) : parsed
   );
   if (
     input.phase === "tt-marketing" &&

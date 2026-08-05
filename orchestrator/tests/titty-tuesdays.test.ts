@@ -57,11 +57,15 @@ describe("Titty Tuesdays bootstrap", () => {
       text: JSON.stringify(contribution)
     });
     expect(parsed.idea?.title).toBe("Tuesday Care Label");
-    expect(() => parsePortfolioContribution({
+    const recoveredCoreIdea = parsePortfolioContribution({
       phase: "tt-marketing",
       agent: "ANGLE",
       text: JSON.stringify({ ...contribution, idea: null })
-    })).toThrow(/returned no Titty Tuesdays marketing idea/);
+    });
+    expect(recoveredCoreIdea.idea).toEqual({
+      title: contribution.summary,
+      summary: contribution.summary
+    });
     expect(() => assertTittyTuesdaysIdeaOutput("tt-marketing", [
       { agent: "AUDIT", idea: null }
     ])).toThrow(/produced no core marketing idea/);
