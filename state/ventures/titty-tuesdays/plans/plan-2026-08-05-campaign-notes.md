@@ -1,6 +1,6 @@
 # Campaign notes for 2026-08-05
 
-> The room kept a short list of future campaign directions for owner review.
+> Season 001 'One Good Day' presents four concept crop tops anchored in utilitarian typography (receipt, night shift, curb paint, varsity). No owner taste data supplied; proceeding with design-first positioning and measurement plan for adult crop-top segment.
 
 Status: draft
 Source meeting: 2026-08-05-tt-marketing
@@ -15,7 +15,7 @@ Keep a detailed record of future marketing ideas without producing assets or tak
 
 ### 1. content
 
-Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims.
+Concept: Receipt uses a quiet seasonal decision-note campaign to test adult audience interest in compact receipt typography without commerce, imagery, publishing, ads, or spend.
 
 Assets needed:
 - owner-approved campaign brief
@@ -24,7 +24,7 @@ Platform note: Planning only. Do not publish, generate social images or contact 
 
 ### 2. content
 
-Four adult, pre-commerce crop-top concepts are evidenced. Convert the season arc into one measured concept-selection experiment before any production or distribution.
+Season 001 'One Good Day' presents four concept crop tops anchored in utilitarian typography (receipt, night shift, curb paint, varsity). No owner taste data supplied; proceeding with design-first positioning and measurement plan for adult crop-top segment.
 
 Assets needed:
 - owner-approved campaign brief
@@ -33,7 +33,7 @@ Platform note: Planning only. Do not publish, generate social images or contact 
 
 ### 3. content
 
-AudienceSpec v1: adults 18+, bounded by region, public interests and platform fit; no reach, conversion or cost estimates supplied.
+Concept season is compliant and suitably pre-commerce. Four adult crop-top directions are concrete, but no owner taste or performance evidence supports prioritization; record as hypotheses only.
 
 Assets needed:
 - owner-approved campaign brief

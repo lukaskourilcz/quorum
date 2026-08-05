@@ -6,6 +6,8 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-08-05-6176bb6c | Receipt: One Good Day, Itemized | proposed | VAULT novel: Closest prior idea overlaps only 0.51. |
+| idea-2026-08-05-c59287a3 | Receipt: Bone Crop, Mono Stack, One Line Item | proposed | VAULT novel: Closest prior idea overlaps only 0.56. |
 | idea-2026-08-05-1fc40c12 | One Good Day: Four Type-Led Crop-Top Concepts | proposed | VAULT novel: Closest prior idea overlaps only 0.57. |
 | idea-2026-08-05-415cf2b0 | Night Shift — One Good Day | proposed | VAULT novel: Closest prior idea overlaps only 0.49. |
 | idea-2026-08-05-7e98fea8 | One Good Day: The Receipt | proposed | VAULT novel: Closest prior idea overlaps only 0.6. |

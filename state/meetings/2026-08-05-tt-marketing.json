@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260805112216-tt-marketing",
+  "cycleId": "20260805113403-tt-marketing",
   "date": "2026-08-05",
   "phase": "tt-marketing",
   "fixture": false,
@@ -31,29 +31,29 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.08,
-    "actualCycleUsd": 0.015797,
-    "monthAllInUsd": 2.7224726,
+    "actualCycleUsd": 0.0181662,
+    "monthAllInUsd": 2.7406388000000006,
     "monthCapUsd": 30
   },
   "decision": {
     "outcome": "PLAN",
-    "summary": "Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims.",
+    "summary": "Concept: Receipt uses a quiet seasonal decision-note campaign to test adult audience interest in compact receipt typography without commerce, imagery, publishing, ads, or spend.",
     "evidenceRefs": []
   },
   "proposals": [
     {
       "agent": "PULSE",
-      "summary": "Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims.",
+      "summary": "Concept: Receipt uses a quiet seasonal decision-note campaign to test adult audience interest in compact receipt typography without commerce, imagery, publishing, ads, or spend.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "ANGLE",
+      "summary": "Season 001 'One Good Day' presents four concept crop tops anchored in utilitarian typography (receipt, night shift, curb paint, varsity). No owner taste data supplied; proceeding with design-first positioning and measurement plan for adult crop-top segment.",
       "evidenceRefs": []
     },
     {
       "agent": "AUDIT",
-      "summary": "Four adult, pre-commerce crop-top concepts are evidenced. Convert the season arc into one measured concept-selection experiment before any production or distribution.",
-      "evidenceRefs": []
-    },
-    {
-      "agent": "COHORT",
-      "summary": "AudienceSpec v1: adults 18+, bounded by region, public interests and platform fit; no reach, conversion or cost estimates supplied.",
+      "summary": "Concept season is compliant and suitably pre-commerce. Four adult crop-top directions are concrete, but no owner taste or performance evidence supports prioritization; record as hypotheses only.",
       "evidenceRefs": []
     }
   ],
@@ -64,63 +64,63 @@
       "veto": false
     },
     {
-      "voter": "AUDIT",
+      "voter": "ANGLE",
       "firstChoice": "plan",
       "veto": false
     },
     {
-      "voter": "COHORT",
-      "firstChoice": "plan",
+      "voter": "AUDIT",
+      "firstChoice": "pass",
       "veto": false
     }
   ],
   "tasks": [
     {
-      "id": "TASK-20260805112216-TT-MARKETING-02",
-      "owner": "AUDIT",
-      "summary": "Define a low-cost owner-rating test comparing the four concept chapters, with a decision threshold and no publishing, spend, or commerce claims.",
+      "id": "TASK-20260805113403-TT-MARKETING-02",
+      "owner": "ANGLE",
+      "summary": "Author positioning brief for Titty Tuesdays (adult crop-top, utilitarian typography angle). Define reader, job-to-be-done, and why this venture deserves attention pre-commerce.",
       "status": "planned"
     }
   ],
   "growthPlan": "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled.",
   "eveningOutcome": null,
-  "generatedAt": "2026-08-05T11:26:16.485Z",
+  "generatedAt": "2026-08-05T11:38:03.034Z",
   "kind": "tt-marketing",
   "roomTranscript": {
-    "openedAt": "2026-08-05T11:22:16.485Z",
-    "closedAt": "2026-08-05T11:26:16.485Z",
+    "openedAt": "2026-08-05T11:34:03.034Z",
+    "closedAt": "2026-08-05T11:38:03.034Z",
     "gavel": "PULSE",
     "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
     "turns": [
       {
         "agent": "PULSE",
         "mode": "gavel",
-        "sentAt": "2026-08-05T11:22:16.485Z",
+        "sentAt": "2026-08-05T11:34:03.034Z",
         "text": "Generate and record concrete marketing ideas for the future Titty Tuesdays eshop from the current season and owner taste. Keep every concept adult-only and pre-commerce: no publishing, ads, people, prices, stock, purchase links or availability claims."
       },
       {
         "agent": "PULSE",
         "mode": "statement",
-        "sentAt": "2026-08-05T11:23:16.485Z",
-        "text": "Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims."
+        "sentAt": "2026-08-05T11:35:03.034Z",
+        "text": "Concept: Receipt uses a quiet seasonal decision-note campaign to test adult audience interest in compact receipt typography without commerce, imagery, publishing, ads, or spend."
+      },
+      {
+        "agent": "ANGLE",
+        "mode": "statement",
+        "sentAt": "2026-08-05T11:36:03.034Z",
+        "text": "Season 001 'One Good Day' presents four concept crop tops anchored in utilitarian typography (receipt, night shift, curb paint, varsity). No owner taste data supplied; proceeding with design-first positioning and measurement plan for adult crop-top segment."
       },
       {
         "agent": "AUDIT",
         "mode": "statement",
-        "sentAt": "2026-08-05T11:24:16.485Z",
-        "text": "Four adult, pre-commerce crop-top concepts are evidenced. Convert the season arc into one measured concept-selection experiment before any production or distribution."
-      },
-      {
-        "agent": "COHORT",
-        "mode": "statement",
-        "sentAt": "2026-08-05T11:25:16.485Z",
-        "text": "AudienceSpec v1: adults 18+, bounded by region, public interests and platform fit; no reach, conversion or cost estimates supplied."
+        "sentAt": "2026-08-05T11:37:03.034Z",
+        "text": "Concept season is compliant and suitably pre-commerce. Four adult crop-top directions are concrete, but no owner taste or performance evidence supports prioritization; record as hypotheses only."
       },
       {
         "agent": "PULSE",
         "mode": "close",
-        "sentAt": "2026-08-05T11:26:16.485Z",
-        "text": "Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims."
+        "sentAt": "2026-08-05T11:38:03.034Z",
+        "text": "Concept: Receipt uses a quiet seasonal decision-note campaign to test adult audience interest in compact receipt typography without commerce, imagery, publishing, ads, or spend."
       }
     ]
   }
