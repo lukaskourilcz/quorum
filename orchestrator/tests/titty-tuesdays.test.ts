@@ -81,6 +81,21 @@ describe("Titty Tuesdays bootstrap", () => {
     expect(repaired.idea?.title.length).toBeLessThanOrEqual(80);
     expect(repaired.idea?.summary.length).toBe(280);
     expect(repaired.idea?.summary).toContain("Care-label typography");
+
+    const numericConcept = {
+      ...contribution,
+      summary: "Compare 4 internal crop-top directions before any public action."
+    };
+    expect(() => parsePortfolioContribution({
+      phase: "tt-marketing",
+      agent: "PULSE",
+      text: JSON.stringify(numericConcept)
+    })).not.toThrow();
+    expect(() => parsePortfolioContribution({
+      phase: "incubator-scan",
+      agent: "PULSE",
+      text: JSON.stringify(numericConcept)
+    })).toThrow(/Numeric contribution claims require evidenceRefs/);
   });
 
   it("puts the pre-commerce brand floor in the standing idea contract", () => {

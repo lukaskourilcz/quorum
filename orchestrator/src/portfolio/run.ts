@@ -130,7 +130,9 @@ const ContributionSchema = z.object({
     summary: z.string().trim().min(1).max(280),
     evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12)
   }).nullable().default(null).catch(null)
-}).superRefine((value, context) => {
+});
+
+const EvidenceBoundContributionSchema = ContributionSchema.superRefine((value, context) => {
   if (/(?:\d|%|\$|€|£)/.test(value.summary) && value.evidenceRefs.length === 0) {
     context.addIssue({ code: "custom", message: "Numeric contribution claims require evidenceRefs", path: ["evidenceRefs"] });
   }
@@ -189,7 +191,13 @@ export function parsePortfolioContribution(input: {
   text: string;
 }): z.infer<typeof ContributionSchema> {
   const parsed = parseJson(input.text);
-  const contribution = ContributionSchema.parse(
+  // This room is creative ideation over canonical internal brand state and deliberately has
+  // no external citation allowlist. A digit in a concept label (the live room used one in two
+  // otherwise valid contributions) is not an empirical claim, so the general evidence guard
+  // must not make those paid seats impossible to record. Every evidence-bearing portfolio
+  // phase keeps the stricter schema below.
+  const schema = input.phase === "tt-marketing" ? ContributionSchema : EvidenceBoundContributionSchema;
+  const contribution = schema.parse(
     input.phase === "tt-marketing" ? repairTittyTuesdaysIdea(parsed) : parsed
   );
   if (
