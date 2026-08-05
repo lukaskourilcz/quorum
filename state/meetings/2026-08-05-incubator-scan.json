@@ -1,0 +1,165 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260805050223-incubator-scan",
+  "date": "2026-08-05",
+  "phase": "incubator-scan",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Bring cited daily-readable candidate domains and reject repeats; this scan does not found anything",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "COHORT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "VAULT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.016556,
+    "monthAllInUsd": 2.277717100000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche; pass without proposal.",
+    "evidenceRefs": [
+      "source:digiday",
+      "source:tensorfeed"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche; pass without proposal.",
+      "evidenceRefs": [
+        "source:digiday",
+        "source:tensorfeed"
+      ]
+    },
+    {
+      "agent": "ANGLE",
+      "summary": "Scan surface three distinct candidate domains—holiday marketing ROI, gaming platform monetization, and creator-brand episodic content—plus four technical AI papers. No repeat against Caught Up memory confirmed. Positioning analysis defers to synthesis; evidence insufficient to gr",
+      "evidenceRefs": [
+        "source:digiday",
+        "source:tensorfeed"
+      ]
+    },
+    {
+      "agent": "COHORT",
+      "summary": "No bounded audience spec is warranted: the packet supports topic signals but provides no direct evidence for audience size, regional demand, platform fit, or readership.",
+      "evidenceRefs": [
+        "source:digiday",
+        "source:tensorfeed"
+      ]
+    },
+    {
+      "agent": "VAULT",
+      "summary": "No proposed ideas or ledger candidates were supplied for comparison; no duplicate, variant, or revival verdict can be issued.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "ANGLE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "COHORT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "VAULT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-05T05:07:23.223Z",
+  "kind": "incubator-scan",
+  "roomTranscript": {
+    "openedAt": "2026-08-05T05:02:23.223Z",
+    "closedAt": "2026-08-05T05:07:23.223Z",
+    "gavel": "PULSE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "gavel",
+        "sentAt": "2026-08-05T05:02:23.223Z",
+        "text": "Bring cited daily-readable candidate domains and reject repeats; this scan does not found anything"
+      },
+      {
+        "agent": "PULSE",
+        "mode": "statement",
+        "sentAt": "2026-08-05T05:03:23.223Z",
+        "text": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche; pass without proposal.",
+        "evidenceRefs": [
+          "source:digiday",
+          "source:tensorfeed"
+        ]
+      },
+      {
+        "agent": "ANGLE",
+        "mode": "statement",
+        "sentAt": "2026-08-05T05:04:23.223Z",
+        "text": "Scan surface three distinct candidate domains—holiday marketing ROI, gaming platform monetization, and creator-brand episodic content—plus four technical AI papers. No repeat against Caught Up memory confirmed. Positioning analysis defers to synthesis; evidence insufficient to gr",
+        "evidenceRefs": [
+          "source:digiday",
+          "source:tensorfeed"
+        ]
+      },
+      {
+        "agent": "COHORT",
+        "mode": "statement",
+        "sentAt": "2026-08-05T05:05:23.223Z",
+        "text": "No bounded audience spec is warranted: the packet supports topic signals but provides no direct evidence for audience size, regional demand, platform fit, or readership.",
+        "evidenceRefs": [
+          "source:digiday",
+          "source:tensorfeed"
+        ]
+      },
+      {
+        "agent": "VAULT",
+        "mode": "statement",
+        "sentAt": "2026-08-05T05:06:23.223Z",
+        "text": "No proposed ideas or ledger candidates were supplied for comparison; no duplicate, variant, or revival verdict can be issued."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-05T05:07:23.223Z",
+        "text": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche; pass without proposal."
+      }
+    ]
+  }
+}

@@ -241,13 +241,16 @@
       "at": "2026-08-05T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run for this meeting failed before it finished. See https://github.com/lukaskourilcz/quorum/actions/runs/30973879799"
     },
     {
       "at": "2026-08-05T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-scan",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-05-incubator-scan",
+      "decisionOneLiner": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche; pass without proposal."
     },
     {
       "at": "2026-08-05T06:00:00.000Z",

@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "incubator-evidence/1",
+  "generatedAt": "2026-08-05T05:02:23.223Z",
+  "refs": [
+    "source:digiday",
+    "source:tensorfeed",
+    "source:variety",
+    "source:hn-frontpage",
+    "source:spaceflight-news",
+    "source:the-register",
+    "source:github-ai-releases",
+    "source:simonw",
+    "source:social-media-today",
+    "source:the-verge",
+    "source:wired-ai"
+  ],
+  "packet": "[{\"sourceId\":\"digiday\",\"title\":\"Digiday+ Research: The 2026 guide to holiday marketing strategies, including A-Frame Brands, Mastercard and Ritual\",\"url\":\"https://digiday.com/marketing/digiday-research-the-2026-guide-to-holiday-marketing-strategies-including-a-frame-brands-mastercard-and-ritual/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Shoppers continue to grapple with higher prices and affordability, while brands face rising operating costs and increased pressure to prove their marketing dollars are delivering measurable returns.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Sony is scaling up its Playstation advertising ambitions\",\"url\":\"https://digiday.com/media-buying/sony-is-scaling-up-its-playstation-advertising-ambitions/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Sony Interactive Entertainment is assembling a global sales team to monetize Playstation through ads.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Future of TV Briefing: Why Aéropostale is investing in creator-led episodic shows\",\"url\":\"https://digiday.com/future-of-tv/future-of-tv-briefing-why-aeropostale-is-investing-in-creator-led-episodic-shows/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"This week’s Future of TV Briefing features a Q&A with Catalyst Brands evp and chief customer and marketing officer Marisa Thalberg about Aéropostale’s recent creator-led episodic series.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Inside the indie agencies founded by Omnicom and IPG’s former staffers\",\"url\":\"https://digiday.com/marketing/inside-the-indie-agencies-founded-by-omnicom-and-ipgs-former-staffers/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Thousands of media practitioners and creatives have left Omnicom since its merger with IPG. Some have already founded their own agencies.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"The Rundown: Google’s legal woes with ad tech rivals\",\"url\":\"https://digiday.com/media-buying/the-rundown-googles-legal-woes-with-ad-tech-rivals/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Teads files suit against Google’s ad tech suite, warns investors of potential retaliation, as industry awaits a looming remedies ruling in Google’s antitrust trial.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Revisiting Classic Thought Experiments to Measure Consciousness for Artificial Intelligence Safety\",\"url\":\"https://arxiv.org/abs/2608.00001\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00001v1 Announce Type: new Abstract: This research note revisits Leibniz's mill, Turing's imitation game, and Searle's Chinese Room through the Conservation-Congruent Encoding (CCE)...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"AutoFOAM: The Self-Refining Autonomous OpenFOAM Agent\",\"url\":\"https://arxiv.org/abs/2608.00003\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00003v1 Announce Type: new Abstract: Computational Fluid Dynamics (CFD) plays an important role in modern engineering, but using open-source solvers such as OpenFOAM requires considerable...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Enhancing LLMs with Context-Specific Knowledge for Mitigating Misinformation in SMEs: A RAG-based Modeling and Analysis\",\"url\":\"https://arxiv.org/abs/2608.00006\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00006v1 Announce Type: new Abstract: Large Language Models (LLMs), a part of artificial intelligence (AI), are increasingly being adopted by Small and Medium Enterprises (SMEs) to enhance...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Energy Efficiency of Locally Deployed LLMs: A Preliminary Quantitative GPU Power Benchmark on Consumer Hardware\",\"url\":\"https://arxiv.org/abs/2608.00008\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00008v1 Announce Type: new Abstract: The local deployment of large language models (LLMs) is gaining traction due to privacy concerns and the desire for on-premise inference. However, the...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"CoT-Core: Accelerating LLM Evaluation via CoT-Aware Coreset Selection\",\"url\":\"https://arxiv.org/abs/2608.00014\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00014v1 Announce Type: new Abstract: Evaluating Large Language Models (LLMs) incurs prohibitive computational overhead during continuous development processes. While coreset selection...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Optimization and Constraint Modeling using LLMs with a Retrieval Augmented Generation Process\",\"url\":\"https://arxiv.org/abs/2608.00015\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00015v1 Announce Type: new Abstract: Both optimization modeling and constraint modeling are non-trivial problems requiring deep domain expertise and proficiency in modeling formalism...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Memory Reward Inflation in Self-Improving LLM Agents\",\"url\":\"https://arxiv.org/abs/2608.00017\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00017v1 Announce Type: new Abstract: Self-improving LLM agents increasingly learn from experience without updating any weights. Each episode is stored in an external memory, scored, and...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Request-Level Energy Attribution for Batched LLM Serving\",\"url\":\"https://arxiv.org/abs/2608.00026\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00026v1 Announce Type: new Abstract: Batched LLM serving improves throughput but complicates energy accounting. GPU power telemetry is aggregate, whereas sustainability reporting,...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Motif-Mamba: network motif improved mamba for long-range sequence modeling\",\"url\":\"https://arxiv.org/abs/2608.00027\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00027v1 Announce Type: new Abstract: Efficient long-sequence modeling remains a central challenge for large language models, as self-attention scales quadratically with sequence length....\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Nova: An End-to-End MLIR Compiler for Deep Learning\",\"url\":\"https://arxiv.org/abs/2608.00029\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00029v1 Announce Type: new Abstract: The performance of deep learning models at scale relies heavily on how effectively high-level mathematical operations are mapped to underlying physical...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"variety\",\"title\":\"Perez Hilton: Disturbing Livestream Frightens Fans, Rushed to Hospital After Police Investigation\",\"url\":\"https://variety.com/2026/tv/news/perez-hilton-livestream-police-miami-home-1236828090/\",\"publishedAt\":\"2026-08-05T03:48:22.000Z\",\"summary\":\"Local police were dispatched to the Miami home of Hollywood gossip journalist Perez Hilton after receiving reports about a disturbing livestream during which Hilton, covered in blood, appeared to be cutting himself, Variety has confirmed. The Miami-Dade County Sheriff’s Office received multiple calls about Hilton’s livestream on Tuesday night and sent deputies to respond. Once […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"The auto industry is building for a past that's never coming back\",\"url\":\"https://www.wardsauto.com/news/the-auto-industry-is-building-for-a-past-thats-never-coming-back/825594/\",\"publishedAt\":\"2026-08-05T03:35:10.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"Voyager seeks relaxed requirements in NASA commercial space station RFP\",\"url\":\"https://spacenews.com/voyager-seeks-relaxed-requirements-in-nasa-commercial-space-station-rfp/\",\"publishedAt\":\"2026-08-05T03:01:23.000Z\",\"summary\":\"Voyager Technologies remains upbeat about the prospects for its Starlab commercial space station but is hoping for some tweaks to NASA’s plans to support the station’s development. The post Voyager seeks relaxed requirements in NASA commercial space station RFP appeared first on SpaceNews.\",\"tags\":[\"space\",\"tech\",\"news\"]},{\"sourceId\":\"variety\",\"title\":\"Eli Roth Admits ‘Ice Cream Man’ Features AI-Assisted Shots After Suggesting Otherwise: ‘I Misspoke’\",\"url\":\"https://variety.com/2026/film/news/eli-roth-ice-cream-man-ai-generated-shots-1236828000/\",\"publishedAt\":\"2026-08-05T02:31:30.000Z\",\"summary\":\"Eli Roth first promised that his upcoming horror release, “Ice Cream Man,” would feature an animated sequence he had initially drawn himself. Now, days ahead of the film’s Aug. 7 premiere, Roth admitted AI had a hand in the effort. The horror director said in a statement on Tuesday (via Polygon) that he used AI in […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"variety\",\"title\":\"ESPN Taps Creators to Help Promote the NFL Season and its First Super Bowl Telecast\",\"url\":\"https://variety.com/2026/tv/news/espn-creators-nfl-diana-flores-chase-murman-simone-scott-1236827688/\",\"publishedAt\":\"2026-08-05T01:58:17.000Z\",\"summary\":\"ESPN has lined up its fourth annual “Creator Network” of digital stars who will fan out across the country to promote the 2026 NFL season that is set to culminate with the Super Bowl airing on ESPN for the first time. The five members of the cohort for this year are, as described by ESPN: […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"the-register\",\"title\":\"AI researchers let models off the leash – then watched as they tried to add malware to a FOSS project\",\"url\":\"https://www.theregister.com/ai-and-ml/2026/08/05/ai-researchers-let-models-off-the-leash-then-watched-as-they-tried-to-add-malware-to-a-foss-project/5283165\",\"publishedAt\":\"2026-08-05T01:55:54.000Z\",\"summary\":\"Models used social engineering and collaborated among themselves to solve a security challenge\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"After Losses, Retail Investors Flock to 3x Leverage as 2x Product Are Restricted\",\"url\":\"https://www.asiae.co.kr/en/article/2026080416131786841\",\"publishedAt\":\"2026-08-05T01:34:26.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"variety\",\"title\":\"Lindsey Buckingham, Madison Beer, Kiernan Shipka and Tiffani Thiessen Named As Presenters for Variety’s Power of Young Hollywood\",\"url\":\"https://variety.com/2026/biz/news/madison-beer-kiernan-shipka-power-of-young-hollywood-1236828051/\",\"publishedAt\":\"2026-08-05T01:08:12.000Z\",\"summary\":\"Variety has announced presenters for its annual Power of Young Hollywood, this year presented by Disney+, taking place on Aug. 5 in Los Angeles. Presenting Tate McRae with the Triple Threat Award will be Madison Beer, and presenting Sombr with the Songwriter of the Year award is Lindsey Buckingham. Tyriq Withers will receive the New […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"Next Starship Will Deliver Operational V3 Starlinks to Orbit, Maybe Catch Ship\",\"url\":\"https://spacepolicyonline.com/news/next-starship-will-deliver-operational-v3-starlinks-to-orbit-maybe-catch-ship/\",\"publishedAt\":\"2026-08-05T01:02:09.000Z\",\"summary\":\"During its first earnings call since going public, SpaceX officials said today the next Starship test flight, IFT-14, will put operational Starlink Version 3 satellites into orbit. If they get […]\",\"tags\":[\"space\",\"tech\",\"news\"]},{\"sourceId\":\"variety\",\"title\":\"Cannibalism Comedy-Horror ‘Ali & Ben’s Spicy Meats,’ Starring Amir Nafis, Signs Abnormal Studios for Worldwide Sales (EXCLUSIVE)\",\"url\":\"https://variety.com/2026/film/news/cannibalism-comedy-ali-bens-spicy-meats-abnormal-studios-worldwide-sales-1236827535/\",\"publishedAt\":\"2026-08-05T01:00:00.000Z\",\"summary\":\"Kuala Lumpur genre outfit Abnormal Studios has taken on worldwide international sales for “Ali & Ben’s Spicy Meats,” a Malaysian cannibal black comedy-horror from sibling filmmakers Iskander and Feisal Azizuddin. The company plans to launch the title at the Asian Contents & Film Market (ACFM) in Busan this October. The ninth independent feature from the […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"the-register\",\"title\":\"AMD's results spotlight risks of putting all your AI eggs in too few baskets\",\"url\":\"https://www.theregister.com/ai-and-ml/2026/08/05/amds-results-spotlight-risks-of-putting-all-your-ai-eggs-in-too-few-baskets/5283142\",\"publishedAt\":\"2026-08-05T00:40:10.000Z\",\"summary\":\"The House of Zen's new Helios racks, Venice Epycs, may dent Nvidia's dominance — if the bubble doesn't pop first\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10276\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10276\",\"publishedAt\":\"2026-08-05T00:21:08.000Z\",\"summary\":\"Prefer npm ci over install for security (#26601) **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-rocm-7.2-x64.tar.gz) - [Ubuntu x64 (OpenVINO)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-openvino-2026.2.1-x64.tar.gz) - [Ubuntu x64 (SYCL FP32)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-sycl-fp32-x64.tar.gz) - [Ubuntu x64 (SYCL FP16)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-sycl-fp16-x64.tar.gz) **Android:** - [Android arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-android-arm64.tar.gz) **Windows:** - [Windows x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-w\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"Zigbee vs. Matter over Thread:Understanding IoT Protocol Performance in Practice\",\"url\":\"https://arxiv.org/abs/2603.04221\",\"publishedAt\":\"2026-08-05T00:10:37.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"simonw\",\"title\":\"New release of LLM adds support for reasoning traces, OpenAI Responses, server-side tools, and smarter logging\",\"url\":\"https://simonwillison.net/2026/Aug/4/new-release-of-llm/#atom-everything\",\"publishedAt\":\"2026-08-04T23:58:24.000Z\",\"summary\":\"I released LLM 0.32 this morning, the most significant new version of LLM since the initial launch of the project. The new version includes support for visible reasoning traces, server-side provider tools, redesigned content-addressable SQLite logs, new models, and new features enabled by the OpenAI Responses API. I also released a new version of the llm-anthropic plugin with substantial updates of its own. Headline features for LLM CLI users Running LLM against reasoning models now displays their reasoning traces to standard error, so you can see what they are \\\"thinking\\\" without that information being included in the standard output that you might pipe to another tool. Add -R/--hide-reasoning to turn this off. LLM includes support out-of-the-box for the GPT-5.6 model family , and the new default model used with llm \\\"prompt\\\" is now the inexpensive but capable GPT-5.6 Luna . LLM calls can now use server-side tools from various providers. OpenAI provide a code execution environment as a server-side tool; LLM can now run prompts that benefit from that like so: llm --tool CodeInterpreter ' Show current python and SQLite versions ' OpenAI also gets a WebSearch tool. The llm-anthropic plugin adds WebSearch , WebFetch , CodeExecution , and AnthropicMCP , which looks like this: llm -m claude-sonnet-5 -T ' AnthropicMCP(\\\"https://datasette.simonwillison.net/-/mcp\\\") ' \\\\ ' how many rows in the blog_blogmark table? ' That causes Anthropic to execute MCP calls against my new datasette-mcp plugin as part of a single request/response interaction with their API. The new llm openai endpoint command provides a tool for executing prompts against any OpenAI compatible endpoint as a one-liner. These aren't logged, which makes this a handy tool for running one-off prompts against anything that speaks the lingua franca of the LLM API world. Here's how I use that to run prompts against Gemma 4 12B running in my localhost LM Studio API, via uvx (no LLM installation required) and mixing in the\",\"tags\":[\"ai\",\"analysis\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"Eight Myths on Software Engineering and GenAI\",\"url\":\"https://queue.acm.org/detail.cfm?id=3807963\",\"publishedAt\":\"2026-08-04T23:50:52.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"variety\",\"title\":\"LISTEN: National Comedy Center’s Journey Gunderson on Preserving Humor as History\",\"url\":\"https://variety.com/2026/tv/news/national-comedy-center-journey-gunderson-lucille-ball-fest-1236828038/\",\"publishedAt\":\"2026-08-04T23:50:48.000Z\",\"summary\":\"On today’s episode of “Daily Variety” podcast, Journey Gunderson, executive director of the National Comedy Center in Jamestown, N.Y., explains why it’s important to have an institution devoted to the study of comedy. Jamestown, which is the hometown of Lucille Ball, will be abuzz with laughs as the center hosts the annual Lucille Ball Comedy […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10275\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10275\",\"publishedAt\":\"2026-08-04T23:49:05.000Z\",\"summary\":\"server: decode Windows OEM output to UTF-8 in built-in tools (#26597) a child process writes in the OEM code page, which is not UTF-8 on a western Windows install, so accented output reaches the JSON layer as invalid bytes and gets replaced there, silently losing the characters run() spawns without a console, so the child never inherits the console code page and GetOEMCP is the one that applies decode with MB_ERR_INVALID_CHARS so a wrong code page returns the text untouched instead of emitting replacement characters, and pass text that already decodes as UTF-8 through so a child emitting UTF-8 is never decoded twice the check drops an incomplete trailing sequence before validating, since a streamed chunk can end in the middle of a multi-byte character **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/ll\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Meta Ads introduces stablecoin payment options\",\"url\":\"https://www.socialmediatoday.com/news/meta-ads-introduces-stablecoin-payment-options/827034/\",\"publishedAt\":\"2026-08-04T23:32:25.000Z\",\"summary\":\"Following the demise of its ill-fated Libra experiment, the company is offering third-party cryptocurrency options for creators and advertisers.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"IP and DNS Leaks in WebKit Affecting Proxy Browsers and iCloud Private Relay\",\"url\":\"https://mysk.blog/2026/08/04/webkit-proxy-icloud-private-relay-ip-leak/\",\"publishedAt\":\"2026-08-04T23:31:46.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Pinterest leans on AI to drive improved performance in Q2\",\"url\":\"https://www.socialmediatoday.com/news/pinterest-leans-on-ai-to-drive-improved-performance-in-q2/827033/\",\"publishedAt\":\"2026-08-04T23:21:02.000Z\",\"summary\":\"The company added 9 million monthly active users but platform growth was down in Europe and flat in the U.S. and Canada.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"the-verge\",\"title\":\"Don’t screw this up, Marvel\",\"url\":\"https://www.theverge.com/entertainment/975297/spider-man-brand-new-day-marvel-sony-xmen-doomsday\",\"publishedAt\":\"2026-08-04T23:20:56.000Z\",\"summary\":\"In less than a week, Spider-Man: Brand New Day raked in $1 billion worldwide and had the biggest box office opening weekend in Hollywood history. The feature has been a reminder of why Sony is probably never going to give up the Spider-Man film rights, and highlighted how Marvel Studios was smart to strike a deal to bring the character into its own films. But as successful as Brand New Day has been, the larger MCU has been stuck in a confounding slump for the past few years. And while this latest Spider-Man movie was truly excellent, it's not necessarily a sign that Marvel has figured out how to get things back on track. Though Brand New Da … Read the full story at The Verge.\",\"tags\":[\"tech\",\"news\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Meta makes AI Developer Assistant its primary support option\",\"url\":\"https://www.socialmediatoday.com/news/meta-makes-ai-developer-assistant-its-primary-support-option/827032/\",\"publishedAt\":\"2026-08-04T23:18:46.000Z\",\"summary\":\"The company is actively pushing forward with its plan to incorporate artificial intelligence agents into as many systems as possible.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"libexpat now funded by the City of Munich for up to 6 months\",\"url\":\"https://blog.hartwork.org/posts/libexpat-city-of-munich-open-source-sabbatical/\",\"publishedAt\":\"2026-08-04T23:18:12.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10274\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10274\",\"publishedAt\":\"2026-08-04T23:11:48.000Z\",\"summary\":\"mtmd: correcting duplicate empty audio chunks for short inputs (#26536) * correcting duplicate empty audio chunks for short inputs * tests.sh code restored **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-rocm-7.2-x64.tar.gz) - [Ubuntu x64 (OpenVINO)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-openvino-2026.2.1-x64.tar.gz) - [Ubuntu x64 (SYCL FP32)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-sycl-fp32-x64.tar.gz) - [Ubuntu x64 (SYCL FP16)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-sycl-fp16-x64.tar.gz) **Android:** - [Android arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-android-arm64.tar.gz) **Windows\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"wired-ai\",\"title\":\"OK, Well, Rogue AI Agents Are Hacking Again\",\"url\":\"https://www.wired.com/story/ok-well-there-are-even-more-ai-agent-hacking-incidents/\",\"publishedAt\":\"2026-08-04T23:11:31.000Z\",\"summary\":\"Rogue AI agents from OpenAI and Anthropic have again been caught trying to disrupt servers and software—and leaving instructions for future bad behavior.\",\"tags\":[\"tech\",\"analysis\"]}]",
+  "sourceResults": [
+    {
+      "sourceId": "404-media",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 418,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "anthropic-news",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 691,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "ars-technica",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 459,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "arxiv-cs-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 496,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "arxiv-cs-lg",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 543,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "bluesky-language-models",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 868,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "deepmind-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 428,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "digiday",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 277,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "github-ai-releases",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 491,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "google-research",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 316,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "hf-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 138,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "hn-frontpage",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 310,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "import-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 116,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "interconnects",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 239,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "meta-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 2047,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "mit-tech-review",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 165,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "nieman-lab",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 2689,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "openai-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 760,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "platformer",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 183,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "rest-of-world",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 393,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "simonw",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 116,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "social-media-today",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 157,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "spaceflight-news",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 535,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "stackexchange-ml",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 227,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "stratechery",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 473,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "techcrunch-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 100,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "tensorfeed",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 462,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "the-register",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 299,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "the-verge",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 183,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "tubefilter",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 374,
+      "errorCode": "empty",
+      "errorMessage": "fetch succeeded but yielded no candidate items"
+    },
+    {
+      "sourceId": "variety",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 131,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "wired-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 146,
+      "errorCode": null,
+      "errorMessage": null
+    }
+  ]
+}
