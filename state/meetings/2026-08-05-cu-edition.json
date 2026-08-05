@@ -4,7 +4,7 @@
   "date": "2026-08-05",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "HELD",
+  "status": "NEEDS_RECONCILIATION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -217,7 +217,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "EDITION. SpaceX chce odebrat zákazníky T-Mobilu, AT&T a Verizonu. Říká to poprvé veřejně led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
+    "summary": "NEEDS_RECONCILIATION. schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-05-17eb32d81474601883eff58c095b8b5d41b056dc",
     "evidenceRefs": [
       "source:the-verge",
       "source:variety",
