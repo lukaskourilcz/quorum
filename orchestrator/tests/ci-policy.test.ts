@@ -77,9 +77,12 @@ describe("automation policy", () => {
     expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
     expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");
     expect(cycle).toContain("MMA_FILES_INDEXING_ENABLED: ${{ vars.MMA_FILES_INDEXING_ENABLED }}");
-    expect(cycle).toContain(
-      "CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.phase == 'cu-edition' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}"
-    );
+    const editionOverride =
+      "CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.phase == 'cu-edition' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}";
+    expect(cycle.split(editionOverride)).toHaveLength(2);
+    const runCycleStart = cycle.indexOf("- name: Run cycle\n");
+    const runCycleEnd = cycle.indexOf("\n      - name: ", runCycleStart + 1);
+    expect(cycle.slice(runCycleStart, runCycleEnd)).toContain(editionOverride);
     expect(cycle).toContain("schedule-cli.ts");
     expect(cycle).toContain("pnpm digest:daily");
     expect(cycle).toContain("DAILY_DIGEST_EMAIL_MODE");
