@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "article/1",
+  "slug": "ufc-event-ufc-fight-night-gamrot-vs-salkilld",
+  "localizations": {
+    "cs": {
+      "title": "UFC Fight Night: Gamrot vs. Salkilld – přehled karty před sobotní akcí",
+      "dek": "Turnaj se koná 8. srpna v aréně Meta Apex. Karta nabízí mimo jiné duel slámskyváhové divize i souboj lehkých vah.",
+      "bodyMDX": "UFC Fight Night: Gamrot vs. Salkilld se odehraje v sobotu 8. srpna v aréně Meta Apex. Turnaj je oznámen a karta již čítá několik potvrzených zápasů napříč vahami.\n\nV slaměné váze nastoupí [Amanda Lemos](/fighters/ufc/amanda-lemos) proti Alexii Thainarě. Lemos vstupuje do zápasu s bilancí 15-6-1 a trénuje v Marajó Brothers Team. Zápas je plánován na tři kola.\n\nLehkou váhu zastoupí souboj Carlose Diega Ferreiry s [Billym Quarantillem](/fighters/ufc/billy-quarantillo). Quarantillo, jenž trénuje v Gracie Tampa South, má podle dostupných údajů rekord 18-7-0. I tento duel je na tři kola.\n\nPérovou váhu zastoupí Darren Elkins proti Yadierovi Del Vallovi, velterovou váhu pak Billy Ray Goff proti Ty Millerovi. V polotěžké váze jsou na kartě Diyar Nurgozhay a Bruno Lopes.\n\nVšechny zápasy jsou zatím ve stavu oznámení, výsledky nejsou k dispozici."
+    }
+  },
+  "format": "fight-week-preview",
+  "sources": [
+    {
+      "kind": "internal",
+      "ref": "state/mma/fighters/ufc:amanda-lemos.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/fighters/ufc:billy-quarantillo.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-4.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-9.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-gamrot-vs-salkilld-bout-billy-ray-goff-vs-ty-miller-5.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-gamrot-vs-salkilld-bout-carlos-diego-ferreira-vs-billy-quarantillo-2.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-gamrot-vs-salkilld-bout-darren-elkins-vs-yadier-del-valle-3.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-gamrot-vs-salkilld-bout-diyar-nurgozhay-vs-bruno-lopes-7.json"
+    }
+  ],
+  "image": {
+    "hero_path": "public/images/articles/ufc-event-ufc-fight-night-gamrot-vs-salkilld/hero.svg",
+    "thumb_path": "public/images/articles/ufc-event-ufc-fight-night-gamrot-vs-salkilld/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "MMA Files cover for 2026-08-05, marked fight-week-preview, amanda-lemos, billy-quarantillo. A generated panel of coloured bars, carrying no photograph.",
+    "alt_cs": "Obálka MMA Files k 2026-08-05, témata fight-week-preview, amanda-lemos, billy-quarantillo. Generovaný panel barevných sloupců, bez fotografie.",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+TU1BIEZJTEVTIGNvdmVyPC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+QSBnZW5lcmF0ZWQgTU1BIEZJTEVTIGNvdmVyOyB0aGUgYXJ0aWNsZSdzIG93biB3b3JkcyBhcmUgbm90IHJlcGVhdGVkIGhlcmUuPC9kZXNjPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDExMTYiLz48cmVjdCB4PSI2MCIgeT0iNjAiIHdpZHRoPSIxNDgwIiBoZWlnaHQ9Ijc4MCIgcng9IjM1IiBmaWxsPSIjMTgxYTIwIiBzdHJva2U9IiNlZjZjMzUiIHN0cm9rZS13aWR0aD0iNC41Ii8+PHJlY3QgeD0iMTAwLjAiIHk9IjUwNS4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNDQuOSIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC41MSIvPjxyZWN0IHg9IjE4Ny41IiB5PSI1MzUuMSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjE0LjkiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMjYiLz48cmVjdCB4PSIyNzUuMCIgeT0iNTk1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE1NC43IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjgwIi8+PHJlY3QgeD0iMzYyLjUiIHk9IjYyNS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMjQuNyIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC42OCIvPjxyZWN0IHg9IjQ1MC4wIiB5PSI2NzAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iNzkuNiIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4zNSIvPjxyZWN0IHg9IjUzNy41IiB5PSI0NzUuMCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjc1LjAiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNjgiLz48cmVjdCB4PSI2MjUuMCIgeT0iNjI1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjEyNC43IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjc2Ii8+PHJlY3QgeD0iNzEyLjUiIHk9IjU4MC4yIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxNjkuOCIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjgwMC4wIiB5PSI2NzAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iNzkuNiIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4yMiIvPjxyZWN0IHg9Ijg4Ny41IiB5PSI0NzUuMCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjc1LjAiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNzIiLz48cmVjdCB4PSI5NzUuMCIgeT0iNTIwLjEiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjIyOS45IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjYzIi8+PHJlY3QgeD0iMTA2Mi41IiB5PSI2NDAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTA5LjYiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNDciLz48cmVjdCB4PSIxMTUwLjAiIHk9IjUyMC4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyMjkuOSIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4zOSIvPjxyZWN0IHg9IjEyMzcuNSIgeT0iNDkwLjAiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjI2MC4wIiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjI2Ii8+PHJlY3QgeD0iMTMyNS4wIiB5PSI2NzAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iNzkuNiIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC44MCIvPjxyZWN0IHg9IjE0MTIuNSIgeT0iNjg1LjUiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjY0LjUiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMzkiLz48dGV4dCB4PSIxMDAiIHk9IjIwMCIgZmlsbD0iI2VmNmMzNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM1IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iNS42Ij5NTUEgRklMRVM8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIzMDAiIGZpbGw9IiNmN2Y0ZWMiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMzciPjIwMjYtMDgtMDU8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIzODUiIGZpbGw9IiM5ZGExYWEiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjkiIGxldHRlci1zcGFjaW5nPSIzLjUiPkZJR0hULVdFRUstUFJFVklFVyAgIEFNQU5EQS1MRU1PUyAgIEJJTExZLVFVQVJBTlRJTExPPC90ZXh0Pjx0ZXh0IHg9IjE1MDAiIHk9IjgwNSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZjNzA3OSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIyNSI+RlJBTUUgwrcgZGI3NTJmNTgyZmM0Y2UyMTwvdGV4dD48L3N2Zz4=",
+    "thumb_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPjx0aXRsZSBpZD0idGl0bGUiPk1NQSBGSUxFUyBjb3ZlcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkEgZ2VuZXJhdGVkIE1NQSBGSUxFUyBjb3ZlcjsgdGhlIGFydGljbGUncyBvd24gd29yZHMgYXJlIG5vdCByZXBlYXRlZCBoZXJlLjwvZGVzYz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTAxMTE2Ii8+PHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNTkyIiBoZWlnaHQ9IjMxMiIgcng9IjE0IiBmaWxsPSIjMTgxYTIwIiBzdHJva2U9IiNlZjZjMzUiIHN0cm9rZS13aWR0aD0iMi4wIi8+PHJlY3QgeD0iNDAuMCIgeT0iMjAyLjAiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9Ijk4LjAiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNTEiLz48cmVjdCB4PSI3NS4wIiB5PSIyMTQuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iODUuOSIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjExMC4wIiB5PSIyMzguMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjEuOSIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC44MCIvPjxyZWN0IHg9IjE0NS4wIiB5PSIyNTAuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNDkuOSIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC42OCIvPjxyZWN0IHg9IjE4MC4wIiB5PSIyNjguMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMzEuOCIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4zNSIvPjxyZWN0IHg9IjIxNS4wIiB5PSIxOTAuMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMTEwLjAiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNjgiLz48cmVjdCB4PSIyNTAuMCIgeT0iMjUwLjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjQ5LjkiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNzYiLz48cmVjdCB4PSIyODUuMCIgeT0iMjMyLjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjY3LjkiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMjYiLz48cmVjdCB4PSIzMjAuMCIgeT0iMjY4LjIiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjMxLjgiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMjIiLz48cmVjdCB4PSIzNTUuMCIgeT0iMTkwLjAiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjExMC4wIiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjcyIi8+PHJlY3QgeD0iMzkwLjAiIHk9IjIwOC4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5Mi4wIiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjYzIi8+PHJlY3QgeD0iNDI1LjAiIHk9IjI1Ni4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI0My45IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iNDYwLjAiIHk9IjIwOC4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5Mi4wIiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iNDk1LjAiIHk9IjE5Ni4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxMDQuMCIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjUzMC4wIiB5PSIyNjguMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMzEuOCIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC44MCIvPjxyZWN0IHg9IjU2NS4wIiB5PSIyNzQuMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMjUuOCIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4zOSIvPjx0ZXh0IHg9IjQwIiB5PSI4MCIgZmlsbD0iI2VmNmMzNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iMi4yIj5NTUEgRklMRVM8L3RleHQ+PHRleHQgeD0iNDAiIHk9IjEyMCIgZmlsbD0iI2Y3ZjRlYyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxNSI+MjAyNi0wOC0wNTwvdGV4dD48dGV4dCB4PSI0MCIgeT0iMTU0IiBmaWxsPSIjOWRhMWFhIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjExIiBsZXR0ZXItc3BhY2luZz0iMS40Ij5GSUdIVC1XRUVLLVBSRVZJRVcgICBBTUFOREEtTEVNT1MgICBCSUxMWS1RVUFSQU5USUxMTzwvdGV4dD48dGV4dCB4PSI2MDAiIHk9IjMyMiIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZjNzA3OSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxMCI+RlJBTUUgwrcgZGI3NTJmNTgyZmM0Y2UyMTwvdGV4dD48L3N2Zz4="
+  },
+  "heroSpec": {
+    "template": "fight-desk",
+    "bindings": {
+      "headline": "ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+    }
+  },
+  "fighterRefs": [
+    "ufc:amanda-lemos",
+    "ufc:billy-quarantillo"
+  ],
+  "eventRef": "ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+  "publishAt": "2026-08-05T08:02:20.500Z",
+  "slot": "am",
+  "status": "published",
+  "packageHash": "c3daaa33b557f9a62014b9cb148f6dc2517c6f24d3e6fbb35bd34d345038290e"
+}
