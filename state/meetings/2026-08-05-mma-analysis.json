@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260805170221-mma-analysis",
+  "date": "2026-08-05",
+  "phase": "mma-analysis",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this room but not called because no bounded agenda was due",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 2.7406388000000006,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing is authorized (NO_ACTION): a wake-up without a due agenda produces no work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "No bounded agenda was due, so the specialist room did not open and no model was called.",
+    "evidenceRefs": []
+  },
+  "generatedAt": "2026-08-05T17:02:21.883Z",
+  "kind": "mma-analysis",
+  "roomTranscript": {
+    "openedAt": "2026-08-05T17:02:21.882Z",
+    "closedAt": "2026-08-05T17:02:21.883Z",
+    "gavel": "FORGE",
+    "setting": "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-05T17:02:21.883Z",
+        "text": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      }
+    ]
+  }
+}

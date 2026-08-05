@@ -313,13 +313,16 @@
       "at": "2026-08-05T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-pm",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "Missing fresh, source-backed subject."
     },
     {
       "at": "2026-08-05T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-05-mma-analysis",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-05T18:00:00.000Z",
