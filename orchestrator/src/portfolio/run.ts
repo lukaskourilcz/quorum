@@ -168,13 +168,23 @@ export function portfolioIdeaInstruction(phase: PortfolioPhase): string {
 
 function repairTittyTuesdaysIdea(value: unknown, agent: FoundingAgent): unknown {
   if (!value || typeof value !== "object" || Array.isArray(value)) return value;
-  const contribution = value as Record<string, unknown>;
+  // These fields belong to other rooms and have no TT consumer. Models sometimes fill every
+  // key despite the phase rule; validating irrelevant payloads then discarded the paid idea
+  // and plan (ANGLE once returned three incubator proposals here). Erase them at the boundary
+  // rather than weakening their owning phase's schema.
+  const contribution: Record<string, unknown> = {
+    ...(value as Record<string, unknown>),
+    nicheProposals: [],
+    editorialSlate: null,
+    templateProposal: null,
+    inspirationObservations: []
+  };
   const rawIdea = contribution.idea;
   const idea = rawIdea && typeof rawIdea === "object" && !Array.isArray(rawIdea)
     ? rawIdea as Record<string, unknown>
     : null;
   if (!idea) {
-    if (!TITTY_TUESDAYS_CORE_IDEATORS.has(agent)) return value;
+    if (!TITTY_TUESDAYS_CORE_IDEATORS.has(agent)) return contribution;
     const plan = contribution.marketingPlan && typeof contribution.marketingPlan === "object" && !Array.isArray(contribution.marketingPlan)
       ? contribution.marketingPlan as Record<string, unknown>
       : null;
@@ -184,7 +194,7 @@ function repairTittyTuesdaysIdea(value: unknown, agent: FoundingAgent): unknown 
     const title = [plan?.title, contribution.headline, contribution.title, summary]
       .find((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
       ?.trim();
-    if (!title || !summary) return value;
+    if (!title || !summary) return contribution;
     // Preserve the provider's own words. This is a structural recovery only: it neither asks
     // another model nor invents campaign content after the paid response has arrived.
     return { ...contribution, idea: { title, summary } };
@@ -198,7 +208,7 @@ function repairTittyTuesdaysIdea(value: unknown, agent: FoundingAgent): unknown 
   const summary = [idea.summary, idea.description, idea.concept, idea.rationale]
     .find((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
     ?.trim() ?? [...strings].sort((left, right) => right.length - left.length)[0];
-  if (!title || !summary) return value;
+  if (!title || !summary) return contribution;
   return { ...contribution, idea: { title, summary } };
 }
 

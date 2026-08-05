@@ -61,11 +61,24 @@ describe("Titty Tuesdays bootstrap", () => {
     const recoveredCoreIdea = parsePortfolioContribution({
       phase: "tt-marketing",
       agent: "ANGLE",
-      text: JSON.stringify({ ...contribution, idea: null })
+      text: JSON.stringify({
+        ...contribution,
+        idea: null,
+        nicheProposals: [{}, {}, {}],
+        editorialSlate: { wrongRoom: true },
+        templateProposal: { wrongRoom: true },
+        inspirationObservations: [{}, {}, {}, {}, {}]
+      })
     });
     expect(recoveredCoreIdea.idea).toEqual({
       title: contribution.summary,
       summary: contribution.summary
+    });
+    expect(recoveredCoreIdea).toMatchObject({
+      nicheProposals: [],
+      editorialSlate: null,
+      templateProposal: null,
+      inspirationObservations: []
     });
     expect(() => assertTittyTuesdaysIdeaOutput("tt-marketing", [
       { agent: "AUDIT", idea: null }
