@@ -1,21 +1,7 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-04T07:29:35.203Z",
+  "generatedAt": "2026-08-05T06:05:51.752Z",
   "items": [
-    {
-      "fighterRef": "ufc:amanda-lemos",
-      "priority": 1020,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "stance",
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
     {
       "fighterRef": "ufc:billy-quarantillo",
       "priority": 1020,
@@ -24,7 +10,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "division",
         "record"
@@ -38,6 +24,18 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T17:58:29.899Z"
+    },
+    {
+      "fighterRef": "ufc:amanda-lemos",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "uncorroborated": [
+        "division"
+      ]
     },
     {
       "fighterRef": "ufc:aaron-pico",
@@ -57,7 +55,7 @@
         "stance",
         "team"
       ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "name",
         "division",
@@ -80,35 +78,9 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "name",
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-lima",
-      "priority": 610,
-      "reason": "missing-history",
-      "gaps": [
-        "stance"
-      ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-petroski",
-      "priority": 610,
-      "reason": "missing-history",
-      "gaps": [
-        "stance"
-      ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
-      "uncorroborated": [
         "division",
         "record"
       ]
@@ -118,7 +90,27 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-lima",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-petroski",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "division"
       ]
@@ -128,7 +120,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "division",
         "record"
@@ -139,23 +131,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:will-fleury",
-      "priority": 490,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "heightCm",
-        "reachCm",
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "division",
         "record"
@@ -187,9 +163,25 @@
         "heightCm",
         "reachCm"
       ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
       "uncorroborated": [
         "division"
+      ]
+    },
+    {
+      "fighterRef": "oktagon:will-fleury",
+      "priority": 490,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
+        "heightCm",
+        "reachCm",
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
@@ -262,34 +254,6 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:amir-albazi",
-      "priority": 470,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-03T18:14:40.046Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-fili",
-      "priority": 470,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-03T18:14:40.046Z",
       "uncorroborated": [
         "division",
         "record"
@@ -445,20 +409,6 @@
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
         "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alonzo-menifield",
-      "priority": 470,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division",
-        "record"
       ]
     },
     {
@@ -643,6 +593,30 @@
       ],
       "reviewedAt": "2026-08-03T18:14:40.046Z",
       "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:amir-albazi",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-fili",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-03T18:14:40.046Z",
+      "uncorroborated": [
         "division",
         "record"
       ]
@@ -722,6 +696,18 @@
       ]
     },
     {
+      "fighterRef": "ufc:alonzo-menifield",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
       "fighterRef": "ufc:bogdan-guskov",
       "priority": 460,
       "reason": "uncorroborated",
@@ -761,6 +747,18 @@
       ]
     },
     {
+      "fighterRef": "ufc:amanda-ribas",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
       "fighterRef": "ufc:asu-almabayev",
       "priority": 450,
       "reason": "uncorroborated",
@@ -793,20 +791,6 @@
         "division",
         "record"
       ]
-    },
-    {
-      "fighterRef": "ufc:amanda-ribas",
-      "priority": 360,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "heightCm",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
     },
     {
       "fighterRef": "ufc:azamat-murzakanov",

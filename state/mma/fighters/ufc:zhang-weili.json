@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Zhang_Weili",
       "publisher": "Wikipedia",
       "title": "Zhang Weili",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -69,7 +69,7 @@
         "source:wikipedia:60121510",
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -215,9 +215,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 0.805208,
-        "layoffDays": 262
+        "layoffDays": 263
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
@@ -227,7 +227,7 @@
     "volatility": 0.06000438,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-dd4842d8223d37c6c9c8",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1535,11 +1535,26 @@
         "source:wikipedia:44159133"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160",
+        "source:wikipedia:64535234",
+        "source:wikipedia:44159133"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

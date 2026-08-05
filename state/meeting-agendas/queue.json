@@ -71,8 +71,10 @@
       "requestedAt": "2026-08-04T08:44:00.833Z",
       "notBefore": "2026-08-05",
       "expiresAt": "2026-08-08T23:59:59.000Z",
-      "status": "pending"
+      "status": "consumed",
+      "consumedBy": "20260805060551-mma-intake",
+      "consumedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
-  "updatedAt": "2026-08-04T18:05:10.583Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alex_Perez_(fighter)",
       "publisher": "Wikipedia",
       "title": "Alex Perez (fighter)",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:58085526",
         "source:wikipedia:77593874"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -206,9 +206,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 0.603208,
-        "layoffDays": 255
+        "layoffDays": 256
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
@@ -218,7 +218,7 @@
     "volatility": 0.05999764,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:history-0ccdd49e0d34e5150f0a",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1499,11 +1499,27 @@
         "source:wikipedia:77593874"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:77593874"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

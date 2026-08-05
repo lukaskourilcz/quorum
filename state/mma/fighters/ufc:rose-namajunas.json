@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Rose_Namajunas",
       "publisher": "Wikipedia",
       "title": "Rose Namajunas",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -69,7 +69,7 @@
         "source:wikipedia:39957370",
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -188,6 +188,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-79a86e49e1376f9c2432",
+      "eventRef": "ufc:event:history-ufc-on-espn-ribas-vs-namajunas",
+      "happenedAt": "2024-03-23T00:00:00.000Z",
+      "opponentRef": "ufc:amanda-ribas",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:63376607"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -197,37 +212,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:rose-namajunas:history",
-      "bouts": 6,
+      "bouts": 7,
       "values": {
-        "bouts": 6,
-        "wins": 4,
+        "bouts": 7,
+        "wins": 5,
         "losses": 2,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.5,
+        "finishRate": 0.4,
         "koTkoWins": 0,
         "submissionWins": 2,
-        "decisionWins": 2,
+        "decisionWins": 3,
         "koTkoWinShare": 0,
-        "submissionWinShare": 0.5,
-        "decisionWinShare": 0.5,
-        "averageElapsedSeconds": 515,
-        "recentThreeWinRate": 0.666667,
+        "submissionWinShare": 0.4,
+        "decisionWinShare": 0.6,
+        "averageElapsedSeconds": 655.714286,
+        "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.6,
-        "fightsPerYear": 1.04714,
-        "layoffDays": 2214
+        "fightsPerYear": 0.708292,
+        "layoffDays": 865
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1710.67425449,
-    "deviation": 153.7448665,
-    "volatility": 0.05999916,
-    "boutCount": 6,
-    "asOfBoutRef": "ufc:bout:history-f347ef303358dca5854c",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "rating": 1758.85046699,
+    "deviation": 145.81714907,
+    "volatility": 0.05999904,
+    "boutCount": 7,
+    "asOfBoutRef": "ufc:bout:history-79a86e49e1376f9c2432",
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1491,11 +1506,26 @@
         "source:wikipedia:40078160"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:40078160",
+        "source:wikipedia:63376607"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Ateba_Gautier",
       "publisher": "Wikipedia",
       "title": "Ateba Gautier",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -58,7 +58,7 @@
       "sourceRefs": [
         "source:wikipedia:82864883"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -354,9 +354,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 2.20751,
-        "layoffDays": 87
+        "layoffDays": 88
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
@@ -366,7 +366,7 @@
     "volatility": 0.05999384,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-709388b2a6d897739876",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1607,11 +1607,24 @@
         "source:wikipedia:82864883"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

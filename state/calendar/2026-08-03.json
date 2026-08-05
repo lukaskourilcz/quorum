@@ -242,7 +242,7 @@
       "tz": "Europe/Prague",
       "kind": "venture-morning",
       "status": "skipped",
-      "decisionOneLiner": "The run for this meeting failed before it finished. See https://github.com/lukaskourilcz/quorum/actions/runs/30973879799"
+      "decisionOneLiner": "The run for this meeting failed before it finished. See https://github.com/lukaskourilcz/quorum/actions/runs/30978478801"
     },
     {
       "at": "2026-08-05T05:00:00.000Z",
@@ -256,7 +256,9 @@
       "at": "2026-08-05T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-05-mma-intake",
+      "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
     },
     {
       "at": "2026-08-05T07:00:00.000Z",

@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-15T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-04:List of UFC events"
+    "source:wikipedia:2026-08-05:List of UFC events"
   ],
   "bouts": [
     {
@@ -36,10 +36,10 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jeremiah-wells-vs-myktybek-orolbai-4",
-      "red": "ufc:jeremiah-wells",
-      "blue": "ufc:myktybek-orolbai",
-      "division": "welterweight",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:edson-barboza-vs-esteban-ribovics-4",
+      "red": "ufc:edson-barboza",
+      "blue": "ufc:esteban-ribovics",
+      "division": "lightweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -52,15 +52,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:neil-magny-vs-ramiz-brahimaj-6",
-      "red": "ufc:neil-magny",
-      "blue": "ufc:ramiz-brahimaj",
-      "division": "welterweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:donte-johnson-vs-eric-mcconico-7",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:donte-johnson-vs-eric-mcconico-6",
       "red": "ufc:donte-johnson",
       "blue": "ufc:eric-mcconico",
       "division": "middleweight",
@@ -68,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:vicente-luque-vs-tresean-gore-8",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:vicente-luque-vs-tresean-gore-7",
       "red": "ufc:vicente-luque",
       "blue": "ufc:tresean-gore",
       "division": "middleweight",
@@ -76,13 +68,21 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:edson-barboza-vs-esteban-ribovics-9",
-      "red": "ufc:edson-barboza",
-      "blue": "ufc:esteban-ribovics",
-      "division": "lightweight",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:neil-magny-vs-ramiz-brahimaj-8",
+      "red": "ufc:neil-magny",
+      "blue": "ufc:ramiz-brahimaj",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jeremiah-wells-vs-myktybek-orolbai-9",
+      "red": "ufc:jeremiah-wells",
+      "blue": "ufc:myktybek-orolbai",
+      "division": "welterweight",
       "scheduledRounds": 3,
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

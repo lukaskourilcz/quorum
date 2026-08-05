@@ -9,7 +9,8 @@
     "wikidataId": "Q4739716",
     "wikipediaTitle": "Amanda Nunes",
     "externalIds": {
-      "wikipediaPageId": "30387040"
+      "wikipediaPageId": "30387040",
+      "cito": "225c5e70-18e8-40f6-a3f5-2e806842135c"
     }
   },
   "organizationHistory": [
@@ -25,14 +26,39 @@
     {
       "org": "ufc",
       "from": "2026-08-04",
-      "to": null,
+      "to": "2026-08-05",
       "status": "former",
       "sourceRefs": [
         "source:wikipedia:2026-08-04:List of current UFC fighters"
       ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-05",
+      "to": "2026-08-05",
+      "status": "active",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c"
+      ]
+    },
+    {
+      "org": "ufc",
+      "from": "2026-08-05",
+      "to": null,
+      "status": "former",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-05:List of current UFC fighters"
+      ]
     }
   ],
   "sources": [
+    {
+      "id": "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Amanda Nunes",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "evidenceTier": "secondary"
+    },
     {
       "id": "source:wikidata:Q4739716",
       "url": "https://www.wikidata.org/wiki/Q4739716",
@@ -47,7 +73,7 @@
       "url": "https://en.wikipedia.org/wiki/Amanda_Nunes",
       "publisher": "Wikipedia",
       "title": "Amanda Nunes",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +82,11 @@
     "name": {
       "value": "Amanda Nunes",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c",
         "source:wikidata:Q4739716",
         "source:wikipedia:30387040"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -94,11 +121,12 @@
     "stance": {
       "value": "orthodox",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c",
         "source:wikipedia:30387040"
       ],
-      "retrievedAt": "2026-08-03T18:14:40.046Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "status": "verified",
+      "corroborated": true
     },
     "team": {
       "value": "Team Carvalho (2003–2012) AMA Fight Club (2010–2012) MMA Masters (2012–2014) American Top Team (2014–2022)",
@@ -112,11 +140,12 @@
     "record": {
       "value": "23-5-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c",
         "source:wikipedia:30387040"
       ],
-      "retrievedAt": "2026-08-03T18:14:40.046Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 175,
@@ -144,6 +173,20 @@
         {
           "value": 172.72,
           "sourceRef": "source:wikipedia:30387040"
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Featherweight",
+          "sourceRef": "source:wikipedia:30387040"
+        },
+        {
+          "value": "womens-bantamweight",
+          "sourceRef": "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c"
         }
       ],
       "status": "open"
@@ -356,9 +399,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 1.718421,
-        "layoffDays": 1466
+        "layoffDays": 1467
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
@@ -368,7 +411,7 @@
     "volatility": 0.06000347,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-57467a60f9cf4f34a9b0",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1763,11 +1806,62 @@
         "source:wikipedia:30387040"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:225c5e70-18e8-40f6-a3f5-2e806842135c"
+      ],
+      "note": "The reviewed roster source lists this fighter as active."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "status-change",
+      "fields": [
+        "organizationHistory"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-05:List of current UFC fighters"
+      ],
+      "note": "The completed roster crawl no longer lists this fighter as active."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44159133",
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
-  "corroboration": 0.25,
+  "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

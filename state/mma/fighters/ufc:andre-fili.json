@@ -9,7 +9,8 @@
     "wikidataId": "Q16233140",
     "wikipediaTitle": "Andre Fili",
     "externalIds": {
-      "wikipediaPageId": "40814604"
+      "wikipediaPageId": "40814604",
+      "cito": "d7ac7d45-1746-4caf-b753-3d46f424ac26"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-05:fighter:d7ac7d45-1746-4caf-b753-3d46f424ac26",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Andre Fili",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q16233140",
       "url": "https://www.wikidata.org/wiki/Q16233140",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Andre_Fili",
       "publisher": "Wikipedia",
       "title": "Andre Fili",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Andre Fili",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:d7ac7d45-1746-4caf-b753-3d46f424ac26",
         "source:wikidata:Q16233140",
         "source:wikipedia:40814604"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -117,6 +126,15 @@
       "retrievedAt": "2026-08-03T18:14:40.046Z",
       "status": "provisional",
       "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:d7ac7d45-1746-4caf-b753-3d46f424ac26"
+      ],
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "status": "provisional",
+      "corroborated": false
     }
   },
   "criticalFields": [
@@ -138,6 +156,20 @@
         }
       ],
       "status": "open"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Featherweight",
+          "sourceRef": "source:wikipedia:40814604"
+        },
+        {
+          "value": "featherweight",
+          "sourceRef": "source:cito-ufc:2026-08-05:fighter:d7ac7d45-1746-4caf-b753-3d46f424ac26"
+        }
+      ],
+      "status": "resolved"
     }
   ],
   "history": [
@@ -797,9 +829,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 2.48176,
-        "layoffDays": 45
+        "layoffDays": 46
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
@@ -809,12 +841,11 @@
     "volatility": 0.06000571,
     "boutCount": 41,
     "asOfBoutRef": "ufc:bout:history-268251a0846104a02830",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "stance",
       "record-history-mismatch"
     ],
     "lastReviewedAt": "2026-08-03T18:14:40.046Z"
@@ -2145,11 +2176,38 @@
         "source:wikipedia:40814604"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:d7ac7d45-1746-4caf-b753-3d46f424ac26"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.875,
+  "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

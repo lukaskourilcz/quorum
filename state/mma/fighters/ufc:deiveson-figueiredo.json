@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
       "publisher": "Wikipedia",
       "title": "Deiveson Figueiredo",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q48122905",
         "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -190,9 +190,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 0.750755,
-        "layoffDays": 619
+        "layoffDays": 620
       },
-      "updatedAt": "2026-08-04T07:29:35.203Z"
+      "updatedAt": "2026-08-05T06:05:51.752Z"
     }
   ],
   "rating": {
@@ -202,7 +202,7 @@
     "volatility": 0.06000827,
     "boutCount": 5,
     "asOfBoutRef": "ufc:bout:history-1a491f49349fa4b20a30",
-    "updatedAt": "2026-08-04T07:29:35.203Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1521,11 +1521,26 @@
         "source:wikipedia:57503647"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:47163936",
+        "source:wikipedia:57503647"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }

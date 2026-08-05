@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-79a86e49e1376f9c2432",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-espn-ribas-vs-namajunas",
+    "name": "UFC on ESPN: Ribas vs. Namajunas",
+    "startsAtUtc": "2024-03-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:amanda-ribas",
+    "blue": "ufc:rose-namajunas"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-03-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:63376607"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-05T06:05:51.752Z",
+    "lastSeenAt": "2026-08-05T06:05:51.752Z",
+    "sourceRefs": [
+      "source:wikipedia:63376607"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:63376607"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:63376607"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:63376607"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-05T06:05:51.752Z"
+}

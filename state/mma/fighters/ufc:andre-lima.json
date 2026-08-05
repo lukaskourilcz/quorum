@@ -9,7 +9,8 @@
     "wikidataId": "Q134458124",
     "wikipediaTitle": "André Lima (fighter)",
     "externalIds": {
-      "wikipediaPageId": "83018693"
+      "wikipediaPageId": "83018693",
+      "cito": "349419ef-5b6c-43f5-bbe3-43ffbe3cfd46"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-05:fighter:349419ef-5b6c-43f5-bbe3-43ffbe3cfd46",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Andre Lima",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q134458124",
       "url": "https://www.wikidata.org/wiki/Q134458124",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Andr%C3%A9_Lima_(fighter)",
       "publisher": "Wikipedia",
       "title": "André Lima (fighter)",
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +67,7 @@
         "source:wikidata:Q134458124",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -69,7 +77,7 @@
         "source:wikidata:Q134458124",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +86,7 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -87,7 +95,7 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,25 +104,35 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "provisional",
       "corroborated": false
     },
     "record": {
       "value": "11-1-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:349419ef-5b6c-43f5-bbe3-43ffbe3cfd46",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 170.18,
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:349419ef-5b6c-43f5-bbe3-43ffbe3cfd46"
+      ],
+      "retrievedAt": "2026-08-05T06:05:51.752Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -138,6 +156,20 @@
         }
       ],
       "status": "resolved"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Flyweight",
+          "sourceRef": "source:wikipedia:83018693"
+        },
+        {
+          "value": "flyweight",
+          "sourceRef": "source:cito-ufc:2026-08-05:fighter:349419ef-5b6c-43f5-bbe3-43ffbe3cfd46"
+        }
+      ],
+      "status": "resolved"
     }
   ],
   "history": [],
@@ -149,14 +181,12 @@
     "volatility": 0.06,
     "boutCount": 0,
     "asOfBoutRef": null,
-    "updatedAt": "2026-08-03T18:26:54.227Z"
+    "updatedAt": "2026-08-05T06:05:51.752Z"
   },
   "quality": {
     "evidenceTier": "secondary",
-    "gaps": [
-      "stance"
-    ],
-    "lastReviewedAt": "2026-08-04T07:29:35.203Z"
+    "gaps": [],
+    "lastReviewedAt": "2026-08-05T06:05:51.752Z"
   },
   "changeLog": [
     {
@@ -2107,11 +2137,52 @@
         "source:wikipedia:83018693"
       ],
       "note": "Reviewed the Wikipedia profile and found 12 historical fight rows."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "source-refresh",
+      "fields": [
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-05:fighter:349419ef-5b6c-43f5-bbe3-43ffbe3cfd46"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83018693"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 12 historical fight rows."
+    },
+    {
+      "at": "2026-08-05T06:05:51.752Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.875,
-  "corroboration": 0.25,
+  "completeness": 1,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-04T07:29:35.203Z"
+  "updatedAt": "2026-08-05T06:05:51.752Z"
 }
