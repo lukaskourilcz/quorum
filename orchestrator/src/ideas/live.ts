@@ -9,18 +9,24 @@ import {
   type ReserveContext
 } from "../budget.js";
 import type { IdeaLedgerEntry } from "../contracts/idea-ledger.js";
-import { guardedJsonCall } from "../llm/call.js";
+import {
+  guardedJsonCall,
+  ModelOutputParseError,
+  ModelResponseTruncatedError
+} from "../llm/call.js";
 import { configRoot } from "../paths.js";
 import { parseEvidenceJsonl, type Evidence } from "../research/evidence.js";
 import { readJson, readText } from "../state.js";
 import type { Stage } from "../types.js";
 import {
   CAUGHT_UP_IDEA_NAMESPACE,
+  deterministicVaultAdjudicator,
   GLOBAL_IDEA_NAMESPACE,
   readIdeaIndexSlice,
   type IdeaRoomVerdict,
   type IdeaScreeningResult,
   type VaultAdjudicator,
+  type VaultVerdict,
   VaultVerdictSchema,
   screenAndRecordIdea
 } from "./ledger.js";
@@ -132,6 +138,51 @@ function assertCallEnvelope(input: {
   }
 }
 
+/**
+ * Parse the bounded VAULT reply without throwing away a valid verdict when its explanation runs
+ * a few characters long.
+ *
+ * The prompt already asks for at most 200 characters. On 5 August VAULT returned a valid JSON
+ * object whose reason exceeded that presentation bound, and the paid SPARK proposal plus the
+ * entire morning record were discarded. Whitespace normalization and truncation change no
+ * verdict or ledger link; the strict schema still checks each semantic field.
+ */
+export function parseVaultVerdictText(text: string): VaultVerdict {
+  const raw: unknown = JSON.parse(text);
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return VaultVerdictSchema.parse(raw);
+  }
+  const record = raw as Record<string, unknown>;
+  const reason = typeof record.reason === "string"
+    ? record.reason.replace(/\s+/gu, " ").trim().slice(0, 200)
+    : record.reason;
+  return VaultVerdictSchema.parse({ ...record, reason });
+}
+
+/**
+ * Keep a formatting failure in the optional semantic dedupe call from killing idea capture.
+ *
+ * The deterministic adjudicator uses the candidate scores computed by the ledger. It can say
+ * novel or duplicate. It does not invent a semantic variant. Provider, budget and transport
+ * failures still propagate; only unusable model output takes this fallback.
+ */
+export async function adjudicateVaultWithFallback(
+  input: Parameters<VaultAdjudicator["adjudicate"]>[0],
+  call: () => Promise<VaultVerdict>
+): Promise<VaultVerdict> {
+  try {
+    return await call();
+  } catch (error) {
+    if (
+      error instanceof ModelOutputParseError ||
+      error instanceof ModelResponseTruncatedError
+    ) {
+      return deterministicVaultAdjudicator().adjudicate(input);
+    }
+    throw error;
+  }
+}
+
 class GuardedVaultAdjudicator implements VaultAdjudicator {
   constructor(private readonly context: IdeaRuntimeContext) {}
 
@@ -163,20 +214,22 @@ class GuardedVaultAdjudicator implements VaultAdjudicator {
       at: this.context.now,
       label: "VAULT dedupe"
     });
-    const response = await guardedJsonCall({
-      stateRoot: this.context.root,
-      cycleId: this.context.cycleId,
-      phase: "idea-dedupe",
-      agent: "VAULT",
-      provider: model.provider,
-      model: model.model,
-      system,
-      input: prompt,
-      maxOutputTokens,
-      budgetContext: reserveContext(this.context, await budgetLedger(this.context.root)),
-      parse: (text) => VaultVerdictSchema.parse(JSON.parse(text))
+    return adjudicateVaultWithFallback(input, async () => {
+      const response = await guardedJsonCall({
+        stateRoot: this.context.root,
+        cycleId: this.context.cycleId,
+        phase: "idea-dedupe",
+        agent: "VAULT",
+        provider: model.provider,
+        model: model.model,
+        system,
+        input: prompt,
+        maxOutputTokens,
+        budgetContext: reserveContext(this.context, await budgetLedger(this.context.root)),
+        parse: parseVaultVerdictText
+      });
+      return response.value;
     });
-    return response.value;
   }
 }
 

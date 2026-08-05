@@ -4,6 +4,10 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { IdeaLedgerEntrySchema, type IdeaLedgerEntry } from "../src/contracts/idea-ledger.js";
 import { DEFAULT_BUDGET_LIMITS } from "../src/budget.js";
+import {
+  ModelOutputParseError,
+  ModelResponseTruncatedError
+} from "../src/llm/call.js";
 import type { Evidence } from "../src/research/evidence.js";
 import { atomicWriteText } from "../src/state.js";
 import {
@@ -26,7 +30,11 @@ import {
   screenAndRecordIdea,
   type VaultAdjudicator
 } from "../src/ideas/ledger.js";
-import { decideLiveProductRoom } from "../src/ideas/live.js";
+import {
+  adjudicateVaultWithFallback,
+  decideLiveProductRoom,
+  parseVaultVerdictText
+} from "../src/ideas/live.js";
 
 function entry(input: {
   id: string;
@@ -108,6 +116,50 @@ describe("idea canonicalization", () => {
 });
 
 describe("VAULT ledger adjudication", () => {
+  it("keeps a valid verdict when VAULT exceeds only the reason presentation bound", () => {
+    const parsed = parseVaultVerdictText(JSON.stringify({
+      verdict: "novel",
+      reason: `  ${"bounded explanation ".repeat(20)}  `
+    }));
+    expect(parsed.verdict).toBe("novel");
+    expect(parsed.reason.length).toBeGreaterThanOrEqual(190);
+    expect(parsed.reason.length).toBeLessThanOrEqual(200);
+    expect(parsed.reason).not.toMatch(/\s{2,}/u);
+  });
+
+  it("falls back to deterministic dedupe for unusable VAULT output", async () => {
+    const input = {
+      proposal: proposal("Fresh reader cue", "Show one bounded reader cue."),
+      candidates: []
+    };
+    const parseFallback = await adjudicateVaultWithFallback(input, async () => {
+      throw new ModelOutputParseError("VAULT", 0.001, new Error("bad JSON"));
+    });
+    const truncationFallback = await adjudicateVaultWithFallback(input, async () => {
+      throw new ModelResponseTruncatedError(
+        "claude-haiku-4-5-20251001",
+        240,
+        "truncated"
+      );
+    });
+    expect(parseFallback).toEqual({
+      verdict: "novel",
+      reason: "No prior idea shares enough wording to compare."
+    });
+    expect(truncationFallback).toEqual(parseFallback);
+  });
+
+  it("does not hide provider, budget or transport failures behind lexical dedupe", async () => {
+    const outage = new Error("provider unavailable");
+    await expect(adjudicateVaultWithFallback(
+      {
+        proposal: proposal("Fresh reader cue", "Show one bounded reader cue."),
+        candidates: []
+      },
+      async () => { throw outage; }
+    )).rejects.toBe(outage);
+  });
+
   it("dedupes within a venture plus global memory without copying global history", async () => {
     const prior = entry({
       id: "idea-2026-08-01-a3f9",
