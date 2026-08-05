@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260805091645-morning",
+  "outcome": "NO_ACTION",
+  "selectedOpportunityId": null,
+  "reasons": [
+    "Fixture candidates cannot establish a real business.",
+    "Score 34/50 is below the 35/50 gate.",
+    "Fewer than three independent eligible evidence sources.",
+    "No eligible direct problem or intent signal."
+  ],
+  "evidenceRefs": [],
+  "caughtUpIdeaRef": "idea-2026-08-05-bbffd7f5",
+  "meetingAgendaIds": [],
+  "generatedAt": "2026-08-05T09:16:45.147Z"
+}

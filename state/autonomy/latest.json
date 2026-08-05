@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-04T05:49:06.490Z",
+  "generatedAt": "2026-08-05T09:16:45.147Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -63,9 +63,9 @@
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0.3444,
+          "value": 0.3675,
           "unit": "ratio",
-          "detail": "187 of 543 fighter fields are corroborated."
+          "detail": "208 of 566 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -96,28 +96,28 @@
         {
           "id": "slot-fill",
           "label": "Evidenced slot fill",
-          "value": 0.3333,
+          "value": 0.6,
           "unit": "ratio",
-          "detail": "1 published articles for 3 assigned slots."
+          "detail": "3 published articles for 5 assigned slots."
         },
         {
           "id": "rendered-fightaiq-coverage",
           "label": "FightAIQ files rendered",
-          "value": 2,
+          "value": 5,
           "unit": "count",
-          "detail": "2 distinct fighter references reached published articles."
+          "detail": "5 distinct fighter references reached published articles."
         }
       ]
     }
   ],
   "quality": {
     "killedSlotReasons": {
-      "evidence": 1
+      "evidence": 3
     },
-    "vetoRate": 0.0476,
+    "vetoRate": 0.1176,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0.3444,
+    "sourceAgreementRate": 0.3675,
     "verifierPassRate": 0
   }
 }

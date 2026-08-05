@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260805091645-morning",
+  "stage": "VALIDATION",
+  "opportunityGate": {
+    "opportunityId": "FIX-OPP-003",
+    "outcome": "INSUFFICIENT_EVIDENCE",
+    "score": 34,
+    "minimumDimension": 2,
+    "independentEvidenceCount": 0,
+    "directEvidenceCount": 0,
+    "passed": false,
+    "reasons": [
+      "Fixture candidates cannot establish a real business.",
+      "Score 34/50 is below the 35/50 gate.",
+      "Fewer than three independent eligible evidence sources.",
+      "No eligible direct problem or intent signal."
+    ],
+    "evidenceRefs": []
+  },
+  "estimatedWorstCaseUsd": 0.036254,
+  "actualUsd": 0.009298,
+  "socialDecision": "NO_POST",
+  "caughtUpIdeaRef": "idea-2026-08-05-bbffd7f5",
+  "growthIdeaNovelty": 0,
+  "vaultVerdict": "duplicate_of",
+  "meetingAgendaIds": [],
+  "generatedAt": "2026-08-05T09:16:45.147Z"
+}

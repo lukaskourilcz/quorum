@@ -15,6 +15,7 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-08-05-bbffd7f5 | Evidence Gap Triage Card | vetoed | VAULT hard stop: Both propose a single bounded internal card/brief naming one evidence gap, stating what decision it in… |
 | idea-2026-08-04-f66c928d | Single-Gap Specialist Agenda Brief | vetoed | VAULT hard stop: Both propose identical bounded internal briefs selecting one open evidence gap with specialist follow-… |
 
 Omitted older kill-list entries: 0.
