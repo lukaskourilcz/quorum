@@ -69,12 +69,24 @@ describe("Titty Tuesdays bootstrap", () => {
       { agent: "PULSE", idea: contribution.idea },
       { agent: "AUDIT", idea: null }
     ])).not.toThrow();
+
+    const repaired = parsePortfolioContribution({
+      phase: "tt-marketing",
+      agent: "ANGLE",
+      text: JSON.stringify({
+        ...contribution,
+        idea: { campaignConcept: "Care-label typography for the current crop-top season. ".repeat(8) }
+      })
+    });
+    expect(repaired.idea?.title.length).toBeLessThanOrEqual(80);
+    expect(repaired.idea?.summary.length).toBe(280);
+    expect(repaired.idea?.summary).toContain("Care-label typography");
   });
 
   it("puts the pre-commerce brand floor in the standing idea contract", () => {
     const instruction = portfolioIdeaInstruction("tt-marketing");
     expect(instruction).toContain("future Titty Tuesdays eshop");
-    expect(instruction).toContain("PULSE and ANGLE must each set idea");
+    expect(instruction).toContain("PULSE and ANGLE must each set idea exactly");
     expect(instruction).toContain("target adults");
     expect(instruction).toContain("do not claim stock, price, availability or a purchase path");
     expect(instruction).toContain("human imagery");

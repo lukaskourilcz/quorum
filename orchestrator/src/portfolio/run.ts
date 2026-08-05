@@ -112,12 +112,11 @@ const ContributionSchema = z.object({
   marketingPlan: z.unknown().nullable().default(null),
   templateProposal: z.unknown().nullable().default(null),
   inspirationObservations: z.array(z.unknown()).max(4).default([]),
-  // One compact idea per seat. The caps match IdeaLedgerEntrySchema exactly, so a room can
-  // never mint an idea the ledger would then reject, and an idea can never grow into a
-  // document: 80 characters of title and 280 of summary is the whole artifact.
+  // One compact idea per seat. The caps match IdeaLedgerEntrySchema exactly. Clip presentation
+  // overflow rather than lose a paid idea, just as the contribution summary above does.
   idea: z.object({
-    title: z.string().trim().min(1).max(80),
-    summary: z.string().trim().min(1).max(280)
+    title: z.string().trim().min(1).transform((value) => value.slice(0, 80)),
+    summary: z.string().trim().min(1).transform((value) => value.slice(0, 280))
   }).nullable().default(null),
   // A malformed follow-up request must never discard a room that has already been paid
   // for. A live mag-editorial run returned a followUpRequest naming a phase outside the
@@ -160,9 +159,28 @@ function parseJson(text: string): unknown {
 
 export function portfolioIdeaInstruction(phase: PortfolioPhase): string {
   if (phase === "tt-marketing") {
-    return "This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea to one concrete, ledger-ready campaign concept. Each idea must fit the current crop-top season, target adults, and stand alone without the transcript. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea when its role supports the concept.";
+    return "This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {\"title\":\"one title, at most 80 characters\",\"summary\":\"one standalone description, at most 280 characters\"}; use no other idea keys. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept.";
   }
   return "Set idea to {\"title\":\"<=80 chars\",\"summary\":\"<=280 chars\"} when this room surfaced a concrete idea worth keeping for later, otherwise null. It is recorded verbatim and must stand alone without the transcript.";
+}
+
+function repairTittyTuesdaysIdea(value: unknown): unknown {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+  const contribution = value as Record<string, unknown>;
+  const rawIdea = contribution.idea;
+  if (!rawIdea || typeof rawIdea !== "object" || Array.isArray(rawIdea)) return value;
+  const idea = rawIdea as Record<string, unknown>;
+  const strings = Object.values(idea)
+    .filter((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
+    .map((candidate) => candidate.trim());
+  const title = [idea.title, idea.name, idea.headline, idea.conceptTitle]
+    .find((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
+    ?.trim() ?? strings[0];
+  const summary = [idea.summary, idea.description, idea.concept, idea.rationale]
+    .find((candidate): candidate is string => typeof candidate === "string" && candidate.trim().length > 0)
+    ?.trim() ?? [...strings].sort((left, right) => right.length - left.length)[0];
+  if (!title || !summary) return value;
+  return { ...contribution, idea: { title, summary } };
 }
 
 export function parsePortfolioContribution(input: {
@@ -170,7 +188,10 @@ export function parsePortfolioContribution(input: {
   agent: FoundingAgent;
   text: string;
 }): z.infer<typeof ContributionSchema> {
-  const contribution = ContributionSchema.parse(parseJson(input.text));
+  const parsed = parseJson(input.text);
+  const contribution = ContributionSchema.parse(
+    input.phase === "tt-marketing" ? repairTittyTuesdaysIdea(parsed) : parsed
+  );
   if (
     input.phase === "tt-marketing" &&
     TITTY_TUESDAYS_CORE_IDEATORS.has(input.agent) &&
