@@ -182,7 +182,8 @@
       "at": "2026-08-04T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "This meeting never ran, and nothing was written down about why. Nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-04T15:00:00.000Z",
@@ -272,13 +273,16 @@
       "at": "2026-08-05T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-05T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-05-tt-marketing",
+      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
       "at": "2026-08-05T11:00:00.000Z",
