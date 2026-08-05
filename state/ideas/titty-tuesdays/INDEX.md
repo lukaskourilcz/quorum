@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-08-05-7e98fea8 | One Good Day: The Receipt | proposed | VAULT novel: Closest prior idea overlaps only 0.6. |
 | idea-2026-08-05-6da40b81 | One Good Day: Four Ways to Wear the | proposed | VAULT novel: No prior idea shares enough wording to compare. |
 | idea-2026-08-05-eb586582 | One Good Day: Receipt | proposed | VAULT novel: Closest prior idea overlaps only 0.4. |
 

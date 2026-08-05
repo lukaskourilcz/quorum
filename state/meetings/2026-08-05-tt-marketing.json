@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260805104458-tt-marketing",
+  "cycleId": "20260805105805-tt-marketing",
   "date": "2026-08-05",
   "phase": "tt-marketing",
   "fixture": false,
@@ -31,24 +31,24 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.08,
-    "actualCycleUsd": 0.011428,
-    "monthAllInUsd": 2.6915536000000007,
+    "actualCycleUsd": 0.012225000000000001,
+    "monthAllInUsd": 2.7037786,
     "monthCapUsd": 30
   },
   "decision": {
     "outcome": "PLAN",
-    "summary": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend.",
+    "summary": "Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision.",
     "evidenceRefs": []
   },
   "proposals": [
     {
       "agent": "PULSE",
-      "summary": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend.",
+      "summary": "Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision.",
       "evidenceRefs": []
     },
     {
       "agent": "AUDIT",
-      "summary": "Four adult-only, pre-commerce crop-top concepts are grounded in the canonical season packet. Recommend testing one concept at a time with owner ratings as the decision gate; no publishing, spend, imagery, or commerce claims.",
+      "summary": "Four adult, pre-commerce crop-top concepts align with the season brief; recommend one measured concept-selection step before any production or distribution.",
       "evidenceRefs": []
     }
   ],
@@ -64,40 +64,47 @@
       "veto": false
     }
   ],
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "TASK-20260805105805-TT-MARKETING-02",
+      "owner": "AUDIT",
+      "summary": "Record owner ratings for the four season concepts, then select one for a constrained visual-queue review.",
+      "status": "planned"
+    }
+  ],
   "growthPlan": "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled.",
   "eveningOutcome": null,
-  "generatedAt": "2026-08-05T10:47:58.976Z",
+  "generatedAt": "2026-08-05T11:01:05.060Z",
   "kind": "tt-marketing",
   "roomTranscript": {
-    "openedAt": "2026-08-05T10:44:58.976Z",
-    "closedAt": "2026-08-05T10:47:58.976Z",
+    "openedAt": "2026-08-05T10:58:05.060Z",
+    "closedAt": "2026-08-05T11:01:05.060Z",
     "gavel": "PULSE",
     "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
     "turns": [
       {
         "agent": "PULSE",
         "mode": "gavel",
-        "sentAt": "2026-08-05T10:44:58.976Z",
+        "sentAt": "2026-08-05T10:58:05.060Z",
         "text": "Generate and record concrete marketing ideas for the future Titty Tuesdays eshop from the current season and owner taste. Keep every concept adult-only and pre-commerce: no publishing, ads, people, prices, stock, purchase links or availability claims."
       },
       {
         "agent": "PULSE",
         "mode": "statement",
-        "sentAt": "2026-08-05T10:45:58.976Z",
-        "text": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend."
+        "sentAt": "2026-08-05T10:59:05.060Z",
+        "text": "Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision."
       },
       {
         "agent": "AUDIT",
         "mode": "statement",
-        "sentAt": "2026-08-05T10:46:58.976Z",
-        "text": "Four adult-only, pre-commerce crop-top concepts are grounded in the canonical season packet. Recommend testing one concept at a time with owner ratings as the decision gate; no publishing, spend, imagery, or commerce claims."
+        "sentAt": "2026-08-05T11:00:05.060Z",
+        "text": "Four adult, pre-commerce crop-top concepts align with the season brief; recommend one measured concept-selection step before any production or distribution."
       },
       {
         "agent": "PULSE",
         "mode": "close",
-        "sentAt": "2026-08-05T10:47:58.976Z",
-        "text": "Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend."
+        "sentAt": "2026-08-05T11:01:05.060Z",
+        "text": "Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision."
       }
     ]
   }

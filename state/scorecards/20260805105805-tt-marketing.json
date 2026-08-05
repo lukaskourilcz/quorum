@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260805105805-tt-marketing",
+  "phase": "tt-marketing",
+  "estimatedWorstCaseUsd": 0.028325,
+  "actualUsd": 0.012225000000000001,
+  "participants": [
+    "PULSE",
+    "ANGLE",
+    "AUDIT",
+    "COHORT"
+  ],
+  "agendaId": null,
+  "generatedAt": "2026-08-05T11:01:05.060Z"
+}

@@ -15,7 +15,7 @@ Keep a detailed record of future marketing ideas without producing assets or tak
 
 ### 1. content
 
-Pre-commerce concept: test which adult crop-top chapter earns qualified opt-in intent using a single measured owner-rating and waitlist-interest signal, without publishing or spend.
+Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision.
 
 Assets needed:
 - owner-approved campaign brief
@@ -24,7 +24,7 @@ Platform note: Planning only. Do not publish, generate social images or contact 
 
 ### 2. content
 
-Four adult-only, pre-commerce crop-top concepts are grounded in the canonical season packet. Recommend testing one concept at a time with owner ratings as the decision gate; no publishing, spend, imagery, or commerce claims.
+Four adult, pre-commerce crop-top concepts align with the season brief; recommend one measured concept-selection step before any production or distribution.
 
 Assets needed:
 - owner-approved campaign brief
