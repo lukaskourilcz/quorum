@@ -15,7 +15,7 @@ Keep a detailed record of future marketing ideas without producing assets or tak
 
 ### 1. content
 
-Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision.
+Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims.
 
 Assets needed:
 - owner-approved campaign brief
@@ -24,7 +24,16 @@ Platform note: Planning only. Do not publish, generate social images or contact 
 
 ### 2. content
 
-Four adult, pre-commerce crop-top concepts align with the season brief; recommend one measured concept-selection step before any production or distribution.
+Four adult, pre-commerce crop-top concepts are evidenced. Convert the season arc into one measured concept-selection experiment before any production or distribution.
+
+Assets needed:
+- owner-approved campaign brief
+
+Platform note: Planning only. Do not publish, generate social images or contact anyone.
+
+### 3. content
+
+AudienceSpec v1: adults 18+, bounded by region, public interests and platform fit; no reach, conversion or cost estimates supplied.
 
 Assets needed:
 - owner-approved campaign brief

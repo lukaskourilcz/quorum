@@ -9,7 +9,7 @@
   "tactics": [
     {
       "type": "content",
-      "description": "Pre-commerce concept: test whether a type-led crop-top chapter earns qualified adult preference signals before any distribution or monetization decision.",
+      "description": "Concept direction: test adult crop-top interest through a single pre-commerce opt-in concept note for “Night Shift,” measuring qualified intent without publishing, spend, stock, price, or purchase claims.",
       "assetsNeeded": [
         "owner-approved campaign brief"
       ],
@@ -17,7 +17,15 @@
     },
     {
       "type": "content",
-      "description": "Four adult, pre-commerce crop-top concepts align with the season brief; recommend one measured concept-selection step before any production or distribution.",
+      "description": "Four adult, pre-commerce crop-top concepts are evidenced. Convert the season arc into one measured concept-selection experiment before any production or distribution.",
+      "assetsNeeded": [
+        "owner-approved campaign brief"
+      ],
+      "platformPolicyNote": "Planning only. Do not publish, generate social images or contact anyone."
+    },
+    {
+      "type": "content",
+      "description": "AudienceSpec v1: adults 18+, bounded by region, public interests and platform fit; no reach, conversion or cost estimates supplied.",
       "assetsNeeded": [
         "owner-approved campaign brief"
       ],
