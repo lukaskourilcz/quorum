@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-d7b3cdeb2e513f9a",
+  "venture": "mma-files",
+  "packageHash": "c3daaa33b557f9a62014b9cb148f6dc2517c6f24d3e6fbb35bd34d345038290e",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "5233902950e335061175bcd73796b342139a8f12",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 5233902950e335061175bcd73796b342139a8f12 is readable",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-gamrot-vs-salkilld?boardless_verify=c3daaa33b557-1785917308906",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-event-ufc-fight-night-gamrot-vs-salkilld match",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose c3daaa33b557f9a62014b9cb148f6dc2517c6f24d3e6fbb35bd34d345038290e",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-event-ufc-fight-night-gamrot-vs-salkilld/hero.svg?boardless_verify=c3daaa33b557-1785917308906",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-05T08:08:28.906Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-05T08:07:27.082Z",
+  "completedAt": "2026-08-05T08:08:29.464Z"
+}
