@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-3f5c8cd85d4db97d",
+  "venture": "caught-up",
+  "packageHash": "17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "6ffed93ab706841bbd730ffebe223b4480320ad5",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 6ffed93ab706841bbd730ffebe223b4480320ad5 is readable",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje?boardless_verify=17eb32d81474-1785923366334",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje match",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-05-spacex-jde-po-operatorech-ai-zlevnuje/hero.webp?boardless_verify=17eb32d81474-1785923366334",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Dall E · CC0",
+      "checkedAt": "2026-08-05T09:49:26.334Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-05T09:48:03.581Z",
+  "completedAt": "2026-08-05T09:49:27.075Z"
+}
