@@ -35,24 +35,23 @@ export class AnthropicTextClient {
       model: request.model,
       system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }]
     });
+    const result: TextProviderResponse = {
+      text: response.content
+        .filter((block) => block.type === "text")
+        .map((block) => block.text)
+        .join(""),
+      model: response.model,
+      tokensIn: response.usage.input_tokens ?? 0,
+      tokensOut: response.usage.output_tokens ?? 0,
+      cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
+      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0
+    };
     // A cut-off body is not a model mistake, it is our cap being too small, and it must not
     // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the
     // cap" and hours spent hunting a syntax error at some byte offset.
     if (response.stop_reason === "max_tokens") {
-      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, "truncated");
+      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, "truncated", result);
     }
-    const text = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("");
-    return {
-      text,
-      model: response.model,
-      tokensIn: response.usage.input_tokens,
-      tokensOut: response.usage.output_tokens,
-      cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
-      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0
-    };
+    return result;
   }
 }
-

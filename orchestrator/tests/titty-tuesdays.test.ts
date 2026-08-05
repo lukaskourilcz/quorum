@@ -8,7 +8,8 @@ import { repoRoot } from "../src/paths.js";
 import {
   assertTittyTuesdaysIdeaOutput,
   parsePortfolioContribution,
-  portfolioIdeaInstruction
+  portfolioIdeaInstruction,
+  portfolioMaxOutputTokens
 } from "../src/portfolio/run.js";
 import { parseTasteDocument } from "../src/taste/model.js";
 import {
@@ -109,6 +110,8 @@ describe("Titty Tuesdays bootstrap", () => {
     expect(instruction).toContain("target adults");
     expect(instruction).toContain("do not claim stock, price, availability or a purchase path");
     expect(instruction).toContain("human imagery");
+    expect(portfolioMaxOutputTokens("ANGLE", 1_600)).toBe(1_600);
+    expect(portfolioMaxOutputTokens("COHORT", 1_600)).toBe(900);
   });
 
   it("stores exactly four non-purchasable crop-top concepts", async () => {

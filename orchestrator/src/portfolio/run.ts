@@ -293,8 +293,12 @@ function modelFor(
   // slate, and a truncated slate parses as an absent one, which reads as a quiet no-news day.
   // Only generated tokens are billed; the cap sets the reserve, which still fits the
   // $0.05-$0.08 room envelopes at these sizes.
-  const cap = agent === "EASEL" ? 1_500 : agent === "ANGLE" || agent === "CANVAS" ? 1_200 : 900;
-  return { ...model, maxOutputTokens: Math.min(cap, model.maxOutputTokens) };
+  return { ...model, maxOutputTokens: portfolioMaxOutputTokens(agent, model.maxOutputTokens) };
+}
+
+export function portfolioMaxOutputTokens(agent: FoundingAgent, configuredMax: number): number {
+  const contractCap = agent === "EASEL" ? 1_500 : agent === "ANGLE" ? 1_600 : agent === "CANVAS" ? 1_200 : 900;
+  return Math.min(contractCap, configuredMax);
 }
 
 function shiftedTimes(now: Date, count: number): string[] {

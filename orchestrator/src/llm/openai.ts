@@ -28,7 +28,13 @@ export interface TextProviderResponse {
  * seat retry (which only caught parse failures), and the 04:00 board never opened.
  */
 export class ModelResponseTruncatedError extends Error {
-  constructor(readonly model: string, readonly cap: number, reason: string) {
+  constructor(
+    readonly model: string,
+    readonly cap: number,
+    reason: string,
+    /** The provider still bills a cut-off reply; carry its usage to the guarded ledger. */
+    readonly response?: TextProviderResponse
+  ) {
     super(`Response ${reason} at the ${cap}-token cap for ${model}; raise maxOutputTokens`);
     this.name = "ModelResponseTruncatedError";
   }
@@ -54,11 +60,7 @@ export class OpenAiTextClient {
       service_tier: "default",
       store: false
     });
-    if (response.status === "incomplete") {
-      const reason = response.incomplete_details?.reason ?? "unknown";
-      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, `incomplete (${reason})`);
-    }
-    return {
+    const result: TextProviderResponse = {
       text: response.output_text,
       model: response.model,
       tokensIn: response.usage?.input_tokens ?? 0,
@@ -67,6 +69,10 @@ export class OpenAiTextClient {
       // OpenAI does not bill a separate cache write.
       cacheWriteTokensIn: 0
     };
+    if (response.status === "incomplete") {
+      const reason = response.incomplete_details?.reason ?? "unknown";
+      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, `incomplete (${reason})`, result);
+    }
+    return result;
   }
 }
-

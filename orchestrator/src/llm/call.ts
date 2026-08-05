@@ -114,8 +114,10 @@ export async function guardedJsonCall<T>(
   if (request.dry) {
     throw new Error("A dry cycle attempted a paid LLM call");
   }
-  const response: TextProviderResponse =
-    request.provider === "openai"
+  let truncation: ModelResponseTruncatedError | null = null;
+  let response: TextProviderResponse;
+  try {
+    response = request.provider === "openai"
       ? await new OpenAiTextClient().generate({
           model: request.model,
           system: request.system,
@@ -128,6 +130,11 @@ export async function guardedJsonCall<T>(
           input: request.input,
           maxOutputTokens: request.maxOutputTokens
         });
+  } catch (error) {
+    if (!(error instanceof ModelResponseTruncatedError) || !error.response) throw error;
+    truncation = error;
+    response = error.response;
+  }
   // input_tokens, cache_read_input_tokens and cache_creation_input_tokens are disjoint counts,
   // so the prompt is their sum. Passing tokensIn alone and then subtracting the cached share
   // would have discounted tokens the provider had already left out, under-reporting the spend
@@ -172,6 +179,11 @@ export async function guardedJsonCall<T>(
       entries: [...ledger.entries, entry]
     });
   }
+
+  // A provider-reported cutoff is unusable, but it is not free. The adapters attach the
+  // partial response's usage so the same durable ledger path records it before callers retry,
+  // skip the seat or fail the room.
+  if (truncation) throw truncation;
 
   // Parse AFTER the ledger entry is durable. The provider has already billed for this
   // response, so a malformed body must not make the spend disappear: parsing first meant a
