@@ -26,6 +26,11 @@
               "minLength": 1,
               "maxLength": 320
             },
+            "altHeadline": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 90
+            },
             "bodyMDX": {
               "type": "string",
               "minLength": 1,
@@ -56,6 +61,11 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 320
+            },
+            "altHeadline": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 90
             },
             "bodyMDX": {
               "type": "string",

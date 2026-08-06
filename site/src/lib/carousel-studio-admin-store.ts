@@ -122,3 +122,66 @@ export async function setCarouselTemplateStatus(input: { templateId: string; ver
   await persist(overridesPath, value, `admin: mark ${input.templateId}@${input.version} ${input.status}`, root);
   return input.status;
 }
+
+const deckStyleOverridesPath = "state/ventures/carousel-studio/deck-style-overrides.json";
+
+export interface DeckStyleOverride {
+  venture: "caught-up" | "mma-files";
+  slug: string;
+  style: string;
+  changedAt: string;
+}
+
+/**
+ * The design the owner chose for one article's deck.
+ *
+ * The /admin switcher re-rendered a preview and nothing else: the shipped deck used the style
+ * `deckStyleFor` derives from the date, so choosing a design changed a picture on the screen and
+ * no bytes anywhere. This file is what the render path reads, so the choice binds. Same text and
+ * same photo either way — only the design changes.
+ */
+export async function readDeckStyleOverrides(root = repositoryRoot): Promise<DeckStyleOverride[]> {
+  try {
+    const raw = await readJson(deckStyleOverridesPath, root) as { overrides?: unknown };
+    return Array.isArray(raw.overrides) ? raw.overrides.filter(isDeckStyleOverride) : [];
+  } catch (error) {
+    if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return [];
+    throw error;
+  }
+}
+
+function isDeckStyleOverride(value: unknown): value is DeckStyleOverride {
+  if (!value || typeof value !== "object") return false;
+  const entry = value as Partial<DeckStyleOverride>;
+  return (entry.venture === "caught-up" || entry.venture === "mma-files")
+    && typeof entry.slug === "string"
+    && typeof entry.style === "string"
+    && typeof entry.changedAt === "string";
+}
+
+export async function setDeckStyleOverride(
+  input: { venture: DeckStyleOverride["venture"]; slug: string; style: string; styles: readonly string[]; now?: Date },
+  root = repositoryRoot
+): Promise<DeckStyleOverride[]> {
+  const slug = input.slug.trim();
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article slug.");
+  }
+  if (!input.styles.includes(input.style)) {
+    throw new CarouselStudioPersistenceError("CONFLICT", "That deck design does not exist.");
+  }
+  const changedAt = (input.now ?? new Date()).toISOString();
+  const overrides = [
+    { venture: input.venture, slug, style: input.style, changedAt },
+    ...(await readDeckStyleOverrides(root)).filter(
+      (override) => override.venture !== input.venture || override.slug !== slug
+    )
+  ].slice(0, 200);
+  await persist(
+    deckStyleOverridesPath,
+    { schemaVersion: "carousel-deck-style-overrides/1", overrides, updatedAt: changedAt },
+    `admin: set the ${input.venture} deck design for ${slug}`,
+    root
+  );
+  return overrides;
+}

@@ -6,9 +6,14 @@ import { articleRef } from "./hash.js";
 
 export const MMA_FILES_ASSIGNMENT_PROTOCOL = "state/ventures/mma-files/social/ASSIGNMENT.md";
 
-export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPack | null {
-  // Fixed by the slug, so a replay renders identical bytes and the package hash holds.
-  const style = deckStyleFor(article.slug, DECK_STYLES);
+export function buildSocialVariantPack(
+  article: ArticlePackage,
+  /** The owner's choice for this article, when /admin recorded one. */
+  overrideStyle?: string
+): SocialVariantPack | null {
+  // Fixed by the slug, so a replay renders identical bytes and the package hash holds — unless
+  // the owner picked a design for this article, which is the one thing allowed to change it.
+  const style = overrideStyle ?? deckStyleFor(article.slug, DECK_STYLES);
   if (article.status !== "published") throw new Error("Social variants require a finished article");
   /**
    * The carousel is the article, split.
@@ -21,6 +26,7 @@ export function buildSocialVariantPack(article: ArticlePackage): SocialVariantPa
     const copy = article.localizations[locale]!;
     const slides = buildArticleDeck({
       title: copy.title,
+      coverLine: copy.altHeadline,
       dek: copy.dek,
       bodyMdx: copy.bodyMDX,
       outro: locale === "cs" ? "Celý ozdrojovaný text najdete v MMA Files." : "Read the full sourced story in MMA Files."

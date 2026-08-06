@@ -1,5 +1,6 @@
 import { ArticlePackageSchema, type ArticlePackage, type EditorialSlate } from "../contracts/mma-files.js";
 import { articlePackageHash } from "./hash.js";
+import { effectiveDeckStyle } from "../social/deck-style.js";
 import { renderSocialVariants } from "./frame.js";
 import { buildSocialVariantPack } from "./social.js";
 import { loadStylebook, reviewArticle, stripSourceMarkers, stylebookPacket, validateStylebook, type CopyViolation } from "./style.js";
@@ -102,6 +103,7 @@ export async function produceMmaFilesArticle(input: {
     ...csDraft,
     title: stripSourceMarkers(csDraft.title),
     dek: stripSourceMarkers(csDraft.dek),
+    ...(csDraft.altHeadline ? { altHeadline: stripSourceMarkers(csDraft.altHeadline) } : {}),
     bodyMDX: stripSourceMarkers(csDraft.bodyMDX)
   };
   const candidate = imageCandidateIndex === undefined
@@ -152,7 +154,7 @@ export async function produceMmaFilesArticle(input: {
   const article = ArticlePackageSchema.parse({ ...finalContent, packageHash: articlePackageHash(finalContent) });
   const stored = await storeArticlePackage(input.root, article);
   const socialPack = article.status === "published" && input.socialProductionEnabled !== false
-    ? buildSocialVariantPack(article)
+    ? buildSocialVariantPack(article, await effectiveDeckStyle({ root: input.root, venture: "mma-files", slug: article.slug, seed: article.slug }))
     : null;
   const socialPath = socialPack ? await storeSocialVariantPack(input.root, socialPack) : null;
   const mediaPaths = await storeArticleMedia(

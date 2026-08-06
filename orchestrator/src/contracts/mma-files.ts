@@ -12,6 +12,8 @@ export const ArticleFormatSchema = z.enum([
 const LocalizationSchema = openObject({
   title: z.string().trim().min(1).max(160),
   dek: z.string().trim().min(1).max(320),
+  /** The carousel cover line the desk wrote. Absent on every article written before it existed. */
+  altHeadline: z.string().trim().min(1).max(90).optional(),
   bodyMDX: z.string().trim().min(1).max(40_000),
   imageAlt: z.string().trim().min(1).max(300).optional()
 });

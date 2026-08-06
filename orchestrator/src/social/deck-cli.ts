@@ -57,6 +57,7 @@ async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "
       hero: pkg.image?.hero_bytes_base64,
       slides: buildArticleDeck({
         title: article.title,
+        coverLine: article.alternative_headlines?.[0],
         dek: article.dek,
         // The editor's own structure, in the order the editor put it: what changed, why it
         // matters, what is still open. Better slides than anything cut out of the body, and
@@ -76,7 +77,7 @@ async function deckFromPackage(file: string): Promise<{ venture: "caught-up" | "
     venture: "mma-files",
     slug: pkg.slug,
     hero: pkg.image.hero_bytes_base64,
-    slides: buildArticleDeck({ title: cs.title, dek: cs.dek, bodyMdx: cs.bodyMDX, outro: OUTRO["mma-files"] })
+    slides: buildArticleDeck({ title: cs.title, coverLine: cs.altHeadline, dek: cs.dek, bodyMdx: cs.bodyMDX, outro: OUTRO["mma-files"] })
   };
 }
 

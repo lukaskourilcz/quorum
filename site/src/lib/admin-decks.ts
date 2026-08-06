@@ -1,4 +1,5 @@
 import "server-only";
+import { readDeckStyleOverrides } from "@/lib/carousel-studio-admin-store";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -58,6 +59,8 @@ function creditOf(image: { license?: { attribution_html?: string } } | undefined
 }
 
 function reviewed(input: {
+  /** The owner's recorded choice for this article, when there is one. */
+  overrideStyle?: string | undefined;
   venture: AdminDeck["venture"];
   slug: string;
   title: string;
@@ -73,7 +76,9 @@ function reviewed(input: {
     slug: input.slug,
     title: input.title,
     date: input.date,
-    style: deckStyleFor(input.seed, DECK_STYLES) as DeckStyle,
+    // The panel shows the design that will actually ship, which is the owner's choice where
+    // one was recorded and the derived style everywhere else.
+    style: (input.overrideStyle ?? deckStyleFor(input.seed, DECK_STYLES)) as DeckStyle,
     slides: review.slides,
     longestSlideWords: review.slides.reduce((longest, slide) => Math.max(longest, wordCount(slide.text)), 0),
     publishable: review.publishable,
@@ -95,6 +100,9 @@ async function readJsonFiles(directory: string): Promise<unknown[]> {
 }
 
 export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
+  const overrides = await readDeckStyleOverrides();
+  const overrideFor = (venture: "caught-up" | "mma-files", slug: string) =>
+    overrides.find((entry) => entry.venture === venture && entry.slug === slug)?.style;
   const articles = await readJsonFiles(path.join(repositoryRoot, "state/ventures/mma-files/articles"));
   const decks: AdminDeck[] = [];
 
@@ -104,7 +112,7 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       publishAt?: string;
       status?: string;
       image?: { hero_bytes_base64?: string; license?: { attribution_html?: string } };
-      localizations?: { cs?: { title?: string; dek?: string; bodyMDX?: string } };
+      localizations?: { cs?: { title?: string; altHeadline?: string; dek?: string; bodyMDX?: string } };
     };
     const cs = article.localizations?.cs;
     if (!article.slug || !cs?.title || !cs.dek || !cs.bodyMDX) continue;
@@ -114,10 +122,12 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       title: cs.title,
       date: (article.publishAt ?? "").slice(0, 10),
       seed: article.slug,
+      overrideStyle: overrideFor("mma-files", article.slug ?? ""),
       hasHero: Boolean(article.image?.hero_bytes_base64),
       heroCredit: creditOf(article.image),
       slides: buildArticleDeck({
         title: cs.title,
+        coverLine: cs.altHeadline,
         dek: cs.dek,
         bodyMdx: cs.bodyMDX,
         outro: OUTRO["mma-files"]
@@ -133,7 +143,7 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       article?: { cs?: { frontmatter?: Record<string, unknown> } };
     };
     const frontmatter = pkg.article?.cs?.frontmatter as
-      | { slug?: string; title?: string; dek?: string; what_changed?: string[]; why_it_matters?: string[]; uncertainty?: string[] }
+      | { slug?: string; title?: string; alternative_headlines?: string[]; dek?: string; what_changed?: string[]; why_it_matters?: string[]; uncertainty?: string[] }
       | undefined;
     if (pkg.status !== "edition" || !frontmatter?.slug || !frontmatter.title || !frontmatter.dek) continue;
     decks.push(reviewed({
@@ -142,10 +152,12 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       title: frontmatter.title,
       date: pkg.date ?? "",
       seed: pkg.date ?? frontmatter.slug,
+      overrideStyle: overrideFor("caught-up", frontmatter.slug ?? ""),
       hasHero: Boolean(pkg.image?.hero_bytes_base64),
       heroCredit: creditOf(pkg.image),
       slides: buildArticleDeck({
         title: frontmatter.title,
+        coverLine: frontmatter.alternative_headlines?.[0],
         dek: frontmatter.dek,
         points: [
           ...(frontmatter.what_changed ?? []).slice(0, 3),

@@ -1,12 +1,16 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 import {
+  ARTICLE_HERO_SLOT,
   CAROUSEL_BRANDS,
   renderCarouselPng,
+  toRenderablePng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
 import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
+import { writeDeckReceipt } from "./deck-receipt.js";
+import { effectiveDeckStyle } from "./deck-style.js";
 import { buildArticleDeck, deckStyleFor, reviewDeck } from "@boardlessai/carousel-studio";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
@@ -167,12 +171,18 @@ export async function composeEditionSocialPack(input: {
    * frontmatter arrays are already the editor's own summary of the same text.
    */
   // Fixed by the edition date, so a replay renders identical bytes.
-  const deckStyle = deckStyleFor(editionPackage.date, DECK_STYLES);
+  const deckStyle = await effectiveDeckStyle({
+    root: input.stateRoot,
+    venture: "caught-up",
+    slug: (editionPackage.article?.cs ?? editionPackage.article?.en)?.frontmatter.slug ?? editionPackage.date,
+    seed: editionPackage.date
+  });
   const visualReference = (locale: SocialLocale): TemplateReference | null => {
     const article = editionPackage.article?.[locale]?.frontmatter;
     if (!article) return null;
     const slides = buildArticleDeck({
       title: article.title,
+      coverLine: article.alternative_headlines?.[0],
       dek: article.dek,
       points: [
         ...article.what_changed.slice(0, 3),
@@ -222,6 +232,13 @@ export async function composeEditionSocialPack(input: {
     quote: { agent: bestTurn.agent, text: bestTurn.text }
   }));
   const relativeDirectory = `site/public/social/${input.editionPackage.date}`;
+  // The templates reserve a hero slot with a scrim over it and the admin preview has always
+  // filled it; the production render passed no images at all, so every shipped cover was type
+  // on a flat panel. Heroes are stored as WebP and librsvg draws nothing for a WebP data URI,
+  // which is what `toRenderablePng` exists to fix.
+  const heroBytes = editionPackage.image?.hero_bytes_base64
+    ? await toRenderablePng(Buffer.from(editionPackage.image.hero_bytes_base64, "base64"))
+    : null;
   const publicDirectory = `/social/${input.editionPackage.date}`;
   const framePaths: Partial<Record<SocialLocale, Record<"instagram" | "threads", string[]>>> = {};
   const frameHashes: Record<string, string> = {};
@@ -233,7 +250,13 @@ export async function composeEditionSocialPack(input: {
     const template = resolveLiveCarouselTemplate(reference.template_id, reference.version);
     for (const channel of ["instagram", "threads"] as const) {
       const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
-      const rendered = await renderCarouselPng({ template, payload: reference.content, brand: CAROUSEL_BRANDS["caught-up"], format });
+      const rendered = await renderCarouselPng({
+        template,
+        payload: reference.content,
+        brand: CAROUSEL_BRANDS["caught-up"],
+        format,
+        ...(heroBytes ? { images: { [ARTICLE_HERO_SLOT]: heroBytes } } : {})
+      });
       for (const slide of rendered) {
         const name = `frame-${String(slide.index + 1).padStart(2, "0")}.png`;
         const publicPath = `${publicDirectory}/${locale}/${channel}/${name}`;
@@ -340,6 +363,17 @@ export async function composeEditionSocialPack(input: {
       item: queueItem({ pack, locale, channel, destination, evidenceRefs, now })
     }));
   });
+  const csVisual = visualRefs.cs ?? visualRefs.en!;
+  const deckReceipt = await writeDeckReceipt({
+    root: input.stateRoot,
+    venture: "caught-up",
+    date: input.editionPackage.date,
+    slug: (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter.slug,
+    templateId: csVisual.template_id,
+    style: deckStyle,
+    slideCount: Object.keys(csVisual.content.strings).length,
+    hashes: Object.values(frameHashes)
+  });
   await Promise.all([
     atomicWriteJson(input.stateRoot, `social/packs/${input.editionPackage.date}.json`, pack),
     atomicWriteJson(input.stateRoot, `social/assets/${input.editionPackage.date}.json`, {
@@ -359,6 +393,7 @@ export async function composeEditionSocialPack(input: {
     artifactPaths: [
       `social/packs/${input.editionPackage.date}.json`,
       `social/assets/${input.editionPackage.date}.json`,
+      deckReceipt,
       ...queued.map(({ locale, channel }) => `social/queue/${input.editionPackage.date}-${locale}-${channel}.json`),
       ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
       path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))

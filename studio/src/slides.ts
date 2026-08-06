@@ -35,6 +35,15 @@ export interface Slide {
 
 export interface ArticleDeckInput {
   title: string;
+  /**
+   * The cover line, when the desk wrote one for it.
+   *
+   * An article title is written for a page of prose; a cover is a square somebody scrolls past.
+   * Both magazines' writers now produce a short Czech line for it in the same call that writes
+   * the article, so it passes the same style review. Absent, the title is the cover, which is
+   * what every deck built before this did.
+   */
+  coverLine?: string | undefined;
   dek: string;
   /** A Caught Up edition's structured points, in the order the editor put them. */
   points?: readonly string[];
@@ -166,7 +175,7 @@ export function buildArticleDeck(input: ArticleDeckInput): Slide[] {
     : packIntoSlides(proseFromMdx(input.bodyMdx ?? ""));
   const room = MAX_SLIDES - 3;
   return [
-    { kind: "cover" as const, text: capped(input.title) },
+    { kind: "cover" as const, text: capped(input.coverLine?.trim() || input.title) },
     { kind: "body" as const, text: capped(input.dek) },
     ...middle.slice(0, room).map((text) => ({ kind: "body" as const, text })),
     { kind: "outro" as const, text: capped(input.outro) }

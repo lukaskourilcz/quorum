@@ -1,6 +1,7 @@
 import path from "node:path";
-import { CAROUSEL_BRANDS, renderCarouselPng } from "@boardlessai/carousel-studio";
+import { ARTICLE_HERO_SLOT, CAROUSEL_BRANDS, renderCarouselPng, toRenderablePng } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
+import { writeDeckReceipt } from "./deck-receipt.js";
 import type { MarketingPlan } from "../contracts/marketing-plan.js";
 import type { ArticlePackage, SocialVariantPack } from "../contracts/mma-files.js";
 import { parseSafeHttpsUrl } from "../security/url.js";
@@ -67,6 +68,10 @@ export async function composeMmaFilesSocialQueue(input: {
   const baseUrl = parseSafeHttpsUrl(input.destinationBaseUrl);
   const date = input.article.publishAt.slice(0, 10);
   const evidenceRefs = input.article.sources.map((source) => source.kind === "internal" ? source.ref : source.url);
+  // Same hero slot the DNESKAi deck fills, from the article's own rehosted photo. A cover with
+  // the article's picture behind its headline is the design these templates were drawn for, and
+  // production has been rendering type on a flat panel because it passed no images at all.
+  const heroBytes = await toRenderablePng(Buffer.from(input.article.image.hero_bytes_base64, "base64"));
   const paths: string[] = [];
   // Czech only: a queue item outlives the route it names, so none is built for a locale the
   // desk no longer publishes.
@@ -81,7 +86,13 @@ export async function composeMmaFilesSocialQueue(input: {
       // that 404s once the route goes, and a queue item cannot be edited after it publishes.
       if (!reference || !caption) continue;
       const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
-      const renders = await renderCarouselPng({ template: resolveLiveCarouselTemplate(reference.template_id, reference.version), payload: reference.content, brand: CAROUSEL_BRANDS["mma-files"], format });
+      const renders = await renderCarouselPng({
+        template: resolveLiveCarouselTemplate(reference.template_id, reference.version),
+        payload: reference.content,
+        brand: CAROUSEL_BRANDS["mma-files"],
+        format,
+        ...(heroBytes ? { images: { [ARTICLE_HERO_SLOT]: heroBytes } } : {})
+      });
       const assetPaths: string[] = [];
       for (const render of renders) {
         const assetPath = `/social/mma-files/${date}/${input.article.slug}-${variant}-${locale}-${channel}-${String(render.index + 1).padStart(2, "0")}.png`;
@@ -110,6 +121,20 @@ export async function composeMmaFilesSocialQueue(input: {
       const queuePath = `social/queue/${id}.json`;
       await atomicWriteJson(input.stateRoot, queuePath, item);
       paths.push(queuePath);
+      // One receipt per article, not per channel: both channels render the same deck at two
+      // canvas sizes, and the engine measure counts articles that produced a deck.
+      if (channel === "instagram") {
+        paths.push(await writeDeckReceipt({
+          root: input.stateRoot,
+          venture: "mma-files",
+          date,
+          slug: input.article.slug,
+          templateId: reference.template_id,
+          style: reference.template_id.split("-")[1] ?? "unknown",
+          slideCount: renders.length,
+          hashes: renders.map((render) => render.pngHash)
+        }));
+      }
     }
   }
   return paths;

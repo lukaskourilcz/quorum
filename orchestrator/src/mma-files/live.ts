@@ -22,6 +22,11 @@ import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
 const LocalizationSchema = z.object({
   title: z.string().trim().min(1).max(160),
   dek: z.string().trim().min(1).max(320),
+  // The carousel cover is the first thing a reader meets and the article title is written for
+  // the page, not for a square. The desk writes the cover line itself, in the same call, so it
+  // passes the same style review as the rest of the article. Optional because every article
+  // written before this field existed still has to load.
+  altHeadline: z.string().trim().min(1).max(90).optional(),
   bodyMDX: z.string().trim().min(1).max(40_000),
   imageAlt: z.string().trim().min(1).max(300),
   imageCandidateIndex: z.number().int().min(0).max(3).optional()
@@ -311,7 +316,8 @@ export const MMA_FILES_WRITE_SYSTEM = [
   "Do not add odds, probabilities, hype or facts.",
   "If licensed image candidates exist, choose the most accurate fit by numeric imageCandidateIndex.",
   "For imageAlt, describe only what a candidate's own caption states. You are shown captions, never pictures, so do not write a pose, a stance, a setting or an action that no caption gives you. If no candidate is supplied, say what the article is about instead of describing an image.",
-  "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\",\"imageCandidateIndex\":0}."
+  "For altHeadline write one short Czech line for the carousel cover: at most nine words, drawn from what the packet states, no invented claim, no question mark bait, no promise the article does not keep.",
+  "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"altHeadline\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\",\"imageCandidateIndex\":0}."
 ].join(" ");
 
 class GuardedMmaFilesGateway implements MmaFilesEditorialGateway {
