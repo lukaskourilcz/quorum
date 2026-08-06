@@ -36,6 +36,7 @@ import {
   type CalendarStatus,
   type PublicCalendarFeed
 } from "@/lib/calendar-feed-model";
+import { publicKindLabel } from "@/lib/slot-labels";
 
 const weekdayFormatter = new Intl.DateTimeFormat("en", {
   weekday: "short",
@@ -219,27 +220,6 @@ function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string
 
 function isIncubator(kind: CalendarKind) {
   return kind === "incubator-scan" || kind === "incubator-synthesis";
-}
-
-function publicKindLabel(kind: CalendarKind): string {
-  const labels: Record<CalendarKind, string> = {
-    "cu-edition": "DNESKAi edition production",
-    "venture-morning": "Morning company meeting",
-    "incubator-scan": "Magazine idea research",
-    "tt-marketing": "Titty Tuesdays marketing meeting",
-    "venture-afternoon": "Afternoon company meeting",
-    "cu-product": "DNESKAi product meeting",
-    "incubator-synthesis": "Magazine idea review",
-    "venture-night": "Night company meeting",
-    "mma-intake": "Fight data check",
-    "mma-analysis": "Fight analysis review",
-    "mag-editorial": "MMA Files story meeting",
-    "mag-desk": "MMA Files desk review",
-    "article-am": "Morning MMA Files article",
-    "article-pm": "Evening MMA Files article",
-    "studio": "Carousel Studio template review"
-  };
-  return labels[kind];
 }
 
 function definitionTone(kind: CalendarKind): string {

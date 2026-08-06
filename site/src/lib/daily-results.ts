@@ -1,5 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { publicAgentText } from "@/components/agent-language";
+import { publicKindLabel } from "@/lib/slot-labels";
 
 /**
  * The daily results ledger, read from the digest receipts the night cycle already writes.
@@ -112,21 +114,23 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
     const venture = text(operation.ventureId);
     const detail = text(operation.text).trim();
     if (!venture || !detail || failureByVenture.has(venture)) continue;
-    failureByVenture.set(venture, detail);
+    failureByVenture.set(venture, publicAgentText(detail));
   }
 
   const meetings = Array.isArray(digest.meetings) ? (digest.meetings as DigestMeeting[]) : [];
   const rows: DailyResultRow[] = meetings.map((meeting) => {
     const ventureId = text(meeting.ventureId, "global");
     const bullets = Array.isArray(meeting.bullets) ? (meeting.bullets as DigestBullet[]) : [];
-    const output = bullets.map((bullet) => text(bullet.text).trim()).filter(Boolean).join(" · ") || "No summary recorded.";
+    // The digest writes these bullets for an operator and they reached the public results
+    // table verbatim, machine slugs and idea references included.
+    const output = bullets.map((bullet) => publicAgentText(text(bullet.text).trim())).filter(Boolean).join(" · ") || "No summary recorded.";
     const roomLink = bullets.map((bullet) => text(bullet.roomLink)).find((link) => link.startsWith("/")) ?? null;
     const held = meeting.held === true;
     const failureReason = failureByVenture.get(ventureId) ?? null;
     return {
       ventureId,
       ventureLabel: ventureLabel(ventureId),
-      kind: text(meeting.kind, "unknown"),
+      kind: publicKindLabel(text(meeting.kind, "unknown")),
       output,
       roomLink,
       status: rowStatus(held, output, failureReason),

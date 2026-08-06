@@ -1,4 +1,6 @@
 import "server-only";
+import { publicAgentText, publicDecisionLabel } from "@/components/agent-language";
+import { publicKindLabel } from "@/lib/slot-labels";
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
 import { getPublicStandups } from "@/lib/standup-records";
 
@@ -9,26 +11,20 @@ export async function getPublicDecisions() {
       id: `standup:${record.id}`,
       href: `/standups/${record.id}`,
       at: record.generatedAt ?? `${record.date}T05:30:00.000Z`,
-      kind: `Venture ${record.phase}`,
-      outcome: record.decision.outcome,
-      summary: record.decision.summary,
+      kind: publicKindLabel(record.phase),
+      outcome: publicDecisionLabel(record.decision.outcome),
+      summary: publicAgentText(record.decision.summary),
       costUsd: record.ledger.actual
     })),
     ...meetings.filter((record) => !record.fixture).map((record) => ({
       id: `meeting:${record.id}`,
       href: `/meetings/${record.id}`,
       at: record.generatedAt,
-      kind: record.kind === "cu-edition"
-        ? "DNESKAi edition"
-        : record.kind === "cu-product"
-          ? "DNESKAi product"
-          : record.kind === "tt-marketing"
-            ? "Titty Tuesdays marketing"
-            : record.kind === "incubator-scan"
-              ? "Incubator scan"
-              : "Incubator synthesis",
-      outcome: record.decision.outcome,
-      summary: record.decision.summary,
+      // Five of the nine meeting kinds fell off the end of this chain and were published to
+      // the feed as "Incubator synthesis" — including every MMA Files and FightAIQ meeting.
+      kind: publicKindLabel(record.kind),
+      outcome: publicDecisionLabel(record.decision.outcome),
+      summary: publicAgentText(record.decision.summary),
       costUsd: record.ledger.actual
     }))
   ].sort((left, right) => Date.parse(right.at) - Date.parse(left.at));
