@@ -4,6 +4,7 @@ import type { PriorityItem } from "../src/contracts/autonomy.js";
 import {
   councilVoteGate,
   resolveMorningCommission,
+  resolveMorningCommissions,
   resolvePriorityProposal,
   schedulerBlockedReason
 } from "../src/cycle.js";
@@ -43,6 +44,7 @@ function positions(overrides: {
   audit?: "approve" | "hold";
   pulse?: "approve" | "hold";
   request?: RecordedPosition["meetingRequest"];
+  requests?: Partial<Record<RecordedPosition["agent"], RecordedPosition["meetingRequest"]>>;
   proposals?: Partial<Record<RecordedPosition["agent"], RecordedPosition["priorityProposal"]>>;
 } = {}): RecordedPosition[] {
   return (["VIZE", "FORGE", "PULSE", "AUDIT"] as const).map((agent, index) => ({
@@ -54,7 +56,9 @@ function positions(overrides: {
         ? overrides.pulse ?? "approve"
         : "approve",
     risk: "Keep the work inside the internal operating queue.",
-    meetingRequest: agent === "VIZE" ? overrides.request ?? null : null,
+    meetingRequest: overrides.requests
+      ? overrides.requests[agent] ?? null
+      : agent === "VIZE" ? overrides.request ?? null : null,
     priorityProposal: overrides.proposals?.[agent] ?? null,
     sentAt: new Date(Date.parse("2026-08-03T04:00:00.000Z") + index * 1_000).toISOString()
   }));
@@ -491,5 +495,100 @@ describe("proposing a new priority question", () => {
       expect(commission.commission).toBe(gate.passed);
       expect(proposal.kind).toBe(gate.passed ? "take" : "refuse");
     }
+  });
+});
+
+describe("how many rooms one morning opens", () => {
+  const base = { policy, registry, sourcePhase: "morning" as const };
+  const ttItem = priority();
+  const mmaItem = priority({ id: "priority-fedcba9876543210", venture: "mma-files" });
+  const incubatorItem = priority({ id: "priority-aaaabbbbccccdddd", venture: "incubator" });
+  const ttRequest = validRequest;
+  const mmaRequest = {
+    priorityItemId: mmaItem.id,
+    phase: "mag-desk" as const,
+    summary: "Decide whether tomorrow's article covers the main card or the prelims.",
+    evidenceRefs: []
+  };
+  const incubatorRequest = {
+    priorityItemId: incubatorItem.id,
+    phase: "incubator-scan" as const,
+    summary: "Decide whether the niche shortlist is worth a research room.",
+    evidenceRefs: []
+  };
+
+  // Four rooms need a bounded agenda every day; the morning could supply one. Thirteen of the
+  // forty-four August meeting records are $0 pauses reading "no bounded agenda was due" — rooms
+  // that were never given anything to meet about rather than rooms that declined to meet.
+  it("commissions one room per project when several seats ask", () => {
+    const resolved = resolveMorningCommissions({
+      ...base,
+      openPriorities: [ttItem, mmaItem],
+      positions: positions({ requests: { VIZE: ttRequest, FORGE: mmaRequest } })
+    });
+
+    expect(resolved.commissions.map((entry) => entry.target.ventureId)).toEqual([
+      "titty-tuesdays",
+      "mma-files"
+    ]);
+    expect(resolved.commissions.map((entry) => entry.requestedBy)).toEqual(["VIZE", "FORGE"]);
+  });
+
+  it("drops a second request for a project another seat already took", () => {
+    const resolved = resolveMorningCommissions({
+      ...base,
+      openPriorities: [ttItem, priority({ id: "priority-1111222233334444" })],
+      positions: positions({
+        requests: {
+          VIZE: ttRequest,
+          FORGE: { ...ttRequest, priorityItemId: "priority-1111222233334444" }
+        }
+      })
+    });
+
+    expect(resolved.commissions).toHaveLength(1);
+    expect(resolved.commissions[0]?.requestedBy).toBe("VIZE");
+  });
+
+  it("never opens more rooms than the policy allows", () => {
+    const resolved = resolveMorningCommissions({
+      ...base,
+      openPriorities: [ttItem, mmaItem, incubatorItem],
+      positions: positions({
+        requests: { VIZE: ttRequest, FORGE: mmaRequest, PULSE: incubatorRequest }
+      })
+    });
+
+    expect(policy.maxRequestsPerMeeting).toBe(2);
+    expect(resolved.commissions).toHaveLength(policy.maxRequestsPerMeeting);
+  });
+
+  it("commissions nothing and says why when the vote gate is not reached", () => {
+    const resolved = resolveMorningCommissions({
+      ...base,
+      openPriorities: [ttItem, mmaItem],
+      positions: positions({ audit: "hold", requests: { VIZE: ttRequest, FORGE: mmaRequest } })
+    });
+
+    expect(resolved.commissions).toEqual([]);
+    expect(resolved.blockedReason).toContain("AUDIT did not approve");
+  });
+
+  it("names a reason a venture can be told even when no seat asked for anything", () => {
+    const resolved = resolveMorningCommissions({
+      ...base,
+      openPriorities: [ttItem],
+      positions: positions()
+    });
+
+    expect(resolved.commissions).toEqual([]);
+    expect(resolved.blockedReason).toContain("no seat requested a room");
+  });
+
+  it("tells the seats one room per project is available", () => {
+    const prompt = roleSystem("VIZE", rooms, policy.maxRequestsPerMeeting);
+
+    expect(prompt).toContain("at most 2 rooms");
+    expect(prompt).toContain("at most one per project");
   });
 });

@@ -235,11 +235,17 @@ export function resolveMorningCommission(input: {
   policy: MeetingPolicy;
   registry: VentureRegistry;
   sourcePhase: string;
+  /**
+   * Which requesting seat to resolve. Defaults to the first non-AUDIT seat carrying a request,
+   * which is what a single-commission morning meant and what every existing caller expects.
+   */
+  requestIndex?: number;
 }): MorningCommission {
   const gate = councilVoteGate(input.positions);
-  const requester = input.positions.find((position) =>
+  const requesters = input.positions.filter((position) =>
     position.agent !== "AUDIT" && position.meetingRequest !== null
   );
+  const requester = requesters[input.requestIndex ?? 0];
   const request = requester?.meetingRequest ?? null;
   if (!gate.passed || !request || !requester) {
     return {
@@ -266,6 +272,54 @@ export function resolveMorningCommission(input: {
     };
   }
   return { commission: true, requestedBy: requester.agent, request, target, priority };
+}
+
+/**
+ * Every room this morning commissions, at most one per venture.
+ *
+ * The morning used to take the first seat's request and stop, so the board could open one room a
+ * day across the whole portfolio while four rooms needed an agenda every day to open at all.
+ * Thirteen of August's forty-four meeting records are $0 pauses reading "no bounded agenda was
+ * due": the rooms were not declining to meet, they were never given anything to meet about. The
+ * gate is unchanged and still applies to the meeting rather than to each request — a board that
+ * cannot reach AUDIT plus three approvals commissions nothing at all — and the queue's own
+ * pending caps still have the last word on each write.
+ *
+ * One per venture, because two rooms for the same venture on the same morning is the same job
+ * commissioned twice, and because the per-venture cap in the agenda queue is the thing that would
+ * otherwise absorb it silently. `maxRequestsPerMeeting` bounds the total.
+ */
+export function resolveMorningCommissions(input: {
+  positions: readonly RecordedPosition[];
+  openPriorities: readonly PriorityItem[];
+  policy: MeetingPolicy;
+  registry: VentureRegistry;
+  sourcePhase: string;
+}): { commissions: Extract<MorningCommission, { commission: true }>[]; blockedReason: string } {
+  const requesterCount = input.positions.filter((position) =>
+    position.agent !== "AUDIT" && position.meetingRequest !== null
+  ).length;
+  const commissions: Extract<MorningCommission, { commission: true }>[] = [];
+  const ventures = new Set<string>();
+  // The reason published when nothing was commissioned is the first refusal, which on a morning
+  // where no seat asked at all is the same sentence the single-commission gate wrote. Later seats
+  // only ever add rooms, so a morning that commissioned something never publishes one of these.
+  let blockedReason = "";
+  for (let index = 0; index < Math.max(requesterCount, 1); index += 1) {
+    if (commissions.length >= input.policy.maxRequestsPerMeeting) break;
+    const outcome = resolveMorningCommission({ ...input, requestIndex: index });
+    if (!outcome.commission) {
+      if (!blockedReason) blockedReason = outcome.reason;
+      continue;
+    }
+    if (ventures.has(outcome.target.ventureId)) continue;
+    ventures.add(outcome.target.ventureId);
+    commissions.push(outcome);
+  }
+  return {
+    commissions,
+    blockedReason: blockedReason || "Every room this board asked for was commissioned."
+  };
 }
 
 export type PriorityProposalDecision =
@@ -1496,10 +1550,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const meetingAgendaIds: string[] = [];
     let meetingAgendaStateChanged = false;
     let priorityStateChanged = false;
-    let selectedPriorityId: string | null = null;
-    let selectedPriorityVenture: string | null = null;
+    // Which priority item each venture had commissioned this morning, at most one per venture.
+    const selectedPriorityByVenture = new Map<string, string>();
     // Why no room was commissioned, in words, so the standup can say it instead of a console line
-    // nobody reads. Both blocks below overwrite it — resolveMorningCommission for every way the
+    // nobody reads. Both blocks below overwrite it — resolveMorningCommissions for every way the
     // gate itself declines, schedulerBlockedReason for a commission the agenda queue refuses — so
     // this default is only ever published by a morning that called no live council, which means a
     // dry run.
@@ -1513,17 +1567,18 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         loadMeetingPolicy(),
         loadVentureRegistry()
       ]);
-      const commission = resolveMorningCommission({
+      const resolved = resolveMorningCommissions({
         positions: measuredCouncil.positions,
         openPriorities: morningContext?.openPriorities ?? [],
         policy: meetingPolicy,
         registry: ventureRegistry,
         sourcePhase: venturePhase
       });
-      if (!commission.commission) {
-        commissionBlockedReason = commission.reason;
+      if (resolved.commissions.length === 0) {
+        commissionBlockedReason = resolved.blockedReason;
         console.warn(commissionBlockedReason);
-      } else {
+      }
+      for (const commission of resolved.commissions) {
         const { request, target, priority } = commission;
         const local = pragueClockParts(now);
         // Only the agenda write is guarded here, and only because the agenda queue declining a
@@ -1553,7 +1608,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             now
           });
           meetingAgendaIds.push(scheduled.agenda.id);
-          meetingAgendaStateChanged = scheduled.created;
+          meetingAgendaStateChanged = meetingAgendaStateChanged || scheduled.created;
           scheduledAgendaId = scheduled.agenda.id;
         } catch (error) {
           commissionBlockedReason = schedulerBlockedReason(request.phase, error);
@@ -1566,8 +1621,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             meetingRef: `standups/${local.date}-morning`,
             now
           });
-          selectedPriorityId = priority.id;
-          selectedPriorityVenture = priority.venture;
+          selectedPriorityByVenture.set(priority.venture, priority.id);
           priorityStateChanged = true;
         }
       }
@@ -1639,8 +1693,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           reason: priorityProposalRecord.reason
         }));
       }
+      const selectedPriorityIds = new Set(selectedPriorityByVenture.values());
       for (const item of morningContext?.openPriorities ?? []) {
-        if (item.id === selectedPriorityId) continue;
+        if (selectedPriorityIds.has(item.id)) continue;
         await skipPriorityItem({
           root: artifactRoot,
           itemId: item.id,
@@ -1648,9 +1703,11 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           // nothing, every item was told its turn went elsewhere — the same false framing the
           // starvation review carried until this morning. commissionBlockedReason is the sentence
           // that says what actually stopped the board.
-          reason: selectedPriorityId === null
+          reason: selectedPriorityIds.size === 0
             ? commissionBlockedReason
-            : "The 06:00 board did not select this item for today's single specialist commission.",
+            : selectedPriorityByVenture.has(item.venture)
+              ? "The 06:00 board commissioned this project's other open question today."
+              : "The 06:00 board did not commission a room for this project today.",
           now
         });
         priorityStateChanged = true;
@@ -1692,19 +1749,19 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           ...standup,
           starvationReview: morningContext.starvation.map((entry) => ({
             ventureId: entry.ventureId,
-            outcome: selectedPriorityVenture === entry.ventureId ? "commissioned" as const : "why-not" as const,
-            reason: selectedPriorityVenture === entry.ventureId
-              ? "The meeting used its one extra meeting on this project's open job."
+            outcome: selectedPriorityByVenture.has(entry.ventureId) ? "commissioned" as const : "why-not" as const,
+            reason: selectedPriorityByVenture.has(entry.ventureId)
+              ? "The board opened a meeting on this project's open job."
               // Only true when a commission actually happened. On 3 August the board commissioned
               // nothing and every venture was still told its turn had gone to a higher priority —
               // wording that reads as accountability while recording the opposite of what
               // occurred. When no room was commissioned, the reason is why the board could not.
-              : selectedPriorityVenture === null
+              : selectedPriorityByVenture.size === 0
                 ? commissionBlockedReason
                 : morningContext.openPriorities.some((item) => item.venture === entry.ventureId)
-                  ? "This project had open jobs, but the one extra meeting the morning can call went to a more urgent one."
+                  ? "This project had open jobs, but the morning's meetings went to more urgent ones."
                   : "Nothing open on this project needed a decision that a meeting could settle.",
-            priorityItemId: selectedPriorityVenture === entry.ventureId ? selectedPriorityId : null
+            priorityItemId: selectedPriorityByVenture.get(entry.ventureId) ?? null
           }))
         })
       : standup;

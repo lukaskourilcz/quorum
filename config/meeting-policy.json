@@ -22,6 +22,6 @@
   },
   "maxPending": 24,
   "perVenturePendingCap": 8,
-  "maxRequestsPerMeeting": 1,
+  "maxRequestsPerMeeting": 2,
   "ttlDays": 3
 }

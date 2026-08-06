@@ -28,7 +28,12 @@ const MeetingPolicySchema = z.object({
   ),
   maxPending: z.number().int().min(1).max(100),
   perVenturePendingCap: z.number().int().min(1).max(24),
-  maxRequestsPerMeeting: z.literal(1),
+  // One request per meeting was a literal until the supply problem it caused became visible:
+  // four rooms need a bounded agenda every day and the whole system could commission one. The
+  // range is small on purpose — a morning that opens every room it can think of is the failure
+  // this number exists to prevent — and the per-venture rule in resolveMorningCommissions is what
+  // stops two of them landing on the same project.
+  maxRequestsPerMeeting: z.number().int().min(1).max(4),
   ttlDays: z.number().int().min(1).max(14)
 }).superRefine((policy, context) => {
   const overlap = policy.agendaRequiredPhases.filter((phase) =>

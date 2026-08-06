@@ -446,6 +446,8 @@ describe("commissioning a question the board declined on an earlier morning", ()
         agent,
         publicSummary: `${agent} recorded a bounded public position.`,
         recommendation: "approve" as const,
+        risk: `${agent} named one bounded risk.`,
+        sentAt: tuesday.toISOString(),
         meetingRequest: agent === "VIZE"
           ? {
               phase: "tt-marketing" as const,

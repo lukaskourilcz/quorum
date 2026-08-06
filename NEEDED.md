@@ -68,16 +68,17 @@ council. Two separate causes, both now fixed:
 
 - The priority queue fills itself; you do not add items by hand. Every live 06:00 board gives
   each agenda venture one open item written from that venture's own `growth_objective` in
-  `config/ventures.json`, expiring after a week. A venture that already has an open item is
-  skipped, so a re-run adds nothing. `/admin` can still add one, but nothing waits for it.
-- What actually rations the six agenda-gated phases (`agendaRequiredPhases` in
-  `config/meeting-policy.json`) is narrower: the 06:00 board may request one room per meeting
-  (`maxRequestsPerMeeting: 1`), so every item it does not select is recorded `why-not` with
-  the reason. On 3 August it selected none: all five seeded items read "The 06:00 board did
-  not select this item for today's single specialist commission." A room that does open can
-  request a follow-up agenda for a different phase — that is how the 2 August editorial room
-  queued the 3 August intake. A phase with no due agenda records `PAUSED` at $0, which is the
-  gate working: `state/meetings/2026-08-03-tt-marketing.json` is exactly that, `PAUSED` at
+  `config/ventures.json`, expiring after a week. A venture that already holds a live item —
+  open, selected, or declined and still selectable — is skipped, so a re-run adds nothing.
+  `/admin` can still add one, but nothing waits for it.
+- What rations the agenda-gated phases (`agendaRequiredPhases` in
+  `config/meeting-policy.json`) is `maxRequestsPerMeeting` in that file: the 06:00 board may
+  commission two rooms, at most one per project. An item it does not select is recorded
+  `why-not` with the reason, and a `why-not` item goes back on the next morning's list — the
+  board can pick up a question it declined earlier. A room that does open can request a
+  follow-up agenda for a different phase; that is how the 2 August editorial room queued the
+  3 August intake. A phase with no due agenda records `PAUSED` at $0, which is the gate
+  working: `state/meetings/2026-08-03-tt-marketing.json` is exactly that, `PAUSED` at
   `actualCycleUsd: 0`.
 - The opportunity gate reads `state/OPPORTUNITIES.json` and no task type may write it. That
   narrow write scope is a guard; seed the file by hand rather than widening the allowlist. The
