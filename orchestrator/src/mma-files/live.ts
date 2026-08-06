@@ -692,7 +692,15 @@ export async function articleImageCandidates(
       .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
     if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
   }
-  return candidatesNaming(search.candidates, query);
+  const named = candidatesNaming(search.candidates, query);
+  if (named.length > 0) return named;
+  // The licensed search found nothing an event name vouches for, so the article fell straight to
+  // the drawn plate while the curated sport photographs sat unused. They are a scene, not a
+  // person, so the risk that made name search unusable for people does not arise here: nothing
+  // about the subject is sent anywhere, the seed only picks which curated file is tried first,
+  // and the alt claims nothing about who is in the frame.
+  const illustrative = await illustrativeSportPhoto({ seed: refs.join("|") }).catch(() => null);
+  return illustrative ? [illustrative] : [];
 }
 
 async function refreshArticleIndex(context: { cycleId: string; date: string; slot: "am" | "pm" }): Promise<string | null> {

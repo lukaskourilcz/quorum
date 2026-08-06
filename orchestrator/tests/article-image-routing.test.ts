@@ -141,9 +141,12 @@ describe("choosing how to find a picture for an article", () => {
     const candidates = await articleImageCandidates(root, ["ufc:event:ufc-330-makhachev-vs-machado-garry"]);
     expect(identityCalls).toEqual([]);
     expect(searchCalls).toEqual(["ufc 330 makhachev vs machado garry"]);
-    // The recorded candidate does not name the event, so `candidatesNaming` drops it and the
-    // article falls back to the FRAME cover.
-    expect(candidates).toEqual([]);
+    // The recorded candidate does not name the event, so `candidatesNaming` drops it -- and the
+    // article now takes the curated illustrative rung rather than falling straight to the plate.
+    // A scene photograph carries no claim about anyone, so nothing about the subject travels:
+    // the seed only decides which curated file is tried first.
+    expect(illustrativeSeeds).toEqual(["ufc:event:ufc-330-makhachev-vs-machado-garry"]);
+    expect(candidates.map((candidate) => candidate.illustrative)).toEqual([true]);
   });
 
   it("searches nothing at all for a killed slot's placeholder ref", async () => {

@@ -154,7 +154,8 @@ describe("where an illustrative photograph comes from", () => {
       }
     });
     expect(calls).toBe(2);
-    expect(photo?.title).toBe(ILLUSTRATIVE_SPORT_PHOTOGRAPHS[1]!.file);
+    // The second entry of this seed's rotation, whatever the set's length happens to be.
+    expect(photo?.title).toBe(illustrativeRotation("oktagon:gustavo-lopez")[1]!.file);
   });
 
   it("gives one article the same photograph every time and neighbours different ones", async () => {

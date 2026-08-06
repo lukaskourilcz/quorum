@@ -26,10 +26,16 @@ import { heroReady, wikimediaLicense, type LicensedPhotoCandidate } from "./lice
  * named "MMA-NYC". Ranking is not stable either, so the same article would get a different
  * photograph on a re-run and no reviewer could say what any article was about to show.
  *
- * The six files below were each looked at, at 640px, before being written down. They are the whole
- * of what may run, so the worst case is knowable: a reader can be shown one of six photographs
- * and a reviewer can check all six in a minute. The rotation is seeded by the article slug, so one
- * article always gets the same photograph and neighbouring articles get different ones.
+ * The files below were each looked at, at 640px, before being written down. They are the whole of
+ * what may run, so the worst case is knowable: a reader can be shown one of a handful of
+ * photographs and a reviewer can check every one of them in a minute. The rotation is seeded by
+ * the article slug, so one article always gets the same photograph and neighbouring articles get
+ * different ones.
+ *
+ * Widened from six to nine on 2026-08-06 under the same review rule, because the event-subject
+ * path now falls here too: a weigh-in stage, gloves on the canvas and an arena exterior, none of
+ * them carrying a recognisable face. A file whose licence has changed simply resolves to nothing
+ * and the rotation moves on, so a bad entry costs a photograph rather than a wrong claim.
  *
  * ## What the six have in common
  *
@@ -72,7 +78,13 @@ export const ILLUSTRATIVE_SPORT_PHOTOGRAPHS: readonly IllustrativeSportPhoto[] =
   // Cage lit through haze in an empty arena bowl before the doors open.
   { file: "MMA Challengers 9.JPG", sceneCs: "nasvícená klec v hale před zápasem" },
   // Cage at floor level ringed by spectators, seen from the upper tier.
-  { file: "MMA event at Mellon Arena, July 7, 2009.jpg", sceneCs: "klec uprostřed haly a publikum kolem ní" }
+  { file: "MMA event at Mellon Arena, July 7, 2009.jpg", sceneCs: "klec uprostřed haly a publikum kolem ní" },
+  // Weigh-in stage: banner wall, scale, officials at the side. Faces distant and unlit.
+  { file: "UFC Fight Night Belfast weigh-ins (29923390484).jpg", sceneCs: "pódium s váhou před oficiálním vážením" },
+  // Open gloves on the canvas beside the cage wall, no person in the frame at all.
+  { file: "MMA gloves (Unsplash).jpg", sceneCs: "zápasnické rukavice položené na plátně u stěny klece" },
+  // Arena exterior at dusk before doors, signage lit, street-level crowd too distant to read.
+  { file: "O2 arena Praha 2019.jpg", sceneCs: "budova haly zvenčí před začátkem galavečera" }
 ];
 
 /**

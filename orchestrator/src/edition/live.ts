@@ -23,6 +23,7 @@ import type { SourceRegistry } from "../sources/types.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
 import { discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { illustrativeScenePhoto } from "../images/illustrative-scenes.js";
 import { imageSubjectQuery } from "../images/subject-query.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 
@@ -277,13 +278,23 @@ export async function runLiveEdition(input: {
   } else {
     let imageCandidates: LicensedPhotoCandidate[] = [];
     if (input.licensedImageSearchEnabled) {
-      const imageSearch = await discoverLicensedPhotos({
-        // The subject the day is about, not its headlines. See imageSubjectQuery.
-        query: imageSubjectQuery(digest.slice(0, 12).map((item) => item.tags)),
-        pexelsKey: process.env.PEXELS_API_KEY,
-        pixabayKey: process.env.PIXABAY_API_KEY
-      });
-      imageCandidates = imageSearch.candidates;
+      // The subject the day is about, not its headlines. See imageSubjectQuery.
+      const subjectQuery = imageSubjectQuery(digest.slice(0, 12).map((item) => item.tags));
+      // Rung one: a hand-reviewed scene photograph for the day's concept, resolved by file name.
+      // The MMA desk has run this design since launch and it is why its covers are predictable;
+      // this edition's photograph used to depend entirely on what a live search happened to rank
+      // first that morning, in an order nobody had looked at and which moves between runs.
+      const scene = await illustrativeScenePhoto({ subjectQuery, seed: input.date }).catch(() => null);
+      if (scene) imageCandidates = [scene];
+      // Rung two: the live search, exactly as before. Rung three is the FRAME plate.
+      const imageSearch = scene
+        ? { candidates: [], skippedProviders: [] }
+        : await discoverLicensedPhotos({
+            query: subjectQuery,
+            pexelsKey: process.env.PEXELS_API_KEY,
+            pixabayKey: process.env.PIXABAY_API_KEY
+          });
+      if (!scene) imageCandidates = imageSearch.candidates;
       if (imageSearch.skippedProviders.length > 0) {
         const relative = "NEEDS_YOUR_HELP_NOW.md";
         const current = await readText(repoRoot, relative, "# Needs your help now\n");

@@ -11,7 +11,7 @@
  * sourced, not what it looks like, so they never become a search; a tag with no visual
  * meaning contributes nothing rather than guessing.
  */
-const VISUAL_SUBJECT: Record<string, string> = {
+export const VISUAL_SUBJECT: Record<string, string> = {
   ai: "artificial intelligence",
   ml: "machine learning",
   robotics: "robotics",
@@ -43,7 +43,76 @@ const VISUAL_SUBJECT: Record<string, string> = {
   tech: "computer circuit board",
   oss: "open source code",
   code: "source code",
-  releases: "software release"
+  releases: "software release",
+
+  // The tags the desks actually emit, added on 2026-08-06 after a week of live editions. Most of
+  // the table above was written before any article existed and matched almost nothing the writer
+  // produced: on 2026-08-05 four of six tags mapped to nothing at all.
+  agents: "data centre",
+  models: "data centre",
+  llm: "data centre",
+  compute: "data centre",
+  startups: "technology company office",
+  funding: "technology company office",
+  business: "technology company office",
+  enterprise: "technology company office",
+  openai: "technology company office",
+  anthropic: "technology company office",
+  google: "technology company office",
+  microsoft: "technology company office",
+  meta: "technology company office",
+  nvidia: "semiconductor",
+  amd: "semiconductor",
+  apple: "technology company office",
+  space: "rocket launch",
+  spacex: "rocket launch",
+  satellites: "rocket launch",
+  telecoms: "mobile phone mast",
+  robots: "robotics",
+  autonomy: "self-driving car",
+  transport: "self-driving car",
+  education: "classroom",
+  labour: "office workers",
+  jobs: "office workers",
+  copyright: "courtroom",
+  elections: "polling station",
+  defence: "military exercise",
+  military: "military exercise",
+
+  // Czech slugs. WRITE_SYSTEM requires Czech ASCII tags, so the English keys above only ever
+  // match the pre-2026-08-06 archive; these are what a live edition emits.
+"umela-inteligence": "artificial intelligence",
+  "ai-agenti": "data centre",
+  "ai-modely": "data centre",
+  "ai-bezpecnost": "cybersecurity",
+  bezpecnost: "cybersecurity",
+  "kyberneticka-bezpecnost": "cybersecurity",
+  kyberbezpecnost: "cybersecurity",
+  soukromi: "surveillance camera",
+  regulace: "government building",
+  politika: "government building",
+  pravo: "courtroom",
+  soudy: "courtroom",
+  vyzkum: "research laboratory",
+  veda: "research laboratory",
+  cipy: "semiconductor",
+  polovodice: "semiconductor",
+datacentra: "data centre",
+  energie: "power station",
+  klima: "wind turbines",
+  zdravotnictvi: "hospital",
+investice: "stock exchange",
+  firmy: "technology company office",
+  startupy: "technology company office",
+  vesmir: "rocket launch",
+  telekomunikace: "mobile phone mast",
+  robotika: "robotics",
+  doprava: "self-driving car",
+  skolstvi: "classroom",
+  prace: "office workers",
+redakce: "newsroom",
+  "socialni-site": "social media",
+  reklama: "advertising billboard"
 };
 
 /**
