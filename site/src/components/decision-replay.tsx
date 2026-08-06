@@ -24,7 +24,8 @@ import {
   useState
 } from "react";
 import { AgentPortrait } from "@/components/agent-portrait";
-import { publicAgentText, publicAgentTitle, publicReferenceLabel } from "@/components/agent-language";
+import { publicAgentText, publicAgentTitle } from "@/components/agent-language";
+import { describeReference } from "@/lib/reference-label";
 import {
   buildReplayMomentUrl,
   buildReplayPlaylist,
@@ -1015,14 +1016,17 @@ export function DecisionReplay({
                                     className="text-[var(--ash)]"
                                     timing={resolveRoomTurnTiming(transcript, turnIndex)}
                                   />
-                                  {turn.evidenceRefs?.map((reference) => (
-                                    <span
-                                      className="rounded-full border border-[var(--slate)] px-2 py-0.5 text-[var(--ash)]"
-                                      key={reference}
-                                    >
-                                      {publicReferenceLabel(reference)}
-                                    </span>
-                                  ))}
+                                  {turn.evidenceRefs?.map((reference) => {
+                                    const described = describeReference(reference);
+                                    return described ? (
+                                      <span
+                                        className="rounded-full border border-[var(--slate)] px-2 py-0.5 text-[var(--ash)]"
+                                        key={reference}
+                                      >
+                                        {described.label}
+                                      </span>
+                                    ) : null;
+                                  })}
                                 </MessageMeta>
                               </MessageBubble>
                             </Message>

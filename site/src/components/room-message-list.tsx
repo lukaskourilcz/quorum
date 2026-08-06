@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
 import { AgentPortrait } from "@/components/agent-portrait";
-import { publicAgentText, publicAgentTitle, publicReferenceLabel } from "@/components/agent-language";
+import { publicAgentText, publicAgentTitle } from "@/components/agent-language";
+import { describeReference } from "@/lib/reference-label";
 import { RoomMessageTime } from "@/components/room-message-time";
 import { resolveRoomTurnTiming } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
@@ -83,11 +85,23 @@ export function RoomMessageList({
               <MessageContent>{publicAgentText(turn.text)}</MessageContent>
               <MessageMeta>
                 <RoomMessageTime timing={timing} />
-                {turn.evidenceRefs?.map((reference) => (
-                  <span className="rounded-full border border-[var(--slate)] px-2 py-0.5" key={reference}>
-                    {publicReferenceLabel(reference)}
-                  </span>
-                ))}
+                {turn.evidenceRefs?.map((reference) => {
+                  const described = describeReference(reference);
+                  if (!described) return null;
+                  return described.href ? (
+                    <Link
+                      className="rounded-full border border-[var(--slate)] px-2 py-0.5 underline-offset-2 hover:underline"
+                      href={described.href}
+                      key={reference}
+                    >
+                      {described.label}
+                    </Link>
+                  ) : (
+                    <span className="rounded-full border border-[var(--slate)] px-2 py-0.5" key={reference}>
+                      {described.label}
+                    </span>
+                  );
+                })}
               </MessageMeta>
             </MessageBubble>
           </Message>

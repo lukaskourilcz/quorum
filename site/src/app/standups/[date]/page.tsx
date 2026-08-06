@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/table";
 import { agentById } from "@/data/agents";
 import { getPublicStandup, getPublicStandups } from "@/lib/standup-records";
+import { describeReference } from "@/lib/reference-label";
 import { formatDate, formatUsd } from "@/lib/utils";
 
 export async function generateStaticParams() {
@@ -179,9 +180,11 @@ export default async function StandupDetailPage({
                       Source links
                     </p>
                     <p className="mt-2 text-sm">
-                      {proposal.evidenceRefs.length
-                        ? proposal.evidenceRefs.join(", ")
-                        : "No reliable sources"}
+                      {proposal.evidenceRefs
+                        .map(describeReference)
+                        .filter((described): described is NonNullable<typeof described> => Boolean(described))
+                        .map((described) => described.label)
+                        .join(", ") || "No reliable sources"}
                     </p>
                   </CardContent>
                 </Card>

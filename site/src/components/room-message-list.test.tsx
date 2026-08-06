@@ -60,7 +60,9 @@ describe("the saved meeting messages", () => {
     expect(html).not.toContain("VIZE opens");
   });
 
-  it("keeps each source link on its message", () => {
-    expect(html).toContain("budget-2026-08e");
+  it("keeps each source link on its message, in words", () => {
+    // The pill used to print the stored reference, `budget-2026-08e`.
+    expect(html).toContain("Budget decision, Aug 2026");
+    expect(html).not.toContain("budget-2026-08e");
   });
 });
