@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
-import { publicAgentText, publicDecisionLabel } from "@/components/agent-language";
+import { publicAgentText, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
-import { SignalBars } from "@/components/signal-bars";
 import { formatPhaseLabel } from "@/components/standup-countdown-model";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -16,12 +15,6 @@ export const metadata: Metadata = {
     "Three daily meetings with their purpose, participants, costs and results.",
   title: "Daily schedule"
 };
-
-const gates = [
-  ["01", "Idea needs a score of 35/50", "34 · TOO LOW"],
-  ["02", "Three reliable sources from different places", "0 · MISSING"],
-  ["03", "One person describing the problem or intent", "0 · MISSING"]
-] as const;
 
 export default async function StandupsPage() {
   const standups = await getPublicStandups();
@@ -99,9 +92,8 @@ export default async function StandupsPage() {
                   <h3 className="mt-3.5 text-[2.375rem] font-semibold leading-none tracking-[-0.055em]">
                     {standup.fixture ? "No project was selected" : publicDecisionLabel(standup.decision.outcome)}
                   </h3>
-                  <SignalBars className="mt-9 h-11" />
-                  <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                    Sample sources / 0 count as real proof
+                  <p className="mt-9 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
+                    {publicStageLabel(standup.stage)}
                   </p>
                 </div>
                 <div className="bg-[var(--surface)] p-7 md:col-span-8 md:p-10">
@@ -125,28 +117,6 @@ export default async function StandupsPage() {
                         <p className="mt-2.5 text-[1.375rem] font-semibold tracking-[-0.04em] tabular-nums">
                           {value}
                         </p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-8 grid gap-3.5 border-t border-[var(--border)] pt-6">
-                    {(standup.fixture
-                      ? gates
-                      : [
-                          ["01", "Project access", "INTERNAL ONLY"],
-                          ["02", "External action", "NOT APPROVED"],
-                          ["03", "Meeting record", "TIME SAVED"]
-                        ]).map(([number, label, state]) => (
-                      <div
-                        className="grid grid-cols-[1.5rem_1fr_auto] items-center gap-4 text-sm"
-                        key={number}
-                      >
-                        <span className="font-mono text-[0.6875rem] text-[var(--fog)]">
-                          {number}
-                        </span>
-                        <span className="text-[var(--ash)]">{label}</span>
-                        <span className="font-mono text-[0.6875rem] tracking-[0.08em] text-[var(--accent)]">
-                          {state}
-                        </span>
                       </div>
                     ))}
                   </div>

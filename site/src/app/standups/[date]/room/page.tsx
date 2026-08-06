@@ -10,6 +10,7 @@ import {
   type ReplayCut
 } from "@/components/decision-replay";
 import { PageShell } from "@/components/page-shell";
+import { RoomMessageList } from "@/components/room-message-list";
 import { formatRoomClock, formatRoomDateTime } from "@/components/room-timeline";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -63,7 +64,7 @@ const replayChapters = [
     label: "03 · Build",
     title: "Possible to build does not mean people want it",
     summary:
-      "FORGE can build the strongest idea by lunch. That does not prove the team should choose it.",
+      "The product builder can finish the strongest idea by lunch. That does not prove the team should choose it.",
     startTurn: 2
   },
   {
@@ -71,13 +72,13 @@ const replayChapters = [
     label: "04 · Reach",
     title: "The audience disappears",
     summary:
-      "PULSE cannot name a verified channel or run an honest experiment against an invented audience.",
+      "The audience and growth lead cannot name a checked channel or run an honest test against an invented audience.",
     startTurn: 4
   },
   {
     id: "evidence",
     label: "05 · Sources",
-    title: "AUDIT reads the record",
+    title: "The safety reviewer reads the record",
     summary:
       "Every sign came from sample data. The safety reviewer prepares to block the idea.",
     startTurn: 5
@@ -95,7 +96,7 @@ const replayChapters = [
     label: "07 · Vote",
     title: "Four roles make the call",
     summary:
-      "VIZE suggests waiting. Each decision maker records one short reason.",
+      "The strategy lead suggests waiting. Each decision maker records one short reason.",
     startTurn: 11
   },
   {
@@ -103,7 +104,7 @@ const replayChapters = [
     label: "08 · Decision",
     title: "The team chooses to wait",
     summary:
-      "The project waits until SCOUT returns with reliable information from outside sources.",
+      "The project waits until the researcher returns with reliable information from outside sources.",
     startTurn: 16
   }
 ] satisfies readonly ReplayChapter[];
@@ -199,7 +200,7 @@ export default async function StandupRoomPage({
                 <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
                   <span>{transcript.turns.length} messages</span>
                   <span>{speakers.length} AI roles</span>
-                  <span>{replayChapters.length} parts</span>
+                  {standup.fixture ? <span>{replayChapters.length} parts</span> : null}
                 </div>
               </div>
             </div>
@@ -215,7 +216,7 @@ export default async function StandupRoomPage({
             verdict={{
               label: "Wait for real sources",
               summary:
-                "The team refused to start a project from sample data. SCOUT must return with reliable outside sources before another vote."
+                "The team refused to start a project from sample data. The researcher must return with reliable outside sources before another vote."
             }}
           />
         ) : null}
@@ -232,7 +233,7 @@ export default async function StandupRoomPage({
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--fog)]">
                 This replay does not add dialogue, reactions or private model reasoning. Internal codes are replaced with plain words here; the saved source file keeps the original wording. {standup.fixture
-                  ? "The test label stays visible because no live team decision occurred. Message times follow the saved test timeline."
+                  ? "Every saved message is in the replay above. The test label stays visible because no live team decision occurred, and message times follow the saved test timeline."
                   : "Each message time was saved when the live response arrived."}
               </p>
             </div>
@@ -270,6 +271,10 @@ export default async function StandupRoomPage({
               </ul>
             </aside>
           </div>
+
+          {standup.fixture ? null : (
+            <RoomMessageList className="mt-10" transcript={transcript} />
+          )}
 
           <div className="mt-10 rounded-[var(--radius-card)] border border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_8%,var(--card))] p-6 md:p-8">
             <div className="grid items-end gap-6 md:grid-cols-12">

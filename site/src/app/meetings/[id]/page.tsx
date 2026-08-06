@@ -1,41 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Gavel, ShieldAlert } from "lucide-react";
+import { ArrowLeft, Gavel } from "lucide-react";
 import { AgentPortrait } from "@/components/agent-portrait";
-import { publicAgentText, publicAgentTitle, publicDecisionLabel, publicReferenceLabel } from "@/components/agent-language";
+import { publicAgentText, publicAgentTitle, publicDecisionLabel } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
-import { RoomMessageTime } from "@/components/room-message-time";
-import { formatRoomClock, formatRoomDateTime, resolveRoomTurnTiming } from "@/components/room-timeline";
+import { RoomMessageList } from "@/components/room-message-list";
+import { formatRoomClock, formatRoomDateTime } from "@/components/room-timeline";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Message,
-  MessageAvatar,
-  MessageBubble,
-  MessageContent,
-  MessageHeader,
-  MessageList,
-  MessageMeta,
-  MessageName,
-  MessageRole
-} from "@/components/ui/message";
 import { agentById } from "@/data/agents";
-import type { RoomTurnMode } from "@/data/fixtures";
 import { getPublicMeetingRecord, getPublicMeetingRecords } from "@/lib/meeting-records";
 import { formatDate, formatUsd } from "@/lib/utils";
-
-const modeLabel: Record<RoomTurnMode, string> = {
-  gavel: "opens the meeting",
-  statement: "sets a position",
-  response: "responds",
-  "reads-ledger": "checks the budget record",
-  "raises-concern": "tests the case",
-  veto: "records a veto",
-  vote: "casts a vote",
-  close: "closes the meeting"
-};
 
 const meetingCopy: Record<string, { name: string; title: string }> = {
   "cu-edition": { name: "Edition production", title: "Produce today's edition" },
@@ -124,24 +101,7 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
             </aside>
           </div>
 
-          <MessageList className="mt-10">
-            {transcript.turns.map((turn, index) => {
-              const speaker = agentById.get(turn.agent)!;
-              const listener = turn.addressedTo ? agentById.get(turn.addressedTo) : null;
-              const timing = resolveRoomTurnTiming(transcript, index);
-              return (
-                <Message key={`${turn.agent}-${index}`}>
-                  <MessageAvatar><AgentPortrait agent={speaker} className="size-11 rounded-full md:size-12" /><span className="font-mono text-[0.625rem] text-[var(--fog)]">#{String(index + 1).padStart(2, "0")}</span></MessageAvatar>
-                  <MessageBubble emphasis={turn.agent === "AUDIT" ? "control" : turn.mode === "veto" || turn.mode === "vote" ? "accent" : "default"}>
-                    <MessageHeader><MessageName>{publicAgentTitle(speaker)}</MessageName><MessageRole>· AI role</MessageRole>{turn.agent === "AUDIT" ? <ShieldAlert aria-label="Safety reviewer" className="size-4 text-[var(--accent)]" /> : null}<Badge className="ml-auto">{modeLabel[turn.mode]}</Badge></MessageHeader>
-                    {listener ? <p className="mb-2 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">To {publicAgentTitle(listener)}</p> : null}
-                    <MessageContent>{publicAgentText(turn.text)}</MessageContent>
-                    <MessageMeta><RoomMessageTime timing={timing} />{turn.evidenceRefs?.map((reference) => <span className="rounded-full border border-[var(--slate)] px-2 py-0.5" key={reference}>{publicReferenceLabel(reference)}</span>)}</MessageMeta>
-                  </MessageBubble>
-                </Message>
-              );
-            })}
-          </MessageList>
+          <RoomMessageList className="mt-10" transcript={transcript} />
 
           <section className="mt-18 border-t border-[var(--border)] pt-12">
             <SectionHeading eyebrow="Decision record" title="Votes and blocks" />
