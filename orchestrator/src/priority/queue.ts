@@ -344,6 +344,30 @@ export async function ensurePriorityItem(input: {
   return { item: await addPriorityItem(input), created: true };
 }
 
+/**
+ * Whether a stored status may become the requested one.
+ *
+ * openPriorityItems hands "why-not" items back to the board precisely so a later morning can
+ * commission one, and this function refusing the move is what made that offer empty: the board
+ * picked an item it had been shown, the write threw "is why-not, not open", the cycle caught the
+ * throw and published "the agenda queue refused it", and the item went back on tomorrow's list to
+ * be offered and refused again. Ten items, nine of them why-not, none of them ever selectable.
+ * Re-offering a question and then refusing to take it is one behaviour written twice, in opposite
+ * directions; the offer is the one that was designed, so this side gives way.
+ *
+ * "archived" stays terminal, and a why-not item still may not be re-skipped into a different
+ * refusal reason — the same status is allowed through so a repeated write is a no-op rather than a
+ * crash.
+ */
+function mayTransition(
+  from: PriorityItem["status"],
+  to: "selected" | "why-not" | "archived"
+): boolean {
+  if (from === to) return true;
+  if (from === "open") return true;
+  return from === "why-not" && to === "selected";
+}
+
 async function transition(input: {
   root: string;
   itemId: string;
@@ -356,8 +380,10 @@ async function transition(input: {
   let result: PriorityItem | null = null;
   const items = queue.items.map((item) => {
     if (item.id !== input.itemId) return item;
-    if (item.status !== "open" && !(item.status === input.status)) {
-      throw new Error(`Priority item ${item.id} is ${item.status}, not open`);
+    if (!mayTransition(item.status, input.status)) {
+      throw new Error(
+        `Priority item ${item.id} is ${item.status}, which cannot become ${input.status}`
+      );
     }
     result = PriorityItemSchema.parse({
       ...item,

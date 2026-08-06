@@ -3,6 +3,14 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { PriorityQueueSchema, type PriorityItem } from "../src/contracts/autonomy.js";
+import { resolveMorningCommission } from "../src/cycle.js";
+import {
+  dueMeetingAgenda,
+  loadMeetingPolicy,
+  readMeetingAgendaQueue,
+  requestMeetingAgenda
+} from "../src/meetings/agenda.js";
+import { loadVentureRegistry } from "../src/ventures/registry.js";
 import {
   addPriorityItem,
   archivePriorityItem,
@@ -394,5 +402,111 @@ describe("a seat proposing a new question", () => {
 
     await expect(proposePriorityItem(proposal(dir))).rejects.toThrow(/already holds/);
     expect((await readPriorityQueue(dir, NOW)).items.length).toBe(before);
+  });
+});
+
+describe("commissioning a question the board declined on an earlier morning", () => {
+  // The offer and the write disagreed. openPriorityItems hands "why-not" items back so a later
+  // board can pick one up; the transition guard then refused every such pick with "is why-not,
+  // not open", the morning caught the throw and published "the agenda queue refused it", and the
+  // item returned to the next morning's list to be offered and refused again. On 2026-08-06 the
+  // standup named an agenda that was sitting pending in the queue at the same moment. This walks
+  // the whole path: decline, re-offer, commission, and check that the record is not lying.
+  it("queues the agenda, marks the item selected, and publishes no refusal", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "priority-recommission-"));
+    const monday = new Date("2026-08-03T04:00:00.000Z");
+    const tuesday = new Date("2026-08-04T04:00:00.000Z");
+    const policy = await loadMeetingPolicy();
+    const registry = await loadVentureRegistry();
+
+    const seeded = await ensurePriorityItem({
+      root,
+      venture: "titty-tuesdays",
+      question: "What is currently blocking the campaign inventory?",
+      decisionAtStake: "Which bounded action fills the next campaign slot.",
+      now: monday,
+      expires: new Date("2026-08-10T04:00:00.000Z")
+    });
+    await skipPriorityItem({
+      root,
+      itemId: seeded.item.id,
+      reason: "The board used its single commission elsewhere.",
+      now: monday
+    });
+
+    const offered = openPriorityItems(await readPriorityQueue(root, tuesday), "titty-tuesdays");
+    expect(offered.map((entry) => entry.status)).toEqual(["why-not"]);
+
+    const commission = resolveMorningCommission({
+      policy,
+      registry,
+      sourcePhase: "morning",
+      openPriorities: offered,
+      positions: (["VIZE", "FORGE", "PULSE", "AUDIT"] as const).map((agent) => ({
+        agent,
+        publicSummary: `${agent} recorded a bounded public position.`,
+        recommendation: "approve" as const,
+        meetingRequest: agent === "VIZE"
+          ? {
+              phase: "tt-marketing" as const,
+              priorityItemId: seeded.item.id,
+              summary: "Decide whether the autumn drop ships one crop top or two.",
+              evidenceRefs: ["campaign-inventory"]
+            }
+          : null,
+        priorityProposal: null
+      }))
+    });
+    expect(commission.commission).toBe(true);
+    if (!commission.commission) throw new Error("expected a commission");
+
+    const scheduled = await requestMeetingAgenda({
+      root,
+      policy,
+      ventureId: commission.target.ventureId,
+      phase: commission.request.phase,
+      requestedBy: commission.requestedBy,
+      sourcePhase: "morning",
+      sourceMeetingRef: "standups/2026-08-04-morning",
+      summary: commission.request.summary,
+      evidenceRefs: commission.request.evidenceRefs,
+      notBefore: "2026-08-04",
+      now: tuesday
+    });
+    const selected = await selectPriorityItem({
+      root,
+      itemId: commission.priority.id,
+      meetingRef: "standups/2026-08-04-morning",
+      now: tuesday
+    });
+
+    expect(selected.status).toBe("selected");
+    expect(selected.consumed_by).toBe("standups/2026-08-04-morning");
+    expect(dueMeetingAgenda(
+      await readMeetingAgendaQueue(root, tuesday),
+      "tt-marketing",
+      "2026-08-04"
+    )?.id).toBe(scheduled.agenda.id);
+    expect(openPriorityItems(await readPriorityQueue(root, tuesday), "titty-tuesdays")).toEqual([]);
+  });
+
+  it("still refuses to reopen an archived question", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "priority-archived-select-"));
+    const seeded = await ensurePriorityItem({
+      root,
+      venture: "incubator",
+      question: "A question that has been settled for good.",
+      decisionAtStake: "Whether anything further is owed to it.",
+      now: NOW,
+      expires: new Date(NOW.getTime() + (7 * DAY_MS))
+    });
+    await archivePriorityItem({ root, itemId: seeded.item.id, now: NOW });
+
+    await expect(selectPriorityItem({
+      root,
+      itemId: seeded.item.id,
+      meetingRef: "standups/2026-08-01-morning",
+      now: NOW
+    })).rejects.toThrow(/archived/);
   });
 });

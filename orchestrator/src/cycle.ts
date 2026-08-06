@@ -111,7 +111,7 @@ import {
 } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
-import { ensurePriorityItem, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
+import { ensurePriorityItem, livePriorityItems, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
 import { loadRuntimeBudgetLimits } from "./portfolio/limits.js";
@@ -1402,7 +1402,15 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           if (!options.dry) {
             let seeded = false;
             for (const ventureId of agendaVentures) {
-              if (openPriorityItems(seededQueue, ventureId).length > 0) continue;
+              // One live generation per venture, not one selectable one.
+              //
+              // The guard used to read openPriorityItems, which excludes "selected": a venture
+              // whose standing question had just been commissioned looked empty the next morning
+              // and was seeded a second copy of the same sentence. The queue on disk carries five
+              // such pairs. livePriorityItems is everything short of archived, so a question that
+              // is being worked on, or was declined and can still be picked up again, counts as
+              // the venture's generation and no second one is written beside it.
+              if (livePriorityItems(seededQueue, ventureId).length > 0) continue;
               const venture = ventureRegistry.ventures.find((candidate) => candidate.id === ventureId);
               if (!venture || venture.status === "paused") continue;
               const objective = venture.growth_objective;
@@ -1518,6 +1526,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       } else {
         const { request, target, priority } = commission;
         const local = pragueClockParts(now);
+        // Only the agenda write is guarded here, and only because the agenda queue declining a
+        // commission is a normal published outcome. Marking the item selected used to sit inside
+        // the same try, so when the queue refused a why-not → selected transition the cycle
+        // published "the agenda queue refused it" over a commission the queue had already
+        // accepted: the 2026-08-06 standup names an agenda that is sitting pending on disk. A
+        // failure to record the selection is a contract failure, not a refusal, and now says so
+        // by taking the cycle down instead of being dressed as the board's own decision.
+        let scheduledAgendaId: string | null = null;
         try {
           const scheduled = await requestMeetingAgenda({
             root: artifactRoot,
@@ -1538,6 +1554,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           });
           meetingAgendaIds.push(scheduled.agenda.id);
           meetingAgendaStateChanged = scheduled.created;
+          scheduledAgendaId = scheduled.agenda.id;
+        } catch (error) {
+          commissionBlockedReason = schedulerBlockedReason(request.phase, error);
+          console.warn(commissionBlockedReason);
+        }
+        if (scheduledAgendaId) {
           await selectPriorityItem({
             root: artifactRoot,
             itemId: priority.id,
@@ -1547,9 +1569,6 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           selectedPriorityId = priority.id;
           selectedPriorityVenture = priority.venture;
           priorityStateChanged = true;
-        } catch (error) {
-          commissionBlockedReason = schedulerBlockedReason(request.phase, error);
-          console.warn(commissionBlockedReason);
         }
       }
       // The proposal is resolved after the commission and before the skip loop below.
