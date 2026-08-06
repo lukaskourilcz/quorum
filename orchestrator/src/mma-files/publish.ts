@@ -133,6 +133,9 @@ export async function nextMmaDelivery(kind: MmaDeliveryKind, root = stateRoot, w
   return kind === "article" ? nextArticleDelivery(root) : nextFightAiQDelivery(root, workspaceRoot);
 }
 
+/** Where MMA Files serves a delivered article. Both locales are prefixed. */
+const MMA_FILES_SITE = "https://mma-files.vercel.app";
+
 export async function recordMmaDelivery(input: {
   kind: MmaDeliveryKind;
   packageHash: string;
@@ -146,9 +149,13 @@ export async function recordMmaDelivery(input: {
 }): Promise<string> {
   const root = input.root ?? stateRoot;
   if (!/^[a-f0-9]{64}$/u.test(input.packageHash)) throw new Error("Invalid MMA Files package hash");
+  let articleUrl: string | null = null;
   if (input.kind === "article") {
     const article = JSON.parse(await readFile(input.packagePath, "utf8")) as ArticlePackage;
     if (article.packageHash !== input.packageHash) throw new Error("Article receipt hash differs from package");
+    // The receipt named a commit and a hash and nothing a reader could open. The desk knows
+    // where the magazine serves the article the moment it delivers it.
+    if (input.status === "delivered") articleUrl = `${MMA_FILES_SITE}/cs/articles/${article.slug}`;
   } else {
     const feed = FightAiQDeliverySchema.parse(JSON.parse(await readFile(input.packagePath, "utf8")));
     if (feed.packageHash !== input.packageHash || fightAiQDeliveryHash((({ packageHash: _packageHash, ...content }) => content)(feed)) !== feed.packageHash) {
@@ -165,6 +172,7 @@ export async function recordMmaDelivery(input: {
     status: input.status,
     targetRepository: "lukaskourilcz/mma-files",
     ...(input.targetCommit ? { targetCommit: input.targetCommit } : {}),
+    ...(articleUrl ? { articleUrl } : {}),
     ...(input.code ? { code: input.code } : {}),
     ...(input.detail ? { detail: input.detail.replace(/\s+/gu, " ").trim().slice(0, 500) } : {}),
     recordedAt: (input.now ?? new Date()).toISOString()

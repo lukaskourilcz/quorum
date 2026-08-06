@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadEditionQualityConfig } from "../src/edition/config.js";
 import { buildNoEditionPackage } from "../src/edition/package.js";
-import { oldestPendingDelivery, recordDelivery } from "../src/delivery/outbox.js";
+import { editionArticleUrl, oldestPendingDelivery, recordDelivery } from "../src/delivery/outbox.js";
 
 async function outboxRoot(): Promise<string> {
   const root = await mkdtemp(path.join(os.tmpdir(), "outbox-terminal-"));
@@ -132,5 +132,48 @@ describe("a delivery item closes when its date delivers", () => {
     });
 
     expect(artifacts).not.toContain("INBOX.md");
+  });
+});
+
+/**
+ * Delivery deleted the package the moment it landed, so the exact bytes the magazine received
+ * survived only in the magazine's own history and the meeting page that decided the edition
+ * could show nothing of what it produced.
+ */
+describe("a delivered package is kept and points at what it published", () => {
+  it("archives the package under its date and hash", async () => {
+    const root = await outboxRoot();
+    const queued = await queueNoEdition(root, "2026-08-06");
+    const hash = path.basename(queued).replace("2026-08-06-", "").replace(".json", "");
+
+    const artifacts = await recordDelivery({
+      root,
+      packagePath: queued,
+      status: "delivered",
+      now: new Date("2026-08-06T06:00:00.000Z")
+    });
+
+    const archived = `edition/archive/2026-08-06-${hash}.json`;
+    expect(artifacts).toContain(archived);
+    expect(JSON.parse(await readFile(path.join(root, archived), "utf8"))).toMatchObject({
+      date: "2026-08-06",
+      status: "no_edition"
+    });
+    // The outbox is still emptied: the archive is a copy, not a second queue.
+    expect(await readdir(path.join(root, "edition", "outbox"))).toEqual([]);
+  });
+
+  it("records where a delivered edition can be read, and nothing for a day with no article", async () => {
+    const root = await outboxRoot();
+    const queued = await queueNoEdition(root, "2026-08-06");
+
+    await recordDelivery({ root, packagePath: queued, status: "delivered" });
+
+    // A no-edition notice publishes no article, so there is no URL to promise.
+    expect(await receipt(root, "2026-08-06")).not.toHaveProperty("articleUrl");
+    expect(editionArticleUrl({
+      status: "edition",
+      article: { cs: { frontmatter: { slug: "tri-laboratore" } } }
+    } as never)).toBe("https://caughtup-ai.vercel.app/articles/tri-laboratore");
   });
 });

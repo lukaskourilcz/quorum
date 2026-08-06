@@ -17,8 +17,12 @@ describe("MMA Files repository delivery", () => {
     await atomicWriteJson(root, `ventures/mma-files/articles/${fixture.publishAt.slice(0, 10)}-${fixture.slot}-${fixture.slug}.json`, fixture);
     const pending = await nextArticleDelivery(root);
     expect(pending).toMatchObject({ kind: "article", packageHash: fixture.packageHash });
-    await recordMmaDelivery({ kind: "article", packageHash: fixture.packageHash, packagePath: pending!.packagePath, status: "delivered", targetCommit: "abc123", root });
+    const receiptPath = await recordMmaDelivery({ kind: "article", packageHash: fixture.packageHash, packagePath: pending!.packagePath, status: "delivered", targetCommit: "abc123", root });
     expect(await nextArticleDelivery(root)).toBeNull();
+    // The receipt named a commit and a hash and nothing a reader could open.
+    expect(JSON.parse(await readFile(path.join(root, receiptPath), "utf8"))).toMatchObject({
+      articleUrl: `https://mma-files.vercel.app/cs/articles/${fixture.slug}`
+    });
   });
 
   it("builds a stable UFC/Oktagon FightAIQ snapshot and skips its replay", async () => {

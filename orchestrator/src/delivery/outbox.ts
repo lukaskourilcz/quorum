@@ -159,6 +159,15 @@ async function raiseInboxOnce(root: string, date: string, code: DeliveryFailureC
   await atomicWriteText(root, "INBOX.md", `${existing.trimEnd()}\n\n${inboxItem(date, code, detail)}\n`);
 }
 
+/** Where DNESKAi serves the article a package delivered. Czech renders at the site root. */
+const DNESKAI_SITE = "https://caughtup-ai.vercel.app";
+
+export function editionArticleUrl(editionPackage: EditionPackage): string | null {
+  return editionPackage.status === "edition"
+    ? `${DNESKAI_SITE}/articles/${editionPackage.article.cs.frontmatter.slug}`
+    : null;
+}
+
 export async function recordDelivery(input: {
   packagePath: string;
   status: "delivered" | "needs_reconciliation";
@@ -198,12 +207,26 @@ export async function recordDelivery(input: {
       targetRepository: "lukaskourilcz/aifirst",
       ...(input.targetCommit ? { targetCommit: input.targetCommit } : {}),
       deliveredAt: now.toISOString(),
+      ...(editionArticleUrl(editionPackage) ? { articleUrl: editionArticleUrl(editionPackage) } : {}),
       tags: editionPackage.status === "edition" ? editionPackage.article.cs.frontmatter.tags : [],
       ...(supersededPackageHashes.length ? { supersededPackageHashes } : {})
     });
+    // Keep what was sent. The package was deleted the moment it delivered, so the only copy of
+    // the exact bytes the magazine received lived in the magazine's own history; the meeting
+    // page that decided the edition could show nothing of what it produced.
+    await atomicWriteJson(
+      root,
+      `edition/archive/${editionPackage.date}-${editionPackage.idempotencyKey}.json`,
+      editionPackage
+    );
     await rm(absolute);
     const closed = await closeInboxItem(root, editionPackage.date, now);
-    return [receiptPath, input.packagePath, ...(closed ? ["INBOX.md"] : [])];
+    return [
+      receiptPath,
+      `edition/archive/${editionPackage.date}-${editionPackage.idempotencyKey}.json`,
+      input.packagePath,
+      ...(closed ? ["INBOX.md"] : [])
+    ];
   }
   const code = input.code ?? "push_rejected";
   const detail = input.detail ?? "Delivery stopped without a reconciled target commit";

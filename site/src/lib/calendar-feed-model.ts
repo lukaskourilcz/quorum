@@ -273,11 +273,18 @@ export function buildPublicCalendarFeed(input: {
       // both fell through to "missed" every day — including the day one of them published.
       const article = articleOutcomes.get(`${date}:${definition.kind}`);
       if (article) {
+        // A published article slot was a dead cell: it said an article existed and gave the
+        // reader nowhere to go. The story meeting that chose the subject holds the package that
+        // was delivered, so that is where the cell leads.
+        const storyMeeting = records.get(`${date}:mag-editorial`);
         slots.push({
           at: at.toISOString(),
           tz: "Europe/Prague",
           kind: definition.kind,
           status: article.status === "published" ? "held" : "skipped",
+          ...(article.status === "published" && storyMeeting && storyMeeting.status !== "PAUSED"
+            ? { meetingHref: storyMeeting.href }
+            : {}),
           decisionOneLiner: article.status === "published"
             ? "The desk published this slot's article."
             : oneLiner(article.reason ?? `The desk did not publish this slot: ${article.status}.`)

@@ -5,6 +5,7 @@ import { ArrowLeft, Gavel } from "lucide-react";
 import { AgentPortrait } from "@/components/agent-portrait";
 import { publicAgentText, publicAgentTitle, publicDecisionLabel } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
+import { ArticleJsonDisclosure } from "@/components/article-json-disclosure";
 import { RoomMessageList } from "@/components/room-message-list";
 import { formatRoomClock, formatRoomDateTime } from "@/components/room-timeline";
 import { SectionHeading } from "@/components/section-heading";
@@ -12,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { agentById } from "@/data/agents";
 import { calendarStaticWeeks, mondayOfCalendarWeek } from "@/lib/calendar-feed-model";
+import { deliveredArticlePackage, deliveredEditionPackage } from "@/lib/delivered-packages";
 import { agendaIdFromRef, getMeetingAgendaSummaries } from "@/lib/meeting-agendas";
 import { getPublicMeetingRecord, getPublicMeetingRecords } from "@/lib/meeting-records";
 import { formatDate, formatUsd } from "@/lib/utils";
@@ -61,6 +63,13 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
     .filter((agent): agent is NonNullable<typeof agent> => Boolean(agent));
   const agendaId = meeting.agendaRef ? agendaIdFromRef(meeting.agendaRef) : null;
   const agendaSummary = agendaId ? (await getMeetingAgendaSummaries()).get(agendaId) : undefined;
+  // The one deliberate machine artifact: on a day this room produced an article, the package
+  // that left the building is available to open under the discussion that decided it.
+  const delivered = meeting.kind === "cu-edition"
+    ? await deliveredEditionPackage(meeting.date, meeting.editionRef)
+    : meeting.kind === "mag-editorial"
+      ? await deliveredArticlePackage(meeting.date)
+      : null;
   // The reader arrives from a week on the calendar, so the way back is that week and not
   // always the current one. Weeks outside the built range fall back to the home board.
   const week = mondayOfCalendarWeek(meeting.date);
@@ -107,6 +116,32 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
           </p>
 
           <RoomMessageList className="mt-8" transcript={transcript} />
+
+          {delivered ? (
+            <div className="mt-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 md:p-6">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+                <AgentPortrait agent={agentById.get("RELAY")!} className="size-9 shrink-0 rounded-full" />
+                <span className="font-mono text-[0.8125rem] font-semibold">
+                  {publicAgentTitle(agentById.get("RELAY")!)}
+                </span>
+                <span className="text-[0.75rem] text-[var(--fog)]">· AI role</span>
+                {delivered.articleUrl ? (
+                  <a
+                    className="ml-auto font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--accent)] underline-offset-2 hover:underline"
+                    href={delivered.articleUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Read the published article
+                  </a>
+                ) : null}
+              </div>
+              <p className="mt-3 text-[0.9375rem] leading-7 text-[var(--mist)]">
+                This meeting produced an article, and it was delivered.
+              </p>
+              <ArticleJsonDisclosure json={delivered.json} {...(delivered.note ? { note: delivered.note } : {})} />
+            </div>
+          ) : null}
 
           <details className="mt-12 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
             <summary className="cursor-pointer px-6 py-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--mist)]">
