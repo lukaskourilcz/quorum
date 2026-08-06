@@ -28,8 +28,15 @@ const meetingCopy: Record<string, { name: string; title: string }> = {
   "mag-desk": { name: "MMA Files desk meeting", title: "Check today’s articles and social drafts" }
 };
 
+/**
+ * A PAUSED record is the note that a room had no agenda due, so it never convened and has no
+ * discussion to show. Building a page for it invited a reader to open a meeting that did not
+ * happen; the calendar cell carries the one sentence there is to say.
+ */
 export async function generateStaticParams() {
-  return (await getPublicMeetingRecords()).map((meeting) => ({ id: meeting.id }));
+  return (await getPublicMeetingRecords())
+    .filter((meeting) => meeting.status !== "PAUSED")
+    .map((meeting) => ({ id: meeting.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -45,7 +52,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function MeetingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const meeting = await getPublicMeetingRecord(id);
-  if (!meeting) notFound();
+  if (!meeting || meeting.status === "PAUSED") notFound();
   const transcript = meeting.roomTranscript;
   const roomName = meetingCopy[meeting.kind]?.name ?? "Project meeting";
   const roomTitle = meetingCopy[meeting.kind]?.title ?? "Review the work";

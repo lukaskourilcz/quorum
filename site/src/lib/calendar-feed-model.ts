@@ -194,6 +194,15 @@ export const SLOT_DELIVERY_GRACE_MINUTES = (6 - 1) * 60;
 export const LATE_SLOT_REASON = "The run for this slot has not arrived yet.";
 
 /**
+ * What the board tells a reader about a slot whose run can no longer arrive.
+ *
+ * "Did not happen" alone was the whole of what a missed cell said, which reads as a decision the
+ * company took rather than the absence of any record of one. This is the same sentence the
+ * reconciler writes into a missed slot's record.
+ */
+export const MISSED_SLOT_REASON = "No run arrived for this slot.";
+
+/**
  * The status of a slot that has neither a record nor a skip reason.
  *
  * Everything the page can answer here comes from two facts it holds without asking anyone: the
@@ -281,7 +290,11 @@ export function buildPublicCalendarFeed(input: {
       // record or a skip ends either state on the next rebuild no matter how little of the
       // window has run down. That ordering is what makes the record, not the clock, the finish
       // signal.
-      const status = record?.status === "PAUSED"
+      // A room with no agenda due writes a PAUSED record: it never convened, so there is no
+      // discussion to open and the cell links nowhere. All it owes the reader is the sentence
+      // saying why nothing was needed, which is exactly what a skipped cell shows.
+      const paused = record?.status === "PAUSED";
+      const status = paused
         ? "not-needed"
         : record
           ? "held"
@@ -293,14 +306,18 @@ export function buildPublicCalendarFeed(input: {
         tz: "Europe/Prague",
         kind: definition.kind,
         status,
-        ...(record ? {
+        ...(record ? (paused ? {
+          decisionOneLiner: record.summary
+        } : {
           meetingHref: record.href,
           decisionOneLiner: record.summary,
           fixture: record.fixture
-        } : skipReasons.has(`${date}:${definition.kind}`) ? {
+        }) : skipReasons.has(`${date}:${definition.kind}`) ? {
           decisionOneLiner: skipReasons.get(`${date}:${definition.kind}`)!
         } : status === "late" ? {
           decisionOneLiner: LATE_SLOT_REASON
+        } : status === "missed" ? {
+          decisionOneLiner: MISSED_SLOT_REASON
         } : {})
       });
     }

@@ -256,9 +256,9 @@ function projectSlotColor(kind: CalendarKind): string {
  * token gets a sentence here. A reason absent from this map is printed verbatim, not guessed at.
  */
 const articleRunReasonCopy: Record<string, string> = {
-  missing_editorial_slate: "The story meeting left no slate, so this slot had no subject.",
-  missing_sourced_subject: "The slate carried no source-backed subject for this slot.",
-  no_sourced_subject_on_file: "No slate, and no source-backed subject left on file.",
+  missing_editorial_slate: "The story meeting chose no subject, so this slot had nothing to write.",
+  missing_sourced_subject: "The story meeting named no source-backed subject for this slot.",
+  no_sourced_subject_on_file: "No subject from the story meeting, and none left on file.",
   budget_decision_not_countersigned: "The budget decision this slot runs under is not countersigned yet.",
   portfolio_gate_closed: "Portfolio work is switched off, so this slot did not open.",
   mma_files_gate_closed: "MMA Files live publishing is switched off, so this slot did not open."

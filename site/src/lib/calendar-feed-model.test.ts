@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   LATE_SLOT_REASON,
+  MISSED_SLOT_REASON,
   ONGOING_CEILING_MINUTES,
   SLOT_DELIVERY_GRACE_MINUTES,
   buildPublicCalendarFeed,
@@ -49,18 +50,27 @@ describe("public CalendarFeed build model", () => {
     expect(weeks).toEqual(["2026-07-13", "2026-07-20", "2026-07-27", "2026-08-03"]);
   });
 
-  it("shows a paused agenda window as not needed", () => {
+  it("shows a paused agenda window as not needed, with its reason and no page to open", () => {
     const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
     expect(parsed).not.toBeNull();
-    const meeting = { ...parsed!, status: "PAUSED" as const };
+    const meeting = {
+      ...parsed!,
+      status: "PAUSED" as const,
+      decision: { ...parsed!.decision, summary: "No agenda was due for this room today." }
+    };
     const feed = buildPublicCalendarFeed({
       weekOf: meeting.date,
       now: new Date(`${meeting.date}T20:00:00Z`),
       standups: [],
       meetings: [meeting]
     });
-    expect(feed.slots.find((slot) => slot.kind === meeting.kind && slot.meetingHref)?.status)
-      .toBe("not-needed");
+    const slot = feed.slots.find(
+      (entry) => entry.kind === meeting.kind && entry.at.startsWith(meeting.date)
+    );
+    expect(slot?.status).toBe("not-needed");
+    // The room never convened, so there is nothing to open: the cell is the whole answer.
+    expect(slot?.meetingHref).toBeUndefined();
+    expect(slot?.decisionOneLiner).toBe("No agenda was due for this room today.");
   });
 });
 
@@ -87,11 +97,13 @@ describe("a skipped slot says why", () => {
     expect(feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "venture-morning")?.status).toBe("skipped");
   });
 
-  it("leaves a slot nobody skipped exactly as it was", () => {
+  it("says the run never arrived for a slot nobody skipped", () => {
     const feed = buildPublicCalendarFeed({ ...base, skips: [] });
     const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "tt-marketing");
     expect(slot?.status).toBe("missed");
-    expect(slot?.decisionOneLiner).toBeUndefined();
+    // "Did not happen" on its own reads as a decision. Nobody decided this; nothing arrived.
+    expect(slot?.decisionOneLiner).toBe(MISSED_SLOT_REASON);
+    expect(slot?.meetingHref).toBeUndefined();
   });
 });
 
