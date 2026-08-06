@@ -56,13 +56,26 @@ Four skills in `.claude/skills/` are vendored verbatim from upstream and kept
 identical across every repository. Each carries an `UPSTREAM.md` with its
 source, pinned commit, and license — re-vendor rather than hand-editing them.
 
-Eleven skills are mirrored byte-for-byte into `.agents/skills/` for Codex CLI
-sessions: agent-identity, boardroom-routing, brand-identity, business-validation,
-financial-operations, organization-operations, page-publishing, safe-release,
-social-operations, stop-slop and titty-tuesdays-brandbook. Edit both copies in
-the same commit; `orchestrator/tests/architecture.test.ts` fails on any drift.
+Nineteen skills are mirrored byte-for-byte into `.agents/skills/` for Codex CLI
+sessions. Eleven are this repository's own: agent-identity, boardroom-routing,
+brand-identity, business-validation, financial-operations,
+organization-operations, page-publishing, safe-release, social-operations,
+stop-slop and titty-tuesdays-brandbook. Eight are vendored verbatim from
+`coreyhaines31/marketingskills` at `7868cb9` (MIT): ai-seo, content-strategy,
+copywriting, marketing-ideas, marketing-loops, marketing-psychology,
+product-marketing and social. Edit both copies in the same commit;
+`orchestrator/tests/architecture.test.ts` fails on any drift, file by file.
 `skillRefs` in `config/agents.json` is a declarative registry field for org
-review and interactive sessions. Runtime prompts do not load skill files.
+review and interactive sessions. Runtime prompts do not load skill files —
+GoVIRAL's craft rules are distilled into `orchestrator/prompts/goviral.md`
+instead.
+
+The vendored eight are generic advice. **This repository's contracts always
+win**: the $30 all-in operating cap, the social triple-lock, the truth gates and
+the treasury rules are not negotiable by a skill file. Each carries an
+`UPSTREAM.md` recording where it diverges — most importantly `social`, whose
+reverse-engineering reference suggests standing up an Apify account that this
+system already owns and quota-guards.
 
 - **`task-observer`** — invoke at the **start of every task-oriented session**,
   before producing deliverables. It records corrections and workflow friction in

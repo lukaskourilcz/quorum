@@ -6,18 +6,46 @@ import { validateAgentAvatars } from "../src/brand/avatars.js";
 import { loadAgentRegistry } from "../src/org/registry.js";
 import { repoRoot } from "../src/paths.js";
 
+/**
+ * Every skill that exists in both trees, in `readdir` order.
+ *
+ * The second block is vendored verbatim from coreyhaines31/marketingskills at
+ * `7868cb9`, MIT. They are mirrored the same way the house skills are, and this test is
+ * the reason a hand-edit in one tree cannot survive: the two copies are compared byte
+ * for byte, file for file.
+ */
 const expectedSkills = [
   "agent-identity",
+  "ai-seo",
   "boardroom-routing",
   "brand-identity",
   "business-validation",
+  "content-strategy",
+  "copywriting",
   "financial-operations",
+  "marketing-ideas",
+  "marketing-loops",
+  "marketing-psychology",
   "organization-operations",
   "page-publishing",
+  "product-marketing",
   "safe-release",
+  "social",
   "social-operations",
   "stop-slop",
   "titty-tuesdays-brandbook"
+] as const;
+
+/** The vendored eight. Every file in each is compared, not just its SKILL.md. */
+const vendoredMarketingSkills = [
+  "ai-seo",
+  "content-strategy",
+  "copywriting",
+  "marketing-ideas",
+  "marketing-loops",
+  "marketing-psychology",
+  "product-marketing",
+  "social"
 ] as const;
 
 const stopSlopFiles = [
@@ -96,7 +124,7 @@ async function directoryNames(directory: string): Promise<string[]> {
 }
 
 describe("agent architecture", () => {
-  it("keeps the ten Claude and Codex skills byte-identical", async () => {
+  it("keeps every mirrored Claude and Codex skill byte-identical", async () => {
     const claudeRoot = path.join(repoRoot, ".claude", "skills");
     const codexRoot = path.join(repoRoot, ".agents", "skills");
     const claudeSkills = await directoryNames(claudeRoot);
@@ -119,6 +147,23 @@ describe("agent architecture", () => {
       const claudeBytes = await readFile(path.join(claudeRoot, "titty-tuesdays-brandbook", file));
       const codexBytes = await readFile(path.join(codexRoot, "titty-tuesdays-brandbook", file));
       expect(codexBytes.equals(claudeBytes), `titty-tuesdays-brandbook/${file} mirror differs`).toBe(true);
+    }
+    // Vendored skills carry references and evals, not just a SKILL.md, and every one of those
+    // files is what an interactive session actually reads. Comparing only the entry point would
+    // let a reference drift silently between the two trees.
+    for (const skill of vendoredMarketingSkills) {
+      const files = (await readdir(path.join(claudeRoot, skill), { recursive: true, withFileTypes: true }))
+        .filter((entry) => entry.isFile())
+        .map((entry) => path.join(path.relative(path.join(claudeRoot, skill), entry.parentPath), entry.name))
+        .sort();
+      expect(files.length, `${skill} vendored no files`).toBeGreaterThan(0);
+      expect(files, `${skill} lost its upstream notice`).toContain("UPSTREAM.md");
+      expect(files, `${skill} lost its MIT licence`).toContain("LICENSE");
+      for (const file of files) {
+        const claudeBytes = await readFile(path.join(claudeRoot, skill, file));
+        const codexBytes = await readFile(path.join(codexRoot, skill, file));
+        expect(codexBytes.equals(claudeBytes), `${skill}/${file} mirror differs`).toBe(true);
+      }
     }
   });
 

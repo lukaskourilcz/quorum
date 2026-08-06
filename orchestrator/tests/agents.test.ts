@@ -9,7 +9,7 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("keeps 30 seated roles of 40 on file, and gated portraits explicit", async () => {
+  it("keeps 31 seated roles of 40 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
     // Forty profiles, thirty-one of them seated. A retired or paused agent keeps its profile and
@@ -36,7 +36,9 @@ describe("agent registry and identity assets", () => {
     ).toEqual([
       ["HERALD", ["caught-up"]],
       ["HACEK", ["caught-up", "mma-files"]],
-      ["SCENE", ["titty-tuesdays"]],
+      // SCENE reads scenes and competition evidence, which GoVIRAL's room can use as a guest
+      // seat. It is not seated there by default — venture-agent-controls lists it switchable.
+      ["SCENE", ["titty-tuesdays", "goviral"]],
       ["STUNT", ["titty-tuesdays"]],
       ["CORNER", ["fightaiq"]],
       ["SPOTTER", ["fightaiq"]],

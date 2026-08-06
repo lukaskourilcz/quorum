@@ -158,7 +158,11 @@
       "descriptionRef": "agent-profile:PULSE:v1",
       "skillRefs": [
         ".claude/skills/business-validation/SKILL.md",
-        ".claude/skills/social-operations/SKILL.md"
+        ".claude/skills/marketing-ideas/SKILL.md",
+        ".claude/skills/marketing-loops/SKILL.md",
+        ".claude/skills/marketing-psychology/SKILL.md",
+        ".claude/skills/social-operations/SKILL.md",
+        ".claude/skills/social/SKILL.md"
       ],
       "visual": {
         "motif": "measured signal waves",
@@ -265,7 +269,9 @@
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:SCOUT:v2",
       "skillRefs": [
-        ".claude/skills/business-validation/SKILL.md"
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/content-strategy/SKILL.md",
+        ".claude/skills/social/SKILL.md"
       ],
       "visual": {
         "motif": "radar rings + distant point",
@@ -409,6 +415,7 @@
       "descriptionRef": "agent-profile:QUILL:v1",
       "skillRefs": [
         ".claude/skills/brand-identity/SKILL.md",
+        ".claude/skills/copywriting/SKILL.md",
         ".claude/skills/page-publishing/SKILL.md"
       ],
       "visual": {
@@ -456,6 +463,7 @@
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:RADAR:v1",
       "skillRefs": [
+        ".claude/skills/ai-seo/SKILL.md",
         ".claude/skills/page-publishing/SKILL.md"
       ],
       "visual": {
@@ -1141,8 +1149,11 @@
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:ANGLE:v1",
       "skillRefs": [
+        ".claude/skills/boardroom-routing/SKILL.md",
         ".claude/skills/business-validation/SKILL.md",
-        ".claude/skills/boardroom-routing/SKILL.md"
+        ".claude/skills/content-strategy/SKILL.md",
+        ".claude/skills/marketing-psychology/SKILL.md",
+        ".claude/skills/product-marketing/SKILL.md"
       ],
       "visual": {
         "motif": "cut viewpoint + positioning axis",
@@ -1193,8 +1204,9 @@
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:COHORT:v1",
       "skillRefs": [
+        ".claude/skills/boardroom-routing/SKILL.md",
         ".claude/skills/business-validation/SKILL.md",
-        ".claude/skills/boardroom-routing/SKILL.md"
+        ".claude/skills/marketing-psychology/SKILL.md"
       ],
       "visual": {
         "motif": "segmented rings + adult threshold",
@@ -1314,7 +1326,8 @@
       "kind": "specialist",
       "provider": "Anthropic",
       "ventures": [
-        "titty-tuesdays"
+        "titty-tuesdays",
+        "goviral"
       ],
       "department": "Titty Tuesdays",
       "title": "Scene & Competitor Scout",
