@@ -10,16 +10,17 @@ on:
   # These paths are what a cycle writes. A push that touches only them is covered by the gate that
   # produced it. Anything else — source, workflows, config, contracts — still runs the full CI, and
   # pull requests are never filtered, so a human change is verified exactly as before.
-  # Prose and vendored skills are the second class of push that starts a full CI run and can
-  # only ever confirm what it confirmed last time. `orchestrator/prompts/**` is deliberately NOT
-  # here: a prompt is read into a live room and a change to one changes what the company does.
+  # Prose is the second class of push that starts a full CI run and can only ever confirm what it
+  # confirmed last time. Two directories that look like prose are deliberately NOT here.
+  # `orchestrator/prompts/**` is read into a live room, so changing one changes what the company
+  # does. `.claude/skills/**` and `.agents/skills/**` are mirrored byte-for-byte and
+  # `architecture.test.ts` compares them file by file — editing one tree without the other is
+  # exactly the mistake that filter would hide, and there are nineteen mirrored skills now.
   push:
     paths-ignore:
       - "state/**"
       - "docs/**"
       - "*.md"
-      - ".claude/**"
-      - ".agents/**"
       - "NEEDS_YOUR_HELP_NOW.md"
       - "NEEDED.md"
       - "site/public/social/**"

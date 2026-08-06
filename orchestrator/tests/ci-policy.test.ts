@@ -201,16 +201,22 @@ describe("automation policy", () => {
   // writes, or only prose, is covered by the gate that produced it or verifies nothing — and
   // each of those was starting a full CI run. What must never be filtered is a prompt: it is
   // read into a live room, so changing one changes what the company does.
-  it("skips CI for pushes that cannot change behaviour, and never for a prompt", async () => {
+  it("skips CI for pushes that cannot change behaviour, and never for a prompt or a mirrored skill", async () => {
     const ci = await readFile(path.join(workflowRoot, "ci.yml"), "utf8");
     const pushBlock = ci.slice(ci.indexOf("  push:"), ci.indexOf("  pull_request:"));
 
-    for (const ignored of ["state/**", "docs/**", "*.md", ".claude/**", ".agents/**", "site/public/social/**"]) {
+    for (const ignored of ["state/**", "docs/**", "*.md", "site/public/social/**"]) {
       expect(pushBlock, `${ignored} should not start a CI run`).toContain(`"${ignored}"`);
     }
     expect(pushBlock).not.toContain("orchestrator/prompts");
     expect(pushBlock).not.toContain("orchestrator/src");
     expect(pushBlock).not.toContain("config/");
+    // The two skill trees are mirrored byte-for-byte and architecture.test.ts compares them file
+    // by file, so editing one without the other is a real, testable break. Filtering them out
+    // would hide precisely the mistake the drift test exists to catch, and there are nineteen
+    // mirrored skills now rather than eleven.
+    expect(pushBlock, ".claude/** can break the mirror test").not.toContain('".claude/**"');
+    expect(pushBlock, ".agents/** can break the mirror test").not.toContain('".agents/**"');
     // Pull requests are never filtered: a human change is verified exactly as before.
     expect(ci).toMatch(/^\s{2}pull_request:\s*$/mu);
   });

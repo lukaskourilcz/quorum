@@ -18,9 +18,9 @@ describe("a question a seat proposed", () => {
     const item = {
       schemaVersion: "priority-item/1",
       id: "priority-1234567890abcdef",
-      venture: "incubator",
-      question: "Which niche has the clearest unmet need?",
-      decision_at_stake: "Whether to open a research room for it.",
+      venture: "goviral",
+      question: "Which of this week's rising topics belongs to a magazine desk?",
+      decision_at_stake: "Whether the desk gets an agenda for it tomorrow.",
       evidence_needed: [],
       requested_by: "FORGE",
       created: "2026-08-04T20:00:00.000Z",
@@ -34,6 +34,6 @@ describe("a question a seat proposed", () => {
       JSON.stringify({ schemaVersion: "priority-queue/1", items: [item], updatedAt: "2026-08-04T20:00:00.000Z" })
     );
     const snapshot = await readAdminAutonomy(root);
-    expect(snapshot.priorities.map((entry) => entry.question)).toEqual(["Which niche has the clearest unmet need?"]);
+    expect(snapshot.priorities.map((entry) => entry.question)).toEqual(["Which of this week's rising topics belongs to a magazine desk?"]);
   });
 });
