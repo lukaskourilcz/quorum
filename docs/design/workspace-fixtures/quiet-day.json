@@ -1,0 +1,85 @@
+[
+  {
+    "id": "vydani-dneskai",
+    "label": "DNESKAi edition",
+    "days": []
+  },
+  {
+    "id": "ranni-porada",
+    "label": "Company board",
+    "days": []
+  },
+  {
+    "id": "kontrola-mma-dat",
+    "label": "Fight data checks",
+    "days": []
+  },
+  {
+    "id": "redakcni-porada-mma",
+    "label": "MMA Files story desk",
+    "days": [
+      {
+        "date": "2026-08-11",
+        "messages": [
+          {
+            "id": "article:2026-08-11:am",
+            "at": "2026-08-11T12:00:00.000Z",
+            "author": {
+              "id": "system",
+              "title": "BoardlessAI"
+            },
+            "kind": "system",
+            "text": "The story meeting named no source-backed subject for this slot."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vecerni-redakce",
+    "label": "MMA Files evening desk",
+    "days": [
+      {
+        "date": "2026-08-11",
+        "messages": [
+          {
+            "id": "skip:2026-08-11:mag-desk",
+            "at": "2026-08-11T12:00:00.000Z",
+            "author": {
+              "id": "system",
+              "title": "BoardlessAI"
+            },
+            "kind": "system",
+            "text": "No agenda was due for this room today, so it did not open."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "titty-tuesdays-marketing",
+    "label": "Titty Tuesdays marketing",
+    "days": []
+  },
+  {
+    "id": "goviral-trend-room",
+    "label": "GoVIRAL trend room",
+    "days": [
+      {
+        "date": "2026-08-11",
+        "messages": [
+          {
+            "id": "skip:2026-08-11:gv-brief",
+            "at": "2026-08-11T12:00:00.000Z",
+            "author": {
+              "id": "system",
+              "title": "BoardlessAI"
+            },
+            "kind": "system",
+            "text": "This room meets on Mondays. Nothing was spent."
+          }
+        ]
+      }
+    ]
+  }
+]
