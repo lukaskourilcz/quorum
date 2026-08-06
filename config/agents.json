@@ -33,7 +33,11 @@
         "Selected opportunities pass every deterministic gate",
         "Forecasts are reviewed against observed outcomes"
       ],
-      "capabilityTags": ["strategy", "opportunity", "stage"],
+      "capabilityTags": [
+        "strategy",
+        "opportunity",
+        "stage"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
@@ -84,7 +88,11 @@
         "Every change is small, runnable and reversible",
         "Independent release gates pass before commit"
       ],
-      "capabilityTags": ["build", "release", "incident"],
+      "capabilityTags": [
+        "build",
+        "release",
+        "incident"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
@@ -137,7 +145,12 @@
         "Every initiative has a measurable conversion objective",
         "Cadence never forces a low-value post"
       ],
-      "capabilityTags": ["growth", "pricing", "social", "campaign"],
+      "capabilityTags": [
+        "growth",
+        "pricing",
+        "social",
+        "campaign"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
@@ -191,7 +204,11 @@
         "Every veto names the breached rule",
         "Promoted fallback proposals are checked again"
       ],
-      "capabilityTags": ["audit", "quality", "risk"],
+      "capabilityTags": [
+        "audit",
+        "quality",
+        "risk"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
@@ -236,13 +253,18 @@
         "Useful evidence is attributable and independently supported",
         "Coverage gaps and proxy signals are labelled"
       ],
-      "capabilityTags": ["evidence", "sources"],
-      "status": "active",
+      "capabilityTags": [
+        "evidence",
+        "sources"
+      ],
+      "status": "paused",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:SCOUT:v1",
-      "skillRefs": [".claude/skills/business-validation/SKILL.md"],
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md"
+      ],
       "visual": {
         "motif": "radar rings + distant point",
         "accentToken": "agent-scout",
@@ -278,8 +300,11 @@
         "Every summary traces to the structured meeting record",
         "Private prompts and reasoning never enter public output"
       ],
-      "capabilityTags": ["summary", "public_projection"],
-      "status": "active",
+      "capabilityTags": [
+        "summary",
+        "public_projection"
+      ],
+      "status": "paused",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
@@ -323,8 +348,11 @@
         "Zero, missing and stale values stay distinct",
         "Every analytical claim traces to input data"
       ],
-      "capabilityTags": ["analytics", "forecast"],
-      "status": "active",
+      "capabilityTags": [
+        "analytics",
+        "forecast"
+      ],
+      "status": "paused",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
@@ -368,7 +396,10 @@
         "Factual claims map to evidence references",
         "Public copy adds material information"
       ],
-      "capabilityTags": ["copy", "claims"],
+      "capabilityTags": [
+        "copy",
+        "claims"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
@@ -413,13 +444,18 @@
         "Every indexable page has unique intent and information gain",
         "No public page is orphaned"
       ],
-      "capabilityTags": ["seo", "discoverability"],
-      "status": "active",
+      "capabilityTags": [
+        "seo",
+        "discoverability"
+      ],
+      "status": "paused",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:RADAR:v1",
-      "skillRefs": [".claude/skills/page-publishing/SKILL.md"],
+      "skillRefs": [
+        ".claude/skills/page-publishing/SKILL.md"
+      ],
       "visual": {
         "motif": "connected nodes + search arc",
         "accentToken": "agent-radar",
@@ -455,7 +491,11 @@
         "Every flag identifies a concrete rule",
         "No missing approval is treated as approval"
       ],
-      "capabilityTags": ["compliance", "privacy", "permissions"],
+      "capabilityTags": [
+        "compliance",
+        "privacy",
+        "permissions"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
@@ -500,13 +540,17 @@
         "Every factual claim has an approved input reference",
         "Drafts pass deterministic platform and duplicate checks"
       ],
-      "capabilityTags": ["social:threads"],
-      "status": "active",
+      "capabilityTags": [
+        "social:threads"
+      ],
+      "status": "paused",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:THREADS:v1",
-      "skillRefs": [".claude/skills/social-operations/SKILL.md"],
+      "skillRefs": [
+        ".claude/skills/social-operations/SKILL.md"
+      ],
       "visual": {
         "motif": "interwoven dialogue lines",
         "accentToken": "agent-threads",
@@ -542,8 +586,11 @@
         "Every asset has provenance, alt text, budget and QA",
         "Generated raster is used only when it adds material value"
       ],
-      "capabilityTags": ["social:instagram", "visual_social"],
-      "status": "active",
+      "capabilityTags": [
+        "social:instagram",
+        "visual_social"
+      ],
+      "status": "paused",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
@@ -592,13 +639,19 @@
         "Changes use outcome, quality, cost and routing evidence",
         "Every proposal includes tests, an evaluation window and rollback"
       ],
-      "capabilityTags": ["org_review", "role_design", "routing_quality"],
+      "capabilityTags": [
+        "org_review",
+        "role_design",
+        "routing_quality"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:PEOPLE:v1",
-      "skillRefs": [".claude/skills/organization-operations/SKILL.md"],
+      "skillRefs": [
+        ".claude/skills/organization-operations/SKILL.md"
+      ],
       "visual": {
         "motif": "role map + calibration marks",
         "accentToken": "agent-people",
@@ -639,13 +692,20 @@
         "Every cost is counted exactly once",
         "Measured zero revenue stays distinct from unavailable data, and the monthly cap fails closed"
       ],
-      "capabilityTags": ["accounting", "cost", "budget", "unit_economics"],
+      "capabilityTags": [
+        "accounting",
+        "cost",
+        "budget",
+        "unit_economics"
+      ],
       "status": "active",
       "activatedAt": "2026-07-23",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:LEDGER:v1",
-      "skillRefs": [".claude/skills/financial-operations/SKILL.md"],
+      "skillRefs": [
+        ".claude/skills/financial-operations/SKILL.md"
+      ],
       "visual": {
         "motif": "balanced ledger columns + reserve mark",
         "accentToken": "agent-ledger",
@@ -659,7 +719,9 @@
       "slug": "herald",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["caught-up"],
+      "ventures": [
+        "caught-up"
+      ],
       "department": "Editorial (Caught Up)",
       "title": "Editor-in-Chief, Caught Up",
       "mission": "Own the daily Caught Up edition: chair the edition room, choose the one story that matters, and answer for its quality.",
@@ -688,7 +750,10 @@
         "No shortlist exceeds three candidates",
         "Weak days end in a truthful NO_EDITION record"
       ],
-      "capabilityTags": ["edition:chair", "editorial:selection"],
+      "capabilityTags": [
+        "edition:chair",
+        "editorial:selection"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -739,7 +804,10 @@
         "Every article and public transcript passes the correct register rules",
         "A failed rewrite never ships as an edition"
       ],
-      "capabilityTags": ["editorial:copy", "quality:slop"],
+      "capabilityTags": [
+        "editorial:copy",
+        "quality:slop"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -762,7 +830,10 @@
       "slug": "hacek",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["caught-up", "mma-files"],
+      "ventures": [
+        "caught-up",
+        "mma-files"
+      ],
       "department": "Czech Editorial",
       "title": "Czech Language Editor",
       "mission": "Own the Czech register and copy floor that Caught Up and MMA Files are written to, without changing any article's facts, sources, uncertainty or intent.",
@@ -790,7 +861,11 @@
         "No register repair changes a number, source URL or uncertainty marker",
         "Any Czech social caption reuses copy that already cleared the article gate"
       ],
-      "capabilityTags": ["editorial:czech", "editorial:register", "social:czech"],
+      "capabilityTags": [
+        "editorial:czech",
+        "editorial:register",
+        "social:czech"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -840,7 +915,10 @@
         "Exactly one pre-checked idea reaches each eligible venture morning",
         "Every accepted idea receives an outcome record"
       ],
-      "capabilityTags": ["growth:product", "bridge:venture"],
+      "capabilityTags": [
+        "growth:product",
+        "bridge:venture"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -891,7 +969,10 @@
         "Every idea verdict cites the compared ledger entries",
         "Evidence-free revivals do not consume a product-room seat"
       ],
-      "capabilityTags": ["memory:ledger", "org:memory"],
+      "capabilityTags": [
+        "memory:ledger",
+        "org:memory"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -942,7 +1023,10 @@
         "Every asset records dimensions, alt text and provenance",
         "No composition exceeds the active media cap"
       ],
-      "capabilityTags": ["media:compose", "media:qa"],
+      "capabilityTags": [
+        "media:compose",
+        "media:qa"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -993,7 +1077,10 @@
         "Every accepted package validates before delivery",
         "Delivery, build and live states remain distinct and reconcilable"
       ],
-      "capabilityTags": ["ops:delivery", "ops:notify"],
+      "capabilityTags": [
+        "ops:delivery",
+        "ops:notify"
+      ],
       "status": "active",
       "activatedAt": "2026-07-31",
       "profileVersion": 1,
@@ -1041,7 +1128,11 @@
         "Every active venture has a positioning document no older than 90 days",
         "Every campaign traces to a CampaignBrief"
       ],
-      "capabilityTags": ["strategy:positioning", "campaign:brief", "niche:analysis"],
+      "capabilityTags": [
+        "strategy:positioning",
+        "campaign:brief",
+        "niche:analysis"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
@@ -1089,7 +1180,11 @@
         "Every graduated campaign has a validated AudienceSpec",
         "No invalid AudienceSpec reaches committed state"
       ],
-      "capabilityTags": ["audience:spec", "targeting:public", "privacy:audience"],
+      "capabilityTags": [
+        "audience:spec",
+        "targeting:public",
+        "privacy:audience"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
@@ -1137,8 +1232,12 @@
         "Each Titty Tuesdays season has a reviewed channel plan before its start",
         "Every cost figure carries an estimate label"
       ],
-      "capabilityTags": ["marketing:performance", "campaign:plan", "cost:estimate"],
-      "status": "active",
+      "capabilityTags": [
+        "marketing:performance",
+        "campaign:plan",
+        "cost:estimate"
+      ],
+      "status": "paused",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
@@ -1185,7 +1284,11 @@
         "Every taste rule cites at least one rating ID",
         "No PALATE pass edits a pinned prompt"
       ],
-      "capabilityTags": ["taste:memory", "ratings:distill", "visual:weights"],
+      "capabilityTags": [
+        "taste:memory",
+        "ratings:distill",
+        "visual:weights"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
@@ -1208,7 +1311,9 @@
       "slug": "scene",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["titty-tuesdays"],
+      "ventures": [
+        "titty-tuesdays"
+      ],
       "department": "Titty Tuesdays",
       "title": "Scene & Competitor Scout",
       "mission": "Track evidence-backed streetwear, skate and lifestyle signals for Titty Tuesdays without fabricating a brand, price or example.",
@@ -1233,7 +1338,11 @@
         "Each scene-day produces at least one report",
         "Every report claim carries a source reference"
       ],
-      "capabilityTags": ["scene:research", "competition:evidence", "streetwear:signals"],
+      "capabilityTags": [
+        "scene:research",
+        "competition:evidence",
+        "streetwear:signals"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
@@ -1256,7 +1365,9 @@
       "slug": "stunt",
       "kind": "specialist",
       "provider": "OpenAI",
-      "ventures": ["titty-tuesdays"],
+      "ventures": [
+        "titty-tuesdays"
+      ],
       "department": "Titty Tuesdays",
       "title": "Guerrilla Marketing Lead",
       "mission": "Design low-cost, permission-aware stunts with explicit estimates, platform checks and a test that can prove whether each idea worked.",
@@ -1281,7 +1392,11 @@
         "Each season graduates at least two stunt concepts",
         "Every concept states cost, legality and platform risk"
       ],
-      "capabilityTags": ["marketing:guerrilla", "legality:note", "platform:safety"],
+      "capabilityTags": [
+        "marketing:guerrilla",
+        "legality:note",
+        "platform:safety"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
@@ -1628,161 +1743,369 @@
       "slug": "canvas",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["mma-files"],
+      "ventures": [
+        "mma-files"
+      ],
       "department": "MMA Files",
       "title": "Editor-in-Chief",
       "mission": "Runs the two-slot Czech newsroom, assigns formats and blocks any article that lacks sources, plain language or a clean copy review.",
-      "responsibilities": ["Plan both daily article slots", "Enforce the newsroom stylebook", "Record a publish or kill reason for each slot"],
-      "notResponsibleFor": ["Publishing an article that failed its copy review", "Inventing a story to fill the calendar"],
-      "decisionRights": ["Assign or kill an editorial slot", "Block copy before final review"],
-      "ownedKpiIds": ["canvas.slot_accounting", "canvas.clean_publish_rate"],
-      "successChecks": ["Both slots are filled or killed with a reason each day", "No article publishes with a failed newsroom lint"],
-      "capabilityTags": ["editorial:chair", "mma:newsroom", "language:czech"],
+      "responsibilities": [
+        "Plan both daily article slots",
+        "Enforce the newsroom stylebook",
+        "Record a publish or kill reason for each slot"
+      ],
+      "notResponsibleFor": [
+        "Publishing an article that failed its copy review",
+        "Inventing a story to fill the calendar"
+      ],
+      "decisionRights": [
+        "Assign or kill an editorial slot",
+        "Block copy before final review"
+      ],
+      "ownedKpiIds": [
+        "canvas.slot_accounting",
+        "canvas.clean_publish_rate"
+      ],
+      "successChecks": [
+        "Both slots are filled or killed with a reason each day",
+        "No article publishes with a failed newsroom lint"
+      ],
+      "capabilityTags": [
+        "editorial:chair",
+        "mma:newsroom",
+        "language:czech"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:CANVAS:v1",
-      "skillRefs": [".claude/skills/stop-slop/SKILL.md", ".claude/skills/boardroom-routing/SKILL.md"],
-      "visual": { "motif": "two article columns and editor marks", "accentToken": "agent-canvas", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for CANVAS with two article columns and editor marks", "provenanceRef": "AVATAR-CANVAS" }
+      "skillRefs": [
+        ".claude/skills/stop-slop/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "two article columns and editor marks",
+        "accentToken": "agent-canvas",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for CANVAS with two article columns and editor marks",
+        "provenanceRef": "AVATAR-CANVAS"
+      }
     },
     {
       "id": "JAB",
       "slug": "jab",
       "kind": "specialist",
       "provider": "OpenAI",
-      "ventures": ["mma-files"],
+      "ventures": [
+        "mma-files"
+      ],
       "department": "MMA Files",
       "title": "Staff Writer",
       "mission": "Drafts sourced fight stories straight in Czech, keeps figures and names exact and never turns an unsupported detail into copy.",
-      "responsibilities": ["Draft both daily Czech articles", "Choose the licensed image candidate and write its Czech alt text", "Link fighters, figures and quotes to evidence"],
-      "notResponsibleFor": ["Creating quotes or statistics", "Publishing without STET approval"],
-      "decisionRights": ["Return an under-sourced brief", "Ask CANVAS to kill a slot whose evidence is too thin"],
-      "ownedKpiIds": ["jab.deadline_rate", "jab.grounding_rate"],
-      "successChecks": ["Drafts arrive before both slot deadlines", "No draft fails for a fabricated quote or figure"],
-      "capabilityTags": ["editorial:writing", "mma:reporting", "language:czech"],
+      "responsibilities": [
+        "Draft both daily Czech articles",
+        "Choose the licensed image candidate and write its Czech alt text",
+        "Link fighters, figures and quotes to evidence"
+      ],
+      "notResponsibleFor": [
+        "Creating quotes or statistics",
+        "Publishing without STET approval"
+      ],
+      "decisionRights": [
+        "Return an under-sourced brief",
+        "Ask CANVAS to kill a slot whose evidence is too thin"
+      ],
+      "ownedKpiIds": [
+        "jab.deadline_rate",
+        "jab.grounding_rate"
+      ],
+      "successChecks": [
+        "Drafts arrive before both slot deadlines",
+        "No draft fails for a fabricated quote or figure"
+      ],
+      "capabilityTags": [
+        "editorial:writing",
+        "mma:reporting",
+        "language:czech"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:JAB:v1",
-      "skillRefs": [".claude/skills/stop-slop/SKILL.md", ".claude/skills/business-validation/SKILL.md"],
-      "visual": { "motif": "short line and source pin", "accentToken": "agent-jab", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for JAB with a short line and source pin", "provenanceRef": "AVATAR-JAB" }
+      "skillRefs": [
+        ".claude/skills/stop-slop/SKILL.md",
+        ".claude/skills/business-validation/SKILL.md"
+      ],
+      "visual": {
+        "motif": "short line and source pin",
+        "accentToken": "agent-jab",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for JAB with a short line and source pin",
+        "provenanceRef": "AVATAR-JAB"
+      }
     },
     {
       "id": "REACH",
       "slug": "reach",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["mma-files"],
+      "ventures": [
+        "mma-files"
+      ],
       "department": "MMA Files",
       "title": "Social Editor",
       "mission": "Turns each approved article into two declared Czech social variants, using deterministic templates and keeping every channel in draft mode.",
-      "responsibilities": ["Build A and B social variants", "Declare every design and caption axis", "Queue two Czech channel drafts per article"],
-      "notResponsibleFor": ["Publishing to a social network", "Changing multiple undeclared choices in one test"],
-      "decisionRights": ["Reject an incomplete variant pack", "Choose a deterministic FRAME template"],
-      "ownedKpiIds": ["reach.pack_coverage", "reach.axis_coverage"],
-      "successChecks": ["Every published article has exactly two Czech variants", "Every test records all four design axes"],
-      "capabilityTags": ["social:editorial", "media:compose", "language:czech"],
+      "responsibilities": [
+        "Build A and B social variants",
+        "Declare every design and caption axis",
+        "Queue two Czech channel drafts per article"
+      ],
+      "notResponsibleFor": [
+        "Publishing to a social network",
+        "Changing multiple undeclared choices in one test"
+      ],
+      "decisionRights": [
+        "Reject an incomplete variant pack",
+        "Choose a deterministic FRAME template"
+      ],
+      "ownedKpiIds": [
+        "reach.pack_coverage",
+        "reach.axis_coverage"
+      ],
+      "successChecks": [
+        "Every published article has exactly two Czech variants",
+        "Every test records all four design axes"
+      ],
+      "capabilityTags": [
+        "social:editorial",
+        "media:compose",
+        "language:czech"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:REACH:v1",
-      "skillRefs": [".claude/skills/stop-slop/SKILL.md", ".claude/skills/boardroom-routing/SKILL.md"],
-      "visual": { "motif": "paired cards and outward arrows", "accentToken": "agent-reach", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for REACH with paired cards and outward arrows", "provenanceRef": "AVATAR-REACH" }
+      "skillRefs": [
+        ".claude/skills/stop-slop/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "paired cards and outward arrows",
+        "accentToken": "agent-reach",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for REACH with paired cards and outward arrows",
+        "provenanceRef": "AVATAR-REACH"
+      }
     },
     {
       "id": "SPLIT",
       "slug": "split",
       "kind": "specialist",
       "provider": "OpenAI",
-      "ventures": ["mma-files"],
+      "ventures": [
+        "mma-files"
+      ],
       "department": "MMA Files",
       "title": "Social Test Analyst",
       "mission": "Remain idle while Phase 3 measurement is closed; do not request, read or infer reader or engagement data.",
-      "responsibilities": ["Verify the Phase 3 gate remains closed", "Refuse social measurement work before a new owner decision"],
-      "notResponsibleFor": ["Collecting reader data", "Comparing A/B performance", "Changing template weights"],
-      "decisionRights": ["Reject any early metrics-ingestion request", "Point the board to the Phase 3 gate"],
-      "ownedKpiIds": ["split.metrics_ingestion_incidents", "split.phase_gate_compliance"],
-      "successChecks": ["METRICS_INGESTION_ENABLED remains false", "No visitor, reader or engagement metric enters state"],
-      "capabilityTags": ["phase3:standby", "measurement:guard"],
-      "status": "active",
+      "responsibilities": [
+        "Verify the Phase 3 gate remains closed",
+        "Refuse social measurement work before a new owner decision"
+      ],
+      "notResponsibleFor": [
+        "Collecting reader data",
+        "Comparing A/B performance",
+        "Changing template weights"
+      ],
+      "decisionRights": [
+        "Reject any early metrics-ingestion request",
+        "Point the board to the Phase 3 gate"
+      ],
+      "ownedKpiIds": [],
+      "successChecks": [
+        "METRICS_INGESTION_ENABLED remains false",
+        "No visitor, reader or engagement metric enters state"
+      ],
+      "capabilityTags": [
+        "phase3:standby",
+        "measurement:guard"
+      ],
+      "status": "retired",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:SPLIT:v1",
-      "skillRefs": [".claude/skills/business-validation/SKILL.md", ".claude/skills/boardroom-routing/SKILL.md"],
-      "visual": { "motif": "balanced halves and sample ticks", "accentToken": "agent-split", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for SPLIT with balanced halves and sample ticks", "provenanceRef": "AVATAR-SPLIT" }
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "balanced halves and sample ticks",
+        "accentToken": "agent-split",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for SPLIT with balanced halves and sample ticks",
+        "provenanceRef": "AVATAR-SPLIT"
+      }
     },
     {
       "id": "EASEL",
       "slug": "easel",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["carousel-studio"],
+      "ventures": [
+        "carousel-studio"
+      ],
       "department": "Carousel Studio",
       "title": "Template Designer",
       "mission": "Turns cited layout observations into original, reusable carousel templates that pass deterministic brand, contrast, safe-area and overflow checks before they can go live.",
-      "responsibilities": ["Propose versioned template DSL records", "Resolve layout checks across every brand and format", "Improve or deprecate templates without deleting history"],
-      "notResponsibleFor": ["Copying an external layout", "Publishing social posts or bypassing lifecycle checks"],
-      "decisionRights": ["Submit a template proposal", "Return a failed proposal for revision"],
-      "ownedKpiIds": ["easel.live_template_proposals", "easel.check_pass_rate"],
-      "successChecks": ["Every proposal cites observations and differs structurally from references", "Only fully checked templates reach live status"],
-      "capabilityTags": ["carousel:template", "design:system", "media:deterministic"],
-      "status": "active",
+      "responsibilities": [
+        "Propose versioned template DSL records",
+        "Resolve layout checks across every brand and format",
+        "Improve or deprecate templates without deleting history"
+      ],
+      "notResponsibleFor": [
+        "Copying an external layout",
+        "Publishing social posts or bypassing lifecycle checks"
+      ],
+      "decisionRights": [
+        "Submit a template proposal",
+        "Return a failed proposal for revision"
+      ],
+      "ownedKpiIds": [],
+      "successChecks": [
+        "Every proposal cites observations and differs structurally from references",
+        "Only fully checked templates reach live status"
+      ],
+      "capabilityTags": [
+        "carousel:template",
+        "design:system",
+        "media:deterministic"
+      ],
+      "status": "retired",
       "activatedAt": "2026-08-02",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:EASEL:v1",
-      "skillRefs": [".claude/skills/ui-ux-pro-max/SKILL.md", ".claude/skills/boardroom-routing/SKILL.md"],
-      "visual": { "motif": "modular grid and measured crop marks", "accentToken": "agent-easel", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for EASEL with a modular grid and crop marks", "provenanceRef": "AVATAR-EASEL" }
+      "skillRefs": [
+        ".claude/skills/ui-ux-pro-max/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "modular grid and measured crop marks",
+        "accentToken": "agent-easel",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for EASEL with a modular grid and crop marks",
+        "provenanceRef": "AVATAR-EASEL"
+      }
     },
     {
       "id": "MOTIF",
       "slug": "motif",
       "kind": "specialist",
       "provider": "OpenAI",
-      "ventures": ["carousel-studio"],
+      "ventures": [
+        "carousel-studio"
+      ],
       "department": "Carousel Studio",
       "title": "Visual Pattern Researcher",
       "mission": "Studies only owner-supplied links and approved public feeds, records attributable visual patterns as text and never copies external artwork or downloads external image bytes.",
-      "responsibilities": ["Record cited layout observations", "Separate reusable principles from source-specific expression", "Maintain brand and format coverage"],
-      "notResponsibleFor": ["Crawling Pinterest or private feeds", "Downloading, tracing or reproducing external creative"],
-      "decisionRights": ["Reject an untraceable inspiration link", "Recommend an observation for EASEL"],
-      "ownedKpiIds": ["motif.cited_observations", "motif.brand_coverage"],
-      "successChecks": ["Every observation keeps an allowed source URL and retrieval date", "No external media bytes enter repository state"],
-      "capabilityTags": ["visual:research", "source:provenance", "originality:guard"],
-      "status": "active",
+      "responsibilities": [
+        "Record cited layout observations",
+        "Separate reusable principles from source-specific expression",
+        "Maintain brand and format coverage"
+      ],
+      "notResponsibleFor": [
+        "Crawling Pinterest or private feeds",
+        "Downloading, tracing or reproducing external creative"
+      ],
+      "decisionRights": [
+        "Reject an untraceable inspiration link",
+        "Recommend an observation for EASEL"
+      ],
+      "ownedKpiIds": [],
+      "successChecks": [
+        "Every observation keeps an allowed source URL and retrieval date",
+        "No external media bytes enter repository state"
+      ],
+      "capabilityTags": [
+        "visual:research",
+        "source:provenance",
+        "originality:guard"
+      ],
+      "status": "retired",
       "activatedAt": "2026-08-02",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:MOTIF:v1",
-      "skillRefs": [".claude/skills/business-validation/SKILL.md", ".claude/skills/boardroom-routing/SKILL.md"],
-      "visual": { "motif": "reference pins and separated pattern tiles", "accentToken": "agent-motif", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for MOTIF with reference pins and pattern tiles", "provenanceRef": "AVATAR-MOTIF" }
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "reference pins and separated pattern tiles",
+        "accentToken": "agent-motif",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for MOTIF with reference pins and pattern tiles",
+        "provenanceRef": "AVATAR-MOTIF"
+      }
     },
     {
       "id": "PIVOT",
       "slug": "pivot",
       "kind": "specialist",
       "provider": "Anthropic",
-      "ventures": ["fightaiq", "mma-files"],
+      "ventures": [
+        "fightaiq",
+        "mma-files"
+      ],
       "department": "MMA Portfolio",
       "title": "MMA Desk Liaison",
       "mission": "Carries evidence-linked insights between FightAIQ and MMA Files so analysis can become a story and reader response can return as context, never as a hidden model input.",
-      "responsibilities": ["Compose the daily MMA bridge", "Cite every crossed insight", "Report which meetings acted on a handoff"],
-      "notResponsibleFor": ["Adding an unlinked bridge note", "Changing a probability from audience interest"],
-      "decisionRights": ["Reject an uncited handoff", "Route a sourced insight to either MMA desk"],
-      "ownedKpiIds": ["pivot.bridge_freshness", "pivot.crossed_insights"],
-      "successChecks": ["The bridge is current before the first MMA room each day", "At least two sourced handoffs are used by a meeting each week"],
-      "capabilityTags": ["mma:bridge", "evidence", "portfolio:liaison"],
+      "responsibilities": [
+        "Compose the daily MMA bridge",
+        "Cite every crossed insight",
+        "Report which meetings acted on a handoff"
+      ],
+      "notResponsibleFor": [
+        "Adding an unlinked bridge note",
+        "Changing a probability from audience interest"
+      ],
+      "decisionRights": [
+        "Reject an uncited handoff",
+        "Route a sourced insight to either MMA desk"
+      ],
+      "ownedKpiIds": [
+        "pivot.bridge_freshness",
+        "pivot.crossed_insights"
+      ],
+      "successChecks": [
+        "The bridge is current before the first MMA room each day",
+        "At least two sourced handoffs are used by a meeting each week"
+      ],
+      "capabilityTags": [
+        "mma:bridge",
+        "evidence",
+        "portfolio:liaison"
+      ],
       "status": "active",
       "activatedAt": "2026-08-01",
       "profileVersion": 1,
       "lastOrgReviewAt": null,
       "descriptionRef": "agent-profile:PIVOT:v1",
-      "skillRefs": [".claude/skills/business-validation/SKILL.md", ".claude/skills/boardroom-routing/SKILL.md"],
-      "visual": { "motif": "two rings joined by a cited hinge", "accentToken": "agent-pivot", "avatar": null, "avatarAlt": "Abstract non-human portrait plan for PIVOT with two rings joined by a cited hinge", "provenanceRef": "AVATAR-PIVOT" }
+      "skillRefs": [
+        ".claude/skills/business-validation/SKILL.md",
+        ".claude/skills/boardroom-routing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "two rings joined by a cited hinge",
+        "accentToken": "agent-pivot",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for PIVOT with two rings joined by a cited hinge",
+        "provenanceRef": "AVATAR-PIVOT"
+      }
     }
   ]
 }

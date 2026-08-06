@@ -116,6 +116,8 @@ export function routeBoardroom(
 ): RoomPacket {
   const owner = input.owner ?? OWNER_BY_TOPIC[input.topicType];
   const disabled = new Set(input.disabledParticipants ?? []);
+  /** Agents the roster has paused or retired, recorded so the room says why a seat is empty. */
+  const inactive = new Set<string>();
   const selected = new Map<
     FoundingAgent,
     { reason: string; mandatoryRule: string | null }
@@ -131,8 +133,24 @@ export function routeBoardroom(
       }
       return;
     }
-    if (config.agents[agent]?.status !== "active") {
-      throw new Error(`Routing selected inactive or unknown agent ${agent}`);
+    // An unknown agent is a config error and still crashes. A known agent that is not active is
+    // a roster decision, and this used to crash too: setting `status: "paused"` on any agent a
+    // preset requires took down every room that preset opens, so pausing an agent was only
+    // possible by editing every preset that named it. Treated as switched off, a pause is a
+    // one-field flip and the record says the seat was not called.
+    //
+    // The cost, stated: a preset's "required" list no longer guarantees the seat is in the room.
+    // A required seat could already vanish through venture-agent-controls, so the guarantee was
+    // conditional before; what changes is that the roster can now remove one as well.
+    if (!config.agents[agent]) {
+      throw new Error(`Routing selected unknown agent ${agent}`);
+    }
+    if (config.agents[agent].status !== "active") {
+      if (agent === owner) {
+        throw new Error(`Routing owner ${agent} is ${config.agents[agent].status}, not active`);
+      }
+      inactive.add(agent);
+      return;
     }
     const assignment = config.ventureAssignments[agent];
     if (
@@ -209,7 +227,9 @@ export function routeBoardroom(
         agent,
         reason: disabled.has(agent)
           ? `switched off for ${input.ventureId ?? "this room"}`
-          : "not relevant to this bounded room",
+          : inactive.has(agent)
+            ? `${config.agents[agent]?.status ?? "not active"} on the current roster`
+            : "not relevant to this bounded room",
         mandatoryRule: null
       })),
     maxRounds: config.defaults.maxRounds,

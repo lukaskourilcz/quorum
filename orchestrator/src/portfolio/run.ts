@@ -1100,7 +1100,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.phase === "mag-editorial") {
     if (weekday === 4) cast.push("TAPE");
-    if (weekday === 5) cast.push("REACH");
   }
   cast = [...new Set(cast)];
   cast = cast.filter((agent) => !disabledAgents.has(agent));

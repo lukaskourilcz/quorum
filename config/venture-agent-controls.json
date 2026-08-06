@@ -15,7 +15,10 @@
         "INSTAGRAM",
         "FRAME"
       ],
-      "disabled": ["THREADS", "INSTAGRAM"]
+      "disabled": [
+        "THREADS",
+        "INSTAGRAM"
+      ]
     },
     "titty-tuesdays": {
       "lockedOn": [
@@ -83,18 +86,23 @@
         "QUILL",
         "REACH",
         "PIVOT",
-        "SPLIT",
         "TAPE",
         "FRAME"
       ],
       "disabled": [
-        "REACH",
-        "SPLIT"
+        "REACH"
       ]
     },
     "carousel-studio": {
-      "lockedOn": ["EASEL", "MOTIF", "KEEPER", "AUDIT", "SCRIBE"],
-      "switchable": ["PALATE", "FRAME"],
+      "lockedOn": [
+        "KEEPER",
+        "AUDIT",
+        "SCRIBE"
+      ],
+      "switchable": [
+        "PALATE",
+        "FRAME"
+      ],
       "disabled": []
     }
   }

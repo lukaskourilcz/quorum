@@ -14,10 +14,12 @@ describe("living ecosystem document", () => {
   it("generates current counts, modes and gates without a provider call", async () => {
     const block = await buildCurrentOperatingTruth(repoRoot);
     expect(block).toContain("| Portfolio | 6 projects");
-    expect(block).toContain("| Agent roster | 40 active: 21 Anthropic, 19 OpenAI");
+    expect(block).toContain("| Agent roster | 30 active: 17 Anthropic, 13 OpenAI");
     expect(block).toContain("Carousel Studio");
     expect(block).toContain("METRICS_INGESTION_ENABLED=false");
-    expect(block).toContain("REACH, SPLIT");
+    // SPLIT is retired and off every venture list, so REACH is the only role MMA Files has
+    // switched off rather than removed.
+    expect(block).toContain("REACH");
   });
 
   it("keeps curated prose untouched when the generated block refreshes", async () => {

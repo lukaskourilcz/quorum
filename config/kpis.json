@@ -964,30 +964,6 @@
       }
     },
     {
-      "id": "split.metrics_ingestion_incidents",
-      "owner": "SPLIT",
-      "metric": "metricsIngestionIncidentCount",
-      "target": 0,
-      "dir": "down",
-      "warmupCycles": 14,
-      "measurement": {
-        "kind": "none",
-        "reason": "Nothing writes a metrics ingestion incident record."
-      }
-    },
-    {
-      "id": "split.phase_gate_compliance",
-      "owner": "SPLIT",
-      "metric": "phaseThreeGateClosedRate",
-      "target": 1,
-      "dir": "up",
-      "warmupCycles": 14,
-      "measurement": {
-        "kind": "none",
-        "reason": "No committed record states whether the phase-three gate was closed on a given day."
-      }
-    },
-    {
       "id": "pivot.bridge_freshness",
       "owner": "PIVOT",
       "metric": "dailyMmaBridgeCoverage",
@@ -1009,54 +985,6 @@
       "measurement": {
         "kind": "none",
         "reason": "Nothing records that one desk used another desk's insight."
-      }
-    },
-    {
-      "id": "easel.live_template_proposals",
-      "owner": "EASEL",
-      "metric": "checkedTemplateProposalsPerQuarter",
-      "target": 6,
-      "dir": "up",
-      "warmupCycles": 14,
-      "measurement": {
-        "kind": "none",
-        "reason": "state/ventures/carousel-studio/templates does not exist; no template proposal record is committed."
-      }
-    },
-    {
-      "id": "easel.check_pass_rate",
-      "owner": "EASEL",
-      "metric": "templateProposalCheckPassRate",
-      "target": 1,
-      "dir": "up",
-      "warmupCycles": 14,
-      "measurement": {
-        "kind": "none",
-        "reason": "state/ventures/carousel-studio/templates does not exist; no template proposal record is committed."
-      }
-    },
-    {
-      "id": "motif.cited_observations",
-      "owner": "MOTIF",
-      "metric": "citedStudioObservationsPerQuarter",
-      "target": 12,
-      "dir": "up",
-      "warmupCycles": 14,
-      "measurement": {
-        "kind": "none",
-        "reason": "state/ventures/carousel-studio/observations does not exist; no studio observation record is committed."
-      }
-    },
-    {
-      "id": "motif.brand_coverage",
-      "owner": "MOTIF",
-      "metric": "studioObservationBrandCoverage",
-      "target": 1,
-      "dir": "up",
-      "warmupCycles": 14,
-      "measurement": {
-        "kind": "none",
-        "reason": "state/ventures/carousel-studio/observations does not exist; no studio observation record is committed."
       }
     },
     {

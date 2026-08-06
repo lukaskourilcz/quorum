@@ -254,8 +254,6 @@
           "cadence": "daily@20:00",
           "cast": [
             "CANVAS",
-            "JAB",
-            "REACH",
             "PIVOT",
             "AUDIT"
           ],

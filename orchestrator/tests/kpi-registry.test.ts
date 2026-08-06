@@ -29,11 +29,12 @@ async function writeJson(file: string, value: unknown): Promise<void> {
 
 describe("the KPI ownership registry states its own measurement", () => {
   it("gives every declared KPI an explicit measurement, and no bare metric string", async () => {
-    // The whole point of the field. Before it existed, all 89 entries carried a `metric`
-    // name and a target and produced no number anywhere, which read as a measurement
-    // config while functioning as an ownership record.
+    // The whole point of the field. Before it existed, every entry carried a `metric` name and a
+    // target and produced no number anywhere, which read as a measurement config while
+    // functioning as an ownership record. Six entries left with SPLIT, EASEL and MOTIF: an
+    // outcome nobody owns is not an outcome the company is answering for.
     const registry = await loadKpiRegistry(configRoot);
-    expect(registry.kpis).toHaveLength(89);
+    expect(registry.kpis).toHaveLength(83);
     expect(registry.kpis.filter((kpi) => kpi.measurement === undefined)).toEqual([]);
   });
 

@@ -9,15 +9,20 @@ async function json<T>(relative: string): Promise<T> {
 }
 
 describe("closing 40-agent system audit", () => {
-  it("keeps every active identity unique, prompt-backed and routable", async () => {
+  it("keeps every identity unique, prompt-backed and routable, seated or not", async () => {
     const registry = await json<{ agents: Array<{ id: string; slug: string; mission: string; status: string; provider: string; notResponsibleFor: string[] }> }>("config/agents.json");
     const routing = await json<{ agents: Record<string, { capabilities: string[]; status: string }> }>("config/agent-routing.json");
     expect(registry.agents).toHaveLength(40);
     expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(40);
     expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(40);
     expect(new Set(Object.keys(routing.agents))).toEqual(new Set(registry.agents.map((agent) => agent.id)));
+    // Forty profiles, thirty of them seated. A retired or paused agent keeps its prompt, its
+    // portrait and its routing entry -- the record of who did what does not shrink when the
+    // roster does -- and the two files have to agree about which of the three it is.
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(30);
     for (const agent of registry.agents) {
-      expect(agent.status).toBe("active");
+      expect(["active", "paused", "retired"]).toContain(agent.status);
+      expect(routing.agents[agent.id]?.status).toBe(agent.status);
       expect(agent.notResponsibleFor.length).toBeGreaterThan(0);
       expect(routing.agents[agent.id]?.capabilities.length).toBeGreaterThan(0);
       await expect(access(path.join(repoRoot, "orchestrator", "prompts", `${agent.slug}.md`))).resolves.toBeUndefined();
@@ -28,7 +33,9 @@ describe("closing 40-agent system audit", () => {
     const controls = await json<{ ventures: Record<string, { disabled: string[] }> }>("config/venture-agent-controls.json");
     const features = await json<{ METRICS_INGESTION_ENABLED: boolean }>("config/features.json");
     expect(controls.ventures["caught-up"]?.disabled).toEqual(expect.arrayContaining(["THREADS", "INSTAGRAM"]));
-    expect(controls.ventures["mma-files"]?.disabled).toEqual(expect.arrayContaining(["REACH", "SPLIT"]));
+    // SPLIT is retired, so it is off every venture list rather than switched off inside one.
+    expect(controls.ventures["mma-files"]?.disabled).toEqual(expect.arrayContaining(["REACH"]));
+    expect(controls.ventures["mma-files"]?.disabled).not.toContain("SPLIT");
     expect(features.METRICS_INGESTION_ENABLED).toBe(false);
     for (const prompt of ["threads.md", "instagram.md", "reach.md"]) {
       const source = await readFile(path.join(repoRoot, "orchestrator", "prompts", prompt), "utf8");

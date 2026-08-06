@@ -47,9 +47,12 @@ describe("Boardroom routing", () => {
       budgetImpactUsd: 0
     });
     const selected = room.selectedParticipants.map(({ agent }) => agent);
-    expect(selected).toEqual(
-      expect.arrayContaining(["PULSE", "THREADS", "QUILL", "KEEPER"])
-    );
+    // THREADS is paused -- no channel has credentials -- so the tag still routes the room and the
+    // seat is skipped with the roster's reason rather than taking the room down.
+    expect(selected).toEqual(expect.arrayContaining(["PULSE", "QUILL", "KEEPER"]));
+    expect(selected).not.toContain("THREADS");
+    expect(room.skippedParticipants.find(({ agent }) => agent === "THREADS")?.reason)
+      .toContain("paused");
     expect(selected).not.toContain("INSTAGRAM");
   });
 
@@ -84,9 +87,13 @@ describe("Boardroom routing", () => {
       budgetImpactUsd: 0.08,
       preset: "edition-room"
     });
+    // SCOUT is paused, so a claims-heavy shortlist reaches the seats that are still on the
+    // roster and records the one that is not.
     expect(claimsHeavy.selectedParticipants.map(({ agent }) => agent)).toEqual(
-      expect.arrayContaining(["SCOUT", "QUILL", "KEEPER"])
+      expect.arrayContaining(["QUILL", "KEEPER"])
     );
+    expect(claimsHeavy.skippedParticipants.find(({ agent }) => agent === "SCOUT")?.reason)
+      .toContain("paused");
 
     const product = routeBoardroom(config, {
       roomId: "ROOM-CU-PRODUCT-001",
@@ -203,5 +210,80 @@ describe("Boardroom routing", () => {
         }
       })
     ).toThrowError(/private/);
+  });
+});
+
+/**
+ * Pausing an agent used to take down every room whose preset required it.
+ *
+ * routeBoardroom threw on any preset-required agent that was not active, so a roster change was
+ * only possible by editing every preset that named the agent — which is why the roster had forty
+ * agents, all marked active, several of them with nothing to do.
+ */
+describe("a paused agent does not crash the room it was required in", () => {
+  const paused = {
+    schemaVersion: 1,
+    defaults: { maxRounds: 2, maxTurns: 6, maxTotalTokens: 12_000, ttlMinutes: 60 },
+    agents: {
+      HERALD: { capabilities: ["edition:lead"], status: "active" },
+      STET: { capabilities: ["copy:quality"], status: "paused" },
+      HACEK: { capabilities: ["copy:cs"], status: "retired" }
+    },
+    ventureAssignments: { HERALD: "global", STET: "global", HACEK: "global" },
+    mandatoryWhen: [],
+    presets: { "edition-room": { required: ["HERALD", "STET", "HACEK"], optionalByTopic: false } }
+  };
+  const room = () => routeBoardroom(paused as never, {
+    roomId: "ROOM-PAUSED-001",
+    topicType: "edition",
+    objective: "Produce today's edition",
+    evidenceRefs: [],
+    decisionNeeded: "EDITION",
+    riskTags: [],
+    budgetImpactUsd: 0.08,
+    preset: "edition-room",
+    now: new Date("2026-08-06T03:00:00.000Z")
+  });
+
+  it("seats the active half and records the roster status of the rest", () => {
+    const routed = room();
+
+    expect(routed.selectedParticipants.map(({ agent }) => agent)).toEqual(["HERALD"]);
+    expect(routed.skippedParticipants.find(({ agent }) => agent === "STET")?.reason)
+      .toContain("paused");
+    expect(routed.skippedParticipants.find(({ agent }) => agent === "HACEK")?.reason)
+      .toContain("retired");
+  });
+
+  it("still refuses an agent no config knows about", () => {
+    expect(() => routeBoardroom(
+      { ...paused, presets: { "edition-room": { required: ["HERALD", "NOBODY"], optionalByTopic: false } } } as never,
+      {
+        roomId: "ROOM-PAUSED-002",
+        topicType: "edition",
+        objective: "Produce today's edition",
+        evidenceRefs: [],
+        decisionNeeded: "EDITION",
+        riskTags: [],
+        budgetImpactUsd: 0.08,
+        preset: "edition-room",
+        now: new Date("2026-08-06T03:00:00.000Z")
+      }
+    )).toThrow(/unknown agent NOBODY/u);
+  });
+
+  it("still refuses to open a room whose owner is off the roster", () => {
+    expect(() => routeBoardroom(paused as never, {
+      roomId: "ROOM-PAUSED-003",
+      topicType: "edition",
+      objective: "Produce today's edition",
+      evidenceRefs: [],
+      decisionNeeded: "EDITION",
+      riskTags: [],
+      budgetImpactUsd: 0.08,
+      preset: "edition-room",
+      owner: "STET",
+      now: new Date("2026-08-06T03:00:00.000Z")
+    })).toThrow(/paused, not active/u);
   });
 });

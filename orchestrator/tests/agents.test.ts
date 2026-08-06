@@ -9,13 +9,20 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("contains 40 active roles and keeps gated portraits explicit", async () => {
+  it("keeps 30 seated roles of 40 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
+    // Forty profiles, thirty of them seated. A retired or paused agent keeps its profile and its
+    // portrait -- the record of who did what does not shrink when the roster does -- and the
+    // router skips it and says so rather than crashing the room it was required in.
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
     expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(40);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(40);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(30);
+    expect(registry.agents.filter((agent) => agent.status === "retired").map((agent) => agent.id).sort())
+      .toEqual(["EASEL", "MOTIF", "SPLIT"]);
+    expect(registry.agents.filter((agent) => agent.status === "paused").map((agent) => agent.id).sort())
+      .toEqual(["FUNNEL", "INSTAGRAM", "LENS", "RADAR", "SCOUT", "SCRIBE", "THREADS"]);
     expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
       19
@@ -136,12 +143,20 @@ describe("agent registry and identity assets", () => {
     );
     const specialists = registry.agents.filter((agent) => agent.kind !== "council");
 
+    // The sentence counts the specialists a room can actually seat, so a paused or retired one is
+    // not in it. The ten that are not seated are named separately, so a seat cannot quietly go
+    // missing from both.
+    const seated = specialists.filter((agent) => agent.status === "active");
     const words: Record<number, string> = {
-      33: "Thirty-three", 34: "Thirty-four", 35: "Thirty-five",
+      24: "Twenty-four", 25: "Twenty-five", 26: "Twenty-six", 27: "Twenty-seven",
+      28: "Twenty-eight", 33: "Thirty-three", 34: "Thirty-four", 35: "Thirty-five",
       36: "Thirty-six", 37: "Thirty-seven", 38: "Thirty-eight"
     };
-    const stated = words[specialists.length];
-    expect(stated, `no spelled-out form for ${specialists.length} specialists`).toBeDefined();
+    const stated = words[seated.length];
+    expect(stated, `no spelled-out form for ${seated.length} seated specialists`).toBeDefined();
     expect(shared).toContain(`${stated} non-voting specialists`);
+    for (const agent of specialists.filter((entry) => entry.status !== "active")) {
+      expect(shared, `${agent.id} is off the roster and unnamed in the preamble`).toContain(agent.id);
+    }
   });
 });

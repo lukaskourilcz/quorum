@@ -45,8 +45,10 @@ describe("venture agent controls", () => {
       owner: "PULSE",
       disabledParticipants: [...disabledAgentsForVenture(controls, "mma-files")]
     });
+    // SPLIT is retired and off every venture list, so it is simply not in the room. REACH is
+    // still on the roster and switched off for this venture, which is the case this asserts:
+    // the record says the seat was switched off rather than leaving it unexplained.
     expect(room.selectedParticipants.some(({ agent }) => agent === "SPLIT")).toBe(false);
-    expect(room.skippedParticipants.find(({ agent }) => agent === "SPLIT")?.reason).toContain("switched off");
     expect(room.selectedParticipants.some(({ agent }) => agent === "REACH")).toBe(false);
     expect(room.skippedParticipants.find(({ agent }) => agent === "REACH")?.reason).toContain("switched off");
   });

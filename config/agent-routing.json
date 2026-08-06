@@ -26,15 +26,15 @@
     },
     "SCOUT": {
       "capabilities": ["evidence", "sources"],
-      "status": "active"
+      "status": "paused"
     },
     "SCRIBE": {
       "capabilities": ["summary", "public_projection"],
-      "status": "active"
+      "status": "paused"
     },
     "LENS": {
       "capabilities": ["analytics", "forecast"],
-      "status": "active"
+      "status": "paused"
     },
     "QUILL": {
       "capabilities": ["copy", "claims"],
@@ -42,7 +42,7 @@
     },
     "RADAR": {
       "capabilities": ["seo", "discoverability"],
-      "status": "active"
+      "status": "paused"
     },
     "KEEPER": {
       "capabilities": ["compliance", "privacy", "permissions"],
@@ -50,11 +50,11 @@
     },
     "THREADS": {
       "capabilities": ["social:threads"],
-      "status": "active"
+      "status": "paused"
     },
     "INSTAGRAM": {
       "capabilities": ["social:instagram", "visual_social"],
-      "status": "active"
+      "status": "paused"
     },
     "PEOPLE": {
       "capabilities": ["org_review", "role_design", "routing_quality"],
@@ -102,7 +102,7 @@
     },
     "FUNNEL": {
       "capabilities": ["marketing:performance", "campaign:plan", "cost:estimate"],
-      "status": "active"
+      "status": "paused"
     },
     "PALATE": {
       "capabilities": ["taste:memory", "ratings:distill", "visual:weights"],
@@ -154,15 +154,15 @@
     },
     "SPLIT": {
       "capabilities": ["phase3:standby", "measurement:guard"],
-      "status": "active"
+      "status": "retired"
     },
     "EASEL": {
       "capabilities": ["carousel:template", "design:system", "media:deterministic"],
-      "status": "active"
+      "status": "retired"
     },
     "MOTIF": {
       "capabilities": ["visual:research", "source:provenance", "originality:guard"],
-      "status": "active"
+      "status": "retired"
     },
     "PIVOT": {
       "capabilities": ["mma:bridge", "evidence", "portfolio:liaison"],
@@ -265,7 +265,7 @@
       "optionalByTopic": false
     },
     "mag-desk-room": {
-      "required": ["CANVAS", "JAB", "REACH", "PIVOT", "AUDIT"],
+      "required": ["CANVAS", "PIVOT", "AUDIT"],
       "optionalByTopic": false
     },
     "evidence-room": {
