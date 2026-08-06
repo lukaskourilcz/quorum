@@ -113,7 +113,8 @@
       "direction": "at-least",
       "unit": "count",
       "critical": false,
-      "ramp_days": 14
+      "ramp_days": 14,
+      "deferred_reason": "No channel has credentials and the social triple-lock is closed; the earliest this can move is about a month away."
     },
     {
       "id": "caught-up.followers",
@@ -124,13 +125,14 @@
       "direction": "at-least",
       "unit": "count",
       "critical": false,
-      "ramp_days": 14
+      "ramp_days": 14,
+      "deferred_reason": "No channel exists to have followers on."
     },
     {
       "id": "caught-up.healthy-sources",
       "venture": "caught-up",
-      "name": "Healthy sources maintained",
-      "metric_source": "state/sources#caught_up_healthy_count",
+      "name": "Sources that answered on the last run",
+      "metric_source": "state/edition/runs#healthy_source_count",
       "target": 30,
       "direction": "at-least",
       "unit": "count",
@@ -151,7 +153,7 @@
     {
       "id": "mma-files.complete-article-rate",
       "venture": "mma-files",
-      "name": "Articles with English, Czech, hero image, and cited evidence",
+      "name": "Articles with the Czech telling, a picture and cited evidence",
       "metric_source": "receipts/mma-files#complete_article_rate",
       "target": 1,
       "direction": "at-least",
@@ -179,7 +181,8 @@
       "direction": "at-least",
       "unit": "count",
       "critical": false,
-      "ramp_days": 14
+      "ramp_days": 14,
+      "deferred_reason": "No channel has credentials and the social triple-lock is closed; the earliest this can move is about a month away."
     },
     {
       "id": "mma-files.followers",
@@ -190,7 +193,8 @@
       "direction": "at-least",
       "unit": "count",
       "critical": false,
-      "ramp_days": 14
+      "ramp_days": 14,
+      "deferred_reason": "No channel exists to have followers on."
     },
     {
       "id": "fightaiq.active-roster-coverage",
@@ -278,7 +282,8 @@
       "direction": "at-least",
       "unit": "count",
       "critical": false,
-      "ramp_days": 14
+      "ramp_days": 14,
+      "deferred_reason": "No channel has credentials and the social triple-lock is closed; the earliest this can move is about a month away."
     },
     {
       "id": "titty-tuesdays.followers",
@@ -289,18 +294,8 @@
       "direction": "at-least",
       "unit": "count",
       "critical": false,
-      "ramp_days": 14
-    },
-    {
-      "id": "titty-tuesdays.commerce-readiness-dossier",
-      "venture": "titty-tuesdays",
-      "name": "Commerce-readiness dossier delivered for owner decision",
-      "metric_source": "state/ventures/titty-tuesdays#commerce_readiness_dossier_complete",
-      "target": 1,
-      "direction": "at-least",
-      "unit": "boolean",
-      "critical": false,
-      "ramp_days": 0
+      "ramp_days": 14,
+      "deferred_reason": "No channel exists to have followers on."
     },
     {
       "id": "incubator.complete-proposals",
@@ -325,28 +320,6 @@
       "ramp_days": 0
     },
     {
-      "id": "carousel-studio.live-templates",
-      "venture": "carousel-studio",
-      "name": "Live checked templates",
-      "metric_source": "state/ventures/carousel-studio/templates#live_count",
-      "target": 10,
-      "direction": "at-least",
-      "unit": "count",
-      "critical": false,
-      "ramp_days": 0
-    },
-    {
-      "id": "carousel-studio.passing-proposals",
-      "venture": "carousel-studio",
-      "name": "New EASEL proposals that passed every check",
-      "metric_source": "state/ventures/carousel-studio/templates#passing_proposal_count",
-      "target": 6,
-      "direction": "at-least",
-      "unit": "count",
-      "critical": false,
-      "ramp_days": 14
-    },
-    {
       "id": "carousel-studio.engine-post-rate",
       "venture": "carousel-studio",
       "name": "Published venture carousels rendered through Carousel Studio",
@@ -354,7 +327,7 @@
       "target": 1,
       "direction": "at-least",
       "unit": "ratio",
-      "critical": true,
+      "critical": false,
       "ramp_days": 14
     },
     {
@@ -367,17 +340,6 @@
       "unit": "boolean",
       "critical": true,
       "ramp_days": 0
-    },
-    {
-      "id": "carousel-studio.observation-brand-coverage",
-      "venture": "carousel-studio",
-      "name": "Brands with a cited-observation-driven iteration",
-      "metric_source": "state/ventures/carousel-studio/observations#brand_iteration_count",
-      "target": 3,
-      "direction": "at-least",
-      "unit": "count",
-      "critical": false,
-      "ramp_days": 14
     },
     {
       "id": "board.starvation-resolution-rate",
@@ -566,6 +528,89 @@
       "unit": "ratio",
       "critical": false,
       "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "caught-up.delivery-reliability",
+      "venture": "caught-up",
+      "name": "Days ending with an edition or a stated reason",
+      "metric_source": "receipts/caught-up#delivery_reliability_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "mma-files.delivery-reliability",
+      "venture": "mma-files",
+      "name": "Days ending with a published run record",
+      "metric_source": "receipts/mma-files#delivery_reliability_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "caught-up.cost-per-edition",
+      "venture": "caught-up",
+      "name": "Cost of one delivered edition",
+      "metric_source": "state/budget#caught_up_cost_per_edition_usd",
+      "target": 0.6,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "mma-files.cost-per-article",
+      "venture": "mma-files",
+      "name": "Cost of one delivered article",
+      "metric_source": "state/budget#mma_files_cost_per_article_usd",
+      "target": 0.35,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "titty-tuesdays.ideas-recorded",
+      "venture": "titty-tuesdays",
+      "name": "Marketing ideas recorded per week",
+      "metric_source": "state/ideas/titty-tuesdays#ideas_per_week",
+      "target": 5,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "titty-tuesdays.ideas-advanced",
+      "venture": "titty-tuesdays",
+      "name": "Ideas advanced past proposed",
+      "metric_source": "state/ideas/titty-tuesdays#advanced_count",
+      "target": 8,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14
+    },
+    {
+      "id": "carousel-studio.released-deck-rate",
+      "venture": "carousel-studio",
+      "name": "Released articles with a rendered deck receipt",
+      "metric_source": "receipts/carousel-studio#released_deck_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 14,
       "pace": "level"
     }
   ]

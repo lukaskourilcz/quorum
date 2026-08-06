@@ -83,6 +83,11 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 89
+          },
+          "deferred_reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
           }
         },
         "required": [

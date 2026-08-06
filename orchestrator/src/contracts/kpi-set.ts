@@ -18,7 +18,29 @@ export const QuarterlyKpiSchema = openObject({
   direction: KpiDirectionSchema,
   unit: KpiUnitSchema,
   critical: z.boolean(),
-  ramp_days: z.number().int().min(0).max(89)
+  ramp_days: z.number().int().min(0).max(89),
+  /**
+   * A KPI kept on file but out of the active quarter, with the reason it cannot be measured yet.
+   *
+   * The social KPIs are the case this exists for: no channel has credentials, the triple-lock is
+   * closed, and the earliest any of them could move is about a month away. Left active they
+   * report "unavailable" every morning and drag a quarter-end reassessment behind them for a
+   * reason that has nothing to do with the venture. Deleting them instead would lose the
+   * definition and the target the owner already agreed. A deferred KPI is not evaluated, is not
+   * counted in any status total, and says why.
+   */
+  deferred_reason: z.string().trim().min(1).max(200).optional()
+}).superRefine((kpi, context) => {
+  // A critical KPI is one whose miss forces a quarter-end reassessment. That is only meaningful
+  // for something that can be measured: a critical KPI with a deferred measurement asks the
+  // company to answer for a number nobody can produce.
+  if (kpi.critical && kpi.deferred_reason) {
+    context.addIssue({
+      code: "custom",
+      message: `A deferred KPI may not be critical: ${kpi.id}`,
+      path: ["critical"]
+    });
+  }
 });
 
 export const KpiSetSchema = openObject({

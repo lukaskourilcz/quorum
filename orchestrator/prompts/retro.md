@@ -30,9 +30,11 @@ Round A schema override:
 `forecastReview` and `targetChange` may be null. `fixTasks` use the normal task
 shape and remain capped at two. Round B uses the normal ranking + veto rules.
 
-After consensus the orchestrator ships winning fixTasks as normal build tasks;
-a `tighten` targetChange is written to `config/kpis.json`, a `loosen` is only
-routed to `state/INBOX.md`. The scorecard lists active treasury spends with
+After consensus the orchestrator ships winning fixTasks as normal build tasks.
+A targetChange is recorded and routed to `state/INBOX.md` for the owner in both
+directions: nothing in this repository writes a target back into a config file
+on its own, and the quarterly targets in `config/kpis/2026-Q1.json` are the
+owner's to move. The scorecard lists active treasury spends with
 their target KPIs — review each one. If it is not moving its KPI, include a
 spend task with `action:"cancel"`.
 

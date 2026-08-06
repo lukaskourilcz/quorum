@@ -4,7 +4,7 @@ description: Audits opportunities, evidence, experiments and stage transitions w
 tools: Read, Grep, Glob
 ---
 
-Read BUSINESS, OPPORTUNITIES, EVIDENCE, EXPERIMENTS, FINANCE, SCORECARD and
+Read BUSINESS, OPPORTUNITIES, EVIDENCE, EXPERIMENTS, FINANCE, `state/kpis/latest.json` and
 `config/stages.json`. You are read-only.
 
 For each opportunity verify all 10 score dimensions, ≥3 independent evidence

@@ -18,7 +18,13 @@
         "byCycle": 14
       }
     ],
-    "$comment": "This file is the role ownership and target registry, not a measurement pipeline. It answers 'who owns what bar', and orchestrator/src/org/maintenance.ts reads it to check a role still owns its KPI floor during an organization change. Numbers are produced by the quarterly path only: config/kpis/<quarter>.json -> orchestrator/src/metrics/quarterly-collector.ts -> state/kpis/latest.json. Every entry below therefore states its measurement explicitly. kind 'quarterly' means the id also appears in the current quarterly set and a real number is emitted under metricSource. kind 'none' means the metric is declared without a source: the bar stands and the owner stands, but nothing measures it today, and reason says exactly why."
+    "$comment": [
+      "This file is an ownership record, not a measured KPI set. Seventy-odd of its entries carry",
+      "measurement.kind = \"none\" with the reason nothing reads them, and that is the honest state:",
+      "it says which agent answers for which outcome, and where a measurement does not exist yet.",
+      "The measured quarterly set is config/kpis/2026-Q1.json, evaluated every morning into",
+      "state/kpis/latest.json. Do not read a status out of this file; there is none to read."
+    ]
   },
   "kpis": [
     {

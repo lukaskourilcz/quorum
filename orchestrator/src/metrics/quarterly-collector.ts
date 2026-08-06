@@ -105,7 +105,12 @@ const EditionRunSchema = z.object({
   completedAt: z.string().min(1),
   stages: z.array(EditionStageSchema),
   stetBlocks: z.number().int().nonnegative(),
-  quality: z.object({ metrics: z.object({ signalStrength: z.number().finite() }) }).optional(),
+  quality: z.object({
+    metrics: z.object({
+      signalStrength: z.number().finite(),
+      successfulSources: z.number().int().nonnegative().optional()
+    })
+  }).optional(),
   stet: z.object({ passed: z.boolean() }).optional()
 });
 
@@ -186,6 +191,19 @@ export async function collectQuarterlyMeasurements(input: {
 }> {
   const periodEnd = input.now.toISOString().slice(0, 10);
   const periodStart = input.kpiSet.quarter_start;
+  /**
+   * The end of the quarter, not today.
+   *
+   * Fights are announced weeks ahead, and clamping their denominators at "now" excluded every
+   * future bout from them: 32 announced bouts and 2 event cards were on file while
+   * announced_event_coverage_rate, prediction_coverage_rate and the event-fighter completeness
+   * KPI all read "unavailable", because their denominators were empty. Real coverage was 2 of 2.
+   * A KPI about work that is scheduled has to look at the schedule.
+   */
+  const quarterEnd = new Date(
+    new Date(`${input.kpiSet.quarter_start}T00:00:00.000Z`).getTime()
+    + (input.kpiSet.quarter_days * DAY_MS)
+  ).toISOString().slice(0, 10);
   const [
     budgetRaw,
     fixedRaw,
@@ -210,7 +228,10 @@ export async function collectQuarterlyMeasurements(input: {
     studioTemplatesRaw,
     studioObservationsRaw,
     editionRunFiles,
-    ideaLedger
+    ideaLedger,
+    tittyTuesdaysIdeaLedger,
+    mmaRunsRaw,
+    deckReceiptsRaw
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -237,7 +258,10 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"), true),
     jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "observations")),
     jsonFilesCounted(path.join(input.stateRoot, "edition", "runs")),
-    jsonLines(path.join(input.stateRoot, "ideas", "caught-up", "ledger.jsonl"))
+    jsonLines(path.join(input.stateRoot, "ideas", "caught-up", "ledger.jsonl")),
+    jsonLines(path.join(input.stateRoot, "ideas", "titty-tuesdays", "ledger.jsonl")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "mma-files", "runs")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "deck-receipts"))
   ]);
 
   const measurements: Record<string, number | null> = {};
@@ -259,7 +283,9 @@ export async function collectQuarterlyMeasurements(input: {
     ? (apiByMonth.size ? Math.max(...apiByMonth.values()) : 0)
     : null;
   const fixed = FixedCostRegistrySchema.safeParse(fixedRaw);
-  measurements["state/metrics/quarterly#maximum_monthly_all_in_usd"] = budget.success && fixed.success && fixed.data.costs.length > 0
+  // An empty cost list the owner has confirmed is fixed $0, not an unanswered question, so the
+  // all-in figure is measurable: API spend plus nothing.
+  measurements["state/metrics/quarterly#maximum_monthly_all_in_usd"] = budget.success && fixed.success && (fixed.data.costs.length > 0 || fixed.data.confirmedNoFixedCosts === true)
     ? (apiByMonth.size ? Math.max(...apiByMonth.values()) : 0) + sum(fixed.data.costs.map((cost) => cost.monthly_usd))
     : null;
 
@@ -298,7 +324,18 @@ export async function collectQuarterlyMeasurements(input: {
     .map((result) => result.data)
     .filter((article) => dateInPeriod(article.publishAt, periodStart, periodEnd) && article.status === "published");
   measurements["receipts/mma-files#articles_delivered"] = articles.length;
-  measurements["receipts/mma-files#complete_article_rate"] = articles.length > 0 ? 1 : null;
+  // A real predicate, not "did anything ship". This used to be `articles.length > 0 ? 1 : null`:
+  // a vanity 1.00 that could never fall, under a display name that still demanded an English
+  // version the desk stopped writing. A complete article has the Czech telling a reader opens, a
+  // picture, and at least one source behind it.
+  measurements["receipts/mma-files#complete_article_rate"] = ratio(
+    articles.filter((article) =>
+      Boolean(article.localizations.cs?.bodyMDX?.trim())
+      && Boolean(article.image?.hero_path)
+      && article.sources.length >= 1
+    ).length,
+    articles.length
+  );
   measurements["receipts/delivery#content_units"] = deliveredEditions + articles.length;
 
   const quarterProofs = proofs.map(record).filter((value): value is Record<string, unknown> => Boolean(value))
@@ -461,7 +498,16 @@ export async function collectQuarterlyMeasurements(input: {
 
   const sourceConfig = record(sourcesRaw);
   const sources = Array.isArray(sourceConfig?.sources) ? sourceConfig.sources.map(record).filter(Boolean) : [];
-  measurements["state/sources#caught_up_healthy_count"] = sources.filter((source) => source?.enabled === true).length;
+  // Sources that actually answered on the most recent production run, not sources someone
+  // switched on in config. The old count read `enabled: true` flags, which is a statement about
+  // intent that cannot fall when a feed goes down -- exactly the number a health KPI exists to
+  // catch. The run's own scorecard already counts the ones that returned.
+  const newestScoredRun = [...editionRuns]
+    .filter((run) => run.quality?.metrics.successfulSources !== undefined)
+    .sort((left, right) => left.date.localeCompare(right.date))
+    .at(-1);
+  measurements["state/edition/runs#healthy_source_count"] =
+    newestScoredRun?.quality?.metrics.successfulSources ?? null;
 
   const fighters = fighterRaw
     .map((value) => FighterRecordSchema.safeParse(value))
@@ -498,7 +544,7 @@ export async function collectQuarterlyMeasurements(input: {
     .map((value) => BoutRecordSchema.safeParse(value))
     .filter((result) => result.success)
     .map((result) => result.data);
-  const quarterBouts = bouts.filter((bout) => dateInPeriod(bout.event.startsAtUtc, periodStart, periodEnd));
+  const quarterBouts = bouts.filter((bout) => dateInPeriod(bout.event.startsAtUtc, periodStart, quarterEnd));
   const covered = quarterBouts.filter((bout) => ["confirmed", "weigh-in", "completed"].includes(bout.status));
   measurements["stats/fightaiq#prediction_coverage_rate"] = ratio(
     covered.filter((bout) => bout.predictionRefs.length > 0).length,
@@ -519,7 +565,7 @@ export async function collectQuarterlyMeasurements(input: {
       .map((value) => EventCardSchema.safeParse(value))
       .filter((result) => result.success)
       .map((result) => result.data)
-      .filter((event) => dateInPeriod(event.startsAtUtc, periodStart, periodEnd))
+      .filter((event) => dateInPeriod(event.startsAtUtc, periodStart, quarterEnd))
       .map((event) => event.id)
   );
   measurements["state/mma/events#announced_event_coverage_rate"] = announcedEventRefs.size > 0
@@ -536,7 +582,6 @@ export async function collectQuarterlyMeasurements(input: {
   const plans = plansRaw.map((value) => MarketingPlanSchema.safeParse(value)).filter((result) => result.success).map((result) => result.data);
   const launchReadyCampaigns = plans.filter((plan) => plan.tactics.length > 0 && plan.calendar.length > 0 && plan.audienceRefs.length > 0).length;
   measurements["state/ventures/titty-tuesdays/campaigns#launch_ready_count"] = launchReadyCampaigns;
-  measurements["state/ventures/titty-tuesdays#commerce_readiness_dossier_complete"] = 0;
   const proposals = proposalsRaw.map((value) => NicheProposalSchema.safeParse(value)).filter((result) => result.success).map((result) => result.data);
   measurements["state/ventures/incubator/proposals#complete_count"] = proposals.length;
   measurements["state/ratings/incubator#rated_proposal_count"] = incubatorRatings.map(record).filter((rating) =>
@@ -553,7 +598,9 @@ export async function collectQuarterlyMeasurements(input: {
   const agendas = record(agendaRaw);
   const agendaList = Array.isArray(agendas?.agendas) ? agendas.agendas.map(record).filter(Boolean) : [];
   const consumed = agendaList.filter((agenda) => agenda?.status === "consumed");
-  measurements["state/meeting-agendas#quarterly_review_consumed_count"] = 0;
+  // The list right above it was computed and thrown away, so this read 0 against a target of 20
+  // for the whole quarter -- permanently off-track while four agendas had in fact been consumed.
+  measurements["state/meeting-agendas#quarterly_review_consumed_count"] = consumed.length;
   const closedStarvation = agendaList.filter((agenda) => ["consumed", "expired"].includes(String(agenda?.status)));
   measurements["state/meeting-agendas#starvation_resolution_rate"] = agendaList.length === 0
     ? 1
@@ -563,6 +610,92 @@ export async function collectQuarterlyMeasurements(input: {
   measurements["state/priority-queue.json#missing_decision_count"] = priorityItems.filter((item) =>
     typeof item?.decision_at_stake !== "string" || !item.decision_at_stake.trim()
   ).length;
+
+  // --- What the owner manages by, all computable from state already on disk ---
+
+  /**
+   * Days elapsed in the quarter so far, at least one, as the denominator of a reliability rate.
+   *
+   * "Elapsed" and not "the whole quarter": a magazine that has published every day of its first
+   * week is at 1.00, not at a twelfth of the way to it.
+   */
+  const elapsedDays = Math.max(
+    1,
+    Math.floor(
+      (Date.parse(`${periodEnd}T00:00:00.000Z`) - Date.parse(`${periodStart}T00:00:00.000Z`)) / DAY_MS
+    ) + 1
+  );
+
+  // A day counts when the reader got something: an edition, or an honest record saying there
+  // wasn't one. That is the contract every terminal day now ends with, so this is the measure of
+  // whether it holds -- not of how many articles were written.
+  const editionDays = new Set(
+    editionDeliveries
+      .map(record)
+      .filter((receipt) =>
+        receipt?.status === "delivered"
+        && typeof receipt.date === "string"
+        && dateInPeriod(receipt.date, periodStart, periodEnd))
+      .map((receipt) => String(receipt!.date))
+  );
+  measurements["receipts/caught-up#delivery_reliability_rate"] = ratio(editionDays.size, elapsedDays);
+
+  const mmaRunDays = new Set(
+    mmaRunsRaw
+      .map(record)
+      .filter((run) =>
+        run?.status === "published"
+        && typeof run.date === "string"
+        && dateInPeriod(run.date, periodStart, periodEnd))
+      .map((run) => String(run!.date))
+  );
+  measurements["receipts/mma-files#delivery_reliability_rate"] = ratio(mmaRunDays.size, elapsedDays);
+
+  // What one delivered unit costs, from the ledger phases that produce it. The all-in monthly
+  // figure says whether the company is inside its limit; this says whether a unit is worth what
+  // it costs, which is the question a per-unit target answers.
+  const phaseSpend = (phases: readonly string[]) =>
+    sum(periodBudget.filter((entry) => phases.includes(entry.phase)).map((entry) => entry.usd));
+  measurements["state/budget#caught_up_cost_per_edition_usd"] = deliveredEditions > 0
+    ? Number((phaseSpend(["cu-edition"]) / deliveredEditions).toFixed(8))
+    : null;
+  measurements["state/budget#mma_files_cost_per_article_usd"] = articles.length > 0
+    ? Number(
+        (phaseSpend(["article-am", "article-pm", "mag-editorial", "mag-desk"]) / articles.length).toFixed(8)
+      )
+    : null;
+
+  // Titty Tuesdays is measured on ideas recorded and ideas that went somewhere, because that is
+  // the whole of what the venture currently produces: the room writes into the ledger and the
+  // owner rates them in /admin. The social KPIs it used to carry cannot move for about a month.
+  const tittyIdeas = tittyTuesdaysIdeaLedger
+    .map(record)
+    .filter((idea): idea is Record<string, unknown> => Boolean(idea));
+  const ideaProposedAt = (idea: Record<string, unknown>): unknown =>
+    Array.isArray(idea.statusHistory) ? record(idea.statusHistory[0])?.at : idea.createdAt;
+  const quarterIdeas = tittyIdeas.filter((idea) =>
+    dateInPeriod(ideaProposedAt(idea), periodStart, periodEnd));
+  measurements["state/ideas/titty-tuesdays#ideas_per_week"] = Number(
+    (quarterIdeas.length / Math.max(1, elapsedDays / 7)).toFixed(8)
+  );
+  measurements["state/ideas/titty-tuesdays#advanced_count"] = quarterIdeas.filter((idea) =>
+    typeof idea.status === "string" && idea.status !== "proposed").length;
+
+  // Every released article should carry a receipt for the deck that was rendered from it. The
+  // engine renders at $0 and deterministically, so anything short of every article is a
+  // pipeline that did not run rather than a budget that ran out.
+  const deckReceiptSlugs = new Set(
+    deckReceiptsRaw
+      .map(record)
+      .filter((receipt) => dateInPeriod(receipt?.date, periodStart, periodEnd))
+      .map((receipt) => String(receipt?.slug ?? ""))
+      .filter(Boolean)
+  );
+  const releasedSlugs = articles.map((article) => article.slug);
+  measurements["receipts/carousel-studio#released_deck_rate"] = ratio(
+    releasedSlugs.filter((slug) => deckReceiptSlugs.has(slug)).length,
+    releasedSlugs.length
+  );
 
   const stored = StoredMeasurementsSchema.safeParse(storedRaw);
   if (stored.success) {

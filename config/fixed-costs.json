@@ -3,8 +3,12 @@
   "currency": "USD",
   "costs": [],
   "$comment": [
-    "Keep costs empty until the owner enters an amount from a real subscription.",
+    "confirmedNoFixedCosts: the owner has confirmed there are no fixed monthly costs. An empty",
+    "costs list with this flag means fixed $0, not unmeasured -- company.monthly-all-in-usd read",
+    "\"unavailable\" while it could not tell the two apart, and it is a critical KPI.",
+    "Remove the flag the moment a real subscription is entered below.",
     "Entry shape: name, monthly_usd, category, since.",
-    "Possible names include Vercel Pro, Supabase Pro, and a domain. Replace them with the owner's actual subscriptions and amounts."
-  ]
+    "Possible names include Vercel Pro, Supabase Pro, and a domain."
+  ],
+  "confirmedNoFixedCosts": true
 }

@@ -47,16 +47,23 @@ function cadenceHour(cadence: string): number {
 }
 
 function productionDefinitions(kind: string, cadence: string): CalendarDefinition[] {
-  const match = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(cadence);
-  const morning = Number(match?.[1]);
-  const evening = Number(match?.[2]);
-  if (kind !== "article-production" || !match || !Number.isInteger(morning) || !Number.isInteger(evening)) {
-    throw new Error(`Unsupported public production schedule: ${kind} ${cadence}`);
+  // One article a day. The evening slot was killed every day since launch, so the registry
+  // stopped promising two; the two-a-day form stays readable because the calendar renders past
+  // weeks whose cadence was still 2x-daily.
+  if (kind === "article-production") {
+    const daily = /^daily@(\d{2}):00$/.exec(cadence);
+    if (daily && Number.isInteger(Number(daily[1]))) {
+      return [{ hour: Number(daily[1]), kind: "article-am", label: "MMA Files daily article" }];
+    }
+    const twice = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(cadence);
+    if (twice && Number.isInteger(Number(twice[1])) && Number.isInteger(Number(twice[2]))) {
+      return [
+        { hour: Number(twice[1]), kind: "article-am", label: "MMA Files morning article" },
+        { hour: Number(twice[2]), kind: "article-pm", label: "MMA Files evening article" }
+      ];
+    }
   }
-  return [
-    { hour: morning, kind: "article-am", label: "MMA Files morning article" },
-    { hour: evening, kind: "article-pm", label: "MMA Files evening article" }
-  ];
+  throw new Error(`Unsupported public production schedule: ${kind} ${cadence}`);
 }
 
 export async function getPublicCalendarSchedule(): Promise<readonly CalendarDefinition[]> {

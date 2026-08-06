@@ -56,7 +56,7 @@ Verdicts mean:
 | `state/INBOX.md` | Current | Canonical runtime inbox, not explanatory copy. |
 | `state/OPPORTUNITIES.md` | Current | No unsupported opportunity was promoted. |
 | `state/ROADMAP.md` | Updated | Marks release proof, image contracts, queue/founding, social gates and the Phase 3 hold complete. |
-| `state/SCORECARD.md` | Current | Warm-up/unavailable metrics remain honestly labelled. |
+| `state/SCORECARD.md` | Deleted 2026-08-06 | Hand-written, stale, and contradicted `state/kpis/latest.json`, which is generated every morning. |
 | `state/SOCIAL_STRATEGY.md` | Updated | Replaces manual approval/results with per-project activation, post proof and no engagement collection. |
 | `state/brand-clearance/2026-07-23.md` | Historical | Original clearance observation preserved. |
 | `state/brand-clearance/2026-07-28.md` | Historical | Follow-up clearance snapshot preserved. |

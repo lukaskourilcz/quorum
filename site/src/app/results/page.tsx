@@ -3,7 +3,12 @@ import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
-import { getDailyResults, type DailyResultRow } from "@/lib/daily-results";
+import {
+  getDailyResults,
+  getVentureKpiStatuses,
+  withMissingDays,
+  type DailyResultRow
+} from "@/lib/daily-results";
 import { formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -27,8 +32,10 @@ const STATUS_TONE: Record<DailyResultRow["status"], string> = {
 };
 
 export default async function ResultsPage() {
-  const days = await getDailyResults();
-  const totalCost = days.reduce((sum, day) => sum + day.totalCostUsd, 0);
+  const recorded = await getDailyResults();
+  const days = withMissingDays(recorded);
+  const kpiStatuses = await getVentureKpiStatuses();
+  const totalCost = recorded.reduce((sum, day) => sum + day.totalCostUsd, 0);
 
   return (
     <PageShell>
@@ -40,7 +47,7 @@ export default async function ResultsPage() {
             </p>
             <p className="mt-2 text-2xl font-semibold tracking-[-0.03em]">{formatUsd(totalCost)}</p>
             <p className="mt-1 text-xs text-[var(--fog)]">
-              {days.length} {days.length === 1 ? "day" : "days"} on record
+              {recorded.length} {recorded.length === 1 ? "day" : "days"} on record
             </p>
           </div>
         }
@@ -50,6 +57,52 @@ export default async function ResultsPage() {
       />
 
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-24">
+        {kpiStatuses.length > 0 ? (
+          <div className="mb-16">
+            <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
+              Where each project stands this quarter
+            </h2>
+            <p className="mt-2 max-w-3xl text-[var(--muted-foreground)]">
+              The day tables below say what was produced. This says whether producing it is moving
+              the outcomes each project is measured on, from this morning&rsquo;s reading.
+            </p>
+            <div className="mt-5 overflow-x-auto">
+              <Table>
+                <thead>
+                  <tr>
+                    <TableHead>Project</TableHead>
+                    <TableHead>On track</TableHead>
+                    <TableHead>At risk</TableHead>
+                    <TableHead>Off track</TableHead>
+                    <TableHead>Not measurable yet</TableHead>
+                  </tr>
+                </thead>
+                <tbody>
+                  {kpiStatuses.map((entry) => (
+                    <tr key={entry.ventureId}>
+                      <TableCell>
+                        <span className="font-semibold">{entry.ventureLabel}</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-[var(--success)]">{entry.onTrack}</span>
+                      </TableCell>
+                      <TableCell>{entry.atRisk}</TableCell>
+                      <TableCell>
+                        <span className={entry.offTrack > 0 ? "text-[var(--danger)]" : undefined}>
+                          {entry.offTrack}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-[var(--fog)]">{entry.unavailable}</span>
+                      </TableCell>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        ) : null}
+
         {days.length === 0 ? (
           <p className="text-[var(--muted-foreground)]">
             No day has been recorded yet. Each night cycle writes one summary, and it appears here the
@@ -62,14 +115,22 @@ export default async function ResultsPage() {
                 <div className="mb-4 flex flex-wrap items-baseline justify-between gap-4">
                   <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">{formatDate(day.date)}</h2>
                   <p className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--ash)]">
-                    Day total {formatUsd(day.totalCostUsd)}
+                    {day.missing ? "No summary recorded" : `Day total ${formatUsd(day.totalCostUsd)}`}
                   </p>
                 </div>
+
+                {day.missing ? (
+                  <p className="max-w-3xl text-[var(--muted-foreground)]">
+                    No summary was recorded for this day. The work still happened; the night cycle
+                    did not write down what it was.
+                  </p>
+                ) : null}
 
                 {day.portfolioLine ? (
                   <p className="mb-5 max-w-3xl text-[var(--muted-foreground)]">{day.portfolioLine}</p>
                 ) : null}
 
+                {day.missing ? null : (
                 <div className="overflow-x-auto">
                   <Table>
                     <thead>
@@ -111,6 +172,7 @@ export default async function ResultsPage() {
                     </tbody>
                   </Table>
                 </div>
+                )}
               </article>
             ))}
           </div>

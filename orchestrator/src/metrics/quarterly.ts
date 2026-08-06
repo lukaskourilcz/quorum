@@ -140,7 +140,9 @@ export function evaluateQuarterlyKpis(input: {
 }): QuarterlyKpiSnapshot {
   const set = KpiSetSchema.parse(input.kpiSet);
   const timing = quarterTiming(set, input.now);
-  const statuses = set.kpis.map((kpi): QuarterlyKpiEvaluation => {
+  // A deferred KPI is parked, not measured: it keeps its definition and target on file and takes
+  // no part in the quarter's totals or in the critical-miss list.
+  const statuses = set.kpis.filter((kpi) => !kpi.deferred_reason).map((kpi): QuarterlyKpiEvaluation => {
     const measurement = input.measurements[kpi.metric_source];
     if (measurement === null || measurement === undefined) {
       return QuarterlyKpiEvaluationSchema.parse({

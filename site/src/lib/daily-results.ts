@@ -25,6 +25,24 @@ export interface DailyResult {
   portfolioLine: string;
   rows: DailyResultRow[];
   totalCostUsd: number;
+  /**
+   * True when no digest exists for this date at all.
+   *
+   * A day with no digest is not a day with nothing on it — 4 and 6 August both produced work —
+   * it is a night cycle that did not write its summary. The page said nothing about either, so
+   * the gaps read as days the company did nothing.
+   */
+  missing?: boolean;
+}
+
+/** How each project's quarterly outcomes stood on the morning of a given day. */
+export interface VentureKpiStatus {
+  ventureId: string;
+  ventureLabel: string;
+  onTrack: number;
+  atRisk: number;
+  offTrack: number;
+  unavailable: number;
 }
 
 const VENTURE_LABELS: Record<string, string> = {
@@ -123,6 +141,73 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
     rows: rows.sort((left, right) => left.ventureLabel.localeCompare(right.ventureLabel)),
     totalCostUsd: Number(rows.reduce((sum, row) => sum + row.costUsd, 0).toFixed(6))
   };
+}
+
+/**
+ * The morning KPI snapshot, grouped by project.
+ *
+ * A day's table says what each project produced; this says whether producing it is moving the
+ * outcome the project is measured on. One is the work and the other is whether the work counts,
+ * and they were on two different pages.
+ */
+export async function getVentureKpiStatuses(root = repositoryRoot()): Promise<VentureKpiStatus[]> {
+  let snapshot: { statuses?: unknown };
+  try {
+    snapshot = JSON.parse(
+      await readFile(path.join(root, "state/kpis/latest.json"), "utf8")
+    ) as { statuses?: unknown };
+  } catch {
+    return [];
+  }
+  const statuses = Array.isArray(snapshot.statuses) ? snapshot.statuses : [];
+  const byVenture = new Map<string, VentureKpiStatus>();
+  for (const entry of statuses as Array<{ venture?: unknown; status?: unknown }>) {
+    const ventureId = text(entry.venture);
+    const status = text(entry.status);
+    if (!ventureId) continue;
+    const current = byVenture.get(ventureId) ?? {
+      ventureId,
+      ventureLabel: ventureLabel(ventureId),
+      onTrack: 0,
+      atRisk: 0,
+      offTrack: 0,
+      unavailable: 0
+    };
+    if (status === "on-track") current.onTrack += 1;
+    else if (status === "at-risk") current.atRisk += 1;
+    else if (status === "off-track") current.offTrack += 1;
+    else current.unavailable += 1;
+    byVenture.set(ventureId, current);
+  }
+  return [...byVenture.values()].sort((left, right) =>
+    left.ventureLabel.localeCompare(right.ventureLabel));
+}
+
+/**
+ * Every day from the newest digest back to the oldest, with the ones that have no digest named.
+ *
+ * The page used to render only the days a digest exists for, so a missing summary was invisible:
+ * 4 and 6 August simply were not on the list, and a reader had no way to tell a quiet day from
+ * an unrecorded one.
+ */
+export function withMissingDays(days: readonly DailyResult[]): DailyResult[] {
+  if (days.length === 0) return [];
+  const known = new Map(days.map((day) => [day.date, day]));
+  const dates = [...known.keys()].sort();
+  const first = Date.parse(`${dates[0]!}T00:00:00.000Z`);
+  const last = Date.parse(`${dates.at(-1)!}T00:00:00.000Z`);
+  const filled: DailyResult[] = [];
+  for (let at = first; at <= last; at += 86_400_000) {
+    const date = new Date(at).toISOString().slice(0, 10);
+    filled.push(known.get(date) ?? {
+      date,
+      portfolioLine: "",
+      rows: [],
+      totalCostUsd: 0,
+      missing: true
+    });
+  }
+  return filled.reverse();
 }
 
 function repositoryRoot(): string {

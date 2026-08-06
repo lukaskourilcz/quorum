@@ -22,6 +22,15 @@ export const FixedCostRegistrySchema = z.strictObject({
   schemaVersion: z.literal("fixed-costs/1"),
   currency: z.literal("USD"),
   costs: z.array(FixedCostEntrySchema).max(100),
+  /**
+   * The owner's statement that an empty list means zero rather than unanswered.
+   *
+   * Without it, `costs: []` is ambiguous — nobody has entered the subscriptions yet, or there are
+   * none — and the collector had to treat it as unmeasured, so `company.monthly-all-in-usd`, a
+   * critical KPI, read "unavailable" for the whole quarter. Setting the flag is the answer; it
+   * comes off the moment a real subscription is entered.
+   */
+  confirmedNoFixedCosts: z.boolean().optional(),
   $comment: z.union([
     z.string().max(2_000),
     z.array(z.string().max(500)).max(20)
