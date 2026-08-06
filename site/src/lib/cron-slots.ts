@@ -25,7 +25,6 @@ export const SCHEDULED_PHASES = [
   "mag-editorial",
   "mag-desk",
   "article-am",
-  "article-pm",
   "studio",
   "night"
 ] as const;
@@ -69,14 +68,13 @@ function cadenceHour(cadence: string): number {
 }
 
 function productionSlots(kind: string, cadence: string): CronSlot[] {
-  const match = /^2x-daily@(\d{2}):00,(\d{2}):00$/u.exec(cadence);
+  // One article a day. The evening slot was killed every single day since launch, so the
+  // schedule stopped promising two.
+  const match = /^daily@(\d{2}):00$/u.exec(cadence);
   if (kind !== "article-production" || !match) {
     throw new Error(`Unsupported production cadence: ${kind} ${cadence}`);
   }
-  return [
-    { phase: "article-am", hour: Number(match[1]) },
-    { phase: "article-pm", hour: Number(match[2]) }
-  ];
+  return [{ phase: "article-am", hour: Number(match[1]) }];
 }
 
 interface RawRegistry {

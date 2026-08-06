@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveCronPhase } from "../src/meetings/clock.js";
+import { MEETING_CLOCK, resolveCronPhase } from "../src/meetings/clock.js";
 import {
   CRON_HOUR_CARRY,
   CRON_MINUTE,
@@ -113,10 +113,10 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
 });
 
 describe("the fired cron is the final word", () => {
-  it("covers all fifteen Prague slots and only those, from the summer crons", () => {
+  it("covers every Prague slot and only those, from the summer crons", () => {
     const summer = summerCrons().map((cron) => resolveCronPhase(cron, delivered(cron, [2026, 7, 3], 40)));
-    expect(summer.filter(Boolean)).toHaveLength(15);
-    expect(new Set(summer).size).toBe(15);
+    expect(summer.filter(Boolean)).toHaveLength(MEETING_CLOCK.length);
+    expect(new Set(summer).size).toBe(MEETING_CLOCK.length);
   });
 
   it("answers nothing for a firing that belongs to the other daylight-saving variant", () => {

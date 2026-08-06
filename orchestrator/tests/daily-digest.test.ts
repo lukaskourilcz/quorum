@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { allInBudgetStatus } from "../src/finance/budget-alert.js";
 import { loadMeetingRecords, mondayOfWeek } from "../src/meetings/calendar.js";
+import { MEETING_CLOCK } from "../src/meetings/clock.js";
 import {
   buildDailyDigest,
   dailyDigestSinkFromEnvironment,
@@ -40,9 +41,11 @@ async function fixtureDigest(finalMeetingFailed = false) {
 }
 
 describe("one daily portfolio digest", () => {
-  it("groups the full fifteen-slot schedule and records missed work in one line", async () => {
+  it("groups the whole day's schedule and records missed work in one line", async () => {
     const digest = await fixtureDigest();
-    expect(digest.meetings).toHaveLength(15);
+    // Counted off the clock rather than pinned to a number: the digest's promise is that it
+    // accounts for every slot the day has, not that the day has any particular count.
+    expect(digest.meetings).toHaveLength(MEETING_CLOCK.length);
     expect(digest.meetings.filter((meeting) => !meeting.held).length).toBeGreaterThan(0);
     expect(digest.meetings.every((meeting) => meeting.bullets.length === 1)).toBe(true);
     expect(digest.bodyWordCount).toBeLessThanOrEqual(400);

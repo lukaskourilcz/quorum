@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { deriveEditorialSlate } from "../src/mma-files/live.js";
+import { deriveEditorialSlate, SINGLE_SLOT_CADENCE } from "../src/mma-files/live.js";
 
 import { repoRoot, stateRoot } from "../src/paths.js";
 const roots: string[] = [];
@@ -32,10 +32,14 @@ describe("a slate derived for one slot", () => {
     await plantFighter(root, "oktagon:gustavo-lopez", { completeness: 0.9 });
     await plantFighter(root, "ufc:aleksandar-rakic", { completeness: 0.7 });
     const slate = await deriveEditorialSlate(root, "2026-08-03", new Date("2026-08-03T18:00:00.000Z"), { forSlot: "pm" });
+    // The caller's slot takes the strongest subject. Its counterpart is not scheduled at all
+    // now that the desk publishes one article a day, so it is killed for that reason rather
+    // than handed the runner-up.
     expect(slate!.slots.map((slot) => [slot.slot, slot.status, slot.subjectRefs[0]])).toEqual([
-      ["am", "assigned", "ufc:aleksandar-rakic"],
+      ["am", "killed", "missing:2026-08-03:am"],
       ["pm", "assigned", "oktagon:gustavo-lopez"]
     ]);
+    expect(slate!.slots[0]!.killedReason).toBe(SINGLE_SLOT_CADENCE);
   });
 
   it("kills the caller's counterpart slot, not always pm, and keeps a verdict for it", async () => {

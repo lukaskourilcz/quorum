@@ -106,13 +106,15 @@ describe("portfolio schedule and budget gate", () => {
     // budget-2026-08d unlocks the full clock; budget-2026-08e supersedes it on amounts,
     // lowering the all-in limit to $30, the model share to $25 and the daily pace to $1.00.
     expect(full).toMatchObject({ fiftyDecisionStatus: "countersigned", monthlyBudgetUsd: 25, dailyBudgetUsd: 1, monthlyOperatingUsd: 30 });
-    expect(full.activePhases).toEqual(expect.arrayContaining(["mma-intake", "mma-analysis", "mag-editorial", "article-am", "article-pm", "mag-desk"]));
+    expect(full.activePhases).toEqual(expect.arrayContaining(["mma-intake", "mma-analysis", "mag-editorial", "article-am", "mag-desk"]));
+    // One article a day: the evening slot is off the clock entirely, not merely disabled.
+    expect(full.activePhases).not.toContain("article-pm");
   });
 
   it("emits correct summer/winter cron pairs for meetings and article slots", async () => {
     const registry = await loadVentureRegistry();
     const payloads = cronPayloads(registry);
-    expect(payloads).toHaveLength(30);
+    expect(payloads).toHaveLength(resolveScheduledClock(registry).length * 2);
     // Assert the rule rather than a snapshot of it: every slot gets exactly two firings, the
     // summer one CRON_LEAD_HOURS + 2 hours before its Prague hour and the winter one
     // CRON_LEAD_HOURS + 1 before, so changing the lead cannot leave this test agreeing with

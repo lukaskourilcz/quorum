@@ -72,11 +72,20 @@ export function resolveMeetingClock(
 
 export function resolveProductionClock(registry: VentureRegistry): ResolvedMeetingSlot[] {
   return registry.ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
-    const match = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(job.cadence);
-    if (job.kind === "article-production" && match) return [
-      { phase: ScheduledPhaseSchema.parse("article-am"), hour: Number(match[1]), label: "MMA Files morning article", ventureId: venture.id },
-      { phase: ScheduledPhaseSchema.parse("article-pm"), hour: Number(match[2]), label: "MMA Files evening article", ventureId: venture.id }
-    ];
+    if (job.kind === "article-production") {
+      // One article a day is the contract now. The evening slot was killed every single day
+      // since launch -- there was never a second subject that cleared the repeat rule -- so the
+      // schedule says one rather than promising two and reporting a kill.
+      const daily = /^daily@(\d{2}):00$/.exec(job.cadence);
+      if (daily) return [
+        { phase: ScheduledPhaseSchema.parse("article-am"), hour: Number(daily[1]), label: "MMA Files daily article", ventureId: venture.id }
+      ];
+      const twice = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(job.cadence);
+      if (twice) return [
+        { phase: ScheduledPhaseSchema.parse("article-am"), hour: Number(twice[1]), label: "MMA Files morning article", ventureId: venture.id },
+        { phase: ScheduledPhaseSchema.parse("article-pm"), hour: Number(twice[2]), label: "MMA Files evening article", ventureId: venture.id }
+      ];
+    }
     throw new Error(`Unsupported production cadence: ${job.kind} ${job.cadence}`);
   })).sort((left, right) => left.hour - right.hour);
 }

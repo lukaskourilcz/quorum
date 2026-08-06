@@ -38,7 +38,6 @@ on:
           - mma-intake
           - mag-editorial
           - article-am
-          - article-pm
           - mma-analysis
           - mag-desk
           - studio

@@ -74,7 +74,7 @@ vi.mock("../src/mma-files/pipeline.js", async () => {
   };
 });
 
-const { deriveEditorialSlate, runLiveArticleProduction } = await import("../src/mma-files/live.js");
+const { deriveEditorialSlate, runLiveArticleProduction, SINGLE_SLOT_CADENCE } = await import("../src/mma-files/live.js");
 const { repoRoot, stateRoot: liveStateRoot } = await import("../src/paths.js");
 const realStateRoot = path.join(repoRoot, "state");
 
@@ -144,7 +144,7 @@ describe("editorial slate derived from the records on disk", () => {
   // mag-editorial never ran on 3 August, so no slate was written and both article slots died
   // with missing_editorial_slate. MMA Files published nothing that day while 92 sourced fighter
   // files sat on disk.
-  it("assigns both slots from sourced fighter files when no slate exists", async () => {
+  it("assigns the day's slot from sourced fighter files when no slate exists", async () => {
     const root = await tempRoot();
     await plantFighter(root, "oktagon:gustavo-lopez", { completeness: 0.9 });
     await plantFighter(root, "ufc:aleksandar-rakic", { completeness: 0.7 });
@@ -153,15 +153,18 @@ describe("editorial slate derived from the records on disk", () => {
 
     expect(slate).not.toBeNull();
     expect(slate!.date).toBe("2026-08-03");
+    // One article a day. The schema keeps both slots so every stored slate still parses, and
+    // pm carries the reason it is not scheduled rather than a reason the desk found nothing.
     expect(slate!.slots.map((slot) => [slot.slot, slot.status, slot.format, slot.subjectRefs[0]])).toEqual([
       ["am", "assigned", "fighter-profile", "oktagon:gustavo-lopez"],
-      ["pm", "assigned", "fighter-profile", "ufc:aleksandar-rakic"]
+      ["pm", "killed", "desk-notes", "missing:2026-08-03:pm"]
     ]);
+    expect(slate!.slots[1]!.killedReason).toBe(SINGLE_SLOT_CADENCE);
     // No room sat, so no verdict may cite one. The evidence is the record the subject was read
     // from, which is a file a reviewer can open.
     expect(slate!.vaultVerdicts.map((verdict) => verdict.evidenceRef)).toEqual([
       "state/mma/fighters/oktagon:gustavo-lopez.json",
-      "state/mma/fighters/ufc:aleksandar-rakic.json"
+      "state/mma/fighters"
     ]);
   });
 
@@ -175,7 +178,7 @@ describe("editorial slate derived from the records on disk", () => {
 
     expect(slate!.slots[0].format).toBe("fight-week-preview");
     expect(slate!.slots[0].subjectRefs).toEqual([eventId]);
-    expect(slate!.slots[1].subjectRefs).toEqual(["oktagon:gustavo-lopez"]);
+    expect(slate!.slots[1].killedReason).toBe(SINGLE_SLOT_CADENCE);
   });
 
   it("skips a card with no bout records rather than handing the slot an unwritable subject", async () => {
@@ -209,7 +212,7 @@ describe("editorial slate derived from the records on disk", () => {
 
     expect(slate!.slots[0].subjectRefs).toEqual(["ufc:aleksandar-rakic"]);
     expect(slate!.slots[1].status).toBe("killed");
-    expect(slate!.slots[1].killedReason).toBe("No source-backed subject left on file.");
+    expect(slate!.slots[1].killedReason).toBe(SINGLE_SLOT_CADENCE);
   });
 
   it("reports no subject rather than inventing one when nothing on file qualifies", async () => {

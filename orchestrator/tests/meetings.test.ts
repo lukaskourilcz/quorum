@@ -17,6 +17,7 @@ import {
   pragueSlotInstant
  } from "../src/meetings/calendar.js";
 import {
+  MEETING_CLOCK,
   pragueClockParts,
   resolveManualPhase,
   resolveScheduledPhase
@@ -378,14 +379,16 @@ describe("the edition room reports the reviews that actually run", () => {
 });
 
 describe("meeting calendar", () => {
-  it("builds a 105-slot Prague week with held, missed and scheduled states", async () => {
+  it("builds a full Prague week with held, missed and scheduled states", async () => {
     const record = await caughtUpRecord("cu-edition");
     const feed = CalendarFeedSchema.parse(buildCalendarFeed({
       weekOf: mondayOfWeek(record.date),
       records: [record],
       now: new Date("2026-08-04T03:10:00.000Z")
     }));
-    expect(feed.slots).toHaveLength(105);
+    // Seven days of the clock. Counted off it rather than pinned, so a cadence change moves
+    // the calendar and this case together instead of failing on arithmetic.
+    expect(feed.slots).toHaveLength(MEETING_CLOCK.length * 7);
     const edition = feed.slots.find((slot) => slot.kind === "cu-edition" && slot.status === "held");
     expect(edition?.at).toBe("2026-08-04T03:00:00.000Z");
     expect(edition?.meetingRef).toBe("meetings/2026-08-04-cu-edition");
@@ -461,13 +464,23 @@ describe("the calendar tells the truth about the article slots", () => {
   });
 
   it("marks a killed slot skipped and carries the reason it was given", () => {
+    // The am slot, because pm is no longer on the clock: the desk publishes one article a day
+    // and the calendar has no cell to hang an evening reason on.
     const feed = buildCalendarFeed({
       ...base,
-      articleSlots: [{ date: "2026-08-04", slot: "pm", status: "killed", reason: "Missing fresh, source-backed subject." }]
+      articleSlots: [{ date: "2026-08-04", slot: "am", status: "killed", reason: "Missing fresh, source-backed subject." }]
     });
-    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "article-pm");
+    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "article-am");
     expect(slot?.status).toBe("skipped");
     expect(slot?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
+  });
+
+  it("has no evening article cell to show at all", () => {
+    const feed = buildCalendarFeed({
+      ...base,
+      articleSlots: [{ date: "2026-08-04", slot: "pm", status: "killed", reason: "single-slot cadence" }]
+    });
+    expect(feed.slots.some((entry) => entry.kind === "article-pm")).toBe(false);
   });
 
   it("leaves a slot with no run exactly as it was", () => {

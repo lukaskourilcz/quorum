@@ -90,14 +90,6 @@
       "schedule": "0 16 * * *"
     },
     {
-      "path": "/api/cron/article-pm",
-      "schedule": "0 16 * * *"
-    },
-    {
-      "path": "/api/cron/article-pm",
-      "schedule": "0 17 * * *"
-    },
-    {
       "path": "/api/cron/mma-analysis",
       "schedule": "0 17 * * *"
     },

@@ -416,6 +416,14 @@ async function eventHasBoutRecords(root: string, eventRef: string): Promise<bool
  *
  * `forSlot` is the slot the caller is about to run, and it gets first pick of the subjects.
  */
+/**
+ * Why the unscheduled slot on a slate is killed.
+ *
+ * Distinct from "No source-backed subject left on file", which means the desk looked and found
+ * nothing. This one means the desk did not look: the venture publishes one article a day.
+ */
+export const SINGLE_SLOT_CADENCE = "single-slot cadence";
+
 export async function deriveEditorialSlate(
   root: string,
   date: string,
@@ -468,24 +476,34 @@ export async function deriveEditorialSlate(
   // second entry, so on a day the am slot published nothing the best subject on file was
   // skipped and the runner-up was written instead. A subject an am article did publish cannot
   // come back here at all — every ref that article declared is in `covered` above.
+  // One article a day, and the slate says which of the two things a killed pm slot is.
+  //
+  // The schema keeps both slots on purpose: every stored slate, every reader and every run
+  // record is shaped by the am/pm tuple, and reshaping it would rewrite history to make a
+  // cadence change look like it had always been true. So pm is structurally killed with its own
+  // reason, told apart from a pm slot that was killed because nothing was left to write about.
   const filling = options.forSlot ?? "am";
   const assigned = new Map<"am" | "pm", DerivedSubject | undefined>([
     [filling, subjects[0]],
-    [filling === "am" ? "pm" : "am", subjects[1]]
+    [filling === "am" ? "pm" : "am", undefined]
   ]);
   const slotFor = (slot: "am" | "pm", assignedWriter: "JAB" | "QUILL") => {
     const subject = assigned.get(slot);
-    return subject
-      ? { slot, format: subject.format, subjectRefs: [subject.ref], rationale: subject.rationale, assignedWriter, status: "assigned" }
-      : {
-          slot,
-          format: "desk-notes",
-          subjectRefs: [`missing:${date}:${slot}`],
-          rationale: "No further source-backed subject is on file for this slot.",
-          assignedWriter,
-          status: "killed",
-          killedReason: "No source-backed subject left on file."
-        };
+    if (subject) {
+      return { slot, format: subject.format, subjectRefs: [subject.ref], rationale: subject.rationale, assignedWriter, status: "assigned" };
+    }
+    const structural = slot !== filling;
+    return {
+      slot,
+      format: "desk-notes",
+      subjectRefs: [`missing:${date}:${slot}`],
+      rationale: structural
+        ? "The desk publishes one article a day; this slot is not scheduled."
+        : "No further source-backed subject is on file for this slot.",
+      assignedWriter,
+      status: "killed",
+      killedReason: structural ? SINGLE_SLOT_CADENCE : "No source-backed subject left on file."
+    };
   };
   return EditorialSlateSchema.parse({
     schemaVersion: "editorial-slate/1",
@@ -494,7 +512,9 @@ export async function deriveEditorialSlate(
     vaultVerdicts: [
       // The verdict cites the record the subject was read from. A `meeting:` ref would name a
       // room that never sat, which is the one thing this path must not claim.
-      ...subjects.map((subject) => ({ subjectRef: subject.ref, verdict: "fresh", evidenceRef: subject.evidenceRef })),
+      ...subjects
+        .filter((subject) => subject === assigned.get(filling))
+        .map((subject) => ({ subjectRef: subject.ref, verdict: "fresh", evidenceRef: subject.evidenceRef })),
       // Every subject a slot names needs a verdict, and the killed slot names a `missing:` ref.
       // Which slot that is now depends on the caller, so it is read back from the assignment
       // rather than assumed to be pm.

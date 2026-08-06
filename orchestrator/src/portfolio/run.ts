@@ -52,6 +52,7 @@ import { composeMeetingTastePacket } from "../taste/packet.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
+import { SINGLE_SLOT_CADENCE } from "../mma-files/live.js";
 import { resolveSlateEvidence } from "../mma-files/slate-evidence.js";
 import { fetchReadable } from "../sources/adapters/reader.js";
 import { loadArticlePackages } from "../mma-files/store.js";
@@ -1479,7 +1480,10 @@ export async function runPortfolioCycle(input: {
         date,
         slots: [
           { slot: "am", format: "desk-notes", subjectRefs: [`missing:${date}:am`], rationale: "No new source-backed subject cleared the desk before the morning cutoff.", assignedWriter: "JAB", status: "killed", killedReason: "Missing fresh, source-backed subject." },
-          { slot: "pm", format: "desk-notes", subjectRefs: [`missing:${date}:pm`], rationale: "No new source-backed subject cleared the desk before the evening cutoff.", assignedWriter: "QUILL", status: "killed", killedReason: "Missing fresh, source-backed subject." }
+          // Structurally killed: the desk publishes one article a day. The schema keeps both
+          // slots so every stored slate and run record still parses, and this reason tells the
+          // unscheduled slot apart from one the desk looked at and found nothing for.
+          { slot: "pm", format: "desk-notes", subjectRefs: [`missing:${date}:pm`], rationale: "The desk publishes one article a day; this slot is not scheduled.", assignedWriter: "QUILL", status: "killed", killedReason: SINGLE_SLOT_CADENCE }
         ],
         vaultVerdicts: [
           { subjectRef: `missing:${date}:am`, verdict: "repeat", evidenceRef: `meeting:${date}-mag-editorial` },

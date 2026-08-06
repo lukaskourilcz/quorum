@@ -61,14 +61,14 @@ async function seedEditionRecord(root: string): Promise<string> {
 }
 
 describe("a day with no record of its slots still gets one", () => {
-  it("accounts for all fifteen slots when nothing anywhere reported them", async () => {
+  it("accounts for every slot when nothing anywhere reported them", async () => {
     // Every recorder in cycle.yml is a step inside the run it describes, so a run stopped before
     // those steps — or one whose commit never landed — left no record at all and the calendar
     // showed the slot red as "missed" with nothing saying why.
     const root = await emptyRoot();
     const result = await reconcileMeetingDay(root, DATE, NOW);
-    expect(MEETING_CLOCK).toHaveLength(15);
-    expect(result.recorded).toHaveLength(15);
+    expect(MEETING_CLOCK.length).toBeGreaterThan(0);
+    expect(result.recorded).toHaveLength(MEETING_CLOCK.length);
     for (const definition of MEETING_CLOCK) {
       const skip = MeetingSkipSchema.parse(
         JSON.parse(await readFile(skipPath(root, definition.phase), "utf8"))
@@ -113,7 +113,9 @@ describe("a day with no record of its slots still gets one", () => {
 
     const result = await reconcileMeetingDay(root, DATE, NOW);
 
-    expect(result.recorded).toHaveLength(12);
+    // Every slot on the clock but the three this case already gave a record, a published
+    // article or an existing skip.
+    expect(result.recorded).toHaveLength(MEETING_CLOCK.length - 3);
     expect(await readFile(recordFile, "utf8")).toBe(recordBefore);
     expect(await exists(skipPath(root, "cu-edition"))).toBe(false);
     expect(await exists(skipPath(root, "article-am"))).toBe(false);
