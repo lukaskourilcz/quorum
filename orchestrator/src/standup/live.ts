@@ -292,6 +292,8 @@ Only VIZE, FORGE or PULSE may request one specialist follow-up each, and only fo
 
 This meeting commissions at most ${maxCommissions} room${maxCommissions === 1 ? "" : "s"} and at most one per project, so a request naming a project another seat has already taken is dropped. Prefer a project that has no room today over a second room for one that does. Every specialist room that is not commissioned meets about nothing and does not meet at all, so a project with an open question and no room today is a day that project loses.
 
+The request summary is the first line the commissioned room reads, and it must name the decision that room has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and leaves that room with nothing to settle.
+
 ${rooms.length === 0
   ? "No specialist room can be commissioned from this shift, so every seat returns meetingRequest:null."
   : `Every room belongs to one venture, and the request is thrown away unless the room you name belongs to the venture that owns the priority item you cite. Read that item's venture field and set phase to the room listed for it here: ${rooms.map((room) => `${room.ventureId} -> ${room.phase}`).join(", ")}. A priority item for any other venture has no room this shift can commission, so return meetingRequest:null instead of naming the nearest room.`}
@@ -301,7 +303,7 @@ ${rooms.length === 0
   : `The priority list is not fixed. If the work this project needs is not on it, VIZE, FORGE or PULSE may propose one new question in priorityProposal: venture (one of ${[...new Set(rooms.map((room) => room.ventureId))].join(", ")}), question, decisionAtStake, evidenceNeeded. AUDIT never proposes. A meeting adds at most one question, so propose only when the list genuinely lacks it; the first proposal is taken and later ones are refused. decisionAtStake must name the decision the answer would settle — a question with no decision behind it is a topic, not work, and is refused. A question the queue already holds in other words is refused as a duplicate, so select it instead. A proposal is added only if this meeting approves, and it is answerable from a later meeting, not this one.`}
 
 Return ONLY this valid JSON object:
-{"agent":"${agent}","publicSummary":"at most 70 words","recommendation":"approve|hold","risk":"at most 35 words","meetingRequest":null|{"priorityItemId":"priority-...","phase":"allowed phase","summary":"why this room is needed","evidenceRefs":[]},"priorityProposal":null|{"venture":"venture id","question":"at most 40 words","decisionAtStake":"the decision it settles","evidenceNeeded":[]}}`;
+{"agent":"${agent}","publicSummary":"at most 70 words","recommendation":"approve|hold","risk":"at most 35 words","meetingRequest":null|{"priorityItemId":"priority-...","phase":"allowed phase","summary":"the decision that room must take","evidenceRefs":[]},"priorityProposal":null|{"venture":"venture id","question":"at most 40 words","decisionAtStake":"the decision it settles","evidenceNeeded":[]}}`;
 }
 
 function positionInput(input: {
