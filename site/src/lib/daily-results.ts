@@ -54,7 +54,6 @@ const VENTURE_LABELS: Record<string, string> = {
   "mma-files": "MMA Files",
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",
-  incubator: "Magazine Incubator",
   "carousel-studio": "Carousel Studio"
 };
 

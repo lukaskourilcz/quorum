@@ -13,7 +13,7 @@ const repoRoot = path.resolve(process.cwd(), "..");
 describe("living ecosystem document", () => {
   it("generates current counts, modes and gates without a provider call", async () => {
     const block = await buildCurrentOperatingTruth(repoRoot);
-    expect(block).toContain("| Portfolio | 6 projects");
+    expect(block).toContain("| Portfolio | 5 projects");
     expect(block).toContain("| Agent roster | 30 active: 17 Anthropic, 13 OpenAI");
     expect(block).toContain("Carousel Studio");
     expect(block).toContain("METRICS_INGESTION_ENABLED=false");

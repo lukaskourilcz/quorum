@@ -29,8 +29,6 @@
             "type": "string",
             "enum": [
               "tt-marketing",
-              "incubator-scan",
-              "incubator-synthesis",
               "mma-intake",
               "mma-analysis",
               "mag-editorial",

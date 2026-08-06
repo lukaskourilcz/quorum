@@ -12,7 +12,7 @@ import { meetingFixtures } from "../data/meeting-fixtures";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 
 describe("public CalendarFeed build model", () => {
-  it("generates fifteen Prague rooms and article slots for every day", () => {
+  it("generates eleven Prague rooms and article slots for every day", () => {
     const feed = buildPublicCalendarFeed({
       weekOf: "2026-07-31",
       now: new Date("2026-07-31T10:00:00Z"),
@@ -20,22 +20,21 @@ describe("public CalendarFeed build model", () => {
       meetings: []
     });
     expect(feed.weekOf).toBe("2026-07-27");
-    expect(feed.slots).toHaveLength(105);
-    expect(feed.slots.slice(0, 15).map((slot) => slot.kind)).toEqual([
+    expect(feed.slots).toHaveLength(77);
+    // The default definitions mirror the live clock. The incubator, the studio room and the
+    // evening article slot left it; `CalendarKind` still carries their kinds, because the
+    // committed records those rooms wrote still have to render.
+    expect(feed.slots.slice(0, 11).map((slot) => slot.kind)).toEqual([
       "cu-edition",
       "venture-morning",
-      "incubator-scan",
       "mma-intake",
       "mag-editorial",
       "article-am",
       "tt-marketing",
-      "studio",
       "venture-afternoon",
       "cu-product",
-      "article-pm",
       "mma-analysis",
       "mag-desk",
-      "incubator-synthesis",
       "venture-night"
     ]);
   });
@@ -204,10 +203,10 @@ describe("the site calendar reports the article slots", () => {
   it("marks a killed slot skipped and carries its reason", () => {
     const feed = buildPublicCalendarFeed({
       ...base,
-      articleSlots: [{ date: "2026-08-04", slot: "pm", status: "killed", reason: "Missing fresh, source-backed subject." }]
+      articleSlots: [{ date: "2026-08-04", slot: "am", status: "killed", reason: "Missing fresh, source-backed subject." }]
     });
-    expect(slotOn(feed, "article-pm")?.status).toBe("skipped");
-    expect(slotOn(feed, "article-pm")?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
+    expect(slotOn(feed, "article-am")?.status).toBe("skipped");
+    expect(slotOn(feed, "article-am")?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
   });
 
   it("leaves a slot with no run exactly as it was", () => {

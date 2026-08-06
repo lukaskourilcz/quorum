@@ -25,8 +25,6 @@ Project rooms:
 - [Caught Up edition](https://boardless-ai.vercel.app/meetings/2026-08-01-cu-edition)
 - [Caught Up product](https://boardless-ai.vercel.app/meetings/2026-08-01-cu-product)
 - [Titty Tuesdays](https://boardless-ai.vercel.app/meetings/2026-08-01-tt-marketing)
-- [Incubator scan](https://boardless-ai.vercel.app/meetings/2026-08-01-incubator-scan)
-- [Incubator synthesis](https://boardless-ai.vercel.app/meetings/2026-08-01-incubator-synthesis)
 - [FightAIQ intake](https://boardless-ai.vercel.app/meetings/2026-08-01-mma-intake)
 - [FightAIQ analysis](https://boardless-ai.vercel.app/meetings/2026-08-01-mma-analysis)
 - [MMA Files story meeting](https://boardless-ai.vercel.app/meetings/2026-08-01-mag-editorial)

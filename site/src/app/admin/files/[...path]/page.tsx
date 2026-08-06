@@ -18,8 +18,7 @@ export const metadata: Metadata = {
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const allowed = [
   /^ideas\/[a-z0-9]+(?:-[a-z0-9]+)*\/details\/idea-\d{4}-\d{2}-\d{2}-[a-f0-9]{4,12}\.md$/,
-  /^ventures\/[a-z0-9]+(?:-[a-z0-9]+)*\/plans\/plan-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/,
-  /^ventures\/[a-z0-9]+(?:-[a-z0-9]+)*\/niche-proposals\/niche-\d{4}-\d{2}-\d{2}-[a-f0-9]{4,12}\.md$/
+  /^ventures\/[a-z0-9]+(?:-[a-z0-9]+)*\/plans\/plan-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/
 ];
 
 async function adminMarkdown(parts: string[]): Promise<{ content: string; relativePath: string } | null> {

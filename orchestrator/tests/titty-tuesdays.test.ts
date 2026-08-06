@@ -45,10 +45,8 @@ describe("Titty Tuesdays bootstrap", () => {
       summary: "Build a type-led concept for an adult audience.",
       evidenceRefs: [],
       task: null,
-      nicheProposals: [],
       editorialSlate: null,
       marketingPlan: null,
-      templateProposal: null,
       inspirationObservations: [],
       idea: {
         title: "Tuesday Care Label",
@@ -68,9 +66,7 @@ describe("Titty Tuesdays bootstrap", () => {
       text: JSON.stringify({
         ...contribution,
         idea: null,
-        nicheProposals: [{}, {}, {}],
         editorialSlate: { wrongRoom: true },
-        templateProposal: { wrongRoom: true },
         inspirationObservations: [{}, {}, {}, {}, {}]
       })
     });
@@ -79,9 +75,7 @@ describe("Titty Tuesdays bootstrap", () => {
       summary: contribution.summary
     });
     expect(recoveredCoreIdea).toMatchObject({
-      nicheProposals: [],
       editorialSlate: null,
-      templateProposal: null,
       inspirationObservations: []
     });
     expect(() => assertTittyTuesdaysIdeaOutput("tt-marketing", [
@@ -114,7 +108,7 @@ describe("Titty Tuesdays bootstrap", () => {
       text: JSON.stringify(numericConcept)
     })).not.toThrow();
     expect(() => parsePortfolioContribution({
-      phase: "incubator-scan",
+      phase: "mag-desk",
       agent: "PULSE",
       text: JSON.stringify(numericConcept)
     })).toThrow(/Numeric contribution claims require evidenceRefs/);

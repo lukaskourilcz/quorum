@@ -15,7 +15,6 @@ export * from "./meeting-agenda.js";
 export * from "./meeting-record.js";
 export * from "./mma.js";
 export * from "./mma-files.js";
-export * from "./niche-proposal.js";
 export * from "./rating.js";
 export * from "./season.js";
 export * from "./social-pack.js";

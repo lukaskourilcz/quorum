@@ -71,7 +71,6 @@ export function resolveEffectivePortfolioSchedule(input: {
     }
   }
   if (shape === "B") {
-    active.delete("incubator-synthesis");
     envelopeByPhase["tt-marketing"] = 0.06;
   }
   if (!fullScheduleShape) {
@@ -88,10 +87,9 @@ export function resolveEffectivePortfolioSchedule(input: {
     envelopeByPhase["mma-intake"] = 0.05;
   }
   let ttTranscriptMode: EffectivePortfolioSchedule["ttTranscriptMode"] = "full";
-  if (input.monthlyApiHeadroomUsd < 3) active.delete("incubator-synthesis");
+  // The two rungs the incubator vacated. Nothing takes them yet; the next room added to the
+  // ladder drops first, which is what the incubator did while it existed.
   if (input.monthlyApiHeadroomUsd < 1.5) {
-    active.delete("incubator-scan");
-    active.delete("incubator-synthesis");
     ttTranscriptMode = "minimal";
   }
   if (input.monthlyApiHeadroomUsd < 0.5) {

@@ -58,21 +58,26 @@ export interface PublicCalendarFeed {
   slots: CalendarSlot[];
 }
 
+/**
+ * The default room list, used when no caller supplies one.
+ *
+ * `getPublicCalendarFeed` always passes definitions derived from `config/ventures.json`, which
+ * is the authority; this list exists so the model can be exercised without a registry read. It
+ * mirrors the live clock — a default that promises rooms nobody holds is the kind of thing a
+ * reader believes. The kinds it no longer lists stay in `CalendarKind` above, because committed
+ * records from those rooms still have to render.
+ */
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 5, kind: "cu-edition", label: "Edition production" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
-  { hour: 7, kind: "incubator-scan", label: "Incubator evidence scan" },
   { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
   { hour: 9, kind: "mag-editorial", label: "MMA Files morning story meeting" },
-  { hour: 10, kind: "article-am", label: "MMA Files morning article" },
+  { hour: 10, kind: "article-am", label: "MMA Files daily article" },
   { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing" },
-  { hour: 13, kind: "studio", label: "Carousel Studio room" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
   { hour: 17, kind: "cu-product", label: "Product room" },
-  { hour: 18, kind: "article-pm", label: "MMA Files evening article" },
   { hour: 19, kind: "mma-analysis", label: "FightAIQ evening model check" },
   { hour: 20, kind: "mag-desk", label: "MMA Files evening desk review" },
-  { hour: 21, kind: "incubator-synthesis", label: "Incubator synthesis" },
   { hour: 22, kind: "venture-night", label: "Night shift" }
 ] as const;
 

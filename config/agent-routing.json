@@ -244,14 +244,6 @@
       "required": ["PULSE", "ANGLE", "AUDIT"],
       "optionalByTopic": false
     },
-    "incubator-scan-room": {
-      "required": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"],
-      "optionalByTopic": false
-    },
-    "incubator-synthesis-room": {
-      "required": ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"],
-      "optionalByTopic": false
-    },
     "mma-intake-room": {
       "required": ["FORGE", "CORNER", "SPOTTER", "TAPE"],
       "optionalByTopic": false

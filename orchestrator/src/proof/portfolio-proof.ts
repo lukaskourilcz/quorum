@@ -10,7 +10,6 @@ import type { RunnablePhase } from "../types.js";
 const fixtures: Array<{ phase: RunnablePhase; at: string }> = [
   { phase: "cu-edition", at: "2026-08-01T03:00:00.000Z" },
   { phase: "morning", at: "2026-08-01T04:00:00.000Z" },
-  { phase: "incubator-scan", at: "2026-08-01T05:00:00.000Z" },
   { phase: "mma-intake", at: "2026-08-01T06:00:00.000Z" },
   { phase: "mag-editorial", at: "2026-08-01T07:00:00.000Z" },
   { phase: "tt-marketing", at: "2026-08-01T09:00:00.000Z" },
@@ -19,7 +18,6 @@ const fixtures: Array<{ phase: RunnablePhase; at: string }> = [
   { phase: "cu-product", at: "2026-08-01T15:00:00.000Z" },
   { phase: "mma-analysis", at: "2026-08-01T17:00:00.000Z" },
   { phase: "mag-desk", at: "2026-08-01T18:00:00.000Z" },
-  { phase: "incubator-synthesis", at: "2026-08-01T19:00:00.000Z" },
   { phase: "night", at: "2026-08-01T20:00:00.000Z" }
 ];
 

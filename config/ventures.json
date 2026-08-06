@@ -103,23 +103,6 @@
       ]
     },
     {
-      "id": "incubator",
-      "name": "Magazine Incubator",
-      "status": "paused",
-      "taste": true,
-      "ledgerNamespace": "incubator",
-      "growth_objective": {
-        "label": "Produce evidence-backed content venture proposals",
-        "components": [
-          "evidence-backed-proposals"
-        ]
-      },
-      "adminTabs": [
-        "niche-proposals"
-      ],
-      "meetings": []
-    },
-    {
       "id": "fightaiq",
       "name": "FightAIQ",
       "status": "operating",

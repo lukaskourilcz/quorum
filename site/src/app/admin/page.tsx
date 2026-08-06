@@ -57,14 +57,12 @@ function statusLabel(status: string): string {
     in_progress: "being worked on",
     owner_rated: "rated by you",
     proposed: "suggested",
-    shortlist: "keep looking at this",
     archived: "closed"
   };
   return labels[status] ?? status.replaceAll("_", " ");
 }
 
 function tabLabel(tab: AdminVentureTab): string {
-  if (tab === "niche-proposals") return "magazine ideas";
   if (tab === "visuals") return "images";
   if (tab === "social-lab") return "social drafts";
   if (tab === "slates") return "fight reports";
@@ -205,11 +203,10 @@ function StatePanel({ title, content }: { title: string; content: string }) {
   );
 }
 
-const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "niche-proposal">> = {
+const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual">> = {
   ideas: "idea",
   plans: "plan",
-  visuals: "visual",
-  "niche-proposals": "niche-proposal"
+  visuals: "visual"
 } as const;
 
 export default async function AdminPage({
@@ -239,9 +236,6 @@ export default async function AdminPage({
     : null;
   const visibleCards = selectedVenture && selectedTab && cardKindByTab[selectedTab]
     ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])
-    : [];
-  const shortlist = selectedVenture?.id === "incubator"
-    ? selectedVenture.cards.filter((card) => card.kind === "niche-proposal" && card.status === "shortlist")
     : [];
   const unreadableFiles = selectedVenture?.id === "mma-files"
     ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
@@ -403,16 +397,6 @@ export default async function AdminPage({
             <Callout className="mt-6" tone="warning">
               {unreadableFiles.length} saved {unreadableFiles.length === 1 ? "file cannot" : "files cannot"} be read: {unreadableFiles.join(", ")}.
             </Callout>
-          ) : null}
-
-          {shortlist.length ? (
-            <aside className="mt-8 rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--surface)] p-6" aria-labelledby="shortlist-heading">
-              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Ideas you liked</p>
-              <h3 className="mt-2 text-2xl font-semibold" id="shortlist-heading">Magazine ideas to keep reviewing</h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {shortlist.map((card) => <Badge key={card.id} tone="success">{card.title}</Badge>)}
-              </div>
-            </aside>
           ) : null}
 
           {selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab) ? (

@@ -40,7 +40,7 @@ export default function CompanyPage() {
             </CardContent>
           </Card>
         }
-        description="BoardlessAI runs five early projects with clear limits. DNESKAi and MMA Files publish on their own sites, Titty Tuesdays plans, the Incubator researches and FightAIQ supplies checked fight data. None has confirmed revenue."
+        description="BoardlessAI runs five early projects with clear limits. DNESKAi and MMA Files publish on their own sites, Titty Tuesdays plans, FightAIQ supplies checked fight data and Carousel Studio draws the covers. None has confirmed revenue."
         eyebrow="Current business plan"
         title="Where the company stands"
       />

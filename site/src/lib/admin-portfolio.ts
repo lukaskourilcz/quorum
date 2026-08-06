@@ -14,7 +14,7 @@ import {
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
-  "ideas", "plans", "visuals", "niche-proposals",
+  "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
   "articles", "calendar", "social-lab", "templates", "inspiration", "decks"
 ] as const;
@@ -333,70 +333,6 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
   }
 }
 
-async function proposalCards(root: string, ventureId: string, ratings: readonly RatingRecord[]) {
-  const directory = path.join(root, "state", "ventures", ventureId, "niche-proposals");
-  const cards: AdminCard[] = [];
-  const unreadable: string[] = [];
-  for (const filename of await safeDirectory(directory)) {
-    const raw = await readFile(path.join(directory, filename), "utf8");
-    try {
-      const proposal = object(JSON.parse(raw));
-      const id = text(proposal?.id, 160);
-      const title = text(proposal?.domain, 160);
-      const summary = text(proposal?.oneLiner, 1_000);
-      const storedStatus = text(proposal?.status, 40);
-      const originMeetingRef = text(proposal?.originMeetingRef, 240);
-      const audience = object(proposal?.audienceHypothesis);
-      const ageRange = object(audience?.ageRange);
-      const contentShape = object(proposal?.contentShape);
-      const competitionNotes = Array.isArray(proposal?.competitionNotes) ? proposal.competitionNotes : null;
-      const validCompetition = competitionNotes?.every((entry) => {
-        const note = object(entry);
-        return Boolean(text(note?.note, 500) && text(note?.evidenceRef, 240));
-      });
-      if (
-        proposal?.schemaVersion !== "niche-proposal/1" ||
-        !id || !/^niche-\d{4}-\d{2}-\d{2}-[a-f0-9]{4,12}$/.test(id) ||
-        !title || !summary || !text(proposal.whyPeopleCareDaily, 800) ||
-        !audience || !textArray(audience.regions)?.length ||
-        typeof ageRange?.min !== "number" || typeof ageRange?.max !== "number" || ageRange.min < 18 || ageRange.min > ageRange.max ||
-        !textArray(audience.genders)?.length || !textArray(audience.interests)?.length || !textArray(audience.platforms)?.length || !text(audience.adTargetingNotes, 800) ||
-        !contentShape || !text(contentShape.cadence, 120) || !textArray(contentShape.formats)?.length || !text(contentShape.caughtUpReuseNotes, 500) ||
-        !competitionNotes || !validCompetition || !textArray(proposal.risks) || !textArray(proposal.evidenceRefs) ||
-        !storedStatus || !["proposed", "rated", "shortlist", "archived"].includes(storedStatus) || !originMeetingRef
-      ) throw new Error("invalid");
-      const createdAt = text(proposal.createdAt, 80) ?? dateFromReference(originMeetingRef);
-      const history = ratingsFor(ratings, id);
-      const ownerRating = currentRating(history, id);
-      const status = ownerRating?.rating === "perfect"
-        ? "shortlist"
-        : ownerRating?.rating === "bad"
-          ? "archived"
-          : ownerRating?.rating === "good"
-            ? "rated"
-            : storedStatus;
-      cards.push({
-        id,
-        ventureId,
-        kind: "niche-proposal",
-        title,
-        summary,
-        detailPath: `ventures/${ventureId}/niche-proposals/${id}.md`,
-        status,
-        originMeetingRef,
-        createdAt,
-        updatedAt: text(proposal.updatedAt, 80) ?? createdAt,
-        contentHash: contentHash(raw),
-        media: [],
-        ratings: history
-      });
-    } catch {
-      unreadable.push(`niche-proposals/${filename}`);
-    }
-  }
-  return { cards, unreadable };
-}
-
 async function visualCards(root: string, ventureId: string, ratings: readonly RatingRecord[]) {
   if (ventureId !== "caught-up") return [];
   const archive = await readAdminSocialArchive(root);
@@ -464,10 +400,9 @@ export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPo
   ]);
   const ventures = await Promise.all(configs.map(async (venture): Promise<AdminVenture> => {
     const ratingState = await readRatings(root, venture.id);
-    const [ideas, plans, proposals, visuals] = await Promise.all([
+    const [ideas, plans, visuals] = await Promise.all([
       ideaCards(root, venture.id, venture.ledgerNamespace, ratingState.ratings),
       planRecords(root, venture.id, ratingState.ratings),
-      proposalCards(root, venture.id, ratingState.ratings),
       visualCards(root, venture.id, ratingState.ratings)
     ]);
     return {
@@ -475,12 +410,11 @@ export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPo
       name: venture.name,
       status: venture.status,
       tabs: venture.adminTabs,
-      cards: [...ideas.cards, ...plans.cards, ...proposals.cards, ...visuals]
+      cards: [...ideas.cards, ...plans.cards, ...visuals]
         .sort((left, right) => (right.updatedAt ?? "").localeCompare(left.updatedAt ?? "") || left.id.localeCompare(right.id)),
       unreadableFiles: [
         ...ideas.unreadable,
         ...plans.unreadable,
-        ...proposals.unreadable,
         ...(venture.id === "caught-up" ? social.unreadableFiles.map((file) => `social/${file}`) : []),
         ...(ratingState.malformed ? [`ratings/${venture.id}/ledger.jsonl`] : [])
       ]

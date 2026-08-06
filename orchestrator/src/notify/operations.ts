@@ -27,7 +27,7 @@ function recordDate(record: Record<string, unknown>, file: string): string | nul
 
 function ventureFrom(file: string, record: Record<string, unknown>): DigestOperation["ventureId"] {
   const explicit = record.venture ?? record.ventureId;
-  if (explicit === "caught-up" || explicit === "mma-files" || explicit === "titty-tuesdays" || explicit === "fightaiq" || explicit === "incubator") return explicit;
+  if (explicit === "caught-up" || explicit === "mma-files" || explicit === "titty-tuesdays" || explicit === "fightaiq") return explicit;
   if (file.includes("caught-up") || file.includes(`${path.sep}edition${path.sep}`)) return "caught-up";
   if (file.includes("mma-files")) return "mma-files";
   if (file.includes("fightaiq")) return "fightaiq";

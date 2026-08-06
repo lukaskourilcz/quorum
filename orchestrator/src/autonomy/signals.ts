@@ -5,7 +5,6 @@ import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { ArticlePackageSchema, EditorialSlateSchema } from "../contracts/mma-files.js";
 import { FighterRecordSchema } from "../contracts/mma.js";
 import { CarouselTemplateSchema } from "../contracts/carousel-template.js";
-import { NicheProposalSchema } from "../contracts/niche-proposal.js";
 import { VentureRegistrySchema } from "../contracts/venture-registry.js";
 import { configRoot } from "../paths.js";
 import { atomicWriteJson } from "../state.js";
@@ -119,13 +118,12 @@ export async function computeAutonomySnapshot(input: {
   const sourceConfig = JSON.parse(await readFile(path.join(input.repoRoot, "config", "sources.json"), "utf8")) as {
     sources?: Array<{ enabled?: unknown }>;
   };
-  const [editionReceipts, articles, slates, fighters, plans, proposals, meetings, proofs, studioTemplates] = await Promise.all([
+  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates] = await Promise.all([
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
     validValues(path.join(input.stateRoot, "mma", "fighters"), FighterRecordSchema),
     validValues(path.join(input.stateRoot, "ventures", "titty-tuesdays", "plans"), MarketingPlanSchema),
-    validValues(path.join(input.stateRoot, "ventures", "incubator", "niche-proposals"), NicheProposalSchema),
     validValues(path.join(input.stateRoot, "meetings"), MeetingRecordSchema),
     files(path.join(input.stateRoot, "release-proofs")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"))
@@ -152,7 +150,6 @@ export async function computeAutonomySnapshot(input: {
     "two-source-agreement": [signal("two-source-agreement", "Two-source agreement", ratio(corroboratedFields, allFighterFields), "ratio", `${corroboratedFields} of ${allFighterFields} fighter fields are corroborated.`)],
     "readiness-dossiers": [signal("readiness-dossiers", "Readiness dossiers", dossierCount, "count", `${dossierCount} completed-event review dossiers.`)],
     "campaign-inventory": [signal("campaign-inventory", "Launch-ready campaigns", completePlans, "count", `${completePlans} campaign plans pass the complete-plan checks.`)],
-    "evidence-backed-proposals": [signal("evidence-backed-proposals", "Evidence-backed proposals", proposals.length, "count", `${proposals.length} valid incubator proposals.`)],
     // Carousel Studio declares this component in config/ventures.json and the registry
     // accepts it, but nothing implemented it, so the venture resolved to an empty signal
     // list while every other venture reported. Same predicate the quarterly collector uses.

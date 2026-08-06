@@ -38,7 +38,7 @@ Refreshed from committed state: **2026-08-06T04:02:23.327Z**. This block is gene
 
 | Item | Current value |
 | --- | --- |
-| Portfolio | 6 projects; 5 marked operating |
+| Portfolio | 5 projects; 5 marked operating |
 | Agent roster | 30 active: 17 Anthropic, 13 OpenAI |
 | Scheduled specialist/service rooms | 7; combined maximum room envelopes $0.46 if every room is commissioned |
 | Approved spend boundary | $50 all-in monthly; $42 model/API share; $2.20 daily model/API pace |
@@ -57,7 +57,6 @@ Refreshed from committed state: **2026-08-06T04:02:23.327Z**. This block is gene
 | --- | --- | --- | --- | --- |
 | Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (2/7) |
 | Titty Tuesdays | operating | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | locked (0/4) |
-| Magazine Incubator | paused | deterministic service only | none | not applicable |
 | FightAIQ | operating | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
 | Carousel Studio | operating | deterministic service only | none | not applicable |
 | MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (3/10) |
@@ -110,17 +109,6 @@ specialists cover audiences, stunts, taste, editorial quality and deterministic
 assets. Complete campaign state is preserved even while production roles are off.
 Social unlock needs four passing campaigns plus credentials and the safety checker;
 the global kill switch still wins.
-
-### Magazine Incubator
-
-Promise: find evidence-backed publication niches without pretending that research is
-a business. The 07:00 scan and 21:00 synthesis rooms are agenda-gated. Proposals name
-the reader problem, evidence, position, content system, cost and stop conditions.
-
-The incubator can found a project autonomously only when every field passes the signed
-content-project template: existing agents and delivery surface, no new credential or
-account, no commerce/legal/personal-data surface, no unplanned spend and no calendar
-collision. Anything outside that fence becomes an exact owner request.
 
 ### FightAIQ
 
@@ -187,18 +175,14 @@ collisions and the public calendar uses the same source.
 | ---: | --- | --- | ---: |
 | 05:00 | Caught Up edition | fixed service; evidence and live gates | room `$0.08`, production `$0.35` |
 | 06:00 | Morning board | decision room; one specialist commission | cycle cap `$0.20` |
-| 07:00 | Incubator scan | due agenda only | `$0.06` |
 | 08:00 | FightAIQ intake | material change or due agenda | `$0.06` |
 | 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
-| 10:00 | MMA Files article AM | assigned slot and evidence only | production cap `$0.35` |
+| 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.35` |
 | 11:00 | Titty Tuesdays | standing future-eshop marketing ideation; optional focused agenda | `$0.08` |
-| 13:00 | Carousel Studio | due agenda only | `$0.06` |
 | 14:00 | Afternoon board | deterministic checkpoint | `$0` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |
-| 18:00 | MMA Files article PM | assigned slot and evidence only | production cap `$0.35` |
 | 19:00 | FightAIQ analysis | due agenda + D8/evidence gates | `$0.06` |
 | 20:00 | MMA Files desk | due agenda only | `$0.05` |
-| 21:00 | Incubator synthesis | due agenda only | `$0.06` |
 | 22:00 | Night board | `$0` checkpoint, digest and document truth refresh | `$0` |
 
 The sum of room envelopes is not expected daily spend: idle agenda rooms make no
@@ -231,9 +215,8 @@ change. The morning board may choose one. `state/meeting-agendas/queue.json` sto
 the specialist request under `meeting-agenda/1`: target project/phase, requester,
 source meeting, one short problem, evidence refs, earliest run, expiry and status.
 
-Requests are allowlisted: morning can request TT, incubator scan, FightAIQ intake,
-MMA editorial/desk or Studio; Studio can request Studio; each other project room can
-request only its defined next step. One meeting creates at most one request, queues
+Requests are allowlisted: morning can request TT, FightAIQ intake or MMA
+editorial/desk; each other project room can request only its defined next step. One meeting creates at most one request, queues
 are capped at 24 and eight per project, duplicate phase/date requests collapse, due
 agendas are consumed once, and pending requests expire after three days. Seven days
 without a consumed project agenda forces a morning-board commission or saved why-not.
@@ -336,8 +319,7 @@ accepts a real event. Empty fixed-cost state means not entered, not free.
 Caught Up sponsorship, MMA Files sponsorship/affiliate and Titty Tuesdays commerce
 are locked hypotheses with explicit readiness and future legal/account/payment work.
 FightAIQ is intentionally unmonetized through Q1/Q2; review begins only after 30
-evaluated events and calibration. The incubator is research. Carousel Studio is an
-internal engine; standalone extraction is a locked future possibility. Readiness may
+evaluated events and calibration. Carousel Studio is an internal engine; standalone extraction is a locked future possibility. Readiness may
 prepare a proposal but never activate an earning method.
 
 ## Safety and launch gates

@@ -45,19 +45,6 @@
         "INSTAGRAM"
       ]
     },
-    "incubator": {
-      "lockedOn": [
-        "PULSE"
-      ],
-      "switchable": [
-        "ANGLE",
-        "SCOUT",
-        "COHORT",
-        "VAULT",
-        "AUDIT"
-      ],
-      "disabled": []
-    },
     "fightaiq": {
       "lockedOn": [
         "FORGE"

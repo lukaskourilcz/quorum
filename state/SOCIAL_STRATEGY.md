@@ -15,7 +15,7 @@
 - Mistakes, vetoes, incidents and recovery.
 - Verified operating cost and revenue milestones.
 - Useful domain work from a validated venture.
-- Owner-rated concept, taste and incubator progress without implying a launch.
+- Owner-rated concept and taste progress without implying a launch.
 - How agent-operated governance works.
 
 ## Channel roles

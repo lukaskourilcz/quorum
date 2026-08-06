@@ -34,10 +34,16 @@ const nextConfig: NextConfig = {
    * under and what it discloses are sections of /company. /boardroom was a second copy of the
    * meeting archive built out of fixtures, and its readers belong on /standups. Every one of
    * these URLs has been public, so none of them is allowed to 404.
+   *
+   * /incubator is the same rule applied to a closed venture: the Magazine Incubator page had
+   * been public and the venture is gone, so the URL lands on the venture index rather than
+   * dying. The page it pointed at is not coming back — the owner's direction is that no new
+   * magazine is ideated again.
    */
   async redirects() {
     return [
       { source: "/boardroom", destination: "/standups", permanent: true },
+      { source: "/incubator", destination: "/ventures", permanent: true },
       { source: "/money", destination: "/results#money", permanent: true },
       { source: "/metrics", destination: "/results#measures", permanent: true },
       { source: "/about", destination: "/company#about", permanent: true },

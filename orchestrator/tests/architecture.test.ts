@@ -52,7 +52,6 @@ const expectedPrompts = [
   "funnel.md",
   "hacek.md",
   "herald.md",
-  "incubator.md",
   "instagram.md",
   "jab.md",
   "keeper.md",

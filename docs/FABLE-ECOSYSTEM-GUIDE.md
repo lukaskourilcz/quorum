@@ -15,17 +15,16 @@ projects. It is not a chat room where every agent speaks every day. It combines 
 small decision-making board, on-demand specialists, fixed content services,
 deterministic checks and human-only approval gates.
 
-The system currently runs six workspaces:
+The system currently runs five workspaces:
 
 1. **Caught Up** — a daily Czech AI-news briefing.
 2. **Titty Tuesdays** — a pre-commerce apparel/brand laboratory focused on future
    campaigns, not social production or sales.
-3. **Magazine Incubator** — a research-only way to find possible publication niches.
-4. **FightAIQ** — sourced UFC and Oktagon fighter cards, historical backfill, bout
+3. **FightAIQ** — sourced UFC and Oktagon fighter cards, historical backfill, bout
    discovery and guarded deterministic analysis.
-5. **Carousel Studio** — an internal deterministic carousel renderer with a public
+4. **Carousel Studio** — an internal deterministic carousel renderer with a public
    template gallery and no image-model calls.
-6. **MMA Files** — a public Czech MMA magazine and the reader-facing home for
+5. **MMA Files** — a public Czech MMA magazine and the reader-facing home for
    FightAIQ data.
 
 BoardlessAI makes plans and content, records why a decision was made, counts external
@@ -79,9 +78,7 @@ Specialist agenda queue ───────────────┐
   bounded, idempotent, 3-day expiry   │
              │                         │
              ├─ Titty Tuesdays room    │
-             ├─ incubator scan/synth   │
              ├─ FightAIQ analysis      │
-             ├─ Carousel Studio room   │
              └─ MMA Files desk         │
                                        │
 Fixed services and change triggers ────┤
@@ -150,7 +147,7 @@ call a model. It distinguishes five behaviors:
 | --- | --- | --- |
 | Decision room | choose priority and commission expertise | 06:00 morning board |
 | Fixed service | maintain a real reader/product promise | Caught Up edition, MMA article slots |
-| Agenda-gated room | solve a named specialist problem | TT campaign, incubator, MMA desk |
+| Agenda-gated room | solve a named specialist problem | TT campaign, FightAIQ analysis, MMA desk |
 | Change-triggered room | react only to material new input | FightAIQ intake |
 | Deterministic checkpoint | preserve the operating trail without model theatre | 14:00 and 22:00 |
 
@@ -206,11 +203,8 @@ Current transition map:
 
 | Source | Allowed follow-up |
 | --- | --- |
-| Morning board | TT campaign, incubator scan, FightAIQ intake, MMA story meeting, MMA desk or Carousel Studio |
-| Carousel Studio | another Carousel Studio room |
+| Morning board | TT campaign, FightAIQ intake, MMA story meeting or MMA desk |
 | TT campaign | another TT campaign |
-| Incubator scan | incubator synthesis |
-| Incubator synthesis | another evidence scan |
 | FightAIQ intake | analysis, MMA story meeting or MMA desk |
 | FightAIQ analysis | new intake or MMA story meeting |
 | MMA story meeting | MMA desk or FightAIQ intake |
@@ -224,23 +218,22 @@ This map prevents an arbitrary agent from scheduling an arbitrary paid room.
 | ---: | --- | --- | --- | ---: |
 | 05:00 | Caught Up | Edition | fixed service and live gate | meeting `$0.08`; production `$0.35` |
 | 06:00 | BoardlessAI | Morning board + Caught Up idea screening | fixed decision room | cycle hard cap `$0.20` |
-| 07:00 | Incubator | Evidence scan | agenda | `$0.06` |
 | 08:00 | FightAIQ | Data intake | material source change or agenda | `$0.06` |
 | 09:00 | MMA Files | Story assignment | fixed service | `$0.05` |
-| 10:00 | MMA Files | Morning article | assigned slot + verified evidence | `$0.16` |
+| 10:00 | MMA Files | Daily article | assigned slot + verified evidence | `$0.16` |
 | 11:00 | Titty Tuesdays | Future-eshop marketing ideas | standing agenda; optional focused question | `$0.08` |
-| 13:00 | Carousel Studio | Template review | agenda; deterministic rendering stays `$0` | `$0.06` |
 | 14:00 | BoardlessAI | Afternoon checkpoint | deterministic | `$0` |
 | 17:00 | Caught Up | Product decision | fixed service | `$0.08` |
-| 18:00 | MMA Files | Evening article | assigned slot + verified evidence | `$0.16` |
 | 19:00 | FightAIQ | Model review | agenda + separate analysis gate | `$0.06` |
 | 20:00 | MMA Files | Desk review | agenda | `$0.05` |
-| 21:00 | Incubator | Proposal synthesis | agenda | `$0.06` |
 | 22:00 | BoardlessAI | Night checkpoint + summary | deterministic | `$0` plus optional digest path |
 
-The GitHub workflow uses 17 unique UTC cron entries to represent these 15 Prague
-windows across daylight saving time. The runtime checks the resolved Prague hour, so
-the inactive seasonal entry does no work. Previously duplicated entries were removed.
+A Vercel cron dispatches each of these eleven windows on its own hour; that path does
+the work. GitHub's own schedule is the backup and arrives late, so the workflow carries
+three backstop sweeps a day instead of a cron per window — each looks for a slot today
+with no record that can still be opened, and opens the oldest. Every firing runs a
+pre-check against the committed records before installing anything, so a slot that is
+already settled costs one billable minute rather than five.
 
 The envelopes are maximum planning/reservation values, not a promise that each run
 costs that amount. A skipped or evidence-killed phase costs `$0`; actual provider use
@@ -258,7 +251,6 @@ The morning packet and `/admin` read business capability from existing Git recor
 - **FightAIQ:** event/fighter coverage, two-source agreement and completed readiness
   dossiers.
 - **Titty Tuesdays:** count and completeness of launch-ready campaign plans.
-- **Incubator:** evidence-backed proposals that meet the current research thesis.
 - **Carousel Studio:** live templates, passing proposals, deterministic rendering and
   cited brand-specific iterations.
 
@@ -321,7 +313,7 @@ future default catalog.
 | VAULT | duplicate detection and idea memory | common memory rules with project namespaces |
 | FRAME | deterministic visual production | one code-driven studio for fallback heroes and social templates |
 | RELAY | bounded repository delivery and daily notification | shared protocol, separate target allowlists |
-| ANGLE | positioning and niche definition | useful to TT and incubator through requested rooms |
+| ANGLE | positioning and niche definition | useful to TT and the magazine desks through requested rooms |
 | COHORT | adult audience definitions without personal data | shared method, project-specific packets |
 | FUNNEL | cost-labelled campaign and measurement plans | TT guest only when the agenda is a funnel question |
 | PALATE | evidence-linked taste memory | shares method but never blends project taste files |
@@ -535,38 +527,7 @@ Before more campaign volume, define one real, legal, low-cost demand experiment 
 one measurable success/failure threshold. More ideas without an observed test will
 increase the archive, not learning.
 
-## 13. Magazine Incubator in detail
-
-### Promise
-
-The incubator finds possible daily-readable publication niches and produces
-evidence-backed proposals. It may found a new content project only when the proposal
-passes the pre-signed template; it cannot treat attention as demand.
-
-### Two-room chain
-
-1. A due scan agenda asks SCOUT/ANGLE/COHORT/VAULT to bring cited candidates.
-2. A scan with no qualifying external evidence returns zero candidates.
-3. A follow-up synthesis agenda may be created from the scan.
-4. Synthesis argues the evidence down to zero, one or two complete proposals.
-5. A board-approved proposal passes deterministic template compliance.
-6. A compliant proposal receives an existing-roster participant group, collision-free calendar,
-   stylebook seed, project state scaffold and decision record automatically.
-7. Any new account, credential, social account, commerce, legal/personal-data surface,
-   unapproved target or daily envelope above `$0.15` stops for the owner instead.
-
-Owner ratings remain optional taste input and never block this contract-driven flow.
-
-This chain is agenda-gated because daily scanning without a current strategic
-question mostly creates duplicates and source costs.
-
-### Improvement path
-
-The next useful improvement is not another research agent. It is a clear quarterly
-research thesis and source budget, followed by a fixture founding rehearsal that
-proves the generated project can be removed cleanly.
-
-## 14. FightAIQ in detail
+## 13. FightAIQ in detail
 
 ### Promise and mode
 
@@ -620,7 +581,7 @@ Only the sanitized FightAIQ content contract is delivered to
 `data/boardless/fightaiq.json` in MMA Files. BoardlessAI intentionally has no duplicate
 public fighters/events section.
 
-## 15. MMA Files in detail
+## 14. MMA Files in detail
 
 ### Promise
 
@@ -675,7 +636,7 @@ connect social accounts when wanted, then choose corrections/operator/privacy de
 before indexing. Article quality approval is agent-owned and enforced by release
 proof, not an owner launch gate.
 
-## 16. State and contract architecture
+## 15. State and contract architecture
 
 Git is the canonical audit trail. Important areas:
 
@@ -702,7 +663,7 @@ State-changing production jobs use a lock because the repository assumes one
 serialized writer. Workflow commits must first integrate remote `main`; this avoids
 the earlier non-fast-forward race when another session changed the calendar.
 
-## 17. Public and admin experience
+## 16. Public and admin experience
 
 The public BoardlessAI site explains the system without exposing secrets, raw private
 notes, credentials or internal approval packets. Its calendar shows one day in the
@@ -735,7 +696,7 @@ The admin is designed for scanning:
 Admin notes enter repository history after saving, so they must contain no secret or
 personal information.
 
-## 18. Delivery and repository separation
+## 17. Delivery and repository separation
 
 The delivery GitHub App has Contents read/write only on specifically approved
 repositories. BoardlessAI holds its App ID/private key in Actions. Consumer sites do
@@ -762,13 +723,13 @@ Caught Up accepts its edition contract. MMA Files accepts article and FightAIQ d
 contracts. Titty Tuesdays currently reads a sanitized public feed and is not a write
 target.
 
-## 19. Cost review
+## 18. Cost review
 
 The cost strategy now prioritizes call avoidance:
 
 - morning is the only paid company-wide decision room;
 - afternoon/night became `$0` deterministic checkpoints;
-- TT, incubator, FightAIQ analysis and MMA desk do not call without a due agenda;
+- TT, FightAIQ analysis and MMA desk do not call without a due agenda;
 - FightAIQ source checks use a material hash before a specialist call;
 - missing article evidence kills work before writing;
 - social captions are folded into existing production calls;
@@ -782,9 +743,8 @@ six only in the morning, removing eight routine calls before considering special
 room savings.
 
 A daily TT room previously averaged roughly five agent contributions. The current
-room uses four contributors only when commissioned. Incubator's scan and synthesis
-previously reserved up to 11 contributions per day; now both require a relevant chain
-of agendas. MMA desk and FightAIQ analysis receive the same treatment.
+room uses four contributors only when commissioned. MMA desk and FightAIQ analysis
+receive the same treatment.
 
 These are avoided maximums, not guaranteed dollar savings. Actual savings depend on
 how often the board creates agendas and on provider token use. The budget ledger, not
@@ -801,13 +761,12 @@ the output path the showcase depends on.
 Use a cheaper model only after a blinded comparison shows equal fact preservation,
 style quality, Czech naturalness and first-pass acceptance on a meaningful sample.
 
-## 20. Safety and failure behavior
+## 19. Safety and failure behavior
 
 The system prefers an explicit non-result over fabricated activity:
 
 - `NO_EDITION` when Caught Up lacks a consequential supported story;
 - a killed MMA slot when evidence is missing;
-- zero incubator proposals without external evidence;
 - `not-needed` when no agenda exists;
 - `PAUSED` when a live switch, budget or safety gate blocks work;
 - no visitor/reader/post measurement while the Phase 3 gate is closed;
@@ -818,7 +777,7 @@ Global and project kill switches stop work independently. Budget exhaustion stop
 paid work rather than silently borrowing. Idempotency keys and receipts make retries
 safe. Historical decisions are never rewritten to make the present look cleaner.
 
-## 21. Current manual dependencies
+## 20. Current manual dependencies
 
 Code completion does not replace account ownership. The only current plumbing is:
 
@@ -835,7 +794,7 @@ and ads. They are not content-review requirements.
 
 `NEEDED.md` is the exact live checklist. `MANUAL STEPS.md` gives its safe order.
 
-## 22. Highest-value next improvements
+## 21. Highest-value next improvements
 
 ### A. Improve source health before adding volume
 
@@ -882,7 +841,7 @@ PEOPLE should review the roster quarterly or after 20 relevant outputs, not dail
 Use killed-slot categories, veto rate, first-pass/retry rate, source agreement and
 owner ratings. Split or add a role only when repeated errors prove a missing specialty.
 
-## 23. Money and quarterly KPIs
+## 22. Money and quarterly KPIs
 
 Decision D10 treats financial and target reporting as part of the public operating
 record. Each quarter lasts 90 days. `config/kpis/2026-Q1.json` stores the owner-editable
@@ -908,7 +867,8 @@ support a stage proposal; the owner remains the only stage authority.
 
 The Money page also explains five earning positions: Caught Up sponsorship, MMA
 Files sponsorship or non-bookmaker affiliates, Titty Tuesdays season-one commerce,
-no FightAIQ monetization in Q1/Q2 and no Incubator monetization. A threshold may move
+no FightAIQ monetization in Q1/Q2 and Carousel Studio as an internal engine. A
+threshold may move
 a method from waiting to ready and prepare a complete proposal in the admin. Only an
 explicit owner decision can make it active.
 
@@ -917,7 +877,7 @@ owner-editable `config/fixed-costs.json`, which starts empty. Verified revenue s
 at `$0`. The public snapshot contains amounts and categories only, without invoices,
 credentials or personal data.
 
-## 24. Questions for Fable brainstorming
+## 23. Questions for Fable brainstorming
 
 Fable can use this system as a design brief and challenge it with questions such as:
 
@@ -945,7 +905,7 @@ Fable can use this system as a design brief and challenge it with questions such
 12. What is the best humane label for internal concepts such as ledger, venture,
     governance and canonical state on the public/admin surfaces?
 
-## 25. Design principles to preserve
+## 24. Design principles to preserve
 
 - A quiet calendar is healthy when no work is needed.
 - A model call needs a service promise, material change or explicit agenda.

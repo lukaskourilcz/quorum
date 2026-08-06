@@ -10,6 +10,7 @@ import {
 import { atomicWriteJson } from "../state.js";
 import { fixedCostTotals } from "./fixed-costs.js";
 import {
+  MONETIZATION_METHODS,
   PublicMonetizationMethodSchema,
   type PublicMonetizationMethod
 } from "./monetization.js";
@@ -26,7 +27,11 @@ export const PublicMoneySnapshotSchema = openObject({
     daysRemaining: z.number().int().min(0).max(90),
     statuses: z.array(QuarterlyKpiEvaluationSchema).max(200)
   }),
-  monetization: z.array(PublicMonetizationMethodSchema).length(6),
+  // Exactly the full set, never a subset: a page that shows four of five ways this company could
+  // make money reads as "here is how we monetize" while hiding one. The count was a literal 6 and
+  // it went stale the moment a venture left the list, so it is taken from the definitions
+  // themselves — the guard is "all of them", and that is what it now says.
+  monetization: z.array(PublicMonetizationMethodSchema).length(MONETIZATION_METHODS.length),
   costs: openObject({
     currency: z.literal("USD"),
     api: openObject({

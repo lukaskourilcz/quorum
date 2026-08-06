@@ -11,7 +11,6 @@ import {
   CircleSlash,
   Clock3,
   FileText,
-  FlaskConical,
   Hourglass,
   Newspaper,
   PanelsTopLeft,
@@ -53,7 +52,7 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
-type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "incubator" | "fightaiq" | "mma-files" | "carousel-studio";
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "fightaiq" | "mma-files" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
@@ -106,7 +105,6 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   company: { icon: Building2, label: "Company", tone: "text-[var(--accent)]", slotColor: "var(--accent)" },
   "caught-up": { icon: Newspaper, label: "DNESKAi", tone: "text-[var(--magenta-spark)]", slotColor: "var(--magenta-spark)" },
   "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--warning-soft)]", slotColor: "var(--warning-soft)" },
-  incubator: { icon: FlaskConical, label: "Magazine Incubator", tone: "text-[var(--success-soft)]", slotColor: "var(--success-soft)" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
   "mma-files": {
     icon: FileText,
@@ -120,7 +118,6 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
 function projectForKind(kind: CalendarKind): ProjectKey {
   if (isCaughtUp(kind)) return "caught-up";
   if (kind === "tt-marketing") return "titty-tuesdays";
-  if (isIncubator(kind)) return "incubator";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
   if (kind === "studio") return "carousel-studio";
@@ -216,10 +213,6 @@ function statusDetails(status: DisplayStatus): { icon: LucideIcon; label: string
     tone: "text-[var(--fog)]",
     surface: { backgroundColor: "var(--surface)" }
   };
-}
-
-function isIncubator(kind: CalendarKind) {
-  return kind === "incubator-scan" || kind === "incubator-synthesis";
 }
 
 function definitionTone(kind: CalendarKind): string {

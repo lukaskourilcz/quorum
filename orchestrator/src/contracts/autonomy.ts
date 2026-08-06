@@ -90,44 +90,6 @@ export const PriorityQueueSchema = openObject({
   updatedAt: DateTimeSchema
 });
 
-export const VentureTemplateSchema = openObject({
-  schemaVersion: z.literal("venture-template/1"),
-  templateId: z.literal("content-venture-default"),
-  dailyEnvelopeCapUsd: z.number().finite().positive().max(0.15),
-  allowedDeliveryTargets: z.array(z.enum(["boardless-site", "caught-up", "mma-files"])).min(1),
-  existingRosterOnly: z.literal(true),
-  newCredentialsAllowed: z.literal(false),
-  newAccountsAllowed: z.literal(false),
-  commerceAllowed: z.literal(false),
-  paymentsAllowed: z.literal(false),
-  adsAllowed: z.literal(false),
-  personalDataAllowed: z.literal(false),
-  newLegalSurfaceAllowed: z.literal(false),
-  newSocialAccountsAllowed: z.literal(false),
-  minimumSlotGapMinutes: z.number().int().min(60).max(240),
-  requiredFiles: z.array(z.enum(["STYLEBOOK.md", "README.md"])).min(1)
-});
-
-export const VentureTemplateCandidateSchema = openObject({
-  schemaVersion: z.literal("venture-template-candidate/1"),
-  proposalRef: z.string().trim().min(1).max(240),
-  slug: VentureIdSchema,
-  name: z.string().trim().min(1).max(100),
-  deliveryTarget: z.enum(["boardless-site", "caught-up", "mma-files"]),
-  dailyEnvelopeUsd: z.number().finite().positive().max(0.15),
-  cadenceHourPrague: z.number().int().min(5).max(23),
-  cast: z.array(ContractAgentIdSchema).min(2).max(8),
-  styleBrief: z.string().trim().min(1).max(2_000),
-  requiresNewCredentials: z.boolean(),
-  requiresNewAccounts: z.boolean(),
-  includesCommerce: z.boolean(),
-  includesPayments: z.boolean(),
-  includesAds: z.boolean(),
-  includesPersonalData: z.boolean(),
-  createsLegalSurface: z.boolean(),
-  createsSocialAccount: z.boolean()
-});
-
 export const ImageLicenseSchema = openObject({
   name: z.enum([
     "CC0",
@@ -259,8 +221,6 @@ export type PriorityItem = z.infer<typeof PriorityItemSchema>;
 export type PriorityQueue = z.infer<typeof PriorityQueueSchema>;
 export type PriorityOrigin = z.infer<typeof PriorityOriginSchema>;
 export type PriorityProposalProvenance = z.infer<typeof PriorityProposalSchema>;
-export type VentureTemplate = z.infer<typeof VentureTemplateSchema>;
-export type VentureTemplateCandidate = z.infer<typeof VentureTemplateCandidateSchema>;
 export type ArticleImage = z.infer<typeof ArticleImageSchema>;
 export type ReleaseProof = z.infer<typeof ReleaseProofSchema>;
 export type SocialPostReceipt = z.infer<typeof SocialPostReceiptSchema>;

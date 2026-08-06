@@ -82,7 +82,7 @@ export async function sendBudgetAlert(input: {
   const previous = await readJson<{ status?: string } | null>(input.root, relative, null);
   if (previous?.status === "sent") return "sent";
   const costBreakdown = breakdown(input.status);
-  const text = `BoardlessAI spending has stopped. ${input.status.month} all-in use is $${input.status.spentUsd.toFixed(2)} of $${input.status.capUsd.toFixed(2)}. By project: ${costBreakdown}. Already reduced: incubator first, then the second magazine slot, then the first magazine slot, then FightAIQ analysis. Options for the owner: keep work paused; reduce article frequency; pause FightAIQ analysis; or countersign a new limit. The system cannot raise or move the limit.`;
+  const text = `BoardlessAI spending has stopped. ${input.status.month} all-in use is $${input.status.spentUsd.toFixed(2)} of $${input.status.capUsd.toFixed(2)}. By project: ${costBreakdown}. Already reduced: the second magazine slot first, then the first magazine slot, then FightAIQ analysis. Options for the owner: keep work paused; reduce article frequency; pause FightAIQ analysis; or countersign a new limit. The system cannot raise or move the limit.`;
   const subject = `[BoardlessAI] Spending stopped for ${input.status.month}`;
   await addInboxOnce(input.root, `BUDGET-EXHAUSTED-${input.status.month}`, `${text} Review state/decisions/2026-08-04-budget-fifty.md before changing any number.`);
   try {

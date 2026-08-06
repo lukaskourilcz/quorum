@@ -61,17 +61,6 @@
       "ramp_days": 0
     },
     {
-      "id": "company.founding-or-rated-proposals",
-      "venture": "company",
-      "name": "One founded venture or two owner-rated proposals",
-      "metric_source": "state/metrics/quarterly#founding_or_two_rated_proposals",
-      "target": 1,
-      "direction": "at-least",
-      "unit": "boolean",
-      "critical": false,
-      "ramp_days": 0
-    },
-    {
       "id": "company.agenda-outcome-review",
       "venture": "company",
       "name": "Consumed agendas included in the quarterly outcome review",
@@ -296,28 +285,6 @@
       "critical": false,
       "ramp_days": 14,
       "deferred_reason": "No channel exists to have followers on."
-    },
-    {
-      "id": "incubator.complete-proposals",
-      "venture": "incubator",
-      "name": "Complete evidence-backed proposals",
-      "metric_source": "state/ventures/incubator/proposals#complete_count",
-      "target": 2,
-      "direction": "at-least",
-      "unit": "count",
-      "critical": false,
-      "ramp_days": 0
-    },
-    {
-      "id": "incubator.owner-rated-proposals",
-      "venture": "incubator",
-      "name": "Proposals rated by the owner",
-      "metric_source": "state/ratings/incubator#rated_proposal_count",
-      "target": 1,
-      "direction": "at-least",
-      "unit": "count",
-      "critical": false,
-      "ramp_days": 0
     },
     {
       "id": "carousel-studio.engine-post-rate",

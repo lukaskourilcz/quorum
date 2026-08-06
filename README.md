@@ -6,8 +6,8 @@ Git-backed state, shared contracts, guarded automation, and a public/admin
 Next.js site.
 
 Current status: **operating, pre-revenue, VALIDATION**. The public site is
-<https://boardless-ai.vercel.app>. Six project workspaces share this runtime:
-Caught Up, Titty Tuesdays, the Magazine Incubator, FightAIQ, Carousel Studio and MMA Files.
+<https://boardless-ai.vercel.app>. Five project workspaces share this runtime:
+Caught Up, Titty Tuesdays, FightAIQ, Carousel Studio and MMA Files.
 The $30 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
 decisions are countersigned. Separate live switches, evidence checks and delivery
 credentials still decide whether a scheduled wake-up may do work.
@@ -22,7 +22,6 @@ passes the existing owner, budget, evidence, security and release gates.
 | --- | --- | --- |
 | Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
-| Magazine Incubator | Evidence-backed niche research and fenced content-project founding | Can found only projects that pass the pre-signed template; anything else stops for the owner |
 | FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Shared deterministic carousel templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
 | MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
@@ -54,8 +53,6 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   heroes, English/Czech language desks, verified GitHub App delivery and social packs.
 - Titty Tuesdays standing daily campaign room, 91-day turnover, platform-risk gate,
   season concepts, public venture page and protected launch binder.
-- Agenda-led incubator scan and synthesis rooms, complete proposal contract, rating
-  lifecycle, public shortlist and pre-signed content-project template founding.
 - FightAIQ source gates, two-source fighter records, Glicko-2 engine, versioned
   probabilities, owner odds capture, immutable results and public performance view.
 - MMA Files source-first bilingual production, Czech and English style desks,
@@ -144,12 +141,10 @@ Useful commands:
 
 | Command | Result |
 | --- | --- |
-| `pnpm agents:validate` | Validates all 40 registry entries and available portrait assets |
+| `pnpm agents:validate` | Validates all 40 registry entries (30 active) and available portrait assets |
 | `pnpm cycle -- --phase morning --dry --explain-budget --explain-routing` | Runs and explains a dry portfolio-board shift |
 | `pnpm cycle -- --phase cu-edition --dry` | Runs the dry Caught Up edition room |
 | `pnpm cycle -- --phase tt-marketing --dry` | Runs the weekday Titty Tuesdays fixture room |
-| `pnpm cycle -- --phase incubator-scan --dry` | Runs the research scan with no provider calls |
-| `pnpm cycle -- --phase incubator-synthesis --dry` | Proves empty input creates no niche proposal |
 | `pnpm cycle -- --phase mma-intake --dry` | Checks UFC and Oktagon without live calls |
 | `pnpm cycle -- --phase mma-analysis --dry` | Proves the D8 analysis path without a live provider call |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
@@ -197,8 +192,8 @@ Repository variables are independent authorization switches:
 - `AUTONOMY_KILL_SWITCH=false` allows the guarded workflow to evaluate work.
 - `CAUGHT_UP_LIVE_ENABLED=true` permits scheduled Caught Up phases after their
   delivery checklist passes.
-- `PORTFOLIO_LIVE_ENABLED=true` permits scheduled Titty Tuesdays and incubator
-  phases after their decisions pass.
+- `PORTFOLIO_LIVE_ENABLED=true` permits scheduled Titty Tuesdays phases after their
+  decisions pass.
 - `FIGHTAIQ_LIVE_ENABLED=true` permits live FightAIQ data rooms;
   `FIGHTAIQ_ANALYSIS_ENABLED=true` permits the guarded model path approved in D8.
   Confirmed bouts and both fighter cards still have to pass their evidence checks.
@@ -217,23 +212,27 @@ publisher. Missing approval never authorizes a live action.
 
 ## Prague schedule and budget
 
-The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 07:00
-incubator scan, 08:00 FightAIQ intake, 09:00 MMA Files story meeting, 10:00
-article slot, 11:00 Titty Tuesdays, 13:00 Carousel Studio, 14:00 board afternoon, 17:00 Caught Up
-product, 18:00 article slot, 19:00 FightAIQ analysis, 20:00 MMA Files desk,
-21:00 incubator synthesis and 22:00 board night. GitHub receives both UTC
-daylight-saving variants as separate one-hour crons, and the phase is resolved from
-the cron that fired rather than from the clock at the moment the job starts: GitHub
-queues scheduled workflows, sometimes by the better part of an hour, and reading the
-wall clock lost seven of fourteen meetings on 2 August and ran an eighth as the
-neighbouring room. The runtime still accepts only the variant matching Prague today.
-A slot a gate turns off is recorded in `state/meetings/skips/` and shown on the
-calendar as **Skipped** with its reason. The morning council may place one bounded specialist
-agenda. Titty Tuesdays opens every day with a standing agenda to generate future-eshop marketing
-ideas; a council agenda may focus that work. The incubator synthesis room, Carousel Studio,
-FightAIQ analysis and the MMA Files desk open only when an agenda is due. Incubator scan and
-FightAIQ intake also open after a material source change. Manual runs remain available for
-explicit tests.
+The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 08:00
+FightAIQ intake, 09:00 MMA Files story meeting, 10:00 article slot, 11:00 Titty
+Tuesdays, 14:00 board afternoon, 17:00 Caught Up product, 19:00 FightAIQ analysis,
+20:00 MMA Files desk and 22:00 board night.
+
+Two paths reach those eleven slots, and they are not equals. A Vercel cron dispatches
+each slot on its own hour and does the real work. GitHub's own `on.schedule` is the
+backup, and it is late — measured over 5–6 August a scheduled run averaged 0.9 billable
+minutes of guard-exit against a dispatch's 5.8 minutes of work, because GitHub queues
+scheduled workflows, sometimes by the better part of an hour. So the workflow carries
+three backstop sweeps a day rather than a cron per slot: each one looks for a slot today
+that has no record and can still be opened, and opens the oldest. Every firing, from
+either path, first runs a pre-check that reads the committed records before `pnpm
+install` — a slot whose answer is already on disk costs one minute instead of five.
+
+A slot a gate turns off is recorded in `state/meetings/skips/` and shown on the calendar
+as **Skipped** with its reason. The morning council may place one bounded specialist
+agenda. Titty Tuesdays opens every day with a standing agenda to generate future-eshop
+marketing ideas; a council agenda may focus that work. FightAIQ analysis and the MMA
+Files desk open only when an agenda is due. FightAIQ intake also opens after a material
+source change. Manual runs remain available for explicit tests.
 Afternoon and night are zero-model checkpoints.
 
 The owner countersigned `budget-2026-08e`, setting a `$30` all-in monthly limit,
@@ -304,8 +303,8 @@ Rollback:
   repository's commits, commit statuses and check runs, and names the permission to
   grant — those are three separate installation permissions, and a missing one reverts
   a healthy article off the live site.
-- Commerce, payment, inventory and ads are not implemented. Incubator founding is
-  limited to the pre-signed, no-new-account content-project template.
+- Commerce, payment, inventory and ads are not implemented. A new venture is founded
+  by a direct registry entry the owner signs off, never by the runtime on its own.
 
 License: MIT. Security-sensitive operation requires the documented human
 approvals and current provider-policy verification.

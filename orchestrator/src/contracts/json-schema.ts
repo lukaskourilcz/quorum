@@ -26,7 +26,6 @@ import {
   TrackRecordSchema
 } from "./mma.js";
 import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } from "./mma-files.js";
-import { NicheProposalSchema } from "./niche-proposal.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
@@ -39,9 +38,7 @@ import {
   PriorityQueueSchema,
   ReleaseProofSchema,
   SocialActivationSchema,
-  SocialPostReceiptSchema,
-  VentureTemplateCandidateSchema,
-  VentureTemplateSchema
+  SocialPostReceiptSchema
 } from "./autonomy.js";
 
 export const ContractSchemas = {
@@ -72,7 +69,6 @@ export const ContractSchemas = {
   "article": ArticlePackageSchema,
   "social-variant": SocialVariantPackSchema,
   "editorial-slate": EditorialSlateSchema,
-  "niche-proposal": NicheProposalSchema,
   "rating": RatingRecordSchema,
   "season": SeasonFileSchema,
   "social-pack": SocialPackSchema,
@@ -84,9 +80,7 @@ export const ContractSchemas = {
   "priority-queue": PriorityQueueSchema,
   "release-proof": ReleaseProofSchema,
   "social-activation": SocialActivationSchema,
-  "social-post-receipt": SocialPostReceiptSchema,
-  "venture-template": VentureTemplateSchema,
-  "venture-template-candidate": VentureTemplateCandidateSchema
+  "social-post-receipt": SocialPostReceiptSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;

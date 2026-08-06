@@ -21,11 +21,12 @@ describe("meeting agenda queue", () => {
   it("allows only bounded transitions and picks the next available room date", async () => {
     const policy = await loadMeetingPolicy();
     expect(mayRequestMeeting(policy, "morning", "tt-marketing")).toBe(true);
-    // The studio and both incubator rooms are off the clock: the studio never held a live
-    // session and the incubator's proposals were not being acted on. Their phases stay in the
-    // agenda contract so the paused incubator can be revived without another contract change,
-    // and the morning board can commission neither.
-    expect(mayRequestMeeting(policy, "morning", "incubator-scan")).toBe(false);
+    // Transitions are bounded, not a free-for-all: the morning board opens the rooms that read
+    // its own record, and `mma-analysis` is not one of them — it is commissioned by mma-intake,
+    // which is the room that produces the material it analyses. The studio and both incubator
+    // rooms used to be checked here; those phases are out of the agenda contract entirely now,
+    // so the type system refuses them before this assertion could.
+    expect(mayRequestMeeting(policy, "morning", "mma-analysis")).toBe(false);
     expect(mayRequestMeeting(policy, "morning", "mag-desk")).toBe(true);
     expect(policy.agendaRequiredPhases).toContain("mag-desk");
     expect(phaseNeedsAgenda(policy, "tt-marketing")).toBe(false);

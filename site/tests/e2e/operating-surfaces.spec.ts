@@ -13,9 +13,8 @@ const axeRoutes = [
   "/ventures/fightaiq",
   "/ventures/carousel-studio",
   "/money",
-  "/incubator",
   "/admin?venture=global",
-  "/admin?venture=incubator&tab=niche-proposals",
+  "/admin?venture=titty-tuesdays&tab=plans",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
   "/admin?venture=fightaiq&tab=events",
@@ -35,8 +34,7 @@ const axeRoutes = [
 
 const repositoryRoot = path.resolve(process.cwd(), "..");
 const e2ePlanPath = path.join(repositoryRoot, "state", "ventures", "titty-tuesdays", "plans", "e2e-launch-plan.json");
-const e2eProposalPath = path.join(repositoryRoot, "state", "ventures", "incubator", "niche-proposals", "e2e-proposal.json");
-const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "incubator", "ledger.jsonl");
+const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "titty-tuesdays", "ledger.jsonl");
 let originalRatingLedger: string | null = null;
 
 test.beforeAll(async () => {
@@ -47,7 +45,6 @@ test.beforeAll(async () => {
   }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
-    mkdir(path.dirname(e2eProposalPath), { recursive: true }),
     mkdir(path.dirname(ratingLedgerPath), { recursive: true })
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
@@ -69,38 +66,10 @@ test.beforeAll(async () => {
     status: "approved",
     originMeetingRef: "meetings/2026-08-01-tt-marketing"
   }));
-  await writeFile(e2eProposalPath, JSON.stringify({
-    schemaVersion: "niche-proposal/1",
-    id: "niche-2026-08-04-e2e0",
-    domain: "E2E repair brief",
-    oneLiner: "A temporary proposal used only to verify the protected rating path.",
-    whyPeopleCareDaily: "The test checks persistence and shortlist projection, not a market claim.",
-    audienceHypothesis: {
-      regions: ["Europe"],
-      ageRange: { min: 25, max: 60 },
-      genders: ["all"],
-      interests: ["repair"],
-      platforms: ["web"],
-      adTargetingNotes: "No advertising; test fixture only."
-    },
-    contentShape: {
-      cadence: "weekday",
-      formats: ["brief"],
-      caughtUpReuseNotes: "Reuse the edition contract only after approval."
-    },
-    competitionNotes: [],
-    risks: ["Test fixture must be removed."],
-    evidenceRefs: [],
-    status: "proposed",
-    originMeetingRef: "meetings/2026-08-01-incubator-synthesis"
-  }));
 });
 
 test.afterAll(async () => {
-  await Promise.all([
-    rm(e2ePlanPath, { force: true }),
-    rm(e2eProposalPath, { force: true })
-  ]);
+  await rm(e2ePlanPath, { force: true });
   if (originalRatingLedger === null) await rm(ratingLedgerPath, { force: true });
   else await writeFile(ratingLedgerPath, originalRatingLedger);
 });
@@ -200,15 +169,17 @@ test("metrics role column keeps the table inset", async ({ page }) => {
   await expect(firstRole).toHaveCSS("padding-left", "32px");
 });
 
-test("admin rating persists, feeds the incubator shortlist, and the launch binder renders", async ({ page }) => {
-  await page.goto("/admin?venture=incubator&tab=niche-proposals", { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "E2E repair brief" })).toBeVisible();
+// The rated object used to be a niche proposal, and the assertion after the reload used to be
+// the incubator shortlist. Both left with the venture; what the test is actually for — a rating
+// survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
+// on the plan card the binder assertion below already needs.
+test("admin rating persists and the launch binder renders", async ({ page }) => {
+  await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
   await page.getByLabel("Note (optional)").fill("E2E owner note");
   await page.getByRole("button", { name: "Perfect", exact: true }).click();
   await expect(page.getByText("Rating saved to the permanent history.")).toBeVisible();
   await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByText("Magazine ideas to keep reviewing")).toBeVisible();
-  await expect(page.getByText("E2E repair brief").first()).toBeVisible();
   await expect(page.getByText("Rating history (1)")).toBeVisible();
 
   await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
@@ -255,7 +226,7 @@ test("admin login explains errors, starts a session and signs out", async ({ pag
   await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/incubator", "/admin?venture=global", "/admin?venture=incubator&tab=niche-proposals", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=templates"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=templates"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },

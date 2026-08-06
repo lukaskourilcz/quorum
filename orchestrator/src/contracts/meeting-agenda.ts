@@ -17,14 +17,14 @@ import {
  * renders at $0. Its historical meeting records stay readable, because MeetingRecord's own kind
  * enum is unchanged and past pages still have to render.
  *
- * The two incubator phases stay in this list although the venture is paused and neither room is
- * on the clock. The venture is parked for revival with all of its state, and taking its phases
- * out of the contract would mean rewriting the contract again to bring it back.
+ * The two incubator phases are gone with the venture. An agenda names a room a future meeting can
+ * be commissioned into, and there is no incubator room to commission — the owner's direction is
+ * that no new magazine is ideated again, and a future venture is founded by a direct registry
+ * entry the way GoVIRAL was. MeetingRecordSchema keeps the two kinds so the committed records
+ * from 1-6 August still parse and render.
  */
 export const AgendaPhaseSchema = z.enum([
   "tt-marketing",
-  "incubator-scan",
-  "incubator-synthesis",
   "mma-intake",
   "mma-analysis",
   "mag-editorial",

@@ -73,20 +73,6 @@ export default function VenturesPage() {
             </div>
           </div>
         </article>
-        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
-          <div className="grid md:grid-cols-12">
-            <div className="bg-[var(--surface)] p-8 md:col-span-4 md:p-10">
-              <Badge>Idea research</Badge>
-              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--fog)]">IDEAS ONLY</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Magazine Incubator</h2>
-            </div>
-            <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Research publication ideas without pretending they are businesses.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">The team can collect sources and let the owner rate a complete proposal. It cannot launch a publication by itself.</p>
-              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/incubator">Open idea research <ArrowRight aria-hidden="true" className="size-4" /></Link>
-            </div>
-          </div>
-        </article>
         <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">

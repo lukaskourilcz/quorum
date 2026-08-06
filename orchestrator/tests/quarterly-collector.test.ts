@@ -155,27 +155,6 @@ describe("quarterly measurement collector", () => {
     expect(verifiedEmpty.measurements["state/metrics/quarterly#maximum_monthly_api_usd"]).toBe(0);
   });
 
-  it("counts a template-compliant founding receipt toward the alternative company KPI", async () => {
-    const { root, stateRoot } = await fixtureRoot();
-    await writeJson(path.join(stateRoot, "ventures/new-brief/founding.json"), {
-      schemaVersion: "template-founding-receipt/1",
-      venture: "new-brief",
-      proposalRef: "proposal-1",
-      templateId: "content-venture-default",
-      foundedAt: "2026-08-03T08:00:00.000Z",
-      compliance: "passed"
-    });
-    const result = await collectQuarterlyMeasurements({
-      repoRoot: root,
-      stateRoot,
-      kpiSet,
-      now: new Date("2026-08-03T12:00:00.000Z"),
-      metricsIngestionEnabled: false,
-      mmaFilesIndexingEnabled: false
-    });
-    expect(result.measurements["state/metrics/quarterly#founding_or_two_rated_proposals"]).toBe(1);
-  });
-
   it("measures upcoming-event coverage from known bouts and rendered event cards", async () => {
     const { root, stateRoot } = await fixtureRoot();
     const event = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/event-card.valid.json"), "utf8")) as {

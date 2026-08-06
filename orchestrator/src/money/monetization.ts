@@ -8,7 +8,6 @@ export const MonetizationMethodIdSchema = z.enum([
   "mma-files-sponsorship-affiliate",
   "titty-tuesdays-commerce",
   "fightaiq-none",
-  "incubator-none",
   "carousel-studio-internal"
 ]);
 
@@ -50,7 +49,7 @@ export const MonetizationMethodStateSchema = openObject({
 
 export const PublicMonetizationMethodSchema = openObject({
   id: MonetizationMethodIdSchema,
-  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "fightaiq", "incubator", "carousel-studio"]),
+  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "fightaiq", "carousel-studio"]),
   method: z.string().min(1).max(160),
   status: MonetizationStatusSchema,
   activationKpi: z.string().min(1).max(300),
@@ -221,15 +220,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
           : "Q1 and Q2 monetization is locked while the model builds an evaluation record."
       };
     }
-  },
-  {
-    id: "incubator-none",
-    venture: "incubator",
-    method: "Not monetized",
-    activationKpi: "None. The Incubator is a research function.",
-    note: "The Incubator supports venture research and does not sell a product.",
-    proposal: null,
-    readiness: () => ({ met: false, unavailable: false, detail: "No monetization is planned." })
   },
   {
     id: "carousel-studio-internal",

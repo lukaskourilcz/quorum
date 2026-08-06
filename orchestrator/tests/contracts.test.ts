@@ -6,7 +6,6 @@ import { repoRoot } from "../src/paths.js";
 import { AudienceSpecSchema } from "../src/contracts/audience-spec.js";
 import { ContractSchemas, jsonSchemaText, type ContractName } from "../src/contracts/json-schema.js";
 import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
-import { NicheProposalSchema } from "../src/contracts/niche-proposal.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
@@ -81,11 +80,6 @@ describe("portfolio contract boundaries", () => {
     const unlabeled = structuredClone(valid);
     delete unlabeled.tactics[0]?.estimate;
     expect(MarketingPlanSchema.safeParse(unlabeled).success).toBe(false);
-  });
-
-  it("requires evidence for quantitative niche claims", async () => {
-    const poison = await fixture("niche-proposal", "poison");
-    expect(NicheProposalSchema.safeParse(poison).success).toBe(false);
   });
 });
 

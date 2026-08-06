@@ -34,34 +34,6 @@ async function sourceContext(now: Date): Promise<SourceFetchContext> {
   return { allowHosts: allowlist.runtimeHosts, now };
 }
 
-export async function refreshIncubatorEvidence(input: {
-  root: string;
-  now: Date;
-}): Promise<{ artifactPaths: string[]; evidenceRefs: string[] }> {
-  const [registry, context] = await Promise.all([
-    loadSourceRegistry(),
-    sourceContext(input.now)
-  ]);
-  const run = await runScrapersDetailed(registry.sources, context);
-  const digest = createDigest(run.items, 40);
-  const evidenceRefs = [...new Set(digest.map((item) => `source:${item.sourceId}`))];
-  const artifactPath = "ventures/incubator/evidence.json";
-  await atomicWriteJson(input.root, artifactPath, {
-    schemaVersion: "incubator-evidence/1",
-    generatedAt: input.now.toISOString(),
-    refs: evidenceRefs,
-    packet: JSON.stringify(digest.map((item) => ({
-      sourceId: item.sourceId,
-      title: item.title,
-      url: item.url,
-      publishedAt: item.publishedAt,
-      summary: item.summary,
-      tags: item.tags
-    }))),
-    sourceResults: run.sources
-  });
-  return { artifactPaths: [artifactPath], evidenceRefs };
-}
 
 type SourceState = "success" | "skipped" | "failed";
 

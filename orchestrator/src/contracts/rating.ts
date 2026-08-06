@@ -2,11 +2,15 @@ import { z } from "zod";
 import { DateTimeSchema, VentureIdSchema, openObject } from "./common.js";
 
 export const RatingValueSchema = z.enum(["perfect", "good", "bad"]);
+/**
+ * `niche-proposal` left with the Magazine Incubator: its only producer was
+ * `applyNicheProposalRating`, deleted with the venture, and no committed rating ever carried the
+ * kind. `template` stays — Carousel Studio rates its deck templates through it.
+ */
 export const RatingObjectKindSchema = z.enum([
   "idea",
   "plan",
   "visual",
-  "niche-proposal",
   "slate",
   "article",
   "social-variant",

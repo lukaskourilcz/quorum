@@ -23,10 +23,9 @@ collects UFC and Oktagon records and captured market data; live model analysis r
 behind its separate switch. MMA Files is the public bilingual magazine and the sole
 reader-facing home for delivered fighter files, event cards, captured odds and reviewed
 model outputs. Their live schedules remain behind the recorded signatures and
-independent switches. The Magazine Incubator may produce research proposals and
-automatically found only template-compliant content projects. Carousel Studio is the
-sixth project: an internal, deterministic social-rendering engine with no accounts,
-marketing, analytics or current earning method.
+independent switches. Carousel Studio is the fifth project: an internal, deterministic
+social-rendering engine with no accounts, marketing, analytics or current earning
+method.
 
 ## Owner and roles
 
@@ -167,8 +166,7 @@ records, captured prices and code-generated analysis without bet placement. MMA 
 owns the public bilingual articles and the reader-facing FightAIQ data pages. The two
 sites accept only bounded, hash-checked content files through their GitHub repositories;
 BoardlessAI cannot change their application code. Social packs are built inside
-existing production calls and post only after project health gates. The incubator owns
-research proposals and template compliance/founding. Caught Up keeps
+existing production calls and post only after project health gates. Caught Up keeps
 a static reader path with Git and MDX as canon.
 
 ## Constraints

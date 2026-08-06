@@ -65,4 +65,8 @@ work. They require a fresh owner scope before implementation.
   verification while keeping visitor/engagement measurement disabled.
 - [x] Found Carousel Studio with ten live templates, one deterministic renderer,
   lifecycle checks, a 13:00 agenda room, admin previews and a public showcase.
+- [x] Close the Magazine Incubator. It sat six times without producing a proposal the
+  owner acted on, and the direction is that no new magazine is ideated again — a future
+  venture is founded by a direct registry entry, the way GoVIRAL was. Its state moved to
+  `state/archive/incubator/`; the meeting records stay live so the rooms remain readable.
 - [ ] Complete only the owner plumbing listed in `NEEDS_YOUR_HELP_NOW.md`.

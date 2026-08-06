@@ -35,7 +35,9 @@ function ventureId(record: MeetingRecord | undefined, phase: string): string {
   if (phase === "tt-marketing") return "titty-tuesdays";
   if (phase.startsWith("mma-")) return "fightaiq";
   if (phase.startsWith("mag-") || phase.startsWith("article-")) return "mma-files";
-  return "incubator";
+  // Every live phase is named above. A record whose phase is not — one of the two retired
+  // incubator kinds, read back from the August archive — belongs to no current venture.
+  return "global";
 }
 
 function roomLink(date: string, record: MeetingRecord | undefined, phase: string, weekOf: string): string {

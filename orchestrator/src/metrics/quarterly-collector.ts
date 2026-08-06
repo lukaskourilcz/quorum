@@ -8,7 +8,6 @@ import { IdeaLedgerEntrySchema } from "../contracts/idea-ledger.js";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
 import { BoutRecordSchema, EventCardSchema, FighterRecordSchema } from "../contracts/mma.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
-import { NicheProposalSchema } from "../contracts/niche-proposal.js";
 import { FixedCostRegistrySchema } from "../money/fixed-costs.js";
 import type { MonetizationMeasurements } from "../money/monetization.js";
 import type { KpiMeasurements } from "./quarterly.js";
@@ -217,9 +216,6 @@ export async function collectQuarterlyMeasurements(input: {
     evaluationRaw,
     rosterStatusRaw,
     plansRaw,
-    proposalsRaw,
-    foundingReceipts,
-    incubatorRatings,
     agendaRaw,
     priorityRaw,
     calendars,
@@ -247,9 +243,6 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFile(path.join(input.stateRoot, "mma", "evaluation", "summary.json")),
     jsonFile(path.join(input.stateRoot, "mma", "roster", "status.json")),
     jsonFiles(path.join(input.stateRoot, "ventures", "titty-tuesdays", "plans")),
-    jsonFiles(path.join(input.stateRoot, "ventures", "incubator", "niche-proposals")),
-    jsonFiles(path.join(input.stateRoot, "ventures"), true),
-    jsonLines(path.join(input.stateRoot, "ratings", "incubator", "ledger.jsonl")),
     jsonFile(path.join(input.stateRoot, "meeting-agendas", "queue.json")),
     jsonFile(path.join(input.stateRoot, "priority-queue.json")),
     jsonFiles(path.join(input.stateRoot, "calendar")),
@@ -587,18 +580,6 @@ export async function collectQuarterlyMeasurements(input: {
   const plans = plansRaw.map((value) => MarketingPlanSchema.safeParse(value)).filter((result) => result.success).map((result) => result.data);
   const launchReadyCampaigns = plans.filter((plan) => plan.tactics.length > 0 && plan.calendar.length > 0 && plan.audienceRefs.length > 0).length;
   measurements["state/ventures/titty-tuesdays/campaigns#launch_ready_count"] = launchReadyCampaigns;
-  const proposals = proposalsRaw.map((value) => NicheProposalSchema.safeParse(value)).filter((result) => result.success).map((result) => result.data);
-  measurements["state/ventures/incubator/proposals#complete_count"] = proposals.length;
-  measurements["state/ratings/incubator#rated_proposal_count"] = incubatorRatings.map(record).filter((rating) =>
-    rating?.objectKind === "niche-proposal" && typeof rating?.rating === "string" && dateInPeriod(rating.ratedAt, periodStart, periodEnd)
-  ).length;
-  const templateFounded = foundingReceipts.map(record).some((receipt) =>
-    receipt?.schemaVersion === "template-founding-receipt/1"
-    && receipt.compliance === "passed"
-    && dateInPeriod(receipt.foundedAt, periodStart, periodEnd)
-  );
-  const ratedProposalCount = measurements["state/ratings/incubator#rated_proposal_count"] ?? 0;
-  measurements["state/metrics/quarterly#founding_or_two_rated_proposals"] = templateFounded || ratedProposalCount >= 2 ? 1 : 0;
 
   const agendas = record(agendaRaw);
   const agendaList = Array.isArray(agendas?.agendas) ? agendas.agendas.map(record).filter(Boolean) : [];

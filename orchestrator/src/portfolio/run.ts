@@ -19,7 +19,6 @@ import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-re
 import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
 import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
-import { NicheProposalSchema, type NicheProposal } from "../contracts/niche-proposal.js";
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
@@ -60,7 +59,7 @@ import { fightAiQBrief } from "../fightaiq/brief.js";
 import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { withinIntakeHorizon } from "./evidence.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
-import { refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
+import { refreshFightAiQAnalysis, refreshFightAiQEvidence } from "./evidence.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
@@ -69,8 +68,6 @@ import {
 } from "./schedule.js";
 import { environmentBudgetLimits } from "./limits.js";
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
-import { foundTemplateVenture, templateCandidateFromProposal } from "../ventures/founding.js";
-import { VentureTemplateSchema } from "../contracts/autonomy.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import {
@@ -81,21 +78,8 @@ import {
   regenerateIdeaIndex,
   screenAndRecordIdea
 } from "../ideas/ledger.js";
-import {
-  INCUBATOR_CONTEXT_CHARS,
-  INCUBATOR_TASTE_CHARS,
-  assertSweptToPacketPath,
-  boundIncubatorPacket,
-  incubatorScanBrief,
-  incubatorScanTriggerPreview,
-  readIncubatorPacketItems,
-  readIncubatorReadItems,
-  recordIncubatorPacketRead,
-  unreadPacketItems,
-  type IncubatorPacketItem
-} from "../incubator/packet.js";
 
-export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
+export type PortfolioPhase = "tt-marketing" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),
@@ -108,10 +92,8 @@ const ContributionSchema = z.object({
   summary: z.string().trim().min(1).transform((value) => value.slice(0, 280)),
   evidenceRefs: z.array(z.string().trim().min(1).max(160)).max(12),
   task: z.object({ summary: z.string().trim().min(1).transform((value) => value.slice(0, 240)) }).nullable(),
-  nicheProposals: z.array(z.unknown()).max(2).default([]),
   editorialSlate: z.unknown().nullable().default(null),
   marketingPlan: z.unknown().nullable().default(null),
-  templateProposal: z.unknown().nullable().default(null),
   inspirationObservations: z.array(z.unknown()).max(4).default([]),
   // One compact idea per seat. The caps match IdeaLedgerEntrySchema exactly. Clip presentation
   // overflow rather than lose a paid idea, just as the contribution summary above does.
@@ -196,9 +178,7 @@ function repairTittyTuesdaysIdea(value: unknown, agent: FoundingAgent): unknown 
   // rather than weakening their owning phase's schema.
   const contribution: Record<string, unknown> = {
     ...(value as Record<string, unknown>),
-    nicheProposals: [],
     editorialSlate: null,
-    templateProposal: null,
     inspirationObservations: []
   };
   const rawIdea = contribution.idea;
@@ -271,39 +251,6 @@ export function assertTittyTuesdaysIdeaOutput(
   }
 }
 
-function renderNicheProposalMarkdown(proposal: NicheProposal): string {
-  return [
-    `# ${proposal.domain}`,
-    "",
-    `> ${proposal.oneLiner}`,
-    "",
-    "## Why readers would care",
-    "",
-    proposal.whyPeopleCareDaily,
-    "",
-    "## Audience",
-    "",
-    `- Regions: ${proposal.audienceHypothesis.regions.join(", ")}`,
-    `- Ages: ${proposal.audienceHypothesis.ageRange.min}–${proposal.audienceHypothesis.ageRange.max}`,
-    `- Interests: ${proposal.audienceHypothesis.interests.join(", ")}`,
-    `- Platforms: ${proposal.audienceHypothesis.platforms.join(", ")}`,
-    "",
-    "## Publication shape",
-    "",
-    `- Cadence: ${proposal.contentShape.cadence}`,
-    `- Formats: ${proposal.contentShape.formats.join(", ")}`,
-    `- Caught Up reuse: ${proposal.contentShape.caughtUpReuseNotes}`,
-    "",
-    "## Risks",
-    "",
-    ...(proposal.risks.length ? proposal.risks.map((risk) => `- ${risk}`) : ["- None recorded"]),
-    "",
-    "## Evidence",
-    "",
-    ...(proposal.evidenceRefs.length ? proposal.evidenceRefs.map((reference) => `- ${reference}`) : ["- None recorded"]),
-    ""
-  ].join("\n");
-}
 
 function modelFor(
   agent: FoundingAgent,
@@ -357,7 +304,6 @@ function buildRecord(input: {
   monthCapUsd: number;
   contributions: readonly Contribution[];
   fixture: boolean;
-  proposals: readonly NicheProposal[];
   editorialSlate: EditorialSlate | null;
   agenda: MeetingAgenda | null;
 }): MeetingRecord {
@@ -374,11 +320,7 @@ function buildRecord(input: {
         : "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction."
     : input.phase === "mag-editorial" && input.editorialSlate
       ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
-    : input.phase === "incubator-synthesis"
-      ? input.proposals.length
-        ? `Recorded ${input.proposals.length} evidenced niche proposal${input.proposals.length === 1 ? "" : "s"}. The first may be founded only if AUDIT and every deterministic template check pass.`
-        : "Recorded zero niche proposals because no candidate cleared the evidence and duplication gates."
-      : input.contributions.find((contribution) => contribution.agent === "PULSE")?.summary ?? "The bounded room recorded no action.";
+    : input.contributions.find((contribution) => contribution.agent === "PULSE")?.summary ?? "The bounded room recorded no action.";
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.cycleId,
@@ -391,7 +333,7 @@ function buildRecord(input: {
     operatingBrief: input.objective,
     participantReasons: input.cast.map((agent) => ({ agent, reason: agent === chair ? "chairs the bounded room" : "serves the registered specialist or veto seat", participated: true })),
     ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.actualCycleUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: input.monthCapUsd },
-    decision: { outcome: veto ? "VETO" : input.phase === "incubator-synthesis" && input.proposals.length === 0 ? "NO_PROPOSAL" : "PLAN", summary, evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))] },
+    decision: { outcome: veto ? "VETO" : "PLAN", summary, evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))] },
     proposals: input.contributions.map((contribution) => ({ agent: contribution.agent, summary: contribution.summary, evidenceRefs: contribution.evidenceRefs })),
     voteMatrix: input.contributions.map((contribution) => ({ voter: contribution.agent, firstChoice: contribution.stance, veto: contribution.stance === "veto" })),
     tasks: input.contributions.flatMap((contribution, index) => contribution.task ? [{ id: `TASK-${input.cycleId.toUpperCase()}-${String(index + 1).padStart(2, "0")}`, owner: contribution.agent, summary: contribution.task.summary, status: "planned" as const }] : []),
@@ -399,8 +341,8 @@ function buildRecord(input: {
     // venture may actually do. The magazine branch says "Czech articles" because that is all the
     // desk produces: mma-files/pipeline.ts makes one writeCzech call and stores
     // `localizations: { cs }`. It read "bilingual articles" while nothing English was written.
-    growthPlan: input.phase === "tt-marketing" ? "Drafts only. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "Data only. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : input.phase === "incubator-synthesis" ? "Templates only. A compliant content venture may be founded; every exception remains with the owner." : "Research only. Evidence collection does not authorize spend or external action.",
-    eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
+    growthPlan: input.phase === "tt-marketing" ? "Drafts only. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "Data only. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : "Research only. Evidence collection does not authorize spend or external action.",
+    eveningOutcome: null,
     ...(input.editorialSlate ? { editorialSlateRef: `ventures/mma-files/slates/${input.date}.json` } : {}),
     ...(input.agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${input.agenda.id}` } : {}),
     ...(isFightDesk ? { sharperData: {
@@ -570,16 +512,6 @@ function shutByNoModelRun(): RoomStayedShut {
     seat: "registered for this meeting but not asked anything, because there is no model run to review yet",
     setting: "The fight data was refreshed as usual. No model run has been produced yet, so there was nothing for this meeting to read and nobody was asked anything.",
     growthPlan: "Nothing was decided and nothing was authorized: the meeting reviews model runs, and none exist yet."
-  };
-}
-
-/** The incubator scan's two ways of finding nothing to read, told apart because they differ. */
-function shutByEmptySweep(): RoomStayedShut {
-  return {
-    brief: "The source check returned nothing at all, so there was nothing to put in front of anyone and nothing was spent.",
-    seat: "registered for this meeting but not asked anything, because the source check returned nothing to read",
-    setting: "The sources were checked and returned nothing at all, so there was nothing to read, the meeting did not open and nobody was asked anything.",
-    growthPlan: "Nothing was decided and nothing was authorized: a check that returns nothing produces no work, spend, publishing or outreach."
   };
 }
 
@@ -801,8 +733,6 @@ function seasonIdFrom(filename: string): string {
 export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>, now = new Date()): Promise<{
   text: string;
   evidenceRefs: string[];
-  /** The incubator packet items that ended up in `text`, and therefore the only ones a seat read. */
-  incubatorItems?: IncubatorPacketItem[];
 }> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
   if (phase === "tt-marketing") {
@@ -880,32 +810,10 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
     };
   }
-  // The incubator rooms. Every block is bounded before it is joined, and the join is not cut
-  // afterwards — that is the whole difference from what stood here.
-  //
-  // The packet is cut to whole items and the citation allowlist is narrowed to the sources those
-  // items came from, so the room can only cite what it was shown. It used to be the raw
-  // serialised digest, allowlisted against every source id in the file. The three blocks were
-  // then concatenated and cut to the ceiling by characters, which moved the damage rather than
-  // removing it: the last block ended wherever the ceiling fell, mid-token and unparseable.
-  // `incubatorScanBrief` bounds the scan by dropping whole transcript turns, and the taste packet
-  // is prose, so a clip there costs a sentence rather than a syntax error. INCUBATOR_CONTEXT_CHARS
-  // carries the cost arithmetic and the measurement behind these three budgets.
-  const packet = boundIncubatorPacket(await readIncubatorPacketItems(root));
-  const scan = phase === "incubator-synthesis"
-    ? incubatorScanBrief(await readText(root, `meetings/${date}-incubator-scan.json`))
-    : "";
-  const text = `${packet.text}\n${(taste ?? "").slice(0, INCUBATOR_TASTE_CHARS)}\n${scan}`;
-  // The three budgets sum below the ceiling, so this never trims. It is the assertion that they
-  // still do — a budget raised past the ceiling would otherwise reintroduce the cut in silence.
-  if (text.length > INCUBATOR_CONTEXT_CHARS) {
-    throw new Error(`Incubator context ${text.length} exceeds ${INCUBATOR_CONTEXT_CHARS}; the per-block budgets no longer sum below the ceiling`);
-  }
-  return {
-    text,
-    evidenceRefs: packet.evidenceRefs.filter((reference) => reference.length <= 160),
-    incubatorItems: packet.items
-  };
+  // Every phase above returns. The incubator rooms were the fall-through and the venture is
+  // gone: no new-magazine ideation, ever — a future venture is founded the way GoVIRAL was,
+  // by a direct registry entry.
+  throw new Error(`No portfolio context builder for phase ${phase}`);
 }
 
 export async function runPortfolioCycle(input: {
@@ -1123,30 +1031,6 @@ export async function runPortfolioCycle(input: {
   }
   let sourceMaterialChanged = true;
   let noChange = shutByNoMaterialChange();
-  if (!input.dry && input.phase === "incubator-scan") {
-    // Order matters and is the point of this block: sweep first, then decide. The trigger reads
-    // the file the sweep has just written, so a decision taken before the sweep would read
-    // yesterday's packet — or, the first time, no packet at all — and close the room on it.
-    const evidence = await refreshIncubatorEvidence({ root, now: input.now });
-    preparationArtifacts.push(...evidence.artifactPaths);
-    assertSweptToPacketPath(evidence.artifactPaths);
-    // Bound before comparing. The room is shown whole items up to its context budget, so an
-    // unread item outside that window must not open a room that will never show it — that is a
-    // room paid for daily that can never mark the item read. The digest sorts newest first, so
-    // the window is the newest end of it; an item published long ago and only now fetched can
-    // sit outside the window and stay unread.
-    const shown = boundIncubatorPacket(await readIncubatorPacketItems(root));
-    const unread = unreadPacketItems(shown.items, (await readIncubatorReadItems(root)).keys);
-    sourceMaterialChanged = unread.length > 0;
-    noChange = shown.offered === 0
-      ? shutByEmptySweep()
-      : shutByNothingUnread({ offered: shown.offered, shown: shown.items.length });
-  }
-  if (input.dry && input.phase === "incubator-scan") {
-    // The dry run's only honest statement about this room: what the live state root would
-    // decide today. It sweeps nothing, spends nothing and writes nothing here.
-    console.log(JSON.stringify(await incubatorScanTriggerPreview(stateRoot), null, 2));
-  }
   if (!input.dry && input.phase === "mma-intake") {
     const evidence = await refreshFightAiQEvidence({ root, date, now: input.now });
     preparationArtifacts.push(...evidence.artifactPaths);
@@ -1248,9 +1132,9 @@ export async function runPortfolioCycle(input: {
   let budgetStop: BudgetError | null = null;
   if (input.dry) {
     const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
-    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, templateProposal: null, inspirationObservations: [], idea: null, followUpRequest: null }));
+    contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, editorialSlate: null, marketingPlan: null, inspirationObservations: [], idea: null, followUpRequest: null }));
   } else {
-    const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
+    const promptName = input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     // The season's concepts, rotated one per day. Read from the same season file the room is
     // shown, so the focus line and the packet can never name different concepts.
@@ -1268,7 +1152,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"editorialSlate":null,"marketingPlan":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -1382,8 +1266,8 @@ export async function runPortfolioCycle(input: {
   // Record every idea a seat raised, into that venture's own ledger namespace.
   //
   // Before this, `screenAndRecordIdea` had exactly one caller, in the Caught Up morning
-  // path, so state/ideas/{global,incubator,titty-tuesdays}/ledger.jsonl were all empty
-  // files: rooms had no field to return an idea in and nothing to write it to. Capture
+  // path, so every other venture's state/ideas/<venture>/ledger.jsonl was an empty file:
+  // rooms had no field to return an idea in and nothing to write it to. Capture
   // runs on the deterministic adjudicator, so it adds no model call to a room that has
   // already been paid for, and a failure here never discards the room's real output.
   const savedIdeaIds: string[] = [];
@@ -1422,12 +1306,6 @@ export async function runPortfolioCycle(input: {
     }
   }
 
-  const proposalCandidates = input.phase === "incubator-synthesis"
-    ? contributions.find((contribution) => contribution.agent === "ANGLE")?.nicheProposals ?? []
-    : [];
-  const proposals = proposalCandidates.map((proposal) => NicheProposalSchema.parse(proposal))
-    .filter((proposal) => proposal.evidenceRefs.length > 0 && proposal.evidenceRefs.every((reference) => context.evidenceRefs.includes(reference)))
-    .slice(0, 2);
   let marketingPlan: MarketingPlan | null = null;
   if (input.phase === "tt-marketing") {
     const meetingRef = `${date}-tt-marketing`;
@@ -1614,14 +1492,12 @@ export async function runPortfolioCycle(input: {
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
   const monthAllInUsd = fixedMonthlyUsd + actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: effectiveObjective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, proposals, editorialSlate, agenda });
+  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: effectiveObjective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, editorialSlate, agenda });
   const meetingPath = `meetings/${date}-${input.phase}.json`;
   const decisionPath = `decisions/${input.cycleId}.json`;
   const scorecardPath = `scorecards/${input.cycleId}.json`;
   const priorRecords = await loadMeetingRecords(root);
   const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({ weekOf: mondayOfWeek(date), records: [...priorRecords, record], skips: await loadMeetingSkips(root), articleSlots: await loadArticleSlotOutcomes(root), now: input.now }));
-  const proposalPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.json`);
-  const proposalMarkdownPaths = proposals.map((proposal) => `ventures/incubator/niche-proposals/${proposal.id}.md`);
   const editorialSlatePath = editorialSlate ? `ventures/mma-files/slates/${date}.json` : null;
   const marketingPlanPath = marketingPlan ? `ventures/titty-tuesdays/plans/${marketingPlan.id}.json` : null;
   const marketingPlanMarkdownPath = marketingPlan ? `ventures/titty-tuesdays/plans/${marketingPlan.id}.md` : null;
@@ -1633,20 +1509,8 @@ export async function runPortfolioCycle(input: {
     ...(marketingPlan && marketingPlanPath && marketingPlanMarkdownPath ? [
       atomicWriteJson(root, marketingPlanPath, marketingPlan),
       atomicWriteText(root, marketingPlanMarkdownPath, renderMarketingPlanMarkdown(marketingPlan))
-    ] : []),
-    ...proposals.flatMap((proposal, index) => [
-      atomicWriteJson(root, proposalPaths[index]!, proposal),
-      atomicWriteText(root, proposalMarkdownPaths[index]!, renderNicheProposalMarkdown(proposal))
-    ])
+    ] : [])
   ]);
-  // What the incubator room read, written where the room's other output is written and nowhere
-  // earlier. The items come from the packet the seats were handed, so the log can only ever
-  // claim what was in front of them; a room the palate pre-step or a cap ended before any seat
-  // spoke returns above this line and leaves the log alone, which is what keeps the next scan
-  // able to see those items as unread.
-  const incubatorReadPaths = !input.dry && input.phase === "incubator-scan" && context.incubatorItems?.length
-    ? [await recordIncubatorPacketRead({ root, items: context.incubatorItems, cycleId: input.cycleId, now: input.now })]
-    : [];
   const ttSocialUnlocked = !input.dry && await socialContentGenerationEnabled(root, "titty-tuesdays");
   const ttSocialArtifacts = ttSocialUnlocked && marketingPlan?.status === "approved"
     ? await composeTittyTuesdaysSocialQueue({
@@ -1672,18 +1536,12 @@ export async function runPortfolioCycle(input: {
     const followUp = contributions.find((contribution) => contribution.agent === chair)?.followUpRequest;
     // Do not queue an agenda for a room the effective schedule has switched off.
     //
-    // `mayRequestMeeting` answers a policy question — may this phase hand work to that one — and
-    // incubator-scan may hand work to incubator-synthesis. Whether that room can ever sit is a
-    // different question, and today the answer is no: decisions/2026-08-01-budget-raise.md is
-    // still "pending owner countersignature" with neither shape ticked, so the schedule takes its
-    // own stated fallback — shape B, "run one daily incubator meeting" — which drops
-    // incubator-synthesis. The workflow reads the same flag and skips the phase before the cycle
-    // starts. An agenda queued for it would sit in the queue until its three-day TTL expired with
-    // no room able to consume it, and the scan's record would claim it had handed work onward.
-    // The scan is therefore terminal under the current shape: it can surface and log candidates,
-    // and nothing downstream turns them into a proposal or founds a venture until the owner
-    // countersigns shape A. Refusing the request keeps that visible instead of burying it in an
-    // expiring queue entry.
+    // `mayRequestMeeting` answers a policy question — may this phase hand work to that one.
+    // Whether the target room can actually sit is a different question, and the budget shape
+    // answers it: under pressure the schedule drops rungs off the degradation ladder, and a
+    // dropped phase has no room to consume anything. An agenda queued for one would sit until
+    // its three-day TTL expired while the requesting room's record claimed it had handed work
+    // onward. Refusing keeps that visible instead of burying it in an expiring queue entry.
     if (followUp && !phaseEnabled(schedule, followUp.phase)) {
       console.warn(`Follow-up meeting request was not queued: ${followUp.phase} is not in the effective budget shape, so no room could consume it`);
     } else if (followUp && mayRequestMeeting(meetingPolicy, input.phase, followUp.phase)) {
@@ -1713,18 +1571,8 @@ export async function runPortfolioCycle(input: {
       }
     }
   }
-  const foundingArtifacts: string[] = [];
-  if (!input.dry && input.phase === "incubator-synthesis" && proposals.length > 0 && !contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto")) {
-    const template = VentureTemplateSchema.parse(JSON.parse(await readFile(path.join(configRoot, "venture-template.json"), "utf8")));
-    const currentRegistry = await loadVentureRegistry();
-    const candidate = templateCandidateFromProposal({ proposal: proposals[0]!, registry: currentRegistry, template });
-    if (!currentRegistry.ventures.some((venture) => venture.id === candidate.slug)) {
-      const founded = await foundTemplateVenture({ repoRoot, candidateValue: candidate, now: input.now });
-      foundingArtifacts.push(...founded.files);
-    }
-  }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, ...incubatorReadPaths, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

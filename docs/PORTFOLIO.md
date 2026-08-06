@@ -11,10 +11,9 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | --- | --- | --- | --- |
 | Caught Up | Operating in validation | Daily Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
-| Magazine Incubator | Research and fenced founding | Finds evidence-backed publication ideas and can create a template-compliant content project | Anything needing a new account, more than `$0.15/day`, commerce, legal or personal-data work stops for the owner |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
-| MMA Files | Operating public magazine | Two daily Czech article slots and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
+| MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -56,8 +55,8 @@ Not every clock entry is a meeting:
 - **Decision:** the 06:00 board decides company priorities and may commission a room.
 - **Service:** Caught Up production, Caught Up product review, MMA Files story
   assignment and article production retain their fixed reader promise.
-- **Agenda-gated:** Titty Tuesdays, both incubator rooms, FightAIQ analysis and the
-  MMA Files desk plus Carousel Studio run only when requested.
+- **Agenda-gated:** Titty Tuesdays, FightAIQ analysis and the MMA Files desk run only
+  when requested.
 - **Change-triggered:** FightAIQ intake runs when its source snapshot materially
   changes or an agenda requests it.
 - **Checkpoint:** 14:00 and 22:00 update the operating trail deterministically and
@@ -73,23 +72,19 @@ credentials, evidence, cost limits or safety rules.
 | ---: | --- | --- |
 | 05:00 | Caught Up edition | fixed service |
 | 06:00 | Board morning | decision room |
-| 07:00 | Incubator evidence scan | due agenda only |
 | 08:00 | FightAIQ data check | material change or agenda |
 | 09:00 | MMA Files story meeting | fixed service |
-| 10:00 | MMA Files morning article | assigned slot and evidence only |
+| 10:00 | MMA Files daily article | assigned slot and evidence only |
 | 11:00 | Titty Tuesdays campaign room | standing future-eshop marketing ideation; optional focused agenda |
-| 13:00 | Carousel Studio room | due agenda only; deterministic rendering remains `$0` |
 | 14:00 | Board afternoon | `$0` checkpoint |
 | 17:00 | Caught Up product meeting | fixed service |
-| 18:00 | MMA Files evening article | assigned slot and evidence only |
 | 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
 | 20:00 | MMA Files desk review | due agenda only |
-| 21:00 | Incubator synthesis | due agenda only |
 | 22:00 | Board night | `$0` checkpoint and daily summary |
 
-Seventeen unique UTC cron wake-ups cover Prague summer and winter time. The runtime
-accepts only the entry resolving to the intended Prague hour, and schedule validation
-rejects collisions under 60 minutes. The public five-day calendar reads the same
+A Vercel cron dispatches each window on its own Prague hour and does the work; three
+GitHub backstop sweeps a day rescue anything that path missed. Schedule validation
+still rejects collisions under 60 minutes. The public five-day calendar reads the same
 resolved table.
 
 ## Spending behavior
@@ -138,8 +133,7 @@ preferences under `config/visual-weights/<project>.json`. Specialist requests li
 approved writes use a repository-scoped GitHub token in production.
 
 The admin includes short summaries with full-record expansion, agent switches,
-Caught Up work, Titty Tuesdays plans, incubator ideas, FightAIQ data and MMA Files
-articles. Perfect, Good and Bad ratings keep their full history. A rating cannot found
+Caught Up work, Titty Tuesdays plans, FightAIQ data and MMA Files articles. Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
 
@@ -161,7 +155,7 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 ## Live switches
 
 - `CAUGHT_UP_LIVE_ENABLED` — Caught Up edition and product work.
-- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation and gated incubator rooms.
+- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation.
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
