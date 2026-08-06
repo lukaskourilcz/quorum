@@ -585,12 +585,16 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
     // This is the case a mutation to packetItemKey has to fail. Reading sourceId here turns four
     // already-read items into four unread ones and opens the room, so `seats.called` fills and
     // the record stops being PAUSED.
+    //
+    // Its own Prague date, because a room that has already met on a date now returns its record
+    // rather than sitting again. Nothing here is about the time of day; what is being tested is
+    // that re-keyed items are still recognised as read.
     sweep.items = [item(4), item(1), item(2), item(3)].map((entry, index) => ({
       ...entry,
       sourceId: `rebalanced-worker-${index}`
     }));
     const before = await readIncubatorReadItems(testStateRoot);
-    const result = await run(new Date("2026-08-07T18:00:00.000Z"));
+    const result = await run(new Date("2026-08-11T05:00:00.000Z"));
     expect(sweep.calls).toBe(1);
     expect(result.decision).toBe("PAUSED");
     expect(seats.called).toEqual([]);
@@ -606,6 +610,8 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
     // transition, so without the schedule check an agenda would be written into the queue, live
     // for three days, for a phase the workflow skips before the cycle even starts. The record
     // would then show the scan handing work to a room that never sits.
+    //
+    // Its own Prague date, for the same reason as the case above.
     sweep.items = [item(21), item(22)];
     seats.followUp = {
       phase: "incubator-synthesis",
@@ -613,7 +619,7 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
       evidenceRefs: []
     };
     try {
-      const result = await run(new Date("2026-08-07T20:00:00.000Z"));
+      const result = await run(new Date("2026-08-12T05:00:00.000Z"));
       expect(result.decision).toBe("PLAN");
       expect(seats.called).toHaveLength(5);
       // Nothing was written to the agenda queue: the run did not list it as an artifact...
@@ -770,7 +776,7 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
     // last room that actually sat.
     const log = await readIncubatorReadItems(testStateRoot);
     expect(log.keys).toHaveLength(6);
-    expect(log.lastReadBy).toBe("20260807200000-incubator-scan");
+    expect(log.lastReadBy).toBe("20260812050000-incubator-scan");
     const evidence = await readJson<{ packet?: string }>(testStateRoot, INCUBATOR_EVIDENCE_PATH, {});
     // ...even though the packet on disk is the empty one the last sweep wrote over it.
     expect(evidence.packet).toBe("[]");

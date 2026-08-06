@@ -888,6 +888,45 @@ export async function runPortfolioCycle(input: {
   const definition = composeMeetingRouteDefinition(registry, input.phase, input.dry ? "dry" : "live");
   const date = pragueClockParts(input.now).date;
   const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
+  // One room, one date, one bill.
+  //
+  // Article slots have had this guard since launch (recordClosedArticleSlot refuses to write over
+  // a run that already exists for the date). Portfolio rooms had none, so every extra firing of a
+  // slot re-ran the palate pre-step and the whole cast: on 2026-08-05 tt-marketing was billed six
+  // times in about sixty-three minutes, $0.0725 against a room that costs about $0.012, and the
+  // sixth record simply overwrote the first five.
+  //
+  // A PAUSED record deliberately does not block. It is what a closed gate leaves behind — no
+  // agenda due, owner gate off, headroom gone — and those are all conditions that can open later
+  // the same day. Blocking on one would mean a room that was shut at 08:00 could not meet at
+  // 20:00 after its agenda arrived, which is the opposite of the supply problem this system has.
+  const alreadyHeld = input.dry
+    ? null
+    : await readJson<{ status?: unknown; decision?: { outcome?: unknown } } | null>(
+        root,
+        `meetings/${date}-${input.phase}.json`,
+        null
+      );
+  if (alreadyHeld && alreadyHeld.status !== "PAUSED") {
+    console.warn(JSON.stringify({
+      event: "portfolio_room_already_held",
+      phase: input.phase,
+      date,
+      cycleId: input.cycleId,
+      status: alreadyHeld.status
+    }));
+    return {
+      cycleId: input.cycleId,
+      phase: input.phase,
+      dry: false,
+      status: "live_complete",
+      decision: alreadyHeld.status === "PLAN" ? "PLAN" : "NO_ACTION",
+      estimatedWorstCaseUsd: 0,
+      selectedAgents: [],
+      skippedAgents: [],
+      artifacts: [path.relative(repoRoot, path.join(root, `meetings/${date}-${input.phase}.json`))]
+    };
+  }
   // A room the owner gate or the degradation ladder closed leaves the same PAUSED record the
   // no-agenda path already leaves. This used to return with artifacts: [] and write nothing,
   // so the slot was indistinguishable on the calendar from one nobody reached — the shape of
