@@ -775,7 +775,8 @@ async function runCaughtUpLiveEditionCycle(
     estimatedCycleUsd: estimatedWorstCaseUsd,
     monthAllInUsd,
     editionPackage: produced.package,
-    evidenceRefs
+    evidenceRefs,
+    report: produced.report
   });
   const meetingPath = `meetings/${date}-cu-edition.json`;
   const decisionPath = `decisions/${cycleId}.json`;

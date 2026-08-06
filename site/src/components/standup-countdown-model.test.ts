@@ -140,7 +140,7 @@ describe("Standup countdown schedule", () => {
     expect(formatPhaseLabel("morning")).toBe("Morning company meeting");
     expect(formatPhaseLabel("afternoon")).toBe("Afternoon company meeting");
     expect(formatPhaseLabel("night")).toBe("Night company meeting");
-    expect(formatPhaseLabel("cu-edition")).toBe("DNESKAi edition meeting");
+    expect(formatPhaseLabel("cu-edition")).toBe("DNESKAi edition production");
     expect(formatPhaseLabel("cu-product")).toBe("DNESKAi product meeting");
     expect(formatPhaseLabel("founding")).toBe("Founding");
     expect(formatPhaseLabel("am")).toBe("Morning meeting · old label");

@@ -225,7 +225,7 @@
       "optionalByTopic": true
     },
     "edition-room": {
-      "required": ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"],
+      "required": ["HERALD", "STET", "HACEK"],
       "optionalByTopic": true
     },
     "product-room": {

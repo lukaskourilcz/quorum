@@ -26,9 +26,7 @@
           "cast": [
             "HERALD",
             "STET",
-            "HACEK",
-            "SPARK",
-            "AUDIT"
+            "HACEK"
           ],
           "envelopeUsd": 0.08,
           "packet": {

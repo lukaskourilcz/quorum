@@ -217,7 +217,7 @@ export function formatPhaseLabel(phase: string) {
     founding: "Founding",
     morning: "Morning company meeting",
     night: "Night company meeting",
-    "cu-edition": "DNESKAi edition meeting",
+    "cu-edition": "DNESKAi edition production",
     "cu-product": "DNESKAi product meeting",
     pm: "Afternoon meeting · old label"
   };

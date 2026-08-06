@@ -68,8 +68,10 @@ describe("Boardroom routing", () => {
       preset: "edition-room",
       now: new Date("2026-07-31T03:00:00.000Z")
     });
+    // The edition slot is a production pipeline, not a deliberation: HERALD curates, STET
+    // writes, HACEK reviews. SPARK and AUDIT had no stage in it and no call to make.
     expect(edition.selectedParticipants.map(({ agent }) => agent).sort()).toEqual(
-      ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"].sort()
+      ["HERALD", "STET", "HACEK"].sort()
     );
 
     const claimsHeavy = routeBoardroom(config, {

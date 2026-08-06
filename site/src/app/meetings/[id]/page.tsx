@@ -38,7 +38,7 @@ const modeLabel: Record<RoomTurnMode, string> = {
 };
 
 const meetingCopy: Record<string, { name: string; title: string }> = {
-  "cu-edition": { name: "Edition meeting", title: "Choose the edition" },
+  "cu-edition": { name: "Edition production", title: "Produce today's edition" },
   "cu-product": { name: "Product meeting", title: "Decide the product idea" },
   "tt-marketing": { name: "Marketing meeting", title: "Shape the season" },
   "incubator-scan": { name: "Idea research", title: "Find ideas with real sources" },

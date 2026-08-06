@@ -223,7 +223,7 @@ function isIncubator(kind: CalendarKind) {
 
 function publicKindLabel(kind: CalendarKind): string {
   const labels: Record<CalendarKind, string> = {
-    "cu-edition": "DNESKAi edition meeting",
+    "cu-edition": "DNESKAi edition production",
     "venture-morning": "Morning company meeting",
     "incubator-scan": "Magazine idea research",
     "tt-marketing": "Titty Tuesdays marketing meeting",

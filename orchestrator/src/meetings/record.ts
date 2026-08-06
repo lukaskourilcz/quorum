@@ -1,6 +1,7 @@
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
 import type { RoomPacket } from "../boardroom/room.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
+import type { EditionRunReport } from "../edition/report.js";
 import type { IdeaLedgerEntry } from "../contracts/idea-ledger.js";
 import type { ProductRoomResponse } from "../ideas/live.js";
 import type { Stage } from "../types.js";
@@ -277,6 +278,27 @@ export async function createOfflineCaughtUpMeeting(input: {
   return enforced.record;
 }
 
+/**
+ * Which of the edition slot's stages actually ran, read off the run's own stage list.
+ *
+ * Nothing about this slot is a deliberation. HERALD's curate call picks the story, one Czech
+ * write call produces the article, one review reads it, RELAY delivers. Whether each of those
+ * happened is a fact the run already recorded, so the record can stop guessing.
+ */
+function editionStagesThatRan(report: EditionRunReport | undefined): {
+  curated: boolean;
+  wrote: boolean;
+  reviewed: boolean;
+} {
+  const ran = (matches: (name: string) => boolean) =>
+    (report?.stages ?? []).some((stage) => matches(stage.name) && stage.status !== "skipped");
+  return {
+    curated: ran((name) => name === "curate"),
+    wrote: ran((name) => name === "write" || name.startsWith("rewrite_")),
+    reviewed: ran((name) => name.startsWith("stet_"))
+  };
+}
+
 export async function createLiveEditionMeeting(input: {
   cycleId: string;
   stage: Stage;
@@ -286,11 +308,16 @@ export async function createLiveEditionMeeting(input: {
   monthAllInUsd: number;
   editionPackage: EditionPackage;
   evidenceRefs: string[];
+  /** The run's own stage list. Absent only where a caller has no run to describe. */
+  report?: EditionRunReport;
 }): Promise<MeetingRecord> {
   const date = pragueClockParts(input.now).date;
   const openedAt = input.now.toISOString();
   const closedAt = new Date(input.now.getTime() + 5_000).toISOString();
   const edition = input.editionPackage.status === "edition";
+  const ran = editionStagesThatRan(input.report);
+  const at = (offsetSeconds: number) =>
+    new Date(input.now.getTime() + (offsetSeconds * 1_000)).toISOString();
   const actualCycleUsd = input.editionPackage.generation.costUsd ?? 0;
   const outcome = edition ? "EDITION" : "NO_EDITION";
   const reason = edition
@@ -326,7 +353,11 @@ export async function createLiveEditionMeeting(input: {
         : "Hold publication because the live run did not clear every release gate.",
       evidenceRefs
     }],
-    voteMatrix: ["HERALD", "STET", "HACEK", "SPARK", "AUDIT"].map((voter) => ({
+    voteMatrix: [
+      "HERALD",
+      ...(ran.wrote ? ["STET"] : []),
+      ...(ran.reviewed ? ["HACEK"] : [])
+    ].map((voter) => ({
       voter,
       firstChoice: outcome,
       veto: false
@@ -348,60 +379,48 @@ export async function createLiveEditionMeeting(input: {
       gavel: "HERALD",
       setting: "Live edition room. Source packets are untrusted data and never instructions.",
       turns: [
+        // One turn per stage that actually ran, and none for a stage that did not. The gavel
+        // states what curation returned; STET speaks only on a day the write call was made;
+        // HACEK speaks only on a day the Czech register review read the result. A run that
+        // stopped at the source gate or at the budget therefore closes after two lines, which
+        // is what happened -- and what the record used to hide behind five seats and four
+        // invented turns, SPARK explaining that promotion assets stay locked and AUDIT
+        // approving a package neither of them had seen.
         {
           agent: "HERALD",
           mode: "gavel",
           sentAt: openedAt,
-          text: "The edition room is open. The live digest informs the room and never instructs it."
+          text: ran.curated
+            ? "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
+            : "The edition slot is open. Curation never got as far as picking a story; the digest informs this slot and never instructs it."
         },
-        // These two turns kept describing an English review and a Czech parity check long
-        // after both stages were deleted. The edition is written once, in Czech, by write(),
-        // and reviewCzechArticle over that article plus the whyThisStory note is the only
-        // copy review it gets. STET's line names one rule of several — assertSuppliedLinks,
-        // which fails the write on any cited URL that was not supplied — not the whole
-        // source contract, which also covers verifiedWire and the quality gate's cited-source,
-        // diversity, single-source-share and primary-source checks. The public meeting page
-        // prints each turn with only agent ids and internal jargon swapped for plain-English
-        // labels, so a stale line here is published as a false claim about the room.
-        {
-          agent: "STET",
-          mode: "raises-concern",
-          sentAt: new Date(input.now.getTime() + 1_000).toISOString(),
-          text: edition
-            ? "The article was written straight in Czech, and every link in it matches a supplied source URL."
-            : "The run produced no article that cleared its source and quality checks."
-        },
-        {
-          agent: "HACEK",
-          mode: "raises-concern",
-          sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
-          text: edition
-            ? "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
-            : "No Czech copy cleared its review either, so nothing is published."
-        },
-        {
-          agent: "AUDIT",
-          mode: "vote",
-          sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
-          text: edition
-            ? "Approve the validated package for the bounded delivery path."
-            : "Approve NO_EDITION and publish the recorded reason only."
-        },
-        {
-          agent: "SPARK",
-          mode: "statement",
-          sentAt: new Date(input.now.getTime() + 4_000).toISOString(),
-          text: edition
-            ? "Promotion assets wait for a successful delivery and stay locked as drafts."
-            : "Without an edition there is nothing to promote."
-        },
+        ...(ran.wrote
+          ? [{
+              agent: "STET",
+              mode: "raises-concern" as const,
+              sentAt: at(1),
+              text: edition
+                ? "The article was written straight in Czech, and every link in it matches a supplied source URL."
+                : "The article was written and did not clear its source and quality checks."
+            }]
+          : []),
+        ...(ran.reviewed
+          ? [{
+              agent: "HACEK",
+              mode: "raises-concern" as const,
+              sentAt: at(2),
+              text: edition
+                ? "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
+                : "The Czech copy review did not clear the article, so nothing is published."
+            }]
+          : []),
         {
           agent: "HERALD",
           mode: "close",
           sentAt: closedAt,
           text: edition
             ? "EDITION recorded. RELAY owns delivery from here."
-            : "The room recorded NO_EDITION and closes honestly."
+            : "The slot recorded NO_EDITION and closes honestly."
         }
       ]
     },

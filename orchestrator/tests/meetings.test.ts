@@ -8,6 +8,7 @@ import { EditionPackageSchema, type EditionPackage } from "../src/contracts/edit
 import { MeetingRecordSchema, type MeetingRecord } from "../src/contracts/meeting-record.js";
 import { loadEditionQualityConfig } from "../src/edition/config.js";
 import { buildNoEditionPackage } from "../src/edition/package.js";
+import type { EditionRunReport } from "../src/edition/report.js";
 import { reviewBoardroomText } from "../src/edition/stet.js";
 import {
   buildCalendarFeed,
@@ -57,7 +58,37 @@ async function caughtUpRecord(
   });
 }
 
-async function liveEditionRecord(status: EditionPackage["status"]): Promise<MeetingRecord> {
+/** Stages a full run leaves behind: curate, one Czech write, one copy review, assembly. */
+const FULL_RUN_STAGES = ["curate", "write", "stet_0", "quality_0", "assemble_package"];
+
+function stageReport(names: readonly string[]): EditionRunReport {
+  return {
+    schemaVersion: 1,
+    runId: "run-fixture",
+    date: "2026-08-04",
+    mode: "production",
+    status: "edition",
+    startedAt: "2026-08-04T03:00:00.000Z",
+    completedAt: "2026-08-04T03:00:05.000Z",
+    stages: names.map((name) => ({
+      name,
+      status: "success" as const,
+      startedAt: "2026-08-04T03:00:00.000Z",
+      completedAt: "2026-08-04T03:00:01.000Z",
+      durationMs: 1_000
+    })),
+    regenerationAttempts: 0,
+    stetBlocks: 0,
+    hacekBlocks: 0,
+    usage: [],
+    warnings: []
+  };
+}
+
+async function liveEditionRecord(
+  status: EditionPackage["status"],
+  stages: readonly string[] = FULL_RUN_STAGES
+): Promise<MeetingRecord> {
   const routing = await loadRoutingConfig(path.join(configRoot, "agent-routing.json"));
   const now = new Date("2026-08-04T03:00:00.000Z");
   const room = routeBoardroom(routing, {
@@ -91,7 +122,8 @@ async function liveEditionRecord(status: EditionPackage["status"]): Promise<Meet
     estimatedCycleUsd: 0.35,
     monthAllInUsd: 1.2,
     editionPackage,
-    evidenceRefs: ["source:the-verge"]
+    evidenceRefs: ["source:the-verge"],
+    report: stageReport(stages)
   });
 }
 
@@ -134,9 +166,11 @@ describe("Caught Up meeting records", () => {
     expect(product.kind).toBe("cu-product");
     expect(edition.roomTranscript.turns.length).toBeLessThanOrEqual(36);
     expect(product.roomTranscript.turns.length).toBeLessThanOrEqual(36);
+    // SPARK and AUDIT left the edition cast: neither has a stage in the pipeline, and the
+    // record used to publish turns for both of them on every single day.
     expect(
       edition.participantReasons.filter((participant) => participant.participated).map((participant) => participant.agent).sort()
-    ).toEqual(["AUDIT", "HACEK", "HERALD", "SPARK", "STET"]);
+    ).toEqual(["HACEK", "HERALD", "STET"]);
     expect(
       product.participantReasons.filter((participant) => participant.participated).map((participant) => participant.agent).sort()
     ).toEqual(["AUDIT", "HERALD", "SPARK", "VAULT"]);
@@ -309,6 +343,31 @@ describe("the edition room reports the reviews that actually run", () => {
     expect(spoken.get("STET")).toMatch(/Czech/);
     expect(spoken.get("STET")).toMatch(/link/i);
     expect(spoken.get("HACEK")).toMatch(/Czech copy review/i);
+  });
+
+  it("gives a turn to a stage that ran and none to a stage that did not", async () => {
+    // The record used to hold five turns whatever the run did. A day the source gate stopped at
+    // curation published STET describing an article nobody wrote, HACEK clearing a review that
+    // never ran, AUDIT approving and SPARK explaining that promotion assets stay locked.
+    const full = await liveEditionRecord("edition");
+    expect(full.roomTranscript.turns.map((turn) => turn.agent)).toEqual([
+      "HERALD",
+      "STET",
+      "HACEK",
+      "HERALD"
+    ]);
+
+    const stoppedAtCuration = await liveEditionRecord("no_edition", ["curate"]);
+    expect(stoppedAtCuration.roomTranscript.turns.map((turn) => turn.agent)).toEqual([
+      "HERALD",
+      "HERALD"
+    ]);
+    expect(stoppedAtCuration.voteMatrix.map((vote) => vote.voter)).toEqual(["HERALD"]);
+
+    for (const record of [full, stoppedAtCuration]) {
+      expect(record.roomTranscript.turns.map((turn) => turn.agent)).not.toContain("SPARK");
+      expect(record.roomTranscript.turns.map((turn) => turn.agent)).not.toContain("AUDIT");
+    }
   });
 
   it("has the dry room miss an article rather than a second version", async () => {

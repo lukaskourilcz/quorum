@@ -58,7 +58,7 @@ export interface PublicCalendarFeed {
 }
 
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
-  { hour: 5, kind: "cu-edition", label: "Edition room" },
+  { hour: 5, kind: "cu-edition", label: "Edition production" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
   { hour: 7, kind: "incubator-scan", label: "Incubator evidence scan" },
   { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
