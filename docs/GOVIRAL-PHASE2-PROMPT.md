@@ -191,11 +191,59 @@ Handled by §3.4 (repurposed to GoVIRAL). Delete/replace its two remaining incub
 
 ## 9. Owner checklist updates (`NEEDS_YOUR_HELP_NOW.md`)
 
-Add: (1) the Apify account + `APIFY_TOKEN` item (blocking GoVIRAL's live scouting; everything else runs and pauses politely without it); (2) fill `state/ventures/goviral/profile.md` (niches, voice, audiences — until then briefs lean on the magazine niches); (3) optional: apply for Google's official Trends API alpha; (4) quarterly reminder: re-verify the pinned Apify actor prices and 30-day success rates (community actors are young; fail over `themineworks` → `magicfingers` if success drops below ~95%). Remove any incubator-related items. Keep the Phase-1 items that still stand (Odds API key, Pexels/Pixabay, TT ratings, season-002, admin credentials, Vercel rename).
+Add: (1) the Apify account + `APIFY_TOKEN` item (blocking GoVIRAL's live scouting; everything else runs and pauses politely without it); (2) fill `state/ventures/goviral/profile.md` (niches, voice, audiences — until then briefs lean on the magazine niches); (3) optional: apply for Google's official Trends API alpha; (4) quarterly reminder: re-verify the pinned Apify actor prices and 30-day success rates (community actors are young; fail over `themineworks` → `magicfingers` if success drops below ~95%); (5) the Actions unblock decision: after the §10.7 secrets audit comes back clean, make `quorum` public (unlimited free Actions minutes on standard runners — the structural fix), otherwise GitHub Pro at $4/mo (needs a `HUMAN_APPROVAL` + `fixed-costs.json` entry) or a temporary Actions spending limit as the stopgap; (6) re-enable the social publisher's schedule trigger when social channels connect (§10.2). Remove any incubator-related items. Keep the Phase-1 items that still stand (Odds API key, Pexels/Pixabay, TT ratings, season-002, admin credentials, Vercel rename).
 
 ---
 
-## 10. Acceptance — definition of done
+## 10. GitHub Actions minute diet — the 2,000-minute free tier died on Aug 6
+
+Measured from the live API (150 runs, Aug 5–6 window): the repos burn **~342 runner-minutes/day ≈ 10,250/month** against the 2,000-minute free tier. Your target after this section: **≤ ~100 min/day**. All numbers below come from that measurement; the owner handles the current month's unblock (see §9 item 5) — you cut the burn.
+
+### 10.1 Delete the OwnDashboard reporters (~1,700 min/mo)
+`.github/workflows/owndashboard-cron-report.yml` exists in BOTH `quorum` and `aifirst` and fires after **every** workflow run (`workflow_run` trigger), billing the 1-minute minimum for ~6 seconds of work (~56 runs/day measured). Delete both files. If OwnDashboard reporting is wanted later, fold it into the daily health workflow as one batched report.
+
+### 10.2 Stop the hourly social publisher (~1,600 min/mo)
+`social-publisher.yml` runs hourly, pays ~4.3 min of checkout+install per run, and can never post — channels are triple-locked for ~a month. Remove the `schedule` trigger (keep `workflow_dispatch`), leave a comment plus the §9 NEEDED item to restore it when channels connect. When restoring, gate the job at **job level** (`if:` on the kill-switch repository variable) so a locked hour costs 0 minutes instead of 4. Update the ci-policy assertions that pin this file's contents.
+
+### 10.3 Kill the cron double-fire (~600 min/mo)
+The 18 GitHub `on.schedule` crons in `cycle.yml` are the unreliable backup; the Vercel-cron `workflow_dispatch` path is the punctual primary doing the real work (measured: schedule runs average 0.9 min guard-exits, dispatch runs 5.8 min). Replace the 18 crons with **3 backstop sweeps** (e.g. `55 3,11,19 * * *` UTC) whose only job is rescuing slots the Vercel path missed — the existing clock/guard logic already makes a no-op sweep exit cheaply. Update `cronPayloads`' GitHub-cron half and the pinned tests (`ci-policy.test.ts` cron count, `portfolio-schedule.test.ts` payload length); the Vercel side stays two entries per slot.
+
+### 10.4 Early exit before dependency install (~1,000–1,500 min/mo)
+Many dispatch runs are $0 gated/PAUSED slots that still pay ~4–5 min of checkout + pnpm install before the guard says no. Add a dependency-free early guard: a plain-Node script (`scripts/slot-guard.mjs`, fs-only, importing nothing from the workspace) that reads the fired slot, the live-enable repository variables and the committed slot records, and emits a step output `proceed=true|false`; every heavy step (pnpm setup, install, cycle, delivery) gets `if: steps.guard.outputs.proceed == 'true'`. A gated slot's run must end within ~1 billable minute. The committed-record double-fire semantics stay identical — the script is a cheap pre-check, not a replacement for the in-process guards.
+
+### 10.5 CI path filters (~700 min/mo)
+- quorum `ci.yml`: extend `paths-ignore` with `docs/**`, root-level `*.md`, `.claude/**`, `.agents/**` (`orchestrator/prompts/**` must KEEP triggering CI). Pull requests stay unfiltered.
+- aifirst `ci.yml`: add `paths-ignore` for delivery-written paths (`content/**`, `public/data/**`, `public/images/editions/**`) — every delivery commit was already built and gated by the quorum delivery step minutes earlier; re-verifying it pays twice.
+- mma-files `ci.yml`: the same for `data/boardless/**` and `public/images/articles/**`.
+
+### 10.6 Small stops
+- Verify Phase 1 §3.9 landed (aifirst `daily.yml` was failing daily — a billed run plus a junk issue every day).
+- Cache the delivery builds: `actions/cache` on the target repo's `.next/cache`, keyed on its lockfile, inside the delivery steps — shaves the ~9-minute delivery runs.
+- Rule going forward: no new scheduled workflow without its monthly minute cost stated in the commit message. GoVIRAL's §3 slot adds two Vercel entries and rides the 3 backstop sweeps — **no new GitHub crons**.
+
+### 10.7 Secrets audit before the repo goes public (owner precondition)
+The owner intends to make `quorum` public once it is proven clean — public repos get unlimited free Actions minutes, which is the structural fix. Run a complete audit and put the result in your final report:
+- Scan the **full git history**, not just the working tree: prefer `gitleaks detect --source . --log-opts="--all"` (pinned binary or npx; if unavailable, a thorough regex sweep over `git log -p`) for API keys (`sk-`, `sk-ant-`, `ghp_`, `github_pat_`, `apify_api_`), private keys (`BEGIN … PRIVATE KEY` — the delivery App key must exist ONLY in Actions secrets), OAuth/bearer tokens, committed `.env` files, and connection strings.
+- Sweep the non-code surfaces: `state/**` (INBOX, meeting records, ledgers — no tokens, no third-party personal data, no personal emails beyond the owner's public identity), `docs/**`, `media/**` (EXIF), and any committed artifacts.
+- Cross-repo leakage: quorum must not embed tokens or private URLs for `aifirst`/`mma-files` in tracked files.
+- Output: a short report (finding → file/commit → severity → remedy). If history holds a real secret, the remedy is rotate-then-rewrite (BFG/filter-repo) — **report it and stop; do not rewrite history yourself**. If clean, state explicitly: "No secret found in working tree or history; safe to publish." The OWNER flips visibility — never change repo visibility, billing, or plans yourself.
+
+---
+
+## 11. Groundwork for the homepage redesign (data only — do not restyle the site)
+
+An approved design direction exists for a new homepage: a full-viewport "walk through the office" (sections Calendar · Meetings · Projects · Team · Results · Company) whose Meetings section is a Slack-like, **read-only** "BoardlessAI Workspace" viewer — 7 channels (one per meeting room), day dividers inside each channel (no sub-channels), message-by-message replay, a pinned "Decision" card, the collapsible article-JSON attachment, no composer, and one quiet system line for days a room did not meet. The visual design arrives separately from a design tool; your job now is only the data layer that makes it implementable:
+
+- `site/src/lib/meeting-feed.ts` (+tests): transform meeting/standup records into a chat-feed model — per channel, per date: `messages[] {id, at, author{id, title}, kind: "system"|"message"|"decision"|"delivery", text, attachment?: {label, ref}}`. Text uses the post-Phase-1 plain-language fields; no raw refs/hashes anywhere except inside the delivery attachment ref.
+- Fixed channel mapping (7 channels): `cu-edition → vydani-dneskai`; `morning|afternoon|night → ranni-porada` (one day may hold up to three blocks); `mma-intake|mma-analysis → kontrola-mma-dat`; `mag-editorial` + article-slot events `→ redakcni-porada-mma`; `mag-desk → vecerni-redakce`; `tt-marketing → titty-tuesdays-marketing`; `gv-brief → goviral-trend-room`.
+- A no-meeting day emits exactly one `system` message carrying the recorded plain reason. A delivery message carries the package ref that powers the JSON disclosure (Phase 1 §10.6 archive).
+- Keep the model language-neutral: store the recorded text as-is; the Czech-vs-English rendering decision belongs to the design implementation, not this layer.
+- Export three representative days as standalone JSON fixtures into `docs/design/workspace-fixtures/` (one held meeting with a decision + delivery, one multi-block board day, one no-meeting day) so the owner can hand them straight to the designer.
+- Rename the nav label "AI team" → "Team" (route unchanged; aligns with the approved design direction).
+
+---
+
+## 12. Acceptance — definition of done
 
 1. Monday's calendar shows the GoVIRAL room held (or an honest stale-data/no-data sentence); Tuesday–Sunday show "This room meets on Mondays. Nothing was spent." — $0, one line, not clickable as a fake meeting.
 2. With `APIFY_TOKEN` present, one live scout run stays under $1.40 estimated credit and writes a trends snapshot with per-actor sourceResults; with the token absent, everything still passes at $0.
@@ -207,5 +255,8 @@ Add: (1) the Apify account + `APIFY_TOKEN` item (blocking GoVIRAL's live scoutin
 8. SCOUT is active with the trend-scout profile; roster count and `_shared.md` specialist sentence updated; no router crash on any room.
 9. All repo gates green (quorum orchestrator + site; magazines untouched by this phase except doc references, unless §4.3 touched shared code — then their gates too).
 10. Decision, org-change, INBOX, and NEEDED records exist per §8–9.
+11. Actions diet holds: OwnDashboard reporters deleted in both repos; `social-publisher.yml` has no `schedule` trigger; `cycle.yml` carries exactly 3 backstop crons; a gated slot's run ends within ~1 billable minute (verify on a live gated run); CI path filters in all three repos as specified; a full day's runs bill ≤ ~100 minutes.
+12. The §10.7 secrets-audit report exists with an explicit clean/not-clean verdict and, if not clean, the rotate-then-rewrite remedy list; repo visibility, billing, and plans are unchanged (owner's move).
+13. `meeting-feed.ts` + tests + the three workspace fixtures in `docs/design/workspace-fixtures/` exist; the channel mapping matches §11 exactly; the nav label reads "Team".
 
-Work order: §7 (incubator out) → §2–3 (Apify + venture founding) → §4 (outputs) → §5 (free signals) → §6 (skills) → §8–9 (records). §7 first because its freed enum/ladder/clock space is reused by §3, and its removal must not be entangled with new-feature commits.
+Work order: §10 (Actions diet first — it stops the bleeding and includes the audit the owner is waiting for) → §7 (incubator out) → §2–3 (Apify + venture founding) → §4 (outputs) → §5 (free signals) → §6 (skills) → §11 (design groundwork) → §8–9 (records). §7 before §2–3 because its freed enum/ladder/clock space is reused by GoVIRAL, and its removal must not be entangled with new-feature commits.
