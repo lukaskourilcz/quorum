@@ -392,13 +392,16 @@
       "at": "2026-08-06T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-06T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-06-tt-marketing",
+      "decisionOneLiner": "Concept: use “One Good Day” as a four-chapter crop-top decision series, measuring adult audience opt-ins and chapter preference before any commerce or publishing step."
     },
     {
       "at": "2026-08-06T11:00:00.000Z",

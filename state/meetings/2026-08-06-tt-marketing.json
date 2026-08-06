@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260806090214-tt-marketing",
+  "date": "2026-08-06",
+  "phase": "tt-marketing",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Generate and record concrete marketing ideas for the future Titty Tuesdays eshop from the current season and owner taste. Keep every concept adult-only and pre-commerce: no publishing, ads, people, prices, stock, purchase links or availability claims.",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SCENE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.08,
+    "actualCycleUsd": 0.018109,
+    "monthAllInUsd": 3.103601300000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Concept: use “One Good Day” as a four-chapter crop-top decision series, measuring adult audience opt-ins and chapter preference before any commerce or publishing step.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "Concept: use “One Good Day” as a four-chapter crop-top decision series, measuring adult audience opt-ins and chapter preference before any commerce or publishing step.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "ANGLE",
+      "summary": "Season 001 concept phase. Four crop-top designs (Night Shift, Receipt, Curb Paint, Late Fee) map to deliberate type systems and restraint. No stock, pricing, or publishing yet. Record positioning brief, open niche proposals for each design chapter, defer visual queue to owner rat",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Future-season ideas are permitted only as measured, adult-only, pre-commerce concepts; no spend, publishing, claims, or visual production is authorized.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "ANGLE",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "plan",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260806090214-TT-MARKETING-02",
+      "owner": "ANGLE",
+      "summary": "Author CampaignBrief v1 for Titty Tuesdays Season 001 positioning and niche targeting. Establish reader, job, and reason for attention.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-06T09:06:14.259Z",
+  "kind": "tt-marketing",
+  "roomTranscript": {
+    "openedAt": "2026-08-06T09:02:14.259Z",
+    "closedAt": "2026-08-06T09:06:14.259Z",
+    "gavel": "PULSE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "gavel",
+        "sentAt": "2026-08-06T09:02:14.259Z",
+        "text": "Generate and record concrete marketing ideas for the future Titty Tuesdays eshop from the current season and owner taste. Keep every concept adult-only and pre-commerce: no publishing, ads, people, prices, stock, purchase links or availability claims."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "statement",
+        "sentAt": "2026-08-06T09:03:14.259Z",
+        "text": "Concept: use “One Good Day” as a four-chapter crop-top decision series, measuring adult audience opt-ins and chapter preference before any commerce or publishing step."
+      },
+      {
+        "agent": "ANGLE",
+        "mode": "statement",
+        "sentAt": "2026-08-06T09:04:14.259Z",
+        "text": "Season 001 concept phase. Four crop-top designs (Night Shift, Receipt, Curb Paint, Late Fee) map to deliberate type systems and restraint. No stock, pricing, or publishing yet. Record positioning brief, open niche proposals for each design chapter, defer visual queue to owner rat"
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-06T09:05:14.259Z",
+        "text": "Future-season ideas are permitted only as measured, adult-only, pre-commerce concepts; no spend, publishing, claims, or visual production is authorized."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-06T09:06:14.259Z",
+        "text": "Concept: use “One Good Day” as a four-chapter crop-top decision series, measuring adult audience opt-ins and chapter preference before any commerce or publishing step."
+      }
+    ]
+  }
+}
