@@ -21,10 +21,12 @@ release checks in `state/release-proofs/mma-files/`. DNESKAi delivered its first
 3 August. A day that produces no edition now delivers the explanation instead of leaving a
 hole, and 2 August, the one date with no delivery at all, has a receipt.
 
-The day is ten slots: 05:00 edition production with a 09:00 retry, 06:00 board, 08:00 fight
+The day is eleven slots: 05:00 edition production with a 09:00 retry, 06:00 board, 08:00 fight
 data check, 09:00 story meeting, 10:00 article production, 11:00 marketing, 14:00 checkpoint,
-19:00 model check, 20:00 desk review, 22:00 checkpoint. A typical measured day is about $0.36
-against a $1.00 daily pace and the $30 all-in monthly cap from `budget-2026-08e`.
+17:00 DNESKAi product room, 19:00 model check, 20:00 desk review, 22:00 checkpoint. No full day
+under this clock has been measured yet: 6 August came to $0.363 across six slots and 4 August to
+$0.412 across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from
+`budget-2026-08e`.
 
 The site says what happened in words. Live meeting pages show their full discussion, a slot
 nobody needed shows one sentence and is not clickable, and no public surface prints a URL,

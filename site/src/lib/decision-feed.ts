@@ -16,7 +16,9 @@ export async function getPublicDecisions() {
       summary: publicAgentText(record.decision.summary),
       costUsd: record.ledger.actual
     })),
-    ...meetings.filter((record) => !record.fixture).map((record) => ({
+    // A PAUSED room never convened and has no page, so publishing it as a decision advertises
+    // a URL that 404s and calls an absence a decision.
+    ...meetings.filter((record) => !record.fixture && record.status !== "PAUSED").map((record) => ({
       id: `meeting:${record.id}`,
       href: `/meetings/${record.id}`,
       at: record.generatedAt,

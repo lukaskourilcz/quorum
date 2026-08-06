@@ -69,7 +69,7 @@ export default async function IdeasPage({
                   const originHref = publicMeetingHref(idea.origin.meetingRef, standups);
                   return (
                     <tr id={idea.id} key={idea.id}>
-                      <TableCell><p className="font-semibold">{idea.title}</p><p className="mt-2 max-w-sm text-sm leading-6 text-[var(--fog)]">{idea.summary}</p><p className="mt-2 font-mono text-[0.625rem] text-[var(--fog)]">{idea.id}</p></TableCell>
+                      <TableCell><p className="font-semibold">{idea.title}</p><p className="mt-2 max-w-sm text-sm leading-6 text-[var(--fog)]">{idea.summary}</p></TableCell>
                       <TableCell><Badge tone={tone(idea.status)}>{statusLabels[idea.status]}</Badge></TableCell>
                       <TableCell>{originHref ? <Link className="text-[var(--accent)] underline underline-offset-4" href={originHref}>{idea.origin.agent} · meeting</Link> : <span>{idea.origin.agent}</span>}</TableCell>
                       <TableCell><ol className="grid min-w-60 gap-3">{idea.statusHistory.map((event, index) => { const href = publicMeetingHref(event.meetingRef, standups); return <li className="border-l-2 border-[var(--border)] pl-3" key={`${event.at}-${index}`}><div className="flex flex-wrap items-center gap-2"><Badge tone={tone(event.status)}>{statusLabels[event.status]}</Badge><time className="font-mono text-[0.625rem] text-[var(--fog)]" dateTime={event.at}>{formatDate(event.at)}</time></div><p className="mt-2 text-xs leading-5 text-[var(--fog)]">{event.reason}</p>{href ? <Link className="mt-1 inline-block text-xs text-[var(--accent)] underline underline-offset-4" href={href}>Decision meeting</Link> : null}</li>; })}</ol></TableCell>

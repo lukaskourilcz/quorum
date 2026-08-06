@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { publicAgentStatus, publicAgentTitle } from "@/components/agent-language";
 import { AgentCard, AgentRow } from "@/components/agent-card";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
@@ -11,8 +12,12 @@ export const metadata: Metadata = {
 };
 
 export default function AgentsPage() {
-  const council = agents.filter((agent) => agent.group === "Council");
-  const specialists = agents.filter((agent) => agent.group !== "Council");
+  // Ten roles were stood down when the roster was cut. Counting them among the working team
+  // told a reader the company runs forty roles when thirty of them do the work.
+  const working = agents.filter((agent) => agent.status === "active");
+  const standDown = agents.filter((agent) => agent.status !== "active");
+  const council = working.filter((agent) => agent.group === "Council");
+  const specialists = working.filter((agent) => agent.group !== "Council");
 
   return (
     <PageShell>
@@ -21,10 +26,10 @@ export default function AgentsPage() {
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[1rem] border border-[var(--slate)] bg-[var(--slate)]">
             <div className="bg-[var(--card)] p-6">
               <p className="mono-label text-[0.65625rem] text-[var(--fog)]">
-                Total roles
+                Working roles
               </p>
               <p className="mt-3.5 text-[2.5rem] font-semibold tracking-[-0.06em]">
-                {agents.length}
+                {working.length}
               </p>
             </div>
             <div className="bg-[var(--card)] p-6">
@@ -70,6 +75,23 @@ export default function AgentsPage() {
             <span>Current work shown on each profile</span>
           </div>
         </div>
+
+        {standDown.length ? (
+          <div className="mt-10 rounded-[1.125rem] border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8">
+            <p className="mono-label text-[0.65625rem] text-[var(--fog)]">Stood down</p>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--fog)]">
+              These roles are on the record and off the work. A retired role is closed; a paused
+              one is waiting for something that does not exist yet, and nothing calls either.
+            </p>
+            <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+              {standDown.map((agent) => (
+                <li className="text-[var(--fog)]" key={agent.id}>
+                  {publicAgentTitle(agent)} · {publicAgentStatus(agent.status)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </section>
     </PageShell>
   );

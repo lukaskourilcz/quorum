@@ -24,9 +24,12 @@ import {
 } from "@/lib/calendar-feed-model";
 import { formatDate, formatUsd } from "@/lib/utils";
 
-const council = agents.filter((agent) => agent.group === "Council");
-const specialists = agents.filter((agent) => agent.group !== "Council");
-const signalAgents = agents.map(({ group, id }) => ({ group, id }));
+// Ten roles were stood down when the roster was cut. The public team page counts the ones that
+// work; so does this one, or the home page advertises a company ten roles larger than it is.
+const working = agents.filter((agent) => agent.status === "active");
+const council = working.filter((agent) => agent.group === "Council");
+const specialists = working.filter((agent) => agent.group !== "Council");
+const signalAgents = working.map(({ group, id }) => ({ group, id }));
 
 const gates = [
   ["01", "Idea needs a score of 35/50", "34 · TOO LOW"],
@@ -136,7 +139,7 @@ export default async function HomePage() {
               "0%",
               latestStandup.fixture ? "Test example / no paid calls" : "Saved meeting cost"
             ],
-            ["AI team", String(agents.length), "4 DECIDE", "100%", `${agents.length - 4} specialist and checking roles`]
+            ["AI team", String(working.length), "4 DECIDE", "100%", `${working.length - 4} specialist and checking roles`]
           ].map(([label, value, tag, width, foot]) => (
             <div
               className="flex min-h-48 flex-col justify-between bg-[var(--surface)] p-7 transition-colors hover:bg-[var(--surface-raised)] md:p-8"
@@ -303,11 +306,11 @@ export default async function HomePage() {
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           }
-          description={`Four AI roles make final decisions. ${agents.length - 4} other roles research, build, edit, check safety and manage costs when their skills are needed. They are software roles, not people.`}
+          description={`Four AI roles make final decisions. ${working.length - 4} other roles research, build, edit, check safety and manage costs when their skills are needed. They are software roles, not people.`}
           eyebrow="The AI team"
           title={
             <>
-              {agents.length} AI roles.
+              {working.length} AI roles.
               <br />
               Their decisions stay public.
             </>
@@ -320,7 +323,7 @@ export default async function HomePage() {
         </div>
         <div className="mt-4 overflow-hidden rounded-[1.125rem] border border-[var(--border)] bg-[var(--card)]">
           <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] px-6 py-5 font-mono text-[0.65625rem] uppercase tracking-[0.14em] text-[var(--fog)]">
-            <span>Specialists and checking roles / {agents.length - 4} roles</span>
+            <span>Specialists and checking roles / {working.length - 4} roles</span>
             <span>Join when needed · do not vote</span>
           </div>
           <div className="grid md:grid-cols-2">

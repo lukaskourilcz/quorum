@@ -218,7 +218,10 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const voteMatrix = strictArray(record.voteMatrix, (value) => {
     const entry = object(value);
     const voter = entry ? agent(entry.voter) : null;
-    const firstChoice = entry ? text(entry.firstChoice, 200) : null;
+    // A vote choice can carry the reference it voted on ("veto:idea-2026-08-05-bbffd7f5"),
+    // and the page prints it beside the voter. Keep the verdict, drop the reference.
+    const raw = entry ? text(entry.firstChoice, 200) : null;
+    const firstChoice = raw ? raw.split(":")[0]!.trim() || raw : null;
     return voter && firstChoice && typeof entry?.veto === "boolean"
       ? { voter, firstChoice, veto: entry.veto }
       : null;

@@ -395,6 +395,7 @@ jobs:
           echo "skip_reason=$skip_reason" >> "$GITHUB_OUTPUT"
           echo "scheduled=$scheduled" >> "$GITHUB_OUTPUT"
           echo "duplicate=$duplicate" >> "$GITHUB_OUTPUT"
+          echo "edition_retry=$edition_retry" >> "$GITHUB_OUTPUT"
           echo "delivery_only=$delivery_only" >> "$GITHUB_OUTPUT"
 
       # Skipped on a delivery-only dispatch, where "Run cycle" does not run, so this gate and
@@ -691,6 +692,10 @@ jobs:
           # instead of the quiet exit 0 a manual dispatch gets.
           EVENT_NAME: ${{ steps.mode.outputs.scheduled == 'true' && 'schedule' || github.event_name }}
           PHASE: ${{ steps.mode.outputs.phase }}
+          # The edition retry is the one firing whose healthy outcome is writing nothing: the
+          # morning already published, so it costs $0 and has nothing to record. Without this it
+          # filed a skip over a published edition and failed the run on every good day.
+          EDITION_RETRY: ${{ steps.mode.outputs.edition_retry }}
         run: |
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
@@ -717,6 +722,10 @@ jobs:
           # quiet exit and only says so in the log.
           if git diff --cached --quiet; then
             echo "Cycle produced no canonical state change."
+            if test "$EDITION_RETRY" = "true"; then
+              echo "The edition retry found the morning already published. Nothing to record."
+              exit 0
+            fi
             test "$EVENT_NAME" = "schedule" || exit 0
             if test -n "$PHASE" && test "$PHASE" != "skip"; then
               pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \

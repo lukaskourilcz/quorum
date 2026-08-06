@@ -39,8 +39,8 @@ Refreshed from committed state: **2026-08-06T04:02:23.327Z**. This block is gene
 | Item | Current value |
 | --- | --- |
 | Portfolio | 6 projects; 5 marked operating |
-| Agent roster | 40 active: 21 Anthropic, 19 OpenAI |
-| Scheduled specialist/service rooms | 10; combined maximum room envelopes $0.64 if every room is commissioned |
+| Agent roster | 30 active: 17 Anthropic, 13 OpenAI |
+| Scheduled specialist/service rooms | 7; combined maximum room envelopes $0.46 if every room is commissioned |
 | Approved spend boundary | $50 all-in monthly; $42 model/API share; $2.20 daily model/API pace |
 | Recorded API spend | $2.90 this month; $2.92 cumulative |
 | Entered fixed costs | $0.00 monthly |
@@ -57,10 +57,10 @@ Refreshed from committed state: **2026-08-06T04:02:23.327Z**. This block is gene
 | --- | --- | --- | --- | --- |
 | Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (2/7) |
 | Titty Tuesdays | operating | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | locked (0/4) |
-| Magazine Incubator | exploration | incubator-scan 07:00; incubator-synthesis 21:00 | none | not applicable |
+| Magazine Incubator | paused | deterministic service only | none | not applicable |
 | FightAIQ | operating | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
-| Carousel Studio | operating | studio 13:00 | none | not applicable |
-| MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH, SPLIT | locked (3/10) |
+| Carousel Studio | operating | deterministic service only | none | not applicable |
+| MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (3/10) |
 
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:END -->
 

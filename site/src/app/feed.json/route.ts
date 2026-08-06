@@ -1,4 +1,5 @@
 import { getPublicStandups } from "@/lib/standup-records";
+import { publicAgentText, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
 
 export const dynamic = "force-static";
@@ -17,10 +18,10 @@ export async function GET() {
       items: standups.filter((standup) => !standup.fixture).map((standup) => ({
         id: `${base}/standups/${standup.id}`,
         url: `${base}/standups/${standup.id}`,
-        title: `${standup.date} · ${standup.status}`,
-        content_text: `${standup.operatingBrief}\n\nDecision: ${standup.decision.summary}`,
+        title: `${standup.date} · ${publicDecisionLabel(standup.status)}`,
+        content_text: publicAgentText(`${standup.operatingBrief}\n\nDecision: ${standup.decision.summary}`),
         date_published: standup.generatedAt ?? `${standup.date}T05:30:00.000Z`,
-        tags: [standup.stage, "live"]
+        tags: [publicStageLabel(standup.stage), "live"]
       }))
     },
     {

@@ -47,7 +47,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "never" as const,
       priority: 0.7
     })),
-    ...meetings.filter((meeting) => !meeting.fixture).map((meeting) => ({
+    // A PAUSED room has no page: listing its URL in the sitemap points crawlers at a 404.
+    ...meetings.filter((meeting) => !meeting.fixture && meeting.status !== "PAUSED").map((meeting) => ({
       url: `${base}/meetings/${meeting.id}`,
       lastModified: new Date(meeting.generatedAt),
       changeFrequency: "never" as const,

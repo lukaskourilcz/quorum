@@ -309,8 +309,13 @@ export async function collectQuarterlyMeasurements(input: {
 
   const editions = editionDeliveries.map(record).filter((value): value is Record<string, unknown> => Boolean(value))
     .filter((value) => dateInPeriod(value.date ?? value.deliveredAt, periodStart, periodEnd));
+  // A delivered "no edition today" notice is a successful gated outcome and it is not an
+  // edition. Counting it as one inflated editions_delivered to 4 against 3, made an edition
+  // look $0.10 cheaper than it was, and pushed published_hero_rate down to 0.75 for the
+  // hero a no-edition notice was never going to carry.
   const deliveredEditions = editions.filter((value) =>
     value.status === "delivered"
+    && value.editionStatus !== "no_edition"
     && typeof value.date === "string"
     && /^[a-f0-9]{64}$/u.test(String(value.packageHash))
     && typeof value.targetRepository === "string"
@@ -661,16 +666,27 @@ export async function collectQuarterlyMeasurements(input: {
     : null;
   measurements["state/budget#mma_files_cost_per_article_usd"] = articles.length > 0
     ? Number(
-        (phaseSpend(["article-am", "article-pm", "mag-editorial", "mag-desk"]) / articles.length).toFixed(8)
+        // "article-production" is the phase the article run bills under (mma-files/live.ts).
+        // "article-am"/"article-pm" are calendar slot names and have never appeared in the
+        // ledger, so naming them here dropped 58% of the numerator and reported an article as
+        // costing $0.0302 when it cost $0.0724.
+        (phaseSpend(["article-production", "mag-editorial", "mag-desk"]) / articles.length).toFixed(8)
       )
     : null;
 
   // Titty Tuesdays is measured on ideas recorded and ideas that went somewhere, because that is
   // the whole of what the venture currently produces: the room writes into the ledger and the
   // owner rates them in /admin. The social KPIs it used to carry cannot move for about a month.
-  const tittyIdeas = tittyTuesdaysIdeaLedger
-    .map(record)
-    .filter((idea): idea is Record<string, unknown> => Boolean(idea));
+  // The ledger is append-only: one line per status change, not one line per idea. Counting
+  // lines meant an idea that advanced was counted twice — precisely the event advanced_count
+  // exists to measure. Last line per id wins, which is the idea's current state.
+  const tittyIdeas = [
+    ...tittyTuesdaysIdeaLedger
+      .map(record)
+      .filter((idea): idea is Record<string, unknown> => Boolean(idea) && typeof idea?.id === "string")
+      .reduce((latest, idea) => latest.set(String(idea.id), idea), new Map<string, Record<string, unknown>>())
+      .values()
+  ];
   const ideaProposedAt = (idea: Record<string, unknown>): unknown =>
     Array.isArray(idea.statusHistory) ? record(idea.statusHistory[0])?.at : idea.createdAt;
   const quarterIdeas = tittyIdeas.filter((idea) =>

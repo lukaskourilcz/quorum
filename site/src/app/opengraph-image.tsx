@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { serverTokens } from "@/brand/tokens";
 import { publicState } from "@/data/fixtures";
 import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
@@ -66,8 +67,8 @@ export default function OpenGraphImage() {
           paddingTop: 24
         }}
       >
-        <span>{publicState.stage}</span>
-        <span>{publicState.decision}</span>
+        <span>{publicStageLabel(publicState.stage)}</span>
+        <span>{publicDecisionLabel(publicState.decision)}</span>
         <span>${CURRENT_MONTHLY_OPERATING_LIMIT_USD} monthly limit</span>
       </div>
     </div>,

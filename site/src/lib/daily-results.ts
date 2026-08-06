@@ -1,6 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { publicAgentText } from "@/components/agent-language";
+import { readsAsMachineText } from "@/lib/public-prose";
 import { publicKindLabel } from "@/lib/slot-labels";
 
 /**
@@ -114,7 +115,9 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
     const venture = text(operation.ventureId);
     const detail = text(operation.text).trim();
     if (!venture || !detail || failureByVenture.has(venture)) continue;
-    failureByVenture.set(venture, publicAgentText(detail));
+    const plain = publicAgentText(detail);
+    if (readsAsMachineText(plain)) continue;
+    failureByVenture.set(venture, plain);
   }
 
   const meetings = Array.isArray(digest.meetings) ? (digest.meetings as DigestMeeting[]) : [];
@@ -123,7 +126,13 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
     const bullets = Array.isArray(meeting.bullets) ? (meeting.bullets as DigestBullet[]) : [];
     // The digest writes these bullets for an operator and they reached the public results
     // table verbatim, machine slugs and idea references included.
-    const output = bullets.map((bullet) => publicAgentText(text(bullet.text).trim())).filter(Boolean).join(" · ") || "No summary recorded.";
+    // The digests already committed were written before the plain-at-source fix, so they still
+    // carry a CI runner path, a failing command line and stop codes. The word list cannot turn
+    // those into sentences; what it cannot rescue is dropped rather than shown to a reader.
+    const output = bullets
+      .map((bullet) => publicAgentText(text(bullet.text).trim()))
+      .filter((line) => line.length > 0 && !readsAsMachineText(line))
+      .join(" · ") || "No summary recorded.";
     const roomLink = bullets.map((bullet) => text(bullet.roomLink)).find((link) => link.startsWith("/")) ?? null;
     const held = meeting.held === true;
     const failureReason = failureByVenture.get(ventureId) ?? null;

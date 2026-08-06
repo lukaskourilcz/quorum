@@ -256,9 +256,15 @@ function withoutShoutedCodes(value: string): string {
 }
 
 export function publicAgentText(value: string): string {
+  // The named token rules run first. Lowercasing every shouted code ahead of them silently
+  // killed OPS-OBSERVE and NO_POST, whose plain wording is a phrase rather than a status label:
+  // publicDecisionLabel does not know them, so they came out as "ops-observe" and "no post".
+  const namedTokens = replacements
+    .filter(([pattern]) => pattern.source.startsWith("\\b") && /[A-Z]/.test(pattern.source[2] ?? ""))
+    .reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
   const withRoleTitles = (Object.entries(titles) as Array<[AgentId, string]>).reduce(
     (text, [agentId, title]) => text.replace(new RegExp(`\\b${agentId}\\b`, "g"), title),
-    withoutShoutedCodes(value)
+    withoutShoutedCodes(namedTokens)
   );
   return replacements.reduce(
     (text, [pattern, replacement]) => text.replace(pattern, replacement),

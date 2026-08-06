@@ -106,8 +106,8 @@ LENS, SCRIBE, SCOUT, FUNNEL. Thirty stay active, each with a real seat, a pipeli
 or a genuinely pending function. Pausing is now safe: the boardroom router skips a
 non-active required seat and records it, instead of throwing and taking the room down.
 That slightly relaxes the "a required seat cannot vanish" guarantee, in exchange for a
-roster that can be paused without crashing rooms. The org-change record for this is
-`state/org/changes/2026-08-06-roster.md`.
+roster that can be paused without crashing rooms. The org-change records for this batch are the
+`ORG-2026-08-06-*` entries in `state/org/changes.jsonl`.
 
 ## Titty Tuesdays
 
@@ -167,6 +167,18 @@ example's replay. Both meeting pages now render the same saved turns.
   pins its absence.
 - The hourly social publisher's schedule is commented out until a channel exists. It fired
   twenty-four times a day to confirm that everything is still switched off.
+
+## The day, counted
+
+Eleven slots, not ten: 05:00 edition production with a 09:00 retry, 06:00 board, 08:00 fight
+data check, 09:00 story meeting, 10:00 article production, 11:00 marketing, 14:00 checkpoint,
+17:00 DNESKAi product room, 19:00 model check, 20:00 desk review, 22:00 checkpoint. The
+product room was never proposed for removal and still sits at 17:00 with its four seats and
+its $0.08 envelope; a summary of this batch that lists ten slots has left it out.
+
+No full day under this clock has been measured. 6 August billed $0.363 across six slots and
+4 August $0.412 across seven, both inside the $1.00 daily pace. The figure to watch is the
+first complete day, not either of those.
 
 ## What this does not touch
 

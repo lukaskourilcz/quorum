@@ -1,9 +1,10 @@
 import { mkdtempSync } from "node:fs";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EDITION_RETRY_HOUR, EDITION_RETRY_PHASE, MEETING_CLOCK } from "../src/meetings/clock.js";
+import { repoRoot } from "../src/paths.js";
 
 vi.mock("../src/paths.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../src/paths.js")>();
@@ -95,5 +96,29 @@ describe("the edition slot's same-day retry", () => {
     const result = await runEdition(new Date("2026-08-06T03:00:00.000Z"));
 
     expect(result.status).toBe("already_recorded");
+  });
+});
+
+/**
+ * The retry's healthy outcome is writing nothing, and the workflow's "a scheduled slot that
+ * wrote nothing is a defect" rule did not know that. On a morning that had already published it
+ * filed a skip record over the published edition — telling the calendar the room was called off
+ * — and failed the run. That is every good day.
+ */
+describe("the retry that finds the morning already published", () => {
+  it("is exempt from the no-write failure and files no skip", async () => {
+    const workflow = await readFile(path.join(repoRoot, ".github/workflows/cycle.yml"), "utf8");
+    const commitStep = workflow.slice(workflow.indexOf("Cycle produced no canonical state change."));
+    const exemption = commitStep.indexOf('if test "$EDITION_RETRY" = "true"');
+    const skipWriter = commitStep.indexOf("src/meetings/skip-cli.ts");
+    const failure = commitStep.indexOf("exit 1");
+
+    expect(exemption).toBeGreaterThan(-1);
+    // Both the skip record and the failure are downstream of the exemption, so neither is reached.
+    expect(skipWriter).toBeGreaterThan(exemption);
+    expect(failure).toBeGreaterThan(exemption);
+    // The flag has to come from the mode step, not be re-derived from the clock a second time.
+    expect(workflow).toContain('EDITION_RETRY: ${{ steps.mode.outputs.edition_retry }}');
+    expect(workflow).toContain('echo "edition_retry=$edition_retry" >> "$GITHUB_OUTPUT"');
   });
 });

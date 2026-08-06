@@ -1,3 +1,4 @@
+import { publicAgentText, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
 import { escapeXml, rssResponse } from "@/lib/rss";
@@ -11,12 +12,12 @@ export async function GET() {
     .filter((standup) => !standup.fixture)
     .map(
       (standup) => `<item>
-        <title>${escapeXml(`${standup.date} · ${standup.status}`)}</title>
+        <title>${escapeXml(`${standup.date} · ${publicDecisionLabel(standup.status)}`)}</title>
         <link>${base}/standups/${standup.id}</link>
         <guid isPermaLink="true">${base}/standups/${standup.id}</guid>
         <pubDate>${new Date(standup.generatedAt ?? `${standup.date}T05:30:00.000Z`).toUTCString()}</pubDate>
-        <description>${escapeXml(`${standup.operatingBrief} Decision: ${standup.decision.summary}`)}</description>
-        <category>${escapeXml(standup.stage)}</category>
+        <description>${escapeXml(publicAgentText(`${standup.operatingBrief} Decision: ${standup.decision.summary}`))}</description>
+        <category>${escapeXml(publicStageLabel(standup.stage))}</category>
       </item>`
     )
     .join("");

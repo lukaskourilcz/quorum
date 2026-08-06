@@ -41,3 +41,22 @@ describe("publicAgentText", () => {
     expect(publicAgentText("Current shift")).toBe("Current meeting");
   });
 });
+
+/**
+ * Running the status-label pass ahead of the word list silently killed the two named token
+ * rules whose plain wording is a phrase rather than a label: publicDecisionLabel does not know
+ * OPS-OBSERVE or NO_POST, so they came out lowercased as "ops-observe" and "no post" — and
+ * "ops-observe" reached the home page.
+ */
+describe("named token rules survive the status-label pass", () => {
+  it("keeps the phrases the label map cannot produce", () => {
+    expect(publicAgentText("The OPS-OBSERVE item is internal.")).toContain("record check");
+    expect(publicAgentText("Growth plan: NO_POST for this shift.")).toContain("do not publish");
+    expect(publicAgentText("Record NO_PROPOSAL and close.")).toContain("no proposal");
+    expect(publicAgentText("The room recorded NO_ACTION.")).toContain("do nothing");
+  });
+
+  it("still labels a status the map does know", () => {
+    expect(publicAgentText("Delivery is NEEDS_RECONCILIATION today.")).toContain("Needs checking");
+  });
+});

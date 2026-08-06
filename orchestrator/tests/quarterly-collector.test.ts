@@ -29,6 +29,25 @@ async function writeJson(file: string, value: unknown): Promise<void> {
   await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);
 }
 
+function ledgerEntry(ts: string, phase: string, usd: number) {
+  return {
+    ts,
+    cycleId: `cycle-${ts}`,
+    requestHash: "a".repeat(64),
+    phase,
+    agent: "JAB",
+    provider: "anthropic",
+    model: "claude-haiku-4-5-20251001",
+    serviceTier: "default",
+    tokensIn: 100,
+    cachedTokensIn: 0,
+    tokensOut: 50,
+    toolUses: 0,
+    usd,
+    kind: "text"
+  };
+}
+
 async function fixtureRoot() {
   const root = await mkdtemp(path.join(os.tmpdir(), "boardless-quarterly-collector-"));
   const stateRoot = path.join(root, "state");
@@ -241,5 +260,101 @@ describe("the published-hero measure counts what the desk promises", () => {
     });
     expect(proof.checks.some((check) => check.name === "english-route")).toBe(false);
     expect(result.measurements["receipts/caught-up#published_hero_rate"]).toBe(1);
+  });
+});
+
+/**
+ * The seven measures added for the magazines and Titty Tuesdays had no test, which is how
+ * `article-am`/`article-pm` — calendar slot names that have never appeared in the budget ledger
+ * — sat in the cost-per-article numerator through a green suite, reporting an article at
+ * $0.0302 when it cost $0.0724.
+ */
+describe("the per-magazine measures read what the runtime actually writes", () => {
+  it("costs an article from the phase the article run bills under", async () => {
+    const { root, stateRoot } = await fixtureRoot();
+    const article = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/article.valid.json"), "utf8")) as Record<string, unknown>;
+    article.publishAt = "2026-08-04T08:00:00.000Z";
+    article.status = "published";
+    await writeJson(path.join(stateRoot, "ventures/mma-files/articles/2026-08-04-am-x.json"), article);
+    await writeJson(path.join(stateRoot, "budget/ledger.json"), {
+      schemaVersion: 1,
+      entries: [
+        ledgerEntry("2026-08-04T08:00:00.000Z", "article-production", 0.05),
+        ledgerEntry("2026-08-04T09:00:00.000Z", "mag-editorial", 0.01),
+        ledgerEntry("2026-08-04T20:00:00.000Z", "mag-desk", 0.01),
+        // Never the calendar slot name: nothing bills under it.
+        ledgerEntry("2026-08-04T10:00:00.000Z", "article-am", 9.99)
+      ]
+    });
+
+    const result = await collectQuarterlyMeasurements({
+      repoRoot: root,
+      stateRoot,
+      kpiSet,
+      now: new Date("2026-08-05T12:00:00.000Z"),
+      metricsIngestionEnabled: false
+    });
+
+    expect(result.measurements["state/budget#mma_files_cost_per_article_usd"]).toBeCloseTo(0.07, 5);
+  });
+
+  it("does not count a delivered no-edition notice as an edition", async () => {
+    const { root, stateRoot } = await fixtureRoot();
+    const receipt = (date: string, editionStatus: string, hash: string) => ({
+      schemaVersion: 1,
+      date,
+      packageHash: hash.repeat(64).slice(0, 64),
+      status: "delivered",
+      editionStatus,
+      targetRepository: "lukaskourilcz/aifirst",
+      targetCommit: "b".repeat(40),
+      deliveredAt: `${date}T07:00:00.000Z`,
+      tags: []
+    });
+    await writeJson(path.join(stateRoot, "edition/deliveries/2026-08-03.json"), receipt("2026-08-03", "edition", "a"));
+    await writeJson(path.join(stateRoot, "edition/deliveries/2026-08-04.json"), receipt("2026-08-04", "no_edition", "c"));
+    await writeJson(path.join(stateRoot, "budget/ledger.json"), {
+      schemaVersion: 1,
+      entries: [ledgerEntry("2026-08-03T05:00:00.000Z", "cu-edition", 0.2)]
+    });
+
+    const result = await collectQuarterlyMeasurements({
+      repoRoot: root,
+      stateRoot,
+      kpiSet,
+      now: new Date("2026-08-05T12:00:00.000Z"),
+      metricsIngestionEnabled: false
+    });
+
+    // A gated $0 outcome is a success and it is not an edition.
+    expect(result.measurements["receipts/caught-up#editions_delivered"]).toBe(1);
+    expect(result.measurements["state/budget#caught_up_cost_per_edition_usd"]).toBeCloseTo(0.2, 5);
+  });
+
+  it("counts Titty Tuesdays ideas, not ledger lines", async () => {
+    const { root, stateRoot } = await fixtureRoot();
+    const line = (id: string, status: string, at: string) => JSON.stringify({
+      id, status, createdAt: at, statusHistory: [{ status: "proposed", at }]
+    });
+    await mkdir(path.join(stateRoot, "ideas/titty-tuesdays"), { recursive: true });
+    await writeFile(
+      path.join(stateRoot, "ideas/titty-tuesdays/ledger.jsonl"),
+      [
+        line("idea-1", "proposed", "2026-08-04T10:00:00.000Z"),
+        // The same idea advancing appends a second line; it is one idea.
+        line("idea-1", "accepted", "2026-08-04T11:00:00.000Z"),
+        line("idea-2", "proposed", "2026-08-05T10:00:00.000Z")
+      ].join("\n") + "\n"
+    );
+
+    const result = await collectQuarterlyMeasurements({
+      repoRoot: root,
+      stateRoot,
+      kpiSet,
+      now: new Date("2026-08-06T12:00:00.000Z"),
+      metricsIngestionEnabled: false
+    });
+
+    expect(result.measurements["state/ideas/titty-tuesdays#advanced_count"]).toBe(1);
   });
 });

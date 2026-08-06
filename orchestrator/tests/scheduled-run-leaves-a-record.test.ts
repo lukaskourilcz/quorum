@@ -252,10 +252,15 @@ describe("the cycle workflow records every scheduled run that resolves to a phas
     expect(branch).toContain("skip-cli.ts");
     expect(branch).toContain("finished without writing anything down about it");
     expect(branch).toContain("exit 1");
-    // The quiet exit survives for exactly one reason — a dispatch claims no calendar slot, so it
-    // has nothing to leave unexplained. Every other way out of this branch records and fails.
-    expect(branch.match(/exit 0/gu) ?? []).toHaveLength(1);
+    // Two quiet exits, and only two. A dispatch claims no calendar slot, so it has nothing to
+    // leave unexplained; the edition retry's healthy outcome is writing nothing, because the
+    // morning already published — filing a skip there would tell the calendar a room that met
+    // was called off. Every other way out of this branch records and fails.
+    expect(branch.match(/exit 0/gu) ?? []).toHaveLength(2);
     expect(branch).toContain('test "$EVENT_NAME" = "schedule" || exit 0');
+    expect(branch).toContain('if test "$EDITION_RETRY" = "true"; then');
+    // The retry's exit comes first, or the skip writer reaches it anyway.
+    expect(branch.indexOf('$EDITION_RETRY')).toBeLessThan(branch.indexOf("skip-cli.ts"));
   });
 
   it("checks that every skip recorder's push actually succeeded", async () => {

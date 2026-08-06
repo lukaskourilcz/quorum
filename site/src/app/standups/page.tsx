@@ -43,7 +43,7 @@ export default async function StandupsPage() {
         <div className="mx-auto grid max-w-[var(--container)] gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Meetings recorded", String(standups.length)],
-            ["Latest decision", standups[0]?.decision.outcome ?? "n/a"],
+            ["Latest decision", standups[0] ? publicDecisionLabel(standups[0].decision.outcome) : "None yet"],
             ["Real cost to date", formatUsd(actualCost)],
             ["Tasks reviewed", String(standups[0]?.tasks.length ?? 0)]
           ].map(([label, value]) => (
