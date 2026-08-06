@@ -57,11 +57,13 @@ social posting. The list below is those, in the order that unblocks the most.
    is only used when its own title, author or URL names the article's subject.
    [imp:4] [owner:me] [time:5m] [kind:setup]
 
-3. [ ] **Rate the seven Titty Tuesdays idea cards in `/admin`.** The marketing room writes
-   concrete campaign ideas every day and nothing has ever rated one, so the taste loop that
-   turns your ratings into written style rules has no input and PALATE has nothing to work
-   from. Seven cards are waiting under the venture's ideas tab. Rating them is the whole of
-   what starts the loop. [imp:4] [owner:me] [time:20m] [kind:decision]
+3. [ ] **Rate the Titty Tuesdays idea cards in `/admin`.** The marketing room writes concrete
+   campaign ideas every day and nothing has ever rated one, so the taste loop that turns your
+   ratings into written style rules has no input and PALATE has nothing to work from. Nine cards
+   sit unrated under the venture's ideas tab, every one of them still `proposed`
+   (`state/ideas/titty-tuesdays/ledger.jsonl`); the count grows by roughly one a day until you
+   rate them. Rating them is the whole of what starts the loop.
+   [imp:4] [owner:me] [time:20m] [kind:decision]
 
 4. [ ] **Set the `/admin` credentials in Vercel production.** Several actions on this list run
    through `/admin` — the idea ratings above, the fixed costs below, the deck design switcher —
@@ -72,8 +74,10 @@ social posting. The list below is those, in the order that unblocks the most.
 
 ## 2. Yours to decide
 
-5. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** The publication is DNESKAi
-   everywhere a reader can see. The deployment is still at `caughtup-ai.vercel.app`, the
+5. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
+   the navigation, the footer and print; the page title, the social cards, the structured data
+   and the Atom feed still say "Caught Up", which was your call and is not a bug. The deployment
+   is still at `caughtup-ai.vercel.app`, the
    repository is still `aifirst`, and the venture is still `caught-up` in every contract and
    Actions variable — all deliberate, so that sealed package hashes and your existing settings
    keep working. The public URL is the one part only you can change. Delivery receipts now
@@ -106,7 +110,7 @@ social posting. The list below is those, in the order that unblocks the most.
     | Titty Tuesdays | `TITTY_TUESDAYS_THREADS_ACCESS_TOKEN`, `TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN` | `TITTY_TUESDAYS_THREADS_USER_ID`, `TITTY_TUESDAYS_INSTAGRAM_USER_ID` |
 
     Decision `social-2026-08a` keeps all of this closed until each magazine has rendered ten
-    articles. `state/social/activation.json` reads DNESKAi 1/7, MMA Files 1/10 and Titty
+    articles. `state/social/activation.json` reads DNESKAi 2/7, MMA Files 3/10 and Titty
     Tuesdays 0/4 — the runtime's own per-venture thresholds, which are not all ten. Keep
     `SOCIAL_KILL_SWITCH=true`; setting it to `false` removes only the owner stop, and each
     venture's counter, credentials, roles and safety checks still have to pass. Until a channel
