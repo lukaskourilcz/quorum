@@ -807,6 +807,21 @@ jobs:
           owner: lukaskourilcz
           repositories: aifirst
 
+      # A delivery clone builds the magazine from cold every time: no .next/cache, so every page
+      # is compiled again for content that changed on one route. The clone path is chosen inside
+      # the step, so the cache lives at a fixed path here and the step copies it in and out.
+      # Keyed on the run so each delivery saves a fresh entry, restored from the newest previous
+      # one — a stale cache costs a slower build, never a wrong one; Next validates its own
+      # entries and rebuilds what does not match.
+      - name: Restore the aifirst build cache
+        if: ${{ steps.delivery.outputs.has_package == 'true' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/next-cache/aifirst
+          key: aifirst-next-cache-${{ github.run_id }}
+          restore-keys: |
+            aifirst-next-cache-
+
       - name: Deliver package to aifirst main
         id: target
         if: ${{ steps.delivery.outputs.has_package == 'true' }}
@@ -858,6 +873,8 @@ jobs:
           # day's edition lost, and the site briefly serving a broken deploy, to learn something
           # a local build would have said first. Captured, because uncaptured under bash -e it
           # aborts before any status= line and both the receipt and fail-closed steps skip.
+          mkdir -p "$clone_root/.next" "$RUNNER_TEMP/next-cache/aifirst"
+          cp -r "$RUNNER_TEMP/next-cache/aifirst" "$clone_root/.next/cache" 2> /dev/null || true
           set +e
           {
             pnpm --dir "$clone_root" check:content \
@@ -867,6 +884,10 @@ jobs:
           } > "$RUNNER_TEMP/delivery-content.log" 2>&1
           content_status=$?
           set -e
+          # Back to the path the cache action saves from, whether or not the build passed: a
+          # failed content check still leaves a warmer cache for the next attempt.
+          rm -rf "$RUNNER_TEMP/next-cache/aifirst"
+          cp -r "$clone_root/.next/cache" "$RUNNER_TEMP/next-cache/aifirst" 2> /dev/null || true
           if test "$content_status" -ne 0; then
             tail -40 "$RUNNER_TEMP/delivery-content.log" >&2
             echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
@@ -1059,6 +1080,17 @@ jobs:
           owner: lukaskourilcz
           repositories: mma-files
 
+      # Same as the aifirst cache above: a delivery clone builds from cold and recompiles every
+      # page for content that changed on one route.
+      - name: Restore the MMA Files build cache
+        if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/next-cache/mma-files
+          key: mma-files-next-cache-${{ github.run_id }}
+          restore-keys: |
+            mma-files-next-cache-
+
       - name: Deliver package to MMA Files main
         id: mma-target
         if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
@@ -1120,6 +1152,8 @@ jobs:
           # The target repository's own gates, captured like every other failure in this step.
           # Uncaptured they abort before any status= line is written, so the receipt step and
           # the fail-closed step both silently skip and the incident leaves no durable record.
+          mkdir -p "$clone_root/.next" "$RUNNER_TEMP/next-cache/mma-files"
+          cp -r "$RUNNER_TEMP/next-cache/mma-files" "$clone_root/.next/cache" 2> /dev/null || true
           set +e
           {
             npm --prefix "$clone_root" run test \
@@ -1127,6 +1161,8 @@ jobs:
               && NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app NEXT_PUBLIC_DEMO_MODE=false npm --prefix "$clone_root" run build
           } > "$RUNNER_TEMP/mma-target-gate.log" 2>&1
           gate_status=$?
+          rm -rf "$RUNNER_TEMP/next-cache/mma-files"
+          cp -r "$clone_root/.next/cache" "$RUNNER_TEMP/next-cache/mma-files" 2> /dev/null || true
           set -e
           if test "$gate_status" -ne 0; then
             tail -40 "$RUNNER_TEMP/mma-target-gate.log" >&2
