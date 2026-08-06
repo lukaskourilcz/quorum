@@ -118,6 +118,56 @@ Wed COHORT, Thu SCENE, with PULSE, ANGLE and AUDIT daily; SPARK, PALATE, VAULT a
 leave it. Nothing is delivered to the titty-tuesdays repository — the flow ends at
 `/admin`, and it stays that way.
 
+## What the public site says
+
+The site had one job it was not doing: showing what the company actually decided. Every
+live morning, afternoon and night meeting page carried a heading reading "Read every
+message." above nothing, because the message list was written inside the founding test
+example's replay. Both meeting pages now render the same saved turns.
+
+- A meeting page opens with the discussion. The compact header carries the room, the date,
+  the status and — when the record names an agenda — the sentence the requesting room
+  wrote, under "What this meeting was asked to decide". The decision, votes, cost and
+  participants sit in one collapsed block beneath the messages.
+- A quiet slot is a sentence, not a link. A PAUSED record never convened, so its cell shows
+  the reason and generates no page. A missed cell says "No run arrived for this slot."
+  instead of "Did not happen", which reads as a decision nobody took.
+- Machine text is refused in three layers: sentences are written where the record is made,
+  a record whose public prose would still render a URL, a path, a hash, a snake_case code
+  or a raw reference fails to parse, and the word list is demoted to a safety net that runs
+  status labels first. The records already on disk were repaired to match. This tightens the
+  public contract: a leaking record disappears from the site rather than rendering.
+- The one deliberate machine artifact is the collapsible "See the article that was sent in
+  .json" block on a delivery day. To have one, delivery now archives the package it sent
+  instead of deleting it, and both receipts record where the article can be read.
+- Evidence pills, the results table and the decisions feed speak plainly. The feed had been
+  publishing five of the nine meeting kinds under the name of a room they had nothing to do
+  with.
+- Six things in the navigation instead of eleven. Money and the measures become sections of
+  the results page; what the company is, the rules it works under and what it discloses
+  become sections of the company page; the duplicate meeting archive at `/boardroom` is
+  deleted. Every retired URL redirects. The home page stops printing figures nobody
+  maintains.
+
+## Carousels
+
+- Slide one carries the article's own photograph. The templates always reserved the slot
+  and the admin preview filled it; both production renders passed no images at all.
+- Slide one's text is a line the desk wrote for a square, not the article title. DNESKAi
+  already produced alternative headlines that nothing consumed; the MMA desk now writes one
+  in the same call as the article, so it passes the same style review.
+- The `/admin` design switcher binds. A recorded choice lives in state and the render path
+  reads it, so picking a design changes the shipped deck rather than a preview.
+- Every released article writes a render receipt where the engine measure looks for one.
+
+## Config hygiene
+
+- `timezone:` under `on.schedule` is removed from `health.yml` and `social-publisher.yml`.
+  GitHub reads every cron as UTC and ignores the key; the test that pinned its presence now
+  pins its absence.
+- The hourly social publisher's schedule is commented out until a channel exists. It fired
+  twenty-four times a day to confirm that everything is still switched off.
+
 ## What this does not touch
 
 The $30 / $25 / $1.00 ceilings. Every truth gate: cited and supplied sources, source
