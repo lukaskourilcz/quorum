@@ -7,6 +7,7 @@ import {
   type CarouselPayload,
   type CarouselTemplate
 } from "./schema.js";
+import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 
 const formats = {
   "instagram-square": { width: 1_080, height: 1_080, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
@@ -454,8 +455,13 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
 let articleDeckCache: readonly CarouselTemplate[] | null = null;
 
 export function articleDeckTemplates(): readonly CarouselTemplate[] {
+  // MIN_SLIDES..MAX_RESOLVABLE_SLIDES, not MIN..MAX: selection is capped at eight slides, and a
+  // pack committed before that cap still names deck-spotlight-10 and has to keep resolving.
   articleDeckCache ??= DECK_STYLES.flatMap((style) =>
-    Array.from({ length: 6 }, (_, index) => articleDeckTemplate(index + 5, style))
+    Array.from(
+      { length: MAX_RESOLVABLE_SLIDES - MIN_SLIDES + 1 },
+      (_, index) => articleDeckTemplate(index + MIN_SLIDES, style)
+    )
   );
   return articleDeckCache;
 }

@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
+  MAX_RESOLVABLE_SLIDES,
   MAX_SLIDES,
   MAX_SLIDE_WORDS,
   MIN_SLIDES,
@@ -10,6 +11,7 @@ import {
   packIntoSlides,
   proseFromMdx,
   reviewDeck,
+  articleDeckTemplates,
   wordCount
 } from "../src/index.js";
 
@@ -115,5 +117,34 @@ describe("a deck the article cannot fill", () => {
     }));
     expect(review.slides).toHaveLength(MAX_SLIDES);
     expect(review.publishable).toBe(true);
+  });
+});
+
+/**
+ * Eight, on the owner's instruction: a ten-slide deck asks for ten swipes to reach a point that
+ * fits in six, and two of the ten are the cover and the closing line.
+ */
+describe("how long a deck may be", () => {
+  it("caps selection at eight slides and keeps five as the floor", () => {
+    expect(MIN_SLIDES).toBe(5);
+    expect(MAX_SLIDES).toBe(8);
+  });
+
+  it("still builds a nine- or ten-slide template a stored pack names", () => {
+    // state/social/packs/2026-08-06.json names deck-spotlight-10. A committed pack that stops
+    // resolving is a past day the site can no longer show.
+    expect(MAX_RESOLVABLE_SLIDES).toBe(10);
+    const built = articleDeckTemplates().map((entry) => entry.id);
+    for (const slideCount of [9, 10]) {
+      expect(built).toContain(`deck-spotlight-${slideCount}`);
+    }
+  });
+
+  it("builds no deck template longer than the cap for anything to select", () => {
+    const selectable = articleDeckTemplates().filter((entry) => entry.slides.length <= MAX_SLIDES);
+    expect(selectable.length).toBeGreaterThan(0);
+    for (const entry of selectable) {
+      expect(entry.slides.length).toBeGreaterThanOrEqual(MIN_SLIDES);
+    }
   });
 });

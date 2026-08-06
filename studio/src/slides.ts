@@ -16,7 +16,16 @@
 /** No slide may exceed this. The owner's constraint, and the only hard rule here. */
 export const MAX_SLIDE_WORDS = 30;
 export const MIN_SLIDES = 5;
-export const MAX_SLIDES = 10;
+/**
+ * Eight, on the owner's instruction. A ten-slide deck asks a reader for ten swipes to reach a
+ * point that fits in six, and the cover and the closing line are two of the ten.
+ *
+ * Nine- and ten-slide templates stay resolvable — `state/social/packs/2026-08-06.json` names
+ * `deck-spotlight-10` and a stored pack must keep rendering — but nothing selects one any more.
+ */
+export const MAX_SLIDES = 8;
+/** The longest deck the generator still builds a template for, so stored references resolve. */
+export const MAX_RESOLVABLE_SLIDES = 10;
 
 export interface Slide {
   /** cover and outro bracket the deck; body carries the argument. */
