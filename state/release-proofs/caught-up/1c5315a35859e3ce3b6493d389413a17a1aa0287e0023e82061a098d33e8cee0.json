@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-91f8c4e04b314ac6",
+  "venture": "caught-up",
+  "packageHash": "1c5315a35859e3ce3b6493d389413a17a1aa0287e0023e82061a098d33e8cee0",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "21b6525bac2d025332739724c99fcb01599c57b0",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 21b6525bac2d025332739724c99fcb01599c57b0 is readable",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-06-ai-agenti-hackuji-pri-testovani?boardless_verify=1c5315a35859-1785985953809",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-06-ai-agenti-hackuji-pri-testovani match",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 1c5315a35859e3ce3b6493d389413a17a1aa0287e0023e82061a098d33e8cee0",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-06-ai-agenti-hackuji-pri-testovani/hero.webp?boardless_verify=1c5315a35859-1785985953809",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "brewbooks · CC BY-SA",
+      "checkedAt": "2026-08-06T03:12:33.809Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-06T03:11:31.466Z",
+  "completedAt": "2026-08-06T03:12:34.612Z"
+}

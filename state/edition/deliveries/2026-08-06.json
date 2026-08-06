@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-06",
+  "packageHash": "1c5315a35859e3ce3b6493d389413a17a1aa0287e0023e82061a098d33e8cee0",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "21b6525bac2d025332739724c99fcb01599c57b0",
+  "deliveredAt": "2026-08-06T03:12:35.902Z",
+  "tags": [
+    "ai-bezpecnost",
+    "ai-agenti",
+    "openai",
+    "meta",
+    "black-hat",
+    "kyberneticka-bezpecnost"
+  ]
+}
