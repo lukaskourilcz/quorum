@@ -349,7 +349,16 @@ jobs:
           # transition working as intended, so the job ends green. `duplicate` keeps the skip
           # recorder quiet: the slot already has a real record, and filing a skip beside it would
           # tell the calendar a meeting was called off that in fact took place.
-          if test "$scheduled" = "true" && test "$skip" != "true" && test "$dry" != "true" && test "$phase" != "skip"; then
+          # The edition slot's same-day retry is exempt, and is the one deliberate second firing
+          # of a phase on one date. The 05:00 run always leaves a meeting record, so this check
+          # would refuse the retry before it could look at anything; the run itself decides, and
+          # a morning that already published costs $0 and writes nothing.
+          edition_retry=false
+          if test "$phase" = "cu-edition" \
+            && test "$(TZ=Europe/Prague date +%H)" = "09"; then
+            edition_retry=true
+          fi
+          if test "$scheduled" = "true" && test "$skip" != "true" && test "$dry" != "true" && test "$phase" != "skip" && test "$edition_retry" != "true"; then
             slot="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/slot-record-cli.ts --phase "$phase")"
             candidate="$(printf '%s' "$slot" | jq -r '.path // ""')"
             recorded=""

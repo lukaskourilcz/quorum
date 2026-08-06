@@ -3,7 +3,11 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { MEETING_CLOCK } from "../src/meetings/clock.js";
+import {
+  EDITION_RETRY_HOUR,
+  EDITION_RETRY_PHASE,
+  MEETING_CLOCK
+} from "../src/meetings/clock.js";
 import { findSlotRecord, slotRecordPath } from "../src/meetings/slot-record.js";
 import { ScheduledPhaseSchema } from "../src/types.js";
 
@@ -27,7 +31,14 @@ async function vercelCrons(): Promise<CronEntry[]> {
  */
 describe("the deployed Vercel schedule matches the meeting clock", () => {
   it("carries both daylight-saving variants of every scheduled slot and nothing else", async () => {
-    const expected = MEETING_CLOCK.flatMap((slot) => [
+    // Every meeting slot, plus one dispatch that is not a meeting: the edition slot's same-day
+    // retry. It carries no Prague hour of its own on the clock -- 09:00 belongs to the story
+    // meeting -- because it is a second attempt at the 05:00 slot rather than a room of its own.
+    const dispatches = [
+      ...MEETING_CLOCK,
+      { phase: EDITION_RETRY_PHASE, hour: EDITION_RETRY_HOUR }
+    ];
+    const expected = dispatches.flatMap((slot) => [
       { path: `/api/cron/${slot.phase}`, schedule: `0 ${(slot.hour - 2 + 24) % 24} * * *` },
       { path: `/api/cron/${slot.phase}`, schedule: `0 ${(slot.hour - 1 + 24) % 24} * * *` }
     ]);
@@ -35,7 +46,12 @@ describe("the deployed Vercel schedule matches the meeting clock", () => {
     const key = (entry: CronEntry) => `${entry.path} ${entry.schedule}`;
     expect([...actual].map(key).sort()).toEqual([...expected].map(key).sort());
     expect(MEETING_CLOCK.length).toBeGreaterThan(0);
-    expect(actual).toHaveLength(MEETING_CLOCK.length * 2);
+    expect(actual).toHaveLength(dispatches.length * 2);
+    // The retry hour must stay off the meeting clock: resolveScheduledPhase has to be able to
+    // name exactly one phase for a Prague hour, and the story meeting owns this one.
+    expect(MEETING_CLOCK.some((slot) => slot.hour === EDITION_RETRY_HOUR)).toBe(true);
+    expect(MEETING_CLOCK.find((slot) => slot.hour === EDITION_RETRY_HOUR)?.phase)
+      .not.toBe(EDITION_RETRY_PHASE);
   });
 
   it("stays inside Vercel's documented cron limits", async () => {

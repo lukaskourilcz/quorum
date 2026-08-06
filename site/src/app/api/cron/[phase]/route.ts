@@ -3,9 +3,9 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  dispatchHoursFor,
   parseScheduledPhase,
   pragueHour,
-  resolveCronSlots,
   type ScheduledPhase
 } from "@/lib/cron-slots";
 
@@ -58,11 +58,15 @@ function isVercelCron(header: string | null): boolean {
   return timingSafeEqual(digest(header ?? ""), digest(`Bearer ${secret}`));
 }
 
-async function slotHourFor(phase: ScheduledPhase): Promise<number | null> {
+/**
+ * The Prague hours this phase may be dispatched at: its meeting slot, and for the edition slot
+ * the same-day retry hour as well.
+ */
+async function slotHoursFor(phase: ScheduledPhase): Promise<number[]> {
   const registry = JSON.parse(
     await readFile(path.join(repositoryRoot(), "config", "ventures.json"), "utf8")
   ) as unknown;
-  return resolveCronSlots(registry).find((slot) => slot.phase === phase)?.hour ?? null;
+  return dispatchHoursFor(registry, phase);
 }
 
 async function dispatch(phase: ScheduledPhase, token: string): Promise<Response> {
@@ -106,16 +110,16 @@ export async function GET(
   const phase = parseScheduledPhase((await context.params).phase);
   if (!phase) return Response.json({ dispatched: false, reason: "unknown-phase" }, { status: 404 });
 
-  let slotHour: number | null;
+  let slotHours: number[];
   try {
-    slotHour = await slotHourFor(phase);
+    slotHours = await slotHoursFor(phase);
   } catch {
     // A registry that cannot be read is not a reason to fire blind. Refusing costs one late
     // meeting, which the GitHub schedule still covers; guessing costs a paid run at the wrong
     // hour for the wrong room.
     return Response.json({ dispatched: false, phase, reason: "registry-unreadable" }, { status: 503 });
   }
-  if (slotHour === null) {
+  if (slotHours.length === 0) {
     return Response.json({ dispatched: false, phase, reason: "phase-has-no-slot" }, { status: 404 });
   }
 
@@ -124,11 +128,20 @@ export async function GET(
   // lands inside the Prague hour the meeting belongs to; the other is an hour off and does
   // nothing. Reading the offset at the moment of the call rather than from the calendar is what
   // makes the two changeover days work without a special case.
+  //
+  // The edition slot carries a second hour as well as a second variant: its same-day retry. A
+  // firing at either hour is live; everything else is the off-by-one variant doing nothing.
   const now = new Date();
   const wallHour = pragueHour(now);
-  if (wallHour !== slotHour) {
+  if (!slotHours.includes(wallHour)) {
     return Response.json(
-      { dispatched: false, phase, reason: "inactive-dst-variant", pragueHour: wallHour, slotHour },
+      {
+        dispatched: false,
+        phase,
+        reason: "inactive-dst-variant",
+        pragueHour: wallHour,
+        slotHour: slotHours[0] ?? null
+      },
       { status: 200 }
     );
   }

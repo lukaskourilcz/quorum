@@ -1,0 +1,99 @@
+import { mkdtempSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { EDITION_RETRY_HOUR, EDITION_RETRY_PHASE, MEETING_CLOCK } from "../src/meetings/clock.js";
+
+vi.mock("../src/paths.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../src/paths.js")>();
+  const root = mkdtempSync(path.join(os.tmpdir(), "edition-retry-"));
+  process.env.EDITION_RETRY_TEST_STATE_ROOT = root;
+  return { ...actual, stateRoot: root };
+});
+
+const { runCycle } = await import("../src/cycle.js");
+
+const testStateRoot = process.env.EDITION_RETRY_TEST_STATE_ROOT!;
+
+/** 09:00 Prague on 4 August 2026 (CEST), the retry hour. */
+const AT_RETRY = new Date("2026-08-04T07:00:00.000Z");
+
+async function seedRecordFor(date: string): Promise<void> {
+  await mkdir(path.join(testStateRoot, "meetings"), { recursive: true });
+  await writeFile(
+    path.join(testStateRoot, "meetings", `${date}-cu-edition.json`),
+    JSON.stringify({ status: "NO_EDITION", date }),
+    "utf8"
+  );
+}
+
+async function seedDelivery(date: string): Promise<void> {
+  await mkdir(path.join(testStateRoot, "edition", "deliveries"), { recursive: true });
+  await writeFile(
+    path.join(testStateRoot, "edition", "deliveries", `${date}.json`),
+    JSON.stringify({ status: "delivered", editionStatus: "edition", tags: ["ai-agenti"] }),
+    "utf8"
+  );
+}
+
+function runEdition(now: Date) {
+  return runCycle({
+    phase: "cu-edition",
+    dry: false,
+    explainBudget: false,
+    explainRouting: false,
+    now
+  });
+}
+
+/**
+ * Every delivered edition except 6 August needed a second run, and every second run that ran
+ * succeeded: the first attempt lost to a source gate, a reserve refusal or a transient provider
+ * failure, all of which pass an hour later. The retry is what gives the day that second attempt.
+ */
+describe("the edition slot's same-day retry", () => {
+  beforeEach(() => {
+    vi.stubEnv("MEETING_TRIGGER", "schedule");
+    vi.stubEnv("CAUGHT_UP_LIVE_ENABLED", "");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("is not a meeting slot, because the story meeting owns that Prague hour", () => {
+    const occupant = MEETING_CLOCK.find((slot) => slot.hour === EDITION_RETRY_HOUR);
+    expect(occupant).toBeDefined();
+    expect(occupant?.phase).not.toBe(EDITION_RETRY_PHASE);
+    // resolveScheduledPhase has to name exactly one phase for a Prague hour, so a retry added to
+    // the clock would take the story meeting's hour with it.
+    expect(MEETING_CLOCK.filter((slot) => slot.hour === EDITION_RETRY_HOUR)).toHaveLength(1);
+  });
+
+  it("gets past the double-fire guard and lets the delivery receipt decide", async () => {
+    // The 05:00 firing always leaves meetings/<date>-cu-edition.json, whatever it decided, and
+    // the guard reads exactly that file -- so without the exemption the retry would return
+    // already_recorded before reading anything about the day. What decides instead is whether an
+    // edition was actually delivered, and on a morning that published, the retry costs $0.
+    await seedRecordFor("2026-08-04");
+    await seedDelivery("2026-08-04");
+
+    const result = await runEdition(AT_RETRY);
+
+    expect(result.status).toBe("preflight_complete");
+    expect(result.decision).toBe("NO_ACTION");
+    expect(result.selectedAgents).toEqual([]);
+    expect(result.artifacts).toEqual(["state/edition/deliveries/2026-08-04.json"]);
+  });
+
+  it("still stops a second firing at the slot's own hour", async () => {
+    // The exemption is for the retry hour and nothing else. Two schedules reaching for the 05:00
+    // slot is the case the guard exists for and is unchanged.
+    await seedRecordFor("2026-08-06");
+
+    const result = await runEdition(new Date("2026-08-06T03:00:00.000Z"));
+
+    expect(result.status).toBe("already_recorded");
+  });
+});

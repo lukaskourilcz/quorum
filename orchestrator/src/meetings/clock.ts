@@ -194,6 +194,25 @@ export function resolveCronPhase(cron: string, at: Date): ScheduledPhase | null 
   return delivery.outcome === "meeting" ? delivery.phase : null;
 }
 
+/**
+ * The Prague hour the edition slot gets a second dispatch at, and why it is not a meeting.
+ *
+ * Every delivered edition except 6 August needed a second run, and every second run that ran
+ * succeeded — the first attempt was losing to a source gate, a reserve refusal or a transient
+ * provider failure, all of which pass an hour later. So the 05:00 slot gets one more firing the
+ * same morning.
+ *
+ * It is deliberately not a slot on MEETING_CLOCK. A slot is a meeting: it owns a Prague hour, it
+ * owes the calendar a record, and resolveScheduledPhase below has to be able to name exactly one
+ * phase for an hour — 09:00 already belongs to the story meeting. This is a second attempt at a
+ * slot that already exists, so it lives in the dispatch layer only: the punctual Vercel route
+ * fires it, the run reaches hasDeliveredPublishedEdition, and a morning that already published
+ * costs $0 and writes nothing.
+ */
+export const EDITION_RETRY_HOUR = 9;
+
+export const EDITION_RETRY_PHASE = "cu-edition" as const;
+
 export function resolveScheduledPhase(
   at: Date,
   graceMinutes = 20

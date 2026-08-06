@@ -159,6 +159,38 @@ describe("the cron route dispatches the slot it was called for", () => {
     expect(calls).toHaveLength(0);
   });
 
+  it("dispatches the edition slot at its own hour and again at the retry hour", async () => {
+    // Every delivered edition except 6 August needed a second run, and every second run that ran
+    // succeeded. The retry is a second dispatch of cu-edition, not a slot: 09:00 Prague belongs
+    // to the story meeting, and the run itself decides whether there is anything left to do.
+    vi.setSystemTime(new Date("2026-08-04T03:00:00.000Z"));
+    expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(202);
+    expect(calls).toHaveLength(1);
+
+    calls = [];
+    vi.setSystemTime(new Date("2026-08-04T07:00:00.000Z"));
+    expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(202);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.body).toEqual({
+      ref: "main",
+      inputs: { phase: "cu-edition", trigger: "vercel-cron" }
+    });
+
+    // Neither retry entry's off-by-one variant fires, and no other hour does either.
+    calls = [];
+    vi.setSystemTime(new Date("2026-08-04T08:00:00.000Z"));
+    expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(200);
+    vi.setSystemTime(new Date("2026-08-04T09:00:00.000Z"));
+    expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(200);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("gives no other phase a retry hour", async () => {
+    vi.setSystemTime(new Date("2026-08-04T07:00:00.000Z"));
+    expect((await call("morning", `Bearer ${SECRET}`)).status).toBe(200);
+    expect(calls).toHaveLength(0);
+  });
+
   it("refuses a phase that is not scheduled", async () => {
     const response = await call("founding", `Bearer ${SECRET}`);
     expect(response.status).toBe(404);

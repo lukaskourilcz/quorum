@@ -163,6 +163,30 @@ export function cronUtcHours(hour: number): [number, number] {
   return [(hour - 2 + 24) % 24, (hour - 1 + 24) % 24];
 }
 
+/**
+ * The Prague hour the edition slot gets a second dispatch at.
+ *
+ * Mirrors EDITION_RETRY_HOUR in orchestrator/src/meetings/clock.ts, the same way this whole
+ * module mirrors the meeting clock, and cron-slots.test.ts fails when the two disagree.
+ *
+ * It is not in resolveCronSlots and must not be: that list is the meeting clock, one phase per
+ * Prague hour, and 09:00 already belongs to the story meeting. This is a second attempt at the
+ * 05:00 slot rather than a meeting of its own — the run it dispatches costs $0 and writes
+ * nothing on a morning that already published.
+ */
+export const EDITION_RETRY_HOUR = 9;
+
+export const EDITION_RETRY_PHASE: ScheduledPhase = "cu-edition";
+
+/** Every Prague hour a phase may be dispatched at: its slot, plus the edition retry. */
+export function dispatchHoursFor(registry: unknown, phase: ScheduledPhase): number[] {
+  const slotHour = resolveCronSlots(registry).find((slot) => slot.phase === phase)?.hour;
+  return [
+    ...(slotHour === undefined ? [] : [slotHour]),
+    ...(phase === EDITION_RETRY_PHASE ? [EDITION_RETRY_HOUR] : [])
+  ];
+}
+
 /** The cron path this repository schedules a phase under. */
 export function cronPathForPhase(phase: ScheduledPhase): string {
   return `/api/cron/${phase}`;
@@ -177,7 +201,11 @@ export function cronPathForPhase(phase: ScheduledPhase): string {
  * segment is the supported mechanism and the query string is an assumption this does not make.
  */
 export function expectedCronEntries(registry: unknown): Array<{ path: string; schedule: string }> {
-  return resolveCronSlots(registry).flatMap((slot) =>
+  const dispatches = [
+    ...resolveCronSlots(registry),
+    { phase: EDITION_RETRY_PHASE, hour: EDITION_RETRY_HOUR }
+  ];
+  return dispatches.flatMap((slot) =>
     cronUtcHours(slot.hour).map((utcHour) => ({
       path: cronPathForPhase(slot.phase),
       schedule: `0 ${utcHour} * * *`

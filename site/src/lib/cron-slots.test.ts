@@ -134,6 +134,8 @@ describe("the deployed vercel.json", () => {
     ) as { crons: Array<{ path: string; schedule: string }> };
     const key = (entry: { path: string; schedule: string }) => `${entry.path} ${entry.schedule}`;
     expect(deployed.crons.map(key).sort()).toEqual(expectedCronEntries(await registry()).map(key).sort());
-    expect(deployed.crons).toHaveLength(SCHEDULED_PHASES.length * 2);
+    // One entry per daylight-saving variant for every scheduled phase, plus the two the edition
+    // slot's same-day retry adds. The retry is a second dispatch of cu-edition, not a phase.
+    expect(deployed.crons).toHaveLength((SCHEDULED_PHASES.length + 1) * 2);
   });
 });

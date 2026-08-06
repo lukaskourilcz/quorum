@@ -28,7 +28,7 @@ import {
   writeCalendarFeed
 } from "./meetings/calendar.js";
 import { isCaughtUpPhase, isPortfolioPhase } from "./meetings/clock.js";
-import { pragueClockParts } from "./meetings/clock.js";
+import { EDITION_RETRY_HOUR, EDITION_RETRY_PHASE, pragueClockParts } from "./meetings/clock.js";
 import {
   MEETING_AGENDA_PATH,
   loadMeetingPolicy,
@@ -1196,8 +1196,17 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   //   - Anything but the current Prague day. Yesterday's record never blocks today's slot.
   //   - Manual work. The gate is MEETING_TRIGGER, so only a firing that claims a slot is
   //     stopped; an owner dispatching a phase deliberately still gets the run they asked for.
+  //   - The edition slot's same-day retry, which is a second firing of cu-edition on purpose.
+  //     Every delivered edition except 6 August needed a second run and every second run that
+  //     ran succeeded, so EDITION_RETRY_HOUR exists to give the day one more attempt. The 05:00
+  //     firing always leaves a meeting record, so this guard would refuse the retry before it
+  //     could read anything; hasDeliveredPublishedEdition is what decides instead, and a morning
+  //     that already published costs $0 and writes nothing.
   const scheduledPhase = ScheduledPhaseSchema.safeParse(options.phase);
-  if (!options.dry && scheduledPhase.success && process.env.MEETING_TRIGGER === "schedule") {
+  const editionRetry = scheduledPhase.success
+    && scheduledPhase.data === EDITION_RETRY_PHASE
+    && pragueClockParts(now).hour === EDITION_RETRY_HOUR;
+  if (!options.dry && !editionRetry && scheduledPhase.success && process.env.MEETING_TRIGGER === "schedule") {
     const recorded = await findSlotRecord(stateRoot, scheduledPhase.data, now);
     // A no-op, not a failure. A second firing for a slot that already ran is the transition
     // working, so it exits the way a healthy run does and says what it found.
