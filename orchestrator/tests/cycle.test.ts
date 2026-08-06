@@ -133,11 +133,11 @@ describe("cycle preflight", () => {
     }
   });
 
-  it("runs all three new portfolio phases as bounded dry records without per-meeting email", async () => {
+  it("runs every portfolio room as a bounded dry record without per-meeting email", async () => {
+    // The incubator rooms were the other two entries here. The venture is paused and holds no
+    // meeting, so there is no definition for the dry room to compose.
     const phases = [
-      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT", "FUNNEL"] },
-      { phase: "incubator-scan" as const, now: new Date("2026-08-04T05:00:00.000Z"), cast: ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"] },
-      { phase: "incubator-synthesis" as const, now: new Date("2026-08-04T19:00:00.000Z"), cast: ["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT", "AUDIT"] }
+      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT", "FUNNEL"] }
     ];
     for (const fixture of phases) {
       const result = await runCycle({ ...fixture, dry: true, explainBudget: false, explainRouting: false });
@@ -148,7 +148,7 @@ describe("cycle preflight", () => {
       const record = MeetingRecordSchema.parse(JSON.parse(await readFile(path.join(repoRoot, `tmp/dry-run/state/meetings/${date}-${fixture.phase}.json`), "utf8")));
       expect(record.fixture).toBe(true);
       expect(record.ledger.actualCycleUsd).toBe(0);
-      expect(record.roomTranscript.turns.length).toBeLessThanOrEqual(fixture.phase === "incubator-scan" ? 12 : fixture.phase === "incubator-synthesis" ? 18 : 22);
+      expect(record.roomTranscript.turns.length).toBeLessThanOrEqual(22);
       if (fixture.phase === "tt-marketing") {
         const planId = `plan-${date}-campaign-notes`;
         const plan = JSON.parse(await readFile(path.join(repoRoot, `tmp/dry-run/state/ventures/titty-tuesdays/plans/${planId}.json`), "utf8"));
@@ -164,13 +164,15 @@ describe("cycle preflight", () => {
     const previous = process.env.PORTFOLIO_LIVE_ENABLED;
     delete process.env.PORTFOLIO_LIVE_ENABLED;
     try {
-      for (const phase of ["tt-marketing", "incubator-scan", "incubator-synthesis"] as const) {
+      for (const phase of ["tt-marketing", "mma-intake", "mag-desk"] as const) {
         const result = await runCycle({
           phase,
           dry: false,
           explainBudget: false,
           explainRouting: false,
-          now: new Date("2026-08-04T19:00:00.000Z")
+          // A date with no committed record for any of these rooms, so the same-date guard is
+          // not what answers here -- the owner gate is.
+          now: new Date("2026-12-01T19:00:00.000Z")
         });
         expect(result).toMatchObject({ status: "paused", decision: "PAUSED", artifacts: [] });
       }

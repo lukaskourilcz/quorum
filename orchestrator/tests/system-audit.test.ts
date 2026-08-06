@@ -39,12 +39,27 @@ describe("closing 40-agent system audit", () => {
   });
 
   it("keeps all room envelopes inside the signed daily pace", async () => {
-    const registry = await json<{ ventures: Array<{ meetings: Array<{ envelopeUsd: number }> }> }>("config/ventures.json");
+    const registry = await json<{
+      ventures: Array<{
+        meetings: Array<{ envelopeUsd: number }>;
+        productionJobs?: Array<{ envelopeUsd: number }>;
+      }>;
+    }>("config/ventures.json");
     const roomEnvelopes = registry.ventures.flatMap((venture) => venture.meetings).reduce((sum, meeting) => sum + meeting.envelopeUsd, 0);
-    const maximumArticleProduction = 0.35 * 2;
+    // Read from the registry rather than pinned: the article slot reserves what it declares, and
+    // a literal here was still asserting two slots at an old per-run cap long after the desk
+    // moved to one article a day.
+    const articleProduction = registry.ventures
+      .flatMap((venture) => venture.productionJobs ?? [])
+      .reduce((sum, job) => sum + job.envelopeUsd, 0);
     const morningCycleCap = 0.2;
-    expect(roomEnvelopes).toBeCloseTo(0.64, 8);
-    expect(roomEnvelopes + maximumArticleProduction + morningCycleCap).toBeLessThanOrEqual(2.2);
+    // Seven rooms: two Caught Up, one Titty Tuesdays, two FightAIQ, two MMA Files. The studio and
+    // both incubator rooms are gone.
+    expect(roomEnvelopes).toBeCloseTo(0.46, 8);
+    // The whole clock, at every room's full envelope, has to fit inside the $1.00 daily pace
+    // budget-2026-08e signed -- which is the arithmetic that makes a full day affordable rather
+    // than a day whose last rooms cannot be funded.
+    expect(roomEnvelopes + articleProduction + morningCycleCap).toBeLessThanOrEqual(1);
   });
 
   it("keeps Carousel Studio free of provider SDKs and external template assets", async () => {

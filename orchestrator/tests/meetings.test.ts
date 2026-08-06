@@ -136,11 +136,11 @@ describe("Prague meeting clock", () => {
 
     expect(resolveScheduledPhase(new Date("2026-07-15T03:00:00.000Z"))).toBe("cu-edition");
     expect(resolveScheduledPhase(new Date("2026-07-15T04:00:00.000Z"))).toBe("morning");
-    expect(resolveScheduledPhase(new Date("2026-07-15T05:00:00.000Z"))).toBe("incubator-scan");
+    expect(resolveScheduledPhase(new Date("2026-07-15T06:00:00.000Z"))).toBe("mma-intake");
     expect(resolveScheduledPhase(new Date("2026-01-15T10:00:00.000Z"))).toBe("tt-marketing");
     expect(resolveScheduledPhase(new Date("2026-07-15T09:00:00.000Z"))).toBe("tt-marketing");
-    expect(resolveScheduledPhase(new Date("2026-01-15T20:00:00.000Z"))).toBe("incubator-synthesis");
-    expect(resolveScheduledPhase(new Date("2026-07-15T19:00:00.000Z"))).toBe("incubator-synthesis");
+    expect(resolveScheduledPhase(new Date("2026-01-15T19:00:00.000Z"))).toBe("mag-desk");
+    expect(resolveScheduledPhase(new Date("2026-07-15T18:00:00.000Z"))).toBe("mag-desk");
 
     expect(resolveScheduledPhase(new Date("2026-03-28T04:19:00.000Z"))).toBe("cu-edition");
     expect(resolveScheduledPhase(new Date("2026-03-29T03:20:00.000Z"))).toBe("cu-edition");

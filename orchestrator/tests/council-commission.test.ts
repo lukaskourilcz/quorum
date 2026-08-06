@@ -92,12 +92,12 @@ function reply(body: Record<string, unknown>): string {
 
 describe("commissionable rooms", () => {
   it("pairs every morning-requestable room with the venture the gate will check it against", () => {
+    // The incubator is paused and the studio holds no meeting, so neither has a room the
+    // morning board could commission.
     expect(rooms).toEqual([
       { ventureId: "titty-tuesdays", phase: "tt-marketing" },
-      { ventureId: "incubator", phase: "incubator-scan" },
       { ventureId: "fightaiq", phase: "mma-intake" },
-      { ventureId: "mma-files", phase: "mag-desk" },
-      { ventureId: "carousel-studio", phase: "studio" }
+      { ventureId: "mma-files", phase: "mag-desk" }
     ]);
 
     for (const room of rooms) {
@@ -246,13 +246,13 @@ describe("morning commission gate", () => {
   it("says whose item was cited when the room belongs to another venture", () => {
     const outcome = resolveMorningCommission({
       ...base,
-      positions: positions({ request: { ...validRequest, phase: "studio" } }),
+      positions: positions({ request: { ...validRequest, phase: "mag-desk" } }),
       openPriorities: [priority()]
     });
 
     expect(outcome.commission).toBe(false);
     if (outcome.commission) throw new Error("expected no commission");
-    expect(outcome.reason).toContain("carousel-studio");
+    expect(outcome.reason).toContain("mma-files");
     expect(outcome.reason).toContain("titty-tuesdays");
   });
 
@@ -279,7 +279,7 @@ describe("morning commission gate", () => {
       }),
       resolveMorningCommission({
         ...base,
-        positions: positions({ request: { ...validRequest, phase: "studio" } }),
+        positions: positions({ request: { ...validRequest, phase: "mag-desk" } }),
         openPriorities: [priority()]
       })
     ];
@@ -306,7 +306,7 @@ describe("scheduler refusal", () => {
   });
 
   it("still reads as a sentence when the scheduler threw a non-Error", () => {
-    expect(schedulerBlockedReason("studio", "boom")).toContain("unknown scheduler error");
+    expect(schedulerBlockedReason("mag-desk", "boom")).toContain("unknown scheduler error");
   });
 });
 
@@ -338,7 +338,7 @@ describe("every published reason fits the standup record", () => {
       }),
       resolveMorningCommission({
         policy, registry, sourcePhase: "morning",
-        positions: positions({ request: { ...validRequest, phase: "studio" } }),
+        positions: positions({ request: { ...validRequest, phase: "mag-desk" } }),
         openPriorities: [priority()]
       })
     ];
@@ -502,7 +502,7 @@ describe("how many rooms one morning opens", () => {
   const base = { policy, registry, sourcePhase: "morning" as const };
   const ttItem = priority();
   const mmaItem = priority({ id: "priority-fedcba9876543210", venture: "mma-files" });
-  const incubatorItem = priority({ id: "priority-aaaabbbbccccdddd", venture: "incubator" });
+  const editorialItem = priority({ id: "priority-aaaabbbbccccdddd", venture: "fightaiq" });
   const ttRequest = validRequest;
   const mmaRequest = {
     priorityItemId: mmaItem.id,
@@ -510,10 +510,10 @@ describe("how many rooms one morning opens", () => {
     summary: "Decide whether tomorrow's article covers the main card or the prelims.",
     evidenceRefs: []
   };
-  const incubatorRequest = {
-    priorityItemId: incubatorItem.id,
-    phase: "incubator-scan" as const,
-    summary: "Decide whether the niche shortlist is worth a research room.",
+  const editorialRequest = {
+    priorityItemId: editorialItem.id,
+    phase: "mma-intake" as const,
+    summary: "Decide whether the roster backfill or the card gaps come first tomorrow.",
     evidenceRefs: []
   };
 
@@ -553,9 +553,9 @@ describe("how many rooms one morning opens", () => {
   it("never opens more rooms than the policy allows", () => {
     const resolved = resolveMorningCommissions({
       ...base,
-      openPriorities: [ttItem, mmaItem, incubatorItem],
+      openPriorities: [ttItem, mmaItem, editorialItem],
       positions: positions({
-        requests: { VIZE: ttRequest, FORGE: mmaRequest, PULSE: incubatorRequest }
+        requests: { VIZE: ttRequest, FORGE: mmaRequest, PULSE: editorialRequest }
       })
     });
 

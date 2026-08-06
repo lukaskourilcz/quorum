@@ -9,6 +9,18 @@ import {
   openObject
 } from "./common.js";
 
+/**
+ * Phases an agenda may be filed for.
+ *
+ * `studio` is gone: the room never held a live session, its only unique capability produced
+ * nothing any consumer read, and everything the venture delivers is deterministic code that
+ * renders at $0. Its historical meeting records stay readable, because MeetingRecord's own kind
+ * enum is unchanged and past pages still have to render.
+ *
+ * The two incubator phases stay in this list although the venture is paused and neither room is
+ * on the clock. The venture is parked for revival with all of its state, and taking its phases
+ * out of the contract would mean rewriting the contract again to bring it back.
+ */
 export const AgendaPhaseSchema = z.enum([
   "tt-marketing",
   "incubator-scan",
@@ -16,8 +28,7 @@ export const AgendaPhaseSchema = z.enum([
   "mma-intake",
   "mma-analysis",
   "mag-editorial",
-  "mag-desk",
-  "studio"
+  "mag-desk"
 ]);
 
 export const MeetingAgendaSchema = openObject({

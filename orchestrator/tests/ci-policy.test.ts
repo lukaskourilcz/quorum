@@ -49,10 +49,10 @@ describe("automation policy", () => {
 
     expect(
       cycle.match(new RegExp(`- cron: "${CRON_MINUTE} \\d{1,2} \\* \\* \\*"`, "g"))
-    ).toHaveLength(18);
+    ).toHaveLength(17);
     // The hours meetings BELONG to, which is the list this schedule has always been described by.
     // The cron that serves each fires CRON_HOUR_CARRY hours earlier, at CRON_MINUTE.
-    for (const hour of [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20]) {
+    for (const hour of [2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 16, 17, 18, 19, 20]) {
       expect(cycle).toContain(`cron: "${CRON_MINUTE} ${(hour - CRON_HOUR_CARRY + 24) % 24} * * *"`);
     }
     // The fired cron is what names the meeting, so it has to reach the resolver.
@@ -200,7 +200,7 @@ describe("automation policy", () => {
         schedules.push({ file: name, expression: match[1]! });
       }
     }
-    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(20);
+    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(19);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;

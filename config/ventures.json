@@ -105,7 +105,7 @@
     {
       "id": "incubator",
       "name": "Magazine Incubator",
-      "status": "exploration",
+      "status": "paused",
       "taste": true,
       "ledgerNamespace": "incubator",
       "growth_objective": {
@@ -117,53 +117,7 @@
       "adminTabs": [
         "niche-proposals"
       ],
-      "meetings": [
-        {
-          "kind": "incubator-scan",
-          "label": "Incubator evidence scan",
-          "cadence": "daily@07:00",
-          "cast": [
-            "PULSE",
-            "ANGLE",
-            "SCOUT",
-            "COHORT",
-            "VAULT"
-          ],
-          "envelopeUsd": 0.06,
-          "packet": {
-            "topicType": "growth",
-            "decisionNeeded": "PLAN",
-            "preset": "incubator-scan-room",
-            "objectives": {
-              "dry": "Return zero candidates without a cited external evidence packet",
-              "live": "Bring cited daily-readable candidate domains and reject repeats; this scan does not found anything"
-            }
-          }
-        },
-        {
-          "kind": "incubator-synthesis",
-          "label": "Incubator proposal synthesis",
-          "cadence": "daily@21:00",
-          "cast": [
-            "PULSE",
-            "ANGLE",
-            "SCOUT",
-            "COHORT",
-            "VAULT",
-            "AUDIT"
-          ],
-          "envelopeUsd": 0.06,
-          "packet": {
-            "topicType": "growth",
-            "decisionNeeded": "PLAN",
-            "preset": "incubator-synthesis-room",
-            "objectives": {
-              "dry": "Return zero proposals when the scan produced no evidenced candidates",
-              "live": "Argue the evidenced scan down to zero, one or two complete proposals; AUDIT may pass the first into deterministic template founding"
-            }
-          }
-        }
-      ]
+      "meetings": []
     },
     {
       "id": "fightaiq",
@@ -250,33 +204,9 @@
       "adminTabs": [
         "templates",
         "decks",
-        "inspiration",
-        "social-lab"
+        "inspiration"
       ],
-      "meetings": [
-        {
-          "kind": "studio",
-          "label": "Carousel Studio room",
-          "cadence": "daily@13:00",
-          "cast": [
-            "EASEL",
-            "MOTIF",
-            "KEEPER",
-            "AUDIT",
-            "SCRIBE"
-          ],
-          "envelopeUsd": 0.06,
-          "packet": {
-            "topicType": "social",
-            "decisionNeeded": "PLAN",
-            "preset": "studio-room",
-            "objectives": {
-              "dry": "Check fixture observations and the live template catalog without creating external work or spend",
-              "live": "Turn allowed, cited layout observations into one original proposal or improve the checked live library"
-            }
-          }
-        }
-      ]
+      "meetings": []
     },
     {
       "id": "mma-files",

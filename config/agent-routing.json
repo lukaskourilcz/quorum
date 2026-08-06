@@ -280,10 +280,6 @@
       "required": ["PEOPLE", "AUDIT", "KEEPER"],
       "includeAffectedAgent": true
     },
-    "studio-room": {
-      "required": ["EASEL", "MOTIF", "KEEPER", "AUDIT", "SCRIBE"],
-      "optionalByTopic": false
-    },
     "incident-room": {
       "required": ["AUDIT", "KEEPER", "FORGE"],
       "optionalByTopic": true

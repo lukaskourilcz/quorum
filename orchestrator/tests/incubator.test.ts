@@ -36,19 +36,20 @@ function rating(proposalId: string, value: "perfect" | "good" | "bad") {
 }
 
 describe("magazine incubator", () => {
-  it("registers a taste-enabled exploration workspace on the resolved research schedule", async () => {
+  it("is parked with its workspace intact and no room on the clock", async () => {
+    // Paused, not deleted. No owner goal needs new venture proposals now, nobody was acting on
+    // the ones produced, and the two rooms cost up to about $0.13 a day when they convened. All
+    // of the venture's state, its admin tab and its taste wiring stay exactly where they are, so
+    // reviving it is putting two meetings back in this file.
     const venture = (await loadVentureRegistry()).ventures.find((entry) => entry.id === "incubator");
     expect(venture).toMatchObject({
       name: "Magazine Incubator",
-      status: "exploration",
+      status: "paused",
       taste: true,
       ledgerNamespace: "incubator",
       adminTabs: ["niche-proposals"],
     });
-    expect(venture?.meetings.map(({ kind, cadence }) => ({ kind, cadence }))).toEqual([
-      { kind: "incubator-scan", cadence: "daily@07:00" },
-      { kind: "incubator-synthesis", cadence: "daily@21:00" }
-    ]);
+    expect(venture?.meetings).toEqual([]);
   });
 
   it("reproduces both committed zero-cost dry meetings with the required squads", async () => {

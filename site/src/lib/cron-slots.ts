@@ -18,14 +18,11 @@ export const SCHEDULED_PHASES = [
   "afternoon",
   "cu-product",
   "tt-marketing",
-  "incubator-scan",
-  "incubator-synthesis",
   "mma-intake",
   "mma-analysis",
   "mag-editorial",
   "mag-desk",
   "article-am",
-  "studio",
   "night"
 ] as const;
 

@@ -74,11 +74,12 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
 
   it("never answers a neighbouring meeting when a run is very late", () => {
     // The wall clock read a run that started at 11:58 UTC as the 14:00 Prague company
-    // meeting, when the only cron that could have triggered it fired at 11:00 for studio.
-    // Running the wrong meeting is worse than running none. Studio sits at 13:00 Prague and
-    // the afternoon board at 14:00, an hour apart, and each keeps its own firing however late.
-    expect(resolveCronPhase("0 10 * * *", new Date("2026-08-02T10:58:00Z"))).toBe("studio");
-    expect(resolveCronPhase("0 11 * * *", new Date("2026-08-02T11:05:00Z"))).toBe("afternoon");
+    // meeting, when the only cron that could have triggered it fired an hour earlier for a
+    // different one. Running the wrong meeting is worse than running none. The story meeting
+    // sits at 09:00 Prague and the article slot at 10:00, an hour apart, and each keeps its own
+    // firing however late it is delivered.
+    expect(resolveCronPhase("55 5 * * *", delivered("55 5 * * *", [2026, 7, 2], 118))).toBe("mag-editorial");
+    expect(resolveCronPhase("55 6 * * *", delivered("55 6 * * *", [2026, 7, 2], 65))).toBe("article-am");
   });
 
   it("keeps the two daylight-saving variants apart", () => {

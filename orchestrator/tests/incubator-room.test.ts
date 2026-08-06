@@ -311,7 +311,15 @@ describe("the synthesis room reads whole blocks, not a prefix of them", () => {
     await mkdir(path.join(root, "meetings"), { recursive: true });
     await writeFile(path.join(root, "meetings", "2026-08-05-incubator-scan.json"), scanRecord);
     try {
-      const registry = await loadVentureRegistry();
+      // The venture is paused and holds no meeting, so its rooms are given back here rather
+      // than read off the registry: what this case is about is the packet the synthesis room is
+      // handed, not whether that room is currently on the clock.
+      const live = await loadVentureRegistry();
+      const registry = structuredClone(live);
+      registry.ventures.find((venture) => venture.id === "incubator")!.meetings = [
+        { ...live.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!, kind: "incubator-scan" },
+        { ...live.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!, kind: "incubator-synthesis" }
+      ];
       const context = await composePortfolioContext(
         "incubator-synthesis", root, "2026-08-05", registry, new Date("2026-08-05T19:00:00.000Z")
       );
@@ -386,24 +394,6 @@ describe("what one opening of the incubator room costs", () => {
     expect(result.writes).toEqual([]);
   });
 
-  it("prices one opening inside the room envelope and states it against the daily cap", async () => {
-    // The figure the comments quote, recomputed from the same inputs the room uses, so a model
-    // or prompt change that moves the price makes the documented cost fail rather than quietly
-    // become wrong. The margins matter: the room must stay under its $0.06 envelope, because
-    // run.ts throws "call graph exceeds envelope" rather than opening a room it cannot fund.
-    const registry = await loadVentureRegistry();
-    const incubator = registry.ventures.find((venture) => venture.id === "incubator")!;
-    const scan = incubator.meetings.find((meeting) => meeting.kind === "incubator-scan")!;
-    expect(scan.envelopeUsd).toBe(0.06);
-    // The pre-step is real: taste is on and the scan is the venture's first meeting, which is
-    // exactly the condition registry.ts turns "palate" on for.
-    expect(incubator.taste).toBe(true);
-    expect(incubator.meetings[0]?.kind).toBe("incubator-scan");
-    expect(INCUBATOR_OPENING_USD_TODAY).toBeLessThan(scan.envelopeUsd);
-    // With the palate pass added once an owner rating exists, an opening is still inside the
-    // envelope-plus-pre-step budget and under 7% of the $1.00 daily pace.
-    expect(INCUBATOR_OPENING_USD_TODAY + PALATE_PASS_BUDGET_USD).toBeLessThan(0.07);
-  });
 });
 
 describe("the length limits a shut record has to respect", () => {
@@ -433,352 +423,30 @@ describe("the length limits a shut record has to respect", () => {
   });
 });
 
-describe("the scan is terminal under the current budget shape", () => {
-  it("has no synthesis room to hand a follow-up to, and the schedule says so", async () => {
-    // Stated rather than implied. budget-2026-08-01 is unsigned, so the schedule falls back to
-    // shape B — "run one daily incubator meeting" — which drops incubator-synthesis. A scan
-    // chair's followUpRequest for it would otherwise queue an agenda that expires in three days
-    // with no room able to consume it, and the scan's record would claim it had handed work on.
-    const [registry, budgetDecisionRaw, budgetFiftyRaw] = await Promise.all([
-      loadVentureRegistry(),
-      readFile(path.join(repoRoot, "state", "decisions", "2026-08-01-budget-raise.md"), "utf8"),
-      readFile(path.join(repoRoot, "state", "decisions", "2026-08-04-budget-fifty.md"), "utf8")
-    ]);
-    const schedule = resolveEffectivePortfolioSchedule({
-      registry,
-      // Written when the raise was unsigned. The owner countersigned it on 2026-08-04, so
-      // reading the live file and asserting shape B would test the state of the repository
-      // rather than the rule these two cases are about. The signature is stripped back out.
-      budgetDecisionRaw: budgetDecisionRaw
-        .replace(/^Status:\s*countersigned\s*$/mi, "Status: pending owner countersignature")
-        .replace(/^Selection:.*$/mi, "Selection: [ ] Shape A  [ ] Shape B"),
-      budgetFiftyRaw,
-      monthlyApiHeadroomUsd: 25
-    });
-    // Not a headroom rung: this is at full headroom and the room is still absent.
-    expect(schedule.shape).toBe("B");
-    expect(phaseEnabled(schedule, "incubator-scan")).toBe(true);
-    expect(phaseEnabled(schedule, "incubator-synthesis")).toBe(false);
-    // The policy would still permit the hand-off, which is why run.ts checks the schedule too.
+/**
+ * The venture is paused: no owner goal needs new venture proposals now, nobody was acting on the
+ * ones produced, and the two rooms cost up to about $0.13 a day when they convened.
+ *
+ * Everything above this line still runs, because it is the machinery reviving the venture would
+ * depend on: the packet key that survives a re-keyed sweep, the whole-item context cut, the read
+ * log, and the parity between the sweep path and the trigger path. What is gone from this file
+ * is the set of cases that drove runPortfolioCycle through a room the registry no longer
+ * defines -- there is no route definition for them to compose.
+ */
+describe("the incubator rooms are parked, not merely quiet", () => {
+  it("has no meeting on the clock and no phase the board can commission", async () => {
+    const registry = await loadVentureRegistry();
+    const venture = registry.ventures.find((entry) => entry.id === "incubator")!;
+    expect(venture.status).toBe("paused");
+    expect(venture.meetings).toEqual([]);
+
     const policy = await loadMeetingPolicy();
-    expect(mayRequestMeeting(policy, "incubator-scan", "incubator-synthesis")).toBe(true);
-  });
+    expect(policy.agendaRequiredPhases).not.toContain("incubator-synthesis");
+    expect(policy.changeTriggeredPhases).not.toContain("incubator-scan");
+    expect(policy.transitions.morning).not.toContain("incubator-scan");
 
-});
-
-describe("a scheduled incubator scan, through runPortfolioCycle", () => {
-  const liveEnabled = process.env.PORTFOLIO_LIVE_ENABLED;
-  const trigger = process.env.MEETING_TRIGGER;
-
-  beforeAll(async () => {
-    process.env.PORTFOLIO_LIVE_ENABLED = "true";
-    process.env.MEETING_TRIGGER = "schedule";
-    await mkdir(path.join(testStateRoot, "decisions"), { recursive: true });
-    for (const decision of [
-      "2026-08-01-budget-raise.md",
-      "2026-08-02-budget-mma.md",
-      "2026-08-04-budget-fifty.md",
-      "2026-08-02-fightaiq-founding.md"
-    ]) {
-      const raw = await readFile(path.join(repoRoot, "state", "decisions", decision), "utf8");
-      // The budget raise was countersigned on 2026-08-04. These cases are about what happens
-      // while it is NOT, so the fixture copy has the signature stripped: copying the live file
-      // verbatim made them assert the state of the repository instead of the rule.
-      await writeFile(
-        path.join(testStateRoot, "decisions", decision),
-        decision === "2026-08-01-budget-raise.md"
-          ? raw
-              .replace(/^Status:\s*countersigned\s*$/mi, "Status: pending owner countersignature")
-              .replace(/^Selection:.*$/mi, "Selection: [ ] Shape A  [ ] Shape B")
-          : raw
-      );
-    }
-    await atomicWriteJson(testStateRoot, "budget/ledger.json", { schemaVersion: 1, entries: [] });
-  });
-
-  afterAll(async () => {
-    if (liveEnabled === undefined) delete process.env.PORTFOLIO_LIVE_ENABLED;
-    else process.env.PORTFOLIO_LIVE_ENABLED = liveEnabled;
-    if (trigger === undefined) delete process.env.MEETING_TRIGGER;
-    else process.env.MEETING_TRIGGER = trigger;
-    await rm(testStateRoot, { recursive: true, force: true });
-  });
-
-  beforeEach(() => {
-    sweep.calls = 0;
-  });
-
-  it("no longer needs an agenda nobody has ever issued", async () => {
-    const policy = await loadMeetingPolicy();
-    expect(phaseNeedsAgenda(policy, "incubator-scan")).toBe(false);
-    expect(phaseWakesOnChange(policy, "incubator-scan")).toBe(true);
-    // The queue is still the record of what a meeting asked for. Nothing has ever asked for
-    // this room, and this test does not put a request there.
-    const queue = JSON.parse(await readFile(
-      path.join(repoRoot, "state", "meeting-agendas", "queue.json"),
-      "utf8"
-    )) as { agendas: Array<{ phase: string }> };
-    expect(queue.agendas.some((agenda) => agenda.phase === "incubator-scan")).toBe(false);
-  });
-
-  it("opens on items no seat has read, and records what it read afterwards", async () => {
-    sweep.items = [item(1), item(2), item(3)];
-    const result = await run(new Date("2026-08-05T05:00:00.000Z"));
-
-    // The sweep has to run before the decision. On a state root with no packet yet, a decision
-    // taken first reads an absent file, finds nothing unread and closes the room — so this
-    // assertion fails if the two are ever swapped back.
-    expect(sweep.calls).toBe(1);
-    expect(result.status).toBe("live_complete");
-    expect(result.decision).toBe("PLAN");
-    expect(seats.called).toEqual(["PULSE", "ANGLE", "SCOUT", "COHORT", "VAULT"]);
-
-    const record = await meetingRecord("2026-08-05");
-    // HELD is what buildRecord stamps on a live room; PLAN is the fixture status.
-    expect(record.status).toBe("HELD");
-    expect(record.participantReasons.every((seat) => seat.participated)).toBe(true);
-
-    const log = await readIncubatorReadItems(testStateRoot);
-    expect(log.keys).toEqual(sweep.items.map((entry) => packetItemKey(entry as { url: string; title: string })));
-    expect(result.artifacts).toContain(path.relative(repoRoot, path.join(testStateRoot, INCUBATOR_READ_ITEMS_PATH)));
-  });
-
-  it("stays shut on the same items the next morning, and says that is why", async () => {
-    // Deleting the read-log write, or the unread comparison, opens a paid room every day on
-    // the same three stories. This is the case that catches it.
-    const result = await run(new Date("2026-08-06T05:00:00.000Z"));
-    expect(sweep.calls).toBe(1);
-    expect(result.status).toBe("paused");
-    expect(result.decision).toBe("PAUSED");
-    expect(seats.called).toEqual([]);
-
-    const record = await meetingRecord("2026-08-06");
-    expect(record.status).toBe("PAUSED");
-    // Every published line says the reason that applied, not the agenda queue's.
-    expect(record.operatingBrief).toContain("The check kept 3 stories and 3 of them fit what this meeting can read");
-    expect(record.operatingBrief).toContain("had been read at an earlier meeting");
-    expect(record.participantReasons).toHaveLength(5);
-    for (const seat of record.participantReasons) {
-      expect(seat.participated).toBe(false);
-      expect(seat.reason).toBe("registered for this meeting but not asked anything, because nothing new had arrived to read");
-    }
-    expect(record.roomTranscript.setting).toContain("already been read at an earlier meeting");
-    expect(record.roomTranscript.setting).not.toContain("agenda");
-    expect(record.growthPlan).toContain("already read");
-  });
-
-  it("opens again for one new item, and not for the three beside it", async () => {
-    sweep.items = [item(4), item(1), item(2), item(3)];
-    const result = await run(new Date("2026-08-07T05:00:00.000Z"));
-    expect(result.decision).toBe("PLAN");
-    expect(seats.called).toHaveLength(5);
-    const log = await readIncubatorReadItems(testStateRoot);
-    expect(log.keys).toHaveLength(4);
-    expect(log.keys).toContain(packetItemKey(item(4)));
-  });
-
-  it("stays shut when the same stories come back under different sourceIds", async () => {
-    // The race, driven through the whole run rather than through the key alone. Yesterday's four
-    // items return with every sourceId reassigned, exactly as a re-run of the same six workers
-    // can file them. Nothing about the day's news has changed, so no seat may be called.
-    //
-    // This is the case a mutation to packetItemKey has to fail. Reading sourceId here turns four
-    // already-read items into four unread ones and opens the room, so `seats.called` fills and
-    // the record stops being PAUSED.
-    //
-    // Its own Prague date, because a room that has already met on a date now returns its record
-    // rather than sitting again. Nothing here is about the time of day; what is being tested is
-    // that re-keyed items are still recognised as read.
-    sweep.items = [item(4), item(1), item(2), item(3)].map((entry, index) => ({
-      ...entry,
-      sourceId: `rebalanced-worker-${index}`
-    }));
-    const before = await readIncubatorReadItems(testStateRoot);
-    const result = await run(new Date("2026-08-11T05:00:00.000Z"));
-    expect(sweep.calls).toBe(1);
-    expect(result.decision).toBe("PAUSED");
-    expect(seats.called).toEqual([]);
-    // The read log is untouched: no new key, and no re-keying of the four already there.
-    const after = await readIncubatorReadItems(testStateRoot);
-    expect(after.keys).toEqual(before.keys);
-    expect(after.lastReadBy).toBe(before.lastReadBy);
-  });
-
-  it("does not queue the chair's follow-up to a room the budget shape has switched off", async () => {
-    // The scan is terminal today, and this is where that becomes visible rather than implied.
-    // PULSE chairs the scan and asks for incubator-synthesis; the meeting policy permits that
-    // transition, so without the schedule check an agenda would be written into the queue, live
-    // for three days, for a phase the workflow skips before the cycle even starts. The record
-    // would then show the scan handing work to a room that never sits.
-    //
-    // Its own Prague date, for the same reason as the case above.
-    sweep.items = [item(21), item(22)];
-    seats.followUp = {
-      phase: "incubator-synthesis",
-      summary: "Argue these two candidates down to a proposal.",
-      evidenceRefs: []
-    };
-    try {
-      const result = await run(new Date("2026-08-12T05:00:00.000Z"));
-      expect(result.decision).toBe("PLAN");
-      expect(seats.called).toHaveLength(5);
-      // Nothing was written to the agenda queue: the run did not list it as an artifact...
-      expect(result.artifacts.some((artifact) => artifact.includes("meeting-agendas"))).toBe(false);
-      // ...and no queue file for a synthesis room exists in this state root at all.
-      const queue = await readJson<{ agendas?: Array<{ phase: string }> }>(
-        testStateRoot, "meeting-agendas/queue.json", {}
-      );
-      expect((queue.agendas ?? []).some((agenda) => agenda.phase === "incubator-synthesis")).toBe(false);
-    } finally {
-      seats.followUp = null;
-    }
-  });
-
-  it("says the sweep came back empty rather than blaming the agenda queue", async () => {
-    sweep.items = [];
-    const result = await run(new Date("2026-08-08T05:00:00.000Z"));
-    expect(result.decision).toBe("PAUSED");
-    expect(seats.called).toEqual([]);
-    const record = await meetingRecord("2026-08-08");
-    expect(record.operatingBrief).toContain("returned nothing at all");
-    expect(record.participantReasons[0]?.reason).toContain("returned nothing to read");
-    expect(record.roomTranscript.setting).toContain("returned nothing at all");
-  });
-
-  it("lets a dry run say what the next scheduled run would decide, without sweeping", async () => {
-    // The dry room writes to tmp/dry-run and calls no model, so the only thing it can honestly
-    // report about this room is the live state root's own answer.
-    //
-    // The packet has to be non-empty for that to be worth asserting. While the live root held
-    // the empty packet the last sweep wrote, the preview reported all zeros — and so did the dry
-    // root, and so did any path at all, because tmp/dry-run/state/ventures/incubator/ does not
-    // exist and readJson falls back to its default. Swapping stateRoot for root in run.ts left
-    // this green. Seeding two unread items here gives the live root an answer no absent
-    // directory can produce, and the dry root's own answer is asserted to differ.
-    const seeded = [item(101), item(102)];
-    await atomicWriteJson(testStateRoot, INCUBATOR_EVIDENCE_PATH, {
-      schemaVersion: "incubator-evidence/1",
-      generatedAt: "2026-08-09T04:00:00.000Z",
-      refs: [...new Set(seeded.map((entry) => `source:${entry.sourceId}`))],
-      packet: JSON.stringify(seeded),
-      sourceResults: []
-    });
-    const printed: string[] = [];
-    const log = vi.spyOn(console, "log").mockImplementation((value: unknown) => {
-      printed.push(String(value));
-    });
-    sweep.calls = 0;
-    try {
-      await runPortfolioCycle({
-        phase: "incubator-scan",
-        cycleId: "20260809050000-incubator-scan",
-        dry: true,
-        explainBudget: false,
-        explainRouting: false,
-        now: new Date("2026-08-09T05:00:00.000Z")
-      });
-      log.mockRestore();
-      expect(sweep.calls).toBe(0);
-      const preview = printed
-        .map((line) => { try { return JSON.parse(line) as Record<string, unknown>; } catch { return null; } })
-        .find((value) => value?.event === "incubator_scan_trigger_preview");
-      // The live root's answer: two items on file, both shown, neither read by any earlier room.
-      expect(preview).toMatchObject({
-        packetPath: INCUBATOR_EVIDENCE_PATH,
-        packetOnDisk: true,
-        itemsInPacket: 2,
-        itemsShownToRoom: 2,
-        itemsNoSeatHasRead: 2,
-        wouldOpenOnThisPacket: true
-      });
-      expect(await incubatorScanTriggerPreview(testStateRoot)).toEqual(preview);
-      // The pin. The dry root has no packet at all, so pointing the preview there reports an
-      // absent packet — a different answer, and the one this test exists to reject.
-      const dryRoot = path.join(repoRoot, "tmp", "dry-run", "state");
-      const dryAnswer = await incubatorScanTriggerPreview(dryRoot);
-      expect(dryAnswer).toMatchObject({ packetOnDisk: false, itemsInPacket: 0, wouldOpenOnThisPacket: false });
-      expect(dryAnswer).not.toEqual(preview);
-      // ...and so does a path that does not exist, which is what made the old assertion vacuous.
-      expect(await incubatorScanTriggerPreview(`${testStateRoot}-nonexistent`)).toEqual(dryAnswer);
-      // An absent packet and an empty one are different states and must not read alike: both
-      // keep the room shut today, but only one of them means a sweep has ever run here.
-      const emptyRoot = `${testStateRoot}-empty-packet`;
-      await atomicWriteJson(emptyRoot, INCUBATOR_EVIDENCE_PATH, {
-        schemaVersion: "incubator-evidence/1",
-        generatedAt: "2026-08-09T04:00:00.000Z",
-        refs: [],
-        packet: "[]",
-        sourceResults: []
-      });
-      try {
-        const emptyAnswer = await incubatorScanTriggerPreview(emptyRoot);
-        expect(emptyAnswer).toMatchObject({ packetOnDisk: true, itemsInPacket: 0, wouldOpenOnThisPacket: false });
-        expect(emptyAnswer.note).not.toBe(dryAnswer.note);
-      } finally {
-        await rm(emptyRoot, { recursive: true, force: true });
-      }
-    } finally {
-      log.mockRestore();
-      // Put back the empty packet the last sweep left, which the next case reads. In a finally
-      // so that a failure here stays one failure instead of taking the next case with it.
-      await atomicWriteJson(testStateRoot, INCUBATOR_EVIDENCE_PATH, {
-        schemaVersion: "incubator-evidence/1",
-        generatedAt: "2026-08-08T04:00:00.000Z",
-        refs: [],
-        packet: "[]",
-        sourceResults: []
-      });
-    }
-  });
-
-  it("blames the month's spend for a closed room, not a decision the owner signed", async () => {
-    // phaseEnabled goes false for two unrelated reasons and the record used to name the
-    // countersigned budget shape for both. Spend the month down to the rung that closes this
-    // room and the record has to say so; the shape still funds it at full headroom.
-    await atomicWriteJson(testStateRoot, "budget/ledger.json", {
-      schemaVersion: 1,
-      entries: [{
-        ts: "2026-08-09T04:00:00.000Z",
-        cycleId: "20260809040000-cu-edition",
-        requestHash: "a".repeat(64),
-        phase: "cu-edition",
-        agent: "HERALD",
-        provider: "anthropic",
-        model: "claude-sonnet-4-6",
-        serviceTier: "default",
-        tokensIn: 1_000,
-        cachedTokensIn: 0,
-        tokensOut: 100,
-        toolUses: 0,
-        usd: 24,
-        kind: "text"
-      }]
-    });
-    try {
-      const result = await run(new Date("2026-08-10T05:00:00.000Z"));
-      expect(result.decision).toBe("PAUSED");
-      expect(sweep.calls).toBe(0);
-      const record = await meetingRecord("2026-08-10");
-      expect(record.operatingBrief).toContain("$1.00 of the $25.00 monthly budget for model calls is left");
-      expect(record.operatingBrief).toContain("too little to pay for this meeting");
-      expect(record.participantReasons[0]?.reason).toContain("monthly budget for model calls is left");
-      expect(record.roomTranscript.setting).toContain("This month's spending is what closed the meeting");
-      expect(record.roomTranscript.setting).not.toContain("countersigned budget shape");
-    } finally {
-      await atomicWriteJson(testStateRoot, "budget/ledger.json", { schemaVersion: 1, entries: [] });
-    }
-  });
-
-  it("leaves the read log alone when the room never opened", async () => {
-    // The sweep replaces the packet before any seat is called, so a room that closes after the
-    // sweep must not leave a log claiming the packet was read. Three rooms above opened and read
-    // six items between them; every shut run since wrote nothing, so the log still ends at the
-    // last room that actually sat.
-    const log = await readIncubatorReadItems(testStateRoot);
-    expect(log.keys).toHaveLength(6);
-    expect(log.lastReadBy).toBe("20260812050000-incubator-scan");
-    const evidence = await readJson<{ packet?: string }>(testStateRoot, INCUBATOR_EVIDENCE_PATH, {});
-    // ...even though the packet on disk is the empty one the last sweep wrote over it.
-    expect(evidence.packet).toBe("[]");
+    // Its state is untouched, which is the whole point of pausing rather than deleting.
+    expect(venture.adminTabs).toContain("niche-proposals");
+    expect(venture.taste).toBe(true);
   });
 });

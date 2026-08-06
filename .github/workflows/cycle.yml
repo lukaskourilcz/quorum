@@ -10,7 +10,6 @@ on:
     - cron: "55 6 * * *"
     - cron: "55 7 * * *"
     - cron: "55 8 * * *"
-    - cron: "55 9 * * *"
     - cron: "55 10 * * *"
     - cron: "55 11 * * *"
     - cron: "55 13 * * *"
@@ -33,14 +32,11 @@ on:
           - afternoon
           - cu-product
           - tt-marketing
-          - incubator-scan
-          - incubator-synthesis
           - mma-intake
           - mag-editorial
           - article-am
           - mma-analysis
           - mag-desk
-          - studio
           - night
       trigger:
         # What kind of firing this dispatch is, which decides whether it claims a slot.
@@ -99,8 +95,8 @@ jobs:
       # dispatched mma-intake passed the skip check and then paused itself:
       # portfolio/run.ts:467 reads process.env.PORTFOLIO_LIVE_ENABLED, saw undefined and
       # returned status "paused" with zero agents. cycle.ts:847 re-checks the MMA switch the
-      # same way. That silently blocked every portfolio phase — tt-marketing, both incubator
-      # rooms, mma-intake, mma-analysis, mag-editorial, mag-desk and studio.
+      # same way. That silently blocked every portfolio phase — tt-marketing, mma-intake,
+      # mma-analysis, mag-editorial and mag-desk.
       CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
       PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
       FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
@@ -238,7 +234,7 @@ jobs:
             fi
             echo "$skip_reason"
           fi
-          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "incubator-scan" || test "$phase" = "incubator-synthesis" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk" || test "$phase" = "studio"; }; then
+          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
               skip_reason="Portfolio meeting crons await explicit owner approval."
@@ -259,7 +255,7 @@ jobs:
               fi
             fi
           fi
-          if test "$dry" != "true" && { test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
+          if test "$dry" != "true" && { test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; } && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
             skip=true
             skip_reason="MMA Files awaits the 08d countersign and explicit live gate."
             echo "$skip_reason"
@@ -294,7 +290,7 @@ jobs:
           if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
             force_dry "Caught Up live mode awaits the explicit repository-variable approval gate."
           fi
-          if { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
+          if { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
             force_dry "Repository delivery credentials are missing, so this room could not deliver what it produced."
           fi
           if test "$delivery_only" != "true" && { test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; }; then

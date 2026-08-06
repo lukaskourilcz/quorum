@@ -1,20 +1,15 @@
 {
   "schemaVersion": "meeting-policy/1",
   "agendaRequiredPhases": [
-    "incubator-synthesis",
     "mma-analysis",
-    "mag-desk",
-    "studio"
+    "mag-desk"
   ],
-  "changeTriggeredPhases": ["mma-intake", "incubator-scan"],
+  "changeTriggeredPhases": ["mma-intake"],
   "standingAgendaPhases": ["tt-marketing"],
-  "servicePhases": ["cu-edition", "cu-product", "mag-editorial", "article-am", "article-pm"],
+  "servicePhases": ["cu-edition", "cu-product", "mag-editorial", "article-am"],
   "transitions": {
-    "morning": ["tt-marketing", "incubator-scan", "mma-intake", "mag-editorial", "mag-desk", "studio"],
-    "studio": ["studio"],
+    "morning": ["tt-marketing", "mma-intake", "mag-editorial", "mag-desk"],
     "tt-marketing": ["tt-marketing"],
-    "incubator-scan": ["incubator-synthesis"],
-    "incubator-synthesis": ["incubator-scan"],
     "mma-intake": ["mma-analysis", "mag-editorial", "mag-desk"],
     "mma-analysis": ["mma-intake", "mag-editorial"],
     "mag-editorial": ["mag-desk", "mma-intake"],

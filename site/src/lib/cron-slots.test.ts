@@ -23,17 +23,14 @@ describe("the slot table the cron route dispatches from", () => {
     expect(slots.map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
       "5:cu-edition",
       "6:morning",
-      "7:incubator-scan",
       "8:mma-intake",
       "9:mag-editorial",
       "10:article-am",
       "11:tt-marketing",
-      "13:studio",
       "14:afternoon",
       "17:cu-product",
       "19:mma-analysis",
       "20:mag-desk",
-      "21:incubator-synthesis",
       "22:night"
     ]);
   });
@@ -49,7 +46,7 @@ describe("the slot table the cron route dispatches from", () => {
     expect(() =>
       resolveCronSlots({
         schemaVersion: "venture-registry/1",
-        ventures: [{ meetings: [{ kind: "studio", cadence: "hourly" }] }]
+        ventures: [{ meetings: [{ kind: "mag-desk", cadence: "hourly" }] }]
       })
     ).toThrow(/Unsupported venture cadence/u);
   });
@@ -59,7 +56,7 @@ describe("the slot table the cron route dispatches from", () => {
       resolveCronSlots({
         schemaVersion: "venture-registry/1",
         ventures: [
-          { meetings: [{ kind: "studio", cadence: "daily@13:00" }] },
+          { meetings: [{ kind: "mag-desk", cadence: "daily@13:00" }] },
           { meetings: [{ kind: "tt-marketing", cadence: "daily@13:00" }] }
         ]
       })

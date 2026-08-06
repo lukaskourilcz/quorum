@@ -105,11 +105,11 @@ describe("a day with no record of its slots still gets one", () => {
     const existing = {
       schemaVersion: "meeting-skip/1",
       date: DATE,
-      phase: "studio",
+      phase: "mma-analysis",
       reason: "The countersign-aware budget shape disabled this phase.",
       decidedAt: `${DATE}T11:02:00.000Z`
     };
-    await writeFile(skipPath(root, "studio"), JSON.stringify(existing), "utf8");
+    await writeFile(skipPath(root, "mma-analysis"), JSON.stringify(existing), "utf8");
 
     const result = await reconcileMeetingDay(root, DATE, NOW);
 
@@ -119,7 +119,7 @@ describe("a day with no record of its slots still gets one", () => {
     expect(await readFile(recordFile, "utf8")).toBe(recordBefore);
     expect(await exists(skipPath(root, "cu-edition"))).toBe(false);
     expect(await exists(skipPath(root, "article-am"))).toBe(false);
-    expect(JSON.parse(await readFile(skipPath(root, "studio"), "utf8")).reason)
+    expect(JSON.parse(await readFile(skipPath(root, "mma-analysis"), "utf8")).reason)
       .toBe(existing.reason);
   });
 

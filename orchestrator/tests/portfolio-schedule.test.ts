@@ -39,9 +39,11 @@ Signature / explicit approval reference: owner-approval-2026-08-04`;
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 21, 22]);
+    // 07:00 and 21:00 left with the paused incubator, 13:00 with the studio room the venture no
+    // longer holds. 18:00 left with the evening article slot.
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 8, 9, 11, 14, 17, 19, 20, 22]);
     const colliding = structuredClone(registry);
-    colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@07:00";
+    colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
   });
 
@@ -65,17 +67,19 @@ describe("portfolio schedule and budget gate", () => {
       dailyBudgetUsd: 0.7,
       envelopeByPhase: { "tt-marketing": 0.06 }
     });
+    // Shape B's other cut was the incubator synthesis room, which is off the clock entirely now
+    // that the venture is paused, so the tt-marketing envelope is what tells the two shapes
+    // apart on a live registry.
     expect(fallback.activePhases).not.toContain("incubator-synthesis");
 
     // And what the committed decision actually says today, so the countersignature cannot be
     // reverted or corrupted without a test noticing.
     const live = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: pending, monthlyApiHeadroomUsd: 15 });
     expect(live.shape).toBe("A");
-    expect(live.activePhases).toContain("incubator-synthesis");
+    expect(live.envelopeByPhase["tt-marketing"]).toBe(0.08);
 
     const approved = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 18 });
     expect(approved).toMatchObject({ shape: "A", monthlyBudgetUsd: 18, dailyBudgetUsd: 1 });
-    expect(approved.activePhases).toContain("incubator-synthesis");
     expect(approved.envelopeByPhase["tt-marketing"]).toBe(0.08);
     expect(budgetDecisionStatus(shapeB)).toBe("countersigned-shape-b");
   });
@@ -138,7 +142,7 @@ describe("portfolio schedule and budget gate", () => {
     // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
     // 12:00 UTC is both studio's winter slot and the afternoon meeting's summer one.
     const expressions = scheduledCronExpressions(await loadVentureRegistry());
-    expect(expressions).toHaveLength(18);
+    expect(expressions).toHaveLength(17);
     // Every firing sits on CRON_MINUTE, off the start-of-hour queue GitHub warns about, and the
     // generator emits the same strings the workflow deploys — otherwise the resolver is only
     // ever exercised on expressions github.event.schedule will never send it.
@@ -154,9 +158,12 @@ describe("portfolio schedule and budget gate", () => {
 
   it("runs PALATE only as a pre-step on each taste venture's first meeting", async () => {
     const registry = await loadVentureRegistry();
+    // The taste pre-step runs on a taste venture's FIRST meeting of the day and nowhere else.
+    // The incubator rooms used to be the second half of this case; the venture is paused and
+    // holds no meeting, so the surviving pair is a taste venture against a non-taste one.
     expect(composeMeetingRouteDefinition(registry, "tt-marketing", "live").preSteps).toEqual(["palate"]);
-    expect(composeMeetingRouteDefinition(registry, "incubator-scan", "live").preSteps).toEqual(["palate"]);
-    expect(composeMeetingRouteDefinition(registry, "incubator-synthesis", "live").preSteps).toEqual([]);
+    expect(composeMeetingRouteDefinition(registry, "mag-editorial", "live").preSteps).toEqual(["palate"]);
+    expect(composeMeetingRouteDefinition(registry, "mag-desk", "live").preSteps).toEqual([]);
     expect(composeMeetingRouteDefinition(registry, "cu-edition", "live").preSteps).toEqual([]);
   });
 });
@@ -191,25 +198,5 @@ describe("Titty Tuesdays cadence wheel", () => {
       palatePreStep: true
     });
     expect(resolveTittyTuesdaysSlot({ date: "2026-10-30" }).kind).toBe("tt-marketing");
-  });
-});
-
-describe("the studio room reads the links it is given", () => {
-  it("refuses a board or a bare homepage the way the admin store does", async () => {
-    // The room filter checked only the https prefix, so a link the admin store would refuse
-    // could still reach the room if it arrived any other way.
-    const root = await mkdtemp(path.join(os.tmpdir(), "studio-links-"));
-    await mkdir(path.join(root, "ventures", "carousel-studio", "inspiration"), { recursive: true });
-    await writeFile(
-      path.join(root, "ventures", "carousel-studio", "inspiration", "owner-links.json"),
-      JSON.stringify({ links: [
-        { url: "https://www.pinterest.com/someone/a-board/" },
-        { url: "https://godly.website/" },
-        { url: "http://example.com/an-article" }
-      ] })
-    );
-    const context = await composePortfolioContext("studio", root, "2026-08-04", await loadVentureRegistry(), new Date("2026-08-04T11:00:00.000Z"));
-    expect(context.evidenceRefs).toEqual([]);
-    expect(context.text).toContain("Record no observations");
   });
 });

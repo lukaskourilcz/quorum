@@ -21,9 +21,13 @@ describe("meeting agenda queue", () => {
   it("allows only bounded transitions and picks the next available room date", async () => {
     const policy = await loadMeetingPolicy();
     expect(mayRequestMeeting(policy, "morning", "tt-marketing")).toBe(true);
-    expect(mayRequestMeeting(policy, "morning", "studio")).toBe(true);
-    expect(mayRequestMeeting(policy, "studio", "studio")).toBe(true);
-    expect(policy.agendaRequiredPhases).toContain("studio");
+    // The studio and both incubator rooms are off the clock: the studio never held a live
+    // session and the incubator's proposals were not being acted on. Their phases stay in the
+    // agenda contract so the paused incubator can be revived without another contract change,
+    // and the morning board can commission neither.
+    expect(mayRequestMeeting(policy, "morning", "incubator-scan")).toBe(false);
+    expect(mayRequestMeeting(policy, "morning", "mag-desk")).toBe(true);
+    expect(policy.agendaRequiredPhases).toContain("mag-desk");
     expect(phaseNeedsAgenda(policy, "tt-marketing")).toBe(false);
     expect(phaseHasStandingAgenda(policy, "tt-marketing")).toBe(true);
     expect(policy.servicePhases).not.toContain("tt-marketing");
@@ -40,12 +44,12 @@ describe("meeting agenda queue", () => {
     const request = {
       root,
       policy,
-      ventureId: "incubator",
-      phase: "incubator-scan" as const,
+      ventureId: "mma-files",
+      phase: "mag-desk" as const,
       requestedBy: "PULSE",
       sourcePhase: "morning",
       sourceMeetingRef: "standups/2026-08-01-morning",
-      summary: "Check one cited reader problem before asking the synthesis room to meet.",
+      summary: "Decide tomorrow's angle between the main card and the prelims.",
       notBefore: "2026-08-01",
       now: new Date("2026-08-01T04:00:00.000Z")
     };
@@ -54,12 +58,12 @@ describe("meeting agenda queue", () => {
     expect(first.created).toBe(true);
     expect(duplicate).toEqual({ agenda: first.agenda, created: false });
     const queue = await readMeetingAgendaQueue(root, request.now);
-    expect(dueMeetingAgenda(queue, "incubator-scan", "2026-08-01")?.id).toBe(first.agenda.id);
+    expect(dueMeetingAgenda(queue, "mag-desk", "2026-08-01")?.id).toBe(first.agenda.id);
 
     await consumeMeetingAgenda({
       root,
       agendaId: first.agenda.id,
-      cycleId: "20260801050000-incubator-scan",
+      cycleId: "20260801200000-mag-desk",
       now: new Date("2026-08-01T05:10:00.000Z")
     });
     const consumed = MeetingAgendaQueueSchema.parse(JSON.parse(await readFile(
@@ -68,7 +72,7 @@ describe("meeting agenda queue", () => {
     )));
     expect(consumed.agendas[0]).toMatchObject({
       status: "consumed",
-      consumedBy: "20260801050000-incubator-scan"
+      consumedBy: "20260801200000-mag-desk"
     });
 
     const expiring = await requestMeetingAgenda({
@@ -89,19 +93,19 @@ describe("meeting agenda queue", () => {
     const policy = { ...base, perVenturePendingCap: 1 };
     const now = new Date("2026-08-08T04:00:00.000Z");
     await requestMeetingAgenda({
-      root, policy, ventureId: "incubator", phase: "incubator-scan", requestedBy: "PULSE",
+      root, policy, ventureId: "fightaiq", phase: "mma-intake", requestedBy: "PULSE",
       sourcePhase: "morning", sourceMeetingRef: "standups/2026-08-08-morning",
       summary: "Check a cited reader problem.", notBefore: "2026-08-08", now
     });
     await expect(requestMeetingAgenda({
-      root, policy, ventureId: "incubator", phase: "incubator-scan", requestedBy: "PULSE",
+      root, policy, ventureId: "fightaiq", phase: "mma-intake", requestedBy: "PULSE",
       sourcePhase: "morning", sourceMeetingRef: "standups/2026-08-08-morning",
       summary: "Check the next cited reader problem.", notBefore: "2026-08-09", now
     })).rejects.toThrow("1-item pending limit");
     const queue = await readMeetingAgendaQueue(root, now);
-    expect(starvationList({ queue, ventureIds: ["incubator", "mma-files"], now }))
+    expect(starvationList({ queue, ventureIds: ["fightaiq", "mma-files"], now }))
       .toEqual([
-        { ventureId: "incubator", lastConsumedAt: null, daysWithoutConsumedAgenda: null },
+        { ventureId: "fightaiq", lastConsumedAt: null, daysWithoutConsumedAgenda: null },
         { ventureId: "mma-files", lastConsumedAt: null, daysWithoutConsumedAgenda: null }
       ]);
   });

@@ -55,7 +55,6 @@ import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { SINGLE_SLOT_CADENCE } from "../mma-files/live.js";
 import { spentSubjectRefs } from "../mma-files/repeat-window.js";
 import { resolveSlateEvidence } from "../mma-files/slate-evidence.js";
-import { fetchReadable } from "../sources/adapters/reader.js";
 import { loadArticlePackages } from "../mma-files/store.js";
 import { fightAiQBrief } from "../fightaiq/brief.js";
 import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
@@ -74,7 +73,6 @@ import { foundTemplateVenture, templateCandidateFromProposal } from "../ventures
 import { VentureTemplateSchema } from "../contracts/autonomy.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
-import { processStudioContribution } from "../studio/lifecycle.js";
 import {
   deterministicVaultAdjudicator,
   ideaIndexPath,
@@ -96,7 +94,7 @@ import {
   type IncubatorPacketItem
 } from "../incubator/packet.js";
 
-export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "studio";
+export type PortfolioPhase = "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),
@@ -318,7 +316,6 @@ function shiftedTimes(now: Date, count: number): string[] {
 }
 
 function portfolioChair(phase: PortfolioPhase): FoundingAgent {
-  if (phase === "studio") return "EASEL";
   if (phase === "mma-intake" || phase === "mma-analysis") return "FORGE";
   if (phase === "mag-editorial" || phase === "mag-desk") return "CANVAS";
   return "PULSE";
@@ -344,7 +341,6 @@ function buildRecord(input: {
 }): MeetingRecord {
   const isFightDesk = input.phase === "mma-intake" || input.phase === "mma-analysis";
   const isMagazine = input.phase === "mag-editorial" || input.phase === "mag-desk";
-  const isStudio = input.phase === "studio";
   const chair = portfolioChair(input.phase);
   const times = shiftedTimes(input.now, input.contributions.length + 2);
   const veto = input.contributions.find((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
@@ -354,8 +350,6 @@ function buildRecord(input: {
       ? input.phase === "mma-intake"
         ? "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
         : "Ran the D8 analysis gate. Only confirmed bouts with two eligible fighter cards can produce a Stats prediction."
-    : isStudio
-      ? input.contributions.find((contribution) => contribution.agent === "EASEL")?.summary ?? "The studio checked the current template library and recorded no new proposal."
     : input.phase === "mag-editorial" && input.editorialSlate
       ? input.editorialSlate.slots.map((slot) => `${slot.slot.toUpperCase()}: ${slot.status}`).join("; ")
     : input.phase === "incubator-synthesis"
@@ -383,7 +377,7 @@ function buildRecord(input: {
     // venture may actually do. The magazine branch says "Czech articles" because that is all the
     // desk produces: mma-files/pipeline.ts makes one writeCzech call and stores
     // `localizations: { cs }`. It read "bilingual articles" while nothing English was written.
-    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "EDITORIAL_ONLY. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : isStudio ? "TEMPLATE_ONLY. Checked original templates may enter the internal live library; this does not authorize social publishing or external media collection." : input.phase === "incubator-synthesis" ? "TEMPLATE_ONLY. A compliant content venture may be founded; every exception remains with the owner." : "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
+    growthPlan: input.phase === "tt-marketing" ? "DRAFT_ONLY. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "DATA_ONLY. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "EDITORIAL_ONLY. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : input.phase === "incubator-synthesis" ? "TEMPLATE_ONLY. A compliant content venture may be founded; every exception remains with the owner." : "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
     eveningOutcome: input.phase === "incubator-synthesis" ? summary : null,
     ...(input.editorialSlate ? { editorialSlateRef: `ventures/mma-files/slates/${input.date}.json` } : {}),
     ...(input.agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${input.agenda.id}` } : {}),
@@ -739,30 +733,6 @@ function seasonIdFrom(filename: string): string {
   return filename.replace(/\.md$/u, "");
 }
 
-/** How many owner links one studio room reads. Each is a network fetch inside a daily room. */
-const STUDIO_LINKS_PER_ROOM = 6;
-/** Characters kept per page, so six pages cannot crowd out the rest of the packet. */
-const STUDIO_PAGE_CHARS = 2_200;
-
-/**
- * The same rejections the admin store applies when a link is saved.
- *
- * A board or a bare homepage is not a design to observe. The room filter only checked the
- * https prefix, so a link that the admin store would refuse could still reach the room if it
- * arrived any other way.
- */
-function allowedIndividualUrl(value: string): boolean {
-  let url: URL;
-  try {
-    url = new URL(value);
-  } catch {
-    return false;
-  }
-  if (url.protocol !== "https:") return false;
-  if (/(?:^|\.)pinterest\./iu.test(url.hostname)) return false;
-  return url.pathname.replace(/\/+$/u, "").length > 1;
-}
-
 export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>, now = new Date()): Promise<{
   text: string;
   evidenceRefs: string[];
@@ -770,33 +740,6 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
   incubatorItems?: IncubatorPacketItem[];
 }> {
   const taste = await composeMeetingTastePacket({ repoRoot, registry, meetingKind: phase });
-  if (phase === "studio") {
-    const inspiration = await readJson<{ links?: Array<{ url?: string; label?: string }> }>(root, "ventures/carousel-studio/inspiration/owner-links.json", {});
-    const links = (inspiration.links ?? [])
-      .filter((entry): entry is { url: string; label?: string } => typeof entry.url === "string" && allowedIndividualUrl(entry.url))
-      .slice(0, STUDIO_LINKS_PER_ROOM);
-    // Read the pages. MOTIF was handed bare URLs and has no tool with which to open one, yet
-    // StudioObservationSchema demands a principle, an originality boundary and the time the
-    // page was retrieved — so every observation the room could return was invented rather
-    // than observed. The reader is Firecrawl when a key exists and keyless r.jina.ai
-    // otherwise, both already allowlisted, and a page that will not load is named as unread
-    // rather than quietly dropped.
-    const pages = await Promise.all(links.map(async (link) => {
-      const body = await fetchReadable(link.url, { allowHosts: [new URL(link.url).hostname, "r.jina.ai", "api.firecrawl.dev"], now })
-        .catch(() => null);
-      return { link, body: body?.slice(0, STUDIO_PAGE_CHARS) ?? null };
-    }));
-    const readable = pages.filter((page) => page.body !== null);
-    const rendered = pages.length === 0
-      ? "- None. Record no observations and propose no template."
-      : pages.map(({ link, body }) => body === null
-          ? `- ${link.url}${link.label ? ` — ${link.label}` : ""} — could not be read; record no observation for it.`
-          : `- ${link.url}${link.label ? ` — ${link.label}` : ""}\n${wrapUntrustedData("owner-inspiration-page", body)}`).join("\n\n");
-    return {
-      text: `${taste ?? ""}\n\nApproved individual inspiration links, retrieved ${now.toISOString()}:\n${rendered}\n\nThe seed library already contains ten live templates. Prefer improving coverage to duplicating an existing layout.`.slice(0, 18_000),
-      evidenceRefs: readable.map(({ link }) => link.url)
-    };
-  }
   if (phase === "tt-marketing") {
     // The newest season file, not season-001 forever. season-001 ends on 2026-10-30 and the
     // room would have gone on reading an expired season and stamping its id onto every plan.
@@ -1222,10 +1165,10 @@ export async function runPortfolioCycle(input: {
   /** Set when a cap refused a seat, so the room closes on the seats it already paid for. */
   let budgetStop: BudgetError | null = null;
   if (input.dry) {
-    const dryChair = input.phase === "studio" ? "EASEL" : input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
+    const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
     contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, nicheProposals: [], editorialSlate: null, marketingPlan: null, templateProposal: null, inspirationObservations: [], idea: null, followUpRequest: null }));
   } else {
-    const promptName = input.phase === "studio" ? "studio.md" : input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
+    const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     const personas = new Map<string, string>();
     for (const agent of selected) {
@@ -1235,7 +1178,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|incubator-scan|incubator-synthesis|mma-intake|mma-analysis|mag-editorial|mag-desk|studio","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Only MOTIF may return inspirationObservations and only EASEL may return templateProposal during studio. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -1570,30 +1513,6 @@ export async function runPortfolioCycle(input: {
     }
   }
   const auditVeto = contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
-  // A rejected studio contribution costs the contribution, not the room. Every seat has
-  // already been billed by the time this runs, and it sits before the writes that produce the
-  // meeting record, decision, scorecard and calendar — so an observation citing a URL outside
-  // the packet, or a template citing no observation, threw and destroyed a paid room that had
-  // nothing to do with the studio. The same file already treats an unparsable seat and an
-  // out-of-packet evidence ref this way. The guarantee is unchanged: neither ever reaches an
-  // artifact; the rejection simply no longer takes the room with it.
-  const studioLifecycle = input.phase === "studio"
-    ? await processStudioContribution({
-        root,
-        observations: contributions.find((contribution) => contribution.agent === "MOTIF")?.inspirationObservations ?? [],
-        templateProposal: contributions.find((contribution) => contribution.agent === "EASEL")?.templateProposal ?? null,
-        allowedEvidenceRefs: context.evidenceRefs,
-        allowLive: !input.dry && !auditVeto
-      }).catch((error: unknown) => {
-        console.warn(JSON.stringify({
-          event: "studio_contribution_rejected",
-          phase: input.phase,
-          cycleId: input.cycleId,
-          reason: error instanceof Error ? error.message : String(error)
-        }));
-        return null;
-      })
-    : null;
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
   const monthAllInUsd = fixedMonthlyUsd + actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
@@ -1708,6 +1627,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, ...incubatorReadPaths, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(studioLifecycle?.artifacts ?? []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, ...incubatorReadPaths, meetingPath, decisionPath, scorecardPath, calendarPath, ...proposalPaths, ...proposalMarkdownPaths, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...foundingArtifacts, ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }
