@@ -77,7 +77,9 @@ describe("budget guard", () => {
     expect(DEFAULT_BUDGET_LIMITS).toMatchObject({
       maxCycleUsd: 0.2,
       caughtUpMeetingUsd: 0.08,
-      editionProductionUsd: 0.35,
+      // Equal to config/edition-quality.json. live.ts refuses a run whose resolved cap is under
+      // the configured one, so these two numbers are one number in two files.
+      editionProductionUsd: 0.5,
       dailyUsd: 0.7,
       monthlyApiUsd: 15,
       monthlyMediaUsd: 2,

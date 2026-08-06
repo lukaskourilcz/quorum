@@ -112,7 +112,7 @@ describe("edition configuration and quality", () => {
       writing: "claude-sonnet-4-6"
     });
     expect(config.quality.minimumSignalStrength).toBe(45);
-    expect(config.budgets.editionProductionUsd).toBe(0.35);
+    expect(config.budgets.editionProductionUsd).toBe(0.5);
     expect(config.budgets.maximumRegenerationAttemptsPerDate).toBe(2);
     expect(config.stet.maximumRewriteAttempts).toBe(1);
     expect(config.hacek.maximumRewriteAttempts).toBe(1);

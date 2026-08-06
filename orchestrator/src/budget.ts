@@ -63,7 +63,10 @@ export const DEFAULT_BUDGET_LIMITS: BudgetLimits = {
   perTextCallUsd: 0.1,
   maxCycleUsd: 0.2,
   caughtUpMeetingUsd: 0.08,
-  editionProductionUsd: 0.35,
+  // Kept equal to config/edition-quality.json's editionProductionUsd on purpose: live.ts blocks
+  // the run when the resolved cap is below the configured one, so a default lower than the
+  // config makes an unconfigured run refuse every edition before it starts.
+  editionProductionUsd: 0.5,
   dailyUsd: 0.7,
   monthlyApiUsd: 15,
   monthlyOperatingUsd: 20,

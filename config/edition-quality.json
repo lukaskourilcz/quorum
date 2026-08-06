@@ -34,7 +34,7 @@
     "hardCostPerRun": 1.5,
     "monthlyWarning": 20,
     "monthlyHardLimit": 40,
-    "editionProductionUsd": 0.35,
+    "editionProductionUsd": 0.5,
     "maximumRegenerationAttemptsPerDate": 2
   },
   "stet": {

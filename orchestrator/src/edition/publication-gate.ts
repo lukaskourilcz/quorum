@@ -3,12 +3,12 @@ import type { StetReview } from "./stet.js";
 /**
  * The one switch: may the editorial review stop the day's article from being published?
  *
- * 2026-08-04 — set to false. The magazine publishes one article a day from now on, and the
- * owner tunes the thresholds after seeing real articles on the site rather than before. Every
- * review still runs and every finding is still recorded; a stylistic or topical finding no
- * longer ends the run in `no_edition`. Set this back to true to restore blocking, and the
- * `unresolvedReview` block on each run report and edition package is the log of what this
- * period would have blocked.
+ * 2026-08-04 — set to false, as a trial. 2026-08-06 — the owner made it permanent policy under
+ * `orchestration-2026-08f`: style and freshness verdicts publish with their findings on the
+ * record, and the checks that the article is true still kill the run. Every review still runs
+ * and every finding is still recorded. Setting this back to true restores blocking, and the
+ * `unresolvedReview` block on each run report and edition package is the log of what blocking
+ * would have stopped.
  *
  * This constant is read in exactly one place, `partition` below. Nothing else in the codebase
  * branches on it, so flipping it here changes the behaviour everywhere at once.

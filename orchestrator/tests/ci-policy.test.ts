@@ -366,16 +366,13 @@ describe("automation policy", () => {
     );
   });
 
-  // The owner doubled four caps on 2026-08-04 for the rest of that week, because testing rather
-  // than production work was spending them and a cap hit was stopping articles from shipping:
-  // that day's edition run billed three calls for about $0.25 and produced no article, because
-  // rewrite_2 could not start against the $0.35 edition cap.
-  //
-  // The 2026-08-09 revert restores the four `original` values in cycle.yml and deletes the
-  // temporaryCaps list below; the workflow and this list have to move together, so a
-  // half-finished revert fails here rather than sitting on main. The two monthly assertions at
-  // the end are permanent and outlive the revert.
-  it("documents the temporarily doubled caps and holds the monthly ceiling still", async () => {
+  // The 2026-08-04 doubling is reverted, with one correction the owner made when it came due:
+  // the edition per-run cap settles at $0.50 rather than the $0.35 it was doubled from. Source
+  // bodies made write and rewrite calls $0.10-0.12 each, so curate + write + two configured
+  // rewrites is $0.38-0.45 -- above $0.35 before the first rewrite starts, and reserve refusals
+  // were the most frequent edition-killer on 1, 2 and 4 August. The monthly assertions below are
+  // permanent and are what the caps above may never move.
+  it("holds the per-run caps at their settled values and the monthly ceiling still", async () => {
     const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
 
     // Anchored at the job env's exact indentation, so a mention inside a comment or a shell
@@ -385,28 +382,20 @@ describe("automation policy", () => {
       expect(match, `${key} is missing from the cycle.yml job env`).not.toBeNull();
       return match?.[1] ?? "";
     };
-    const lineOf = (key: string): string =>
-      cycle.split("\n").find((line) => line.startsWith(`      ${key}:`)) ?? "";
 
-    const temporaryCaps = [
-      { key: "MAX_CYCLE_BUDGET_USD", original: "0.20", doubled: "0.40" },
-      { key: "CU_MEETING_BUDGET_USD", original: "0.08", doubled: "0.16" },
-      { key: "EDITION_PRODUCTION_BUDGET_USD", original: "0.35", doubled: "0.70" },
-      { key: "DAILY_BUDGET_USD", original: "1.00", doubled: "2.00" }
-    ];
-    for (const { key, original, doubled } of temporaryCaps) {
-      // What the owner approved was a doubling. Pinning the arithmetic means a later edit
-      // cannot push a cap to four times its original while still claiming "was 0.20".
-      expect(Number(doubled), `${key}: the approved raise is exactly double`).toBeCloseTo(
-        Number(original) * 2,
-        8
-      );
-      expect(valueOf(key), `${key} is not the value the owner approved`).toBe(doubled);
-      // A temporary value that does not say what it was and when it goes back is a permanent
-      // value nobody remembers approving.
-      expect(lineOf(key), `${key} must name the value it reverts to`).toContain(`was "${original}"`);
-      expect(lineOf(key), `${key} must name its revert date`).toContain("2026-08-09");
-    }
+    expect(valueOf("MAX_CYCLE_BUDGET_USD")).toBe("0.20");
+    expect(valueOf("CU_MEETING_BUDGET_USD")).toBe("0.08");
+    expect(valueOf("DAILY_BUDGET_USD")).toBe("1.00");
+    // The one raised value, and the config the runtime parses has to agree with it: the
+    // workflow exports the cap and edition-quality.json is what the estimator reserves
+    // against, so a half-finished change fails here rather than at 05:00.
+    expect(valueOf("EDITION_PRODUCTION_BUDGET_USD")).toBe("0.50");
+    const editionQuality = JSON.parse(
+      await readFile(path.join(repoRoot, "config", "edition-quality.json"), "utf8")
+    ) as { budgets: { editionProductionUsd: number; maximumRegenerationAttemptsPerDate: number } };
+    expect(editionQuality.budgets.editionProductionUsd).toBe(0.5);
+    // The cap was raised to make the second rewrite affordable, not to allow a third.
+    expect(editionQuality.budgets.maximumRegenerationAttemptsPerDate).toBe(2);
 
     // Permanent, and the point of the whole block. budget-2026-08e's $25 model/API share and $30
     // all-in cap are the ceiling the owner countersigned and deliberately did not move; a per-run

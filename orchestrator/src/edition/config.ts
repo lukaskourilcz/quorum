@@ -64,7 +64,7 @@ export const EditionQualityConfigSchema = z.object({
     hardCostPerRun: z.number().positive(),
     monthlyWarning: z.number().nonnegative(),
     monthlyHardLimit: z.number().positive(),
-    editionProductionUsd: z.literal(0.35),
+    editionProductionUsd: z.literal(0.5),
     maximumRegenerationAttemptsPerDate: z.number().int().min(0).max(2)
   }),
   stet: z.object({
