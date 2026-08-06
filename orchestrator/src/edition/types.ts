@@ -83,7 +83,6 @@ export interface WrittenArticle {
   slug: string;
   date: string;
   tags: string[];
-  illustrationPrompt: string;
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   selectedImageCandidateIndex?: number;
@@ -97,7 +96,6 @@ export interface CzechArticle {
   slug: string;
   date: string;
   tags: string[];
-  illustrationPrompt: string;
   /** The Czech "why this story" sentence, when the write call returned one. */
   whyThisStory?: string;
   wire: z.infer<typeof WireItemSchema>[];

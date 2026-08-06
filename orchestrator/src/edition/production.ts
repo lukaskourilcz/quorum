@@ -30,6 +30,7 @@ import type {
 } from "./types.js";
 import type { LicensedPhotoCandidate } from "../images/licensed.js";
 import { materializeLicensedPhoto } from "../images/licensed.js";
+import { heroAltCs } from "../images/alt.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
 import { BudgetError } from "../budget.js";
@@ -377,12 +378,20 @@ export async function produceEdition(
         let image;
         if (candidate) {
           try {
+            // The archive's own description of the photograph first, the writer's second.
+            //
+            // The writer produces its alt before any photograph is chosen: it is describing an
+            // illustration it imagined, and attaching it to a real photograph tells a screen
+            // reader about a picture that is not on the page. The 2026-08-06 edition described a
+            // schematic that does not exist over a real Flickr photograph. heroAltCs is the same
+            // rule the MMA desk already applies, and for an illustrative candidate the writer's
+            // text is not merely deprioritised but unreachable.
             image = await materializeLicensedPhoto({
               candidate,
               venture: "caught-up",
               slug: article.slug,
               ...(article.byLocale.en ? { altEn: article.byLocale.en.illustrationAlt } : {}),
-              altCs: article.byLocale.cs.illustrationAlt
+              altCs: heroAltCs(candidate, article.byLocale.cs.illustrationAlt, article.byLocale.cs.title)
             });
           } catch (error) {
             reporter.warn(`licensed_image_fallback:${error instanceof Error ? error.message : "unknown"}`);

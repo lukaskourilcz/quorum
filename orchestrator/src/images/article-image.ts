@@ -61,8 +61,34 @@ function lines(value: string, maximum: number): string[] {
  * publication date and the subject tags — chrome a reader can use, not prose they have
  * already read.
  */
+/**
+ * What the plate calls the publication.
+ *
+ * The caught-up venture id is stable and the magazine it feeds is DNESKAi; the plate is the one
+ * place a reader sees the name, so it says the one the reader knows.
+ */
 function brandName(venture: "caught-up" | "mma-files"): string {
-  return venture === "caught-up" ? "Caught Up" : "MMA Files";
+  return venture === "caught-up" ? "DNESKAi" : "MMA Files";
+}
+
+/**
+ * Human-readable labels for a cover, from the refs the desk assigned.
+ *
+ * The plate used to print raw ref slugs — FIGHT-WEEK-PREVIEW AMANDA-LEMOS BILLY-QUARANTILLO — and
+ * a hex fingerprint of its own inputs, on published covers. Neither is anything a reader can use:
+ * the fingerprint identifies the file to nobody, and an uppercased slug is a machine token wearing
+ * a headline's clothes. What is left is a name written the way a person writes it.
+ */
+export function coverLabels(tags: readonly string[]): string[] {
+  return tags
+    .map((tag) => tag
+      .replace(/^[a-z]+:(?:event:)?/u, "")
+      .split(/[-_\s]+/u)
+      .filter(Boolean)
+      .map((word) => word.charAt(0).toLocaleUpperCase("cs-CZ") + word.slice(1))
+      .join(" ")
+      .trim())
+    .filter((label) => label.length > 0);
 }
 
 function frameSvg(input: {
@@ -74,7 +100,7 @@ function frameSvg(input: {
   tags: readonly string[];
 }): string {
   const accent = input.venture === "caught-up" ? "#79f2c0" : "#ef6c35";
-  const brand = input.venture === "caught-up" ? "CAUGHT UP" : "MMA FILES";
+  const brand = input.venture === "caught-up" ? "DNESKAi" : "MMA FILES";
   const unit = input.width / 32;
   const seed = input.fingerprint.padEnd(16, "0");
   const nibble = (index: number) => Number.parseInt(seed[index % seed.length]!, 16);
@@ -96,8 +122,8 @@ function frameSvg(input: {
   }).join("");
 
   const label = Math.round(input.width * 0.022);
-  const tagLine = input.tags.slice(0, 4).map((tag) => tag.toUpperCase()).join("   ");
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${input.width}" height="${input.height}" viewBox="0 0 ${input.width} ${input.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(brand)} cover</title><desc id="desc">A generated ${escapeXml(brand)} cover; the article's own words are not repeated here.</desc><rect width="100%" height="100%" fill="#101116"/><rect x="${unit * 1.2}" y="${unit * 1.2}" width="${input.width - unit * 2.4}" height="${input.height - unit * 2.4}" rx="${unit * 0.7}" fill="#181a20" stroke="${accent}" stroke-width="${Math.max(2, unit * 0.09).toFixed(1)}"/>${columns}<text x="${unit * 2}" y="${unit * 4}" fill="${accent}" font-family="Arial, sans-serif" font-size="${label}" font-weight="700" letter-spacing="${(label * 0.16).toFixed(1)}">${escapeXml(brand)}</text><text x="${unit * 2}" y="${unit * 6}" fill="#f7f4ec" font-family="monospace" font-size="${Math.round(label * 1.05)}">${escapeXml(input.date)}</text>${tagLine ? `<text x="${unit * 2}" y="${unit * 7.7}" fill="#9da1aa" font-family="monospace" font-size="${Math.round(label * 0.82)}" letter-spacing="${(label * 0.1).toFixed(1)}">${escapeXml(tagLine)}</text>` : ""}<text x="${input.width - unit * 2}" y="${input.height - unit * 1.9}" text-anchor="end" fill="#6c7079" font-family="monospace" font-size="${Math.round(label * 0.72)}">FRAME · ${escapeXml(input.fingerprint)}</text></svg>`;
+  const tagLine = coverLabels(input.tags).slice(0, 3).join(" · ");
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${input.width}" height="${input.height}" viewBox="0 0 ${input.width} ${input.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(brand)} cover</title><desc id="desc">A generated ${escapeXml(brand)} cover; the article's own words are not repeated here.</desc><rect width="100%" height="100%" fill="#101116"/><rect x="${unit * 1.2}" y="${unit * 1.2}" width="${input.width - unit * 2.4}" height="${input.height - unit * 2.4}" rx="${unit * 0.7}" fill="#181a20" stroke="${accent}" stroke-width="${Math.max(2, unit * 0.09).toFixed(1)}"/>${columns}<text x="${unit * 2}" y="${unit * 4}" fill="${accent}" font-family="Arial, sans-serif" font-size="${label}" font-weight="700" letter-spacing="${(label * 0.16).toFixed(1)}">${escapeXml(brand)}</text><text x="${unit * 2}" y="${unit * 6}" fill="#f7f4ec" font-family="monospace" font-size="${Math.round(label * 1.05)}">${escapeXml(input.date)}</text>${tagLine ? `<text x="${unit * 2}" y="${unit * 7.7}" fill="#9da1aa" font-family="monospace" font-size="${Math.round(label * 0.82)}" letter-spacing="${(label * 0.1).toFixed(1)}">${escapeXml(tagLine)}</text>` : ""}</svg>`;
 }
 
 export function deterministicArticleImage(input: {
@@ -123,7 +149,7 @@ export function deterministicArticleImage(input: {
   // shipped this plate under "A chessboard with pieces casting shadows shaped like daggers" —
   // a screen-reader user was told about a chessboard that is not there. A caller's alt is
   // right for a photograph and wrong for this, so this one supplies its own.
-  const subject = tags.slice(0, 3).join(", ");
+  const subject = coverLabels(tags).slice(0, 3).join(", ");
   const altEn = `${brandName(input.venture)} cover for ${date}${subject ? `, marked ${subject}` : ""}. A generated panel of coloured bars, carrying no photograph.`;
   const altCs = `Obálka ${brandName(input.venture)} k ${date}${subject ? `, témata ${subject}` : ""}. Generovaný panel barevných sloupců, bez fotografie.`;
   return ArticleImageSchema.parse({

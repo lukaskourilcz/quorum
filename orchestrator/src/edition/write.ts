@@ -54,7 +54,6 @@ const ToolOutputSchema = z.object({
   // Czech heading "Proč právě tento příběh" on every live edition, in the one place on the
   // page where the reader is told why the desk led with this story.
   why_this_story: z.string().trim().min(1).max(280).optional(),
-  illustration_prompt: z.string().trim().min(1),
   image_candidate_index: z.number().int().min(0).max(3).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
   ...LocalizedOutputSchema.shape
@@ -139,7 +138,6 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
       // pattern here so the shape is asked for rather than only checked afterwards.
       items: { type: "string", pattern: SLUG_SOURCE }
     },
-    illustration_prompt: { type: "string" },
     why_this_story: { type: "string" },
     image_candidate_index: { type: "integer", minimum: 0, maximum: 3 },
     wire: {
@@ -165,7 +163,6 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
   required: [
     "slug",
     "tags",
-    "illustration_prompt",
     "wire",
     ...localeSchema.required
   ],
@@ -735,7 +732,6 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     slug,
     date: brief.date,
     tags: response.value.tags,
-    illustrationPrompt: response.value.illustration_prompt,
     ...(response.value.why_this_story ? { whyThisStory: response.value.why_this_story } : {}),
     wire,
     sources: pickedItems.map((item) => {

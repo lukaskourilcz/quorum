@@ -77,7 +77,6 @@ function frontmatter(
     illustration: {
       path: image.hero_path.replace(/^public/u, ""),
       thumbnail_path: image.thumb_path.replace(/^public/u, ""),
-      prompt: article.illustrationPrompt,
       alt: (locale === "en" ? image.alt_en : image.alt_cs) ?? image.alt_cs,
       width: image.width,
       height: image.height,

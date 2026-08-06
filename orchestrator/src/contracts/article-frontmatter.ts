@@ -46,7 +46,10 @@ export const ArticleFrontmatterV2Schema = openObject({
   illustration: openObject({
     path: z.string().regex(/^\/(?:images\/[a-z0-9][a-z0-9/_-]*\.(?:webp|png|svg)|illustrations\/[a-zA-Z0-9/_-]+\.webp)$/).optional(),
     thumbnail_path: z.string().regex(/^\/images\/[a-z0-9][a-z0-9/_-]*\.(?:webp|png|svg)$/).optional(),
-    prompt: z.string(),
+    // Legacy. Nothing generated an image from it, and it was the text that captioned real
+    // photographs with illustrations that do not exist, so the writer stopped emitting it. Kept
+    // optional so every article already on disk still parses.
+    prompt: z.string().optional(),
     alt: z.string().trim().min(1).max(300),
     width: z.number().int().min(640).max(4_000).optional(),
     height: z.number().int().min(360).max(3_000).optional(),

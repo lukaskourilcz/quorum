@@ -486,12 +486,13 @@ describe("edition dry production", () => {
   it("builds the deterministic golden package without leaking injected instructions", async () => {
     const result = await runEditionDry();
     expect(result.status).toBe("edition");
-    // The golden hash moved with the fallback cover, which no longer sets the article's own
-    // headline in type. Nothing else about the package changed.
-    // Re-golded twice in this migration: the deterministic cover took its fingerprint
-    // from the Czech title, the package stopped carrying an English half, and the wordmark
-    // drawn on the cover became CAUGHT UP. Same bytes-in, bytes-out contract throughout.
-    expect(result.packageHash).toBe("f463391bd05b1eb63dca1554c1e0e2e95441370b635d84ff9273c4d4590d58cf");
+    // The golden hash is re-golded whenever the package's bytes legitimately change, and the
+    // reason is written down each time. So far: the fallback cover stopped setting the article's
+    // own headline in type; the cover fingerprint moved to the Czech title; the package stopped
+    // carrying an English half; and now the plate is branded DNESKAi with readable labels and no
+    // hex fingerprint, and illustration.prompt is gone from the package altogether. Same
+    // bytes-in, bytes-out contract throughout.
+    expect(result.packageHash).toBe("b9f26659ca497383584d7aab8f60ec4413b2f94508be82d17e6bd8545f57f7bb");
     // The shape itself, not just its hash: one article file, and it is the Czech one.
     const mdx = result.files.filter((file) => file.endsWith(".mdx")).map((file) => file.split("/").pop());
     expect(mdx).toHaveLength(1);
@@ -508,8 +509,10 @@ describe("edition dry production", () => {
     expect(hasValidEditionPackageHash(editionPackage)).toBe(true);
     if (editionPackage.status === "edition") {
       expect(editionPackage.image).toMatchObject({ origin: "svg", width: 1600, height: 900 });
+      // The deterministic plate, identified by what a reader sees on it rather than by the hex
+      // fingerprint it used to carry in the corner.
       expect(Buffer.from(editionPackage.image.hero_bytes_base64, "base64").toString("utf8"))
-        .toContain("FRAME");
+        .toContain("DNESKAi");
     }
     expect(JSON.stringify(editionPackage)).not.toMatch(/ignore all previous|system prompt/i);
   });

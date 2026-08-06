@@ -7,7 +7,9 @@ const UnitIntervalSchema = z.number().min(0).max(1);
 
 export const EditionQualityConfigSchema = z.object({
   schemaVersion: z.literal(1),
-  brand: z.object({ name: z.literal("Caught Up") }),
+  // The venture id stays `caught-up`; the publication the reader sees is DNESKAi, and this is
+  // the name the deterministic cover plate prints.
+  brand: z.object({ name: z.literal("DNESKAi") }),
   quality: z
     .object({
       minimumSignalStrength: z.number().min(0).max(100),

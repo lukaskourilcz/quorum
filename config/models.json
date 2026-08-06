@@ -58,12 +58,7 @@
       "maxInputTokens": 15000,
       "maxOutputTokens": 1200
     },
-    "IMAGE": {
-      "provider": "openai",
-      "model": "gpt-image-2",
-      "quality": "medium",
-      "size": "1024x1024"
-    },
+    "_comment_IMAGE": "Avatar repairs only, and only when the owner asks for one. No article pipeline has a gpt-image-2 call site and none may gain one: both magazines illustrate from keyless licensed archives with a deterministic SVG plate as the last rung, and the ledger has never carried a kind:\"image\" entry. AVATAR_IMAGE below is the role that is actually used.",
     "AVATAR_IMAGE": {
       "provider": "openai",
       "model": "gpt-image-2",

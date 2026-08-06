@@ -1,4 +1,7 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { deterministicArticleImage } from "../src/images/article-image.js";
+import { repoRoot } from "../src/paths.js";
 import { imageSubjectQuery } from "../src/images/subject-query.js";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
@@ -137,7 +140,12 @@ describe("a cover never repeats the article", () => {
       expect(svg, `cover must not carry "${word}"`).not.toContain(word);
     }
     expect(svg).toContain("2026-08-03");
-    expect(svg).toContain("AI");
+    // Readable labels, not raw slugs. The plate used to print uppercased ref tokens --
+    // FIGHT-WEEK-PREVIEW AMANDA-LEMOS BILLY-QUARANTILLO -- on published covers.
+    expect(svg).toContain("Ai · Safety");
+    expect(svg).toContain("DNESKAi");
+    // And no fingerprint: a hex digest of the plate's own inputs identifies the file to nobody.
+    expect(svg).not.toContain("FRAME ·");
   });
 
   it("gives two different articles two different covers, and one article the same one twice", () => {
@@ -188,5 +196,33 @@ describe("the cover's alt describes the cover", () => {
     expect(image.alt_en).toContain("2026-08-03");
     expect(image.alt_en).toContain("no photograph");
     expect(image.alt_cs).toContain("bez fotografie");
+  });
+});
+
+/**
+ * Both magazines illustrate from keyless licensed archives, with a deterministic SVG plate as the
+ * last rung. gpt-image-2 has never had a call site in an article pipeline and the budget ledger
+ * has never carried an entry for one; this is what says so out loud, so a future image adapter
+ * has to argue with a failing test rather than slip in beside the free ladder.
+ */
+describe("paid image generation has no way into an article", () => {
+  it("has no IMAGE role for a pipeline to reach", async () => {
+    const models = JSON.parse(
+      await readFile(path.join(repoRoot, "config", "models.json"), "utf8")
+    ) as { roles: Record<string, unknown> };
+
+    expect(models.roles.IMAGE).toBeUndefined();
+    // AVATAR_IMAGE stays: owner-triggered portrait repairs are the one place a generated image
+    // is wanted, and they are not an article pipeline.
+    expect(models.roles.AVATAR_IMAGE).toBeDefined();
+  });
+
+  it("has never billed an image call from an article pipeline", async () => {
+    const ledger = JSON.parse(
+      await readFile(path.join(repoRoot, "state", "budget", "ledger.json"), "utf8")
+    ) as { entries: Array<{ kind: string; phase: string }> };
+
+    const imageEntries = ledger.entries.filter((entry) => entry.kind === "image");
+    expect(imageEntries.map((entry) => `${entry.phase}:${entry.kind}`)).toEqual([]);
   });
 });

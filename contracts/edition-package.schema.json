@@ -225,7 +225,6 @@
                         }
                       },
                       "required": [
-                        "prompt",
                         "alt"
                       ],
                       "additionalProperties": {}
@@ -705,7 +704,6 @@
                         }
                       },
                       "required": [
-                        "prompt",
                         "alt"
                       ],
                       "additionalProperties": {}
