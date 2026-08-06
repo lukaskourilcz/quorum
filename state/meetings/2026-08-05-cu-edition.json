@@ -217,7 +217,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "NEEDS_RECONCILIATION. schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-05-17eb32d81474601883eff58c095b8b5d41b056dc",
+    "summary": "The finished edition did not match the delivery format the magazine accepts, so it was not published. The owner has the technical report.",
     "evidenceRefs": [
       "source:the-verge",
       "source:variety",
@@ -323,7 +323,7 @@
         "agent": "HERALD",
         "mode": "close",
         "sentAt": "2026-08-05T09:27:11.795Z",
-        "text": "EDITION recorded. RELAY owns delivery from here."
+        "text": "The edition is recorded. RELAY owns delivery from here."
       }
     ]
   }

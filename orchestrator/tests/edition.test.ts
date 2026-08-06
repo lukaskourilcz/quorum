@@ -23,7 +23,7 @@ import {
   BudgetedEditionModelGateway,
   editionUsageCost
 } from "../src/edition/models.js";
-import { hasValidEditionPackageHash } from "../src/edition/package.js";
+import { hasValidEditionPackageHash, noEditionSentence } from "../src/edition/package.js";
 import { produceEdition, type EditionProductionInput } from "../src/edition/production.js";
 import {
   CZECH_BENCHMARK_URLS,
@@ -406,7 +406,7 @@ describe("edition configuration and quality", () => {
     ]);
     expect(result.report.quality?.result.action).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toMatch(/^quality_block:/);
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("quality_block"));
     }
   });
 });
@@ -462,7 +462,7 @@ describe("STET article register", () => {
     const result = await produceEdition(await productionInput([base[0]!, slop, rewrite]));
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toBe("stet_block_after_rewrite");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("stet_block_after_rewrite"));
     }
     expect(result.report.stetBlocks).toBe(2);
     expect(result.report.regenerationAttempts).toBe(1);

@@ -217,7 +217,7 @@
   },
   "decision": {
     "outcome": "veto",
-    "summary": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence.",
+    "summary": "VAULT already hard-stopped the idea raised on 2026-08-05 as a duplicate without qualifying revival evidence.",
     "evidenceRefs": []
   },
   "proposals": [
@@ -253,7 +253,7 @@
     {
       "id": "TASK-20260805150137-cu-product-LEDGER",
       "owner": "VAULT",
-      "summary": "Append the veto verdict for idea-2026-08-05-bbffd7f5 and regenerate the compact index.",
+      "summary": "Append the veto verdict for the idea raised on 2026-08-05 and regenerate the compact index.",
       "status": "done"
     }
   ],
@@ -264,7 +264,7 @@
     {
       "ideaId": "idea-2026-08-05-bbffd7f5",
       "verdict": "veto",
-      "reason": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence."
+      "reason": "VAULT already hard-stopped the idea raised on 2026-08-05 as a duplicate without qualifying revival evidence."
     }
   ],
   "generatedAt": "2026-08-05T15:01:41.322Z",
@@ -279,7 +279,7 @@
         "agent": "HERALD",
         "mode": "gavel",
         "sentAt": "2026-08-05T15:01:37.322Z",
-        "text": "The product room is open for idea-2026-08-05-bbffd7f5. No edition or external action is in scope.",
+        "text": "The product room is open for the idea raised on 2026-08-05. No edition or external action is in scope.",
         "evidenceRefs": [
           "idea-2026-08-05-bbffd7f5"
         ]
@@ -297,7 +297,7 @@
         "agent": "VAULT",
         "mode": "reads-ledger",
         "sentAt": "2026-08-05T15:01:39.322Z",
-        "text": "The compact index records idea-2026-08-05-bbffd7f5 as vetoed; the raw ledger was not injected into this room.",
+        "text": "The compact index records the idea raised on 2026-08-05 as vetoed; the raw ledger was not injected into this room.",
         "evidenceRefs": [
           "idea-2026-08-05-bbffd7f5"
         ]
@@ -306,7 +306,7 @@
         "agent": "VAULT",
         "mode": "raises-concern",
         "sentAt": "2026-08-05T15:01:40.322Z",
-        "text": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence.",
+        "text": "VAULT already hard-stopped the idea raised on 2026-08-05 as a duplicate without qualifying revival evidence.",
         "evidenceRefs": [
           "idea-2026-08-05-bbffd7f5"
         ]
@@ -315,7 +315,7 @@
         "agent": "HERALD",
         "mode": "close",
         "sentAt": "2026-08-05T15:01:41.322Z",
-        "text": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence.",
+        "text": "VAULT already hard-stopped the idea raised on 2026-08-05 as a duplicate without qualifying revival evidence.",
         "evidenceRefs": [
           "idea-2026-08-05-bbffd7f5"
         ]

@@ -2,6 +2,6 @@
   "schemaVersion": "meeting-skip/1",
   "date": "2026-08-04",
   "phase": "cu-product",
-  "reason": "The repository release gate failed at commit 34aef4b3709c, so the room did not open.",
+  "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent.",
   "decidedAt": "2026-08-04T15:04:43.779Z"
 }

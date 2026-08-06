@@ -343,7 +343,10 @@ export async function createLiveEditionMeeting(input: {
     },
     decision: {
       outcome,
-      summary: edition ? `EDITION. ${reason}` : `NO_EDITION. ${reason}`,
+      // The outcome code is a field of its own and the site renders it as a label. Repeating it
+      // as the first word of the summary put "NO_EDITION." in front of the only sentence a
+      // reader gets, on the calendar cell and on the meeting page alike.
+      summary: reason,
       evidenceRefs
     },
     proposals: [{
@@ -419,7 +422,7 @@ export async function createLiveEditionMeeting(input: {
           mode: "close",
           sentAt: closedAt,
           text: edition
-            ? "EDITION recorded. RELAY owns delivery from here."
+            ? "The edition is recorded. RELAY owns delivery from here."
             : "The slot recorded NO_EDITION and closes honestly."
         }
       ]

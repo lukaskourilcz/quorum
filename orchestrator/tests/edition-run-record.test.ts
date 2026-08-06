@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import type { EditionPackage } from "../src/contracts/edition-package.js";
+import { noEditionSentence } from "../src/edition/package.js";
 import { appendEditionUsage, runLiveEdition } from "../src/edition/live.js";
 import type { EditionProductionInput, EditionProductionResult } from "../src/edition/production.js";
 import type { EditionRunReport } from "../src/edition/report.js";
@@ -105,7 +106,7 @@ describe("a live edition run that spent money leaves a record of it", () => {
 
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toBe("production_failed");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("production_failed"));
     }
     // What the run cost is on the package the desk publishes its no-edition from...
     expect(result.package.generation.costUsd).toBe(BILLED.costUsd);
@@ -151,7 +152,7 @@ describe("a live edition run that spent money leaves a record of it", () => {
 
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toBe("delivery_invalid");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("delivery_invalid"));
     }
     expect(result.outboxPath).not.toBeNull();
     expect(written.status).toBe("failed");

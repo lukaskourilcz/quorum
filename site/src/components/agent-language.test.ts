@@ -3,8 +3,21 @@ import { publicAgentText, publicDecisionLabel } from "./agent-language";
 
 describe("publicAgentText", () => {
   it("replaces internal role and work codes with plain language", () => {
+    // The dash stays: rewriting every em dash to a colon mangled ordinary sentences to fix one
+    // code that now has its own label.
     expect(publicAgentText("LEDGER approved OPS-HANDOFF — no external action.")).toBe(
-      "Budget keeper approved next-step summary: no outside action."
+      "Budget keeper approved Prepare the next step — no outside action."
+    );
+  });
+
+  it("labels a shouted code before the word list can tear it in half", () => {
+    // NEEDS_RECONCILIATION used to render as "NEEDS_final checking": the word list matched
+    // "reconciliation" inside the token. Status labels run first now, on any shouted code.
+    expect(publicAgentText("Delivery is NEEDS_RECONCILIATION today.")).toBe(
+      "Delivery is Needs checking today."
+    );
+    expect(publicAgentText("DATA_ONLY. No probability is published.")).toBe(
+      "data only. No probability is published."
     );
   });
 

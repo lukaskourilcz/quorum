@@ -328,7 +328,9 @@ export async function prepareMorningIdea(input: {
 }
 
 function deterministicVeto(idea: IdeaLedgerEntry): ProductRoomResponse {
-  const reason = `VAULT already hard-stopped ${idea.id} as a duplicate without qualifying revival evidence.`;
+  // The idea id is a reference, not a sentence, and this reason is published on the meeting
+  // page and the calendar cell. Name the idea by the day it was raised instead.
+  const reason = `VAULT already hard-stopped the idea raised on ${idea.id.slice(5, 15)} as a duplicate without qualifying revival evidence.`;
   return ProductRoomResponseSchema.parse({
     verdict: "veto",
     reason,

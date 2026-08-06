@@ -1,5 +1,6 @@
 import { agentById, type AgentId } from "../data/agents";
 import type { RoomTranscript, RoomTurnMode } from "../data/fixtures";
+import { readsAsMachineText } from "./public-prose";
 
 export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "studio";
 export type PublicMeetingStatus =
@@ -90,6 +91,18 @@ function text(value: unknown, max = 800): string | null {
     : null;
 }
 
+/**
+ * A field a reader reads as a sentence: summaries, briefs, reasons, message bodies.
+ *
+ * Separate from `text` because the record also holds tokens by design — statuses, outcomes,
+ * ids and source references — which are rendered through their own label maps and would fail
+ * a machine-text check by definition.
+ */
+function prose(value: unknown, max = 800): string | null {
+  const candidate = text(value, max);
+  return candidate && !readsAsMachineText(candidate) ? candidate : null;
+}
+
 function iso(value: unknown): string | null {
   const candidate = text(value, 80);
   return candidate && !Number.isNaN(Date.parse(candidate)) ? candidate : null;
@@ -133,7 +146,7 @@ function parseTurn(value: unknown): RoomTranscript["turns"][number] | null {
   if (!entry) return null;
   const speaker = agent(entry.agent);
   const mode = text(entry.mode, 32) as RoomTurnMode | null;
-  const body = text(entry.text, 800);
+  const body = prose(entry.text, 800);
   const addressedTo = entry.addressedTo === undefined ? undefined : agent(entry.addressedTo);
   const sentAt = entry.sentAt === undefined ? undefined : iso(entry.sentAt);
   const evidenceRefs = entry.evidenceRefs === undefined ? undefined : stringArray(entry.evidenceRefs);
@@ -165,7 +178,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const phase = record.phase === kind ? kind : null;
   const status = text(record.status, 40) as PublicMeetingStatus | null;
   const stage = text(record.stage, 40);
-  const operatingBrief = text(record.operatingBrief);
+  const operatingBrief = prose(record.operatingBrief);
   const generatedAt = iso(record.generatedAt);
   if (!cycleId || !meetingDate || !kind || !phase || !status || !statuses.has(status) || !stage || !stages.has(stage) || !operatingBrief || !generatedAt || typeof record.fixture !== "boolean") return null;
 
@@ -178,19 +191,19 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const monthAllIn = finiteNonnegative(ledger.monthAllInUsd);
   const cap = finiteNonnegative(ledger.monthCapUsd);
   const outcome = text(decision.outcome, 160);
-  const decisionSummary = text(decision.summary);
+  const decisionSummary = prose(decision.summary);
   const decisionEvidence = stringArray(decision.evidenceRefs);
   const openedAt = iso(transcript.openedAt);
   const closedAt = iso(transcript.closedAt);
   const gavel = agent(transcript.gavel);
-  const setting = text(transcript.setting);
+  const setting = prose(transcript.setting);
   const turns = strictArray(transcript.turns, parseTurn, 36);
   if (estimate === null || (ledger.actualCycleUsd !== null && actual === null) || monthAllIn === null || cap === null || cap <= 0 || !outcome || !decisionSummary || !decisionEvidence || !openedAt || !closedAt || !gavel || !setting || !turns || turns.length === 0) return null;
 
   const participants = strictArray(record.participantReasons, (value) => {
     const entry = object(value);
     const id = entry ? agent(entry.agent) : null;
-    const reason = entry ? text(entry.reason, 240) : null;
+    const reason = entry ? prose(entry.reason, 240) : null;
     return id && reason && typeof entry?.participated === "boolean"
       ? { agent: id, reason, participated: entry.participated }
       : null;
@@ -198,7 +211,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const proposals = strictArray(record.proposals, (value) => {
     const entry = object(value);
     const id = entry ? agent(entry.agent) : null;
-    const summary = entry ? text(entry.summary) : null;
+    const summary = entry ? prose(entry.summary) : null;
     const evidenceRefs = entry ? stringArray(entry.evidenceRefs) : null;
     return id && summary && evidenceRefs ? { agent: id, summary, evidenceRefs } : null;
   }, 8);
@@ -214,7 +227,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
     const entry = object(value);
     const id = entry ? text(entry.id, 160) : null;
     const owner = entry ? agent(entry.owner) : null;
-    const summary = entry ? text(entry.summary) : null;
+    const summary = entry ? prose(entry.summary) : null;
     const taskStatus = entry ? text(entry.status, 20) : null;
     return id && owner && summary && taskStatus && ["planned", "done", "blocked", "skipped"].includes(taskStatus)
       ? { id, owner, summary, status: taskStatus as PublicMeetingRecord["tasks"][number]["status"] }
@@ -224,13 +237,13 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
     const entry = object(value);
     const ideaId = entry ? text(entry.ideaId, 160) : null;
     const verdict = entry ? text(entry.verdict, 20) : null;
-    const reason = entry ? text(entry.reason, 280) : null;
+    const reason = entry ? prose(entry.reason, 280) : null;
     return ideaId && verdict && reason && ["accept", "veto", "defer", "supersede"].includes(verdict)
       ? { ideaId, verdict: verdict as PublicMeetingRecord["ideaVerdicts"][number]["verdict"], reason }
       : null;
   }, 8);
-  const growthPlan = text(record.growthPlan);
-  const eveningOutcome = record.eveningOutcome === null ? null : text(record.eveningOutcome);
+  const growthPlan = prose(record.growthPlan);
+  const eveningOutcome = record.eveningOutcome === null ? null : prose(record.eveningOutcome);
   if (!participants || participants.length === 0 || !proposals || !voteMatrix || voteMatrix.length === 0 || !tasks || !ideaVerdicts || !growthPlan || (record.eveningOutcome !== null && !eveningOutcome)) return null;
 
   const caughtUpIdeaRef = record.caughtUpIdeaRef === undefined ? undefined : text(record.caughtUpIdeaRef, 160);
@@ -238,7 +251,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const agendaRef = record.agendaRef === undefined ? undefined : text(record.agendaRef, 160);
   const sharper = record.sharperData === undefined ? null : object(record.sharperData);
   const sharperOutcome = sharper?.outcome === "proposal" || sharper?.outcome === "nothing-new" ? sharper.outcome : null;
-  const sharperSummary = sharper ? text(sharper.summary, 280) : null;
+  const sharperSummary = sharper ? prose(sharper.summary, 280) : null;
   const sharperEvidence = sharper ? stringArray(sharper.evidenceRefs) : null;
   const sharperIdeaRef = sharper?.ideaRef === undefined ? undefined : text(sharper.ideaRef, 160);
   const mmaKind = kind === "mma-intake" || kind === "mma-analysis";

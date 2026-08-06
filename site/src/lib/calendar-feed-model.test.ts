@@ -182,7 +182,10 @@ describe("the record, not the clock, ends the ongoing state", () => {
       skips: [{ date: "2026-08-04", phase: "tt-marketing", reason: "The gate turned this slot off." }]
     });
     expect(ttSlot(feed)?.status).toBe("skipped");
-    expect(ttSlot(feed)?.decisionOneLiner).toBe("The gate turned this slot off.");
+    // The cell, its tooltip and its accessible name all read this string, and it used to be the
+    // one public rendering of a summary that never met the plain-language pass: "gate" is now
+    // "check", the same word every other surface uses.
+    expect(ttSlot(feed)?.decisionOneLiner).toBe("The check turned this slot off.");
   });
 });
 

@@ -808,3 +808,20 @@ export async function readIdeaIndexSlice(
   }
   return index;
 }
+
+/**
+ * The screening verdict as a reader meets it.
+ *
+ * The stored verdict is a machine value, and it was written straight into the morning meeting's
+ * public transcript: "VAULT recorded duplicate_of". The stored value keeps its shape; only the
+ * sentence changes.
+ */
+export function screeningWord(verdict: IdeaScreeningResult["verdict"]): string {
+  const words: Record<IdeaScreeningResult["verdict"], string> = {
+    novel: "new",
+    duplicate_of: "a duplicate",
+    variant_of: "a variant of an existing idea",
+    revived: "revived"
+  };
+  return words[verdict];
+}

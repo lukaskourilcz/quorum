@@ -300,7 +300,7 @@
         "agent": "SPARK",
         "mode": "statement",
         "sentAt": "2026-08-01T04:00:02.000Z",
-        "text": "Reader source-confidence cue. VAULT recorded duplicate_of; carry idea-2026-08-01-c3826574 to the product room.",
+        "text": "Reader source-confidence cue. VAULT recorded it as a duplicate; carry the idea raised on 2026-08-01 to the product room.",
         "evidenceRefs": [
           "idea-2026-08-01-c3826574"
         ]

@@ -20,6 +20,7 @@ import {
   type Stage
 } from "../types.js";
 import { StandupSchema, type Standup } from "./schema.js";
+import { screeningWord } from "../ideas/ledger.js";
 import type { IdeaScreeningResult } from "../ideas/ledger.js";
 import type { AutonomySnapshot } from "../autonomy/signals.js";
 import type { PriorityItem } from "../contracts/autonomy.js";
@@ -592,7 +593,7 @@ export function createLiveStandup(input: {
     fixture: false,
     status: outcome,
     stage: input.stage,
-    operatingBrief: `Four live council positions reviewed the ${shift.label.toLowerCase()} internal work item. ${summary}${input.caughtUpIdea ? ` SPARK carried one VAULT-screened Caught Up idea: ${input.caughtUpIdea.entry.id}.` : ""}`,
+    operatingBrief: `Four live council positions reviewed the ${shift.label.toLowerCase()} internal work item. ${summary}${input.caughtUpIdea ? ` SPARK carried one VAULT-screened Caught Up idea: ${input.caughtUpIdea.entry.title}.` : ""}`,
     participantReasons: [
       ...input.room.selectedParticipants.map((participant) => ({
         agent: participant.agent,
@@ -712,7 +713,7 @@ export function createLiveStandup(input: {
           agent: "SPARK" as const,
           mode: "statement" as const,
           sentAt: new Date(input.now.getTime() + 3).toISOString(),
-          text: `${input.caughtUpIdea.entry.title}. VAULT recorded ${input.caughtUpIdea.verdict}; ${input.caughtUpIdea.entry.id} is the one Caught Up handoff for the product room.`,
+          text: `${input.caughtUpIdea.entry.title}. VAULT recorded it as ${screeningWord(input.caughtUpIdea.verdict)}; it is the one Caught Up next-step summary for the product room.`,
           evidenceRefs: [
             input.caughtUpIdea.entry.id,
             ...(input.caughtUpIdea.entry.revival

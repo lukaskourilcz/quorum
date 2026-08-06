@@ -5,6 +5,7 @@ import {
   isShiftPhase
 } from "../shifts.js";
 import type { RunnablePhase, Stage } from "../types.js";
+import { screeningWord } from "../ideas/ledger.js";
 import type { IdeaScreeningResult } from "../ideas/ledger.js";
 import { StandupSchema, type Standup } from "./schema.js";
 import type { AutonomySnapshot } from "../autonomy/signals.js";
@@ -193,7 +194,7 @@ export function createOfflineStandup(input: {
           agent: "SPARK" as const,
           mode: "statement" as const,
           sentAt: closedAt,
-          text: `${input.caughtUpIdea.entry.title}. VAULT recorded ${input.caughtUpIdea.verdict}; carry ${input.caughtUpIdea.entry.id} to the product room.`,
+          text: `${input.caughtUpIdea.entry.title}. VAULT recorded it as ${screeningWord(input.caughtUpIdea.verdict)}; carry it to the product room.`,
           evidenceRefs: [
             input.caughtUpIdea.entry.id,
             ...(input.caughtUpIdea.entry.revival

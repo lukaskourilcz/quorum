@@ -1,3 +1,4 @@
+import { publicAgentText } from "@/components/agent-language";
 import type { PublicStandup } from "@/data/fixtures";
 import type { PublicMeetingRecord } from "@/lib/meeting-record-model";
 
@@ -244,18 +245,21 @@ export function buildPublicCalendarFeed(input: {
   const skipReasons = new Map((input.skips ?? []).map((skip) => [`${skip.date}:${skipKind(skip.phase)}`, skip.reason]));
   const articleOutcomes = new Map((input.articleSlots ?? []).map((run) => [`${run.date}:article-${run.slot}`, run]));
   const records = new Map<string, { href: string; summary: string; fixture: boolean; status?: PublicMeetingRecord["status"] }>();
+  // Cells, their tooltips and their accessible names all read this one string, and it was the
+  // only public rendering of a decision summary that skipped the plain-language pass entirely.
+  const oneLiner = (summary: string) => publicAgentText(summary).slice(0, 180);
   for (const standup of input.standups) {
     const kind = ventureKind(standup.phase);
     if (kind) records.set(`${standup.date}:${kind}`, {
       href: `/standups/${standup.id}/room`,
-      summary: standup.decision.summary.slice(0, 180),
+      summary: oneLiner(standup.decision.summary),
       fixture: standup.fixture
     });
   }
   for (const meeting of input.meetings) {
     records.set(`${meeting.date}:${meeting.kind}`, {
       href: `/meetings/${meeting.id}`,
-      summary: meeting.decision.summary.slice(0, 180),
+      summary: oneLiner(meeting.decision.summary),
       fixture: meeting.fixture,
       status: meeting.status
     });
@@ -276,7 +280,7 @@ export function buildPublicCalendarFeed(input: {
           status: article.status === "published" ? "held" : "skipped",
           decisionOneLiner: article.status === "published"
             ? "The desk published this slot's article."
-            : (article.reason ?? `The desk did not publish this slot: ${article.status}.`).slice(0, 180)
+            : oneLiner(article.reason ?? `The desk did not publish this slot: ${article.status}.`)
         });
         continue;
       }
@@ -313,7 +317,7 @@ export function buildPublicCalendarFeed(input: {
           decisionOneLiner: record.summary,
           fixture: record.fixture
         }) : skipReasons.has(`${date}:${definition.kind}`) ? {
-          decisionOneLiner: skipReasons.get(`${date}:${definition.kind}`)!
+          decisionOneLiner: oneLiner(skipReasons.get(`${date}:${definition.kind}`)!)
         } : status === "late" ? {
           decisionOneLiner: LATE_SLOT_REASON
         } : status === "missed" ? {

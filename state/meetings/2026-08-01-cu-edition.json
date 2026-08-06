@@ -207,7 +207,7 @@
   },
   "decision": {
     "outcome": "NO_EDITION",
-    "summary": "NO_EDITION. stet_block_after_rewrite",
+    "summary": "The Czech copy review rejected the article again after a rewrite, so nothing was published.",
     "evidenceRefs": [
       "source:404-media",
       "source:anthropic-news",

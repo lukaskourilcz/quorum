@@ -105,6 +105,23 @@ async function supersedeStaleNoEdition(
   await rm(file, { force: true });
 }
 
+/**
+ * What the public record says when a delivery does not complete.
+ *
+ * The failure code and the technical detail belong in the INBOX item, which is where the owner
+ * reads it. Both used to be pasted straight into `decision.summary`, a public field: the record
+ * for 5 August published a CI runner path, a 40-character hash and the command line that failed,
+ * and the calendar cell for that day showed the first 180 characters of it.
+ */
+const DELIVERY_FAILURE_SENTENCE: Record<DeliveryFailureCode, string> = {
+  schema_invalid: "The finished edition did not match the delivery format the magazine accepts, so it was not published.",
+  content_invalid: "The finished edition failed its content checks on the way out, so it was not published.",
+  push_rejected: "The magazine repository refused the delivery, so the edition is not published yet.",
+  build_failed: "The magazine could not build the delivered edition, so it is not published yet.",
+  hash_conflict: "A different edition already holds this date in the magazine, so this one was held back.",
+  unreachable: "The magazine could not be reached, so the edition is waiting to be delivered."
+};
+
 function inboxItem(date: string, code: DeliveryFailureCode, detail: string): string {
   const oneLineDetail = detail.replace(/\s+/g, " ").trim();
   return [
@@ -190,7 +207,6 @@ export async function recordDelivery(input: {
   }
   const code = input.code ?? "push_rejected";
   const detail = input.detail ?? "Delivery stopped without a reconciled target commit";
-  const oneLineDetail = detail.replace(/\s+/g, " ").trim();
   const meetingPath = `meetings/${editionPackage.date}-cu-edition.json`;
   const meeting = MeetingRecordSchema.parse(
     JSON.parse(await readFile(resolveStatePath(root, meetingPath), "utf8"))
@@ -201,7 +217,7 @@ export async function recordDelivery(input: {
       status: "NEEDS_RECONCILIATION",
       decision: {
         ...meeting.decision,
-        summary: `NEEDS_RECONCILIATION. ${code}: ${oneLineDetail.slice(0, 220)}`
+        summary: `${DELIVERY_FAILURE_SENTENCE[code]} The owner has the technical report.`
       }
     }),
     raiseInboxOnce(root, editionPackage.date, code, detail)

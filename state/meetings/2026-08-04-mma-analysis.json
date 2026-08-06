@@ -59,7 +59,7 @@
   "proposals": [
     {
       "agent": "FORGE",
-      "summary": "No BUILD task assigned. This is MMA-ANALYSIS phase with a data backfill agenda (50 fighters, height/reach via two independent sources). Sources live and healthy. No model run blocked. Waiting for backfill completion signal before next gate.",
+      "summary": "No build task was assigned. This is the evening model check with a data backfill agenda (50 fighters, height/reach via two independent sources). Sources live and healthy. No model run blocked. Waiting for backfill completion signal before next gate.",
       "evidenceRefs": [
         "source:cito-ufc:2026-08-04",
         "source:wikimedia:2026-08-04"
@@ -207,7 +207,7 @@
         "agent": "FORGE",
         "mode": "statement",
         "sentAt": "2026-08-04T17:06:22.262Z",
-        "text": "No BUILD task assigned. This is MMA-ANALYSIS phase with a data backfill agenda (50 fighters, height/reach via two independent sources). Sources live and healthy. No model run blocked. Waiting for backfill completion signal before next gate.",
+        "text": "No build task was assigned. This is the evening model check with a data backfill agenda (50 fighters, height/reach via two independent sources). Sources live and healthy. No model run blocked. Waiting for backfill completion signal before next gate.",
         "evidenceRefs": [
           "source:cito-ufc:2026-08-04",
           "source:wikimedia:2026-08-04"

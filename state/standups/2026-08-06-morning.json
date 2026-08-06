@@ -14,7 +14,7 @@
   "fixture": false,
   "status": "PLAN",
   "stage": "VALIDATION",
-  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea: idea-2026-08-06-c42b60b6.",
+  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea, screened before the room opened.",
   "participantReasons": [
     {
       "agent": "VIZE",
@@ -467,7 +467,7 @@
         "agent": "SPARK",
         "mode": "statement",
         "sentAt": "2026-08-06T04:01:37.355Z",
-        "text": "MMA Files Slot Gap Review Card. VAULT recorded variant_of; idea-2026-08-06-c42b60b6 is the one Caught Up handoff for the product room.",
+        "text": "MMA Files Slot Gap Review Card. VAULT recorded it as a variant of an existing idea; it is the one Caught Up next-step summary for the product room.",
         "evidenceRefs": [
           "idea-2026-08-06-c42b60b6"
         ]

@@ -14,7 +14,7 @@
   "fixture": false,
   "status": "NO_ACTION",
   "stage": "VALIDATION",
-  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council held the internal work item. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea: idea-2026-08-03-0e047a4b.",
+  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council held the internal work item. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea: the idea raised on 2026-08-03.",
   "participantReasons": [
     {
       "agent": "VIZE",
@@ -468,7 +468,7 @@
         "agent": "SPARK",
         "mode": "statement",
         "sentAt": "2026-08-03T08:33:18.688Z",
-        "text": "Single-Gap Specialist Agenda Brief. VAULT recorded novel; idea-2026-08-03-0e047a4b is the one Caught Up handoff for the product room.",
+        "text": "Single-Gap Specialist Agenda Brief. VAULT recorded it as new; the idea raised on 2026-08-03 is the one Caught Up next-step summary for the product room.",
         "evidenceRefs": [
           "idea-2026-08-03-0e047a4b"
         ]

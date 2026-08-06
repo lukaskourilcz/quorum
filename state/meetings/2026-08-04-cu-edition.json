@@ -217,7 +217,7 @@
   },
   "decision": {
     "outcome": "NO_EDITION",
-    "summary": "NO_EDITION. budget_exhausted",
+    "summary": "The day's writing budget was already spent, so no article was written.",
     "evidenceRefs": [
       "source:404-media",
       "source:anthropic-news",

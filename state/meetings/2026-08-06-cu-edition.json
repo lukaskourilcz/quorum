@@ -217,7 +217,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "EDITION. Tři laboratoře, jeden evaluátor a devatenáct útoků, které nikdo nečekal led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
+    "summary": "Tři laboratoře, jeden evaluátor a devatenáct útoků, které nikdo nečekal led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
     "evidenceRefs": [
       "source:simonw",
       "source:tensorfeed",
@@ -315,7 +315,7 @@
         "agent": "HERALD",
         "mode": "close",
         "sentAt": "2026-08-06T03:03:50.057Z",
-        "text": "EDITION recorded. RELAY owns delivery from here."
+        "text": "The edition is recorded. RELAY owns delivery from here."
       }
     ]
   }

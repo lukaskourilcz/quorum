@@ -2,6 +2,7 @@ import "server-only";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { PublicMeetingSkip } from "@/lib/calendar-feed-model";
+import { readsAsMachineText } from "@/lib/public-prose";
 
 function skipsRoot() {
   const repoRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -15,6 +16,9 @@ function parseSkip(value: unknown): PublicMeetingSkip | null {
   const { date, phase, reason } = record;
   if (typeof date !== "string" || typeof phase !== "string" || typeof reason !== "string") return null;
   if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || phase.length === 0 || reason.length === 0) return null;
+  // The reason is the whole of what a quiet cell says, so it has to read as a sentence. Two
+  // August skips named the commit their release gate failed at and one linked a workflow run.
+  if (readsAsMachineText(reason)) return null;
   return { date, phase, reason: reason.slice(0, 180) };
 }
 

@@ -188,6 +188,35 @@ export function buildEditionPackage(
   return EditionPackageSchema.parse(preliminary);
 }
 
+/**
+ * The sentence a reader gets when a day produced no edition.
+ *
+ * A stop code is the run's own name for what happened and belongs in the run report, where the
+ * reporter already writes it. It was also the entire published explanation: the public record for
+ * 2 and 4 August read "NO_EDITION. budget_exhausted" and the one for 1 August read
+ * "NO_EDITION. stet_block_after_rewrite". Every code the production and live paths can stop on
+ * owes the reader a sentence; a reason that is already a sentence passes through untouched.
+ */
+export function noEditionSentence(reason: string): string {
+  if (!/^[a-z][a-z0-9_]*(?::|$)/.test(reason)) return reason;
+  const sentences: Record<string, string> = {
+    budget_exhausted: "The day's writing budget was already spent, so no article was written.",
+    content_invalid_after_regeneration:
+      "The article failed its own checks on every attempt the budget allowed, so nothing was published.",
+    curation_failed: "The desk could not assemble a shortlist from today's sources, so nothing was written.",
+    curation_gate_failed:
+      "Today's candidate stories did not meet the source rules, so nothing was written.",
+    delivery_invalid: "The finished edition could not be delivered in a form the magazine accepts.",
+    production_failed: "The run producing today's edition stopped before it finished.",
+    quality_block: "The finished article did not clear the quality checks, so nothing was published.",
+    source_gate: "Too few sources were reachable today to choose a story from.",
+    stet_block_after_rewrite:
+      "The Czech copy review rejected the article again after a rewrite, so nothing was published."
+  };
+  return sentences[reason.split(":")[0]!]
+    ?? "Today's edition stopped before publication; the run report records where.";
+}
+
 export function buildNoEditionPackage(input: {
   date: string;
   meetingRef: string;
@@ -204,7 +233,7 @@ export function buildNoEditionPackage(input: {
     board: {
       meetingRef: input.meetingRef,
       roomUrl: input.roomUrl,
-      noEditionReason: input.reason.slice(0, 280)
+      noEditionReason: noEditionSentence(input.reason).slice(0, 280)
     },
     generation: {
       models: {

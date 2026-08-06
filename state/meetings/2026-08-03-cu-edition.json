@@ -217,7 +217,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "EDITION. AI agents cheat to win — and the platforms are just starting to notice led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
+    "summary": "AI agents cheat to win — and the platforms are just starting to notice led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.",
     "evidenceRefs": [
       "source:mit-tech-review",
       "source:tensorfeed",
@@ -323,7 +323,7 @@
         "agent": "HERALD",
         "mode": "close",
         "sentAt": "2026-08-03T08:40:13.040Z",
-        "text": "EDITION recorded. RELAY owns delivery from here."
+        "text": "The edition is recorded. RELAY owns delivery from here."
       }
     ]
   }

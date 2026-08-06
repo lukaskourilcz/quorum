@@ -9,7 +9,7 @@ import { validateEditionForDelivery } from "../src/delivery/validate.js";
 import { loadEditionQualityConfig } from "../src/edition/config.js";
 import { runLiveEdition, shouldQueueEditionDelivery } from "../src/edition/live.js";
 import { BudgetedEditionModelGateway } from "../src/edition/models.js";
-import { buildNoEditionPackage } from "../src/edition/package.js";
+import { buildNoEditionPackage, noEditionSentence } from "../src/edition/package.js";
 import type { EditionModelGateway, StructuredToolRequest } from "../src/edition/types.js";
 import { caughtUpBudgetMode } from "../src/finance/budget-plan.js";
 import { repoRoot } from "../src/paths.js";
@@ -158,7 +158,7 @@ describe("Caught Up production budget", () => {
     });
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toBe("budget_exhausted");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("budget_exhausted"));
     }
     expect(calls).toBe(0);
   });

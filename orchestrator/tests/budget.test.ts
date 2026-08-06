@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { KpiSetSchema } from "../src/contracts/kpi-set.js";
+import { noEditionSentence } from "../src/edition/package.js";
 import { runLiveEdition } from "../src/edition/live.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../src/portfolio/limits.js";
 import { resolveEffectivePortfolioSchedule } from "../src/portfolio/schedule.js";
@@ -292,8 +293,10 @@ describe("every phase reaches the countersigned caps", () => {
         return result.package.board.noEditionReason;
       };
       // $5 of headroom is inside the countersigned $25 share and outside the superseded $15 one.
-      expect(await reasonAfterSpending(limits.monthlyApiUsd - 5)).toMatch(/^source_gate:/u);
-      expect(await reasonAfterSpending(limits.monthlyApiUsd - 0.1)).toBe("budget_exhausted");
+      // The published reason is the sentence, not the stop code; the code still decides which
+      // sentence, so this still pins which of the two stops each headroom reaches.
+      expect(await reasonAfterSpending(limits.monthlyApiUsd - 5)).toBe(noEditionSentence("source_gate"));
+      expect(await reasonAfterSpending(limits.monthlyApiUsd - 0.1)).toBe(noEditionSentence("budget_exhausted"));
     } finally {
       Object.assign(process.env, previous);
     }

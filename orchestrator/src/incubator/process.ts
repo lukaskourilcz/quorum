@@ -120,7 +120,7 @@ export function createIncubatorScanDryMeeting(): MeetingRecord {
       summary: "Prepare a bounded evidence packet before a live scan can name candidate domains.",
       status: "planned"
     }],
-    growthPlan: "NO_EXTERNAL_ACTION. This dry scan records the evidence requirement and nothing else.",
+    growthPlan: "No outside action. This dry scan records the evidence requirement and nothing else.",
     eveningOutcome: null,
     roomTranscript: {
       openedAt,
@@ -177,7 +177,7 @@ export function createIncubatorSynthesisDryMeeting(): MeetingRecord {
       summary: "Wait for an evidenced scan before writing any niche proposal.",
       status: "blocked"
     }],
-    growthPlan: "NO_FOUNDING. The incubator terminal output remains an empty shortlist until evidence supports a proposal and the owner rates it.",
+    growthPlan: "No company is founded. The incubator ends with an empty shortlist until evidence supports a proposal and the owner rates it.",
     eveningOutcome: "Zero proposals; zero shortlist items; owner action is not requested.",
     roomTranscript: {
       openedAt,

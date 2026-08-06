@@ -8,13 +8,38 @@
   "stage": "DISCOVERY",
   "operatingBrief": "Exercise the divergent incubator room without external evidence, provider calls, founding authority or proposal fabrication.",
   "participantReasons": [
-    { "agent": "PULSE", "reason": "chairs the research-only room", "participated": true },
-    { "agent": "ANGLE", "reason": "leads daily-readable niche analysis", "participated": true },
-    { "agent": "SCOUT", "reason": "supplies cited observations or records the evidence gap", "participated": true },
-    { "agent": "COHORT", "reason": "bounds an adult audience hypothesis without invented size", "participated": true },
-    { "agent": "VAULT", "reason": "rejects repeats against incubator and global memory", "participated": true }
+    {
+      "agent": "PULSE",
+      "reason": "chairs the research-only room",
+      "participated": true
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "leads daily-readable niche analysis",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "supplies cited observations or records the evidence gap",
+      "participated": true
+    },
+    {
+      "agent": "COHORT",
+      "reason": "bounds an adult audience hypothesis without invented size",
+      "participated": true
+    },
+    {
+      "agent": "VAULT",
+      "reason": "rejects repeats against incubator and global memory",
+      "participated": true
+    }
   ],
-  "ledger": { "estimatedCycleUsd": 0.06, "actualCycleUsd": 0, "monthAllInUsd": 0, "monthCapUsd": 20 },
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 20
+  },
   "decision": {
     "outcome": "EVIDENCE_PACKET_REQUIRED",
     "summary": "Record zero candidate domains because the dry packet contains no external evidence. The next scan must bring cited observations.",
@@ -22,11 +47,31 @@
   },
   "proposals": [],
   "voteMatrix": [
-    { "voter": "PULSE", "firstChoice": "return-zero-candidates", "veto": false },
-    { "voter": "ANGLE", "firstChoice": "return-zero-candidates", "veto": false },
-    { "voter": "SCOUT", "firstChoice": "return-zero-candidates", "veto": false },
-    { "voter": "COHORT", "firstChoice": "return-zero-candidates", "veto": false },
-    { "voter": "VAULT", "firstChoice": "return-zero-candidates", "veto": false }
+    {
+      "voter": "PULSE",
+      "firstChoice": "return-zero-candidates",
+      "veto": false
+    },
+    {
+      "voter": "ANGLE",
+      "firstChoice": "return-zero-candidates",
+      "veto": false
+    },
+    {
+      "voter": "SCOUT",
+      "firstChoice": "return-zero-candidates",
+      "veto": false
+    },
+    {
+      "voter": "COHORT",
+      "firstChoice": "return-zero-candidates",
+      "veto": false
+    },
+    {
+      "voter": "VAULT",
+      "firstChoice": "return-zero-candidates",
+      "veto": false
+    }
   ],
   "tasks": [
     {
@@ -36,7 +81,7 @@
       "status": "planned"
     }
   ],
-  "growthPlan": "NO_EXTERNAL_ACTION. This dry scan records the evidence requirement and nothing else.",
+  "growthPlan": "No outside action. This dry scan records the evidence requirement and nothing else.",
   "eveningOutcome": null,
   "generatedAt": "2026-08-01T06:06:00.000Z",
   "kind": "incubator-scan",
@@ -46,12 +91,42 @@
     "gavel": "PULSE",
     "setting": "Deterministic incubator scan fixture. No source packet, provider call or market fact is represented.",
     "turns": [
-      { "agent": "PULSE", "mode": "gavel", "sentAt": "2026-08-01T06:00:00.000Z", "text": "This is a dry scan. Bring a candidate only if the packet can show why someone would return tomorrow." },
-      { "agent": "SCOUT", "mode": "statement", "sentAt": "2026-08-01T06:01:00.000Z", "text": "The fixture contains no source observations. I will not turn an uncited hunch into a domain." },
-      { "agent": "ANGLE", "mode": "response", "sentAt": "2026-08-01T06:02:00.000Z", "text": "Without a reader and daily curiosity loop, there is no positioning case to sharpen." },
-      { "agent": "COHORT", "mode": "response", "sentAt": "2026-08-01T06:03:00.000Z", "text": "No audience size is inferable here. Any future hypothesis must stay adult and use public interests only." },
-      { "agent": "VAULT", "mode": "vote", "sentAt": "2026-08-01T06:04:00.000Z", "text": "There is nothing to compare with memory. Zero candidates is the novel and honest record." },
-      { "agent": "PULSE", "mode": "close", "sentAt": "2026-08-01T06:06:00.000Z", "text": "Close with zero candidates. A cited evidence packet is the next input, not a manufactured proposal." }
+      {
+        "agent": "PULSE",
+        "mode": "gavel",
+        "sentAt": "2026-08-01T06:00:00.000Z",
+        "text": "This is a dry scan. Bring a candidate only if the packet can show why someone would return tomorrow."
+      },
+      {
+        "agent": "SCOUT",
+        "mode": "statement",
+        "sentAt": "2026-08-01T06:01:00.000Z",
+        "text": "The fixture contains no source observations. I will not turn an uncited hunch into a domain."
+      },
+      {
+        "agent": "ANGLE",
+        "mode": "response",
+        "sentAt": "2026-08-01T06:02:00.000Z",
+        "text": "Without a reader and daily curiosity loop, there is no positioning case to sharpen."
+      },
+      {
+        "agent": "COHORT",
+        "mode": "response",
+        "sentAt": "2026-08-01T06:03:00.000Z",
+        "text": "No audience size is inferable here. Any future hypothesis must stay adult and use public interests only."
+      },
+      {
+        "agent": "VAULT",
+        "mode": "vote",
+        "sentAt": "2026-08-01T06:04:00.000Z",
+        "text": "There is nothing to compare with memory. Zero candidates is the novel and honest record."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-01T06:06:00.000Z",
+        "text": "Close with zero candidates. A cited evidence packet is the next input, not a manufactured proposal."
+      }
     ]
   }
 }

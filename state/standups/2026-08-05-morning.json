@@ -14,7 +14,7 @@
   "fixture": false,
   "status": "NO_ACTION",
   "stage": "VALIDATION",
-  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council held the internal work item. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea: idea-2026-08-05-bbffd7f5.",
+  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council held the internal work item. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea, screened before the room opened.",
   "participantReasons": [
     {
       "agent": "VIZE",
@@ -457,7 +457,7 @@
         "agent": "SPARK",
         "mode": "statement",
         "sentAt": "2026-08-05T09:16:45.150Z",
-        "text": "Evidence Gap Triage Card. VAULT recorded duplicate_of; idea-2026-08-05-bbffd7f5 is the one Caught Up handoff for the product room.",
+        "text": "Evidence Gap Triage Card. VAULT recorded it as a duplicate; it is the one Caught Up next-step summary for the product room.",
         "evidenceRefs": [
           "idea-2026-08-05-bbffd7f5"
         ]

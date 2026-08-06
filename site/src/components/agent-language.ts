@@ -88,7 +88,6 @@ const mandates: Record<AgentId, string> = {
 
 const replacements: ReadonlyArray<readonly [RegExp, string]> = [
   [/\bOPS-OBSERVE\b/g, "record check"],
-  [/\bOPS-HANDOFF\b/g, "next-step summary"],
   [/\bNO_POST\b/g, "do not publish"],
   [/\bNO_PROPOSAL\b/g, "no proposal"],
   [/\bNO_ACTION\b/g, "do nothing"],
@@ -99,6 +98,7 @@ const replacements: ReadonlyArray<readonly [RegExp, string]> = [
   [/internal operating/gi, "internal work"],
   [/public archive/gi, "public history"],
   [/archive availability/gi, "availability in the public history"],
+  [/\bCaught Up\b/g, "DNESKAi"],
   [/hobby-mode/gi, "low-cost test"],
   [/hobby operations/gi, "low-cost work"],
   [/provider calls/gi, "AI service calls"],
@@ -142,8 +142,6 @@ const replacements: ReadonlyArray<readonly [RegExp, string]> = [
   [/eligible for a ledger entry/gi, "ready to be added to the history"],
   [/authorize product action/gi, "approve product work"],
   [/audience hypothesis/gi, "idea about the audience"],
-  [/handoff/gi, "next-step summary"],
-  [/\s+—\s+/g, ": "],
   [/Founding fixture declined/gi, "First test rejected every idea"],
   [/offline fixture/gi, "test example"],
   [/synthetic opportunity cards/gi, "sample business ideas"],
@@ -176,7 +174,6 @@ const replacements: ReadonlyArray<readonly [RegExp, string]> = [
   [/control boundary/gi, "limit"],
   [/controls/gi, "checks"],
   [/control/gi, "check"],
-  [/bounded/gi, "clearly limited"],
   [/operational/gi, "day-to-day"],
   [/operating/gi, "running"],
   [/production-ready/gi, "ready to release"],
@@ -245,10 +242,23 @@ export function publicAgentStatus(status: Agent["status"]): string {
   return "Retired";
 }
 
+/**
+ * Every SCREAMING_SNAKE token a record can carry, translated before the list below runs.
+ *
+ * The list matches on words, so a status token was torn in half by whichever rule reached it
+ * first: NEEDS_RECONCILIATION rendered as "NEEDS_final checking". Statuses and outcomes have
+ * their own label map, and it already lowercases anything it does not name, so it goes first
+ * and the list never sees the token. It is a safety net for text that arrives shouting, not a
+ * place to add rules — plain sentences belong in the writer that makes the record.
+ */
+function withoutShoutedCodes(value: string): string {
+  return value.replace(/\b[A-Z][A-Z0-9]*(?:[_-][A-Z0-9]+)+\b/g, (token) => publicDecisionLabel(token));
+}
+
 export function publicAgentText(value: string): string {
   const withRoleTitles = (Object.entries(titles) as Array<[AgentId, string]>).reduce(
     (text, [agentId, title]) => text.replace(new RegExp(`\\b${agentId}\\b`, "g"), title),
-    value
+    withoutShoutedCodes(value)
   );
   return replacements.reduce(
     (text, [pattern, replacement]) => text.replace(pattern, replacement),

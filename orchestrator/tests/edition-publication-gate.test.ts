@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadEditionQualityConfig } from "../src/edition/config.js";
+import { noEditionSentence } from "../src/edition/package.js";
 import {
   FixtureEditionModelGateway,
   type FixtureModelResponse
@@ -232,7 +233,7 @@ describe("what the switch does not unblock", () => {
     );
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toBe("stet_block_after_rewrite");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("stet_block_after_rewrite"));
     }
     expect(result.report.stetBlocks).toBe(2);
     expect(result.report.unresolvedReview).toBeUndefined();
@@ -248,9 +249,11 @@ describe("what the switch does not unblock", () => {
     );
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toMatch(/^quality_block:/);
-      expect(result.package.board.noEditionReason).toContain("minimum_successful_sources");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("quality_block"));
     }
+    // Which floor the article failed is a fact about the run, and the run report is where it
+    // belongs. The package's reason is read by a reader, and it used to carry the code list.
+    expect(result.report.warnings).toContain("quality:minimum_successful_sources");
     expect(result.report.regenerationAttempts).toBe(2);
   });
 
@@ -265,7 +268,7 @@ describe("what the switch does not unblock", () => {
     );
     expect(result.package.status).toBe("no_edition");
     if (result.package.status === "no_edition") {
-      expect(result.package.board.noEditionReason).toBe("content_invalid_after_regeneration");
+      expect(result.package.board.noEditionReason).toBe(noEditionSentence("content_invalid_after_regeneration"));
     }
     expect(result.report.warnings).toContain(
       "content_invalid:write: output cited an unsupplied URL: https://unsupplied.example/story"
