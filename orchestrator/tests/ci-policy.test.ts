@@ -21,7 +21,6 @@ describe("automation policy", () => {
       "cycle.yml",
       "delivery-doctor.yml",
       "health.yml",
-      "owndashboard-cron-report.yml",
       "social-publisher.yml"
     ]);
 
@@ -181,6 +180,13 @@ describe("automation policy", () => {
     // workflow already handled Prague by pairing DST cron variants, and these two do not need to.
     expect(social).not.toContain("timezone:");
     expect(social).toContain("--dry-if-disabled");
+    // Hourly, the publisher paid about 4.3 billable minutes of checkout and install to confirm
+    // that every channel is still switched off — roughly 1,600 minutes a month for an answer
+    // the kill switch already knows. The schedule stays commented out until a channel exists,
+    // and the job-level guard is what makes a locked scheduled hour cost nothing when it does:
+    // a step-level check has already paid for the runner.
+    expect(social).not.toMatch(/^\s*schedule:/mu);
+    expect(social).toContain("if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}");
     expect(health).not.toContain("timezone:");
   });
 
@@ -194,6 +200,24 @@ describe("automation policy", () => {
   //
   // Asserted over every workflow file rather than the three that have crons today, so a schedule
   // added later cannot quietly land back on minute 0 by being new.
+  // The council pushes about eighteen commits a day. Every one that touches only what a cycle
+  // writes, or only prose, is covered by the gate that produced it or verifies nothing — and
+  // each of those was starting a full CI run. What must never be filtered is a prompt: it is
+  // read into a live room, so changing one changes what the company does.
+  it("skips CI for pushes that cannot change behaviour, and never for a prompt", async () => {
+    const ci = await readFile(path.join(workflowRoot, "ci.yml"), "utf8");
+    const pushBlock = ci.slice(ci.indexOf("  push:"), ci.indexOf("  pull_request:"));
+
+    for (const ignored of ["state/**", "docs/**", "*.md", ".claude/**", ".agents/**", "site/public/social/**"]) {
+      expect(pushBlock, `${ignored} should not start a CI run`).toContain(`"${ignored}"`);
+    }
+    expect(pushBlock).not.toContain("orchestrator/prompts");
+    expect(pushBlock).not.toContain("orchestrator/src");
+    expect(pushBlock).not.toContain("config/");
+    // Pull requests are never filtered: a human change is verified exactly as before.
+    expect(ci).toMatch(/^\s{2}pull_request:\s*$/mu);
+  });
+
   it("keeps every schedule off the minutes GitHub is most contended on", async () => {
     const names = (await readdir(workflowRoot)).filter((name) => name.endsWith(".yml"));
     const schedules: Array<{ file: string; expression: string }> = [];

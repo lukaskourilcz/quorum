@@ -2,8 +2,12 @@ name: Guarded social publisher
 
 on:
   # Paused, not deleted. Every channel is off behind the social triple-lock, so twenty-four
-  # firings a day existed to confirm there was nothing to publish. Uncomment the schedule when
-  # a channel is enabled; workflow_dispatch still runs it on demand in the meantime.
+  # firings a day existed to confirm there was nothing to publish — each one paying about 4.3
+  # billable minutes of checkout and install to reach that answer, roughly 1,600 minutes a month.
+  #
+  # When a channel is enabled, restore the schedule AND keep the job-level `if:` below. The
+  # guard has to sit on the job, not inside a step: a locked hour that reaches the runner has
+  # already been billed a whole minute, while a job whose `if:` is false costs nothing at all.
   # schedule:
   #   - cron: "55 * * * *"
   workflow_dispatch:
@@ -24,6 +28,9 @@ concurrency:
 jobs:
   publish:
     name: Validate or publish approved queue
+    # A scheduled firing with the kill switch on never starts a runner. A dispatch always runs,
+    # because someone asking for it by hand wants the validation output either way.
+    if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
