@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260806050052-incubator-scan",
+  "date": "2026-08-06",
+  "phase": "incubator-scan",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Bring cited daily-readable candidate domains and reject repeats; this scan does not found anything",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "COHORT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "VAULT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.020202,
+    "monthAllInUsd": 2.998457300000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "The packet shows recurring AI, platform advertising, and media-platform items, but AI news is taken and no direct audience, conversion, or willingness-to-pay evidence supports a novel niche.",
+    "evidenceRefs": [
+      "source:tensorfeed",
+      "source:digiday",
+      "source:the-register",
+      "source:spaceflight-news"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "The packet shows recurring AI, platform advertising, and media-platform items, but AI news is taken and no direct audience, conversion, or willingness-to-pay evidence supports a novel niche.",
+      "evidenceRefs": [
+        "source:tensorfeed",
+        "source:digiday"
+      ]
+    },
+    {
+      "agent": "COHORT",
+      "summary": "No AudienceSpec proposed: the packet contains cited topic observations but no product or campaign brief requiring audience definition.",
+      "evidenceRefs": [
+        "source:the-register",
+        "source:tensorfeed",
+        "source:spaceflight-news",
+        "source:digiday"
+      ]
+    },
+    {
+      "agent": "VAULT",
+      "summary": "No candidate ideas were supplied for ledger comparison; no novelty verdict or revival review is possible.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "COHORT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "VAULT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "RESEARCH_ONLY. Evidence collection does not authorize spend or external action.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-06T05:04:52.057Z",
+  "kind": "incubator-scan",
+  "roomTranscript": {
+    "openedAt": "2026-08-06T05:00:52.057Z",
+    "closedAt": "2026-08-06T05:04:52.057Z",
+    "gavel": "PULSE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "gavel",
+        "sentAt": "2026-08-06T05:00:52.057Z",
+        "text": "Bring cited daily-readable candidate domains and reject repeats; this scan does not found anything"
+      },
+      {
+        "agent": "PULSE",
+        "mode": "statement",
+        "sentAt": "2026-08-06T05:01:52.057Z",
+        "text": "The packet shows recurring AI, platform advertising, and media-platform items, but AI news is taken and no direct audience, conversion, or willingness-to-pay evidence supports a novel niche.",
+        "evidenceRefs": [
+          "source:tensorfeed",
+          "source:digiday"
+        ]
+      },
+      {
+        "agent": "COHORT",
+        "mode": "statement",
+        "sentAt": "2026-08-06T05:02:52.057Z",
+        "text": "No AudienceSpec proposed: the packet contains cited topic observations but no product or campaign brief requiring audience definition.",
+        "evidenceRefs": [
+          "source:the-register",
+          "source:tensorfeed",
+          "source:spaceflight-news",
+          "source:digiday"
+        ]
+      },
+      {
+        "agent": "VAULT",
+        "mode": "statement",
+        "sentAt": "2026-08-06T05:03:52.057Z",
+        "text": "No candidate ideas were supplied for ledger comparison; no novelty verdict or revival review is possible."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-06T05:04:52.057Z",
+        "text": "The packet shows recurring AI, platform advertising, and media-platform items, but AI news is taken and no direct audience, conversion, or willingness-to-pay evidence supports a novel niche."
+      }
+    ]
+  }
+}

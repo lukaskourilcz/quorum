@@ -360,13 +360,17 @@
       "at": "2026-08-06T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-06-morning",
+      "decisionOneLiner": "The council approved one bounded internal work item: Set today's bounded specialist agendas. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-08-06T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "incubator-scan",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-06-incubator-scan",
+      "decisionOneLiner": "The packet shows recurring AI, platform advertising, and media-platform items, but AI news is taken and no direct audience, conversion, or willingness-to-pay evidence supports a no"
     },
     {
       "at": "2026-08-06T06:00:00.000Z",

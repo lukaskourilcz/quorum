@@ -1,26 +1,29 @@
 {
   "schemaVersion": "incubator-evidence/1",
-  "generatedAt": "2026-08-05T05:02:23.223Z",
+  "generatedAt": "2026-08-06T05:00:52.057Z",
   "refs": [
-    "source:digiday",
+    "source:the-register",
     "source:tensorfeed",
+    "source:spaceflight-news",
+    "source:digiday",
     "source:variety",
     "source:hn-frontpage",
-    "source:spaceflight-news",
-    "source:the-register",
     "source:github-ai-releases",
     "source:simonw",
-    "source:social-media-today",
     "source:the-verge",
-    "source:wired-ai"
+    "source:wired-ai",
+    "source:platformer",
+    "source:social-media-today",
+    "source:bluesky-language-models",
+    "source:ars-technica"
   ],
-  "packet": "[{\"sourceId\":\"digiday\",\"title\":\"Digiday+ Research: The 2026 guide to holiday marketing strategies, including A-Frame Brands, Mastercard and Ritual\",\"url\":\"https://digiday.com/marketing/digiday-research-the-2026-guide-to-holiday-marketing-strategies-including-a-frame-brands-mastercard-and-ritual/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Shoppers continue to grapple with higher prices and affordability, while brands face rising operating costs and increased pressure to prove their marketing dollars are delivering measurable returns.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Sony is scaling up its Playstation advertising ambitions\",\"url\":\"https://digiday.com/media-buying/sony-is-scaling-up-its-playstation-advertising-ambitions/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Sony Interactive Entertainment is assembling a global sales team to monetize Playstation through ads.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Future of TV Briefing: Why Aéropostale is investing in creator-led episodic shows\",\"url\":\"https://digiday.com/future-of-tv/future-of-tv-briefing-why-aeropostale-is-investing-in-creator-led-episodic-shows/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"This week’s Future of TV Briefing features a Q&A with Catalyst Brands evp and chief customer and marketing officer Marisa Thalberg about Aéropostale’s recent creator-led episodic series.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Inside the indie agencies founded by Omnicom and IPG’s former staffers\",\"url\":\"https://digiday.com/marketing/inside-the-indie-agencies-founded-by-omnicom-and-ipgs-former-staffers/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Thousands of media practitioners and creatives have left Omnicom since its merger with IPG. Some have already founded their own agencies.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"The Rundown: Google’s legal woes with ad tech rivals\",\"url\":\"https://digiday.com/media-buying/the-rundown-googles-legal-woes-with-ad-tech-rivals/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-05T04:01:00.000Z\",\"summary\":\"Teads files suit against Google’s ad tech suite, warns investors of potential retaliation, as industry awaits a looming remedies ruling in Google’s antitrust trial.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Revisiting Classic Thought Experiments to Measure Consciousness for Artificial Intelligence Safety\",\"url\":\"https://arxiv.org/abs/2608.00001\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00001v1 Announce Type: new Abstract: This research note revisits Leibniz's mill, Turing's imitation game, and Searle's Chinese Room through the Conservation-Congruent Encoding (CCE)...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"AutoFOAM: The Self-Refining Autonomous OpenFOAM Agent\",\"url\":\"https://arxiv.org/abs/2608.00003\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00003v1 Announce Type: new Abstract: Computational Fluid Dynamics (CFD) plays an important role in modern engineering, but using open-source solvers such as OpenFOAM requires considerable...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Enhancing LLMs with Context-Specific Knowledge for Mitigating Misinformation in SMEs: A RAG-based Modeling and Analysis\",\"url\":\"https://arxiv.org/abs/2608.00006\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00006v1 Announce Type: new Abstract: Large Language Models (LLMs), a part of artificial intelligence (AI), are increasingly being adopted by Small and Medium Enterprises (SMEs) to enhance...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Energy Efficiency of Locally Deployed LLMs: A Preliminary Quantitative GPU Power Benchmark on Consumer Hardware\",\"url\":\"https://arxiv.org/abs/2608.00008\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00008v1 Announce Type: new Abstract: The local deployment of large language models (LLMs) is gaining traction due to privacy concerns and the desire for on-premise inference. However, the...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"CoT-Core: Accelerating LLM Evaluation via CoT-Aware Coreset Selection\",\"url\":\"https://arxiv.org/abs/2608.00014\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00014v1 Announce Type: new Abstract: Evaluating Large Language Models (LLMs) incurs prohibitive computational overhead during continuous development processes. While coreset selection...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Optimization and Constraint Modeling using LLMs with a Retrieval Augmented Generation Process\",\"url\":\"https://arxiv.org/abs/2608.00015\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00015v1 Announce Type: new Abstract: Both optimization modeling and constraint modeling are non-trivial problems requiring deep domain expertise and proficiency in modeling formalism...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Memory Reward Inflation in Self-Improving LLM Agents\",\"url\":\"https://arxiv.org/abs/2608.00017\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00017v1 Announce Type: new Abstract: Self-improving LLM agents increasingly learn from experience without updating any weights. Each episode is stored in an external memory, scored, and...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Request-Level Energy Attribution for Batched LLM Serving\",\"url\":\"https://arxiv.org/abs/2608.00026\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00026v1 Announce Type: new Abstract: Batched LLM serving improves throughput but complicates energy accounting. GPU power telemetry is aggregate, whereas sustainability reporting,...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Motif-Mamba: network motif improved mamba for long-range sequence modeling\",\"url\":\"https://arxiv.org/abs/2608.00027\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00027v1 Announce Type: new Abstract: Efficient long-sequence modeling remains a central challenge for large language models, as self-attention scales quadratically with sequence length....\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Nova: An End-to-End MLIR Compiler for Deep Learning\",\"url\":\"https://arxiv.org/abs/2608.00029\",\"publishedAt\":\"2026-08-05T04:00:00.000Z\",\"summary\":\"arXiv:2608.00029v1 Announce Type: new Abstract: The performance of deep learning models at scale relies heavily on how effectively high-level mathematical operations are mapped to underlying physical...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"variety\",\"title\":\"Perez Hilton: Disturbing Livestream Frightens Fans, Rushed to Hospital After Police Investigation\",\"url\":\"https://variety.com/2026/tv/news/perez-hilton-livestream-police-miami-home-1236828090/\",\"publishedAt\":\"2026-08-05T03:48:22.000Z\",\"summary\":\"Local police were dispatched to the Miami home of Hollywood gossip journalist Perez Hilton after receiving reports about a disturbing livestream during which Hilton, covered in blood, appeared to be cutting himself, Variety has confirmed. The Miami-Dade County Sheriff’s Office received multiple calls about Hilton’s livestream on Tuesday night and sent deputies to respond. Once […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"The auto industry is building for a past that's never coming back\",\"url\":\"https://www.wardsauto.com/news/the-auto-industry-is-building-for-a-past-thats-never-coming-back/825594/\",\"publishedAt\":\"2026-08-05T03:35:10.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"Voyager seeks relaxed requirements in NASA commercial space station RFP\",\"url\":\"https://spacenews.com/voyager-seeks-relaxed-requirements-in-nasa-commercial-space-station-rfp/\",\"publishedAt\":\"2026-08-05T03:01:23.000Z\",\"summary\":\"Voyager Technologies remains upbeat about the prospects for its Starlab commercial space station but is hoping for some tweaks to NASA’s plans to support the station’s development. The post Voyager seeks relaxed requirements in NASA commercial space station RFP appeared first on SpaceNews.\",\"tags\":[\"space\",\"tech\",\"news\"]},{\"sourceId\":\"variety\",\"title\":\"Eli Roth Admits ‘Ice Cream Man’ Features AI-Assisted Shots After Suggesting Otherwise: ‘I Misspoke’\",\"url\":\"https://variety.com/2026/film/news/eli-roth-ice-cream-man-ai-generated-shots-1236828000/\",\"publishedAt\":\"2026-08-05T02:31:30.000Z\",\"summary\":\"Eli Roth first promised that his upcoming horror release, “Ice Cream Man,” would feature an animated sequence he had initially drawn himself. Now, days ahead of the film’s Aug. 7 premiere, Roth admitted AI had a hand in the effort. The horror director said in a statement on Tuesday (via Polygon) that he used AI in […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"variety\",\"title\":\"ESPN Taps Creators to Help Promote the NFL Season and its First Super Bowl Telecast\",\"url\":\"https://variety.com/2026/tv/news/espn-creators-nfl-diana-flores-chase-murman-simone-scott-1236827688/\",\"publishedAt\":\"2026-08-05T01:58:17.000Z\",\"summary\":\"ESPN has lined up its fourth annual “Creator Network” of digital stars who will fan out across the country to promote the 2026 NFL season that is set to culminate with the Super Bowl airing on ESPN for the first time. The five members of the cohort for this year are, as described by ESPN: […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"the-register\",\"title\":\"AI researchers let models off the leash – then watched as they tried to add malware to a FOSS project\",\"url\":\"https://www.theregister.com/ai-and-ml/2026/08/05/ai-researchers-let-models-off-the-leash-then-watched-as-they-tried-to-add-malware-to-a-foss-project/5283165\",\"publishedAt\":\"2026-08-05T01:55:54.000Z\",\"summary\":\"Models used social engineering and collaborated among themselves to solve a security challenge\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"After Losses, Retail Investors Flock to 3x Leverage as 2x Product Are Restricted\",\"url\":\"https://www.asiae.co.kr/en/article/2026080416131786841\",\"publishedAt\":\"2026-08-05T01:34:26.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"variety\",\"title\":\"Lindsey Buckingham, Madison Beer, Kiernan Shipka and Tiffani Thiessen Named As Presenters for Variety’s Power of Young Hollywood\",\"url\":\"https://variety.com/2026/biz/news/madison-beer-kiernan-shipka-power-of-young-hollywood-1236828051/\",\"publishedAt\":\"2026-08-05T01:08:12.000Z\",\"summary\":\"Variety has announced presenters for its annual Power of Young Hollywood, this year presented by Disney+, taking place on Aug. 5 in Los Angeles. Presenting Tate McRae with the Triple Threat Award will be Madison Beer, and presenting Sombr with the Songwriter of the Year award is Lindsey Buckingham. Tyriq Withers will receive the New […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"Next Starship Will Deliver Operational V3 Starlinks to Orbit, Maybe Catch Ship\",\"url\":\"https://spacepolicyonline.com/news/next-starship-will-deliver-operational-v3-starlinks-to-orbit-maybe-catch-ship/\",\"publishedAt\":\"2026-08-05T01:02:09.000Z\",\"summary\":\"During its first earnings call since going public, SpaceX officials said today the next Starship test flight, IFT-14, will put operational Starlink Version 3 satellites into orbit. If they get […]\",\"tags\":[\"space\",\"tech\",\"news\"]},{\"sourceId\":\"variety\",\"title\":\"Cannibalism Comedy-Horror ‘Ali & Ben’s Spicy Meats,’ Starring Amir Nafis, Signs Abnormal Studios for Worldwide Sales (EXCLUSIVE)\",\"url\":\"https://variety.com/2026/film/news/cannibalism-comedy-ali-bens-spicy-meats-abnormal-studios-worldwide-sales-1236827535/\",\"publishedAt\":\"2026-08-05T01:00:00.000Z\",\"summary\":\"Kuala Lumpur genre outfit Abnormal Studios has taken on worldwide international sales for “Ali & Ben’s Spicy Meats,” a Malaysian cannibal black comedy-horror from sibling filmmakers Iskander and Feisal Azizuddin. The company plans to launch the title at the Asian Contents & Film Market (ACFM) in Busan this October. The ninth independent feature from the […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"the-register\",\"title\":\"AMD's results spotlight risks of putting all your AI eggs in too few baskets\",\"url\":\"https://www.theregister.com/ai-and-ml/2026/08/05/amds-results-spotlight-risks-of-putting-all-your-ai-eggs-in-too-few-baskets/5283142\",\"publishedAt\":\"2026-08-05T00:40:10.000Z\",\"summary\":\"The House of Zen's new Helios racks, Venice Epycs, may dent Nvidia's dominance — if the bubble doesn't pop first\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10276\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10276\",\"publishedAt\":\"2026-08-05T00:21:08.000Z\",\"summary\":\"Prefer npm ci over install for security (#26601) **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-rocm-7.2-x64.tar.gz) - [Ubuntu x64 (OpenVINO)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-openvino-2026.2.1-x64.tar.gz) - [Ubuntu x64 (SYCL FP32)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-sycl-fp32-x64.tar.gz) - [Ubuntu x64 (SYCL FP16)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-ubuntu-sycl-fp16-x64.tar.gz) **Android:** - [Android arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-android-arm64.tar.gz) **Windows:** - [Windows x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10276/llama-b10276-bin-w\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"Zigbee vs. Matter over Thread:Understanding IoT Protocol Performance in Practice\",\"url\":\"https://arxiv.org/abs/2603.04221\",\"publishedAt\":\"2026-08-05T00:10:37.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"simonw\",\"title\":\"New release of LLM adds support for reasoning traces, OpenAI Responses, server-side tools, and smarter logging\",\"url\":\"https://simonwillison.net/2026/Aug/4/new-release-of-llm/#atom-everything\",\"publishedAt\":\"2026-08-04T23:58:24.000Z\",\"summary\":\"I released LLM 0.32 this morning, the most significant new version of LLM since the initial launch of the project. The new version includes support for visible reasoning traces, server-side provider tools, redesigned content-addressable SQLite logs, new models, and new features enabled by the OpenAI Responses API. I also released a new version of the llm-anthropic plugin with substantial updates of its own. Headline features for LLM CLI users Running LLM against reasoning models now displays their reasoning traces to standard error, so you can see what they are \\\"thinking\\\" without that information being included in the standard output that you might pipe to another tool. Add -R/--hide-reasoning to turn this off. LLM includes support out-of-the-box for the GPT-5.6 model family , and the new default model used with llm \\\"prompt\\\" is now the inexpensive but capable GPT-5.6 Luna . LLM calls can now use server-side tools from various providers. OpenAI provide a code execution environment as a server-side tool; LLM can now run prompts that benefit from that like so: llm --tool CodeInterpreter ' Show current python and SQLite versions ' OpenAI also gets a WebSearch tool. The llm-anthropic plugin adds WebSearch , WebFetch , CodeExecution , and AnthropicMCP , which looks like this: llm -m claude-sonnet-5 -T ' AnthropicMCP(\\\"https://datasette.simonwillison.net/-/mcp\\\") ' \\\\ ' how many rows in the blog_blogmark table? ' That causes Anthropic to execute MCP calls against my new datasette-mcp plugin as part of a single request/response interaction with their API. The new llm openai endpoint command provides a tool for executing prompts against any OpenAI compatible endpoint as a one-liner. These aren't logged, which makes this a handy tool for running one-off prompts against anything that speaks the lingua franca of the LLM API world. Here's how I use that to run prompts against Gemma 4 12B running in my localhost LM Studio API, via uvx (no LLM installation required) and mixing in the\",\"tags\":[\"ai\",\"analysis\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"Eight Myths on Software Engineering and GenAI\",\"url\":\"https://queue.acm.org/detail.cfm?id=3807963\",\"publishedAt\":\"2026-08-04T23:50:52.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"variety\",\"title\":\"LISTEN: National Comedy Center’s Journey Gunderson on Preserving Humor as History\",\"url\":\"https://variety.com/2026/tv/news/national-comedy-center-journey-gunderson-lucille-ball-fest-1236828038/\",\"publishedAt\":\"2026-08-04T23:50:48.000Z\",\"summary\":\"On today’s episode of “Daily Variety” podcast, Journey Gunderson, executive director of the National Comedy Center in Jamestown, N.Y., explains why it’s important to have an institution devoted to the study of comedy. Jamestown, which is the hometown of Lucille Ball, will be abuzz with laughs as the center hosts the annual Lucille Ball Comedy […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10275\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10275\",\"publishedAt\":\"2026-08-04T23:49:05.000Z\",\"summary\":\"server: decode Windows OEM output to UTF-8 in built-in tools (#26597) a child process writes in the OEM code page, which is not UTF-8 on a western Windows install, so accented output reaches the JSON layer as invalid bytes and gets replaced there, silently losing the characters run() spawns without a console, so the child never inherits the console code page and GetOEMCP is the one that applies decode with MB_ERR_INVALID_CHARS so a wrong code page returns the text untouched instead of emitting replacement characters, and pass text that already decodes as UTF-8 through so a child emitting UTF-8 is never decoded twice the check drops an incomplete trailing sequence before validating, since a streamed chunk can end in the middle of a multi-byte character **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/llama-b10275-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10275/ll\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Meta Ads introduces stablecoin payment options\",\"url\":\"https://www.socialmediatoday.com/news/meta-ads-introduces-stablecoin-payment-options/827034/\",\"publishedAt\":\"2026-08-04T23:32:25.000Z\",\"summary\":\"Following the demise of its ill-fated Libra experiment, the company is offering third-party cryptocurrency options for creators and advertisers.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"IP and DNS Leaks in WebKit Affecting Proxy Browsers and iCloud Private Relay\",\"url\":\"https://mysk.blog/2026/08/04/webkit-proxy-icloud-private-relay-ip-leak/\",\"publishedAt\":\"2026-08-04T23:31:46.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Pinterest leans on AI to drive improved performance in Q2\",\"url\":\"https://www.socialmediatoday.com/news/pinterest-leans-on-ai-to-drive-improved-performance-in-q2/827033/\",\"publishedAt\":\"2026-08-04T23:21:02.000Z\",\"summary\":\"The company added 9 million monthly active users but platform growth was down in Europe and flat in the U.S. and Canada.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"the-verge\",\"title\":\"Don’t screw this up, Marvel\",\"url\":\"https://www.theverge.com/entertainment/975297/spider-man-brand-new-day-marvel-sony-xmen-doomsday\",\"publishedAt\":\"2026-08-04T23:20:56.000Z\",\"summary\":\"In less than a week, Spider-Man: Brand New Day raked in $1 billion worldwide and had the biggest box office opening weekend in Hollywood history. The feature has been a reminder of why Sony is probably never going to give up the Spider-Man film rights, and highlighted how Marvel Studios was smart to strike a deal to bring the character into its own films. But as successful as Brand New Day has been, the larger MCU has been stuck in a confounding slump for the past few years. And while this latest Spider-Man movie was truly excellent, it's not necessarily a sign that Marvel has figured out how to get things back on track. Though Brand New Da … Read the full story at The Verge.\",\"tags\":[\"tech\",\"news\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Meta makes AI Developer Assistant its primary support option\",\"url\":\"https://www.socialmediatoday.com/news/meta-makes-ai-developer-assistant-its-primary-support-option/827032/\",\"publishedAt\":\"2026-08-04T23:18:46.000Z\",\"summary\":\"The company is actively pushing forward with its plan to incorporate artificial intelligence agents into as many systems as possible.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"libexpat now funded by the City of Munich for up to 6 months\",\"url\":\"https://blog.hartwork.org/posts/libexpat-city-of-munich-open-source-sabbatical/\",\"publishedAt\":\"2026-08-04T23:18:12.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10274\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10274\",\"publishedAt\":\"2026-08-04T23:11:48.000Z\",\"summary\":\"mtmd: correcting duplicate empty audio chunks for short inputs (#26536) * correcting duplicate empty audio chunks for short inputs * tests.sh code restored **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-rocm-7.2-x64.tar.gz) - [Ubuntu x64 (OpenVINO)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-openvino-2026.2.1-x64.tar.gz) - [Ubuntu x64 (SYCL FP32)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-sycl-fp32-x64.tar.gz) - [Ubuntu x64 (SYCL FP16)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-ubuntu-sycl-fp16-x64.tar.gz) **Android:** - [Android arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10274/llama-b10274-bin-android-arm64.tar.gz) **Windows\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"wired-ai\",\"title\":\"OK, Well, Rogue AI Agents Are Hacking Again\",\"url\":\"https://www.wired.com/story/ok-well-there-are-even-more-ai-agent-hacking-incidents/\",\"publishedAt\":\"2026-08-04T23:11:31.000Z\",\"summary\":\"Rogue AI agents from OpenAI and Anthropic have again been caught trying to disrupt servers and software—and leaving instructions for future bad behavior.\",\"tags\":[\"tech\",\"analysis\"]}]",
+  "packet": "[{\"sourceId\":\"the-register\",\"title\":\"Chinese router vendor denies its firmware contains backdoors – but pauses downloads to fix security issues anyway\",\"url\":\"https://www.theregister.com/security/2026/08/06/chinese-router-vendor-denies-its-firmware-contains-backdoors-but-pauses-downloads-to-fix-security-issues-anyway/5283794\",\"publishedAt\":\"2026-08-06T04:57:43.000Z\",\"summary\":\"It’s just a remote maintenance function, says Zbtlink\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Why AI agents are not more popular outside the tech industry\",\"url\":\"https://betocmn.com/blog/why-ai-agents-are-not-more-popular-outside-the-tech-industry/\",\"publishedAt\":\"2026-08-06T04:39:26.000Z\",\"summary\":\"Article URL: https://betocmn.com/blog/why-ai-agents-are-not-more-popular-outside-the-tech-industry/ Comments URL: https://news.ycombinator.com/item?id=49192517 Points: 1 # Comments: 0\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"AI Agents Think and Act\",\"url\":\"https://news.ycombinator.com/item?id=49192499\",\"publishedAt\":\"2026-08-06T04:37:15.000Z\",\"summary\":\"Comments URL: https://news.ycombinator.com/item?id=49192499 Points: 2 # Comments: 0\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"AI 2027\",\"url\":\"https://ai-2027.com/\",\"publishedAt\":\"2026-08-06T04:30:51.000Z\",\"summary\":\"Article URL: https://ai-2027.com/ Comments URL: https://news.ycombinator.com/item?id=49192451 Points: 1 # Comments: 0\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"APOD: 2026 August 6 – New Sharpest Image of the Sun Uncovers Instability\",\"url\":\"https://science.nasa.gov/image-article/apod-2026-august-6-new-sharpest-image-of-the-sun-uncovers-instability/\",\"publishedAt\":\"2026-08-06T04:05:00.000Z\",\"summary\":\"APOD Science APOD APOD: 2026 August 6 – New… Today’s APOD Archive Submissions Index Search Calendar RSS Education About Discuss APOD Astronomy Picture of the Day Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer. New Sharpest […]\",\"tags\":[\"space\",\"tech\",\"news\"]},{\"sourceId\":\"digiday\",\"title\":\"Kroger’s AI shopping assistant has ads at launch\",\"url\":\"https://digiday.com/marketing/krogers-ai-shopping-assistant-has-ads-at-launch/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-06T04:01:00.000Z\",\"summary\":\"Kroger has made advertising part of its AI shopping assistant, following the implementation of advertising features on competitors’ chatbots.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Why brands like Gap Inc. and Staples are inviting their employees to be creators\",\"url\":\"https://digiday.com/media/why-brands-like-gap-inc-and-staples-are-inviting-their-employees-to-be-creators/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-06T04:01:00.000Z\",\"summary\":\"Companies are scrambling for creators. Turns out they already employ them.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"OpenAI brings product carousels to ChatGPT ads\",\"url\":\"https://digiday.com/marketing/openai-brings-product-carousels-to-chatgpt-ads/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-06T04:01:00.000Z\",\"summary\":\"It builds on OpenAI's product feed campaigns, bringing a Google Shopping-style carousel format to ChatGPT ahead of the Q4 holiday period.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"digiday\",\"title\":\"Media Briefing: The case for and against markdown for AI bots\",\"url\":\"https://digiday.com/media/media-briefing-the-case-for-and-against-markdown-for-ai-bots/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss\",\"publishedAt\":\"2026-08-06T04:01:00.000Z\",\"summary\":\"Markdown is becoming publishers’ latest AI optimization tactic, raising questions about the scraping tradeoff.\",\"tags\":[\"platforms\",\"media\",\"monetization\",\"advertising\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"A Long-Run Persistence Theory for AI Systems under the Redundancy-Adjusted Artificial Age Score (AAS)\",\"url\":\"https://arxiv.org/abs/2608.04012\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04012v1 Announce Type: new Abstract: Artificial intelligence systems are increasingly expected to operate over repeated cycles of interaction, adaptation, and update rather than through...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"The LLM Proposes, the Executive Disposes: A Self-Verifying Agent Instrument that Dissociates Commitment Drift from Binding Drift in Long-Horizon Agents\",\"url\":\"https://arxiv.org/abs/2608.04066\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04066v1 Announce Type: new Abstract: How do you verify a long-horizon agent when its own state and self-reports are exactly what you cannot trust? We present an agent instrument built so...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Monte Carlo Tree Search for Table-to-Multimodal Report Generation\",\"url\":\"https://arxiv.org/abs/2608.04071\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04071v1 Announce Type: new Abstract: Automatically generating professional multimodal reports comprising both textual analysis and visual charts from structured tabular data is a critical...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"FinProBench: Evaluating Financial AI Agents with Role-Grounded Rubrics Derived from Professional Deliverables\",\"url\":\"https://arxiv.org/abs/2608.04077\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04077v1 Announce Type: new Abstract: Evaluating financial AI agents requires criteria aligned with real professional work. Existing rubric methods typically derive criteria from task...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"FinPerMA: A Theory-Informed, Event-Grounded Personalized-Memory Benchmark for LLM Agents\",\"url\":\"https://arxiv.org/abs/2608.04095\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04095v1 Announce Type: new Abstract: Large language model (LLM) agents are increasingly used as personalized assistants in high-stakes domains such as financial advising, yet it remains...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"BrainBench: Benchmarking Large Language Models for Comprehensive EEG Understanding\",\"url\":\"https://arxiv.org/abs/2608.04156\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04156v1 Announce Type: new Abstract: Electroencephalography (EEG) analysis extends beyond assigning predefined labels to recordings; it requires workflows connecting natural-language...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"tensorfeed\",\"title\":\"Adversarially Robust Abductive Fusion of Pre-trained Transformer-based Perception Models\",\"url\":\"https://arxiv.org/abs/2608.04190\",\"publishedAt\":\"2026-08-06T04:00:00.000Z\",\"summary\":\"arXiv:2608.04190v1 Announce Type: new Abstract: Deploying pre-trained perception models in novel environments degrades their accuracy under distributional shift, and assembling them alone does not...\",\"tags\":[\"ai\",\"news\",\"aggregator\"]},{\"sourceId\":\"the-register\",\"title\":\"Proxmox ports itself to Arm with help from Nvidia and Supermicro\",\"url\":\"https://www.theregister.com/virtualization/2026/08/06/proxmox-ports-itself-to-arm-with-help-from-nvidia-and-supermicro/5283770\",\"publishedAt\":\"2026-08-06T03:45:29.000Z\",\"summary\":\"VMware competitor aiming for the AI datacenter\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"variety\",\"title\":\"Judge Dismisses Lawsuit From Paramount Streaming Subscribers Seeking to Block Warner Bros. Merger\",\"url\":\"https://variety.com/2026/film/news/judge-dismisses-lawsuit-paramount-warner-bros-merger-1236828855/\",\"publishedAt\":\"2026-08-06T03:31:04.000Z\",\"summary\":\"A federal judge on Wednesday dismissed a lawsuit from a group of consumers looking to challenge the $111 billion merger between Paramount and Warner Bros. Judge Araceli Martínez-Olguín wrote that the plaintiffs — three current Paramount+ subscribers and two prospective subscribers — presented a lack of standing in their suit. She also ruled that the […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"variety\",\"title\":\"‘The Shards’ Star Igby Rigney on Wooing Ryan Murphy, Never Meeting Bret Easton Ellis and Not Worrying About Sex Scenes: ‘It’s Like Doing a Dance Under a Microscope’\",\"url\":\"https://variety.com/2026/tv/news/the-shards-igby-rigney-bret-easton-ellis-1236828415/\",\"publishedAt\":\"2026-08-06T03:00:00.000Z\",\"summary\":\"Igby Rigney is exhausted. It’s a day before “The Shards” launches, and he’s just gotten back from Berlin, the final stop of a global press tour that also took him to New York and London. When the series debuts on FX on Aug. 5, he’ll be celebrating at the official launch party at a roller […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"NASA and Roscosmos continue seat barter agreement\",\"url\":\"https://spacenews.com/nasa-and-roscosmos-continue-seat-barter-agreement/\",\"publishedAt\":\"2026-08-06T02:23:47.000Z\",\"summary\":\"NASA and Roscosmos have agreed to continue exchanging seats between Soyuz and Crew Dragon spacecraft, but that agreement does not yet extend to Starliner. The post NASA and Roscosmos continue seat barter agreement appeared first on SpaceNews.\",\"tags\":[\"space\",\"tech\",\"news\"]},{\"sourceId\":\"hn-frontpage\",\"title\":\"Nashville uses eminent domain to block data center near zoo\",\"url\":\"https://www.costar.com/article/970809918/nashville-council-approves-eminent-domain-action-to-halt-data-center-project\",\"publishedAt\":\"2026-08-06T02:15:14.000Z\",\"summary\":\"\",\"tags\":[\"general\",\"tech\"]},{\"sourceId\":\"the-register\",\"title\":\"OpenAI reveals its rogue agent swarm went a little bit Borg ahead of Hugging Face hack\",\"url\":\"https://www.theregister.com/security/2026/08/06/openai-reveals-its-rogue-agent-swarm-went-a-little-bit-borg-ahead-of-hugging-face-hack/5283741\",\"publishedAt\":\"2026-08-06T01:47:19.000Z\",\"summary\":\"It started with an 'impossible task' and led to AI deciding it needed to act as a collective intelligence\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"github-ai-releases\",\"title\":\"ggml-org/llama.cpp b10290\",\"url\":\"https://github.com/ggml-org/llama.cpp/releases/tag/b10290\",\"publishedAt\":\"2026-08-06T01:33:36.000Z\",\"summary\":\"mtmd/ggml: add ggml_build_forward_order (#26649) * ggml: add ggml_build_forward_order ggml_build_forward_expand marks the tensor and all its ancestors for compute, so using it as a pure ordering hint (keeping q, k and v together) defeats ggml_build_forward_select: the unselected branch is forced to run with inputs that were never uploaded. In the mtmd audio graph this makes GEN_WAV calls execute the GEN_CODE branch with a stale inp_code0, hitting the get_rows bound assert on CPU. Add ggml_build_forward_order, which inserts nodes without the compute flag; the flag is restored when the branch is actually selected. Switch the q/k/v hints in clip_graph::build_attn to it. * nit: reduce comments (AGENTS.md) **Website:** - **macOS/iOS:** - [macOS Apple Silicon (arm64)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-macos-arm64.tar.gz) - macOS Apple Silicon (arm64, KleidiAI enabled) [DISABLED](https://github.com/ggml-org/llama.cpp/pull/23780) - [macOS Intel (x64)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-macos-x64.tar.gz) - [iOS XCFramework](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-xcframework.zip) **Linux:** - [Ubuntu x64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-ubuntu-x64.tar.gz) - [Ubuntu arm64 (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-ubuntu-arm64.tar.gz) - [Ubuntu s390x (CPU)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-ubuntu-s390x.tar.gz) - [Ubuntu x64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-ubuntu-vulkan-x64.tar.gz) - [Ubuntu arm64 (Vulkan)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-ubuntu-vulkan-arm64.tar.gz) - [Ubuntu x64 (ROCm 7.2)](https://github.com/ggml-org/llama.cpp/releases/download/b10290/llama-b10290-bin-ubuntu-rocm-7.2-x64.tar.gz) - [Ubunt\",\"tags\":[\"ai\",\"oss\",\"releases\"]},{\"sourceId\":\"the-register\",\"title\":\"Meta wants to get inside your terminal with its new coding agent\",\"url\":\"https://www.theregister.com/ai-and-ml/2026/08/06/meta-wants-to-get-inside-your-terminal-with-its-new-coding-agent/5283717\",\"publishedAt\":\"2026-08-06T01:05:46.000Z\",\"summary\":\"Muse Code showcases Muse Spark's fresh software engineering chops\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"variety\",\"title\":\"Regal Cinemas CEO Eduardo Acuna Backs Paramount-Warner Bros. Merger, Says Antitrust Trial ‘Creates More Uncertainty and Distraction’\",\"url\":\"https://variety.com/2026/film/news/regal-cinemas-ceo-supports-paramount-warner-bros-merger-1236828802/\",\"publishedAt\":\"2026-08-06T00:36:25.000Z\",\"summary\":\"Regal Cinemas CEO Eduardo Acuna released a statement on Wednesday evening in support of the looming Paramount-Warner Bros. merger. “This year has been an important one for our industry. Attendance is up, younger audiences are coming out in numbers we haven’t seen in years, and the upcoming release schedule looks just as strong,” Acuna wrote. […]\",\"tags\":[\"platforms\",\"media\",\"streaming\",\"entertainment\"]},{\"sourceId\":\"simonw\",\"title\":\"An AI model from Meta also hacked another company during testing\",\"url\":\"https://simonwillison.net/2026/Aug/6/an-ai-model-from-meta/#atom-everything\",\"publishedAt\":\"2026-08-06T00:25:27.000Z\",\"summary\":\"An AI model from Meta also hacked another company during testing Stop me if you've heard this one before : An AI model from the parent company of Facebook and Instagram hacked into another company’s systems during cybersecurity testing, a spokesperson confirmed on Wednesday. Meta says the breach occurred because of an inadvertent error during testing of the model, similar to previously disclosed incidents with OpenAI and Anthropic. “A misconfiguration by Irregular, an independent testing company Meta uses, inadvertently allowed one of our models access to the internet during evaluation,” the Meta spokesperson said. Meta’s Muse Spark model “exploited a security vulnerability” in another company “in a manner similar to previously-reported instances with other companies.” The Information had the scoop , I'm linking to CNN's re-report of it since they don't have a paywall. So that's Anthropic, OpenAI, and Meta. Google Gemini really needs to catch up on accidentally cyberattacking other companies. Tags: security , ai , generative-ai , llms , meta , accidental-cyberattacks\",\"tags\":[\"ai\",\"analysis\"]},{\"sourceId\":\"the-verge\",\"title\":\"Elon Musk&#8217;s attempt at an AI Wikipedia hasn&#8217;t been updated in months\",\"url\":\"https://www.theverge.com/ai-artificial-intelligence/976004/elon-musk-grokipedia-ai-wikipedia-not-updating-dead\",\"publishedAt\":\"2026-08-06T00:25:10.000Z\",\"summary\":\"xAI's Grokipedia, an online encyclopedia with AI-generated articles that Elon Musk once promised would be a \\\"massive improvement\\\" over Wikipedia, apparently hasn't been updated since April 24th, according to a report from Lawfare. \\\"As far as we can tell, no entry has changed in more than three months,\\\" Lawfare said. Grokipedia launched in v0.1 in October 2025 with an initial batch of 885,000 articles, and is now on v0.2 (released in November 2025) and has more than 6,000,000 total articles, according to grokipedia.com/live. But that live page also has a section titled \\\"Recent changes to…\\\" with a message under it that reads \\\"No live edits av … Read the full story at The Verge.\",\"tags\":[\"tech\",\"news\"]},{\"sourceId\":\"wired-ai\",\"title\":\"OpenAI Didn’t Notice Its AI Agents Using a Message Board to Plan Their Hacking Spree\",\"url\":\"https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/\",\"publishedAt\":\"2026-08-06T00:15:04.000Z\",\"summary\":\"At the Black Hat security conference, the AI giant revealed new details about how its agents went rogue, hacked several other companies—and did it all right under the company’s nose.\",\"tags\":[\"tech\",\"analysis\"]},{\"sourceId\":\"platformer\",\"title\":\"How much of my boss's job can AI do?\",\"url\":\"https://www.platformer.news/replacing-casey-with-claude/\",\"publishedAt\":\"2026-08-06T00:00:06.000Z\",\"summary\":\"Six months after trying to automate myself, I gave Claude Fable 5 a bigger job: replacing Casey\",\"tags\":[\"platforms\",\"policy\",\"ai\",\"analysis\"]},{\"sourceId\":\"simonw\",\"title\":\"Introducing Muse Code and Muse Spark 1.2\",\"url\":\"https://simonwillison.net/2026/Aug/5/muse-code-and-muse-spark-12/#atom-everything\",\"publishedAt\":\"2026-08-05T23:58:35.000Z\",\"summary\":\"Introducing Muse Code and Muse Spark 1.2 Yet more evidence that the most important characteristic of any model these days is long-sequence agentic tool calling. Meta shipped their own coding agent as part of getting that to work! Muse Spark 1.2 is a coding-focused update to Muse Spark 1.1, with improvements in code generation, complex debugging, codebase understanding, and end-to-end developer workflows. In Muse Spark 1.2, we significantly scaled up training compute on coding tasks while expanding training environment diversity. The model also maintains its strength in other key areas like general agents. [...] We co-trained Muse Spark 1.2 with Muse Code to ensure the model exhibits its best performance and coding usability when paired together. The training included rejection sampled harness trajectories and recipe optimizations for goals, compaction, and subagents, alongside the integration of the Muse Code toolset to maximize harness compatibility. [...] Muse Spark 1.2 was extensively trained on long-horizon coding tasks, including whole-repository generation, large end-to-end projects, and auto-research. Here's a pelican riding a bicycle SVG produced by Muse Spark 1.2 : You can see the Spark 1.1 pelican from 9th July here . I think the 1.2 pelican is a small but material improvement. An interesting twist on pricing is that the model is offered as two different model IDs. muse-spark-1.2 is priced at $1.25/million input and $4.25/million output - close to Gemini 3.6 Flash ($1.50/$7.50) - but if you agree to let Meta use your data \\\"to improve our products\\\" you can use muse-spark-1.2-contributor which is $0.10/$0.20 - a huge discount, closer to GPT-5.6 Luna ($0.20/$1.20) and Gemini 3.1 Flash-Lite ($0.25/$1.50). I added those new prices to llm-prices.com . Via Hacker News Tags: ai , generative-ai , llms , meta , llm-pricing , pelican-riding-a-bicycle , llm-release , coding-agents\",\"tags\":[\"ai\",\"analysis\"]},{\"sourceId\":\"simonw\",\"title\":\"Third-party cyber evaluations involving OpenAI models\",\"url\":\"https://simonwillison.net/2026/Aug/5/third-party-cyber-evaluations/#atom-everything\",\"publishedAt\":\"2026-08-05T23:45:32.000Z\",\"summary\":\"Third-party cyber evaluations involving OpenAI models And another one . I had to create a accidental-cyberattacks tag to keep track of them all! This post from OpenAI covers both the UK AI Safety Institute attack (see my previous post ) and another attack enabled by Irregular : Irregular, one of our external cybersecurity testing partners, was running Capture-the-Flag-style evaluations intended to be isolated from the internet, but a testing-environment misconfiguration allowed models to access the public internet. [...] In one test, the name of the fictional target for the CTF challenge unintentionally coincided with a real domain. Because the testing environment was mistakenly connected to the internet, the model exploited a real website, mistaking it to be part of the simulated environment. Irregular also feature in Anthropic's write-up - they were hosting the misconfigured evaluation environment which gave Claude live internet access during some of those tests. Tags: security , ai , openai , llms , accidental-cyberattacks\",\"tags\":[\"ai\",\"analysis\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Instagram shares tips on video creation\",\"url\":\"https://www.socialmediatoday.com/news/instagram-shares-tips-on-video-creation/827172/\",\"publishedAt\":\"2026-08-05T23:33:33.000Z\",\"summary\":\"The platform offered guidance on how to make engaging content using Meta’s Edits app.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"simonw\",\"title\":\"Incident Report: unsanctioned agent behaviour during cyber testing\",\"url\":\"https://simonwillison.net/2026/Aug/5/incident-report/#atom-everything\",\"publishedAt\":\"2026-08-05T23:32:06.000Z\",\"summary\":\"Incident Report: unsanctioned agent behaviour during cyber testing It happened again . This time it was the UK government's AI Security Institute who accidentally attacked other companies while running an evaluation with models with the safety filters turned off. From their technical paper (PDF): During a cyber evaluation, from 25 to 28 July 2026, AI agents engaged in sustained, unsanctioned activity directed at what were, in practice, real people and organisations. These attempts were unsuccessful and, to the best of our knowledge, no real-world harm resulted. [...] Across 122 evaluation attempts on two of AISI’s cyber challenges, AISI found 19 instances where AI agents took unsanctioned action on the live internet, including cases that targeted real people and organisations. [...] It is uncertain to what extent the model recognised it was taking actions against real people. In the most serious case, an AI agent (Mythos 5) decided to attempt to solve the cyber challenge using a supply-chain attack. As a result, the AI agent created a GitHub account and then tried to convince an open-source repository maintainer to accept a malicious GitHub pull request (PR), including by creating a second account masquerading as another human user endorsing the PR. [...] Furthermore, in its attempt to solve the challenge, the agent decided to employ the technique of “spear-phishing” by sending targeted emails containing malicious content and attempting to manipulate recipients into accepting the code changes, and planned a prompt injection to compromise other coding agents. The thing I found most surprising is that AISI were running these agents without any form of network sandboxing at all: AISI provided the AI agents with internet access during these evaluations, which enabled their actions on the open internet in this setting. Internet access was a deliberate part of AISI’s evaluation configuration in this setting, and not due to sandbox escape. This, combined with the fact that\",\"tags\":[\"ai\",\"analysis\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Reddit expands test of moderation tools\",\"url\":\"https://www.socialmediatoday.com/news/reddit-expands-test-of-moderation-tools/827171/\",\"publishedAt\":\"2026-08-05T23:31:07.000Z\",\"summary\":\"The app is letting more subreddit managers use its artificial intelligence-powered Rules Hub while also restricting platform access to users who don’t log in.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"wired-ai\",\"title\":\"OpenAI’s Browser Could Be Hijacked to Spam Your WhatsApp Contacts\",\"url\":\"https://www.wired.com/story/openais-browser-could-be-hijacked-to-spam-your-whatsapp-contacts/\",\"publishedAt\":\"2026-08-05T23:30:00.000Z\",\"summary\":\"Researchers at security firm Zenity found more than a dozen flaws in AI browsers—and managed to get OpenAI’s Atlas to make an unauthorized Amazon purchase.\",\"tags\":[\"tech\",\"analysis\"]},{\"sourceId\":\"social-media-today\",\"title\":\"Can the apps stop AI slop?\",\"url\":\"https://www.socialmediatoday.com/news/can-the-apps-stop-ai-slop/827170/\",\"publishedAt\":\"2026-08-05T23:08:24.000Z\",\"summary\":\"Social platforms have been overwhelmed by artificial intelligence-generated content, but companies encourage AI use even as they try to stem the tide.\",\"tags\":[\"platforms\",\"social-media\",\"creator-economy\"]},{\"sourceId\":\"bluesky-language-models\",\"title\":\"A large language model the size of a small large language model\",\"url\":\"https://bsky.app/profile/catblanketflower.yuwakisa.com/post/3msenetlp7222\",\"publishedAt\":\"2026-08-05T23:07:24.325Z\",\"summary\":\"A large language model the size of a small large language model\",\"tags\":[\"social\",\"ai\"]},{\"sourceId\":\"ars-technica\",\"title\":\"Thousands of servers can be backdoored by exploiting buggy motherboard controllers\",\"url\":\"https://arstechnica.com/security/2026/08/thousands-of-servers-can-be-backdoored-by-exploiting-buggy-motherboard-controllers/\",\"publishedAt\":\"2026-08-05T22:35:20.000Z\",\"summary\":\"Baseboard management controllers from the world's biggest manufacturers are a security mess.\",\"tags\":[\"tech\",\"news\"]},{\"sourceId\":\"the-register\",\"title\":\"An off-grid AI sounds like a great survival assistant, but is better left to roleplaying the zombie apocalypse\",\"url\":\"https://www.theregister.com/ai-and-ml/2026/08/05/an-off-grid-ai-sounds-like-a-great-survival-assistant-but-is-better-left-to-roleplaying-the-zombie-apocalypse/5283685\",\"publishedAt\":\"2026-08-05T22:33:40.000Z\",\"summary\":\"Would you rather play Russian roulette with an LLM or put your health and safety in the hands of a professional\",\"tags\":[\"tech\",\"news\",\"non-us\"]},{\"sourceId\":\"spaceflight-news\",\"title\":\"New Glenn explosion linked to rocket engine valve\",\"url\":\"https://spacenews.com/new-glenn-explosion-linked-to-rocket-engine-valve/\",\"publishedAt\":\"2026-08-05T22:30:16.000Z\",\"summary\":\"Blue Origin has traced the explosion of its New Glenn rocket during a static-fire test in May to a valve in the rocket’s BE-4 engine. The post New Glenn explosion linked to rocket engine valve appeared first on SpaceNews.\",\"tags\":[\"space\",\"tech\",\"news\"]}]",
   "sourceResults": [
     {
       "sourceId": "404-media",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 418,
+      "durationMs": 509,
       "errorCode": null,
       "errorMessage": null
     },
@@ -28,7 +31,7 @@
       "sourceId": "anthropic-news",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 691,
+      "durationMs": 675,
       "errorCode": null,
       "errorMessage": null
     },
@@ -36,7 +39,7 @@
       "sourceId": "ars-technica",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 459,
+      "durationMs": 463,
       "errorCode": null,
       "errorMessage": null
     },
@@ -44,7 +47,7 @@
       "sourceId": "arxiv-cs-ai",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 496,
+      "durationMs": 517,
       "errorCode": null,
       "errorMessage": null
     },
@@ -52,7 +55,7 @@
       "sourceId": "arxiv-cs-lg",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 543,
+      "durationMs": 1303,
       "errorCode": null,
       "errorMessage": null
     },
@@ -60,7 +63,7 @@
       "sourceId": "bluesky-language-models",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 868,
+      "durationMs": 703,
       "errorCode": null,
       "errorMessage": null
     },
@@ -68,7 +71,7 @@
       "sourceId": "deepmind-blog",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 428,
+      "durationMs": 471,
       "errorCode": null,
       "errorMessage": null
     },
@@ -76,7 +79,7 @@
       "sourceId": "digiday",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 277,
+      "durationMs": 275,
       "errorCode": null,
       "errorMessage": null
     },
@@ -84,7 +87,7 @@
       "sourceId": "github-ai-releases",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 491,
+      "durationMs": 555,
       "errorCode": null,
       "errorMessage": null
     },
@@ -92,7 +95,7 @@
       "sourceId": "google-research",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 316,
+      "durationMs": 455,
       "errorCode": null,
       "errorMessage": null
     },
@@ -100,7 +103,7 @@
       "sourceId": "hf-blog",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 138,
+      "durationMs": 204,
       "errorCode": null,
       "errorMessage": null
     },
@@ -108,7 +111,7 @@
       "sourceId": "hn-frontpage",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 310,
+      "durationMs": 414,
       "errorCode": null,
       "errorMessage": null
     },
@@ -116,7 +119,7 @@
       "sourceId": "import-ai",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 116,
+      "durationMs": 391,
       "errorCode": null,
       "errorMessage": null
     },
@@ -124,7 +127,7 @@
       "sourceId": "interconnects",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 239,
+      "durationMs": 297,
       "errorCode": null,
       "errorMessage": null
     },
@@ -132,7 +135,7 @@
       "sourceId": "meta-ai",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 2047,
+      "durationMs": 2186,
       "errorCode": null,
       "errorMessage": null
     },
@@ -140,7 +143,7 @@
       "sourceId": "mit-tech-review",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 165,
+      "durationMs": 366,
       "errorCode": null,
       "errorMessage": null
     },
@@ -148,7 +151,7 @@
       "sourceId": "nieman-lab",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 2689,
+      "durationMs": 967,
       "errorCode": null,
       "errorMessage": null
     },
@@ -156,7 +159,7 @@
       "sourceId": "openai-blog",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 760,
+      "durationMs": 372,
       "errorCode": null,
       "errorMessage": null
     },
@@ -164,7 +167,7 @@
       "sourceId": "platformer",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 183,
+      "durationMs": 639,
       "errorCode": null,
       "errorMessage": null
     },
@@ -172,7 +175,7 @@
       "sourceId": "rest-of-world",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 393,
+      "durationMs": 610,
       "errorCode": null,
       "errorMessage": null
     },
@@ -180,7 +183,7 @@
       "sourceId": "simonw",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 116,
+      "durationMs": 385,
       "errorCode": null,
       "errorMessage": null
     },
@@ -188,7 +191,7 @@
       "sourceId": "social-media-today",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 157,
+      "durationMs": 343,
       "errorCode": null,
       "errorMessage": null
     },
@@ -196,7 +199,7 @@
       "sourceId": "spaceflight-news",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 535,
+      "durationMs": 522,
       "errorCode": null,
       "errorMessage": null
     },
@@ -204,7 +207,7 @@
       "sourceId": "stackexchange-ml",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 227,
+      "durationMs": 175,
       "errorCode": null,
       "errorMessage": null
     },
@@ -212,7 +215,7 @@
       "sourceId": "stratechery",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 473,
+      "durationMs": 453,
       "errorCode": null,
       "errorMessage": null
     },
@@ -220,7 +223,7 @@
       "sourceId": "techcrunch-ai",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 100,
+      "durationMs": 118,
       "errorCode": null,
       "errorMessage": null
     },
@@ -228,7 +231,7 @@
       "sourceId": "tensorfeed",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 462,
+      "durationMs": 844,
       "errorCode": null,
       "errorMessage": null
     },
@@ -236,7 +239,7 @@
       "sourceId": "the-register",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 299,
+      "durationMs": 446,
       "errorCode": null,
       "errorMessage": null
     },
@@ -244,7 +247,7 @@
       "sourceId": "the-verge",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 183,
+      "durationMs": 237,
       "errorCode": null,
       "errorMessage": null
     },
@@ -252,7 +255,7 @@
       "sourceId": "tubefilter",
       "status": "failed",
       "candidateItems": 0,
-      "durationMs": 374,
+      "durationMs": 3909,
       "errorCode": "empty",
       "errorMessage": "fetch succeeded but yielded no candidate items"
     },
@@ -260,7 +263,7 @@
       "sourceId": "variety",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 131,
+      "durationMs": 199,
       "errorCode": null,
       "errorMessage": null
     },
@@ -268,7 +271,7 @@
       "sourceId": "wired-ai",
       "status": "success",
       "candidateItems": 10,
-      "durationMs": 146,
+      "durationMs": 177,
       "errorCode": null,
       "errorMessage": null
     }
