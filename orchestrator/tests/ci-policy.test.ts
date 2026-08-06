@@ -176,9 +176,12 @@ describe("automation policy", () => {
     // Every run says which meeting it is, in the log and on the run page.
     expect(cycle).toContain("::notice title=Cycle phase::");
     expect(cycle).not.toContain("git add state\n");
-    expect(social).toContain('timezone: "Europe/Prague"');
+    // GitHub reads every cron as UTC and ignores a `timezone:` key under `on.schedule`, so the
+    // two workflows carrying one were documenting a behaviour they did not have. The cycle
+    // workflow already handled Prague by pairing DST cron variants, and these two do not need to.
+    expect(social).not.toContain("timezone:");
     expect(social).toContain("--dry-if-disabled");
-    expect(health).toContain('timezone: "Europe/Prague"');
+    expect(health).not.toContain("timezone:");
   });
 
   // GitHub runs scheduled workflows off a shared queue and says outright that high load times
@@ -200,7 +203,9 @@ describe("automation policy", () => {
         schedules.push({ file: name, expression: match[1]! });
       }
     }
-    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(19);
+    // 18, not 19: the hourly social publisher is commented out until a channel exists, so its
+    // twenty-four daily firings no longer confirm there is nothing to publish.
+    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(18);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;

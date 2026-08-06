@@ -1,9 +1,11 @@
 name: Guarded social publisher
 
 on:
-  schedule:
-    - cron: "55 * * * *"
-      timezone: "Europe/Prague"
+  # Paused, not deleted. Every channel is off behind the social triple-lock, so twenty-four
+  # firings a day existed to confirm there was nothing to publish. Uncomment the schedule when
+  # a channel is enabled; workflow_dispatch still runs it on demand in the meantime.
+  # schedule:
+  #   - cron: "55 * * * *"
   workflow_dispatch:
     inputs:
       validate_only:

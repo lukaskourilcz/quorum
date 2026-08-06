@@ -3,7 +3,6 @@ name: Production health
 on:
   schedule:
     - cron: "55 7 * * *"
-      timezone: "Europe/Prague"
   workflow_dispatch:
 
 permissions:
