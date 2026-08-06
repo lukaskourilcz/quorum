@@ -124,11 +124,12 @@ describe("a live edition run that spent money leaves a record of it", () => {
       new Date("2026-08-04T05:04:00.000Z"),
       result.report
     )).toBe(BILLED.costUsd);
-    // A local failure is not a public editorial gate, so nothing is queued for delivery.
-    expect(result.outboxPath).toBeNull();
+    // The day still ends with something the reader can see. A local failure used to stay inside
+    // BoardlessAI, which made a gated $0 day indistinguishable on the magazine from a crash.
+    expect(result.outboxPath).not.toBeNull();
   });
 
-  it("downgrades an undeliverable package to a stated no-edition and never queues it", async () => {
+  it("downgrades an undeliverable package to a stated no-edition and queues that", async () => {
     const golden = await goldenPackage();
     if (golden.status !== "edition") throw new Error("golden-package.json is not an edition");
     // Schema-valid and hash-invalid: exactly what delivery validation exists to refuse.
@@ -152,7 +153,7 @@ describe("a live edition run that spent money leaves a record of it", () => {
     if (result.package.status === "no_edition") {
       expect(result.package.board.noEditionReason).toBe("delivery_invalid");
     }
-    expect(result.outboxPath).toBeNull();
+    expect(result.outboxPath).not.toBeNull();
     expect(written.status).toBe("failed");
     expect(written.measuredCostUsd).toBe(BILLED.costUsd);
     expect(written.warnings).toContain(

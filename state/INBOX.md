@@ -62,6 +62,6 @@ items in place. Lack of response never authorizes an action. -->
 
 - [x] **CAUGHT-UP-DELIVERY-2026-08-01** — Resolved 2026-08-01: a technical no-edition fallback duplicated an already delivered provisional board status. The duplicate outbox package was held internally; a valid same-day edition may replace only that provisional status.
 
-- [ ] **CAUGHT-UP-DELIVERY-2026-08-05** — schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-05-17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+- [x] **CAUGHT-UP-DELIVERY-2026-08-05** — Resolved 2026-08-06: the same package delivered two hours later on a repeat run. Original report: schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-05-17eb32d81474601883eff58c095b8b5d41b056dc23100fdf44675787c8ff824c.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]

@@ -24,7 +24,7 @@ async function writeJson(file: string, value: unknown): Promise<void> {
 afterEach(() => vi.unstubAllEnvs());
 
 describe("Caught Up production budget", () => {
-  it("keeps technical no-edition failures internal while queuing deterministic gates", async () => {
+  it("queues an honest no-edition for every terminal day, gate or failure", async () => {
     const config = await loadEditionQualityConfig();
     const technical = buildNoEditionPackage({
       date: "2026-08-04",
@@ -40,7 +40,12 @@ describe("Caught Up production budget", () => {
       reason: "source_gate:successful_sources_2",
       config
     });
-    expect(shouldQueueEditionDelivery(technical)).toBe(false);
+    // A technical failure used to stay inside BoardlessAI, on the reasoning that a later
+    // same-day run might repair it. That is true of the notice's timing and not of its
+    // existence: a gated $0 day looked identical on the magazine to a crash, and 2 August has no
+    // board JSON at all because of it. The retry slot is what attempts the repair, and the
+    // aifirst consumer already replaces a provisional no-edition board with a real edition.
+    expect(shouldQueueEditionDelivery(technical)).toBe(true);
     expect(shouldQueueEditionDelivery(sourceGate)).toBe(true);
   });
 

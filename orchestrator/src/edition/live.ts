@@ -57,14 +57,22 @@ export interface LiveEditionResult {
 }
 
 /**
- * A no-edition outcome is only public when it reflects a deterministic
- * editorial/budget gate. Provider or local validation failures stay inside
- * BoardlessAI, so a repaired same-day run can still publish a real edition.
+ * Every terminal day gets a public record, whether or not it produced an article.
+ *
+ * This used to queue a no-edition package for `budget_exhausted` and `source_gate:*` only.
+ * `quality_block`, `content_invalid_after_regeneration`, `stet_block_after_rewrite`,
+ * `curation_failed`, `production_failed` and `delivery_invalid` stayed inside BoardlessAI, so a
+ * gated $0 day looked exactly like a crash on the magazine: nothing arrived and nothing said
+ * why. 2 August has no board JSON at all for that reason.
+ *
+ * The old rule reasoned that a provider failure might be repaired by a later same-day run, so
+ * publishing a notice would be premature. That is true of the notice's timing and not of its
+ * existence: the aifirst consumer already accepts a provisional no-edition board being replaced
+ * by a real edition the same day, the retry slot exists to attempt exactly that repair, and a
+ * day that ends with nothing is a day the reader is owed a sentence about.
  */
-export function shouldQueueEditionDelivery(editionPackage: EditionPackage): boolean {
-  if (editionPackage.status === "edition") return true;
-  const reason = editionPackage.board.noEditionReason;
-  return reason === "budget_exhausted" || reason.startsWith("source_gate:");
+export function shouldQueueEditionDelivery(_editionPackage: EditionPackage): boolean {
+  return true;
 }
 
 function sameUtcMonth(left: Date, right: Date): boolean {

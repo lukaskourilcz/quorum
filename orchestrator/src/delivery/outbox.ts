@@ -55,13 +55,54 @@ export async function oldestPendingDelivery(
     // A "no edition today" notice is only true on its own day. Left in an oldest-first queue
     // that ships one package per run, a stale one holds every real edition behind it and
     // would publish yesterday's notice as though it were today's. Today's still ships.
-    if (editionPackage.status === "no_edition" && editionPackage.date !== today) continue;
+    //
+    // Skipping it silently is what orphaned 2 August: the package sat in the outbox with no
+    // receipt, no INBOX item and no deletion, re-read and re-skipped by every run since, and the
+    // magazine's 2 August has no board JSON at all. A stale notice now ends: it gets a terminal
+    // receipt saying it was superseded, and its file is removed.
+    if (editionPackage.status === "no_edition" && editionPackage.date !== today) {
+      await supersedeStaleNoEdition(root, file, editionPackage, today);
+      continue;
+    }
     return {
       packagePath: path.relative(root, file),
       package: editionPackage
     };
   }
   return null;
+}
+
+/**
+ * End a "no edition" notice that is no longer true, in the one place that used to drop it.
+ *
+ * The receipt is `superseded`, not `delivered`: nothing reached the magazine, and a reader of
+ * `edition/deliveries/` must not be told otherwise. `tags: []` and `editionStatus: no_edition`
+ * keep it out of every reader that counts published editions, and recentEditionTags already
+ * skips receipts with no tags.
+ */
+async function supersedeStaleNoEdition(
+  root: string,
+  file: string,
+  editionPackage: EditionPackage,
+  today: string
+): Promise<void> {
+  const receiptPath = `edition/deliveries/${editionPackage.date}.json`;
+  const existing = await readJson<{ status?: unknown } | null>(root, receiptPath, null);
+  // A date that already has a real receipt keeps it. This only writes where nothing was written.
+  if (!existing) {
+    await atomicWriteJson(root, receiptPath, {
+      schemaVersion: 1,
+      date: editionPackage.date,
+      packageHash: editionPackage.idempotencyKey,
+      status: "superseded",
+      editionStatus: editionPackage.status,
+      targetRepository: "lukaskourilcz/aifirst",
+      supersededAt: `${today}T00:00:00.000Z`,
+      reason: "The notice for this day was never delivered and no longer describes today.",
+      tags: []
+    });
+  }
+  await rm(file, { force: true });
 }
 
 function inboxItem(date: string, code: DeliveryFailureCode, detail: string): string {
@@ -71,6 +112,27 @@ function inboxItem(date: string, code: DeliveryFailureCode, detail: string): str
     "  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.",
     "  [imp:5] [owner:me] [time:20m] [kind:deploy]"
   ].join("\n");
+}
+
+/**
+ * Tick the delivery item for a date the moment that date actually delivers.
+ *
+ * CAUGHT-UP-DELIVERY-2026-08-05 was still open with the same package delivered two hours later:
+ * the item is raised when a delivery needs reconciliation and nothing ever closed it, so the
+ * owner's list grew an entry per failed attempt and none of them ever went away on their own.
+ * Only the marker line is ticked; the report under it stays, because what went wrong that day is
+ * still worth reading.
+ */
+async function closeInboxItem(root: string, date: string, now: Date): Promise<boolean> {
+  const existing = await readText(root, "INBOX.md", "# INBOX\n");
+  const marker = `CAUGHT-UP-DELIVERY-${date}`;
+  const open = `- [ ] **${marker}**`;
+  if (!existing.includes(open)) return false;
+  await atomicWriteText(root, "INBOX.md", existing.replace(
+    open,
+    `- [x] **${marker}** — Resolved ${now.toISOString().slice(0, 10)}: the edition for this date delivered on a later run. Original report:`
+  ));
+  return true;
 }
 
 async function raiseInboxOnce(root: string, date: string, code: DeliveryFailureCode, detail: string) {
@@ -123,7 +185,8 @@ export async function recordDelivery(input: {
       ...(supersededPackageHashes.length ? { supersededPackageHashes } : {})
     });
     await rm(absolute);
-    return [receiptPath, input.packagePath];
+    const closed = await closeInboxItem(root, editionPackage.date, now);
+    return [receiptPath, input.packagePath, ...(closed ? ["INBOX.md"] : [])];
   }
   const code = input.code ?? "push_rejected";
   const detail = input.detail ?? "Delivery stopped without a reconciled target commit";
