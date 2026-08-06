@@ -174,7 +174,7 @@ export async function MeasuresSection() {
       <section className="border-t border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
           <SectionHeading
-            action={<Link className={buttonVariants({ variant: "secondary" })} href="/money">Open Money</Link>}
+            action={<Link className={buttonVariants({ variant: "secondary" })} href="/results#money">Open Money</Link>}
             description="Only confirmed money records count. Duplicate or unmatched entries are left out."
             eyebrow="Money"
             title="Confirmed income and unknowns stay separate"

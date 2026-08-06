@@ -102,7 +102,7 @@ export function AboutSection() {
             </p>
             <Link
               className={buttonVariants({ variant: "secondary" })}
-              href="/disclosure"
+              href="/company#disclosure"
             >
               Read the important notices
               <ArrowRight aria-hidden="true" className="size-4" />

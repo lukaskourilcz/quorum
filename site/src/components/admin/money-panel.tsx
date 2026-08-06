@@ -24,7 +24,7 @@ export function AdminMoneyPanel({ snapshot }: { snapshot: PublicMoneySnapshot | 
           <div className="flex items-center gap-3"><CircleDollarSign aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Quarter and earning plans</p></div>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]" id="admin-money-heading">What needs attention before money can move</h2>
         </div>
-        <Link className={buttonVariants({ variant: "secondary" })} href="/money">Public Money <ArrowRight aria-hidden="true" className="size-4" /></Link>
+        <Link className={buttonVariants({ variant: "secondary" })} href="/results#money">Public Money <ArrowRight aria-hidden="true" className="size-4" /></Link>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {kpiCounts.map(({ status, count }) => <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4" key={status}><Badge tone={kpiTone(status)}>{statusLabel(status)}</Badge><p className="mt-3 text-3xl font-semibold tabular-nums">{count}</p><p className="mt-1 text-xs text-[var(--fog)]">quarterly targets</p></div>)}

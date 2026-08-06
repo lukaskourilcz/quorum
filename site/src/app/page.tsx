@@ -259,7 +259,7 @@ export default async function HomePage() {
             action={
               <Link
                 className={buttonVariants({ variant: "secondary" })}
-                href="/governance"
+                href="/company#rules"
               >
                 Read the rules
               </Link>

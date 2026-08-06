@@ -118,7 +118,7 @@ export async function MoneySection() {
         <>
           <section className="mx-auto max-w-[var(--container)] px-5 py-24 md:px-10">
             <SectionHeading
-              action={<Link className={buttonVariants({ variant: "secondary" })} href="/metrics">Open Results <ArrowRight aria-hidden="true" className="size-4" /></Link>}
+              action={<Link className={buttonVariants({ variant: "secondary" })} href="/results#measures">Open Results <ArrowRight aria-hidden="true" className="size-4" /></Link>}
               description="A threshold can prepare a plan, but it cannot switch income on. Ready methods get a detailed owner proposal in the protected admin area."
               eyebrow="Earning methods"
               title="Revenue stays owner-controlled"
@@ -204,7 +204,7 @@ export async function MoneySection() {
             </div>
             <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-5">
               <p className="max-w-2xl text-sm leading-6 text-[var(--fog)]">Results explains the delivery and quality measurements behind several quarterly targets.</p>
-              <Link className={buttonVariants({ variant: "secondary" })} href="/metrics">See Results <ArrowRight aria-hidden="true" className="size-4" /></Link>
+              <Link className={buttonVariants({ variant: "secondary" })} href="/results#measures">See Results <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </section>
         </>
