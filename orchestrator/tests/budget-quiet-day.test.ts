@@ -177,9 +177,12 @@ describe("a room the cap stops ends the day quietly", () => {
     const skip = MeetingSkipSchema.parse(JSON.parse(
       await readFile(path.join(root, "meetings", "skips", `${DATE}-mma-intake.json`), "utf8")
     ));
-    expect(skip.reason).toContain("model-API cap");
+    // Plain language, and no phase slug: the sentence is published on the calendar, where a
+    // reader has no use for "mma-intake" or "model-API cap".
+    expect(skip.reason).toContain("day's spending limit was reached");
     expect(skip.reason).toContain(`$${limits.dailyUsd.toFixed(2)}`);
     expect(skip.reason).not.toMatch(/fail/i);
+    expect(skip.reason).not.toContain("mma-intake");
 
     // The finance alert and the daily digest count exhausted days from this file. index.ts used
     // to write it on the way out with exit 1; catching the error must not lose the signal.
@@ -197,7 +200,7 @@ describe("a room the cap stops ends the day quietly", () => {
       (candidate) => candidate.kind === "mma-intake" && candidate.at.startsWith(DATE)
     );
     expect(slot?.status).toBe("skipped");
-    expect(slot?.decisionOneLiner).toContain("model-API cap");
+    expect(slot?.decisionOneLiner).toContain("day's spending limit was reached");
 
     // The control: the same slot on the same past day with nothing recorded. This is what the
     // calendar showed before — "missed", which the week board paints with --destructive and

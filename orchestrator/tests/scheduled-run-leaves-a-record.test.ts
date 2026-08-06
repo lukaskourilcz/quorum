@@ -250,7 +250,7 @@ describe("the cycle workflow records every scheduled run that resolves to a phas
     const step = source.slice(source.indexOf("- name: Commit one atomic runtime cycle"));
     const branch = step.slice(step.indexOf("if git diff --cached --quiet; then"), step.indexOf("git commit -m \"cycle("));
     expect(branch).toContain("skip-cli.ts");
-    expect(branch).toContain("wrote no record of this meeting");
+    expect(branch).toContain("finished without writing anything down about it");
     expect(branch).toContain("exit 1");
     // The quiet exit survives for exactly one reason — a dispatch claims no calendar slot, so it
     // has nothing to leave unexplained. Every other way out of this branch records and fails.

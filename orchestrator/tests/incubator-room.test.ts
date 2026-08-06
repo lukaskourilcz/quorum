@@ -555,14 +555,14 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
     const record = await meetingRecord("2026-08-06");
     expect(record.status).toBe("PAUSED");
     // Every published line says the reason that applied, not the agenda queue's.
-    expect(record.operatingBrief).toContain("The sweep kept 3 items and 3 of them fit this room's context budget");
-    expect(record.operatingBrief).toContain("already read in an earlier scan");
+    expect(record.operatingBrief).toContain("The check kept 3 stories and 3 of them fit what this meeting can read");
+    expect(record.operatingBrief).toContain("had been read at an earlier meeting");
     expect(record.participantReasons).toHaveLength(5);
     for (const seat of record.participantReasons) {
       expect(seat.participated).toBe(false);
-      expect(seat.reason).toBe("registered for this room but not called because the sweep brought nothing this room has not already read");
+      expect(seat.reason).toBe("registered for this meeting but not asked anything, because nothing new had arrived to read");
     }
-    expect(record.roomTranscript.setting).toContain("read log");
+    expect(record.roomTranscript.setting).toContain("already been read at an earlier meeting");
     expect(record.roomTranscript.setting).not.toContain("agenda");
     expect(record.growthPlan).toContain("already read");
   });
@@ -640,9 +640,9 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
     expect(result.decision).toBe("PAUSED");
     expect(seats.called).toEqual([]);
     const record = await meetingRecord("2026-08-08");
-    expect(record.operatingBrief).toContain("returned no items");
-    expect(record.participantReasons[0]?.reason).toContain("returned no items to read");
-    expect(record.roomTranscript.setting).toContain("returned no items");
+    expect(record.operatingBrief).toContain("returned nothing at all");
+    expect(record.participantReasons[0]?.reason).toContain("returned nothing to read");
+    expect(record.roomTranscript.setting).toContain("returned nothing at all");
   });
 
   it("lets a dry run say what the next scheduled run would decide, without sweeping", async () => {
@@ -759,10 +759,10 @@ describe("a scheduled incubator scan, through runPortfolioCycle", () => {
       expect(result.decision).toBe("PAUSED");
       expect(sweep.calls).toBe(0);
       const record = await meetingRecord("2026-08-10");
-      expect(record.operatingBrief).toContain("$1.00 of the $25.00 monthly model-API budget is left");
-      expect(record.operatingBrief).toContain("below the rung that funds this room");
-      expect(record.participantReasons[0]?.reason).toContain("monthly model-API budget is left");
-      expect(record.roomTranscript.setting).toContain("degradation ladder");
+      expect(record.operatingBrief).toContain("$1.00 of the $25.00 monthly budget for model calls is left");
+      expect(record.operatingBrief).toContain("too little to pay for this meeting");
+      expect(record.participantReasons[0]?.reason).toContain("monthly budget for model calls is left");
+      expect(record.roomTranscript.setting).toContain("This month's spending is what closed the meeting");
       expect(record.roomTranscript.setting).not.toContain("countersigned budget shape");
     } finally {
       await atomicWriteJson(testStateRoot, "budget/ledger.json", { schemaVersion: 1, entries: [] });

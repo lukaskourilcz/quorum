@@ -278,9 +278,9 @@ export function budgetStopReason(input: {
   code?: BudgetErrorCode;
 }): string {
   if (input.reservationUsd !== null) {
-    return `The ${input.phase} room did not open: the day's ${money(input.status.capUsd)} model-API cap has ${money(input.status.remainingUsd)} left and the room reserves ${money(input.reservationUsd)}. No model was called; spending resumes tomorrow.`;
+    return `The day's spending limit was reached, so this meeting was postponed. ${money(input.status.remainingUsd)} of the day's ${money(input.status.capUsd)} limit is left and it needs ${money(input.reservationUsd)}. Nothing was spent; spending resumes tomorrow.`;
   }
-  return `The ${input.phase} room stopped early: a budget cap refused the next seat (${input.code ?? "DAILY_CAP"}). ${money(input.status.spentUsd)} of the day's ${money(input.status.capUsd)} model-API cap is spent. The rest were not called.`;
+  return `The day's spending limit was reached part-way through, so this meeting stopped early. ${money(input.status.spentUsd)} of the day's ${money(input.status.capUsd)} limit is spent; nobody left to speak was asked.`;
 }
 
 function isSameUtcMonth(left: Date, right: Date): boolean {

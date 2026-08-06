@@ -508,11 +508,10 @@ jobs:
         if: ${{ steps.mode.outputs.scheduled == 'true' && steps.gate.outputs.failed == 'true' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
-          COMMIT: ${{ github.sha }}
         run: |
           # The meeting did not fail. It never opened, because main did not build. Saying that
           # on the calendar is the difference between "look into this" and "a room went wrong".
-          reason="The repository release gate failed at commit ${COMMIT:0:12}, so the room did not open."
+          reason="The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
           pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
             --phase "$PHASE" --reason "$reason"
           if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
@@ -690,7 +689,6 @@ jobs:
           # instead of the quiet exit 0 a manual dispatch gets.
           EVENT_NAME: ${{ steps.mode.outputs.scheduled == 'true' && 'schedule' || github.event_name }}
           PHASE: ${{ steps.mode.outputs.phase }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
@@ -721,7 +719,7 @@ jobs:
             if test -n "$PHASE" && test "$PHASE" != "skip"; then
               pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
                 --phase "$PHASE" \
-                --reason "The cycle ran and finished but wrote no record of this meeting. See ${RUN_URL}"
+                --reason "The run behind this meeting finished without writing anything down about it."
               if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
                 git add -A -- state/meetings/skips
                 git commit -m "skip(${PHASE}): the cycle wrote no canonical state"
@@ -1267,7 +1265,6 @@ jobs:
           PHASE: ${{ steps.mode.outputs.phase }}
           EVENT_SCHEDULE: ${{ github.event.schedule }}
           INPUT_PHASE: ${{ inputs.phase }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           git fetch origin "$GITHUB_REF_NAME"
           git checkout -- . 2>/dev/null || true
@@ -1292,7 +1289,7 @@ jobs:
               --phase "$INPUT_PHASE")" || PHASE=""
           fi
           test -n "$PHASE" && test "$PHASE" != "skip" || exit 0
-          reason="The run for this meeting failed before it finished. See ${RUN_URL}"
+          reason="The run behind this meeting failed before it finished."
           pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
             --phase "$PHASE" --reason "$reason" || exit 0
           if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then

@@ -39,7 +39,7 @@ function valueAfter(args: string[], flag: string): string | undefined {
  * happen, that nobody knows why, and that it therefore cost nothing.
  */
 export const NO_RECORD_REASON =
-  "This meeting never ran, and nothing was written down about why. Nobody was asked anything and nothing was spent.";
+  "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent.";
 
 type SlotKind = CalendarFeed["slots"][number]["kind"];
 

@@ -482,19 +482,19 @@ interface RoomStayedShut {
 
 function shutByOwnerGate(): RoomStayedShut {
   return {
-    brief: "The owner's portfolio gate is closed, so the room did not open and no model was called.",
-    seat: "registered for this room but not called because the owner's portfolio gate is closed",
-    setting: "The scheduler read the owner's portfolio gate before opening anything. It is closed, so no agenda was read, no specialist meeting opened and no model was called.",
-    growthPlan: "Nothing is authorized (NO_ACTION): a room the owner's gate holds closed produces no work, spend, publishing or outreach."
+    brief: "The owner has these meetings switched off, so this one did not meet and nothing was spent.",
+    seat: "registered for this meeting but not asked anything, because the owner has these meetings switched off",
+    setting: "The owner's switch for these meetings was read first. It is off, so nothing was queued, the meeting did not open and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: a meeting the owner has switched off produces no work, spend, publishing or outreach."
   };
 }
 
 function shutByBudgetShape(): RoomStayedShut {
   return {
-    brief: "The countersigned budget shape does not fund this room, so it did not open and no model was called.",
-    seat: "registered for this room but not called because the countersigned budget shape does not fund it",
-    setting: "The scheduler resolved the countersigned budget shape before opening anything. This room is not in it at any level of spend, so no agenda was read, no specialist meeting opened and no model was called.",
-    growthPlan: "Nothing is authorized (NO_ACTION): a room outside the countersigned budget shape produces no work, spend, publishing or outreach."
+    brief: "The budget the owner signed does not pay for this meeting, so it did not meet and nothing was spent.",
+    seat: "registered for this meeting but not asked anything, because the signed budget does not pay for it",
+    setting: "The budget the owner signed was read first. It does not pay for this meeting at any level of spend, so nothing was queued, the meeting did not open and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: a meeting outside the signed budget produces no work, spend, publishing or outreach."
   };
 }
 
@@ -508,52 +508,70 @@ function shutByBudgetShape(): RoomStayedShut {
  * full headroom and seeing whether the room survives there.
  */
 function shutByLowHeadroom(input: { remainingUsd: number; capUsd: number }): RoomStayedShut {
-  const spend = `$${input.remainingUsd.toFixed(2)} of the $${input.capUsd.toFixed(2)} monthly model-API budget is left`;
+  const spend = `$${input.remainingUsd.toFixed(2)} of the $${input.capUsd.toFixed(2)} monthly budget for model calls is left`;
   return {
-    brief: `${spend}, which is below the rung that funds this room, so it did not open and no model was called.`,
-    seat: `registered for this room but not called because ${spend} — below the rung that funds it`,
-    setting: `The scheduler priced the month before opening anything: ${spend}. The degradation ladder closes this room at that level, so no agenda was read, no specialist meeting opened and no model was called.`,
-    growthPlan: "Nothing is authorized (NO_ACTION): a room the month's remaining budget cannot fund produces no work, spend, publishing or outreach."
+    brief: `${spend}, which is too little to pay for this meeting, so it did not meet and nothing was spent.`,
+    seat: `registered for this meeting but not asked anything, because ${spend} — too little to pay for it`,
+    setting: `The month was priced first: ${spend}. This month's spending is what closed the meeting at that level, not any decision the owner signed, so it did not open and nobody was asked anything.`,
+    growthPlan: "Nothing was decided and nothing was authorized: a meeting the month's remaining budget cannot pay for produces no work, spend, publishing or outreach."
   };
 }
 
 function shutByNoAgenda(): RoomStayedShut {
   return {
-    brief: "No bounded agenda was due, so the specialist room did not open and no model was called.",
-    seat: "registered for this room but not called because no bounded agenda was due",
-    setting: "The scheduler checked the bounded agenda queue. No specialist meeting opened and no model was called.",
-    growthPlan: "Nothing is authorized (NO_ACTION): a wake-up without a due agenda produces no work, spend, publishing or outreach."
+    brief: "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent.",
+    seat: "registered for this meeting but not asked anything, because it had nothing to decide",
+    setting: "Nothing had been queued for this meeting to decide, so it did not meet and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: a meeting with nothing to settle produces no work, spend, publishing or outreach."
   };
 }
 
 function shutByNoMaterialChange(): RoomStayedShut {
   return {
-    brief: "The guarded source refresh found no material change and no agenda was due, so no specialist model was called.",
-    seat: "registered for this room but not called because the guarded source refresh found no material change and no agenda was due",
-    // "the previous snapshot on file", not "what the room has read": refreshFightAiQEvidence
-    // compares content hashes it writes itself, before any seat is called.
-    setting: "The scheduler ran the guarded source refresh and compared it with the previous snapshot on file. Nothing material had changed, so no specialist meeting opened and no model was called.",
-    growthPlan: "Nothing is authorized (NO_ACTION): a wake-up on unchanged sources produces no work, spend, publishing or outreach."
+    brief: "Nothing new arrived since the last check, so this meeting was not needed.",
+    seat: "registered for this meeting but not asked anything, because nothing new had arrived",
+    // "the last check", not "what the room has read": refreshFightAiQEvidence compares content
+    // hashes it writes itself, before any seat is called.
+    setting: "The sources were checked and nothing had changed since the last check, so the meeting was not needed and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: a meeting on unchanged sources produces no work, spend, publishing or outreach."
+  };
+}
+
+/**
+ * The fight-model review has nothing to review until a model run exists.
+ *
+ * The 19:00 room's own deterministic pre-step (refreshFightAiQAnalysis) runs either way and costs
+ * nothing. What the room adds on top is a reading of the newest model run — and no model run has
+ * ever been produced, because no bout reaches `confirmed` without a second independent odds
+ * source and THE_ODDS_API_KEY is not installed. Every sitting so far could only have restated the
+ * pre-step back to itself at full cast price.
+ */
+function shutByNoModelRun(): RoomStayedShut {
+  return {
+    brief: "No model run exists to review yet — waiting for the odds data key.",
+    seat: "registered for this meeting but not asked anything, because there is no model run to review yet",
+    setting: "The fight data was refreshed as usual. No model run has been produced yet, so there was nothing for this meeting to read and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: the meeting reviews model runs, and none exist yet."
   };
 }
 
 /** The incubator scan's two ways of finding nothing to read, told apart because they differ. */
 function shutByEmptySweep(): RoomStayedShut {
   return {
-    brief: "The guarded source sweep returned no items at all, so there was nothing to put in front of a seat and no model was called.",
-    seat: "registered for this room but not called because the source sweep returned no items to read",
-    setting: "The scheduler ran the guarded source sweep. It returned no items, so the packet was empty, no specialist meeting opened and no model was called.",
-    growthPlan: "Nothing is authorized (NO_ACTION): an empty sweep produces no work, spend, publishing or outreach."
+    brief: "The source check returned nothing at all, so there was nothing to put in front of anyone and nothing was spent.",
+    seat: "registered for this meeting but not asked anything, because the source check returned nothing to read",
+    setting: "The sources were checked and returned nothing at all, so there was nothing to read, the meeting did not open and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: a check that returns nothing produces no work, spend, publishing or outreach."
   };
 }
 
 function shutByNothingUnread(input: { offered: number; shown: number }): RoomStayedShut {
-  const counted = `The sweep kept ${input.offered} item${input.offered === 1 ? "" : "s"} and ${input.shown} of them fit this room's context budget`;
+  const counted = `The check kept ${input.offered} ${input.offered === 1 ? "story" : "stories"} and ${input.shown} of them fit what this meeting can read`;
   return {
-    brief: `${counted}; each of those was already read in an earlier scan, so no model was called.`,
-    seat: "registered for this room but not called because the sweep brought nothing this room has not already read",
-    setting: `${counted}. Each of those was already in this room's read log, so no specialist meeting opened and no model was called. Items past the budget were shown to no seat and counted for nothing.`,
-    growthPlan: "Nothing is authorized (NO_ACTION): re-reading items this room has already read produces no work, spend, publishing or outreach."
+    brief: `${counted}; every one had been read at an earlier meeting, so this one was not needed.`,
+    seat: "registered for this meeting but not asked anything, because nothing new had arrived to read",
+    setting: `${counted}. Every one of them had already been read at an earlier meeting, so this one did not open and nobody was asked anything. Stories past that limit were shown to nobody and counted for nothing.`,
+    growthPlan: "Nothing was decided and nothing was authorized: re-reading stories this meeting has already read produces no work, spend, publishing or outreach."
   };
 }
 
@@ -700,6 +718,19 @@ async function newestSeasonFilename(root: string): Promise<string> {
   const names = await readdir(path.join(root, "ventures", "titty-tuesdays")).catch(() => [] as string[]);
   const seasons = names.filter((name) => /^season-\d{3}\.md$/u.test(name)).sort();
   return seasons.at(-1) ?? "season-001.md";
+}
+
+/**
+ * Whether any versioned fight-model run exists for the 19:00 room to read.
+ *
+ * A directory scan rather than a state read: `state/mma/model-runs/` does not exist yet — no bout
+ * has ever reached `confirmed`, because that needs a second independent odds source and
+ * THE_ODDS_API_KEY is not installed — so there is no index file to consult and the absent
+ * directory is the honest answer.
+ */
+async function hasFightAiQModelRun(root: string): Promise<boolean> {
+  const names = await readdir(path.join(root, "mma", "model-runs")).catch(() => [] as string[]);
+  return names.some((name) => name.endsWith(".json"));
 }
 
 function seasonIdFrom(filename: string): string {
@@ -1027,6 +1058,27 @@ export async function runPortfolioCycle(input: {
     : null;
   const disabledAgents = disabledAgentsForVenture(agentControls, definition.ventureId);
   const expectedCast = definition.requiredParticipants.filter((agent) => !disabledAgents.has(agent));
+  if (!input.dry && input.phase === "mma-analysis") {
+    // The refresh runs whatever the room decides; it is deterministic and free, and it is what
+    // produces the model runs the room exists to read.
+    preparationArtifacts.push(...await refreshFightAiQAnalysis({ root, now: input.now }));
+    if (scheduledWakeUp && !(await hasFightAiQModelRun(root))) {
+      return recordNoAgendaCycle({
+        phase: input.phase,
+        cycleId: input.cycleId,
+        date,
+        now: input.now,
+        stage: stages.current,
+        root,
+        expectedCast,
+        monthAllInUsd: spent,
+        monthCapUsd: schedule.monthlyOperatingUsd,
+        shut: shutByNoModelRun(),
+        preparationArtifacts
+      });
+    }
+  }
+
   if (scheduledWakeUp && phaseNeedsAgenda(meetingPolicy, input.phase) && !agenda) {
     return recordNoAgendaCycle({
       phase: input.phase,
@@ -1072,9 +1124,6 @@ export async function runPortfolioCycle(input: {
     preparationArtifacts.push(...evidence.artifactPaths);
     sourceMaterialChanged = evidence.materialChange;
     preparationArtifacts.push(...await refreshReadinessDossiers(root, input.now));
-  }
-  if (!input.dry && input.phase === "mma-analysis") {
-    preparationArtifacts.push(...await refreshFightAiQAnalysis({ root, now: input.now }));
   }
   if (input.phase === "mma-intake") {
     await refreshMmaBridge(root, date);
