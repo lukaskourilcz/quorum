@@ -8,6 +8,7 @@ import {
   CRON_MINUTE,
   cronSlotHour,
   readVentureRegistry,
+  deployedCronExpressions,
   scheduledCronExpressions
 } from "../src/ventures/registry.js";
 
@@ -46,26 +47,22 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
+    // Three backstop sweeps, not one cron per slot. The Vercel dispatch is the punctual path
+    // that names a slot; GitHub's schedule is the backup that arrives hours late, and eighteen
+    // of them were being billed like primaries. deployedCronExpressions is the generator, and
+    // the workflow must hold exactly what it produces and nothing else.
     expect(
       cycle.match(new RegExp(`- cron: "${CRON_MINUTE} \\d{1,2} \\* \\* \\*"`, "g"))
-    ).toHaveLength(17);
-    // The hours meetings BELONG to, which is the list this schedule has always been described by.
-    // The cron that serves each fires CRON_HOUR_CARRY hours earlier, at CRON_MINUTE.
-    for (const hour of [2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 16, 17, 18, 19, 20]) {
-      expect(cycle).toContain(`cron: "${CRON_MINUTE} ${(hour - CRON_HOUR_CARRY + 24) % 24} * * *"`);
+    ).toHaveLength(3);
+    for (const expression of deployedCronExpressions()) {
+      expect(cycle.match(new RegExp(`- cron: "${expression.replace(/\*/gu, "\\*")}"`, "g")), expression)
+        .toHaveLength(1);
     }
-    // The fired cron is what names the meeting, so it has to reach the resolver.
-    expect(cycle).toContain("EVENT_SCHEDULE: ${{ github.event.schedule }}");
-    expect(cycle).toContain('--scheduled --cron "$EVENT_SCHEDULE"');
-    for (const hour of [4, 5, 8, 17, 18, 20]) {
-      expect(
-        cycle.match(
-          new RegExp(`cron: "${CRON_MINUTE} ${(hour - CRON_HOUR_CARRY + 24) % 24} \\* \\* \\*"`, "g")
-        )
-      ).toHaveLength(1);
-    }
+    // A sweep names no slot of its own, so it asks the registry and the records which one to
+    // rescue. The per-cron resolver is gone with the per-slot crons.
+    expect(cycle).toContain("sweep-cli.ts");
+    expect(cycle).not.toContain('--scheduled --cron "$EVENT_SCHEDULE"');
     expect(cycle).not.toContain('timezone: "Europe/Prague"');
-    expect(cycle).toContain("clock-cli.ts --scheduled");
     expect(cycle).toContain('clock-cli.ts --phase "$phase"');
     expect(cycle).not.toContain("Caught Up product remains fixture-only until the Phase 10 ledger cutover.");
     expect(cycle).toContain("CAUGHT_UP_LIVE_ENABLED");
@@ -229,7 +226,9 @@ describe("automation policy", () => {
     }
     // 18, not 19: the hourly social publisher is commented out until a channel exists, so its
     // twenty-four daily firings no longer confirm there is nothing to publish.
-    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(18);
+    // Three backstop sweeps in cycle.yml, one daily health run, and nothing else: the social
+    // publisher's hourly schedule is commented out until a channel exists.
+    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(4);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;
@@ -268,8 +267,11 @@ describe("automation policy", () => {
     const deployed = [...cycle.matchAll(/^\s*- cron: "([^"]+)"/gmu)].map((match) => match[1]!);
     expect(
       [...deployed].sort(),
-      "cycle.yml and cronPayloads disagree about when the council meets"
-    ).toEqual([...scheduledCronExpressions(readVentureRegistry())].sort());
+      "cycle.yml and deployedCronExpressions disagree about the backstop sweeps"
+    ).toEqual([...deployedCronExpressions()].sort());
+    // The per-slot expressions still exist and still drive the Vercel side; what changed is that
+    // GitHub no longer deploys them.
+    expect(scheduledCronExpressions(readVentureRegistry()).length).toBeGreaterThan(deployed.length);
   });
 
   it("keys the release-gate verdict on content, not on the moving cycle sha", async () => {

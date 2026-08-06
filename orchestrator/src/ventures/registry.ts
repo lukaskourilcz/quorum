@@ -244,9 +244,33 @@ export function cronPayloads(registry: VentureRegistry): Array<{
  * say which of the two hours had fired, and 12:00 UTC is also the summer firing of the
  * afternoon company meeting. Keeping the hours apart is what lets the fired cron name its
  * meeting outright, which is how a queued run still holds the right one.
+ *
+ * This is now the Vercel side only. The GitHub side is three backstop sweeps — see
+ * meetings/sweep.ts and deployedCronExpressions below.
  */
 export function scheduledCronExpressions(registry: VentureRegistry): string[] {
   return [...new Set(cronPayloads(registry).map(({ cron }) => cron))];
+}
+
+/**
+ * The UTC hours the three backstop sweeps fire at.
+ *
+ * Here rather than beside the sweep itself because a cron is the registry's business and
+ * meetings/sweep.ts imports this module: the other direction is a cycle.
+ */
+export const BACKSTOP_SWEEP_HOURS = [3, 11, 19] as const;
+
+/**
+ * What cycle.yml actually deploys as `on.schedule`.
+ *
+ * The eighteen per-slot crons were the backup path being billed like a primary. Measured over
+ * 5-6 August: a Vercel dispatch arrives on the slot's own hour and does 5.8 minutes of real
+ * work, a GitHub cron arrives hours late and spends 0.9 minutes exiting a guard — about 600
+ * billable minutes a month to duplicate a path that had already run. Three sweeps replace them,
+ * each looking for a slot today that has no record and can still be opened.
+ */
+export function deployedCronExpressions(): string[] {
+  return BACKSTOP_SWEEP_HOURS.map((hour) => `${CRON_MINUTE} ${hour} * * *`);
 }
 
 export function ventureIdForPhase(

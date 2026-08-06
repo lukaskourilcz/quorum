@@ -2,22 +2,14 @@ name: Guarded council cycle
 
 on:
   schedule:
-    - cron: "55 1 * * *"
-    - cron: "55 2 * * *"
+    # Three backstop sweeps, not eighteen per-slot crons. The Vercel dispatch is the punctual
+    # primary — it arrives on the slot's own hour and does the work — and GitHub's schedule is the
+    # backup that arrives hours late. Measured 5-6 August: a dispatch run averages 5.8 billable
+    # minutes of real work, a schedule run 0.9 minutes of guard exit, about 600 minutes a month
+    # spent duplicating a path that had already run. A sweep asks one question instead: is there a
+    # slot today with no record that can still be opened? See orchestrator/src/meetings/sweep.ts.
     - cron: "55 3 * * *"
-    - cron: "55 4 * * *"
-    - cron: "55 5 * * *"
-    - cron: "55 6 * * *"
-    - cron: "55 7 * * *"
-    - cron: "55 8 * * *"
-    - cron: "55 10 * * *"
     - cron: "55 11 * * *"
-    - cron: "55 13 * * *"
-    - cron: "55 14 * * *"
-    - cron: "55 15 * * *"
-    - cron: "55 16 * * *"
-    - cron: "55 17 * * *"
-    - cron: "55 18 * * *"
     - cron: "55 19 * * *"
   workflow_dispatch:
     inputs:
@@ -155,20 +147,40 @@ jobs:
             exit 1
           fi
 
+      # Before anything is installed. A dispatch run averages 5.8 billable minutes and a large
+      # share of them are firings whose answer was already on disk when the runner started: a
+      # slot that already ran today, or a gated slot whose skip record the first firing wrote.
+      # Each of those paid for checkout, pnpm and a full workspace install to reach an in-process
+      # guard that said no. This script imports nothing outside node: builtins, so it answers on
+      # the runner's bundled Node, and it answers "false" only where the real guards would
+      # certainly have written nothing.
+      - name: Cheap slot pre-check
+        id: guard
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_PHASE: ${{ inputs.phase }}
+          INPUT_TRIGGER: ${{ inputs.trigger }}
+          INPUT_DELIVERY_ONLY: ${{ inputs.delivery_only }}
+        run: node scripts/slot-guard.mjs
+
       - name: Install pnpm
+        if: ${{ steps.guard.outputs.proceed == 'true' }}
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Install Node.js
+        if: ${{ steps.guard.outputs.proceed == 'true' }}
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: "22"
           package-manager-cache: false
 
       - name: Install locked dependencies
+        if: ${{ steps.guard.outputs.proceed == 'true' }}
         run: pnpm install --frozen-lockfile
 
       - name: Resolve guarded cycle mode
         id: mode
+        if: ${{ steps.guard.outputs.proceed == 'true' }}
         env:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_SCHEDULE: ${{ github.event.schedule }}
@@ -206,17 +218,23 @@ jobs:
             dry=false
           fi
           if test "$EVENT_NAME" = "schedule"; then
-            # --json, because "skip" alone cannot say which kind of skip it is, and the two need
-            # opposite handling. An inactive daylight-saving cron has no meeting behind it and
-            # must leave nothing behind either. A cron GitHub delivered past the six-hour window
-            # does have one, and it is owed a stated reason: without it the slot goes red with
-            # nothing anywhere explaining it, which is the state this whole recorder chain exists
-            # to prevent. The worst delivery seen is 3h20m, on 3 August, against that window.
-            firing="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --scheduled --cron "$EVENT_SCHEDULE" --json)"
+            # A backstop sweep. The three GitHub crons name no slot of their own — the Vercel
+            # dispatch is the punctual path that names one — so the sweep asks the registry and
+            # the committed records which slot today, if any, still has no record and can still
+            # be opened. Nothing to rescue is the normal answer and costs a guard exit.
+            #
+            # A sweep never writes a skip: it is a backup that found nothing, not a gate that
+            # closed a room, and filing one would tell the calendar a meeting was called off
+            # hours after the punctual path had already recorded it or explained its absence.
+            firing="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/sweep-cli.ts)"
             phase="$(printf '%s' "$firing" | jq -r '.phase')"
-            firing_outcome="$(printf '%s' "$firing" | jq -r '.outcome')"
-            firing_slot="$(printf '%s' "$firing" | jq -r '.slot // ""')"
-            firing_reason="$(printf '%s' "$firing" | jq -r '.reason // ""')"
+            firing_outcome="meeting"
+            if test "$phase" = "skip"; then
+              firing_outcome="no-meeting"
+              echo "$(printf '%s' "$firing" | jq -r '.reason')"
+            else
+              echo "Backstop sweep rescuing ${phase}: $(printf '%s' "$firing" | jq -r '.reason')"
+            fi
           else
             phase="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts --phase "$phase")"
           fi
@@ -229,6 +247,10 @@ jobs:
               # recorder below has a phase to file the skip under.
               phase="$firing_slot"
               skip_reason="$firing_reason"
+            elif test "$EVENT_NAME" = "schedule"; then
+              # A sweep with nothing to rescue. `phase` stays "skip", which is what keeps the
+              # recorder below from filing anything.
+              skip_reason="The backstop sweep found no slot to rescue."
             else
               skip_reason="The inactive DST cron variant has no Prague wall-clock meeting."
             fi
@@ -408,7 +430,7 @@ jobs:
       # Not on a duplicate. That slot already holds a record of the meeting actually happening,
       # and a skip filed next to it would claim the room was called off when it was not.
       - name: Record why a scheduled meeting was skipped
-        if: ${{ steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip == 'true' && steps.mode.outputs.duplicate != 'true' && steps.mode.outputs.phase != 'skip' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip == 'true' && steps.mode.outputs.duplicate != 'true' && steps.mode.outputs.phase != 'skip' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           REASON: ${{ steps.mode.outputs.skip_reason }}
@@ -458,7 +480,7 @@ jobs:
       # install`, the 8000-odd .ts files under node_modules/.pnpm as well.
       - name: Reuse the release-gate verdict for this source tree
         id: gate-cache
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .release-gate-verdict
@@ -479,7 +501,7 @@ jobs:
 
       - name: Pre-cycle release gate
         id: gate
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' && steps.gate-cache.outputs.cache-hit != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' && steps.gate-cache.outputs.cache-hit != 'true' }}
         run: |
           # Captured, not left to abort the job. An uncaught failure here skipped every
           # remaining step including the skip recorder, so a commit that did not compile showed
@@ -548,7 +570,7 @@ jobs:
 
       - name: Run cycle
         id: run
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           DRY: ${{ steps.mode.outputs.dry }}
@@ -580,7 +602,7 @@ jobs:
           fi
 
       - name: Send the one daily portfolio digest
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'night' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'night' }}
         env:
           CYCLE_FAILED: ${{ steps.run.outputs.failed }}
           DRY: ${{ steps.mode.outputs.dry }}
@@ -591,7 +613,7 @@ jobs:
           pnpm digest:daily -- "${args[@]}"
 
       - name: Send a one-time hard-limit alert when needed
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         run: pnpm budget:alert
 
       # Ends the job for a cycle that reported failure, before the post-cycle gate and every
@@ -599,11 +621,11 @@ jobs:
       # failed cycle" further down carries failure(), so it still runs after this step has
       # failed the job.
       - name: Fail closed on a cycle that reported failure
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.run.outputs.failed == 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.run.outputs.failed == 'true' }}
         run: exit 1
 
       - name: Post-cycle release gate
-        if: ${{ steps.mode.outputs.skip != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' }}
         env:
           GATE_BASE: ${{ github.sha }}
         run: |
@@ -634,7 +656,7 @@ jobs:
           git diff --check
 
       - name: Production route and link smoke
-        if: ${{ steps.mode.outputs.skip != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' }}
         run: |
           pnpm --filter @boardlessai/site start &
           server_pid=$!
@@ -662,7 +684,7 @@ jobs:
         # own exit status and returns 0. Standing after the gate and the smoke test means a
         # cycle that exited 0, billed for calls and then tripped either of them is covered too.
         # The porcelain check makes this a no-op when there is nothing left to record.
-        if: ${{ (failure() || steps.run.outputs.failed == 'true') && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && (failure() || steps.run.outputs.failed == 'true') && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         run: |
           if test -n "$(git status --porcelain --untracked-files=all -- state/budget state/notify)"; then
             git config user.name "boardlessai-cycle[bot]"
@@ -684,7 +706,7 @@ jobs:
           fi
 
       - name: Commit one atomic runtime cycle
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
         env:
           CYCLE_NUMBER: ${{ github.run_number }}
           # The Vercel cron reads as a schedule here as well, so a punctual run that finished
@@ -772,7 +794,7 @@ jobs:
 
       - name: Select the oldest Caught Up delivery
         id: delivery
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'cu-edition' && steps.mode.outputs.dry != 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'cu-edition' && steps.mode.outputs.dry != 'true' }}
         run: pnpm delivery -- next --github-output "$GITHUB_OUTPUT"
 
       - name: Mint bounded aifirst installation token
@@ -1017,7 +1039,7 @@ jobs:
 
       - name: Select pending MMA Files delivery
         id: mma-delivery
-        if: ${{ steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
         run: |
@@ -1271,10 +1293,10 @@ jobs:
         # one was skipped — so != 'false' is exactly the two cases worth a note. It stays quiet
         # for a meeting that ran: a delivery step failing after that is a delivery problem, and
         # calling it "the meeting never finished" is the opposite of what happened.
-        if: ${{ failure() && steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && failure() && steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
-          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          EVENT_NAME: ${{ github.event_name }}
           INPUT_PHASE: ${{ inputs.phase }}
         run: |
           git fetch origin "$GITHUB_REF_NAME"
@@ -1291,9 +1313,13 @@ jobs:
           # input the route set instead. Same recovery, different place the slot's name was
           # written down; without it the punctual path would be the one shape of scheduled run
           # that can still fail early and leave the slot unexplained.
-          if test -z "$PHASE"; then
-            PHASE="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts \
-              --scheduled --cron "$EVENT_SCHEDULE" --json | jq -r '.slot // ""')" || PHASE=""
+          #
+          # A backstop sweep is the one scheduled shape with no slot of its own to recover: the
+          # cron names three hours, not a meeting. It asks the sweep the same question the mode
+          # step asked, and if the answer is still a slot, that slot is what failed.
+          if test -z "$PHASE" && test "$EVENT_NAME" = "schedule"; then
+            PHASE="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/sweep-cli.ts \
+              | jq -r '.phase // ""')" || PHASE=""
           fi
           if test -z "$PHASE"; then
             PHASE="$(pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/clock-cli.ts \

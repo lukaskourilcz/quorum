@@ -279,12 +279,14 @@ describe("the cycle workflow records every scheduled run that resolves to a phas
 
   it("recovers the slot name when the step that resolves it is what failed", async () => {
     // `test -n "$PHASE" || exit 0` meant the run that failed earliest was the one guaranteed to
-    // leave no trace. The cron names the slot on its own, so the name is recovered rather than
-    // given up on.
+    // leave no trace, so the name is recovered rather than given up on. Where it is recovered
+    // from moved with the schedule: a per-slot cron named its own meeting, and a backstop sweep
+    // names three hours, so the sweep is asked the same question the mode step asked.
     const source = await workflow;
     const step = source.slice(source.indexOf("- name: Say on the calendar why this run did not finish"));
     expect(step).toContain('if test -z "$PHASE"; then');
     expect(step).toContain("clock-cli.ts");
-    expect(step).toContain("EVENT_SCHEDULE: ${{ github.event.schedule }}");
+    expect(step).toContain("sweep-cli.ts");
+    expect(step).toContain("EVENT_NAME: ${{ github.event_name }}");
   });
 });
