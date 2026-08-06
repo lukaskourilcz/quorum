@@ -15,7 +15,7 @@ import { fetchCurrentRosterNames, fetchRecentResults, fetchScheduledCards } from
 import { applyEventResults } from "../fightaiq/results.js";
 import { enrichWikidataProfiles } from "../fightaiq/wikidata.js";
 
-import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
+import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
 import { enrichWikimediaBackfill } from "../fightaiq/wikimedia-backfill.js";
@@ -29,6 +29,13 @@ import {
   recordActorUsage
 } from "../sources/apify.js";
 import { runRecipeStep } from "../sources/goviral-scout.js";
+import {
+  AI_VOCABULARY,
+  collectTrendingSignals,
+  matchDictionary,
+  type TrendingProviderResult,
+  type TrendingSignal
+} from "../sources/trending.js";
 import {
   GoViralTrendsSchema,
   TREND_SNAPSHOT_MAX_AGE_DAYS,
@@ -585,12 +592,33 @@ export async function refreshGoViralTrends(input: {
     previous: previous?.signals.topHashtags ?? [],
     now: input.now
   });
-  const evidenceRefs = trendEvidenceRefs(input.date, sourceResults);
+  const free = await collectFreeTrendingSignals({
+    root: input.root,
+    date: input.date,
+    now: input.now,
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+  });
+  const evidenceRefs = [
+    ...trendEvidenceRefs(input.date, sourceResults),
+    ...new Set(free.results.filter((result) => result.status === "success").map((result) => `source:trending:${result.provider}:${input.date}`))
+  ];
   const trends = GoViralTrendsSchema.parse({
     schemaVersion: "goviral-trends/1",
     date: input.date,
     generatedAt: input.now.toISOString(),
     sourceResults,
+    freeSignals: free.results.map((result) => ({
+      provider: result.provider,
+      status: result.status,
+      reason: result.reason,
+      signals: result.signals.slice(0, 40).map((signal) => ({
+        kind: signal.kind,
+        topic: signal.topic,
+        value: signal.value,
+        ...(signal.scope ? { scope: signal.scope } : {}),
+        ref: signal.ref
+      }))
+    })),
     items,
     signals: {
       topHashtags,
@@ -610,6 +638,58 @@ export async function refreshGoViralTrends(input: {
     snapshotDate: input.date,
     stale: false,
     reason: `The scout ran ${sourceResults.length} step${sourceResults.length === 1 ? "" : "s"} and stored ${items.length} items.`
+  };
+}
+
+/**
+ * The free signals, added to the same trends artifact GoVIRAL's scout writes.
+ *
+ * They cost nothing and touch no Apify credit, so they run whether or not `APIFY_TOKEN` exists —
+ * which means the magazines get a velocity reading from day one while GoVIRAL's paid scout waits
+ * for an account. The entity dictionaries come from what the system already knows: the AI
+ * vocabulary for DNESKAi, and the scheduled cards and roster policy for MMA Files.
+ *
+ * Provider results are kept separate rather than merged. A single number cannot say whether a
+ * quiet reading means nothing is trending or three of four sources were down, and the first is a
+ * fact while the second is an outage.
+ */
+export async function collectFreeTrendingSignals(input: {
+  root: string;
+  date: string;
+  now: Date;
+  fetchImpl?: typeof fetch;
+}): Promise<{ results: TrendingProviderResult[]; ai: TrendingSignal[]; mma: TrendingSignal[] }> {
+  const [events, rosterPolicy] = await Promise.all([
+    loadEventCards(path.join(input.root, "mma", "events")),
+    loadRosterPolicy(configRoot).catch(() => null)
+  ]);
+  const focus = fightWeekFocus(events, input.now);
+  // A card carries fighter *refs*, not names: `ufc:jiri-prochazka`. The slug is the name with
+  // hyphens, which is exactly what a news query wants, so it is unhyphenated rather than looked
+  // up — one fewer read, and no chance of querying a name the card does not actually name.
+  const nameFromRef = (ref: string) => ref.split(":").at(-1)?.replaceAll("-", " ") ?? "";
+  const mmaQueries = [
+    ...focus.map((event) => event.name),
+    ...focus.flatMap((event) => event.bouts.flatMap((bout) => [nameFromRef(bout.red), nameFromRef(bout.blue)]))
+  ].filter((name) => name.length > 2).slice(0, 6);
+  const results = await collectTrendingSignals({
+    now: input.now,
+    aiQueries: ["artificial intelligence", "OpenAI", "Anthropic"],
+    mmaQueries,
+    subreddits: ["MMA", "ufc", "artificial", "LocalLLaMA"],
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+  });
+  const all = results.flatMap((result) => result.signals);
+  const mmaDictionary = [
+    ...mmaQueries,
+    ...(rosterPolicy ? rosterPolicyIds(rosterPolicy) : []),
+    "UFC",
+    "Oktagon"
+  ];
+  return {
+    results,
+    ai: matchDictionary(all, [...AI_VOCABULARY]),
+    mma: matchDictionary(all, mmaDictionary)
   };
 }
 

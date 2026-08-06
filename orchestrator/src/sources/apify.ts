@@ -76,6 +76,11 @@ export const GoViralSourceRegistrySchema = z.object({
   actors: z.array(GoViralActorSchema).min(1),
   recipe: z.array(GoViralRecipeStepSchema).min(1),
   trackedAccounts: z.array(z.string().trim().min(1).max(80)).max(40),
+  /** Decided and closed. Kept in the config so a future session finds the reason, not the gap. */
+  rejected: z.array(z.object({
+    what: z.string().min(1).max(160),
+    why: z.string().min(1).max(400)
+  })).default([]),
   topicSets: z.record(z.string(), GoViralTopicSetSchema)
 });
 

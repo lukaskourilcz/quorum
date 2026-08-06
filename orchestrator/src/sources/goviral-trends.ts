@@ -81,11 +81,32 @@ export const TrendSourceResultSchema = z.object({
   estimatedUsd: z.number().finite().nonnegative()
 });
 
+/**
+ * The free readings, kept beside the paid ones and never folded into them.
+ *
+ * A rank and a velocity are different measurements and a sum of the two means nothing, so they
+ * stay separate all the way to the room. `status` distinguishes an empty answer from a failed
+ * one, because "nothing is trending" and "the source was down" are different news.
+ */
+export const FreeSignalResultSchema = z.object({
+  provider: z.enum(["hn", "google-trends", "google-news", "reddit"]),
+  status: z.enum(["success", "empty", "failed"]),
+  reason: z.string().max(300).nullable(),
+  signals: z.array(z.object({
+    kind: z.enum(["velocity", "volume", "rank"]),
+    topic: z.string().max(160),
+    value: z.number().finite(),
+    scope: z.string().max(80).optional(),
+    ref: z.string().max(160)
+  })).max(40)
+});
+
 export const GoViralTrendsSchema = z.object({
   schemaVersion: z.literal("goviral-trends/1"),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   generatedAt: z.string(),
   sourceResults: z.array(TrendSourceResultSchema),
+  freeSignals: z.array(FreeSignalResultSchema).max(24).default([]),
   items: z.array(TrendItemSchema).max(2_000),
   signals: z.object({
     topHashtags: z.array(TrendHashtagSignalSchema).max(24),

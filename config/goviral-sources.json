@@ -81,6 +81,15 @@
   ],
   "$accountComment": "Public accounts whose posts step 4 watches for deltas. Owner-editable. Empty is a legitimate state — step 4 simply does not run, and the week's scout is smaller rather than failed.",
   "trackedAccounts": [],
+  "$rejectedComment": "Decided and closed. Re-opening any of these needs a new decision record, not a code change.",
+  "rejected": [
+    { "what": "X/Twitter scraping, in any form", "why": "Every usable Apify actor needs the $29 Starter plan, which alone busts the $30 all-in cap." },
+    { "what": "The Apify Google News rental actor", "why": "$20/mo to wrap an RSS feed that is free and already read directly." },
+    { "what": "Apify Google Trends actors", "why": "emastra rates 3.22 stars and resounding_diplomacy reports 0% success; the free Trends RSS covers the need." },
+    { "what": "pytrends and its forks", "why": "Archived 2025-04 and unmaintained." },
+    { "what": "Reddit's free OAuth tier as a dependency", "why": "Non-commercial use only, which is ToS-grey for a magazine that intends to earn. RSS is read instead, and treated as closable at any time." },
+    { "what": "trudax/reddit-scraper-lite as the Reddit fallback", "why": "$3.40/1k would take most of GoVIRAL's monthly credit. Left documented as a future owner decision, deliberately not pre-built." }
+  ],
   "$topicComment": "Owner-editable, deliberately JSON rather than prompt text. `writer` is seeded from state/ventures/goviral/profile.md and should be rewritten once the owner fills that file in.",
   "topicSets": {
     "writer": {

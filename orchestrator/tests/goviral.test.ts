@@ -295,6 +295,7 @@ describe("the weekly brief", () => {
         date: "2026-08-10",
         generatedAt: "2026-08-10T11:00:00.000Z",
         sourceResults: [],
+        freeSignals: [],
         items: [],
         signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
         forMagazines: { ai: [], mma: [] }
