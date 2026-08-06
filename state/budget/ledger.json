@@ -2814,6 +2814,23 @@
       "toolUses": 0,
       "usd": 0.005689,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-06T08:02:12.319Z",
+      "cycleId": "20260806080156-article-am",
+      "requestHash": "dae07d69dcef25e13436dbf7a07d928b8b7f533cd4501d38261436bd8127b115",
+      "phase": "article-production",
+      "ventureId": "mma-files",
+      "agent": "JAB",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "serviceTier": "default",
+      "tokensIn": 10603,
+      "cachedTokensIn": 0,
+      "tokensOut": 490,
+      "toolUses": 0,
+      "usd": 0.039159,
+      "kind": "text"
     }
   ]
 }
