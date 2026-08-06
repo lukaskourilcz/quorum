@@ -344,13 +344,17 @@
       "at": "2026-08-05T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-05-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-06T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-06-cu-edition",
+      "decisionOneLiner": "EDITION. Tři laboratoře, jeden evaluátor a devatenáct útoků, které nikdo nečekal led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy ga"
     },
     {
       "at": "2026-08-06T04:00:00.000Z",

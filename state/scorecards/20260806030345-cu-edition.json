@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260806030345-cu-edition",
+  "phase": "cu-edition",
+  "estimatedWorstCaseUsd": 0.78,
+  "actualUsd": 0.1603485,
+  "participants": [
+    "HERALD",
+    "STET",
+    "HACEK",
+    "SPARK",
+    "AUDIT"
+  ],
+  "sourceResults": [
+    {
+      "sourceId": "404-media",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 245,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "anthropic-news",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 1052,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "ars-technica",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 276,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "arxiv-cs-ai",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 8135,
+      "errorCode": "AbortError",
+      "errorMessage": "This operation was aborted"
+    },
+    {
+      "sourceId": "arxiv-cs-lg",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 8137,
+      "errorCode": "AbortError",
+      "errorMessage": "This operation was aborted"
+    },
+    {
+      "sourceId": "bluesky-language-models",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 435,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "deepmind-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 341,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "digiday",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 84,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "github-ai-releases",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 510,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "google-research",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 289,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "hf-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 196,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "hn-frontpage",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 469,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "import-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 161,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "interconnects",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 254,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "meta-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 2390,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "mit-tech-review",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 122,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "nieman-lab",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 2365,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "openai-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 157,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "platformer",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 267,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "rest-of-world",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 76,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "simonw",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 70,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "social-media-today",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 99,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "spaceflight-news",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 337,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "stackexchange-ml",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 137,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "stratechery",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 369,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "techcrunch-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 48,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "tensorfeed",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 68,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "the-register",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 216,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "the-verge",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 56,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "tubefilter",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 4975,
+      "errorCode": "empty",
+      "errorMessage": "fetch succeeded but yielded no candidate items"
+    },
+    {
+      "sourceId": "variety",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 244,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "wired-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 62,
+      "errorCode": null,
+      "errorMessage": null
+    }
+  ],
+  "editionStatus": "edition",
+  "packageHash": "1c5315a35859e3ce3b6493d389413a17a1aa0287e0023e82061a098d33e8cee0",
+  "generatedAt": "2026-08-06T03:03:50.057Z"
+}

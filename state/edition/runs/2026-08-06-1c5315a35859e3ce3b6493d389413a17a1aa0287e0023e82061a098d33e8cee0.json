@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "runId": "9df680a8-7c1f-4ace-8473-2881de253fc3",
+  "date": "2026-08-06",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-06T03:03:53.358Z",
+  "completedAt": "2026-08-06T03:05:57.722Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-06T03:03:54.034Z",
+      "completedAt": "2026-08-06T03:04:10.623Z",
+      "durationMs": 16589
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-06T03:04:10.623Z",
+      "completedAt": "2026-08-06T03:05:57.369Z",
+      "durationMs": 106746
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-06T03:05:57.371Z",
+      "completedAt": "2026-08-06T03:05:57.377Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-06T03:05:57.377Z",
+      "completedAt": "2026-08-06T03:05:57.377Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-06T03:05:57.377Z",
+      "completedAt": "2026-08-06T03:05:57.720Z",
+      "durationMs": 343
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11244,
+      "outputTokens": 660,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.043632
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13948,
+      "outputTokens": 4634,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 1430,
+      "costUsd": 0.1167165
+    }
+  ],
+  "measuredCostUsd": 0.1603485,
+  "quality": {
+    "metrics": {
+      "successfulSources": 29,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 71,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.6122448979591837,
+      "duplicateStorySimilarity": 0.13333333333333333,
+      "repeatedTopicFrequency": 0,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1603485
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "repeated_topic_warmup:2/3"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
