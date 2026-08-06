@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Amanda_Lemos",
       "publisher": "Wikipedia",
       "title": "Amanda Lemos",
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q98684485",
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q98684485",
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -105,7 +105,7 @@
       "sourceRefs": [
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -115,7 +115,7 @@
         "source:cito-ufc:2026-08-05:fighter:57017e0c-e97d-49ae-b154-0505d242cfa0",
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -124,7 +124,7 @@
       "sourceRefs": [
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -575,9 +575,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 2.058671,
-        "layoffDays": 144
+        "layoffDays": 145
       },
-      "updatedAt": "2026-08-05T06:05:51.752Z"
+      "updatedAt": "2026-08-06T06:00:43.585Z"
     }
   ],
   "rating": {
@@ -587,14 +587,14 @@
     "volatility": 0.06000375,
     "boutCount": 24,
     "asOfBoutRef": "ufc:bout:history-f3f8254560f471a33a23",
-    "updatedAt": "2026-08-05T06:05:51.752Z"
+    "updatedAt": "2026-08-06T06:00:43.585Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "record-history-mismatch"
     ],
-    "lastReviewedAt": "2026-08-05T06:05:51.752Z"
+    "lastReviewedAt": "2026-08-06T06:00:43.585Z"
   },
   "changeLog": [
     {
@@ -2010,11 +2010,44 @@
         "source:wikipedia:64535234"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 22 historical fight rows."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

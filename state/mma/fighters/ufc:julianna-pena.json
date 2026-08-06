@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Julianna_Pe%C3%B1a",
       "publisher": "Wikipedia",
       "title": "Julianna Peña",
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q15987784",
         "source:wikipedia:41237982"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -205,9 +205,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 0.909016,
-        "layoffDays": 1467
+        "layoffDays": 1468
       },
-      "updatedAt": "2026-08-05T06:05:51.752Z"
+      "updatedAt": "2026-08-06T06:00:43.585Z"
     }
   ],
   "rating": {
@@ -217,7 +217,7 @@
     "volatility": 0.0600116,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-57467a60f9cf4f34a9b0",
-    "updatedAt": "2026-08-05T06:05:51.752Z"
+    "updatedAt": "2026-08-06T06:00:43.585Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1481,11 +1481,25 @@
         "source:wikipedia:30387040"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44159133",
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

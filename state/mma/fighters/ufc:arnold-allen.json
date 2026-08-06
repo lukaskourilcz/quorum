@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Arnold_Allen",
       "publisher": "Wikipedia",
       "title": "Arnold Allen",
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q23007609",
         "source:wikipedia:49598119"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -570,9 +570,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.772334,
-        "layoffDays": 81
+        "layoffDays": 82
       },
-      "updatedAt": "2026-08-05T06:05:51.752Z"
+      "updatedAt": "2026-08-06T06:00:43.585Z"
     }
   ],
   "rating": {
@@ -582,7 +582,7 @@
     "volatility": 0.05999753,
     "boutCount": 26,
     "asOfBoutRef": "ufc:bout:history-c173a3a0fd2b19f87a68",
-    "updatedAt": "2026-08-05T06:05:51.752Z"
+    "updatedAt": "2026-08-06T06:00:43.585Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1888,11 +1888,26 @@
         "source:wikipedia:49598119"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

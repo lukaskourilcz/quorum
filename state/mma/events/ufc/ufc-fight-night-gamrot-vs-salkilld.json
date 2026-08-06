@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-08T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-05:List of UFC events"
+    "source:wikipedia:2026-08-06:List of UFC events"
   ],
   "bouts": [
     {
@@ -98,7 +98,15 @@
       "division": "womens-flyweight",
       "scheduledRounds": 3,
       "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-gamrot-vs-salkilld:bout:giovanna-canuto-vs-carol-foro-12",
+      "red": "ufc:giovanna-canuto",
+      "blue": "ufc:carol-foro",
+      "division": "womens-strawweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

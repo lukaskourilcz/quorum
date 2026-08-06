@@ -9,7 +9,8 @@
     "wikidataId": "Q20979276",
     "wikipediaTitle": "Angela Hill",
     "externalIds": {
-      "wikipediaPageId": "47691727"
+      "wikipediaPageId": "47691727",
+      "cito": "d32eff6f-ec66-4ff9-9910-c19cee5befd5"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-06:fighter:d32eff6f-ec66-4ff9-9910-c19cee5befd5",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Angela Hill",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q20979276",
       "url": "https://www.wikidata.org/wiki/Q20979276",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Angela_Hill",
       "publisher": "Wikipedia",
       "title": "Angela Hill",
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Angela Hill",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-06:fighter:d32eff6f-ec66-4ff9-9910-c19cee5befd5",
         "source:wikidata:Q20979276",
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -93,11 +102,12 @@
     "record": {
       "value": "19-16-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-06:fighter:d32eff6f-ec66-4ff9-9910-c19cee5befd5",
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 160.02,
@@ -105,6 +115,15 @@
         "source:wikipedia:47691727"
       ],
       "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-06:fighter:d32eff6f-ec66-4ff9-9910-c19cee5befd5"
+      ],
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -139,6 +158,20 @@
         {
           "value": "20-19-0",
           "sourceRef": "derived:ufc:angela-hill:history"
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Strawweight",
+          "sourceRef": "source:wikipedia:47691727"
+        },
+        {
+          "value": "womens-strawweight",
+          "sourceRef": "source:cito-ufc:2026-08-06:fighter:d32eff6f-ec66-4ff9-9910-c19cee5befd5"
         }
       ],
       "status": "open"
@@ -756,9 +789,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 3.142227,
-        "layoffDays": 67
+        "layoffDays": 68
       },
-      "updatedAt": "2026-08-05T06:05:51.752Z"
+      "updatedAt": "2026-08-06T06:00:43.585Z"
     }
   ],
   "rating": {
@@ -768,12 +801,11 @@
     "volatility": 0.05999927,
     "boutCount": 39,
     "asOfBoutRef": "ufc:bout:history-3fdf2017b89dcb87235a",
-    "updatedAt": "2026-08-05T06:05:51.752Z"
+    "updatedAt": "2026-08-06T06:00:43.585Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "stance",
       "reachCm",
       "record-history-mismatch"
     ],
@@ -2278,11 +2310,42 @@
         "source:wikipedia:64535234"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-06:fighter:d32eff6f-ec66-4ff9-9910-c19cee5befd5"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:40078160",
+        "source:wikipedia:68442521",
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.125,
+  "completeness": 0.875,
+  "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

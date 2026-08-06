@@ -56,7 +56,7 @@
       "url": "https://en.wikipedia.org/wiki/Arman_Tsarukyan",
       "publisher": "Wikipedia",
       "title": "Arman Tsarukyan",
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -69,7 +69,7 @@
         "source:wikipedia:43536705",
         "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-05T06:05:51.752Z",
+      "retrievedAt": "2026-08-06T06:00:43.585Z",
       "status": "verified",
       "corroborated": true
     },
@@ -200,9 +200,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 0.802731,
-        "layoffDays": 844
+        "layoffDays": 845
       },
-      "updatedAt": "2026-08-05T06:05:51.752Z"
+      "updatedAt": "2026-08-06T06:00:43.585Z"
     }
   ],
   "rating": {
@@ -212,7 +212,7 @@
     "volatility": 0.06000316,
     "boutCount": 5,
     "asOfBoutRef": "ufc:bout:history-e4fdafd9bc167ff332e6",
-    "updatedAt": "2026-08-05T06:05:51.752Z"
+    "updatedAt": "2026-08-06T06:00:43.585Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1537,11 +1537,26 @@
         "source:wikipedia:27167974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-06T06:00:43.585Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44264537",
+        "source:wikipedia:43536705",
+        "source:wikipedia:27167974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

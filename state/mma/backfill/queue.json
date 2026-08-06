@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-05T06:05:51.752Z",
+  "generatedAt": "2026-08-06T06:00:43.585Z",
   "items": [
     {
       "fighterRef": "ufc:billy-quarantillo",
@@ -10,7 +10,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division",
         "record"
@@ -32,7 +32,7 @@
       "gaps": [
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division"
       ]
@@ -55,7 +55,7 @@
         "stance",
         "team"
       ],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "name",
         "division",
@@ -78,7 +78,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "name",
         "division",
@@ -90,7 +90,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division"
       ]
@@ -100,7 +100,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division"
       ]
@@ -110,7 +110,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division"
       ]
@@ -120,10 +120,9 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
-        "division",
-        "record"
+        "division"
       ]
     },
     {
@@ -131,7 +130,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division",
         "record"
@@ -147,7 +146,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division",
         "record"
@@ -163,7 +162,7 @@
         "heightCm",
         "reachCm"
       ],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division"
       ]
@@ -178,7 +177,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-05T06:05:51.752Z",
+      "reviewedAt": "2026-08-06T06:00:43.585Z",
       "uncorroborated": [
         "division",
         "record"
@@ -194,21 +193,6 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:angela-hill",
-      "priority": 480,
-      "reason": "uncorroborated",
-      "gaps": [
-        "stance",
-        "reachCm",
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
         "division",
         "record"
@@ -405,6 +389,19 @@
       "gaps": [
         "reachCm",
         "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-03T18:14:46.640Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:angela-hill",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "record-history-mismatch"
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "bout/1",
-  "id": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-steven-asplund-vs-guilherme-pat-6",
+  "id": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-giovanna-canuto-vs-carol-foro-12",
   "org": "ufc",
   "event": {
     "ref": "ufc:event:ufc-fight-night-gamrot-vs-salkilld",
@@ -9,39 +9,37 @@
     "venue": "Meta Apex"
   },
   "fighters": {
-    "red": "ufc:steven-asplund",
-    "blue": "ufc:guilherme-pat"
+    "red": "ufc:giovanna-canuto",
+    "blue": "ufc:carol-foro"
   },
-  "division": "heavyweight",
+  "division": "womens-strawweight",
   "scheduledRounds": 3,
   "status": "announced",
   "statusHistory": [
     {
       "status": "announced",
-      "at": "2026-08-05T06:05:51.752Z",
+      "at": "2026-08-06T06:00:43.585Z",
       "sourceRefs": [
-        "source:wikipedia:2026-08-05:List of UFC events"
+        "source:wikipedia:2026-08-06:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
     }
   ],
   "discovery": {
-    "firstSeenAt": "2026-08-05T06:05:51.752Z",
+    "firstSeenAt": "2026-08-06T06:00:43.585Z",
     "lastSeenAt": "2026-08-06T06:00:43.585Z",
     "sourceRefs": [
-      "source:wikipedia:2026-08-05:List of UFC events",
       "source:wikipedia:2026-08-06:List of UFC events"
     ]
   },
   "sourceRefs": [
-    "source:wikipedia:2026-08-05:List of UFC events",
     "source:wikipedia:2026-08-06:List of UFC events"
   ],
   "result": null,
   "predictionRefs": [],
   "changeLog": [
     {
-      "at": "2026-08-05T06:05:51.752Z",
+      "at": "2026-08-06T06:00:43.585Z",
       "kind": "created",
       "fields": [
         "event",
@@ -49,10 +47,10 @@
         "status"
       ],
       "sourceRefs": [
-        "source:wikipedia:2026-08-05:List of UFC events"
+        "source:wikipedia:2026-08-06:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
     }
   ],
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T06:00:43.585Z"
 }

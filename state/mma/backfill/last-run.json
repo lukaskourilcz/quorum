@@ -3,13 +3,12 @@
   "status": "success",
   "processed": 12,
   "artifacts": [
-    "mma/bouts/ufc/history-79a86e49e1376f9c2432.json",
+    "mma/fighters/oktagon:losene-keita.json",
     "mma/fighters/oktagon:lucia-szabova.json",
     "mma/fighters/oktagon:will-fleury.json",
     "mma/fighters/ufc:ailin-perez.json",
     "mma/fighters/ufc:alateng-heili.json",
     "mma/fighters/ufc:amanda-lemos.json",
-    "mma/fighters/ufc:amanda-ribas.json",
     "mma/fighters/ufc:andre-lima.json",
     "mma/fighters/ufc:andre-petroski.json",
     "mma/fighters/ufc:anshul-jubli.json",
@@ -17,5 +16,5 @@
     "mma/fighters/ufc:brando-pericic.json",
     "mma/fighters/ufc:conor-mcgregor.json"
   ],
-  "generatedAt": "2026-08-05T06:05:51.752Z"
+  "generatedAt": "2026-08-06T06:00:43.585Z"
 }
