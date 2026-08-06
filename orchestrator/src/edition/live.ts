@@ -16,6 +16,7 @@ import type { EditionPackage } from "../contracts/edition-package.js";
 import { validateEditionForDelivery } from "../delivery/validate.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
+import { newestTrendSnapshot } from "../portfolio/evidence.js";
 import { runScrapersDetailed, type ScrapeRunResult } from "../sources/run.js";
 import { createDigest } from "../sources/digest.js";
 import { loadSourceRegistry } from "../sources/registry.js";
@@ -311,6 +312,7 @@ export async function runLiveEdition(input: {
       productionCap
     );
     const produce = input.dependencies?.produce ?? produceEdition;
+    const trending = (await newestTrendSnapshot(root, input.date))?.forMagazines.ai ?? [];
     const productionInput: EditionProductionInput = {
       date: input.date,
       now: input.now,
@@ -335,7 +337,11 @@ export async function runLiveEdition(input: {
       gateway,
       reporter,
       socialPackEnabled: input.socialPackEnabled,
-      imageCandidates
+      imageCandidates,
+      // A tiebreaker for the editor, and nothing more. Absent when no scout has run, which is
+      // the normal state until the owner adds APIFY_TOKEN; the editor's gates are identical
+      // either way.
+      ...(trending.length > 0 ? { trending } : {})
     };
     try {
       const produced = await produce(productionInput);

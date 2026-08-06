@@ -55,6 +55,8 @@ export interface EditionProductionInput {
   imageCandidates?: readonly LicensedPhotoCandidate[];
   /** How a picked article's text is fetched. Injected by tests so none reaches the network. */
   readBody?: (url: string, at: Date) => Promise<string | null>;
+  /** This week's rising AI topics, if a scout snapshot exists. A tiebreaker for curation only. */
+  trending?: readonly { topic: string; engagementPerHour: number; weekOverWeekDelta: number | null }[];
 }
 
 export interface EditionProductionResult {
@@ -213,7 +215,7 @@ export async function produceEdition(
   let brief: CuratedBrief;
   try {
     brief = await reporter.stage("curate", () =>
-      curate(input.items, input.date, input.config, input.gateway, input.sources)
+      curate(input.items, input.date, input.config, input.gateway, input.sources, input.trending)
     );
   } catch (error) {
     if (error instanceof CurationGateError) {

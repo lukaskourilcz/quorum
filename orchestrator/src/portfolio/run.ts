@@ -69,6 +69,7 @@ import {
 } from "./schedule.js";
 import { environmentBudgetLimits } from "./limits.js";
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
+import { buildGoViralWeeklyBrief } from "./goviral-brief.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import {
@@ -167,6 +168,9 @@ export function tittyTuesdaysDailyFocus(input: {
 export function portfolioIdeaInstruction(phase: PortfolioPhase, focus = ""): string {
   if (phase === "tt-marketing") {
     return `This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {"title":"one title, at most 80 characters","summary":"one standalone description, at most 280 characters"}; use no other idea keys, and repeat the concept from summary inside idea rather than leaving idea null. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept. Propose nothing whose title or summary restates an idea already in the index you were shown.${focus}`;
+  }
+  if (phase === "gv-brief") {
+    return `This room has a standing agenda: read the week's trend data and turn it into things to write. PULSE, SCOUT and ANGLE must each set idea exactly to {"title":"one title, at most 80 characters","summary":"one standalone description, at most 280 characters"}; use no other idea keys. A magazine-marketing idea names its venture in the title — "DNESKAi: ..." or "MMA Files: ..." — so the owner can see at a glance which desk it belongs to; an idea for the owner's own writing names neither. Every idea that claims a trend is rising must carry the number from the packet that shows it. AUDIT sets idea:null and reviews the picks for brand safety, adult-audience fit and anything that reads as a posting instruction. Propose nothing whose title or summary restates an idea already in the index you were shown.${focus}`;
   }
   return "Set idea to {\"title\":\"<=80 chars\",\"summary\":\"<=280 chars\"} when this room surfaced a concrete idea worth keeping for later, otherwise null. It is recorded verbatim and must stand alone without the transcript.";
 }
@@ -766,6 +770,27 @@ function seasonIdFrom(filename: string): string {
   return filename.replace(/\.md$/u, "");
 }
 
+/**
+ * The trending block a magazine desk sees, and the one sentence that bounds it.
+ *
+ * The instruction is the point. A desk that treats "this is trending" as a reason to publish has
+ * traded its source gates for a hashtag count, so the block says what it is for in the same
+ * breath as it says what is rising. It renders to an empty string when there is nothing to say —
+ * an empty heading is an invitation to fill it.
+ */
+export function renderTrendTiebreaker(
+  topics: readonly { topic: string; engagementPerHour: number; weekOverWeekDelta: number | null }[] | undefined
+): string {
+  if (!topics?.length) return "";
+  const lines = topics.map((entry) => {
+    const delta = entry.weekOverWeekDelta === null
+      ? ""
+      : ` (${entry.weekOverWeekDelta >= 0 ? "+" : ""}${entry.weekOverWeekDelta.toFixed(1)} on last week)`;
+    return `- ${entry.topic}: ${entry.engagementPerHour.toFixed(1)} engagements/hour${delta}`;
+  });
+  return `\n\nTrending on public social, from this week's scout data:\n${lines.join("\n")}\n\nTrending status is a tiebreaker between equally sourced candidates, never a substitute for sourcing. A subject that fails the source gates fails them whatever its velocity, and a subject with no source packet is not a candidate at all.`;
+}
+
 export async function composePortfolioContext(phase: PortfolioPhase, root: string, date: string, registry: Awaited<ReturnType<typeof loadVentureRegistry>>, now = new Date()): Promise<{
   text: string;
   evidenceRefs: string[];
@@ -860,17 +885,23 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     };
   }
   if (phase === "mag-editorial" || phase === "mag-desk") {
-    const [stylebook, bridge, slate, articles, events] = await Promise.all([
+    const [stylebook, bridge, slate, articles, events, trends] = await Promise.all([
       canonicalStateText(root, "ventures/mma-files/STYLEBOOK.md"),
       readText(root, "mma/BRIDGE.md"),
       canonicalStateText(root, `ventures/mma-files/slates/${date}.json`),
       canonicalStateText(root, "ventures/mma-files/articles/INDEX.md"),
-      loadEventCards(path.join(root, "mma", "events"))
+      loadEventCards(path.join(root, "mma", "events")),
+      newestTrendSnapshot(root, date)
     ]);
     const focus = fightWeekFocus(events, new Date(`${date}T12:00:00Z`));
+    const trending = renderTrendTiebreaker(trends?.forMagazines.mma);
     return {
-      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\nFight-week event priority:\n${JSON.stringify(focus)}\n\n${slate}\n\n${articles}`.slice(0, 18_000),
-      evidenceRefs: [...bridgeEvidenceRefs(bridge), ...focus.map((event) => `event:${event.id}`)]
+      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\nFight-week event priority:\n${JSON.stringify(focus)}\n\n${slate}\n\n${articles}${trending}`.slice(0, 18_000),
+      evidenceRefs: [
+        ...bridgeEvidenceRefs(bridge),
+        ...focus.map((event) => `event:${event.id}`),
+        ...(trends && trending ? trendEvidenceRefs(trends.date, trends.sourceResults) : [])
+      ]
     };
   }
   // Every phase above returns. The incubator rooms were the fall-through and the venture is
@@ -1488,6 +1519,14 @@ export async function runPortfolioCycle(input: {
     }
 
   }
+  if (input.phase === "gv-brief") {
+    marketingPlan = buildGoViralWeeklyBrief({
+      date,
+      trends: input.dry ? null : await newestTrendSnapshot(root, date),
+      contributions,
+      vetoed: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto")
+    });
+  }
   let editorialSlate: EditorialSlate | null = null;
   if (input.phase === "mag-editorial") {
     if (input.dry) {
@@ -1600,8 +1639,10 @@ export async function runPortfolioCycle(input: {
   const priorRecords = await loadMeetingRecords(root);
   const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({ weekOf: mondayOfWeek(date), records: [...priorRecords, record], skips: await loadMeetingSkips(root), articleSlots: await loadArticleSlotOutcomes(root), now: input.now }));
   const editorialSlatePath = editorialSlate ? `ventures/mma-files/slates/${date}.json` : null;
-  const marketingPlanPath = marketingPlan ? `ventures/titty-tuesdays/plans/${marketingPlan.id}.json` : null;
-  const marketingPlanMarkdownPath = marketingPlan ? `ventures/titty-tuesdays/plans/${marketingPlan.id}.md` : null;
+  // The plan belongs to the venture that wrote it. This was `ventures/titty-tuesdays/` as a
+  // literal, which was true while TT was the only room producing one.
+  const marketingPlanPath = marketingPlan ? `ventures/${marketingPlan.ventureId}/plans/${marketingPlan.id}.json` : null;
+  const marketingPlanMarkdownPath = marketingPlan ? `ventures/${marketingPlan.ventureId}/plans/${marketingPlan.id}.md` : null;
   await Promise.all([
     atomicWriteJson(root, meetingPath, record),
     atomicWriteJson(root, decisionPath, { schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: input.phase, outcome: record.decision.outcome, summary: record.decision.summary, evidenceRefs: record.decision.evidenceRefs, ...(agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${agenda.id}` } : {}), generatedAt: record.generatedAt }),

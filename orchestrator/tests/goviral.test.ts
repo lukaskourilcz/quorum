@@ -22,7 +22,9 @@ import {
   type TrendItem
 } from "../src/sources/goviral-trends.js";
 import { mapDatasetRow, stepPayload } from "../src/sources/goviral-scout.js";
-import { isScoutDay } from "../src/portfolio/run.js";
+import { isScoutDay, renderTrendTiebreaker } from "../src/portfolio/run.js";
+import { buildGoViralWeeklyBrief } from "../src/portfolio/goviral-brief.js";
+import { renderTrendingCandidates } from "../src/edition/curate.js";
 
 const now = new Date("2026-08-10T12:00:00.000Z");
 
@@ -246,5 +248,77 @@ describe("the Monday gate", () => {
     expect(isScoutDay("2026-01-05")).toBe(true);
     expect(isScoutDay("2026-01-06")).toBe(false);
     expect(isScoutDay("not-a-date")).toBe(false);
+  });
+});
+
+describe("the weekly brief", () => {
+  const contributions = [
+    { agent: "PULSE", summary: "Two calls this week and one skip.", evidenceRefs: ["source:apify:instagram:2026-08-10"], idea: { title: "Owner: the cost-per-token piece", summary: "Write the piece about what an agent day actually costs." } },
+    { agent: "SCOUT", summary: "#ufc is climbing.", evidenceRefs: ["source:apify:instagram:2026-08-10"], idea: null },
+    { agent: "ANGLE", summary: "One of these is MMA Files' problem.", evidenceRefs: [], idea: { title: "MMA Files: fight-week explainer", summary: "The card is trending; the desk has the sources for a preview." } },
+    { agent: "AUDIT", summary: "No posting or spend proposed.", evidenceRefs: [], idea: null }
+  ];
+
+  it("writes a plan for goviral, and the plan path follows the venture that wrote it", () => {
+    const brief = buildGoViralWeeklyBrief({ date: "2026-08-10", trends: null, contributions, vetoed: false });
+    expect(brief.ventureId).toBe("goviral");
+    expect(brief.id).toBe("plan-2026-08-10-weekly-brief");
+    expect(brief.originMeetingRef).toBe("2026-08-10-gv-brief");
+    expect(brief.status).toBe("approved");
+    // Both seat ideas reach the brief; the two seats that returned none add nothing.
+    expect(brief.tactics.filter((tactic) => tactic.assetsNeeded.includes("owner review"))).toHaveLength(2);
+    expect(brief.postable_assets).toHaveLength(1);
+  });
+
+  it("says a quiet week was quiet rather than inventing a call", () => {
+    const quiet = buildGoViralWeeklyBrief({
+      date: "2026-08-10",
+      trends: null,
+      contributions: [{ agent: "PULSE", summary: "Nothing this week's data supports.", evidenceRefs: [], idea: null }],
+      vetoed: false
+    });
+    expect(quiet.tactics).toHaveLength(1);
+    expect(quiet.tactics[0]?.description).toContain("no trend call");
+    expect(quiet.tactics[0]?.description).toContain("No scout data was available");
+  });
+
+  it("stays a draft when AUDIT vetoed, because a veto is about the calls themselves", () => {
+    const vetoed = buildGoViralWeeklyBrief({ date: "2026-08-10", trends: null, contributions, vetoed: true });
+    expect(vetoed.status).toBe("draft");
+  });
+
+  it("says plainly when it is working from an older snapshot", () => {
+    const stale = buildGoViralWeeklyBrief({
+      date: "2026-08-17",
+      trends: {
+        schemaVersion: "goviral-trends/1",
+        date: "2026-08-10",
+        generatedAt: "2026-08-10T11:00:00.000Z",
+        sourceResults: [],
+        items: [],
+        signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
+        forMagazines: { ai: [], mma: [] }
+      },
+      contributions,
+      vetoed: false
+    });
+    expect(JSON.stringify(stale)).toContain("working from the 2026-08-10 snapshot");
+  });
+});
+
+describe("trend injection into the magazines", () => {
+  it("carries the numbers and the tiebreaker rule together, or says nothing at all", () => {
+    expect(renderTrendTiebreaker(undefined)).toBe("");
+    expect(renderTrendTiebreaker([])).toBe("");
+    expect(renderTrendingCandidates([])).toBe("");
+    const desk = renderTrendTiebreaker([{ topic: "#ufc", engagementPerHour: 214.4, weekOverWeekDelta: 88.2 }]);
+    expect(desk).toContain("214.4 engagements/hour");
+    expect(desk).toContain("+88.2 on last week");
+    // The whole reason the block is allowed to exist.
+    expect(desk).toContain("tiebreaker between equally sourced candidates, never a substitute for sourcing");
+    const editor = renderTrendingCandidates([{ topic: "#ai", engagementPerHour: 12, weekOverWeekDelta: null }]);
+    expect(editor).toContain("12.0 engagements/hour");
+    expect(editor).not.toContain("on last week");
+    expect(editor).toContain("never a reason to pick a story the packet does not support");
   });
 });

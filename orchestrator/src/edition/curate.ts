@@ -99,12 +99,33 @@ export class CurationGateError extends Error {
   }
 }
 
+/**
+ * The trending block the editor sees, if there is one, and the sentence that bounds it.
+ *
+ * A tiebreaker, never a substitute for sourcing. The editor's gates are unchanged: a story that
+ * fails them fails them whatever the public is searching for, and a story with no source packet
+ * is not a candidate. Renders to an empty string when there is nothing to say.
+ */
+export function renderTrendingCandidates(
+  topics: readonly { topic: string; engagementPerHour: number; weekOverWeekDelta: number | null }[] | undefined
+): string {
+  if (!topics?.length) return "";
+  const lines = topics.slice(0, 8).map((entry) => {
+    const delta = entry.weekOverWeekDelta === null
+      ? ""
+      : ` (${entry.weekOverWeekDelta >= 0 ? "+" : ""}${entry.weekOverWeekDelta.toFixed(1)} on last week)`;
+    return `- ${entry.topic}: ${entry.engagementPerHour.toFixed(1)} engagements/hour${delta}`;
+  });
+  return `\n\nRising on public social this week:\n${lines.join("\n")}\n\nUse this only to break a tie between two candidates that are equally well sourced. It is never a reason to pick a story the packet does not support, and never a reason to skip one it does.`;
+}
+
 export async function curate(
   items: readonly SourceItem[],
   date: string,
   config: EditionQualityConfig,
   gateway: EditionModelGateway,
-  sources?: Parameters<typeof curationOwnedViolations>[0]["registry"]
+  sources?: Parameters<typeof curationOwnedViolations>[0]["registry"],
+  trending?: Parameters<typeof renderTrendingCandidates>[0]
 ): Promise<CuratedBrief> {
   if (items.length < 3) throw new Error("curate: at least three source items are required");
   // Index the very list the editor is shown. renderDigestDataBlock re-sorts by date and
@@ -119,7 +140,7 @@ export async function curate(
     stage: "curate",
     maxOutputTokens: 1_500,
     system: `${CURATE_SYSTEM}\n\nThe packet holds ${pool.length} items, numbered 0 to ${pool.length - 1}. An index outside that range kills the edition after this call is billed.`,
-    user: `Publication date: ${date}\n\n${renderDigestDataBlock(pool)}`,
+    user: `Publication date: ${date}\n\n${renderDigestDataBlock(pool)}${renderTrendingCandidates(trending)}`,
     tool: {
       name: "emit_brief",
       description: "Emit the structured Caught Up daily brief.",
