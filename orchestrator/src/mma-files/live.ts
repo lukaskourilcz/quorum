@@ -16,7 +16,7 @@ import { candidatesNaming, discoverLicensedPhotos, type LicensedPhotoCandidate }
 import { fighterIdentityPhoto } from "../images/fighter-photo.js";
 import { illustrativeSportPhoto } from "../images/illustrative.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
-import { socialContentGenerationEnabled } from "../social/activation.js";
+import { socialChannelsEnabled, socialContentGenerationEnabled } from "../social/activation.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
 
 const LocalizationSchema = z.object({
@@ -785,7 +785,11 @@ export async function runLiveArticleProduction(input: {
       return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
     }
     const imageCandidates = await articleImageCandidates(stateRoot, assignment.subjectRefs);
-    const socialUnlocked = await socialContentGenerationEnabled(stateRoot, "mma-files");
+    // Composition needs both the venture's own gate and a channel for the result to reach. Every
+    // committed SVG variant under state/ventures/mma-files/media/ was inventory nothing could
+    // consume, deterministically re-buildable from the article package beside it.
+    const socialUnlocked = await socialContentGenerationEnabled(stateRoot, "mma-files")
+      && await socialChannelsEnabled(configRoot);
     const result = await produceMmaFilesArticle({
       root: stateRoot,
       slate,

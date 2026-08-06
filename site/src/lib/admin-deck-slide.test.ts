@@ -91,7 +91,8 @@ describe("one deck's worth of slide requests", () => {
     } = await import("@boardlessai/carousel-studio");
 
     const [deck] = await readAdminDecks(40);
-    expect(deck!.slides).toHaveLength(10);
+    // Eight, since the owner capped a deck there: ten swipes to reach a point that fits in six.
+    expect(deck!.slides).toHaveLength(8);
     expect(deck!.hasHero).toBe(true);
     const style = "editorial";
 

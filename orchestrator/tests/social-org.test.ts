@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { repoRoot } from "../src/paths.js";
 import { assertOrgChangeApproved, type OrgChange } from "../src/org/change.js";
 import { assertLiveChannel, type Channel } from "../src/social/channel-registry.js";
+import { socialChannelsEnabled } from "../src/social/activation.js";
 import { planSocialPosts } from "../src/social/plan.js";
 import {
   assertQueueItemPublishable,
@@ -208,5 +210,42 @@ describe("social and organization controls", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(String(fetchMock.mock.calls[0]?.[0])).toContain("/threads");
     expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/threads_publish");
+  });
+});
+
+/**
+ * Roughly 1.4-2.1 MB of PNG frames per edition day were being committed into
+ * `site/public/social/`, plus MMA SVG variants, while both channels had `enabledByHumanAt: null`
+ * and no credentials -- inventory nothing could consume, deterministically re-buildable from the
+ * packages committed beside it, and re-rendered on request by the admin decks tab anyway.
+ */
+describe("composing social inventory needs somewhere for it to go", () => {
+  it("is closed while no channel has been enabled by the owner", async () => {
+    const channels = JSON.parse(
+      await readFile(path.join(repoRoot, "config", "channels.json"), "utf8")
+    ) as { channels: Array<{ enabledByHumanAt: string | null }> };
+
+    expect(channels.channels.every((channel) => channel.enabledByHumanAt === null)).toBe(true);
+    expect(await socialChannelsEnabled(path.join(repoRoot, "config"))).toBe(false);
+  });
+
+  it("opens the moment one channel is enabled, with no code change", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "social-channels-"));
+    await writeFile(
+      path.join(root, "channels.json"),
+      JSON.stringify({ channels: [
+        { id: "threads", enabledByHumanAt: null },
+        { id: "instagram", enabledByHumanAt: "2026-09-01T00:00:00.000Z" }
+      ] }),
+      "utf8"
+    );
+
+    expect(await socialChannelsEnabled(root)).toBe(true);
+  });
+
+  it("answers no rather than throwing when the file is missing or unreadable", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "social-channels-empty-"));
+
+    expect(await socialChannelsEnabled(root)).toBe(false);
   });
 });

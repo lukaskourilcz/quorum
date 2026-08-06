@@ -1,4 +1,5 @@
 import { readFile, readdir } from "node:fs/promises";
+import { z } from "zod";
 import path from "node:path";
 import { SocialActivationSchema, type SocialActivation } from "../contracts/autonomy.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
@@ -69,6 +70,30 @@ export async function socialContentGenerationEnabled(
   const raw = await readJson<unknown>(stateRoot, "social/activation.json", null);
   const parsed = SocialActivationSchema.safeParse(raw);
   return parsed.success && parsed.data.ventures[venture].status !== "paused";
+}
+
+/**
+ * Whether any channel exists for composed inventory to reach.
+ *
+ * The activation counters answer "is this venture allowed to produce drafts", which is a
+ * different question from "is there anywhere for them to go". Both channels have
+ * `enabledByHumanAt: null` and no credentials, and have had for about a month, while the
+ * pipeline committed roughly 1.4-2.1 MB of PNG frames per edition day into `site/public/social/`
+ * plus MMA SVG variants -- inventory no channel can consume, deterministically re-buildable from
+ * the packages that are already committed, and re-rendered on request by the admin decks tab
+ * anyway.
+ *
+ * This gates composition, not the queue: the queue plumbing, its idempotency and its INBOX items
+ * are untouched, so switching a channel on is what starts composition again rather than a code
+ * change.
+ */
+export async function socialChannelsEnabled(configRoot: string): Promise<boolean> {
+  const raw = await readFile(path.join(configRoot, "channels.json"), "utf8").catch(() => null);
+  if (raw === null) return false;
+  const parsed = z.object({
+    channels: z.array(z.object({ enabledByHumanAt: z.string().nullable().optional() }))
+  }).safeParse(JSON.parse(raw));
+  return parsed.success && parsed.data.channels.some((channel) => Boolean(channel.enabledByHumanAt));
 }
 
 /** Whether a validated queue item may actually be sent. Unchanged: posting needs "enabled". */

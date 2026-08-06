@@ -71,7 +71,7 @@ import {
   recordMissingSocialPackConfiguration,
   recordSocialPackFailure
 } from "./social/pack.js";
-import { socialContentGenerationEnabled } from "./social/activation.js";
+import { socialChannelsEnabled, socialContentGenerationEnabled } from "./social/activation.js";
 import {
   COUNCIL_SEATS,
   collectLiveCouncil,
@@ -748,7 +748,11 @@ async function runCaughtUpLiveEditionCycle(
     now
   });
   const socialContentEnabled = caughtUpSocialProductionEnabled(agentControls) &&
-    await socialContentGenerationEnabled(stateRoot, "caught-up");
+    await socialContentGenerationEnabled(stateRoot, "caught-up") &&
+    // And somewhere for it to go. Composing frames no channel can consume filled
+    // site/public/social/ with megabytes of committed inventory that the admin decks tab
+    // re-renders on request anyway.
+    await socialChannelsEnabled(configRoot);
   const produced = await runLiveEdition({
     cycleId,
     date,
