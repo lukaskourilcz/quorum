@@ -76,14 +76,14 @@
       },
       "adminTabs": [
         "plans",
-        "ideas",
-        "visuals"
+        "ideas"
       ],
       "meetings": [
         {
           "kind": "tt-marketing",
           "label": "Titty Tuesdays marketing room",
           "cadence": "daily@11:00",
+          "$castComment": "The live cast is resolved by orchestrator/src/titty-tuesdays/schedule.ts, which seats these three every day and adds one weekday specialist. This field is the floor, not the roster.",
           "cast": [
             "PULSE",
             "ANGLE",

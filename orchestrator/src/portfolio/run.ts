@@ -77,6 +77,7 @@ import {
   deterministicVaultAdjudicator,
   ideaIndexPath,
   ideaLedgerPath,
+  readIdeaIndexSlice,
   regenerateIdeaIndex,
   screenAndRecordIdea
 } from "../ideas/ledger.js";
@@ -159,9 +160,30 @@ function parseJson(text: string): unknown {
   return JSON.parse(normalized);
 }
 
-export function portfolioIdeaInstruction(phase: PortfolioPhase): string {
+/**
+ * The concept this day's room works on, rotated deterministically through the season.
+ *
+ * Four of the seven ideas on the ledger are near-duplicates of one concept. The idea index now
+ * tells the room what it has already said; this tells it where to look next, without a model
+ * call and without the room having to decide. One concept per day, in season order, wrapping.
+ */
+export function tittyTuesdaysDailyFocus(input: {
+  products: readonly { name: string; concept: string }[];
+  startsOn: string;
+  date: string;
+}): string {
+  if (input.products.length === 0) return "";
+  const days = Math.floor(
+    (Date.parse(`${input.date}T12:00:00.000Z`) - Date.parse(`${input.startsOn}T12:00:00.000Z`)) / 86_400_000
+  );
+  if (!Number.isFinite(days)) return "";
+  const product = input.products[((days % input.products.length) + input.products.length) % input.products.length]!;
+  return ` Today's focus: ${product.name} — ${product.concept}`;
+}
+
+export function portfolioIdeaInstruction(phase: PortfolioPhase, focus = ""): string {
   if (phase === "tt-marketing") {
-    return "This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {\"title\":\"one title, at most 80 characters\",\"summary\":\"one standalone description, at most 280 characters\"}; use no other idea keys, and repeat the concept from summary inside idea rather than leaving idea null. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept.";
+    return `This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {"title":"one title, at most 80 characters","summary":"one standalone description, at most 280 characters"}; use no other idea keys, and repeat the concept from summary inside idea rather than leaving idea null. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept. Propose nothing whose title or summary restates an idea already in the index you were shown.${focus}`;
   }
   return "Set idea to {\"title\":\"<=80 chars\",\"summary\":\"<=280 chars\"} when this room surfaced a concrete idea worth keeping for later, otherwise null. It is recorded verbatim and must stand alone without the transcript.";
 }
@@ -729,6 +751,49 @@ async function hasFightAiQModelRun(root: string): Promise<boolean> {
   return names.some((name) => name.endsWith(".json"));
 }
 
+/**
+ * A plain warning line when the newest season has ended, or "" while it is current.
+ *
+ * season-001 ends on 2026-10-30 and nothing creates season-002. From 31 October the room would
+ * ideate against an expired season forever and stamp its id onto every plan, with nothing on the
+ * record saying so. `NEEDS_YOUR_HELP_NOW.md` carries the owner item; this is what the record says
+ * in the meantime.
+ */
+/**
+ * The concept list and start date out of a season file, or an empty season.
+ *
+ * The file is markdown wrapping one JSON block, which is what the room is shown; parsing that
+ * block here rather than re-reading the contract keeps the focus line and the packet reading the
+ * same bytes.
+ */
+export function seasonProducts(seasonMarkdown: string): {
+  products: { name: string; concept: string }[];
+  startsOn: string;
+} {
+  const block = /```json\s*([\s\S]*?)```/u.exec(seasonMarkdown)?.[1];
+  if (!block) return { products: [], startsOn: "" };
+  try {
+    const parsed = JSON.parse(block) as {
+      startsOn?: unknown;
+      products?: Array<{ name?: unknown; concept?: unknown }>;
+    };
+    return {
+      startsOn: typeof parsed.startsOn === "string" ? parsed.startsOn : "",
+      products: (parsed.products ?? [])
+        .filter((product) => typeof product.name === "string" && typeof product.concept === "string")
+        .map((product) => ({ name: String(product.name), concept: String(product.concept) }))
+    };
+  } catch {
+    return { products: [], startsOn: "" };
+  }
+}
+
+export function seasonExpiryWarning(seasonMarkdown: string, date: string): string {
+  const endsOn = /"endsOn"\s*:\s*"(\d{4}-\d{2}-\d{2})"/u.exec(seasonMarkdown)?.[1];
+  if (!endsOn || date <= endsOn) return "";
+  return `This season ended on ${endsOn} and no later season has been written. Keep working the concepts above; do not invent a new season.`;
+}
+
 function seasonIdFrom(filename: string): string {
   return filename.replace(/\.md$/u, "");
 }
@@ -743,8 +808,26 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
   if (phase === "tt-marketing") {
     // The newest season file, not season-001 forever. season-001 ends on 2026-10-30 and the
     // room would have gone on reading an expired season and stamping its id onto every plan.
-    const season = await readText(root, `ventures/titty-tuesdays/${await newestSeasonFilename(root)}`);
-    return { text: `${season}\n\n${taste ?? ""}`.slice(0, 18_000), evidenceRefs: [] };
+    const seasonFile = await newestSeasonFilename(root);
+    const [season, ideaIndex] = await Promise.all([
+      readText(root, `ventures/titty-tuesdays/${seasonFile}`),
+      // The room's own back catalogue, whose header already calls itself "Compact
+      // titty-tuesdays meeting context" and which was never actually injected. Four of the
+      // seven ideas on the ledger are near-duplicates of one concept, because the room had no
+      // way to know what it had already said.
+      readIdeaIndexSlice(root, "titty-tuesdays")
+    ]);
+    const expired = seasonExpiryWarning(season, date);
+    return {
+      text: [
+        season,
+        expired,
+        "Ideas this room has already recorded. Propose nothing whose title or summary restates one of them:",
+        ideaIndex,
+        taste ?? ""
+      ].filter(Boolean).join("\n\n").slice(0, 18_000),
+      evidenceRefs: []
+    };
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
     const [overview, bridge, events, sourceSnapshotData] = await Promise.all([
@@ -1169,6 +1252,14 @@ export async function runPortfolioCycle(input: {
   } else {
     const promptName = input.phase.startsWith("incubator-") ? "incubator.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
+    // The season's concepts, rotated one per day. Read from the same season file the room is
+    // shown, so the focus line and the packet can never name different concepts.
+    const dailyFocus = input.phase === "tt-marketing"
+      ? tittyTuesdaysDailyFocus({
+          ...seasonProducts(await readText(root, `ventures/titty-tuesdays/${await newestSeasonFilename(root)}`)),
+          date
+        })
+      : "";
     const personas = new Map<string, string>();
     for (const agent of selected) {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
@@ -1177,7 +1268,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"nicheProposals":[],"editorialSlate":null,"marketingPlan":null,"templateProposal":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only ANGLE may return up to two complete niche-proposal/1 objects during incubator synthesis. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -1370,7 +1461,15 @@ export async function runPortfolioCycle(input: {
       })),
       calendar: [{ week: 1, focus: "Owner reads the notes and decides whether any direction deserves a separate brief." }],
       audienceRefs: [],
-      kpis: ["The owner can understand and rate each proposed direction without opening the meeting transcript."],
+      // Measurements that already exist on disk, not a sentence nobody can check. The plan's
+      // KPIs used to be a readability aspiration with no reading behind it; these three are
+      // counted from state/ideas/titty-tuesdays/ledger.jsonl, state/ratings/ and the approved
+      // plans the social unlock counts.
+      kpis: [
+        "Ideas recorded on state/ideas/titty-tuesdays/ledger.jsonl this week.",
+        "Ideas the owner has rated in state/ratings/, and how many of those are Perfect.",
+        "Approved plans carrying a non-empty audienceRefs, against the four the social unlock needs."
+      ],
       postable_assets: [{
         id: `asset-${date.replaceAll("-", "")}-campaign-notes`,
         captions: {

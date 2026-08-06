@@ -169,14 +169,18 @@ describe("portfolio schedule and budget gate", () => {
 });
 
 describe("Titty Tuesdays cadence wheel", () => {
+  // Mon COHORT, Tue STUNT, Wed COHORT, Thu SCENE, and nobody extra Friday to Sunday. COHORT
+  // twice because audience specs are the binding constraint: the social unlock counts only
+  // approved plans with a non-empty audienceRefs, and ANGLE's plans keep failing without
+  // audience input.
   const cases = [
-    ["2026-08-03", ["FUNNEL"]],
+    ["2026-08-03", ["COHORT"]],
     ["2026-08-04", ["STUNT"]],
     ["2026-08-05", ["COHORT"]],
     ["2026-08-06", ["SCENE"]],
-    ["2026-08-07", ["PALATE"]],
-    ["2026-08-08", ["SPARK"]],
-    ["2026-08-09", ["VAULT"]]
+    ["2026-08-07", []],
+    ["2026-08-08", []],
+    ["2026-08-09", []]
   ] as const;
 
   it.each(cases)("seats only the %s weekday guests", (date, guests) => {
@@ -186,15 +190,23 @@ describe("Titty Tuesdays cadence wheel", () => {
     expect(slot.cast.slice(3)).toEqual(guests);
   });
 
-  it("adds QUILL only when a separate caption brief is explicitly needed", () => {
-    expect(resolveTittyTuesdaysSlot({ date: "2026-08-08" }).cast).not.toContain("QUILL");
-    expect(resolveTittyTuesdaysSlot({ date: "2026-08-08", captionsNeeded: true }).cast).toContain("QUILL");
+  it("never seats QUILL, or any role that has nothing to do here", () => {
+    // The captionsNeeded flag that could add QUILL is gone: nothing ever set it, QUILL is
+    // disabled on this venture, and captions are a channel artefact no channel can act on.
+    // SPARK owns DNESKAi growth, PALATE's distilling already runs as the free pre-step, VAULT's
+    // adjudication is deterministic code, and FUNNEL is paused.
+    for (const date of ["2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07"]) {
+      const cast = resolveTittyTuesdaysSlot({ date }).cast;
+      for (const absent of ["QUILL", "SPARK", "PALATE", "VAULT", "FUNNEL"]) {
+        expect(cast, `${date} seats ${absent}`).not.toContain(absent);
+      }
+    }
   });
 
   it("replaces exactly the 91-day boundary slot with turnover", () => {
     expect(resolveTittyTuesdaysSlot({ date: "2026-10-31" })).toEqual({
       kind: "season-turnover",
-      cast: ["PULSE", "ANGLE", "FUNNEL", "SCENE", "STUNT", "AUDIT"],
+      cast: ["PULSE", "ANGLE", "COHORT", "SCENE", "STUNT", "AUDIT"],
       palatePreStep: true
     });
     expect(resolveTittyTuesdaysSlot({ date: "2026-10-30" }).kind).toBe("tt-marketing");

@@ -9,7 +9,10 @@ import {
   assertTittyTuesdaysIdeaOutput,
   parsePortfolioContribution,
   portfolioIdeaInstruction,
-  portfolioMaxOutputTokens
+  portfolioMaxOutputTokens,
+  seasonExpiryWarning,
+  seasonProducts,
+  tittyTuesdaysDailyFocus
 } from "../src/portfolio/run.js";
 import { parseTasteDocument } from "../src/taste/model.js";
 import {
@@ -26,7 +29,8 @@ describe("Titty Tuesdays bootstrap", () => {
       status: "operating",
       taste: true,
       ledgerNamespace: "titty-tuesdays",
-      adminTabs: ["plans", "ideas", "visuals"],
+      // No "visuals": visualCards() hardcodes caught-up, so the tab was permanently empty.
+      adminTabs: ["plans", "ideas"],
       meetings: [expect.objectContaining({ kind: "tt-marketing", cadence: "daily@11:00", envelopeUsd: 0.08 })]
     });
     expect(venture?.meetings[0]?.packet.objectives.live).toContain("Generate and record concrete marketing ideas");
@@ -172,5 +176,63 @@ describe("Titty Tuesdays bootstrap", () => {
     expect(founding).toContain("Status: countersigned");
     expect(budget).toContain("Automatic fallback shape B");
     expect(platform).toContain("No primary source found");
+  });
+});
+
+/**
+ * Four of the seven ideas on the ledger are near-duplicates of one concept. The room had no
+ * memory of its own back catalogue and no reason to move on from whatever it thought of first.
+ */
+describe("what stops the room repeating itself", () => {
+  const SEASON = [
+    "# Season 001",
+    "",
+    "```json",
+    JSON.stringify({
+      startsOn: "2026-08-01",
+      endsOn: "2026-10-30",
+      products: [
+        { name: "Night Shift", concept: "A washed-black crop top." },
+        { name: "Receipt", concept: "A bone crop top stacked like a receipt." },
+        { name: "Third", concept: "A third concept." }
+      ]
+    }, null, 2),
+    "```"
+  ].join("\n");
+
+  it("rotates one season concept per day, wrapping", () => {
+    const { products, startsOn } = seasonProducts(SEASON);
+    expect(products).toHaveLength(3);
+    const focusOn = (date: string) => tittyTuesdaysDailyFocus({ products, startsOn, date });
+
+    expect(focusOn("2026-08-01")).toContain("Night Shift");
+    expect(focusOn("2026-08-02")).toContain("Receipt");
+    expect(focusOn("2026-08-03")).toContain("Third");
+    // Wraps rather than running out.
+    expect(focusOn("2026-08-04")).toContain("Night Shift");
+    // Deterministic: the same day always names the same concept.
+    expect(focusOn("2026-08-02")).toBe(focusOn("2026-08-02"));
+  });
+
+  it("says nothing rather than guessing when the season cannot be read", () => {
+    expect(seasonProducts("no json block here")).toEqual({ products: [], startsOn: "" });
+    expect(tittyTuesdaysDailyFocus({ products: [], startsOn: "2026-08-01", date: "2026-08-02" }))
+      .toBe("");
+  });
+
+  it("carries the focus and the no-duplicates rule into the room instruction", () => {
+    const instruction = portfolioIdeaInstruction("tt-marketing", " Today's focus: Receipt — a bone crop top.");
+
+    expect(instruction).toContain("Propose nothing whose title or summary restates an idea already in the index");
+    expect(instruction).toContain("Today's focus: Receipt");
+  });
+
+  it("warns in the record once the season has ended, and not before", () => {
+    // season-001 ends on 2026-10-30 and nothing creates season-002. From 31 October the room
+    // would ideate against an expired season forever with nothing saying so.
+    expect(seasonExpiryWarning(SEASON, "2026-10-30")).toBe("");
+    expect(seasonExpiryWarning(SEASON, "2026-10-31")).toContain("ended on 2026-10-30");
+    expect(seasonExpiryWarning(SEASON, "2026-10-31")).toContain("do not invent a new season");
+    expect(seasonExpiryWarning("no json block here", "2026-12-01")).toBe("");
   });
 });

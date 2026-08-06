@@ -137,7 +137,7 @@ describe("cycle preflight", () => {
     // The incubator rooms were the other two entries here. The venture is paused and holds no
     // meeting, so there is no definition for the dry room to compose.
     const phases = [
-      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT"] }
+      { phase: "tt-marketing" as const, now: new Date("2026-08-03T09:00:00.000Z"), cast: ["PULSE", "ANGLE", "AUDIT", "COHORT"] }
     ];
     for (const fixture of phases) {
       const result = await runCycle({ ...fixture, dry: true, explainBudget: false, explainRouting: false });
