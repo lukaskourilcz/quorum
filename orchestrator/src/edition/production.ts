@@ -178,11 +178,19 @@ function noEdition(
   };
 }
 
+/**
+ * The Czech sentence published under "Proč právě tento příběh".
+ *
+ * It used to be an English template rendered under a Czech heading on every live edition —
+ * the only English left on a page a Czech reader reads. The writer now produces it in the
+ * same call that produces the article, for about a tenth of a cent, so it is the desk's own
+ * sentence about its own story. The two fallbacks below are Czech, and are what a run gets
+ * when the model omits the field or when a caller supplies its own line.
+ */
 function articleRationale(article: CzechArticle, fallback: string): string {
-  if (!fallback) {
-    return `${article.cs.title} led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates.`.slice(0, 280);
-  }
-  return fallback;
+  if (article.whyThisStory) return article.whyThisStory.slice(0, 280);
+  if (fallback) return fallback;
+  return `${article.cs.title} vede dnešní vydání, protože doložené zdroje prošly kontrolou rozmanitosti zdrojů, nejistoty i jazyka.`.slice(0, 280);
 }
 
 export async function produceEdition(

@@ -161,9 +161,12 @@ function localizedText(value: LocalizedContent): string {
  * translation, with separate score floors. With one telling there is one review, and it holds
  * the stricter of the two floors so collapsing the stages cannot quietly lower the bar.
  *
- * whyThisStory is reviewed separately and against the board rules, because it is not article
- * prose — it is the room's rationale, generated in English, published on the edition page and
- * in the room summary. Nothing else checks it: the package schema only bounds its length.
+ * whyThisStory is reviewed separately, because it is not article prose — it is the desk's
+ * rationale for leading with this story, published on the edition page and in the room summary.
+ * It is now written in Czech in the same call as the article, so it is read against the Czech
+ * rules; while it was an English template it was read against the English ones, which is a
+ * review of a sentence no reader was shown. Nothing else checks it: the package schema only
+ * bounds its length.
  */
 export function reviewCzechArticle(
   article: CzechArticle,
@@ -172,7 +175,7 @@ export function reviewCzechArticle(
 ): StetReview {
   const violations = [
     ...reviewArticleText(localizedText(article.cs), "cs"),
-    ...reviewArticleText(whyThisStory, "board")
+    ...reviewArticleText(whyThisStory, "cs")
   ];
   const score = Math.max(0, 50 - violations.length * 5);
   const floor = Math.max(config.stet.minimumScore, config.hacek.minimumScore);

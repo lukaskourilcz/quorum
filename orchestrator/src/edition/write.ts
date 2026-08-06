@@ -49,6 +49,11 @@ export class InvalidArticleError extends Error {
 const ToolOutputSchema = z.object({
   slug: z.string().trim().min(1),
   tags: z.array(z.string().regex(SLUG)).min(1).max(6),
+  // Optional so a model that omits it costs nothing: production falls back to a Czech
+  // template. What it replaces is an English template sentence that was rendered under the
+  // Czech heading "Proč právě tento příběh" on every live edition, in the one place on the
+  // page where the reader is told why the desk led with this story.
+  why_this_story: z.string().trim().min(1).max(280).optional(),
   illustration_prompt: z.string().trim().min(1),
   image_candidate_index: z.number().int().min(0).max(3).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
@@ -135,6 +140,7 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
       items: { type: "string", pattern: SLUG_SOURCE }
     },
     illustration_prompt: { type: "string" },
+    why_this_story: { type: "string" },
     image_candidate_index: { type: "integer", minimum: 0, maximum: 3 },
     wire: {
       type: "array",
@@ -187,7 +193,15 @@ Before you emit the article, remove empty emphasis words from every title, descr
 bullet and dispatch: "doslova", "upřímně", "skutečně", "jednoduše", "potenciálně",
 "zajímavé je, že" and "důležité je, že". State the supporting fact instead.
 
-The slug must be plain ASCII with no diacritics.
+The slug must be plain ASCII with no diacritics. Tags are Czech, written as ASCII slugs:
+fold the diacritics away and join lowercase words with single hyphens, so "umělá
+inteligence" becomes "umela-inteligence". Never emit an English tag; the reader browses
+these on the magazine, and a week of English tags splits the same topic in two.
+
+Write why_this_story as one Czech sentence, at most 280 characters, saying why this
+story led today rather than another: what it changes, for whom. It is published to the
+reader under the heading "Proč právě tento příběh". Same register as the article, no
+hype, no restating the headline.
 
 ${CZECH_EDITORIAL_REGISTER}
 
@@ -722,6 +736,7 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     date: brief.date,
     tags: response.value.tags,
     illustrationPrompt: response.value.illustration_prompt,
+    ...(response.value.why_this_story ? { whyThisStory: response.value.why_this_story } : {}),
     wire,
     sources: pickedItems.map((item) => {
       const pick = brief.picks.find((candidate) => candidate.itemId === item.externalId);

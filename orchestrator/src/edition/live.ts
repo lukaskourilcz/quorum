@@ -109,6 +109,15 @@ export async function recentEditionTags(root: string): Promise<string[][]> {
   const tags: string[][] = [];
   for (const file of files.slice(0, DELIVERY_RECEIPTS_SCANNED)) {
     if (tags.length >= RECENT_EDITION_WINDOW) break;
+    // Tags before the cutover are a different vocabulary, not a different topic.
+    //
+    // The writer emitted English tags on 3 and 5 August and Czech ones on the 6th, so the same
+    // subject appeared twice under two names: the freshness window read them as fresh, and the
+    // magazine's /topics page split the topic in two. The Czech rule is now stated in
+    // WRITE_SYSTEM; these earlier receipts stay on disk unchanged and are simply not counted,
+    // so repeatedTopicShare measures one vocabulary against itself. Drop this guard once the
+    // window has moved past the cutover, which needs no code change beyond deleting it.
+    if (file.slice(0, 10) < CZECH_TAG_CUTOVER_DATE) continue;
     const value = JSON.parse(await readFile(path.join(directory, file), "utf8")) as { tags?: unknown };
     if (
       Array.isArray(value.tags) &&
@@ -120,6 +129,11 @@ export async function recentEditionTags(root: string): Promise<string[][]> {
   }
   return tags;
 }
+
+/**
+ * The first Prague date whose delivered tags are Czech. Receipts before it are warm-up.
+ */
+export const CZECH_TAG_CUTOVER_DATE = "2026-08-06";
 
 function sourceEvidence(sourceRun: ScrapeRunResult): string[] {
   return sourceRun.sources

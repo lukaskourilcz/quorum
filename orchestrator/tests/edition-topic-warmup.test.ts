@@ -10,7 +10,7 @@ import {
   FixtureEditionModelGateway,
   type FixtureModelResponse
 } from "../src/edition/fixture.js";
-import { recentEditionTags } from "../src/edition/live.js";
+import { CZECH_TAG_CUTOVER_DATE, recentEditionTags } from "../src/edition/live.js";
 import { produceEdition, type EditionProductionInput } from "../src/edition/production.js";
 import { repoRoot } from "../src/paths.js";
 import { loadSourceRegistry } from "../src/sources/registry.js";
@@ -166,12 +166,13 @@ describe("the recent-edition window read from delivery receipts", () => {
   it("skips a no-edition receipt instead of spending a window slot on it", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "edition-window-"));
     await mkdir(path.join(root, "edition", "deliveries"), { recursive: true });
+    // Every date is on or after the Czech-tag cutover, so only the quiet-day rule is in play.
     const receipts: Record<string, string[]> = {
-      "2026-07-30": ["policy"],
-      "2026-07-31": ["hardware"],
-      "2026-08-01": [],
-      "2026-08-02": [],
-      "2026-08-03": ["research"]
+      "2026-08-07": ["politika"],
+      "2026-08-08": ["hardware"],
+      "2026-08-09": [],
+      "2026-08-10": [],
+      "2026-08-11": ["vyzkum"]
     };
     for (const [date, tags] of Object.entries(receipts)) {
       await writeFile(
@@ -182,9 +183,31 @@ describe("the recent-edition window read from delivery receipts", () => {
     // Newest first, quiet days dropped. Taking the four newest receipts returned two empty
     // lists and only two editions, so the window was half padding.
     expect(await recentEditionTags(root)).toEqual([
-      ["research"],
+      ["vyzkum"],
       ["hardware"],
-      ["policy"]
+      ["politika"]
     ]);
+  });
+
+  it("leaves the English-tag window out, so the score measures one vocabulary", async () => {
+    // The writer emitted English tags on 3 and 5 August and Czech ones on the 6th. The same
+    // subject therefore appears twice under two names, which reads as fresh to the freshness
+    // window and splits the topic in two on the magazine. WRITE_SYSTEM now requires Czech
+    // tags; these receipts stay on disk and simply stop being counted.
+    const root = await mkdtemp(path.join(os.tmpdir(), "edition-window-cutover-"));
+    await mkdir(path.join(root, "edition", "deliveries"), { recursive: true });
+    const receipts: Record<string, string[]> = {
+      "2026-08-03": ["ai", "safety"],
+      "2026-08-05": ["spacex", "ai"],
+      [CZECH_TAG_CUTOVER_DATE]: ["ai-bezpecnost", "openai"]
+    };
+    for (const [date, tags] of Object.entries(receipts)) {
+      await writeFile(
+        path.join(root, "edition", "deliveries", `${date}.json`),
+        JSON.stringify({ date, status: "delivered", tags })
+      );
+    }
+
+    expect(await recentEditionTags(root)).toEqual([["ai-bezpecnost", "openai"]]);
   });
 });
