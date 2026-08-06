@@ -240,7 +240,7 @@ without a consumed project agenda forces a morning-board commission or saved why
 A manual run bypasses the agenda timing only; it cannot bypass live, evidence, cost,
 credential or safety gates.
 
-## Forty-agent roster
+## Roster: thirty working roles, ten stood down
 
 Model routing is declared in `config/models.json` and `config/agent-routing.json`.
 Council judgment uses Claude Sonnet 5 or GPT-5.6 Luna. Narrow specialists use the
@@ -255,14 +255,14 @@ envelope before any call.
 | FORGE | production-ready implementation/release judgment | cannot widen approved scope |
 | PULSE | growth, positioning and campaign direction | cannot activate accounts, ads or commerce |
 | AUDIT | rule-based challenge and veto | must name a concrete violated rule |
-| SCOUT | market/source evidence | cannot treat attention as demand |
-| SCRIBE | public/admin summaries | cannot alter the underlying decision |
-| LENS | experiment, forecast and finance interpretation | cannot manufacture missing measurements |
+| SCOUT | paused | stood down; no venture is looking for a new market right now |
+| SCRIBE | paused | stood down; the record writers produce the summaries |
+| LENS | paused | stood down until there are measurements to interpret |
 | QUILL | public-claim clarity and support | cannot add unsupported facts |
-| RADAR | useful search discoverability | cannot manufacture SEO pages |
+| RADAR | paused | stood down; neither magazine is optimising for search yet |
 | KEEPER | compliance, privacy and permissions | cannot grant owner-only authority |
-| THREADS | Threads-native draft copy | disabled; no publish/account action; live template refs only |
-| INSTAGRAM | Instagram-native carousel draft | disabled; no freeform/image-model visual path |
+| THREADS | paused | stood down; no channel has credentials and nothing composes for one |
+| INSTAGRAM | paused | stood down with THREADS; the studio renders every carousel |
 | PEOPLE | role usefulness and routing review | cannot add roles without repeated evidence |
 | LEDGER | costs, budget and unit economics | cannot create payments or invent revenue |
 | HERALD | Caught Up story selection and edition quality | cannot bypass evidence/AUDIT/STET |
@@ -274,7 +274,7 @@ envelope before any call.
 | RELAY | bounded delivery, digest and reconciliation | cannot edit consumer-app code outside packages |
 | ANGLE | precise position and niche | cannot assert an audience without evidence |
 | COHORT | adult audience definition without personal data | cannot claim unsupported reach |
-| FUNNEL | costed channel/test planning | cannot activate ads, offers or commerce |
+| FUNNEL | paused | stood down; no channel exists to plan a funnel into |
 | PALATE | rating-linked taste memory | cannot edit pinned prompts or treat taste as evidence |
 | SCENE | TT competitor/culture signals | cannot fabricate brands, prices or examples |
 | STUNT | permission-aware low-cost stunts | cannot execute or buy an activation |
@@ -287,9 +287,9 @@ envelope before any call.
 | CANVAS | MMA Files assignments and release quality | kills unsupported slots before spend |
 | JAB | direct sourced MMA reporting | cannot promote unsupported detail into copy |
 | REACH | Czech MMA social variants | disabled; drafts use only live Carousel Studio templates |
-| SPLIT | future social test analysis | disabled while metrics ingestion is false |
-| EASEL | original carousel-template data | cannot copy a source or edit renderer code |
-| MOTIF | cited textual layout observations | cannot crawl collections or download inspiration images |
+| SPLIT | retired | stood down; the reader measurement it waited for is not being built |
+| EASEL | retired | stood down; the studio renders deterministically and holds no meeting |
+| MOTIF | retired | stood down with EASEL; nothing reads layout observations |
 | PIVOT | evidence bridge between FightAIQ and MMA Files | cannot turn response/context into hidden model input |
 
 ## Content, social and Carousel Studio flow

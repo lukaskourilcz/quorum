@@ -24,8 +24,10 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Thirty-six specialists do bounded work only when a service path or due agenda needs
-their domain. The registry has 40 agents: 21 Anthropic and 19 OpenAI. The 27
+Twenty-six specialists do bounded work only when a service path or due agenda needs
+their domain. The registry holds 40 entries: 30 active, 7 paused and 3 retired. A
+stood-down role stays on the record — the router skips it and names it — so the count
+that matters is the thirty that work. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
 prompts or meeting packets. The public interface uses names and work labels. It does

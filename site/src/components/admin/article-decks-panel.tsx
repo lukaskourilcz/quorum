@@ -12,9 +12,37 @@ function slideUrl(deck: AdminDeck, style: string, slide: number): string {
 }
 
 function Deck({ deck }: { deck: AdminDeck }) {
-  // The engine picks a style from the slug so a replay renders the same bytes. Here the
-  // owner can look at the other four without changing what the pipeline would produce.
+  // The engine picks a style from the date or the slug so a replay renders the same bytes.
+  // Picking one here saves it, and the render path reads what is saved — the preview and the
+  // shipped deck are the same design. Looking without choosing changes nothing.
   const [style, setStyle] = useState<string>(deck.style);
+  const [saved, setSaved] = useState<string>(deck.style);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function choose(candidate: string): Promise<void> {
+    setStyle(candidate);
+    if (candidate === saved) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const response = await fetch("/admin/api/carousel-studio/deck-style", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ venture: deck.venture, slug: deck.slug, style: candidate })
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({})) as { error?: string };
+        throw new Error(body.error ?? "Design se neuložil.");
+      }
+      setSaved(candidate);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Design se neuložil.");
+      setStyle(saved);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
@@ -46,8 +74,9 @@ function Deck({ deck }: { deck: AdminDeck }) {
           <button
             key={candidate}
             type="button"
-            onClick={() => setStyle(candidate)}
+            onClick={() => { void choose(candidate); }}
             aria-pressed={style === candidate}
+            disabled={saving}
             className={`rounded-full border px-3 py-1 font-mono text-[0.65625rem] uppercase tracking-[0.12em] transition ${
               style === candidate
                 ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]"
@@ -55,9 +84,12 @@ function Deck({ deck }: { deck: AdminDeck }) {
             }`}
           >
             {candidate}
-            {candidate === deck.style ? " ·" : ""}
+            {candidate === saved ? " ·" : ""}
           </button>
         ))}
+        <span className="self-center font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+          {saving ? "ukládám…" : error ? error : `vychází ${saved}`}
+        </span>
       </div>
 
       <div className="w-full overflow-x-auto px-5 py-4" data-horizontal-scroll>

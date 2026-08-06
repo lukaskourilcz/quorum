@@ -518,13 +518,19 @@ export async function createLiveProductMeeting(input: {
       closedAt,
       gavel: "HERALD",
       setting: "Live Caught Up product room. Participants receive the compact idea index, not the raw JSONL ledger.",
-      turns: [
+      // A room that cost nothing did not deliberate. When VAULT's screening already hard-stopped
+      // the idea, decideLiveProductRoom returns without a model call, and the five turns below
+      // were written anyway: SPARK pitching an idea nobody read out and VAULT reading an index
+      // in a room that never opened. The record now says what happened — the gavel and the
+      // verdict — and invents nobody's speech.
+      turns: input.actualCycleUsd > 0
+        ? [
         {
           agent: "HERALD",
           mode: "gavel",
           sentAt: openedAt,
           text: idea
-            ? `The product room is open for ${idea.id}. No edition or external action is in scope.`
+            ? `The product room is open for the idea raised on ${idea.id.slice(5, 15)}. No edition or external action is in scope.`
             : "The product room is open, but no screened morning idea reached the room.",
           ...(idea ? { evidenceRefs: [idea.id] } : {})
         },
@@ -542,7 +548,7 @@ export async function createLiveProductMeeting(input: {
           mode: "reads-ledger",
           sentAt: new Date(input.now.getTime() + 2_000).toISOString(),
           text: idea
-            ? `The compact index records ${idea.id} as ${idea.status}; the raw ledger was not injected into this room.`
+            ? `The compact index records this idea as ${idea.status}; the raw ledger was not injected into this room.`
             : "The compact index contains no handoff for this room.",
           ...(idea ? { evidenceRefs: [idea.id] } : {})
         },
@@ -551,8 +557,24 @@ export async function createLiveProductMeeting(input: {
           mode: "raises-concern",
           sentAt: new Date(input.now.getTime() + 3_000).toISOString(),
           text: response?.bestExchange.text
-            ?? "Defer. A missing morning handoff cannot become a product verdict.",
+            ?? "Defer. A missing morning next-step summary cannot become a product verdict.",
           ...(idea ? { evidenceRefs: [idea.id, ...evidenceRefs] } : {})
+        },
+        {
+          agent: "HERALD",
+          mode: "close",
+          sentAt: closedAt,
+          text: summary,
+          ...(idea ? { evidenceRefs: [idea.id, ...evidenceRefs] } : {})
+        }
+      ]
+        : [
+        {
+          agent: "HERALD",
+          mode: "gavel",
+          sentAt: openedAt,
+          text: "The product room opened and closed without deliberating: the idea history had already settled this idea, so nothing was asked and nothing was spent.",
+          ...(idea ? { evidenceRefs: [idea.id] } : {})
         },
         {
           agent: "HERALD",

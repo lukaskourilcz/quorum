@@ -2,7 +2,7 @@ import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { buildArticleDeck } from "@boardlessai/carousel-studio";
+import { DECK_STYLES, buildArticleDeck } from "@boardlessai/carousel-studio";
 import { effectiveDeckStyle } from "../src/social/deck-style.js";
 import { writeDeckReceipt } from "../src/social/deck-receipt.js";
 
@@ -53,7 +53,10 @@ describe("the deck design the owner picked", () => {
     const root = await stateRoot();
     await mkdir(path.join(root, "ventures", "carousel-studio"), { recursive: true });
     const derived = await effectiveDeckStyle({ root, venture: "caught-up", slug: "tri-laboratore", seed: "2026-08-06" });
-    const chosen = derived === "mesh" ? "grid" : "mesh";
+    // Any real style but the derived one. "grid" was here and is not in DECK_STYLES, so the
+    // override would have been rejected and the assertion passed for the wrong reason.
+    const chosen = DECK_STYLES.find((style) => style !== derived)!;
+    expect(chosen).toBeDefined();
     await writeFile(
       path.join(root, "ventures", "carousel-studio", "deck-style-overrides.json"),
       JSON.stringify({

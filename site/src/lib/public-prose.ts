@@ -19,6 +19,9 @@ const machinePatterns: readonly RegExp[] = [
   /https?:\/\//i,
   /\/(?:home|work|runner|usr|var|tmp)\//i,
   /\b[0-9a-f]{10,}\b/i,
+  // A shortened hash is still a hash. Seven hex characters on their own would catch ordinary
+  // words ("defaced"), so this asks for the word that makes it one.
+  /\bcommit\s+[0-9a-f]{7,}\b/i,
   // snake_case, in either case: `budget_exhausted`, `NEWSROOM_ONLY`.
   /\b[A-Za-z0-9]+(?:_[A-Za-z0-9]+)+\b/,
   // Raw reference tokens: `idea-2026-08-05-bbffd7f5`, `agenda-1f7e454d7495c427`,

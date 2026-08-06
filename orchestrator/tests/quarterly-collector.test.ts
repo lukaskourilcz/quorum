@@ -292,7 +292,8 @@ describe("the per-magazine measures read what the runtime actually writes", () =
       stateRoot,
       kpiSet,
       now: new Date("2026-08-05T12:00:00.000Z"),
-      metricsIngestionEnabled: false
+      metricsIngestionEnabled: false,
+      mmaFilesIndexingEnabled: false
     });
 
     expect(result.measurements["state/budget#mma_files_cost_per_article_usd"]).toBeCloseTo(0.07, 5);
@@ -323,7 +324,8 @@ describe("the per-magazine measures read what the runtime actually writes", () =
       stateRoot,
       kpiSet,
       now: new Date("2026-08-05T12:00:00.000Z"),
-      metricsIngestionEnabled: false
+      metricsIngestionEnabled: false,
+      mmaFilesIndexingEnabled: false
     });
 
     // A gated $0 outcome is a success and it is not an edition.
@@ -352,7 +354,8 @@ describe("the per-magazine measures read what the runtime actually writes", () =
       stateRoot,
       kpiSet,
       now: new Date("2026-08-06T12:00:00.000Z"),
-      metricsIngestionEnabled: false
+      metricsIngestionEnabled: false,
+      mmaFilesIndexingEnabled: false
     });
 
     expect(result.measurements["state/ideas/titty-tuesdays#advanced_count"]).toBe(1);

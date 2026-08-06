@@ -152,7 +152,9 @@ export default async function StandupDetailPage({
           <SectionHeading
             description="Each decision maker gave a short view. These are summaries of their decisions, not private model reasoning."
             eyebrow="Decision team"
-            title={standup.fixture ? "Four roles. One decision to wait." : "Four roles. One clear decision."}
+            title={standup.fixture
+              ? "Four roles. One decision to wait."
+              : `${standup.proposals.length} ${standup.proposals.length === 1 ? "view" : "views"}. One recorded decision.`}
           />
           <div className="grid gap-4 md:grid-cols-2">
             {standup.proposals.map((proposal) => {
@@ -269,11 +271,15 @@ export default async function StandupDetailPage({
             <div className="md:col-span-5">
               <Badge>Votes</Badge>
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">
-                The safety block held.
+                {standup.voteMatrix.some((vote) => vote.veto)
+                  ? "A safety block held."
+                  : "Every vote is on the record."}
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--muted-foreground)]">
-                The authors of the choices are hidden before voting. Here,
-                every decision maker independently chose to do nothing.
+                The authors of the choices are hidden before voting.{" "}
+                {standup.voteMatrix.length > 0
+                  ? `${standup.voteMatrix.length} ${standup.voteMatrix.length === 1 ? "decision maker" : "decision makers"} voted, ${standup.voteMatrix.filter((vote) => vote.veto).length} of them blocking.`
+                  : "This meeting recorded no vote."}
               </p>
             </div>
             <Card className="md:col-span-7">
@@ -318,7 +324,9 @@ export default async function StandupDetailPage({
                 <p className="text-xl leading-8">{publicAgentText(standup.decision.summary)}</p>
                 <Separator className="my-7" />
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Reliable sources: none. Sample records do not count as proof.
+                  {standup.fixture
+                    ? "Reliable sources: none. Sample records do not count as proof."
+                    : `${publicStageLabel(standup.stage)} · ${standup.participants.filter((participant) => participant.participated).length} of ${standup.participants.length} roles took part.`}
                 </p>
               </CardContent>
             </div>

@@ -289,6 +289,13 @@ export function publicDecisionLabel(value: string): string {
     skipped: "Skipped",
     OPS_HANDOFF: "Prepare the next step",
     "OPS-HANDOFF": "Prepare the next step",
+    // A vote cell renders through this map and never through publicAgentText, so the two named
+    // token phrases need an entry here too: without them "OPS-OBSERVE" fell through to the
+    // lowercase fallback and three vote rows on the home page read "ops-observe".
+    "OPS-OBSERVE": "Record check",
+    OPS_OBSERVE: "Record check",
+    NO_POST: "Do not publish",
+    NO_PROPOSAL: "No proposal",
     proposed: "Suggested",
     accepted: "Approved",
     in_progress: "Being built",
