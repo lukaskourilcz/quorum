@@ -8,8 +8,9 @@ import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { produceMmaFilesArticle, type ArticleEvidencePacket, type MmaFilesEditorialGateway } from "./pipeline.js";
+import { spentSubjectRefs } from "./repeat-window.js";
 import { loadArticlePackages, regenerateArticleIndex } from "./store.js";
-import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
+import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { candidatesNaming, discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
 import { fighterIdentityPhoto } from "../images/fighter-photo.js";
@@ -430,18 +431,18 @@ export async function deriveEditorialSlate(
   now: Date,
   options: { forSlot?: "am" | "pm" } = {}
 ): Promise<EditorialSlate | null> {
-  const [events, fighters, published] = await Promise.all([
+  const [events, fighters, bouts, published] = await Promise.all([
     loadEventCards(path.join(root, "mma", "events")),
     loadFighterRecords(path.join(root, "mma", "fighters")),
+    loadBoutRecords(path.join(root, "mma", "bouts")),
     loadArticlePackages(root)
   ]);
-  // The desk's repeat rule, unchanged: every ref an article declared counts as covered, not only
-  // its headline subject. Narrowing it here would let this path assign a fighter the editorial
-  // room considers spent, and the two would disagree on what "fresh" means on alternating days.
-  const covered = new Set(published.flatMap((article) => [
-    ...article.fighterRefs,
-    ...(article.eventRef ? [article.eventRef] : [])
-  ]));
+  // The desk's repeat rule: every ref an article declared counts as covered, not only its
+  // headline subject, and it expires six weeks after coverage or the moment the fighter fights
+  // again. spentSubjectRefs is the one implementation of it; the editorial room's rescue path
+  // reads the same function, because the two disagreeing about what "fresh" means would show up
+  // as the desk assigning on alternating days a subject the other path considers spent.
+  const covered = spentSubjectRefs({ articles: published, bouts, now });
   let preview: DerivedSubject | undefined;
   for (const event of fightWeekFocus(events, now)) {
     if (covered.has(event.id) || !await eventHasBoutRecords(root, event.id)) continue;

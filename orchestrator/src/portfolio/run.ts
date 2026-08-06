@@ -53,11 +53,12 @@ import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { GuardedPalateDistiller, runPalatePass } from "../taste/pipeline.js";
 import { bridgeEvidenceRefs, refreshMmaBridge } from "../mma-files/bridge.js";
 import { SINGLE_SLOT_CADENCE } from "../mma-files/live.js";
+import { spentSubjectRefs } from "../mma-files/repeat-window.js";
 import { resolveSlateEvidence } from "../mma-files/slate-evidence.js";
 import { fetchReadable } from "../sources/adapters/reader.js";
 import { loadArticlePackages } from "../mma-files/store.js";
 import { fightAiQBrief } from "../fightaiq/brief.js";
-import { fightWeekFocus, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
+import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { withinIntakeHorizon } from "./evidence.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
 import { refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshIncubatorEvidence } from "./evidence.js";
@@ -1507,9 +1508,11 @@ export async function runPortfolioCycle(input: {
         // slate, publishing a second Shevchenko profile tomorrow at the full article
         // envelope and stamping a "fresh" verdict on a repeat. When every eligible fighter
         // has been used the slot stays killed, which is the honest answer.
-        const alreadyProfiled = new Set(
-          (await loadArticlePackages(stateRoot)).flatMap((article) => article.fighterRefs)
-        );
+        const alreadyProfiled = spentSubjectRefs({
+          articles: await loadArticlePackages(stateRoot),
+          bouts: await loadBoutRecords(path.join(stateRoot, "mma", "bouts")),
+          now: input.now
+        });
         const profileSubject = (await loadFighterRecords())
           .filter((fighter) => (fighter.sources?.length ?? 0) > 0 && (fighter.history?.length ?? 0) > 0)
           .filter((fighter) => !alreadyProfiled.has(fighter.id))
