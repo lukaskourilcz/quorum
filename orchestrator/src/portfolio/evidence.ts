@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { configRoot } from "../paths.js";
 import { atomicWriteJson, readJson } from "../state.js";
@@ -19,6 +19,33 @@ import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
 import { enrichWikimediaBackfill } from "../fightaiq/wikimedia-backfill.js";
+import {
+  APIFY_MONTHLY_CREDIT_USD,
+  currentMonthQuota,
+  estimateActorUsd,
+  fetchApifyMonthlyUsageUsd,
+  loadGoViralSourceRegistry,
+  mayRunApify,
+  recordActorUsage
+} from "../sources/apify.js";
+import { runRecipeStep } from "../sources/goviral-scout.js";
+import {
+  GoViralTrendsSchema,
+  TREND_SNAPSHOT_MAX_AGE_DAYS,
+  buildForMagazines,
+  computeAudioSignals,
+  computeFormatSignals,
+  computeHashtagSignals,
+  computeTopicSummaries,
+  plannedRecipeSteps,
+  pruneItems,
+  snapshotAgeDays,
+  trendEvidenceRefs,
+  trendsPath,
+  type GoViralTrends,
+  type TrendItem,
+  type TrendSourceResult
+} from "../sources/goviral-trends.js";
 
 /** How far back the results reader looks for a card whose outcome is not on file yet. */
 const RESULT_WINDOW_DAYS = 10;
@@ -454,4 +481,157 @@ export async function refreshFightAiQAnalysis(input: { root: string; now: Date }
     loadBoutRecords(path.join(input.root, "mma", "bouts"))
   ]);
   return runConfirmedBoutAnalysis({ root: input.root, fighters, bouts, now: input.now });
+}
+
+/**
+ * GoVIRAL's trend scout: the deterministic pre-step that runs before any seat exists.
+ *
+ * It is called from the `gv-brief` branch on Mondays only, and everything about it is built to
+ * fail politely. Without `APIFY_TOKEN` it is a $0 no-op. With the month's credit spent it is a
+ * $0 no-op. With every actor failing it is a $0 no-op. In each case the room falls back to the
+ * newest snapshot within two weeks and says so in plain words, and if there is no such snapshot
+ * the room does not meet — which is a cheaper and more honest outcome than four seats reasoning
+ * about nothing.
+ *
+ * The `$5` Apify Free-plan credit is the budget guard. Nothing here may assume a paid plan.
+ */
+export async function refreshGoViralTrends(input: {
+  root: string;
+  date: string;
+  now: Date;
+  fetchImpl?: typeof fetch;
+}): Promise<{
+  artifactPaths: string[];
+  evidenceRefs: string[];
+  trends: GoViralTrends | null;
+  snapshotDate: string | null;
+  stale: boolean;
+  reason: string;
+}> {
+  const registry = await loadGoViralSourceRegistry();
+  const month = input.date.slice(0, 7);
+  const quotaPath = "goviral/source-quota/apify.json";
+  const storedQuota = await readJson<unknown>(input.root, quotaPath, {});
+  let quota = currentMonthQuota(storedQuota, month, input.now);
+  const token = process.env.APIFY_TOKEN?.trim();
+  const verdict = mayRunApify(quota, token);
+
+  const previous = await newestTrendSnapshot(input.root, input.date);
+  const fallback = (reason: string) => {
+    if (!previous || snapshotAgeDays(previous.date, input.date) > TREND_SNAPSHOT_MAX_AGE_DAYS) {
+      return { artifactPaths: [], evidenceRefs: [], trends: null, snapshotDate: null, stale: true, reason };
+    }
+    return {
+      artifactPaths: [],
+      evidenceRefs: trendEvidenceRefs(previous.date, previous.sourceResults),
+      trends: previous,
+      snapshotDate: previous.date,
+      stale: true,
+      reason: `${reason} No fresh scout this week — working from the ${previous.date} snapshot.`
+    };
+  };
+
+  if (!verdict.allowed) return fallback(verdict.reason);
+
+  // The platform's own figure beats our arithmetic when it will give one, the same way the Odds
+  // API's quota headers beat a local counter. A usage endpoint that is down is not a reason to
+  // skip a run that costs nothing.
+  const reportedUsage = await fetchApifyMonthlyUsageUsd({
+    token: token as string,
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+  });
+  if (reportedUsage !== null) quota = { ...quota, estimatedUsedUsd: reportedUsage };
+
+  const remaining = Math.max(APIFY_MONTHLY_CREDIT_USD - quota.estimatedUsedUsd, 0);
+  const isFirstScoutOfMonth = !previous || previous.date.slice(0, 7) !== month;
+  const planned = plannedRecipeSteps({ registry, remainingUsd: remaining, isFirstScoutOfMonth });
+  if (planned.length === 0) return fallback("Every recipe step was priced out of this month's remaining Apify credit.");
+
+  const sourceResults: TrendSourceResult[] = [];
+  const fresh: TrendItem[] = [];
+  for (const entry of planned) {
+    const outcome = await runRecipeStep({
+      step: entry.step,
+      actor: entry.actor,
+      registry,
+      token: token as string,
+      ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+    });
+    fresh.push(...outcome.items);
+    quota = recordActorUsage(quota, entry.actor, outcome.count, input.now);
+    sourceResults.push({
+      actorId: entry.actor.id,
+      step: entry.step.step,
+      status: outcome.failure ? "failed" : outcome.count > 0 ? "success" : "skipped",
+      reason: outcome.failure ?? (outcome.count > 0 ? null : "The actor returned no items."),
+      count: outcome.count,
+      estimatedUsd: estimateActorUsd(entry.actor, outcome.count)
+    });
+  }
+
+  await atomicWriteJson(input.root, quotaPath, quota);
+  if (fresh.length === 0) {
+    return {
+      ...fallback("The scout ran and returned nothing."),
+      artifactPaths: [quotaPath]
+    };
+  }
+
+  // Raw items are transient and aggregates are not: the previous snapshot's posts are pruned at
+  // 30 days, while its hashtag velocities stay as the week-over-week baseline.
+  const items = pruneItems([...fresh, ...(previous?.items ?? [])], input.now).slice(0, 2_000);
+  const topHashtags = computeHashtagSignals({
+    items,
+    previous: previous?.signals.topHashtags ?? [],
+    now: input.now
+  });
+  const evidenceRefs = trendEvidenceRefs(input.date, sourceResults);
+  const trends = GoViralTrendsSchema.parse({
+    schemaVersion: "goviral-trends/1",
+    date: input.date,
+    generatedAt: input.now.toISOString(),
+    sourceResults,
+    items,
+    signals: {
+      topHashtags,
+      topFormats: computeFormatSignals(items),
+      topAudio: computeAudioSignals(items),
+      exploreSections: [...new Set(items.map((item) => item.exploreSection).filter((section): section is string => Boolean(section)))].slice(0, 20),
+      perTopicSet: computeTopicSummaries({ items, hashtags: topHashtags, topicSets: registry.topicSets, now: input.now })
+    },
+    forMagazines: buildForMagazines({ hashtags: topHashtags, refs: evidenceRefs })
+  });
+  const artifactPath = trendsPath(input.date);
+  await atomicWriteJson(input.root, artifactPath, trends);
+  return {
+    artifactPaths: [artifactPath, quotaPath],
+    evidenceRefs,
+    trends,
+    snapshotDate: input.date,
+    stale: false,
+    reason: `The scout ran ${sourceResults.length} step${sourceResults.length === 1 ? "" : "s"} and stored ${items.length} items.`
+  };
+}
+
+/** The newest stored snapshot at or before `date`, which is what a stale week works from. */
+export async function newestTrendSnapshot(root: string, date: string): Promise<GoViralTrends | null> {
+  let filenames: string[];
+  try {
+    filenames = await readdir(path.join(root, "goviral", "trends"));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+  const candidates = filenames
+    .filter((name) => /^\d{4}-\d{2}-\d{2}\.json$/.test(name))
+    .map((name) => name.slice(0, 10))
+    .filter((candidate) => candidate <= date)
+    .sort()
+    .reverse();
+  for (const candidate of candidates) {
+    const stored = await readJson<unknown>(root, trendsPath(candidate), null);
+    const parsed = GoViralTrendsSchema.safeParse(stored);
+    if (parsed.success) return parsed.data;
+  }
+  return null;
 }

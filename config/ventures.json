@@ -103,6 +103,47 @@
       ]
     },
     {
+      "id": "goviral",
+      "name": "GoVIRAL",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "goviral",
+      "growth_objective": {
+        "label": "Deliver a weekly trend brief and keep a rated inventory of marketing plays for every venture",
+        "components": [
+          "campaign-inventory"
+        ]
+      },
+      "adminTabs": [
+        "plans",
+        "ideas"
+      ],
+      "meetings": [
+        {
+          "kind": "gv-brief",
+          "label": "GoVIRAL trend and marketing room",
+          "cadence": "daily@13:00",
+          "$cadenceComment": "The room meets on Mondays. There is no weekly cadence form and adding one would break eight consumers, so the day is a deterministic gate in run.ts and the two off-day firings are $0 no-ops.",
+          "cast": [
+            "PULSE",
+            "SCOUT",
+            "ANGLE",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "growth",
+            "decisionNeeded": "PLAN",
+            "preset": "gv-brief-room",
+            "objectives": {
+              "dry": "Review the fixture scout data and record one plan without external work or spend.",
+              "live": "Turn this week's scout data into the owner's weekly content brief and record marketing ideas for the magazines; hand at most one trend-driven agenda to another venture's room."
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "fightaiq",
       "name": "FightAIQ",
       "status": "operating",

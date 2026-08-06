@@ -570,6 +570,53 @@
       "ramp_days": 14
     },
     {
+      "id": "goviral.weekly-briefs",
+      "venture": "goviral",
+      "name": "Weekly content briefs written",
+      "metric_source": "state/ventures/goviral/plans#weekly_brief_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 7,
+      "pace": "level"
+    },
+    {
+      "id": "goviral.trend-snapshots",
+      "venture": "goviral",
+      "name": "Trend snapshots stored per week",
+      "metric_source": "state/goviral/trends#snapshot_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 7,
+      "pace": "level"
+    },
+    {
+      "id": "goviral.ideas-recorded",
+      "venture": "goviral",
+      "name": "Marketing ideas recorded per week",
+      "metric_source": "state/ideas/goviral#ideas_per_week",
+      "target": 3,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 7,
+      "pace": "level"
+    },
+    {
+      "id": "goviral.cross-venture-agendas",
+      "venture": "goviral",
+      "name": "Trend-driven agendas handed to another room",
+      "metric_source": "state/meeting-agendas#goviral_sourced_count",
+      "target": 2,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14
+    },
+    {
       "id": "carousel-studio.released-deck-rate",
       "venture": "carousel-studio",
       "name": "Released articles with a rendered deck receipt",

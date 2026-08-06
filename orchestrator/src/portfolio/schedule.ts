@@ -87,8 +87,13 @@ export function resolveEffectivePortfolioSchedule(input: {
     envelopeByPhase["mma-intake"] = 0.05;
   }
   let ttTranscriptMode: EffectivePortfolioSchedule["ttTranscriptMode"] = "full";
-  // The two rungs the incubator vacated. Nothing takes them yet; the next room added to the
-  // ladder drops first, which is what the incubator did while it existed.
+  // GoVIRAL takes the rungs the incubator vacated, and takes them first on purpose: it is the
+  // newest room, it meets once a week, and a missed Monday costs a brief rather than a
+  // publication. Everything below it on this ladder is either a reader-facing promise or the
+  // company's own decision room.
+  if (input.monthlyApiHeadroomUsd < 2) {
+    active.delete("gv-brief");
+  }
   if (input.monthlyApiHeadroomUsd < 1.5) {
     ttTranscriptMode = "minimal";
   }

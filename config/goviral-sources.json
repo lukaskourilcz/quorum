@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "goviral-sources/1",
+  "verifiedAt": "2026-08-06",
+  "$comment": "Apify actors GoVIRAL may run, and the topic sets it runs them on. The Free plan's $5 monthly platform credit is the budget guard: when it is spent the actors stop, so overspend is impossible and no cash is at risk. Upgrading the plan needs a new owner approval — Starter is $29/mo and does not fit the $30 all-in cap.",
+  "actors": [
+    {
+      "id": "instagram-popular-reels",
+      "actorSlug": "apify/instagram-search-scraper",
+      "credentialEnv": "APIFY_TOKEN",
+      "pricePer1000Usd": 1.5,
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide",
+      "termsVerdict": "allowed",
+      "termsNote": "Logged-out public data only. Meta v. Bright Data (N.D. Cal. 2024) held that Meta's terms do not bar scraping public data without an account; this actor takes no login and no cookie, so the owner's own accounts are never involved.",
+      "evidenceUrl": "https://apify.com/apify/instagram-search-scraper",
+      "scheduled": true
+    },
+    {
+      "id": "instagram-hashtags",
+      "actorSlug": "scrapesmith/instagram-hashtag-scraper",
+      "credentialEnv": "APIFY_TOKEN",
+      "pricePer1000Usd": 0.5,
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide",
+      "termsVerdict": "allowed",
+      "termsNote": "Logged-out public hashtag pages. No login, no cookie. Four times cheaper than the official hashtag actor, which returns recent rather than top posts.",
+      "evidenceUrl": "https://apify.com/scrapesmith/instagram-hashtag-scraper",
+      "scheduled": true
+    },
+    {
+      "id": "threads-primary",
+      "actorSlug": "themineworks/threads-scraper",
+      "credentialEnv": "APIFY_TOKEN",
+      "pricePer1000Usd": 1.0,
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide",
+      "termsVerdict": "allowed",
+      "termsNote": "Logged-out public Threads posts, top or recent sorting, no start fee. Rebuilt 2026-07-25 and young — re-verify its 30-day success rate quarterly and fail over to threads-fallback below ~95%.",
+      "evidenceUrl": "https://apify.com/themineworks/threads-scraper",
+      "scheduled": true
+    },
+    {
+      "id": "threads-fallback",
+      "actorSlug": "magicfingers/threads-scraper",
+      "credentialEnv": "APIFY_TOKEN",
+      "pricePer1000Usd": 0.6,
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide",
+      "termsVerdict": "allowed",
+      "termsNote": "Same logged-out posture as the primary. Runs only when the primary fails.",
+      "evidenceUrl": "https://apify.com/magicfingers/threads-scraper",
+      "scheduled": false
+    },
+    {
+      "id": "instagram-explore",
+      "actorSlug": "agentx/instagram-trending-scraper",
+      "credentialEnv": "APIFY_TOKEN",
+      "startUsd": 0.01,
+      "pricePerResultUsd": 0.0039,
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide",
+      "termsVerdict": "allowed",
+      "termsNote": "Reads the logged-out Instagram Explore feed with its section labels. The closest thing to a real trending endpoint that exists without an account.",
+      "evidenceUrl": "https://apify.com/agentx/instagram-trending-scraper",
+      "scheduled": true
+    },
+    {
+      "id": "instagram-deep-dive",
+      "actorSlug": "apify/instagram-scraper",
+      "credentialEnv": "APIFY_TOKEN",
+      "pricePer1000Usd": 2.7,
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide",
+      "termsVerdict": "allowed",
+      "termsNote": "Reserve for an ad-hoc deep dive the owner asks for. Never scheduled — at $2.70/1k it would take most of the month's credit in one run.",
+      "evidenceUrl": "https://apify.com/apify/instagram-scraper",
+      "scheduled": false
+    }
+  ],
+  "$recipeComment": "The weekly scout, priced against the $5 credit with margin. maxResults is a hard cap, not a target — the guard drops steps in reverse order when the month is running hot, so the last step listed is the first to go. Weekly is about $1.03 and a month about $4.60.",
+  "recipe": [
+    { "step": 1, "actorId": "instagram-popular-reels", "mode": "reels", "inputs": "keyword", "perInput": 64, "maxResults": 192, "cadence": "weekly" },
+    { "step": 2, "actorId": "instagram-hashtags", "mode": "hashtag", "inputs": "hashtag", "perInput": 25, "maxResults": 300, "cadence": "weekly" },
+    { "step": 3, "actorId": "threads-primary", "mode": "search-top", "inputs": "keyword", "perInput": 30, "maxResults": 240, "cadence": "weekly" },
+    { "step": 4, "actorId": "threads-primary", "mode": "profile-monitor", "inputs": "account", "perInput": 15, "maxResults": 225, "cadence": "weekly" },
+    { "step": 5, "actorId": "instagram-explore", "mode": "explore", "inputs": "none", "perInput": 120, "maxResults": 120, "cadence": "monthly" }
+  ],
+  "$accountComment": "Public accounts whose posts step 4 watches for deltas. Owner-editable. Empty is a legitimate state — step 4 simply does not run, and the week's scout is smaller rather than failed.",
+  "trackedAccounts": [],
+  "$topicComment": "Owner-editable, deliberately JSON rather than prompt text. `writer` is seeded from state/ventures/goviral/profile.md and should be rewritten once the owner fills that file in.",
+  "topicSets": {
+    "writer": {
+      "label": "The owner's own writing",
+      "keywords": ["building in public", "AI tools", "solo founder"],
+      "hashtags": ["#buildinpublic", "#indiehackers", "#AItools"]
+    },
+    "dneskai": {
+      "label": "DNESKAi (AI and technology)",
+      "keywords": ["artificial intelligence", "OpenAI", "Anthropic", "Claude", "GPT"],
+      "hashtags": ["#AI", "#umelainteligence", "#technologie", "#LLM"]
+    },
+    "mma": {
+      "label": "MMA Files (fighting)",
+      "keywords": ["UFC", "Oktagon MMA", "fight week"],
+      "hashtags": ["#MMA", "#UFC", "#oktagonmma"]
+    }
+  }
+}

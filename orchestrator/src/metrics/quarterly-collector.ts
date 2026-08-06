@@ -226,6 +226,9 @@ export async function collectQuarterlyMeasurements(input: {
     editionRunFiles,
     ideaLedger,
     tittyTuesdaysIdeaLedger,
+    goViralIdeaLedger,
+    goViralPlansRaw,
+    goViralTrends,
     mmaRunsRaw,
     deckReceiptsRaw
   ] = await Promise.all([
@@ -253,6 +256,9 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFilesCounted(path.join(input.stateRoot, "edition", "runs")),
     jsonLines(path.join(input.stateRoot, "ideas", "caught-up", "ledger.jsonl")),
     jsonLines(path.join(input.stateRoot, "ideas", "titty-tuesdays", "ledger.jsonl")),
+    jsonLines(path.join(input.stateRoot, "ideas", "goviral", "ledger.jsonl")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "goviral", "plans")),
+    jsonFiles(path.join(input.stateRoot, "goviral", "trends")),
     jsonFiles(path.join(input.stateRoot, "ventures", "mma-files", "runs")),
     jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "deck-receipts"))
   ]);
@@ -677,6 +683,26 @@ export async function collectQuarterlyMeasurements(input: {
   );
   measurements["state/ideas/titty-tuesdays#advanced_count"] = quarterIdeas.filter((idea) =>
     typeof idea.status === "string" && idea.status !== "proposed").length;
+
+  // GoVIRAL is measured on what the Monday room leaves behind: a brief, a snapshot, ideas on the
+  // ledger and the agendas it hands to other desks. All four are files this repository already
+  // holds, so every reading is a count of committed artifacts rather than an estimate.
+  const goViralBriefs = goViralPlansRaw
+    .map(record)
+    .filter((plan) => plan?.ventureId === "goviral" && dateInPeriod(plan?.createdAt ?? plan?.generatedAt, periodStart, periodEnd));
+  const weeksElapsed = Math.max(1, elapsedDays / 7);
+  measurements["state/ventures/goviral/plans#weekly_brief_rate"] = Number((goViralBriefs.length / weeksElapsed).toFixed(8));
+  measurements["state/goviral/trends#snapshot_rate"] = Number((goViralTrends.length / weeksElapsed).toFixed(8));
+  const goViralIdeas = [
+    ...goViralIdeaLedger
+      .map(record)
+      .filter((idea): idea is Record<string, unknown> => Boolean(idea) && typeof idea?.id === "string")
+      .reduce((latest, idea) => latest.set(String(idea.id), idea), new Map<string, Record<string, unknown>>())
+      .values()
+  ].filter((idea) => dateInPeriod(ideaProposedAt(idea), periodStart, periodEnd));
+  measurements["state/ideas/goviral#ideas_per_week"] = Number((goViralIdeas.length / weeksElapsed).toFixed(8));
+  measurements["state/meeting-agendas#goviral_sourced_count"] = agendaList.filter((agenda) =>
+    agenda?.sourcePhase === "gv-brief" && dateInPeriod(agenda?.requestedAt, periodStart, periodEnd)).length;
 
   // Every released article should carry a receipt for the deck that was rendered from it. The
   // engine renders at $0 and deterministically, so anything short of every article is a

@@ -12,7 +12,7 @@ import { meetingFixtures } from "../data/meeting-fixtures";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 
 describe("public CalendarFeed build model", () => {
-  it("generates eleven Prague rooms and article slots for every day", () => {
+  it("generates twelve Prague rooms and article slots for every day", () => {
     const feed = buildPublicCalendarFeed({
       weekOf: "2026-07-31",
       now: new Date("2026-07-31T10:00:00Z"),
@@ -20,17 +20,18 @@ describe("public CalendarFeed build model", () => {
       meetings: []
     });
     expect(feed.weekOf).toBe("2026-07-27");
-    expect(feed.slots).toHaveLength(77);
+    expect(feed.slots).toHaveLength(84);
     // The default definitions mirror the live clock. The incubator, the studio room and the
     // evening article slot left it; `CalendarKind` still carries their kinds, because the
     // committed records those rooms wrote still have to render.
-    expect(feed.slots.slice(0, 11).map((slot) => slot.kind)).toEqual([
+    expect(feed.slots.slice(0, 12).map((slot) => slot.kind)).toEqual([
       "cu-edition",
       "venture-morning",
       "mma-intake",
       "mag-editorial",
       "article-am",
       "tt-marketing",
+      "gv-brief",
       "venture-afternoon",
       "cu-product",
       "mma-analysis",

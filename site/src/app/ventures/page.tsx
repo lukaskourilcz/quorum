@@ -101,6 +101,20 @@ export default function VenturesPage() {
             </div>
           </div>
         </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[var(--surface)] p-8 md:col-span-4 md:p-10">
+              <Badge>Project 007</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--fog)]">DRAFTS ONLY</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">GoVIRAL</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One weekly read of what is actually rising, turned into things to write.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Every Monday the room reads public Instagram and Threads data, names the trends the numbers support, and writes the owner a content brief plus marketing ideas for the two magazines. It cannot post, schedule, buy or open an account.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/goviral">Open GoVIRAL <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
         <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">

@@ -22,6 +22,7 @@ const meetingCopy: Record<string, { name: string; title: string }> = {
   "cu-edition": { name: "Edition production", title: "Produce today's edition" },
   "cu-product": { name: "Product meeting", title: "Decide the product idea" },
   "tt-marketing": { name: "Marketing meeting", title: "Shape the season" },
+  "gv-brief": { name: "GoVIRAL trend meeting", title: "Turn the week's trend data into a plan" },
   "incubator-scan": { name: "Idea research", title: "Find ideas with real sources" },
   "incubator-synthesis": { name: "Idea review", title: "Choose ideas without starting a project" },
   "mma-intake": { name: "FightAIQ data meeting", title: "Check the fight data" },

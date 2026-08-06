@@ -87,13 +87,14 @@ describe("Boardroom routing", () => {
       budgetImpactUsd: 0.08,
       preset: "edition-room"
     });
-    // SCOUT is paused, so a claims-heavy shortlist reaches the seats that are still on the
-    // roster and records the one that is not.
+    // SCOUT is seated again — GoVIRAL gave it a room — so `source_coverage_low` now reaches a
+    // live agent rather than recording a skip. The rule was written for a paused SCOUT and is
+    // still correct with an active one: the tag pulls the agent that reads sources into a room
+    // whose shortlist is thin on them.
     expect(claimsHeavy.selectedParticipants.map(({ agent }) => agent)).toEqual(
-      expect.arrayContaining(["QUILL", "KEEPER"])
+      expect.arrayContaining(["QUILL", "KEEPER", "SCOUT"])
     );
-    expect(claimsHeavy.skippedParticipants.find(({ agent }) => agent === "SCOUT")?.reason)
-      .toContain("paused");
+    expect(claimsHeavy.skippedParticipants.find(({ agent }) => agent === "SCOUT")).toBeUndefined();
 
     const product = routeBoardroom(config, {
       roomId: "ROOM-CU-PRODUCT-001",

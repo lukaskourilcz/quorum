@@ -1,0 +1,250 @@
+import { describe, expect, it } from "vitest";
+import {
+  APIFY_MONTHLY_CREDIT_USD,
+  APIFY_RUN_RESERVATION_USD,
+  currentMonthQuota,
+  emptyApifyQuota,
+  estimateActorUsd,
+  loadGoViralSourceRegistry,
+  mayRunApify,
+  recordActorUsage,
+  type GoViralActor
+} from "../src/sources/apify.js";
+import {
+  TREND_ITEM_RETENTION_DAYS,
+  buildForMagazines,
+  computeAudioSignals,
+  computeHashtagSignals,
+  engagementPerHour,
+  plannedRecipeSteps,
+  pruneItems,
+  trendEvidenceRefs,
+  type TrendItem
+} from "../src/sources/goviral-trends.js";
+import { mapDatasetRow, stepPayload } from "../src/sources/goviral-scout.js";
+import { isScoutDay } from "../src/portfolio/run.js";
+
+const now = new Date("2026-08-10T12:00:00.000Z");
+
+function item(overrides: Partial<TrendItem> = {}): TrendItem {
+  return {
+    platform: "instagram",
+    kind: "reel",
+    topicSet: "mma",
+    text: "A fight-week clip",
+    likes: 100,
+    comments: 0,
+    reshares: 0,
+    postedAt: "2026-08-10T10:00:00.000Z",
+    url: "https://example.test/p/1",
+    hashtags: ["#mma"],
+    audioTitle: null,
+    audioArtist: null,
+    exploreSection: null,
+    ...overrides
+  };
+}
+
+describe("the Apify quota guard", () => {
+  it("refuses without a token, and refuses a run the month's credit cannot cover", () => {
+    const empty = emptyApifyQuota("2026-08", now);
+    expect(mayRunApify(empty, undefined).allowed).toBe(false);
+    expect(mayRunApify(empty, "  ").allowed).toBe(false);
+    expect(mayRunApify(empty, "apify_api_test").allowed).toBe(true);
+
+    // The Free plan's $5 is the budget guard, not a preference: a run reserves its worst case
+    // up front so it can never start work the credit cannot finish. This is the boundary.
+    const nearlySpent = { ...empty, estimatedUsedUsd: APIFY_MONTHLY_CREDIT_USD - APIFY_RUN_RESERVATION_USD + 0.01 };
+    const verdict = mayRunApify(nearlySpent, "apify_api_test");
+    expect(verdict.allowed).toBe(false);
+    expect(verdict.reason).toContain("credit is spent");
+    expect(mayRunApify({ ...empty, estimatedUsedUsd: APIFY_MONTHLY_CREDIT_USD - APIFY_RUN_RESERVATION_USD }, "apify_api_test").allowed)
+      .toBe(true);
+  });
+
+  it("rolls the counter over at the month boundary, because Apify's credit does not roll over", () => {
+    const august = recordActorUsage(emptyApifyQuota("2026-08", now), {
+      id: "threads-primary",
+      actorSlug: "themineworks/threads-scraper",
+      credentialEnv: "APIFY_TOKEN",
+      pricePer1000Usd: 1,
+      freeLimit: "x",
+      termsVerdict: "allowed",
+      termsNote: "x",
+      evidenceUrl: "https://example.test",
+      scheduled: true
+    } as GoViralActor, 240, now);
+    expect(august.estimatedUsedUsd).toBeCloseTo(0.24, 8);
+    expect(august.perActorCounts["threads-primary"]).toEqual({ runs: 1, items: 240, estimatedUsd: 0.24 });
+    // Same month: carried. Next month: reset, or a September run would be refused for August's
+    // spending on credit September was already granted.
+    expect(currentMonthQuota(august, "2026-08", now).estimatedUsedUsd).toBeCloseTo(0.24, 8);
+    expect(currentMonthQuota(august, "2026-09", now).estimatedUsedUsd).toBe(0);
+    expect(currentMonthQuota({ nonsense: true }, "2026-08", now).estimatedUsedUsd).toBe(0);
+  });
+
+  it("prices both shapes the registry declares", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    const perThousand = registry.actors.find((actor) => actor.id === "threads-primary")!;
+    const perResult = registry.actors.find((actor) => actor.id === "instagram-explore")!;
+    expect(estimateActorUsd(perThousand, 1_000)).toBeCloseTo(1, 8);
+    expect(estimateActorUsd(perResult, 120)).toBeCloseTo(0.01 + 0.0039 * 120, 8);
+    expect(estimateActorUsd(perResult, 0)).toBeCloseTo(0.01, 8);
+  });
+
+  it("keeps the committed recipe inside the free credit, with margin", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    const monthly = plannedRecipeSteps({ registry, remainingUsd: APIFY_MONTHLY_CREDIT_USD, isFirstScoutOfMonth: true });
+    const weekly = plannedRecipeSteps({ registry, remainingUsd: APIFY_MONTHLY_CREDIT_USD, isFirstScoutOfMonth: false });
+    // Four scouts a month, one of them carrying the monthly Explore snapshot.
+    const worstMonth = monthly.reduce((sum, entry) => sum + entry.estimatedUsd, 0)
+      + 3 * weekly.reduce((sum, entry) => sum + entry.estimatedUsd, 0);
+    expect(worstMonth).toBeLessThan(APIFY_MONTHLY_CREDIT_USD);
+    // The reservation has to cover the biggest single scout, or the guard would wave through a
+    // run that then overspends what it reserved.
+    expect(monthly.reduce((sum, entry) => sum + entry.estimatedUsd, 0)).toBeLessThanOrEqual(APIFY_RUN_RESERVATION_USD);
+    // Steps that need tracked accounts do not run while the owner has named none.
+    expect(weekly.some((entry) => entry.step.inputs === "account")).toBe(false);
+    // The monthly step is monthly.
+    expect(weekly.some((entry) => entry.step.cadence === "monthly")).toBe(false);
+  });
+
+  it("drops steps from the end when the month is running hot, rather than refusing everything", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    const full = plannedRecipeSteps({ registry, remainingUsd: 5, isFirstScoutOfMonth: false });
+    const thin = plannedRecipeSteps({ registry, remainingUsd: 0.3, isFirstScoutOfMonth: false });
+    expect(thin.length).toBeGreaterThan(0);
+    expect(thin.length).toBeLessThan(full.length);
+    expect(thin.map((entry) => entry.step.step)).toEqual([...thin.map((entry) => entry.step.step)].sort((a, b) => a - b));
+    expect(plannedRecipeSteps({ registry, remainingUsd: 0, isFirstScoutOfMonth: false })).toEqual([]);
+  });
+});
+
+describe("trend signals", () => {
+  it("scores velocity rather than volume, and refuses to guess when a post has no timestamp", () => {
+    const peaked = item({ likes: 10_000, postedAt: "2026-07-20T12:00:00.000Z" });
+    const rising = item({ likes: 400, postedAt: "2026-08-10T10:00:00.000Z" });
+    expect(engagementPerHour(rising, now)).toBeGreaterThan(engagementPerHour(peaked, now));
+    // No timestamp is not "posted a second ago" — that would make every undated post the
+    // week's biggest trend.
+    expect(engagementPerHour(item({ postedAt: null }), now)).toBe(0);
+    // Nor is a future timestamp a division by almost zero.
+    expect(engagementPerHour(item({ likes: 100, postedAt: "2026-08-10T13:00:00.000Z" }), now)).toBe(100);
+  });
+
+  it("carries a week-over-week delta only where there is something to compare against", () => {
+    const first = computeHashtagSignals({ items: [item({ hashtags: ["#UFC"] })], previous: [], now });
+    expect(first[0]).toMatchObject({ hashtag: "#ufc", posts: 1, weekOverWeekDelta: null });
+    const second = computeHashtagSignals({
+      items: [item({ hashtags: ["#UFC"], likes: 200 }), item({ hashtags: ["#oktagon"] })],
+      previous: first,
+      now
+    });
+    expect(second.find((signal) => signal.hashtag === "#ufc")?.weekOverWeekDelta).toBeCloseTo(50, 4);
+    expect(second.find((signal) => signal.hashtag === "#oktagon")?.weekOverWeekDelta).toBeNull();
+  });
+
+  it("calls a song a trend only once more than one reel uses it", () => {
+    const once = computeAudioSignals([item({ audioTitle: "Song", audioArtist: "A" })]);
+    expect(once).toEqual([]);
+    const twice = computeAudioSignals([
+      item({ audioTitle: "Song", audioArtist: "A" }),
+      item({ audioTitle: "song", audioArtist: "A" }),
+      item({ kind: "post", audioTitle: "Song", audioArtist: "A" })
+    ]);
+    expect(twice).toEqual([{ title: "Song", artist: "A", reels: 2 }]);
+  });
+
+  it("prunes raw items at thirty days and keeps nothing it cannot date", () => {
+    const kept = item({ postedAt: "2026-08-01T12:00:00.000Z" });
+    const old = item({ postedAt: "2026-06-01T12:00:00.000Z" });
+    const undated = item({ postedAt: null });
+    expect(pruneItems([kept, old, undated], now)).toEqual([kept]);
+    const edge = item({ postedAt: new Date(now.getTime() - TREND_ITEM_RETENTION_DAYS * 86_400_000 + 1_000).toISOString() });
+    expect(pruneItems([edge], now)).toEqual([edge]);
+  });
+
+  it("names evidence refs only for actors that actually returned something", () => {
+    expect(trendEvidenceRefs("2026-08-10", [
+      { actorId: "instagram-hashtags", step: 2, status: "success", reason: null, count: 12, estimatedUsd: 0.01 },
+      { actorId: "threads-primary", step: 3, status: "failed", reason: "boom", count: 0, estimatedUsd: 0 },
+      { actorId: "instagram-explore", step: 5, status: "success", reason: null, count: 0, estimatedUsd: 0.01 }
+    ])).toEqual(["source:apify:instagram:2026-08-10"]);
+    expect(trendEvidenceRefs("2026-08-10", [])).toEqual([]);
+  });
+
+  it("hands the magazines numbers and refs, split by the topic set that produced them", () => {
+    const hashtags = computeHashtagSignals({
+      items: [item({ topicSet: "mma", hashtags: ["#ufc"] }), item({ topicSet: "dneskai", hashtags: ["#ai"] })],
+      previous: [],
+      now
+    });
+    const block = buildForMagazines({ hashtags, refs: ["source:apify:instagram:2026-08-10"] });
+    expect(block.mma.map((entry) => entry.topic)).toEqual(["#ufc"]);
+    expect(block.ai.map((entry) => entry.topic)).toEqual(["#ai"]);
+    // A topic a desk cannot check is a rumour, so every entry carries its ref.
+    expect(block.mma.every((entry) => entry.refs.length > 0)).toBe(true);
+  });
+});
+
+describe("the scraped-row boundary", () => {
+  it("keeps the bounded fields and drops everything else, including anything republishable", () => {
+    const mapped = mapDatasetRow({
+      row: {
+        caption: `#UFC ${"very long ".repeat(60)}`,
+        url: "https://example.test/p/2",
+        likesCount: 12,
+        commentsCount: 3,
+        timestamp: 1_786_000_000,
+        ownerUsername: "someone",
+        ownerFullName: "Some One",
+        displayUrl: "https://example.test/photo.jpg",
+        musicInfo: { song_name: "Track", artist_name: "Artist" }
+      },
+      step: { step: 1, actorId: "instagram-popular-reels", mode: "reels", inputs: "keyword", perInput: 64, maxResults: 192, cadence: "weekly" },
+      topicSet: "mma"
+    });
+    expect(mapped).not.toBeNull();
+    expect(mapped!.text.length).toBeLessThanOrEqual(280);
+    expect(mapped!.hashtags).toContain("#ufc");
+    expect(mapped!.likes).toBe(12);
+    expect(mapped!.audioTitle).toBe("Track");
+    // The handle, the display name and the image URL are the three things that would let this
+    // system republish somebody's post. None of them survives the mapper.
+    expect(JSON.stringify(mapped)).not.toContain("someone");
+    expect(JSON.stringify(mapped)).not.toContain("Some One");
+    expect(JSON.stringify(mapped)).not.toContain("photo.jpg");
+  });
+
+  it("drops a row with neither text nor a URL, which is a partial page rather than an observation", () => {
+    const step = { step: 2, actorId: "instagram-hashtags", mode: "hashtag" as const, inputs: "hashtag" as const, perInput: 25, maxResults: 300, cadence: "weekly" as const };
+    expect(mapDatasetRow({ row: { likesCount: 5 }, step, topicSet: "mma" })).toBeNull();
+    expect(mapDatasetRow({ row: { url: "https://example.test/p/3" }, step, topicSet: "mma" })).not.toBeNull();
+  });
+
+  it("caps every actor input twice, per input and per step", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    const step = registry.recipe.find((entry) => entry.inputs === "hashtag")!;
+    const payload = stepPayload({ step, registry, topicSet: "mma" });
+    expect(payload).toMatchObject({ resultsLimit: step.perInput, maxResults: step.maxResults });
+    // A step with no inputs to work from produces no call at all, rather than an unbounded one.
+    expect(stepPayload({ step, registry, topicSet: "nope" })).toBeNull();
+    const accountStep = registry.recipe.find((entry) => entry.inputs === "account")!;
+    expect(stepPayload({ step: accountStep, registry, topicSet: null })).toBeNull();
+  });
+});
+
+describe("the Monday gate", () => {
+  it("opens the room on Prague Mondays and on no other day", () => {
+    // 2026-08-10 is a Monday.
+    expect(isScoutDay("2026-08-10")).toBe(true);
+    expect(isScoutDay("2026-08-17")).toBe(true);
+    for (const date of ["2026-08-09", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16"]) {
+      expect(isScoutDay(date), date).toBe(false);
+    }
+    // Winter, when Prague is UTC+1 rather than UTC+2.
+    expect(isScoutDay("2026-01-05")).toBe(true);
+    expect(isScoutDay("2026-01-06")).toBe(false);
+    expect(isScoutDay("not-a-date")).toBe(false);
+  });
+});

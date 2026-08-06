@@ -4,16 +4,52 @@
     "mma-analysis",
     "mag-desk"
   ],
-  "changeTriggeredPhases": ["mma-intake"],
-  "standingAgendaPhases": ["tt-marketing"],
-  "servicePhases": ["cu-edition", "cu-product", "mag-editorial", "article-am"],
+  "changeTriggeredPhases": [
+    "mma-intake"
+  ],
+  "standingAgendaPhases": [
+    "tt-marketing",
+    "gv-brief"
+  ],
+  "servicePhases": [
+    "cu-edition",
+    "cu-product",
+    "mag-editorial",
+    "article-am"
+  ],
   "transitions": {
-    "morning": ["tt-marketing", "mma-intake", "mag-editorial", "mag-desk"],
-    "tt-marketing": ["tt-marketing"],
-    "mma-intake": ["mma-analysis", "mag-editorial", "mag-desk"],
-    "mma-analysis": ["mma-intake", "mag-editorial"],
-    "mag-editorial": ["mag-desk", "mma-intake"],
-    "mag-desk": ["mag-editorial", "mma-intake"]
+    "morning": [
+      "tt-marketing",
+      "gv-brief",
+      "mma-intake",
+      "mag-editorial",
+      "mag-desk"
+    ],
+    "tt-marketing": [
+      "tt-marketing"
+    ],
+    "gv-brief": [
+      "gv-brief",
+      "mag-desk",
+      "tt-marketing"
+    ],
+    "mma-intake": [
+      "mma-analysis",
+      "mag-editorial",
+      "mag-desk"
+    ],
+    "mma-analysis": [
+      "mma-intake",
+      "mag-editorial"
+    ],
+    "mag-editorial": [
+      "mag-desk",
+      "mma-intake"
+    ],
+    "mag-desk": [
+      "mag-editorial",
+      "mma-intake"
+    ]
   },
   "maxPending": 24,
   "perVenturePendingCap": 8,

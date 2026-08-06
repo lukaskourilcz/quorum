@@ -12,17 +12,18 @@ describe("agent registry and identity assets", () => {
   it("keeps 30 seated roles of 40 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
-    // Forty profiles, thirty of them seated. A retired or paused agent keeps its profile and its
-    // portrait -- the record of who did what does not shrink when the roster does -- and the
-    // router skips it and says so rather than crashing the room it was required in.
+    // Forty profiles, thirty-one of them seated. A retired or paused agent keeps its profile and
+    // its portrait -- the record of who did what does not shrink when the roster does -- and the
+    // router skips it and says so rather than crashing the room it was required in. SCOUT came
+    // back off the paused list when GoVIRAL gave it a room again; headcount is otherwise flat.
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
     expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(40);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(30);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(31);
     expect(registry.agents.filter((agent) => agent.status === "retired").map((agent) => agent.id).sort())
       .toEqual(["EASEL", "MOTIF", "SPLIT"]);
     expect(registry.agents.filter((agent) => agent.status === "paused").map((agent) => agent.id).sort())
-      .toEqual(["FUNNEL", "INSTAGRAM", "LENS", "RADAR", "SCOUT", "SCRIBE", "THREADS"]);
+      .toEqual(["FUNNEL", "INSTAGRAM", "LENS", "RADAR", "SCRIBE", "THREADS"]);
     expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
       19

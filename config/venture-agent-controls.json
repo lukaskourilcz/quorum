@@ -45,6 +45,20 @@
         "INSTAGRAM"
       ]
     },
+    "goviral": {
+      "lockedOn": [
+        "PULSE",
+        "AUDIT"
+      ],
+      "switchable": [
+        "SCOUT",
+        "ANGLE",
+        "COHORT",
+        "SCENE",
+        "FUNNEL"
+      ],
+      "disabled": []
+    },
     "fightaiq": {
       "lockedOn": [
         "FORGE"

@@ -24,6 +24,7 @@ import { loadAgentRegistry } from "../org/registry.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
+import { trendEvidenceRefs } from "../sources/goviral-trends.js";
 import type { FoundingAgent, Stage } from "../types.js";
 import {
   composeMeetingRouteDefinition,
@@ -59,7 +60,7 @@ import { fightAiQBrief } from "../fightaiq/brief.js";
 import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { withinIntakeHorizon } from "./evidence.js";
 import { refreshReadinessDossiers } from "../fightaiq/readiness.js";
-import { refreshFightAiQAnalysis, refreshFightAiQEvidence } from "./evidence.js";
+import { newestTrendSnapshot, refreshFightAiQAnalysis, refreshFightAiQEvidence, refreshGoViralTrends } from "./evidence.js";
 import {
   budgetDecisionStatus,
   phaseEnabled,
@@ -79,7 +80,7 @@ import {
   screenAndRecordIdea
 } from "../ideas/ledger.js";
 
-export type PortfolioPhase = "tt-marketing" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
+export type PortfolioPhase = "tt-marketing" | "gv-brief" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk";
 
 const ContributionSchema = z.object({
   stance: z.enum(["plan", "pass", "veto"]),
@@ -290,6 +291,21 @@ function portfolioChair(phase: PortfolioPhase): FoundingAgent {
   return "PULSE";
 }
 
+/**
+ * Monday, in Prague.
+ *
+ * GoVIRAL is a weekly room and the registry has no weekly cadence: `daily@HH:00` is the only
+ * form, and adding another breaks the schema's superRefine, the founding hour arithmetic,
+ * `parseCadenceHour` (which throws at module load), cronPayloads, the site's cron slots and five
+ * pinned tests. So the day is a gate in code, the way the TT weekday wheel and the mma-intake
+ * weekday casts already are, and the two off-day firings cost nothing.
+ */
+export function isScoutDay(date: string): boolean {
+  const value = new Date(`${date}T12:00:00Z`);
+  if (Number.isNaN(value.getTime())) return false;
+  return new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: "Europe/Prague" }).format(value) === "Mon";
+}
+
 function buildRecord(input: {
   phase: PortfolioPhase;
   cycleId: string;
@@ -341,7 +357,7 @@ function buildRecord(input: {
     // venture may actually do. The magazine branch says "Czech articles" because that is all the
     // desk produces: mma-files/pipeline.ts makes one writeCzech call and stores
     // `localizations: { cs }`. It read "bilingual articles" while nothing English was written.
-    growthPlan: input.phase === "tt-marketing" ? "Drafts only. Social publishing, ads, commerce and external action remain disabled." : isFightDesk ? "Data only. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : "Research only. Evidence collection does not authorize spend or external action.",
+    growthPlan: input.phase === "tt-marketing" ? "Drafts only. Social publishing, ads, commerce and external action remain disabled." : input.phase === "gv-brief" ? "Drafts and plans only. Nothing here posts, schedules, buys or creates an account, and no follower or reach number is promised." : isFightDesk ? "Data only. No probability, bookmaker link, account action or bet placement is authorized." : isMagazine ? "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens." : "Research only. Evidence collection does not authorize spend or external action.",
     eveningOutcome: null,
     ...(input.editorialSlate ? { editorialSlateRef: `ventures/mma-files/slates/${input.date}.json` } : {}),
     ...(input.agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${input.agenda.id}` } : {}),
@@ -512,6 +528,26 @@ function shutByNoModelRun(): RoomStayedShut {
     seat: "registered for this meeting but not asked anything, because there is no model run to review yet",
     setting: "The fight data was refreshed as usual. No model run has been produced yet, so there was nothing for this meeting to read and nobody was asked anything.",
     growthPlan: "Nothing was decided and nothing was authorized: the meeting reviews model runs, and none exist yet."
+  };
+}
+
+/** GoVIRAL meets on Mondays. The other six firings are this, and they cost nothing. */
+function shutByNotScoutDay(): RoomStayedShut {
+  return {
+    brief: "This room meets on Mondays. Nothing was spent.",
+    seat: "registered for this meeting but not asked anything, because this room meets on Mondays",
+    setting: "This room meets on Mondays. Today is not Monday, so it did not open and nobody was asked anything.",
+    growthPlan: "Nothing was decided and nothing was authorized: a room that did not open produces no work, spend, publishing or outreach."
+  };
+}
+
+/** No scout data, and no snapshot recent enough to stand in for one. */
+function shutByNoScoutData(): RoomStayedShut {
+  return {
+    brief: "Trend scouting produced no data this week, so the meeting was not held.",
+    seat: "registered for this meeting but not asked anything, because there was no trend data to read",
+    setting: "The trend scout returned nothing and no recent snapshot was available, so there was nothing to put in front of anyone and the meeting did not open.",
+    growthPlan: "Nothing was decided and nothing was authorized: a room with no data produces no work, spend, publishing or outreach."
   };
 }
 
@@ -757,6 +793,33 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
         taste ?? ""
       ].filter(Boolean).join("\n\n").slice(0, 18_000),
       evidenceRefs: []
+    };
+  }
+  if (phase === "gv-brief") {
+    const [profile, trends, ideaIndex] = await Promise.all([
+      readText(root, "ventures/goviral/profile.md"),
+      newestTrendSnapshot(root, date),
+      readIdeaIndexSlice(root, "goviral")
+    ]);
+    // Items are the raw scraped posts. They stay on disk for the 30-day window and out of the
+    // packet entirely: a room needs the aggregate to make a call, and handing four seats a list
+    // of strangers' posts is both a bigger prompt and a worse idea.
+    const signals = trends
+      ? JSON.stringify({ date: trends.date, signals: trends.signals, sourceResults: trends.sourceResults })
+      : "";
+    const staleness = trends && trends.date !== date
+      ? `No fresh scout this week — working from the ${trends.date} snapshot.`
+      : "";
+    return {
+      text: [
+        profile ?? "The owner has not filled in state/ventures/goviral/profile.md yet. Until they do, lean the writer brief on the two magazine niches and say plainly that this is what you are doing.",
+        staleness,
+        signals ? `This week's trend signals:\n${signals}` : "No scout data is available for this week.",
+        "Ideas this room has already recorded. Propose nothing whose title or summary restates one of them:",
+        ideaIndex,
+        taste ?? ""
+      ].filter(Boolean).join("\n\n").slice(0, 18_000),
+      evidenceRefs: trends ? trendEvidenceRefs(trends.date, trends.sourceResults) : []
     };
   }
   if (phase === "mma-intake" || phase === "mma-analysis") {
@@ -1015,6 +1078,44 @@ export async function runPortfolioCycle(input: {
     }
   }
 
+  // GoVIRAL's Monday gate, and the scout that feeds it. Both come before any seat, so an
+  // off-day firing and a scout that found nothing each cost $0 rather than four model calls.
+  if (input.phase === "gv-brief") {
+    if (!isScoutDay(date) && !agenda) {
+      return recordNoAgendaCycle({
+        phase: input.phase,
+        cycleId: input.cycleId,
+        date,
+        now: input.now,
+        stage: stages.current,
+        root,
+        expectedCast,
+        monthAllInUsd: spent,
+        monthCapUsd: schedule.monthlyOperatingUsd,
+        shut: shutByNotScoutDay()
+      });
+    }
+    if (!input.dry && isScoutDay(date)) {
+      const scout = await refreshGoViralTrends({ root, date, now: input.now });
+      preparationArtifacts.push(...scout.artifactPaths);
+      if (!scout.trends) {
+        return recordNoAgendaCycle({
+          phase: input.phase,
+          cycleId: input.cycleId,
+          date,
+          now: input.now,
+          stage: stages.current,
+          root,
+          expectedCast,
+          monthAllInUsd: spent,
+          monthCapUsd: schedule.monthlyOperatingUsd,
+          shut: shutByNoScoutData(),
+          preparationArtifacts
+        });
+      }
+    }
+  }
+
   if (scheduledWakeUp && phaseNeedsAgenda(meetingPolicy, input.phase) && !agenda) {
     return recordNoAgendaCycle({
       phase: input.phase,
@@ -1134,7 +1235,7 @@ export async function runPortfolioCycle(input: {
     const dryChair = input.phase.startsWith("mma-") ? "FORGE" : input.phase.startsWith("mag-") ? "CANVAS" : "PULSE";
     contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, editorialSlate: null, marketingPlan: null, inspirationObservations: [], idea: null, followUpRequest: null }));
   } else {
-    const promptName = input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
+    const promptName = input.phase === "gv-brief" ? "goviral.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
     const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
     // The season's concepts, rotated one per day. Read from the same season file the room is
     // shown, so the focus line and the packet can never name different concepts.
@@ -1152,7 +1253,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"editorialSlate":null,"marketingPlan":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"editorialSlate":null,"marketingPlan":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|gv-brief|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,

@@ -3,6 +3,7 @@
   "runtimeHosts": [
     "ai.meta.com",
     "api.anthropic.com",
+    "api.apify.com",
     "api.bsky.app",
     "api.citoapi.com",
     "api.firecrawl.dev",

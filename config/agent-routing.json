@@ -25,8 +25,8 @@
       "status": "active"
     },
     "SCOUT": {
-      "capabilities": ["evidence", "sources"],
-      "status": "paused"
+      "capabilities": ["evidence", "sources", "trend:signals"],
+      "status": "active"
     },
     "SCRIBE": {
       "capabilities": ["summary", "public_projection"],
@@ -242,6 +242,10 @@
     },
     "tt-marketing-room": {
       "required": ["PULSE", "ANGLE", "AUDIT"],
+      "optionalByTopic": false
+    },
+    "gv-brief-room": {
+      "required": ["PULSE", "SCOUT", "ANGLE", "AUDIT"],
       "optionalByTopic": false
     },
     "mma-intake-room": {

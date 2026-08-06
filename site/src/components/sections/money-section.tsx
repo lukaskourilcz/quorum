@@ -22,6 +22,7 @@ const ventureLabels: Record<string, string> = {
   "mma-files": "MMA Files",
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",
+  goviral: "GoVIRAL",
   board: "Board"
 };
 

@@ -5,6 +5,7 @@ const labels: Record<CalendarKind, string> = {
   "venture-morning": "Morning company meeting",
   "incubator-scan": "Magazine idea research",
   "tt-marketing": "Titty Tuesdays marketing meeting",
+  "gv-brief": "GoVIRAL trend and marketing meeting",
   "venture-afternoon": "Afternoon company meeting",
   "cu-product": "DNESKAi product meeting",
   "incubator-synthesis": "Magazine idea review",

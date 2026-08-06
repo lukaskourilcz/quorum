@@ -92,10 +92,12 @@ function reply(body: Record<string, unknown>): string {
 
 describe("commissionable rooms", () => {
   it("pairs every morning-requestable room with the venture the gate will check it against", () => {
-    // The incubator is paused and the studio holds no meeting, so neither has a room the
-    // morning board could commission.
+    // Carousel Studio holds no meeting and the incubator is gone, so neither has a room the
+    // morning board could commission. GoVIRAL does: an agenda is how a mid-week opening happens
+    // at all, since the room otherwise only meets on Mondays.
     expect(rooms).toEqual([
       { ventureId: "titty-tuesdays", phase: "tt-marketing" },
+      { ventureId: "goviral", phase: "gv-brief" },
       { ventureId: "fightaiq", phase: "mma-intake" },
       { ventureId: "mma-files", phase: "mag-desk" }
     ]);

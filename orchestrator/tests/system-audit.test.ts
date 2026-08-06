@@ -19,7 +19,7 @@ describe("closing 40-agent system audit", () => {
     // Forty profiles, thirty of them seated. A retired or paused agent keeps its prompt, its
     // portrait and its routing entry -- the record of who did what does not shrink when the
     // roster does -- and the two files have to agree about which of the three it is.
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(30);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(31);
     for (const agent of registry.agents) {
       expect(["active", "paused", "retired"]).toContain(agent.status);
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
@@ -60,9 +60,11 @@ describe("closing 40-agent system audit", () => {
       .flatMap((venture) => venture.productionJobs ?? [])
       .reduce((sum, job) => sum + job.envelopeUsd, 0);
     const morningCycleCap = 0.2;
-    // Seven rooms: two Caught Up, one Titty Tuesdays, two FightAIQ, two MMA Files. The studio and
-    // both incubator rooms are gone.
-    expect(roomEnvelopes).toBeCloseTo(0.46, 8);
+    // Eight rooms: two Caught Up, one Titty Tuesdays, one GoVIRAL, two FightAIQ, two MMA Files.
+    // The studio and both incubator rooms are gone. GoVIRAL reserves its $0.06 every day even
+    // though it meets on Mondays -- the reservation is what the clock can cost, not what it
+    // usually does, and reserving less than a room can spend is how a day runs out of money.
+    expect(roomEnvelopes).toBeCloseTo(0.52, 8);
     // The whole clock, at every room's full envelope, has to fit inside the $1.00 daily pace
     // budget-2026-08e signed -- which is the arithmetic that makes a full day affordable rather
     // than a day whose last rooms cannot be funded.

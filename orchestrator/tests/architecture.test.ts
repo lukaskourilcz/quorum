@@ -50,6 +50,7 @@ const expectedPrompts = [
   "founding.md",
   "frame.md",
   "funnel.md",
+  "goviral.md",
   "hacek.md",
   "herald.md",
   "instagram.md",

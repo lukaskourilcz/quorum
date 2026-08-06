@@ -20,6 +20,7 @@ import { CaughtUpVenturePage } from "@/components/caught-up-venture-page";
 import { TittyTuesdaysVenturePage } from "@/components/titty-tuesdays-venture-page";
 import { FightAiQVenturePage } from "@/components/fightaiq-venture-page";
 import { CarouselStudioVenturePage } from "@/components/carousel-studio-venture-page";
+import { GoViralVenturePage } from "@/components/goviral-venture-page";
 import {
   opportunities,
   opportunityDimensions
@@ -29,7 +30,7 @@ export function generateStaticParams() {
   // The founding test rejected three sample business ideas, and each of them had a page here
   // that read like a project the company runs. The ideas stay on the record where they were
   // rejected; they stop being routes.
-  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "fightaiq" }, { slug: "carousel-studio" }];
+  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "goviral" }, { slug: "fightaiq" }, { slug: "carousel-studio" }];
 }
 
 export async function generateMetadata({
@@ -51,6 +52,7 @@ export async function generateMetadata({
       title: "Titty Tuesdays"
     };
   }
+  if (slug === "goviral") return { title: "GoVIRAL", description: "The weekly room that reads public trend data and turns it into things to write." };
   if (slug === "fightaiq") return { title: "FightAIQ", description: "The UFC and Oktagon data layer that delivers checked fight files to MMA Files." };
   if (slug === "carousel-studio") return { title: "Carousel Studio", description: "BoardlessAI's deterministic carousel template engine and live layout gallery." };
   const opportunity = opportunities.find((item) => item.slug === slug);
@@ -69,6 +71,7 @@ export default async function VentureDetailPage({
   const { slug } = await params;
   if (slug === "caught-up") return <CaughtUpVenturePage />;
   if (slug === "titty-tuesdays") return <TittyTuesdaysVenturePage />;
+  if (slug === "goviral") return <GoViralVenturePage />;
   if (slug === "fightaiq") return <FightAiQVenturePage />;
   if (slug === "carousel-studio") return <CarouselStudioVenturePage />;
   const opportunity = opportunities.find((item) => item.slug === slug);

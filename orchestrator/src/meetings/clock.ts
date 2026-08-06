@@ -245,6 +245,6 @@ export function isCaughtUpPhase(
 
 export function isPortfolioPhase(
   phase: RunnablePhase
-): phase is "tt-marketing" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" {
-  return phase === "tt-marketing" || phase === "mma-intake" || phase === "mma-analysis" || phase === "mag-editorial" || phase === "mag-desk";
+): phase is "tt-marketing" | "gv-brief" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" {
+  return phase === "tt-marketing" || phase === "gv-brief" || phase === "mma-intake" || phase === "mma-analysis" || phase === "mag-editorial" || phase === "mag-desk";
 }
