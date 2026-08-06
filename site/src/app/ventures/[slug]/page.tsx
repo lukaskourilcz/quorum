@@ -26,7 +26,10 @@ import {
 } from "@/data/fixtures";
 
 export function generateStaticParams() {
-  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "fightaiq" }, { slug: "carousel-studio" }, ...opportunities.map((opportunity) => ({ slug: opportunity.slug }))];
+  // The founding test rejected three sample business ideas, and each of them had a page here
+  // that read like a project the company runs. The ideas stay on the record where they were
+  // rejected; they stop being routes.
+  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "fightaiq" }, { slug: "carousel-studio" }];
 }
 
 export async function generateMetadata({

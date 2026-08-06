@@ -3,6 +3,9 @@ import { ArrowRight, Building2, CircleDollarSign, FlaskConical } from "lucide-re
 import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
+import { AboutSection } from "@/components/sections/about-section";
+import { DisclosureSection } from "@/components/sections/disclosure-section";
+import { RulesSection } from "@/components/sections/governance-section";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -190,6 +193,19 @@ export default function CompanyPage() {
           View current projects
           <ArrowRight aria-hidden="true" className="size-4" />
         </Link>
+      </section>
+
+      {/* What the company is, the rules it works under, and what it discloses were three
+          separate navigation entries answering one question. /about, /governance and
+          /disclosure redirect into these sections. */}
+      <section aria-label="About" id="about">
+        <AboutSection />
+      </section>
+      <section aria-label="Rules" id="rules">
+        <RulesSection />
+      </section>
+      <section aria-label="Disclosure" id="disclosure">
+        <DisclosureSection />
       </section>
     </PageShell>
   );

@@ -27,6 +27,24 @@ const nextConfig: NextConfig = {
     // asserts the match against Next's own matcher rather than trusting that it looks right.
     "/api/cron/[phase]": ["../config/ventures.json"]
   },
+  /**
+   * Where the eleven-item navigation went.
+   *
+   * Money and the measures are sections of /results; what the company is, the rules it works
+   * under and what it discloses are sections of /company. /boardroom was a second copy of the
+   * meeting archive built out of fixtures, and its readers belong on /standups. Every one of
+   * these URLs has been public, so none of them is allowed to 404.
+   */
+  async redirects() {
+    return [
+      { source: "/boardroom", destination: "/standups", permanent: true },
+      { source: "/money", destination: "/results#money", permanent: true },
+      { source: "/metrics", destination: "/results#measures", permanent: true },
+      { source: "/about", destination: "/company#about", permanent: true },
+      { source: "/governance", destination: "/company#rules", permanent: true },
+      { source: "/disclosure", destination: "/company#disclosure", permanent: true }
+    ];
+  },
   poweredByHeader: false,
   reactStrictMode: true,
   // sharp loads its libvips binding through `require('@img/sharp-' + platform)`, a specifier no

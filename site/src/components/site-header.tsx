@@ -6,17 +6,20 @@ import { usePathname } from "next/navigation";
 import { Mark } from "@/components/brand/mark";
 import { cn } from "@/lib/utils";
 
+/**
+ * Six entries, one per question a reader arrives with.
+ *
+ * It was eleven, including a "KPIs" label the site's own plain-language filter bans, two
+ * separate meeting archives, and four pages that are sections of two others. New ideas and the
+ * idea history keep their routes and are linked from the projects that own them.
+ */
 const links = [
-  { href: "/standups", label: "Schedule" },
-  { href: "/boardroom", label: "Meetings" },
-  { href: "/agents", label: "AI team" },
+  { href: "/calendar", label: "Calendar" },
+  { href: "/standups", label: "Meetings" },
   { href: "/ventures", label: "Projects" },
-  { href: "/incubator", label: "New ideas" },
-  { href: "/ideas", label: "Idea history" },
+  { href: "/agents", label: "AI team" },
   { href: "/results", label: "Results" },
-  { href: "/metrics", label: "KPIs" },
-  { href: "/money", label: "Money" },
-  { href: "/governance", label: "Rules" }
+  { href: "/company", label: "Company" }
 ];
 
 export function SiteHeader() {

@@ -8,7 +8,8 @@ import { getPublicStandups } from "@/lib/standup-records";
 export interface PublicDeliveryReceipt {
   date: string;
   deliveredAt: string;
-  targetCommit?: string;
+  /** Where the magazine serves what was delivered. Receipts written before this is absent. */
+  articleUrl?: string;
   built: { status: "passed" | "failed" | "not-recorded"; checkedAt?: string };
   live: { status: "passed" | "failed" | "not-recorded"; checkedAt?: string };
 }
@@ -45,7 +46,9 @@ async function getDeliveryReceipts(): Promise<PublicDeliveryReceipt[]> {
       receipts.push({
         date: record.date,
         deliveredAt: record.deliveredAt,
-        ...(typeof record.targetCommit === "string" ? { targetCommit: record.targetCommit } : {}),
+        ...(typeof record.articleUrl === "string" && record.articleUrl.startsWith("https://")
+          ? { articleUrl: record.articleUrl }
+          : {}),
         built: check(checks?.built),
         live: check(checks?.live)
       });

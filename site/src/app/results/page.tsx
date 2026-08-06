@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
+import { MeasuresSection } from "@/components/sections/metrics-section";
+import { MoneySection } from "@/components/sections/money-section";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 import {
   getDailyResults,
@@ -177,6 +179,16 @@ export default async function ResultsPage() {
             ))}
           </div>
         )}
+      </section>
+
+      {/* Money and the measures used to be two more entries in an eleven-item navigation bar.
+          They answer the same question this page does — what came of the work — so they are
+          sections of it, and /money and /metrics redirect here. */}
+      <section aria-label="Money" id="money">
+        <MoneySection />
+      </section>
+      <section aria-label="Measures" id="measures">
+        <MeasuresSection />
       </section>
     </PageShell>
   );

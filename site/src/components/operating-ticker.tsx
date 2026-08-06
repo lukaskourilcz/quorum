@@ -1,21 +1,28 @@
 import { agents } from "@/data/agents";
 import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 
+/**
+ * Every figure here is read from the record the page already holds.
+ *
+ * Three of them were constants left over from the founding test: "Real sources 0" stayed zero
+ * through every sourced edition the desk published, "Best idea score 34/50" was one fixture
+ * idea's score, and "Meeting times 06 · 14 · 22" named three company shifts on a day that runs
+ * ten slots. A number nobody maintains is worse than no number.
+ */
 function itemsFor(input: {
   actualSpend: string;
   decision: string;
+  meetingsToday: number;
   stage: string;
 }) {
   return [
   ["Current step", input.stage],
   ["Money spent", input.actualSpend],
   ["Monthly limit", `$${CURRENT_MONTHLY_OPERATING_LIMIT_USD.toFixed(2)}`],
-  ["Real sources", "0"],
   ["Latest decision", input.decision],
   ["Decision makers", "4"],
   ["AI roles", String(agents.length)],
-  ["Meeting times", "06 · 14 · 22"],
-  ["Best idea score", "34/50"]
+  ["Slots today", String(input.meetingsToday)]
   ] as const;
 }
 
@@ -37,7 +44,7 @@ function TickerItems({
             {label}{" "}
             <span
               className={
-                label === "Real sources" || label === "Latest decision"
+                label === "Latest decision"
                   ? "text-[var(--accent)]"
                   : "text-[var(--foreground)]"
               }
@@ -57,6 +64,7 @@ function TickerItems({
 export function OperatingTicker(input: {
   actualSpend: string;
   decision: string;
+  meetingsToday: number;
   stage: string;
 }) {
   const items = itemsFor(input);

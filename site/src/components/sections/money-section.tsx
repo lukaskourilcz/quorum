@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight, CalendarClock, CircleDollarSign, Landmark, LockKeyhole, Target } from "lucide-react";
-import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -17,11 +15,6 @@ import {
   type PublicKpiStatus
 } from "@/lib/money-records";
 import { formatDate, formatDateTime, formatUsd } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  description: "BoardlessAI quarterly targets, monetization gates, confirmed costs and recognized revenue.",
-  title: "Money"
-};
 
 const ventureLabels: Record<string, string> = {
   company: "Company",
@@ -83,7 +76,7 @@ function groupedStatuses(statuses: PublicKpiStatus[]): Array<[string, PublicKpiS
   return [...groups.entries()];
 }
 
-export default async function MoneyPage() {
+export async function MoneySection() {
   const snapshot = await getPublicMoneySnapshot();
   const moneyCards: Array<{ label: string; value: string; note: string; icon: LucideIcon }> = snapshot ? [
     { label: "Current monthly cost", value: formatUsd(snapshot.costs.totalMonthlyBurnUsd), note: "API use this month plus saved fixed monthly costs", icon: CircleDollarSign },
@@ -91,7 +84,7 @@ export default async function MoneyPage() {
     { label: "Recognized revenue", value: formatUsd(snapshot.revenue.recognizedUsd), note: "Only verified revenue entries", icon: CircleDollarSign }
   ] : [];
   return (
-    <PageShell>
+    <>
       <section className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-[var(--container)] gap-10 px-5 py-20 md:px-10 md:py-28 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
@@ -216,6 +209,6 @@ export default async function MoneyPage() {
           </section>
         </>
       )}
-    </PageShell>
+    </>
   );
 }

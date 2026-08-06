@@ -1,7 +1,5 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
-import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -11,12 +9,6 @@ import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { getPublicStandups } from "@/lib/standup-records";
 import { fighterName, getPublicFightStatsEntries, getPublicFighters } from "@/lib/fightaiq-records";
 import { formatUsd } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  description:
-    "BoardlessAI results, costs and the numbers that are still unknown.",
-  title: "Results"
-};
 
 const metricCopy: Record<string, { label: string; note: string }> = {
   "Selected opportunity score": { label: "Chosen idea score", note: "No idea was chosen from the scored sample set" },
@@ -32,7 +24,7 @@ function metricValue(metric: (typeof metrics)[number]) {
   return metric.value;
 }
 
-export default async function MetricsPage() {
+export async function MeasuresSection() {
   const [latestStandup, fightStats] = await Promise.all([
     getPublicStandups().then((items) => items[0]!),
     getPublicFightStatsEntries()
@@ -43,7 +35,7 @@ export default async function MetricsPage() {
       : []
   );
   return (
-    <PageShell>
+    <>
       <PageIntro
         aside={
           <div className="rounded-[0.875rem] border border-[var(--slate)] bg-[var(--card)] p-5">
@@ -217,6 +209,6 @@ export default async function MetricsPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    </>
   );
 }

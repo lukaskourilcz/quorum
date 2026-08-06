@@ -1,13 +1,5 @@
-import type { Metadata } from "next";
 import { PageIntro } from "@/components/page-intro";
-import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
-export const metadata: Metadata = {
-  description:
-    "The source, voting, permission, budget and publishing rules used by BoardlessAI.",
-  title: "Rules"
-};
-
 const controls = [
   {
     title: "Every idea needs the basics",
@@ -62,9 +54,9 @@ const humanOnly = [
   "Make major changes to permissions, budgets or the AI team."
 ] as const;
 
-export default function GovernancePage() {
+export function RulesSection() {
   return (
-    <PageShell>
+    <>
       <PageIntro
         aside={
           <div className="rounded-[0.875rem] border border-l-[3px] border-[var(--accent)] bg-[var(--surface-raised)] p-5 text-sm leading-6 text-[var(--mist)]">
@@ -252,6 +244,6 @@ export default function GovernancePage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    </>
   );
 }

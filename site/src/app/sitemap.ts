@@ -15,8 +15,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const core = [
     "",
     "/standups",
-    "/boardroom",
-    "/governance",
     "/agents",
     "/ventures",
     "/ventures/caught-up",
@@ -25,11 +23,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/ventures/titty-tuesdays",
     "/ideas",
     "/results",
-    "/metrics",
-    "/money",
     "/log",
     "/company",
-    "/about",
     "/privacy",
     "/disclosure"
   ];

@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { AlertTriangle, Check, CircleSlash, ExternalLink } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
-import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { Callout } from "@/components/ui/callout";
 import {
@@ -13,15 +11,9 @@ import {
   CardTitle
 } from "@/components/ui/card";
 
-export const metadata: Metadata = {
-  description:
-    "Important notices about BoardlessAI, its sample data, brand, AI models and limits.",
-  title: "Important notices"
-};
-
-export default function DisclosurePage() {
+export function DisclosureSection() {
   return (
-    <PageShell>
+    <>
       <PageIntro
         aside={
           <Callout tone="warning">
@@ -179,6 +171,6 @@ export default function DisclosurePage() {
           </CardContent>
         </Card>
       </section>
-    </PageShell>
+    </>
   );
 }

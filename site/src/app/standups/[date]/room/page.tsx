@@ -176,7 +176,7 @@ export default async function StandupRoomPage({
                   variant: "secondary",
                   size: "small"
                 })}
-                href="/boardroom#room-archive"
+                href="/standups"
               >
                 All meetings
               </Link>
@@ -249,7 +249,7 @@ export default async function StandupRoomPage({
                   </p>
                 </div>
                 <Gavel
-                  aria-label={`${transcript.gavel} led the meeting`}
+                  aria-label={`${publicAgentTitle(agentById.get(transcript.gavel)!)} led the meeting`}
                   className="size-5 text-[var(--accent)]"
                 />
               </div>
@@ -295,7 +295,7 @@ export default async function StandupRoomPage({
                 </Link>
                 <Link
                   className={buttonVariants({ variant: "primary" })}
-                  href="/boardroom#room-archive"
+                  href="/standups"
                 >
                   All meetings
                   <ArrowRight aria-hidden="true" className="size-4" />

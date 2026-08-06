@@ -8,7 +8,7 @@ export default function NotFound() {
   return (
     <PageShell>
       <section className="mx-auto grid min-h-[65svh] max-w-[var(--container)] content-center px-5 py-20 md:px-8">
-        <Badge>404 · NO_ACTION</Badge>
+        <Badge>Page not found</Badge>
         <h1 className="mt-6 text-[clamp(4rem,12vw,10rem)] font-semibold leading-[0.82] tracking-[-0.08em]">
           Nothing here
           <span className="text-[var(--accent)]">.</span>

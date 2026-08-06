@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { AgentCard, AgentRow } from "@/components/agent-card";
-import { publicAgentText, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
+import { publicAgentText, publicAgentTitle, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { AgentSignalField } from "@/components/agent-signal-field";
 import { OperatingTicker } from "@/components/operating-ticker";
 import { PageShell } from "@/components/page-shell";
@@ -12,7 +12,7 @@ import { WeekBoard } from "@/components/week-board";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { agents } from "@/data/agents";
+import { agentById, agents } from "@/data/agents";
 import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicCalendarFeed } from "@/lib/calendar-feed";
@@ -67,6 +67,7 @@ export default async function HomePage() {
       <OperatingTicker
         actualSpend={formatUsd(latestStandup.ledger.monthAllIn)}
         decision={publicDecisionLabel(latestStandup.decision.outcome)}
+        meetingsToday={calendarFeed.definitions.length}
         stage={publicStageLabel(latestStandup.stage)}
       />
 
@@ -98,7 +99,7 @@ export default async function HomePage() {
           </div>
           <div className="grid items-end gap-8 md:grid-cols-12 md:gap-10">
             <p className="max-w-[38rem] text-lg leading-8 text-[var(--ash)] md:col-span-6 md:text-[1.1875rem]">
-              Fourteen scheduled work slots a day. Four AI roles make the company
+              A day of scheduled meetings and article slots. Four AI roles make the company
               decisions, specialists join when needed, and the work stays open to inspect.
             </p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
@@ -201,7 +202,7 @@ export default async function HomePage() {
             </p>
             <SignalBars className="mt-10" />
             <p className="mt-3 font-mono text-[0.65625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-              Meeting record / {latestStandup.status}
+              Meeting record / {publicDecisionLabel(latestStandup.status)}
             </p>
           </div>
           <div className="bg-[var(--surface)] p-7 md:col-span-7 md:p-11">
@@ -233,7 +234,7 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="mt-11 grid gap-3.5 border-t border-[var(--border)] pt-6">
-              {(latestStandup.fixture ? gates : latestStandup.voteMatrix.map((vote, index) => [String(index + 1).padStart(2, "0"), `${vote.voter} role`, vote.veto ? "BLOCKED" : publicDecisionLabel(vote.firstChoice)] as const)).map(([number, label, state]) => (
+              {(latestStandup.fixture ? gates : latestStandup.voteMatrix.map((vote, index) => [String(index + 1).padStart(2, "0"), publicAgentTitle(agentById.get(vote.voter)!), vote.veto ? "Blocked" : publicDecisionLabel(vote.firstChoice)] as const)).map(([number, label, state]) => (
                 <div
                   className="grid grid-cols-[1.25rem_1fr_auto] items-center gap-4 text-sm"
                   key={number}
@@ -362,7 +363,7 @@ export default async function HomePage() {
                 Month to date
               </p>
               <p className="mt-5 text-7xl font-semibold leading-none tracking-[-0.07em] tabular-nums">
-                $0.00
+                {formatUsd(latestStandup.ledger.monthAllIn)}
               </p>
               <Progress className="mt-7" max={CURRENT_MONTHLY_OPERATING_LIMIT_USD} value={latestStandup.ledger.monthAllIn} />
               <div className="mt-4 flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-[var(--fog)]">
@@ -371,7 +372,7 @@ export default async function HomePage() {
               </div>
               <Link
                 className={`${buttonVariants({ variant: "primary" })} mt-9 w-full`}
-                href="/metrics"
+                href="/results#money"
               >
                 See costs and results
               </Link>

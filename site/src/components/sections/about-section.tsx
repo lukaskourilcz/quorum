@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Eye, ShieldCheck, SquareStack } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
-import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -13,15 +11,9 @@ import {
   CardTitle
 } from "@/components/ui/card";
 
-export const metadata: Metadata = {
-  description:
-    "Why BoardlessAI exists and what a company run by AI roles can and cannot do.",
-  title: "About"
-};
-
-export default function AboutPage() {
+export function AboutSection() {
   return (
-    <PageShell>
+    <>
       <PageIntro
         description="A working experiment in whether AI roles can run a small company openly, affordably and within clear limits set by people."
         eyebrow="About"
@@ -118,6 +110,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    </>
   );
 }
