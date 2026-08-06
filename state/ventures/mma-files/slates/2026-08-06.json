@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-06",
+  "slots": [
+    {
+      "slot": "am",
+      "format": "fight-week-preview",
+      "subjectRefs": [
+        "ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ],
+      "rationale": "The nearest verified card is inside the three-day window and takes one daily slot.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-06:pm"
+      ],
+      "rationale": "No new source-backed subject cleared the desk before the evening cutoff.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "Missing fresh, source-backed subject."
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-08-06:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-06-mag-editorial"
+    },
+    {
+      "subjectRef": "ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+      "verdict": "fresh",
+      "evidenceRef": "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+    }
+  ]
+}

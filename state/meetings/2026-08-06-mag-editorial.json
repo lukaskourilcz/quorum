@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260806070212-mag-editorial",
+  "date": "2026-08-06",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.027444,
+    "monthAllInUsd": 3.046333300000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-05-mma-analysis",
+      "meeting:2026-08-05-mag-desk",
+      "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Oba sloty zabít. Packet neobsahuje FightAIQ soubory, model ani nové zdrojové téma mimo již publikovaný přehled karty. Další text by opakoval AM článek nebo vyráběl fakta.",
+      "evidenceRefs": [
+        "meeting:2026-08-05-mma-analysis",
+        "meeting:2026-08-05-mag-desk",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "No bounded agenda from specialist rooms and no new verified subject for both slots. AM slot repeats published UFC Fight Night preview from 2026-08-05. PM slot has no candidate. Kill both.",
+      "evidenceRefs": [
+        "meeting:2026-08-05-mma-analysis",
+        "meeting:2026-08-05-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Oba sloty zabít. Balíček obsahuje jen již publikovaný náhled celé karty a žádný nový FightAIQ model, výsledek ani další ověřený subject. Vytvářet další text by porušilo pravidlo čerstvosti a copy gate.",
+      "evidenceRefs": [
+        "meeting:2026-08-05-mma-analysis",
+        "meeting:2026-08-05-mag-desk",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "UFC Fight Night: Gamrot vs. Salkilld (08-08-2026) was published as fight-week preview on 2026-08-05. No fresh fighter files, injury reports, weight-cut alerts or contract details arrived to warrant AM or PM adjustment slots. Bridge reports no model call was due.",
+      "evidenceRefs": [
+        "meeting:2026-08-05-mma-analysis",
+        "meeting:2026-08-05-mag-desk",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "EDITORIAL_ONLY. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-06.json",
+  "generatedAt": "2026-08-06T07:07:12.974Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-06T07:02:12.974Z",
+    "closedAt": "2026-08-06T07:07:12.974Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-06T07:02:12.974Z",
+        "text": "Assign or kill both article slots from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-06T07:03:12.974Z",
+        "text": "Oba sloty zabít. Packet neobsahuje FightAIQ soubory, model ani nové zdrojové téma mimo již publikovaný přehled karty. Další text by opakoval AM článek nebo vyráběl fakta.",
+        "evidenceRefs": [
+          "meeting:2026-08-05-mma-analysis",
+          "meeting:2026-08-05-mag-desk",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "veto",
+        "sentAt": "2026-08-06T07:04:12.974Z",
+        "text": "No bounded agenda from specialist rooms and no new verified subject for both slots. AM slot repeats published UFC Fight Night preview from 2026-08-05. PM slot has no candidate. Kill both.",
+        "evidenceRefs": [
+          "meeting:2026-08-05-mma-analysis",
+          "meeting:2026-08-05-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-06T07:05:12.974Z",
+        "text": "Oba sloty zabít. Balíček obsahuje jen již publikovaný náhled celé karty a žádný nový FightAIQ model, výsledek ani další ověřený subject. Vytvářet další text by porušilo pravidlo čerstvosti a copy gate.",
+        "evidenceRefs": [
+          "meeting:2026-08-05-mma-analysis",
+          "meeting:2026-08-05-mag-desk",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-06T07:06:12.974Z",
+        "text": "UFC Fight Night: Gamrot vs. Salkilld (08-08-2026) was published as fight-week preview on 2026-08-05. No fresh fighter files, injury reports, weight-cut alerts or contract details arrived to warrant AM or PM adjustment slots. Bridge reports no model call was due.",
+        "evidenceRefs": [
+          "meeting:2026-08-05-mma-analysis",
+          "meeting:2026-08-05-mag-desk",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-06T07:07:12.974Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}
