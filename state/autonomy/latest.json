@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-05T09:16:45.147Z",
+  "generatedAt": "2026-08-06T04:01:37.352Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -12,7 +12,7 @@
           "label": "Edition cadence",
           "value": 1,
           "unit": "ratio",
-          "detail": "1 delivered, 0 failed; NO_EDITION is neutral."
+          "detail": "3 delivered, 0 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -114,7 +114,7 @@
     "killedSlotReasons": {
       "evidence": 3
     },
-    "vetoRate": 0.1176,
+    "vetoRate": 0.1,
     "firstPassRate": 0,
     "retryRate": 0,
     "sourceAgreementRate": 0.3675,

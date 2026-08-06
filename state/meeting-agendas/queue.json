@@ -74,7 +74,22 @@
       "status": "consumed",
       "consumedBy": "20260805060551-mma-intake",
       "consumedAt": "2026-08-05T06:05:51.752Z"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-6aff203da97a2ed0",
+      "ventureId": "mma-files",
+      "phase": "mag-desk",
+      "requestedBy": "FORGE",
+      "sourcePhase": "morning",
+      "sourceMeetingRef": "standups/2026-08-06-morning",
+      "summary": "Determine next bounded action to raise evidenced slot-fill and FightAIQ rendering for MMA Files given current 60% fill rate.",
+      "evidenceRefs": [],
+      "requestedAt": "2026-08-06T04:01:37.352Z",
+      "notBefore": "2026-08-06",
+      "expiresAt": "2026-08-09T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-06T04:01:37.352Z"
 }

@@ -34,7 +34,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-05T22:51:41.212Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-06T04:02:23.327Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -42,7 +42,7 @@ Refreshed from committed state: **2026-08-05T22:51:41.212Z**. This block is gene
 | Agent roster | 40 active: 21 Anthropic, 19 OpenAI |
 | Scheduled specialist/service rooms | 10; combined maximum room envelopes $0.64 if every room is commissioned |
 | Approved spend boundary | $50 all-in monthly; $42 model/API share; $2.20 daily model/API pace |
-| Recorded API spend | $2.39 this month; $2.40 cumulative |
+| Recorded API spend | $2.90 this month; $2.92 cumulative |
 | Entered fixed costs | $0.00 monthly |
 | Recognized revenue | $0.00 |
 | KPI quarter | 2026-Q1; open; 30 on track, 0 at risk, 11 off track, 9 unavailable |
