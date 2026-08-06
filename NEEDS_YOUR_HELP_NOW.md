@@ -9,6 +9,11 @@ record or chat.
 
 ## What already works
 
+GoVIRAL was founded on 2026-08-06: one room, Mondays at 13:00, that reads public trend data
+and writes the owner a weekly content brief plus marketing ideas for the two magazines. It
+cannot post, schedule, buy or open an account, and it costs about $0.05 of model spend a week
+plus $0 cash. It is waiting on item 2.
+
 Both magazines are Czech-only. MMA Files and DNESKAi (formerly Caught Up) each
 write their article in one Czech call instead of writing English and paying again
 to translate it. Measured: MMA Files was spending 51% of an article on a draft
@@ -21,9 +26,10 @@ release checks in `state/release-proofs/mma-files/`. DNESKAi delivered its first
 3 August. A day that produces no edition now delivers the explanation instead of leaving a
 hole, and 2 August, the one date with no delivery at all, has a receipt.
 
-The day is eleven slots: 05:00 edition production with a 09:00 retry, 06:00 board, 08:00 fight
-data check, 09:00 story meeting, 10:00 article production, 11:00 marketing, 14:00 checkpoint,
-17:00 DNESKAi product room, 19:00 model check, 20:00 desk review, 22:00 checkpoint. No full day
+The day is twelve slots: 05:00 edition production with a 09:00 retry, 06:00 board, 08:00 fight
+data check, 09:00 story meeting, 10:00 article production, 11:00 marketing, 13:00 GoVIRAL trend
+room (Mondays only — the other six days cost $0), 14:00 checkpoint, 17:00 DNESKAi product room,
+19:00 model check, 20:00 desk review, 22:00 checkpoint. No full day
 under this clock has been measured yet: 6 August came to $0.363 across six slots and 4 August to
 $0.412 across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from
 `budget-2026-08e`.
@@ -34,10 +40,16 @@ a file path, a commit hash or a machine code — the record parser rejects one t
 single deliberate exception is the collapsible "See the article that was sent in .json" block
 on a delivery day.
 
-What is still waiting: one API key that unblocks every FightAIQ output, two optional photo
-keys, the taste loop for Titty Tuesdays, the `/admin` credentials that several actions run
-through, the DNESKAi public URL, the fixed-cost registry, the next Titty Tuesdays season, and
-social posting. The list below is those, in the order that unblocks the most.
+The Magazine Incubator is closed. It sat six times and produced no proposal worth acting on,
+and no new magazine will be ideated again — a future venture is founded by a direct registry
+entry the way GoVIRAL was. Any incubator item you remember from an earlier version of this list
+is gone rather than deferred.
+
+What is still waiting: one API key that unblocks every FightAIQ output, an Apify account that
+unblocks GoVIRAL's trend scouting, two optional photo keys, the taste loop for Titty Tuesdays,
+the `/admin` credentials that several actions run through, the DNESKAi public URL, the
+fixed-cost registry, the next Titty Tuesdays season, the Actions-minutes decision, and social
+posting. The list below is those, in the order that unblocks the most.
 
 ## 1. Blocking output right now
 
@@ -51,13 +63,32 @@ social posting. The list below is those, in the order that unblocks the most.
    data API; Wikimedia and reviewed imports are the $0 baseline.
    [imp:5] [owner:me] [time:10m] [kind:setup]
 
-2. [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`.** Free tier, and they widen the
+2. [ ] **Create an Apify account on the Free plan and add `APIFY_TOKEN` to Actions secrets.**
+   This is the single unblock for GoVIRAL's trend scouting. Free plan only: no card, and its $5
+   of monthly platform credit is the budget guard — when the credit is spent the actors stop, so
+   an overspend is not possible. The weekly recipe uses about $1.03 of it and a month about
+   $4.60, so the cash cost is $0 now and on renewal. The six pinned actors read logged-out
+   public Instagram and Threads posts and none of them takes a login or a cookie, so your own
+   accounts are never involved and carry no ban risk from this. Without the token everything
+   still runs: the Monday room opens, finds no scout data, records that in one sentence and
+   spends nothing. **Never upgrade the plan without a new approval** — Starter is $29/month,
+   which alone would consume the entire $30 all-in cap. `state/INBOX.md` carries this as
+   `APIFY-ACCOUNT-001`. [imp:4] [owner:me] [time:10m] [kind:setup]
+
+3. [ ] **Fill in `state/ventures/goviral/profile.md`.** It is the writer half of the weekly
+   brief: your niches, your voice, your audiences, and what you never write about. Nothing in
+   it is generated and nothing should be — until you fill it in, the room leans on the two
+   magazine niches and says so plainly in the brief rather than inventing a voice for you.
+   Half-thoughts and bullets are fine; it is read as data, never as instructions.
+   [imp:4] [owner:me] [time:20m] [kind:content]
+
+4. [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`.** Free tier, and they widen the
    licensed photo pool for both magazines at once. Not a blocker: Openverse, Wikimedia Commons,
    the curated illustrative set and the deterministic FRAME plate remain available, and a photo
    is only used when its own title, author or URL names the article's subject.
    [imp:4] [owner:me] [time:5m] [kind:setup]
 
-3. [ ] **Rate the Titty Tuesdays idea cards in `/admin`.** The marketing room writes concrete
+5. [ ] **Rate the Titty Tuesdays idea cards in `/admin`.** The marketing room writes concrete
    campaign ideas every day and nothing has ever rated one, so the taste loop that turns your
    ratings into written style rules has no input and PALATE has nothing to work from. Nine cards
    sit unrated under the venture's ideas tab, every one of them still `proposed`
@@ -65,7 +96,7 @@ social posting. The list below is those, in the order that unblocks the most.
    rate them. Rating them is the whole of what starts the loop.
    [imp:4] [owner:me] [time:20m] [kind:decision]
 
-4. [ ] **Set the `/admin` credentials in Vercel production.** Several actions on this list run
+6. [ ] **Set the `/admin` credentials in Vercel production.** Several actions on this list run
    through `/admin` — the idea ratings above, the fixed costs below, the deck design switcher —
    and it needs `ADMIN_USER`, `ADMIN_PASSWORD` and a fine-grained `BOARDLESSAI_GITHUB_TOKEN`
    with Contents read/write on this repository (plus `BOARDLESSAI_GITHUB_REPOSITORY` and
@@ -74,7 +105,7 @@ social posting. The list below is those, in the order that unblocks the most.
 
 ## 2. Yours to decide
 
-5. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
+7. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
    the navigation, the footer and print; the page title, the social cards, the structured data
    and the Atom feed still say "Caught Up", which was your call and is not a bug. The deployment
    is still at `caughtup-ai.vercel.app`, the
@@ -84,7 +115,7 @@ social posting. The list below is those, in the order that unblocks the most.
    record the article URL they published to, so changing the project name means the older
    receipts point at the old host. [imp:3] [owner:me] [time:20m] [kind:setup]
 
-6. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
+8. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
    `config/fixed-costs.json` now carries `confirmedNoFixedCosts: true`, which says "there are
    none" rather than "nobody has entered any". If that is right, this item is done and you can
    tick it. If you do pay for something, enter each subscription with its monthly USD amount,
@@ -93,14 +124,30 @@ social posting. The list below is those, in the order that unblocks the most.
    wrong answer makes the company look cheaper than it is. Do not enter example prices.
    [imp:3] [owner:me] [time:15m] [kind:setup]
 
-7. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
+9. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
    the marketing room works from the current season; with none, it has a standing objective and
    no material. The warning appears in the room's own daily brief as the date approaches.
    [imp:2] [owner:me] [time:60m] [kind:content]
 
+10. [ ] **Decide how to unblock GitHub Actions minutes.** The three repositories were burning
+   about 342 runner-minutes a day against a 2,000-minute free tier, measured over 5–6 August.
+   The diet in this batch — three backstop crons instead of eighteen, a pre-check that ends a
+   settled slot in about a minute, path filters on CI — should bring that under ~100 a day, but
+   the current month is already spent and only you can clear it. Three options, in the order I
+   would take them:
+   - **Make `quorum` public.** The structural fix: unlimited free Actions minutes on standard
+     runners, at $0. `docs/SECRETS-AUDIT-2026-08-06.md` swept the working tree and the full
+     history of all three repositories and found no secret, so this is safe to do — but
+     visibility is yours to flip and I have not touched it.
+   - **GitHub Pro at $4/month.** Needs its own `HUMAN_APPROVAL` and a `config/fixed-costs.json`
+     entry, because it is real cash against the $30 all-in cap.
+   - **A temporary Actions spending limit.** A stopgap that costs money per minute and fixes
+     nothing structural.
+   [imp:5] [owner:me] [time:15m] [kind:decision]
+
 ## 3. Only before social posting
 
-8. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
+11. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
    accounts.
 
     | Venture | Actions secrets | Repository variables |
@@ -142,6 +189,23 @@ social posting. The list below is those, in the order that unblocks the most.
   non-fixture evidence refs in `state/EVIDENCE.jsonl`. This is not what holds the stage:
   `config/stages.json` reads `"current": "VALIDATION"` with `stageChangeAuthority: owner-only`.
   [imp:3] [owner:me] [time:60m] [kind:decision]
+
+- [ ] **Re-verify the pinned Apify actor prices and success rates each quarter.** The prices in
+  `config/goviral-sources.json` were verified live on 2026-08-06 and cannot be re-checked at
+  runtime — an actor's store page is not an API. Two of the six are community actors and young:
+  `themineworks/threads-scraper` was rebuilt on 2026-07-25 and had 104 users at pinning. If its
+  30-day success rate drops below about 95%, switch the primary to `magicfingers/threads-scraper`,
+  which is already in the config as the fallback. [imp:2] [owner:me] [time:20m] [kind:setup]
+
+- [ ] **Optionally apply for Google's official Trends API alpha.** Free, application-gated. If
+  granted it would replace the Trends RSS fetch with a supported endpoint. Nothing depends on
+  it and nothing may be built assuming it — the RSS path is the design.
+  [imp:1] [owner:me] [time:10m] [kind:setup]
+
+- [ ] **Re-enable the social publisher's schedule trigger when a channel connects.** Its hourly
+  cron is commented out in `.github/workflows/social-publisher.yml` because it fired
+  twenty-four times a day to confirm everything was still switched off. Restore it in the same
+  change that connects the first account. [imp:1] [owner:me] [time:5m] [kind:setup]
 
 ## Deliberately deferred
 

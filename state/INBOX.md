@@ -5,6 +5,31 @@ items in place. Lack of response never authorizes an action. -->
 
 ## Pending
 
+- [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001 — Create an Apify account on the **Free
+  plan** and add `APIFY_TOKEN` to the repository's Actions secrets, so GoVIRAL's
+  Monday trend room has data to read.
+  What this approves, exactly:
+  - **The plan:** Free, and only Free. No card is required and none should be
+    added. Its $5 of monthly platform credit is the budget guard: when the
+    credit is spent the actors simply stop, so an overspend is not possible
+    rather than merely unlikely.
+  - **What it costs:** $0 cash, now and on renewal. The weekly recipe uses about
+    $1.03 of the free credit and a month about $4.60 of the $5.
+  - **What it fetches:** logged-out public Instagram and Threads posts, through
+    six pinned actors listed in `config/goviral-sources.json`. None of them
+    takes a login or a cookie, so your own Instagram and Threads accounts are
+    never involved and carry no ban risk from this.
+  - **What is done with it:** engagement numbers are aggregated into a weekly
+    trend snapshot. Raw items are deleted after thirty days. No post, handle or
+    image is ever republished on any BoardlessAI surface.
+  - **Where the token is stored:** as the Actions secret `APIFY_TOKEN` on
+    `lukaskourilcz/quorum`, read only by `cycle.yml`.
+  Until the token exists the whole pipeline is a $0 no-op: the room opens on
+  Mondays, finds no scout data, records that in one plain sentence and spends
+  nothing. Everything else in the system is unaffected.
+  **Never upgrade the plan without a new approval.** Starter is $29/month, which
+  alone would consume the entire $30 all-in operating cap from `budget-2026-08e`.
+
 - [ ] HUMAN_APPROVAL DISPATCH-TOKEN-001 — Store a GitHub dispatch token and a
   cron secret on the `quorum-site` Vercel project, so the council's meetings
   start on their own hour instead of whenever GitHub's queue gets to them.
