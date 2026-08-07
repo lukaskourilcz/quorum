@@ -12,6 +12,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   assertBannerIsInert,
+  BANNER_SIZES,
   bannerSlotConfig,
   bannerSvg,
   MarketingSharkBannerContract,
@@ -28,12 +29,20 @@ async function main(): Promise<void> {
   const brand = config.brands.find((candidate) => candidate.id === "devshark")!;
   if (!brand.banner) throw new Error("devShark's banner flag is off; nothing to stage");
 
-  const svg = bannerSvg();
-  assertBannerIsInert(svg);
+  const creatives = (Object.keys(BANNER_SIZES) as Array<keyof typeof BANNER_SIZES>).map((size) => {
+    const svg = bannerSvg(size);
+    assertBannerIsInert(svg);
+    const { width, height } = BANNER_SIZES[size];
+    return { path: `public/images/banners/devshark-${width}x${height}.svg`, svg };
+  });
   const slot = `${JSON.stringify(bannerSlotConfig(brand), null, 2)}\n`;
 
   const files = [
-    { path: "public/banners/devshark.svg", sha256: sha256(svg), bytes: Buffer.byteLength(svg) },
+    ...creatives.map((creative) => ({
+      path: creative.path,
+      sha256: sha256(creative.svg),
+      bytes: Buffer.byteLength(creative.svg)
+    })),
     { path: "config/banner.json", sha256: sha256(slot), bytes: Buffer.byteLength(slot) }
   ];
 
@@ -41,9 +50,11 @@ async function main(): Promise<void> {
     schemaVersion: "marketingshark-banner/1",
     brandId: "devshark",
     targetRepo: "lukaskourilcz/aifirst",
-    // Verified at aifirst e5e9b4f: config/ holds board-changelog.json and topics.yml and no
-    // banner slot, so this payload supplies one. A slot that lands there later wins.
-    fallbackSpec: true,
+    // False, and checked rather than assumed: aifirst owns a banner-slot/1 config at
+    // config/banner.json with the today-partner-belt slot, landed at 5a94146. An earlier version
+    // of this script read a shallow clone taken hours before that commit, concluded the slot was
+    // absent, and would have overwritten it with an incompatible flat object.
+    fallbackSpec: false,
     files,
     payloadHash: payloadHashOf(files),
     humanApprovalRef: "INBOX:place-devshark-house-banner-on-dneskai",
@@ -52,9 +63,11 @@ async function main(): Promise<void> {
     receiptRef: null
   });
 
-  await mkdir(path.join(stagingRoot, "payload", "public", "banners"), { recursive: true });
+  await mkdir(path.join(stagingRoot, "payload", "public", "images", "banners"), { recursive: true });
   await mkdir(path.join(stagingRoot, "payload", "config"), { recursive: true });
-  await writeFile(path.join(stagingRoot, "payload", "public", "banners", "devshark.svg"), svg, "utf8");
+  for (const creative of creatives) {
+    await writeFile(path.join(stagingRoot, "payload", creative.path), creative.svg, "utf8");
+  }
   await writeFile(path.join(stagingRoot, "payload", "config", "banner.json"), slot, "utf8");
   await writeFile(path.join(stagingRoot, "contract.json"), `${JSON.stringify(contract, null, 2)}\n`, "utf8");
 

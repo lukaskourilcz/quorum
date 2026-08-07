@@ -3,6 +3,9 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   assertBannerIsInert,
+  BANNER_ASSET_PREFIX,
+  BANNER_SIZES,
+  BANNER_SLOT_ID,
   bannerSlotConfig,
   bannerSvg,
   BANNER_UTM,
@@ -16,10 +19,16 @@ import { repoRoot } from "../src/paths.js";
 const stagingRoot = path.join(repoRoot, "state", "ventures", "marketingshark", "banner");
 
 describe("devShark house banner", () => {
-  it("carries nothing executable, remote or tracked", () => {
+  it("carries nothing executable, remote or tracked, at both sizes", () => {
+    for (const size of ["desktop", "mobile"] as const) {
+      const each = bannerSvg(size);
+      expect(() => assertBannerIsInert(each)).not.toThrow();
+      expect(each).not.toMatch(/<script|onload=|onclick=/iu);
+      expect(each).toContain(`width="${BANNER_SIZES[size].width}"`);
+      expect(each).toContain(`height="${BANNER_SIZES[size].height}"`);
+    }
     const svg = bannerSvg();
     expect(() => assertBannerIsInert(svg)).not.toThrow();
-    expect(svg).not.toMatch(/<script|onload=|onclick=/iu);
     // The namespace declaration is not a request and a same-document url(#id) is not a fetch;
     // everything else that looks like one is.
     expect(() => assertBannerIsInert('<svg xmlns="http://www.w3.org/2000/svg"><rect fill="url(#g)"/></svg>')).not.toThrow();
@@ -51,17 +60,75 @@ describe("devShark house banner", () => {
     expect(svg).toMatch(/aria-label="[^"]+"/u);
   });
 
-  it("points the slot at the product with an honest label and ships switched off", async () => {
+  it("fills the target's own slot shape and ships switched off", async () => {
     const config = await loadMarketingSharkConfig();
     const brand = config.brands.find((candidate) => candidate.id === "devshark")!;
-    const slot = bannerSlotConfig(brand);
+    const slotConfig = bannerSlotConfig(brand);
+    const slot = slotConfig.slots[BANNER_SLOT_ID]!;
 
-    // The asset and the wiring arrive first and a person turns it on, so a delivery cannot place
-    // a banner on the reader site by itself.
-    expect(slot.enabled).toBe(false);
-    expect(slot.label).toBe("vlastní projekt");
+    // banner-slot/1 is DNESKAi's schema, not this venture's. The first staging run was built
+    // against a shallow clone taken hours before that slot landed and would have overwritten a
+    // live config with an incompatible flat object.
+    expect(slotConfig.schemaVersion).toBe("banner-slot/1");
+    expect(Object.keys(slotConfig.slots)).toEqual([BANNER_SLOT_ID]);
+
+    // The creatives and the wiring arrive first and a person turns the slot on, so a delivery
+    // cannot place a banner on the reader site by itself.
+    expect(slot.active).toBe(false);
     expect(slot.href).toBe(`https://devshark.app?${BANNER_UTM}`);
-    expect(slot.asset).toBe("public/banners/devshark.svg");
+
+    // The target renders its own "Partner" label, so the disclosure has to live in the fields
+    // this side owns or DNESKAi reads as if it sells partner placements.
+    expect(slot.advertiser).toContain("vlastní projekt");
+    expect(slot.alt).toContain("vlastní projekt");
+
+    // The target refuses any creative outside this prefix, and reads the refusal as an empty
+    // slot rather than an error, so a wrong path fails silently in production.
+    for (const creative of [slot.desktop, slot.mobile]) {
+      expect(creative.src.startsWith(BANNER_ASSET_PREFIX)).toBe(true);
+    }
+    expect(slot.desktop).toMatchObject(BANNER_SIZES.desktop);
+    expect(slot.mobile).toMatchObject(BANNER_SIZES.mobile);
+  });
+
+  it("keeps the staged payload parseable by the target's own validator", async () => {
+    // A transcription of lib/banner.ts from lukaskourilcz/aifirst at 5a94146. The staged config
+    // has to survive it, and has to survive it as an INACTIVE slot: anything malformed reads as
+    // empty there rather than throwing, so a broken payload looks exactly like an unfilled slot.
+    const LOCAL_PREFIX = "/images/banners/";
+    const creative = (value: unknown) => {
+      if (typeof value !== "object" || value === null) return null;
+      const { src, width, height } = value as Record<string, unknown>;
+      if (typeof src !== "string" || !src.startsWith(LOCAL_PREFIX)) return null;
+      if (typeof width !== "number" || typeof height !== "number") return null;
+      if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return null;
+      return { src, width, height };
+    };
+
+    const staged = JSON.parse(await readFile(
+      path.join(stagingRoot, "payload", "config", "banner.json"), "utf8")) as {
+        schemaVersion: string;
+        slots: Record<string, Record<string, unknown>>;
+      };
+
+    expect(staged.schemaVersion).toBe("banner-slot/1");
+    const slot = staged.slots[BANNER_SLOT_ID]!;
+    expect(slot.active).toBe(false);
+    expect(typeof slot.advertiser === "string" && slot.advertiser !== "").toBe(true);
+    expect(typeof slot.href === "string" && slot.href !== "").toBe(true);
+    expect(typeof slot.alt === "string" && slot.alt !== "").toBe(true);
+    expect(creative(slot.desktop)).not.toBeNull();
+    expect(creative(slot.mobile)).not.toBeNull();
+
+    // Every creative the config names is actually in the payload, and the contract says the
+    // target owns the slot rather than claiming to supply one.
+    const contract = MarketingSharkBannerContract.parse(
+      JSON.parse(await readFile(path.join(stagingRoot, "contract.json"), "utf8")));
+    expect(contract.fallbackSpec).toBe(false);
+    for (const value of [slot.desktop, slot.mobile]) {
+      expect(contract.files.map((file) => file.path))
+        .toContain(`public${(value as { src: string }).src}`);
+    }
   });
 
   it("is staged with a payload hash and delivered to nothing", async () => {

@@ -2,22 +2,27 @@
   "schemaVersion": "marketingshark-banner/1",
   "brandId": "devshark",
   "targetRepo": "lukaskourilcz/aifirst",
-  "fallbackSpec": true,
+  "fallbackSpec": false,
   "files": [
     {
-      "path": "public/banners/devshark.svg",
-      "sha256": "555a8292b8b7c95ea0b5ab4a8730c787e9f758e51bc6448249bb12698d343e8b",
-      "bytes": 1159
+      "path": "public/images/banners/devshark-728x90.svg",
+      "sha256": "dabd53624b77e2f02e519b700087373c7c93b8f770ef746c3d4cfd7e8c9fa11b",
+      "bytes": 1173
+    },
+    {
+      "path": "public/images/banners/devshark-320x100.svg",
+      "sha256": "f1973d6713b4d45fb2f5fe1538c42f72f56ebb8ee2e17b4b44c311b792cfbfa2",
+      "bytes": 982
     },
     {
       "path": "config/banner.json",
-      "sha256": "acfe3facc597cab0fa502ed1c961b0b1686bcd47af5a22aa4ddb2b3f099d70b4",
-      "bytes": 395
+      "sha256": "1e6362231c67372fbc174a2c6d2823016828d27c1c77cc704aa7db4a916c6c2d",
+      "bytes": 607
     }
   ],
-  "payloadHash": "0ce9fd61399ded5cea699d160866c96c72789076e506753247ecd5eb482e4f3c",
+  "payloadHash": "1aa924f58d4793e6754648ed956b6fe649f456c0e71e54147efbe249b94eacfe",
   "humanApprovalRef": "INBOX:place-devshark-house-banner-on-dneskai",
-  "preparedAt": "2026-08-07T09:21:14.030Z",
+  "preparedAt": "2026-08-07T12:26:45.031Z",
   "status": "staged",
   "receiptRef": null
 }
