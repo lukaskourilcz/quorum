@@ -230,7 +230,8 @@ export async function collectQuarterlyMeasurements(input: {
     goViralPlansRaw,
     goViralTrends,
     mmaRunsRaw,
-    deckReceiptsRaw
+    deckReceiptsRaw,
+    hookChannelsRaw
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -260,7 +261,8 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFiles(path.join(input.stateRoot, "ventures", "goviral", "plans")),
     jsonFiles(path.join(input.stateRoot, "goviral", "trends")),
     jsonFiles(path.join(input.stateRoot, "ventures", "mma-files", "runs")),
-    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "deck-receipts"))
+    jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "deck-receipts")),
+    jsonFile(path.join(input.stateRoot, "ventures", "carousel-studio", "hook-channels.json"))
   ]);
 
   const measurements: Record<string, number | null> = {};
@@ -493,6 +495,27 @@ export async function collectQuarterlyMeasurements(input: {
   const firstRender = renderCarouselSvg(deterministicInput).map((slide) => slide.svgHash);
   const secondRender = renderCarouselSvg(deterministicInput).map((slide) => slide.svgHash);
   measurements["state/ventures/carousel-studio#determinism_check_green"] = JSON.stringify(firstRender) === JSON.stringify(secondRender) ? 1 : 0;
+
+  /**
+   * Every posted carousel carries a decision about slide 1, one way or the other.
+   *
+   * A gate-valid assignment and a logged `no-hook` fallback both count as covered: a fallback is
+   * the correct outcome when nothing is eligible, and DNESKAi and MMA Files take it on every pack
+   * until their libraries are written. What this measure exists to catch is the third state — a
+   * post with no recorded decision at all, which means something rendered slide 1 outside the
+   * brain. The ratio is over posts, so it stays at 1 while the magazines fall back and only moves
+   * if a pack escapes the path.
+   */
+  const hookChannels = record(hookChannelsRaw);
+  const hookPosts = Object.values((hookChannels?.channels ?? {}) as Record<string, unknown>)
+    .flatMap((posts) => (Array.isArray(posts) ? posts : []))
+    .map((post) => record(post))
+    .filter((post): post is Record<string, unknown> => post !== null)
+    .filter((post) => dateInPeriod(typeof post.date === "string" ? post.date : undefined, periodStart, periodEnd));
+  const hookCovered = hookPosts.filter((post) =>
+    (typeof post.hookId === "string" && post.hookId !== "none") || typeof post.fallback === "string");
+  measurements["state/ventures/carousel-studio#hook_assignment_coverage"] =
+    hookPosts.length === 0 ? 1 : hookCovered.length / hookPosts.length;
   const iteratedBrands = new Set(studioObservationsRaw.flatMap((value) => {
     const observation = record(value);
     if (!dateInPeriod(observation?.retrievedAt, periodStart, periodEnd) || !Array.isArray(observation?.appliesTo)) return [];

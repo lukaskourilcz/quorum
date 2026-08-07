@@ -309,6 +309,17 @@
       "ramp_days": 0
     },
     {
+      "id": "carousel-studio.hook-assignment-coverage",
+      "venture": "carousel-studio",
+      "name": "Posted venture carousels carrying a gate-valid hook assignment or a logged no-hook fallback",
+      "metric_source": "state/ventures/carousel-studio#hook_assignment_coverage",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 14
+    },
+    {
       "id": "board.starvation-resolution-rate",
       "venture": "board",
       "name": "Starvation-list items commissioned or skipped with a reason",
