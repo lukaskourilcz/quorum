@@ -142,6 +142,12 @@ walkthrough and Carousel Studio are waiting on specifically.
   hashed under `state/ventures/marketingshark/banner/` with no receipt: the session
   that staged it cannot reach the delivery App credentials, so a later run delivers it
   within exactly the approved scope. [imp:3] [owner:me] [time:5m] [kind:decision]
+- [ ] **Turn on "Automatically delete head branches" on `lukaskourilcz/quorum`** —
+  Settings → General → Pull Requests. Sessions can push a branch but not delete one: the
+  agent proxy answers a delete-ref push with HTTP 403, so the git-workflow rule about never
+  leaving a stale branch behind is one no session can actually keep. The setting keeps it
+  automatically, and the branches already merged can go from the branch list in the same
+  visit. [imp:2] [owner:me] [time:2m] [kind:setup]
 - [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no
   public address, so their cards on the home page render nothing in the link slot rather
   than a "coming soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]
