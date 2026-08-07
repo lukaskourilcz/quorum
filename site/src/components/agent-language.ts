@@ -40,7 +40,9 @@ const titles: Record<AgentId, string> = {
   SPLIT: "Social test analyst",
   EASEL: "Carousel template designer",
   MOTIF: "Visual pattern researcher",
-  PIVOT: "MMA desk liaison"
+  PIVOT: "MMA desk liaison",
+  MAKO: "marketingShark director",
+  CHUM: "Carousel copywriter"
 };
 
 const mandates: Record<AgentId, string> = {
@@ -83,7 +85,9 @@ const mandates: Record<AgentId, string> = {
   SPLIT: "Stays idle until Phase 3 and blocks any early reader or post measurement.",
   EASEL: "Turns cited layout observations into original, checked and reusable carousel templates.",
   MOTIF: "Studies approved individual links as text-only visual observations without copying or storing external images.",
-  PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input."
+  PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input.",
+  MAKO: "Reviews what the daily carousel room shipped and keeps its hook rotation and its numbers honest.",
+  CHUM: "Writes each day's quiz carousel twice, once for Czech readers and once for English ones."
 };
 
 const replacements: ReadonlyArray<readonly [RegExp, string]> = [
