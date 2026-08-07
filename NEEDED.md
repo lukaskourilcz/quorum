@@ -142,16 +142,13 @@ walkthrough and Carousel Studio are waiting on specifically.
 - [ ] **Portraits for the roles that have none** — 27 of 40 registered roles have an approved
   portrait. The rest fall back to an initials tile on the team panel and to the anonymous
   silhouette in the workspace player, which is honest but plain. [imp:1] [owner:me] [time:1h] [kind:content]
-- [ ] **Decide what to do about the email now in public commit history** — the pre-publication
-  window for this one closed on 2026-08-07, when all three repositories went public.
-  `kouril.lukas@gmail.com` is the author or committer address on 10 of 89 commits here,
-  50 of 87 in `aifirst` and 29 of 57 in `mma-files`, so it is already published and readable.
-  It is personal data rather than a credential, and nothing is at risk beyond the address
-  itself. Two things still worth doing: turn on GitHub's "keep my email address private" plus
-  "block command line pushes that expose my email" so it cannot recur, and decide whether the
-  existing history is worth rewriting — which on a public repository means force-pushing three
-  repos and breaking every commit link already out there, so accepting it is a reasonable
-  answer. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [x] **The email in public commit history is accepted, decided 2026-08-07.**
+  `kouril.lukas@gmail.com` is the author or committer address on 10 of 89 commits here, 50 of
+  87 in `aifirst` and 29 of 57 in `mma-files`, and all three repositories are public. It is
+  personal data rather than a credential, so nothing is at risk beyond the address itself, and
+  the owner has accepted it. Do not propose rewriting history for this: on a public repository
+  that means force-pushing three repos and breaking every commit link already published, which
+  costs more than it fixes. Treat this as settled rather than re-raising it.
 - [ ] **Confirm the wallboard's five figures are the ones you want on the wall** — the home
   page's TV shows published articles, publishing reliability, cost per article, spend against
   the $30 limit and ideas from meetings, all read from the record. Any figure the record
