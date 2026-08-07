@@ -19,7 +19,7 @@ import {
   selectQuestion,
   type MarketingSharkLedger
 } from "./ledger.js";
-import { assignPackHook, channelRecordFor, hookLineFor } from "../../studio/hook-brain.js";
+import { assertHookAssignmentValid, assignPackHook, channelRecordFor, hookLineFor } from "../../studio/hook-brain.js";
 import { recordPost, writeHookChannels, type HookChannels } from "../../studio/hook-channels.js";
 import type { HookAssignment } from "../../contracts/hook-assignment.js";
 import type { Hook } from "@boardlessai/carousel-studio";
@@ -196,6 +196,10 @@ export function assemblePackage(input: {
   summaryPaths: string[];
   spendUsd: number;
 }): MarketingSharkPackage {
+  // The last place the bound is checked before the assignment becomes a file. An override that
+  // reached outside its eligible set, or a set edited after it was evaluated, stops here.
+  assertHookAssignmentValid(input.assignment);
+
   const lines = hookLinesFor(input);
   const alternateLines = hookLinesFor({ ...input, hook: input.alternate });
 

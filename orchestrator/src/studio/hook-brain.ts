@@ -1,6 +1,7 @@
 import {
   assignHook,
   assignmentSeed,
+  eligibleSetHash,
   readLibrary,
   renderHookText,
   type Hook,
@@ -107,6 +108,85 @@ export async function assignPackHook(input: HookBrainInput): Promise<HookBrainRe
     library,
     channels
   };
+}
+
+/** Why an override or an assignment was refused, in words a meeting record can carry. */
+export class HookOverrideError extends Error {
+  constructor(detail: string) {
+    super(detail);
+    this.name = "HookOverrideError";
+  }
+}
+
+/**
+ * Prove an assignment is still the one the gates licensed.
+ *
+ * The eligible set is the licence: every hook in it was checked against this item's own metadata,
+ * so anything inside it is honest and anything outside it is a claim nothing verified. Rehashing
+ * the recorded ids and comparing is what makes that binding rather than advisory — an override, a
+ * hand edit or a bug that widened `eligibleIds` to smuggle a hook in changes the hash, and the
+ * package stops validating.
+ *
+ * Called when the package is assembled, so a bad assignment can never reach a file.
+ */
+export function assertHookAssignmentValid(assignment: HookAssignment): void {
+  const recomputed = eligibleSetHash(assignment.eligibleIds);
+  if (recomputed !== assignment.eligibleSetHash) {
+    throw new HookOverrideError(
+      `The eligible set does not hash to its recorded snapshot (${recomputed.slice(0, 12)} vs `
+      + `${assignment.eligibleSetHash.slice(0, 12)}): the set was edited after it was evaluated`
+    );
+  }
+  if (assignment.hookId !== null && !assignment.eligibleIds.includes(assignment.hookId)) {
+    throw new HookOverrideError(
+      `Hook ${assignment.hookId} is not in the eligible set recorded for ${assignment.itemId}`
+    );
+  }
+}
+
+/**
+ * Swap the proposed hook for another member of the recorded eligible set.
+ *
+ * This is the whole of what an agent may do to slide 1, and it is the only thing an existing
+ * marketing meeting needs: assignment is deterministic $0 code, and agent judgment is an optional
+ * preference between hooks the gates have already licensed. There is no path from a meeting to a
+ * hook outside the set, to a rewritten line, or to a new library entry — those go through the
+ * authoring bar and the lint.
+ *
+ * The swap does not re-evaluate cooldown or variety. Both were applied when `availableIds` was
+ * computed, and a meeting choosing from that list is choosing from what the rotation already
+ * allowed.
+ */
+export function applyHookOverride(input: {
+  readonly assignment: HookAssignment;
+  readonly hookId: string;
+  readonly meetingRef: string;
+}): HookAssignment {
+  const { assignment, hookId, meetingRef } = input;
+
+  if (assignment.hookId === null) {
+    throw new HookOverrideError(
+      `${assignment.itemId} has no assignment to override: it fell back to no-hook (${assignment.noHookReason})`
+    );
+  }
+  if (hookId === assignment.hookId) {
+    throw new HookOverrideError(`${hookId} is already the assigned hook`);
+  }
+  if (!assignment.availableIds.includes(hookId)) {
+    const why = assignment.eligibleIds.includes(hookId)
+      ? "it is eligible but was filtered out by the channel cooldown or the archetype-variety rule"
+      : "it is not in the eligible set: its gates do not hold for this item";
+    throw new HookOverrideError(`${hookId} cannot be assigned to ${assignment.itemId} — ${why}`);
+  }
+
+  const overridden = HookAssignmentSchema.parse({
+    ...assignment,
+    hookId,
+    overriddenFrom: assignment.hookId,
+    overrideMeetingRef: meetingRef
+  });
+  assertHookAssignmentValid(overridden);
+  return overridden;
 }
 
 /** The channel record for this assignment, written beside the package. */

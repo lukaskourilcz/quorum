@@ -8,6 +8,8 @@ import { parseSafeHttpsUrl } from "../security/url.js";
 import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
 import { deterministicVariant } from "./pack.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
+import { assignPackHook, channelRecordFor } from "../studio/hook-brain.js";
+import { recordPost, writeHookChannels } from "../studio/hook-channels.js";
 
 function nextTuesday(date: string): string {
   const base = new Date(`${date}T12:00:00.000Z`);
@@ -73,6 +75,25 @@ export async function composeMmaFilesSocialQueue(input: {
   // production has been rendering type on a flat panel because it passed no images at all.
   const heroBytes = await toRenderablePng(Buffer.from(input.article.image.hero_bytes_base64, "base64"));
   const paths: string[] = [];
+
+  // MMA Files' hook library is not written yet, so every article takes the `no-hook` fallback and
+  // the deck's own cover headline renders. It runs through the brain from day one so the fallback
+  // is logged and countable rather than absent. Its authoring issue carries the two constraints
+  // that are not negotiable here: no teasing beyond what the article delivers, and no betting
+  // claims in a hook, ever. See docs/hooks/05-surfaces.md.
+  const hookDecision = await assignPackHook({
+    stateRoot: input.stateRoot,
+    surface: "mma",
+    channel: "mma-files-carousel",
+    date,
+    itemId: input.article.slug,
+    vertical: "dev",
+    languages: ["cs"]
+  });
+  paths.push(await writeHookChannels(
+    input.stateRoot,
+    recordPost(hookDecision.channels, hookDecision.assignment.channel, channelRecordFor(hookDecision.assignment, hookDecision.hook))
+  ));
   // Czech only: a queue item outlives the route it names, so none is built for a locale the
   // desk no longer publishes.
   for (const locale of ["cs"] as const) {
