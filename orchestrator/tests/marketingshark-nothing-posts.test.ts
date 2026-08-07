@@ -9,6 +9,7 @@ import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
 import { MarketingSharkPackage } from "../src/ventures/marketingshark/package.js";
 import { buildQueueItems } from "../src/ventures/marketingshark/queue.js";
 import { fixtureChumOutput, planBrandDay, runBrandDay } from "../src/ventures/marketingshark/run.js";
+import { repoRoot } from "../src/paths.js";
 
 async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: string }> {
   const root = await mkdtemp(path.join(tmpdir(), "ms-post-"));
@@ -35,7 +36,9 @@ async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: s
 
 describe("marketingShark cannot post", () => {
   it("keeps the global kill switch up and measurement closed in the committed environment", async () => {
-    const environment = await readFile(path.join(process.cwd(), "..", ".env.example"), "utf8");
+    // repoRoot, not process.cwd(): the working directory depends on where vitest was invoked
+    // from, and this file has to read the same .env.example whichever way the suite is started.
+    const environment = await readFile(path.join(repoRoot, ".env.example"), "utf8");
     expect(environment).toMatch(/^SOCIAL_KILL_SWITCH=true$/mu);
     expect(environment).toMatch(/^METRICS_INGESTION_ENABLED=false$/mu);
     // The venture added no channel, no token and no user id of its own.
