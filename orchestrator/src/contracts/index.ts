@@ -8,6 +8,7 @@ export * from "./common.js";
 export * from "./daily-digest.js";
 export * from "./edition-package.js";
 export * from "./hook-assignment.js";
+export * from "./hook-library.js";
 export * from "./idea-ledger.js";
 export * from "./kpi-set.js";
 export * from "./marketing-plan.js";

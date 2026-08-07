@@ -1084,6 +1084,146 @@ jobs:
         if: ${{ steps.target.outputs.status == 'needs_reconciliation' || steps.cu-proof.outputs.status == 'failed' }}
         run: exit 1
 
+      # ---------------------------------------------------------------------------------------
+      # hook-library/1 — the quiz apps receive the hook library as bounded data.
+      #
+      # Runs on the marketingShark slot because that is the room that touches hooks, and it is a
+      # no-op on every day the library has not changed: the CLI compares the package's
+      # idempotency key against the receipt and reports has_package=false. A library the lint
+      # rejects never gets this far — hooks:delivery refuses to cut a package at all, which is
+      # what "re-delivery only after lint:hooks passes" means in practice.
+      - name: Select pending hook library delivery
+        id: hook-delivery
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.phase == 'ms-daily' }}
+        run: pnpm hooks:delivery -- next --github-output "$GITHUB_OUTPUT"
+
+      - name: Mint bounded react-express-app installation token
+        id: hook-delivery-token
+        if: ${{ steps.hook-delivery.outputs.has_package == 'true' }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
+        with:
+          client-id: ${{ secrets.DELIVERY_APP_ID }}
+          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
+          owner: lukaskourilcz
+          repositories: react-express-app
+
+      - name: Deliver hook library to react-express-app main
+        id: hook-target
+        if: ${{ steps.hook-delivery.outputs.has_package == 'true' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.hook-delivery-token.outputs.token }}
+          PACKAGE_PATH: ${{ steps.hook-delivery.outputs.package_path }}
+          PACKAGE_HASH12: ${{ steps.hook-delivery.outputs.package_hash12 }}
+          HOOK_COUNT: ${{ steps.hook-delivery.outputs.hook_count }}
+        run: |
+          clone_root=""
+          for attempt in 1 2; do
+            candidate="$RUNNER_TEMP/react-express-app-delivery-$attempt"
+            if git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/react-express-app.git" "$candidate"; then
+              clone_root="$candidate"
+              break
+            fi
+          done
+          if test -z "$clone_root"; then
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            echo "failure_code=unreachable" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Contents-only: this writes the two files out of the package envelope itself and runs
+          # nothing from the target repository. There is no consumer script to trust, because
+          # there is nothing to transform — the app receives the bytes this repo linted.
+          if ! node -e '
+            const { readFileSync, writeFileSync, mkdirSync } = require("node:fs");
+            const { createHash } = require("node:crypto");
+            const path = require("node:path");
+            const pkg = JSON.parse(readFileSync(process.argv[1], "utf8"));
+            if (pkg.schemaVersion !== "hook-library/1") throw new Error("[delivery:schema_invalid] not a hook-library/1 package");
+            if (pkg.lint.errors !== 0) throw new Error("[delivery:content_invalid] package records a failing lint");
+            for (const file of pkg.files) {
+              if (!/^lib\/hooks\/[a-z0-9.-]+\.json$/.test(file.path)) throw new Error(`[delivery:content_invalid] ${file.path} is outside lib/hooks/`);
+              const actual = createHash("sha256").update(file.contents, "utf8").digest("hex");
+              if (actual !== file.sha256) throw new Error(`[delivery:hash_conflict] ${file.path} does not match its hash`);
+              const target = path.join(process.argv[2], file.path);
+              mkdirSync(path.dirname(target), { recursive: true });
+              writeFileSync(target, file.contents, "utf8");
+            }
+          ' "$PACKAGE_PATH" "$clone_root" > "$RUNNER_TEMP/hook-consumer.log" 2>&1; then
+            cat "$RUNNER_TEMP/hook-consumer.log"
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            if grep -q '\[delivery:hash_conflict\]' "$RUNNER_TEMP/hook-consumer.log"; then
+              echo "failure_code=hash_conflict" >> "$GITHUB_OUTPUT"
+            else
+              echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
+            fi
+            echo "detail_file=$RUNNER_TEMP/hook-consumer.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Its own delivery kind with its own allowlist, the same way a dataset append is not an
+          # edition: a hook delivery can never touch the app's source, and nothing else can write
+          # lib/hooks/.
+          allowed='^lib/hooks/(quiz\.hooks|hooks\.predicates\.spec)\.json$'
+          unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
+          if test -n "$unexpected"; then
+            printf '%s\n%s\n' "Hook delivery touched unauthorized paths:" "$unexpected" > "$RUNNER_TEMP/hook-delivery-error.log"
+            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+            echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
+            echo "detail_file=$RUNNER_TEMP/hook-delivery-error.log" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git -C "$clone_root" add lib/hooks
+          echo "created_commit=false" >> "$GITHUB_OUTPUT"
+          if ! git -C "$clone_root" diff --cached --quiet; then
+            git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
+            git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+            git -C "$clone_root" commit -m "hooks(${HOOK_COUNT}): sync hook library [package:${PACKAGE_HASH12}]"
+            echo "created_commit=true" >> "$GITHUB_OUTPUT"
+            pushed=false
+            for attempt in 1 2; do
+              if git -C "$clone_root" push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              git -C "$clone_root" fetch --depth 1 origin main
+              if ! git -C "$clone_root" rebase --autostash origin/main; then
+                git -C "$clone_root" rebase --abort || true
+                break
+              fi
+            done
+            if test "$pushed" != "true"; then
+              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
+              echo "failure_code=push_rejected" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "status=delivered" >> "$GITHUB_OUTPUT"
+          echo "target_commit=$(git -C "$clone_root" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Record the hook library delivery
+        if: ${{ steps.hook-target.outputs.status == 'delivered' }}
+        env:
+          TARGET_COMMIT: ${{ steps.hook-target.outputs.target_commit }}
+          PACKAGE_HASH12: ${{ steps.hook-delivery.outputs.package_hash12 }}
+        run: |
+          pnpm hooks:delivery -- record --commit "$TARGET_COMMIT"
+          git add -A -- state/ventures/carousel-studio
+          if ! git diff --cached --quiet; then
+            git config user.name "boardlessai-cycle[bot]"
+            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+            git commit -m "hooks: delivered library [package:${PACKAGE_HASH12}]"
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then break; fi
+              git fetch origin "$GITHUB_REF_NAME"
+              if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
+                git rebase --abort || true
+                break
+              fi
+            done
+          fi
+
+      - name: Fail closed on hook delivery reconciliation
+        if: ${{ steps.hook-target.outputs.status == 'needs_reconciliation' }}
+        run: exit 1
+
       - name: Select pending MMA Files delivery
         id: mma-delivery
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}

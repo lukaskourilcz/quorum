@@ -29,6 +29,7 @@
     "lint": "pnpm -r lint",
     "lint:hooks": "pnpm --filter @boardlessai/orchestrator exec tsx ../studio/src/hooks/lint-cli.ts",
     "hooks:vectors": "pnpm --filter @boardlessai/orchestrator exec tsx ../studio/src/hooks/vectors-cli.ts",
+    "hooks:delivery": "pnpm --filter @boardlessai/orchestrator exec tsx src/studio/hook-delivery-cli.ts",
     "marketingshark:stage-banner": "pnpm --filter @boardlessai/orchestrator exec tsx ../scripts/marketingshark-stage-banner.ts",
     "marketingshark:import-bank": "pnpm --filter @boardlessai/orchestrator exec tsx ../scripts/marketingshark-import-bank.ts",
     "org:maintain": "pnpm --filter @boardlessai/orchestrator org:maintain",
