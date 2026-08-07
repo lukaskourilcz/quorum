@@ -61,6 +61,23 @@ function ventureName(id: string, name: string): string {
   return id === "caught-up" ? "DNESKAi" : name;
 }
 
+/**
+ * Money at headline size, always to the cent.
+ *
+ * `formatUsd` allows four decimals because a single model call costs a fraction of a cent and the
+ * detail tables need that precision. At 26px beside "of the $30.00 limit" the same function
+ * printed "$2.901", which reads as a typo rather than as a sum. The tiles round; the tables that
+ * account for the pennies still do not.
+ */
+function tileUsd(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value);
+}
+
 function Tile({
   label,
   value,
@@ -157,12 +174,21 @@ export default async function AdminPage({
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
 
+  /**
+   * How many stored items a workspace holds.
+   *
+   * Three ventures keep their work outside the portfolio card store, so counting cards reported 0
+   * for them — FightAIQ showed nothing on a rail beside a workspace holding twelve hundred fighter
+   * records. Each of those three is counted from the loader that actually reads it.
+   */
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "carousel-studio"
         ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
-        : fallback;
+        : ventureId === "fightaiq"
+          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.slates.length + fightaiq.sources.length
+          : fallback;
 
   const files = [
     { name: "Things only you can approve", content: state.inbox },
@@ -266,21 +292,21 @@ export default async function AdminPage({
               foot={`of the ${formatUsd(CURRENT_MONTHLY_OPERATING_LIMIT_USD)} limit`}
               label="Month to date"
               percent={(monthAllIn / CURRENT_MONTHLY_OPERATING_LIMIT_USD) * 100}
-              value={formatUsd(monthAllIn)}
+              value={tileUsd(monthAllIn)}
             />
             <Tile
               brand={brand}
               foot={latestDay ? `recorded ${latestDay.date}` : "no day on record yet"}
               label="Latest recorded day"
               percent={latestDay ? Math.min(100, latestDay.totalCostUsd * 100) : 0}
-              value={latestDay ? formatUsd(latestDay.totalCostUsd) : "—"}
+              value={latestDay ? tileUsd(latestDay.totalCostUsd) : "—"}
             />
             <Tile
               brand={brand}
               foot={`of ${formatUsd(CURRENT_MONTHLY_API_LIMIT_USD)}`}
               label="Model share"
               percent={(monthApi / CURRENT_MONTHLY_API_LIMIT_USD) * 100}
-              value={formatUsd(monthApi)}
+              value={tileUsd(monthApi)}
             />
             <Tile
               brand={brand}
