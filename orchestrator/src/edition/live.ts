@@ -27,6 +27,7 @@ import { discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/l
 import { illustrativeScenePhoto } from "../images/illustrative-scenes.js";
 import { imageSubjectQuery } from "../images/subject-query.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
+import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -415,5 +416,10 @@ export async function runLiveEdition(input: {
     }
   });
   if (outboxPath) await atomicWriteJson(root, outboxPath, editionPackage);
+  // The edition also reaches Carousel Studio, as a summary rather than as the edition: the
+  // headline, the standfirst and the editor's own points, in the order they made them. A
+  // `no_edition` package writes nothing, because an edition that did not go out has nothing to
+  // put on a slide, and its reason is already recorded above.
+  await storeEditionCarouselSummary(root, editionPackage);
   return { package: editionPackage, report, sourceRun, outboxPath, reportPath, monthApiUsd };
 }

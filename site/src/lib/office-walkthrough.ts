@@ -26,6 +26,7 @@ import { getPublicMoneySnapshot } from "@/lib/money-records";
 import { getPublicArticleSlots } from "@/lib/article-slots";
 import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
 import { getPublicStandups } from "@/lib/standup-records";
+import { VENTURE_BRAND } from "@/lib/venture-brand";
 import { getPublicCalendarSchedule } from "@/lib/venture-registry";
 
 /**
@@ -59,22 +60,8 @@ export type OfficeProjectKey =
   | "titty-tuesdays"
   | "carousel-studio";
 
-/**
- * The venture hue the public calendar already uses.
- *
- * Kept as literal hex rather than the `color-mix()` the board uses, because these cross to the
- * client as inline styles on a canvas that also composes them into `brand + "26"` alpha suffixes,
- * and `color-mix()` does not concatenate.
- */
-export const PROJECT_COLOR: Record<OfficeProjectKey, string> = {
-  company: "#ff5a00",
-  "caught-up": "#fe45e2",
-  "mma-files": "#f7a8ea",
-  fightaiq: "#fecaca",
-  goviral: "#bbf7d0",
-  "titty-tuesdays": "#fde68a",
-  "carousel-studio": "#d4d4d8"
-};
+/** The venture hue the public calendar already uses, shared with the admin rail. */
+export const PROJECT_COLOR = VENTURE_BRAND as Record<OfficeProjectKey, string>;
 
 export function projectForKind(kind: string): OfficeProjectKey {
   if (kind === "cu-edition" || kind === "cu-product") return "caught-up";

@@ -3,6 +3,7 @@ import path from "node:path";
 import { ArticlePackageSchema, SocialVariantPackSchema, type ArticlePackage, type SocialVariantPack } from "../contracts/mma-files.js";
 import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
 import { atomicWriteText } from "../state.js";
+import { storeArticleCarouselSummary } from "../studio/carousel-summary-store.js";
 import { articleRef, hasValidArticlePackageHash } from "./hash.js";
 import type { SocialRender } from "./frame.js";
 
@@ -61,6 +62,12 @@ export async function storeArticlePackage(
   for (const { filename } of superseded) await rm(path.join(directory, filename), { force: true });
   const relative = articleRelativePath(article);
   await atomicWriteJson(root, relative, article);
+  // Every article that reaches MMA Files also reaches Carousel Studio, as a summary rather than
+  // as the article: the headline, the standfirst and a handful of the desk's own passages. It is
+  // written here, beside the package, because this is the one place an article becomes stored —
+  // and it is derived rather than requested, so it costs nothing and cannot disagree with the
+  // piece it came from.
+  await storeArticleCarouselSummary(root, article);
   return {
     path: relative,
     idempotent: false,
