@@ -29,7 +29,7 @@ method.
 
 ## Owner and roles
 
-- Operator: Lukas Kouril (kouril.lukas@gmail.com)
+- Operator: Lukas Kouril (contact via the repository owner account)
 - Incident owner and approver: Lukas Kouril
 - Emergency stop: repository variable `AUTONOMY_KILL_SWITCH=false` for the
   approved runtime; the owner can restore it to `true` at once
