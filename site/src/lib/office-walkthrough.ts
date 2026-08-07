@@ -57,6 +57,7 @@ export type OfficeProjectKey =
   | "mma-files"
   | "fightaiq"
   | "goviral"
+  | "marketingshark"
   | "titty-tuesdays"
   | "carousel-studio";
 
@@ -67,6 +68,7 @@ export function projectForKind(kind: string): OfficeProjectKey {
   if (kind === "cu-edition" || kind === "cu-product") return "caught-up";
   if (kind === "tt-marketing") return "titty-tuesdays";
   if (kind === "gv-brief") return "goviral";
+  if (kind === "ms-daily") return "marketingshark";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
   if (kind === "studio") return "carousel-studio";
@@ -172,7 +174,7 @@ export interface OfficeChannel {
 }
 
 /**
- * The English handle, room name, hour and topic for each of the seven channels.
+ * The English handle, room name, hour and topic for each of the eight channels.
  *
  * `meeting-feed.ts` owns the channel ids and the kinds that route into them; it deliberately makes
  * no language decision. This is that decision. The ids stay as the data layer named them so the
@@ -185,6 +187,13 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
   topic: string;
   project: OfficeProjectKey;
 }> = {
+  "marketingshark-carousel-room": {
+    handle: "marketingshark-daily",
+    room: "marketingShark carousel room",
+    time: "07:00",
+    topic: "One quiz question, drawn as a Czech and an English carousel and left as a draft.",
+    project: "marketingshark"
+  },
   "vydani-dneskai": {
     handle: "dneskai-edition",
     room: "DNESKAi edition",

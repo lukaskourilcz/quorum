@@ -16,7 +16,8 @@ const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
   "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
-  "articles", "calendar", "social-lab", "templates", "inspiration", "decks"
+  "articles", "calendar", "social-lab", "templates", "inspiration", "decks",
+  "packages"
 ] as const;
 
 export type AdminVentureTab = (typeof adminTabs)[number];
@@ -121,6 +122,28 @@ async function safeDirectory(directory: string): Promise<string[]> {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw error;
+  }
+}
+
+/** Subdirectory names, sorted. Missing is empty, because a venture that has not run yet is not an error. */
+async function directoryEntries(directory: string): Promise<string[]> {
+  try {
+    return (await readdir(directory, { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  }
+}
+
+/** A JSON file that may not exist, or may not parse. Both read as absent to the caller. */
+async function optionalJsonFile(absolute: string): Promise<unknown> {
+  try {
+    return JSON.parse(await readFile(absolute, "utf8")) as unknown;
+  } catch {
+    return null;
   }
 }
 
@@ -362,6 +385,54 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
   );
 }
 
+/**
+ * marketingShark's drafted packages, read from what is committed.
+ *
+ * The admin tab is the whole review surface for this venture: nothing publishes, so a person
+ * reading these cards is the only thing between a draft and the bin. Each card names the question,
+ * the hook that fronted it and the alternate that did not, and carries the recorded render
+ * summaries as media rather than rebuilding the slides from the copy.
+ */
+async function packageCards(root: string, ventureId: string, ratings: readonly RatingRecord[]): Promise<{ cards: AdminCard[]; unreadable: string[] }> {
+  if (ventureId !== "marketingshark") return { cards: [], unreadable: [] };
+  const packagesRoot = path.join(root, "state", "ventures", "marketingshark", "packages");
+  const cards: AdminCard[] = [];
+  const unreadable: string[] = [];
+
+  for (const date of (await directoryEntries(packagesRoot)).filter((name) => /^\d{4}-\d{2}-\d{2}$/.test(name))) {
+    for (const brand of await directoryEntries(path.join(packagesRoot, date))) {
+      const relative = `ventures/marketingshark/packages/${date}/${brand}/package.json`;
+      const parsed = object(await optionalJsonFile(path.join(packagesRoot, date, brand, "package.json")));
+      if (!parsed) {
+        unreadable.push(relative);
+        continue;
+      }
+      const question = object(parsed.question);
+      const hooks = object(parsed.hooks);
+      const hookA = object(hooks?.a);
+      const hookB = object(hooks?.b);
+      const render = object(parsed.render);
+      const id = `marketingshark-${date}-${brand}`;
+      cards.push({
+        id,
+        ventureId,
+        kind: "social-variant",
+        title: `${brand} · ${date}`,
+        summary: `Question ${String(question?.id ?? "unknown")} (${String(question?.category ?? "?")}). Hook ${String(hookA?.patternId ?? "?")}, alternate ${String(hookB?.patternId ?? "?")}. ${String(hookA?.en ?? "")}`.trim(),
+        detailPath: null,
+        status: String(parsed.status ?? "unavailable"),
+        originMeetingRef: `meetings/${date}-ms-daily`,
+        createdAt: date,
+        updatedAt: date,
+        contentHash: contentHash(JSON.stringify(parsed)),
+        media: Array.isArray(render?.summaryPaths) ? render.summaryPaths.filter((entry): entry is string => typeof entry === "string") : [],
+        ratings: ratingsFor(ratings, id)
+      });
+    }
+  }
+  return { cards, unreadable };
+}
+
 interface VentureConfig {
   id: string;
   name: string;
@@ -400,21 +471,23 @@ export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPo
   ]);
   const ventures = await Promise.all(configs.map(async (venture): Promise<AdminVenture> => {
     const ratingState = await readRatings(root, venture.id);
-    const [ideas, plans, visuals] = await Promise.all([
+    const [ideas, plans, visuals, packages] = await Promise.all([
       ideaCards(root, venture.id, venture.ledgerNamespace, ratingState.ratings),
       planRecords(root, venture.id, ratingState.ratings),
-      visualCards(root, venture.id, ratingState.ratings)
+      visualCards(root, venture.id, ratingState.ratings),
+      packageCards(root, venture.id, ratingState.ratings)
     ]);
     return {
       id: venture.id,
       name: venture.name,
       status: venture.status,
       tabs: venture.adminTabs,
-      cards: [...ideas.cards, ...plans.cards, ...visuals]
+      cards: [...ideas.cards, ...plans.cards, ...visuals, ...packages.cards]
         .sort((left, right) => (right.updatedAt ?? "").localeCompare(left.updatedAt ?? "") || left.id.localeCompare(right.id)),
       unreadableFiles: [
         ...ideas.unreadable,
         ...plans.unreadable,
+        ...packages.unreadable,
         ...(venture.id === "caught-up" ? social.unreadableFiles.map((file) => `social/${file}`) : []),
         ...(ratingState.malformed ? [`ratings/${venture.id}/ledger.jsonl`] : [])
       ]

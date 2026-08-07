@@ -9,6 +9,20 @@ import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.j
 export type DeliveryHealth = "passed" | "failed" | "no-edition";
 export type SocialVenture = "caught-up" | "mma-files" | "titty-tuesdays";
 
+export const SOCIAL_VENTURES: readonly SocialVenture[] = ["caught-up", "mma-files", "titty-tuesdays"];
+
+/**
+ * Whether a queue item's venture owns a social account at all.
+ *
+ * Not every venture that writes a queue item publishes from one. marketingShark drafts bilingual
+ * carousels for a human to review and has no channel, no credentials and no activation record, so
+ * the publisher has to be able to tell "switched off" from "was never a publisher" -- reading
+ * `.status` off a missing activation record would have thrown and taken the whole run with it.
+ */
+export function isPublishingVenture(venture: string): venture is SocialVenture {
+  return (SOCIAL_VENTURES as readonly string[]).includes(venture);
+}
+
 export const SOCIAL_DECISION_REFERENCE = "D2-autonomy-build-2026-08-01" as const;
 
 export const SOCIAL_CREDENTIALS: Record<SocialVenture, readonly string[]> = {

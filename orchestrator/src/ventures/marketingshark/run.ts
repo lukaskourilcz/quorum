@@ -20,7 +20,9 @@ import {
 } from "./ledger.js";
 import { ChumOutput, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
+import { buildQueueItems } from "./queue.js";
 import { engineVersion, renderCarousel, type RenderedRoleSlide } from "./render.js";
+import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
 export const MS_DAILY_PHASE = "ms-daily";
@@ -196,6 +198,7 @@ export async function commitBrandDay(input: {
   hookAId: string;
   hookBId: string;
   relaxed: boolean;
+  queueItems: ReturnType<typeof buildQueueItems>;
 }): Promise<string[]> {
   const relative = packagePath(input.date, input.brand.id);
   await mkdir(path.join(input.root, path.dirname(relative)), { recursive: true });
@@ -204,6 +207,12 @@ export async function commitBrandDay(input: {
     await atomicWriteJson(input.root, summary.relative, summary.body);
   }
   await atomicWriteJson(input.root, relative, input.built);
+
+  // Draft-locked, and written in the same breath as the package so a reviewer never finds copy
+  // with no queue entry or a queue entry pointing at copy that was never committed.
+  for (const { relative: queuePath, item } of input.queueItems) {
+    await atomicWriteJson(input.root, queuePath, item);
+  }
 
   const nextLedger = recordServed(input.ledger, input.brand.id, input.selection.brandLedger, {
     date: input.date,
@@ -216,7 +225,12 @@ export async function commitBrandDay(input: {
   });
   await atomicWriteJson(input.root, LEDGER_PATH, nextLedger);
 
-  return [relative, ...input.summaries.map((summary) => summary.relative), LEDGER_PATH];
+  return [
+    relative,
+    ...input.summaries.map((summary) => summary.relative),
+    ...input.queueItems.map((entry) => entry.relative),
+    LEDGER_PATH
+  ];
 }
 
 export function summaryPathsFor(date: string, brandId: string): { cs: string; en: string } {
@@ -239,9 +253,11 @@ export async function runBrandDay(input: {
   cycleId: string;
   root: string;
   dry: boolean;
+  now?: Date;
   call: (packet: string, attempt: number) => Promise<{ output: ChumOutput; usd: number }>;
 }): Promise<{ outcome: BrandOutcome; ledger: MarketingSharkLedger; artifacts: string[] }> {
   const { brand, date } = input;
+  const now = input.now ?? new Date(`${date}T07:00:00.000Z`);
   let spendUsd = 0;
 
   let plan: Awaited<ReturnType<typeof planBrandDay>>;
@@ -362,7 +378,8 @@ export async function runBrandDay(input: {
     selection: plan.selection,
     hookAId: plan.hooks.a.id,
     hookBId: plan.hooks.b.id,
-    relaxed: plan.hooks.relaxed
+    relaxed: plan.hooks.relaxed,
+    queueItems: buildQueueItems({ built, brand, now })
   });
 
   return {
@@ -549,7 +566,97 @@ export async function runMarketingSharkCycle(input: {
     if (result.outcome.status === "aborted") spendUsd += result.outcome.spendUsd;
   }
 
+  const recordPath = `meetings/${input.date}-${MS_DAILY_PHASE}.json`;
+  await atomicWriteJson(root, recordPath, buildMeetingRecord({
+    cycleId: input.cycleId,
+    date: input.date,
+    now: input.now,
+    stage: input.stage,
+    dry: input.dry,
+    outcomes,
+    spendUsd,
+    envelopeUsd: 0.1 * brands.length
+  }));
+  artifacts.push(recordPath);
+
   return { date: input.date, dry: input.dry, brands: outcomes, spendUsd, skipped: null, artifacts };
+}
+
+/**
+ * The room's record, in the same shape and with the same sanitising as every other room.
+ *
+ * The transcript is three deterministic turns rather than a conversation, because that is what
+ * happened: MAKO opens with the day's objective, CHUM reports what it drafted, AUDIT states the
+ * locks that held. Writing it as a debate would be a nicer record of a meeting that did not occur.
+ */
+export function buildMeetingRecord(input: {
+  cycleId: string;
+  date: string;
+  now: Date;
+  stage: Stage;
+  dry: boolean;
+  outcomes: readonly BrandOutcome[];
+  spendUsd: number;
+  envelopeUsd: number;
+}) {
+  const drafted = input.outcomes.filter((outcome) => outcome.status === "drafted");
+  const aborted = input.outcomes.filter((outcome) => outcome.status === "aborted");
+  const times = Array.from({ length: 4 }, (_, index) => new Date(input.now.getTime() + index * 60_000).toISOString());
+  const summary = drafted.length === 0
+    ? aborted.length > 0
+      ? `No package was drafted. ${aborted.map((outcome) => `${outcome.brandId}: ${outcome.reason}`).join("; ")}.`
+      : "Every enabled brand already had today's package; nothing was re-served."
+    : `${drafted.length} draft ${drafted.length === 1 ? "package" : "packages"}: ${drafted.map((outcome) => `${outcome.brandId} (${outcome.hookA}/${outcome.hookB}${outcome.relaxed ? ", cooldown relaxed" : ""})`).join("; ")}.`;
+
+  return MeetingRecordSchema.parse({
+    schemaVersion: "meeting-record/2",
+    cycleId: input.cycleId,
+    date: input.date,
+    phase: MS_DAILY_PHASE,
+    kind: MS_DAILY_PHASE,
+    fixture: input.dry,
+    status: input.dry ? "PLAN" : "HELD",
+    stage: input.stage,
+    operatingBrief: "Turn one selected question into one Czech and one English five-slide carousel per enabled brand, as a draft behind the approval queue.",
+    participantReasons: [
+      { agent: "MAKO", reason: "directs the venture and chairs the bounded room", participated: true },
+      { agent: "CHUM", reason: "writes the day's bilingual copy", participated: drafted.length > 0 },
+      { agent: "AUDIT", reason: "serves the veto seat", participated: true }
+    ],
+    ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.spendUsd, monthAllInUsd: 0, monthCapUsd: 30 },
+    decision: {
+      outcome: drafted.length > 0 ? "PLAN" : "NO_ACTION",
+      summary,
+      evidenceRefs: drafted.map((outcome) => `marketingshark:question:${outcome.questionId}`)
+    },
+    proposals: drafted.map((outcome) => ({
+      agent: "CHUM",
+      summary: `${outcome.brandId}: question ${outcome.questionId}, hook ${outcome.hookA}, alternate ${outcome.hookB}.`,
+      evidenceRefs: [`marketingshark:question:${outcome.questionId}`]
+    })),
+    voteMatrix: [
+      { voter: "MAKO", firstChoice: drafted.length > 0 ? "approve" : "abstain", veto: false },
+      { voter: "AUDIT", firstChoice: "approve", veto: false }
+    ],
+    tasks: [],
+    growthPlan: "Drafts only. Nothing here posts, schedules, buys or opens an account: SOCIAL_KILL_SWITCH is the supreme stop, marketingShark owns no channel or credentials, and every queue item is written as a draft with all approval checks pending.",
+    eveningOutcome: null,
+    roomTranscript: {
+      openedAt: times[0],
+      closedAt: times[3],
+      gavel: "MAKO",
+      setting: input.dry
+        ? "Deterministic dry room. The reply is a labeled fixture and no provider was contacted."
+        : "Live bounded room. One model call per enabled brand, and the question, hooks, templates and slide-5 line were all decided in code before it.",
+      turns: [
+        { agent: "MAKO", mode: "gavel", sentAt: times[0], text: "One question, one Czech and one English carousel per enabled brand." },
+        { agent: "CHUM", mode: "statement", sentAt: times[1], text: summary },
+        { agent: "AUDIT", mode: "statement", sentAt: times[2], text: "Truth gates ran on every returned draft. Nothing was published, queued or scheduled." },
+        { agent: "MAKO", mode: "close", sentAt: times[3], text: summary }
+      ]
+    },
+    generatedAt: times[3]
+  });
 }
 
 export { enabledBrands, loadMarketingSharkConfig, guardedJsonCall, readFile, writeFile };

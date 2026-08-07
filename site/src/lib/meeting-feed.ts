@@ -23,7 +23,8 @@ export const WORKSPACE_CHANNELS = [
   { id: "redakcni-porada-mma", label: "MMA Files story desk" },
   { id: "vecerni-redakce", label: "MMA Files evening desk" },
   { id: "titty-tuesdays-marketing", label: "Titty Tuesdays marketing" },
-  { id: "goviral-trend-room", label: "GoVIRAL trend room" }
+  { id: "goviral-trend-room", label: "GoVIRAL trend room" },
+  { id: "marketingshark-carousel-room", label: "marketingShark carousel room" }
 ] as const;
 
 export type WorkspaceChannelId = (typeof WORKSPACE_CHANNELS)[number]["id"];
@@ -48,7 +49,8 @@ const CHANNEL_BY_KIND: Record<string, WorkspaceChannelId> = {
   "article-pm": "redakcni-porada-mma",
   "mag-desk": "vecerni-redakce",
   "tt-marketing": "titty-tuesdays-marketing",
-  "gv-brief": "goviral-trend-room"
+  "gv-brief": "goviral-trend-room",
+  "ms-daily": "marketingshark-carousel-room"
 };
 
 export function channelForKind(kind: string): WorkspaceChannelId | null {

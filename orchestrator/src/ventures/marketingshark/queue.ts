@@ -1,0 +1,90 @@
+import { QueueItemSchema, queuePayloadHash, type QueueItem } from "../../social/queue.js";
+import type { Brand } from "./config.js";
+import type { MarketingSharkPackage } from "./package.js";
+
+export function queueItemPath(date: string, brandId: string, locale: "cs" | "en", channel: "instagram" | "threads"): string {
+  return `social/queue/${date}-${brandId}-${locale}-${channel}.json`;
+}
+
+/**
+ * One draft queue item per language per channel, and nothing that could publish.
+ *
+ * Three separate things keep these drafts: `SOCIAL_KILL_SWITCH` is the supreme stop and beats
+ * every venture unlock; the item is written with `status: "draft"`, and only `queued` or
+ * `publishing` reaches the publisher; and every approval check is `pending`, which
+ * `assertQueueItemPublishable` refuses outright. Nothing here weakens any of the three -- the
+ * item is a record of what was drafted, addressed to a human.
+ *
+ * `assetPaths` is deliberately empty. The rendered SVGs live in state beside the package, not
+ * under `site/public/social`, so an Instagram item could not become publishable without a person
+ * placing hosted assets first. That is the correct shape for a venture with no credentials, no
+ * channel and no publishing path.
+ */
+export function buildQueueItems(input: {
+  built: MarketingSharkPackage;
+  brand: Brand;
+  now: Date;
+}): Array<{ relative: string; item: QueueItem }> {
+  const { built, brand } = input;
+  const createdAt = input.now.toISOString();
+  const notBefore = new Date(`${built.date}T06:00:00.000Z`).toISOString();
+  const notAfter = new Date(`${built.date}T21:00:00.000Z`).toISOString();
+
+  return (["cs", "en"] as const).flatMap((locale) =>
+    (["instagram", "threads"] as const).map((channel) => {
+      const text = channel === "instagram"
+        ? `${built.descriptions.instagram[locale]}\n\n${built.hashtags.instagram[locale].join(" ")}`
+        : built.descriptions.threads[locale];
+      const draft = {
+        schemaVersion: 1 as const,
+        id: `ms-${built.date}-${brand.id}-${locale}-${channel}`,
+        venture: "marketingshark" as const,
+        locale,
+        variant: "A" as const,
+        campaignId: `marketingshark-${built.date}-${brand.id}`,
+        // The B hook is recorded on the package rather than as a second queue item: SPLIT is
+        // retired and nothing measures, so a second item would imply a test that does not exist.
+        experimentId: null,
+        channel,
+        objective: "value_action" as const,
+        audience: brand.tone === "dev" ? "Working developers who want one real question a day" : "People who enjoy geography",
+        destination: brand.productUrl,
+        utm: {
+          source: channel,
+          medium: "organic_social" as const,
+          campaign: `marketingshark-${brand.id}`,
+          content: `${built.date}-${locale}-${built.question.id}`
+        },
+        content: {
+          text,
+          altText: built.carousels[locale].slides.map((slide) => slide.alt).join(" "),
+          assetPaths: [],
+          factualClaimRefs: [`marketingshark:question:${built.question.id}`],
+          rendererVersion: "carousel-studio-1" as const,
+          contentHash: "0".repeat(64)
+        },
+        publishWindow: { notBefore, notAfter },
+        status: "draft" as const,
+        checks: {
+          schema: "pending" as const,
+          brand: "pending" as const,
+          claims: "pending" as const,
+          quill: "pending" as const,
+          keeper: "pending" as const,
+          duplicate: "pending" as const,
+          accessibility: "pending" as const,
+          budget: "pending" as const
+        },
+        selectedBy: "MAKO" as const,
+        createdAt,
+        attempt: null,
+        receiptId: null
+      };
+      const item = QueueItemSchema.parse({
+        ...draft,
+        content: { ...draft.content, contentHash: queuePayloadHash(draft) }
+      });
+      return { relative: queueItemPath(built.date, brand.id, locale, channel), item };
+    })
+  );
+}
