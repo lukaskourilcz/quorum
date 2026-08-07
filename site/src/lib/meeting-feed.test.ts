@@ -85,7 +85,7 @@ function messagesIn(channels: ReturnType<typeof buildMeetingFeed>, id: string): 
 
 describe("the workspace channel map", () => {
   it("routes every room a reader can open, and nothing else", () => {
-    expect(WORKSPACE_CHANNELS).toHaveLength(7);
+    expect(WORKSPACE_CHANNELS).toHaveLength(8);
     expect(channelForKind("cu-edition")).toBe("vydani-dneskai");
     expect(channelForKind("gv-brief")).toBe("goviral-trend-room");
     expect(channelForKind("tt-marketing")).toBe("titty-tuesdays-marketing");

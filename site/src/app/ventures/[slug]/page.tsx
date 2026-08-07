@@ -21,6 +21,7 @@ import { TittyTuesdaysVenturePage } from "@/components/titty-tuesdays-venture-pa
 import { FightAiQVenturePage } from "@/components/fightaiq-venture-page";
 import { CarouselStudioVenturePage } from "@/components/carousel-studio-venture-page";
 import { GoViralVenturePage } from "@/components/goviral-venture-page";
+import { MarketingSharkVenturePage } from "@/components/marketingshark-venture-page";
 import {
   opportunities,
   opportunityDimensions
@@ -30,7 +31,7 @@ export function generateStaticParams() {
   // The founding test rejected three sample business ideas, and each of them had a page here
   // that read like a project the company runs. The ideas stay on the record where they were
   // rejected; they stop being routes.
-  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "goviral" }, { slug: "fightaiq" }, { slug: "carousel-studio" }];
+  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "goviral" }, { slug: "marketingshark" }, { slug: "fightaiq" }, { slug: "carousel-studio" }];
 }
 
 export async function generateMetadata({
@@ -53,6 +54,7 @@ export async function generateMetadata({
     };
   }
   if (slug === "goviral") return { title: "GoVIRAL", description: "The weekly room that reads public trend data and turns it into things to write." };
+  if (slug === "marketingshark") return { title: "marketingShark", description: "The daily room that turns one devShark quiz question into a Czech and an English carousel." };
   if (slug === "fightaiq") return { title: "FightAIQ", description: "The UFC and Oktagon data layer that delivers checked fight files to MMA Files." };
   if (slug === "carousel-studio") return { title: "Carousel Studio", description: "BoardlessAI's deterministic carousel template engine and live layout gallery." };
   const opportunity = opportunities.find((item) => item.slug === slug);
@@ -72,6 +74,7 @@ export default async function VentureDetailPage({
   if (slug === "caught-up") return <CaughtUpVenturePage />;
   if (slug === "titty-tuesdays") return <TittyTuesdaysVenturePage />;
   if (slug === "goviral") return <GoViralVenturePage />;
+  if (slug === "marketingshark") return <MarketingSharkVenturePage />;
   if (slug === "fightaiq") return <FightAiQVenturePage />;
   if (slug === "carousel-studio") return <CarouselStudioVenturePage />;
   const opportunity = opportunities.find((item) => item.slug === slug);

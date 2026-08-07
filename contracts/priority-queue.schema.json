@@ -86,7 +86,9 @@
               "SPLIT",
               "EASEL",
               "MOTIF",
-              "PIVOT"
+              "PIVOT",
+              "MAKO",
+              "CHUM"
             ]
           },
           "created": {
@@ -188,7 +190,9 @@
                       "SPLIT",
                       "EASEL",
                       "MOTIF",
-                      "PIVOT"
+                      "PIVOT",
+                      "MAKO",
+                      "CHUM"
                     ]
                   },
                   "meeting_ref": {

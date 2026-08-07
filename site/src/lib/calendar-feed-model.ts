@@ -9,6 +9,7 @@ export type CalendarKind =
   | "cu-product"
   | "tt-marketing"
   | "gv-brief"
+  | "ms-daily"
   | "incubator-scan"
   | "incubator-synthesis"
   | "mma-intake"
@@ -71,6 +72,7 @@ export interface PublicCalendarFeed {
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 5, kind: "cu-edition", label: "Edition production" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
+  { hour: 7, kind: "ms-daily", label: "marketingShark daily carousel room" },
   { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
   { hour: 9, kind: "mag-editorial", label: "MMA Files morning story meeting" },
   { hour: 10, kind: "article-am", label: "MMA Files daily article" },

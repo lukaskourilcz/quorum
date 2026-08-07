@@ -238,7 +238,7 @@
       "ventures": "global",
       "department": "Growth",
       "title": "Trend Scout",
-      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it — never inventing a trend the data cannot support.",
+      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it \u2014 never inventing a trend the data cannot support.",
       "responsibilities": [
         "Read the week's scout snapshot and name what is rising, with its velocity number",
         "Say which signals are rank-only and cannot be called engagement",
@@ -2120,6 +2120,118 @@
         "avatar": null,
         "avatarAlt": "Abstract non-human portrait plan for PIVOT with two rings joined by a cited hinge",
         "provenanceRef": "AVATAR-PIVOT"
+      }
+    },
+    {
+      "id": "MAKO",
+      "slug": "mako",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "marketingshark"
+      ],
+      "department": "marketingShark",
+      "title": "marketingShark Director",
+      "mission": "Keeps the daily quiz-carousel venture honest: brand configuration, the weekly package review, hook-library proposals and KPI truthfulness.",
+      "responsibilities": [
+        "Review the week's packages against the craft rules",
+        "Propose hook-library additions and retirements",
+        "Report hook rotation and coverage honestly"
+      ],
+      "notResponsibleFor": [
+        "Posting or scheduling anything",
+        "Editing the hook library directly",
+        "Estimating a metric that has no measurement"
+      ],
+      "decisionRights": [
+        "Reject a package that overstated its question",
+        "Request one allowlisted follow-up room"
+      ],
+      "ownedKpiIds": [
+        "marketingshark.hook_rotation_coverage",
+        "marketingshark.truth_gate_violations"
+      ],
+      "successChecks": [
+        "Every weekly review names dates and quotes lines rather than generalising",
+        "Hook coverage stays above ten distinct patterns per brand per 30 days"
+      ],
+      "capabilityTags": [
+        "marketing:direction",
+        "review",
+        "kpi:honesty"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-07",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:MAKO:v1",
+      "skillRefs": [
+        ".claude/skills/copywriting/SKILL.md",
+        ".claude/skills/social/SKILL.md",
+        ".claude/skills/marketing-psychology/SKILL.md",
+        ".claude/skills/product-marketing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "a dorsal fin cut from a rotation dial",
+        "accentToken": "agent-mako",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for MAKO with a dorsal fin cut from a rotation dial",
+        "provenanceRef": "AVATAR-MAKO"
+      }
+    },
+    {
+      "id": "CHUM",
+      "slug": "chum",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "marketingshark"
+      ],
+      "department": "marketingShark",
+      "title": "Carousel Copywriter, CS and EN",
+      "mission": "Writes one Czech and one English five-slide carousel per brand per day from the question the room already selected, plus its descriptions and alt text.",
+      "responsibilities": [
+        "Fill the assigned hook pattern truthfully",
+        "Write native-register Czech rather than a translation",
+        "Compress the explanation without losing the concrete detail"
+      ],
+      "notResponsibleFor": [
+        "Choosing the question, the hook or the template",
+        "Rendering, packaging or publishing",
+        "Rewriting the brand's slide-5 line"
+      ],
+      "decisionRights": [
+        "Fill a hook plainer when the assigned wording would overstate"
+      ],
+      "ownedKpiIds": [
+        "marketingshark.package_completeness"
+      ],
+      "successChecks": [
+        "Czech and the English carousel both clear the truth gates on the first call",
+        "Code blocks reach the slide byte-identical to the question bank"
+      ],
+      "capabilityTags": [
+        "copywriting",
+        "czech:native",
+        "social:carousel"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-07",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:CHUM:v1",
+      "skillRefs": [
+        ".claude/skills/copywriting/SKILL.md",
+        ".claude/skills/social/SKILL.md",
+        ".claude/skills/marketing-psychology/SKILL.md",
+        ".claude/skills/product-marketing/SKILL.md"
+      ],
+      "visual": {
+        "motif": "five stacked slide edges under a single bite mark",
+        "accentToken": "agent-chum",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for CHUM with five stacked slide edges under a single bite mark",
+        "provenanceRef": "AVATAR-CHUM"
       }
     }
   ]

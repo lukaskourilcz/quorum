@@ -5,7 +5,7 @@ import { SocialActivationSchema, SocialPostReceiptSchema } from "../contracts/au
 import { atomicWriteJson, readJson, withFileLock } from "../state.js";
 import { configRoot as defaultConfigRoot, repoRoot as defaultRepoRoot, stateRoot as defaultStateRoot } from "../paths.js";
 import { pragueClockParts } from "../meetings/clock.js";
-import { refreshSocialActivation, pauseVentureSocial } from "./activation.js";
+import { refreshSocialActivation, pauseVentureSocial, isPublishingVenture, type SocialVenture } from "./activation.js";
 import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
 import { createMetaPublishAdapter } from "./meta.js";
 import type { PublishAdapter } from "./publish.js";
@@ -81,7 +81,12 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       new Date(item.publishWindow.notBefore).getTime() <= now.getTime() &&
       new Date(item.publishWindow.notAfter).getTime() >= now.getTime()
     );
-    const enabledDue = due.filter(({ item }) => activation.ventures[item.venture].status === "enabled");
+    // A venture with no activation record is not a venture that is switched off -- it is one that
+    // has no social account at all, and marketingShark is the first of those. Its items are drafts
+    // addressed to a human. Looking it up and reading `.status` off undefined would have thrown
+    // here and taken the whole publisher run with it, so the absence is checked rather than assumed.
+    const enabledDue = due.filter(({ item }) =>
+      isPublishingVenture(item.venture) && activation.ventures[item.venture].status === "enabled");
 
     for (const { item } of enabledDue) {
       const queued = item.status === "draft" ? { ...item, status: "queued" as const } : item;
@@ -171,7 +176,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       if (succeeded) published += 1;
       else {
         failed += 1;
-        await pauseVentureSocial({ stateRoot, venture: queued.venture, reason: `Post ${queued.id} failed twice: ${receipt.error}`, now });
+        await pauseVentureSocial({ stateRoot, venture: queued.venture as SocialVenture, reason: `Post ${queued.id} failed twice: ${receipt.error}`, now });
       }
     }
     return { status: "complete", queueItems: entries.length, due: due.length, published, ambiguous: failed, skipped: due.length - enabledDue.length + safetyKilled };

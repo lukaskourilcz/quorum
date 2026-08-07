@@ -9,275 +9,579 @@
   },
   "agents": {
     "VIZE": {
-      "capabilities": ["strategy", "opportunity", "stage"],
+      "capabilities": [
+        "strategy",
+        "opportunity",
+        "stage"
+      ],
       "status": "active"
     },
     "FORGE": {
-      "capabilities": ["build", "release", "incident"],
+      "capabilities": [
+        "build",
+        "release",
+        "incident"
+      ],
       "status": "active"
     },
     "PULSE": {
-      "capabilities": ["growth", "pricing", "social", "campaign"],
+      "capabilities": [
+        "growth",
+        "pricing",
+        "social",
+        "campaign"
+      ],
       "status": "active"
     },
     "AUDIT": {
-      "capabilities": ["audit", "quality", "risk"],
+      "capabilities": [
+        "audit",
+        "quality",
+        "risk"
+      ],
       "status": "active"
     },
     "SCOUT": {
-      "capabilities": ["evidence", "sources", "trend:signals"],
+      "capabilities": [
+        "evidence",
+        "sources",
+        "trend:signals"
+      ],
       "status": "active"
     },
     "SCRIBE": {
-      "capabilities": ["summary", "public_projection"],
+      "capabilities": [
+        "summary",
+        "public_projection"
+      ],
       "status": "paused"
     },
     "LENS": {
-      "capabilities": ["analytics", "forecast"],
+      "capabilities": [
+        "analytics",
+        "forecast"
+      ],
       "status": "paused"
     },
     "QUILL": {
-      "capabilities": ["copy", "claims"],
+      "capabilities": [
+        "copy",
+        "claims"
+      ],
       "status": "active"
     },
     "RADAR": {
-      "capabilities": ["seo", "discoverability"],
+      "capabilities": [
+        "seo",
+        "discoverability"
+      ],
       "status": "paused"
     },
     "KEEPER": {
-      "capabilities": ["compliance", "privacy", "permissions"],
+      "capabilities": [
+        "compliance",
+        "privacy",
+        "permissions"
+      ],
       "status": "active"
     },
     "THREADS": {
-      "capabilities": ["social:threads"],
+      "capabilities": [
+        "social:threads"
+      ],
       "status": "paused"
     },
     "INSTAGRAM": {
-      "capabilities": ["social:instagram", "visual_social"],
+      "capabilities": [
+        "social:instagram",
+        "visual_social"
+      ],
       "status": "paused"
     },
     "PEOPLE": {
-      "capabilities": ["org_review", "role_design", "routing_quality"],
+      "capabilities": [
+        "org_review",
+        "role_design",
+        "routing_quality"
+      ],
       "status": "active"
     },
     "LEDGER": {
-      "capabilities": ["accounting", "cost", "budget", "unit_economics"],
+      "capabilities": [
+        "accounting",
+        "cost",
+        "budget",
+        "unit_economics"
+      ],
       "status": "active"
     },
     "HERALD": {
-      "capabilities": ["edition:chair", "editorial:selection"],
+      "capabilities": [
+        "edition:chair",
+        "editorial:selection"
+      ],
       "status": "active"
     },
     "STET": {
-      "capabilities": ["editorial:copy", "quality:slop"],
+      "capabilities": [
+        "editorial:copy",
+        "quality:slop"
+      ],
       "status": "active"
     },
     "HACEK": {
-      "capabilities": ["editorial:czech", "editorial:register", "social:czech"],
+      "capabilities": [
+        "editorial:czech",
+        "editorial:register",
+        "social:czech"
+      ],
       "status": "active"
     },
     "SPARK": {
-      "capabilities": ["growth:product", "bridge:venture"],
+      "capabilities": [
+        "growth:product",
+        "bridge:venture"
+      ],
       "status": "active"
     },
     "VAULT": {
-      "capabilities": ["memory:ledger", "org:memory"],
+      "capabilities": [
+        "memory:ledger",
+        "org:memory"
+      ],
       "status": "active"
     },
     "FRAME": {
-      "capabilities": ["media:compose", "media:qa"],
+      "capabilities": [
+        "media:compose",
+        "media:qa"
+      ],
       "status": "active"
     },
     "RELAY": {
-      "capabilities": ["ops:delivery", "ops:notify"],
+      "capabilities": [
+        "ops:delivery",
+        "ops:notify"
+      ],
       "status": "active"
     },
     "ANGLE": {
-      "capabilities": ["strategy:positioning", "campaign:brief", "niche:analysis"],
+      "capabilities": [
+        "strategy:positioning",
+        "campaign:brief",
+        "niche:analysis"
+      ],
       "status": "active"
     },
     "COHORT": {
-      "capabilities": ["audience:spec", "targeting:public", "privacy:audience"],
+      "capabilities": [
+        "audience:spec",
+        "targeting:public",
+        "privacy:audience"
+      ],
       "status": "active"
     },
     "FUNNEL": {
-      "capabilities": ["marketing:performance", "campaign:plan", "cost:estimate"],
+      "capabilities": [
+        "marketing:performance",
+        "campaign:plan",
+        "cost:estimate"
+      ],
       "status": "paused"
     },
     "PALATE": {
-      "capabilities": ["taste:memory", "ratings:distill", "visual:weights"],
+      "capabilities": [
+        "taste:memory",
+        "ratings:distill",
+        "visual:weights"
+      ],
       "status": "active"
     },
     "SCENE": {
-      "capabilities": ["scene:research", "competition:evidence", "streetwear:signals"],
+      "capabilities": [
+        "scene:research",
+        "competition:evidence",
+        "streetwear:signals"
+      ],
       "status": "active"
     },
     "STUNT": {
-      "capabilities": ["marketing:guerrilla", "legality:note", "platform:safety"],
+      "capabilities": [
+        "marketing:guerrilla",
+        "legality:note",
+        "platform:safety"
+      ],
       "status": "active"
     },
     "CORNER": {
-      "capabilities": ["mma:scouting", "mma:ufc"],
+      "capabilities": [
+        "mma:scouting",
+        "mma:ufc"
+      ],
       "status": "active"
     },
     "SPOTTER": {
-      "capabilities": ["mma:scouting", "mma:oktagon", "language:czech"],
+      "capabilities": [
+        "mma:scouting",
+        "mma:oktagon",
+        "language:czech"
+      ],
       "status": "active"
     },
     "TAPE": {
-      "capabilities": ["mma:analysis", "mma:adjustment", "evidence"],
+      "capabilities": [
+        "mma:analysis",
+        "mma:adjustment",
+        "evidence"
+      ],
       "status": "active"
     },
     "SIGMA": {
-      "capabilities": ["mma:model", "statistics", "calibration"],
+      "capabilities": [
+        "mma:model",
+        "statistics",
+        "calibration"
+      ],
       "status": "active"
     },
     "VIG": {
-      "capabilities": ["mma:odds", "mma:market", "responsible_play"],
+      "capabilities": [
+        "mma:odds",
+        "mma:market",
+        "responsible_play"
+      ],
       "status": "active"
     },
     "SONAR": {
-      "capabilities": ["mma:sources", "source:terms", "source:discovery"],
+      "capabilities": [
+        "mma:sources",
+        "source:terms",
+        "source:discovery"
+      ],
       "status": "active"
     },
     "CANVAS": {
-      "capabilities": ["editorial:chair", "mma:newsroom", "language:czech"],
+      "capabilities": [
+        "editorial:chair",
+        "mma:newsroom",
+        "language:czech"
+      ],
       "status": "active"
     },
     "JAB": {
-      "capabilities": ["editorial:writing", "mma:reporting", "language:czech"],
+      "capabilities": [
+        "editorial:writing",
+        "mma:reporting",
+        "language:czech"
+      ],
       "status": "active"
     },
     "REACH": {
-      "capabilities": ["social:editorial", "media:compose", "language:czech"],
+      "capabilities": [
+        "social:editorial",
+        "media:compose",
+        "language:czech"
+      ],
       "status": "active"
     },
     "SPLIT": {
-      "capabilities": ["phase3:standby", "measurement:guard"],
+      "capabilities": [
+        "phase3:standby",
+        "measurement:guard"
+      ],
       "status": "retired"
     },
     "EASEL": {
-      "capabilities": ["carousel:template", "design:system", "media:deterministic"],
+      "capabilities": [
+        "carousel:template",
+        "design:system",
+        "media:deterministic"
+      ],
       "status": "retired"
     },
     "MOTIF": {
-      "capabilities": ["visual:research", "source:provenance", "originality:guard"],
+      "capabilities": [
+        "visual:research",
+        "source:provenance",
+        "originality:guard"
+      ],
       "status": "retired"
     },
     "PIVOT": {
-      "capabilities": ["mma:bridge", "evidence", "portfolio:liaison"],
+      "capabilities": [
+        "mma:bridge",
+        "evidence",
+        "portfolio:liaison"
+      ],
+      "status": "active"
+    },
+    "MAKO": {
+      "capabilities": [
+        "marketing:direction",
+        "review",
+        "kpi:honesty"
+      ],
+      "status": "active"
+    },
+    "CHUM": {
+      "capabilities": [
+        "copywriting",
+        "czech:native",
+        "social:carousel"
+      ],
       "status": "active"
     }
   },
   "mandatoryWhen": [
     {
-      "any": ["spend", "pricing", "revenue", "cost"],
-      "include": ["LEDGER"]
+      "any": [
+        "spend",
+        "pricing",
+        "revenue",
+        "cost"
+      ],
+      "include": [
+        "LEDGER"
+      ]
     },
     {
-      "any": ["external_spend"],
-      "include": ["KEEPER"]
+      "any": [
+        "external_spend"
+      ],
+      "include": [
+        "KEEPER"
+      ]
     },
     {
-      "any": ["org_change"],
-      "include": ["PEOPLE", "AUDIT", "KEEPER"]
+      "any": [
+        "org_change"
+      ],
+      "include": [
+        "PEOPLE",
+        "AUDIT",
+        "KEEPER"
+      ]
     },
     {
-      "any": ["public_claim"],
-      "include": ["QUILL", "AUDIT", "KEEPER"]
+      "any": [
+        "public_claim"
+      ],
+      "include": [
+        "QUILL",
+        "AUDIT",
+        "KEEPER"
+      ]
     },
     {
-      "any": ["public_social"],
-      "include": ["KEEPER"]
+      "any": [
+        "public_social"
+      ],
+      "include": [
+        "KEEPER"
+      ]
     },
     {
-      "any": ["security", "incident"],
-      "include": ["AUDIT", "KEEPER", "FORGE"]
+      "any": [
+        "security",
+        "incident"
+      ],
+      "include": [
+        "AUDIT",
+        "KEEPER",
+        "FORGE"
+      ]
     },
     {
-      "any": ["social:threads"],
-      "include": ["PULSE", "THREADS", "QUILL"]
+      "any": [
+        "social:threads"
+      ],
+      "include": [
+        "PULSE",
+        "THREADS",
+        "QUILL"
+      ]
     },
     {
-      "any": ["social:instagram"],
-      "include": ["PULSE", "INSTAGRAM", "QUILL"]
+      "any": [
+        "social:instagram"
+      ],
+      "include": [
+        "PULSE",
+        "INSTAGRAM",
+        "QUILL"
+      ]
     },
     {
-      "any": ["visual", "media:compose"],
-      "include": ["FRAME"]
+      "any": [
+        "visual",
+        "media:compose"
+      ],
+      "include": [
+        "FRAME"
+      ]
     },
     {
-      "any": ["delivery", "notification", "email", "calendar"],
-      "include": ["RELAY"]
+      "any": [
+        "delivery",
+        "notification",
+        "email",
+        "calendar"
+      ],
+      "include": [
+        "RELAY"
+      ]
     },
     {
-      "any": ["source_coverage_low"],
-      "include": ["SCOUT"]
+      "any": [
+        "source_coverage_low"
+      ],
+      "include": [
+        "SCOUT"
+      ]
     }
   ],
   "presets": {
     "daily-standup": {
-      "required": ["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER"],
+      "required": [
+        "VIZE",
+        "FORGE",
+        "PULSE",
+        "AUDIT",
+        "LEDGER"
+      ],
       "optionalByTopic": true
     },
     "venture-morning": {
-      "required": ["VIZE", "FORGE", "PULSE", "AUDIT", "LEDGER", "SPARK"],
+      "required": [
+        "VIZE",
+        "FORGE",
+        "PULSE",
+        "AUDIT",
+        "LEDGER",
+        "SPARK"
+      ],
       "optionalByTopic": true
     },
     "edition-room": {
-      "required": ["HERALD", "STET", "HACEK"],
+      "required": [
+        "HERALD",
+        "STET",
+        "HACEK"
+      ],
       "optionalByTopic": true
     },
     "product-room": {
-      "required": ["HERALD", "SPARK", "VAULT", "AUDIT"],
+      "required": [
+        "HERALD",
+        "SPARK",
+        "VAULT",
+        "AUDIT"
+      ],
       "optionalByTopic": true
     },
     "build-room": {
-      "required": ["FORGE", "AUDIT"],
+      "required": [
+        "FORGE",
+        "AUDIT"
+      ],
       "optionalByTopic": true
     },
     "growth-room": {
-      "required": ["PULSE"],
+      "required": [
+        "PULSE"
+      ],
       "optionalByTopic": true
     },
     "tt-marketing-room": {
-      "required": ["PULSE", "ANGLE", "AUDIT"],
+      "required": [
+        "PULSE",
+        "ANGLE",
+        "AUDIT"
+      ],
       "optionalByTopic": false
     },
     "gv-brief-room": {
-      "required": ["PULSE", "SCOUT", "ANGLE", "AUDIT"],
+      "required": [
+        "PULSE",
+        "SCOUT",
+        "ANGLE",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
+    },
+    "ms-daily-room": {
+      "required": [
+        "MAKO",
+        "CHUM",
+        "AUDIT"
+      ],
       "optionalByTopic": false
     },
     "mma-intake-room": {
-      "required": ["FORGE", "CORNER", "SPOTTER", "TAPE"],
+      "required": [
+        "FORGE",
+        "CORNER",
+        "SPOTTER",
+        "TAPE"
+      ],
       "optionalByTopic": false
     },
     "mma-analysis-room": {
-      "required": ["FORGE", "SIGMA", "VIG", "TAPE", "PIVOT", "AUDIT"],
+      "required": [
+        "FORGE",
+        "SIGMA",
+        "VIG",
+        "TAPE",
+        "PIVOT",
+        "AUDIT"
+      ],
       "optionalByTopic": false
     },
     "mag-editorial-room": {
-      "required": ["CANVAS", "JAB", "QUILL", "AUDIT"],
+      "required": [
+        "CANVAS",
+        "JAB",
+        "QUILL",
+        "AUDIT"
+      ],
       "optionalByTopic": false
     },
     "mag-desk-room": {
-      "required": ["CANVAS", "PIVOT", "AUDIT"],
+      "required": [
+        "CANVAS",
+        "PIVOT",
+        "AUDIT"
+      ],
       "optionalByTopic": false
     },
     "evidence-room": {
-      "required": ["VIZE", "SCOUT"],
+      "required": [
+        "VIZE",
+        "SCOUT"
+      ],
       "optionalByTopic": true
     },
     "finance-room": {
-      "required": ["LEDGER", "PULSE"],
+      "required": [
+        "LEDGER",
+        "PULSE"
+      ],
       "optionalByTopic": true
     },
     "org-review": {
-      "required": ["PEOPLE", "AUDIT", "KEEPER"],
+      "required": [
+        "PEOPLE",
+        "AUDIT",
+        "KEEPER"
+      ],
       "includeAffectedAgent": true
     },
     "incident-room": {
-      "required": ["AUDIT", "KEEPER", "FORGE"],
+      "required": [
+        "AUDIT",
+        "KEEPER",
+        "FORGE"
+      ],
       "optionalByTopic": true
     }
   }

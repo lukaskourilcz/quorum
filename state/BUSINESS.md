@@ -46,7 +46,7 @@ Effective countersigned all-in hard cap: $30 USD.
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
 The owner countersigned `budget-2026-08e` on 2026-08-02. It sets one $30 limit,
-a $25 model share and a $1.00 daily pace for all six projects. Project-specific
+a $25 model share and a $1.00 daily pace for all seven projects. Project-specific
 live switches and evidence gates still decide whether a meeting may run.
 
 Fixed subscriptions are unavailable until the owner enters the real names, amounts,

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "banner-slot/1",
+  "slots": {
+    "today-partner-belt": {
+      "active": false,
+      "advertiser": "devShark (vlastní projekt)",
+      "href": "https://devshark.app?utm_source=dneskai&utm_medium=banner&utm_campaign=devshark-house",
+      "alt": "devShark, vlastní projekt BoardlessAI — kvízová hra pro vývojáře",
+      "desktop": {
+        "src": "/images/banners/devshark-728x90.svg",
+        "width": 728,
+        "height": 90
+      },
+      "mobile": {
+        "src": "/images/banners/devshark-320x100.svg",
+        "width": 320,
+        "height": 100
+      }
+    }
+  }
+}

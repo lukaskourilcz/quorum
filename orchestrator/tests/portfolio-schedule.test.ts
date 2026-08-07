@@ -39,10 +39,11 @@ Signature / explicit approval reference: owner-approval-2026-08-04`;
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
-    // 07:00 and 21:00 left with the closed incubator and 18:00 with the evening article slot.
-    // 13:00 came back: the studio room the venture no longer holds vacated it and GoVIRAL took
-    // it, which is why the hour is here and the studio phase is not.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 8, 9, 11, 13, 14, 17, 19, 20, 22]);
+    // 21:00 left with the closed incubator and 18:00 with the evening article slot. 13:00 came
+    // back: the studio room the venture no longer holds vacated it and GoVIRAL took it, which is
+    // why the hour is here and the studio phase is not. 07:00 came back the same way --
+    // marketingShark took the hour the incubator vacated.
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);

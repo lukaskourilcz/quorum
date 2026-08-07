@@ -109,6 +109,33 @@ async function studioTemplateFiles(directory: string): Promise<Array<{ status?: 
   return [...SEED_TEMPLATES, ...found];
 }
 
+/**
+ * Complete marketingShark packages on disk, counted without importing the package schema.
+ *
+ * They nest two levels — `packages/<date>/<brand>/package.json` — which `files` does not walk, and
+ * a shape check here rather than a zod parse keeps the autonomy snapshot from failing closed on a
+ * single malformed day. Complete means what the growth objective claims: both carousels present
+ * and a render recorded. A package missing either is not cadence, it is a half-finished morning.
+ */
+async function marketingSharkPackages(root: string): Promise<number> {
+  const dates = await readdir(root, { withFileTypes: true }).catch(() => []);
+  let complete = 0;
+  for (const date of dates.filter((entry) => entry.isDirectory())) {
+    const brands = await readdir(path.join(root, date.name), { withFileTypes: true }).catch(() => []);
+    for (const brand of brands.filter((entry) => entry.isDirectory())) {
+      const parsed = await readFile(path.join(root, date.name, brand.name, "package.json"), "utf8")
+        .then((raw) => JSON.parse(raw) as Record<string, unknown>)
+        .catch(() => null);
+      const carousels = parsed?.carousels as { cs?: unknown; en?: unknown } | undefined;
+      const render = parsed?.render as { summaryPaths?: unknown } | undefined;
+      if (carousels?.cs && carousels.en && Array.isArray(render?.summaryPaths) && render.summaryPaths.length > 0) {
+        complete += 1;
+      }
+    }
+  }
+  return complete;
+}
+
 export async function computeAutonomySnapshot(input: {
   repoRoot: string;
   stateRoot: string;
@@ -118,7 +145,7 @@ export async function computeAutonomySnapshot(input: {
   const sourceConfig = JSON.parse(await readFile(path.join(input.repoRoot, "config", "sources.json"), "utf8")) as {
     sources?: Array<{ enabled?: unknown }>;
   };
-  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates] = await Promise.all([
+  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount] = await Promise.all([
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
@@ -126,7 +153,8 @@ export async function computeAutonomySnapshot(input: {
     validValues(path.join(input.stateRoot, "ventures", "titty-tuesdays", "plans"), MarketingPlanSchema),
     validValues(path.join(input.stateRoot, "meetings"), MeetingRecordSchema),
     files(path.join(input.stateRoot, "release-proofs")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
-    studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates"))
+    studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates")),
+    marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages"))
   ]);
 
   const deliveredEditions = editionReceipts.filter((receipt) => receipt.status === "delivered" && receipt.editionStatus === "edition").length;
@@ -153,7 +181,8 @@ export async function computeAutonomySnapshot(input: {
     // Carousel Studio declares this component in config/ventures.json and the registry
     // accepts it, but nothing implemented it, so the venture resolved to an empty signal
     // list while every other venture reported. Same predicate the quarterly collector uses.
-    "live-template-library": [signal("live-template-library", "Live carousel templates", studioTemplates.filter((template) => template.status === "live").length, "count", `${studioTemplates.filter((template) => template.status === "live").length} templates passed every brand and format check.`)]
+    "live-template-library": [signal("live-template-library", "Live carousel templates", studioTemplates.filter((template) => template.status === "live").length, "count", `${studioTemplates.filter((template) => template.status === "live").length} templates passed every brand and format check.`)],
+    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry both carousels and a recorded render.`)]
   };
 
   const killedSlotReasons: Record<string, number> = {};

@@ -5,15 +5,16 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má šest pracovních projektů: Caught Up (veřejně
-DNESKAi), Titty Tuesdays, GoVIRAL, FightAIQ, Carousel Studio a MMA Files.
+<https://boardless-ai.vercel.app>. Systém má sedm pracovních projektů: Caught Up (veřejně
+DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Carousel Studio a MMA Files.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Co už publikuje (k 7. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
 MMA Files jeden článkový slot denně. Oba posílají hotový článek zároveň do Carousel
 Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
 karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
-`NEEDS_YOUR_HELP_NOW.md`.
+`NEEDS_YOUR_HELP_NOW.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
+jako koncepty ve frontě ke schválení a rozhoduje o nich majitel.
 
 ## Jak je systém poskládaný
 
@@ -24,7 +25,7 @@ GitHub Actions / příkazová řádka
      TypeScript řízení porad
      ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
-     ├─ porady všech šesti projektů
+     ├─ porady všech sedmi projektů
      └─ jeden denní souhrn
               │
               ▼
@@ -39,9 +40,9 @@ GitHub Actions / příkazová řádka
      └─ chráněná správa projektů (rail podle projektů)
 ```
 
-V rejstříku je 40 rolí, z toho **31 aktivních**: čtyři hlasující členové rady a 27
+V rejstříku je 42 rolí, z toho **33 aktivních**: čtyři hlasující členové rady a 29
 odborných rolí. Devět rolí bylo při zeštíhlení soupisky odstaveno a veřejný web počítá
-jen ty pracující. Sedmnáct aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
+jen ty pracující. Devatenáct aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
 rolí má na veřejném webu svou schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
 dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
 seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
@@ -59,14 +60,25 @@ modelům ani do podkladů porad.
   jeden brief pro majitele, marketingové nápady pro oba magazíny a nejvýše jednu agendu
   předanou jiné poradě. Data bere z Apify na Free plánu, jehož měsíční kredit 5 dolarů
   je zároveň limitem — žádná karta není v systému.
+- **marketingShark** dělá marketingové podklady pro produkty z portfolia. Jedna porada
+  denně v 07:00 vezme jednu otázku z kvízu devSharku a udělá z ní jeden český a jeden
+  anglický pětislidový karusel. Vykreslí ho Carousel Studio a hotový balíček skončí jako
+  koncept ve frontě ke schválení; marketingShark nemá sociální účet ani přihlašovací
+  údaje, takže zveřejnit nic neumí. devShark je zatím jediná zapnutá značka — jeho banku
+  3 633 otázek o webovém vývoji systém jen čte z připnutého otisku a v jeho repozitáři nic
+  nemění. geoShark je v konfiguraci od začátku a vypnutý; zapnout ho znamená jeden import
+  a jednu změnu `false` na `true`.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Analýzy smí spustit jen pro ověřené zápasy a karty: neumí sázet, otevírat sázkové
   účty ani slibovat výhru.
 - **Carousel Studio** spravuje znovupoužitelná rozložení a bez modelu z nich vykresluje
-  všechny sociální karusely. V administraci má galerii **13 šablon**, ve které se každý
+  všechny sociální karusely. V administraci má galerii **11 šablon**, ve které se každý
   doručený článek zobrazí ve všech šablonách, v obou formátech a proti své nejkratší,
-  střední i nejdelší pasáži. Nemá vlastní sociální účet, marketing ani měření
-  návštěvnosti.
+  střední i nejdelší pasáži. Jedenáctou šablonu `quiz-code-context` si vyžádal
+  marketingShark: nejširší monospace pole ve všech ostatních živých šablonách pojme
+  100 znaků na dva řádky, což je popisek zdroje, ne program. Barevné sady drží pro pět
+  značek, devShark a geoShark přibyly s marketingSharkem. Nemá vlastní sociální účet,
+  marketing ani měření návštěvnosti.
 - **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
   rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
   nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe
@@ -74,9 +86,10 @@ modelům ani do podkladů porad.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 12 kontrolních časů: 05:00, 06:00, 08:00, 09:00, 10:00, 11:00,
-13:00, 14:00, 17:00, 19:00, 20:00 a 22:00. Sloty 07:00, 18:00 a 21:00 zmizely s uzavřením
-inkubátoru a se zrušením večerního článkového slotu. Letní a zimní čas má každý
+Společný pražský rozpis má 13 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
+11:00, 13:00, 14:00, 17:00, 19:00, 20:00 a 22:00. Sloty 18:00 a 21:00 zmizely se zrušením
+večerního článkového slotu. Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
+7. srpna 2026 v ní sedí denní porada marketingSharku. Letní a zimní čas má každý
 slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
 
 Kterou poradu spustit, určuje **spouštěč, který se ozval**, ne hodiny v okamžiku startu.

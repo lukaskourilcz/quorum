@@ -33,14 +33,25 @@ function apiVersion(environment: NodeJS.ProcessEnv): string {
   return version;
 }
 
-const VENTURE_PREFIX = {
+/**
+ * The credential prefix each publishing venture's tokens live under.
+ *
+ * A venture absent from this map has no social account, and that is a fact about the company
+ * rather than a gap to fill in: marketingShark drafts carousels for a human to review and owns no
+ * channel, no token and no publishing path. Absence throws by name below rather than resolving to
+ * `undefined_THREADS_ACCESS_TOKEN` and failing as a confusing missing-environment error.
+ */
+const VENTURE_PREFIX: Partial<Record<QueueItem["venture"], string>> = {
   "caught-up": "CAUGHT_UP",
   "mma-files": "MMA_FILES",
   "titty-tuesdays": "TITTY_TUESDAYS"
-} as const;
+};
 
 function accountCredentials(environment: NodeJS.ProcessEnv, item: QueueItem, channel: Channel): { accessToken: string; userId: string } {
   const prefix = VENTURE_PREFIX[item.venture];
+  if (!prefix) {
+    throw new Error(`${item.venture} has no social credentials and cannot publish`);
+  }
   const channelPrefix = channel.id === "threads" ? "THREADS" : "INSTAGRAM";
   return {
     accessToken: requiredEnvironment(environment, `${prefix}_${channelPrefix}_ACCESS_TOKEN`),

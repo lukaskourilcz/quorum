@@ -25,7 +25,7 @@ export const QueueItemSchema = z
   .object({
     schemaVersion: z.literal(1),
     id: z.string().min(1),
-    venture: z.enum(["caught-up", "mma-files", "titty-tuesdays"]).default("caught-up"),
+    venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "marketingshark"]).default("caught-up"),
     locale: z.enum(["en", "cs"]).nullable().default(null),
     variant: z.enum(["A", "B"]).default("A"),
     campaignId: z.string().min(1),
@@ -72,7 +72,11 @@ export const QueueItemSchema = z
       accessibility: CheckStatusSchema,
       budget: CheckStatusSchema
     }),
-    selectedBy: z.literal("PULSE"),
+    // PULSE selects for every venture that publishes today. MAKO directs marketingShark, whose
+    // items are drafts a human completes; widening the enum records who actually chose, and
+    // changes nothing about assertQueueItemPublishable below -- an item still needs status
+    // queued, every check passing and a matching payload hash before the publisher will touch it.
+    selectedBy: z.enum(["PULSE", "MAKO"]),
     createdAt: z.string().datetime(),
     attempt: QueueAttemptSchema.nullable(),
     receiptId: z.string().nullable()

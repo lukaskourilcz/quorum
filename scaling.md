@@ -27,7 +27,8 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 - Placená firemní rada se schází jednou v 06:00. Časy 14:00 a 22:00 jsou kontrolní
   zápisy bez modelu. Odborné porady se otevřou jen s konkrétní agendou; FightAIQ také
-  při skutečné změně zdrojových dat. Nepotřebný čas stojí $0.
+  při skutečné změně zdrojových dat, marketingShark jako jediný běží každý den.
+  Nepotřebný čas stojí $0.
 - GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
   letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
   který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
@@ -45,6 +46,14 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 - Doručený článek posílá do Carousel Studia jen *summary*, ne celý text, a skládá se
   aritmeticky bez volání modelu. Karusel proto nestojí nic navíc a stejný článek dá vždy
   stejné slidy.
+- marketingShark má poradu každý den v 07:00 a v ní jediný placený krok: jedno volání
+  modelu na značku a den pro české a anglické texty. Výběr otázky, přiřazení háčku,
+  kontroly pravdivosti, vykreslení i zápis do fronty jsou deterministický kód za $0.
+  Vychází to zhruba na **$1.50 měsíčně** s jednou zapnutou značkou a **$3.00** se dvěma.
+  MAKO má týdenní kontrolu popsanou v `orchestrator/prompts/marketingshark/strategy.md`,
+  ale zatím ji nemá kam poslat — žádná porada ji nespouští, takže se nic neúčtuje. Až se
+  zapojí, přidá zhruba $0.16 měsíčně. Žádné fixní náklady, žádná hotovost, žádná položka
+  v pokladně.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 

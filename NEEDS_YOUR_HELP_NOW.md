@@ -1,8 +1,8 @@
 # Needs your help now — one owner checklist
 
-Updated: 2026-08-06
+Updated: 2026-08-07
 
-The only canonical list of human-owned setup across all six ventures. Git cannot inspect a
+The only canonical list of human-owned setup across all seven projects. Git cannot inspect a
 secret's value or an external account's settings, so an item stays unchecked until you have
 seen it in the provider's own UI. Never paste a credential into Git, an issue, a meeting
 record or chat.
@@ -13,6 +13,15 @@ GoVIRAL was founded on 2026-08-06: one room, Mondays at 13:00, that reads public
 and writes the owner a weekly content brief plus marketing ideas for the two magazines. It
 cannot post, schedule, buy or open an account, and it costs about $0.05 of model spend a week
 plus $0 cash. It is waiting on item 2.
+
+marketingShark was founded on 2026-08-07, and devShark came into the portfolio with it. One
+room every morning at 07:00 takes a single question out of devShark's own quiz bank and writes
+it up as a five-slide carousel in Czech and again in English — the real question, the real
+answer, and the product named once at the end. Everything about that room except one model call
+per brand is deterministic and costs nothing: which question runs, whether the day's opening
+line is actually true of it, how the slides are drawn, where they are stored. About $1.66 a
+month, $0 cash. It owns no social account and cannot post; each carousel is a draft waiting for
+you. It is waiting on item 7.
 
 Both magazines are Czech-only. MMA Files and DNESKAi (formerly Caught Up) each
 write their article in one Czech call instead of writing English and paying again
@@ -26,13 +35,13 @@ release checks in `state/release-proofs/mma-files/`. DNESKAi delivered its first
 3 August. A day that produces no edition now delivers the explanation instead of leaving a
 hole, and 2 August, the one date with no delivery at all, has a receipt.
 
-The day is twelve slots: 05:00 edition production with a 09:00 retry, 06:00 board, 08:00 fight
-data check, 09:00 story meeting, 10:00 article production, 11:00 marketing, 13:00 GoVIRAL trend
-room (Mondays only — the other six days cost $0), 14:00 checkpoint, 17:00 DNESKAi product room,
-19:00 model check, 20:00 desk review, 22:00 checkpoint. No full day
-under this clock has been measured yet: 6 August came to $0.363 across six slots and 4 August to
-$0.412 across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from
-`budget-2026-08e`.
+The day is thirteen slots: 05:00 edition production with a 09:00 retry, 06:00 board, 07:00
+marketingShark carousel room, 08:00 fight data check, 09:00 story meeting, 10:00 article
+production, 11:00 marketing, 13:00 GoVIRAL trend room (Mondays only — the other six days cost
+$0), 14:00 checkpoint, 17:00 DNESKAi product room, 19:00 model check, 20:00 desk review,
+22:00 checkpoint. No full day under this clock has been measured yet: 6 August came to $0.363
+across six slots and 4 August to $0.412 across seven, both against a $1.00 daily pace and the
+$30 all-in monthly cap from `budget-2026-08e`. marketingShark adds about 6c to a day.
 
 The site says what happened in words. Live meeting pages show their full discussion, a slot
 nobody needed shows one sentence and is not clickable, and no public surface prints a URL,
@@ -50,9 +59,9 @@ which makes standard runners unmetered, and CI is confirmed green again on both 
 
 What is still waiting: one API key that unblocks every FightAIQ output, an Apify account that
 unblocks GoVIRAL's trend scouting, two optional photo keys, the taste loop for Titty Tuesdays,
-the `/admin` credentials that several actions run through, the DNESKAi public URL, the
-fixed-cost registry, the next Titty Tuesdays season, and social posting. The list below is
-those, in the order that unblocks the most.
+the `/admin` credentials that several actions run through, marketingShark's first live run, the
+DNESKAi public URL, the fixed-cost registry, the next Titty Tuesdays season, and social posting.
+The list below is those, in the order that unblocks the most.
 
 ## 1. Blocking output right now
 
@@ -106,9 +115,19 @@ those, in the order that unblocks the most.
    `BOARDLESSAI_GITHUB_BRANCH` if you are not using the defaults). Without them the checklist
    points at a door that will not open. [imp:5] [owner:me] [time:10m] [kind:setup]
 
+7. [ ] **Fire the first live `ms-daily` dispatch.** marketingShark has never made a real model
+   call. The implementation session had no API key reachable from it, so everything was proved
+   against a labelled fixture instead: `pnpm cycle -- --phase ms-daily --dry` produced a
+   complete package, both carousels rendered to checked SVG, four draft queue items, the ledger
+   entry and the meeting record. What has not happened is CHUM actually writing a word. Run the
+   `cycle.yml` workflow manually with phase `ms-daily`, or run it locally with a key in `.env`.
+   It costs about $0.05 and it is the only thing standing between a proven pipeline and a
+   working one. If the output is poor, that is a prompt problem and the truth gates will catch
+   the dishonest parts of it — but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
+
 ## 2. Yours to decide
 
-7. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
+8. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
    the navigation, the footer and print; the page title, the social cards, the structured data
    and the Atom feed still say "Caught Up", which was your call and is not a bug. The deployment
    is still at `caughtup-ai.vercel.app`, the
@@ -118,7 +137,7 @@ those, in the order that unblocks the most.
    record the article URL they published to, so changing the project name means the older
    receipts point at the old host. [imp:3] [owner:me] [time:20m] [kind:setup]
 
-8. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
+9. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
    `config/fixed-costs.json` now carries `confirmedNoFixedCosts: true`, which says "there are
    none" rather than "nobody has entered any". If that is right, this item is done and you can
    tick it. If you do pay for something, enter each subscription with its monthly USD amount,
@@ -127,12 +146,12 @@ those, in the order that unblocks the most.
    wrong answer makes the company look cheaper than it is. Do not enter example prices.
    [imp:3] [owner:me] [time:15m] [kind:setup]
 
-9. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
+10. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
    the marketing room works from the current season; with none, it has a standing objective and
    no material. The warning appears in the room's own daily brief as the date approaches.
    [imp:2] [owner:me] [time:60m] [kind:content]
 
-10. [x] **GitHub Actions minutes — resolved 2026-08-07 by making all three repositories public.**
+11. [x] **GitHub Actions minutes — resolved 2026-08-07 by making all three repositories public.**
    Standard runners are unmetered on public repositories, so the exhausted free tier no longer
    gates anything. `docs/SECRETS-AUDIT-2026-08-06.md` had already swept the working tree and full
    history of all three and found no secret; an independent re-sweep before the flip agreed, and
@@ -142,7 +161,7 @@ those, in the order that unblocks the most.
 
 ## 3. Only before social posting
 
-11. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
+12. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
    accounts.
 
     | Venture | Actions secrets | Repository variables |
@@ -227,6 +246,13 @@ those, in the order that unblocks the most.
 - [x] **"Add a priority item through `/admin`" is retired.** The 06:00 board seeds one item per
   agenda venture from that venture's `growth_objective`, so the loop starts from inside the
   system.
+- [x] **The devShark banner on DNESKAi is approved.** You said yes on 2026-08-07 and
+  `HUMAN_APPROVAL DEVSHARK-BANNER-001` is resolved. Nothing has been pushed to the DNESKAi
+  repository yet: the payload is still `status: "staged"` with no receipt, because the session
+  that staged it cannot reach the delivery App credentials. A later run that holds them may
+  deliver exactly what the contract's payload hash covers — two SVGs and one slot config — and
+  nothing more. The slot ships `active: false`, so it stays empty on DNESKAi until you turn it
+  on there.
 - [x] **The six repository variables and both model API keys.** All present as of 2026-08-02.
 - [x] **Delivery App `Checks` and `Commit status` read access,** verified with `Delivery doctor`.
 - [x] **The delivery App covers both `lukaskourilcz/aifirst` and `lukaskourilcz/mma-files`,**

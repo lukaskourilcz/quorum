@@ -18,6 +18,14 @@
       "schedule": "0 5 * * *"
     },
     {
+      "path": "/api/cron/ms-daily",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/ms-daily",
+      "schedule": "0 6 * * *"
+    },
+    {
       "path": "/api/cron/mma-intake",
       "schedule": "0 6 * * *"
     },

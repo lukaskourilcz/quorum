@@ -115,6 +115,20 @@ export default function VenturesPage() {
             </div>
           </div>
         </article>
+        <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)]">
+          <div className="grid md:grid-cols-12">
+            <div className="bg-[var(--surface)] p-8 md:col-span-4 md:p-10">
+              <Badge>Project 008</Badge>
+              <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--fog)]">DRAFTS ONLY</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">marketingShark</h2>
+            </div>
+            <div className="p-8 md:col-span-8 md:p-10">
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One quiz question a day, written up twice.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Every morning the room takes one question out of devShark&apos;s own bank and draws it as a five-slide carousel for Czech readers and again for English ones — the real question, the real answer, and the product named once at the end. It owns no social account and cannot post.</p>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/marketingshark">Open marketingShark <ArrowRight aria-hidden="true" className="size-4" /></Link>
+            </div>
+          </div>
+        </article>
         <article className="mt-5 overflow-hidden rounded-[var(--radius-card)] border border-[var(--accent)] bg-[var(--card)]">
           <div className="grid md:grid-cols-12">
             <div className="bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
@@ -124,7 +138,7 @@ export default function VenturesPage() {
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Reusable social layouts that stay distinct across all three brands.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Ten original templates render as deterministic PNGs for Instagram and Threads. The engine costs no API tokens; its paid review room runs only from a bounded agenda.</p>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Eleven original templates render as deterministic PNGs for Instagram and Threads. The engine costs no API tokens; its paid review room runs only from a bounded agenda.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/carousel-studio">Open Carousel Studio <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>

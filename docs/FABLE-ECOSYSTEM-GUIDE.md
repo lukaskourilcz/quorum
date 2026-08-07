@@ -1,6 +1,6 @@
 # BoardlessAI ecosystem guide for Fable
 
-> Current brainstorming guide for the six-project, 40-agent system. Use
+> Current brainstorming guide for the seven-project, 42-agent system. Use
 > [`docs/ECOSYSTEM.md`](ECOSYSTEM.md) for the canonical operating truth and generated
 > state block when a count, switch, cost or status differs from this explanation.
 
@@ -44,8 +44,8 @@ open accounts, place bets or change a consumer application's code.
 | All-in monthly limit | `$30`, countersigned |
 | Model/API share | `$25` monthly |
 | Daily model/API pace | `$1.00` |
-| Projects | 6 |
-| Registered agents | 40: 21 Anthropic, 19 OpenAI |
+| Projects | 7 |
+| Registered agents | 42: 23 Anthropic, 19 OpenAI |
 | Human decision owner | Lukas Kouril |
 | Public BoardlessAI site | `https://boardless-ai.vercel.app` |
 | Caught Up site | `https://caughtup-ai.vercel.app` |
@@ -218,17 +218,19 @@ This map prevents an arbitrary agent from scheduling an arbitrary paid room.
 | ---: | --- | --- | --- | ---: |
 | 05:00 | Caught Up | Edition | fixed service and live gate | meeting `$0.08`; production `$0.35` |
 | 06:00 | BoardlessAI | Morning board + Caught Up idea screening | fixed decision room | cycle hard cap `$0.20` |
+| 07:00 | marketingShark | Daily carousel room | standing daily | `$0.10` per enabled brand |
 | 08:00 | FightAIQ | Data intake | material source change or agenda | `$0.06` |
 | 09:00 | MMA Files | Story assignment | fixed service | `$0.05` |
 | 10:00 | MMA Files | Daily article | assigned slot + verified evidence | `$0.16` |
 | 11:00 | Titty Tuesdays | Future-eshop marketing ideas | standing agenda; optional focused question | `$0.08` |
+| 13:00 | GoVIRAL | Trend and marketing room | standing weekly; Mondays only, the other six days are `$0` no-ops | `$0.06` |
 | 14:00 | BoardlessAI | Afternoon checkpoint | deterministic | `$0` |
 | 17:00 | Caught Up | Product decision | fixed service | `$0.08` |
 | 19:00 | FightAIQ | Model review | agenda + separate analysis gate | `$0.06` |
 | 20:00 | MMA Files | Desk review | agenda | `$0.05` |
 | 22:00 | BoardlessAI | Night checkpoint + summary | deterministic | `$0` plus optional digest path |
 
-A Vercel cron dispatches each of these eleven windows on its own hour; that path does
+A Vercel cron dispatches each of these thirteen windows on its own hour; that path does
 the work. GitHub's own schedule is the backup and arrives late, so the workflow carries
 three backstop sweeps a day instead of a cron per window — each looks for a slot today
 with no record that can still be opened, and opens the oldest. Every firing runs a
@@ -261,7 +263,7 @@ social engagement. `METRICS_INGESTION_ENABLED=false` and SPLIT remains idle.
 
 ## 8. Agent roster and model routing
 
-The registry keeps 40 stable identities. The identity describes responsibility; model
+The registry keeps 42 stable identities. The identity describes responsibility; model
 routing remains centralized so models can be changed without rewriting biographies.
 
 Council routing:
@@ -274,7 +276,10 @@ Council routing:
 Specialist routing:
 
 - OpenAI specialists use configured `gpt-5.6-luna`.
-- Anthropic specialists normally use configured `claude-haiku-4-5-20251001`.
+- MAKO and CHUM are the exceptions among Anthropic specialists that route to
+`claude-sonnet-5`: CHUM's daily call is the venture's only quality-critical one, native-register
+Czech and English creative in a single pass. Other Anthropic specialists normally use configured
+`claude-haiku-4-5-20251001`.
 - Caught Up curation and the one long-form Czech writing call use the quality path
   `claude-sonnet-4-6`.
 - The MMA Files article call uses `claude-sonnet-4-6`.
@@ -369,7 +374,14 @@ brand tokens while sharing the same checked template engine.
 | TAPE/PIVOT | data context and desk bridge | no betting instruction or hidden model feedback |
 | FRAME | deterministic hero/social visuals | photo fallback and social templates; no image-model call |
 
-## 9. Why no new permanent agents were added
+### marketingShark specialists
+
+| Agent | Specialty | Boundary |
+| --- | --- | --- |
+| MAKO | venture direction, hook-library proposals, KPI honesty | cannot post, cannot edit the hook library silently, cannot invent a metric; its weekly review is written and not yet wired to a room |
+| CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the brand's closing line; one call plus one retry |
+
+## 9. Why broad roles were not split further
 
 The audit considered splitting broad roles further. The current evidence does not
 justify it.

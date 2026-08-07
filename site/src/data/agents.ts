@@ -41,6 +41,8 @@ export type AgentId =
   | "REACH"
   | "SPLIT"
   | "PIVOT"
+  | "MAKO"
+  | "CHUM"
   | "EASEL"
   | "MOTIF";
 
@@ -114,7 +116,9 @@ type TextModelRole =
   | "AUDIT"
   | "OPENAI_SPECIALIST"
   | "ANTHROPIC_SPECIALIST"
-  | "DIGEST";
+  | "DIGEST"
+  | "MAKO"
+  | "CHUM";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -338,6 +342,11 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   ],
   PULSE: [configuredTextModel("PULSE", "Company and project meetings", councilMeetingCall)],
   AUDIT: [configuredTextModel("AUDIT", "Company and project meetings", councilMeetingCall)],
+  // Both route to claude-sonnet-5, not the shared Haiku specialist route. Without an entry here
+  // the public agent page fell through to ANTHROPIC_SPECIALIST and advertised the wrong model
+  // and the wrong price for the venture's only quality-critical call.
+  MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
+  CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
   HERALD: [
     configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
     configuredTextModel("DIGEST", "DNESKAi product room"),
@@ -638,6 +647,18 @@ const profileCopy: Record<
     operatingPrinciple: "Describe the pattern and cite the page. Never copy the artifact.",
     output: "Cited textual design observation",
     currentFocus: "Allowed design publications and owner links",
+    publicTrackRecord: null
+  },
+  MAKO: {
+    operatingPrinciple: "Name the date and quote the line, or say nothing.",
+    output: "One bounded weekly review of what shipped",
+    currentFocus: "marketingShark hook rotation and truthfulness",
+    publicTrackRecord: null
+  },
+  CHUM: {
+    operatingPrinciple: "Write the Czech, do not translate it.",
+    output: "One day's carousel copy, in two languages",
+    currentFocus: "devShark quiz carousels",
     publicTrackRecord: null
   }
 };

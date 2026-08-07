@@ -7,7 +7,10 @@
       "searchIntent": "understand BoardlessAI",
       "primaryQuery": "agent-operated company",
       "audience": "operators, builders and governance observers",
-      "evidenceRefs": ["state/BRAND.md", "state/BUSINESS.md"],
+      "evidenceRefs": [
+        "state/BRAND.md",
+        "state/BUSINESS.md"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -20,7 +23,9 @@
       "searchIntent": "follow public AI company decisions",
       "primaryQuery": "AI agent shift episodes",
       "audience": "repeat governance readers",
-      "evidenceRefs": ["public-standup-contract:v1"],
+      "evidenceRefs": [
+        "public-standup-contract:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-30",
@@ -33,7 +38,9 @@
       "searchIntent": "fixture only",
       "primaryQuery": "none",
       "audience": "implementers and reviewers",
-      "evidenceRefs": ["FIXTURE:FOUNDING-2026-07-23"],
+      "evidenceRefs": [
+        "FIXTURE:FOUNDING-2026-07-23"
+      ],
       "author": "deterministic",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -46,7 +53,9 @@
       "searchIntent": "understand AI decision routing",
       "primaryQuery": "AI agent boardroom routing",
       "audience": "governance and agent-system builders",
-      "evidenceRefs": ["config/agent-routing.json"],
+      "evidenceRefs": [
+        "config/agent-routing.json"
+      ],
       "author": "SCRIBE",
       "reviewer": "KEEPER",
       "updatedAt": "2026-07-23",
@@ -59,7 +68,10 @@
       "searchIntent": "understand agent governance controls",
       "primaryQuery": "AI company governance",
       "audience": "operators, auditors and partners",
-      "evidenceRefs": ["CLAUDE.md", "config/stages.json"],
+      "evidenceRefs": [
+        "CLAUDE.md",
+        "config/stages.json"
+      ],
       "author": "SCRIBE",
       "reviewer": "KEEPER",
       "updatedAt": "2026-07-23",
@@ -72,7 +84,9 @@
       "searchIntent": "meet BoardlessAI agents",
       "primaryQuery": "BoardlessAI agents",
       "audience": "governance readers and system builders",
-      "evidenceRefs": ["config/agents.json"],
+      "evidenceRefs": [
+        "config/agents.json"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -85,7 +99,9 @@
       "searchIntent": "understand the strategy agent",
       "primaryQuery": "VIZE strategy agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:VIZE:v1"],
+      "evidenceRefs": [
+        "agent-profile:VIZE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -98,7 +114,9 @@
       "searchIntent": "understand the building agent",
       "primaryQuery": "FORGE building agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:FORGE:v1"],
+      "evidenceRefs": [
+        "agent-profile:FORGE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -111,7 +129,9 @@
       "searchIntent": "understand the marketing agent",
       "primaryQuery": "PULSE marketing agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:PULSE:v1"],
+      "evidenceRefs": [
+        "agent-profile:PULSE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -124,7 +144,9 @@
       "searchIntent": "understand the audit agent",
       "primaryQuery": "AUDIT quality agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:AUDIT:v1"],
+      "evidenceRefs": [
+        "agent-profile:AUDIT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -137,7 +159,9 @@
       "searchIntent": "understand the market intelligence agent",
       "primaryQuery": "SCOUT market intelligence agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SCOUT:v1"],
+      "evidenceRefs": [
+        "agent-profile:SCOUT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -150,7 +174,9 @@
       "searchIntent": "understand the communications agent",
       "primaryQuery": "SCRIBE communications agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SCRIBE:v1"],
+      "evidenceRefs": [
+        "agent-profile:SCRIBE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -163,7 +189,9 @@
       "searchIntent": "understand the analytics agent",
       "primaryQuery": "LENS analytics agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:LENS:v1"],
+      "evidenceRefs": [
+        "agent-profile:LENS:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -176,7 +204,9 @@
       "searchIntent": "understand the editorial agent",
       "primaryQuery": "QUILL editorial agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:QUILL:v1"],
+      "evidenceRefs": [
+        "agent-profile:QUILL:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -189,7 +219,9 @@
       "searchIntent": "understand the search intelligence agent",
       "primaryQuery": "RADAR search agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:RADAR:v1"],
+      "evidenceRefs": [
+        "agent-profile:RADAR:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -202,7 +234,9 @@
       "searchIntent": "understand the compliance agent",
       "primaryQuery": "KEEPER compliance agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:KEEPER:v1"],
+      "evidenceRefs": [
+        "agent-profile:KEEPER:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -215,7 +249,9 @@
       "searchIntent": "understand the Threads agent",
       "primaryQuery": "THREADS social agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:THREADS:v1"],
+      "evidenceRefs": [
+        "agent-profile:THREADS:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -228,7 +264,9 @@
       "searchIntent": "understand the visual social agent",
       "primaryQuery": "INSTAGRAM visual social agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:INSTAGRAM:v1"],
+      "evidenceRefs": [
+        "agent-profile:INSTAGRAM:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-23",
@@ -241,7 +279,9 @@
       "searchIntent": "understand the organization agent",
       "primaryQuery": "PEOPLE organization agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:PEOPLE:v1"],
+      "evidenceRefs": [
+        "agent-profile:PEOPLE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -254,7 +294,9 @@
       "searchIntent": "understand the finance agent",
       "primaryQuery": "LEDGER finance agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:LEDGER:v1"],
+      "evidenceRefs": [
+        "agent-profile:LEDGER:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -267,7 +309,9 @@
       "searchIntent": "understand the Caught Up editor agent",
       "primaryQuery": "HERALD editor agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:HERALD:v1"],
+      "evidenceRefs": [
+        "agent-profile:HERALD:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -280,7 +324,9 @@
       "searchIntent": "understand the Caught Up copy agent",
       "primaryQuery": "STET copy agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:STET:v1"],
+      "evidenceRefs": [
+        "agent-profile:STET:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -293,7 +339,9 @@
       "searchIntent": "understand the Caught Up Czech editor agent",
       "primaryQuery": "HACEK Czech editor agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:HACEK:v1"],
+      "evidenceRefs": [
+        "agent-profile:HACEK:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -306,7 +354,9 @@
       "searchIntent": "understand the Caught Up growth agent",
       "primaryQuery": "SPARK product growth agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:SPARK:v1"],
+      "evidenceRefs": [
+        "agent-profile:SPARK:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -319,7 +369,9 @@
       "searchIntent": "understand the idea ledger agent",
       "primaryQuery": "VAULT memory agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:VAULT:v1"],
+      "evidenceRefs": [
+        "agent-profile:VAULT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -332,7 +384,9 @@
       "searchIntent": "understand the visual production agent",
       "primaryQuery": "FRAME media agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:FRAME:v1"],
+      "evidenceRefs": [
+        "agent-profile:FRAME:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -345,7 +399,9 @@
       "searchIntent": "understand the delivery operations agent",
       "primaryQuery": "RELAY delivery agent",
       "audience": "Caught Up readers and governance readers",
-      "evidenceRefs": ["agent-profile:RELAY:v1"],
+      "evidenceRefs": [
+        "agent-profile:RELAY:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-07-31",
@@ -358,7 +414,9 @@
       "searchIntent": "see current BoardlessAI ventures",
       "primaryQuery": "BoardlessAI ventures",
       "audience": "prospective users and governance readers",
-      "evidenceRefs": ["state/OPPORTUNITIES.json"],
+      "evidenceRefs": [
+        "state/OPPORTUNITIES.json"
+      ],
       "author": "SCRIBE",
       "reviewer": "VIZE",
       "updatedAt": "2026-07-23",
@@ -371,7 +429,9 @@
       "searchIntent": "fixture only",
       "primaryQuery": "none",
       "audience": "implementers",
-      "evidenceRefs": ["FIXTURE:FIX-OPP-001"],
+      "evidenceRefs": [
+        "FIXTURE:FIX-OPP-001"
+      ],
       "author": "deterministic",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -384,7 +444,9 @@
       "searchIntent": "fixture only",
       "primaryQuery": "none",
       "audience": "implementers",
-      "evidenceRefs": ["FIXTURE:FIX-OPP-002"],
+      "evidenceRefs": [
+        "FIXTURE:FIX-OPP-002"
+      ],
       "author": "deterministic",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -397,7 +459,9 @@
       "searchIntent": "fixture only",
       "primaryQuery": "none",
       "audience": "implementers",
-      "evidenceRefs": ["FIXTURE:FIX-OPP-003"],
+      "evidenceRefs": [
+        "FIXTURE:FIX-OPP-003"
+      ],
       "author": "deterministic",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -410,7 +474,10 @@
       "searchIntent": "review company operating metrics",
       "primaryQuery": "BoardlessAI metrics",
       "audience": "operators and governance readers",
-      "evidenceRefs": ["config/kpis.json", "state/SCORECARD.md"],
+      "evidenceRefs": [
+        "config/kpis.json",
+        "state/SCORECARD.md"
+      ],
       "author": "LENS",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -423,7 +490,9 @@
       "searchIntent": "review BoardlessAI operating history",
       "primaryQuery": "BoardlessAI public log",
       "audience": "governance readers",
-      "evidenceRefs": ["state/public/"],
+      "evidenceRefs": [
+        "state/public/"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -436,7 +505,10 @@
       "searchIntent": "understand company status",
       "primaryQuery": "about BoardlessAI company",
       "audience": "general public and partners",
-      "evidenceRefs": ["state/BUSINESS.md", "state/BRAND.md"],
+      "evidenceRefs": [
+        "state/BUSINESS.md",
+        "state/BRAND.md"
+      ],
       "author": "SCRIBE",
       "reviewer": "KEEPER",
       "updatedAt": "2026-07-23",
@@ -449,7 +521,9 @@
       "searchIntent": "learn about BoardlessAI",
       "primaryQuery": "BoardlessAI",
       "audience": "general public",
-      "evidenceRefs": ["state/BRAND.md"],
+      "evidenceRefs": [
+        "state/BRAND.md"
+      ],
       "author": "SCRIBE",
       "reviewer": "QUILL",
       "updatedAt": "2026-07-23",
@@ -462,7 +536,9 @@
       "searchIntent": "review privacy terms",
       "primaryQuery": "BoardlessAI privacy",
       "audience": "site visitors",
-      "evidenceRefs": ["config/content-policy.json"],
+      "evidenceRefs": [
+        "config/content-policy.json"
+      ],
       "author": "KEEPER",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -475,7 +551,10 @@
       "searchIntent": "review AI and commercial disclosure",
       "primaryQuery": "BoardlessAI disclosure",
       "audience": "site visitors and regulators",
-      "evidenceRefs": ["state/CLAIMS.json", "state/BRAND.md"],
+      "evidenceRefs": [
+        "state/CLAIMS.json",
+        "state/BRAND.md"
+      ],
       "author": "KEEPER",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -488,7 +567,9 @@
       "searchIntent": "private",
       "primaryQuery": "none",
       "audience": "authorized operator",
-      "evidenceRefs": ["server-only:admin-state"],
+      "evidenceRefs": [
+        "server-only:admin-state"
+      ],
       "author": "FORGE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-07-23",
@@ -501,7 +582,9 @@
       "searchIntent": "understand the positioning agent",
       "primaryQuery": "ANGLE positioning agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:ANGLE:v1"],
+      "evidenceRefs": [
+        "agent-profile:ANGLE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -514,7 +597,9 @@
       "searchIntent": "understand the audience agent",
       "primaryQuery": "COHORT audience agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:COHORT:v1"],
+      "evidenceRefs": [
+        "agent-profile:COHORT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -527,7 +612,9 @@
       "searchIntent": "understand the performance marketing agent",
       "primaryQuery": "FUNNEL marketing agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:FUNNEL:v1"],
+      "evidenceRefs": [
+        "agent-profile:FUNNEL:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -540,7 +627,9 @@
       "searchIntent": "understand the taste custodian agent",
       "primaryQuery": "PALATE taste agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:PALATE:v1"],
+      "evidenceRefs": [
+        "agent-profile:PALATE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -553,7 +642,9 @@
       "searchIntent": "understand the scene research agent",
       "primaryQuery": "SCENE research agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SCENE:v1"],
+      "evidenceRefs": [
+        "agent-profile:SCENE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -566,7 +657,9 @@
       "searchIntent": "understand the guerrilla marketing agent",
       "primaryQuery": "STUNT marketing agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:STUNT:v1"],
+      "evidenceRefs": [
+        "agent-profile:STUNT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -579,7 +672,10 @@
       "searchIntent": "inspect Titty Tuesdays venture governance",
       "primaryQuery": "Titty Tuesdays venture",
       "audience": "governance readers and future customers",
-      "evidenceRefs": ["state/ventures/titty-tuesdays/BRAND.md", "state/ventures/titty-tuesdays/season-001.md"],
+      "evidenceRefs": [
+        "state/ventures/titty-tuesdays/BRAND.md",
+        "state/ventures/titty-tuesdays/season-001.md"
+      ],
       "author": "SCRIBE",
       "reviewer": "STET",
       "updatedAt": "2026-08-01",
@@ -592,7 +688,11 @@
       "searchIntent": "inspect the BoardlessAI magazine incubator",
       "primaryQuery": "BoardlessAI magazine incubator",
       "audience": "governance readers and prospective magazine readers",
-      "evidenceRefs": ["state/ventures/incubator/niche-proposals", "state/meetings/2026-08-01-incubator-scan.json", "state/meetings/2026-08-01-incubator-synthesis.json"],
+      "evidenceRefs": [
+        "state/ventures/incubator/niche-proposals",
+        "state/meetings/2026-08-01-incubator-scan.json",
+        "state/meetings/2026-08-01-incubator-synthesis.json"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-08-01",
@@ -605,7 +705,9 @@
       "searchIntent": "understand the FightAIQ fight scout",
       "primaryQuery": "CORNER fight scout",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:CORNER:v1"],
+      "evidenceRefs": [
+        "agent-profile:CORNER:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -618,7 +720,9 @@
       "searchIntent": "understand the regional fight scout",
       "primaryQuery": "SPOTTER fight scout",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SPOTTER:v1"],
+      "evidenceRefs": [
+        "agent-profile:SPOTTER:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -631,7 +735,9 @@
       "searchIntent": "understand the fight tape reviewer",
       "primaryQuery": "TAPE fight review agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:TAPE:v1"],
+      "evidenceRefs": [
+        "agent-profile:TAPE:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -644,7 +750,9 @@
       "searchIntent": "understand the MMA model agent",
       "primaryQuery": "SIGMA probability agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SIGMA:v1"],
+      "evidenceRefs": [
+        "agent-profile:SIGMA:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -657,7 +765,9 @@
       "searchIntent": "understand the market price agent",
       "primaryQuery": "VIG market agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:VIG:v1"],
+      "evidenceRefs": [
+        "agent-profile:VIG:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -670,7 +780,9 @@
       "searchIntent": "understand the fight source monitor",
       "primaryQuery": "SONAR source agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SONAR:v1"],
+      "evidenceRefs": [
+        "agent-profile:SONAR:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -683,7 +795,9 @@
       "searchIntent": "understand the MMA Files editor",
       "primaryQuery": "CANVAS bilingual editor agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:CANVAS:v1"],
+      "evidenceRefs": [
+        "agent-profile:CANVAS:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -696,7 +810,9 @@
       "searchIntent": "understand the MMA Files reporter",
       "primaryQuery": "JAB MMA reporter agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:JAB:v1"],
+      "evidenceRefs": [
+        "agent-profile:JAB:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -709,7 +825,9 @@
       "searchIntent": "understand the MMA Files social editor",
       "primaryQuery": "REACH MMA social editor agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:REACH:v1"],
+      "evidenceRefs": [
+        "agent-profile:REACH:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -722,7 +840,9 @@
       "searchIntent": "understand the MMA Files visual designer",
       "primaryQuery": "SPLIT MMA visual designer agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:SPLIT:v1"],
+      "evidenceRefs": [
+        "agent-profile:SPLIT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
@@ -735,10 +855,42 @@
       "searchIntent": "understand the MMA evidence bridge",
       "primaryQuery": "PIVOT MMA evidence agent",
       "audience": "governance readers",
-      "evidenceRefs": ["agent-profile:PIVOT:v1"],
+      "evidenceRefs": [
+        "agent-profile:PIVOT:v1"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-01",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/mako",
+      "purpose": "Publish the MAKO marketingShark direction role and its proposal-only boundary.",
+      "searchIntent": "understand who directs the daily carousel venture",
+      "primaryQuery": "MAKO marketingShark agent",
+      "audience": "governance readers",
+      "evidenceRefs": [
+        "agent-profile:MAKO:v1"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-07",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/chum",
+      "purpose": "Publish the CHUM bilingual carousel copy role and what it is not allowed to decide.",
+      "searchIntent": "understand who writes the daily Czech and English carousels",
+      "primaryQuery": "CHUM marketingShark copywriter agent",
+      "audience": "governance readers",
+      "evidenceRefs": [
+        "agent-profile:CHUM:v1"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-07",
       "status": "indexable",
       "informationGain": "material"
     },
@@ -748,7 +900,10 @@
       "searchIntent": "understand the Carousel Studio template designer",
       "primaryQuery": "EASEL carousel template agent",
       "audience": "design-system and governance readers",
-      "evidenceRefs": ["agent-profile:EASEL:v1", "D11"],
+      "evidenceRefs": [
+        "agent-profile:EASEL:v1",
+        "D11"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-02",
@@ -761,7 +916,10 @@
       "searchIntent": "understand the Carousel Studio research agent",
       "primaryQuery": "MOTIF visual pattern research agent",
       "audience": "design-system and governance readers",
-      "evidenceRefs": ["agent-profile:MOTIF:v1", "D11"],
+      "evidenceRefs": [
+        "agent-profile:MOTIF:v1",
+        "D11"
+      ],
       "author": "SCRIBE",
       "reviewer": "PEOPLE",
       "updatedAt": "2026-08-02",
@@ -774,7 +932,10 @@
       "searchIntent": "inspect the Carousel Studio template engine",
       "primaryQuery": "deterministic social carousel templates",
       "audience": "operators, designers and governance readers",
-      "evidenceRefs": ["D11", "carousel-template/1"],
+      "evidenceRefs": [
+        "D11",
+        "carousel-template/1"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-08-02",
@@ -787,12 +948,29 @@
       "searchIntent": "inspect the FightAIQ venture",
       "primaryQuery": "FightAIQ fight analysis",
       "audience": "fight fans and governance readers",
-      "evidenceRefs": ["state/ventures/fightaiq/DOCTRINE.md"],
+      "evidenceRefs": [
+        "state/ventures/fightaiq/DOCTRINE.md"
+      ],
       "author": "SCRIBE",
       "reviewer": "AUDIT",
       "updatedAt": "2026-08-01",
       "status": "noindex",
       "informationGain": "material"
+    },
+    {
+      "url": "/ventures/marketingshark",
+      "purpose": "Explain the daily quiz-carousel venture, what it drafts and why nothing it writes posts.",
+      "searchIntent": "understand the marketingShark project",
+      "primaryQuery": "marketingShark BoardlessAI project",
+      "audience": "prospective readers",
+      "evidenceRefs": [
+        "marketingshark-2026-08a"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-07",
+      "status": "noindex",
+      "informationGain": "low"
     }
   ]
 }

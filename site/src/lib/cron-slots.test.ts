@@ -23,6 +23,7 @@ describe("the slot table the cron route dispatches from", () => {
     expect(slots.map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
       "5:cu-edition",
       "6:morning",
+      "7:ms-daily",
       "8:mma-intake",
       "9:mag-editorial",
       "10:article-am",

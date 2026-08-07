@@ -61,7 +61,8 @@
                     "two-source-agreement",
                     "readiness-dossiers",
                     "campaign-inventory",
-                    "live-template-library"
+                    "live-template-library",
+                    "package-cadence"
                   ]
                 }
               }
@@ -97,7 +98,8 @@
                 "social-lab",
                 "templates",
                 "inspiration",
-                "decks"
+                "decks",
+                "packages"
               ]
             }
           },
@@ -191,7 +193,9 @@
                       "SPLIT",
                       "EASEL",
                       "MOTIF",
-                      "PIVOT"
+                      "PIVOT",
+                      "MAKO",
+                      "CHUM"
                     ]
                   }
                 },

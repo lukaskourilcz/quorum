@@ -233,6 +233,46 @@
       "meetings": []
     },
     {
+      "id": "marketingshark",
+      "name": "marketingShark",
+      "status": "operating",
+      "taste": false,
+      "$tasteComment": "false on purpose. taste:true adds a PALATE pre-step to the venture's first meeting, which is a second model call; this room is designed around exactly one paid call per brand per day.",
+      "ledgerNamespace": "marketingshark",
+      "growth_objective": {
+        "label": "Draft one complete bilingual carousel package per active brand per day",
+        "components": [
+          "package-cadence"
+        ]
+      },
+      "adminTabs": [
+        "packages"
+      ],
+      "meetings": [
+        {
+          "kind": "ms-daily",
+          "label": "marketingShark daily carousel room",
+          "cadence": "daily@07:00",
+          "cast": [
+            "MAKO",
+            "CHUM",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.1,
+          "$envelopeComment": "Per enabled brand per day, and it covers the one retry. Phase 1 has one enabled brand.",
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "ms-daily-room",
+            "objectives": {
+              "dry": "Select the day's question from the fixture bank and assemble one package without any provider call or spend",
+              "live": "Turn today's selected question into one Czech and one English five-slide carousel per enabled brand, rendered and stored as a draft behind the approval queue"
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "mma-files",
       "name": "MMA Files",
       "status": "operating",
