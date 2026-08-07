@@ -3,7 +3,7 @@ import {
   CarouselFormatSchema,
   renderCarouselSvg
 } from "@boardlessai/carousel-studio";
-import { findCarouselTemplate, previewPayload } from "@/lib/carousel-studio";
+import { findCarouselTemplate, previewPayloadForBrand } from "@/lib/carousel-studio";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ export async function GET(
   try {
     const renders = renderCarouselSvg({
       template,
-      payload: previewPayload(template, locale),
+      payload: await previewPayloadForBrand(template, locale, brandTokens.id),
       brand: brandTokens,
       format: parsedFormat.data
     });

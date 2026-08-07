@@ -5,3 +5,4 @@ export * from "./libraries.js";
 export * from "./lint.js";
 export * from "./assign.js";
 export * from "./vectors.js";
+export * from "./fixtures.js";

@@ -7,7 +7,10 @@ import {
   CarouselTemplateSchema,
   SEED_TEMPLATES,
   TemplateLifecycleOverrideSchema,
+  fixtureAssignment,
+  fixtureItem,
   fixturePayload,
+  readLibrary,
   previewFormats,
   resolveLifecycleStatus,
   validateTemplateForBrand,
@@ -112,6 +115,42 @@ export function previewPayload(template: CarouselTemplate, locale: "en" | "cs"):
       ]))
     };
   }
+}
+
+/** The slot slide 1 puts its headline in: the first text layer on the first slide. */
+export function slideOneTextSlot(template: CarouselTemplate): string | null {
+  const first = template.slides[0];
+  if (!first) return null;
+  const layer = first.layers.find((candidate) => candidate.type === "text");
+  return layer && layer.type === "text" ? layer.slot : null;
+}
+
+/**
+ * A preview payload whose slide 1 carries a real assigned hook.
+ *
+ * The two shark brands are quiz verticals, so their previews run the real assignment against a
+ * fixture item carrying real quiz metadata and render whatever it returns. That makes the gallery
+ * show the thing the studio actually publishes rather than lorem for the one slot that has to earn
+ * the next interaction.
+ *
+ * Every other brand keeps its fixture headline. Their libraries are unwritten, so a preview that
+ * invented a hook for them would be showing something the pipeline would never produce.
+ */
+export async function previewPayloadForBrand(
+  template: CarouselTemplate,
+  locale: "en" | "cs",
+  brandId: keyof typeof CAROUSEL_BRANDS
+): Promise<CarouselPayload> {
+  const base = previewPayload(template, locale);
+  const vertical = brandId === "devshark" ? "dev" : brandId === "geoshark" ? "geo" : null;
+  const slot = slideOneTextSlot(template);
+  if (!vertical || !slot) return base;
+
+  const resolved = fixtureAssignment(await readLibrary("quiz"), fixtureItem(vertical));
+  // No line means the fallback fired, which is exactly when the template's own headline renders.
+  if (!resolved.line) return base;
+
+  return { ...base, strings: { ...base.strings, [slot]: resolved.line[locale] } };
 }
 
 export async function readCarouselStudio(root = repositoryRoot): Promise<CarouselStudioSnapshot> {
