@@ -25,6 +25,7 @@ on:
           - cu-product
           - tt-marketing
           - gv-brief
+          - ms-daily
           - mma-intake
           - mag-editorial
           - article-am

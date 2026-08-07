@@ -627,6 +627,78 @@
       "critical": false,
       "ramp_days": 14,
       "pace": "level"
+    },
+    {
+      "id": "marketingshark.daily-package-rate",
+      "venture": "marketingshark",
+      "name": "Scheduled brand-days that produced a package",
+      "metric_source": "state/ventures/marketingshark/packages#daily_package_rate",
+      "target": 0.9,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "marketingshark.package-completeness",
+      "venture": "marketingshark",
+      "name": "Packages passing the full schema and render checks",
+      "metric_source": "state/ventures/marketingshark/packages#package_completeness",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "marketingshark.truth-gate-violations",
+      "venture": "marketingshark",
+      "name": "Truth-gate failures that reached a committed package",
+      "metric_source": "state/ventures/marketingshark/packages#truth_gate_violations",
+      "target": 0,
+      "direction": "at-most",
+      "unit": "count",
+      "critical": true,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "marketingshark.hook-rotation-coverage",
+      "venture": "marketingshark",
+      "name": "Distinct hook patterns used per brand per 30 days",
+      "metric_source": "state/marketingshark/ledger.json#hook_rotation_coverage",
+      "target": 10,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "marketingshark.cost-per-package",
+      "venture": "marketingshark",
+      "name": "Model spend per drafted package",
+      "metric_source": "state/budget/ledger.json#marketingshark_cost_per_package",
+      "target": 0.08,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "marketingshark.owner-review-rate",
+      "venture": "marketingshark",
+      "name": "Queued packages the owner has reviewed",
+      "metric_source": "state/ratings/marketingshark#owner_review_rate",
+      "target": 0.5,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
     }
   ]
 }

@@ -238,7 +238,7 @@
       "ventures": "global",
       "department": "Growth",
       "title": "Trend Scout",
-      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it — never inventing a trend the data cannot support.",
+      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it \u2014 never inventing a trend the data cannot support.",
       "responsibilities": [
         "Read the week's scout snapshot and name what is rising, with its velocity number",
         "Say which signals are rank-only and cannot be called engagement",
@@ -2188,7 +2188,7 @@
         "marketingshark"
       ],
       "department": "marketingShark",
-      "title": "Bilingual Carousel Copywriter",
+      "title": "Carousel Copywriter, CS and EN",
       "mission": "Writes one Czech and one English five-slide carousel per brand per day from the question the room already selected, plus its descriptions and alt text.",
       "responsibilities": [
         "Fill the assigned hook pattern truthfully",
@@ -2207,12 +2207,12 @@
         "marketingshark.package_completeness"
       ],
       "successChecks": [
-        "Both languages clear the deterministic truth gates on the first call",
+        "Czech and the English carousel both clear the truth gates on the first call",
         "Code blocks reach the slide byte-identical to the question bank"
       ],
       "capabilityTags": [
         "copywriting",
-        "bilingual:cs",
+        "czech:native",
         "social:carousel"
       ],
       "status": "active",

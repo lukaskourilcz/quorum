@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { atomicWriteText } from "../state.js";
+import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
 
 export const OPERATING_TRUTH_START = "<!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->";
 export const OPERATING_TRUTH_END = "<!-- GENERATED:CURRENT-OPERATING-TRUTH:END -->";
@@ -84,6 +85,7 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     json<FeatureConfig>(path.join(repoRoot, "config", "features.json")),
     latestStandupTimestamp(repoRoot)
   ]);
+  const limits = await loadRuntimeBudgetLimits();
   const activeAgents = agents.agents.filter((agent) => agent.status === "active");
   const providerCounts = new Map<string, number>();
   for (const agent of activeAgents) providerCounts.set(agent.provider, (providerCounts.get(agent.provider) ?? 0) + 1);
@@ -110,7 +112,11 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     `| Portfolio | ${ventures.ventures.length} projects; ${ventures.ventures.filter((venture) => venture.status === "operating").length} marked operating |`,
     `| Agent roster | ${activeAgents.length} active: ${providerCounts.get("Anthropic") ?? 0} Anthropic, ${providerCounts.get("OpenAI") ?? 0} OpenAI |`,
     `| Scheduled specialist/service rooms | ${meetingCount}; combined maximum room envelopes ${money(dailyMeetingEnvelope)} if every room is commissioned |`,
-    "| Approved spend boundary | $50 all-in monthly; $42 model/API share; $2.20 daily model/API pace |",
+    // Read from the resolver rather than written here. This line was a literal carrying
+    // budget-2026-08d's $50 / $42 / $2.20 for four days after budget-2026-08e superseded it at
+    // $30 / $25 / $1.00 -- a generated block stating a cap the runtime had stopped enforcing,
+    // which is the one thing a generated block exists to prevent.
+    `| Approved spend boundary | ${money(limits.monthlyOperatingUsd)} all-in monthly; ${money(limits.monthlyApiUsd)} model/API share; ${money(limits.dailyUsd)} daily model/API pace |`,
     `| Recorded API spend | ${money(moneyState.costs.api.monthlyUsd)} this month; ${money(moneyState.costs.api.cumulativeUsd)} cumulative |`,
     `| Entered fixed costs | ${money(moneyState.costs.fixed.monthlyUsd)} monthly |`,
     `| Recognized revenue | ${money(moneyState.revenue.recognizedUsd)} |`,

@@ -154,11 +154,13 @@ describe("marketingShark room", () => {
     expect(built.render.summaryPaths).toHaveLength(2);
     expect(built.spendUsd).toBe(0);
 
-    // Package, both render summaries and the ledger move together or not at all.
+    // Package, both render summaries, four draft queue items and the ledger move together or
+    // not at all.
     const ledger = await readLedger(root);
     expect(ledger.brands.devshark!.served).toHaveLength(1);
     expect(ledger.brands.devshark!.served[0]!.questionId).toBe(built.question.id);
-    expect(result.artifacts).toHaveLength(4);
+    expect(result.artifacts).toHaveLength(8);
+    expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toHaveLength(4);
   });
 
   it("writes nothing at all when a truth gate fails", async () => {

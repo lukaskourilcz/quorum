@@ -8,7 +8,8 @@ export const MonetizationMethodIdSchema = z.enum([
   "mma-files-sponsorship-affiliate",
   "titty-tuesdays-commerce",
   "fightaiq-none",
-  "carousel-studio-internal"
+  "carousel-studio-internal",
+  "marketingshark-internal"
 ]);
 
 export const MonetizationProposalSchema = openObject({
@@ -49,7 +50,7 @@ export const MonetizationMethodStateSchema = openObject({
 
 export const PublicMonetizationMethodSchema = openObject({
   id: MonetizationMethodIdSchema,
-  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "fightaiq", "carousel-studio"]),
+  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "fightaiq", "carousel-studio", "marketingshark"]),
   method: z.string().min(1).max(160),
   status: MonetizationStatusSchema,
   activationKpi: z.string().min(1).max(300),
@@ -229,6 +230,15 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     note: "The package stays self-contained so a future standalone product remains possible, but no extraction, sale or service is authorized.",
     proposal: null,
     readiness: () => ({ met: false, unavailable: false, detail: "Internal portfolio infrastructure; future product extraction is locked." })
+  },
+  {
+    id: "marketingshark-internal",
+    venture: "marketingshark",
+    method: "Not monetized — internal agency",
+    activationKpi: "Locked. marketingShark earns nothing directly; its value appears in the products it markets.",
+    note: "An internal service for the Shark family. devShark's own revenue, if any, sits outside BoardlessAI's accounts until the owner decides otherwise, and no marketingShark output may be sold, sponsored or placed for payment.",
+    proposal: null,
+    readiness: () => ({ met: false, unavailable: false, detail: "Internal service; recognized revenue is $0 and activation is owner-only." })
   }
 ];
 

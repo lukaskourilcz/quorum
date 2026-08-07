@@ -72,11 +72,11 @@ export interface PublicCalendarFeed {
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 5, kind: "cu-edition", label: "Edition production" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
+  { hour: 7, kind: "ms-daily", label: "marketingShark daily carousel room" },
   { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
   { hour: 9, kind: "mag-editorial", label: "MMA Files morning story meeting" },
   { hour: 10, kind: "article-am", label: "MMA Files daily article" },
   { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing" },
-  { hour: 7, kind: "ms-daily", label: "marketingShark daily carousel room" },
   { hour: 13, kind: "gv-brief", label: "GoVIRAL trend and marketing room" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
   { hour: 17, kind: "cu-product", label: "Product room" },

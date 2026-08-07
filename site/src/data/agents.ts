@@ -41,6 +41,8 @@ export type AgentId =
   | "REACH"
   | "SPLIT"
   | "PIVOT"
+  | "MAKO"
+  | "CHUM"
   | "EASEL"
   | "MOTIF";
 
@@ -638,6 +640,18 @@ const profileCopy: Record<
     operatingPrinciple: "Describe the pattern and cite the page. Never copy the artifact.",
     output: "Cited textual design observation",
     currentFocus: "Allowed design publications and owner links",
+    publicTrackRecord: null
+  },
+  MAKO: {
+    operatingPrinciple: "Name the date and quote the line, or say nothing.",
+    output: "One bounded weekly review of what shipped",
+    currentFocus: "marketingShark hook rotation and truthfulness",
+    publicTrackRecord: null
+  },
+  CHUM: {
+    operatingPrinciple: "Write the Czech, do not translate it.",
+    output: "One day's carousel copy, in two languages",
+    currentFocus: "devShark quiz carousels",
     publicTrackRecord: null
   }
 };

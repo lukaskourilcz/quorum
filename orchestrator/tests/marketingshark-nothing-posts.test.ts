@@ -63,9 +63,9 @@ describe("marketingShark cannot post", () => {
     const { built } = await draftedPackage();
     const config = await loadMarketingSharkConfig();
     const brand = enabledBrands(config)[0]!;
-    const [{ item }] = buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") });
+    const item = buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") })[0]!.item;
 
-    const forced = QueueItemSchema.parse({ ...item!, status: "queued" });
+    const forced = QueueItemSchema.parse({ ...item, status: "queued" });
     // The approval checks are the second lock and they are all still pending.
     expect(() => assertQueueItemPublishable(forced)).toThrow(/incomplete approval checks/u);
   });

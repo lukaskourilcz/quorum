@@ -30,6 +30,7 @@
             "cu-product",
             "tt-marketing",
             "gv-brief",
+            "ms-daily",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -169,7 +170,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "reason": {
@@ -297,7 +300,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "summary": {
@@ -368,7 +373,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "firstChoice": {
@@ -438,7 +445,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "summary": {
@@ -629,7 +638,9 @@
                 "SPLIT",
                 "EASEL",
                 "MOTIF",
-                "PIVOT"
+                "PIVOT",
+                "MAKO",
+                "CHUM"
               ]
             },
             "setting": {
@@ -686,7 +697,9 @@
                       "SPLIT",
                       "EASEL",
                       "MOTIF",
-                      "PIVOT"
+                      "PIVOT",
+                      "MAKO",
+                      "CHUM"
                     ]
                   },
                   "mode": {
@@ -744,7 +757,9 @@
                       "SPLIT",
                       "EASEL",
                       "MOTIF",
-                      "PIVOT"
+                      "PIVOT",
+                      "MAKO",
+                      "CHUM"
                     ]
                   },
                   "sentAt": {
@@ -837,6 +852,7 @@
             "cu-product",
             "tt-marketing",
             "gv-brief",
+            "ms-daily",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -976,7 +992,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "reason": {
@@ -1104,7 +1122,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "summary": {
@@ -1175,7 +1195,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "firstChoice": {
@@ -1245,7 +1267,9 @@
                   "SPLIT",
                   "EASEL",
                   "MOTIF",
-                  "PIVOT"
+                  "PIVOT",
+                  "MAKO",
+                  "CHUM"
                 ]
               },
               "summary": {
@@ -1384,6 +1408,7 @@
             "cu-product",
             "tt-marketing",
             "gv-brief",
+            "ms-daily",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -1448,7 +1473,9 @@
                 "SPLIT",
                 "EASEL",
                 "MOTIF",
-                "PIVOT"
+                "PIVOT",
+                "MAKO",
+                "CHUM"
               ]
             },
             "setting": {
@@ -1505,7 +1532,9 @@
                       "SPLIT",
                       "EASEL",
                       "MOTIF",
-                      "PIVOT"
+                      "PIVOT",
+                      "MAKO",
+                      "CHUM"
                     ]
                   },
                   "mode": {
@@ -1563,7 +1592,9 @@
                       "SPLIT",
                       "EASEL",
                       "MOTIF",
-                      "PIVOT"
+                      "PIVOT",
+                      "MAKO",
+                      "CHUM"
                     ]
                   },
                   "sentAt": {

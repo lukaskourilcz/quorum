@@ -123,8 +123,8 @@ export default function VenturesPage() {
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">marketingShark</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
-              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One quiz question a day, written up in Czech and English.</h2>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Every morning the room takes one question out of devShark&apos;s own bank and draws it as a five-slide carousel in both languages — the real question, the real answer, and the product named once at the end. It owns no social account and cannot post.</p>
+              <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">One quiz question a day, written up twice.</h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Every morning the room takes one question out of devShark&apos;s own bank and draws it as a five-slide carousel for Czech readers and again for English ones — the real question, the real answer, and the product named once at the end. It owns no social account and cannot post.</p>
               <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/marketingshark">Open marketingShark <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
