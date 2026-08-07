@@ -21,7 +21,7 @@ import {
 import { ChumOutput, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
 import { buildQueueItems } from "./queue.js";
-import { engineVersion, renderCarousel, type RenderedRoleSlide } from "./render.js";
+import { engineVersion, MARKETINGSHARK_FORMAT, renderCarousel, type RenderedRoleSlide } from "./render.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
@@ -151,7 +151,7 @@ export function buildRenderSummary(input: {
     date: input.date,
     brandId: input.brand.id,
     locale: input.locale,
-    format: input.rendered[0]?.slideId ? "instagram-portrait" : "instagram-portrait",
+    format: MARKETINGSHARK_FORMAT,
     engineVersion: engineVersion(),
     slides: input.rendered.map((slide) => ({
       role: slide.role,
@@ -562,8 +562,9 @@ export async function runMarketingSharkCycle(input: {
     outcomes.push(result.outcome);
     ledger = result.ledger;
     artifacts.push(...result.artifacts);
-    if (result.outcome.status === "drafted") spendUsd += result.outcome.spendUsd;
-    if (result.outcome.status === "aborted") spendUsd += result.outcome.spendUsd;
+    // An aborted brand still spent whatever its call cost before the gate refused it, and the
+    // record has to carry that. Only an already-served brand costs nothing.
+    if (result.outcome.status !== "already-served") spendUsd += result.outcome.spendUsd;
   }
 
   const recordPath = `meetings/${input.date}-${MS_DAILY_PHASE}.json`;
