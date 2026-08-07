@@ -2950,6 +2950,57 @@
       "toolUses": 0,
       "usd": 0.05448,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-07T09:03:44.107Z",
+      "cycleId": "20260807090337-tt-marketing",
+      "requestHash": "ebc4315a6bad2d8e9bd4ec10370e784b54dccbb46bfa6c57f204fae6ac68d0a6",
+      "phase": "tt-marketing",
+      "ventureId": "titty-tuesdays",
+      "agent": "PULSE",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 2727,
+      "cachedTokensIn": 0,
+      "tokensOut": 160,
+      "toolUses": 0,
+      "usd": 0.003687,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-07T09:03:50.230Z",
+      "cycleId": "20260807090337-tt-marketing",
+      "requestHash": "e2a2c8e0a6b6caf1d2db8a7fcc8518f1c34a5797b74d0d8c0c7622208f0faacf",
+      "phase": "tt-marketing",
+      "ventureId": "titty-tuesdays",
+      "agent": "ANGLE",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 2920,
+      "cachedTokensIn": 0,
+      "tokensOut": 393,
+      "toolUses": 0,
+      "usd": 0.004885,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-07T09:03:51.671Z",
+      "cycleId": "20260807090337-tt-marketing",
+      "requestHash": "05b90f46068960cef1bdd6ddc807dbc3d69aea947edcea414544da1db153546c",
+      "phase": "tt-marketing",
+      "ventureId": "titty-tuesdays",
+      "agent": "AUDIT",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 2440,
+      "cachedTokensIn": 0,
+      "tokensOut": 68,
+      "toolUses": 0,
+      "usd": 0.002848,
+      "kind": "text"
     }
   ]
 }
