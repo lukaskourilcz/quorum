@@ -60,7 +60,9 @@ items in place. Lack of response never authorizes an action. -->
   If `CRON_SECRET` is never set, the route refuses every request and nothing is
   dispatched — an unset secret costs punctuality, never money.
 
-- [ ] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on
+## Resolved
+
+- [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on
   DNESKAi, so a reader who finishes an article sees one quiet line about your own
   product.
   What this approves, exactly:
@@ -82,8 +84,12 @@ items in place. Lack of response never authorizes an action. -->
   Nothing is delivered until this is ticked. geoShark never gets a banner
   anywhere; that is pinned by the config schema and by two tests, not by this
   sentence.
-
-## Resolved
+  **Approved by the owner on 2026-08-07.** Approval is not delivery: the payload is still
+  `status: "staged"` with no receipt, because the delivery App credentials are not reachable
+  from the session that staged it. The next run that holds them may deliver it within exactly
+  this scope — the two creatives and the one slot config recorded in the contract's payload
+  hash, and nothing else. `active: false` still ships, so the slot stays empty on DNESKAi
+  until someone turns it on there.
 
 - [x] HUMAN_APPROVAL REVENUE-HOSTING-001 — Owner confirmed on 2026-07-31 that
   both projects use an existing Vercel Pro subscription. Hosting is recorded as

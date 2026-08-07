@@ -21,7 +21,7 @@ answer, and the product named once at the end. Everything about that room except
 per brand is deterministic and costs nothing: which question runs, whether the day's opening
 line is actually true of it, how the slides are drawn, where they are stored. About $1.66 a
 month, $0 cash. It owns no social account and cannot post; each carousel is a draft waiting for
-you. It is waiting on items 7 and 8.
+you. It is waiting on item 7.
 
 Both magazines are Czech-only. MMA Files and DNESKAi (formerly Caught Up) each
 write their article in one Czech call instead of writing English and paying again
@@ -56,9 +56,9 @@ is gone rather than deferred.
 
 What is still waiting: one API key that unblocks every FightAIQ output, an Apify account that
 unblocks GoVIRAL's trend scouting, two optional photo keys, the taste loop for Titty Tuesdays,
-the `/admin` credentials that several actions run through, marketingShark's first live run and
-its banner decision, the DNESKAi public URL, the fixed-cost registry, the next Titty Tuesdays
-season, the Actions-minutes decision, and social posting. The list below is those, in the order that unblocks the most.
+the `/admin` credentials that several actions run through, marketingShark's first live run, the
+DNESKAi public URL, the fixed-cost registry, the next Titty Tuesdays season, the Actions-minutes
+decision, and social posting. The list below is those, in the order that unblocks the most.
 
 ## 1. Blocking output right now
 
@@ -122,17 +122,9 @@ season, the Actions-minutes decision, and social posting. The list below is thos
    working one. If the output is poor, that is a prompt problem and the truth gates will catch
    the dishonest parts of it — but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
 
-8. [ ] **Approve the devShark banner on DNESKAi, or decide against it.**
-   `HUMAN_APPROVAL DEVSHARK-BANNER-001` in `state/INBOX.md` has the full detail. One static SVG
-   below the article footer, self-hosted, no script and no tracking pixel, labelled `vlastní
-   projekt` so the site does not look like it sells advertising. It is staged and hashed at
-   `state/ventures/marketingshark/banner/` and nothing was pushed to the DNESKAi repository.
-   $0 either way. Declining is a real answer and costs nothing to say.
-   [imp:3] [owner:me] [time:5m] [kind:decision]
-
 ## 2. Yours to decide
 
-9. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
+8. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
    the navigation, the footer and print; the page title, the social cards, the structured data
    and the Atom feed still say "Caught Up", which was your call and is not a bug. The deployment
    is still at `caughtup-ai.vercel.app`, the
@@ -142,7 +134,7 @@ season, the Actions-minutes decision, and social posting. The list below is thos
    record the article URL they published to, so changing the project name means the older
    receipts point at the old host. [imp:3] [owner:me] [time:20m] [kind:setup]
 
-10. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
+9. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
    `config/fixed-costs.json` now carries `confirmedNoFixedCosts: true`, which says "there are
    none" rather than "nobody has entered any". If that is right, this item is done and you can
    tick it. If you do pay for something, enter each subscription with its monthly USD amount,
@@ -151,12 +143,12 @@ season, the Actions-minutes decision, and social posting. The list below is thos
    wrong answer makes the company look cheaper than it is. Do not enter example prices.
    [imp:3] [owner:me] [time:15m] [kind:setup]
 
-11. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
+10. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
    the marketing room works from the current season; with none, it has a standing objective and
    no material. The warning appears in the room's own daily brief as the date approaches.
    [imp:2] [owner:me] [time:60m] [kind:content]
 
-12. [ ] **Decide how to unblock GitHub Actions minutes.** The three repositories were burning
+11. [ ] **Decide how to unblock GitHub Actions minutes.** The three repositories were burning
    about 342 runner-minutes a day against a 2,000-minute free tier, measured over 5–6 August.
    The diet in this batch — three backstop crons instead of eighteen, a pre-check that ends a
    settled slot in about a minute, path filters on CI — should bring that under ~100 a day, but
@@ -174,7 +166,7 @@ season, the Actions-minutes decision, and social posting. The list below is thos
 
 ## 3. Only before social posting
 
-13. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
+12. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
    accounts.
 
     | Venture | Actions secrets | Repository variables |
@@ -259,6 +251,13 @@ season, the Actions-minutes decision, and social posting. The list below is thos
 - [x] **"Add a priority item through `/admin`" is retired.** The 06:00 board seeds one item per
   agenda venture from that venture's `growth_objective`, so the loop starts from inside the
   system.
+- [x] **The devShark banner on DNESKAi is approved.** You said yes on 2026-08-07 and
+  `HUMAN_APPROVAL DEVSHARK-BANNER-001` is resolved. Nothing has been pushed to the DNESKAi
+  repository yet: the payload is still `status: "staged"` with no receipt, because the session
+  that staged it cannot reach the delivery App credentials. A later run that holds them may
+  deliver exactly what the contract's payload hash covers — two SVGs and one slot config — and
+  nothing more. The slot ships `active: false`, so it stays empty on DNESKAi until you turn it
+  on there.
 - [x] **The six repository variables and both model API keys.** All present as of 2026-08-02.
 - [x] **Delivery App `Checks` and `Commit status` read access,** verified with `Delivery doctor`.
 - [x] **The delivery App covers both `lukaskourilcz/aifirst` and `lukaskourilcz/mma-files`,**

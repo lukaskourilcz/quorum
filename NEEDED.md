@@ -103,10 +103,11 @@ walkthrough and Carousel Studio are waiting on specifically.
   session had no model key reachable from it. One manual `cycle.yml` dispatch with phase
   `ms-daily` costs about $0.05 and turns a proven pipeline into a working one.
   [imp:4] [owner:me] [time:5m] [kind:deploy]
-- [ ] **Approve or decline the devShark banner on DNESKAi** — `HUMAN_APPROVAL
-  DEVSHARK-BANNER-001` in `state/INBOX.md`. Staged and hashed under
-  `state/ventures/marketingshark/banner/`, never delivered, $0 either way.
-  [imp:3] [owner:me] [time:5m] [kind:decision]
+- [x] **Approve or decline the devShark banner on DNESKAi** — approved 2026-08-07.
+  `HUMAN_APPROVAL DEVSHARK-BANNER-001` is resolved. The payload is still staged and
+  hashed under `state/ventures/marketingshark/banner/` with no receipt: the session
+  that staged it cannot reach the delivery App credentials, so a later run delivers it
+  within exactly the approved scope. [imp:3] [owner:me] [time:5m] [kind:decision]
 - [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no
   public address, so their cards on the home page render nothing in the link slot rather
   than a "coming soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]

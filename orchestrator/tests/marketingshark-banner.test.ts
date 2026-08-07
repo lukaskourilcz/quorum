@@ -149,13 +149,25 @@ describe("devShark house banner", () => {
     }
   });
 
-  it("waits on an owner approval that is actually in the INBOX", async () => {
+  it("carries an owner decision in the INBOX, and does not read that decision as a delivery", async () => {
     const inbox = await readFile(path.join(repoRoot, "state", "INBOX.md"), "utf8");
-    const pending = inbox.slice(0, inbox.indexOf("## Resolved"));
-    expect(pending).toContain("HUMAN_APPROVAL DEVSHARK-BANNER-001");
-    // An unticked box. A staged delivery whose approval was already ticked would be a delivery
-    // nobody made a decision about.
-    expect(pending).toMatch(/- \[ \] HUMAN_APPROVAL DEVSHARK-BANNER-001/u);
+    const boundary = inbox.indexOf("## Resolved");
+    expect(boundary).toBeGreaterThan(-1);
+    const pending = inbox.slice(0, boundary);
+    const resolved = inbox.slice(boundary);
+
+    // The owner approved it on 2026-08-07, so it sits under Resolved with a ticked box and is
+    // no longer waiting on anyone. It must exist in exactly one of the two sections: an item in
+    // both would let a reader answer a question that was already answered.
+    expect(resolved).toMatch(/- \[x\] HUMAN_APPROVAL DEVSHARK-BANNER-001/u);
+    expect(pending).not.toContain("DEVSHARK-BANNER-001");
+
+    // And the tick moved nothing on its own. Delivery is a separate act by a run that holds the
+    // App credentials, and a receipt -- not a checkbox -- is what records that it happened.
+    const contract = MarketingSharkBannerContract.parse(
+      JSON.parse(await readFile(path.join(stagingRoot, "contract.json"), "utf8")));
+    expect(contract.status).toBe("staged");
+    expect(contract.receiptRef).toBeNull();
   });
 
   it("refuses a banner contract for any brand but devShark", () => {
