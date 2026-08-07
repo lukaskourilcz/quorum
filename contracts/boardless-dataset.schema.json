@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "boardless-dataset/1"
+    },
+    "dataset": {
+      "type": "string",
+      "enum": [
+        "ai-facts",
+        "mma-facts",
+        "ai-lessons"
+      ]
+    },
+    "anchor": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "categories": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "maxLength": 120,
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "en": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "cs": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          }
+        },
+        "required": [
+          "en",
+          "cs"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "entries": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(?:ai|mma|lex)-\\d{3,}$"
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "promotion": {
+            "type": "string",
+            "enum": [
+              "ufc",
+              "oktagon",
+              "cross"
+            ]
+          },
+          "term": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "en": {
+            "type": "object",
+            "properties": {
+              "short": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 140
+              },
+              "full": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              }
+            },
+            "required": [
+              "short",
+              "full"
+            ],
+            "additionalProperties": {}
+          },
+          "cs": {
+            "type": "object",
+            "properties": {
+              "short": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 140
+              },
+              "full": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              }
+            },
+            "required": [
+              "short",
+              "full"
+            ],
+            "additionalProperties": {}
+          },
+          "verified": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 12,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "category",
+          "en",
+          "cs",
+          "verified",
+          "source"
+        ],
+        "additionalProperties": {}
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "dataset",
+    "anchor",
+    "categories",
+    "entries"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/boardless-dataset.schema.json"
+}

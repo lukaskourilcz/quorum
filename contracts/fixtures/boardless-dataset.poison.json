@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "boardless-dataset/1",
+  "dataset": "ai-facts",
+  "anchor": "2026-07-01",
+  "categories": {
+    "history": { "en": "History", "cs": "Historie" }
+  },
+  "entries": [
+    {
+      "id": "ai-001",
+      "slug": "turing-test-1950",
+      "category": "history",
+      "en": {
+        "short": "Turing proposed his imitation game in 1950, before the field had a name",
+        "full": "Alan Turing's 1950 paper opened with the question 'Can machines think?' and replaced it with an imitation game."
+      },
+      "cs": {
+        "short": "Turing navrhl svou imitační hru v roce 1950",
+        "full": "Turingova práce z roku 1950 začíná otázkou 'Mohou stroje myslet?' a nahrazuje ji imitační hrou."
+      },
+      "verified": "2026-08-07",
+      "source": "Turing, Mind (1950)"
+    },
+    {
+      "id": "ai-001",
+      "slug": "invented-milestone",
+      "category": "provenance",
+      "promotion": "ufc",
+      "en": {
+        "short": "A claim nobody checked, in a category this file never declared",
+        "full": "This entry reuses a published id, points at a category the file does not declare, carries a promotion that belongs to the MMA dataset, and cites a source nobody could follow."
+      },
+      "cs": {
+        "short": "Tvrzení, které nikdo neověřil, v nedeklarované kategorii",
+        "full": "Tato položka opakuje již publikované id, ukazuje na nedeklarovanou kategorii, nese promotion patřící do MMA datové sady a cituje zdroj, který nelze dohledat."
+      },
+      "verified": "2026-08-07",
+      "source": "a source"
+    }
+  ]
+}

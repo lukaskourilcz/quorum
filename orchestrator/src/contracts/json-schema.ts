@@ -1,5 +1,6 @@
 import { z, type ZodType } from "zod";
 import { AudienceSpecSchema } from "./audience-spec.js";
+import { BoardlessDatasetSchema } from "./boardless-dataset.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
@@ -43,6 +44,7 @@ import {
 
 export const ContractSchemas = {
   "audience-spec": AudienceSpecSchema,
+  "boardless-dataset": BoardlessDatasetSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
   "carousel-template": CarouselTemplateSchema,

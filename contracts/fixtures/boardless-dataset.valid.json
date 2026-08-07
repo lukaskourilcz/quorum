@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "boardless-dataset/1",
+  "dataset": "ai-facts",
+  "anchor": "2026-07-01",
+  "categories": {
+    "history": { "en": "History", "cs": "Historie" },
+    "models": { "en": "Models", "cs": "Modely" }
+  },
+  "entries": [
+    {
+      "id": "ai-001",
+      "slug": "turing-test-1950",
+      "category": "history",
+      "en": {
+        "short": "Turing proposed his imitation game in 1950, before the field had a name",
+        "full": "Alan Turing's 1950 paper 'Computing Machinery and Intelligence' opened with the question 'Can machines think?' and replaced it with an imitation game. The term 'artificial intelligence' was not coined until the Dartmouth workshop six years later."
+      },
+      "cs": {
+        "short": "Turing navrhl svou imitační hru v roce 1950, ještě než obor dostal jméno",
+        "full": "Turingova práce 'Computing Machinery and Intelligence' z roku 1950 začíná otázkou 'Mohou stroje myslet?' a nahrazuje ji imitační hrou. Pojem 'umělá inteligence' vznikl až o šest let později na workshopu v Dartmouthu."
+      },
+      "verified": "2026-08-07",
+      "source": "Turing, Mind (1950)"
+    },
+    {
+      "id": "ai-002",
+      "slug": "transformer-attention-2017",
+      "category": "models",
+      "en": {
+        "short": "The architecture behind today's language models was published in a single 2017 paper",
+        "full": "'Attention Is All You Need' introduced the transformer in 2017, dropping recurrence in favour of attention alone. Nearly every large language model in use today is a descendant of that architecture."
+      },
+      "cs": {
+        "short": "Architektura dnešních jazykových modelů vyšla v jediné práci z roku 2017",
+        "full": "Práce 'Attention Is All You Need' představila v roce 2017 transformer, který nahradil rekurenci samotnou pozorností. Téměř každý dnešní velký jazykový model je potomkem této architektury."
+      },
+      "verified": "2026-08-07",
+      "source": "Vaswani et al., 2017"
+    },
+    {
+      "id": "ai-003",
+      "slug": "dartmouth-workshop-1956",
+      "category": "history",
+      "en": {
+        "short": "The phrase 'artificial intelligence' was coined to win a grant",
+        "full": "John McCarthy proposed the term 'artificial intelligence' in the 1956 Dartmouth workshop proposal, partly to distinguish the new field from cybernetics. The workshop's organisers expected significant progress over one summer."
+      },
+      "cs": {
+        "short": "Spojení 'umělá inteligence' vzniklo kvůli žádosti o grant",
+        "full": "John McCarthy navrhl pojem 'umělá inteligence' v návrhu dartmouthského workshopu z roku 1956, částečně proto, aby nový obor odlišil od kybernetiky. Organizátoři čekali výrazný pokrok během jediného léta."
+      },
+      "verified": "2026-08-07",
+      "source": "Dartmouth workshop proposal, 1955"
+    }
+  ]
+}
