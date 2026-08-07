@@ -1,8 +1,8 @@
 # Product marketing context — GoVIRAL
 
-Drafted 2026-08-06 from `config/ventures.json`, `config/goviral-sources.json` and
-`docs/GOVIRAL-PHASE2-PROMPT.md`. It exists so the vendored marketing skills stop asking for
-foundations this repository already holds. **Nothing here is a claim about performance** — the
+Drafted 2026-08-06 from `config/ventures.json`, `config/goviral-sources.json` and the
+founding record `state/decisions/2026-08-06-goviral-founding.md`. It exists so the vendored
+marketing skills stop asking for foundations this repository already holds. **Nothing here is a claim about performance** — the
 venture was founded today and has produced nothing yet.
 
 Document version: 1.0 · Changelog: 1.0 (2026-08-06) — first draft, written at founding.

@@ -11,10 +11,11 @@ still accurate and on point.
 
 Never rewrite these. Report them and move on:
 
-- `state/decisions/*.md`, `docs/AUDIT-*.md`, `docs/REVIEW-*.md` and
-  `docs/MARKDOWN-AUDIT-*.md` are dated append-only records. A superseded figure
-  in one of them is correct history (GOVERNANCE.md, "Historical decision
-  records are append-only evidence").
+- `state/decisions/*.md` and any dated `docs/*AUDIT-*.md` or `docs/REVIEW-*.md`
+  are append-only records. A superseded figure in one of them is correct history
+  (GOVERNANCE.md, "Historical decision records are append-only evidence"). Once
+  the work a record describes is finished and its findings are folded into the
+  standing docs, retire the whole file rather than editing it — git keeps the trail.
 - Any skill folder holding an `UPSTREAM.md` is vendored. Re-vendor from source;
   never hand-edit.
 - Every file under `.claude/skills/<name>/` that is mirrored in
