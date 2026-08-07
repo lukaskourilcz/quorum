@@ -23,22 +23,44 @@ not need, and where a determinstic check could replace a paid judgment call. Say
 which of the standing rooms earn their cadence and which should become
 event-triggered. Be specific about which gate, file or constant you would move.
 
-**0.2 — Design the `/workflows` section for the BoardlessAI site.** An animated,
-scroll-driven explanation of the whole mechanism, accurate enough that a reader
-finishes it understanding how a story becomes a published article, a rendered
-carousel and a receipt. Part 13 is the shot list. The section must include
-Titty Tuesdays and GoVIRAL even though neither publishes yet, because both are
-already producing state.
+**0.2 — Write the build prompt for Opus that produces the `/workflows` section.**
 
-**0.3 — Also design the Titty Tuesdays visual-proposal loop.** A new capability the
-owner wants. Full brief in Part 14.3, including the constraints it has to survive.
+This is the main deliverable, and it is a *prompt*, not a design document and not code.
+Opus will receive your prompt and build the section in one pass, without re-scouting the
+repository. So the prompt has to carry everything Opus needs and nothing it has to guess:
 
-The site is Next.js App Router under `site/`, server components by default, brand
-tokens in `site/src/styles`. Existing venture pages are
-`site/src/components/*-venture-page.tsx`. There is no motion library in the
-dependency tree and the studio is imported as TypeScript source, so `site` runs
-webpack (`next dev --webpack`) — Turbopack does not apply the `.js`→`.ts` alias and
-every studio import fails under it.
+- **The metaphor and its rules**, stated so Opus cannot drift from them. Part 13 gives
+  you the metaphor the owner wants — an office map — and the constraints that make it
+  truthful rather than decorative.
+- **The exact section structure**: how many movements, what each one shows, what
+  animates, what triggers it, what it looks like at rest.
+- **The data contract for every element on screen**: which file or resolver each number,
+  label and status comes from. The section must render from real committed state, the
+  way the home page already does, and must print an unavailable state rather than a zero
+  where a figure cannot be computed honestly.
+- **The reuse contract**: which existing components, helpers and tokens Opus must build
+  on rather than reinvent. Part 13.2 lists them. A parallel plate system or a second
+  venture-colour map would be a defect.
+- **The load-bearing invariants** it must not break, copied into the prompt verbatim
+  from Part 13.6, because each one was a real bug and none of them is obvious from
+  reading the code.
+- **Responsive, accessibility and reduced-motion requirements**, concretely.
+- **The acceptance checks** Opus should run before reporting done.
+
+Write it as one self-contained prompt. Assume Opus has the repository and this document
+but has not read either yet, and will not ask follow-up questions.
+
+**0.3 — Design the Titty Tuesdays visual-proposal loop.** A new capability the owner
+wants. Full brief in Part 14.3, including the constraints it has to survive. This one is
+a design, not a prompt.
+
+**Site facts your prompt must carry.** `site/` is Next.js App Router, server components
+by default, brand tokens in `site/src/styles`. Venture pages are
+`site/src/components/*-venture-page.tsx`. **There is no motion library in the dependency
+tree** — the home page's parallax, scroll locking and playback are hand-written against
+`requestAnimationFrame` and wheel events, and the section must stay that way. The studio
+is imported as TypeScript source, so `site` runs webpack (`next dev --webpack`);
+Turbopack does not apply the `.js`→`.ts` alias and every studio import fails under it.
 
 ---
 
@@ -1185,13 +1207,238 @@ Critical gaps: `company.monthly-all-in-usd`, `company.monthly-api-usd`,
 
 ---
 
-## Part 13 — The `/workflows` section: what the animation must show
+## Part 13 — The `/workflows` section: the office map
 
-The brief for deliverable 0.2. Seven movements. The reader should be able to follow one
-story from a cron firing to a rendered carousel without ever seeing a claim the system
-does not actually make.
+The brief for deliverable 0.2. Everything here goes into the prompt you write for Opus.
 
-### Movement 1 — The clock
+### 13.0 The metaphor, and the rules that keep it honest
+
+**Every venture that holds meetings is a small office on a map.** A meeting happens in
+an office. When the office decides something, two things leave the building: a sealed
+package that a courier carries to a published site, and a summary that goes to the
+workshop where the social content is made. That is the whole story, and a reader should
+get it from the picture before they read a word.
+
+```
+                          ┌─────────────────────┐
+                          │   BoardlessAI HQ    │   06:00 · 14:00 · 22:00
+                          │  board · 3 rooms    │
+                          └──────────┬──────────┘
+                                     │ priorities, one commission
+   ┌──────────────┬──────────────┬───┴──────────┬──────────────┬──────────────┐
+   ▼              ▼              ▼              ▼              ▼              ▼
+┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐
+│DNESKAi │   │  MMA   │   │FightAIQ│   │marketing│  │ Titty  │   │GoVIRAL │
+│        │   │ Files  │   │        │   │  Shark  │  │Tuesdays│   │        │
+│05 · 17 │   │09·10·20│   │08 · 19 │   │   07    │  │   11   │   │13 (Mon)│
+└───┬────┘   └───┬────┘   └───┬────┘   └───┬────┘  └───┬────┘   └───┬────┘
+    │            │            │            │           │            │
+    │            │◄───────────┘            │           │            │
+    │            │  verified fighter data  │           │            │
+    │            │                         │           │            │
+    │            │                         │           │            │
+    └────────────┴───────────┬─────────────┴───────────┘            │
+                             │                                      │
+                             ▼                                      │
+                  ┌──────────────────────┐                          │
+                  │   CAROUSEL STUDIO    │ ◄────────────────────────┘
+                  │  the workshop        │   trend signals feed
+                  │  no meeting room     │   the two magazine offices
+                  │  always open         │
+                  └──────────┬───────────┘
+                             │
+        ┌────────────────────┼────────────────────┐
+        ▼                    ▼                    ▼
+   ┌─────────┐         ┌──────────┐         ┌──────────┐
+   │ COURIER │         │ COURIER  │         │ COURIER  │
+   │ one key │         │ one key  │         │ one key  │
+   │ one door│         │ one door │         │ one door │
+   └────┬────┘         └────┬─────┘         └────┬─────┘
+        ▼                   ▼                    ▼
+    aifirst            mma-files          react-express-app
+   (DNESKAi)          (MMA Files)         (devShark)  ◄──► questions come back
+                                                            the other way
+
+              titty-tuesdays storefront ──► collects its own feed
+                                            (nobody delivers to it)
+```
+
+**Six rules the metaphor must obey.** These are what stop it becoming decoration:
+
+1. **Most offices are dark most of the time.** Only one is lit at a time, for one hour.
+   Thirteen wake-ups across a day is the honest picture, and a map showing every window
+   blazing at once would be a lie about how the business runs. Time of day should drive
+   the map.
+2. **An office that opens and decides "nothing today" turns its light on and then off
+   again, and that is a success.** `NO_EDITION`, a killed article slot, a `not-needed`
+   agenda — these must not read as failures. Find a visual language for a good empty
+   outcome that is distinct from both "busy" and "broken".
+3. **GoVIRAL's office is lit one day in seven.** The other six firings are $0 no-ops.
+   Show that rather than implying a daily room.
+4. **Carousel Studio is not an office.** It has no meeting room, holds no discussion and
+   never deliberates — `config/ventures.json` gives it `"meetings": []`. It is the
+   workshop: machinery that is always available and runs the moment something is handed
+   to it. Draw it as a different kind of building.
+5. **The courier cannot go wherever it likes.** It carries one sealed package to one
+   address, using a key cut for that door only (a GitHub App token scoped to a single
+   repository), and at the door there is a checklist of exactly which shelves it may put
+   things on (the path allowlist). Then it waits, walks round the front, and checks the
+   thing is actually on display before it reports back (`release:verify`). This is the
+   most animatable idea in the system — give it room.
+6. **Two edges are not deliveries.** `react-express-app` is a two-way street: questions
+   come *in*, the hook library goes *out*. `titty-tuesdays` **collects** — it pulls a
+   feed and fails closed to concept mode when it cannot reach it. Nobody delivers to it.
+   Both asymmetries should be obvious without a caption.
+
+### 13.1 The home page is already an office walkthrough — this must match it
+
+**Read `site/src/components/office/` and `site/src/lib/office-walkthrough.ts` before
+designing anything.** The home page is a seven-section, scroll-locked walkthrough with
+photographic plates, parallax, a mood tint that tracks Prague wall time, and a wallboard.
+Its sections are `intro · calendar · meetings · projects · team · results · company`.
+
+`/workflows` is a sibling of that page, not a new visual world. It must feel like walking
+into the same building through a different door. Where the home page shows *who works
+here and what happened today*, `/workflows` shows *how the work moves*.
+
+The office vocabulary already exists in code:
+
+- `OfficeProjectKey` — `company · caught-up · mma-files · fightaiq · goviral ·
+  marketingshark · titty-tuesdays · carousel-studio`. Exactly the eight buildings on the
+  map.
+- `projectForKind(kind)` — maps any meeting phase to its building. Use it; do not write
+  a second mapping.
+- `PROJECT_COLOR` / `VENTURE_BRAND` — the venture hues the public calendar and the admin
+  rail already share. The map's building colours are already decided.
+
+### 13.2 The reuse contract
+
+Opus must build on these rather than reinvent them. Name each one in the prompt:
+
+| Reuse | Where | Why |
+| --- | --- | --- |
+| `OfficePlate` | `site/src/components/office/office-plate.tsx` | the plate, parallax offset and layer discipline are solved and its bugs are documented |
+| `wheel-gesture.ts` | `site/src/components/office/` | scroll locking above 1024px, already tested |
+| `projectForKind`, `PROJECT_COLOR` | `site/src/lib/office-walkthrough.ts` | one phase→building map, one colour map |
+| `buildPublicCalendarFeed`, `pragueCalendarDate` | `site/src/lib/calendar-feed-model.ts` | slot statuses and Prague dates |
+| `getPublicCalendarSchedule` | `site/src/lib/venture-registry.ts` | the 13 slots, from the registry |
+| `getPublicMeetingRecords`, `getPublicMeetingSkips` | `site/src/lib/` | what happened and why not |
+| `getPublicArticleSlots`, `readableSlotReason` | `site/src/lib/` | article outcomes in reader language |
+| `getPublicMoneySnapshot` | `site/src/lib/money-records.ts` | spend, honestly nullable |
+| `PageShell`, `SectionHeading`, `PageIntro`, `Stat` | `site/src/components/` | page furniture |
+| `deliveredEditionPackage`, `deliveredArticlePackage` | `site/src/lib/delivered-packages.ts` | real delivered content for the worked example |
+
+**The server/client boundary is the sanitising boundary.** Follow
+`office-walkthrough.ts` exactly: resolve everything on the server, cross once as plain
+JSON, and let nothing carry a repository path, a raw package hash outside a disclosure,
+or a number the state files do not contain.
+
+### 13.3 The movements
+
+Seven, matching the home page's rhythm. Each is one screen.
+
+**Movement 1 — The map at rest.** The whole picture from 13.0, at the current Prague
+hour, with the lit office highlighted and the rest dim. A reader who stops here should
+already understand the shape. Everything after this is the same map, zoomed.
+
+**Movement 2 — A day passes.** Time runs from 05:00 to 22:00 and offices light in
+sequence. Show GoVIRAL staying dark on six days in seven. Show a light coming on and
+going off again with nothing leaving the building — the good empty outcome. This is the
+movement that teaches the reader the business is quiet on purpose.
+
+**Movement 3 — Inside one office.** Enter DNESKAi at 05:00. What arrives (the source
+scan), what the room reads, who is in it, what it decides. Show the two gates as doors
+that do not open: fewer than 10 sources responding, or fewer than 10 candidates, and the
+day ends here with a stated reason. Show the count falling — sources → 80 candidates →
+50 shown to the editor → 1 chosen.
+
+**Movement 4 — The desk.** The write-and-check loop as a loop the reader can watch go
+round: write → quick check → editor's review → full check, with up to two returns. Show
+cost accumulating against the day's allowance, and show the quick check catching a
+problem *before* the expensive review is paid for. That reordering is one of the clearest
+pieces of engineering in the system and it should get its own beat.
+
+**Movement 5 — The courier.** Rule 5 from 13.0, animated. The sealed package, the key cut
+for one door, the checklist at the door with four files passing and everything else
+bouncing off, the walk round the front to check the thing is on display, the receipt.
+Show the three different checklists side by side and show a dataset append physically
+unable to touch an article.
+
+**Movement 6 — The workshop.** Carousel Studio. The article arriving as a *summary* —
+1,100 words collapsing to a headline, a standfirst and a handful of passages, because the
+desk already decided what the piece was about. Then the same summary rendering twice and
+producing identical output. Then the hook line being chosen: a rack of 49 opening lines,
+most of them greyed out because they would not be true of *this* item, then the recently
+used ones removed, then one picked. Show the greying-out clearly — that a line is only
+allowed to appear when the content makes it true is the single most interesting idea in
+the system.
+
+Show the empty-handed case too: DNESKAi and MMA Files have no hook library written, so
+they take the plain headline. Ordinary, not broken.
+
+**Movement 7 — The five repositories.** The full map again, now with every edge labelled
+with what actually crosses it, including the two asymmetric ones from rule 6.
+
+### 13.4 The worked example
+
+Carry **one real published article** through movements 3 to 6, from committed state
+rather than from mock data — `deliveredEditionPackage` already resolves it. A reader who
+followed the abstraction should be able to click through to the actual piece at the end.
+This is what turns the section from an explainer into a proof.
+
+### 13.5 What the section must not do
+
+- **Do not animate money being spent where the path is free.** The carousel summary, hook
+  assignment, question selection, every gate and every render are $0. Showing them as
+  costing something misrepresents the entire design.
+- **Do not show social posting as live.** Nothing has posted. Show the queue filling and
+  the lock holding.
+- **Do not invent metrics.** `METRICS_INGESTION_ENABLED=false`. There are no engagement
+  numbers, and a chart of them would be a fabrication.
+- **Do not use generated imagery as filler**, and do not replace authentic UI with drawn
+  UI.
+- **Do not make failure look like drama.** The system's failure modes are quiet and
+  stated. A red alert aesthetic would be a lie about the temperature of the thing.
+
+### 13.6 Load-bearing invariants — copy these into the Opus prompt verbatim
+
+Each was a real bug on this page. None is obvious from reading the code.
+
+1. **Centre an oversized backdrop plate with `left/top: 50%` plus
+   `translate(-50%, -50%)`, never with grid centring.** An oversized grid item is
+   start-aligned in Chrome, so `place-items: center` put the left edge of a
+   2.4×-viewport image at the left edge of the screen and the room was never in frame.
+2. **Give every decorative layer `pointer-events: none`.** In section 05 the mood tint
+   sits *after* the content in DOM order — that is what dims the room around the lit
+   screen — and without the rule it swallowed every click on the wallboard.
+3. **Keep the plates off `will-change: transform`.** Seven plates at 2,000–2,700 CSS
+   pixels wide, permanently promoted, exhausted the GPU layer budget; Chrome answered by
+   painting whole frames black while the DOM underneath was perfectly correct.
+4. **Mark real horizontal scrollers `data-horizontal-scroll`** or the containment e2e
+   guard reads them as page overflow.
+5. **Wheel-driven section jumping binds only above 1024px.** Below that the page is an
+   ordinary document — auto-height sections, no snap, nothing intercepted.
+6. **Honour `prefers-reduced-motion`.** The home page already branches on it; the map
+   must be fully legible and complete with every animation off.
+7. **Plates are AVIF with a WebP fallback and no `next/image`.** They are 3–40 KB at
+   native size, so a resize pipeline adds a request and a transformation to save nothing.
+   Only the first plate is eager.
+
+### 13.7 Acceptance checks for the prompt to require
+
+`pnpm -C site typecheck` · `pnpm -C site build` · the containment e2e guard · no page
+horizontal overflow at 360, 430, 768, 1024, 1280 and 1600px · full legibility with
+reduced motion on · keyboard reachable in document order · every figure on screen
+traceable to a state file or rendered as an explicit unavailable state.
+
+---
+
+## Part 13A — Mechanism notes for the map
+
+The metaphor above is what the reader sees. This is what is underneath each part of it,
+in engineering terms, because the prompt Opus receives needs both.
+
+### Under the map and the passing day (movements 1–2)
 
 A 24-hour Prague dial with 13 marks. Each mark carries its phase, its venture colour and
 its envelope. Hovering a mark shows the room's cast.
@@ -1202,7 +1449,7 @@ workflow — the punctual Vercel line landing on the hour, the GitHub backstop l
 arriving visibly late and finding the work already done. Show the 5-hour grace window as
 a widening band behind each mark, and a slot moving `scheduled → late → held`.
 
-### Movement 2 — The scan
+### Under the source scan (movement 3)
 
 32 source nodes fanning into a digest. Group them by adapter kind. Animate the count
 falling: *N sources responded → 80 candidates → 50 shown to the editor → 1 chosen*.
@@ -1211,7 +1458,7 @@ Show the two gates as physical stops: fewer than 10 successful sources, or fewer
 candidates, and the whole line stops with a labelled `no_edition`. **A stopped line is
 not a broken line** — that should be visually clear, not a red error.
 
-### Movement 3 — The write
+### Under the desk (movement 4)
 
 The regeneration loop, drawn as a loop. Curate → write → draft gate → STET → final gate,
 with the two rewrite attempts as visible returns. Show cost accumulating against a $0.50
@@ -1219,13 +1466,13 @@ bar as each stage completes, and show the draft gate catching a violation *befor
 is paid — that reordering is one of the clearest efficiency wins in the system and it
 deserves a beat.
 
-### Movement 4 — The picture
+### Under the hero image (movement 4)
 
 Three rungs, falling through: curated scene → licensed search across four providers →
 deterministic SVG plate. The plate should look like a finished thing, not a fallback,
 because it is a legitimate delivered state.
 
-### Movement 5 — The delivery
+### Under the courier (movement 5)
 
 The most visually interesting part. Show, in order: the bounded token minted and scoped
 to one repository · the target repo cloned · the consumer script running *inside the
@@ -1237,7 +1484,7 @@ The allowlist is the single best thing to animate in the whole system. Show the 
 allowlists side by side (edition, no-edition, dataset) and show a dataset append being
 physically unable to touch an article.
 
-### Movement 6 — Carousel Studio
+### Under the workshop (movement 6)
 
 The article arriving as a **summary**, not as an article: 1,100 words collapsing to
 kicker + headline + standfirst + 3–8 passages + sources. Then template + payload + brand
@@ -1252,7 +1499,7 @@ same hand*.
 Show `no-hook` too, for DNESKAi and MMA Files, as an ordinary outcome where the
 template's own headline renders.
 
-### Movement 7 — The five repositories
+### Under the repository map (movement 7)
 
 The full map. quorum at the centre; `aifirst` and `mma-files` receiving packages;
 `react-express-app` in a **two-way** relationship (3,633 questions in, hook library
@@ -1261,17 +1508,6 @@ and failing closed to concept mode when it cannot reach it; GoVIRAL as a signal 
 feeds back into the two magazines' rooms without ever having a repository of its own.
 
 Each edge should be labelled with what actually crosses it and what cannot.
-
-### What the section must not do
-
-- Do not animate money being spent when the path is deterministic. The summary builder,
-  the hook brain, question selection, every gate and every render are $0, and showing
-  them as costing something misrepresents the whole design.
-- Do not show social posting as live. Nothing has posted. Show the queue filling and the
-  lock holding.
-- Do not invent metrics. `METRICS_INGESTION_ENABLED=false` and there are no engagement
-  numbers to show.
-- No generated imagery standing in for real UI, and no fake dashboards.
 
 ---
 
@@ -1297,15 +1533,33 @@ Each edge should be labelled with what actually crosses it and what cannot.
 7. **MAKO's weekly review is specified and unwired.** Wire it, drop it, or fold it into
    `mag-desk`?
 
-### 14.2 Design questions for the section itself
+### 14.2 The hard parts of the office map
 
-1. How do you show 13 daily wake-ups without the page feeling like a cron table?
-2. How do you make "this stopped and that is correct" read as competence rather than
-   failure?
-3. The most interesting mechanism (the path allowlist, the eligible-set hash) is also
-   the most abstract. How do you make a hash comparison legible?
-4. Five repositories, one of which pulls instead of being pushed to. What layout makes
-   that asymmetry obvious at a glance?
+Part 13 sets the metaphor and its rules. These are the places where the metaphor is
+under real strain, and your prompt has to give Opus an answer rather than leave it to
+improvise:
+
+1. **An office that opens, decides nothing and closes is the most common outcome in the
+   system, and the hardest thing to draw.** It must not read as failure, must not read
+   as idleness, and must not look identical to a busy office. Solve this one first —
+   almost every other honesty rule depends on it.
+2. **Time is doing two jobs at once.** The map is lit by the current Prague hour
+   (movement 1) *and* replayed across a whole day (movement 2). If those two use the
+   same visual language the reader will not know whether they are watching now or a
+   recording. Say how they differ.
+3. **The most interesting mechanisms are the least visual.** The path allowlist, the
+   eligible-set hash and the content-hash check are all comparisons between two strings.
+   The courier-and-checklist metaphor carries the allowlist. What carries the other two?
+4. **Three of the eight buildings are not really offices.** Carousel Studio has no
+   meeting room, FightAIQ is a data office whose output is another office's input, and
+   the board HQ decides priorities rather than producing anything. If they all get the
+   same building, the map flattens; if they each get a bespoke shape, it fragments.
+5. **The section has to survive its own accuracy.** Thirteen slots, eight buildings,
+   five repositories, seven release checks and three allowlists is a lot of true detail.
+   Say what gets cut from the first screen and what a reader has to scroll or click to
+   reach. A map nobody finishes teaches nothing.
+6. **`/workflows` sits beside a home page that is already an office walkthrough.** Say
+   how a reader knows which one they are on, and what stops the two feeling redundant.
 
 ### 14.3 New capability: Titty Tuesdays visual proposals
 
