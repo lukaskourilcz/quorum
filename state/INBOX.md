@@ -60,6 +60,29 @@ items in place. Lack of response never authorizes an action. -->
   If `CRON_SECRET` is never set, the route refuses every request and nothing is
   dispatched — an unset secret costs punctuality, never money.
 
+- [ ] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on
+  DNESKAi, so a reader who finishes an article sees one quiet line about your own
+  product.
+  What this approves, exactly:
+  - **What is placed:** one static SVG, 720×120, below the article footer, plus
+    a `config/banner.json` that turns it on. Both are staged and hashed at
+    `state/ventures/marketingshark/banner/`; the payload hash travels with them.
+  - **What it costs:** $0. The asset is self-hosted in the target repository and
+    the delivery rides the App channel that already carries the daily edition.
+  - **What it fetches:** nothing. No script, no external font, no remote image,
+    no tracking pixel. A test asserts the file contains none of those before it
+    can be staged at all.
+  - **How it is labelled:** `vlastní projekt`, visibly. DNESKAi does not sell
+    advertising and this must not look like it does.
+  - **What it claims:** that devShark is a quiz game for developers, and its
+    address. No user count, no ranking, no testimonial.
+  - **Why it needs you:** a house banner is a new outward-facing surface on a
+    reader site, and no room may open one for itself. After this one approval the
+    delivery runs within the recorded scope and needs no further sign-off.
+  Nothing is delivered until this is ticked. geoShark never gets a banner
+  anywhere; that is pinned by the config schema and by two tests, not by this
+  sentence.
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL REVENUE-HOSTING-001 — Owner confirmed on 2026-07-31 that

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "marketingshark-banner/1",
+  "brandId": "devshark",
+  "targetRepo": "lukaskourilcz/aifirst",
+  "fallbackSpec": true,
+  "files": [
+    {
+      "path": "public/banners/devshark.svg",
+      "sha256": "555a8292b8b7c95ea0b5ab4a8730c787e9f758e51bc6448249bb12698d343e8b",
+      "bytes": 1159
+    },
+    {
+      "path": "config/banner.json",
+      "sha256": "acfe3facc597cab0fa502ed1c961b0b1686bcd47af5a22aa4ddb2b3f099d70b4",
+      "bytes": 395
+    }
+  ],
+  "payloadHash": "0ce9fd61399ded5cea699d160866c96c72789076e506753247ecd5eb482e4f3c",
+  "humanApprovalRef": "INBOX:place-devshark-house-banner-on-dneskai",
+  "preparedAt": "2026-08-07T09:21:14.030Z",
+  "status": "staged",
+  "receiptRef": null
+}

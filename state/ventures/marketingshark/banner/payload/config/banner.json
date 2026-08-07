@@ -1,0 +1,14 @@
+{
+  "enabled": false,
+  "slotId": "house-banner",
+  "position": "below-article-footer",
+  "maxWidth": "720px",
+  "height": {
+    "desktop": 120,
+    "mobile": 90
+  },
+  "href": "https://devshark.app?utm_source=dneskai&utm_medium=banner&utm_campaign=devshark-house",
+  "asset": "public/banners/devshark.svg",
+  "alt": "devShark — kvízová hra pro vývojáře",
+  "label": "vlastní projekt"
+}
