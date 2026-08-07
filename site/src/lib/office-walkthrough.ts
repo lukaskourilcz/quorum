@@ -1,0 +1,682 @@
+import "server-only";
+import ventureRegistry from "../../../config/ventures.json";
+import { publicAgentMandate, publicAgentTitle } from "@/components/agent-language";
+import { agents } from "@/data/agents";
+import { CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
+import { deliveredArticlePackage, deliveredEditionPackage } from "@/lib/delivered-packages";
+import {
+  addCalendarDays,
+  buildPublicCalendarFeed,
+  mondayOfCalendarWeek,
+  pragueCalendarDate,
+  type CalendarStatus
+} from "@/lib/calendar-feed-model";
+import { getDailyResults, getVentureKpiStatuses } from "@/lib/daily-results";
+import { getPublicIdeas } from "@/lib/idea-ledger";
+import {
+  WORKSPACE_CHANNELS,
+  buildMeetingFeed,
+  channelForKind,
+  type FeedMessage,
+  type WorkspaceChannelId
+} from "@/lib/meeting-feed";
+import { getPublicMeetingRecords } from "@/lib/meeting-records";
+import { getPublicMeetingSkips } from "@/lib/meeting-skips";
+import { getPublicMoneySnapshot } from "@/lib/money-records";
+import { getPublicArticleSlots } from "@/lib/article-slots";
+import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
+import { getPublicStandups } from "@/lib/standup-records";
+import { getPublicCalendarSchedule } from "@/lib/venture-registry";
+
+/**
+ * Everything the office walkthrough renders, resolved on the server.
+ *
+ * The page is one long client component — wheel locking, parallax, playback and the wallboard all
+ * need the browser — so every read happens here and crosses once, as plain JSON. That boundary is
+ * also the sanitising boundary: nothing below carries a repository path, a package hash outside a
+ * disclosure, or a number the state files do not contain. Where a figure cannot be computed
+ * honestly it is `null` and the wallboard prints an unavailable state rather than a zero.
+ */
+
+/** How many past weeks the calendar arrows can reach. Matches `/calendar`'s own built range. */
+const CALENDAR_PAST_WEEKS = 8;
+const CALENDAR_FUTURE_WEEKS = 1;
+
+/** How far back the workspace player carries a transcript. Older days stay on `/meetings`. */
+const TRANSCRIPT_DAYS = 21;
+
+const weekdayFormatter = new Intl.DateTimeFormat("en", { weekday: "short", timeZone: "UTC" });
+const weekdayLongFormatter = new Intl.DateTimeFormat("en", { weekday: "long", timeZone: "UTC" });
+const dayMonthFormatter = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", timeZone: "UTC" });
+const longDateFormatter = new Intl.DateTimeFormat("en", { month: "long", day: "numeric", timeZone: "UTC" });
+
+export type OfficeProjectKey =
+  | "company"
+  | "caught-up"
+  | "mma-files"
+  | "fightaiq"
+  | "goviral"
+  | "titty-tuesdays"
+  | "carousel-studio";
+
+/**
+ * The venture hue the public calendar already uses.
+ *
+ * Kept as literal hex rather than the `color-mix()` the board uses, because these cross to the
+ * client as inline styles on a canvas that also composes them into `brand + "26"` alpha suffixes,
+ * and `color-mix()` does not concatenate.
+ */
+export const PROJECT_COLOR: Record<OfficeProjectKey, string> = {
+  company: "#ff5a00",
+  "caught-up": "#fe45e2",
+  "mma-files": "#f7a8ea",
+  fightaiq: "#fecaca",
+  goviral: "#bbf7d0",
+  "titty-tuesdays": "#fde68a",
+  "carousel-studio": "#d4d4d8"
+};
+
+export function projectForKind(kind: string): OfficeProjectKey {
+  if (kind === "cu-edition" || kind === "cu-product") return "caught-up";
+  if (kind === "tt-marketing") return "titty-tuesdays";
+  if (kind === "gv-brief") return "goviral";
+  if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
+  if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
+  if (kind === "studio") return "carousel-studio";
+  return "company";
+}
+
+/* ------------------------------------------------------------------ calendar */
+
+export interface OfficeCell {
+  /** `held` and `ongoing` are the two a visitor can open. */
+  state: CalendarStatus;
+  text: string;
+  /** The full sentence, for the tooltip, because the cell clamps to two lines. */
+  title: string;
+  /** The channel a click opens, when there is a record to open. */
+  channel: WorkspaceChannelId | null;
+  date: string;
+}
+
+export interface OfficeRow {
+  kind: string;
+  time: string;
+  label: string;
+  color: string;
+  cells: OfficeCell[];
+}
+
+export interface OfficeDayHeader {
+  date: string;
+  short: string;
+  dayMonth: string;
+  isToday: boolean;
+}
+
+export interface OfficeWeek {
+  weekOf: string;
+  label: string;
+  days: OfficeDayHeader[];
+  rows: OfficeRow[];
+}
+
+const STATUS_WORD: Record<CalendarStatus, string> = {
+  held: "Happened",
+  ongoing: "In progress",
+  late: "Waiting on the run",
+  missed: "Did not happen",
+  skipped: "Did not happen",
+  "not-needed": "Not needed",
+  scheduled: "Planned"
+};
+
+/**
+ * What one cell says.
+ *
+ * A planned slot prints its own time, because a future cell has nothing else true to say. Every
+ * other state prints the sentence the feed recorded for it, and a slot whose room does not meet
+ * that day prints an em dash — that is not a failure, it is a room with no meeting on Tuesdays.
+ */
+function cellText(status: CalendarStatus, oneLiner: string | undefined, hour: number): string {
+  if (status === "scheduled") return `${String(hour).padStart(2, "0")}:00`;
+  if (status === "not-needed") return "—";
+  return oneLiner ?? STATUS_WORD[status];
+}
+
+/* ------------------------------------------------------------------ workspace */
+
+export interface OfficeMessage {
+  id: string;
+  kind: FeedMessage["kind"];
+  /** Agent id, or `system`. */
+  author: string;
+  /** The role's plain-English title, already public-safe. */
+  role: string;
+  time: string;
+  text: string;
+  /** Two letters for the avatar tile. Absent on system rows, which draw no avatar. */
+  initials: string | null;
+  /** The role has an approved portrait, so it gets an initials tile rather than the silhouette. */
+  known: boolean;
+  /** The delivered package, pretty-printed. The one machine artifact shown on purpose. */
+  json?: string;
+  jsonNote?: string;
+}
+
+export interface OfficeChannelDay {
+  date: string;
+  /** `Monday, August 3` — the day divider's pill. */
+  label: string;
+  messages: OfficeMessage[];
+  /** True when the only thing recorded is why the room did not sit. */
+  quiet: boolean;
+}
+
+export interface OfficeChannel {
+  id: WorkspaceChannelId;
+  /** The English handle the sidebar prints after `#`. */
+  handle: string;
+  room: string;
+  time: string;
+  topic: string;
+  project: OfficeProjectKey;
+  days: OfficeChannelDay[];
+}
+
+/**
+ * The English handle, room name, hour and topic for each of the seven channels.
+ *
+ * `meeting-feed.ts` owns the channel ids and the kinds that route into them; it deliberately makes
+ * no language decision. This is that decision. The ids stay as the data layer named them so the
+ * two never drift, and only what a reader sees is written here.
+ */
+const CHANNEL_COPY: Record<WorkspaceChannelId, {
+  handle: string;
+  room: string;
+  time: string;
+  topic: string;
+  project: OfficeProjectKey;
+}> = {
+  "vydani-dneskai": {
+    handle: "dneskai-edition",
+    room: "DNESKAi edition",
+    time: "05:00",
+    topic: "One story of the day, or nothing goes out and the reason is recorded.",
+    project: "caught-up"
+  },
+  "ranni-porada": {
+    handle: "company-board",
+    room: "Company board",
+    time: "06:00 · 14:00 · 22:00",
+    topic: "Three shifts, one conversation: what the company spends its day on.",
+    project: "company"
+  },
+  "kontrola-mma-dat": {
+    handle: "fight-data-check",
+    room: "Fight data checks",
+    time: "08:00 · 19:00",
+    topic: "Cards, gaps in fighter files and source health. A value needs two sources that agree.",
+    project: "fightaiq"
+  },
+  "redakcni-porada-mma": {
+    handle: "mma-story-desk",
+    room: "MMA Files story desk",
+    time: "09:00",
+    topic: "The day's article slot is assigned from verified files, or left empty.",
+    project: "mma-files"
+  },
+  "vecerni-redakce": {
+    handle: "mma-evening-desk",
+    room: "MMA Files evening desk",
+    time: "20:00",
+    topic: "What actually went out, what failed, and which sourced lead stays for tomorrow.",
+    project: "mma-files"
+  },
+  "titty-tuesdays-marketing": {
+    handle: "titty-tuesdays-marketing",
+    room: "Titty Tuesdays marketing",
+    time: "11:00",
+    topic: "Concrete marketing ideas for a shop that does not exist yet. No prices, no availability.",
+    project: "titty-tuesdays"
+  },
+  "goviral-trend-room": {
+    handle: "goviral-trend-room",
+    room: "GoVIRAL trend room",
+    time: "13:00 · Mondays",
+    topic: "What is rising this week, and at most one trend handed to another desk.",
+    project: "goviral"
+  }
+};
+
+/** Roles with an approved portrait get an initials tile; the rest keep the anonymous silhouette. */
+const portraitRoles = new Set(agents.filter((agent) => agent.visual.avatar).map((agent) => agent.id));
+
+/**
+ * The short role label beside a name in the message list — "Safety reviewer", not the mandate.
+ *
+ * A chat row gives this about eight words of horizontal room next to a 13px name and a timestamp.
+ * `publicAgentMandate` is a full sentence and wrapped onto a second line above every message,
+ * which pushed the message itself down and made the list read as headings rather than as people
+ * talking.
+ */
+const roleTitle = new Map(agents.map((agent) => [agent.id as string, publicAgentTitle(agent)]));
+
+function clockOf(at: string): string {
+  const parsed = new Date(at);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone: "Europe/Prague"
+  }).format(parsed);
+}
+
+/* ------------------------------------------------------------------ projects */
+
+export interface OfficeProject {
+  id: string;
+  name: string;
+  status: string;
+  description: string;
+  /** Rendered only when the owner has supplied a live URL. A card without one renders nothing. */
+  url: string | null;
+  /** True for the two that publish every day, which is what the accent status marks. */
+  daily: boolean;
+  color: string;
+}
+
+/**
+ * The five projects on the wall.
+ *
+ * Names, order and colours come from `config/ventures.json`; the sentence under each is site copy,
+ * because the registry's own `growth_objective.label` is an internal objective rather than a
+ * description a visitor can read. Carousel Studio is not here on purpose: it is a workshop the
+ * other projects use, not a project with its own room on the wall, and it has its own admin
+ * workspace instead.
+ *
+ * TODO(owner): FightAIQ, GoVIRAL and Titty Tuesdays have no public URL yet. The card renders
+ * nothing in that slot until one is supplied — no "coming soon", no disabled link.
+ */
+const PROJECT_COPY: Record<string, { status: string; description: string; url: string | null; daily: boolean }> = {
+  "caught-up": {
+    status: "Publishes daily",
+    description: "Czech news about AI. One subject a day, and when none passes verification, no edition goes out.",
+    url: "https://caughtup-ai.vercel.app/",
+    daily: true
+  },
+  "mma-files": {
+    status: "Publishes daily",
+    description: "A Czech magazine about combat sports. One article slot a day, written only from verified fighter files.",
+    url: "https://mma-files.vercel.app/cs",
+    daily: true
+  },
+  fightaiq: {
+    status: "Data and analysis",
+    description: "Fighter cards from two independent sources, and a model that publishes its version with every probability.",
+    url: null,
+    daily: false
+  },
+  goviral: {
+    status: "Weekly brief",
+    description: "Trend scouting. The week's data becomes one brief and an inventory of marketing plays for the whole portfolio.",
+    url: null,
+    daily: false
+  },
+  "titty-tuesdays": {
+    status: "Before commerce",
+    description: "Brand and season concepts. So far only an inventory of ideas: no prices, no stock, no availability.",
+    url: null,
+    daily: false
+  }
+};
+
+const PROJECT_ORDER = ["caught-up", "mma-files", "fightaiq", "goviral", "titty-tuesdays"];
+
+/* ------------------------------------------------------------------ team */
+
+export interface OfficeRole {
+  id: string;
+  line: string;
+  portrait: string | null;
+  portraitAlt: string;
+}
+
+export interface OfficeTeam {
+  council: OfficeRole[];
+  specialists: OfficeRole[];
+  /** How many roles were stood down when the roster was cut, for the expanded footnote. */
+  standDownCount: number;
+}
+
+/* ------------------------------------------------------------------ results */
+
+export interface OfficeMeasure {
+  label: string;
+  value: string;
+  state: "On track" | "At risk" | "Off track" | "Not measurable yet";
+}
+
+export interface OfficeProjectScreen {
+  id: string;
+  name: string;
+  stage: string;
+  objective: string;
+  measures: OfficeMeasure[];
+  standing: { onTrack: number; atRisk: number; offTrack: number; unavailable: number };
+}
+
+export interface OfficeResults {
+  /** Every figure is nullable: an unavailable measure prints as unavailable, never as zero. */
+  articles: number | null;
+  reliability: number | null;
+  costPerArticle: number | null;
+  monthlySpend: number | null;
+  ideas: number | null;
+  limit: number;
+  projects: OfficeProjectScreen[];
+}
+
+export interface OfficeWalkthroughData {
+  weeks: OfficeWeek[];
+  /** Index into `weeks` of the current Prague week. */
+  currentWeek: number;
+  channels: OfficeChannel[];
+  projects: OfficeProject[];
+  team: OfficeTeam;
+  results: OfficeResults;
+  meetingCount: number;
+}
+
+const KPI_STATE: Record<string, OfficeMeasure["state"]> = {
+  "on-track": "On track",
+  "at-risk": "At risk",
+  "off-track": "Off track",
+  unavailable: "Not measurable yet"
+};
+
+/** A KPI reading in the unit it was measured in. `null` stays unavailable rather than becoming 0. */
+function measureValue(unit: string, actual: number | null): string {
+  if (actual === null) return "—";
+  if (unit === "ratio") return `${Math.round(actual * 100)}%`;
+  if (unit === "usd") return `$${actual.toFixed(2)}`;
+  if (unit === "boolean") return actual >= 1 ? "Yes" : "No";
+  return Number.isInteger(actual) ? String(actual) : actual.toFixed(2);
+}
+
+interface RawKpi {
+  id: string;
+  venture: string;
+  name: string;
+  unit: string;
+  actual: number | null;
+  status: string;
+}
+
+export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWalkthroughData> {
+  const [
+    standups,
+    meetings,
+    skips,
+    articleSlots,
+    definitions,
+    money,
+    dailyResults,
+    kpiStanding,
+    ideas
+  ] = await Promise.all([
+    getPublicStandups(),
+    getPublicMeetingRecords(),
+    getPublicMeetingSkips(),
+    getPublicArticleSlots(),
+    getPublicCalendarSchedule(),
+    getPublicMoneySnapshot(),
+    getDailyResults(),
+    getVentureKpiStatuses(),
+    getPublicIdeas()
+  ]);
+
+  const today = pragueCalendarDate(now);
+  const currentWeekOf = mondayOfCalendarWeek(today);
+
+  /* ---- 01 Calendar ------------------------------------------------------ */
+
+  const weekStarts = Array.from(
+    { length: CALENDAR_PAST_WEEKS + CALENDAR_FUTURE_WEEKS + 1 },
+    (_, index) => addCalendarDays(currentWeekOf, (index - CALENDAR_PAST_WEEKS) * 7)
+  );
+
+  const weeks: OfficeWeek[] = weekStarts.map((weekOf) => {
+    // One `buildPublicCalendarFeed` per week over sources read once, rather than
+    // `getPublicCalendarFeed` per week, which would re-read every record ten times.
+    const feed = buildPublicCalendarFeed({ weekOf, now, standups, meetings, skips, articleSlots, definitions });
+    const days: OfficeDayHeader[] = Array.from({ length: 7 }, (_, index) => {
+      const date = addCalendarDays(weekOf, index);
+      const at = new Date(`${date}T12:00:00Z`);
+      return {
+        date,
+        short: weekdayFormatter.format(at),
+        dayMonth: dayMonthFormatter.format(at),
+        isToday: date === today
+      };
+    });
+    const rows: OfficeRow[] = feed.definitions.map((definition, rowIndex) => ({
+      kind: definition.kind,
+      time: `${String(definition.hour).padStart(2, "0")}:00`,
+      label: publicKindLabel(definition.kind),
+      color: PROJECT_COLOR[projectForKind(definition.kind)],
+      cells: days.map((day, dayIndex) => {
+        const slot = feed.slots[dayIndex * feed.definitions.length + rowIndex]!;
+        const openable = slot.status === "held" || slot.status === "ongoing";
+        const channel = openable
+          ? channelForKind(definition.kind.replace(/^venture-/u, "")) ?? null
+          : null;
+        const text = cellText(slot.status, readableSlotReason(slot.decisionOneLiner), definition.hour);
+        return {
+          state: slot.status,
+          text,
+          title: `${String(definition.hour).padStart(2, "0")}:00 ${publicKindLabel(definition.kind)} · ${STATUS_WORD[slot.status]} · ${text}`,
+          channel,
+          date: day.date
+        };
+      })
+    }));
+    return {
+      weekOf,
+      label: `Week ${days[0]!.dayMonth} – ${days[6]!.dayMonth}`,
+      days,
+      rows
+    };
+  });
+
+  /* ---- 02 Meetings ------------------------------------------------------ */
+
+  // The delivered package a day sent, resolved only for the days the player can reach.
+  const transcriptFloor = addCalendarDays(today, -TRANSCRIPT_DAYS);
+  const deliveryDates = new Set(
+    meetings
+      .filter((record) => !record.fixture && record.date >= transcriptFloor)
+      .filter((record) => record.kind === "cu-edition" || record.kind === "mag-editorial")
+      .map((record) => `${record.kind}:${record.date}`)
+  );
+  const deliveredPackages = new Map<string, { json: string; note?: string }>();
+  await Promise.all([...deliveryDates].map(async (key) => {
+    const [kind, date] = key.split(":") as [string, string];
+    const pkg = kind === "cu-edition"
+      ? await deliveredEditionPackage(date)
+      : await deliveredArticlePackage(date);
+    if (pkg) deliveredPackages.set(key, { json: pkg.json, ...(pkg.note ? { note: pkg.note } : {}) });
+  }));
+
+  const feed = buildMeetingFeed({
+    meetings,
+    standups,
+    skips,
+    articleSlots,
+    deliveries: [...deliveryDates].flatMap((key) => {
+      const [kind, date] = key.split(":") as [string, string];
+      if (!deliveredPackages.has(key)) return [];
+      return [{
+        date,
+        kind,
+        text: kind === "cu-edition"
+          ? "The edition passed the check and went to DNESKAi. Delivery confirmed."
+          : "The article passed the check and went to MMA Files. Delivery confirmed.",
+        ref: key
+      }];
+    })
+  });
+
+  const channels: OfficeChannel[] = WORKSPACE_CHANNELS.map((channel) => {
+    const copy = CHANNEL_COPY[channel.id];
+    const source = feed.find((entry) => entry.id === channel.id);
+    const days: OfficeChannelDay[] = (source?.days ?? [])
+      .filter((day) => day.date >= transcriptFloor)
+      .map((day) => ({
+        date: day.date,
+        label: `${weekdayLongFormatter.format(new Date(`${day.date}T12:00:00Z`))}, ${longDateFormatter.format(new Date(`${day.date}T12:00:00Z`))}`,
+        quiet: day.messages.every((message) => message.kind === "system"),
+        messages: day.messages.map((message): OfficeMessage => {
+          const isSystem = message.author.id === "system";
+          const attachment = message.attachment ? deliveredPackages.get(message.attachment.ref) : undefined;
+          return {
+            id: message.id,
+            kind: message.kind,
+            author: isSystem ? "system" : message.author.id,
+            role: isSystem ? "" : roleTitle.get(message.author.id) ?? message.author.title,
+            // A delivery carries no recorded instant: `buildMeetingFeed` stamps it at the end of
+            // the day purely so it sorts after the room that decided it. Printing that stamp as a
+            // clock claimed the package left the building at 01:00, which nothing recorded.
+            time: message.kind === "delivery" ? "" : clockOf(message.at),
+            text: message.text,
+            initials: isSystem ? null : message.author.id.slice(0, 2),
+            known: !isSystem && portraitRoles.has(message.author.id as never),
+            ...(attachment ? { json: attachment.json, ...(attachment.note ? { jsonNote: attachment.note } : {}) } : {})
+          };
+        })
+      }));
+    return { id: channel.id, ...copy, days };
+  });
+
+  /* ---- 03 Projects ------------------------------------------------------ */
+
+  const registered = new Map(ventureRegistry.ventures.map((venture) => [venture.id, venture]));
+  const projects: OfficeProject[] = PROJECT_ORDER.flatMap((id) => {
+    const venture = registered.get(id);
+    const copy = PROJECT_COPY[id];
+    if (!venture || !copy) return [];
+    return [{
+      id,
+      name: id === "caught-up" ? "DNESKAi" : venture.name,
+      status: copy.status,
+      description: copy.description,
+      url: copy.url,
+      daily: copy.daily,
+      color: PROJECT_COLOR[id as OfficeProjectKey] ?? PROJECT_COLOR.company
+    }];
+  });
+
+  /* ---- 04 Team ---------------------------------------------------------- */
+
+  const working = agents.filter((agent) => agent.status === "active");
+  /**
+   * The roster line is the curated mandate, not the operating principle.
+   *
+   * Two reasons, both visible on the wall. The principles are written for the roles themselves and
+   * some are Czech — HACEK's is "Nepřekládá se…" — which put Czech in an English UI on the one
+   * surface the handoff is explicit about. And running them through the plain-language filter
+   * rewrote them mid-sentence: AUDIT's "Evidence first. Fail closed." came out as "sources first.
+   * Fail closed.", lower-cased at the start of a sentence. The mandates are already public,
+   * already English and already one sentence each.
+   */
+  const toRole = (agent: (typeof agents)[number]): OfficeRole => ({
+    id: agent.id,
+    line: publicAgentMandate(agent),
+    portrait: agent.visual.avatar,
+    portraitAlt: agent.visual.avatarAlt
+  });
+  const team: OfficeTeam = {
+    council: working.filter((agent) => agent.group === "Council").map(toRole),
+    specialists: working.filter((agent) => agent.group !== "Council").map(toRole),
+    standDownCount: agents.length - working.length
+  };
+
+  /* ---- 05 Results ------------------------------------------------------- */
+
+  const kpis = (money?.quarter.statuses ?? []) as unknown as RawKpi[];
+  const month = money?.costs.api.month ?? now.toISOString().slice(0, 7);
+
+  const producedThisMonth = dailyResults
+    .filter((day) => day.date.startsWith(month))
+    .flatMap((day) => day.rows)
+    .filter((row) => row.status === "produced" && (row.ventureId === "caught-up" || row.ventureId === "mma-files"));
+
+  /**
+   * Publishing reliability is the company's own measured KPI, not a ratio computed here.
+   *
+   * The obvious arithmetic — produced rows over rows that were reached — reads 100% on this
+   * archive, because a slot the desk killed with a reason is recorded as not held rather than as
+   * a failure. That number would be true of the rows and false about the company. The quarter
+   * already measures the thing the board wants to say, against a target, with a reason attached
+   * when it cannot be read at all.
+   */
+  const reliabilityKpi = kpis.find((kpi) => kpi.id === "company.valid-window-rate")
+    ?? kpis.find((kpi) => kpi.venture === "company" && kpi.unit === "ratio");
+
+  const monthlySpend = money?.costs.totalMonthlyBurnUsd ?? null;
+  const articles = producedThisMonth.length;
+  const articleCost = producedThisMonth.reduce((sum, row) => sum + row.costUsd, 0);
+
+  const stageOf = (id: string) => registered.get(id)?.status ?? "operating";
+
+  const projectScreens: OfficeProjectScreen[] = PROJECT_ORDER.flatMap((id) => {
+    const venture = registered.get(id);
+    if (!venture) return [];
+    const standing = kpiStanding.find((entry) => entry.ventureId === id)
+      ?? { onTrack: 0, atRisk: 0, offTrack: 0, unavailable: 0 };
+    const measures = kpis
+      .filter((kpi) => kpi.venture === id)
+      .slice(0, 4)
+      .map((kpi): OfficeMeasure => ({
+        label: kpi.name,
+        value: measureValue(kpi.unit, kpi.actual),
+        state: KPI_STATE[kpi.status] ?? "Not measurable yet"
+      }));
+    return [{
+      id,
+      name: id === "caught-up" ? "DNESKAi" : venture.name,
+      stage: stageOf(id) === "operating" ? "Operating" : "Exploration",
+      objective: venture.growth_objective.label,
+      measures,
+      standing: {
+        onTrack: standing.onTrack,
+        atRisk: standing.atRisk,
+        offTrack: standing.offTrack,
+        unavailable: standing.unavailable
+      }
+    }];
+  });
+
+  const results: OfficeResults = {
+    articles: dailyResults.length > 0 ? articles : null,
+    reliability: reliabilityKpi?.actual === null || reliabilityKpi === undefined
+      ? null
+      : Math.round(reliabilityKpi.actual * 100),
+    costPerArticle: articles > 0 ? articleCost / articles : null,
+    monthlySpend,
+    ideas: ideas.length > 0 ? ideas.length : null,
+    limit: CURRENT_MONTHLY_OPERATING_LIMIT_USD,
+    projects: projectScreens
+  };
+
+  return {
+    weeks,
+    currentWeek: weekStarts.indexOf(currentWeekOf),
+    channels,
+    projects,
+    team,
+    results,
+    meetingCount: definitions.length
+  };
+}

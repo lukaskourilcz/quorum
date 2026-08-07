@@ -33,3 +33,28 @@ export function publicKindLabel(kind: string): string {
       : undefined)
     ?? kind.replaceAll("-", " ").replaceAll("_", " ");
 }
+
+/**
+ * An article run states why its slot died as a machine token. `buildCalendarFeed` copies that
+ * token into `decisionOneLiner` unchanged, and every board that prints one is where an owner
+ * reads it, so each token gets a sentence here. A reason absent from this map is printed
+ * verbatim, not guessed at.
+ *
+ * Shared, because it was not: the five-day board translated these and the walkthrough's own
+ * calendar did not, so the same Monday slot read "The story meeting chose no subject" on
+ * `/calendar` and `missing_editorial_slate` on the home page.
+ */
+const articleRunReasonCopy: Record<string, string> = {
+  missing_editorial_slate: "The story meeting chose no subject, so this slot had nothing to write.",
+  missing_sourced_subject: "The story meeting named no source-backed subject for this slot.",
+  no_sourced_subject_on_file: "No subject from the story meeting, and none left on file.",
+  budget_decision_not_countersigned: "The budget decision this slot runs under is not countersigned yet.",
+  portfolio_gate_closed: "Portfolio work is switched off, so this slot did not open.",
+  mma_files_gate_closed: "MMA Files live publishing is switched off, so this slot did not open."
+};
+
+/** The sentence a recorded slot reason reads as, or the reason itself when it is already prose. */
+export function readableSlotReason(reason: string | undefined): string | undefined {
+  if (!reason) return reason;
+  return articleRunReasonCopy[reason] ?? reason;
+}

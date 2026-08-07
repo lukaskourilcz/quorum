@@ -224,6 +224,78 @@ img {
   }
 }
 
+/* ---- Office walkthrough ---------------------------------------------------
+   The home page walks through seven full-viewport rooms. Snap is scoped to that
+   page by a data attribute the walkthrough sets on <html> while it is mounted,
+   because a proximity snap left on globally would fight every other page's own
+   scrolling. Above 1024px only: below it the page is an ordinary document and
+   nothing is intercepted, which is the whole no-scroll-jacking-on-a-phone rule. */
+
+@media (min-width: 1025px) {
+  html[data-office-walkthrough] {
+    scroll-snap-type: y proximity;
+  }
+
+  html[data-office-walkthrough] [data-sec] {
+    scroll-snap-align: start;
+  }
+
+  /* The fixed-height rooms stop the walk; the two that can outgrow a viewport do not. */
+  html[data-office-walkthrough] #intro,
+  html[data-office-walkthrough] #calendar,
+  html[data-office-walkthrough] #projects,
+  html[data-office-walkthrough] #team,
+  html[data-office-walkthrough] #results {
+    scroll-snap-stop: always;
+  }
+}
+
+@keyframes bai-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}
+
+@keyframes bai-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes bai-hint {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(5px);
+  }
+}
+
+@keyframes bai-scan {
+  from {
+    transform: translateY(-120%);
+  }
+  to {
+    transform: translateY(620%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -232,6 +304,14 @@ img {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  html[data-office-walkthrough] {
+    scroll-snap-type: none !important;
+  }
+
+  html[data-office-walkthrough] [data-sec] {
+    scroll-snap-align: none !important;
   }
 }
 

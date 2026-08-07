@@ -24,8 +24,41 @@ async function readJson(...segments: string[]): Promise<unknown | null> {
   }
 }
 
+/**
+ * How large a string has to be before it is summarised rather than printed.
+ *
+ * The image fields are the only ones that reach this: an article package carries its hero and
+ * thumbnail as base64, and the Shevchenko package spent 253 KB of its 259 KB on those two
+ * strings. Printed in full they were 253 KB of unreadable characters shipped in the HTML of
+ * every meeting page that delivered an article, inside a `<pre>` a reader scrolls past. The
+ * threshold is well above any field a human wrote and well below any encoded image.
+ */
+const INLINE_BYTES_CEILING = 512;
+
+/**
+ * Replace encoded blobs with a line saying what they were.
+ *
+ * The point of the disclosure is that a reader can check what left the building. A 200 KB base64
+ * string does not help them do that — the package hash already proves the bytes — while it does
+ * make the page slow. So the field stays, named and measured, and the bytes go.
+ */
+function withoutEncodedBytes(value: unknown): unknown {
+  if (typeof value === "string") {
+    return value.length > INLINE_BYTES_CEILING
+      ? `<${(value.length / 1024).toFixed(0)} KB omitted — encoded bytes, covered by the package hash>`
+      : value;
+  }
+  if (Array.isArray(value)) return value.map(withoutEncodedBytes);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, entry]) => [key, withoutEncodedBytes(entry)])
+    );
+  }
+  return value;
+}
+
 function pretty(value: unknown): string {
-  return JSON.stringify(value, null, 2);
+  return JSON.stringify(withoutEncodedBytes(value), null, 2);
 }
 
 /**

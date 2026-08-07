@@ -36,7 +36,7 @@ import {
   type CalendarStatus,
   type PublicCalendarFeed
 } from "@/lib/calendar-feed-model";
-import { publicKindLabel } from "@/lib/slot-labels";
+import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
 
 const weekdayFormatter = new Intl.DateTimeFormat("en", {
   weekday: "short",
@@ -231,22 +231,15 @@ function projectSlotColor(kind: CalendarKind): string {
  * token into `decisionOneLiner` unchanged, and the board is where an owner reads it, so each
  * token gets a sentence here. A reason absent from this map is printed verbatim, not guessed at.
  */
-const articleRunReasonCopy: Record<string, string> = {
-  missing_editorial_slate: "The story meeting chose no subject, so this slot had nothing to write.",
-  missing_sourced_subject: "The story meeting named no source-backed subject for this slot.",
-  no_sourced_subject_on_file: "No subject from the story meeting, and none left on file.",
-  budget_decision_not_countersigned: "The budget decision this slot runs under is not countersigned yet.",
-  portfolio_gate_closed: "Portfolio work is switched off, so this slot did not open.",
-  mma_files_gate_closed: "MMA Files live publishing is switched off, so this slot did not open."
-};
-
 /**
  * Translate the reason once, as the slot enters its row, so the accessible name, the tooltip and
- * the printed cell text cannot disagree about what the cell says.
+ * the printed cell text cannot disagree about what the cell says. The map itself lives in
+ * `slot-labels.ts` beside `publicKindLabel`, because the home page's calendar prints the same
+ * reasons and printed the raw token until it shared this.
  */
 function readableSlot(slot: CalendarSlot): CalendarSlot {
-  const copy = slot.decisionOneLiner ? articleRunReasonCopy[slot.decisionOneLiner] : undefined;
-  return copy ? { ...slot, decisionOneLiner: copy } : slot;
+  const copy = readableSlotReason(slot.decisionOneLiner);
+  return copy && copy !== slot.decisionOneLiner ? { ...slot, decisionOneLiner: copy } : slot;
 }
 
 /**
