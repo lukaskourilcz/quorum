@@ -5,12 +5,15 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má šest pracovních projektů: Caught Up,
-Titty Tuesdays, Magazine Incubator, FightAIQ, Carousel Studio a MMA Files.
+<https://boardless-ai.vercel.app>. Systém má šest pracovních projektů: Caught Up (veřejně
+DNESKAi), Titty Tuesdays, GoVIRAL, FightAIQ, Carousel Studio a MMA Files.
+Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
-**Co už publikuje (k 2. srpnu 2026):** MMA Files vydal první článek, který napsala rada —
-profil Valentiny Ševčenkové, živě anglicky i česky, prošel všemi devíti kontrolami vydání.
-Ostatní projekty zatím nepublikují; na co každý čeká, je v `NEEDS_YOUR_HELP_NOW.md`.
+**Co už publikuje (k 7. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
+MMA Files jeden článkový slot denně. Oba posílají hotový článek zároveň do Carousel
+Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
+karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
+`NEEDS_YOUR_HELP_NOW.md`.
 
 ## Jak je systém poskládaný
 
@@ -31,13 +34,15 @@ GitHub Actions / příkazová řádka
               │
               ▼
            Next.js web
+     ├─ úvodní stránka jako procházka kanceláří (7 sekcí)
      ├─ veřejné stránky a kalendář
-     └─ chráněná správa projektů
+     └─ chráněná správa projektů (rail podle projektů)
 ```
 
-Systém má 40 rolí: čtyři hlasující členy rady a 36 odborných rolí. Dvacet jedna rolí
-používá Anthropic a 19 OpenAI. Dvacet sedm zavedených rolí má na veřejném webu svou
-schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
+V rejstříku je 40 rolí, z toho **31 aktivních**: čtyři hlasující členové rady a 27
+odborných rolí. Devět rolí bylo při zeštíhlení soupisky odstaveno a veřejný web počítá
+jen ty pracující. Sedmnáct aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
+rolí má na veřejném webu svou schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
 dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
 seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
 modelům ani do podkladů porad.
@@ -50,25 +55,28 @@ modelům ani do podkladů porad.
   ověří oba jazyky, obrázek, zdroj fotografie a otisk obsahu.
 - **Titty Tuesdays** připravuje značku, témata a marketing. Nemá e-shop, sklad,
   platby, reklamy ani automatické zveřejňování.
-- **Magazine Incubator** hledá podložené nápady na publikace. Pokud návrh splní
-  předem podepsanou šablonu bez nového účtu, právního rizika, osobních dat a s limitem
-  nejvýše 0,15 dolaru denně, systém může nový obsahový projekt založit sám.
+- **GoVIRAL** je týdenní trendová porada (pondělí 13:00). Ze zdrojovaných dat udělá
+  jeden brief pro majitele, marketingové nápady pro oba magazíny a nejvýše jednu agendu
+  předanou jiné poradě. Data bere z Apify na Free plánu, jehož měsíční kredit 5 dolarů
+  je zároveň limitem — žádná karta není v systému.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Analýzy smí spustit jen pro ověřené zápasy a karty: neumí sázet, otevírat sázkové
   účty ani slibovat výhru.
-- **Carousel Studio** spravuje deset znovupoužitelných rozložení a bez modelu z nich
-  vykresluje všechny sociální karusely. Nemá vlastní sociální účet, marketing ani
-  měření návštěvnosti.
-- **MMA Files** je veřejný anglicko-český magazín a jediný projekt, který dnes
-  publikuje. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
+- **Carousel Studio** spravuje znovupoužitelná rozložení a bez modelu z nich vykresluje
+  všechny sociální karusely. V administraci má galerii **13 šablon**, ve které se každý
+  doručený článek zobrazí ve všech šablonách, v obou formátech a proti své nejkratší,
+  střední i nejdelší pasáži. Nemá vlastní sociální účet, marketing ani měření
+  návštěvnosti.
+- **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
   rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
   nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe
   podloženého bojovníka — oba projekty na sobě nezávisí.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 15 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
-11:00, 13:00, 14:00, 17:00, 18:00, 19:00, 20:00, 21:00 a 22:00. Letní a zimní čas má každý
+Společný pražský rozpis má 12 kontrolních časů: 05:00, 06:00, 08:00, 09:00, 10:00, 11:00,
+13:00, 14:00, 17:00, 19:00, 20:00 a 22:00. Sloty 07:00, 18:00 a 21:00 zmizely s uzavřením
+inkubátoru a se zrušením večerního článkového slotu. Letní a zimní čas má každý
 slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
 
 Kterou poradu spustit, určuje **spouštěč, který se ozval**, ne hodiny v okamžiku startu.
@@ -78,7 +86,7 @@ nekonalo a jedna se spustila jako sousední porada. Spouštěč poradu pojmenuje
 zpoždění už nevadí.
 
 V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba. Odpoledne a večer
-se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays, inkubátoru, Carousel
+se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays, GoVIRAL, Carousel
 Studia, večerní analýzy FightAIQ a redakční kontrola MMA Files se spustí jen s platnou
 agendou.
 

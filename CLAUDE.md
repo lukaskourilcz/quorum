@@ -9,7 +9,29 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   EXPERIMENTS, FINANCE, CONTENT_INVENTORY, CLAIMS, BRAND, ROADMAP, INBOX and
   decisions.
 - `orchestrator/` — cycle engine + council prompts. `site/` — Next.js app.
+- `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
+  consumed as TypeScript source, so `site` must run webpack (`next dev --webpack`,
+  already in its `dev` script) — Turbopack does not apply the `.js`→`.ts` extension alias
+  and every studio import fails under it.
 - `config/models.json` — model IDs per role. `.env.example` — required env.
+
+## Two things a session will trip over
+
+- **The home page is one client component.** `site/src/components/office/` holds the
+  office walkthrough; `site/src/lib/office-walkthrough.ts` resolves everything it renders
+  on the server and hands it across as plain JSON, which is also the sanitising boundary.
+  Its layout invariants are load-bearing and were each a real bug: centre an oversized
+  backdrop plate with `left/top:50%` plus `translate(-50%,-50%)` and never with grid
+  centring; give every decorative layer `pointer-events: none`, because section 05's mood
+  tint sits after the content and otherwise swallows every click on the wallboard; keep
+  the plates off `will-change`, which exhausted the compositor and painted whole frames
+  black; and mark real horizontal scrollers `data-horizontal-scroll` or the containment
+  e2e guard reads them as overflow.
+- **A delivered article also goes to Carousel Studio.** `storeArticlePackage` and the
+  edition outbox write both call `buildCarouselSummary` from `studio/src/summary.ts`, so a
+  delivery cannot happen without a summary beside it. The site rebuilds the same summary
+  from the package for anything published before that existed, using the same function —
+  a recorded summary always wins over a derived one, because it is what was actually sent.
 
 ## Golden rules
 

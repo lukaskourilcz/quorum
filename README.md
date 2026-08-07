@@ -22,6 +22,7 @@ passes the existing owner, budget, evidence, security and release gates.
 | --- | --- | --- |
 | Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
+| GoVIRAL | Weekly trend brief and marketing plays for the portfolio | Apify Free plan only — its $5 monthly credit is the budget guard; hands over at most one agenda |
 | FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Shared deterministic carousel templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
 | MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
@@ -33,8 +34,9 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 
 ## What is implemented
 
-- Four voting council seats and 36 routed specialists in one validated
-  40-agent registry. The 27 established roles keep their approved photographs;
+- Four voting council seats and 27 routed specialists working out of one validated
+  40-agent registry; the other nine were stood down when the roster was cut, and every
+  public count is of the roles that work. The 27 established roles keep their photographs;
   newer roles use name-based placeholders until approved media exists. Public pages
   use agent names and work labels without the retired workplace-show, Season or
   Episode framing.
@@ -66,9 +68,17 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   including deliveries, release proofs, failures and social-unlock counters.
 - Fail-closed username/password admin session with Git-backed rating persistence,
   social archive, project tabs, card history and noindex/no-store headers.
+- A home page that is a walk through one office: seven full-viewport rooms — intro,
+  calendar, meetings, projects, team, results, company — with the meeting archive played
+  back message by message in a read-only workspace window. One wheel gesture per room
+  above 1024px and no scroll-jacking at all below it.
+- Every delivered DNESKAi edition and MMA Files article also reaches Carousel Studio as a
+  summary — headline, standfirst, the desk's own passages, sources — written beside the
+  package by the same deterministic builder the site falls back to. Thirteen templates
+  render it live in the admin at both formats.
 - Responsive public site, feeds, metadata, accessibility checks, contrast tests
   and scroll-preserving stateful controls.
-- Public `/money` reporting for earning-method gates, quarterly targets, API and
+- Public money reporting at `/results#money` for earning-method gates, quarterly targets, API and
   owner-entered fixed costs, plus a protected fixed-cost editor and owner proposals.
 - SHA-pinned GitHub Actions with timeouts, concurrency guards, rebase-first state
   commits and independent Caught Up, portfolio, social and health switches.
@@ -214,10 +224,10 @@ publisher. Missing approval never authorizes a live action.
 
 The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 08:00
 FightAIQ intake, 09:00 MMA Files story meeting, 10:00 article slot, 11:00 Titty
-Tuesdays, 14:00 board afternoon, 17:00 Caught Up product, 19:00 FightAIQ analysis,
-20:00 MMA Files desk and 22:00 board night.
+Tuesdays, 13:00 GoVIRAL trend room (Mondays), 14:00 board afternoon, 17:00 Caught Up
+product, 19:00 FightAIQ analysis, 20:00 MMA Files desk and 22:00 board night.
 
-Two paths reach those eleven slots, and they are not equals. A Vercel cron dispatches
+Two paths reach those twelve slots, and they are not equals. A Vercel cron dispatches
 each slot on its own hour and does the real work. GitHub's own `on.schedule` is the
 backup, and it is late — measured over 5–6 August a scheduled run averaged 0.9 billable
 minutes of guard-exit against a dispatch's 5.8 minutes of work, because GitHub queues
@@ -249,7 +259,7 @@ check plus a signed, HttpOnly session cookie.
 The global admin view shows the current quarter, earning-method readiness and full
 owner proposals when a method becomes ready. Its fixed-cost editor writes real
 subscriptions to `config/fixed-costs.json`; an empty list is valid and never implies
-that hosting or software is free. `/money` reads only `state/money/public.json`, which
+that hosting or software is free. `/results#money` reads only `state/money/public.json`, which
 contains amounts and categories without invoices, credentials or personal data.
 Authenticated traffic is not counted as a failed login; repeated invalid
 credentials are rate-limited. The page displays the priority queue, social readiness

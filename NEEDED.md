@@ -92,6 +92,32 @@ council. Two separate causes, both now fixed:
 
 Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STEPS.md).
 
+## Owner action items
+
+The shared marker format, for the things only the owner can supply. The full runbook is
+still [`NEEDS_YOUR_HELP_NOW.md`](NEEDS_YOUR_HELP_NOW.md); these are the items the office
+walkthrough and Carousel Studio are waiting on specifically.
+
+- [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no
+  public address, so their cards on the home page render nothing in the link slot rather
+  than a "coming soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]
+- [ ] **Real office photography** — the six backdrops behind the seven home-page sections
+  are AI-generated placeholders committed at `site/public/office/*.{avif,webp}`. The layout
+  does not depend on them; replace the files at the same names and nothing else changes.
+  [imp:2] [owner:me] [time:2h] [kind:content]
+- [ ] **Portraits for the roles that have none** — 27 of 40 registered roles have an approved
+  portrait. The rest fall back to an initials tile on the team panel and to the anonymous
+  silhouette in the workspace player, which is honest but plain. [imp:1] [owner:me] [time:1h] [kind:content]
+- [ ] **Decide what to do about the email in the commit history** — `state/BUSINESS.md` no
+  longer carries the operator's personal address, but part of the git log still has it as the
+  author address. Making the repository public publishes that. Either accept it, or rewrite
+  history before the switch, and turn on GitHub's "keep my email address private" so it
+  cannot recur. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Confirm the wallboard's five figures are the ones you want on the wall** — the home
+  page's TV shows published articles, publishing reliability, cost per article, spend against
+  the $30 limit and ideas from meetings, all read from the record. Any figure the record
+  cannot supply prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
+
 ## Recently finished
 
 - **A standup no longer files itself under the wrong day.** The shift record took its date

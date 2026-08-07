@@ -28,13 +28,23 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 - Placená firemní rada se schází jednou v 06:00. Časy 14:00 a 22:00 jsou kontrolní
   zápisy bez modelu. Odborné porady se otevřou jen s konkrétní agendou; FightAIQ také
   při skutečné změně zdrojových dat. Nepotřebný čas stojí $0.
-- GitHub Actions používá 17 jedinečných UTC spuštění místo 28 překrývajících se
-  letních a zimních záznamů. To snižuje počet zbytečných běhů bez vlivu na obsah.
+- GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
+  letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
+  který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
+  jedno místo osmnácti.
 - Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
 - Sociální obrázky vykresluje jediný Carousel Studio engine z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
   Náhradní hero obrázky také vznikají v kódu. Licencované fotografie se pouze stáhnou,
   zkontrolují, zmenší a uloží; chybějící Pexels/Pixabay klíč neblokuje náhradní grafiku.
+- GoVIRAL čte trendová data přes Apify na **Free plánu**. Jeho měsíční kredit 5 dolarů
+  *je* limit: aktory se zastaví, jakmile dojde, žádná karta v systému není a přečerpání
+  není možné. Zapsaný recept stojí zhruba $1.03 týdně a $4.60 měsíčně; když měsíc běží
+  horko, hlídač ubírá kroky od konce, ne od začátku. Starter za $29/měsíc by sám snědl
+  celý třicetidolarový limit, takže nic zde nesmí předpokládat placený plán.
+- Doručený článek posílá do Carousel Studia jen *summary*, ne celý text, a skládá se
+  aritmeticky bez volání modelu. Karusel proto nestojí nic navíc a stejný článek dá vždy
+  stejné slidy.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 
