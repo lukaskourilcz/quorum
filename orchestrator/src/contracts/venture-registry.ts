@@ -73,6 +73,7 @@ const VentureDefinitionSchema = openObject({
     "templates",
     "inspiration",
     "decks",
+    "hooks",
     "packages"
   ])),
   productionJobs: z.array(openObject({

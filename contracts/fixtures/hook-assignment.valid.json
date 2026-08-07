@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "hook-assignment/1",
+  "surface": "quiz",
+  "vertical": "dev",
+  "channel": "devshark-instagram",
+  "date": "2026-08-08",
+  "itemId": "js-event-loop-01",
+  "seed": "3d9f2a1b7c4e5068a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718",
+  "languages": ["en", "cs"],
+  "eligibleSetHash": "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f607182930415263748596",
+  "eligibleIds": ["payoff-explainer", "half-known", "footnote", "seniors-know", "one-detail"],
+  "availableIds": ["payoff-explainer", "half-known", "footnote"],
+  "cooldownSnapshot": [
+    {
+      "hookId": "seniors-know",
+      "lastPostedOn": "2026-08-01",
+      "daysSince": 7,
+      "requiredDays": 20
+    }
+  ],
+  "hookId": "half-known",
+  "overriddenFrom": "footnote",
+  "overrideMeetingRef": "state/meetings/2026-08-08-ms-daily.json",
+  "noHookReason": null
+}

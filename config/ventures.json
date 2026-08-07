@@ -228,7 +228,8 @@
       "adminTabs": [
         "templates",
         "decks",
-        "inspiration"
+        "inspiration",
+        "hooks"
       ],
       "meetings": []
     },

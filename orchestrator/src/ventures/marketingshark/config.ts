@@ -4,35 +4,19 @@ import { z } from "zod";
 import { configRoot } from "../../paths.js";
 
 /**
- * A hook pattern: one opening line per tone per language, with the conditions under which it is
- * allowed to be said at all.
+ * Hook copy is no longer configuration.
  *
- * `truthRequires` is the honesty mechanism. "Two answers look right. One is." is a claim about the
- * question, not a slogan, so it may only front a question that actually has four options and is
- * not trivial. Every predicate is deterministic and evaluated in code against the NormalizedQuestion
- * -- a model never decides whether its own hook was true.
+ * This file used to carry a sixteen-pattern `hookLibrary` inline. It now lives at
+ * `studio/hooks/quiz.hooks.json`, beside the Carousel Studio engine, because the studio is the
+ * assignment brain for every surface and the quiz apps receive the same library as a bounded
+ * delivery. Two copies of one playbook drift within weeks — `docs/hooks/README.md` says so, and the
+ * two libraries had already diverged: the inline one still shipped `speed-run` ("You have 10
+ * seconds. Go.") against a card with no timer, which `docs/hooks/02-hook-craft-rules.md` bans
+ * outright, and `looks-easy`, which was retired for warning readers off the intuitive answer.
  *
- *  always                     -- no condition
- *  difficultyAtLeast:N        -- question.difficulty >= N
- *  optionsAtLeast:N           -- question.en.options.length >= N
- *  hasCode                    -- question.hasCode === true
- *  categoryIn:<listKey>       -- question.category is in brand.categoryLists[listKey]
- *  questionStartsWith:<word>  -- EN question text starts with <word>
+ * What stays here is what is genuinely per brand: the category lists a `categoryIn` gate resolves
+ * against, the slide-5 line, the templates and the hashtags.
  */
-export const HookPattern = z.object({
-  id: z.string().regex(/^[a-z0-9-]+$/),
-  cooldownDays: z.number().int().min(1).max(30),
-  truthRequires: z.array(z.string()).min(1),
-  variants: z.record(
-    z.enum(["dev", "geo"]),
-    z.object({
-      en: z.string().min(1),
-      cs: z.string().min(1)
-    })
-  )
-});
-export type HookPattern = z.infer<typeof HookPattern>;
-
 export const Brand = z.object({
   id: z.enum(["devshark", "geoshark"]),
   enabled: z.boolean(),
@@ -67,76 +51,27 @@ export const MarketingSharkConfig = z.object({
   pragueHour: z.literal(7),
   abVariants: z.literal(2),
   minEligibleBeforeRelax: z.literal(2),
-  brands: z.array(Brand).min(1),
-  hookLibrary: z.array(HookPattern).min(15).max(20)
+  brands: z.array(Brand).min(1)
 }).superRefine((cfg, ctx) => {
   if (cfg.brands.some((b) => b.id === "geoshark" && b.banner))
     ctx.addIssue({ code: "custom", message: "geoShark never gets a banner" });
 });
 export type MarketingSharkConfig = z.infer<typeof MarketingSharkConfig>;
 
-/** What a truth predicate is evaluated against. Kept structural so tests need no full snapshot. */
-export interface TruthSubject {
-  difficulty: number;
-  hasCode: boolean;
-  category: string;
-  optionCount: number;
-  englishQuestion: string;
-}
-
 /**
- * The one per-tone override, and the reason it exists.
+ * The per-tone override that used to live here, and why it is gone.
  *
- * `spot-it` reads "Spot it before the compiler does" for dev and "Spot the odd one out" for geo.
- * The dev line is only true of a question carrying code, so its predicate is `hasCode` -- but a
- * geography bank has no code at all, which would make the geo variant permanently ineligible
- * rather than differently conditioned. Substituting `optionsAtLeast:4` keeps the geo line
- * conditional on something real about the question instead of on something its bank can never
- * have. This is the only override, and adding a second one belongs in a decision record.
+ * `requirementsForTone` rewrote `hasCode` to `optionsAtLeast:4` for the geo tone, so the geo
+ * variant of a code-gated hook would not be permanently dead. Against the central library that
+ * rewrite would publish a falsehood: the shipped geo line under `hasCode` reads "There's code on a
+ * geography card. Start there.", and substituting the gate would render it on any four-option
+ * geography question, where there is no code at all.
+ *
+ * `docs/hooks/04-schema-and-gates.md` calls this out as a known bug class and prescribes the other
+ * handling — write the variant to be honest if it ever fires, and lint for the unreachability. The
+ * `unreachable-variant` warning in `lint:hooks` is that check, and it names exactly these three
+ * hooks. An honest silence beats a rendered falsehood.
  */
-export function requirementsForTone(pattern: HookPattern, tone: Brand["tone"]): string[] {
-  if (tone !== "geo") return pattern.truthRequires;
-  return pattern.truthRequires.map((requirement) =>
-    requirement === "hasCode" ? "optionsAtLeast:4" : requirement
-  );
-}
-
-export function evaluateTruthRequirement(
-  requirement: string,
-  subject: TruthSubject,
-  categoryLists: Brand["categoryLists"]
-): boolean {
-  const [name, argument] = requirement.split(":", 2);
-  switch (name) {
-    case "always":
-      return true;
-    case "hasCode":
-      return subject.hasCode;
-    case "difficultyAtLeast":
-      return subject.difficulty >= Number(argument);
-    case "optionsAtLeast":
-      return subject.optionCount >= Number(argument);
-    case "categoryIn":
-      return (categoryLists[argument ?? ""] ?? []).includes(subject.category);
-    case "questionStartsWith":
-      return subject.englishQuestion.trimStart().toLowerCase().startsWith((argument ?? "").toLowerCase());
-    default:
-      // An unknown predicate fails closed. Reading it as "no condition" would silently promote a
-      // typo into an always-eligible hook, which is the one direction this must never fail in.
-      return false;
-  }
-}
-
-export function patternIsTruthful(
-  pattern: HookPattern,
-  tone: Brand["tone"],
-  subject: TruthSubject,
-  categoryLists: Brand["categoryLists"]
-): boolean {
-  return requirementsForTone(pattern, tone)
-    .every((requirement) => evaluateTruthRequirement(requirement, subject, categoryLists));
-}
-
 export function enabledBrands(config: MarketingSharkConfig): Brand[] {
   return config.brands.filter((brand) => brand.enabled);
 }

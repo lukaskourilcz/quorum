@@ -127,12 +127,16 @@ importer run and one `enabled` flag.
 
 Everything except one model call per brand per day is deterministic and costs nothing. Which
 question runs comes from a seeded order over the bank, so every question is served once before
-any repeats and the same date always produces the same question. Which opening line may front
-it is gated on predicates evaluated in code — "Two answers look right. One is." may only run on
-a question that actually has four options and is not trivial. After CHUM answers, deterministic
-gates check that the brand's closing line is verbatim, that any code block reached the slide
-byte for byte, and that no number in the hook appears in neither the question nor the pattern.
-A failure aborts the brand and leaves nothing behind.
+any repeats and the same date always produces the same question. Which opening line fronts it
+is decided by the Carousel Studio's hook brain, not by the model and no longer from a library
+inline in this venture's config: the studio evaluates the central library's gates against the
+question's own metadata — "Two answers look right. One is." may only run on a question that
+actually has four options and is not trivial — and slide 1 renders that line verbatim. CHUM
+writes slides 2 to 5 to cash the promise slide 1 makes, and there is no field left in its
+output through which it could author hook copy at all. After CHUM answers, deterministic gates
+check that the assigned hook line is unchanged, that the brand's closing line is verbatim, that
+any code block reached the slide byte for byte, and that no number in the hook appears in
+neither the question nor the assigned line. A failure aborts the brand and leaves nothing behind.
 
 Nothing it writes can post. marketingShark owns no social account and no credentials, every
 package is written with `status: "draft"` and every approval check pending, and it is not a
@@ -189,6 +193,35 @@ MOTIF records cited text observations without crawling or downloading imagery. E
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
 deprecated, never deleted. Owner ratings teach PALATE but cannot bypass checks.
+
+The studio is also the **assignment brain for hook copy across every surface**. A hook is
+one line on slide 1 whose job is to earn the next interaction, and it is gated: each hook
+declares `truthRequires` predicates and may only render on content whose metadata makes
+them true. Gates license claims — that is the entire honesty model, and it is why the
+engine ports everywhere while the strings do not. The libraries live beside the engine in
+`studio/hooks/`; `quiz.hooks.json` ships 49 hooks for devShark and geoShark, and
+`news.hooks.json` and `mma.hooks.json` are not written yet, which is a valid state: those
+packs take a logged `no-hook` fallback and the template's own headline renders. A missing
+hook never blocks a pack.
+
+**`docs/hooks/` is the canonical knowledge base for hooks and short-form viral copy**, for
+this repository and for every consuming one — seven files covering mechanism catalogue and
+evidence tags (`01`), the writing playbook and honesty rules (`02`), metrics, cooldowns and
+A/B method (`03`), schema, predicate semantics and the Tier B build specs (`04`), per-surface
+vocabularies and the extra honesty rules for news and MMA (`05`), and assignment, cooldown
+scopes, override limits and conformance vectors (`06`). Consuming repositories reference
+these files rather than copying them; a forked playbook drifts within weeks.
+
+Assignment is deterministic and costs `$0`: eligible set from the item's metadata, then a
+channel cooldown of `max(2 × cooldownDays, 14)` days, then no repeat of the channel's
+previous archetype, then a seeded pick over what survives — seeded from channel, date and
+item so a rebuild reaches the same slide 1 that a rebuild reaches the same pixels. The
+decision is recorded as `hook-assignment/1` in the pack. Marketing meetings may swap the
+proposed hook for another member of the recorded eligible set and for nothing else; the set
+is hashed, so widening it to smuggle a hook in stops the package validating. `lint:hooks`
+enforces the craft caps in CI, and `hook-library/1` delivers the library and its conformance
+vectors to the quiz apps through the same bounded channel articles use, only after that lint
+passes.
 
 The 13:00 room is agenda-gated and costs `$0` when idle. The protected admin renders
 all slides for all statuses, three brands and three formats, with checks, ratings,

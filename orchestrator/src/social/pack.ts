@@ -19,6 +19,8 @@ import { parseSafeHttpsUrl } from "../security/url.js";
 import { atomicWriteBuffer, atomicWriteJson, atomicWriteText, readText } from "../state.js";
 import { validateSocialImage } from "./media/validate.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
+import { assignPackHook, channelRecordFor } from "../studio/hook-brain.js";
+import { recordPost, writeHookChannels } from "../studio/hook-channels.js";
 
 const COMPOSER_VERSION = "carousel-studio-1" as const;
 
@@ -364,6 +366,25 @@ export async function composeEditionSocialPack(input: {
     }));
   });
   const csVisual = visualRefs.cs ?? visualRefs.en!;
+  // DNESKAi's hook library is not written yet, so every edition takes the `no-hook` fallback and
+  // the deck's own cover headline renders. Running it through the brain from day one rather than
+  // wiring it later is the point: the fallback is logged and countable now, so the KPI can read a
+  // real number instead of an absence, and authoring news.hooks.json changes a data file rather
+  // than this code path. See docs/hooks/05-surfaces.md.
+  const hookDecision = await assignPackHook({
+    stateRoot: input.stateRoot,
+    surface: "news",
+    channel: "caught-up-carousel",
+    date: input.editionPackage.date,
+    itemId: (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter.slug,
+    vertical: "dev",
+    languages: ["cs"]
+  });
+  const hookChannelsPath = await writeHookChannels(
+    input.stateRoot,
+    recordPost(hookDecision.channels, hookDecision.assignment.channel, channelRecordFor(hookDecision.assignment, hookDecision.hook))
+  );
+
   const deckReceipt = await writeDeckReceipt({
     root: input.stateRoot,
     venture: "caught-up",
@@ -394,6 +415,7 @@ export async function composeEditionSocialPack(input: {
       `social/packs/${input.editionPackage.date}.json`,
       `social/assets/${input.editionPackage.date}.json`,
       deckReceipt,
+      hookChannelsPath,
       ...queued.map(({ locale, channel }) => `social/queue/${input.editionPackage.date}-${locale}-${channel}.json`),
       ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
       path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))

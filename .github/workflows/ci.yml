@@ -63,6 +63,17 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # Its own step rather than a line inside `pnpm lint`: the hook lint reports per-rule findings
+      # and a run's warnings (the geo variants their gate makes unreachable) are meant to be read,
+      # not folded into an eslint summary. A red step here also blocks the `hook-library/1`
+      # delivery, which may only re-deliver after this passes.
+      - name: Lint hook libraries
+        run: pnpm lint:hooks
+
+      # The conformance vectors are generated from the evaluator, so a stale file pins nothing.
+      - name: Check hook conformance vectors
+        run: pnpm hooks:vectors -- --check
+
       - name: Typecheck
         run: pnpm typecheck
 

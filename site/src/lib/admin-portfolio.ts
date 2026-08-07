@@ -16,7 +16,7 @@ const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
   "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
-  "articles", "calendar", "social-lab", "templates", "inspiration", "decks",
+  "articles", "calendar", "social-lab", "templates", "inspiration", "decks", "hooks",
   "packages"
 ] as const;
 

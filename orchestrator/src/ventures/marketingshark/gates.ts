@@ -1,5 +1,5 @@
 import type { NormalizedQuestion } from "./bank.js";
-import type { Brand, HookPattern } from "./config.js";
+import type { Brand } from "./config.js";
 import { SLIDE_ROLES, type ChumOutput } from "./package.js";
 
 /**
@@ -66,8 +66,8 @@ export function runTruthGates(input: {
   output: ChumOutput;
   brand: Brand;
   question: NormalizedQuestion;
-  hookA: HookPattern;
-  hookB: HookPattern;
+  /** The assigned hook's line per locale, or null when the pack takes its `no-hook` fallback. */
+  hookLines: { cs: string; en: string } | null;
 }): GateViolation[] {
   const { output, brand, question } = input;
   const violations: GateViolation[] = [];
@@ -95,8 +95,15 @@ export function runTruthGates(input: {
 
     const [hook, context, , why, footer] = slides;
 
-    if (hook!.headline.length > LIMITS.hookChars) {
-      add("hook-length", locale, `hook headline is ${hook!.headline.length} characters, cap is ${LIMITS.hookChars}`);
+    // Slide 1 is the library's line, checked the way the brand's slide-5 line is: verbatim or not
+    // at all. The char budget is the hook lint's job upstream — by the time a line reaches here it
+    // has already cleared EN 58 / CS 66, and re-capping it at 80 here would only hide a mismatch.
+    if (input.hookLines && hook!.headline.trim() !== input.hookLines[locale].trim()) {
+      add("hook-verbatim", locale, "slide 1 does not carry the assigned hook line unchanged");
+    }
+    if (!input.hookLines && hook!.headline.length > LIMITS.hookChars) {
+      // The `no-hook` fallback is the one path where the model still writes slide 1.
+      add("hook-length", locale, `fallback headline is ${hook!.headline.length} characters, cap is ${LIMITS.hookChars}`);
     }
 
     // An unfilled {topic} reaching a slide is the pattern leaking its own template into the feed.
@@ -109,8 +116,8 @@ export function runTruthGates(input: {
     // the never-invent-a-statistic rule in the only form a check can apply it.
     const allowed = new Set([
       ...numerals(sourceText),
-      ...numerals(input.hookA.variants[brand.tone]?.en ?? ""),
-      ...numerals(input.hookA.variants[brand.tone]?.cs ?? "")
+      ...numerals(input.hookLines?.en ?? ""),
+      ...numerals(input.hookLines?.cs ?? "")
     ]);
     for (const numeral of numerals(hook!.headline)) {
       if (!allowed.has(numeral)) {
@@ -181,14 +188,9 @@ export function runTruthGates(input: {
     }
   }
 
-  for (const locale of ["cs", "en"] as const) {
-    if (output.hookB[locale].trim().length === 0) {
-      add("ab-record", locale, "the alternate hook line is empty");
-    }
-    if (output.hookB[locale].length > LIMITS.hookChars) {
-      add("ab-record", locale, `alternate hook is ${output.hookB[locale].length} characters, cap is ${LIMITS.hookChars}`);
-    }
-  }
+  // The `ab-record` gate is gone with the field it checked. Both hook lines now come from the
+  // central library, so neither can be empty, over-long or invented — the hook lint proved that
+  // before either was eligible to be assigned.
 
   return violations;
 }

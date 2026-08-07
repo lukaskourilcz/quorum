@@ -9,17 +9,20 @@ import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import type { Stage } from "../../types.js";
 import { atomicWriteJson, readJson } from "../../state.js";
-import { loadQuestionBankSnapshot, type NormalizedQuestion } from "./bank.js";
+import { loadQuestionBankSnapshot, truthSubjectOf, type NormalizedQuestion } from "./bank.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig } from "./config.js";
 import { runTruthGates, type GateViolation } from "./gates.js";
 import {
-  assignHooks,
   EMPTY_LEDGER,
   MarketingSharkLedgerSchema,
   recordServed,
   selectQuestion,
   type MarketingSharkLedger
 } from "./ledger.js";
+import { assertHookAssignmentValid, assignPackHook, channelRecordFor, hookLineFor } from "../../studio/hook-brain.js";
+import { recordPost, writeHookChannels, type HookChannels } from "../../studio/hook-channels.js";
+import type { HookAssignment } from "../../contracts/hook-assignment.js";
+import type { Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
 import { buildQueueItems } from "./queue.js";
@@ -55,18 +58,54 @@ export async function readLedger(root = stateRoot): Promise<MarketingSharkLedger
  * Kept separate from the call so a dry run, a test and the live room all reach the same question
  * and the same two patterns by the same path. Steps 2 to 4 of the meeting flow, and all $0.
  */
+/**
+ * One channel per brand, not one per platform.
+ *
+ * Instagram and Threads are built from a single package and carry the same slide 1, so they are one
+ * rotation with one cooldown. Scoping them separately would record two posts for one decision and
+ * halve the effective wear-out window for no gain.
+ */
+export function hookChannelFor(brandId: string): string {
+  return `${brandId}-carousel`;
+}
+
+/**
+ * `{topic}` values, in the register the copy expects.
+ *
+ * Category slugs are what the bank actually carries, and they are the honest topic: a hook filled
+ * from anything else would be claiming something the payload does not say. Only the presentation is
+ * mapped, and only for the slugs whose display form is not their capitalisation.
+ */
+const TOPIC_LABELS: Readonly<Record<string, string>> = {
+  javascript: "JavaScript", typescript: "TypeScript", nodejs: "Node.js", css: "CSS", html: "HTML",
+  dsa: "DSA", "system-design": "system design", react: "React", git: "Git", databases: "databases",
+  testing: "testing", security: "security", internet: "the internet", algorithms: "algorithms"
+};
+
+export function topicLabel(category: string): string {
+  return TOPIC_LABELS[category] ?? `${category.charAt(0).toUpperCase()}${category.slice(1)}`;
+}
+
+export interface BrandDayPlan {
+  question: NormalizedQuestion;
+  selection: ReturnType<typeof selectQuestion>;
+  assignment: HookAssignment;
+  hook: Hook | null;
+  /** The recorded alternate. Never published; kept so a split test has a counterfactual on file. */
+  alternate: Hook | null;
+  /** The channel state the assignment was taken against, committed with the package. */
+  channels: HookChannels;
+  contentHash: string;
+}
+
 export async function planBrandDay(input: {
   config: MarketingSharkConfig;
   brand: Brand;
   ledger: MarketingSharkLedger;
   date: string;
   root?: string;
-}): Promise<{
-  question: NormalizedQuestion;
-  selection: ReturnType<typeof selectQuestion>;
-  hooks: ReturnType<typeof assignHooks>;
-  contentHash: string;
-}> {
+  stateRoot?: string;
+}): Promise<BrandDayPlan> {
   const snapshot = await loadQuestionBankSnapshot(input.brand.questionBank.snapshotPath, input.root ?? repoRoot);
   const selection = selectQuestion({
     ledger: input.ledger,
@@ -78,17 +117,70 @@ export async function planBrandDay(input: {
   const question = snapshot.questions.find((entry) => entry.id === selection.questionId);
   if (!question) throw new Error(`${selection.questionId} is not in ${input.brand.id}'s snapshot`);
 
-  const hooks = assignHooks({
-    library: input.config.hookLibrary,
-    brand: input.brand,
-    brandId: input.brand.id,
-    question,
+  const subject = truthSubjectOf(question);
+  const { assignment, hook, library, channels } = await assignPackHook({
+    stateRoot: input.stateRoot ?? stateRoot,
+    surface: "quiz",
+    channel: hookChannelFor(input.brand.id),
     date: input.date,
-    served: selection.brandLedger.served,
-    minEligibleBeforeRelax: input.config.minEligibleBeforeRelax
+    itemId: question.id,
+    vertical: input.brand.tone,
+    languages: ["en", "cs"],
+    quiz: {
+      subject: {
+        difficulty: subject.difficulty,
+        hasCode: subject.hasCode,
+        category: subject.category,
+        optionCount: subject.optionCount,
+        canonicalEnglishQuestion: subject.englishQuestion
+      },
+      categoryLists: input.brand.categoryLists
+    }
   });
 
-  return { question, selection, hooks, contentHash: snapshot.contentHash };
+  // The alternate is the next member of the same available list, so it is bound by exactly the
+  // gates the assigned hook was. There is no second draw and no second cooldown spend.
+  const available = assignment.availableIds;
+  const chosen = available.indexOf(assignment.hookId ?? "");
+  const alternateId = chosen >= 0 && available.length > 1
+    ? available[(chosen + 1) % available.length]!
+    : null;
+  const alternate = alternateId ? library.hooks.find((entry) => entry.id === alternateId) ?? null : null;
+
+  return { question, selection, assignment, hook, alternate, channels, contentHash: snapshot.contentHash };
+}
+
+/**
+ * The hook line each locale's slide 1 must carry, or null when the pack falls back.
+ *
+ * Both languages come from the same assignment. There is one eligible set per pack, so slide 1 is
+ * the same hook in EN and CS — only the string differs.
+ */
+export function hookLinesFor(input: {
+  hook: Hook | null;
+  brand: Brand;
+  question: NormalizedQuestion;
+}): { cs: string; en: string } | null {
+  if (!input.hook) return null;
+  const topic = topicLabel(input.question.category);
+  const line = (language: "cs" | "en") =>
+    hookLineFor({ hook: input.hook, vertical: input.brand.tone, language, topic })!;
+  return { cs: line("cs"), en: line("en") };
+}
+
+/**
+ * The hook lines a fixture reply should echo back on the hook slide.
+ *
+ * The same resolution the live path uses, so a dry run exercises the verbatim gate for real: on an
+ * assignment it echoes the assigned line, and on the `no-hook` fallback it writes the question, which
+ * is what a live run would render when nothing is eligible.
+ */
+export function fixtureHookLines(plan: Pick<BrandDayPlan, "hook" | "question">, brand: Brand): { hookA: string; hookACs: string } {
+  const lines = hookLinesFor({ hook: plan.hook, brand, question: plan.question });
+  return {
+    hookA: lines?.en ?? plan.question.en.question,
+    hookACs: lines?.cs ?? plan.question.cs?.question ?? plan.question.en.question
+  };
 }
 
 /** Fold CHUM's copy and everything code already knows into the committed package. */
@@ -96,18 +188,30 @@ export function assemblePackage(input: {
   date: string;
   brand: Brand;
   question: NormalizedQuestion;
-  hookAId: string;
-  hookBId: string;
+  assignment: HookAssignment;
+  hook: Hook | null;
+  alternate: Hook | null;
   output: ChumOutput;
   rendered: { cs: RenderedRoleSlide[]; en: RenderedRoleSlide[] };
   summaryPaths: string[];
   spendUsd: number;
 }): MarketingSharkPackage {
+  // The last place the bound is checked before the assignment becomes a file. An override that
+  // reached outside its eligible set, or a set edited after it was evaluated, stops here.
+  assertHookAssignmentValid(input.assignment);
+
+  const lines = hookLinesFor(input);
+  const alternateLines = hookLinesFor({ ...input, hook: input.alternate });
+
   const slides = (locale: "cs" | "en") =>
     input.output.carousels[locale].slides.map((slide, index) => ({
       role: SLIDE_ROLES[index]!,
       templateId: input.brand.templateMap[SLIDE_ROLES[index]!],
-      headline: slide.headline,
+      // Slide 1 is the library's line, not the model's. The assignment is deterministic $0 code and
+      // the copy it assigns is the copy that was linted, length-budgeted and gate-licensed; a
+      // paraphrase would be none of those. On the `no-hook` fallback the template's own headline —
+      // whatever CHUM wrote for the slide — renders instead.
+      headline: index === 0 && lines ? lines[locale] : slide.headline,
       ...(slide.body ? { body: slide.body } : {}),
       alt: slide.alt
     }));
@@ -118,9 +222,18 @@ export function assemblePackage(input: {
     brandId: input.brand.id,
     question: { id: input.question.id, category: input.question.category, difficulty: input.question.difficulty },
     hooks: {
-      a: { patternId: input.hookAId, en: input.output.carousels.en.slides[0]!.headline, cs: input.output.carousels.cs.slides[0]!.headline },
-      b: { patternId: input.hookBId, en: input.output.hookB.en, cs: input.output.hookB.cs }
+      a: {
+        patternId: input.assignment.hookId ?? "no-hook",
+        en: lines?.en ?? input.output.carousels.en.slides[0]!.headline,
+        cs: lines?.cs ?? input.output.carousels.cs.slides[0]!.headline
+      },
+      b: {
+        patternId: input.alternate?.id ?? "none",
+        en: alternateLines?.en ?? "",
+        cs: alternateLines?.cs ?? ""
+      }
     },
+    hookAssignment: input.assignment,
     carousels: { cs: { slides: slides("cs") }, en: { slides: slides("en") } },
     descriptions: input.output.descriptions,
     hashtags: input.output.hashtags,
@@ -197,9 +310,9 @@ export async function commitBrandDay(input: {
   summaries: Array<{ relative: string; body: unknown }>;
   ledger: MarketingSharkLedger;
   selection: ReturnType<typeof selectQuestion>;
-  hookAId: string;
-  hookBId: string;
-  relaxed: boolean;
+  assignment: HookAssignment;
+  hook: Hook | null;
+  channels: HookChannels;
   queueItems: ReturnType<typeof buildQueueItems>;
 }): Promise<string[]> {
   const relative = packagePath(input.date, input.brand.id);
@@ -220,18 +333,28 @@ export async function commitBrandDay(input: {
     date: input.date,
     epoch: input.selection.epoch,
     questionId: input.built.question.id,
-    hookA: input.hookAId,
-    hookB: input.hookBId,
-    relaxed: input.relaxed,
+    hookA: input.assignment.hookId ?? "no-hook",
+    hookB: input.built.hooks.b.patternId,
+    // The channel cooldown never relaxes: it takes the `no-hook` fallback instead. The field stays
+    // for the packages written before that was true.
+    relaxed: false,
     package: `state/${relative}`
   });
   await atomicWriteJson(input.root, LEDGER_PATH, nextLedger);
+
+  // The channel record is part of the same unit. A hook recorded without a package would cool a
+  // line that never posted; a package without the record would let it post again tomorrow.
+  const channelsPath = await writeHookChannels(
+    input.root,
+    recordPost(input.channels, input.assignment.channel, channelRecordFor(input.assignment, input.hook))
+  );
 
   return [
     relative,
     ...input.summaries.map((summary) => summary.relative),
     ...input.queueItems.map((entry) => entry.relative),
-    LEDGER_PATH
+    LEDGER_PATH,
+    channelsPath
   ];
 }
 
@@ -267,7 +390,7 @@ export async function runBrandDay(input: {
     // The snapshot path and the craft rules are repo-relative and are read from the repository on
     // every run. Only state writes move to the dry-run root; a dry run reads the same committed
     // bank the live room reads, which is the whole point of it proving the wiring.
-    plan = await planBrandDay({ config: input.config, brand, ledger: input.ledger, date, root: repoRoot });
+    plan = await planBrandDay({ config: input.config, brand, ledger: input.ledger, date, root: repoRoot, stateRoot: input.root });
   } catch (error) {
     return {
       outcome: { status: "aborted", brandId: brand.id, reason: "bank-invalid", detail: message(error), spendUsd: 0 },
@@ -299,8 +422,8 @@ export async function runBrandDay(input: {
     const packet = buildChumPacket({
       brand,
       question: plan.question,
-      hookA: plan.hooks.a,
-      hookB: plan.hooks.b,
+      hookLines: hookLinesFor({ hook: plan.hook, brand, question: plan.question }),
+      hookId: plan.assignment.hookId,
       date,
       ...(violations.length ? { violations } : {})
     });
@@ -327,8 +450,7 @@ export async function runBrandDay(input: {
       output: candidate,
       brand,
       question: plan.question,
-      hookA: plan.hooks.a,
-      hookB: plan.hooks.b
+      hookLines: hookLinesFor({ hook: plan.hook, brand, question: plan.question })
     });
     if (violations.length === 0) output = candidate;
   }
@@ -386,8 +508,9 @@ export async function runBrandDay(input: {
     date,
     brand,
     question: plan.question,
-    hookAId: plan.hooks.a.id,
-    hookBId: plan.hooks.b.id,
+    assignment: plan.assignment,
+    hook: plan.hook,
+    alternate: plan.alternate,
     output,
     rendered,
     summaryPaths: [summaryPaths.cs, summaryPaths.en].map((relative) => `state/${relative}`),
@@ -405,9 +528,9 @@ export async function runBrandDay(input: {
     ],
     ledger: input.ledger,
     selection: plan.selection,
-    hookAId: plan.hooks.a.id,
-    hookBId: plan.hooks.b.id,
-    relaxed: plan.hooks.relaxed,
+    assignment: plan.assignment,
+    hook: plan.hook,
+    channels: plan.channels,
     queueItems: buildQueueItems({ built, brand, now })
   });
 
@@ -418,9 +541,9 @@ export async function runBrandDay(input: {
       questionId: plan.question.id,
       packagePath: `state/${packagePath(date, brand.id)}`,
       spendUsd,
-      hookA: plan.hooks.a.id,
-      hookB: plan.hooks.b.id,
-      relaxed: plan.hooks.relaxed
+      hookA: plan.assignment.hookId ?? "no-hook",
+      hookB: built.hooks.b.patternId,
+      relaxed: false
     },
     ledger: await readLedger(input.root),
     artifacts
@@ -448,7 +571,7 @@ function message(error: unknown): string {
  * produced something. It exists to prove the wiring: selection, gates, render, packaging and the
  * ledger all run for real against it.
  */
-export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQuestion; hookA: string; hookACs: string; hookB: string; hookBCs: string }): ChumOutput {
+export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQuestion; hookA: string; hookACs: string }): ChumOutput {
   const { brand, question } = input;
   const answer = question.en.options[question.correctIndex] ?? "";
   const letter = String.fromCharCode(65 + question.correctIndex);
@@ -474,8 +597,7 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
     hashtags: {
       instagram: { cs: brand.hashtags.instagram.cs, en: brand.hashtags.instagram.en },
       threads: { cs: [brand.hashtags.threadsTopic.cs], en: [brand.hashtags.threadsTopic.en] }
-    },
-    hookB: { en: input.hookB, cs: input.hookBCs }
+    }
   });
 }
 
@@ -539,17 +661,10 @@ export async function runMarketingSharkCycle(input: {
         if (input.dry) {
           // A dry run proves the wiring and never contacts a provider. The fixture reply runs
           // through the same gates, the same render and the same packaging as a paid one.
-          const plan = await planBrandDay({ config, brand, ledger, date: input.date, root: repoRoot });
+          const plan = await planBrandDay({ config, brand, ledger, date: input.date, root: repoRoot, stateRoot: root });
           return {
             usd: 0,
-            output: fixtureChumOutput({
-              brand,
-              question: plan.question,
-              hookA: plan.hooks.a.variants[brand.tone]?.en ?? "",
-              hookACs: plan.hooks.a.variants[brand.tone]?.cs ?? "",
-              hookB: plan.hooks.b.variants[brand.tone]?.en ?? "",
-              hookBCs: plan.hooks.b.variants[brand.tone]?.cs ?? ""
-            })
+            output: fixtureChumOutput({ brand, question: plan.question, ...fixtureHookLines(plan, brand) })
           };
         }
         const call = await guardedJsonCall<ChumOutput>({

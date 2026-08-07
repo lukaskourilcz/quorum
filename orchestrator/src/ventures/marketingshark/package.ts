@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { HookAssignmentSchema } from "../../contracts/hook-assignment.js";
 
 export const SLIDE_ROLES = ["hook", "context", "reveal", "why", "footer"] as const;
 export type SlideRole = (typeof SLIDE_ROLES)[number];
@@ -24,6 +25,14 @@ export const MarketingSharkPackage = z.object({
     a: z.object({ patternId: z.string(), en: z.string(), cs: z.string() }),
     b: z.object({ patternId: z.string(), en: z.string(), cs: z.string() })
   }),
+  /**
+   * What the studio decided about slide 1, and the set it was allowed to decide within.
+   *
+   * The package carries it rather than only the ledger because this is what a reviewer needs in
+   * front of the copy: which hook, which gates licensed it, what else was available, and — when an
+   * agent swapped it — that the swap stayed inside the recorded set.
+   */
+  hookAssignment: HookAssignmentSchema,
   carousels: z.object({ cs: CarouselCopy, en: CarouselCopy }),
   descriptions: z.object({
     instagram: z.object({ cs: z.string().max(2200), en: z.string().max(2200) }),
@@ -73,8 +82,10 @@ export const ChumOutput = z.object({
   hashtags: z.object({
     instagram: z.object({ cs: z.array(z.string()), en: z.array(z.string()) }),
     threads: z.object({ cs: z.array(z.string()), en: z.array(z.string()) })
-  }),
-  hookB: z.object({ en: z.string(), cs: z.string() })
+  })
+  // `hookB` used to be here: CHUM wrote the alternate hook line as free text. Both hook lines now
+  // come from the central library, so there is no field left through which a model can author hook
+  // copy at all.
 });
 export type ChumOutput = z.infer<typeof ChumOutput>;
 
