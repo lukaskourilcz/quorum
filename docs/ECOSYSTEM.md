@@ -115,8 +115,10 @@ the global kill switch still wins.
 ### marketingShark
 
 Promise: one quiz question a day, written up honestly enough that a reader gets value from
-the carousel whether or not they ever open the product. MAKO directs and reviews weekly,
-CHUM writes the day's copy in Czech and again in English, AUDIT holds the veto seat.
+the carousel whether or not they ever open the product. CHUM writes the day's copy in Czech and
+again in English, and AUDIT holds the veto seat. MAKO's weekly review is specified — its
+instructions are `orchestrator/prompts/marketingshark/strategy.md` — and is not yet wired to a
+room, so no weekly call runs and none is billed.
 
 devShark is the first brand and the only one enabled: its 3,633-question webdev bank is
 consumed read-only as a committed snapshot pinned to a source commit, and nothing is written
@@ -307,7 +309,7 @@ envelope before any call.
 | EASEL | retired | stood down; the studio renders deterministically and holds no meeting |
 | MOTIF | retired | stood down with EASEL; nothing reads layout observations |
 | PIVOT | evidence bridge between FightAIQ and MMA Files | cannot turn response/context into hidden model input |
-| MAKO | marketingShark direction, weekly package review, KPI honesty | cannot post, cannot edit the hook library silently, cannot invent a metric |
+| MAKO | marketingShark direction and KPI honesty; its weekly package review is specified, not yet wired | cannot post, cannot edit the hook library silently, cannot invent a metric |
 | CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
 
 ## Content, social and Carousel Studio flow

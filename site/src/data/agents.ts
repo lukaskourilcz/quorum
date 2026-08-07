@@ -116,7 +116,9 @@ type TextModelRole =
   | "AUDIT"
   | "OPENAI_SPECIALIST"
   | "ANTHROPIC_SPECIALIST"
-  | "DIGEST";
+  | "DIGEST"
+  | "MAKO"
+  | "CHUM";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -340,6 +342,11 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   ],
   PULSE: [configuredTextModel("PULSE", "Company and project meetings", councilMeetingCall)],
   AUDIT: [configuredTextModel("AUDIT", "Company and project meetings", councilMeetingCall)],
+  // Both route to claude-sonnet-5, not the shared Haiku specialist route. Without an entry here
+  // the public agent page fell through to ANTHROPIC_SPECIALIST and advertised the wrong model
+  // and the wrong price for the venture's only quality-critical call.
+  MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
+  CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
   HERALD: [
     configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
     configuredTextModel("DIGEST", "DNESKAi product room"),

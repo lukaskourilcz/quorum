@@ -18,8 +18,7 @@ import {
   Shirt,
   TrendingUp,
   Swords,
-  type LucideIcon
-} from "lucide-react";
+  type LucideIcon, Layers } from "lucide-react";
 import ventureRegistrySource from "../../../config/ventures.json";
 import {
   agentById,
@@ -53,7 +52,7 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
-type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "fightaiq" | "mma-files" | "carousel-studio";
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "fightaiq" | "mma-files" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
@@ -107,6 +106,9 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   "caught-up": { icon: Newspaper, label: "DNESKAi", tone: "text-[var(--magenta-spark)]", slotColor: "var(--magenta-spark)" },
   "titty-tuesdays": { icon: Shirt, label: "Titty Tuesdays", tone: "text-[var(--warning-soft)]", slotColor: "var(--warning-soft)" },
   goviral: { icon: TrendingUp, label: "GoVIRAL", tone: "text-[var(--success-soft)]", slotColor: "var(--success-soft)" },
+  // The hue is the one already recorded for this venture in lib/venture-brand.ts, so the board,
+  // the admin rail and the carousel canvases agree about what colour marketingShark is.
+  marketingshark: { icon: Layers, label: "marketingShark", tone: "text-[var(--info-soft)]", slotColor: "#a5d8f3" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
   "mma-files": {
     icon: FileText,
@@ -121,6 +123,7 @@ function projectForKind(kind: CalendarKind): ProjectKey {
   if (isCaughtUp(kind)) return "caught-up";
   if (kind === "tt-marketing") return "titty-tuesdays";
   if (kind === "gv-brief") return "goviral";
+  if (kind === "ms-daily") return "marketingshark";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
   if (kind === "studio") return "carousel-studio";

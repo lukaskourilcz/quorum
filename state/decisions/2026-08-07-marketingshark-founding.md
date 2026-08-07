@@ -97,6 +97,26 @@ sentence.
 DNESKAi's banner carries the honest `vlastní projekt` label. The site does not sell ads and
 must not look like it does.
 
+## Two things the work order asked for that are not built
+
+Recorded rather than quietly dropped, in the shape `goviral-2026-08a` used for the same kind of
+gap.
+
+**The agenda transitions.** `ms-daily` was to be a standing agenda window that the morning board
+could focus, and that could itself request MAKO's weekly review. Neither is wired, and offering
+the first without the engine that reads it would be worse than not offering it: `run.ts` is the
+only place a due agenda is ever consumed, `ms-daily` runs from `cycle.ts`, and an agenda filed
+for it would sit in the queue until its three-day TTL expired while the morning board's record
+claimed it had handed work onward. That is the same trap `cu-product` fell into. The room is a
+standing daily window in behaviour — it opens without a due agenda — it is simply not registered
+as one in `config/meeting-policy.json`.
+
+**MAKO's weekly review.** Its instructions exist and are byte-perfect at
+`orchestrator/prompts/marketingshark/strategy.md`, and nothing calls them. No weekly room is
+registered, no weekly call is made, and no weekly cost is incurred. The cost figures in this
+decision were written for a design that included it; the venture actually runs at about $1.50 a
+month with one brand and $3.00 with two, and wiring the review would add roughly $0.16.
+
 ## What this does not touch
 
 The $30 / $25 / $1.00 ceilings. The publisher, the treasury and the INBOX flows. Every

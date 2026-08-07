@@ -698,7 +698,8 @@
       "unit": "ratio",
       "critical": false,
       "ramp_days": 14,
-      "pace": "level"
+      "pace": "level",
+      "deferred_reason": "No queue item has been reviewed yet, so the ratio has no denominator."
     }
   ]
 }

@@ -48,11 +48,21 @@ describe("closing 42-agent system audit", () => {
   it("keeps all room envelopes inside the signed daily pace", async () => {
     const registry = await json<{
       ventures: Array<{
-        meetings: Array<{ envelopeUsd: number }>;
+        meetings: Array<{ kind: string; envelopeUsd: number }>;
         productionJobs?: Array<{ envelopeUsd: number }>;
       }>;
     }>("config/ventures.json");
-    const roomEnvelopes = registry.ventures.flatMap((venture) => venture.meetings).reduce((sum, meeting) => sum + meeting.envelopeUsd, 0);
+    // ms-daily's envelope is per ENABLED BRAND, which its own registry comment says and run.ts
+    // computes as `0.1 * brands.length`. Summing it as a flat scalar made the guard model a
+    // cheaper clock than the one that can actually run: on the Phase-2 flag flip the real total
+    // is 0.72 and a flat sum would still report 0.62 and pass.
+    const marketingSharkBrands = JSON.parse(
+      await readFile(path.join(repoRoot, "config", "marketingshark.json"), "utf8")
+    ) as { brands: Array<{ enabled: boolean }> };
+    const enabledBrands = marketingSharkBrands.brands.filter((brand) => brand.enabled).length;
+    const roomEnvelopes = registry.ventures
+      .flatMap((venture) => venture.meetings)
+      .reduce((sum, meeting) => sum + meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1), 0);
     // Read from the registry rather than pinned: the article slot reserves what it declares, and
     // a literal here was still asserting two slots at an old per-run cap long after the desk
     // moved to one article a day.

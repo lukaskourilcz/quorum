@@ -47,11 +47,13 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   aritmeticky bez volání modelu. Karusel proto nestojí nic navíc a stejný článek dá vždy
   stejné slidy.
 - marketingShark má poradu každý den v 07:00 a v ní jediný placený krok: jedno volání
-  modelu na značku a den pro české a anglické texty, k tomu jedna týdenní kontrola
-  balíčků. Výběr otázky, přiřazení háčku, kontroly pravdivosti, vykreslení i zápis do
-  fronty jsou deterministický kód za $0. Vychází to zhruba na **$1.66 měsíčně** s jednou
-  zapnutou značkou a **$3.15** se dvěma. Žádné fixní náklady, žádná hotovost, žádná
-  položka v pokladně.
+  modelu na značku a den pro české a anglické texty. Výběr otázky, přiřazení háčku,
+  kontroly pravdivosti, vykreslení i zápis do fronty jsou deterministický kód za $0.
+  Vychází to zhruba na **$1.50 měsíčně** s jednou zapnutou značkou a **$3.00** se dvěma.
+  MAKO má týdenní kontrolu popsanou v `orchestrator/prompts/marketingshark/strategy.md`,
+  ale zatím ji nemá kam poslat — žádná porada ji nespouští, takže se nic neúčtuje. Až se
+  zapojí, přidá zhruba $0.16 měsíčně. Žádné fixní náklady, žádná hotovost, žádná položka
+  v pokladně.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 
