@@ -103,6 +103,7 @@ import {
 import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js";
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
+import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
   recordClosedArticleSlot,
@@ -1258,6 +1259,35 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     });
     // runPortfolioCycle handles its own cap stops and returns a skip rather than throwing; the
     // wrapper is the backstop for a refusal on a path inside it that this change did not reach.
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
+  }
+  if (options.phase === "ms-daily") {
+    const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };
+    const run = async (): Promise<CycleResult> => {
+      const result = await runMarketingSharkCycle({
+        cycleId,
+        dry: options.dry,
+        now,
+        date: pragueClockParts(now).date,
+        stage: stages.current
+      });
+      const drafted = result.brands.filter((brand) => brand.status === "drafted").length;
+      const aborted = result.brands.filter((brand) => brand.status === "aborted").length;
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: options.dry,
+        status: options.dry ? "dry_complete" : result.skipped ? "paused" : "live_complete",
+        decision: result.skipped ? "PAUSED" : drafted > 0 ? "PLAN" : "NO_ACTION",
+        estimatedWorstCaseUsd: result.spendUsd,
+        // A brand that aborted is a seat that produced nothing, and the record says so rather
+        // than reporting a room that ran clean.
+        selectedAgents: drafted > 0 ? ["MAKO", "CHUM", "AUDIT"] : [],
+        skippedAgents: aborted > 0 || result.skipped ? ["CHUM"] : [],
+        artifacts: result.artifacts.map((artifact) =>
+          path.relative(repoRoot, path.join(options.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot, artifact)))
+      };
+    };
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (options.phase === "article-am" || options.phase === "article-pm") {

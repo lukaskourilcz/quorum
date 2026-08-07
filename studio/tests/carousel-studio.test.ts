@@ -25,9 +25,13 @@ import {
 } from "../src/index.js";
 
 describe("carousel-template/1", () => {
-  it("ships ten live, original seed layouts", () => {
-    expect(SEED_TEMPLATES).toHaveLength(10);
-    expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(10);
+  it("ships eleven live, original seed layouts", () => {
+    // The eleventh is quiz-code-context, added for marketingShark and justified by a gap rather
+    // than by a preference: every other live layout tops out at a 100-character mono slot over
+    // two lines, which is a source label and not a program, so a quiz question carrying a fenced
+    // code block had nowhere to put it that kept the characters monospaced and legible.
+    expect(SEED_TEMPLATES).toHaveLength(11);
+    expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(11);
     expect(SEED_TEMPLATES.every((template) => CarouselTemplateSchema.parse(template).status === "live")).toBe(true);
   });
 

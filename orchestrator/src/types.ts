@@ -75,6 +75,7 @@ export const PhaseSchema = z.enum([
   "cu-product",
   "tt-marketing",
   "gv-brief",
+  "ms-daily",
   "incubator-scan",
   "incubator-synthesis",
   "mma-intake",

@@ -420,6 +420,27 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
     }))
   }),
   template({
+    id: "quiz-code-context",
+    name: "Quiz code context",
+    description: "A question, a monospaced code block at readable size, and its lettered answer options.",
+    requiredSlots: ["question-line", "code-block", "options"],
+    slides: [{
+      id: "slide-quiz-code",
+      backgroundToken: "background",
+      variants: [{ id: "A" }, { id: "B", backgroundToken: "surface" }],
+      layers: [
+        logo(),
+        text("question-line", 0.08, 0.18, 0.84, 0.16, { fontToken: "headline", fontWeight: 800, minFontSize: 28, maxFontSize: 52, maxChars: 160, maxLines: 4 }),
+        shape(0.08, 0.36, 0.84, 0.38, "surface-strong", 0.03),
+        // The reason this template exists. Every other live layout tops out at a 100-character
+        // mono slot over two lines -- a source label, not a program -- so a question carrying a
+        // fenced block had nowhere to put it that kept the characters monospaced and legible.
+        text("code-block", 0.11, 0.39, 0.78, 0.32, { fontToken: "mono", fontWeight: 500, minFontSize: 20, maxFontSize: 34, maxChars: 420, maxLines: 10 }),
+        text("options", 0.08, 0.76, 0.84, 0.13, { colorToken: "muted", fontWeight: 600, minFontSize: 18, maxFontSize: 28, maxChars: 200, maxLines: 4 })
+      ]
+    }]
+  }),
+  template({
     id: "minimal-text-poster",
     name: "Minimal text poster",
     description: "A single short statement uses scale, empty space and one brand punctuation mark.",
@@ -519,6 +540,42 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       secondary: "#ffc45e"
     },
     fonts: { headline: "Arial Black, Arial, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+  }),
+  // The two shark brands take their palettes from the product's own Deep End ocean-ink tokens
+  // (client/src/styles/astryx-theme.css) and their accents from its subject registry: webdev's
+  // green and geography's orange, at the bright variants those files pair with a dark surface.
+  // Every token combination the templates use clears 4.5:1, which the studio checks anyway.
+  devshark: BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "devshark",
+    name: "devShark",
+    logoText: "DEVSHARK",
+    colors: {
+      background: "#0b141b",
+      surface: "#101c24",
+      "surface-strong": "#16242d",
+      foreground: "#e8eef0",
+      muted: "#9db3bc",
+      accent: "#4caf50",
+      secondary: "#67e8f9"
+    },
+    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+  }),
+  geoshark: BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "geoshark",
+    name: "geoShark",
+    logoText: "GEOSHARK",
+    colors: {
+      background: "#0b141b",
+      surface: "#101c24",
+      "surface-strong": "#16242d",
+      foreground: "#e8eef0",
+      muted: "#9db3bc",
+      accent: "#fb923c",
+      secondary: "#67e8f9"
+    },
+    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
   })
 };
 
@@ -532,13 +589,15 @@ const fixtures: Record<string, Record<string, string>> = {
   comparison: { "left-title": "FREEFORM", "left-body": "A new visual spec for every post.", "right-title": "TEMPLATE", "right-body": "One checked layout with brand tokens.", "comparison-note": "The template path is cheaper to review and reproduce." },
   "cover-cta": { "cover-title": "One layout, three distinct brands", "cover-dek": "Tokens change the voice. The reading order stays dependable.", cta: "Read the sourced story", destination: "boardless-ai.vercel.app" },
   "five-slide-story": { "story-title": "Why the studio lives inside the pipeline", "story-one": "The content packet selects a live template.", "story-two": "Brand tokens skin the layout at render time.", "story-three": "The same bytes can be reproduced from saved inputs.", "story-takeaway": "No image model and no extra service are required." },
-  "minimal-text-poster": { "poster-line": "DESIGN THE SYSTEM ONCE.", "poster-note": "Original layout · deterministic render" }
+  "minimal-text-poster": { "poster-line": "DESIGN THE SYSTEM ONCE.", "poster-note": "Original layout · deterministic render" },
+  "quiz-code-context": { "question-line": "What does this hook return?", "code-block": "const [value, setValue] = useState(0);\n// two elements, always in this order", options: "A. A single value\nB. An array with value and setter\nC. An object\nD. A promise" }
 };
 
 const czechFixtureOverrides: Partial<Record<string, Record<string, string>>> = {
   "quote-card": { quote: "Nejsilnější tvrzení unese zdroj, ne efektní formulace.", attribution: "AUDIT · testovací meeting" },
   "headline-three-bullets": { headline: "Carousel musí obhájit každý slide", "bullet-one": "Jeden fakt na obrazovku", "bullet-two": "Čitelné i na telefonu", "bullet-three": "Zdroj zůstává nablízku" },
-  "minimal-text-poster": { "poster-line": "NEJNEOBHOSPODAŘOVÁVATELNĚJŠÍ SLOVO SE VEJDE.", "poster-note": "Česká diakritika · automatické zmenšení" }
+  "minimal-text-poster": { "poster-line": "NEJNEOBHOSPODAŘOVÁVATELNĚJŠÍ SLOVO SE VEJDE.", "poster-note": "Česká diakritika · automatické zmenšení" },
+  "quiz-code-context": { "question-line": "Co vrací tenhle hook?", "code-block": "const [value, setValue] = useState(0);\n// dva prvky, vždy v tomhle pořadí", options: "A. Jednu hodnotu\nB. Pole s hodnotou a setterem\nC. Objekt\nD. Promise" }
 };
 
 export function templateByReference(templateId: string, version: string): CarouselTemplate | null {
