@@ -1,6 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../../budget.js";
+import { BudgetError, BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../../budget.js";
+import { ModelOutputParseError } from "../../llm/call.js";
+import { loadFixedMonthlyUsd } from "../../money/fixed-costs.js";
 import { MeetingSkipSchema } from "../../contracts/meeting-skip.js";
 import { guardedJsonCall } from "../../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../../paths.js";
@@ -308,6 +310,13 @@ export async function runBrandDay(input: {
       spendUsd += result.usd;
       candidate = result.output;
     } catch (error) {
+      // A refused reservation is not a model failure and must not be recorded as one. Letting it
+      // through reaches quietWhenBudgetStops in cycle.ts, which writes a skip naming the gate;
+      // swallowing it here reported "model-output-invalid" for a cap doing its job.
+      if (error instanceof BudgetError) throw error;
+      // guardedJsonCall writes the ledger entry before it throws, so an unparsable reply was
+      // still billed. The amount rides on the error and the record has to carry it.
+      if (error instanceof ModelOutputParseError) spendUsd += error.usd;
       return {
         outcome: { status: "aborted", brandId: brand.id, reason: "model-output-invalid", detail: message(error), spendUsd },
         ledger: input.ledger,
@@ -347,6 +356,26 @@ export async function runBrandDay(input: {
   } catch (error) {
     return {
       outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
+      ledger: input.ledger,
+      artifacts: []
+    };
+  }
+
+  // A clipped slide is a worse slide, not a rendered one. fitText has always reported which slots
+  // it had to cut and the renderer surfaces it as truncatedSlots; nothing read it, so copy that
+  // cleared every truth gate could still ship with its last line replaced by an ellipsis. The
+  // gates bound what the model writes; this bounds what the canvas can actually hold.
+  const clipped = [...rendered.cs, ...rendered.en]
+    .flatMap((slide) => slide.truncatedSlots.map((slot) => `${slide.locale}/${slide.role}:${slot}`));
+  if (clipped.length > 0) {
+    return {
+      outcome: {
+        status: "aborted",
+        brandId: brand.id,
+        reason: "render-failed",
+        detail: `slides were clipped to fit: ${clipped.join(", ")}`,
+        spendUsd
+      },
       ledger: input.ledger,
       artifacts: []
     };
@@ -481,8 +510,11 @@ export async function runMarketingSharkCycle(input: {
   }
 
   const limits = await loadRuntimeBudgetLimits();
-  const ledgerEntries = (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] })).entries
-    .map((entry) => BudgetLedgerEntrySchema.parse(entry));
+  const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
+  const monthToDateUsd = (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
+    .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry))
+    .filter((entry) => entry.ts.slice(0, 7) === input.date.slice(0, 7))
+    .reduce((sum, entry) => sum + entry.usd, 0);
   const models = JSON.parse(await readFile(path.join(configRoot, "models.json"), "utf8")) as {
     roles: Record<string, { provider: "openai" | "anthropic"; model: string; maxOutputTokens: number }>;
   };
@@ -536,8 +568,16 @@ export async function runMarketingSharkCycle(input: {
             now: input.now,
             cycleId: input.cycleId,
             stage: input.stage,
-            ledger: ledgerEntries,
-            allInNonApiSpentUsd: 0,
+            // Read per call rather than once before the brand loop. assertSharedReservation
+            // derives the cycle, daily and monthly spend entirely from this array, so a frozen
+            // snapshot made every reservation in the run see a world where nothing had been spent
+            // yet -- the second brand's call could not see the first brand's.
+            ledger: (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
+              .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry)),
+            // The $30 all-in limb of the cap sums this with the model spend. Every other live call
+            // site supplies the real figure; passing zero here made this the one paid path that
+            // could not see the company's fixed costs.
+            allInNonApiSpentUsd: fixedMonthlyUsd,
             allInCommittedUsd: 0,
             knownMonthlyForecastUsd: 0,
             remainingScheduledCycles: 60,
@@ -576,7 +616,11 @@ export async function runMarketingSharkCycle(input: {
     dry: input.dry,
     outcomes,
     spendUsd,
-    envelopeUsd: 0.1 * brands.length
+    envelopeUsd: 0.1 * brands.length,
+    // The published figures every other room computes. They were literals here, so a reader of an
+    // ms-daily record saw "$0.00 of $30.00" on a day the company had spent real money.
+    monthAllInUsd: fixedMonthlyUsd + monthToDateUsd + spendUsd,
+    monthCapUsd: limits.monthlyOperatingUsd
   }));
   artifacts.push(recordPath);
 
@@ -599,6 +643,8 @@ export function buildMeetingRecord(input: {
   outcomes: readonly BrandOutcome[];
   spendUsd: number;
   envelopeUsd: number;
+  monthAllInUsd: number;
+  monthCapUsd: number;
 }) {
   const drafted = input.outcomes.filter((outcome) => outcome.status === "drafted");
   const aborted = input.outcomes.filter((outcome) => outcome.status === "aborted");
@@ -624,7 +670,7 @@ export function buildMeetingRecord(input: {
       { agent: "CHUM", reason: "writes the day's bilingual copy", participated: drafted.length > 0 },
       { agent: "AUDIT", reason: "serves the veto seat", participated: true }
     ],
-    ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.spendUsd, monthAllInUsd: 0, monthCapUsd: 30 },
+    ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.spendUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: input.monthCapUsd },
     decision: {
       outcome: drafted.length > 0 ? "PLAN" : "NO_ACTION",
       summary,

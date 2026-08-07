@@ -115,6 +115,14 @@ describe("marketingShark selection ledger", () => {
     const secondPass = picks.filter((pick) => pick.epoch === 2).map((pick) => pick.questionId);
     expect(secondPass).not.toEqual(firstPass);
     expect([...secondPass].sort()).toEqual([...firstPass].sort());
+
+    // WHICH question opens the new epoch was pinned by nothing: replacing the exhaustion-day pick
+    // with a random index left every assertion above satisfied, because a random draw is still a
+    // permutation. The determinism guarantee is weakest exactly here, so it is stated outright.
+    const contentHash = contentHashOf(questions);
+    expect(secondPass[0]).toBe(epochOrder(questions.map((entry) => entry.id), orderSeedFor(2, contentHash))[0]);
+    expect(picks.filter((pick) => pick.epoch === 3)[0]!.questionId)
+      .toBe(epochOrder(questions.map((entry) => entry.id), orderSeedFor(3, contentHash))[0]);
   });
 
   it("keeps served history and relative order when the bank is re-imported", () => {
@@ -229,6 +237,15 @@ describe("marketingShark hook assignment", () => {
     // Slot B does not spend the cooldown. It is recorded as the alternate and never fronts
     // anything, and counting it would burn two patterns a day against a sixteen-pattern library.
     expect(assignHooks({ ...input, date: "2026-08-09" }).eligibleIds).toContain("no-google");
+
+    // The cooldown runs from the MOST RECENT use, not the first. With only one use on file both
+    // readings agree, so the assertions above pass either way -- inverting the comparison in
+    // assignHooks left the whole suite green. A second, later use is what tells them apart.
+    const reused = [...history, served({ date: "2026-08-16", hookA: "speed-run" })];
+    expect(assignHooks({ ...input, served: reused, date: "2026-08-18" }).eligibleIds)
+      .not.toContain("speed-run");
+    expect(assignHooks({ ...input, served: reused, date: "2026-08-26" }).eligibleIds)
+      .toContain("speed-run");
   });
 
   it("relaxes the cooldown oldest-first, only as far as two, and says that it did", async () => {

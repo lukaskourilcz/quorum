@@ -16,7 +16,22 @@ export const LIMITS = {
   threadsChars: 300,
   altChars: 200,
   instagramHashtagsMin: 3,
-  instagramHashtagsMax: 5
+  instagramHashtagsMax: 5,
+  /**
+   * The package schema's own caps, restated so the gates can catch a breach as a violation the
+   * retry can act on.
+   *
+   * They were not here, and the consequence was a crash rather than a retry: the craft caps bound
+   * the hook, the why slide, the descriptions and the alt text, but nothing bound a context or
+   * reveal headline, a slide body, or an Instagram caption once its hashtags were appended. An
+   * ordinary reply with a 130-character question on slide 2 passed every gate and then threw an
+   * uncaught ZodError inside assemblePackage, after the call was paid for and both carousels were
+   * rendered.
+   */
+  headlineChars: 120,
+  bodyChars: 600,
+  instagramTotalChars: 2_200,
+  threadsTotalChars: 500
 } as const;
 
 export interface GateViolation {
@@ -113,6 +128,12 @@ export function runTruthGates(input: {
     }
 
     for (const slide of slides) {
+      if (slide.headline.length > LIMITS.headlineChars) {
+        add("headline-length", locale, `${slide.role} headline is ${slide.headline.length} characters, cap is ${LIMITS.headlineChars}`);
+      }
+      if ((slide.body ?? "").length > LIMITS.bodyChars) {
+        add("body-length", locale, `${slide.role} body is ${(slide.body ?? "").length} characters, cap is ${LIMITS.bodyChars}`);
+      }
       if (slide.alt.length > LIMITS.altChars) {
         add("alt-length", locale, `${slide.role} alt text is ${slide.alt.length} characters, cap is ${LIMITS.altChars}`);
       }
@@ -137,6 +158,15 @@ export function runTruthGates(input: {
     }
     if (output.descriptions.threads[locale].length > LIMITS.threadsChars) {
       add("threads-length", locale, `${output.descriptions.threads[locale].length} characters, cap is ${LIMITS.threadsChars}`);
+    }
+    // The schema caps the stored field, and the stored Instagram field is the description with its
+    // hashtags appended -- so the cap has to be measured on that, not on the description alone.
+    const instagramStored = `${description}\n\n${output.hashtags.instagram[locale].join(" ")}`;
+    if (instagramStored.length > LIMITS.instagramTotalChars) {
+      add("instagram-total", locale, `${instagramStored.length} characters with hashtags, schema cap is ${LIMITS.instagramTotalChars}`);
+    }
+    if (output.descriptions.threads[locale].length > LIMITS.threadsTotalChars) {
+      add("threads-total", locale, `${output.descriptions.threads[locale].length} characters, schema cap is ${LIMITS.threadsTotalChars}`);
     }
 
     const instagramTags = output.hashtags.instagram[locale];

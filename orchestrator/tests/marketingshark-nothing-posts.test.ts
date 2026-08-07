@@ -1,8 +1,10 @@
-import { mkdtemp, readFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { isPublishingVenture, SOCIAL_VENTURES } from "../src/social/activation.js";
+import { runSocialPublisher } from "../src/social/runner.js";
+import { configRoot } from "../src/paths.js";
 import { assertQueueItemPublishable, QueueItemSchema } from "../src/social/queue.js";
 import { enabledBrands, loadMarketingSharkConfig } from "../src/ventures/marketingshark/config.js";
 import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
@@ -80,6 +82,59 @@ describe("marketingShark cannot post", () => {
     expect(isPublishingVenture("marketingshark")).toBe(false);
     expect(SOCIAL_VENTURES).toEqual(["caught-up", "mma-files", "titty-tuesdays"]);
     for (const venture of SOCIAL_VENTURES) expect(isPublishingVenture(venture)).toBe(true);
+  });
+
+  it("survives the real publisher in a maximally unlocked world", async () => {
+    // Every other test here reasons about a guard. This one runs the publisher itself with the
+    // kill switch DOWN and all three publishing ventures enabled -- the most permissive world the
+    // system can be in -- and confirms marketingShark's items still do not go anywhere.
+    const { built } = await draftedPackage();
+    const config = await loadMarketingSharkConfig();
+    const brand = enabledBrands(config)[0]!;
+    const root = await mkdtemp(path.join(tmpdir(), "ms-publish-"));
+
+    await mkdir(path.join(root, "social", "queue"), { recursive: true });
+    for (const { relative, item } of buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") })) {
+      await writeFile(path.join(root, relative), JSON.stringify(item), "utf8");
+    }
+    // updatedAt has to fall on the same Prague day as `now`, or the runner discards this file and
+    // recomputes activation from the real repository -- which quietly re-locks every venture and
+    // turns the whole test into a no-op. That is exactly what the first version of it did, and it
+    // passed just as happily with the guard it was meant to be testing deleted.
+    const now = new Date("2026-08-08T09:00:00.000Z");
+    await mkdir(path.join(root, "social"), { recursive: true });
+    await writeFile(path.join(root, "social", "activation.json"), JSON.stringify({
+      schemaVersion: "social-activation/1",
+      updatedAt: now.toISOString(),
+      // marketingShark is in this file deliberately. Without it the runner filters the items out
+      // for want of an activation record and the test passes even with the guard deleted -- it
+      // would prove nothing. Here it is the guard, and only the guard, standing in the way.
+      ventures: Object.fromEntries([...SOCIAL_VENTURES, "marketingshark"].map((venture) => [venture, {
+        status: "enabled", counter: 99, required: 1, reason: "test",
+        updatedAt: now.toISOString(), unlockedAt: now.toISOString(),
+        decisionReference: "D2-autonomy-build-2026-08-01"
+      }]))
+    }), "utf8");
+
+    let fetched = 0;
+    const report = await runSocialPublisher({
+      validateOnly: false,
+      dryIfDisabled: false,
+      stateRoot: root,
+      configRoot,
+      now,
+      environment: { ...process.env, SOCIAL_KILL_SWITCH: "false" },
+      fetchImpl: (async () => {
+        fetched += 1;
+        throw new Error("the publisher reached the network for a marketingShark item");
+      }) as unknown as typeof fetch
+    });
+
+    // Four items on disk, and not one of them due: the venture owns no activation record, so the
+    // runner never considers it. Nothing was published and nothing touched the network.
+    expect(report.queueItems).toBe(4);
+    expect(report.published).toBe(0);
+    expect(fetched).toBe(0);
   });
 
   it("records the A/B variants without ever ranking them", async () => {

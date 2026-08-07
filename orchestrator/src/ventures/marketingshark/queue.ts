@@ -9,11 +9,19 @@ export function queueItemPath(date: string, brandId: string, locale: "cs" | "en"
 /**
  * One draft queue item per language per channel, and nothing that could publish.
  *
- * Three separate things keep these drafts: `SOCIAL_KILL_SWITCH` is the supreme stop and beats
- * every venture unlock; the item is written with `status: "draft"`, and only `queued` or
- * `publishing` reaches the publisher; and every approval check is `pending`, which
- * `assertQueueItemPublishable` refuses outright. Nothing here weakens any of the three -- the
- * item is a record of what was drafted, addressed to a human.
+ * Two things keep these off the wire, and it is worth being exact about which:
+ *
+ *  - marketingShark is not a publishing venture. The runner only considers items whose venture
+ *    owns an activation record, and this one has none, so its items are never even examined.
+ *  - Every approval check is `pending`, and `assertQueueItemPublishable` refuses an item with any
+ *    check unpassed. That holds even if the venture were somehow activated.
+ *
+ * `status: "draft"` is NOT one of them, and an earlier version of this comment claimed it was.
+ * The runner treats a draft as due work and promotes it to `queued` itself -- that is how every
+ * publishing venture's items reach the wire. Draft is a statement about review, not a lock.
+ *
+ * `SOCIAL_KILL_SWITCH` sits above all of it as the global stop, but it is not specific to this
+ * venture and is not what makes these items safe.
  *
  * `assetPaths` is deliberately empty. The rendered SVGs live in state beside the package, not
  * under `site/public/social`, so an Instagram item could not become publishable without a person

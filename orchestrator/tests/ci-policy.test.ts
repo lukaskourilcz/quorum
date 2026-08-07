@@ -111,7 +111,11 @@ describe("automation policy", () => {
     }
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain("runtime_paths=(");
-    expect(cycle).toContain("state/kpis state/money state/mma state/notify state/social");
+    expect(cycle).toContain("state/kpis state/money state/mma state/marketingshark state/notify state/social");
+    // Every directory a scheduled phase writes has to be in this list or the run ends green with
+    // nothing committed. marketingShark's dedupe ledger lives outside state/ventures, so its
+    // absence would have re-served the same question every morning while the packages piled up.
+    expect(cycle).toContain("state/marketingshark");
     expect(cycle).toContain("state/meeting-agendas state/priority-queue.json");
     expect(cycle).toContain(
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
