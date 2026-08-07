@@ -1309,78 +1309,124 @@ Each edge should be labelled with what actually crosses it and what cannot.
 
 ### 14.3 New capability: Titty Tuesdays visual proposals
 
-**The owner's requirement, verbatim in intent:**
+**The owner's requirement:**
 
 > Titty Tuesdays must send its proposals as images, so they can be rated properly in the
-> Admin section. They must be SVG images that render in the admin. The agents must first
-> come up with the idea, then rewrite that idea into a prompt and send it via API call to
-> ChatGPT and to Gemini. The owner then gives ratings and picks which t-shirt designs get
-> used.
+> Admin section. The agents must first come up with the idea, then rewrite that idea into
+> a prompt and send it via API call to ChatGPT. The images render in the admin, the owner
+> gives ratings, and picks which t-shirt designs get used.
 
-**Design this.** The pipeline is: *room produces a concept → concept is rewritten into an
-image prompt → prompt goes to two providers → results render in `/admin` → owner rates →
-ratings feed PALATE → PALATE's taste steers the next room.*
+Ordinary raster images — PNG or WebP, whatever the API returns. No SVG requirement, and
+OpenAI only for now.
 
-What already exists and should be reused rather than rebuilt:
+**Design this.** The pipeline is:
 
-- `rating/1` already has `objectKind: "visual"`. The rating ledger, the
-  `rating-widget.tsx` component and the `state/ratings/titty-tuesdays/ledger.jsonl`
-  append path are all in place.
-- PALATE already distils ratings into `state/taste/titty-tuesdays/TASTE.md` and already
-  emits `visualAdjustments`, and already runs as a free pre-step on every `tt-marketing`
-  room. The feedback loop the owner wants is **already wired** — it just has nothing
-  visual to rate.
-- Carousel Studio already renders deterministic SVG and already has a
-  `titty-tuesdays` brand token set.
-- The admin already renders checked SVG directly (`carousel-studio-panel.tsx`,
-  `carousel-article-studio.tsx`), specifically so previews do not need a native image
-  library in a serverless request.
+```
+tt-marketing room produces a garment concept
+        │
+        ▼
+concept rewritten into an image prompt  (deterministic template + concept fields)
+        │
+        ▼
+OpenAI image API  ──►  N variants per concept
+        │
+        ▼
+brand-doctrine checker (deterministic)
+        │
+        ▼
+bytes + provenance record written to state
+        │
+        ▼
+/admin renders the variants side by side
+        │
+        ▼
+owner rates  (rating/1, objectKind: "visual")
+        │
+        ▼
+PALATE distils → state/taste/titty-tuesdays/TASTE.md
+        │
+        └──► steers the next room
+```
+
+The owner is comparing, not accepting, so a concept should produce **more than one
+variant** — either N images from one prompt or a small set of deliberate prompt
+variations on the same concept. Recommend which, and how many. Keep every variant on
+file even when it is rejected, because a rejected design is what teaches PALATE.
+
+**What already exists and should be reused rather than rebuilt:**
+
+- `rating/1` already has `objectKind: "visual"`. The rating ledger,
+  `rating-widget.tsx` and the `state/ratings/titty-tuesdays/ledger.jsonl` append path
+  are all in place.
+- PALATE already distils ratings into `state/taste/titty-tuesdays/TASTE.md`, already
+  emits `visualAdjustments`, and already runs as a free pre-step on every
+  `tt-marketing` room. **The feedback loop the owner wants is already wired — it just
+  has nothing visual to rate.**
+- **Binary storage has a precedent.** `atomicWriteBuffer()` in
+  `orchestrator/src/state.ts` already writes rendered carousel PNGs to
+  `site/public/social/<date>/<locale>/<channel>/frame-NN.png`, with a JSON asset record
+  beside them carrying `composerVersion`, an `inputsHash` and a per-file `frameHashes`
+  map (see `state/social/assets/2026-08-06.json`). Follow that shape exactly rather
+  than inventing a second one: bytes under `site/public/…`, a hashed record in `state/`.
+  There is no Git LFS in this repository, so keep the images small and the count per
+  day bounded.
+- The admin already has panels that render generated media with a rating control
+  attached (`carousel-studio-panel.tsx`, `carousel-article-studio.tsx`,
+  `rating-widget.tsx`). This is a new panel in an established pattern, not a new surface.
 - `visual-weights.schema.json` and `config/visual-weights/` already exist.
 
 **Constraints this design has to survive.** State these back to the owner rather than
 designing around them silently:
 
-1. **SVG and image models are not the same thing.** ChatGPT's and Gemini's image
-   endpoints emit raster (PNG/WebP). They do not emit SVG. "SVG images rendering in the
-   admin" and "generated via image API" are two different mechanisms, and the design has
-   to pick or bridge:
-   - *(a)* the model returns a **structured design spec** (palette, type field, motif,
-     placement) and Carousel Studio composes deterministic SVG from it — keeps the whole
-     render deterministic, hash-stable and free, and keeps the model doing the part it is
-     good at;
-   - *(b)* raster generation, stored as a re-hosted asset with provenance, previewed in
-     admin — genuine visual variety, but breaks determinism and adds per-image cost;
-   - *(c)* both: (a) for the on-brand composition, (b) as reference imagery labelled as
-     such.
+1. **Keep generation outside Carousel Studio.** The studio is a pure function —
+   template + payload + brand tokens → identical bytes every time — and every check in
+   it depends on that. An image model is non-deterministic by nature. Put the generation
+   path beside the studio, not inside it, and let the studio keep rendering the things
+   that must replay identically. The proposal images are inputs to a human decision, not
+   deliverables the system re-derives.
+2. **The provider is already wired, so this is cheaper to build than it looks.** OpenAI
+   is one of the two providers `config/models.json` already declares, `OPENAI_API_KEY`
+   is already a required secret the cycle guard checks for, and `gpt-image-2` is already
+   declared as the `AVATAR_IMAGE` role. **No new credential, no new allowlist host, no
+   new provider adapter.** What is genuinely new is a call site, an envelope, a ledger
+   line, the doctrine checker and the admin panel.
+3. **It is still new spend inside a $30 cap currently running at $3.39/month.**
+   `AVATAR_IMAGE` exists for owner-requested avatar repairs, its comment states that no
+   article pipeline has a `gpt-image-2` call site and none may gain one, and **the
+   ledger has never carried a `kind: "image"` entry**. This is not an article pipeline,
+   so it does not contradict that comment — but it is the first routine image spend the
+   system has ever had, and the comment should be updated to say so rather than left to
+   read as though nothing generates images. Price it honestly: concepts per day ×
+   variants per concept × cost per image × 30 days. Put a per-room envelope on it, write
+   the treasury ledger line before it runs, and say what happens when the envelope is
+   exhausted mid-room — the rest of the venture's day must still work.
+4. **`allowHumanImagery: false` is brand doctrine, not a preference.** No human imagery,
+   no nudity, no suggestive posing, no isolated body parts, no anatomy-led visuals. Flat
+   lays, garment silhouettes, fabric, labels, packaging, type fields and construction
+   details only. Every garment carries the exact words `TITTY TUESDAYS`.
 
-   Recommend one and say why.
-2. **There is no Gemini provider in this system.** `config/models.json` has exactly two
-   providers, `anthropic` and `openai`. Adding Google means a new adapter, a new
-   credential and a new host on `config/network-allowlist.json` — and a new credential is
-   a **`HUMAN_APPROVAL` INBOX item** under golden rule 5, not a config edit.
-3. **Image generation is new spend inside a $30 cap** that currently runs at $3.39/month.
-   `config/models.json`'s `AVATAR_IMAGE` role exists but its comment states no article
-   pipeline has a `gpt-image-2` call site and none may gain one. The ledger has never
-   carried a `kind: "image"` entry. A new image path needs a treasury ledger line and an
-   envelope before it runs. Price it: N concepts × 2 providers × cost/image × 30 days.
-4. **`allowHumanImagery: false`** is enforced in the consumer repo and is brand doctrine,
-   not a preference. No human imagery, no nudity, no suggestive posing, no isolated body
-   parts, no anatomy-led visuals. Flat lays, garment silhouettes, fabric, labels,
-   packaging, type fields and construction details only. Every garment carries the exact
-   words `TITTY TUESDAYS`. The prompt-rewriting step has to enforce this, and a
-   deterministic checker has to verify the output before it reaches the admin — a model
-   asked politely is not a gate.
+   The prompt-rewriting step has to encode this, **and a deterministic checker has to
+   verify the result before it reaches the admin** — a model asked politely is not a
+   gate. Say what that checker can actually assert about a returned raster and what it
+   cannot, and put the residue in front of the owner as a labelled review step rather
+   than pretending it was checked.
 5. **The venture is pre-commerce.** A rated design is a concept, not a product. Nothing
    in this path may create a sellable state; `resolvePurchasability()` stays the only
-   gate.
-6. **Provenance.** Every generated asset needs its provider, model version, the exact
-   prompt, a content hash and a timestamp on file, the same way `article-image` and the
-   licensed-photo path already record theirs.
+   gate and the storefront keeps failing closed.
+6. **Provenance on every asset**: provider, model version, the exact prompt sent, the
+   concept it came from, a content hash and a timestamp — the same discipline
+   `article-image` and the licensed-photo path already keep. An image with no recorded
+   prompt cannot be reproduced or defended.
 
-Deliverable: the contract (a new `design-proposal/1` schema?), the storage path, the
-admin surface, the rating flow, the PALATE feedback shape, the cost envelope, the
-approval items the owner has to sign, and which of the three mechanisms in constraint 1
-you recommend.
+**Deliverable:** the contract (a `design-proposal/1` schema alongside
+`marketing-plan/1`?), the storage paths, the prompt-rewriting step and where it sits in
+the 11:00 room, the image call site and its envelope, the doctrine checker, the admin
+panel, the rating flow into the existing ledger, the PALATE feedback shape, the cost
+figure, and the exact list of approval items the owner has to sign before any of it
+runs.
+
+Design it so a second provider can be added later without reshaping the contract — the
+provenance record already names its provider and model — but do not build for one now.
 
 ---
 
