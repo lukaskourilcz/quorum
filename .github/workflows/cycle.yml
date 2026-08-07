@@ -1087,6 +1087,13 @@ jobs:
       # ---------------------------------------------------------------------------------------
       # hook-library/1 — the quiz apps receive the hook library as bounded data.
       #
+      # Gated on HOOK_DELIVERY_ENABLED, which is unset. The delivery GitHub App is installed on
+      # aifirst and mma-files; it has no access to react-express-app yet, and minting a token for
+      # a repository the App cannot see fails the step and would take an otherwise healthy
+      # marketingShark cycle down with it. Inert until the owner grants access and sets the
+      # variable — the same shape every other unlaunched delivery in this file uses. See
+      # NEEDS_YOUR_HELP_NOW.md.
+      #
       # Runs on the marketingShark slot because that is the room that touches hooks, and it is a
       # no-op on every day the library has not changed: the CLI compares the package's
       # idempotency key against the receipt and reports has_package=false. A library the lint
@@ -1094,7 +1101,7 @@ jobs:
       # what "re-delivery only after lint:hooks passes" means in practice.
       - name: Select pending hook library delivery
         id: hook-delivery
-        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.phase == 'ms-daily' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.phase == 'ms-daily' && vars.HOOK_DELIVERY_ENABLED == 'true' }}
         run: pnpm hooks:delivery -- next --github-output "$GITHUB_OUTPUT"
 
       - name: Mint bounded react-express-app installation token
