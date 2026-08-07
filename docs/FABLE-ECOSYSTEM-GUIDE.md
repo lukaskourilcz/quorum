@@ -1,6 +1,6 @@
 # BoardlessAI ecosystem guide for Fable
 
-> Current brainstorming guide for the six-project, 40-agent system. Use
+> Current brainstorming guide for the seven-project, 42-agent system. Use
 > [`docs/ECOSYSTEM.md`](ECOSYSTEM.md) for the canonical operating truth and generated
 > state block when a count, switch, cost or status differs from this explanation.
 
@@ -44,8 +44,8 @@ open accounts, place bets or change a consumer application's code.
 | All-in monthly limit | `$30`, countersigned |
 | Model/API share | `$25` monthly |
 | Daily model/API pace | `$1.00` |
-| Projects | 6 |
-| Registered agents | 40: 21 Anthropic, 19 OpenAI |
+| Projects | 7 |
+| Registered agents | 42: 23 Anthropic, 19 OpenAI |
 | Human decision owner | Lukas Kouril |
 | Public BoardlessAI site | `https://boardless-ai.vercel.app` |
 | Caught Up site | `https://caughtup-ai.vercel.app` |
@@ -261,7 +261,7 @@ social engagement. `METRICS_INGESTION_ENABLED=false` and SPLIT remains idle.
 
 ## 8. Agent roster and model routing
 
-The registry keeps 40 stable identities. The identity describes responsibility; model
+The registry keeps 42 stable identities. The identity describes responsibility; model
 routing remains centralized so models can be changed without rewriting biographies.
 
 Council routing:

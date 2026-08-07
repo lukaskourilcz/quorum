@@ -31,7 +31,7 @@ work. They require a fresh owner scope before implementation.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [x] Expand the shared roster to 40 agents across six projects, retain the 27
+- [x] Expand the shared roster to 42 agents across seven projects, retain the 27
   approved agent photographs and use neutral name-based placeholders for newer roles.
 - [x] Add Carousel Studio, ten checked live layouts and the one deterministic social-visual path used by every project.
 - [x] Port source collection and edition production into BoardlessAI.
@@ -69,4 +69,14 @@ work. They require a fresh owner scope before implementation.
   owner acted on, and the direction is that no new magazine is ideated again — a future
   venture is founded by a direct registry entry, the way GoVIRAL was. Its state moved to
   `state/archive/incubator/`; the meeting records stay live so the rooms remain readable.
+- [x] Found marketingShark and fold devShark into the portfolio as a product it markets.
+  A seventh project, a thirteenth clock window at 07:00, and two roles: MAKO directs and
+  reviews, CHUM writes the day's copy. One question a day out of devShark's committed
+  question snapshot, drawn as a Czech and an English five-slide carousel by the existing
+  Carousel Studio engine and left as a draft behind the approval queue. geoShark ships
+  present and disabled; enabling it is one importer run and one flag. Everything except one
+  model call per brand per day is deterministic and free.
+- [x] Add `quiz-code-context`, the eleventh live seed layout, and brand token sets for
+  devShark and geoShark. The layout exists because every other live template's widest
+  monospace slot holds 100 characters over two lines — a source label, not a program.
 - [ ] Complete only the owner plumbing listed in `NEEDS_YOUR_HELP_NOW.md`.

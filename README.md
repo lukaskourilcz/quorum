@@ -6,8 +6,9 @@ Git-backed state, shared contracts, guarded automation, and a public/admin
 Next.js site.
 
 Current status: **operating, pre-revenue, VALIDATION**. The public site is
-<https://boardless-ai.vercel.app>. Five project workspaces share this runtime:
-Caught Up, Titty Tuesdays, FightAIQ, Carousel Studio and MMA Files.
+<https://boardless-ai.vercel.app>. Seven project workspaces share this runtime:
+Caught Up, Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Carousel Studio
+and MMA Files.
 The $30 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
 decisions are countersigned. Separate live switches, evidence checks and delivery
 credentials still decide whether a scheduled wake-up may do work.
@@ -23,6 +24,7 @@ passes the existing owner, budget, evidence, security and release gates.
 | Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
 | GoVIRAL | Weekly trend brief and marketing plays for the portfolio | Apify Free plan only — its $5 monthly credit is the budget guard; hands over at most one agenda |
+| marketingShark | One devShark quiz question a day, drafted as one Czech and one English five-slide carousel | Owns no social account and no publisher path; every package is written as a draft behind the approval queue |
 | FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Shared deterministic carousel templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
 | MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
@@ -34,8 +36,8 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 
 ## What is implemented
 
-- Four voting council seats and 27 routed specialists working out of one validated
-  40-agent registry; the other nine were stood down when the roster was cut, and every
+- Four voting council seats and 29 routed specialists working out of one validated
+  42-agent registry; the other nine were stood down when the roster was cut, and every
   public count is of the roles that work. The 27 established roles keep their photographs;
   newer roles use name-based placeholders until approved media exists. Public pages
   use agent names and work labels without the retired workplace-show, Season or
@@ -59,9 +61,10 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   probabilities, owner odds capture, immutable results and public performance view.
 - MMA Files source-first bilingual production, Czech and English style desks,
   licensed-photo-first heroes, public delivery, release proof and guarded social packs.
-- Carousel Studio's `carousel-template/1` DSL, ten checked layouts, deterministic
-  SVG/PNG renderer, lifecycle, admin preview controls and public showcase.
-- One 15-window Prague calendar, 17 deduplicated UTC wake-ups, correct DST
+- Carousel Studio's `carousel-template/1` DSL, eleven checked layouts, five brand
+  palettes, deterministic SVG/PNG renderer, lifecycle, admin preview controls and
+  public showcase.
+- One 13-window Prague calendar, 18 deduplicated UTC wake-ups, correct DST
   resolution and collision validation shared by runtime and WeekBoard. Agenda-gated
   windows record `not-needed` without opening paid rooms.
 - One daily portfolio digest, capped at 400 words and idempotent per Prague date,
@@ -74,7 +77,7 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   above 1024px and no scroll-jacking at all below it.
 - Every delivered DNESKAi edition and MMA Files article also reaches Carousel Studio as a
   summary — headline, standfirst, the desk's own passages, sources — written beside the
-  package by the same deterministic builder the site falls back to. Thirteen templates
+  package by the same deterministic builder the site falls back to. Eleven templates
   render it live in the admin at both formats.
 - Responsive public site, feeds, metadata, accessibility checks, contrast tests
   and scroll-preserving stateful controls.
@@ -151,10 +154,11 @@ Useful commands:
 
 | Command | Result |
 | --- | --- |
-| `pnpm agents:validate` | Validates all 40 registry entries (30 active) and available portrait assets |
+| `pnpm agents:validate` | Validates all 42 registry entries (33 active) and available portrait assets |
 | `pnpm cycle -- --phase morning --dry --explain-budget --explain-routing` | Runs and explains a dry portfolio-board shift |
 | `pnpm cycle -- --phase cu-edition --dry` | Runs the dry Caught Up edition room |
 | `pnpm cycle -- --phase tt-marketing --dry` | Runs the weekday Titty Tuesdays fixture room |
+| `pnpm cycle -- --phase ms-daily --dry` | Assembles the day's carousel package from the committed question bank without a provider call |
 | `pnpm cycle -- --phase mma-intake --dry` | Checks UFC and Oktagon without live calls |
 | `pnpm cycle -- --phase mma-analysis --dry` | Proves the D8 analysis path without a live provider call |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
@@ -222,12 +226,13 @@ publisher. Missing approval never authorizes a live action.
 
 ## Prague schedule and budget
 
-The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 08:00
-FightAIQ intake, 09:00 MMA Files story meeting, 10:00 article slot, 11:00 Titty
-Tuesdays, 13:00 GoVIRAL trend room (Mondays), 14:00 board afternoon, 17:00 Caught Up
-product, 19:00 FightAIQ analysis, 20:00 MMA Files desk and 22:00 board night.
+The shared wake-up schedule is 05:00 Caught Up edition, 06:00 board morning, 07:00
+marketingShark carousel room, 08:00 FightAIQ intake, 09:00 MMA Files story meeting,
+10:00 article slot, 11:00 Titty Tuesdays, 13:00 GoVIRAL trend room (Mondays), 14:00
+board afternoon, 17:00 Caught Up product, 19:00 FightAIQ analysis, 20:00 MMA Files
+desk and 22:00 board night.
 
-Two paths reach those twelve slots, and they are not equals. A Vercel cron dispatches
+Two paths reach those thirteen slots, and they are not equals. A Vercel cron dispatches
 each slot on its own hour and does the real work. GitHub's own `on.schedule` is the
 backup, and it is late — measured over 5–6 August a scheduled run averaged 0.9 billable
 minutes of guard-exit against a dispatch's 5.8 minutes of work, because GitHub queues
@@ -264,8 +269,9 @@ contains amounts and categories without invoices, credentials or personal data.
 Authenticated traffic is not counted as a failed login; repeated invalid
 credentials are rate-limited. The page displays the priority queue, social readiness
 and project-specific ideas, plans, visuals, research proposals, meeting agendas, FightAIQ data,
-agent switches, the MMA Files newsroom and Carousel Studio's all-status/all-brand/all-format
-template previews, checks, ratings and inspiration links. Ratings are
+agent switches, marketingShark's drafted packages, the MMA Files newsroom and Carousel
+Studio's all-status/all-brand/all-format template previews, checks, ratings and
+inspiration links. Ratings are
 re-ratable; the latest value governs the UI and prior values remain visible.
 
 Instagram and Threads posting is pre-authorized within the recorded project scopes.
@@ -293,14 +299,19 @@ Rollback:
 - BoardlessAI has a documented name-collision risk and must be cleared or
   renamed before paid sponsorship.
 - Social account credentials, optional Pexels/Pixabay keys and confirmation of the
-  MMA Files App/Vercel connection remain owner-controlled steps in `NEEDED.md`.
+  MMA Files App/Vercel connection remain owner-controlled steps in `NEEDED.md`. The
+  devShark house banner for DNESKAi is staged and hashed under
+  `state/ventures/marketingshark/banner/` and undelivered; it waits on one approval
+  item in `state/INBOX.md`.
 - No eligible live experiment or accepted market evidence exists yet.
 - MMA Files is the only venture publishing. Caught Up has produced no edition; its
   per-edition cap is consumed by one pass, so its configured regenerations cannot run.
   FightAIQ holds fighters and historical bouts but no upcoming events, so its analysis
   emits nothing. Titty Tuesdays and Carousel Studio have never produced their artifact:
   both need an open priority item, and Carousel Studio also needs owner inspiration
-  links. See `NEEDS_YOUR_HELP_NOW.md`.
+  links. marketingShark has only run dry — the session that built it reached no model
+  key — so its 07:00 room has yet to draft a package the owner can approve. See
+  `NEEDS_YOUR_HELP_NOW.md`.
 - Git-backed runtime state assumes one serialized writer.
 - Admin has one username/password identity and signed session, not SSO, MFA or
   per-user audit identity.

@@ -81,7 +81,7 @@ their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
-## The six projects
+## The seven projects
 
 ### Caught Up
 
@@ -111,6 +111,30 @@ specialists cover audiences, stunts, taste, editorial quality and deterministic
 assets. Complete campaign state is preserved even while production roles are off.
 Social unlock needs four passing campaigns plus credentials and the safety checker;
 the global kill switch still wins.
+
+### marketingShark
+
+Promise: one quiz question a day, written up honestly enough that a reader gets value from
+the carousel whether or not they ever open the product. MAKO directs and reviews weekly,
+CHUM writes the day's copy in Czech and again in English, AUDIT holds the veto seat.
+
+devShark is the first brand and the only one enabled: its 3,633-question webdev bank is
+consumed read-only as a committed snapshot pinned to a source commit, and nothing is written
+back to that repository. geoShark is present in config and disabled; enabling it is one
+importer run and one `enabled` flag.
+
+Everything except one model call per brand per day is deterministic and costs nothing. Which
+question runs comes from a seeded order over the bank, so every question is served once before
+any repeats and the same date always produces the same question. Which opening line may front
+it is gated on predicates evaluated in code — "Two answers look right. One is." may only run on
+a question that actually has four options and is not trivial. After CHUM answers, deterministic
+gates check that the brand's closing line is verbatim, that any code block reached the slide
+byte for byte, and that no number in the hook appears in neither the question nor the pattern.
+A failure aborts the brand and leaves nothing behind.
+
+Nothing it writes can post. marketingShark owns no social account and no credentials, every
+package is written with `status: "draft"` and every approval check pending, and it is not a
+publishing venture at all — the publisher refuses it by name rather than by an absent switch.
 
 ### FightAIQ
 
@@ -152,8 +176,13 @@ The public and admin galleries serve the checked SVG directly so their previews 
 not depend on a native image library inside a serverless request. Final deliverables
 still use the deterministic PNG renderer.
 
-Ten original seed layouts are live: quote, steps, statistic, before/after, headline
-plus bullets, timeline, comparison, cover/CTA, five-slide story and minimal poster.
+Eleven original seed layouts are live: quote, steps, statistic, before/after, headline
+plus bullets, timeline, comparison, cover/CTA, five-slide story, minimal poster and
+quiz-code-context. The eleventh was added for marketingShark and justified by a gap
+rather than a preference: every other live layout's widest monospace slot holds 100
+characters over two lines, which is a source label and not a program, so a quiz question
+carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
+five brands — devShark and geoShark arrived with marketingShark.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
@@ -168,8 +197,8 @@ is only a locked future earning possibility.
 
 ## Prague operating clock
 
-Every row is a wake-up, not a promise to spend. GitHub stores 17 unique UTC cron
-expressions covering Prague winter and summer time. Runtime DST resolution accepts
+Every row is a wake-up, not a promise to spend. The schedule resolves to 18 unique UTC
+cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
 only the entry matching the intended local hour. Calendar validation rejects
 collisions and the public calendar uses the same source.
 
@@ -177,10 +206,12 @@ collisions and the public calendar uses the same source.
 | ---: | --- | --- | ---: |
 | 05:00 | Caught Up edition | fixed service; evidence and live gates | room `$0.08`, production `$0.35` |
 | 06:00 | Morning board | decision room; one specialist commission | cycle cap `$0.20` |
+| 07:00 | marketingShark carousel | standing daily; one paid call per enabled brand | `$0.10` per enabled brand |
 | 08:00 | FightAIQ intake | material change or due agenda | `$0.06` |
 | 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
 | 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.35` |
 | 11:00 | Titty Tuesdays | standing future-eshop marketing ideation; optional focused agenda | `$0.08` |
+| 13:00 | GoVIRAL trend room | standing weekly; Mondays only, the other six days are `$0` no-ops | `$0.06` |
 | 14:00 | Afternoon board | deterministic checkpoint | `$0` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |
 | 19:00 | FightAIQ analysis | due agenda + D8/evidence gates | `$0.06` |
@@ -225,7 +256,7 @@ without a consumed project agenda forces a morning-board commission or saved why
 A manual run bypasses the agenda timing only; it cannot bypass live, evidence, cost,
 credential or safety gates.
 
-## Roster: thirty working roles, ten stood down
+## Roster: thirty-three working roles, nine stood down
 
 Model routing is declared in `config/models.json` and `config/agent-routing.json`.
 Council judgment uses Claude Sonnet 5 or GPT-5.6 Luna. Narrow specialists use the
@@ -276,6 +307,8 @@ envelope before any call.
 | EASEL | retired | stood down; the studio renders deterministically and holds no meeting |
 | MOTIF | retired | stood down with EASEL; nothing reads layout observations |
 | PIVOT | evidence bridge between FightAIQ and MMA Files | cannot turn response/context into hidden model input |
+| MAKO | marketingShark direction, weekly package review, KPI honesty | cannot post, cannot edit the hook library silently, cannot invent a metric |
+| CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
 
 ## Content, social and Carousel Studio flow
 
@@ -340,7 +373,7 @@ prepare a proposal but never activate an earning method.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
-## Decision map D1–D12
+## Decision map D1–D13
 
 | Decision | Current effect |
 | --- | --- |
@@ -354,8 +387,9 @@ prepare a proposal but never activate an earning method.
 | D8 FightAIQ analysis/free data | guarded early-model analysis is approved; evidence and free-source rules bind it |
 | D9 Measurement readiness | contracts/assignment may exist, but ingestion and SPLIT remain off |
 | D10 Money and quarterly KPIs | public cost/revenue truth, 90-day protocol and owner-only earning activation |
-| D11 Carousel Studio | sixth project, monorepo engine, 10 live templates, lifecycle, room and public showcase |
+| D11 Carousel Studio | sixth project, monorepo engine, 11 live seed templates, lifecycle, room and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
+| D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.
@@ -375,7 +409,7 @@ outcome, not a reason to rerun paid work.
 
 ## Open questions for Fable
 
-1. Which owner-facing view would make six projects feel simpler without hiding gates
+1. Which owner-facing view would make seven projects feel simpler without hiding gates
    or unavailable data?
 2. Which repeated board decisions can become deterministic checks, and which still
    require genuine judgment?

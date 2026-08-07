@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with six project workspaces. Shared
+BoardlessAI is one guarded operating system with seven project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -11,8 +11,10 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | --- | --- | --- | --- |
 | Caught Up | Operating in validation | Daily Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
+| GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated marketing plays for every other project | Reads only the Apify Free plan, whose `$5` monthly credit is the guard; hands over at most one agenda |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
+| marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by Carousel Studio | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
@@ -23,10 +25,10 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Twenty-six specialists do bounded work only when a service path or due agenda needs
-their domain. The registry holds 40 entries: 30 active, 7 paused and 3 retired. A
+Twenty-nine specialists do bounded work only when a service path or due agenda needs
+their domain. The registry holds 42 entries: 33 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
-that matters is the thirty that work. The 27
+that matters is the thirty-three that work. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
 prompts or meeting packets. The public interface uses names and work labels. It does
@@ -54,7 +56,9 @@ Not every clock entry is a meeting:
 
 - **Decision:** the 06:00 board decides company priorities and may commission a room.
 - **Service:** Caught Up production, Caught Up product review, MMA Files story
-  assignment and article production retain their fixed reader promise.
+  assignment and article production retain their fixed reader promise. The 07:00
+  marketingShark room is fixed the same way, except that what it owes each day is a
+  draft package rather than a published one.
 - **Agenda-gated:** Titty Tuesdays, FightAIQ analysis and the MMA Files desk run only
   when requested.
 - **Change-triggered:** FightAIQ intake runs when its source snapshot materially
@@ -72,10 +76,12 @@ credentials, evidence, cost limits or safety rules.
 | ---: | --- | --- |
 | 05:00 | Caught Up edition | fixed service |
 | 06:00 | Board morning | decision room |
+| 07:00 | marketingShark carousel room | fixed daily service; one paid copy call per enabled brand |
 | 08:00 | FightAIQ data check | material change or agenda |
 | 09:00 | MMA Files story meeting | fixed service |
 | 10:00 | MMA Files daily article | assigned slot and evidence only |
 | 11:00 | Titty Tuesdays campaign room | standing future-eshop marketing ideation; optional focused agenda |
+| 13:00 | GoVIRAL trend room | Mondays only; an off-day firing is a `$0` no-op |
 | 14:00 | Board afternoon | `$0` checkpoint |
 | 17:00 | Caught Up product meeting | fixed service |
 | 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
@@ -170,5 +176,5 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 Missing variables deny the action. The exact owner checklist is `NEEDED.md`; the
 ordered setup path is `MANUAL STEPS.md`.
 
-The canonical, standalone description of all six projects, 40 roles, D1–D12 and
+The canonical, standalone description of all seven projects, 42 roles, D1–D12 and
 current generated state is `docs/ECOSYSTEM.md`.

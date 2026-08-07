@@ -98,6 +98,15 @@ The shared marker format, for the things only the owner can supply. The full run
 still [`NEEDS_YOUR_HELP_NOW.md`](NEEDS_YOUR_HELP_NOW.md); these are the items the office
 walkthrough and Carousel Studio are waiting on specifically.
 
+- [ ] **Fire marketingShark's first live `ms-daily` run** — everything about the room is proved
+  against a labelled fixture and CHUM has never actually written a word; the implementation
+  session had no model key reachable from it. One manual `cycle.yml` dispatch with phase
+  `ms-daily` costs about $0.05 and turns a proven pipeline into a working one.
+  [imp:4] [owner:me] [time:5m] [kind:deploy]
+- [ ] **Approve or decline the devShark banner on DNESKAi** — `HUMAN_APPROVAL
+  DEVSHARK-BANNER-001` in `state/INBOX.md`. Staged and hashed under
+  `state/ventures/marketingshark/banner/`, never delivered, $0 either way.
+  [imp:3] [owner:me] [time:5m] [kind:decision]
 - [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no
   public address, so their cards on the home page render nothing in the link slot rather
   than a "coming soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]
@@ -105,7 +114,7 @@ walkthrough and Carousel Studio are waiting on specifically.
   are AI-generated placeholders committed at `site/public/office/*.{avif,webp}`. The layout
   does not depend on them; replace the files at the same names and nothing else changes.
   [imp:2] [owner:me] [time:2h] [kind:content]
-- [ ] **Portraits for the roles that have none** — 27 of 40 registered roles have an approved
+- [ ] **Portraits for the roles that have none** — 27 of 42 registered roles have an approved
   portrait. The rest fall back to an initials tile on the team panel and to the anonymous
   silhouette in the workspace player, which is honest but plain. [imp:1] [owner:me] [time:1h] [kind:content]
 - [ ] **Decide what to do about the email in the commit history** — `state/BUSINESS.md` no
@@ -120,6 +129,14 @@ walkthrough and Carousel Studio are waiting on specifically.
 
 ## Recently finished
 
+- **marketingShark was founded, and devShark came into the portfolio with it.** A seventh
+  project, a thirteenth clock slot at 07:00, and two roles — MAKO directing, CHUM writing. One
+  question a day out of devShark's own bank, drawn as a Czech and an English carousel and left
+  as a draft. Everything except one model call per brand is deterministic and free.
+- **A generated block stopped stating a cap nothing was enforcing.** The current-operating-truth
+  table in `docs/ECOSYSTEM.md` printed `$50` all-in, `$42` model share and `$2.20` daily as a
+  hardcoded literal — the figures of `budget-2026-08d`, superseded four days earlier while the
+  runtime enforced `$30` / `$25` / `$1.00`. It reads the resolver now.
 - **A standup no longer files itself under the wrong day.** The shift record took its date
   from the UTC clock while every other record and the whole calendar use the Prague wall
   clock. Prague runs an hour or two ahead, so a night shift that GitHub queued past local
