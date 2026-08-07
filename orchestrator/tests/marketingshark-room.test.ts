@@ -20,6 +20,7 @@ import {
   readLedger,
   runBrandDay
 } from "../src/ventures/marketingshark/run.js";
+import { buildChumPacket } from "../src/ventures/marketingshark/packet.js";
 
 const CODE = "const [value, setValue] = useState(0);";
 
@@ -269,6 +270,18 @@ describe("marketingShark room", () => {
     const plan = await planBrandDay({ config, brand: flipped, ledger: EMPTY_LEDGER, date: "2026-08-08" });
     expect(plan.question.id).toBeTruthy();
     expect(plan.hooks.a.variants.geo).toBeDefined();
+
+    // A second selection AND a second packet, with no code path of its own. The packet has to
+    // carry geoShark's line and geoShark's wording, or "brand-generic" is a claim rather than a
+    // property.
+    const packet = buildChumPacket({
+      brand: flipped, question: plan.question, hookA: plan.hooks.a, hookB: plan.hooks.b, date: "2026-08-08"
+    });
+    expect(packet).toContain(flipped.slide5.cs);
+    expect(packet).toContain("tone: geo");
+    expect(packet).toContain(plan.hooks.a.variants.geo!.cs);
+    expect(packet).not.toContain(plan.hooks.a.variants.dev!.cs === plan.hooks.a.variants.geo!.cs
+      ? "\u0000never matches" : plan.hooks.a.variants.dev!.cs);
     // Its own ledger node and its own epoch, created on first sight.
     expect(plan.selection.brandLedger.served).toEqual([]);
     expect(plan.selection.epoch).toBe(1);
