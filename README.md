@@ -21,13 +21,13 @@ passes the existing owner, budget, evidence, security and release gates.
 
 | Workspace | Current role | Boundary |
 | --- | --- | --- |
-| Caught Up | Bilingual daily AI briefing and product board | Guarded delivery writes content only through a repository-scoped GitHub App |
+| Caught Up | Czech daily AI briefing, published as DNESKAi, and its product board | Guarded delivery writes content only through a repository-scoped GitHub App |
 | Titty Tuesdays | Brand, concept seasons and marketing planning | No commerce, inventory, payment, ads, generated people or purchase claims |
 | GoVIRAL | Weekly trend brief and marketing plays for the portfolio | Apify Free plan only — its $5 monthly credit is the budget guard; hands over at most one agenda |
 | marketingShark | One devShark quiz question a day, drafted as one Czech and one English five-slide carousel | Owns no social account and no publisher path; every package is written as a draft behind the approval queue |
 | FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
 | Carousel Studio | Shared deterministic carousel templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
-| MMA Files | Public bilingual MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
+| MMA Files | Public Czech MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
 
 The common registry is `config/ventures.json`. It defines cadence, routing,
 budgets, idea namespaces, taste participation and admin tabs. The complete standing
@@ -53,17 +53,23 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   reassessment after a failed quarter.
 - Venture-aware routing, ledgers, owner ratings, evidence-linked taste files and
   bounded visual-weight updates.
-- Caught Up source collection, bilingual article production, licensed-photo-first
-  heroes, English/Czech language desks, verified GitHub App delivery and social packs.
+- Caught Up source collection, Czech article production, licensed-photo-first
+  heroes, a Czech style desk, verified GitHub App delivery and social packs.
 - Titty Tuesdays standing daily campaign room, 91-day turnover, platform-risk gate,
   season concepts, public venture page and protected launch binder.
 - FightAIQ source gates, two-source fighter records, Glicko-2 engine, versioned
   probabilities, owner odds capture, immutable results and public performance view.
-- MMA Files source-first bilingual production, Czech and English style desks,
+- MMA Files source-first Czech production, a Czech style desk,
   licensed-photo-first heroes, public delivery, release proof and guarded social packs.
 - Carousel Studio's `carousel-template/1` DSL, eleven checked layouts, five brand
   palettes, deterministic SVG/PNG renderer, lifecycle, admin preview controls and
   public showcase.
+- `boardless-dataset/1` and the append path behind the magazines' daily widgets.
+  Array order is a reveal schedule rather than a list, so a published entry is as
+  immutable as a published edition: insertion, reordering, removal and anchor
+  moves are refused, and a correction must move `verified` forward. Appends are
+  their own delivery kind, so an edition can never rewrite a dataset. Human
+  curation is the default and calls no model.
 - One 13-window Prague calendar, 18 deduplicated UTC wake-ups, correct DST
   resolution and collision validation shared by runtime and WeekBoard. Agenda-gated
   windows record `not-needed` without opening paid rooms.
@@ -162,7 +168,7 @@ Useful commands:
 | `pnpm cycle -- --phase mma-intake --dry` | Checks UFC and Oktagon without live calls |
 | `pnpm cycle -- --phase mma-analysis --dry` | Proves the D8 analysis path without a live provider call |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
-| `pnpm cycle -- --phase mag-desk --dry` | Reviews the bilingual newsroom queue |
+| `pnpm cycle -- --phase mag-desk --dry` | Reviews the Czech newsroom queue |
 | `pnpm cycle -- --phase studio --dry` | Proves the agenda-ready Carousel Studio room without a provider call |
 | `pnpm proof:rooms` | Rebuilds fixture-labeled proof for all 13 room kinds |
 | `pnpm docs:refresh` | Rebuilds the `$0` operating-truth block in `docs/ECOSYSTEM.md` |

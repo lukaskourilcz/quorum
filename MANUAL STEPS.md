@@ -41,8 +41,7 @@ affiliate work, commerce, accounts, payments and legal setup remain owner-contro
 Run **Guarded council cycle** for `cu-edition` with dry mode off and delivery-only off.
 The mode step must say `dry=false` and `skip=false`. A successful path now:
 
-1. creates the English and Czech article with exactly one licensed photo or FRAME
-   fallback;
+1. creates the Czech article with exactly one licensed photo or FRAME fallback;
 2. commits the two image sizes into `lukaskourilcz/aifirst`;
 3. deploys the newest article as the home-page hero and older ones as thumbnails;
 4. polls CI and both public language routes for up to 30 minutes;
@@ -70,7 +69,7 @@ Confirm the two surviving optional source secrets, `CITO_API_KEY` and
    reason to loosen the gate;
 3. `mag-editorial` — assigns or evidence-kills both article slots;
 4. the assigned `article-am` or `article-pm` — produces, delivers and verifies one
-   bilingual article plus its image;
+   Czech article plus its image;
 5. `mag-desk` — exercises the desk room when manually requested.
 
 In MMA Files, confirm cancelled bouts are absent from upcoming cards, every rendered

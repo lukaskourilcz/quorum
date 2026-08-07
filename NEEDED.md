@@ -92,6 +92,40 @@ council. Two separate causes, both now fixed:
 
 Exact workflow order and proof locations are in [`MANUAL STEPS.md`](MANUAL%20STEPS.md).
 
+## Next six, in the order that unblocks the most
+
+A working queue to tick off one at a time. Each line names its full entry in
+[`NEEDS_YOUR_HELP_NOW.md`](NEEDS_YOUR_HELP_NOW.md), which stays the source of truth —
+if the two ever disagree, that file wins.
+
+Nothing here is waiting on code. The magazines' daily datasets, the widgets, `/lekce`, the
+banner slot, the `boardless-dataset/1` contract, the append verifier, the producer and the
+delivery wiring are all on `main` and green.
+
+- [ ] **Add `THE_ODDS_API_KEY` to Actions secrets** — the single unblock for every FightAIQ
+  output. Without a price source the evening model check has nothing to calibrate a model
+  estimate against, so it records no calibration and the readiness dossiers stay empty.
+  Item 1 in the runbook. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Create an Apify Free account and add `APIFY_TOKEN`** — the single unblock for
+  GoVIRAL's trend scouting. Free plan only: its $5 of monthly platform credit is the budget
+  guard, and Starter at $29/month would consume the entire $30 all-in cap on its own, so it
+  needs a new approval rather than a click. Item 2. [imp:4] [owner:me] [time:10m] [kind:setup]
+- [ ] **Set the `/admin` credentials in Vercel production** — several later items run through
+  a door that will not currently open, including the idea ratings and the fixed-cost registry.
+  Item 6. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief:
+  niches, voice, audiences, and what never to write about. Until it exists the room leans on
+  the two magazine niches and says so plainly rather than inventing a voice. Item 3.
+  [imp:4] [owner:me] [time:20m] [kind:content]
+- [ ] **Rate the Titty Tuesdays idea cards in `/admin`** — nine sit unrated, so the taste loop
+  that turns ratings into written style rules has never had an input. Item 5.
+  [imp:4] [owner:me] [time:20m] [kind:decision]
+- [ ] **Finish the Vercel half of the aifirst credential audit** — the retired
+  `ANTHROPIC_API_KEY` Actions secret is deleted; old source, image, promotion, heartbeat and
+  generation-report credentials in the aifirst Vercel project are still open, and keys pasted
+  into chat still want rotating. Tracked in `aifirst/NEEDED.md`.
+  [imp:4] [owner:me] [time:15m] [kind:setup]
+
 ## Owner action items
 
 The shared marker format, for the things only the owner can supply. The full runbook is
@@ -118,11 +152,13 @@ walkthrough and Carousel Studio are waiting on specifically.
 - [ ] **Portraits for the roles that have none** — 27 of 42 registered roles have an approved
   portrait. The rest fall back to an initials tile on the team panel and to the anonymous
   silhouette in the workspace player, which is honest but plain. [imp:1] [owner:me] [time:1h] [kind:content]
-- [ ] **Decide what to do about the email in the commit history** — `state/BUSINESS.md` no
-  longer carries the operator's personal address, but part of the git log still has it as the
-  author address. Making the repository public publishes that. Either accept it, or rewrite
-  history before the switch, and turn on GitHub's "keep my email address private" so it
-  cannot recur. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [x] **The email in public commit history is accepted, decided 2026-08-07.**
+  `kouril.lukas@gmail.com` is the author or committer address on 10 of 89 commits here, 50 of
+  87 in `aifirst` and 29 of 57 in `mma-files`, and all three repositories are public. It is
+  personal data rather than a credential, so nothing is at risk beyond the address itself, and
+  the owner has accepted it. Do not propose rewriting history for this: on a public repository
+  that means force-pushing three repos and breaking every commit link already published, which
+  costs more than it fixes. Treat this as settled rather than re-raising it.
 - [ ] **Confirm the wallboard's five figures are the ones you want on the wall** — the home
   page's TV shows published articles, publishing reliability, cost per article, spend against
   the $30 limit and ideas from meetings, all read from the record. Any figure the record

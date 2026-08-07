@@ -902,14 +902,33 @@ jobs:
           if test "$PACKAGE_STATUS" = "edition"; then
             allowed="^((content/articles/${PACKAGE_DATE}\.(en|cs)\.mdx)|(public/data/board/${PACKAGE_DATE}\.json)|(public/images/editions/${PACKAGE_SLUG}/(hero|thumb)\.(webp|png|svg)))$"
           fi
+          # A dataset append is its own delivery kind rather than a wider edition
+          # allowlist, so an edition can never rewrite a dataset and an append can
+          # never touch an article. The daily widgets read these two files.
+          if test "$PACKAGE_STATUS" = "dataset"; then
+            allowed='^data/(ai-facts|ai-lessons)\.json$'
+          fi
           unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
           if test -n "$unexpected"; then
             echo "Consumer touched unauthorized paths:"
             echo "$unexpected"
             exit 1
           fi
-          git -C "$clone_root" add \
-            "public/data/board/${PACKAGE_DATE}.json"
+          if test "$PACKAGE_STATUS" = "dataset"; then
+            # Only the dataset files move. No board record, no article, no image.
+            # Named one at a time and guarded on existence for the same reason the
+            # English MDX is below: git add is fatal on a pathspec matching nothing
+            # and this step runs under bash -e, so a dataset that does not exist
+            # downstream yet would abort after the consumer had already written.
+            for dataset_file in data/ai-facts.json data/ai-lessons.json; do
+              if test -f "$clone_root/$dataset_file"; then
+                git -C "$clone_root" add "$dataset_file"
+              fi
+            done
+          else
+            git -C "$clone_root" add \
+              "public/data/board/${PACKAGE_DATE}.json"
+          fi
           if test "$PACKAGE_STATUS" = "edition"; then
             # Czech is the locale that is always written; English is optional and on its way
             # out. git add is fatal on a pathspec that matches nothing, and this step runs
@@ -926,7 +945,11 @@ jobs:
           if ! git -C "$clone_root" diff --cached --quiet; then
             git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
             git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
-            git -C "$clone_root" commit -m "edition(${PACKAGE_DATE}): ${PACKAGE_SLUG} [package:${PACKAGE_HASH12}]"
+            commit_subject="edition(${PACKAGE_DATE}): ${PACKAGE_SLUG} [package:${PACKAGE_HASH12}]"
+            if test "$PACKAGE_STATUS" = "dataset"; then
+              commit_subject="dataset(${PACKAGE_SLUG}): append [package:${PACKAGE_HASH12}]"
+            fi
+            git -C "$clone_root" commit -m "$commit_subject"
             echo "created_commit=true" >> "$GITHUB_OUTPUT"
             pushed=false
             for attempt in 1 2; do
@@ -1144,6 +1167,12 @@ jobs:
           if test "$PACKAGE_KIND" = "fightaiq"; then
             allowed='^data/boardless/fightaiq\.json$'
           fi
+          # The verified-facts dataset behind the "Víte, že…" belt. Its own kind, so
+          # an article delivery can never rewrite it and an append can never touch
+          # data/boardless/ — which stays delivery-only in the other direction too.
+          if test "$PACKAGE_KIND" = "dataset"; then
+            allowed='^src/data/mma-facts\.json$'
+          fi
           unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
           if test -n "$unexpected"; then
             printf '%s\n%s\n' "Consumer touched unauthorized paths:" "$unexpected" > "$RUNNER_TEMP/mma-delivery-error.log"
@@ -1176,6 +1205,8 @@ jobs:
           fi
           if test "$PACKAGE_KIND" = "article"; then
             git -C "$clone_root" add data/boardless/articles.json "$IMAGE_HERO_PATH" "$IMAGE_THUMB_PATH"
+          elif test "$PACKAGE_KIND" = "dataset"; then
+            git -C "$clone_root" add src/data/mma-facts.json
           else
             git -C "$clone_root" add data/boardless/fightaiq.json
           fi
