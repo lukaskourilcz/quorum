@@ -97,7 +97,7 @@ export interface EligibleSet {
  * reordering that changed the pick without changing the set would break reproducibility for a
  * reason no receipt records.
  */
-export function eligibleFor(library: Library, context: QuizContext): EligibleSet {
+export function eligibleFor(library: Library, context?: QuizContext): EligibleSet {
   if (library.surface !== "quiz") {
     if (library.hooks.length === 0) {
       // The honest empty case: the library has not been written, so nothing is eligible and the
@@ -109,6 +109,12 @@ export function eligibleFor(library: Library, context: QuizContext): EligibleSet
       + `docs/hooks/05-surfaces.md, not a confirmed spec. Step one of the authoring issue is `
       + `enumerating the metadata ${library.surface} items actually carry at render time.`
     );
+  }
+  if (library.hooks.length === 0) {
+    return { surface: library.surface, ids: [], hash: eligibleSetHash([]) };
+  }
+  if (!context) {
+    throw new Error("The quiz evaluator needs a subject: a gate cannot hold or fail against nothing");
   }
   const ids = library.hooks.filter((hook) => hookIsEligible(hook, context)).map((hook) => hook.id);
   return { surface: library.surface, ids, hash: eligibleSetHash(ids) };

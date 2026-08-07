@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "hook-assignment/1"
+    },
+    "surface": {
+      "type": "string",
+      "enum": [
+        "quiz",
+        "news",
+        "mma"
+      ]
+    },
+    "vertical": {
+      "type": "string",
+      "enum": [
+        "dev",
+        "geo"
+      ]
+    },
+    "channel": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "itemId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "seed": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "languages": {
+      "minItems": 1,
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "en",
+          "cs"
+        ]
+      }
+    },
+    "eligibleSetHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "eligibleIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "availableIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "cooldownSnapshot": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hookId": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "lastPostedOn": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "daysSince": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "requiredDays": {
+            "type": "integer",
+            "minimum": 14,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "hookId",
+          "lastPostedOn",
+          "daysSince",
+          "requiredDays"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "hookId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "overriddenFrom": {
+      "default": null,
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "overrideMeetingRef": {
+      "default": null,
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "noHookReason": {
+      "default": null,
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "empty-library",
+            "empty-eligible-set"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "surface",
+    "vertical",
+    "channel",
+    "date",
+    "itemId",
+    "seed",
+    "languages",
+    "eligibleSetHash",
+    "eligibleIds",
+    "availableIds",
+    "cooldownSnapshot",
+    "hookId",
+    "overriddenFrom",
+    "overrideMeetingRef",
+    "noHookReason"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/hook-assignment.schema.json"
+}

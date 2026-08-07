@@ -2,10 +2,11 @@ import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { CAROUSEL_BRANDS, liveTemplates, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
+import { CAROUSEL_BRANDS, liveTemplates, readLibrary, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
+import { historyFor, HOOK_CHANNELS_PATH, readHookChannels } from "../src/studio/hook-channels.js";
 import { MarketingSharkPackage } from "../src/ventures/marketingshark/package.js";
 import {
   letteredOptions,
@@ -16,6 +17,8 @@ import {
 } from "../src/ventures/marketingshark/render.js";
 import {
   fixtureChumOutput,
+  fixtureHookLines,
+  hookLinesFor,
   planBrandDay,
   readLedger,
   runBrandDay
@@ -136,8 +139,7 @@ describe("marketingShark room", () => {
           usd: 0,
           output: fixtureChumOutput({
             brand, question: plan.question,
-            hookA: plan.hooks.a.variants[brand.tone]!.en, hookACs: plan.hooks.a.variants[brand.tone]!.cs,
-            hookB: plan.hooks.b.variants[brand.tone]!.en, hookBCs: plan.hooks.b.variants[brand.tone]!.cs
+            ...fixtureHookLines(plan, brand)
           })
         };
       }
@@ -155,13 +157,27 @@ describe("marketingShark room", () => {
     expect(built.render.summaryPaths).toHaveLength(2);
     expect(built.spendUsd).toBe(0);
 
-    // Package, both render summaries, four draft queue items and the ledger move together or
-    // not at all.
+    // Package, both render summaries, four draft queue items, the ledger and the channel record
+    // move together or not at all.
     const ledger = await readLedger(root);
     expect(ledger.brands.devshark!.served).toHaveLength(1);
     expect(ledger.brands.devshark!.served[0]!.questionId).toBe(built.question.id);
-    expect(result.artifacts).toHaveLength(8);
+    expect(result.artifacts).toHaveLength(9);
     expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toHaveLength(4);
+    expect(result.artifacts).toContain(HOOK_CHANNELS_PATH);
+
+    // Slide 1 is the assigned library line, in both languages, and the assignment that licensed
+    // it travels with the package.
+    expect(built.hookAssignment.schemaVersion).toBe("hook-assignment/1");
+    expect(built.hookAssignment.hookId).toBe(built.hooks.a.patternId);
+    expect(built.hookAssignment.eligibleIds).toContain(built.hookAssignment.hookId);
+    expect(built.carousels.en.slides[0]!.headline).toBe(built.hooks.a.en);
+    expect(built.carousels.cs.slides[0]!.headline).toBe(built.hooks.a.cs);
+
+    // And the channel now carries the post the cooldown will read tomorrow.
+    const channels = await readHookChannels(root);
+    expect(historyFor(channels, "devshark-carousel").map((post) => post.hookId))
+      .toEqual([built.hookAssignment.hookId]);
   });
 
   it("writes nothing at all when a truth gate fails", async () => {
@@ -175,8 +191,7 @@ describe("marketingShark room", () => {
         const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
         const output = fixtureChumOutput({
           brand, question: plan.question,
-          hookA: plan.hooks.a.variants[brand.tone]!.en, hookACs: plan.hooks.a.variants[brand.tone]!.cs,
-          hookB: plan.hooks.b.variants[brand.tone]!.en, hookBCs: plan.hooks.b.variants[brand.tone]!.cs
+          ...fixtureHookLines(plan, brand)
         });
         // The one thing code owns and a model may never edit.
         output.carousels.en.slides[4]!.headline = "Follow devShark for more!";
@@ -208,17 +223,18 @@ describe("marketingShark room", () => {
         const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
         const output = fixtureChumOutput({
           brand, question: plan.question,
-          hookA: plan.hooks.a.variants[brand.tone]!.en, hookACs: plan.hooks.a.variants[brand.tone]!.cs,
-          hookB: plan.hooks.b.variants[brand.tone]!.en, hookBCs: plan.hooks.b.variants[brand.tone]!.cs
+          ...fixtureHookLines(plan, brand)
         });
-        if (attempt === 1) output.carousels.en.slides[0]!.headline = "x".repeat(90);
+        // Slide 1 is the library's line now, so the failure a retry has to carry back is an
+        // edited hook rather than an over-long one.
+        if (attempt === 1) output.carousels.en.slides[0]!.headline = "A line the studio never assigned.";
         return { usd: 0.05, output };
       }
     });
 
     expect(packets).toHaveLength(2);
     expect(packets[0]).not.toContain("previous answer failed");
-    expect(packets[1]).toContain("[hook-length] en");
+    expect(packets[1]).toContain("[hook-verbatim] en");
     expect(result.outcome.status).toBe("drafted");
     expect(result.outcome).toMatchObject({ spendUsd: 0.1 });
   });
@@ -233,8 +249,7 @@ describe("marketingShark room", () => {
         usd: 0,
         output: fixtureChumOutput({
           brand, question: plan.question,
-          hookA: plan.hooks.a.variants[brand.tone]!.en, hookACs: plan.hooks.a.variants[brand.tone]!.cs,
-          hookB: plan.hooks.b.variants[brand.tone]!.en, hookBCs: plan.hooks.b.variants[brand.tone]!.cs
+          ...fixtureHookLines(plan, brand)
         })
       };
     };
@@ -269,27 +284,33 @@ describe("marketingShark room", () => {
 
     const plan = await planBrandDay({ config, brand: flipped, ledger: EMPTY_LEDGER, date: "2026-08-08" });
     expect(plan.question.id).toBeTruthy();
-    expect(plan.hooks.a.variants.geo).toBeDefined();
+    expect(plan.hook?.variants.geo).toBeDefined();
+    expect(plan.assignment.vertical).toBe("geo");
+    expect(plan.assignment.channel).toBe("geoshark-carousel");
 
     // A second selection AND a second packet, with no code path of its own. The packet has to
     // carry geoShark's line and geoShark's wording, or "brand-generic" is a claim rather than a
     // property.
+    const lines = hookLinesFor({ hook: plan.hook, brand: flipped, question: plan.question })!;
     const packet = buildChumPacket({
-      brand: flipped, question: plan.question, hookA: plan.hooks.a, hookB: plan.hooks.b, date: "2026-08-08"
+      brand: flipped, question: plan.question, hookLines: lines, hookId: plan.assignment.hookId, date: "2026-08-08"
     });
     expect(packet).toContain(flipped.slide5.cs);
     expect(packet).toContain("tone: geo");
-    expect(packet).toContain(plan.hooks.a.variants.geo!.cs);
-    expect(packet).not.toContain(plan.hooks.a.variants.dev!.cs === plan.hooks.a.variants.geo!.cs
-      ? "\u0000never matches" : plan.hooks.a.variants.dev!.cs);
+    expect(packet).toContain(lines.cs);
+    // The geo line, not the dev one — unless this hook is one of the two intentional identical
+    // pairs, where there is no dev line to tell it apart from.
+    const devLine = plan.hook!.variants.dev!.cs;
+    const geoLine = plan.hook!.variants.geo!.cs;
+    if (devLine !== geoLine) expect(packet).not.toContain(devLine);
     // Its own ledger node and its own epoch, created on first sight.
     expect(plan.selection.brandLedger.served).toEqual([]);
     expect(plan.selection.epoch).toBe(1);
 
-    // And the geo tone is actually reachable: at least one assigned-eligible pattern words
-    // itself differently for geo than for dev, which is what makes tone more than a label.
-    const divergent = config.hookLibrary.filter((pattern) =>
-      pattern.variants.geo!.en !== pattern.variants.dev!.en);
-    expect(divergent.length).toBeGreaterThan(0);
+    // And the geo tone is actually reachable: most of the library words itself differently for
+    // geo than for dev, which is what makes tone more than a label.
+    const library = await readLibrary("quiz");
+    const divergent = library.hooks.filter((hook) => hook.variants.geo!.en !== hook.variants.dev!.en);
+    expect(divergent.length).toBeGreaterThan(library.hooks.length / 2);
   });
 });

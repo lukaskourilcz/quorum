@@ -1,11 +1,5 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
-import {
-  patternIsTruthful,
-  type Brand,
-  type HookPattern
-} from "./config.js";
-import { truthSubjectOf, type NormalizedQuestion } from "./bank.js";
 
 export const ServedEntrySchema = z.object({
   date: z.iso.date(),
@@ -160,88 +154,17 @@ export function daysBetween(earlier: string, later: string): number {
   return Math.round((Date.parse(`${later}T00:00:00Z`) - Date.parse(`${earlier}T00:00:00Z`)) / 86_400_000);
 }
 
-export interface HookAssignment {
-  a: HookPattern;
-  b: HookPattern;
-  /** True when the cooldown was relaxed to reach two eligible patterns. */
-  relaxed: boolean;
-  eligibleIds: string[];
-}
-
 /**
- * Which patterns may front this question today, and which two are picked.
+ * Hook assignment moved to the studio.
  *
- * Truth first: a pattern whose `truthRequires` does not hold for this question is not eligible at
- * any price, and relaxation never reaches it. Only the cooldown is relaxable, and only far enough
- * to reach two -- because the alternative is a day with no hook at all, and a ten-day-old repeat
- * is a smaller cost than a missing carousel.
- *
- * The cooldown counts slot A only. B is recorded as the alternate and never fronts anything, so
- * counting it would burn two patterns a day against a sixteen-pattern library and put the room in
- * permanent relaxation -- a cooldown that always yields is not a cooldown.
+ * It used to live here as `assignHooks`, over the inline sixteen-pattern library, with a
+ * per-user-shaped cooldown and a relaxation rule that let a cooling pattern back in rather than
+ * skip a day. On a public channel that rule is wrong in a way it never was in the app: every
+ * follower sees every post, so there is no per-user dilution to average the repeat away.
+ * `orchestrator/src/studio/hook-brain.ts` calls the studio's `assignHook`, which cools per channel
+ * at `max(2 x cooldownDays, 14)` days, refuses the previous post's archetype, and takes the
+ * `no-hook` fallback rather than relaxing. See `docs/hooks/06-hook-brain.md`.
  */
-export function assignHooks(input: {
-  library: readonly HookPattern[];
-  brand: Pick<Brand, "tone" | "categoryLists">;
-  brandId: string;
-  question: NormalizedQuestion;
-  date: string;
-  served: readonly ServedEntry[];
-  minEligibleBeforeRelax: number;
-}): HookAssignment {
-  const subject = truthSubjectOf(input.question);
-  const truthful = input.library.filter((pattern) =>
-    patternIsTruthful(pattern, input.brand.tone, subject, input.brand.categoryLists));
-  if (truthful.length === 0) {
-    throw new Error(`No hook pattern is truthful for ${input.question.id}`);
-  }
-
-  const lastUsed = new Map<string, string>();
-  for (const entry of input.served) {
-    const previous = lastUsed.get(entry.hookA);
-    if (!previous || entry.date > previous) lastUsed.set(entry.hookA, entry.date);
-  }
-
-  const withinCooldown = (pattern: HookPattern): boolean => {
-    const used = lastUsed.get(pattern.id);
-    return used !== undefined && daysBetween(used, input.date) < pattern.cooldownDays;
-  };
-
-  let eligible = truthful.filter((pattern) => !withinCooldown(pattern));
-  let relaxed = false;
-
-  if (eligible.length < input.minEligibleBeforeRelax) {
-    // Oldest use first, ties broken by id, so the relaxation order is a fact about the ledger
-    // rather than about the order the library happens to be written in.
-    const blocked = truthful
-      .filter((pattern) => withinCooldown(pattern))
-      .sort((left, right) => {
-        const leftUsed = lastUsed.get(left.id) ?? "";
-        const rightUsed = lastUsed.get(right.id) ?? "";
-        if (leftUsed !== rightUsed) return leftUsed < rightUsed ? -1 : 1;
-        return left.id < right.id ? -1 : 1;
-      });
-    for (const pattern of blocked) {
-      if (eligible.length >= input.minEligibleBeforeRelax) break;
-      eligible = [...eligible, pattern];
-      relaxed = true;
-    }
-  }
-
-  // Library order, so the index the hash picks means the same thing on every run.
-  const ordered = input.library.filter((pattern) => eligible.some((candidate) => candidate.id === pattern.id));
-  const digest = createHash("sha256").update(`${input.date}${input.brandId}${input.question.id}`).digest("hex");
-  const indexA = Number(BigInt(`0x${digest.slice(0, 12)}`) % BigInt(ordered.length));
-  const indexB = (indexA + 1) % ordered.length;
-
-  return {
-    a: ordered[indexA]!,
-    b: ordered[indexB]!,
-    relaxed,
-    eligibleIds: ordered.map((pattern) => pattern.id)
-  };
-}
-
 export function recordServed(
   ledger: MarketingSharkLedger,
   brandId: string,

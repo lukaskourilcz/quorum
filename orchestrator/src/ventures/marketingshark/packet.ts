@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { repoRoot } from "../../paths.js";
 import type { NormalizedQuestion } from "./bank.js";
-import type { Brand, HookPattern } from "./config.js";
+import type { Brand } from "./config.js";
 import { LIMITS, violationReport, type GateViolation } from "./gates.js";
 import { SLIDE_ROLES } from "./package.js";
 
@@ -32,8 +32,7 @@ export const OUTPUT_SHAPE = `{
   "hashtags": {
     "instagram": { "cs": ["#tag", ...], "en": ["#tag", ...] },
     "threads":   { "cs": ["topic"], "en": ["topic"] }
-  },
-  "hookB": { "en": "string", "cs": "string" }
+  }
 }`;
 
 function optionLines(options: readonly string[]): string {
@@ -50,12 +49,13 @@ function optionLines(options: readonly string[]): string {
 export function buildChumPacket(input: {
   brand: Brand;
   question: NormalizedQuestion;
-  hookA: HookPattern;
-  hookB: HookPattern;
+  /** The assigned line per locale, or null on the `no-hook` fallback. */
+  hookLines: { cs: string; en: string } | null;
+  hookId: string | null;
   date: string;
   violations?: readonly GateViolation[];
 }): string {
-  const { brand, question, hookA, hookB } = input;
+  const { brand, question } = input;
   const tone = brand.tone;
   const czech = question.cs;
 
@@ -89,20 +89,24 @@ export function buildChumPacket(input: {
         + (czech.explanation ? `Explanation (CS):\n${czech.explanation}` : "")
       : `## Czech reference\nNone exists for this question. Write the Czech carousel from the English source, in native register.`,
 
-    `## Assigned hook pattern A (fronts the carousel)\n`
-    + `id: ${hookA.id}\n`
-    + `EN: ${hookA.variants[tone]?.en ?? ""}\n`
-    + `CS: ${hookA.variants[tone]?.cs ?? ""}\n`
-    + `It must be literally true of this question. Fill any {slot} from the question. If the`
-    + ` filled line would overstate, fill it plainer.`,
-
-    `## Alternate hook pattern B (recorded, never published)\n`
-    + `id: ${hookB.id}\n`
-    + `EN: ${hookB.variants[tone]?.en ?? ""}\n`
-    + `CS: ${hookB.variants[tone]?.cs ?? ""}`,
+    input.hookLines
+      ? `## Slide 1 is already written — copy it verbatim\n`
+        + `hook id: ${input.hookId}\n`
+        + `EN: ${input.hookLines.en}\n`
+        + `CS: ${input.hookLines.cs}\n`
+        + `These lines come from the central hook library and are already gate-licensed and`
+        + ` length-budgeted. Reproduce them character for character on the hook slide, in both`
+        + ` languages. Do not rewrite, translate, shorten or punctuate them differently. Write`
+        + ` slides 2 to 5 so that they cash the promise slide 1 makes.`
+      : `## Slide 1 is yours this time\n`
+        + `No hook was eligible for this question, so write the hook slide yourself as a plain,`
+        + ` concrete headline about the question. Claim nothing about the reader, the difficulty`
+        + ` or any statistic. Keep it under ${LIMITS.hookChars} characters in both languages.`,
 
     `## Hard limits, checked in code after you answer\n`
-    + `- hook headline ≤ ${LIMITS.hookChars} characters, both languages\n`
+    + (input.hookLines
+      ? `- the hook slide carries the assigned hook line above, unchanged\n`
+      : `- hook headline ≤ ${LIMITS.hookChars} characters, both languages\n`)
     + `- why slide ≤ ${LIMITS.whyWords} words\n`
     + `- Instagram ≤ ${LIMITS.instagramBeforeHashtags} characters before hashtags\n`
     + `- Threads ≤ ${LIMITS.threadsChars} characters\n`

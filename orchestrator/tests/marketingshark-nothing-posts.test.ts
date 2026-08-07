@@ -10,7 +10,7 @@ import { enabledBrands, loadMarketingSharkConfig } from "../src/ventures/marketi
 import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
 import { MarketingSharkPackage } from "../src/ventures/marketingshark/package.js";
 import { buildQueueItems } from "../src/ventures/marketingshark/queue.js";
-import { fixtureChumOutput, planBrandDay, runBrandDay } from "../src/ventures/marketingshark/run.js";
+import { fixtureChumOutput, fixtureHookLines, planBrandDay, runBrandDay } from "../src/ventures/marketingshark/run.js";
 import { repoRoot } from "../src/paths.js";
 
 async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: string }> {
@@ -25,8 +25,7 @@ async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: s
         usd: 0,
         output: fixtureChumOutput({
           brand, question: plan.question,
-          hookA: plan.hooks.a.variants[brand.tone]!.en, hookACs: plan.hooks.a.variants[brand.tone]!.cs,
-          hookB: plan.hooks.b.variants[brand.tone]!.en, hookBCs: plan.hooks.b.variants[brand.tone]!.cs
+          ...fixtureHookLines(plan, brand)
         })
       };
     }
