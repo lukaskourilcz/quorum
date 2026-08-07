@@ -137,14 +137,13 @@ walkthrough and Carousel Studio are waiting on specifically.
   session had no model key reachable from it. One manual `cycle.yml` dispatch with phase
   `ms-daily` costs about $0.05 and turns a proven pipeline into a working one.
   [imp:4] [owner:me] [time:5m] [kind:deploy]
-- [ ] **Give the delivery GitHub App access to `react-express-app`, then set
-  `HOOK_DELIVERY_ENABLED=true`** — the quiz apps' hook copy is now owned centrally and ships
-  to them as a bounded `hook-library/1` delivery, 49 hooks plus the conformance vectors that
-  pin their selector to this repo's evaluator. Everything on this side is built and tested;
-  the App is installed on `aifirst` and `mma-files` only, so the delivery job is gated off
-  rather than left to fail a healthy marketingShark cycle. Until it runs, the apps keep the
-  16-hook set that still contains a hook promising a ten-second timer to a card that has no
-  timer. [imp:4] [owner:me] [time:5m] [kind:setup]
+- [ ] **Set `HOOK_DELIVERY_ENABLED=true`** — the delivery App was granted access to
+  `react-express-app` on 2026-08-08, so this is the last step before the quiz apps receive
+  their hook copy as a bounded `hook-library/1` delivery: 49 hooks plus the conformance vectors
+  that pin their selector to this repo's evaluator. The job runs on the `ms-daily` slot and is
+  a no-op on any day the library has not changed. Until it runs, the apps keep the 16-hook set
+  that still contains a hook promising a ten-second timer to a card that has no timer.
+  [imp:4] [owner:me] [time:1m] [kind:setup]
 - [x] **Approve or decline the devShark banner on DNESKAi** — approved 2026-08-07.
   `HUMAN_APPROVAL DEVSHARK-BANNER-001` is resolved. The payload is still staged and
   hashed under `state/ventures/marketingshark/banner/` with no receipt: the session

@@ -1087,12 +1087,11 @@ jobs:
       # ---------------------------------------------------------------------------------------
       # hook-library/1 — the quiz apps receive the hook library as bounded data.
       #
-      # Gated on HOOK_DELIVERY_ENABLED, which is unset. The delivery GitHub App is installed on
-      # aifirst and mma-files; it has no access to react-express-app yet, and minting a token for
-      # a repository the App cannot see fails the step and would take an otherwise healthy
-      # marketingShark cycle down with it. Inert until the owner grants access and sets the
-      # variable — the same shape every other unlaunched delivery in this file uses. See
-      # NEEDS_YOUR_HELP_NOW.md.
+      # Gated on HOOK_DELIVERY_ENABLED. The delivery App has had access to react-express-app
+      # since 2026-08-08; the variable stays the switch because minting a token for a repository
+      # the App cannot see fails the step, and this step sits on the ms-daily slot — an ungated
+      # job would take an otherwise healthy marketingShark cycle down with it if access were
+      # ever revoked. Same shape every other delivery in this file uses.
       #
       # Runs on the marketingShark slot because that is the room that touches hooks, and it is a
       # no-op on every day the library has not changed: the CLI compares the package's

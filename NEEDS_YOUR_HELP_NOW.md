@@ -125,16 +125,14 @@ The list below is those, in the order that unblocks the most.
    working one. If the output is poor, that is a prompt problem and the truth gates will catch
    the dishonest parts of it — but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
 
-8. [ ] **Give the delivery GitHub App access to `react-express-app`, then set
-   `HOOK_DELIVERY_ENABLED=true`.** The hook library the quiz apps read is now owned centrally
-   and ships to them as a bounded `hook-library/1` delivery — 49 hooks plus the conformance
-   vectors that pin the app's own selector to this repo's evaluator, written to `lib/hooks/`
-   and nowhere else. Everything on this side is built, linted and tested; the App is installed
-   on `aifirst` and `mma-files` and cannot see `react-express-app`, so the job is gated off
-   rather than left to fail a healthy cycle. Two steps in the App's settings
-   (Settings → GitHub Apps → your delivery App → Repository access), then the variable. It costs
-   $0 and calls no model. Until then the apps keep whatever hook copy they have, which is the
-   16-hook set with the fake-timer line in it. [imp:4] [owner:me] [time:5m] [kind:setup]
+8. [ ] **Set `HOOK_DELIVERY_ENABLED=true`.** The delivery App was granted access to
+   `react-express-app` on 2026-08-08, so this is the last step. The hook library the quiz apps
+   read is now owned centrally and ships to them as a bounded `hook-library/1` delivery — 49
+   hooks plus the conformance vectors that pin the app's own selector to this repo's evaluator,
+   written to `lib/hooks/` and nowhere else. The job runs on the `ms-daily` slot and is a no-op
+   on any day the library has not changed. It costs $0 and calls no model. Until the variable is
+   set the apps keep whatever hook copy they have, which is the 16-hook set with the fake-timer
+   line in it. [imp:4] [owner:me] [time:1m] [kind:setup]
 
 ## 2. Yours to decide
 
