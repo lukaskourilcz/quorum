@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "marketingshark-config/1",
+  "meetingPhase": "ms-daily",
+  "pragueHour": 7,
+  "abVariants": 2,
+  "minEligibleBeforeRelax": 2,
+  "brands": [
+    {
+      "id": "devshark",
+      "enabled": true,
+      "displayName": "devShark",
+      "productUrl": "https://devshark.app",
+      "tone": "dev",
+      "questionBank": {
+        "snapshotPath": "state/marketingshark/question-banks/devshark.json",
+        "sourceRepo": "lukaskourilcz/react-express-app",
+        "sourceSubject": "webdev"
+      },
+      "categoryLists": {
+        "commonUse": ["javascript", "typescript", "git", "css", "html", "react", "nodejs"],
+        "interview": ["dsa", "algorithms", "system-design", "databases", "javascript", "typescript"],
+        "core": ["internet", "git", "security", "databases", "testing"]
+      },
+      "slide5": {
+        "en": "One question from devShark — the game that makes you a better developer. devshark.app",
+        "cs": "Jedna otázka z devSharku — hry, se kterou budeš lepší vývojář. devshark.app"
+      },
+      "templateMap": {
+        "hook": "minimal-text-poster",
+        "context": "quiz-code-context",
+        "reveal": "stat-highlight",
+        "why": "quote-card",
+        "footer": "minimal-text-poster"
+      },
+      "hashtags": {
+        "instagram": {
+          "en": ["#webdev", "#programming", "#codingquiz"],
+          "cs": ["#programovani", "#webdev", "#vyvojar"]
+        },
+        "threadsTopic": { "en": "webdev", "cs": "programování" }
+      },
+      "banner": true
+    },
+    {
+      "id": "geoshark",
+      "enabled": false,
+      "displayName": "geoShark",
+      "productUrl": "https://studyshark-app.vercel.app",
+      "tone": "geo",
+      "questionBank": {
+        "snapshotPath": "state/marketingshark/question-banks/geoshark.json",
+        "sourceRepo": "lukaskourilcz/react-express-app",
+        "sourceSubject": "geography"
+      },
+      "categoryLists": {
+        "commonUse": ["capitals", "flags", "continents", "earth"],
+        "interview": ["capitals", "flags", "political", "geopolitics"],
+        "core": ["cartography", "earth", "climate", "landforms"]
+      },
+      "slide5": {
+        "en": "One question from geoShark — for people who love geography. studyshark-app.vercel.app",
+        "cs": "Jedna otázka z geoSharku — pro lidi, které baví zeměpis. studyshark-app.vercel.app"
+      },
+      "templateMap": {
+        "hook": "minimal-text-poster",
+        "context": "quiz-code-context",
+        "reveal": "stat-highlight",
+        "why": "quote-card",
+        "footer": "minimal-text-poster"
+      },
+      "hashtags": {
+        "instagram": {
+          "en": ["#geography", "#maps", "#quiz"],
+          "cs": ["#zemepis", "#mapy", "#kviz"]
+        },
+        "threadsTopic": { "en": "geography", "cs": "zeměpis" }
+      },
+      "banner": false
+    }
+  ],
+  "hookLibrary": [
+    { "id": "speed-run", "cooldownDays": 10, "truthRequires": ["always"], "variants": {
+      "dev": { "en": "You have 10 seconds. Go.", "cs": "Máš 10 vteřin. Teď." },
+      "geo": { "en": "You have 10 seconds. Go.", "cs": "Máš 10 vteřin. Teď." } } },
+    { "id": "no-google", "cooldownDays": 10, "truthRequires": ["always"], "variants": {
+      "dev": { "en": "No googling. That is the whole point.", "cs": "Negoogli. O tom to celé je." },
+      "geo": { "en": "No maps, no googling.", "cs": "Bez mapy, bez googlení." } } },
+    { "id": "bet-on-it", "cooldownDays": 10, "truthRequires": ["always"], "variants": {
+      "dev": { "en": "Would you bet a code review on this?", "cs": "Vsadil bys na to code review?" },
+      "geo": { "en": "Would you bet your passport on this?", "cs": "Vsadil bys na to svůj pas?" } } },
+    { "id": "two-look-right", "cooldownDays": 10, "truthRequires": ["optionsAtLeast:4", "difficultyAtLeast:2"], "variants": {
+      "dev": { "en": "Two answers look right. One is.", "cs": "Dvě odpovědi vypadají správně. Jedna je." },
+      "geo": { "en": "Two answers look right. One is.", "cs": "Dvě odpovědi vypadají správně. Jedna je." } } },
+    { "id": "seniors-know", "cooldownDays": 10, "truthRequires": ["difficultyAtLeast:3"], "variants": {
+      "dev": { "en": "Juniors know the rule. Seniors know the exception.", "cs": "Junioři znají pravidlo. Senioři znají výjimku." },
+      "geo": { "en": "Tourists know the name. Travelers know the reason.", "cs": "Turisté znají jméno. Cestovatelé znají důvod." } } },
+    { "id": "everyday-blindspot", "cooldownDays": 10, "truthRequires": ["categoryIn:commonUse"], "variants": {
+      "dev": { "en": "You use {topic} every day. Can you explain it?", "cs": "Používáš {topic} každý den. Umíš to vysvětlit?" },
+      "geo": { "en": "It is on every map. Have you ever noticed it?", "cs": "Je to na každé mapě. Všiml sis toho někdy?" } } },
+    { "id": "interview-favorite", "cooldownDays": 10, "truthRequires": ["categoryIn:interview"], "variants": {
+      "dev": { "en": "This one shows up in interviews.", "cs": "Tahle se objevuje na pohovorech." },
+      "geo": { "en": "This one shows up in every quiz night.", "cs": "Tahle padá na každém kvízu." } } },
+    { "id": "looks-easy", "cooldownDays": 10, "truthRequires": ["difficultyAtLeast:3"], "variants": {
+      "dev": { "en": "Looks easy. Take the bait.", "cs": "Vypadá to jednoduše. Chyť se." },
+      "geo": { "en": "Looks easy. Take the bait.", "cs": "Vypadá to jednoduše. Chyť se." } } },
+    { "id": "one-detail", "cooldownDays": 10, "truthRequires": ["difficultyAtLeast:2"], "variants": {
+      "dev": { "en": "One detail changes the whole answer.", "cs": "Jeden detail mění celou odpověď." },
+      "geo": { "en": "One detail changes the whole answer.", "cs": "Jeden detail mění celou odpověď." } } },
+    { "id": "streak-breaker", "cooldownDays": 10, "truthRequires": ["difficultyAtLeast:4"], "variants": {
+      "dev": { "en": "Questions like this end streaks.", "cs": "Otázky jako tahle ukončují streaky." },
+      "geo": { "en": "Questions like this end streaks.", "cs": "Otázky jako tahle ukončují streaky." } } },
+    { "id": "explain-it", "cooldownDays": 10, "truthRequires": ["always"], "variants": {
+      "dev": { "en": "Could you explain this to a junior?", "cs": "Vysvětlil bys to juniorovi?" },
+      "geo": { "en": "Could you explain this to a tourist?", "cs": "Vysvětlil bys to turistovi?" } } },
+    { "id": "hard-mode", "cooldownDays": 10, "truthRequires": ["difficultyAtLeast:4"], "variants": {
+      "dev": { "en": "Hard mode: no hints, no docs.", "cs": "Hard mode: bez nápovědy, bez dokumentace." },
+      "geo": { "en": "Hard mode: no atlas.", "cs": "Hard mode: bez atlasu." } } },
+    { "id": "depends-on-it", "cooldownDays": 10, "truthRequires": ["categoryIn:core"], "variants": {
+      "dev": { "en": "You have shipped code that depends on this.", "cs": "Už jsi nasadil kód, který na tomhle stojí." },
+      "geo": { "en": "Every map you have read leans on this.", "cs": "Každá mapa, kterou jsi kdy četl, na tomhle stojí." } } },
+    { "id": "know-why", "cooldownDays": 10, "truthRequires": ["questionStartsWith:Why"], "variants": {
+      "dev": { "en": "You know the what. This asks the why.", "cs": "Víš co. Tohle se ptá proč." },
+      "geo": { "en": "You know the what. This asks the why.", "cs": "Víš co. Tohle se ptá proč." } } },
+    { "id": "spot-it", "cooldownDays": 10, "truthRequires": ["hasCode"], "variants": {
+      "dev": { "en": "Spot it before the compiler does.", "cs": "Najdi to dřív než kompilátor." },
+      "geo": { "en": "Spot the odd one out.", "cs": "Najdi, co sem nepatří." } } },
+    { "id": "daily-rep", "cooldownDays": 10, "truthRequires": ["always"], "variants": {
+      "dev": { "en": "One question a day keeps the rust away.", "cs": "Jedna otázka denně a nezreziviš." },
+      "geo": { "en": "One question a day keeps the world close.", "cs": "Jedna otázka denně a svět zůstane blízko." } } }
+  ]
+}
