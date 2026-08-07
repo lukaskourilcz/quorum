@@ -1,0 +1,95 @@
+# Surfaces — one engine, many libraries
+
+The hook system is shared across BoardlessAI ventures. **The engine, the docs and the lint
+are central. The hook strings are not.** A hook is only honest if its gates can evaluate
+against the content it sits on, and different ventures have different content.
+
+## Surface map
+
+| Surface | Library | Content shape | Gate vocabulary |
+|---|---|---|---|
+| devShark app | `quiz.hooks.json` | hook + question card, swipe to answer | options, difficulty, category, hasCode |
+| geoShark app | `quiz.hooks.json` (geo variants) | same | same |
+| devShark/geoShark carousels | `quiz.hooks.json` | slide 1 hook, slide 2 question, 3–4 reveal | same — the question is picked from the stack, so all metadata is known at render |
+| DNESKAi / Caught Up | `news.hooks.json` *(to write)* | daily AI briefing item | recency, source count, topic, numbers present |
+| MMA Files | `mma.hooks.json` *(to write)* | magazine article, 2/day EN+CS | event proximity, title fight, ranking, result known |
+
+Every library uses the same schema, the same craft rules (`02`), the same honesty
+discipline, the same lint. Only `truthRequires` vocabulary and the strings differ.
+
+## Why quiz hooks don't port to news or magazine content
+
+A quiz hook's power comes from a gap the reader can close *in ten seconds by swiping*, and
+its honesty comes from gates that describe a question. Neither holds elsewhere:
+
+- No question means no options, no difficulty, no correct answer. `optionsAtLeast:4`,
+  `difficultyAtLeast:N` and `categoryIn:X` cannot evaluate — a hook gated on them is
+  dead, and a hook that makes those claims ungated is a lie.
+- The payoff differs. In the quiz the payoff is *the answer*; in a briefing it's
+  *understanding what happened*; in the magazine it's *the read*. Payoff-promise hooks
+  must be rewritten around the actual payoff.
+- The honesty bar is higher for news. A quiz hook that overpromises costs a swipe. A
+  briefing hook that overpromises costs the reader's trust in the briefing, which is the
+  entire product. See the news rules below.
+
+## Writing a new surface library
+
+1. **Enumerate the metadata the content actually carries.** Not what you wish it carried —
+   what's in the JSON at render time. That list *is* your predicate vocabulary.
+2. **Write predicates that license claims.** For each predicate, write down the sentence
+   it makes true. If you can't, it's a filter, not a gate.
+3. **Port the mechanisms, not the lines.** Work from `01-hook-psychology.md`. Information
+   gap, IoED, precision, self-reference and payoff-promise all port. The *imagery* doesn't.
+4. **Keep the always-pool honest.** Ungated hooks may only claim things true of every item
+   on that surface.
+5. **Meet the same shipping bar** (`02`): mechanism, tagged citation, prediction,
+   `falsifiedIf`, cooldown rationale, gate justification. Run the lint.
+6. **Size it by the pool arithmetic** (`03`): items/day × cooldown days.
+
+## Proposed predicate vocabularies
+
+Sketches, not specs — confirm against the real JSON in each repo before building.
+
+**DNESKAi / Caught Up (`news.hooks.json`)**
+`always` · `articleAgeHours:N` (freshness claims) · `sourceCount:N` (corroboration claims)
+· `topicIn:model-release|funding|policy|research|safety` · `hasNumber` (a figure appears in
+the item) · `isFirstReport` · `followsPriorStory` (continuity — the news analogue of
+`missedTopicBefore`, and probably the strongest hook here)
+
+**MMA Files (`mma.hooks.json`)**
+`always` · `eventWithinDays:N` · `isTitleFight` · `fighterRanked:N` · `resultKnown`
+(post-fight vs preview — completely different tense and promise) · `hasStatEdge` (a real
+sourced number from the FightAIQ data)
+
+## Extra honesty rules for news and MMA
+
+These sit **on top of** the rules in `02`, they don't replace them.
+
+- **News: never tease what the item doesn't deliver.** The briefing's value is that it can
+  be trusted at a glance. A hook that dramatises a minor item is a withdrawal from the only
+  account the product has.
+- **News: no false novelty.** "First" and "breaking" require `isFirstReport`. Freshness
+  claims require `articleAgeHours`.
+- **News: attribute uncertainty.** If the underlying item is a rumour or single-sourced,
+  the hook may not state it as fact. Gate on `sourceCount`.
+- **MMA: no betting claims in hooks, ever.** FightAIQ's analysis may inform an article's
+  content, but a hook must never imply a prediction, an edge or a recommended wager.
+  Copy that sells certainty about a fight outcome is both dishonest and a regulatory
+  problem in several markets.
+- **MMA: real people.** Hooks reference fighters as competitors, never with invented
+  quotes, invented motives or disparagement. Records and rankings must come from the data,
+  not from the copy agent's memory.
+- **Both: the result-known tense trap.** A preview hook and a recap hook make opposite
+  promises. Gate them apart (`resultKnown`) or you will eventually tease a fight that
+  already happened.
+
+## Cross-surface measurement
+
+STR is a quiz-app metric. Each surface needs its own primary metric and its own guardrails
+before its hooks mean anything:
+
+- Carousels: slide-1 → slide-2 advance rate; guardrail = completion to the reveal slide.
+- News: item open rate; guardrails = time-on-item (catches teasing), next-day return.
+- Magazine: article open rate; guardrails = scroll depth, next-day return.
+
+Do not compare STR across surfaces. Compare each hook to its own surface's control.
