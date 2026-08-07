@@ -45,11 +45,14 @@ and no new magazine will be ideated again — a future venture is founded by a d
 entry the way GoVIRAL was. Any incubator item you remember from an earlier version of this list
 is gone rather than deferred.
 
+The Actions-minutes decision is settled: all three repositories are public as of 2026-08-07,
+which makes standard runners unmetered, and CI is confirmed green again on both magazines.
+
 What is still waiting: one API key that unblocks every FightAIQ output, an Apify account that
 unblocks GoVIRAL's trend scouting, two optional photo keys, the taste loop for Titty Tuesdays,
 the `/admin` credentials that several actions run through, the DNESKAi public URL, the
-fixed-cost registry, the next Titty Tuesdays season, the Actions-minutes decision, and social
-posting. The list below is those, in the order that unblocks the most.
+fixed-cost registry, the next Titty Tuesdays season, and social posting. The list below is
+those, in the order that unblocks the most.
 
 ## 1. Blocking output right now
 
@@ -129,21 +132,13 @@ posting. The list below is those, in the order that unblocks the most.
    no material. The warning appears in the room's own daily brief as the date approaches.
    [imp:2] [owner:me] [time:60m] [kind:content]
 
-10. [ ] **Decide how to unblock GitHub Actions minutes.** The three repositories were burning
-   about 342 runner-minutes a day against a 2,000-minute free tier, measured over 5–6 August.
-   The diet in this batch — three backstop crons instead of eighteen, a pre-check that ends a
-   settled slot in about a minute, path filters on CI — should bring that under ~100 a day, but
-   the current month is already spent and only you can clear it. Three options, in the order I
-   would take them:
-   - **Make `quorum` public.** The structural fix: unlimited free Actions minutes on standard
-     runners, at $0. `docs/SECRETS-AUDIT-2026-08-06.md` swept the working tree and the full
-     history of all three repositories and found no secret, so this is safe to do — but
-     visibility is yours to flip and I have not touched it.
-   - **GitHub Pro at $4/month.** Needs its own `HUMAN_APPROVAL` and a `config/fixed-costs.json`
-     entry, because it is real cash against the $30 all-in cap.
-   - **A temporary Actions spending limit.** A stopgap that costs money per minute and fixes
-     nothing structural.
-   [imp:5] [owner:me] [time:15m] [kind:decision]
+10. [x] **GitHub Actions minutes — resolved 2026-08-07 by making all three repositories public.**
+   Standard runners are unmetered on public repositories, so the exhausted free tier no longer
+   gates anything. `docs/SECRETS-AUDIT-2026-08-06.md` had already swept the working tree and full
+   history of all three and found no secret; an independent re-sweep before the flip agreed, and
+   confirmed the delivered FightAIQ snapshot carries no odds, price or bookmaker field. Verified
+   after the switch: CI on `aifirst` and `mma-files` went from failing in 3–4 seconds with no
+   runner assigned to passing in 66 and 69 seconds. Neither paid option was needed.
 
 ## 3. Only before social posting
 
