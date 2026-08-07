@@ -23,3 +23,27 @@ export const VENTURE_BRAND: Record<string, string> = {
 export function ventureBrand(id: string | null | undefined): string {
   return (id && VENTURE_BRAND[id]) || VENTURE_BRAND.global!;
 }
+
+/**
+ * A brand tint, composited to an opaque colour rather than left as an alpha layer.
+ *
+ * The design calls for `brand` at 15% behind an active chip, and `#fde68a26` renders exactly
+ * right. What it does not do is let anything measure the result: a contrast checker reading a
+ * 15%-alpha pale yellow has no idea what is behind it, so it reported white-on-yellow at 1.25:1
+ * for a chip that really sits on near-black at about 15:1. Blending here produces the same pixel
+ * and a colour that can be checked — which matters, because the contrast gate is the only thing
+ * standing between a pale venture hue and an unreadable label.
+ */
+export function brandTint(brand: string, surface = "#0c0c0f", ratio = 0.15): string {
+  const parse = (hex: string) => {
+    const value = hex.replace("#", "");
+    const full = value.length === 3 ? [...value].map((part) => part + part).join("") : value;
+    return [0, 2, 4].map((offset) => Number.parseInt(full.slice(offset, offset + 2), 16));
+  };
+  const [br, bg, bb] = parse(brand);
+  const [sr, sg, sb] = parse(surface);
+  const blend = (top: number, bottom: number) => Math.round(top * ratio + bottom * (1 - ratio));
+  return `#${[blend(br!, sr!), blend(bg!, sg!), blend(bb!, sb!)]
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("")}`;
+}

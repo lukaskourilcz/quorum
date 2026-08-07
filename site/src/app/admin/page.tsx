@@ -30,7 +30,7 @@ import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicMoneySnapshot } from "@/lib/money-records";
 import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
-import { ventureBrand } from "@/lib/venture-brand";
+import { brandTint, ventureBrand } from "@/lib/venture-brand";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -282,7 +282,7 @@ export default async function AdminPage({
       workspaces={workspaces}
     >
       {!selectedVenture ? (
-        <div className="grid gap-4">
+        <div className="grid min-w-0 gap-4">
           <div
             className="grid grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[#26262b] bg-[#26262b] lg:grid-cols-4"
             data-adm-tiles
@@ -344,7 +344,7 @@ export default async function AdminPage({
           </Panel>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid min-w-0 gap-4">
           <div className="flex flex-wrap items-center gap-2">
             {selectedVenture.tabs.map((tab) => {
               const on = selectedTab === tab;
@@ -355,10 +355,15 @@ export default async function AdminPage({
                   href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
                   key={tab}
                   scroll={false}
+                  // The active chip is brand border, brand tint and *white* text, not brand text.
+                  // Brand on a 15%-brand ground measures 1.00:1 — the two are the same hue — and
+                  // "fighters" on FightAIQ's pale red was unreadable rather than merely low
+                  // contrast. The border and the tint carry the identity; the label carries the
+                  // word, so it gets the colour that lets it be read.
                   style={{
                     border: `1px solid ${on ? brand : "#3f3f46"}`,
-                    background: on ? `${brand}26` : "#101013",
-                    color: on ? brand : "#a1a1aa"
+                    background: on ? brandTint(brand) : "#101013",
+                    color: on ? "#ffffff" : "#a1a1aa"
                   }}
                 >
                   {tabLabel(tab)}

@@ -55,7 +55,7 @@ export function OfficePlate({
     aspectRatio: "1376 / 768"
   };
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" data-viewport-decoration>
       <div data-plate-inner data-plate-y={plateY} style={style}>
         <picture>
           <source srcSet={`/office/${image}.avif`} type="image/avif" />

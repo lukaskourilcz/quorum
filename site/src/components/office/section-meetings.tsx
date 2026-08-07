@@ -206,6 +206,7 @@ export function SectionMeetings({
           <div
             className="flex flex-1 gap-1.5 overflow-x-auto p-2 md:flex-col md:gap-0 md:overflow-x-hidden md:overflow-y-auto md:px-2 md:pb-3 md:pt-0"
             data-chat-list
+            data-horizontal-scroll
           >
             {channels.map((entry) => {
               const active = entry.id === channel.id;

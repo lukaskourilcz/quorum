@@ -8,6 +8,7 @@ import {
   stressPassages,
   type PreviewSlide
 } from "@/lib/carousel-deck-preview";
+import { brandTint } from "@/lib/venture-brand";
 import {
   CAROUSEL_FORMATS,
   CAROUSEL_TEMPLATES,
@@ -76,17 +77,24 @@ function SlideCanvas({
   );
 }
 
+/**
+ * A format or length switch.
+ *
+ * The active chip is brand border, brand tint and white text. Brand text on a 15%-brand ground is
+ * the same hue against itself — 1.00:1 — which is unreadable rather than merely low contrast. The
+ * border and the tint say which one is on; the label says what it is.
+ */
 function chipStyle(on: boolean, brand: string) {
   return {
     border: `1px solid ${on ? brand : "#3f3f46"}`,
     borderRadius: "9px",
-    background: on ? `${brand}26` : "#101013",
+    background: on ? brandTint(brand) : "#101013",
     padding: "7px 12px",
     fontFamily: "var(--font-ibm-plex-mono), monospace",
     fontSize: "10.5px",
     letterSpacing: "0.12em",
     textTransform: "uppercase" as const,
-    color: on ? brand : "#a1a1aa",
+    color: on ? "#ffffff" : "#a1a1aa",
     cursor: "pointer",
     whiteSpace: "nowrap" as const
   };
@@ -134,15 +142,15 @@ export function CarouselArticleStudio({
   const strip = deck.slice(0, 3);
 
   return (
-    <div className="grid gap-4">
-      <div className="rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
-        <div className="flex items-center justify-between gap-3 border-b border-[#1e1e22] px-[18px] py-3.5">
+    <div className="grid min-w-0 gap-4">
+      <div className="min-w-0 rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
+        <div className="min-w-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-[#1e1e22] px-[18px] py-3.5">
           <p className="m-0 text-[14px] font-semibold">Article</p>
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">
+          <span className="min-w-0 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">
             {articles.length} delivered · summary only, never the whole article
           </span>
         </div>
-        <div className="flex max-h-[168px] gap-2 overflow-x-auto overflow-y-auto p-2 [overscroll-behavior:contain]">
+        <div className="hide-scrollbar flex min-w-0 max-h-[168px] gap-2 overflow-x-auto overflow-y-auto p-2 [overscroll-behavior:contain]" data-horizontal-scroll>
           {articles.map((entry) => {
             const on = entry.id === article.id;
             return (
@@ -152,7 +160,7 @@ export function CarouselArticleStudio({
                 onClick={() => setArticleId(entry.id)}
                 style={{
                   border: `1px solid ${on ? brand : "#1e1e22"}`,
-                  background: on ? `${brand}1f` : "transparent"
+                  background: on ? brandTint(brand, "#0c0c0f", 0.12) : "transparent"
                 }}
                 type="button"
               >
@@ -178,7 +186,7 @@ export function CarouselArticleStudio({
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex min-w-0 flex-wrap items-center gap-2">
         <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#94949c]">Format</span>
         {CAROUSEL_FORMATS.map((entry) => (
           <button
@@ -208,7 +216,7 @@ export function CarouselArticleStudio({
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-3" data-adm-gallery>
+      <div className="flex min-w-0 flex-wrap gap-3" data-adm-gallery data-horizontal-scroll>
         {CAROUSEL_TEMPLATES.map((entry, index) => {
           const on = index === templateIndex;
           return (
@@ -243,10 +251,10 @@ export function CarouselArticleStudio({
       </div>
 
       <div
-        className="grid grid-cols-1 gap-6 rounded-[12px] border border-[#26262b] bg-[#0c0c0f] p-5 xl:grid-cols-[minmax(0,auto)_minmax(0,1fr)]"
+        className="grid min-w-0 grid-cols-1 gap-6 rounded-[12px] border border-[#26262b] bg-[#0c0c0f] p-5 xl:grid-cols-[minmax(0,auto)_minmax(0,1fr)]"
         data-adm-cols
       >
-        <div className="flex flex-col gap-4">
+        <div className="hide-scrollbar flex min-w-0 flex-col gap-4 overflow-x-auto" data-horizontal-scroll>
           <SlideCanvas
             brand={brand}
             format={format}
@@ -261,7 +269,7 @@ export function CarouselArticleStudio({
             templates change background, type colour and hero position from slide to slide, and a
             single frame cannot show that — the whole point of those five is what a swipe does.
           */}
-          <div className="flex gap-2.5 overflow-x-auto pb-1">
+          <div className="hide-scrollbar flex gap-2.5 overflow-x-auto pb-1" data-horizontal-scroll>
             {strip.map((slide, index) => {
               const style = slideStyle({
                 template,
@@ -325,11 +333,11 @@ export function CarouselArticleStudio({
         </div>
       </div>
 
-      <details className="rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
+      <details className="min-w-0 rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
         <summary className="cursor-pointer px-[18px] py-3.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8]">
           The whole deck · {deck.length} slides
         </summary>
-        <div className="flex flex-wrap gap-3 border-t border-[#1e1e22] p-[18px]">
+        <div className="flex flex-wrap gap-3 border-t border-[#1e1e22] p-[18px]" data-horizontal-scroll>
           {deck.map((slide, index) => (
             <div className="flex flex-col gap-2" key={`${slide.kicker}-${index}`}>
               <SlideCanvas

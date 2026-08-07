@@ -71,7 +71,7 @@ export function AdminShell({
           <p className="mx-1.5 mb-2 font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#94949c]">
             Workspaces
           </p>
-          <div className="flex gap-1.5 overflow-x-auto lg:block lg:overflow-visible" data-adm-rail-list>
+          <div className="hide-scrollbar flex gap-1.5 overflow-x-auto lg:block lg:overflow-visible" data-adm-rail-list data-horizontal-scroll>
             {workspaces.map((workspace) => {
               const hue = ventureBrand(workspace.id);
               return (
@@ -149,18 +149,21 @@ export function AdminShell({
           </form>
         </div>
 
-        <div className="px-4 pb-16 pt-5 md:px-7 md:pt-6.5" data-adm-body>
+        <main className="px-4 pb-16 pt-5 md:px-7 md:pt-6.5" data-adm-body>
           <div className="max-w-[1180px]">
             <div className="mb-5.5 flex items-end justify-between gap-5">
               <div className="min-w-0">
-                <h1 className="m-0 text-[30px] font-semibold tracking-[-0.04em]">{title}</h1>
+                <h1 className="m-0 text-[30px] font-semibold tracking-[-0.04em]">
+                  {title}
+                  <span style={{ color: brand }}>.</span>
+                </h1>
                 <p className="mt-2 max-w-[74ch] text-[13.5px] leading-[1.6] text-[#a1a1aa]">{lead}</p>
               </div>
               {action}
             </div>
             {children}
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

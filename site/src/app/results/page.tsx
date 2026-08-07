@@ -26,10 +26,22 @@ const STATUS_LABEL: Record<DailyResultRow["status"], string> = {
   "not-held": "Not held"
 };
 
+/**
+ * Status colours that can actually be read on this page.
+ *
+ * `--success` is `#166534` and `--destructive` is `#b91c1c`: both are chosen to sit *behind*
+ * light type, and both were used here as type on `#09090b`, which measures 2.79:1 against a 4.5:1
+ * gate. The `-soft` variants are the same states rendered for a dark surface, and they are what
+ * the wallboard already uses for On track / Off track.
+ *
+ * `--danger` was worse than low contrast: no such token exists, so the class resolved to nothing
+ * and a failed row was rendered in the inherited body colour — indistinguishable from a row that
+ * produced something.
+ */
 const STATUS_TONE: Record<DailyResultRow["status"], string> = {
-  produced: "text-[var(--success)]",
+  produced: "text-[var(--success-soft)]",
   "no-output": "text-[var(--ash)]",
-  failed: "text-[var(--danger)]",
+  failed: "text-[var(--destructive-soft)]",
   "not-held": "text-[var(--fog)]"
 };
 
@@ -86,11 +98,11 @@ export default async function ResultsPage() {
                         <span className="font-semibold">{entry.ventureLabel}</span>
                       </TableCell>
                       <TableCell>
-                        <span className="text-[var(--success)]">{entry.onTrack}</span>
+                        <span className="text-[var(--success-soft)]">{entry.onTrack}</span>
                       </TableCell>
                       <TableCell>{entry.atRisk}</TableCell>
                       <TableCell>
-                        <span className={entry.offTrack > 0 ? "text-[var(--danger)]" : undefined}>
+                        <span className={entry.offTrack > 0 ? "text-[var(--destructive-soft)]" : undefined}>
                           {entry.offTrack}
                         </span>
                       </TableCell>

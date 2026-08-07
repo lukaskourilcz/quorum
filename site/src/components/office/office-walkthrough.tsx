@@ -74,7 +74,7 @@ const COMPANY_LINKS = [
 
 export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const clockRef = useRef<HTMLSpanElement>(null);
   const lockRef = useRef(0);
@@ -322,7 +322,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             <Mark />
             <span>BoardlessAI</span>
           </button>
-          <nav aria-label="Primary" className="hide-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto" data-nav>
+          <nav aria-label="Primary" className="hide-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto" data-horizontal-scroll data-nav>
             {NAV.map((entry) => (
               <button
                 aria-current={active === entry.index ? "true" : undefined}
@@ -361,7 +361,12 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
         ))}
       </div>
 
-      <div data-track ref={trackRef}>
+      {/*
+        A real `main` landmark. The walkthrough is seven sections under one root, and shipping it
+        as a bare `div` left the page with no main landmark at all — which a screen reader uses to
+        skip the header, and which the responsive guard uses to know the page rendered.
+      */}
+      <main data-track ref={trackRef}>
         {/* 00 Intro */}
         <section
           className="relative h-auto min-h-[100svh] overflow-hidden bg-[#09090b] lg:h-[100svh] lg:min-h-0"
@@ -618,7 +623,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             </div>
           </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 }

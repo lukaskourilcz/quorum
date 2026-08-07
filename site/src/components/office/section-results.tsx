@@ -134,10 +134,19 @@ export function SectionResults({
     setIndex((current) => ((current + delta) % projects.length + projects.length) % projects.length);
   };
 
+  /**
+   * The control surface, as an opaque colour rather than a translucent white.
+   *
+   * `rgba(255,255,255,.05)` over the screen's `#06060a` composites to almost exactly this, so
+   * nothing looks different. What changes is that the colour can be read: a contrast checker sees
+   * a 5%-white layer as near-white and reported "Full KPIs ›" at 1.10:1 against its own label,
+   * when the button really sits on near-black at about 19:1. A control whose contrast cannot be
+   * measured is a control nobody can prove is legible.
+   */
   const buttonStyle = {
     border: "1px solid #3f3f46",
     borderRadius: "0.8cqw",
-    background: "rgba(255, 255, 255, .05)",
+    background: "#141418",
     padding: "0.9cqw 1.5cqw",
     fontSize: "1.4cqw",
     letterSpacing: "0.1em",
@@ -310,12 +319,12 @@ export function SectionResults({
                     style={{
                       border: `1px solid ${on ? "var(--bai-accent)" : "#3f3f46"}`,
                       borderRadius: "0.8cqw",
-                      background: on ? "color-mix(in srgb, var(--bai-accent) 15%, transparent)" : "rgba(255,255,255,.03)",
+                      background: on ? "color-mix(in srgb, var(--bai-accent) 15%, #06060a)" : "#0e0e12",
                       padding: "0.9cqw 1.2cqw",
                       fontSize: "1.3cqw",
                       letterSpacing: "0.08em",
                       textTransform: "uppercase",
-                      color: on ? "#ffffff" : "#a1a1aa",
+                      color: on ? "#ffffff" : "#d4d4d8",
                       cursor: "pointer",
                       whiteSpace: "nowrap"
                     }}
