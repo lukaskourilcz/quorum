@@ -3069,6 +3069,57 @@
       "toolUses": 0,
       "usd": 0.00464,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-07T18:04:02.437Z",
+      "cycleId": "20260807180352-mag-desk",
+      "requestHash": "fb04b94e0e7ce249ace46a0fc07de5487336ba331992a1a67f8164f392f29247",
+      "phase": "mag-desk",
+      "ventureId": "mma-files",
+      "agent": "CANVAS",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 4836,
+      "cachedTokensIn": 0,
+      "tokensOut": 769,
+      "toolUses": 0,
+      "usd": 0.008681,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-07T18:04:09.785Z",
+      "cycleId": "20260807180352-mag-desk",
+      "requestHash": "aa932adbf7981ef40e484e2314705341d261cec273dcd4e34362199926da35bf",
+      "phase": "mag-desk",
+      "ventureId": "mma-files",
+      "agent": "PIVOT",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 4660,
+      "cachedTokensIn": 0,
+      "tokensOut": 585,
+      "toolUses": 0,
+      "usd": 0.007585,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-07T18:04:15.510Z",
+      "cycleId": "20260807180352-mag-desk",
+      "requestHash": "7bd1fbbee12f084b1a7a4bcbe25af066b0855380c47f75432beb53bd0a669979",
+      "phase": "mag-desk",
+      "ventureId": "mma-files",
+      "agent": "AUDIT",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 3967,
+      "cachedTokensIn": 0,
+      "tokensOut": 257,
+      "toolUses": 0,
+      "usd": 0.005509,
+      "kind": "text"
     }
   ]
 }
