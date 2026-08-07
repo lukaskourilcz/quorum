@@ -32,5 +32,9 @@ site/.playwright/
 # Carousel previews are regenerable renders for looking at, not canonical state.
 state/social/previews/
 
+# The staged hook-library delivery is rebuilt from studio/hooks/ on every run and read back
+# inside the same job. The receipt beside it is the canonical record of what was sent.
+state/ventures/carousel-studio/hook-delivery.json
+
 # The cached release-gate verdict for one commit; see .github/workflows/cycle.yml
 .release-gate-verdict
