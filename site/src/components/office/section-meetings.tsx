@@ -247,7 +247,9 @@ export function SectionMeetings({
                   <span className="text-[#94949c]">#</span>
                   {channel.handle}
                 </p>
-                <span aria-hidden="true" className="h-[13px] w-px bg-[#2e2e34]" />
+                {/* Hidden until the title line actually fits on one row; a lone 1px rule at the
+                    end of a wrapped line reads as a stray mark rather than as a separator. */}
+                <span aria-hidden="true" className="hidden h-[13px] w-px bg-[#2e2e34] md:inline-block" />
                 <span className="text-[12.5px] text-[#94949c]">
                   {channel.room} · {channel.time}
                 </span>
