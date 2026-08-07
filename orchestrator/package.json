@@ -30,7 +30,8 @@
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts",
-    "social:deck": "tsx src/social/deck-cli.ts"
+    "social:deck": "tsx src/social/deck-cli.ts",
+    "datasets:append": "tsx src/datasets/append-cli.ts"
   },
   "dependencies": {
     "@boardlessai/carousel-studio": "workspace:*",

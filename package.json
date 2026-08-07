@@ -35,7 +35,8 @@
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune",
-    "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck"
+    "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck",
+    "datasets:append": "pnpm --filter @boardlessai/orchestrator datasets:append"
   },
   "pnpm": {
     "overrides": {

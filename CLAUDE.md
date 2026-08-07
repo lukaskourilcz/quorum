@@ -64,7 +64,33 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 
 `pnpm install` · `pnpm test` ·
 `pnpm cycle -- --phase morning|afternoon|night|founding [--dry]`
-`pnpm -C site dev|build|typecheck`
+`pnpm -C site dev|build|typecheck` ·
+`pnpm datasets:append -- --dataset <name> --current <file> --entries <file>`
+
+## Magazine datasets
+
+The magazines' daily widgets read append-only JSON datasets: `data/ai-facts.json`
+and `data/ai-lessons.json` in aifirst, `src/data/mma-facts.json` in mma-files.
+`boardless-dataset/1` is the contract and `orchestrator/src/datasets/` owns the
+append path.
+
+- **Array order is a reveal schedule, not a list.** `entries[0]` is revealed on
+  the anchor and each later day resolves through a modulo over the length. So a
+  published entry is as immutable as a published edition: `verifyDatasetAppend`
+  refuses insertion, reordering, removal and any anchor move. Text may change
+  only as a correction, and only by moving `verified` forward.
+- **Appends are their own delivery kind.** An edition delivery can never write a
+  dataset and an append can never touch an article, an image or `data/boardless/`.
+  The allowlists in `.github/workflows/cycle.yml` enforce it.
+- **Evidence rule.** A human-curated append needs only the entry's own `source`.
+  An agent-drafted append needs an `evidenceRef` per entry that a reviewer can
+  open. Provenance stays in the upstream receipt under
+  `state/ventures/<venture>/datasets/`; the delivered file keeps exactly the
+  shape the magazines' loaders expect.
+- **Cost.** Human curation is the default and costs nothing. Nothing in the
+  append path calls a model, so this work sits outside the `budget-2026-08e`
+  model share entirely. Drafting entries with a model would draw on that cap and
+  needs a ledger line before it runs.
 
 ## When asked to "do the tasks"
 
