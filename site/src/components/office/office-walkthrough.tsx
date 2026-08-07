@@ -11,6 +11,13 @@ import { SectionResults } from "@/components/office/section-results";
 import { SectionTeam } from "@/components/office/section-team";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeWalkthroughData } from "@/lib/office-walkthrough";
+import {
+  INNER_LOCK_MS,
+  LOCK_MS,
+  armWheelGesture,
+  createWheelGestureState,
+  shouldWheelAct
+} from "@/components/office/wheel-gesture";
 
 /**
  * The office walkthrough: seven full-viewport rooms, one wheel gesture each.
@@ -41,6 +48,14 @@ const NAV = [
   { index: 5, label: "Results" },
   { index: 6, label: "Company" }
 ] as const;
+
+/**
+ * How long a jump's destination stays authoritative over the live scroll position.
+ *
+ * Comfortably longer than a smooth scroll takes, and short enough that a scrollbar drag or an
+ * anchor link a moment later counts from where the reader actually is.
+ */
+const PENDING_TTL_MS = 1_200;
 
 /** Prague wall time drives both the header clock and the mood wash on every section. */
 const MOODS = {
@@ -77,8 +92,12 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
   const trackRef = useRef<HTMLElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const clockRef = useRef<HTMLSpanElement>(null);
-  const lockRef = useRef(0);
   const frameRef = useRef<number | null>(null);
+  /** Which wheel events move the walk, and which are one gesture still arriving. */
+  const gestureRef = useRef(createWheelGestureState());
+  /** The room a jump is currently travelling to, and when it set off. */
+  const pendingIndexRef = useRef<number | null>(null);
+  const jumpAtRef = useRef(0);
 
   const [active, setActive] = useState(0);
   const [weekIndex, setWeekIndex] = useState(data.currentWeek);
@@ -117,10 +136,13 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
     (index: number) => {
       const all = sections();
       if (all.length === 0) return;
-      const target = all[Math.max(0, Math.min(all.length - 1, index))]!;
-      lockRef.current = Date.now() + 640;
+      const clamped = Math.max(0, Math.min(all.length - 1, index));
+      const target = all[clamped]!;
+      jumpAtRef.current = Date.now();
+      armWheelGesture(gestureRef.current, jumpAtRef.current, LOCK_MS);
+      pendingIndexRef.current = clamped;
       window.scrollTo({ top: topOf(target), behavior: reduceMotion ? "auto" : "smooth" });
-      setActive(Math.max(0, Math.min(all.length - 1, index)));
+      setActive(clamped);
     },
     [sections, reduceMotion]
   );
@@ -200,6 +222,9 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
         // dot rail left the workspace sitting on a day divider with no messages under it. The
         // active index is true for every route in, including a jump.
         const index = currentIndex();
+        // The jump has landed once the live position agrees with where it was going, and from
+        // then on the live position is the truth again.
+        if (pendingIndexRef.current === index) pendingIndexRef.current = null;
         setActive(index);
         if (index >= 2) setMeetingsSeen(true);
         if (index >= 5) setResultsSeen(true);
@@ -221,9 +246,23 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       // The workspace window is exempt entirely, so its pane scrolls natively.
       if (workspaceRef.current && target instanceof Node && workspaceRef.current.contains(target)) return;
       event.preventDefault();
-      if (Date.now() < lockRef.current) return;
+
+      const now = Date.now();
+      if (!shouldWheelAct(gestureRef.current, now, event.deltaY)) return;
+
       const all = sections();
-      const current = currentIndex();
+      // While a jump is still animating, the live scroll position is mid-flight and reports
+      // the room being left. Stepping from there sends the next gesture back to where it is
+      // already going, so it counts from the pending target instead.
+      //
+      // The target has to expire on a clock of its own. Clearing it only when the scroll
+      // handler sees it arrive is not enough: a jump that moves nothing — the last room, or a
+      // scroll the browser declines to animate — fires no scroll event at all, and a target
+      // cleared only there stays stale for every gesture that follows.
+      if (pendingIndexRef.current !== null && now - jumpAtRef.current > PENDING_TTL_MS) {
+        pendingIndexRef.current = null;
+      }
+      const current = pendingIndexRef.current ?? currentIndex();
       const section = all[current];
       if (!section) return;
       const direction = event.deltaY > 0 ? 1 : -1;
@@ -235,12 +274,12 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       // A section taller than the viewport scrolls inside itself first, then hands over.
       if (section.offsetHeight > viewportHeight + 8) {
         if (direction > 0 && viewBottom < sectionBottom - 8) {
-          lockRef.current = Date.now() + 260;
+          armWheelGesture(gestureRef.current, now, INNER_LOCK_MS);
           window.scrollBy({ top: Math.min(440, sectionBottom - viewBottom), behavior: "smooth" });
           return;
         }
         if (direction < 0 && viewTop > sectionTop + 8) {
-          lockRef.current = Date.now() + 260;
+          armWheelGesture(gestureRef.current, now, INNER_LOCK_MS);
           window.scrollBy({ top: -Math.min(440, viewTop - sectionTop), behavior: "smooth" });
           return;
         }
@@ -261,10 +300,10 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       }
       if (event.key === "ArrowDown" || event.key === "PageDown") {
         event.preventDefault();
-        goTo(currentIndex() + 1);
+        goTo((pendingIndexRef.current ?? currentIndex()) + 1);
       } else if (event.key === "ArrowUp" || event.key === "PageUp") {
         event.preventDefault();
-        goTo(currentIndex() - 1);
+        goTo((pendingIndexRef.current ?? currentIndex()) - 1);
       } else if (event.key === "Home") {
         event.preventDefault();
         goTo(0);
