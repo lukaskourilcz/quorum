@@ -1008,6 +1008,39 @@
         "kind": "none",
         "reason": "Nothing marks a proposal as duplicating another."
       }
+    },
+    {
+      "id": "marketingshark.hook_rotation_coverage",
+      "owner": "MAKO",
+      "metric": "distinctHookPatternsPerBrandPer30Days",
+      "target": 10,
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "Counted from state/marketingshark/ledger.json once the room has run for thirty days. The measured form is marketingshark.hook-rotation-coverage in config/kpis/2026-Q1.json."
+      }
+    },
+    {
+      "id": "marketingshark.truth_gate_violations",
+      "owner": "MAKO",
+      "metric": "truthGateFailuresReachingACommittedPackage",
+      "target": 0,
+      "dir": "down",
+      "measurement": {
+        "kind": "none",
+        "reason": "The gate aborts the brand before a package is written, so a violation that reached disk is the only thing worth counting and none has happened yet."
+      }
+    },
+    {
+      "id": "marketingshark.package_completeness",
+      "owner": "CHUM",
+      "metric": "packagesPassingSchemaAndRenderChecks",
+      "target": 1,
+      "dir": "up",
+      "measurement": {
+        "kind": "none",
+        "reason": "No package exists yet. The measured form is marketingshark.package-completeness in config/kpis/2026-Q1.json."
+      }
     }
   ]
 }

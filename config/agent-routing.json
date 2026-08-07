@@ -167,6 +167,14 @@
     "PIVOT": {
       "capabilities": ["mma:bridge", "evidence", "portfolio:liaison"],
       "status": "active"
+    },
+    "MAKO": {
+      "capabilities": ["marketing:direction", "review", "kpi:honesty"],
+      "status": "active"
+    },
+    "CHUM": {
+      "capabilities": ["copywriting", "bilingual:cs", "social:carousel"],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -246,6 +254,10 @@
     },
     "gv-brief-room": {
       "required": ["PULSE", "SCOUT", "ANGLE", "AUDIT"],
+      "optionalByTopic": false
+    },
+    "ms-daily-room": {
+      "required": ["MAKO", "CHUM", "AUDIT"],
       "optionalByTopic": false
     },
     "mma-intake-room": {

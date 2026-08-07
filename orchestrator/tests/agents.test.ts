@@ -9,17 +9,17 @@ import {
 import { configRoot } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("keeps 31 seated roles of 40 on file, and gated portraits explicit", async () => {
+  it("keeps 33 seated roles of 42 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
-    // Forty profiles, thirty-one of them seated. A retired or paused agent keeps its profile and
-    // its portrait -- the record of who did what does not shrink when the roster does -- and the
-    // router skips it and says so rather than crashing the room it was required in. SCOUT came
-    // back off the paused list when GoVIRAL gave it a room again; headcount is otherwise flat.
+    // Forty-two profiles, thirty-three of them seated. A retired or paused agent keeps its
+    // profile and its portrait -- the record of who did what does not shrink when the roster
+    // does -- and the router skips it and says so rather than crashing the room it was required
+    // in. MAKO and CHUM arrived with marketingShark; the nine unseated are unchanged.
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(40);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(42);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(31);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(33);
     expect(registry.agents.filter((agent) => agent.status === "retired").map((agent) => agent.id).sort())
       .toEqual(["EASEL", "MOTIF", "SPLIT"]);
     expect(registry.agents.filter((agent) => agent.status === "paused").map((agent) => agent.id).sort())
@@ -30,7 +30,7 @@ describe("agent registry and identity assets", () => {
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(21);
+    ).toHaveLength(23);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
@@ -52,7 +52,9 @@ describe("agent registry and identity assets", () => {
       ["SPLIT", ["mma-files"]],
       ["EASEL", ["carousel-studio"]],
       ["MOTIF", ["carousel-studio"]],
-      ["PIVOT", ["fightaiq", "mma-files"]]
+      ["PIVOT", ["fightaiq", "mma-files"]],
+      ["MAKO", ["marketingshark"]],
+      ["CHUM", ["marketingshark"]]
     ]);
 
     const kpiConfig = JSON.parse(
@@ -71,7 +73,7 @@ describe("agent registry and identity assets", () => {
     expect(avatars).toHaveLength(27);
     expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
       "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR",
-      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT"
+      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT", "MAKO", "CHUM"
     ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
@@ -92,7 +94,7 @@ describe("agent registry and identity assets", () => {
       })
     );
 
-    expect(loaded).toHaveLength(40);
+    expect(loaded).toHaveLength(42);
     expect(loaded.filter((entry) => entry.body.length === 0).map((entry) => entry.id)).toEqual([]);
     // Each persona rides on every call in its room; an unbounded file would silently
     // inflate every seat's input cost against a $0.05-$0.16 room envelope.
@@ -152,7 +154,8 @@ describe("agent registry and identity assets", () => {
     const seated = specialists.filter((agent) => agent.status === "active");
     const words: Record<number, string> = {
       24: "Twenty-four", 25: "Twenty-five", 26: "Twenty-six", 27: "Twenty-seven",
-      28: "Twenty-eight", 33: "Thirty-three", 34: "Thirty-four", 35: "Thirty-five",
+      28: "Twenty-eight", 29: "Twenty-nine", 30: "Thirty", 31: "Thirty-one",
+      32: "Thirty-two", 33: "Thirty-three", 34: "Thirty-four", 35: "Thirty-five",
       36: "Thirty-six", 37: "Thirty-seven", 38: "Thirty-eight"
     };
     const stated = words[seated.length];

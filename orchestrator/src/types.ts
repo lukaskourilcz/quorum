@@ -43,7 +43,9 @@ export const FoundingAgentSchema = z.enum([
   "SPLIT",
   "EASEL",
   "MOTIF",
-  "PIVOT"
+  "PIVOT",
+  "MAKO",
+  "CHUM"
 ]);
 export type FoundingAgent = z.infer<typeof FoundingAgentSchema>;
 

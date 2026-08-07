@@ -94,6 +94,15 @@
         "REACH"
       ]
     },
+    "marketingshark": {
+      "lockedOn": [
+        "MAKO",
+        "CHUM",
+        "AUDIT"
+      ],
+      "switchable": [],
+      "disabled": []
+    },
     "carousel-studio": {
       "lockedOn": [
         "KEEPER",

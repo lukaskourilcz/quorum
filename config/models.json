@@ -38,6 +38,19 @@
       "reasoningEffort": "none",
       "serviceTier": "default"
     },
+    "_comment_MARKETINGSHARK": "Both marketingShark roles take the same claude-sonnet-5 the council seats above take; the entries exist for their token caps, not for a different model. CHUM's is the venture's only quality-critical call -- native-register Czech plus English creative in one pass, where Haiku-class output is not acceptable for a public brand voice -- and at ~$0.05 the quality tier costs almost nothing. Switching either is PEOPLE's process, not a config edit.",
+    "MAKO": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 900
+    },
+    "CHUM": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 6000,
+      "maxOutputTokens": 3000
+    },
     "OPENAI_SPECIALIST": {
       "provider": "openai",
       "model": "gpt-5.6-luna",
