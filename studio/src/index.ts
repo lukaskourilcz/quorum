@@ -6,3 +6,4 @@ export * from "./lifecycle.js";
 export * from "./library.js";
 export * from "./slides.js";
 export * from "./summary.js";
+export * from "./hooks/index.js";
