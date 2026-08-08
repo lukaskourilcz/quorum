@@ -225,6 +225,16 @@ walkthrough and Carousel Studio are waiting on specifically.
   regression still fails every attempt. The proper fix is a fresh browser context for the
   heavy admin journeys, or sharding the suite, and neither belongs in a review-fix issue.
   [imp:2] [owner:ai] [time:45m] [kind:deploy]
+- [ ] **The React Compiler costs more than it saves here — one line to reverse** — SI-09 turned
+  `reactCompiler` on in `site/next.config.ts` as the programme specified, and it behaves: the
+  wheel lock, all four panels, every room view and the whole day performance were walked by hand
+  with it on and nothing desynchronised. But measured on the same build and machine it charges
+  24.2 kB of first-load JS (573.7 → 597.9 kB) and 7 kB more on the panel chunk, to save 14 ms of
+  scripting across a thirty-second performance that never came near dropping a frame — more than
+  the code-splitting in the same issue saved. The plan's motion is CSS and React only re-renders
+  on the beat tick, so there was little render pressure to remove. Deleting the flag line returns
+  the bytes; the measurement is recorded beside it in the config.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
 - [ ] **Root `pnpm test` flakes under its own concurrency** — it runs three workspaces at once,
   under which `orchestrator/tests/studio-lifecycle.test.ts` exceeds its 30s timeout; the same
   file passes in 4.1s run alone. Raising that file's timeout or serialising the workspaces
