@@ -74,7 +74,15 @@ export async function main(argv: string[], now: Date): Promise<number> {
 
   const proposals = normalizeProposals(await readJson(required(args, "--entries")));
 
-  const outcome = planAppend({ dataset, current, proposals, author });
+  // Only read on a bootstrap. A dataset that already exists downstream keeps its own anchor and
+  // category labels, because the anchor is a reveal schedule and moving it reorders every day
+  // that has already been published.
+  const bootstrapPath = valueAfter(args, "--bootstrap");
+  const bootstrap = bootstrapPath === undefined
+    ? undefined
+    : (await readJson(bootstrapPath)) as { anchor: string; categories: Record<string, { en: string; cs: string }> };
+
+  const outcome = planAppend({ dataset, current, proposals, author, ...(bootstrap ? { bootstrap } : {}) });
   if (!outcome.ok) {
     console.error(`refused ${dataset} append:`);
     for (const violation of outcome.refusal.violations) {

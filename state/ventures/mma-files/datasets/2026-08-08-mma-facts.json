@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dataset-append/1",
+  "dataset": "mma-facts",
+  "targetRepo": "mma-files",
+  "targetPath": "src/data/mma-facts.json",
+  "packageHash": "0a89a2b55959305fa79ebafee4693ba4901e03b0ae4359a5eab83b9760835f2d",
+  "appendedIds": [
+    "mma-001",
+    "mma-002",
+    "mma-003",
+    "mma-004"
+  ],
+  "entryCountBefore": 0,
+  "entryCountAfter": 4,
+  "author": {
+    "kind": "agent",
+    "id": "SCRIBE"
+  },
+  "evidenceRefs": [
+    "MMA-E-001",
+    "MMA-E-002",
+    "MMA-E-003",
+    "MMA-E-004"
+  ],
+  "recordedAt": "2026-08-08T01:28:05.862Z"
+}
