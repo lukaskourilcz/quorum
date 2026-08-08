@@ -8,7 +8,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-03-cu-edition",
-      "decisionOneLiner": "EDITION. AI agents cheat to win — and the platforms are just starting to notice led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gat"
+      "decisionOneLiner": "AI agents cheat to win — and the platforms are just starting to notice led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates."
     },
     {
       "at": "2026-08-03T04:00:00.000Z",
@@ -21,10 +21,8 @@
     {
       "at": "2026-08-03T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-03-incubator-scan",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      "kind": "ms-daily",
+      "status": "missed"
     },
     {
       "at": "2026-08-03T06:00:00.000Z",
@@ -59,9 +57,8 @@
     {
       "at": "2026-08-03T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
-      "status": "skipped",
-      "decisionOneLiner": "No record of this slot exists: no meeting record, no article run and no skip. The cause is unknown."
+      "kind": "gv-brief",
+      "status": "missed"
     },
     {
       "at": "2026-08-03T12:00:00.000Z",
@@ -76,13 +73,6 @@
       "kind": "cu-product",
       "status": "skipped",
       "decisionOneLiner": "No record of this slot exists: no meeting record, no article run and no skip. The cause is unknown."
-    },
-    {
-      "at": "2026-08-03T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "skipped",
-      "decisionOneLiner": "missing_editorial_slate"
     },
     {
       "at": "2026-08-03T17:00:00.000Z",
@@ -101,13 +91,6 @@
       "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
-      "at": "2026-08-03T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
-      "status": "skipped",
-      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
-    },
-    {
       "at": "2026-08-03T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
@@ -121,7 +104,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-04-cu-edition",
-      "decisionOneLiner": "NO_EDITION. budget_exhausted"
+      "decisionOneLiner": "The day's writing budget was already spent, so no article was written."
     },
     {
       "at": "2026-08-04T04:00:00.000Z",
@@ -134,10 +117,8 @@
     {
       "at": "2026-08-04T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-04-incubator-scan",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      "kind": "ms-daily",
+      "status": "missed"
     },
     {
       "at": "2026-08-04T06:00:00.000Z",
@@ -173,10 +154,8 @@
     {
       "at": "2026-08-04T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-04-studio",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      "kind": "gv-brief",
+      "status": "missed"
     },
     {
       "at": "2026-08-04T12:00:00.000Z",
@@ -190,14 +169,7 @@
       "tz": "Europe/Prague",
       "kind": "cu-product",
       "status": "skipped",
-      "decisionOneLiner": "The repository release gate failed at commit 34aef4b3709c, so the room did not open."
-    },
-    {
-      "at": "2026-08-04T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "skipped",
-      "decisionOneLiner": "Missing fresh, source-backed subject."
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-04T17:00:00.000Z",
@@ -216,19 +188,11 @@
       "decisionOneLiner": "The bounded room recorded no action."
     },
     {
-      "at": "2026-08-04T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-04-incubator-synthesis",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
-    },
-    {
       "at": "2026-08-04T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
       "status": "skipped",
-      "decisionOneLiner": "The repository release gate failed at commit 1cdfb05e2c45, so the room did not open."
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-05T03:00:00.000Z",
@@ -236,7 +200,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-05-cu-edition",
-      "decisionOneLiner": "NEEDS_RECONCILIATION. schema_invalid: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/q"
+      "decisionOneLiner": "The finished edition did not match the delivery format the magazine accepts, so it was not published. The owner has the technical report."
     },
     {
       "at": "2026-08-05T04:00:00.000Z",
@@ -249,10 +213,8 @@
     {
       "at": "2026-08-05T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-05-incubator-scan",
-      "decisionOneLiner": "The packet shows recurring AI research and ad-tech coverage but no direct evidence for a distinct, bounded daily-readable niche; pass without proposal."
+      "kind": "ms-daily",
+      "status": "missed"
     },
     {
       "at": "2026-08-05T06:00:00.000Z",
@@ -288,10 +250,8 @@
     {
       "at": "2026-08-05T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-05-studio",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      "kind": "gv-brief",
+      "status": "missed"
     },
     {
       "at": "2026-08-05T12:00:00.000Z",
@@ -307,14 +267,7 @@
       "kind": "cu-product",
       "status": "held",
       "meetingRef": "meetings/2026-08-05-cu-product",
-      "decisionOneLiner": "VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence."
-    },
-    {
-      "at": "2026-08-05T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "skipped",
-      "decisionOneLiner": "Missing fresh, source-backed subject."
+      "decisionOneLiner": "VAULT already hard-stopped the idea raised on 2026-08-05 as a duplicate without qualifying revival evidence."
     },
     {
       "at": "2026-08-05T17:00:00.000Z",
@@ -333,14 +286,6 @@
       "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
     },
     {
-      "at": "2026-08-05T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-05-incubator-synthesis",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
-    },
-    {
       "at": "2026-08-05T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
@@ -354,7 +299,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-06-cu-edition",
-      "decisionOneLiner": "EDITION. Tři laboratoře, jeden evaluátor a devatenáct útoků, které nikdo nečekal led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy ga"
+      "decisionOneLiner": "Tři laboratoře, jeden evaluátor a devatenáct útoků, které nikdo nečekal led today's digest because its cited evidence cleared the source-diversity, uncertainty and copy gates."
     },
     {
       "at": "2026-08-06T04:00:00.000Z",
@@ -367,10 +312,8 @@
     {
       "at": "2026-08-06T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-06-incubator-scan",
-      "decisionOneLiner": "The packet shows recurring AI, platform advertising, and media-platform items, but AI news is taken and no direct audience, conversion, or willingness-to-pay evidence supports a no"
+      "kind": "ms-daily",
+      "status": "missed"
     },
     {
       "at": "2026-08-06T06:00:00.000Z",
@@ -406,148 +349,130 @@
     {
       "at": "2026-08-06T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-06-studio",
-      "decisionOneLiner": "No bounded agenda was due, so the specialist room did not open and no model was called."
+      "kind": "gv-brief",
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-06T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-06T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-06T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-06T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-06T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-06T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-06T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-07T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
-      "status": "scheduled"
+      "kind": "ms-daily",
+      "status": "missed"
     },
     {
       "at": "2026-08-07T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
-      "status": "scheduled"
+      "kind": "gv-brief",
+      "status": "missed"
     },
     {
       "at": "2026-08-07T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-07T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-07T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-07T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-08T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-08-cu-edition",
+      "decisionOneLiner": "OpenAI dnes poprvé veřejně připustilo, že nepublikovaný model překročil práh schopností, pro který bezpečnostní záruky ještě neexistovaly – a Anthropic s Metou to vzápětí potvrdily"
     },
     {
       "at": "2026-08-08T04:00:00.000Z",
@@ -558,7 +483,7 @@
     {
       "at": "2026-08-08T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
+      "kind": "ms-daily",
       "status": "scheduled"
     },
     {
@@ -588,7 +513,7 @@
     {
       "at": "2026-08-08T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
+      "kind": "gv-brief",
       "status": "scheduled"
     },
     {
@@ -604,12 +529,6 @@
       "status": "scheduled"
     },
     {
-      "at": "2026-08-08T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "scheduled"
-    },
-    {
       "at": "2026-08-08T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
@@ -619,12 +538,6 @@
       "at": "2026-08-08T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-08T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
       "status": "scheduled"
     },
     {
@@ -648,7 +561,7 @@
     {
       "at": "2026-08-09T05:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "incubator-scan",
+      "kind": "ms-daily",
       "status": "scheduled"
     },
     {
@@ -678,7 +591,7 @@
     {
       "at": "2026-08-09T11:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "studio",
+      "kind": "gv-brief",
       "status": "scheduled"
     },
     {
@@ -694,12 +607,6 @@
       "status": "scheduled"
     },
     {
-      "at": "2026-08-09T16:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-pm",
-      "status": "scheduled"
-    },
-    {
       "at": "2026-08-09T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
@@ -709,12 +616,6 @@
       "at": "2026-08-09T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-09T19:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "incubator-synthesis",
       "status": "scheduled"
     },
     {

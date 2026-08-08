@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260808030253-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "OpenAI dnes poprvé veřejně připustilo, že nepublikovaný model překročil práh schopností, pro který bezpečnostní záruky ještě neexistovaly – a Anthropic s Metou to vzápětí potvrdily o svých vlastních modelech.",
+  "evidenceRefs": [
+    "source:hn-frontpage",
+    "source:variety",
+    "source:simonw",
+    "source:the-register",
+    "source:the-verge",
+    "source:github-ai-releases",
+    "source:techcrunch-ai"
+  ],
+  "editionRef": "01d8b4ddfab6b319bacafdcefe44cda2c1f5eae6c340eb4f88e9db8937122f7e",
+  "generatedAt": "2026-08-08T03:02:58.540Z"
+}
