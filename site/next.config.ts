@@ -1,18 +1,26 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 
-const adminRuntimeFiles = ["../config/**/*", "../state/**/*"];
+/**
+ * The hook libraries, declared rather than inferred.
+ *
+ * `readLibrary` takes its root as a parameter so the tests can point it at a fixture, which means
+ * no bundler can prove which directory it reads. Turbopack's answer was to trace the whole
+ * repository into every function that could reach it; the call is marked `turbopackIgnore` in the
+ * studio and the files it actually needs are named here instead. Every route below reads a hook
+ * library at request time — the venture pages and the sitemap read one at build time, on a machine
+ * that has the whole repository, so they need nothing traced.
+ */
+const hookLibraryFiles = ["../studio/hooks/**/*"];
+
+const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFiles];
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
-  experimental: {
-    extensionAlias: {
-      ".js": [".ts", ".tsx", ".js"]
-    }
-  },
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,
+    "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": hookLibraryFiles,
     "/money": ["../state/money/public.json"],
     "/results": ["../state/notify/digest/**/*"],
     // The cron route reads the venture registry at request time to learn which Prague hour each
@@ -52,6 +60,33 @@ const nextConfig: NextConfig = {
     ];
   },
   poweredByHeader: false,
+  /**
+   * The React Compiler, on for the whole app.
+   *
+   * It is a top-level option in this version, not an `experimental` one, and it needs
+   * `babel-plugin-react-compiler` as a devDependency — Next runs the compiler through Babel but
+   * gates it behind an SWC pre-pass, so only files with JSX or hooks pay for it.
+   *
+   * It behaves. The wheel lock, the four panels, the room views and the whole day performance were
+   * walked by hand with it on, because a test suite cannot see a stale closure that still renders
+   * something plausible; nothing was stale and nothing desynchronised.
+   *
+   * What it costs is worth writing down, because it is the opposite of what the flag is usually
+   * turned on for. Measured on this app, same build, same machine:
+   *
+   *              first-load JS   on-demand chunk   scripting over a whole day performance
+   *   off            573.7 kB          17.2 kB      64 ms, no long tasks
+   *   on             597.9 kB          24.2 kB      50 ms, no long tasks
+   *
+   * So it buys 14 ms of main-thread time across a thirty-second animation that was already
+   * nowhere near dropping a frame, and charges 24 kB of first-load JS for it — more than the
+   * code-splitting in this same issue saved. The plan's motion is CSS and React only re-renders
+   * on the beat tick, which is why there was so little render pressure for it to remove.
+   *
+   * Kept on because the flag was a decided item and nothing broke, but the trade is a poor one on
+   * this app and `docs/NEEDED.md` carries it as a call the owner can reverse in one line.
+   */
+  reactCompiler: true,
   reactStrictMode: true,
   // sharp loads its libvips binding through `require('@img/sharp-' + platform)`, a specifier no
   // bundler can resolve statically. Bundled, its JavaScript is inlined and the binding is never

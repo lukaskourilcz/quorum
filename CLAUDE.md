@@ -10,9 +10,12 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   decisions.
 - `orchestrator/` — cycle engine + council prompts. `site/` — Next.js app.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
-  consumed as TypeScript source, so `site` must run webpack (`next dev --webpack`,
-  already in its `dev` script) — Turbopack does not apply the `.js`→`.ts` extension alias
-  and every studio import fails under it.
+  consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
+  studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
+  `orchestrator`; consuming the source is what used to force webpack, and both site
+  scripts run Turbopack now. **After editing studio source, run `pnpm -C studio build`
+  before anything that only resolves the package** — `pnpm cycle`, `pnpm delivery` and the
+  other `tsx` entry points read `dist` and will otherwise use the last build.
 - `config/models.json` — model IDs per role. `.env.example` — required env.
 
 ## Two things a session will trip over
@@ -27,7 +30,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   the plates off `will-change`, which exhausted the compositor and painted whole frames
   black; and mark real horizontal scrollers `data-horizontal-scroll` or the containment
   e2e guard reads them as overflow.
-- **A delivered article also goes to Carousel Studio.** `storeArticlePackage` and the
+- **A delivered article also goes to the Design Lab.** `storeArticlePackage` and the
   edition outbox write both call `buildCarouselSummary` from `studio/src/summary.ts`, so a
   delivery cannot happen without a summary beside it. The site rebuilds the same summary
   from the package for anything published before that existed, using the same function —
@@ -130,7 +133,7 @@ system already owns and quota-guards.
   an observation log so they can become skill improvements later. Its log lives
   outside the repo; `.claude/observations/` is git-ignored.
 - **`stop-slop`** — apply to every piece of prose that ships: documentation,
-  `NEEDED.md` entries, UI copy, commit bodies, and pull-request descriptions.
+  `docs/NEEDED.md` entries, UI copy, commit bodies, and pull-request descriptions.
 - **`ui-ux-pro-max`** — consult before visual or interaction decisions. Query
   the bundled database with
   `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain>`
@@ -147,15 +150,17 @@ system already owns and quota-guards.
 This repo follows a shared markdown contract (see the `session-start`,
 `session-end`, and `markdown-checkup` skills under `.claude/skills/`):
 
-- **`NEEDED.md`** — owner/agent action items. Each task:
+- **`docs/NEEDED.md`** — the one owner document: action items, the reference
+  tables, and the procedures for proving a path once its account exists. Nothing
+  the owner has to do lives anywhere else. Each task:
   `- [ ] **Title** — desc. [imp:1-5] [owner:me|ai] [time:30m] [kind:K]`, where
   `[kind:K]` is one of `setup` `deploy` `legal` `content` `decision`.
 - **`about-project.md`** — project summary + the tech stack.
 - **`scaling.md`** — cost & scaling only (renamed from `stack-and-scaling.md`).
 - **`monetization.md`** — how the project could earn (options table).
 
-At session start, check `NEEDED.md` for `[owner:ai]` tasks that can now be done;
-at session end, update `NEEDED.md` (finished + newly-needed owner items).
+At session start, check `docs/NEEDED.md` for `[owner:ai]` tasks that can now be
+done; at session end, update it (finished + newly-needed owner items).
 
 ## Git workflow (every session)
 

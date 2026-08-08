@@ -39,7 +39,7 @@ export default function VenturesPage() {
             </p>
           </div>
         }
-        description="Six projects share the same checks for sources, cost and human approval. Carousel Studio supplies checked social layouts without adding an image-model bill."
+        description="Six projects share the same checks for sources, cost and human approval. The Design Lab supplies checked social layouts without adding an image-model bill."
         eyebrow="Current work"
         title="Six projects, with clear limits"
       />
@@ -134,12 +134,12 @@ export default function VenturesPage() {
             <div className="bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] p-8 md:col-span-4 md:p-10">
               <Badge tone="accent">Project 006</Badge>
               <p className="mt-12 font-mono text-sm uppercase tracking-[0.12em] text-[var(--accent)]">INTERNAL DESIGN ENGINE</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Carousel Studio</h2>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em]">Design Lab</h2>
             </div>
             <div className="p-8 md:col-span-8 md:p-10">
               <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">Reusable social layouts that stay distinct across all three brands.</h2>
               <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--fog)]">Eleven original templates render as deterministic PNGs for Instagram and Threads. The engine costs no API tokens; its paid review room runs only from a bounded agenda.</p>
-              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/carousel-studio">Open Carousel Studio <ArrowRight aria-hidden="true" className="size-4" /></Link>
+              <Link className={`${buttonVariants({ variant: "secondary" })} mt-7`} href="/ventures/carousel-studio">Open the Design Lab <ArrowRight aria-hidden="true" className="size-4" /></Link>
             </div>
           </div>
         </article>

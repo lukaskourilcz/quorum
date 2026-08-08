@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 
 /**
- * The thirteen render templates the Carousel Studio gallery shows.
+ * The render templates the Design Lab's gallery shows.
  *
  * Eight quiet ones for ordinary editions (01–08) and five loud, large-type ones built for
  * scrolling (09–13). Each is a declaration, not markup: hero geometry, mask, the three headline

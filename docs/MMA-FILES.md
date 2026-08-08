@@ -51,7 +51,7 @@ failure in the daily digest.
 
 REACH and SPLIT are currently disabled, so the article path spends no social-content
 tokens. Their re-enable path is already complete: REACH returns two Czech A/B
-drafts whose visuals contain only a live Carousel Studio template id, version and
+drafts whose visuals contain only a live the Design Lab template id, version and
 content payload; FRAME renders that payload deterministically. MMA Files posting
 unlocks only after ten consecutive passed article proofs and complete brand
 credentials; `SOCIAL_KILL_SWITCH=true` still beats that project gate. A/B variants
@@ -67,4 +67,4 @@ routes belong only to MMA Files.
 The code, content bridge and automated proof are complete. The owner still needs to
 confirm MMA Files is in the delivery App installation, keep the public demo noindex,
 add social account credentials when wanted, choose the corrections inbox and clear
-the name/operator/privacy details before enabling indexing. See `NEEDED.md`.
+the name/operator/privacy details before enabling indexing. See `docs/NEEDED.md`.

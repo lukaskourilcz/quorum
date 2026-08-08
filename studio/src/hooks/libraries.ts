@@ -42,17 +42,35 @@ async function readJsonOrEmpty(file: string): Promise<unknown> {
   }
 }
 
+/**
+ * Where a library file is, spelled so a bundler can follow it.
+ *
+ * `root` is a parameter because the tests point it at a fixture directory, and a bundler cannot
+ * prove what a parameter holds. Turbopack answers that by tracing the entire project into every
+ * function that can reach this call — measured, that took the home page's traced payload from 251
+ * files to 2,252 and doubled its size, because the tracing root is the whole repository.
+ *
+ * `turbopackIgnore` says: do not follow this read, the files it wants are declared instead. They
+ * are — `site/next.config.ts` traces `studio/hooks/**` onto the routes that read a library, which
+ * is the honest version of the same statement and covers the ones this analysis would have missed
+ * anyway. The comment sits inside the call because that is where the bundler looks for it, and it
+ * survives `tsc` into `dist` because comments are preserved.
+ */
+function libraryPath(root: string, file: string): string {
+  return path.join(/* turbopackIgnore: true */ root, file);
+}
+
 /** One surface's library, parsed and gated. An absent file is an empty library, not a failure. */
 export async function readLibrary(surface: Surface, root = HOOKS_ROOT): Promise<Library> {
   const files = LIBRARY_FILES[surface];
   const [hooks, research] = await Promise.all([
-    readJsonOrEmpty(path.join(root, files.hooks)),
-    readJsonOrEmpty(path.join(root, files.research))
+    readJsonOrEmpty(libraryPath(root, files.hooks)),
+    readJsonOrEmpty(libraryPath(root, files.research))
   ]);
   return loadLibrary({ surface, hooks, research });
 }
 
 /** The library file's bytes as written, for delivery and hashing. */
 export async function readLibrarySource(surface: Surface, root = HOOKS_ROOT): Promise<string> {
-  return readFile(path.join(root, LIBRARY_FILES[surface].hooks), "utf8");
+  return readFile(libraryPath(root, LIBRARY_FILES[surface].hooks), "utf8");
 }

@@ -116,7 +116,7 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
     tone: "text-[color-mix(in_srgb,var(--magenta-spark)_58%,var(--paper))]",
     slotColor: "color-mix(in srgb, var(--magenta-spark) 58%, var(--paper))"
   },
-  "carousel-studio": { icon: PanelsTopLeft, label: "Carousel Studio", tone: "text-[var(--accent)]", slotColor: "var(--accent)" }
+  "carousel-studio": { icon: PanelsTopLeft, label: "Design Lab", tone: "text-[var(--accent)]", slotColor: "var(--accent)" }
 };
 
 function projectForKind(kind: CalendarKind): ProjectKey {

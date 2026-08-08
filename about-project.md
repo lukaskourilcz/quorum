@@ -6,14 +6,14 @@ důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
 <https://boardless-ai.vercel.app>. Systém má sedm pracovních projektů: Caught Up (veřejně
-DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Carousel Studio a MMA Files.
+DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Design Lab a MMA Files.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Co už publikuje (k 7. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
 MMA Files jeden článkový slot denně. Oba posílají hotový článek zároveň do Carousel
 Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
 karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
-`NEEDS_YOUR_HELP_NOW.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
+`docs/NEEDED.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
 jako koncepty ve frontě ke schválení a rozhoduje o nich majitel.
 
 ## Jak je systém poskládaný
@@ -62,7 +62,7 @@ modelům ani do podkladů porad.
   je zároveň limitem — žádná karta není v systému.
 - **marketingShark** dělá marketingové podklady pro produkty z portfolia. Jedna porada
   denně v 07:00 vezme jednu otázku z kvízu devSharku a udělá z ní jeden český a jeden
-  anglický pětislidový karusel. Vykreslí ho Carousel Studio a hotový balíček skončí jako
+  anglický pětislidový karusel. Vykreslí ho Design Lab a hotový balíček skončí jako
   koncept ve frontě ke schválení; marketingShark nemá sociální účet ani přihlašovací
   údaje, takže zveřejnit nic neumí. devShark je zatím jediná zapnutá značka — jeho banku
   3 633 otázek o webovém vývoji systém jen čte z připnutého otisku a v jeho repozitáři nic
@@ -71,7 +71,7 @@ modelům ani do podkladů porad.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Analýzy smí spustit jen pro ověřené zápasy a karty: neumí sázet, otevírat sázkové
   účty ani slibovat výhru.
-- **Carousel Studio** spravuje znovupoužitelná rozložení a bez modelu z nich vykresluje
+- **Design Lab** spravuje znovupoužitelná rozložení a bez modelu z nich vykresluje
   všechny sociální karusely. V administraci má galerii **11 šablon**, ve které se každý
   doručený článek zobrazí ve všech šablonách, v obou formátech a proti své nejkratší,
   střední i nejdelší pasáži. Jedenáctou šablonu `quiz-code-context` si vyžádal
@@ -140,7 +140,7 @@ pnpm build
 pnpm --filter @boardlessai/site test:e2e
 ```
 
-Zkušební porady zapisují jen do dočasných složek. Přehled kroků, které musí udělat
-majitel, je v `NEEDS_YOUR_HELP_NOW.md`; `NEEDED.md` k tomu drží referenční tabulky a
-postup, jak dohledat prázdný den. Doporučené pořadí je v `MANUAL STEPS.md`.
+Zkušební porady zapisují jen do dočasných složek. Všechno, co musí udělat majitel, je
+v jediném dokumentu `docs/NEEDED.md`: úkoly v pořadí, které odblokuje nejvíc, referenční
+tabulky, postup, jak dohledat prázdný den, a ověřovací kroky pro každou cestu.
 Úplný samostatný popis systému je v `docs/ECOSYSTEM.md`.

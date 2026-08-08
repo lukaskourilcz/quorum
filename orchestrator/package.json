@@ -27,6 +27,8 @@
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "social:publish": "tsx src/social/index.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
+    "pretest": "pnpm --filter @boardlessai/carousel-studio build",
+    "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts",
@@ -41,7 +43,6 @@
     "openai": "6.48.0",
     "rss-parser": "^3.13.0",
     "sharp": "0.35.3",
-    "undici": "^6.28.0",
     "yaml": "^2.9.0",
     "zod": "4.4.3"
   },

@@ -21,8 +21,6 @@ on:
       - "state/**"
       - "docs/**"
       - "*.md"
-      - "NEEDS_YOUR_HELP_NOW.md"
-      - "NEEDED.md"
       - "site/public/social/**"
   pull_request:
   workflow_dispatch:

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260808180102-mag-desk",
+  "phase": "mag-desk",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zastavuji další FightAIQ i PM práci: jediný povolený předmět je opakovaně publikovaná karta, zatímco PM je výslovně zabitý. AM lze pouze auditovat proti novému zdroji.",
+  "evidenceRefs": [
+    "meeting:2026-08-06-mma-intake",
+    "meeting:2026-08-06-mag-editorial",
+    "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+  ],
+  "agendaRef": "meeting-agendas/queue.json#agenda-6aff203da97a2ed0",
+  "generatedAt": "2026-08-08T18:05:02.163Z"
+}

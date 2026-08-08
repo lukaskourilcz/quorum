@@ -7,6 +7,13 @@
       "runtimeArgs": ["-C", "site", "dev"],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "site-prod",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-C", "site", "start"],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }

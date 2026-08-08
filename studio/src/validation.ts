@@ -20,6 +20,24 @@ export function contrastRatio(foreground: string, background: string): number {
   return (light! + 0.05) / (dark! + 0.05);
 }
 
+/**
+ * Whether a template's text and logos sit inside a canvas's safe area.
+ *
+ * The geometry half of `safeAreaCheck`, without the brand or the check wrapper, so the library can
+ * answer "is this template composed for that canvas" without pretending to validate it.
+ */
+export function fitsSafeArea(template: CarouselTemplate, format: CarouselFormat): boolean {
+  const safe = template.formats[format]?.safeArea;
+  if (!safe) return false;
+  return template.slides.every((slide) => slide.layers.every((layer) => {
+    if (layer.type !== "text" && layer.type !== "logo") return true;
+    return layer.x >= safe.left
+      && layer.y >= safe.top
+      && layer.x + layer.width <= 1 - safe.right
+      && layer.y + layer.height <= 1 - safe.bottom;
+  }));
+}
+
 function safeAreaCheck(template: CarouselTemplate, format: CarouselFormat): TemplateCheck {
   const safe = template.formats[format].safeArea;
   const failures: string[] = [];

@@ -100,7 +100,7 @@ export async function addCarouselInspiration(input: { url: string; label: string
   if (!label || label.length > 120) throw new CarouselStudioPersistenceError("CONFLICT", "Add a short label of 1–120 characters.");
   const addedAt = (input.now ?? new Date()).toISOString();
   const links = [{ url, label, addedAt }, ...current.filter((link) => link.url !== url)].slice(0, 100);
-  await persist(linksPath, { schemaVersion: "carousel-inspiration-links/1", links, updatedAt: addedAt }, "admin: add Carousel Studio inspiration", root);
+  await persist(linksPath, { schemaVersion: "carousel-inspiration-links/1", links, updatedAt: addedAt }, "admin: add Design Lab inspiration", root);
   return links;
 }
 

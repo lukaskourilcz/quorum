@@ -11,7 +11,7 @@ schválit konkrétního sponzora a brand clearance. Finanční model je v
 | **Titty Tuesdays crop tops** | Neznámá; pre-commerce | unavailable | Úzký produkt a výrazná značka | Neexistuje eshop, clearance, sklad, cena ani poptávkový experiment |
 | **Cloud/API kredity a granty** | Nízká | jednorázově | Prodlouží runway | Nejsou to tržby; časově omezené |
 | **Konzultace nad postaveným systémem** | Střední | podle projektu | Využije expertízu | Nemá škálování; čas za peníze |
-| **Samostatné Carousel Studio** | Zamčeno | unavailable | Opakovatelný deterministický produkt bez image-model nákladů; 11 originálních šablon a summary pipeline z obou magazínů | Neexistuje ověřená poptávka; oddělení schvaluje majitel |
+| **Samostatný Design Lab** | Zamčeno | unavailable | Opakovatelný deterministický produkt bez image-model nákladů; 12 originálních šablon a summary pipeline z obou magazínů | Neexistuje ověřená poptávka; oddělení schvaluje majitel |
 | **GoVIRAL týdenní brief** | Zamčeno; interní | unavailable | Už vzniká pro vlastní potřebu, marginální náklad ~$1/týden | Neprodává se nikomu; hodnota pro třetí stranu neověřená |
 | **marketingShark jako interní agentura** | n/a (interní služba) | unavailable | Denní obsah pro rodinu Shark produktů za ~$1,60/měs; deterministický pipeline | Nevydělává; hodnota se projeví až v růstu produktů |
 | **devShark (portfolio produkt)** | Mimo účetnictví BoardlessAI | unavailable | Hotový produkt, marketing řeší marketingShark | Případné příjmy produktu se neúčtují zde, dokud majitel nerozhodne |

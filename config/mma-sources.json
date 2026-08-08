@@ -38,7 +38,7 @@
       "access": "api",
       "state": "wired",
       "credentialEnv": "CITO_API_KEY",
-      "freeLimit": "500 calls per month, 200 per day and 10 per minute; each run reserves at most five calls",
+      "freeLimit": "500 calls per month, 200 per day and 10 per minute; each run reserves at most two calls",
       "termsVerdict": "allowed-with-account",
       "termsNote": "The runtime keeps conservative monthly and daily counters and stops before a run that could cross either free limit.",
       "evidenceUrl": "https://citoapi.com/pricing/"

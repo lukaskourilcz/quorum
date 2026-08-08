@@ -289,7 +289,7 @@
     {
       "id": "carousel-studio.engine-post-rate",
       "venture": "carousel-studio",
-      "name": "Published venture carousels rendered through Carousel Studio",
+      "name": "Published venture carousels rendered through the Design Lab",
       "metric_source": "receipts/social#carousel_studio_render_rate",
       "target": 1,
       "direction": "at-least",

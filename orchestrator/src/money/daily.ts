@@ -96,7 +96,7 @@ async function addReadyProposalNotices(input: {
 }): Promise<boolean> {
   const ready = input.methods.filter((method) => method.readiness.met && method.proposal);
   if (ready.length === 0) return false;
-  const relative = "NEEDS_YOUR_HELP_NOW.md";
+  const relative = "docs/NEEDED.md";
   let content = await readText(input.repoRoot, relative, "# Needs your help now\n");
   const additions = ready.filter((method) => !content.includes(`MONETIZATION-PROPOSAL-${method.id}`));
   if (additions.length === 0) return false;
@@ -182,7 +182,7 @@ export async function runDailyMoneyAndKpis(input: {
   });
   artifacts.push(await writePublicMoneySnapshot(input.stateRoot, publicSnapshot));
   if (input.writeOwnerNotices === true && await addReadyProposalNotices({ repoRoot: input.repoRoot, methods: monetization })) {
-    artifacts.push("NEEDS_YOUR_HELP_NOW.md");
+    artifacts.push("docs/NEEDED.md");
   }
   return {
     summary: packetSummary(snapshot),

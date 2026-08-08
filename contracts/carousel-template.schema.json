@@ -150,6 +150,69 @@
           ],
           "additionalProperties": false
         },
+        "instagram-story": {
+          "default": {
+            "width": 1080,
+            "height": 1920,
+            "safeArea": {
+              "top": 0.14,
+              "right": 0.07,
+              "bottom": 0.16,
+              "left": 0.07
+            }
+          },
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 320,
+              "maximum": 4096
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 320,
+              "maximum": 4096
+            },
+            "safeArea": {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.25
+                },
+                "right": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.25
+                },
+                "bottom": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.25
+                },
+                "left": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.25
+                }
+              },
+              "required": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "width",
+            "height",
+            "safeArea"
+          ],
+          "additionalProperties": false
+        },
         "threads": {
           "type": "object",
           "properties": {
@@ -207,6 +270,7 @@
       "required": [
         "instagram-square",
         "instagram-portrait",
+        "instagram-story",
         "threads"
       ],
       "additionalProperties": false

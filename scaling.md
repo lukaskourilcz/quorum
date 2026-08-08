@@ -34,7 +34,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
   jedno místo osmnácti.
 - Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
-- Sociální obrázky vykresluje jediný Carousel Studio engine z živé šablony, obsahu a
+- Sociální obrázky vykresluje jediný engine Design Labu z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
   Náhradní hero obrázky také vznikají v kódu. Licencované fotografie se pouze stáhnou,
   zkontrolují, zmenší a uloží; chybějící Pexels/Pixabay klíč neblokuje náhradní grafiku.
