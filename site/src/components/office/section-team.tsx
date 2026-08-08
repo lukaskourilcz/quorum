@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import type { OfficeTeam } from "@/lib/office-walkthrough";
-import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
  * The roster by reception.
@@ -20,11 +19,11 @@ import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 export function SectionTeam({ team }: { team: OfficeTeam }) {
   return (
     <div
-      className="w-full max-w-[1160px] rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px]"
+      className="w-full rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px] max-lg:max-w-[1160px] lg:h-[65vh] lg:w-[65vw]"
       data-team-panel
-      style={WALKTHROUGH_PANEL_ZOOM}
+      style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}
     >
-      <div className="flex items-center justify-between gap-6 border-b border-[#26262b] px-[22px] py-3.5">
+      <div className="flex shrink-0 items-center justify-between gap-6 border-b border-[#26262b] px-[22px] py-3.5">
         {/*
           The roster carries names and portraits, so this is the one place on the home page a
           reader could take it for a staff list. The disclosure was on the home page before the
@@ -40,7 +39,7 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         </p>
       </div>
 
-      <div className="px-[22px] pb-1.5 pt-[18px]">
+      <div className="shrink-0 px-[22px] pb-1.5 pt-[18px]">
         <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--bai-accent)]">
           Council · {team.council.length} votes
         </p>
@@ -84,8 +83,8 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         </div>
       </div>
 
-      <div className="px-[22px] pb-[18px] pt-4">
-        <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
+      <div className="flex min-h-0 flex-1 flex-col px-[22px] pb-[18px] pt-4">
+        <p className="mb-3 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
           Specialists · no vote
         </p>
         {/*
@@ -102,7 +101,9 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
           role="group"
           tabIndex={0}
           style={{
-            maxHeight: "min(300px, 34svh)",
+            flex: 1,
+            minHeight: 0,
+            alignContent: "start",
             overflowY: "auto",
             overscrollBehavior: "contain",
             paddingRight: "8px"

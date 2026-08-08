@@ -52,12 +52,27 @@ export interface WorkflowsSlot {
   sits: boolean;
 }
 
+/** One role standing in a room, as the roster already publishes it. */
+export interface WorkflowsRole {
+  id: string;
+  title: string;
+  department: string;
+}
+
 export interface WorkflowsRoom {
   key: OfficeProjectKey;
   name: string;
   color: string;
   /** In hour order. Empty for the workshop, which holds no session. */
   slots: WorkflowsSlot[];
+  /** What the room is for. Site copy, the way the project cards' sentences are. */
+  purpose: string;
+  /** What it opens onto, in the plan's own terms — doors, exits, the lines in the spine. */
+  connects: string;
+  /** How it runs, including what it deliberately does not do. */
+  operates: string;
+  /** The active roles assigned to it, from `ventures` in the agent registry. */
+  roles: WorkflowsRole[];
 }
 
 /**

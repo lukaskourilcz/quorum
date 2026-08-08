@@ -82,6 +82,7 @@ export function projectForKind(kind: string): OfficeProjectKey {
 export interface OfficeCell {
   /** `held` and `ongoing` are the two a visitor can open. */
   state: CalendarStatus;
+  /** What the cell prints: at most sixteen characters, so every cell is exactly one line. */
   text: string;
   /** The full sentence, for the tooltip, because the cell clamps to two lines. */
   title: string;
@@ -123,16 +124,31 @@ const STATUS_WORD: Record<CalendarStatus, string> = {
 };
 
 /**
- * What one cell says.
+ * What one cell says, in at most sixteen characters.
  *
- * A planned slot prints its own time, because a future cell has nothing else true to say. Every
- * other state prints the sentence the feed recorded for it, and a slot whose room does not meet
- * that day prints an em dash — that is not a failure, it is a room with no meeting on Tuesdays.
+ * The cell used to print the recorded decision sentence, which wrapped to two lines, clamped, and
+ * turned the week into a wall of prose nobody reads across. It says the outcome instead — two or
+ * three words, one line, the same width in every cell — and the sentence it replaced moves to the
+ * cell's own `title`, where a reader who wants it can ask for it.
+ *
+ * The wording is derived from the recorded status and the slot's kind, never from the sentence:
+ * summarising committed prose is not something this file can do honestly, and a keyword that says
+ * only what the status already says cannot drift from it.
  */
-function cellText(status: CalendarStatus, oneLiner: string | undefined, hour: number): string {
-  if (status === "scheduled") return `${String(hour).padStart(2, "0")}:00`;
-  if (status === "not-needed") return "—";
-  return oneLiner ?? STATUS_WORD[status];
+function cellText(status: CalendarStatus, kind: string, delivered: boolean): string {
+  const article = kind === "article-am" || kind === "article-pm";
+  if (status === "held") {
+    if (article) return "Article shipped";
+    if (kind === "cu-edition") return delivered ? "Edition sent" : "Edition held";
+    if (kind === "mag-editorial") return "Subject chosen";
+    return "Decision made";
+  }
+  if (status === "ongoing") return "In progress";
+  if (status === "late") return "Waiting on run";
+  if (status === "missed") return "No record";
+  if (status === "skipped") return article ? "No article" : "Gate closed";
+  if (status === "not-needed") return "Nothing needed";
+  return "Scheduled";
 }
 
 /* ------------------------------------------------------------------ workspace */
@@ -457,6 +473,14 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
   const today = pragueCalendarDate(now);
   const currentWeekOf = mondayOfCalendarWeek(today);
 
+  /** Which edition rooms actually sent something, so a held cell can say which kind of held. */
+  const deliveredDates = new Set(
+    meetings
+      .filter((record) => !record.fixture)
+      .filter((record) => record.kind === "cu-edition" || record.kind === "mag-editorial")
+      .map((record) => `${record.kind}:${record.date}`)
+  );
+
   /* ---- 01 Calendar ------------------------------------------------------ */
 
   const weekStarts = Array.from(
@@ -489,11 +513,19 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
         const channel = openable
           ? channelForKind(definition.kind.replace(/^venture-/u, "")) ?? null
           : null;
-        const text = cellText(slot.status, readableSlotReason(slot.decisionOneLiner), definition.hour);
+        const recorded = readableSlotReason(slot.decisionOneLiner);
+        const delivered = deliveredDates.has(`${definition.kind}:${day.date}`);
         return {
           state: slot.status,
-          text,
-          title: `${String(definition.hour).padStart(2, "0")}:00 ${publicKindLabel(definition.kind)} · ${STATUS_WORD[slot.status]} · ${text}`,
+          text: cellText(slot.status, definition.kind, delivered),
+          /*
+           * A future slot carries no tooltip. There is nothing recorded for an hour that has not
+           * come, and a tooltip repeating the word already printed in the cell is a tooltip that
+           * teaches a reader to stop hovering.
+           */
+          title: slot.status === "scheduled"
+            ? ""
+            : `${String(definition.hour).padStart(2, "0")}:00 ${publicKindLabel(definition.kind)} · ${STATUS_WORD[slot.status]}${recorded ? ` · ${recorded}` : ""}`,
           channel,
           date: day.date
         };
