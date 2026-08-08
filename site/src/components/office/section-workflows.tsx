@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   REPLAY_FIRST_HOUR,
@@ -9,13 +9,12 @@ import {
   notesThroughHour,
   type OfficeWorkflows
 } from "@/lib/office-workflows-model";
-import { WorkflowsPlan, type PlanPlace } from "@/components/office/workflows-plan";
+import { ROOMS, WorkflowsPlan, roomViewBox, type PlanPlace } from "@/components/office/workflows-plan";
 import {
   ExampleChip,
   PANEL_COPY,
   WorkflowsPanelBody,
   carriesExample,
-  hasPanel,
   type PanelPlace
 } from "@/components/office/workflows-panels";
 import { WorkflowsRoomView } from "@/components/office/workflows-room";
@@ -102,6 +101,7 @@ export function SectionWorkflows({
   const railRef = useRef<HTMLDivElement>(null);
   /** Which door the open panel came out of, so focus can go back to it. */
   const openerRef = useRef<PlanPlace | null>(null);
+  const planRef = useRef<HTMLDivElement>(null);
 
   const replaying = replayHour !== null;
 
@@ -215,6 +215,47 @@ export function SectionWorkflows({
     [openRoom, data.rooms]
   );
 
+  /*
+   * The frame the plan uses while a room is open.
+   *
+   * The room's rectangle is grown to the aspect of the box the drawing sits in, so it lands on an
+   * exactly known part of the frame and the overlay can be placed inside its walls without
+   * measuring the SVG. The box is watched rather than read once, because the section is a
+   * percentage of the viewport and every resize changes the aspect.
+   */
+  const [planBox, setPlanBox] = useState<{ width: number; height: number } | null>(null);
+  useLayoutEffect(() => {
+    /*
+     * Measured directly, not through a ResizeObserver.
+     *
+     * The observer was the obvious mechanism and the wrong one to depend on: its callback is
+     * driven by the rendering lifecycle, so in a background or throttled tab it can go unfired
+     * indefinitely — and with no box measured, no room would open at all. Reading the rect is
+     * synchronous and always answers. The measurement is retaken whenever a room opens and on
+     * resize, which is every moment the aspect can have changed.
+     */
+    const measure = () => {
+      const rect = planRef.current?.getBoundingClientRect();
+      if (rect && rect.width > 0 && rect.height > 0) {
+        setPlanBox((current) =>
+          current && Math.abs(current.width - rect.width) < 1 && Math.abs(current.height - rect.height) < 1
+            ? current
+            : { width: rect.width, height: rect.height });
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [openRoom, compact]);
+
+  const focus = useMemo(() => {
+    if (!openRoom || !planBox) return null;
+    const geometry = ROOMS.find((entry) => entry.key === openRoom);
+    if (!geometry) return null;
+    const framed = roomViewBox(geometry, planBox.width / planBox.height);
+    return { room: geometry, viewBox: framed.viewBox, inset: framed.inset };
+  }, [openRoom, planBox]);
+
   /** Opening a room moves focus to its name; closing it returns focus to the door on the plan. */
   useEffect(() => {
     if (openRoom) {
@@ -295,15 +336,10 @@ export function SectionWorkflows({
           justifyContent: "space-between",
           gap: "18px",
           flexWrap: "wrap",
-          borderBottom: "1px solid #26262b",
-          padding: "14px 22px"
+          padding: "0 2px 10px"
         }}
       >
-        <p style={{ margin: 0, fontSize: "13px", lineHeight: 1.5, color: "#94949c", maxWidth: "62ch" }}>
-          Thirteen wake-ups a day, one room at a time. Open a door to see how the work leaves the
-          building.
-        </p>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginLeft: "auto" }}>
           {!replaying ? (
             <button
               onClick={startReplay}
@@ -324,31 +360,28 @@ export function SectionWorkflows({
         </div>
       </div>
 
-      <div style={{ position: "relative", ...(compact ? {} : { flex: 1, minHeight: 0 }) }}>
-        {room ? (
+      <div ref={planRef} style={{ position: "relative", ...(compact ? {} : { flex: 1, minHeight: 0 }) }}>
+        <WorkflowsPlan
+          animate={animate}
+          compact={compact}
+          fill={!compact}
+          focus={focus}
+          litRoom={litRoom}
+          mode={replaying ? "replay" : "ambient"}
+          notes={notes}
+          onOpen={openPlace}
+          rooms={data.rooms}
+          slots={data.slots}
+          workshopWorking={workshopWorking}
+        />
+        {room && focus ? (
           <WorkflowsRoomView
             compact={compact}
+            inset={focus.inset}
             onBack={() => setOpenRoom(null)}
-            panel={hasPanel(room.key)
-              ? <WorkflowsPanelBody place={room.key} {...panelProps} compact />
-              : undefined}
-            panelTitle={hasPanel(room.key) ? PANEL_COPY[room.key].title : undefined}
             room={room}
           />
-        ) : (
-          <WorkflowsPlan
-            fill={!compact}
-            animate={animate}
-            compact={compact}
-            litRoom={litRoom}
-            mode={replaying ? "replay" : "ambient"}
-            notes={notes}
-            onOpen={openPlace}
-            rooms={data.rooms}
-            slots={data.slots}
-            workshopWorking={workshopWorking}
-          />
-        )}
+        ) : null}
 
         {open && !compact ? (
           <div

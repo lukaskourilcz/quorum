@@ -730,25 +730,25 @@ function EdgesBody({ data, animate, shuttered, onShuttered }: {
 
 export const PANEL_COPY: Record<PanelPlace, { eyebrow: string; title: string; footer: string; columns: string }> = {
   "caught-up": {
-    eyebrow: "THE DNESKAI OFFICE · DEPTH 3",
+    eyebrow: "THE DNESKAI OFFICE",
     title: "One story of the day, or nothing goes out",
     footer: "Every figure here is the gate the run actually enforces.",
     columns: "5fr 4fr 3fr"
   },
   "carousel-studio": {
-    eyebrow: "THE WORKSHOP · DEPTH 3",
+    eyebrow: "THE WORKSHOP",
     title: "The article arrives as a summary",
     footer: "Assignment is deterministic and costs nothing.",
     columns: "1fr"
   },
   dock: {
-    eyebrow: "THE COURIER · DEPTH 3",
+    eyebrow: "THE COURIER",
     title: "One sealed package, one address",
     footer: "The allowlist is the checklist at the shelf.",
     columns: "1fr"
   },
   "titty-tuesdays": {
-    eyebrow: "THE WINDOW AND THE SIGNAL · DEPTH 3",
+    eyebrow: "THE WINDOW AND THE SIGNAL",
     title: "The edges that are not deliveries",
     footer: "Three edges leave the building and one records an import.",
     columns: "1fr 1fr"

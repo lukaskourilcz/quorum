@@ -95,6 +95,37 @@ describe("shouldWheelAct", () => {
     expect(acted).toBe(0);
   });
 
+  it("acts on a deliberate push that arrives while the last flick is still coasting", () => {
+    // The reported bug: a hard flick leaves a high peak, the reader pushes again more gently than
+    // they flicked, and the push measures below three quarters of that stale peak. It was read as
+    // momentum and dropped, so the page ignored the first scroll and moved on the second.
+    const state = createWheelGestureState();
+    expect(shouldWheelAct(state, 1_000, 300)).toBe(true);
+    armWheelGesture(state, 1_000, LOCK_MS);
+
+    let at = 1_013;
+    let acted = 0;
+    // The tail of the flick, decaying, arriving without a gap long enough to end the gesture.
+    for (let step = 0; step < 60; step += 1, at += 13) {
+      if (shouldWheelAct(state, at, 300 * Math.exp((-3.2 * step) / 60))) acted += 1;
+    }
+    expect(acted, "the tail alone must move nothing").toBe(0);
+
+    // Now a real push: gentler than the flick, but faster than the event before it.
+    expect(shouldWheelAct(state, at, 90)).toBe(true);
+  });
+
+  it("still ignores a tail that never rises, however long it runs", () => {
+    const state = createWheelGestureState();
+    expect(shouldWheelAct(state, 1_000, 300)).toBe(true);
+    armWheelGesture(state, 1_000, LOCK_MS);
+    let acted = 0;
+    for (let step = 0, at = 1_013; step < 200; step += 1, at += 13) {
+      if (shouldWheelAct(state, at, 300 * Math.exp((-3.2 * step) / 200))) acted += 1;
+    }
+    expect(acted).toBe(0);
+  });
+
   it("never acts twice inside one lock", () => {
     const state = createWheelGestureState();
     expect(shouldWheelAct(state, 1_000, 120)).toBe(true);

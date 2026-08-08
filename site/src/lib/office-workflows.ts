@@ -27,6 +27,7 @@ import {
   type WorkflowsBank,
   type WorkflowsExample,
   type WorkflowsReceipt,
+  type WorkflowsOutput,
   type WorkflowsRole,
   type WorkflowsRoom,
   type WorkflowsSlot
@@ -226,6 +227,78 @@ function packageRef(hash: unknown): string | null {
     : null;
 }
 
+
+/**
+ * Where the card gets its thumbnail from.
+ *
+ * The magazine publishes the same bytes at its own address, but this site's content-security
+ * policy allows images from `'self'` only — so the card is served the copy this repository already
+ * holds, through a route of our own. An image is claimed only when the package actually carries
+ * the bytes; otherwise the card renders without one.
+ */
+function packagedThumbnail(venture: "caught-up" | "mma-files", encoded: unknown): string | null {
+  return typeof encoded === "string" && encoded.length > 0 ? `/facilities/thumb/${venture}` : null;
+}
+
+/**
+ * The newest article a magazine room delivered, as a link preview.
+ *
+ * Only a receipt that records where the article went can produce a link, which is the same rule
+ * the worked example follows. MMA Files records no address today, so its room shows the title and
+ * the date and no link at all — the honest form of "we published this and did not write down
+ * where".
+ */
+async function latestArticle(
+  venture: "caught-up" | "mma-files"
+): Promise<WorkflowsOutput | null> {
+  if (venture === "caught-up") {
+    const newest = await newestDeliveredEdition();
+    if (!newest) return null;
+    const url = typeof newest.receipt.articleUrl === "string" ? newest.receipt.articleUrl : null;
+    const hash = typeof newest.receipt.packageHash === "string" ? newest.receipt.packageHash : null;
+    const archived = hash
+      ? await readJson(stateRoot(), "edition", "archive", `${newest.date}-${hash}.json`) as
+        { article?: { cs?: { frontmatter?: { title?: unknown } } }; image?: { thumb_bytes_base64?: unknown } } | null
+      : null;
+    const title = archived?.article?.cs?.frontmatter?.title;
+    if (typeof title !== "string") return null;
+    return {
+      kind: "article",
+      title,
+      date: newest.date,
+      url,
+      image: packagedThumbnail("caught-up", archived?.image?.thumb_bytes_base64)
+    };
+  }
+
+  let names: string[] = [];
+  try {
+    names = await readdir(path.join(stateRoot(), "ventures", "mma-files", "articles"));
+  } catch {
+    return null;
+  }
+  const file = names.filter((name) => name.endsWith(".json")).sort().reverse()[0];
+  if (!file) return null;
+  const article = await readJson(stateRoot(), "ventures", "mma-files", "articles", file) as
+    | { publishAt?: unknown; packageHash?: unknown; localizations?: { cs?: { title?: unknown } }; image?: { thumb_bytes_base64?: unknown } }
+    | null;
+  const title = article?.localizations?.cs?.title;
+  if (typeof title !== "string") return null;
+  const receipt = typeof article?.packageHash === "string"
+    ? await readJson(
+        stateRoot(), "ventures", "mma-files", "deliveries", "articles", `${article.packageHash}.json`
+      ) as { articleUrl?: unknown } | null
+    : null;
+  const url = typeof receipt?.articleUrl === "string" ? receipt.articleUrl : null;
+  return {
+    kind: "article",
+    title,
+    date: typeof article?.publishAt === "string" ? article.publishAt.slice(0, 10) : file.slice(0, 10),
+    url,
+    image: packagedThumbnail("mma-files", article?.image?.thumb_bytes_base64)
+  };
+}
+
 export async function resolveOfficeWorkflows(
   now = new Date(),
   shared?: WorkflowsCalendarInput
@@ -283,16 +356,43 @@ export async function resolveOfficeWorkflows(
   // A room carries its name, its hue and its own slots. It used to carry a made-up sentence for a
   // native `<title>` as well; the plan raises no tooltips now, so nothing read it and it is gone.
   // The recorded reasons still travel on the slots, where the replay rail reads them.
-  const rooms: WorkflowsRoom[] = ROOM_ORDER.map(({ key, name, purpose, connects, operates }) => ({
-    key,
-    name,
-    color: PROJECT_COLOR[key],
-    slots: slots.filter((slot) => slot.room === key).sort((left, right) => left.hour - right.hour),
-    purpose,
-    connects,
-    operates,
-    roles: rolesFor(key)
-  }));
+  const [dneskaiLatest, mmaLatest] = await Promise.all([
+    latestArticle("caught-up"),
+    latestArticle("mma-files")
+  ]);
+
+  /**
+   * The last thing each room produced.
+   *
+   * The magazine rooms produce articles, so theirs is the article. Every other room produces
+   * decisions, and the newest recorded one is what it has to show — taken from today's own slots,
+   * so a room that has not sat yet says nothing rather than reaching back to an older day.
+   */
+  const latestFor = (key: OfficeProjectKey, own: WorkflowsSlot[]): WorkflowsOutput | null => {
+    if (key === "caught-up") return dneskaiLatest;
+    if (key === "mma-files") return mmaLatest;
+    const recorded = [...own].reverse().find((slot) => slot.reason);
+    return recorded
+      ? { kind: "decision", title: recorded.reason!, date: today, url: null, image: null }
+      : null;
+  };
+
+  const rooms: WorkflowsRoom[] = ROOM_ORDER.map(({ key, name, purpose, connects, operates }) => {
+    const own = slots
+      .filter((slot) => slot.room === key)
+      .sort((left, right) => left.hour - right.hour);
+    return {
+      key,
+      name,
+      color: PROJECT_COLOR[key],
+      slots: own,
+      purpose,
+      connects,
+      operates,
+      roles: rolesFor(key),
+      latest: latestFor(key, own)
+    };
+  });
 
   /* ---- the workshop's hook rack ------------------------------------------ */
 

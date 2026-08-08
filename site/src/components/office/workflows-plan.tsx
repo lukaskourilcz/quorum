@@ -25,6 +25,7 @@ import type {
 
 export const PLAN_WIDTH = 1760;
 export const PLAN_HEIGHT = 940;
+export const PLAN_FLOOR_MARGIN = 80;
 
 /**
  * How much empty plan sits either side of the drawing.
@@ -33,13 +34,47 @@ export const PLAN_HEIGHT = 940;
  * width they touched its border and read as clipped. This is margin in plan units rather than
  * padding on the card, which keeps the geometry below transcribable exactly as specified.
  */
-const PLAN_MARGIN = 80;
+const PLAN_MARGIN = PLAN_FLOOR_MARGIN;
+
+/** How much floor stays visible around a room once the plan frames it. */
+export const ROOM_FRAME_PAD = 26;
+
+/**
+ * The viewBox that frames one room inside a box of the given aspect.
+ *
+ * The room's own rect is grown to the container's aspect ratio about its centre, so the room lands
+ * on an exactly known sub-rectangle of the frame and an HTML overlay can be placed inside its
+ * walls without measuring anything. Without this the drawing would letterbox by an amount that
+ * depends on the room, and no two rooms would put their text in the same place.
+ */
+export function roomViewBox(room: RoomGeometry, aspect: number): {
+  viewBox: string;
+  inset: { left: string; top: string; width: string; height: string };
+} {
+  let width = room.width + ROOM_FRAME_PAD * 2;
+  let height = room.height + ROOM_FRAME_PAD * 2;
+  if (width / height < aspect) width = height * aspect;
+  else height = width / aspect;
+  const cx = room.x + room.width / 2;
+  const cy = room.y + room.height / 2;
+  const minX = cx - width / 2;
+  const minY = cy - height / 2;
+  return {
+    viewBox: `${minX} ${minY} ${width} ${height}`,
+    inset: {
+      left: `${((room.x - minX) / width) * 100}%`,
+      top: `${((room.y - minY) / height) * 100}%`,
+      width: `${(room.width / width) * 100}%`,
+      height: `${(room.height / height) * 100}%`
+    }
+  };
+}
 
 /** The four places that open. Everything else on the plan is drawn and not pressed. */
 /** The dock is not a room; every other place on the plan is one. */
 export type PlanPlace = OfficeProjectKey | "dock";
 
-interface RoomGeometry {
+export interface RoomGeometry {
   key: OfficeProjectKey;
   x: number;
   y: number;
@@ -54,7 +89,7 @@ interface RoomGeometry {
 }
 
 /** Plan order: the top rank west to east, then the bottom rank west to east. */
-const ROOMS: readonly RoomGeometry[] = [
+export const ROOMS: readonly RoomGeometry[] = [
   { key: "company", x: 200, y: 100, width: 360, height: 354, labelY: 146, door: { from: 440, to: 500, rank: "top" }, numeral: 1 },
   { key: "caught-up", x: 560, y: 100, width: 270, height: 354, labelY: 146, door: { from: 665, to: 725, rank: "top" }, numeral: 2 },
   { key: "mma-files", x: 830, y: 100, width: 260, height: 354, labelY: 146, door: { from: 930, to: 990, rank: "top" }, numeral: 3 },
@@ -255,6 +290,7 @@ export function WorkflowsPlan({
   compact,
   animate,
   fill,
+  focus,
   onOpen
 }: {
   rooms: readonly WorkflowsRoom[];
@@ -269,6 +305,8 @@ export function WorkflowsPlan({
   animate: boolean;
   /** Fit the drawing to its box rather than to its own height. Above 1024px only. */
   fill: boolean;
+  /** The room the plan is framing, if any: the same walls, closer in. */
+  focus: { room: RoomGeometry; viewBox: string } | null;
   onOpen: (place: PlanPlace) => void;
 }) {
   const byKey = new Map(rooms.map((room) => [room.key, room]));
@@ -307,7 +345,7 @@ export function WorkflowsPlan({
       style={fill
         ? { display: "block", width: "100%", height: "100%" }
         : { display: "block", width: "100%", height: "auto" }}
-      viewBox={`${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
+      viewBox={focus ? focus.viewBox : `${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
@@ -323,7 +361,7 @@ export function WorkflowsPlan({
           <stop offset="0.6" stopColor="currentColor" stopOpacity={0.16} />
           <stop offset="1" stopColor="currentColor" stopOpacity={0} />
         </radialGradient>
-        {["#d4d4d8", WALL_INNER].map((colour) => (
+        {["#d4d4d8", WALL_INNER, "#fde68a"].map((colour) => (
           <marker
             id={`wf-arrow-${colour.slice(1)}`}
             key={colour}
@@ -646,8 +684,8 @@ export function WorkflowsPlan({
         <rect height={40} width={240} x={1060} y={620} />
         {/*
           Three bays. The lower two sit opposite the two courier exits; the top one is Titty
-          Tuesdays', by owner decision, and lines up with no exit at all — which is the one thing
-          on the drawing that still says this edge is not a delivery.
+          Tuesdays', and lines up with no exit at all — which is the one thing left on the drawing
+          saying this edge is not a delivery.
         */}
         {[526, 620, 720].map((y) => (
           <rect height={80} key={y} strokeDasharray="8 7" strokeWidth={1.5} width={132} x={1420} y={y} />
@@ -681,6 +719,21 @@ export function WorkflowsPlan({
           outbound leg, because there is no longer anything going the other way.
         */}
         <path d="M104 692 H198" markerEnd="url(#wf-arrow-94949c)" stroke={WALL_INNER} strokeWidth={2.2} />
+        {/*
+          Titty Tuesdays' bay, and the line from it back to the room.
+          Dashed and in the venture's own hue rather than the couriers' solid grey: the arrow
+          points at the room because the feed is collected, not delivered, and nothing on the two
+          courier lanes should be mistaken for it.
+        */}
+        <path
+          d="M1408 566 H1014"
+          fill="none"
+          markerEnd="url(#wf-arrow-fde68a)"
+          stroke="#fde68a"
+          strokeDasharray="6 5"
+          strokeWidth={1.8}
+        />
+
         <rect fill="none" height={60} stroke={WALL_INNER} strokeDasharray="7 6" strokeWidth={1.5} width={1} x={200} y={662} />
       </g>
 
@@ -732,7 +785,7 @@ export function WorkflowsPlan({
                 y={geometry.y}
               />
             ) : null}
-            {compact ? (
+            {focus?.room.key === geometry.key ? null : compact ? (
               <Label
                 fill="#f4f4f5"
                 size={44}

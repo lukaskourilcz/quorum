@@ -231,7 +231,7 @@ export function SectionMeetings({
               return (
                 <button
                   aria-current={active ? "true" : undefined}
-                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2.5 py-1.5 text-left font-mono text-[11.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
+                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2 py-1 text-left font-mono text-[9.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
                   key={entry.id}
                   onClick={() => {
                     setOpened((seen) => (seen.includes(entry.id) ? seen : [...seen, entry.id]));
@@ -277,7 +277,7 @@ export function SectionMeetings({
               <button
                 aria-expanded={dateMenu}
                 aria-haspopup="menu"
-                className="inline-flex items-center gap-1 rounded border border-[#3f3f46] bg-[#101013] px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.05em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                className="inline-flex items-center gap-1 rounded-sm border border-[#3f3f46] bg-[#101013] px-1 py-px font-mono text-[7.5px] uppercase tracking-[0.04em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                 onClick={() => setDateMenu((open) => !open)}
                 type="button"
               >
@@ -402,7 +402,7 @@ export function SectionMeetings({
                             <div className="mt-[11px]">
                               <button
                                 aria-expanded={openJson === message.id}
-                                className="rounded border border-[#3f3f46] bg-[#0e0e11] px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.05em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                                className="rounded-sm border border-[#3f3f46] bg-[#0e0e11] px-1 py-px font-mono text-[7.5px] uppercase tracking-[0.04em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                                 onClick={() => setOpenJson((open) => (open === message.id ? null : message.id))}
                                 type="button"
                               >

@@ -1,18 +1,20 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import { useState } from "react";
+import type { CSSProperties } from "react";
 import type { WorkflowsRoom } from "@/lib/office-workflows-model";
 
 /**
- * One room, opened.
+ * One room, opened inside the floor plan.
  *
- * Pressing a room on the plan replaces the drawing with this: the room stretched to the whole
- * section, carrying who stands in it, when it sits, and what it is for. It is not an overlay —
- * the plan is gone while it is open — because a room at full width is the point, and a panel
- * floating over a drawing of itself would be two pictures of the same thing.
+ * The plan does not go away and it is not replaced by a card: it frames the room, so the same
+ * walls the reader was looking at a moment ago are still the walls around what they are reading.
+ * This is the content that stands inside them — laid over the room's own rectangle, which
+ * `roomViewBox` puts at an exactly known place in the frame.
  *
- * Everything here was resolved on the server. The roles come from `ventures` in the agent
- * registry, so a room with no roles assigned to it says so rather than borrowing someone else's.
+ * It carries the least that answers "what is this room": what it is for, when it sits, and who
+ * stands in it. The mechanisms each room hands its work to live behind the dock and the panels,
+ * not here.
  */
 
 const MONO = "var(--font-ibm-plex-mono), monospace";
@@ -20,199 +22,229 @@ const MONO = "var(--font-ibm-plex-mono), monospace";
 const eyebrow: CSSProperties = {
   margin: 0,
   fontFamily: MONO,
-  fontSize: "10.5px",
+  fontSize: "9.5px",
   textTransform: "uppercase",
   letterSpacing: ".14em",
   color: "#94949c"
 };
 
-const body: CSSProperties = { margin: 0, fontSize: "13.5px", lineHeight: 1.55, color: "#d4d4d8" };
+
+/**
+ * The last thing a room produced, drawn the way a link preview draws it.
+ *
+ * The thumbnail is the article's own published image, so this is the card a reader would get if
+ * they pasted the link anywhere else. An article whose address was never recorded keeps the title
+ * and the date and loses the frame around them — there is nothing to open, and a card that looks
+ * clickable and is not would be worse than a line of text. If the image itself does not resolve,
+ * it removes itself and the card stays a card.
+ */
+function LatestCard({ latest }: { latest: NonNullable<WorkflowsRoom["latest"]> }) {
+  const [broken, setBroken] = useState(false);
+
+  if (latest.kind === "decision") {
+    return (
+      <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.5, color: "#94949c" }}>{latest.title}</p>
+    );
+  }
+
+  const inner = (
+    <>
+      {latest.image && !broken ? (
+        // Not `next/image`: the thumbnail is served by another origin entirely, so optimising it
+        // would mean declaring a remote pattern for each magazine and proxying their bytes
+        // through this site to save nothing. The same reasoning the office plates already carry.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          alt=""
+          onError={() => setBroken(true)}
+          src={latest.image}
+          style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover" }}
+        />
+      ) : null}
+      <span style={{ display: "block", padding: "8px 10px" }}>
+        <span
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            fontSize: "12px",
+            lineHeight: 1.35,
+            color: "#f4f4f5"
+          }}
+        >
+          {latest.title}
+        </span>
+        <span style={{ ...eyebrow, display: "block", marginTop: "4px" }}>
+          {latest.url ? new URL(latest.url).host : latest.date}
+        </span>
+      </span>
+    </>
+  );
+
+  const frame: CSSProperties = {
+    display: "block",
+    border: "1px solid #26262b",
+    borderRadius: "8px",
+    background: "#0e0e12",
+    overflow: "hidden"
+  };
+
+  return latest.url ? (
+    <a href={latest.url} rel="noreferrer" style={frame} target="_blank">
+      {inner}
+    </a>
+  ) : (
+    <span style={frame}>{inner}</span>
+  );
+}
 
 export function WorkflowsRoomView({
   room,
+  inset,
   compact,
-  panel,
-  panelTitle,
   onBack
 }: {
   room: WorkflowsRoom;
-  /** Below 1024px the room is an ordinary block in the page's flow, not a filled box. */
+  /** Where the room's own rectangle sits inside the frame, as percentages. */
+  inset: { left: string; top: string; width: string; height: string };
   compact: boolean;
-  /** The room's own depth-3 panel, where it has one — folded in rather than stacked on top. */
-  panel?: ReactNode;
-  panelTitle?: string;
   onBack: () => void;
 }) {
-  const hours = room.slots.map((slot) => slot);
-
   return (
     <div
+      data-room-view
       style={{
+        position: "absolute",
+        left: inset.left,
+        top: inset.top,
+        width: inset.width,
+        height: inset.height,
+        // Inside the walls, not over them: the room's outline stays the frame of what it holds.
+        padding: compact ? "10px" : "18px",
         display: "flex",
         flexDirection: "column",
-        ...(compact ? {} : { height: "100%", minHeight: 0 }),
-        border: `1px solid ${room.color}`,
-        borderRadius: "14px",
-        background: "rgba(11,11,13,.94)",
-        overflow: "hidden"
+        gap: "12px",
+        minHeight: 0,
+        ...(compact ? {} : { animation: "wf-fade 220ms ease-out" })
       }}
-      data-room-view
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "14px",
-          padding: "14px 20px",
-          borderBottom: "1px solid #26262b"
-        }}
-      >
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: "0 0 auto" }}>
         <button
+          aria-label="Back to the floor"
           onClick={onBack}
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
+            display: "grid",
+            placeItems: "center",
+            width: "26px",
+            height: "26px",
             border: "1px solid #3f3f46",
-            borderRadius: "9px",
+            borderRadius: "8px",
             background: "#101013",
-            padding: "6px 11px",
-            fontFamily: MONO,
-            fontSize: "10.5px",
-            textTransform: "uppercase",
-            letterSpacing: ".1em",
             color: "#d4d4d8",
-            cursor: "pointer"
+            cursor: "pointer",
+            flex: "0 0 auto"
           }}
           type="button"
         >
-          ← The floor
+          ←
         </button>
-        <span style={{ display: "flex", alignItems: "baseline", gap: "12px", minWidth: 0 }}>
-          <span
-            aria-hidden="true"
-            style={{ width: "10px", height: "10px", borderRadius: "2px", background: room.color, flex: "0 0 auto" }}
-          />
-          <span
-            id="wf-room-title"
-            style={{ fontSize: "21px", fontWeight: 600, letterSpacing: "-.02em", color: "#f4f4f5", outline: "none" }}
-            tabIndex={-1}
-          >
-            {room.name}
-          </span>
+        <span
+          id="wf-room-title"
+          style={{
+            fontSize: compact ? "15px" : "19px",
+            fontWeight: 600,
+            letterSpacing: "-.02em",
+            color: "#f4f4f5",
+            outline: "none"
+          }}
+          tabIndex={-1}
+        >
+          {room.name}
         </span>
-        <span style={{ ...eyebrow, marginLeft: "auto", textAlign: "right" }}>
-          {hours.length === 0
-            ? "Always open · no session"
-            : hours.map((slot) => `${String(slot.hour).padStart(2, "0")}:00`).join(" · ")}
+        <span style={{ ...eyebrow, marginLeft: "auto" }}>
+          {room.slots.length === 0
+            ? "Always open"
+            : room.slots.map((slot) => `${String(slot.hour).padStart(2, "0")}:00`).join(" · ")}
         </span>
       </div>
 
       <div
+        data-wheel-exempt
         style={{
           flex: 1,
           minHeight: 0,
           overflowY: "auto",
           display: "grid",
-          gridTemplateColumns: compact ? "minmax(0, 1fr)" : "minmax(0, 3fr) minmax(0, 2fr)",
-          gap: "1px",
-          background: "#1e1e22",
+          gap: compact ? "14px" : "18px",
+          gridTemplateColumns: compact ? "1fr" : "minmax(0, 1fr) minmax(0, 1fr)",
           alignContent: "start"
         }}
-        data-wheel-exempt
       >
-        <div style={{ background: "#0b0b0d", padding: "20px 22px", display: "flex", flexDirection: "column", gap: "18px" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <p style={eyebrow}>What it does</p>
-            <p style={body}>{room.purpose}</p>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <p style={eyebrow}>What it connects to</p>
-            <p style={body}>{room.connects}</p>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <p style={eyebrow}>How it operates</p>
-            <p style={body}>{room.operates}</p>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <p style={eyebrow}>{hours.length === 0 ? "Sessions" : `Sessions · ${hours.length}`}</p>
-            {hours.length === 0 ? (
-              <p style={body}>
-                This room holds no session. Its machinery runs the moment something is handed to
-                it, which is why the plan draws it lit at every hour.
-              </p>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "#1e1e22" }}>
-                {hours.map((slot) => (
-                  <div
-                    key={`${slot.kind}-${slot.hour}`}
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "14px",
-                      background: "#0e0e12",
-                      padding: "9px 12px"
-                    }}
-                  >
-                    <span style={{ fontFamily: MONO, fontSize: "12px", color: "#f4f4f5", flex: "0 0 auto" }}>
-                      {String(slot.hour).padStart(2, "0")}:00
-                    </span>
-                    <span style={{ fontSize: "12.5px", color: "#d4d4d8", minWidth: 0 }}>{slot.label}</span>
-                    <span style={{ ...eyebrow, marginLeft: "auto", flex: "0 0 auto" }}>
-                      {slot.reason ? "recorded" : "no record yet"}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <p style={{ margin: 0, fontSize: "12.5px", lineHeight: 1.5, color: "#d4d4d8" }}>
+            {room.purpose}
+          </p>
+          <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.5, color: "#94949c" }}>
+            {room.connects}
+          </p>
+          <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.5, color: "#94949c" }}>
+            {room.operates}
+          </p>
         </div>
 
-        <div style={{ background: "#0b0b0d", padding: "20px 22px", display: "flex", flexDirection: "column", gap: "10px" }}>
-          <p style={eyebrow}>
-            {room.roles.length === 0 ? "Roles" : `Roles · ${room.roles.length}`}
-          </p>
-          {room.roles.length === 0 ? (
-            <p style={body}>
-              No role is assigned to this room on the roster. The work here is done by roles that
-              serve the whole company rather than this room alone.
-            </p>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "#1e1e22" }}>
-              {room.roles.map((role) => (
-                <div key={role.id} style={{ background: "#0e0e12", padding: "9px 12px" }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-                    <span style={{ fontFamily: MONO, fontSize: "12px", fontWeight: 600, color: "#f4f4f5" }}>
-                      {role.id}
-                    </span>
-                    <span style={{ ...eyebrow, marginLeft: "auto" }}>{role.department}</span>
-                  </div>
-                  <p style={{ margin: "3px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#94949c" }}>
-                    {role.title}
-                  </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: 0 }}>
+          {room.slots.length > 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <p style={eyebrow}>Sessions</p>
+              {room.slots.map((slot) => (
+                <div
+                  key={`${slot.kind}-${slot.hour}`}
+                  style={{ display: "flex", gap: "10px", alignItems: "baseline" }}
+                >
+                  <span style={{ fontFamily: MONO, fontSize: "11px", color: "#f4f4f5", flex: "0 0 auto" }}>
+                    {String(slot.hour).padStart(2, "0")}:00
+                  </span>
+                  <span style={{ fontSize: "12px", color: "#94949c", minWidth: 0 }}>{slot.label}</span>
                 </div>
               ))}
             </div>
-          )}
-          <p style={{ ...eyebrow, marginTop: "auto" }}>They are software roles, not people.</p>
-        </div>
+          ) : null}
 
-        {/*
-          The room's mechanism, folded in rather than floating over it. Four rooms have one; the
-          rest end at the roster. Opening a panel on top of a room that is already the whole
-          section would be a second picture of the same place.
-        */}
-        {panel ? (
-          <div style={{ gridColumn: "1 / -1", background: "#0b0b0d", padding: "20px 22px 6px" }}>
-            <p style={eyebrow}>{panelTitle}</p>
+          {room.latest ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+              <p style={eyebrow}>Latest</p>
+              <LatestCard latest={room.latest} />
+            </div>
+          ) : null}
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px", minHeight: 0 }}>
+            <p style={eyebrow}>Roles</p>
+            {room.roles.length === 0 ? (
+              <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.5, color: "#94949c" }}>
+                Served by roles that work across the whole company.
+              </p>
+            ) : (
+              room.roles.map((role) => (
+                <div key={role.id} style={{ display: "flex", gap: "10px", alignItems: "baseline" }}>
+                  <span
+                    style={{
+                      fontFamily: MONO,
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      color: "#f4f4f5",
+                      flex: "0 0 auto",
+                      minWidth: "58px"
+                    }}
+                  >
+                    {role.id}
+                  </span>
+                  <span style={{ fontSize: "12px", color: "#94949c", minWidth: 0 }}>{role.title}</span>
+                </div>
+              ))
+            )}
           </div>
-        ) : null}
-        {panel ? (
-          <div style={{ gridColumn: "1 / -1", display: "grid", gap: "1px", background: "#1e1e22" }}>
-            {panel}
-          </div>
-        ) : null}
+        </div>
       </div>
     </div>
   );

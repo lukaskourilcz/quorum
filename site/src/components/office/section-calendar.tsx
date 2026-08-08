@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import type { CalendarStatus } from "@/lib/calendar-feed-model";
 import type { OfficeCell, OfficeWeek } from "@/lib/office-walkthrough";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
+import { Tooltip } from "@/components/ui/tooltip";
 
 /**
  * The five surfaces a slot can wear.
@@ -146,20 +147,32 @@ export function SectionCalendar({
                   const content = (
                     <span className="truncate text-[11px] leading-[1.32]">{cell.text}</span>
                   );
-                  return openable ? (
+                  const cellNode = openable ? (
                     <button
-                      key={`${row.kind}-${cell.date}`}
                       onClick={() => onOpen(cell.channel!, cell.date)}
                       style={cellStyle(cell)}
-                      title={cell.title || undefined}
                       type="button"
                     >
                       {content}
                     </button>
                   ) : (
-                    <div key={`${row.kind}-${cell.date}`} style={cellStyle(cell)} title={cell.title || undefined}>
-                      {content}
-                    </div>
+                    <div style={cellStyle(cell)}>{content}</div>
+                  );
+                  // A slot whose hour has not come has nothing recorded, so it carries no tooltip
+                  // and stays a plain cell rather than a thing that looks askable.
+                  return cell.detail ? (
+                    <Tooltip
+                      className="min-w-0 flex-1"
+                      content={cell.detail}
+                      key={`${row.kind}-${cell.date}`}
+                      label={cell.title}
+                    >
+                      {cellNode}
+                    </Tooltip>
+                  ) : (
+                    <span className="flex min-w-0 flex-1" key={`${row.kind}-${cell.date}`}>
+                      {cellNode}
+                    </span>
                   );
                 })}
               </div>
