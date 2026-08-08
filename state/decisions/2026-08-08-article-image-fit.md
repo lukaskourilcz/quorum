@@ -54,7 +54,7 @@ issue.
 ## Tasks
 
 - [x] T1 — DNESKAi subject query reads the picked story, not the whole digest (brief §T1)
-- [ ] T2 — `IMAGE_GATE` model role, vision call plumbing, ledger and caps (brief §T2)
+- [x] T2 — `IMAGE_GATE` model role, vision call plumbing, ledger and caps (brief §T2)
 - [ ] T3 — `images/vision-gate.ts` with verdict schema, vetoes and tests (brief §T3)
 - [ ] T4 — Visual brief fields on both desks, with name-safety validation (brief §T4)
 - [ ] T5 — Selection rewired: search after write, gate picks, writer index removed (brief §T5)

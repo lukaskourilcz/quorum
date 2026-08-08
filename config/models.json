@@ -71,7 +71,13 @@
       "maxInputTokens": 15000,
       "maxOutputTokens": 1200
     },
-    "_comment_IMAGE": "Avatar repairs only, and only when the owner asks for one. No article pipeline has a gpt-image-2 call site and none may gain one: both magazines illustrate from keyless licensed archives with a deterministic SVG plate as the last rung, and the ledger has never carried a kind:\"image\" entry. AVATAR_IMAGE below is the role that is actually used.",
+    "IMAGE_GATE": {
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 1200
+    },
+    "_comment_IMAGE": "Superseded on 2026-08-08 by article-image-fit-2026-08-08. The old note here forbade every image call site in an article pipeline; that decision sanctions exactly two and no more. IMAGE_GATE above looks at candidate thumbnails before any of them can become a hero, on the Anthropic key the company already pays for, capped at $0.02 an article and $0.10 a day for the whole image programme. ARTICLE_ILLUSTRATION renders an abstract illustration between the licensed search and the FRAME plate; it is labelled as an illustration wherever a reader meets it, never as photography, and it runs only when both FAL_KEY and ARTICLE_ILLUSTRATION_ENABLED are set. Everything else stands: an unsanctioned image call site in an article pipeline is still forbidden, and the ladder still prefers a keyless licensed archive to anything paid.",
     "AVATAR_IMAGE": {
       "provider": "openai",
       "model": "gpt-image-2",
