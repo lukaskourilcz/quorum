@@ -13,7 +13,8 @@ describe("daily Money and KPI materialization", () => {
   it("keeps a dry artifact run from changing canonical owner notices", async () => {
     const repoRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-money-dry-"));
     const stateRoot = path.join(repoRoot, "tmp/dry-run/state");
-    const needsPath = path.join(repoRoot, "NEEDS_YOUR_HELP_NOW.md");
+    const needsPath = path.join(repoRoot, "docs/NEEDED.md");
+    await mkdir(path.dirname(needsPath), { recursive: true });
     await writeFile(needsPath, "# Needs your help now\n\nCanonical text.\n");
     await writeJson(path.join(repoRoot, "config/kpis/2026-Q1.json"), {
       schemaVersion: "kpi-set/1",
@@ -58,7 +59,7 @@ describe("daily Money and KPI materialization", () => {
       writeOwnerNotices: false
     });
     expect(await readFile(needsPath, "utf8")).toBe("# Needs your help now\n\nCanonical text.\n");
-    expect(result.artifacts).not.toContain("NEEDS_YOUR_HELP_NOW.md");
+    expect(result.artifacts).not.toContain("docs/NEEDED.md");
     expect(JSON.parse(await readFile(path.join(stateRoot, "money/public.json"), "utf8"))).toMatchObject({
       schemaVersion: "money-public/1",
       revenue: { recognizedUsd: 0 }

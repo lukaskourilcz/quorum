@@ -494,11 +494,15 @@ export async function refreshFightAiQAnalysis(input: { root: string; now: Date }
  * GoVIRAL's trend scout: the deterministic pre-step that runs before any seat exists.
  *
  * It is called from the `gv-brief` branch on Mondays only, and everything about it is built to
- * fail politely. Without `APIFY_TOKEN` it is a $0 no-op. With the month's credit spent it is a
- * $0 no-op. With every actor failing it is a $0 no-op. In each case the room falls back to the
- * newest snapshot within two weeks and says so in plain words, and if there is no such snapshot
- * the room does not meet — which is a cheaper and more honest outcome than four seats reasoning
- * about nothing.
+ * fail politely. Without `APIFY_TOKEN` the *paid* scout is a $0 no-op. With the month's credit
+ * spent it is a $0 no-op. With every actor failing it is a $0 no-op. In each case the room falls
+ * back to the newest snapshot within two weeks and says so in plain words, and if there is no
+ * such snapshot the room does not meet — which is a cheaper and more honest outcome than four
+ * seats reasoning about nothing.
+ *
+ * The keyless collection is not part of that gate and never should have been behind it: it runs
+ * before the verdict, on every path, and its signals and refs reach the day's output whichever
+ * way the rest of the run goes.
  *
  * The `$5` Apify Free-plan credit is the budget guard. Nothing here may assume a paid plan.
  */
@@ -524,14 +528,58 @@ export async function refreshGoViralTrends(input: {
   const verdict = mayRunApify(quota, token);
 
   const previous = await newestTrendSnapshot(input.root, input.date);
+
+  /*
+   * The free signals run first, and they run on every path.
+   *
+   * HN Algolia, Google Trends, Google News and Reddit rank are keyless and cost nothing, and the
+   * docstring below has always promised they "run whether or not `APIFY_TOKEN` exists". They did
+   * not: this collection sat after the Apify verdict's early return, after the priced-out return
+   * and after the empty-scout return, so on precisely the days it was written for — no token, no
+   * credit, no fresh scout — it never ran at all and the magazines got nothing.
+   *
+   * Moving it above the gate is the fix. Nothing here touches the Apify quota, so a day that
+   * cannot afford the paid scout still gets its velocity reading, and the refs reach the day's
+   * output whichever way the rest of the run goes.
+   */
+  const free = await collectFreeTrendingSignals({
+    root: input.root,
+    date: input.date,
+    now: input.now,
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+  });
+  const freeRefs = [...new Set(
+    free.results
+      .filter((result) => result.status === "success")
+      .map((result) => `source:trending:${result.provider}:${input.date}`)
+  )];
+  const freeSignals = free.results.map((result) => ({
+    provider: result.provider,
+    status: result.status,
+    reason: result.reason,
+    signals: result.signals.slice(0, 40).map((signal) => ({
+      kind: signal.kind,
+      topic: signal.topic,
+      value: signal.value,
+      ...(signal.scope ? { scope: signal.scope } : {}),
+      ref: signal.ref
+    }))
+  }));
+
   const fallback = (reason: string) => {
     if (!previous || snapshotAgeDays(previous.date, input.date) > TREND_SNAPSHOT_MAX_AGE_DAYS) {
-      return { artifactPaths: [], evidenceRefs: [], trends: null, snapshotDate: null, stale: true, reason };
+      // No usable snapshot: the room still does not meet, because four seats reasoning about a
+      // velocity reading and nothing else is not a room worth opening. The refs are returned
+      // regardless — the collection happened and saying so is cheaper than pretending it did not.
+      return { artifactPaths: [], evidenceRefs: freeRefs, trends: null, snapshotDate: null, stale: true, reason };
     }
+    // The snapshot carries forward, with *today's* free signals written onto it. `stale` stays
+    // true because it is the paid scout that did not run, which is what stale has always meant
+    // here — and the day's trends output now carries a reading taken today either way.
     return {
       artifactPaths: [],
-      evidenceRefs: trendEvidenceRefs(previous.date, previous.sourceResults),
-      trends: previous,
+      evidenceRefs: [...trendEvidenceRefs(previous.date, previous.sourceResults), ...freeRefs],
+      trends: { ...previous, freeSignals },
       snapshotDate: previous.date,
       stale: true,
       reason: `${reason} No fresh scout this week — working from the ${previous.date} snapshot.`
@@ -592,33 +640,13 @@ export async function refreshGoViralTrends(input: {
     previous: previous?.signals.topHashtags ?? [],
     now: input.now
   });
-  const free = await collectFreeTrendingSignals({
-    root: input.root,
-    date: input.date,
-    now: input.now,
-    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
-  });
-  const evidenceRefs = [
-    ...trendEvidenceRefs(input.date, sourceResults),
-    ...new Set(free.results.filter((result) => result.status === "success").map((result) => `source:trending:${result.provider}:${input.date}`))
-  ];
+  const evidenceRefs = [...trendEvidenceRefs(input.date, sourceResults), ...freeRefs];
   const trends = GoViralTrendsSchema.parse({
     schemaVersion: "goviral-trends/1",
     date: input.date,
     generatedAt: input.now.toISOString(),
     sourceResults,
-    freeSignals: free.results.map((result) => ({
-      provider: result.provider,
-      status: result.status,
-      reason: result.reason,
-      signals: result.signals.slice(0, 40).map((signal) => ({
-        kind: signal.kind,
-        topic: signal.topic,
-        value: signal.value,
-        ...(signal.scope ? { scope: signal.scope } : {}),
-        ref: signal.ref
-      }))
-    })),
+    freeSignals,
     items,
     signals: {
       topHashtags,
@@ -646,7 +674,8 @@ export async function refreshGoViralTrends(input: {
  *
  * They cost nothing and touch no Apify credit, so they run whether or not `APIFY_TOKEN` exists —
  * which means the magazines get a velocity reading from day one while GoVIRAL's paid scout waits
- * for an account. The entity dictionaries come from what the system already knows: the AI
+ * for an account. That is true as of this change and was not before it: the call sat after three
+ * early returns, so on a tokenless day — the exact day it exists for — it never ran. The entity dictionaries come from what the system already knows: the AI
  * vocabulary for DNESKAi, and the scheduled cards and roster policy for MMA Files.
  *
  * Provider results are kept separate rather than merged. A single number cannot say whether a

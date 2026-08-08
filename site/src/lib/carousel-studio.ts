@@ -171,7 +171,7 @@ export async function readCarouselStudio(root = repositoryRoot): Promise<Carouse
       return true;
     })
     .map(({ template: raw, source }): CarouselStudioTemplate => {
-      const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats().map((format) => {
+      const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats(raw).map((format) => {
         const details = validateTemplateForBrand(raw, brand, format);
         return { brand: brand.id, format, passed: details.every((check) => check.status === "pass"), details };
       }));
@@ -193,6 +193,8 @@ export async function readCarouselStudio(root = repositoryRoot): Promise<Carouse
   return {
     templates,
     brands: Object.values(CAROUSEL_BRANDS).map((brand) => ({ id: brand.id, name: brand.name })),
+    // The gallery's own picker: every canvas the studio renders. Which of them a given template
+    // is offered is per-template and rides on its `checks` above.
     formats: previewFormats(),
     inspirationLinks: parseInspiration(inspirationValue).sort((left, right) => right.addedAt.localeCompare(left.addedAt))
   };

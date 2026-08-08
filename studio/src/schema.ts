@@ -3,6 +3,7 @@ import { z } from "zod";
 export const CarouselFormatSchema = z.enum([
   "instagram-square",
   "instagram-portrait",
+  "instagram-story",
   "threads"
 ]);
 
@@ -135,6 +136,20 @@ export const CarouselTemplateSchema = z.object({
   formats: z.object({
     "instagram-square": FormatSpecSchema,
     "instagram-portrait": FormatSpecSchema,
+    /*
+     * The story canvas carries a default, and that is deliberate rather than lax.
+     *
+     * A template proposed and stored before this format existed has only three canvases, and the
+     * site reads stored proposals with `safeParse` and silently drops whatever fails — so making
+     * this required would not have surfaced an error, it would have made those templates vanish
+     * from the gallery. Defaulting parses them unchanged and hands them the story canvas, which
+     * is what "extend the contract, do not break its readers" means here.
+     */
+    "instagram-story": FormatSpecSchema.default({
+      width: 1_080,
+      height: 1_920,
+      safeArea: { top: 0.14, right: 0.07, bottom: 0.16, left: 0.07 }
+    }),
     threads: FormatSpecSchema
   }),
   requiredSlots: z.array(SlotNameSchema).min(1).max(30),

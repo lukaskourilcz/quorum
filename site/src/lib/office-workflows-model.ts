@@ -15,7 +15,14 @@ import type { OfficeProjectKey } from "@/lib/office-walkthrough";
  * also what makes it the testable part.
  */
 
-/** Where the day starts and ends on the replay rail. Both ends are inclusive. */
+/**
+ * Where the working day starts and ends. Both ends are inclusive.
+ *
+ * These bounded the replay rail until D1 removed it. What still reads them is the guard asserting
+ * that every slot the registry holds falls inside the day the plan is drawn against — a slot at
+ * 03:00 would have had nowhere to be on the rail, and now would have nowhere to be in the
+ * performance either.
+ */
 export const REPLAY_FIRST_HOUR = 5;
 export const REPLAY_LAST_HOUR = 22;
 
@@ -206,12 +213,4 @@ export function litRoomForHour(
 ): OfficeProjectKey | null {
   const slot = slots.find((entry) => entry.hour === hour && entry.sits && entry.room !== WORKSHOP_ROOM);
   return slot?.room ?? null;
-}
-
-/** Every note hanging on the plan at a given hour of the replay, index-aligned with `slots`. */
-export function notesThroughHour(
-  hour: number,
-  slots: readonly WorkflowsSlot[]
-): WorkflowsNoteKind[] {
-  return slots.map((slot) => (slot.hour <= hour ? slot.note : "none"));
 }

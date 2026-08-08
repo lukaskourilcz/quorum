@@ -10,7 +10,7 @@ import {
 } from "@boardlessai/carousel-studio";
 
 /**
- * Every article that reached DNESKAi or MMA Files, as something Carousel Studio can render.
+ * Every article that reached DNESKAi or MMA Files, as something the Design Lab can render.
  *
  * Two sources, in that order. Delivery writes a summary beside the package it sent, and that
  * file is the record: it is what the desk actually handed over. Where no such file exists — every

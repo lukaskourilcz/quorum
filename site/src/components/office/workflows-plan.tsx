@@ -7,6 +7,7 @@ import type {
   WorkflowsRoom,
   WorkflowsSlot
 } from "@/lib/office-workflows-model";
+import type { TravelLeg, TravelStation } from "@/lib/office-workflows-timeline";
 
 /**
  * The floor plan: one office from above, drawn as a single inline SVG.
@@ -36,25 +37,45 @@ export const PLAN_FLOOR_MARGIN = 80;
  */
 const PLAN_MARGIN = PLAN_FLOOR_MARGIN;
 
-/** How much floor stays visible around a room once the plan frames it. */
-export const ROOM_FRAME_PAD = 26;
+/**
+ * How much of the frame the open room claims on whichever of its axes binds first.
+ *
+ * The remaining fifth is the breathing room, split evenly. A top-rank room framed this way carries
+ * its own north wall, its door and the notes hanging at that door, instead of ending half a unit
+ * past the wall with the notes cropped off the bottom edge — which is what 0.87, the fraction the
+ * old stretch happened to produce, did. Lower than this and the room stops being the subject: at
+ * 0.7 Board HQ's roster needed 220px of scroll on a laptop that had shown it whole.
+ */
+export const ROOM_FRAME_SPAN = 0.8;
 
 /**
  * The viewBox that frames one room inside a box of the given aspect.
  *
- * The room's own rect is grown to the container's aspect ratio about its centre, so the room lands
- * on an exactly known sub-rectangle of the frame and an HTML overlay can be placed inside its
- * walls without measuring anything. Without this the drawing would letterbox by an amount that
- * depends on the room, and no two rooms would put their text in the same place.
+ * The frame is *centred on the room and sized from it*. It still carries the container's aspect,
+ * because the drawing fills its box and a mismatched frame would letterbox — but the size comes
+ * from the room's own larger axis, so every room is framed to the same fraction of itself and
+ * lands on an exactly known sub-rectangle the overlay can be placed against without measuring the
+ * SVG.
+ *
+ * The earlier version grew the room's rect *to* the aspect: it padded by a flat 26 units and then
+ * stretched whichever axis was short. On a wide container that stretch decided the horizontal
+ * framing on its own — a room 270 units wide sat in a frame 766 wide, measured — so the opened
+ * room claimed 87% of the stage's height and a third of its width, and the neighbours around it
+ * filled the rest at four times their drawn scale. Sizing the frame from the room is the fix. The
+ * neighbours that stay in frame are pushed back by the scrim below rather than by the framing,
+ * because no framing can make a room 0.76 as wide as it is tall fill a stage twice as wide as it
+ * is tall — that geometry is why the two halves of this repair are separate.
  */
 export function roomViewBox(room: RoomGeometry, aspect: number): {
   viewBox: string;
   inset: { left: string; top: string; width: string; height: string };
 } {
-  let width = room.width + ROOM_FRAME_PAD * 2;
-  let height = room.height + ROOM_FRAME_PAD * 2;
-  if (width / height < aspect) width = height * aspect;
-  else height = width / aspect;
+  // Whichever axis binds — the room's width, or its height once the container's aspect is applied
+  // to it — is given exactly ROOM_FRAME_SPAN of the frame. The other axis then has more room than
+  // it needs, which is correct: a tall room in a wide box cannot fill the width, and pretending
+  // otherwise is what cropped it.
+  const width = Math.max(room.width, room.height * aspect) / ROOM_FRAME_SPAN;
+  const height = width / aspect;
   const cx = room.x + room.width / 2;
   const cy = room.y + room.height / 2;
   const minX = cx - width / 2;
@@ -97,9 +118,13 @@ export const ROOMS: readonly RoomGeometry[] = [
   // and opens into the desk that uses its files. That asymmetry needs no caption.
   { key: "fightaiq", x: 1090, y: 100, width: 150, height: 354, labelY: 146, door: null, numeral: 4 },
   { key: "carousel-studio", x: 1240, y: 100, width: 320, height: 354, labelY: 146, door: null, numeral: 5 },
-  { key: "marketingshark", x: 200, y: 524, width: 360, height: 336, labelY: 570, door: { from: 410, to: 470, rank: "bottom" }, numeral: 6 },
-  { key: "goviral", x: 560, y: 524, width: 170, height: 336, labelY: 570, door: { from: 625, to: 685, rank: "bottom" }, numeral: 7 },
-  { key: "titty-tuesdays", x: 730, y: 524, width: 270, height: 336, labelY: 570, door: { from: 835, to: 895, rank: "bottom" }, numeral: 8 }
+  { key: "marketingshark", x: 200, y: 524, width: 340, height: 336, labelY: 570, door: { from: 340, to: 400, rank: "bottom" }, numeral: 6 },
+  // GoVIRAL is a station, not a room that meets once a week: envelopes arrive from the Design Lab,
+  // are prepared, and leave toward the platforms. At 170 units an envelope entering it vanished.
+  // The 120 it gained came from marketingShark's 20 and 100 off the dock apron's west end, which
+  // held nothing but hatch — the bays, the courier exits and the roller door did not move.
+  { key: "goviral", x: 540, y: 524, width: 290, height: 336, labelY: 570, door: { from: 655, to: 715, rank: "bottom" }, numeral: 7 },
+  { key: "titty-tuesdays", x: 830, y: 524, width: 270, height: 336, labelY: 570, door: { from: 935, to: 995, rank: "bottom" }, numeral: 8 }
 ];
 
 /**
@@ -114,9 +139,9 @@ const NOTE_ANCHORS: Record<string, { xs: number[]; y: number; stem: "down" | "up
   "caught-up": { xs: [733, 771], y: 458, stem: "down" },
   "mma-files": { xs: [998, 1036, 1074], y: 458, stem: "down" },
   fightaiq: { xs: [1017, 1055], y: 206, stem: "side" },
-  marketingshark: { xs: [478], y: 500, stem: "up" },
-  goviral: { xs: [693], y: 500, stem: "up" },
-  "titty-tuesdays": { xs: [903], y: 500, stem: "up" }
+  marketingshark: { xs: [370], y: 500, stem: "up" },
+  goviral: { xs: [685], y: 500, stem: "up" },
+  "titty-tuesdays": { xs: [965], y: 500, stem: "up" }
 };
 
 /** The venture hue at 14% over the room floor, given opaque so it can be measured. */
@@ -129,6 +154,29 @@ const LIT_FILL: Record<OfficeProjectKey, string> = {
   marketingshark: "#232a32",
   "titty-tuesdays": "#2f2c23",
   "carousel-studio": "#2a2a2e"
+};
+
+/**
+ * The same hue at 28% — the room whose beat is live (D4).
+ *
+ * Twice the lit ratio, so a room steps up visibly when its beat begins and falls back to the
+ * accumulated-day state, not to dark, when it ends. Composited to opaque here for the same reason
+ * `LIT_FILL` is: an alpha layer cannot be measured, and every one of these is measured against
+ * `#f4f4f5` in the spec's §6.5 ledger, worst pair 7.88:1.
+ *
+ * The step is honestly weaker on the two darkest hues — Board HQ and DNESKAi move by 1.27 and 1.28
+ * in luminance against 1.5–1.6 for the rest. That is why a beat never carries brightness alone:
+ * the tag arrives with it, and the note hangs when it ends.
+ */
+const ACTIVE_FILL: Record<OfficeProjectKey, string> = {
+  company: "#51230d",
+  "caught-up": "#511d4c",
+  "mma-files": "#4f394e",
+  fightaiq: "#514346",
+  goviral: "#3e4f47",
+  marketingshark: "#384751",
+  "titty-tuesdays": "#514a34",
+  "carousel-studio": "#454549"
 };
 
 const FLOOR_DARK = "#0e0e12";
@@ -262,6 +310,136 @@ function DoorNote({
   );
 }
 
+/* ---- what travels, and where ------------------------------------------------- */
+
+/** Where each room meets the spine, and where its own middle is. */
+const ROOM_ANCHOR: Record<OfficeProjectKey, { door: [number, number]; centre: [number, number] }> = {
+  company: { door: [470, 489], centre: [380, 277] },
+  "caught-up": { door: [695, 489], centre: [695, 277] },
+  "mma-files": { door: [960, 489], centre: [960, 277] },
+  // The records room's only door is in the shared wall, and its slip is the only thing that uses it.
+  fightaiq: { door: [1165, 270], centre: [1165, 270] },
+  // The Design Lab has no corridor door. Its opening is the roller door, centred at 1420.
+  "carousel-studio": { door: [1420, 489], centre: [1400, 300] },
+  marketingshark: { door: [370, 489], centre: [370, 692] },
+  goviral: { door: [685, 489], centre: [685, 692] },
+  "titty-tuesdays": { door: [965, 489], centre: [965, 692] }
+};
+
+/** The bay and the courier arrow each magazine's package uses. Nothing else has one. */
+const COURIER_LANE: Partial<Record<OfficeProjectKey, { bay: [number, number]; address: [number, number] }>> = {
+  "caught-up": { bay: [1486, 660], address: [1656, 660] },
+  "mma-files": { bay: [1486, 760], address: [1656, 760] }
+};
+
+/**
+ * Where a leg ends, given the room that sent it.
+ *
+ * A leg is always one station to the next and the timeline guarantees it starts exactly when the
+ * one before it rested; this map is the other half of that promise — it guarantees it starts
+ * exactly *where* the one before it rested, so nothing teleports and nothing skips (D10).
+ */
+export function stationPoint(station: TravelStation, room: OfficeProjectKey): [number, number] {
+  const anchor = ROOM_ANCHOR[room];
+  const lane = COURIER_LANE[room];
+  switch (station) {
+    case "door": return anchor.door;
+    // The board's summary fades along the corridor rather than reaching an edge.
+    case "corridor": return [1000, 489];
+    // The chase's east node, where it meets the Design Lab.
+    case "chase": return [1420, 484];
+    case "lab": return [1400, 300];
+    case "bench": return [1199, 605];
+    case "bay": return lane?.bay ?? [1486, 660];
+    case "exit": return lane?.address ?? [1656, 660];
+    // West along the spine to GoVIRAL's door, then straight down through its three bands.
+    case "spine-west": return [685, 489];
+    case "goviral-arrival": return [685, 580];
+    case "goviral-prep": return [685, 692];
+    case "goviral-launch": return [685, 804];
+    case "platforms": return [685, 902];
+    case "shared-wall": return [1020, 270];
+    case "collect-lane": return [1114, 566];
+    case "green-line": return [964, 494];
+  }
+}
+
+/** Where a leg starts: the station before it, or the room itself for the first leg. */
+export function legStart(leg: TravelLeg, room: OfficeProjectKey): [number, number] {
+  if (leg.index > 0) return stationPoint(PREVIOUS_STATION[leg.station] ?? "door", room);
+  switch (leg.station) {
+    case "door": return ROOM_ANCHOR[room].centre;
+    case "chase": return ROOM_ANCHOR[room].door;
+    case "shared-wall": return ROOM_ANCHOR.fightaiq.door;
+    case "collect-lane": return [1408, 566];
+    case "green-line": return [685, 494];
+    default: return ROOM_ANCHOR[room].centre;
+  }
+}
+
+/** Each station's predecessor inside its journey. Journeys never branch, so one map covers all. */
+const PREVIOUS_STATION: Partial<Record<TravelStation, TravelStation>> = {
+  corridor: "door",
+  lab: "chase",
+  bench: "lab",
+  bay: "bench",
+  exit: "bay",
+  "spine-west": "lab",
+  "goviral-arrival": "spine-west",
+  "goviral-prep": "goviral-arrival",
+  "goviral-launch": "goviral-prep",
+  platforms: "goviral-launch"
+};
+
+/**
+ * One traveller, mid-leg.
+ *
+ * The glyph is drawn at the leg's start and translated to its end by a CSS keyframe — transforms
+ * and opacity only, no per-frame JavaScript and no `will-change`. The keyframe is generated per
+ * leg because its distance is per leg; that is one small `<style>` per traveller in flight, and
+ * there are never more than a handful.
+ *
+ * One envelope silhouette for the whole plan, and the fill is what says whose work it is (D10).
+ * Two exceptions keep their own vocabulary because neither is a parcel: FightAIQ's record slip
+ * has no flap, and GoVIRAL's trend pulse has no glyph at all — the green line's own dashes carry
+ * it, which is the difference between a signal and a package drawn rather than captioned.
+ */
+function Traveller({ leg }: { leg: TravelLeg }) {
+  if (leg.kind === "pulse") return null;
+  const [x0, y0] = legStart(leg, leg.room);
+  const [x1, y1] = stationPoint(leg.station, leg.room);
+  const name = `wf-travel-${leg.id.replace(/[^a-z0-9]/gi, "-")}`;
+  const slip = leg.kind === "slip";
+  return (
+    <g style={{ pointerEvents: "none" }}>
+      <style>{
+        `@keyframes ${name}{from{transform:translate(0px,0px)}` +
+        `to{transform:translate(${(x1 - x0).toFixed(1)}px,${(y1 - y0).toFixed(1)}px)}}`
+      }</style>
+      <g
+        style={{
+          animation: `${name} ${leg.duration}ms linear both`
+            + (leg.last ? `, wf-fade-out 320ms linear ${leg.duration - 320}ms both` : "")
+        }}
+      >
+        {slip ? (
+          <rect fill="#fecaca" height={14} rx={1} width={20} x={x0 - 10} y={y0 - 7} />
+        ) : (
+          <>
+            <rect fill={leg.color} height={18} rx={2} width={26} x={x0 - 13} y={y0 - 9} />
+            <path
+              d={`M${x0 - 13} ${y0 - 9} L${x0} ${y0} L${x0 + 13} ${y0 - 9}`}
+              fill="none"
+              stroke={FLOOR_DARK}
+              strokeWidth={1.4}
+            />
+          </>
+        )}
+      </g>
+    </g>
+  );
+}
+
 /** The two-rect ring every SVG target carries, revealed by `:focus-visible` in the stylesheet. */
 function FocusRing({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
   return (
@@ -285,6 +463,8 @@ export function WorkflowsPlan({
   slots,
   notes,
   litRoom,
+  beat,
+  legs,
   workshopWorking,
   mode,
   compact,
@@ -298,6 +478,15 @@ export function WorkflowsPlan({
   /** One note kind per slot, index-aligned with `slots`. The replay hands a shorter day. */
   notes: readonly WorkflowsNoteKind[];
   litRoom: OfficeProjectKey | null;
+  /**
+   * The beat that is live, while the day performs (D3, D4).
+   *
+   * `room` takes the active fill and `tag` is drawn beneath that room's name — `HH:00 · label`,
+   * the registry's own hour and the registry's own words. Null at rest and between beats.
+   */
+  beat: { room: OfficeProjectKey; tag: string } | null;
+  /** Every leg in flight right now (D5, D10). Empty at rest and between journeys. */
+  legs: readonly TravelLeg[];
   workshopWorking: boolean;
   mode: "ambient" | "replay";
   /** Below 1024px the labels leave the drawing and each place carries a numeral instead. */
@@ -311,6 +500,21 @@ export function WorkflowsPlan({
 }) {
   const byKey = new Map(rooms.map((room) => [room.key, room]));
   const noteFor = (slot: WorkflowsSlot) => notes[slots.indexOf(slot)] ?? "none";
+
+  /*
+   * Occupancy, derived from what is actually inside a station rather than from the hour.
+   *
+   * The Design Lab brightens while envelopes are in it and its disc turns; GoVIRAL's bands light
+   * the same way as one passes through; the chase's dashes march only while something rides them.
+   * Ambient keeps its own `workshopWorking` rule, which is the hour check — the two never both
+   * apply, because ambient has no legs.
+   */
+  const occupied = new Set(legs.map((leg) => leg.station));
+  const labBusy = occupied.has("lab") || occupied.has("chase") || occupied.has("bench");
+  const chaseBusy = occupied.has("chase");
+  const signalBusy = legs.some((leg) => leg.station === "green-line");
+  const collectBusy = legs.some((leg) => leg.station === "collect-lane");
+  const bandBusy = (station: TravelStation) => occupied.has(station);
 
   const press = (place: PlanPlace) => ({
     "data-wf-target": true,
@@ -361,7 +565,7 @@ export function WorkflowsPlan({
           <stop offset="0.6" stopColor="currentColor" stopOpacity={0.16} />
           <stop offset="1" stopColor="currentColor" stopOpacity={0} />
         </radialGradient>
-        {["#d4d4d8", WALL_INNER, "#fde68a"].map((colour) => (
+        {["#d4d4d8", WALL_INNER, "#fde68a", "#bbf7d0"].map((colour) => (
           <marker
             id={`wf-arrow-${colour.slice(1)}`}
             key={colour}
@@ -382,17 +586,25 @@ export function WorkflowsPlan({
         {ROOMS.map((geometry) => {
           const lit = litRoom === geometry.key;
           const workshop = geometry.key === "carousel-studio";
-          const fill = workshop
-            ? (workshopWorking ? LIT_FILL["carousel-studio"] : FLOOR_WORKSHOP)
-            : lit
-              ? LIT_FILL[geometry.key]
-              : FLOOR_DARK;
+          // The beat's own room outranks every other state: it is the one thing happening now.
+          const fill = beat?.room === geometry.key
+            ? ACTIVE_FILL[geometry.key]
+            : workshop
+              ? (labBusy || workshopWorking ? LIT_FILL["carousel-studio"] : FLOOR_WORKSHOP)
+              : lit
+                ? LIT_FILL[geometry.key]
+                : FLOOR_DARK;
           return (
             <rect
               fill={fill}
               height={geometry.height}
               key={geometry.key}
-              style={{ transition: "fill 900ms ease" }}
+              style={{
+                // The ambient crossfade is a slow hour changing. A beat is not: it rises in 260ms
+                // and falls in 420ms, which is what makes the step read as *now* inside a stride
+                // of under two seconds.
+                transition: `fill ${beat?.room === geometry.key ? 260 : mode === "replay" ? 420 : 900}ms ease`
+              }}
               width={geometry.width}
               x={geometry.x}
               y={geometry.y}
@@ -400,7 +612,7 @@ export function WorkflowsPlan({
           );
         })}
         <path d="M200 454 H1560 V524 H200 Z" fill={FLOOR_CORRIDOR} />
-        <rect fill="url(#wf-apron)" height={336} width={560} x={1000} y={524} />
+        <rect fill="url(#wf-apron)" height={336} width={460} x={1100} y={524} />
       </g>
 
       {/*
@@ -488,7 +700,7 @@ export function WorkflowsPlan({
           question bank came in through, which is the one opening that no longer carries anything.
         */}
         <path
-          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H1560"
+          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H655 M715 860 H1560"
           pathLength={1}
           strokeDasharray={1}
         />
@@ -504,16 +716,49 @@ export function WorkflowsPlan({
         <path
           d="M560 100 V454 M830 100 V454 M1240 100 V454 M1090 100 V240 M1090 300 V454
              M200 454 H440 M500 454 H665 M725 454 H930 M990 454 H1330 M1510 454 H1560
-             M560 524 V860 M730 524 V860 M1000 524 V860
-             M200 524 H410 M470 524 H625 M685 524 H835 M895 524 H1000"
+             M540 524 V860 M830 524 V860 M1100 524 V860
+             M200 524 H340 M400 524 H655 M715 524 H935 M995 524 H1100"
           pathLength={1}
           strokeDasharray={1}
         />
       </g>
 
+      {/*
+        GoVIRAL's three bands (D12). Thinner than a partition between rooms at 1.6 against 2.5,
+        because these are not rooms — they are the stations one envelope passes through. Their
+        openings are gaps at x 655–715, exactly under the room's door and exactly over the gap in
+        the south wall, so an envelope crosses all three on one straight line at x 685 and never
+        turns.
+      */}
+      <g
+        fill="none"
+        stroke={WALL_INNER}
+        strokeLinecap="square"
+        strokeWidth={1.6}
+        style={animate ? entrance("wf-fade", 380, 240, E1) : undefined}
+      >
+        <path d="M540 636 H655 M715 636 H830 M540 748 H655 M715 748 H830" />
+      </g>
+
+      {/* Each band lights for as long as an envelope is inside it, the same rule as the lab's. */}
+      {(["goviral-arrival", "goviral-prep", "goviral-launch"] as const).map((station, index) => (
+        bandBusy(station) ? (
+          <rect
+            fill="#bbf7d0"
+            fillOpacity={0.14}
+            height={112}
+            key={station}
+            style={{ pointerEvents: "none", transition: "fill-opacity 260ms ease-out" }}
+            width={290}
+            x={540}
+            y={524 + index * 112}
+          />
+        ) : null
+      ))}
+
       <g fill="none" stroke={WALL_INNER} strokeLinecap="square" style={animate ? entrance("wf-fade", 380, 180, E1) : undefined}>
         {/* The dock kerb, dashed, so the apron reads as circulation rather than as a room. */}
-        <path d="M1000 524 H1040 M1110 524 H1330 M1510 524 H1560" strokeDasharray="7 6" strokeWidth={1.5} />
+        <path d="M1100 524 H1140 M1210 524 H1330 M1510 524 H1560" strokeDasharray="7 6" strokeWidth={1.5} />
         {/* A roller does not swing. Six ticks across the opening is how the workshop reads as
             machinery from the wall alone. */}
         {[1345, 1375, 1405, 1435, 1465, 1495].map((x) => (
@@ -537,6 +782,7 @@ export function WorkflowsPlan({
           stroke={WALL_INNER}
           strokeDasharray="9 7"
           strokeWidth={1.6}
+          style={chaseBusy ? { animation: "wf-march 900ms linear infinite" } : undefined}
         />
         <rect fill={WALL_INNER} height={5} width={5} x={697.5} y={481.5} />
         <rect fill={WALL_INNER} height={5} width={5} x={1417.5} y={481.5} />
@@ -544,12 +790,13 @@ export function WorkflowsPlan({
             exit, no dock bay and no address, and the drawing says so by never reaching a wall.
             Its gap at the walk-through is deliberate: a trend signal does not cross the dock. */}
         <path
-          d="M655 524 V494 H1000 M1040 494 H1180 M712 494 V454 M964 494 V454"
+          d="M685 524 V494 H1100 M1140 494 H1180 M712 494 V454 M964 494 V454"
           stroke="#bbf7d0"
           strokeDasharray="2 7"
           strokeLinecap="round"
-          strokeOpacity={0.8}
-          strokeWidth={1.8}
+          strokeOpacity={signalBusy ? 1 : 0.8}
+          strokeWidth={signalBusy ? 2.4 : 1.8}
+          style={signalBusy ? { animation: "wf-march 1600ms linear infinite" } : undefined}
         />
       </g>
 
@@ -603,24 +850,31 @@ export function WorkflowsPlan({
           <rect height={10} key={y} width={114} x={1108} y={y} />
         ))}
 
-        <rect height={64} rx={10} width={170} x={300} y={668} />
-        {[320, 426].map((x) => (
+        <rect height={64} rx={10} width={170} x={285} y={668} />
+        {[305, 411].map((x) => (
           <g key={x}>
             <rect height={16} width={24} x={x} y={644} />
             <rect height={16} width={24} x={x} y={740} />
           </g>
         ))}
 
-        <rect height={52} rx={8} width={96} x={597} y={674} />
-        {[609, 657].map((x) => (
-          <g key={x}>
-            <rect height={16} width={24} x={x} y={650} />
-            <rect height={16} width={24} x={x} y={734} />
-          </g>
+        {/*
+          GoVIRAL has no table. It had one, and D12 took it: a room that work passes *through* is
+          not a room that sits down. Its three bands carry station glyphs instead — the arrival
+          tray, the preparation top and the launch sill.
+        */}
+        <rect height={34} rx={4} width={130} x={600} y={588} />
+        {[599, 610].map((y) => (
+          <path d={`M600 ${y} H730`} key={y} />
+        ))}
+        <rect height={40} rx={4} width={130} x={600} y={672} />
+        <path d="M665 672 V712" />
+        {[830, 838].map((y) => (
+          <path d={`M600 ${y} H770`} key={y} />
         ))}
 
-        <rect height={62} rx={10} width={170} x={780} y={659} />
-        {[800, 906].map((x) => (
+        <rect height={62} rx={10} width={170} x={880} y={659} />
+        {[900, 1006].map((x) => (
           <g key={x}>
             <rect height={16} width={24} x={x} y={635} />
             <rect height={16} width={24} x={x} y={729} />
@@ -654,7 +908,7 @@ export function WorkflowsPlan({
       <circle
         cx={1508}
         cy={350}
-        fill={workshopWorking ? "#c9c9cf" : "#818185"}
+        fill={labBusy || workshopWorking ? "#c9c9cf" : "#818185"}
         r={13}
         style={{
           opacity: 0.62,
@@ -677,11 +931,13 @@ export function WorkflowsPlan({
         strokeWidth={1.6}
         style={animate ? entrance("wf-fade", 300, 480, "linear") : undefined}
       >
-        <rect height={54} width={90} x={1060} y={540} />
+        <rect height={54} width={90} x={1160} y={540} />
         {[556, 568, 580].map((y) => (
-          <path d={`M1072 ${y} H1138`} key={y} strokeWidth={1.4} />
+          <path d={`M1172 ${y} H1238`} key={y} strokeWidth={1.4} />
         ))}
-        <rect height={40} width={240} x={1060} y={620} />
+        {/* The bench ends at 1400 and the first bay begins at 1420: the clearance the drawing
+            has always implied, now that the apron's west edge has moved. */}
+        <rect height={40} width={240} x={1160} y={620} />
         {/*
           Three bays. The lower two sit opposite the two courier exits; the top one is Titty
           Tuesdays', and lines up with no exit at all — which is the one thing left on the drawing
@@ -693,13 +949,13 @@ export function WorkflowsPlan({
       </g>
       {/* One package on the bench, not two. It is the rule's cardinality, and the caption says so. */}
       <g style={animate ? entrance("wf-fade", 300, 480, "linear") : undefined}>
-        <rect fill="#16161b" height={30} stroke={WALL_OUTER} strokeWidth={1.6} width={30} x={1084} y={590} />
-        <path d="M1084 605 H1114" stroke={WALL_OUTER} strokeWidth={1.6} />
-        <circle cx={1099} cy={605} fill={WALL_OUTER} r={3.2} />
+        <rect fill="#16161b" height={30} stroke={WALL_OUTER} strokeWidth={1.6} width={30} x={1184} y={590} />
+        <path d="M1184 605 H1214" stroke={WALL_OUTER} strokeWidth={1.6} />
+        <circle cx={1199} cy={605} fill={WALL_OUTER} r={3.2} />
       </g>
       {!compact ? (
         <g style={animate ? entrance("wf-rise", 260, 560, E1) : undefined}>
-          <Label anchor="start" fill={WALL_OUTER} size={19} tracking=".1em" weight={600} x={1016} y={812}>
+          <Label anchor="start" fill={WALL_OUTER} size={19} tracking=".1em" weight={600} x={1116} y={812}>
             LOADING DOCK
           </Label>
         </g>
@@ -726,15 +982,34 @@ export function WorkflowsPlan({
           courier lanes should be mistaken for it.
         */}
         <path
-          d="M1408 566 H1014"
+          d="M1408 566 H1114"
           fill="none"
           markerEnd="url(#wf-arrow-fde68a)"
           stroke="#fde68a"
           strokeDasharray="6 5"
           strokeWidth={1.8}
+          // Inward, and only ever a pulse. Nothing is delivered to this venture and nothing
+          // travels to its bay, so the lane brightens toward the room and carries no glyph.
+          style={collectBusy ? { animation: "wf-pull 900ms ease-in-out infinite" } : undefined}
         />
 
         <rect fill="none" height={60} stroke={WALL_INNER} strokeDasharray="7 6" strokeWidth={1.5} width={1} x={200} y={662} />
+        {/*
+          GoVIRAL's launch edge, out of the one gap in the south wall (D12).
+          Dashed and in GoVIRAL's own hue, which extends a rule the drawing already had: the two
+          courier lanes are solid grey because they carry a sealed package to a real address;
+          Titty Tuesdays' lane is dashed in its hue because it pulls rather than receives; this
+          one is dashed because the pipeline is built and the far end is not connected yet. When
+          the platforms exist it becomes solid and gains an address block like the magazines'.
+        */}
+        <path
+          d="M685 862 V902"
+          fill="none"
+          markerEnd="url(#wf-arrow-bbf7d0)"
+          stroke="#bbf7d0"
+          strokeDasharray="6 5"
+          strokeWidth={1.8}
+        />
       </g>
 
       {!compact ? (
@@ -757,6 +1032,10 @@ export function WorkflowsPlan({
           <Label anchor="end" fill={WALL_INNER} size={15} tracking=".1em" weight={400} x={94} y={704}>
             BANK
           </Label>
+          {/* The one address the drawing names that does not exist yet. The dashed lane says so. */}
+          <Label fill="#bbf7d0" size={15} tracking=".1em" weight={500} x={685} y={926}>
+            SOCIAL PLATFORMS
+          </Label>
         </g>
       ) : null}
 
@@ -772,7 +1051,20 @@ export function WorkflowsPlan({
         const labelFill = lit ? "#f4f4f5" : workshop ? "#d4d4d8" : WALL_OUTER;
         const body = (
           <>
-            <rect fill="transparent" height={geometry.height} width={geometry.width} x={geometry.x} y={geometry.y} />
+            {/*
+              The room's own rectangle, and while this room is the open one, the mark that says
+              where it landed. The framing arithmetic is the thing that broke, and it is only
+              observable as a rendered rect — so the guard reads this rather than recomputing
+              the maths it is supposed to be checking.
+            */}
+            <rect
+              data-open-room={focus?.room.key === geometry.key ? "" : undefined}
+              fill="transparent"
+              height={geometry.height}
+              width={geometry.width}
+              x={geometry.x}
+              y={geometry.y}
+            />
             {lit ? (
               <rect
                 fill="none"
@@ -809,6 +1101,58 @@ export function WorkflowsPlan({
                 {room.name}
               </Label>
             )}
+            {/*
+              The beat's tag (D3): `HH:00 · label`, beneath the room's name, in the registry's own
+              hour and the registry's own words. Drawn text — never a native `title`, because
+              nothing on this plan has ever carried one and the performance does not bend that.
+              19 units is the room-label size, which renders 10.1px at the 1024px wide-mode floor
+              and so clears the 9.5px minimum; below 1024px the tag leaves the drawing entirely and
+              the section prints it as an HTML line instead.
+
+              `pointer-events: none`, like every performance layer: a press anywhere on this room
+              is D9's teardown-and-open, and a tag must never swallow one.
+            */}
+            {beat?.room === geometry.key && !compact && focus?.room.key !== geometry.key ? (() => {
+              /*
+               * The tag is a label on the room, and it needs a plate to stay one.
+               *
+               * `08:00 · Fight data check` is 24 characters, which at 19 units is about 300 units
+               * wide — twice FightAIQ's own 150. Every long label on a narrow room lay across two
+               * neighbours as bare text and read as belonging to none of them. The plate is the
+               * fix: the tag still centres on its room and still says exactly what the registry
+               * says, and where it overhangs it reads as a label sitting on top of the drawing
+               * rather than as text tangled in it.
+               *
+               * Mono advances predictably, so the width is counted rather than measured — there
+               * is no text metric at render time, and a measured one would need a layout pass
+               * this drawing does not otherwise take.
+               */
+              const width = beat.tag.length * 11.6 + 22;
+              const centre = Math.min(
+                Math.max(geometry.x + geometry.width / 2, -PLAN_MARGIN + width / 2 + 8),
+                PLAN_WIDTH + PLAN_MARGIN - width / 2 - 8
+              );
+              const y = geometry.labelY + 16;
+              return (
+                <g style={{ pointerEvents: "none", ...(animate ? entrance("wf-fade", 180, 80, E1) : {}) }}>
+                  <rect
+                    fill="#09090b"
+                    fillOpacity={0.88}
+                    height={28}
+                    rx={4}
+                    stroke={room.color}
+                    strokeOpacity={0.5}
+                    strokeWidth={1}
+                    width={width}
+                    x={centre - width / 2}
+                    y={y}
+                  />
+                  <Label fill="#f4f4f5" size={19} tracking=".06em" weight={500} x={centre} y={y + 20}>
+                    {beat.tag}
+                  </Label>
+                </g>
+              );
+            })() : null}
             <FocusRing height={geometry.height} width={geometry.width} x={geometry.x} y={geometry.y} />
           </>
         );
@@ -820,8 +1164,8 @@ export function WorkflowsPlan({
             {/* The dock's hit target, in reading order: after the workshop, before the shop. */}
             {geometry.key === "carousel-studio" ? (
               <g aria-label="Open the loading dock" {...press("dock")}>
-                <rect fill="transparent" height={336} width={560} x={1000} y={524} />
-                <FocusRing height={336} width={560} x={1000} y={524} />
+                <rect fill="transparent" height={336} width={460} x={1100} y={524} />
+                <FocusRing height={336} width={460} x={1100} y={524} />
               </g>
             ) : null}
           </g>
@@ -856,6 +1200,51 @@ export function WorkflowsPlan({
           );
         });
       })}
+
+      {/*
+        ---- everything that is not the open room, pushed back --------------------
+
+        One element, painted last so it covers the notes and the off-plan addresses too, with the
+        open room punched out of it by the even-odd rule. The rest of the floor keeps its drawing
+        and loses its claim on the eye.
+
+        A scrim rather than an opacity on each layer, because the plan is grouped by *kind* —
+        floors together, walls together, furniture together — and no group is one room. Dimming
+        "the non-room layers" any other way would mean regrouping the whole drawing by room first,
+        for a result a reader could not tell apart.
+
+        This is also why the framing above does not have to do the impossible. A room drawn 0.76
+        as wide as it is tall cannot fill a stage twice as wide as it is tall, so its neighbours
+        are in frame whatever the viewBox says; held back to a tenth of their contrast they read
+        as the building around the room rather than as three more rooms competing with it.
+
+        It takes no clicks, so every room underneath stays pressable, and it carries no
+        `will-change` — the plates exhausted this page's compositor once already.
+      */}
+      {/*
+        ---- the travellers -----------------------------------------------------
+
+        Painted after the drawing so an envelope rides over the floor it crosses, and before the
+        open-room scrim so a room framed mid-teardown could never show one — though D9 tears the
+        performance down before it reframes, so that case does not arise.
+      */}
+      {legs.map((leg) => <Traveller key={leg.id} leg={leg} />)}
+
+      {focus ? (
+        <path
+          d={`M${-PLAN_MARGIN} 0 H${PLAN_WIDTH + PLAN_MARGIN} V${PLAN_HEIGHT} H${-PLAN_MARGIN} Z`
+            + ` M${focus.room.x} ${focus.room.y} H${focus.room.x + focus.room.width}`
+            + ` V${focus.room.y + focus.room.height} H${focus.room.x} Z`}
+          data-wf-scrim
+          fill="#09090b"
+          fillOpacity={0.88}
+          fillRule="evenodd"
+          style={{
+            pointerEvents: "none",
+            ...(animate ? entrance("wf-fade", 240, 0, "linear") : {})
+          }}
+        />
+      ) : null}
     </svg>
   );
 }

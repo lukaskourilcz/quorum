@@ -298,7 +298,7 @@ export async function runLiveEdition(input: {
           });
       if (!scene) imageCandidates = imageSearch.candidates;
       if (imageSearch.skippedProviders.length > 0) {
-        const relative = "NEEDS_YOUR_HELP_NOW.md";
+        const relative = "docs/NEEDED.md";
         const current = await readText(repoRoot, relative, "# Needs your help now\n");
         const additions = imageSearch.skippedProviders
           .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))

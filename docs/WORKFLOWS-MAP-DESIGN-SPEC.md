@@ -9,6 +9,18 @@
 > returns as the dormant record of a completed import — and the launcher
 > outranks this spec wherever the two overlap.
 
+> **Owner amendment, 2026-08-08 — the replay becomes the day performing.**
+> Fourteen decisions, D1–D14, are transcribed into this spec and cited inline.
+> The largest of them replaces §6 outright: what was a scrubbable *replay* of
+> today, driven by a control strip, is now a *performance* of the standing day
+> driven by one toggle. The strip is removed rather than hidden (D1). §3.2 and
+> §3.3 re-balance the bottom rank so GoVIRAL can be a station with subrooms
+> (D12, §3.8), §5.2's bottom-rank anchors follow their doors, §9 gains the
+> travelling rows, §10 keeps every one of them at a resting end state, §12
+> gains the active fills, and §13 gains a decision-by-decision check. The
+> workshop is called the **Design Lab** on every surface a reader sees (D13);
+> its `carousel-studio` key and package name do not move.
+
 The visual specification for the eighth section of the BoardlessAI home page.
 Section id `workflows`, inserted after `projects`, NAV label "Workflows".
 Written for the Opus build pass; it makes no code decisions and every visual
@@ -51,8 +63,8 @@ visibly different scale rather than as the same photograph twice.
 Section shell, exactly as its siblings: `<section data-sec id="workflows">`
 with the calendar section's responsive height classes, `background: #0b0b0d`,
 an `OfficePlate`, an `OfficeMood`, and one content component inside a `data-fg`
-wrapper. Add one extra decorative layer after `OfficeMood` — the replay scrim
-in §6.4 — carrying `pointer-events: none`.
+wrapper. Add one extra decorative layer after `OfficeMood` — the performance scrim
+in §6.8 — carrying `pointer-events: none`.
 
 ## 2. Section layout
 
@@ -64,7 +76,7 @@ panel's chrome, so the two sections read as the same page furniture.
 | Board | `max-width: 1180px`, `border: 1px solid #3f3f46`, `border-radius: 14px`, `background: rgba(11,11,13,.9)`, `box-shadow: 0 40px 120px rgba(0,0,0,.65)`, `backdrop-filter: blur(16px)`, `overflow: hidden` |
 | Header row | `border-bottom: 1px solid #26262b`, padding `14px 22px`, flex, space-between |
 | Plan | full board width, the inline SVG at `display: block; width: 100%; height: auto` |
-| Replay strip | present only while replaying; `border-top: 1px solid #26262b`, padding `12px 22px` |
+| ~~Replay strip~~ | **Removed (D1).** The board is the header row and the plan. Nothing sits under the drawing at any width. |
 
 The board's composite background is `rgba(11,11,13,.9)` over the plate. At the
 plate's `brightness(.3)` the wall's brightest pixels land near `#3a3a3a`, so
@@ -81,16 +93,18 @@ ideal `#0b0b0d`.
   (6.31:1), reading `NOW · PRAGUE HH:MM` with the minutes in `#f4f4f5`
   (17.3:1), tabular nums, preceded by a 6px `var(--bai-accent)` dot running the
   page's existing `bai-pulse 1.8s ease-in-out infinite`.
-- Right, the only depth-2 entry point: a button reading `PLAY THE DAY`, mono
+- Right, the only depth-2 control at all: a toggle reading `PLAY THE DAY`, mono
   10.5px uppercase .1em, `border: 1px solid #3f3f46`, `border-radius: 9px`,
-  `background: #101013`, padding `7px 12px`, `color: #d4d4d8` (12.85:1). It is
-  replaced by the replay strip's `NOW` control while replaying.
+  `background: #101013`, padding `7px 12px`, `color: #d4d4d8` (12.85:1). While
+  the day performs it reads `STOP THE DAY` and carries `aria-pressed="true"`;
+  it stays in this row and never moves (D1). It is not rendered at all while a
+  room view or the dock panel stands open (D9).
 
 ### No legend, and no readout
 
-The board carries a header row, the plan, and the replay strip while replaying.
-There is no legend and no readout. Both were specified and both are dropped by
-owner decision.
+The board carries a header row and the plan. There is no legend, no readout,
+and since D1 no strip either. All three were specified and all three are
+dropped by owner decision.
 
 That is a real constraint on the drawing rather than a subtraction from it:
 every state on the plan has to be self-evident from its own shape, because
@@ -106,7 +120,7 @@ enumerated underneath. A reader learns the marks by looking at the building.
 the BoardlessAI office*. One inline SVG; HTML overlays only for the panels.
 
 The 200-unit left and right margins and the 80-unit bottom margin are the
-off-plan zone: exit arrows, addresses and the storefront's approach live there.
+off-plan zone: exit arrows and addresses live there.
 
 ### 3.1 Envelope and ranks
 
@@ -131,11 +145,21 @@ decision go when it leaves a room", drawn.
 | DNESKAi | `caught-up` | 560 | 270 | 100 | 354 | 95,580 |
 | MMA Files | `mma-files` | 830 | 260 | 100 | 354 | 92,040 |
 | FightAIQ | `fightaiq` | 1090 | 150 | 100 | 354 | 53,100 |
-| Carousel Studio | `carousel-studio` | 1240 | 320 | 100 | 354 | 113,280 |
-| marketingShark | `marketingshark` | 200 | 360 | 524 | 336 | 120,960 |
-| GoVIRAL | `goviral` | 560 | 170 | 524 | 336 | 57,120 |
-| Titty Tuesdays | `titty-tuesdays` | 730 | 270 | 524 | 336 | 90,720 |
-| Loading dock | — | 1000 | 560 | 524 | 336 | — |
+| Design Lab | `carousel-studio` | 1240 | 320 | 100 | 354 | 113,280 |
+| marketingShark | `marketingshark` | 200 | 340 | 524 | 336 | 114,240 |
+| GoVIRAL | `goviral` | 540 | 290 | 524 | 336 | 97,440 |
+| Titty Tuesdays | `titty-tuesdays` | 830 | 270 | 524 | 336 | 90,720 |
+| Loading dock | — | 1100 | 460 | 524 | 336 | — |
+
+The bottom rank was re-balanced for D12. GoVIRAL is a station now, not a room
+that meets once a week: envelopes arrive in it from the Design Lab, are
+prepared, and leave it toward the platforms, and at 170 units it had no room
+to show any of that. It takes 290. The 120 units come from two places —
+marketingShark gives up 20, and the dock apron gives up 100 from its west end,
+where it held nothing but empty hatch. Titty Tuesdays keeps its width exactly
+and moves 100 east. The dock's own furniture moves with the apron; its three
+bays, both courier exits and the roller door do not move at all, because those
+are the coordinates the drawing's argument rests on.
 
 Board HQ is the largest room and the only corner room: it holds both the west
 and the north outer wall. The dock is larger in area and is not a room — it is
@@ -143,7 +167,8 @@ drawn as an apron (§3.7), reads as circulation, and carries no room label, no
 furniture group and no light state.
 
 No hours are printed on the plan. A room carries its name and nothing else; the
-hours live on the replay rail (§6.2) and in each room's native `<title>`
+hours live on each beat's tag while the day performs (§6.4) and in each room's
+native `<title>`
 (§5.5), where they are read rather than counted. The workshop carries no hours
 line either — its always-on state is drawn, by a floor that is never dark and a
 working light that never goes out. MMA Files' 10:00 production desk is
@@ -154,7 +179,7 @@ printed hour and never by a ninth room.
 
 Three weights, two greys, both from the page palette. Hierarchy is carried by
 weight, so no wall borrows a venture hue — `#d4d4d8` in particular stays
-Carousel Studio's.
+the Design Lab's.
 
 | Layer | Stroke | Width | Contrast on #101012 |
 | --- | --- | ---: | ---: |
@@ -171,32 +196,43 @@ Envelope (openings are gaps in the path, never lighter strokes):
 north  M200 100 H1560
 west   M200 100 V860
 east   M1560 100 V630   M1560 690 V730   M1560 790 V860
-south  M200 860 H815    M925 860 H1560
+south  M200 860 H655    M715 860 H1560
 ```
 
 East openings 630–690 and 730–790 are the two courier exits. The south opening
-815–925 is the pickup window. The west wall is unbroken.
+655–715 is GoVIRAL's launch edge (§3.8), aligned with its door and its two
+subroom openings so that an envelope crosses the room on one straight line. The
+west wall is unbroken.
+
+**The pickup window is not drawn, and this paragraph is the record of that.**
+The original decision 8 gave Titty Tuesdays a sill in the south wall with a
+storefront reaching in from outside; the launcher's amendment replaced it with
+a dock bay and a dashed collect lane pointing back at the room, and that is what
+the plan has drawn since. §3.6 and §5 are corrected to match. Whether the bay
+itself stays is an open owner decision, on record in the owner document — and
+either way the wall below Titty Tuesdays is solid.
 
 Partitions:
 
 ```
 verticals   M560 100 V454      M830 100 V454      M1240 100 V454
             M1090 100 V240     M1090 300 V454        (FightAIQ's only opening)
-            M560 524 V860      M730 524 V860      M1000 524 V860
+            M540 524 V860      M830 524 V860      M1100 524 V860
 y=454       M200 454 H440   M500 454 H665   M725 454 H930   M990 454 H1330   M1510 454 H1560
-y=524       M200 524 H410   M470 524 H625   M685 524 H835   M895 524 H1000
-dock kerb   M1000 524 H1040   M1110 524 H1330   M1510 524 H1560     (dashed 7 6)
+y=524       M200 524 H340   M400 524 H655   M715 524 H935   M995 524 H1100
+dock kerb   M1100 524 H1140   M1210 524 H1330   M1510 524 H1560     (dashed 7 6)
+subrooms    M540 636 H655   M715 636 H830      M540 748 H655   M715 748 H830   (§3.8)
 ```
 
 Door gaps are 60 units wide: Board HQ 440–500, DNESKAi 665–725, MMA Files
-930–990, marketingShark 410–470, GoVIRAL 625–685, Titty Tuesdays 835–895. A
+930–990, marketingShark 340–400, GoVIRAL 655–715, Titty Tuesdays 935–995. A
 door is a gap in the wall and nothing else — no leaf, no swing arc, no
 threshold mark. The plan draws what the building is, not which way a door
 happens to hang, and seven arcs in a 70-unit corridor were the busiest thing on
 the drawing while carrying no information the gap did not already carry.
 
 The roller door is 180 units, 1330–1510. The dock's kerb openings are the
-courier walk-through 1040–1110 and the pack crossing 1330–1510, the second
+courier walk-through 1140–1210 and the pack crossing 1330–1510, the second
 aligned exactly with the roller door so a finished pack crosses 70 units of
 corridor and nothing else.
 
@@ -213,9 +249,10 @@ not swing, and that is how the workshop reads as machinery from the wall alone.
 Window marks — three on Board HQ's north wall, one per sitting: paired 1.6-unit
 lines at y 96 and y 104, spanning x 250–310, 350–410, 450–510.
 
-Pickup-window sill — a closed 1.8-unit outline in `#fde68a`, x 815–925,
-y 852–860, the only place a venture hue appears in the wall layer. It is the
-only opening in the building that is not a door.
+Pickup-window sill — a closed 1.8-unit outline in `#fde68a`, x 915–1025,
+y 852–860, moved east with its room. It is one of two places a venture hue
+appears in the wall layer, and the only opening in the building that is neither
+a door nor an edge — §3.8's launch edge is the other.
 
 ### 3.4 Floors
 
@@ -242,16 +279,17 @@ and distinguished by dash pattern.
 | Line | Path | Stroke |
 | --- | --- | --- |
 | Summary chase, magazines → workshop | `M700 484 H1420` plus risers `M700 484 V462` and `M1420 484 V462`, plus 5×5 nodes at (697.5, 481.5) and (1417.5, 481.5) | `#94949c`, 1.6, dash 9 7 |
-| GoVIRAL trend signal | `M655 524 V494 H1000` · `M1040 494 H1180`, risers `M712 494 V454` and `M964 494 V454` | `#bbf7d0`, 1.8, dash 2 7, round caps, `stroke-opacity: .8` |
+| GoVIRAL trend signal | `M685 524 V494 H1100` · `M1140 494 H1180`, risers `M712 494 V454` and `M964 494 V454` | `#bbf7d0`, 1.8, dash 2 7, round caps, `stroke-opacity: .8` |
 
 The chase runs at y 484, the signal at y 494. Door notes occupy y 458–478
 above the chase and y 500–520 below the signal, so nothing ever overlaps. The
-signal's gap at x 1000–1040 is the courier walk-through: a trend signal does
-not cross the dock.
+signal's gap at x 1100–1140 is the courier walk-through: a trend signal does
+not cross the dock. Its two risers do not move: they rise into the magazine
+rooms, and the top rank is unchanged.
 
-GoVIRAL's line ends inside the two magazine rooms and starts nowhere else. It
-owns no exit, no dock bay and no address, and the drawing says so by never
-reaching a wall.
+GoVIRAL's line ends inside the two magazine rooms and starts nowhere else: it
+is a signal handed to another desk, and it owns no dock bay and no courier
+address. What GoVIRAL gained in D12 is an edge of its own, not a bay — §3.8.
 
 ### 3.6 Off-plan edges
 
@@ -259,8 +297,9 @@ reaching a wall.
 | --- | --- |
 | Courier → DNESKAi magazine | `M1560 660 H1656`, 2.2 `#d4d4d8`, arrowhead |
 | Courier → MMA Files magazine | `M1560 760 H1656`, 2.2 `#d4d4d8`, arrowhead |
-| Storefront reach leg | `M700 916 H900 V872`, 1.8 `#94949c`, dash 3 6, no head |
-| Storefront return leg | `M856 872 V898 H706`, 2.2 `#fde68a`, arrowhead at the west end |
+| Question bank → the floor | `M104 692 H198`, 2.2 `#94949c`, arrowhead, plus the dormant 60-unit sill at x 200, y 662–722, dashed 7 6 |
+| Titty Tuesdays' bay → the room | `M1408 566 H1114`, 1.8 `#fde68a`, dash 6 5, arrowhead at the **west** end |
+| GoVIRAL → the platforms | `M685 862 V902`, 1.8 `#bbf7d0`, dash 6 5, arrowhead (§3.8) |
 
 Arrowhead marker: `markerWidth 9`, `markerHeight 8`, `refX 8`, `refY 4`,
 `orient="auto"`, path `M0 0 L9 4 L0 8 Z`, filled in the line's own colour.
@@ -270,33 +309,84 @@ Addresses, mono, `text-anchor: start` at x 1666:
 - `DNESKAI` at y 650 and `MAGAZINE` at y 672 (mono 15/400)
 - `MMA FILES` at y 750 and `MAGAZINE` at y 772
 
-The storefront's two legs are the whole of decision 8's surviving half. Both
-begin and end outside the envelope: the dotted leg reaches in to the sill and
-stops without a head, the solid leg leaves the sill and carries the arrow away.
-Nobody inside walks to the window, and no courier arrow ever touches this wall.
-Labels, `text-anchor: end` at x 688: `STOREFRONT` at y 892 (mono 15/600
-`#d4d4d8`, 12.85:1) and `COLLECTS AT THE WINDOW` at y 912 (mono 15 `#94949c`,
-6.31:1). `PICKUP WINDOW` sits at x 940, y 886 in mono 15/500 `#fde68a`
-(13.7:1 on `#101012`).
+The three edges that leave the building say three different things, and the
+drawing's rule is one a reader learns once:
 
-**Shuttered state.** The sill's 815–925 opening fills with a hatched shutter —
-the apron pattern at 8-unit pitch in `#94949c` at 1.2 — the reach leg stops at
-the shutter, the return leg is absent entirely, and `CONCEPT MODE` replaces
-`COLLECTS AT THE WINDOW` in mono 15 `#fde68a`. An unreachable engine can close
-the window; it can never open a courier exit.
+- **Solid grey means an address.** The two courier lanes carry a sealed package
+  to a magazine that exists, and only those two are solid.
+- **Dashed in a venture's own hue means an intention or a pull.** Titty
+  Tuesdays' lane points *inward* at the room, because the storefront collects
+  its own feed and nothing is delivered to it. GoVIRAL's launch edge points
+  outward at platforms that are not connected yet (§3.8).
+- **Dormant grey, drawn and never animated, means a completed import.** The
+  west corridor is where the question bank came in, once. It points inward,
+  has no outbound leg, and stillness on it is the honest state.
+
+Addresses, mono, `text-anchor: start` at x 1666 for the two magazines, and
+`text-anchor: middle` at x 685 for the platforms:
+
+- `DNESKAI` / `MAGAZINE` at y 650 and 672, `MMA FILES` / `MAGAZINE` at y 750
+  and 772 (mono 15, `#d4d4d8` then `#94949c`)
+- `QUESTION` / `BANK`, `text-anchor: end` at x 94, y 682 and 704
+- `SOCIAL PLATFORMS` at y 926, mono 15/500 `#bbf7d0` — 11.35:1 on `#101012`
 
 ### 3.7 The dock
 
 | Glyph | Geometry |
 | --- | --- |
-| Checklist board | rect 1060, 540, 90 × 54, `#94949c` 1.6, plus three 1.4 rules x 1072→1138 at y 556, 568, 580 |
-| Sealed package | rect 1084, 590, 30 × 30, fill `#16161b`, stroke `#a1a1aa` 1.6; seam line y 605 x 1084→1114; wax dot r 3.2 fill `#a1a1aa` at (1099, 605) |
-| Staging bench | rect 1060, 620, 240 × 40, `#94949c` 1.6 |
+| Checklist board | rect 1160, 540, 90 × 54, `#94949c` 1.6, plus three 1.4 rules x 1172→1238 at y 556, 568, 580 |
+| Sealed package | rect 1184, 590, 30 × 30, fill `#16161b`, stroke `#a1a1aa` 1.6; seam line y 605 x 1184→1214; wax dot r 3.2 fill `#a1a1aa` at (1199, 605) |
+| Staging bench | rect 1160, 620, 240 × 40, `#94949c` 1.6 |
 | Courier bays | rects 1420, 620, 132 × 80 and 1420, 720, 132 × 80, `#94949c` 1.5, dash 8 7 |
-| Labels | `LOADING DOCK` x 1016 y 812, mono 19/600 `#a1a1aa`; `ONE PACKAGE · ONE ADDRESS` x 1016 y 834, mono 15 `#94949c` |
+| Labels | `LOADING DOCK` x 1116 y 812, mono 19/600 `#a1a1aa`; `ONE PACKAGE · ONE ADDRESS` x 1116 y 834, mono 15 `#94949c` |
+
+Everything in this table except the bays moved 100 east with the apron's west
+edge (§3.2). The bays did not move, because they line up with the two courier
+exits, and that alignment — plus the third bay lining up with nothing — is the
+argument the dock exists to make. The bench now ends at x 1400 and the first
+bay begins at 1420, so the 20 units between them are the clearance the drawing
+has always implied.
 
 One package on the bench, not two. It is the rule's cardinality, not a count of
 today's work, and the caption says so.
+
+### 3.8 GoVIRAL's subrooms and the launch edge (D12, D10)
+
+GoVIRAL is the one room on the plan that work passes *through*. Everything the
+Design Lab renders for social arrives here, is prepared, and leaves toward the
+platforms; drawn as a single 170-unit cell, an envelope entering it simply
+vanished and reappeared. Three bands, each 112 deep, turn that into a journey a
+reader can watch.
+
+| Band | y | What it is |
+| --- | --- | --- |
+| Arrival | 524 → 636 | Where the room meets the corridor. Its door is the room's only door. |
+| Preparation | 636 → 748 | Where the arriving envelope is worked. |
+| Launch | 748 → 860 | Fronts the south wall, and the only opening in it is this room's edge. |
+
+Dividers are `#94949c` at 1.6 — thinner than the 2.5 of a partition between
+rooms, because these are not rooms. Their openings are gaps, 60 units at
+x 655–715, exactly under the door and exactly over the launch gap, so an
+envelope crosses all three bands on one straight line at x 685 and never turns.
+
+| Glyph | Geometry |
+| --- | --- |
+| Arrival tray | rect 600, 588, 130 × 34, `#6c6c73` 1.6, plus rules x 600→730 at y 599 and y 610 |
+| Preparation top | rect 600, 672, 130 × 40, `#6c6c73` 1.6, split by `M665 672 V712` |
+| Launch sill | paired 1.6 rules x 600→770 at y 830 and y 838, `#6c6c73` |
+
+**The platform edge.** `M685 862 V902` in `#bbf7d0` at 1.8, dash 6 5, with the
+standard arrowhead, and `SOCIAL PLATFORMS` at x 685, y 926, mono 15/500
+`#bbf7d0`, `text-anchor: middle` — 11.35:1 on `#101012`.
+
+Dashed, and that is the whole statement about the platforms not existing yet.
+The two courier exits are solid grey because they carry a sealed package to a
+real address; Titty Tuesdays' collect lane is dashed in its own hue because it
+pulls rather than receives; this edge is dashed in GoVIRAL's hue because the
+pipeline is built and the far end is not connected. A reader learns the rule
+once — solid means an address, dashed means an intention — and it holds for all
+three. When the platforms exist the edge becomes solid and gains an address
+block like the magazines'; nothing else about the drawing changes.
 
 ## 4. Furniture glyphs
 
@@ -319,9 +409,12 @@ the table.
 | --- | --- | --- |
 | Board HQ | 260, 280, 240 × 80, r 14 | 288/368/448 at y 256 and y 368; 232 and 508 at y 308, 16 × 24 |
 | DNESKAi | 610, 288, 170 × 64, r 10 | 630 and 736 at y 264 and y 360 |
-| marketingShark | 300, 668, 170 × 64, r 10 | 320 and 426 at y 644 and y 740 |
-| GoVIRAL | 597, 674, 96 × 52, r 8 | 609 and 657 at y 650 and y 734 |
-| Titty Tuesdays | 780, 659, 170 × 62, r 10 | 800 and 906 at y 635 and y 729 |
+| marketingShark | 285, 668, 170 × 64, r 10 | 305 and 411 at y 644 and y 740 |
+| Titty Tuesdays | 880, 659, 170 × 62, r 10 | 900 and 1006 at y 635 and y 729 |
+
+GoVIRAL has no table. It had one, and D12 took it: a room that work passes
+*through* is not a room that sits down. Its three subrooms carry station
+glyphs instead (§3.8).
 
 Board HQ gets the largest table and eight chairs, including one at each end —
 the only room on the plan with a head of the table.
@@ -345,7 +438,7 @@ Three shelving runs: 114 × 10 rects at x 1108, y 320, 344, 368.
 
 Caption `RECORDS` at x 1108, y 414, mono 15/500 `#94949c`.
 
-### 4.4 Carousel Studio — machine room
+### 4.4 The Design Lab — machine room
 
 No table, no chairs, nothing to sit at.
 
@@ -382,13 +475,15 @@ in-plan size at 15 units (10.06px). Nothing on the plan is smaller.
 | Dock sub-caption | 15u | 500 | upper | .12em | `#94949c` | 10.1px |
 | Off-plan address, primary | 15u | 600 | upper | .12em | `#d4d4d8` | 10.1px |
 | Off-plan address, secondary | 15u | 400 | upper | .1em | `#94949c` | 10.1px |
-| `PICKUP WINDOW` | 15u | 500 | upper | .1em | `#fde68a` | 10.1px |
+| `SOCIAL PLATFORMS` | 15u | 500 | upper | .1em | `#bbf7d0` | 10.1px |
 
-No hour marks, no numerals and no legends live inside the plan (§3.2). Panel
-typography is specified with the panel chrome in §7.1; board chrome — the
-header sentence and the replay strip, which is all there is — is specified
-where each part is drawn, and every size there is one the page already uses:
-13px body and mono 10.5px labels.
+No hour marks, no numerals and no legends live inside the plan (§3.2) — the one
+exception is a beat's tag, which is `HH:00 · label` in mono 19u while that beat
+is live and gone the moment it closes (§6.4). Panel typography is specified
+with the panel chrome in §7.1; board chrome — the header sentence and the one
+toggle, which is all there is — is specified where each part is drawn, and
+every size there is one the page already uses: 13px body and mono 10.5px
+labels.
 
 ## 5. Light states and door notes
 
@@ -397,7 +492,7 @@ where each part is drawn, and every size there is one the page already uses:
 | State | Room fill | Room outline | Extra |
 | --- | --- | --- | --- |
 | Dark | `#0e0e12` | partition only, `#94949c` 2.5 | none |
-| Lit | composited hue fill below, plus a 2.5 outline in the hue on the room's own rect | full-strength hue | halo or contour (§6.4) and a door spill |
+| Lit | composited hue fill below, plus a 2.5 outline in the hue on the room's own rect | full-strength hue | halo or contour (§6.8) and a door spill |
 | Workshop, low | `#1c1c20` | partition only | working light always on at `#818185` |
 
 Composited lit fills are the venture hue at 14% over `#0e0e12`, given opaque so
@@ -412,9 +507,9 @@ they can be measured:
 | GoVIRAL | `#bbf7d0` | `#262f2d` | 11.35:1 | 12.55:1 | 9.33:1 |
 | marketingShark | `#a5d8f3` | `#232a32` | 9.47:1 | 13.19:1 | 9.81:1 |
 | Titty Tuesdays | `#fde68a` | `#2f2c23` | 11.20:1 | 12.69:1 | 9.44:1 |
-| Carousel Studio | `#d4d4d8` | `#2a2a2e` | 9.67:1 | 13.03:1 | 9.68:1 |
+| Design Lab | `#d4d4d8` | `#2a2a2e` | 9.67:1 | 13.03:1 | 9.68:1 |
 
-Carousel Studio's lit fill applies only while it is working — a pack has
+The Design Lab's lit fill applies only while it is working — a pack has
 arrived and is rendering. It never returns to `#0e0e12`: its floor is
 `#1c1c20` at rest and its working light never goes out. Its working light
 brightens to `#c9c9cf` while working.
@@ -456,12 +551,13 @@ intervals for a room with more than one sitting:
 | DNESKAi | 733, 771 | 458 | 454 → 458 |
 | MMA Files | 998, 1036, 1074 | 458 | 454 → 458 |
 | FightAIQ | 1017 (inside MMA Files) | 206 | horizontal, 1047 → 1059 at y 216 |
-| marketingShark | 478 | 500 | 524 → 520 |
-| GoVIRAL | 693 | 500 | 524 → 520 |
-| Titty Tuesdays | 903 | 500 | 524 → 520 |
+| marketingShark | 370 | 500 | 524 → 520 |
+| GoVIRAL | 685 | 500 | 524 → 520 |
+| Titty Tuesdays | 965 | 500 | 524 → 520 |
 
-Tags are drawn at anchor − 15. Carousel Studio hangs no note: it holds no
-session and has nothing to record.
+The bottom rank's three anchors follow their doors east (§3.2). Tags are drawn
+at anchor − 15. The Design Lab hangs no note: it holds no session and has
+nothing to record.
 
 Contrast, as graphics against the corridor's `#121216`: `#ff5a00` 5.97:1,
 `#fe45e2` 6.38:1, `#f7a8ea` 10.45:1, `#fecaca` 13.75:1, `#bbf7d0` 15.42:1,
@@ -482,7 +578,7 @@ no body are three different silhouettes. Hue removal costs nothing.
 | scheduled | nothing at the jamb. The hour has not come; an empty clip would be a lie about the day. |
 | late | the clip appears, plus a waiting band: an arc around the clip, `#94949c` 1.5, sweeping clockwise from 0° and widening as the five-hour grace elapses. At the end of grace it stops and the state becomes missed. |
 
-This is the same grace glyph the replay uses (§6.3), so a reader learns it
+This is the same grace glyph the performance uses (§6.2), so a reader learns it
 once.
 
 ### 5.4 What depth 1 shows, and what it withholds
@@ -500,7 +596,7 @@ Depth 1 answers the question on its own. Every door opens onto one corridor;
 the corridor runs east into the roller door and the dock; the dock has two
 labelled exits and one package on its bench; two rooms never send anything that
 way and the drawing shows why — the records room's only door leads into the
-desk that uses it, and the storefront's line begins and ends outside the wall.
+desk that uses it, and Titty Tuesdays' lane whose arrow points back at the room.
 
 ### 5.5 Hover and focus
 
@@ -532,80 +628,279 @@ fill, 4.58:1 against the lightest lit fill and 5.97:1 against the corridor, so
 the ring clears 3:1 against every surround it can land on, and the black gap
 keeps it legible where a lit room's own hue is closest to it.
 
-Nothing on the plan is a link and nothing changes route. The four openable
-places are `<button>`-semantic and reachable in document order: DNESKAi,
-Carousel Studio, the loading dock, Titty Tuesdays.
+Nothing on the plan is a link and nothing changes route. Every room and the
+dock are `<button>`-semantic and reachable in document order. Each room opens
+as itself, in place (§7.0); the dock opens the courier panel (§7.1), because
+it is not a room.
 
-## 6. Depth 2 — the replay
+## 6. Depth 2 — the day performs
+
+Rewritten for the owner's decisions of 2026-08-08. What this section used to
+specify was a *replay*: a scrubbable recording of today with a transport, a
+rail and a playhead, keyed to today's outcomes. It is now a *performance* — the
+standing day, played once, with one control and no chrome. The decisions it
+transcribes are cited inline as D1–D14.
 
 ### 6.1 Rules
 
-The replay never starts itself. `PLAY THE DAY` is the only entry, arrival is
-not a trigger, and the walk runs 05:00 → 22:00 and loops. Every mark on the
-strip is a wake-up, not a promise to spend; nothing on this screen animates a
-cost.
+- **One control (D1).** `PLAY THE DAY` starts the performance immediately.
+  Pressing the same button stops it and returns the section to ambient. The
+  button toggles its own label to `STOP THE DAY` and carries `aria-pressed`.
+  There is no other entry, no other control, and the entire bottom control
+  strip — transport, step buttons, rail, playhead, `REPLAY HH:00` stamp, `NOW`
+  button, and the stepped-strip variant of §10 row 14–17 — is **removed, not
+  hidden**.
+- **The whole standing day, every day (D2).** The performance plays every slot
+  in the registry, in hour order, first sitting to last. It is not keyed to the
+  wall clock, to today's outcomes, or to any particular hour: the same complete
+  story plays on every visit. Hours and titles are the registry's own —
+  `slot.hour` and `slot.label`, as the calendar page prints them, never
+  reformatted and never invented.
+- **It never starts itself (D7).** Arrival, scroll, hover and focus are not
+  triggers. Ambient is untouched: Prague-hour halo, today's real notes hung,
+  the bench holding the rule's one package, the Design Lab never dark.
+- **Nothing animates a cost.** Unchanged from the original section, and it now
+  covers the travellers too: envelopes carry no currency, no counts and no
+  fabricated hours.
 
-### 6.2 The control strip
+### 6.2 Beats
 
-Left to right, in one row, `gap: 14px`, all controls 30 × 30 with
-`border: 1px solid #3f3f46`, `border-radius: 9px`, `background: #101013`,
-`color: #d4d4d8` (12.85:1):
+The performance is a sequence of **beats**, one per slot, in hour order.
 
-- Transport, ❚❚ / ▶.
-- Step back ‹, step forward ›, mono 13px. Stepping pauses playback.
-- The hour rail, `flex: 1`, 28px tall (44px hit area below 1024px):
-  - track: 1px `#26262b` at the vertical centre, decoration;
-  - 13 slot marks, 3 × 14, each in its venture hue, at
-    `left: calc((hour − 5) / 17 × 100% − 1.5px)`. Minimum contrast on
-    `#101012` is `#ff5a00` at 5.97:1;
-  - playhead: a 2px `#f4f4f5` full-height line (17.3:1) with a 8px `#f4f4f5`
-    square rotated 45° at its head.
-- Timestamp stamp: `REPLAY HH:00`, mono 10.5px uppercase .1em `#f4f4f5`,
-  `border: 1px solid #3f3f46`, `border-radius: 8px`, padding `6px 10px`,
-  preceded by a 7px solid `#d4d4d8` square.
-- `NOW`: mono 10.5px uppercase, same button chrome as `PLAY THE DAY`. Returns
-  to ambient, hides the strip, restores the plate's mood.
-
-Scrub: click or drag anywhere on the rail seeks to
-`5 + round(fraction × 17)`. With the rail focused, ←/→ step an hour, Home
-seeks 05:00, End seeks 22:00, Space toggles playback.
-
-Speed: one hour per 700ms, so a full day runs 11.9s. A second speed is not
-offered; the step buttons cover close reading and a speed menu is chrome the
-section does not need.
-
-### 6.3 What the replay draws
-
-- Rooms light in sequence and hold for their hour. A room that closes hangs
-  its note and the note stays for the rest of the run, so the day accumulates
-  visibly and the last frame is the same picture depth 1 shows at 22:00.
-- GoVIRAL stays dark on six days in seven. Its 13:00 mark keeps its hue on the
-  rail and its door shows the empty clip, whose `<title>` states the recorded
-  skip.
-- A slot that misses its hour holds the waiting band (§5.3) behind its clip,
-  widening as the grace runs, then goes quiet. Nothing flashes and nothing
-  turns amber.
-- Carousel Studio brightens to `#2a2a2e` with its working light at `#c9c9cf`
-  on the hours a pack arrives, and returns to `#1c1c20`. It is never dark.
-
-### 6.4 Ambient versus recording
-
-Three simultaneous distinctions, all readable with the copy unread:
-
-| | Now | Replay |
+| Phase | What happens | Duration |
 | --- | --- | --- |
-| Chrome | none. One clock chip with the pulsing accent dot. | the full strip: transport, rail, playhead, stamp, `NOW`. |
+| Rise | the room's floor steps to its active fill (D4, §6.5) | 260ms, ease-out |
+| Tag | `HH:00 · label` appears at the room (D3, §6.4) | 180ms, ease-out |
+| Hold | the beat is readable | 1.4s |
+| Close | today's real note hangs at the door; the floor falls back to its accumulated-day state | 220ms tag, 420ms floor |
+
+**Beat lighting is the schedule, not today (D2).** Every slot's room lights and
+tags for its beat, GoVIRAL included on the six days in seven when it does not
+sit — the performance shows how the day *operates*. Today's truth still shows,
+in the notes: the note that hangs as a beat closes is today's real note — sent,
+quiet, missed, the empty clip — exactly as `notesThroughHour` already gives it.
+Ambient keeps its own rule, where a gated slot lights nothing.
+
+Travel legs (§6.6) launch as their beat closes and overlap the beats that
+follow, because that is how the real day pipelines: the board commissions at
+06:00 and the package it commissioned is still crossing the floor at 09:00.
+
+### 6.3 The end (D6)
+
+After the last beat's last travel leg comes to rest, the finished picture holds
+for **1s** — every room closed, every note hung, every envelope gone — and then
+dissolves back to ambient over **600ms**. The button reads `PLAY THE DAY`
+again. No performance chrome remains on screen and no traveller survives the
+dissolve.
+
+Stopping mid-performance (D1) is the same teardown at once rather than after a
+hold. So is opening a room (D9): pressing any room or the dock while the
+performance runs tears it down completely and *then* reframes, so travellers
+and a framed room never coexist, and closing the room lands on the default
+ambient plan. While a room view or the dock panel stands open the toggle is not
+offered — the performance starts only from the full floor plan.
+
+### 6.4 The tag (D3)
+
+While a beat is live its room shows a tag reading `HH:00 · <label>`, for
+example `06:00 · Morning board`.
+
+| Property | Value |
+| --- | --- |
+| Type | mono 19 units, weight 500, tracking .06em |
+| Fill | `#f4f4f5` |
+| Plate | `#09090b` at `fill-opacity: .88`, r 4, 28 units tall, stroked 1 in the room's own hue at `stroke-opacity: .5` |
+| Width | `tag.length × 11.6 + 22` — mono advances predictably and there is no text metric at render time |
+| Position | `text-anchor: middle` on the room's centre x, plate at `labelY + 16`, baseline at `labelY + 36`; the centre is clamped so the plate never leaves the drawing |
+| Enter | opacity 0 → 1 over 180ms, ease-out |
+| Leave | opacity 1 → 0 over 220ms, ease-in |
+
+**The plate is not decoration.** `08:00 · Fight data check` is 24 characters,
+about 300 units at this size — twice FightAIQ's own 150. Every long label on a
+narrow room lay across two neighbours as bare text and read as belonging to
+none of them. With the plate the tag still centres on its room and still says
+exactly what the registry says, and where it overhangs it reads as a label
+sitting *on* the drawing rather than tangled in it. Its border is the room's
+hue, which is the second thing saying whose beat this is.
+
+19 units is the room-label size, and the floor beneath it is the room's own
+active fill, so the pair is measured in §12: the worst case is `#f4f4f5` on
+GoVIRAL's `#3e4f47` at **7.88:1**, and the best is on Board HQ's `#51230d` at
+11.91:1. Every pair clears AAA for large text and AA for body.
+
+**The tag is drawn text.** It is never a native `title` attribute — nothing on
+this plan has ever carried one, and that rule does not bend for the
+performance. Where a hover explanation is genuinely needed anywhere in the
+section, the house tooltip component is the only mechanism.
+
+**Measured at the type floor.** The plan's scale is its rendered width over the
+1920 viewBox units, so the tag's rendered size is 19 x that scale:
+
+| Viewport | Plan width | Scale | Tag renders |
+| --- | ---: | ---: | ---: |
+| 1024px — the smallest wide mode | 992px | 0.517 | **9.82px** |
+| 1280px | 1248px | 0.650 | 12.35px |
+| 1440px | 1408px | 0.733 | 13.93px |
+
+9.82px clears the 9.5px floor by a third of a pixel, and that is the whole
+margin there is. The room names are the same 19 units and have always sat on
+the same edge — so the tag is not a new risk, but neither has room to shrink.
+Anything that narrows the plan's box at 1024px, or any smaller wide-mode
+breakpoint, puts both under the floor together. Below 1024px the tag leaves the
+drawing entirely (§11).
+
+### 6.5 The active room (D4)
+
+The lit fill is the venture hue at 14% over the floor. The **active** fill —
+the room whose beat is live — is the same hue at **28%**, so a room visibly
+steps up when its beat begins and falls back to the accumulated-day state, not
+to dark, when it ends.
+
+| Room | Hue | Lit (14%) | Active (28%) | `#f4f4f5` on active | Lit → active |
+| --- | --- | --- | --- | ---: | ---: |
+| Board HQ | `#ff5a00` | `#30190f` | `#51230d` | 11.91:1 | 1.27 |
+| DNESKAi | `#fe45e2` | `#30162f` | `#511d4c` | 11.68:1 | 1.28 |
+| MMA Files | `#f7a8ea` | `#2f2430` | `#4f394e` | 9.40:1 | 1.44 |
+| FightAIQ | `#fecaca` | `#30282c` | `#514346` | 8.56:1 | 1.52 |
+| GoVIRAL | `#bbf7d0` | `#262f2d` | `#3e4f47` | 7.88:1 | 1.59 |
+| marketingShark | `#a5d8f3` | `#232a32` | `#384751` | 8.77:1 | 1.50 |
+| Titty Tuesdays | `#fde68a` | `#2f2c23` | `#514a34` | 7.99:1 | 1.58 |
+| Design Lab | `#d4d4d8` | `#2a2a2e` | `#454549` | 8.62:1 | 1.51 |
+
+The last column is the luminance ratio between a room's lit floor and its
+active floor, and it is the honest weakness of this device: the two darkest
+hues step by 1.27 and 1.28, which is present but not loud. That is why
+brightness is never the only signal a beat carries — the tag appears with it,
+the note hangs when it ends, and in the performance the room also wears the
+hard contour of §6.7. A reader who cannot see the step still reads the beat.
+
+The Design Lab is the exception to "falls back": it is never dark, and between
+beats it returns to `#1c1c20` or, while envelopes occupy it, stays at its
+active fill (§6.6).
+
+### 6.6 What travels (D5, D10, D11)
+
+**One glyph.** Every output that moves is an envelope, and there is one
+silhouette on the whole plan: a 26 × 18 body, r 2, filled with the producing
+venture's hue, plus a 1.4 flap `M x y L x+13 y+9 L x+26 y` stroked in the
+floor colour beneath it. Tag scale, so it reads at every viewport the tag does.
+The **fill is what says whose work it is** — no second shape, no label, no
+count.
+
+Two deliberate exceptions keep their own vocabulary, because neither is a
+package: FightAIQ's record slip through the shared wall (a 20 × 14 plain rect
+in `#fecaca`, no flap), and GoVIRAL's Monday trend-signal pulse along the green
+dashed line (a travelling 8-unit brightening of the existing dashes, no glyph
+at all). A signal is not a parcel and does not get a parcel's shape.
+
+**The journeys.** Every leg below is drawn in order, the envelope visibly
+enters and leaves each station, and it never teleports, skips a leg, or starts
+a leg before the one before it has finished.
+
+| Beat's room | What leaves, and the legs it walks |
+| --- | --- |
+| Board HQ | A summary envelope in `#ff5a00` leaves the door gap 440–500, drops to the spine at y 489, fades east along the corridor and is gone by x 1000. The board commissions; it does not ship. |
+| DNESKAi | **Two** envelopes in `#fe45e2` (D11). The first joins the chase at (700, 484), rides it east while the chase dashes march, enters the Design Lab through the roller door, is worked there, crosses the roller-door span onto the bench at (1184, 590), moves to the middle bay at (1420, 620), and exits along the y 660 courier arrow, fading at the DNESKAI address. The second also enters the Design Lab, is rendered, then leaves west along the spine to GoVIRAL's door at 655–715, drops through arrival, preparation and launch at x 685, and leaves by the platform edge. |
+| MMA Files | The same two-envelope pattern in `#f7a8ea`: one to the bench, the lower bay at (1420, 720) and the y 760 courier arrow to the MMA FILES address; one through the Design Lab to GoVIRAL and out the platform edge. |
+| FightAIQ | A record slip crosses the shared-wall gap at x 1090, y 240–300 into the MMA Files desk. It never touches the corridor — the room has no corridor door, and that asymmetry is the drawing's own argument. |
+| marketingShark | **Two** envelopes in `#a5d8f3` with text contents (D11), both via the chase to the Design Lab; each is rendered into a social post and continues to GoVIRAL for launch. Nothing of marketingShark's crosses the dock. |
+| GoVIRAL | Its own beat is the trend-signal pulse along the green line toward the two magazine risers — the signal travels, nothing is carried. Through the rest of the day GoVIRAL is a station: arriving envelopes move through its three bands and leave by its edge. |
+| Titty Tuesdays | **Nothing is delivered.** The venture collects: it pulls a feed. Its beat hangs its note, and its only motion is an inward pulse along its own collect lane, from (1408, 566) toward the room — a pull, never a package. Nothing travels to its dock bay, and whether that bay stays drawn is an open owner decision this performance does not depend on. |
+
+**Occupancy.** The Design Lab brightens to its active fill while any envelope
+is inside it and its disc turns; derive that from the envelopes present, not
+from the old `note === "sent"` hour check, which ambient keeps. GoVIRAL's three
+bands light the same way as an envelope passes through each. The chase dashes
+march only while something rides them, and the green line's dashes march only
+during GoVIRAL's own pulse.
+
+### 6.7 Pacing
+
+| Quantity | Value |
+| --- | --- |
+| Beat hold | 1.7s (contract range 1.4–1.7s, floor 1.2s) |
+| Beat rise / fall | 260ms / 420ms |
+| Beat stride — rise + hold, so the fall overlaps the next beat | 1.96s |
+| Tag in / out | 180ms / 220ms |
+| Note hangs | 220ms |
+| Travel leg, short (within a room, or a door to the spine) | 1.3s |
+| Travel leg, long (the chase, a corridor run, a courier exit) | 2.6s |
+| Gap between a beat closing and its first leg | 200ms |
+| Stagger between a room's two journeys | 600ms |
+| End-of-day hold | 1s |
+| Dissolve to ambient | 600ms |
+
+**Measured against the registry's own thirteen slots: 13 beats, 48 legs, the
+last leg resting at 29.6s and the performance ending at 31.2s** — inside the
+30–50s the contract asks for.
+
+The first draft of this table used a 1.4s hold with 1.2 and 2.4s legs, and
+landed at 27s — under the window. The hold went to the top of the contract's
+range and the legs up by a twelfth, together, which is the adjustment this
+section prescribes: never drop a leg, and never take the hold below its 1.2s
+floor. The numbers live in `office-workflows-timeline.ts` as named constants
+and a unit test asserts the 30–50s window against the real registry, so a slot
+added or removed cannot quietly push the day outside it.
+
+### 6.8 Ambient versus performing
+
+Three simultaneous distinctions, all readable with the copy unread. The middle
+row is unchanged from the original section; the first has lost its strip.
+
+| | Ambient | Performing |
+| --- | --- | --- |
+| Chrome | one clock chip with the pulsing accent dot, and `PLAY THE DAY` | the same button, reading `STOP THE DAY`, `aria-pressed="true"`. Nothing else. No strip, no rail, no stamp. |
 | The lit room's light | a soft halo, breathing `opacity: .30 ↔ .42` over 6s | no halo. A hard 1.5 contour in the hue, offset 10 units outside the room's rect at `opacity: .85`. Nothing breathes. |
 | The plate | `OfficeMood` alone — the Prague wash | a flat `#09090b` scrim at `opacity: .42` above the mood layer, `pointer-events: none`. The real sky is switched off. |
 
-Soft light means the building; hard contour means a recording. That difference
-survives with the sound off, the copy unread and the strip out of frame.
+Soft light means the building; hard contour means a performance. That
+difference survives with the sound off, the copy unread, and — now that the
+strip is gone — with no chrome on screen at all beyond one button.
 
-## 7. Depth 3 — the panels
+### 6.9 Every performance layer takes no clicks
 
-Four openable places, one shared chrome, each panel one screenful.
+`pointer-events: none` on travellers, tags, brightness overlays and the scrim.
+Every pressable room, the dock and the header button stay fully operable
+mid-performance; a press on a room is D9's teardown-and-open, never a dead
+click. No `will-change` anywhere, on any of it.
 
-### 7.1 Shared chrome
+## 7. Depth 3 — the rooms, and the dock
+
+Depth 3 has two kinds, and the difference is the drawing's own: **every room
+opens as itself, in place**, and **the dock opens as a panel**, because the
+dock is not a room.
+
+### 7.0 A room opens in place
+
+The plan does not go away and is not covered by a card. It reframes onto the
+room's own rectangle, and the content stands inside those walls: what the room
+is for, what it opens onto, how it operates, its sessions, the roles standing
+in it, and the last thing it produced.
+
+| Part | Spec |
+| --- | --- |
+| The frame | the viewBox is re-centred on the room and **sized from it**: whichever of the room's axes binds first is given `ROOM_FRAME_SPAN` = **0.8** of the frame, and the frame keeps the container's aspect so the drawing still fills its box |
+| Clearance | the remaining fifth, split evenly, which is what puts the room's north wall, its door and the notes hanging at that door inside the frame |
+| The rest of the plan | one scrim path over the whole drawing with the open room punched out of it by the even-odd rule — `#09090b` at `fill-opacity: .88`, painted last so it covers the door notes and the off-plan addresses, `pointer-events: none`, no `will-change` |
+| The content box | starts at the room's rect and widens about the same centre until it holds a readable measure — floor 380px — capped at 94% of the stage; one column below 560px; its own ground at `rgba(9,9,11,.92)` so the room's furniture does not read through the type |
+| Overflow | the content scrolls inside the room, wheel-exempt. Board HQ lists every role scoped to the whole company and does not fit at any viewport |
+| Exit | Escape, or the back control; focus moves to the room's name on open and returns to the door on close |
+
+**Why the frame is sized from the room and the scrim does the rest.** A room
+drawn 0.76 as wide as it is tall cannot fill the majority of a stage 1.9 times
+wider than it is tall — no viewBox achieves it, so the neighbours are always in
+frame. Framing keeps the room whole and centred; the scrim is what stops the
+neighbours competing. Sizing the frame from the *container* instead, which is
+what this did before 2026-08-08, let a wide stage decide the framing on its
+own: a 270-unit room sat in a frame 766 wide, took a third of the stage, and
+left its neighbours drawn at four times their scale with the room's own walls
+6% from the edge.
+
+The container is measured in a layout effect and **not** a `ResizeObserver`: an
+observer's callback can go unfired in a throttled tab, and with no box measured
+no room would open at all.
+
+### 7.1 The dock panel's shared chrome
 
 | Part | Spec |
 | --- | --- |
@@ -618,10 +913,15 @@ Four openable places, one shared chrome, each panel one screenful.
 | Body | `flex: 1; min-height: 0`, laid out as a grid with `gap: 1px` on a `#1e1e22` background, so every column division is a hairline and matches the page's panel-grid idiom |
 | Footer | padding `12px 22px`, `border-top: 1px solid #26262b`, mono 10.5px uppercase .12em `#94949c`; any link `#d4d4d8` → `#f4f4f5` on hover |
 
-The frame leaves 14 units of the plan visible on every side, and the room the
-panel belongs to keeps its lit outline in that margin, so the panel reads as
-the room opened rather than as a new screen. Opening moves focus to the title;
-Escape and the close control both dismiss and return focus to the opener.
+The frame leaves 14 units of the plan visible on every side, so the panel reads
+as the dock opened rather than as a new screen. Opening moves focus to the
+title; Escape and the close control both dismiss and return focus to the door
+the panel came out of.
+
+§§7.2–7.5 below specify four panel bodies. Since the Facilities session only
+one of them — the courier, §7.4 — is reached through the dock. The other three
+are the reference for the material each room's own view carries, and for the
+compact layout below 1024px, where all four are still folded blocks (§11).
 
 Panel body type: section headings mono 10.5px uppercase .14em `#94949c`; body
 12.5px/1.45 `#d4d4d8`; captions mono 10.5px/1.5 .06em `#94949c`; figures
@@ -728,9 +1028,15 @@ Two columns plus a footer band. This panel replaces "the two odd edges"
 following the owner amendment.
 
 **The window.** The sill drawn large, with the storefront outside pulling a
-sanitized feed through it: the same two legs as the plan, at panel scale,
-annotated with what crosses (*sanitized catalog feed*) and what cannot (*no
-price, no stock, no purchase path*). A toggle shows the shuttered state:
+sanitized feed through it — a reach in and a return leg — annotated with what
+crosses (*sanitized catalog feed*) and what cannot (*no price, no stock, no
+purchase path*). This is a panel-scale idiom and **not** a magnification of the
+plan: since the geometry pass the plan draws this edge as one dashed lane in
+the venture's own hue pointing inward at the room, with no outbound leg at all,
+because the feed is collected rather than delivered. The panel can afford two
+legs because it has room to say which direction each one carries; the plan
+cannot, and says the same thing with one arrow. A toggle shows the shuttered
+state:
 shutter hatch, the return leg gone, and `concept mode` with
 `commerceMode: precommerce` beneath. The annotation states the asymmetry in
 one line: *an unreachable engine can close the window and can never open it*.
@@ -785,30 +1091,46 @@ E2 = `cubic-bezier(.2,.8,.3,1.2)`.
 | 10 | Halo breathe, opacity .30 ↔ .42 | ambient state, infinite | 6s | 0 | ease-in-out |
 | 11 | Working light, opacity .55 ↔ .70 | always, infinite | 4.2s | 0 | ease-in-out |
 | 12 | Hour change while ambient: old lit room crossfades to new | the Prague hour changes | 900ms | 0 | ease |
-| 13 | Enter replay: scrim to .42, halo out, contour in | `PLAY THE DAY` | 420ms | 0 | ease |
-| 14 | Playhead travels one hour | replay running | 700ms | 0 | linear |
-| 15 | Replay room light on | each hour | 260ms | 0 | ease-out |
-| 16 | Replay room light off | each hour end | 420ms | 0 | ease-in |
-| 17 | Replay note hangs | each close | 220ms | 0 | E2 |
-| 18 | Waiting band widens 0 → 14 units | a late slot | the grace | 0 | linear |
-| 19 | Leave replay: scrim out, contour out, halo in | `NOW` | 420ms | 0 | ease |
-| 20 | Panel opens: scale .94 → 1, opacity 0 → 1, `transform-origin` at the opener's centre | selection | 420ms | 0 | E1 |
-| 21 | Panel closes | Escape or close | 260ms | 0 | ease-in |
-| 22 | Panel body content fades and rises 6px, staggered 50ms per column | panel opened | 300ms | 180ms | E1 |
-| 23 | The fold: 22 hairlines collapse into the summary card | workshop panel opened | 900ms | 300ms | E1 |
-| 24 | Hook rack: greying sweeps west to east across the 49 cards | workshop panel opened | 760ms | 500ms | linear |
-| 25 | Courier beats advance | courier panel opened, auto | 520ms in, 260ms out, 2.4s dwell | 0 | E1 |
-| 26 | Filter bounce (beat 03): stray file leaves at 24° | beat 03 shown | 480ms | 0 | E2 |
-| 27 | Hover outline and label step-up | hover / focus | 140ms | 0 | ease-out |
-| 28 | Note hover scale to 1.12 | hover / focus | 140ms | 0 | E2 |
+| 13 | Enter the performance: scrim to .42, halo out, contour in | `PLAY THE DAY` | 420ms | 0 | ease |
+| 14 | Beat rise: the room's floor to its active fill (D4) | each beat opens | 260ms | 0 | ease-out |
+| 15 | Beat tag in: `HH:00 · label` (D3) | each beat opens | 180ms | 80ms | ease-out |
+| 16 | Beat tag out | each beat closes | 220ms | 0 | ease-in |
+| 17 | Beat fall: the floor to its accumulated-day state | each beat closes | 420ms | 0 | ease-in |
+| 18 | Note hangs | each close | 220ms | 0 | E2 |
+| 19 | Waiting band widens 0 → 14 units | a late slot | the grace | 0 | linear |
+| 19a | Envelope walks a short leg — a door to the spine, a station to a station (D10) | its beat closes | 1.2s | 200ms after the close | linear |
+| 19b | Envelope walks a long leg — the chase, a corridor run, a courier exit | the leg before it rests | 2.4s | 0 | linear |
+| 19c | Envelope fades at an off-plan address | the leg ends | 320ms | 0 | ease-in |
+| 19d | Chase dashes march (`stroke-dashoffset` 0 → −16) | something rides the chase | 900ms | 0 | linear, repeating |
+| 19e | Green-line dashes march, GoVIRAL's pulse (D10 exception) | GoVIRAL's beat | 1.6s | 0 | linear |
+| 19f | Titty Tuesdays' collect lane pulses inward | its beat | 900ms | 0 | ease-in-out |
+| 19g | Design Lab occupancy: floor to active fill, disc to `#c9c9cf` | an envelope inside it | 300ms | 0 | ease |
+| 19h | A GoVIRAL band lights as an envelope enters it | per band | 260ms | 0 | ease-out |
+| 19i | End of day: hold the finished picture, then dissolve (D6) | last leg rests | 1s hold, 600ms dissolve | 0 | ease |
+| 20 | Leave the performance: scrim out, contour out, halo in, travellers unmount | `STOP THE DAY`, a room press (D9), or the dissolve | 420ms | 0 | ease |
+| 21 | Panel opens: scale .94 → 1, opacity 0 → 1, `transform-origin` at the opener's centre | selection | 420ms | 0 | E1 |
+| 22 | Panel closes | Escape or close | 260ms | 0 | ease-in |
+| 23 | Panel body content fades and rises 6px, staggered 50ms per column | panel opened | 300ms | 180ms | E1 |
+| 24 | The fold: 22 hairlines collapse into the summary card | workshop panel opened | 900ms | 300ms | E1 |
+| 25 | Hook rack: greying sweeps west to east across the 49 cards | workshop panel opened | 760ms | 500ms | linear |
+| 26 | Courier beats advance | courier panel opened, auto | 520ms in, 260ms out, 2.4s dwell | 0 | E1 |
+| 27 | Filter bounce (beat 03): stray file leaves at 24° | beat 03 shown | 480ms | 0 | E2 |
+| 28 | Hover outline and label step-up | hover / focus | 140ms | 0 | ease-out |
+| 29 | Note hover scale to 1.12 | hover / focus | 140ms | 0 | E2 |
 
-Nothing on any of these paths animates a cost except row 22's cost bar inside
+Nothing on any of these paths animates a cost except row 23's cost bar inside
 the DNESKAi panel, which advances only on the paid stages: curation and the
 write/review loop. Summaries, hook assignment, question selection, rendering,
 every gate and every verification move nothing.
 
+Every travelling row above is a CSS keyframe on an SVG group, transforms and
+opacity only — chained translates between the leg's waypoints, which are
+orthogonal, so no path-following is needed. No per-frame JS loop, no SMIL, no
+new dependency.
+
 Transforms animate without permanent promotion: no `will-change` on the plan
-SVG or on any group inside it.
+SVG, on any group inside it, or on any traveller. Seven promoted plates once
+exhausted this page's compositor and Chrome painted whole frames black.
 
 ## 10. Reduced motion
 
@@ -821,14 +1143,18 @@ immediately. Nothing is hidden, nothing waits for a frame, nothing loops.
 | 1–9 | The plan renders complete on first paint: envelope, partitions, fills, furniture, labels, addresses, arrows, notes, the current hour's room lit with its outline, fill and spill, and its halo at a static `opacity: .34`. |
 | 10, 11 | Static: halo at .34, working light at .62. |
 | 12 | The lit room swaps with no crossfade. |
-| 13, 19 | Mode changes apply instantly; the scrim, halo and contour switch with no transition. |
-| 14–17 | The replay is replaced by an hour strip. Thirteen buttons, 44px minimum hit, one per slot, each carrying its hour in mono 11px and a 3 × 14 tick in its venture hue. Pressing one paints the plan at that hour, including every note hung up to it. The strip is a row of buttons with no playhead, no transport and no autoplay; the stamp still reads `REPLAY HH:00` and `NOW` still returns to ambient. Mark the strip `data-horizontal-scroll` if it scrolls. |
-| 18 | The waiting band renders at its final width for a late slot, with the elapsed grace stated in that note's `<title>`. |
-| 20–22 | Panels appear and disappear with no transform and no stagger; content is present at full opacity. |
-| 23 | The fold renders folded: the 22 hairlines and the filled summary card both drawn, with a mono caption `1,100 words → one summary`. |
-| 24 | The rack renders in its final state — eligible, greyed, cooled and drawn cards all as they end up, seal included. |
-| 25, 26 | The courier becomes a numbered static strip: the seven beats laid out at once as `01`–`07`, every drawing at its end state, the stray file already outside the funnel, the two ticket halves already met, all seven ticks set. |
-| 27, 28 | Hover and focus states apply with no transition. Focus remains visible. |
+| 13, 20 | Mode changes apply instantly; the scrim, halo and contour switch with no transition. |
+| 14–17 | **The performance still runs, and still tells the whole story.** The button works and the beats advance on the same cadence, each as an opacity step: the room's floor changes to its active fill with no transition, the tag appears, the note hangs, the floor returns. Nothing translates and nothing eases. A reader who asked for stillness gets the same thirteen beats, in the same order, with the same words. |
+| 18 | The note hangs with no scale. |
+| 19 | The waiting band renders at its final width for a late slot, with the elapsed grace stated in that note's `<title>`. |
+| 19a–19f | **No travel at all.** No envelope is rendered, no dash marches, no lane pulses. The journeys are the one thing reduced motion cannot show, and a jumping envelope would be worse than none — the choreography's meaning is carried by the beats' order, and that survives. |
+| 19g, 19h | Occupancy still reads: the Design Lab's floor and disc, and each GoVIRAL band, switch to their lit values for the span they would have been occupied, with no transition. |
+| 19i | The end holds for its second, then swaps to ambient with no dissolve. |
+| 21–23 | Panels appear and disappear with no transform and no stagger; content is present at full opacity. |
+| 24 | The fold renders folded: the 22 hairlines and the filled summary card both drawn, with a mono caption `1,100 words → one summary`. |
+| 25 | The rack renders in its final state — eligible, greyed, cooled and drawn cards all as they end up, seal included. |
+| 26, 27 | The courier becomes a numbered static strip: the seven beats laid out at once as `01`–`07`, every drawing at its end state, the stray file already outside the funnel, the two ticket halves already met, all seven ticks set. |
+| 28, 29 | Hover and focus states apply with no transition. Focus remains visible. |
 
 ## 11. Below 1024px
 
@@ -841,7 +1167,8 @@ auto-height, and there is no horizontal page scroll.
 | Plan | the same SVG at `width: 100%; height: auto`, viewBox unchanged, as a static picture. At 360px it renders 192px tall, where one unit is 0.20px — no type inside the drawing can clear the 9.5px floor at any size the rooms can hold. So below 1024px every in-plan and off-plan `<text>` is hidden and the labels move out of the drawing (next row). The walls, doors, furniture, apron, data lines, exit arrows, sill and the current hour's lit room all still draw. |
 | The key | replaces the plan's labels. Each room and the dock carry a 44-unit mono numeral, 600, `#f4f4f5`, centred in the room — 9.0px at 360px, and a numeral is the one glyph that survives there. Beneath the plan, an HTML key lists the numbered places in plan order: numeral (mono 11px `#94949c`), name (13px `#f4f4f5`), hours (mono 10.5px `#94949c`), and today's note as a 12 × 8 swatch drawn exactly like the note on the plan. The two courier addresses and the storefront are rows 9–11 with their edge type named in words. |
 | Lit room | the current hour, static. No halo breathe. |
-| Replay | absent. In its place, the hour strip from §10 — 13 buttons in a `data-horizontal-scroll` row, 44px hit targets, mono 11px. |
+| The performance | present, and the toggle is its only control here too. In-plan text is numerals-only at this width, so the tag leaves the drawing: the current beat renders as one HTML line directly beneath the plan, `HH:00 · label`, mono 11px `#f4f4f5`, replaced on each beat. Travellers may run — the SVG scales with everything in it. |
+| The hour strip | gone, with the rest of the strip (D1). Removing it removes its `data-horizontal-scroll` scroller too, so the containment guard has one less exemption to honour — confirm it stays green. |
 | Panels | not overlays. Four stacked expandable blocks beneath the plan, in the plan's own order — DNESKAi, the workshop, the courier, the window and the signal — each with the panel header vocabulary as its summary row (eyebrow, title, a chevron), expanding downward in flow. |
 | Panel bodies | every multi-column body becomes one column: the DNESKAi panel's three columns stack, the courier's seven beats become the numbered strip, the hook rack becomes a 4 × 13 grid, the workshop's two rows stay two rows. |
 | Legend and readout | neither exists at any width. The key row above carries every name, hour and note, and it is the only place they appear below 1024px. |
@@ -852,7 +1179,7 @@ Every value used, and where it comes from.
 
 | Value | Source | Used for |
 | --- | --- | --- |
-| `#09090b` | page | focus-ring gap, replay scrim |
+| `#09090b` | page | focus-ring gap, performance scrim, the open-room scrim (§7) |
 | `#0b0b0d` | page | board paper (at .9), panel body |
 | `#0e0e12` | page | room floor, quiet-close tag fill, card fills |
 | `#101013` | page family | control fills |
@@ -871,8 +1198,14 @@ Every value used, and where it comes from.
 | `#d4d4d8` | page + `carousel-studio` hue | controls, addresses, body copy, exit arrows |
 | `#f4f4f5` | page | headings, playhead, lit-room labels |
 | `#ff5a00` | `var(--bai-accent)`, `company` | the header's pulse dot, the focus ring, and Board HQ's room hue. Nowhere else. |
-| The seven venture hues | `PROJECT_COLOR` | room outlines, lit fills, door notes, spills, rail ticks, panel accents |
-| The eight composited lit fills | derived, tabulated in §5.1 | lit room floors |
+| The seven venture hues | `PROJECT_COLOR` | room outlines, lit fills, door notes, spills, envelope fills, panel accents |
+| The eight composited lit fills | derived, hue at 14% over `#0e0e12`, tabulated in §5.1 | lit room floors |
+| The eight composited **active** fills | derived, hue at 28% over `#0e0e12`, tabulated in §6.5 | the room whose beat is live (D4) |
+| `#bbf7d0` | `goviral` | the trend signal, and the platform edge and its address (§3.8) — 11.35:1 on `#101012` |
+
+The rail ticks left the ledger with the rail (D1). The active fills are the one
+family added: eight values, each its hue at twice the lit ratio, each measured
+against `#f4f4f5` in §6.5 with the worst pair at 7.88:1.
 
 Ember appears in exactly three places: the accent dot in the header, the focus
 ring, and Board HQ, whose key is `company`. No venture room borrows it and no
@@ -891,14 +1224,57 @@ venture panel uses it as an accent.
   the workshop's unique disc. The two notes and the missed state separate by
   silhouette: filled body, outlined body with a bar, open bracket with no
   body.
-- The replay is identifiable as a recording with the sound off and the copy
-  unread: chrome present, halo replaced by a hard offset contour, the plate's
-  Prague wash switched off behind a flat scrim.
+- The performance is identifiable as a performance with the sound off and the
+  copy unread: halo replaced by a hard offset contour, the plate's Prague wash
+  switched off behind a flat scrim, and one button whose label has changed.
+  There is no chrome left to carry it (D1).
 - Nothing animates a cost on a free path. The only moving cost is the DNESKAi
   panel's $0.50 bar, which advances on curation and the write/review loop
-  only.
-- The reduced-motion appendix covers all 28 motion rows, including the hour
-  strip and the numbered courier strip.
+  only. No envelope carries a figure of any kind.
+- The reduced-motion appendix covers all 38 motion rows, including every
+  travelling row and the numbered courier strip.
+
+Added by the 2026-08-08 decisions:
+
+- **One control, and it is a toggle.** `PLAY THE DAY` ↔ `STOP THE DAY`, with
+  `aria-pressed`. Nothing else on the board starts, stops, steps or seeks the
+  day, and no strip exists to remove (D1).
+- **The day is the schedule, not today.** Every slot lights and tags for its
+  beat, GoVIRAL included on the days it does not sit; the notes that hang are
+  today's real ones. The same story plays on every visit (D2).
+- **Every hour and title on screen is the registry's.** `slot.hour` and
+  `slot.label`, printed exactly as the calendar prints them (D2, D3).
+- **No native `title` anywhere.** The tag is drawn text. Where a hover
+  explanation is genuinely needed, the house tooltip component is the only
+  mechanism (D3).
+- **Every drawn glyph clears 9.5px** at the smallest wide-mode viewport. The
+  tag is 19 plan units, which measures 9.82px at 1024px — a third of a pixel of
+  margin, shared with the room names at the same size (D3, §6.4).
+- **Every text/background pair the performance introduces is measured.** Eight
+  tag-on-active-fill pairs in §6.5, worst 7.88:1 (D4).
+- **One envelope silhouette, and the fill says whose work it is.** Two stated
+  exceptions, both of which are signals rather than parcels: FightAIQ's record
+  slip and GoVIRAL's trend pulse (D10).
+- **Every journey is complete.** Each leg renders in order, the envelope
+  visibly enters and leaves every station, and no leg begins before the one
+  before it has rested (D10).
+- **Both magazines and marketingShark send two envelopes.** One to an address,
+  one through the Design Lab to GoVIRAL and out toward the platforms (D11).
+- **Titty Tuesdays receives nothing.** Its lane pulses inward or not at all,
+  and the performance does not depend on its dock bay, whose fate is an open
+  owner decision (D11).
+- **GoVIRAL is a station a reader can watch work pass through**: three bands,
+  one straight line at x 685 from its door to its edge (D12).
+- **The platform edge is dashed** because the platforms are not connected yet,
+  and the drawing's rule holds across all three edges: solid means an address,
+  dashed means an intention (D10, §3.8).
+- **The whole performance lands between 30 and 50 seconds** (§6.7).
+- **Opening a room stops the day.** The same teardown as the toggle, completing
+  before the plan reframes, so a traveller and a framed room never coexist; and
+  the toggle is not offered while a room stands open (D9).
+- **The plan says `DESIGN LAB`.** The reader-facing name everywhere; every
+  internal identifier — the `carousel-studio` key, the package, config keys,
+  state paths, workflow allowlists — is untouched (D13).
 - A reader who only sees depth 1 can answer where a decision goes when it
   leaves a room: one door per room onto one spine, the spine east into the
   roller door and the dock, two labelled exits from the dock, and two visible
@@ -914,3 +1290,10 @@ venture panel uses it as an accent.
   they sit and how they are typed.
 - The worked example's date, headline and URL, which resolve from committed
   state.
+- What the social platforms are, and which of them GoVIRAL launches to. §3.8
+  draws the edge and stops there deliberately: the pipeline is designed, the
+  far end is not connected, and naming a platform the system cannot yet post to
+  would be the drawing making a claim the building cannot keep.
+- Whether Titty Tuesdays' dock bay stays drawn, and how long Board HQ's roster
+  runs in an opened room. Both are open owner decisions on record in the owner
+  document; nothing in §6 or §7 depends on either answer.

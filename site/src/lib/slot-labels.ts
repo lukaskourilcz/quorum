@@ -17,7 +17,7 @@ const labels: Record<CalendarKind, string> = {
   "mag-desk": "MMA Files desk review",
   "article-am": "Morning MMA Files article",
   "article-pm": "Evening MMA Files article",
-  "studio": "Carousel Studio template review"
+  "studio": "Design Lab template review"
 };
 
 /**

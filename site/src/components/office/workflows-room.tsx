@@ -101,31 +101,49 @@ function LatestCard({ latest }: { latest: NonNullable<WorkflowsRoom["latest"]> }
 
 export function WorkflowsRoomView({
   room,
-  inset,
+  box,
+  narrow,
+  overspills,
   compact,
   onBack
 }: {
   room: WorkflowsRoom;
-  /** Where the room's own rectangle sits inside the frame, as percentages. */
-  inset: { left: string; top: string; width: string; height: string };
+  /** The measured box the content is laid out in, in pixels on the plan's own box. */
+  box: { left: number; top: number; width: number; height: number };
+  /** Lay out as one column: this box is too narrow for two, whatever the viewport is. */
+  narrow: boolean;
+  /** The box reaches past the room's walls, so it brings its own ground. */
+  overspills: boolean;
   compact: boolean;
   onBack: () => void;
 }) {
+  const oneColumn = compact || narrow;
   return (
     <div
       data-room-view
       style={{
         position: "absolute",
-        left: inset.left,
-        top: inset.top,
-        width: inset.width,
-        height: inset.height,
-        // Inside the walls, not over them: the room's outline stays the frame of what it holds.
+        left: `${box.left}px`,
+        top: `${box.top}px`,
+        width: `${box.width}px`,
+        height: `${box.height}px`,
+        // Inside the walls where the room is wide enough to hold the text, and centred on the same
+        // middle where it is not. The room's outline is still the frame of what it holds; on the
+        // narrow rooms the text simply needs more of the floor than the walls enclose.
         padding: compact ? "10px" : "18px",
         display: "flex",
         flexDirection: "column",
         gap: "12px",
         minHeight: 0,
+        // The scrim has already darkened the floor *outside* the room. Inside it the room's own
+        // table and chairs are still drawn at full strength, and body text laid straight over a
+        // furniture stroke is unreadable — so the content brings its own ground. It stays a shade
+        // short of opaque, which keeps the floor's hue under the type and the room reading as the
+        // room rather than as a card that happens to be here.
+        background: "rgba(9,9,11,.92)",
+        // Where the box had to reach past the walls, it draws its own edge; where it sits inside
+        // them, the room's outline is already the frame and a second one would fight it.
+        ...(overspills ? { border: "1px solid #26262b", borderRadius: "10px" } : {}),
         ...(compact ? {} : { animation: "wf-fade 220ms ease-out" })
       }}
     >
@@ -152,7 +170,7 @@ export function WorkflowsRoomView({
         <span
           id="wf-room-title"
           style={{
-            fontSize: compact ? "15px" : "19px",
+            fontSize: oneColumn ? "15px" : "19px",
             fontWeight: 600,
             letterSpacing: "-.02em",
             color: "#f4f4f5",
@@ -169,6 +187,12 @@ export function WorkflowsRoomView({
         </span>
       </div>
 
+      {/*
+        Long content scrolls inside the room rather than running through its south wall. Board HQ
+        lists every role scoped to the whole company — seventeen of them — and at the height a room
+        gets on a laptop that is more than fits. `data-wheel-exempt` is what stops the page's own
+        wheel lock from swallowing the gesture.
+      */}
       <div
         data-wheel-exempt
         style={{
@@ -176,8 +200,8 @@ export function WorkflowsRoomView({
           minHeight: 0,
           overflowY: "auto",
           display: "grid",
-          gap: compact ? "14px" : "18px",
-          gridTemplateColumns: compact ? "1fr" : "minmax(0, 1fr) minmax(0, 1fr)",
+          gap: oneColumn ? "14px" : "18px",
+          gridTemplateColumns: oneColumn ? "minmax(0, 1fr)" : "minmax(0, 1fr) minmax(0, 1fr)",
           alignContent: "start"
         }}
       >
@@ -200,12 +224,14 @@ export function WorkflowsRoomView({
               {room.slots.map((slot) => (
                 <div
                   key={`${slot.kind}-${slot.hour}`}
-                  style={{ display: "flex", gap: "10px", alignItems: "baseline" }}
+                  style={{ display: "flex", flexWrap: "wrap", gap: "4px 10px", alignItems: "baseline" }}
                 >
                   <span style={{ fontFamily: MONO, fontSize: "11px", color: "#f4f4f5", flex: "0 0 auto" }}>
                     {String(slot.hour).padStart(2, "0")}:00
                   </span>
-                  <span style={{ fontSize: "12px", color: "#94949c", minWidth: 0 }}>{slot.label}</span>
+                  <span style={{ fontSize: "12px", color: "#94949c", flex: "1 1 auto", minWidth: 0 }}>
+                    {slot.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -225,21 +251,29 @@ export function WorkflowsRoomView({
                 Served by roles that work across the whole company.
               </p>
             ) : (
+              // A role's id and its title wrap onto two lines rather than pushing the row wider
+              // than the box. The 58px reservation that used to align the ids is what carried the
+              // overflow out of the drawing on the narrow rooms; the column is short enough that
+              // the ids read fine unaligned.
               room.roles.map((role) => (
-                <div key={role.id} style={{ display: "flex", gap: "10px", alignItems: "baseline" }}>
+                <div
+                  key={role.id}
+                  style={{ display: "flex", flexWrap: "wrap", gap: "4px 10px", alignItems: "baseline" }}
+                >
                   <span
                     style={{
                       fontFamily: MONO,
                       fontSize: "11px",
                       fontWeight: 600,
                       color: "#f4f4f5",
-                      flex: "0 0 auto",
-                      minWidth: "58px"
+                      flex: "0 0 auto"
                     }}
                   >
                     {role.id}
                   </span>
-                  <span style={{ fontSize: "12px", color: "#94949c", minWidth: 0 }}>{role.title}</span>
+                  <span style={{ fontSize: "12px", color: "#94949c", flex: "1 1 auto", minWidth: 0 }}>
+                    {role.title}
+                  </span>
                 </div>
               ))
             )}

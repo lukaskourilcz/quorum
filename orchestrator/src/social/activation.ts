@@ -205,10 +205,10 @@ async function recordMissingCredentials(repoRoot: string, missing: Record<Social
     .map(([venture, values]) => `${venture}: ${values.join(", ")}`);
   if (names.length === 0) return;
   const marker = "SOCIAL-PLATFORM-CREDENTIALS";
-  const current = await readText(repoRoot, "NEEDS_YOUR_HELP_NOW.md", "# Needs your help now\n");
+  const current = await readText(repoRoot, "docs/NEEDED.md", "# Needs your help now\n");
   if (current.includes(marker)) return;
   const item = `\n## ${marker}\n\nAdd the Instagram and Threads account IDs and access tokens as GitHub Actions secrets/variables for each brand. Missing now: ${names.join("; ")}. The per-venture gates remain locked and no post is attempted.\n`;
-  await atomicWriteText(repoRoot, "NEEDS_YOUR_HELP_NOW.md", `${current.trimEnd()}\n${item}`);
+  await atomicWriteText(repoRoot, "docs/NEEDED.md", `${current.trimEnd()}\n${item}`);
 }
 
 export async function refreshSocialActivation(input: {

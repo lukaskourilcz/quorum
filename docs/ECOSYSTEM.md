@@ -1,7 +1,7 @@
 # BoardlessAI ecosystem — standing full-context brief
 
 Updated: 2026-08-02  
-Status: implementation complete; launch-ready after the owner-only setup in `NEEDS_YOUR_HELP_NOW.md`  
+Status: implementation complete; launch-ready after the owner-only setup in `docs/NEEDED.md`  
 Audience: owner, product partners and Fable brainstorming  
 Authority: current code, committed state and countersigned decisions D1–D12
 
@@ -20,7 +20,7 @@ an honest `not-needed`, `unavailable` or failure state instead of inventing work
 The public BoardlessAI site explains the company and its saved outputs. `/admin` is the
 owner's protected operating view. Caught Up and MMA Files are bounded consumer apps:
 they accept content/data packages and render them, but never orchestrate BoardlessAI.
-Titty Tuesdays remains pre-commerce. FightAIQ never places bets. Carousel Studio is
+Titty Tuesdays remains pre-commerce. FightAIQ never places bets. The Design Lab is
 an internal renderer with a public gallery, not another social brand.
 
 ## How to maintain this document
@@ -59,7 +59,7 @@ Refreshed from committed state: **2026-08-08T20:01:09.008Z**. This block is gene
 | Titty Tuesdays | operating | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | locked (0/4) |
 | GoVIRAL | operating | gv-brief 13:00 | none | not applicable |
 | FightAIQ | operating | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
-| Carousel Studio | operating | deterministic service only | none | not applicable |
+| Design Lab | operating | deterministic service only | none | not applicable |
 | marketingShark | operating | ms-daily 07:00 | none | not applicable |
 | MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (3/10) |
 
@@ -97,7 +97,7 @@ marker, image dimensions and attribution. One verification failure retries the s
 package without a model call; a second failure reverts and pauses only Caught Up.
 Social publishing stays locked until seven consecutive release proofs, complete
 credentials, project checks and the global switch all pass. THREADS and INSTAGRAM
-remain disabled, but their contracts are Carousel Studio-ready.
+remain disabled, but their contracts are Design Lab-ready.
 
 ### Titty Tuesdays
 
@@ -128,7 +128,7 @@ importer run and one `enabled` flag.
 Everything except one model call per brand per day is deterministic and costs nothing. Which
 question runs comes from a seeded order over the bank, so every question is served once before
 any repeats and the same date always produces the same question. Which opening line fronts it
-is decided by the Carousel Studio's hook brain, not by the model and no longer from a library
+is decided by the Design Lab's hook brain, not by the model and no longer from a library
 inline in this venture's config: the studio evaluates the central library's gates against the
 question's own metadata — "Two answers look right. One is." may only run on a question that
 actually has four options and is not trivial — and slide 1 renders that line verbatim. CHUM
@@ -167,11 +167,11 @@ Up.
 
 An article is killed before any model call when its source packet is incomplete.
 REACH and SPLIT are currently disabled. REACH's Czech A/B draft contract already
-uses live Carousel Studio templates; SPLIT remains measurement-only and idle. Social
+uses live Design Lab templates; SPLIT remains measurement-only and idle. Social
 unlock requires ten consecutive article proofs, credentials, project safety and the
 global switch. Indexing remains an independent owner decision.
 
-### Carousel Studio
+### Design Lab
 
 Promise: provide one deterministic, brand-token-driven carousel engine for every
 project. It lives inside this monorepo as `@boardlessai/carousel-studio`; no separate
@@ -325,7 +325,7 @@ envelope before any call.
 | HACEK | the Czech editorial register and copy floor | cannot change uncertainty or intent |
 | SPARK | one ledger-checked Caught Up product idea | cannot recycle rejected ideas without evidence |
 | VAULT | idea memory and duplicate control | cannot approve an idea |
-| FRAME | article heroes and deterministic visual rendering | social path is Carousel Studio only; no publishing |
+| FRAME | article heroes and deterministic visual rendering | social path is the Design Lab only; no publishing |
 | RELAY | bounded delivery, digest and reconciliation | cannot edit consumer-app code outside packages |
 | ANGLE | precise position and niche | cannot assert an audience without evidence |
 | COHORT | adult audience definition without personal data | cannot claim unsupported reach |
@@ -341,7 +341,7 @@ envelope before any call.
 | SONAR | source terms, cost and overlap review | cannot wire a source before terms approval |
 | CANVAS | MMA Files assignments and release quality | kills unsupported slots before spend |
 | JAB | direct sourced MMA reporting | cannot promote unsupported detail into copy |
-| REACH | Czech MMA social variants | disabled; drafts use only live Carousel Studio templates |
+| REACH | Czech MMA social variants | disabled; drafts use only live Design Lab templates |
 | SPLIT | retired | stood down; the reader measurement it waited for is not being built |
 | EASEL | retired | stood down; the studio renders deterministically and holds no meeting |
 | MOTIF | retired | stood down with EASEL; nothing reads layout observations |
@@ -349,7 +349,7 @@ envelope before any call.
 | MAKO | marketingShark direction and KPI honesty; its weekly package review is specified, not yet wired | cannot post, cannot edit the hook library silently, cannot invent a metric |
 | CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
 
-## Content, social and Carousel Studio flow
+## Content, social and the Design Lab's flow
 
 Caught Up and MMA Files spend on article language work only after source gates pass.
 Both publish in Czech only; both use one licensed hero/fallback; both are delivered
@@ -357,7 +357,7 @@ through a repository-scoped App and verified after deployment. Social payload
 generation is separately gated, so locked social projects make no caption/model calls.
 
 When enabled, every social producer returns a live `template_id`, semantic `version`
-and bounded `content` payload. FRAME resolves the version through Carousel Studio,
+and bounded `content` payload. FRAME resolves the version through the Design Lab,
 binds the project's tokens, renders PNGs, validates accessibility/provenance and saves
 the renderer version on the queue/receipt. Schema validation rejects missing or
 non-live references. There is no freeform social image path.
@@ -374,7 +374,7 @@ spin-up. The daily evaluator reads saved state and labels targets on-track, at-r
 off-track or unavailable; missing Phase 3 measurement is never converted to zero.
 Company targets cover valid windows, all-in/API cost, content volume, delivery proof,
 founding/rated proposals and agenda review. Each project has targets appropriate to
-its promise. Carousel Studio requires ten live templates, six passing new proposals,
+its promise. The Design Lab requires ten live templates, six passing new proposals,
 100% engine-rendered published carousels after unlock, green determinism and one cited
 iteration per brand.
 
@@ -393,7 +393,7 @@ accepts a real event. Empty fixed-cost state means not entered, not free.
 Caught Up sponsorship, MMA Files sponsorship/affiliate and Titty Tuesdays commerce
 are locked hypotheses with explicit readiness and future legal/account/payment work.
 FightAIQ is intentionally unmonetized through Q1/Q2; review begins only after 30
-evaluated events and calibration. Carousel Studio is an internal engine; standalone extraction is a locked future possibility. Readiness may
+evaluated events and calibration. The Design Lab is an internal engine; standalone extraction is a locked future possibility. Readiness may
 prepare a proposal but never activate an earning method.
 
 ## Safety and launch gates
@@ -426,7 +426,7 @@ prepare a proposal but never activate an earning method.
 | D8 FightAIQ analysis/free data | guarded early-model analysis is approved; evidence and free-source rules bind it |
 | D9 Measurement readiness | contracts/assignment may exist, but ingestion and SPLIT remain off |
 | D10 Money and quarterly KPIs | public cost/revenue truth, 90-day protocol and owner-only earning activation |
-| D11 Carousel Studio | sixth project, monorepo engine, 11 live seed templates, lifecycle, room and public showcase |
+| D11 Design Lab | sixth project, monorepo engine, 11 live seed templates, lifecycle, room and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
 
@@ -438,9 +438,9 @@ supersede a setting without rewriting the earlier context.
 Code readiness means contracts, dry proofs, tests, delivery adapters, rendering,
 posting validation, gates, public/admin projections and rollback paths exist. It does
 not mean Codex can create accounts, know invoices or accept legal terms. The one
-deduplicated human checklist is `NEEDS_YOUR_HELP_NOW.md`; `NEEDED.md` and
-`MANUAL STEPS.md` explain the same items and verification order without inventing
-additional approval gates.
+deduplicated human checklist is `docs/NEEDED.md`, which carries the items, the reference
+tables and the verification order in one place without inventing additional approval
+gates.
 
 After those human inputs, a real workflow must report `dry=false` and `skip=false`.
 An honest `NO_EDITION`, killed article or `not-needed` agenda is a successful `$0`
@@ -454,7 +454,7 @@ outcome, not a reason to rerun paid work.
    require genuine judgment?
 3. After one full quarter, which rooms produce changed decisions often enough to keep
    their cadence and which should become event-triggered?
-4. How should Carousel Studio ratings reveal useful template families without turning
+4. How should the Design Lab ratings reveal useful template families without turning
    taste into a self-reinforcing monoculture?
 5. What is the smallest lawful measurement plan worth enabling in Phase 3, and what
    decisions would each metric actually change?
@@ -466,5 +466,5 @@ outcome, not a reason to rerun paid work.
    an account prematurely?
 9. How should the system explain its rare failures so the owner can intervene once,
    not babysit recurring workflows?
-10. What parts of Carousel Studio would need isolation, documentation and demand proof
+10. What parts of the Design Lab would need isolation, documentation and demand proof
     before standalone extraction becomes rational?

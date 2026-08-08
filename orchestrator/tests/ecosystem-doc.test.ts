@@ -19,7 +19,9 @@ describe("living ecosystem document", () => {
     // carried budget-2026-08d's superseded $50/$42/$2.20 as a literal while the runtime enforced
     // budget-2026-08e -- a generated block stating a cap nothing was applying.
     expect(block).toContain("| Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |");
-    expect(block).toContain("Carousel Studio");
+    // The workshop's reader-facing name is Design Lab (D13). Its venture id stays
+    // `carousel-studio`, which is why the generated table's row label moved and nothing else did.
+    expect(block).toContain("Design Lab");
     expect(block).toContain("METRICS_INGESTION_ENABLED=false");
     // SPLIT is retired and off every venture list, so REACH is the only role MMA Files has
     // switched off rather than removed.

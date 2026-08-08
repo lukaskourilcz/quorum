@@ -16,6 +16,7 @@ import {
   fitText,
   fixturePayload,
   mayGoLive,
+  previewFormats,
   renderCarouselPng,
   renderCarouselSlidePng,
   renderCarouselSlideSvg,
@@ -25,13 +26,17 @@ import {
 } from "../src/index.js";
 
 describe("carousel-template/1", () => {
-  it("ships eleven live, original seed layouts", () => {
+  it("ships twelve live, original seed layouts", () => {
     // The eleventh is quiz-code-context, added for marketingShark and justified by a gap rather
     // than by a preference: every other live layout tops out at a 100-character mono slot over
     // two lines, which is a source label and not a program, so a quiz question carrying a fenced
     // code block had nowhere to put it that kept the characters monospaced and legible.
-    expect(SEED_TEMPLATES).toHaveLength(11);
-    expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(11);
+    //
+    // The twelfth is story-quote, and it is here for the same kind of reason: the 9:16 canvas
+    // reserves roughly a seventh of its height at each end for the platform's own chrome, and
+    // every layout composed for 4:5 puts its logo and its closing line inside those bands.
+    expect(SEED_TEMPLATES).toHaveLength(12);
+    expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(12);
     expect(SEED_TEMPLATES.every((template) => CarouselTemplateSchema.parse(template).status === "live")).toBe(true);
   });
 
@@ -74,10 +79,44 @@ describe("carousel-template/1", () => {
     expect(fitted.fontSize).toBeGreaterThanOrEqual(24);
   });
 
+  it("renders the story at 1080 x 1920, deterministically and seeded like the rest (D14)", async () => {
+    const template = SEED_TEMPLATES.find((entry) => entry.id === "story-quote");
+    if (!template) throw new Error("story-quote is not a seed layout");
+    const input = {
+      template,
+      brand: CAROUSEL_BRANDS["caught-up"]!,
+      payload: fixturePayload(template),
+      format: "instagram-story" as const
+    };
+    const first = await renderCarouselPng(input);
+    const second = await renderCarouselPng(input);
+    expect(await sharp(first[0]!.png).metadata()).toMatchObject({ width: 1_080, height: 1_920, format: "png" });
+    // Same input, same bytes — the studio's whole contract, and the story is not an exception.
+    expect(createHash("sha256").update(first[0]!.png).digest("hex"))
+      .toBe(createHash("sha256").update(second[0]!.png).digest("hex"));
+  });
+
+  it("offers the story only to layouts composed for it", () => {
+    // Every seed is offered the three canvases it was designed for.
+    for (const template of SEED_TEMPLATES) {
+      expect(previewFormats(template), template.id).toEqual(
+        expect.arrayContaining(["instagram-square", "instagram-portrait", "threads"])
+      );
+    }
+    // The story is offered to the layout built for it, and withheld from those that are not —
+    // which is what stopped a new canvas from demoting every live template to draft.
+    expect(previewFormats(SEED_TEMPLATES.find((entry) => entry.id === "story-quote")!))
+      .toContain("instagram-story");
+    expect(previewFormats(SEED_TEMPLATES.find((entry) => entry.id === "quote-card")!))
+      .not.toContain("instagram-story");
+    // With no template it is every canvas the studio can render, which is the preview route's enum.
+    expect(previewFormats()).toHaveLength(4);
+  });
+
   it("checks safe areas, contrast, token bindings and overflow for every brand and format", () => {
     for (const template of SEED_TEMPLATES) {
       for (const brand of Object.values(CAROUSEL_BRANDS)) {
-        for (const format of ["instagram-square", "instagram-portrait", "threads"] as const) {
+        for (const format of previewFormats(template)) {
           const checks = validateTemplateForBrand(template, brand, format);
           expect(checks.every((check) => check.status === "pass"), `${template.id}/${brand.id}/${format}: ${checks.map((check) => check.detail).join("; ")}`).toBe(true);
           expect(mayGoLive(checks)).toBe(true);

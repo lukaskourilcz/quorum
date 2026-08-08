@@ -310,12 +310,12 @@ export interface OfficeProject {
  * because the registry's own `growth_objective.label` is an internal objective rather than a
  * description a visitor can read.
  *
- * marketingShark and Carousel Studio are here by owner decision. Carousel Studio in particular is
+ * marketingShark and the Design Lab are here by owner decision. The Design Lab in particular is
  * not a venture with an audience — it is the workshop the others hand their work to, and the
  * Workflows plan draws it as machinery rather than as a room. On the wall it is still one of the
  * things this company runs, and leaving it off made the wall disagree with the registry.
  *
- * TODO(owner): FightAIQ, GoVIRAL, Titty Tuesdays, marketingShark and Carousel Studio have no
+ * TODO(owner): FightAIQ, GoVIRAL, Titty Tuesdays, marketingShark and the Design Lab have no
  * public URL yet. The card renders nothing in that slot until one is supplied — no "coming soon",
  * no disabled link.
  */
