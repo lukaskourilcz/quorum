@@ -94,10 +94,10 @@ The list below is those, in the order that unblocks the most.
    Half-thoughts and bullets are fine; it is read as data, never as instructions.
    [imp:4] [owner:me] [time:20m] [kind:content]
 
-4. [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`.** Free tier, and they widen the
-   licensed photo pool for both magazines at once. Not a blocker: Openverse, Wikimedia Commons,
-   the curated illustrative set and the deterministic FRAME plate remain available, and a photo
-   is only used when its own title, author or URL names the article's subject.
+4. [x] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`.** Done — the owner added both
+   Actions secrets on 2026-08-08; `cycle.yml` already maps them into the run, so the wider
+   photo pool is live for the article-image program
+   (`state/decisions/2026-08-08-article-image-fit.md`).
    [imp:4] [owner:me] [time:5m] [kind:setup]
 
 5. [ ] **Rate the Titty Tuesdays idea cards in `/admin`.** The marketing room writes concrete

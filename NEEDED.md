@@ -132,6 +132,12 @@ The shared marker format, for the things only the owner can supply. The full run
 still [`NEEDS_YOUR_HELP_NOW.md`](NEEDS_YOUR_HELP_NOW.md); these are the items the office
 walkthrough and Carousel Studio are waiting on specifically.
 
+- [ ] **Create a fal.ai account and arm the illustration rung** — the article-image program
+  (`state/decisions/2026-08-08-article-image-fit.md`) ships its generated-illustration rung
+  dark. Create the account, add `FAL_KEY` to Actions secrets, prepay the minimum credit
+  (schnell renders cost about $0.003 each, capped at two a day), then set
+  `ARTICLE_ILLUSTRATION_ENABLED=true` when you want it live. Until then the ladder behaves
+  exactly as before. [imp:3] [owner:me] [time:10m] [kind:setup]
 - [ ] **Fire marketingShark's first live `ms-daily` run** — everything about the room is proved
   against a labelled fixture and CHUM has never actually written a word; the implementation
   session had no model key reachable from it. One manual `cycle.yml` dispatch with phase
