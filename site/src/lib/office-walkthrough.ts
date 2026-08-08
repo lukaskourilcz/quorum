@@ -23,6 +23,8 @@ import {
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
 import { getPublicMeetingSkips } from "@/lib/meeting-skips";
 import { getPublicMoneySnapshot } from "@/lib/money-records";
+import { resolveOfficeWorkflows } from "@/lib/office-workflows";
+import type { OfficeWorkflows } from "@/lib/office-workflows-model";
 import { getPublicArticleSlots } from "@/lib/article-slots";
 import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
 import { getPublicStandups } from "@/lib/standup-records";
@@ -382,6 +384,7 @@ export interface OfficeWalkthroughData {
   projects: OfficeProject[];
   team: OfficeTeam;
   results: OfficeResults;
+  workflows: OfficeWorkflows;
   meetingCount: number;
 }
 
@@ -497,13 +500,24 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
       .map((record) => `${record.kind}:${record.date}`)
   );
   const deliveredPackages = new Map<string, { json: string; note?: string }>();
-  await Promise.all([...deliveryDates].map(async (key) => {
-    const [kind, date] = key.split(":") as [string, string];
-    const pkg = kind === "cu-edition"
-      ? await deliveredEditionPackage(date)
-      : await deliveredArticlePackage(date);
-    if (pkg) deliveredPackages.set(key, { json: pkg.json, ...(pkg.note ? { note: pkg.note } : {}) });
-  }));
+  /**
+   * The floor plan resolves here rather than in the batch above, and that is deliberate.
+   *
+   * Its slot table is built from the records that batch returns, so it cannot start any earlier;
+   * pairing it with the package reads is what keeps it concurrent with them instead of queued
+   * behind them. The records are handed over rather than read a second time — one read of the
+   * calendar sources serves both the week grid and the plan.
+   */
+  const [, workflows] = await Promise.all([
+    Promise.all([...deliveryDates].map(async (key) => {
+      const [kind, date] = key.split(":") as [string, string];
+      const pkg = kind === "cu-edition"
+        ? await deliveredEditionPackage(date)
+        : await deliveredArticlePackage(date);
+      if (pkg) deliveredPackages.set(key, { json: pkg.json, ...(pkg.note ? { note: pkg.note } : {}) });
+    })),
+    resolveOfficeWorkflows(now, { standups, meetings, skips, articleSlots, definitions })
+  ]);
 
   const feed = buildMeetingFeed({
     meetings,
@@ -673,6 +687,7 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     projects,
     team,
     results,
+    workflows,
     meetingCount: definitions.length
   };
 }

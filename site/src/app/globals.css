@@ -225,7 +225,7 @@ img {
 }
 
 /* ---- Office walkthrough ---------------------------------------------------
-   The home page walks through seven full-viewport rooms. Snap is scoped to that
+   The home page walks through eight full-viewport rooms. Snap is scoped to that
    page by a data attribute the walkthrough sets on <html> while it is mounted,
    because a proximity snap left on globally would fight every other page's own
    scrolling. Above 1024px only: below it the page is an ordinary document and
@@ -244,6 +244,7 @@ img {
   html[data-office-walkthrough] #intro,
   html[data-office-walkthrough] #calendar,
   html[data-office-walkthrough] #projects,
+  html[data-office-walkthrough] #workflows,
   html[data-office-walkthrough] #team,
   html[data-office-walkthrough] #results {
     scroll-snap-stop: always;
@@ -294,6 +295,114 @@ img {
   to {
     transform: translateY(620%);
   }
+}
+
+/* ---- Workflows floor plan -------------------------------------------------
+   The plan draws itself once when the reader arrives and then holds still. Every
+   element below is written at its resting value in the markup and the entrance
+   animations run *backwards* into it, so the section is complete and correct on
+   first paint — before a frame has run, without JavaScript, and for a crawler.
+   The component simply does not apply these when the reader asked for stillness.
+
+   No `will-change` anywhere here. The plates already exhausted the compositor
+   once on this page; a permanently promoted 1760-unit SVG would do it again. */
+
+@keyframes wf-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes wf-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes wf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes wf-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes wf-breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
+@keyframes wf-worklight {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes wf-panel {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes wf-column {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes wf-sweep {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wf-bounce {
+  from {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(38px, 17px);
+  }
+}
+
+/* Focus on an SVG child cannot be drawn with `outline` dependably, so each target
+   carries its own two-rect ring and reveals it here. The black gap is what keeps
+   Ember legible where a lit room's own hue sits closest to it. */
+[data-wf-target] [data-wf-ring] {
+  opacity: 0;
+}
+
+[data-wf-target]:focus-visible {
+  outline: none;
+}
+
+[data-wf-target]:focus-visible [data-wf-ring] {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
