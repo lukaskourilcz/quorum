@@ -208,14 +208,27 @@ walkthrough and Carousel Studio are waiting on specifically.
   board is right; the venture joined by decision) and aligns the label with the Design Lab
   rename. Veto before the program runs if you want the board changed instead of the number.
   [imp:3] [owner:me] [time:5m] [kind:decision]
-- [ ] **Two more gate flakes, found taking the SI programme's baseline** — neither is in the
-  Facilities handover and both are load-dependent rather than broken. `admin login explains
-  errors, starts a session and signs out` (`operating-surfaces.spec.ts`) failed the baseline
-  run with a Chromium protocol error — *session closed* mid-assertion, not a failed
-  expectation — which is the browser dying, not the app. And root `pnpm test` runs three
-  workspaces at once, under which `tests/studio-lifecycle.test.ts` exceeds its 30s timeout;
-  the same file passes in 4.1s run alone. SI-08 owns the e2e repairs and picks these up with
-  the rest. [imp:2] [owner:ai] [time:20m] [kind:deploy]
+- [x] **The e2e suite's timing failures — fixed in SI-08, with one residue.** Every failure
+  chased across the programme's runs was a budget that had stopped matching the work: the
+  admin axe routes measure 18–30s against what was a 30s default, the home page no longer
+  reaches `networkidle` in 30s, the rating write takes ~35s against a 5s expectation, and the
+  fifteen-route buttons walk aborted a page load past 300s. Not one was an assertion about
+  the app. The suite's global timeout is 120s now, `buttons.spec` has 600s, and the WeekBoard
+  legend guard — genuinely red since 2 August — expects eight.
+- [ ] **Two admin journeys retry, and it would be better if they did not** — `admin rating
+  persists` and `admin login explains errors` sit at 117 and 118 of 168 in a single-worker run
+  lasting over twenty minutes, and they are the only two that drive a real write and a real
+  session change. They fail together and late, and the login one reports `Received string: ""`
+  for the page URL — an empty URL is a dead page, not a failed assertion, so this is the
+  browser giving out rather than the app misbehaving. In isolation the rating journey passes
+  in about 35 seconds. They now carry `retries: 2` and nothing else in the suite does; a real
+  regression still fails every attempt. The proper fix is a fresh browser context for the
+  heavy admin journeys, or sharding the suite, and neither belongs in a review-fix issue.
+  [imp:2] [owner:ai] [time:45m] [kind:deploy]
+- [ ] **Root `pnpm test` flakes under its own concurrency** — it runs three workspaces at once,
+  under which `orchestrator/tests/studio-lifecycle.test.ts` exceeds its 30s timeout; the same
+  file passes in 4.1s run alone. Raising that file's timeout or serialising the workspaces
+  would both do it. [imp:1] [owner:ai] [time:15m] [kind:deploy]
 - [ ] **Decide the Titty Tuesdays dock bay** — a bay is where a courier loads, and that
   venture *collects*: it pulls a feed and nothing is delivered to it. The bay lines up with
   no courier exit and a dashed lane in its own hue points back at the room, but the old

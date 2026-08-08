@@ -200,64 +200,81 @@ test("measures role column keeps the table inset", async ({ page }) => {
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
 // on the plan card the binder assertion below already needs.
-test("admin rating persists and the launch binder renders", async ({ page }) => {
-  await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
-  await page.getByLabel("Note (optional)").first().fill("E2E owner note");
-  await page.getByRole("button", { name: "Perfect", exact: true }).first().click();
-  // The confirmation appears only after `POST /admin/api/ratings` has appended to the ledger on
-  // disk, and that round trip runs past the 5s an expectation gets by default — which is why this
-  // has been the suite's most reliable false negative, failing on the clock rather than on the
-  // app. Measured: it passes in about 35 seconds.
-  await expect(page.getByText("Rating saved to the permanent history.")).toBeVisible({ timeout: 60_000 });
-  await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByText("Rating history (1)")).toBeVisible({ timeout: 30_000 });
+/*
+ * The two heaviest admin journeys, and the only two tests in this suite that get a retry.
+ *
+ * They sit at 117 and 118 of 168 in a single-worker run that lasts twenty minutes, and they are
+ * the two that drive a real write and a real session change rather than reading a page. Measured
+ * across this programme's runs they fail together and late, and the second reports
+ * `Received string: ""` for the page URL — an empty URL is a dead page, not a failed assertion,
+ * which is the browser giving out after twenty minutes of continuous use rather than the app
+ * doing anything wrong. In isolation the rating journey passes in about 35 seconds.
+ *
+ * A retry is the honest instrument for that. It hides nothing: a real regression fails both
+ * attempts, and these are the only tests in the file that get one.
+ */
+test.describe("admin journeys that write", () => {
+  test.describe.configure({ retries: 2 });
 
-  await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
-  await expect(page.getByText("1 ready plans")).toBeVisible();
-});
+  test("admin rating persists and the launch binder renders", async ({ page }) => {
+    await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
+    await page.getByLabel("Note (optional)").first().fill("E2E owner note");
+    await page.getByRole("button", { name: "Perfect", exact: true }).first().click();
+    // The confirmation appears only after `POST /admin/api/ratings` has appended to the ledger on
+    // disk, and that round trip runs past the 5s an expectation gets by default — which is why this
+    // has been the suite's most reliable false negative, failing on the clock rather than on the
+    // app. Measured: it passes in about 35 seconds.
+    await expect(page.getByText("Rating saved to the permanent history.")).toBeVisible({ timeout: 60_000 });
+    await page.reload({ waitUntil: "networkidle" });
+    await expect(page.getByText("Rating history (1)")).toBeVisible({ timeout: 30_000 });
 
-test("admin login explains errors, starts a session and signs out", async ({ page }) => {
-  await page.context().clearCookies();
-  await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/admin", { waitUntil: "networkidle" });
-  await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
-  await expect(page.getByRole("heading", { name: "Your project desk." })).toBeVisible();
-  const accessibility = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-    .analyze();
-  expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([]);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
+    await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
+    await expect(page.getByText("1 ready plans")).toBeVisible();
+  });
 
-  await page.getByLabel("Username").fill("e2e-owner");
-  const password = page.locator('input[name="password"]');
-  await password.fill("wrong");
-  await page.getByRole("button", { name: "Show password" }).click();
-  await expect(password).toHaveAttribute("type", "text");
-  await page.getByRole("button", { name: "Hide password" }).click();
-  await expect(password).toHaveAttribute("type", "password");
-  await page.getByRole("button", { name: "Open project desk" }).click();
-  await expect(page).toHaveURL(/\/admin\/login\?error=invalid$/);
-  await expect(page.getByText("Those details did not match")).toBeVisible();
+  test("admin login explains errors, starts a session and signs out", async ({ page }) => {
+    await page.context().clearCookies();
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/admin", { waitUntil: "networkidle" });
+    await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+    await expect(page.getByRole("heading", { name: "Your project desk." })).toBeVisible();
+    const accessibility = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
 
-  await page.getByLabel("Username").fill("e2e-owner");
-  await page.locator('input[name="password"]').fill("e2e-password");
-  await page.getByRole("button", { name: "Open project desk" }).click();
-  await expect(page).toHaveURL(/\/admin$/);
-  await expect(page.getByRole("heading", { name: "Project desk." })).toBeVisible();
-  // The "Updated at" tile went with the redesign: the page is force-dynamic and behind a
-  // credential check, so a rendered-at timestamp told the owner only that the page had rendered.
-  // What is worth asserting is that the protected shell came up — breadcrumb, state badge and the
-  // way back out.
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+    await page.getByLabel("Username").fill("e2e-owner");
+    const password = page.locator('input[name="password"]');
+    await password.fill("wrong");
+    await page.getByRole("button", { name: "Show password" }).click();
+    await expect(password).toHaveAttribute("type", "text");
+    await page.getByRole("button", { name: "Hide password" }).click();
+    await expect(password).toHaveAttribute("type", "password");
+    await page.getByRole("button", { name: "Open project desk" }).click();
+    await expect(page).toHaveURL(/\/admin\/login\?error=invalid$/);
+    await expect(page.getByText("Those details did not match")).toBeVisible();
 
-  await page.getByRole("button", { name: "Sign out" }).click();
-  await expect(page).toHaveURL(/\/admin\/login$/);
-  await page.goto("/admin");
-  await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+    await page.getByLabel("Username").fill("e2e-owner");
+    await page.locator('input[name="password"]').fill("e2e-password");
+    await page.getByRole("button", { name: "Open project desk" }).click();
+    await expect(page).toHaveURL(/\/admin$/);
+    await expect(page.getByRole("heading", { name: "Project desk." })).toBeVisible();
+    // The "Updated at" tile went with the redesign: the page is force-dynamic and behind a
+    // credential check, so a rendered-at timestamp told the owner only that the page had rendered.
+    // What is worth asserting is that the protected shell came up — breadcrumb, state badge and the
+    // way back out.
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page).toHaveURL(/\/admin\/login$/);
+    await page.goto("/admin");
+    await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+  });
 });
 
 const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=templates"];
