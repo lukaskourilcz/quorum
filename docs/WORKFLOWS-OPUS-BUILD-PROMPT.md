@@ -212,8 +212,8 @@ the plan SVG as much as to plates; animate transforms without permanent promotio
 Run and pass:
 
 1. `pnpm -C site typecheck`
-2. `pnpm -C site build` (the dev server needs `next dev --webpack`; Turbopack
-   breaks the studio's `.js` to `.ts` alias)
+2. `pnpm -C site build` (it builds the studio first, through `prebuild`; both
+   site scripts run Turbopack)
 3. `pnpm -C site test`, including your new resolver and logic tests
 4. The containment e2e guard (`site/tests/e2e/`), with any new horizontal
    scroller marked

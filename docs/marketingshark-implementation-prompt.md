@@ -62,8 +62,9 @@ Work in:
    site page. `.claude/skills` and `.agents/skills` stay byte-identical —
    `orchestrator/tests/architecture.test.ts` enforces the mirror, and this task adds **no
    new skill directories**, so that test must pass untouched.
-7. The site consumes `studio/` as TypeScript source; `site` must run webpack (`next dev
-   --webpack`), never Turbopack. Do not touch the office walkthrough invariants.
+7. The site consumes `studio/` as built output, so anything resolving it builds it first —
+   `site`'s `pre*` scripts already do. Both site scripts run Turbopack. Do not touch the
+   office walkthrough invariants.
 
 ---
 

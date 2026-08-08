@@ -1,18 +1,26 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 
-const adminRuntimeFiles = ["../config/**/*", "../state/**/*"];
+/**
+ * The hook libraries, declared rather than inferred.
+ *
+ * `readLibrary` takes its root as a parameter so the tests can point it at a fixture, which means
+ * no bundler can prove which directory it reads. Turbopack's answer was to trace the whole
+ * repository into every function that could reach it; the call is marked `turbopackIgnore` in the
+ * studio and the files it actually needs are named here instead. Every route below reads a hook
+ * library at request time — the venture pages and the sitemap read one at build time, on a machine
+ * that has the whole repository, so they need nothing traced.
+ */
+const hookLibraryFiles = ["../studio/hooks/**/*"];
+
+const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFiles];
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
-  experimental: {
-    extensionAlias: {
-      ".js": [".ts", ".tsx", ".js"]
-    }
-  },
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,
+    "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": hookLibraryFiles,
     "/money": ["../state/money/public.json"],
     "/results": ["../state/notify/digest/**/*"],
     // The cron route reads the venture registry at request time to learn which Prague hour each

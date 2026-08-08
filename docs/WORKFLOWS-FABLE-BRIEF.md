@@ -65,8 +65,8 @@ by default, brand tokens in `site/src/styles`. Venture pages are
 `site/src/components/*-venture-page.tsx`. **There is no motion library in the dependency
 tree** — the home page's parallax, scroll locking and playback are hand-written against
 `requestAnimationFrame` and wheel events, and the section must stay that way. The studio
-is imported as TypeScript source, so `site` runs webpack (`next dev --webpack`);
-Turbopack does not apply the `.js`→`.ts` alias and every studio import fails under it.
+is imported as built output and `site`'s `predev`/`prebuild` scripts build it first, so
+`next dev` and `next build` both run Turbopack with nothing pinned.
 
 ---
 

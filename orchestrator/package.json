@@ -27,6 +27,8 @@
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "social:publish": "tsx src/social/index.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
+    "pretest": "pnpm --filter @boardlessai/carousel-studio build",
+    "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts",

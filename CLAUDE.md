@@ -10,9 +10,12 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   decisions.
 - `orchestrator/` — cycle engine + council prompts. `site/` — Next.js app.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
-  consumed as TypeScript source, so `site` must run webpack (`next dev --webpack`,
-  already in its `dev` script) — Turbopack does not apply the `.js`→`.ts` extension alias
-  and every studio import fails under it.
+  consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
+  studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
+  `orchestrator`; consuming the source is what used to force webpack, and both site
+  scripts run Turbopack now. **After editing studio source, run `pnpm -C studio build`
+  before anything that only resolves the package** — `pnpm cycle`, `pnpm delivery` and the
+  other `tsx` entry points read `dist` and will otherwise use the last build.
 - `config/models.json` — model IDs per role. `.env.example` — required env.
 
 ## Two things a session will trip over
