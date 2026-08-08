@@ -15,7 +15,12 @@ Read in this order before writing any code:
 3. This document, end to end.
 4. `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` §§5–10 and §12–13 — the section you are
    changing was built spec-first and stays that way.
-5. `site/AGENTS.md` — before any Next-specific work, read the relevant guide in
+5. `docs/FACILITIES-HANDOVER.md` — the previous session's handover. Its four
+   open owner decisions are logged in the owner document: record-keeping only,
+   never yours to decide. Its three e2e notes are worked in §2.5, and its four
+   traps are folded into this contract's gates notes. Once absorbed, the
+   handover itself is an executed session doc — cleanup-eligible in SI-13.
+6. `site/AGENTS.md` — before any Next-specific work, read the relevant guide in
    `site/node_modules/next/dist/docs/`. The installed Next 16.3.0 differs from
    training data; trust the shipped docs, not memory.
 
@@ -69,7 +74,27 @@ pnpm -C site test:e2e          # axe + measured contrast + operating surfaces
 ```
 
 If the e2e browsers are unavailable in your environment, say so in the commit
-body and in `NEEDED.md` — never report a gate you did not run as passed.
+body and in the owner document — never report a gate you did not run as
+passed.
+
+Four operational notes from the previous session, learned the hard way
+(`docs/FACILITIES-HANDOVER.md`):
+
+- Run the e2e suite on an **idle** machine — a concurrent `next build`
+  roughly doubles its runtime and tips the time-budgeted tests over.
+- **The suite writes into `state/`** (`state/ratings/titty-tuesdays/` and
+  `state/ventures/titty-tuesdays/plans/e2e-launch-plan.json` are written in
+  setup and restored in teardown), and a killed run leaves both dirty.
+  Check `git status state/` before staging, and never stage with a blanket
+  `git add -A` after running e2e.
+- The dev server's Tailwind utility scan goes stale: a class can be present
+  in the markup, missing from the dev stylesheet, and correct in the
+  production build. Verify against `site/.next/static/css/*.css` before
+  concluding a CSS variable or size "does not work".
+- `img-src` is `'self' data: blob:` — cross-origin images fail silently.
+  Serve any new image bytes (the story previews included) through a
+  same-origin route, the way `facilities/thumb/[venture]` does, rather than
+  widening the header.
 
 ---
 
@@ -89,15 +114,20 @@ the one with `id="facilities"`
   (the block guarded by `(replaying || strip) && !room` at line 454):
   transport ❚❚/▶, step buttons, a scrubbable hour rail with playhead, a
   `REPLAY HH:00` stamp, and a `NOW` button — plus a stepped-strip variant for
-  reduced motion and sub-1024 px. Since the *rooms open as rooms* change on
-  `main`, pressing any room replaces the whole plan with `WorkflowsRoomView`
-  (`site/src/components/office/workflows-room.tsx`): the room at full
-  section size — who stands in it, when it sits, what it produces — with its
-  depth-3 panel folded in where one exists (`hasPanel`; the `PanelPlace`s
-  are caught-up, carousel-studio, dock, titty-tuesdays). The dock is not a
-  room and keeps its overlay panel. Two facts matter for D9: today the
-  replay state persists behind an open room (the strip merely hides), and
-  the `Play the day` button renders whenever the replay is off — including
+  reduced motion and sub-1024 px. After the Facilities session on `main`,
+  every room opens **in place**: the plan reframes onto that room's own
+  rectangle (`roomViewBox` — the SVG's `viewBox` switches to the framed
+  rect) and `WorkflowsRoomView` stands inside those walls — what the room
+  does, what it opens onto, how it operates, its sessions, the roles
+  standing in it, and the last thing it produced, with thumbnail bytes
+  served same-origin by `site/src/app/facilities/thumb/[venture]/route.ts`
+  and room copy in `ROOM_ORDER` (`site/src/lib/office-workflows.ts`). The
+  dock is not a room and keeps the courier panel. Tooltips are the
+  hand-rolled house component `site/src/components/ui/tooltip.tsx` — no
+  Radix in this repository, and still no native `title` anywhere on the
+  plan. Two facts mattered for D9 when this was written (re-verify against
+  the tree): the replay state persists beneath an open room, and the
+  `Play the day` button renders whenever the replay is off — including
   while a room stands open.
 - `site/src/components/office/workflows-plan.tsx` — the floor plan, one inline
   SVG in a 1760 × 940 viewBox with an 80-unit margin each side. Every room is
@@ -146,9 +176,10 @@ reformatted times.
 
 **D3 — a tag at the active room.** While a meeting's beat is live, its room
 shows a tag reading `HH:00 · <label>` (for example `06:00 · Morning board`),
-drawn in the plan near the room's name — text on the drawing, never a
-`title` attribute, because nothing on the plan raises tooltips. The tag
-appears with its beat and leaves when the beat ends.
+drawn in the plan near the room's name — text on the drawing, never a native
+`title` attribute; where a hover explanation is genuinely needed anywhere,
+the house tooltip component (`ui/tooltip.tsx`) is the only mechanism. The
+tag appears with its beat and leaves when the beat ends.
 
 **D4 — the active room is brighter.** During its beat, the room's floor
 steps visibly brighter than the current lit fill so a viewer sees that
@@ -181,9 +212,9 @@ whiteboard's sides are in frame. Reframe the plate for this section so the
 whiteboard's top edge and bottom edge are both visible at common desktop
 viewports, with the plan sitting on the whiteboard's face.
 
-**D9 — opening a room stops the day.** Rooms open by replacing the plan, so a
-performance left running behind a room view would still be walking, unseen,
-when the reader came back. Pressing any room or the dock while the
+**D9 — opening a room stops the day.** Rooms open by reframing the plan onto
+their own rectangle, so a performance left running underneath would still be
+walking, unseen and half-cropped, when the reader zoomed back out. Pressing any room or the dock while the
 performance runs stops and resets it completely — the same teardown as
 pressing the toggle — so closing the room lands on the default ambient plan:
 no motion in progress, no scrim, the button reading `Play the day`. While a
@@ -261,7 +292,7 @@ blindly, but the flows themselves are decided:
 | FightAIQ (its slots) | A record slip passes through the shared-wall door gap (the wall break at x 1090, y 240–300) into the MMA Files desk. It never touches the corridor — the room has no corridor door, and that asymmetry is the drawing's own argument. |
 | marketingShark (07:00) | Two envelopes with text contents in the shark hue (D11), both via the chase to the Design Lab; each is rendered into a social post and continues to GoVIRAL for launch. Nothing of marketingShark's crosses the dock. |
 | GoVIRAL (13:00) | Its own beat keeps the trend-signal pulse along the green dashed line toward the two magazine spine stubs — the signal travels, nothing is carried. Through the rest of the day GoVIRAL is a station (D12): envelopes arriving from the Design Lab move through its subrooms and leave through its launch edge toward the platforms. |
-| Titty Tuesdays | An envelope reaches the top bay (y 526) and rests there. That bay lines up with no exit; the drawing already says this edge is not a delivery, and the performance repeats the claim. |
+| Titty Tuesdays | Nothing is delivered — the venture *collects*: it pulls a feed, and the plan draws a dashed lane in its own hue pointing back at the room. Its beat hangs its note, and if it gets motion at all, the collect lane pulses **inward** — a pull, never a package, and nothing travels to its dock bay. Whether that bay stays drawn is an open owner decision in the owner document; the performance must not depend on it. |
 
 Rules the choreography must keep:
 
@@ -314,7 +345,14 @@ Rules the choreography must keep:
   set. Remounting or keying the performance layer is an acceptable reset
   mechanism. No traveler survives into ambient. Opening any room or the dock
   runs this exact teardown automatically (D9) — one code path for both
-  exits, so the two can never drift apart.
+  exits, so the two can never drift apart — and the teardown completes
+  before the plan reframes, so travelers and a framed room never coexist.
+- **The room framing is deliberate — do not refactor it.** `roomViewBox`
+  grows the room's rect to the container's aspect, and the container is
+  measured in a layout effect, not a `ResizeObserver`: an observer's
+  callback can go unfired in a throttled tab, and with no box measured no
+  room would open at all. The performance builds beside this mechanism, not
+  through it.
 - **Reduced motion.** Nothing translates. The button still works: beats
   advance as opacity-only steps — room brightens, tag appears, note hangs —
   at the same cadence, with no travelers and no marching dashes. The design
@@ -426,6 +464,24 @@ sedmi projektů" — count the ventures in `config/ventures.json` before
 touching either, because projects and sections are different numbers, and fix
 only what the registry contradicts. The Czech stays Czech and matches the
 file's voice.
+
+**2.5 The e2e repairs from the handover.** Three items from
+`docs/FACILITIES-HANDOVER.md`, each small and each real:
+
+- The WeekBoard legend guard has been genuinely red since 2 August: it
+  expects 7 `[data-project-legend]` entries and the board renders 8 since
+  Carousel Studio joined `projectDetails` in `3e081c8`. Move the assertion
+  to 8 — and mind that SI-07 renames the reader-facing label to Design Lab,
+  so fix the count and the label expectation in the same pass.
+- `buttons.spec.ts` › *every app button declares its behavior* walks fifteen
+  routes under a single 120 s budget and now lands around 126 s. Raise the
+  budget to something honest for fifteen routes.
+- `operating-surfaces.spec.ts` › *admin rating persists…* is
+  timing-marginal: the rating POST misses its 5 s expectation on a slower
+  dev server, and the larger home page trips it more often. Fix the cause
+  if it is cheap — a longer expectation or a proper await — otherwise
+  document the flake where the test lives and in the owner document rather
+  than letting it fail silently at random.
 
 ---
 
@@ -545,6 +601,16 @@ work worth keeping is recorded in `docs/NEEDED.md` instead of silently
 deleted. This runs from the owner's machine, where branch deletion is
 permitted; the remote sessions' 403 on delete-ref does not apply.
 
+**5.4 The README.** The repository is public and `README.md` is its face —
+today it is 300+ lines of stage law, gate mechanics, venture boundaries and
+key-by-key operational detail: information no visitor will read and the
+owner does not want advertised. Rewrite it to a **two-minute read at
+most**: what BoardlessAI is, what the app does, the stack in a sentence or
+two, how to run it, where the live site is. No credential or key names, no
+internal business logic, no governance law — that depth lives in `docs/`
+and the owner document, for the people who need it. Current, plain, and
+short enough to actually be read.
+
 # Out of scope
 
 Everything not named above. In particular: no new runtime dependency
@@ -565,6 +631,10 @@ the scope.
 - One owner document remains — `docs/NEEDED.md`, current and deduplicated;
   no executed prompt docs left in the tree; every surviving doc up to date;
   stale local and remote branches deleted.
+- `README.md` reads in two minutes, says what the app does, and exposes no
+  key names and no internal business law.
+- The handover's four owner decisions stand logged in the owner document,
+  undecided — the program records them and does not decide them.
 - `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` amended ahead of the build commits.
 - `NEEDED.md` updated as issues close: tick the 2026-08-08 review items this
   work completes, and add any finding this contract told you to record.

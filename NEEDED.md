@@ -200,10 +200,33 @@ walkthrough and Carousel Studio are waiting on specifically.
   correct the stale section and project counts. Folded into Part Two of
   `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`; the build session ticks this item.
   [imp:2] [owner:ai] [time:45m] [kind:deploy]
-- [ ] **Fix the `/calendar` legend guard, or decide it should stay red** — the e2e suite
-  expects seven `[data-project-legend]` entries and the board renders eight. Carousel Studio
-  joined the legend in `3e081c8` on 2 August and the assertion was never moved, so the check
-  has been failing on `main` since then. [imp:3] [owner:me] [time:10m] [kind:decision]
+- [ ] **The `/calendar` legend guard — delegated to SI-08 with a default** — the e2e suite
+  expects seven `[data-project-legend]` entries and the board renders eight since Carousel
+  Studio joined in `3e081c8`. The build program's SI-08 moves the assertion to eight (the
+  board is right; the venture joined by decision) and aligns the label with the Design Lab
+  rename. Veto before the program runs if you want the board changed instead of the number.
+  [imp:3] [owner:me] [time:5m] [kind:decision]
+- [ ] **Decide the Titty Tuesdays dock bay** — a bay is where a courier loads, and that
+  venture *collects*: it pulls a feed and nothing is delivered to it. The bay lines up with
+  no courier exit and a dashed lane in its own hue points back at the room, but the old
+  window-and-sill drawing said the asymmetry more plainly. Raised in
+  `docs/FACILITIES-HANDOVER.md`; the day performance does not depend on the bay either way.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+- [ ] **Decide Board HQ's roster length** — the opened room lists all 17 roles scoped
+  `global`, correct by the registry but a long column beside rooms showing two or three.
+  Restricting it to the council is a one-line change. From the same handover.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+- [ ] **MMA Files' room card cannot link its article** — no delivery receipt under
+  `state/ventures/mma-files/deliveries/articles/` records an `articleUrl`, so the card shows
+  a title and a date with no link and no thumbnail; DNESKAi's card is complete because its
+  receipt records one. If the MMA delivery path starts writing `articleUrl`, the card fills
+  in with no further work — decide whether that path change is wanted.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+- [ ] **Two workspace controls sit under the 9.5px type floor** — `Jump to date` and `Show
+  the delivered article` are at 7.5px and the channel rail at 9.5px after several
+  shrink-on-request rounds, against the documented mono floor. Decide whether the floor
+  bends for these two controls or they grow back to it.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
 - [ ] **Decide the two owner calls in the efficiency review** — whether the DNESKAi edition
   may arrive at 09:00 so the 05:00 rehearsal slot and the retry machinery go, and whether the
   three backstop sweeps shrink to one. Both in `docs/WORKFLOWS-EFFICIENCY-REVIEW.md`,
