@@ -31,12 +31,13 @@ Read in this order before writing any code:
   and re-check §1.1 against the tree. Line references here were true when
   this was written; where the tree has drifted, the tree wins.
 - **The work is cut into GitHub issues.** Twelve issues on this repository,
-  `SI-01` through `SI-12`, each a scoped increment that ends with the gates
-  green and the work merged to `main` — Vercel redeploys from `main`, so
-  every closed issue is a live deploy. Work them strictly in title order,
-  one at a time: read the issue, do the work on a short-lived branch, run
-  the gates, merge, close the issue with a short comment naming what was
-  verified in the running app. This document is the contract the issues
+  `SI-01` through `SI-12`. Work them strictly in title order, one at a time,
+  all on this one branch: read the issue, do the work, run the gates, commit
+  — frequent small commits throughout, and at least one commit closes each
+  issue — then close the issue with a short comment naming the closing
+  commit and what was verified in the running app. **`main` is touched
+  once:** after SI-12, merge the finished branch to `main`, so CI runs once
+  and Vercel redeploys once. This document is the contract the issues
   reference; if an issue and this document ever disagree, the issue is
   newer and wins.
 - **Commit small and often.** One task, one commit, in the order this document
@@ -520,8 +521,9 @@ the scope.
 
 # Definition of done
 
-- Issues `SI-01` through `SI-12` all closed, each merged to `main` with its
-  gates green; commit history small and readable.
+- Issues `SI-01` through `SI-12` all closed, each with its gates green and
+  its closing commit named in the closing comment; one final merge to
+  `main` after SI-12; commit history small and readable.
 - `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` amended ahead of the build commits.
 - `NEEDED.md` updated as issues close: tick the 2026-08-08 review items this
   work completes, and add any finding this contract told you to record.

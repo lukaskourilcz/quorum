@@ -115,9 +115,10 @@ Reduced motion renders the same story as opacity-only steps — nothing
 translates — and ambient stays exactly as built: the performance never starts
 itself, and only the reader's press sets the day in motion. The build runs as
 twelve GitHub issues, `SI-01` through `SI-12` (#41–#52), worked strictly in
-order, each ending with the gates green and a merge to `main` for redeploy;
-the design-spec amendment is the second of them, ahead of every component
-change.
+order on one branch — each closing with its gates green and a named commit,
+and a single merge to `main` after the last of them, so CI runs once and the
+site redeploys once; the design-spec amendment is the second of them, ahead
+of every component change.
 
 ## 3. Python: not for the scrapers, yes for a lab
 
