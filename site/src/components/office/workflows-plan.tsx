@@ -151,6 +151,29 @@ const LIT_FILL: Record<OfficeProjectKey, string> = {
   "carousel-studio": "#2a2a2e"
 };
 
+/**
+ * The same hue at 28% — the room whose beat is live (D4).
+ *
+ * Twice the lit ratio, so a room steps up visibly when its beat begins and falls back to the
+ * accumulated-day state, not to dark, when it ends. Composited to opaque here for the same reason
+ * `LIT_FILL` is: an alpha layer cannot be measured, and every one of these is measured against
+ * `#f4f4f5` in the spec's §6.5 ledger, worst pair 7.88:1.
+ *
+ * The step is honestly weaker on the two darkest hues — Board HQ and DNESKAi move by 1.27 and 1.28
+ * in luminance against 1.5–1.6 for the rest. That is why a beat never carries brightness alone:
+ * the tag arrives with it, and the note hangs when it ends.
+ */
+const ACTIVE_FILL: Record<OfficeProjectKey, string> = {
+  company: "#51230d",
+  "caught-up": "#511d4c",
+  "mma-files": "#4f394e",
+  fightaiq: "#514346",
+  goviral: "#3e4f47",
+  marketingshark: "#384751",
+  "titty-tuesdays": "#514a34",
+  "carousel-studio": "#454549"
+};
+
 const FLOOR_DARK = "#0e0e12";
 const FLOOR_CORRIDOR = "#121216";
 const FLOOR_WORKSHOP = "#1c1c20";
@@ -305,6 +328,7 @@ export function WorkflowsPlan({
   slots,
   notes,
   litRoom,
+  beat,
   workshopWorking,
   mode,
   compact,
@@ -318,6 +342,13 @@ export function WorkflowsPlan({
   /** One note kind per slot, index-aligned with `slots`. The replay hands a shorter day. */
   notes: readonly WorkflowsNoteKind[];
   litRoom: OfficeProjectKey | null;
+  /**
+   * The beat that is live, while the day performs (D3, D4).
+   *
+   * `room` takes the active fill and `tag` is drawn beneath that room's name — `HH:00 · label`,
+   * the registry's own hour and the registry's own words. Null at rest and between beats.
+   */
+  beat: { room: OfficeProjectKey; tag: string } | null;
   workshopWorking: boolean;
   mode: "ambient" | "replay";
   /** Below 1024px the labels leave the drawing and each place carries a numeral instead. */
@@ -402,17 +433,25 @@ export function WorkflowsPlan({
         {ROOMS.map((geometry) => {
           const lit = litRoom === geometry.key;
           const workshop = geometry.key === "carousel-studio";
-          const fill = workshop
-            ? (workshopWorking ? LIT_FILL["carousel-studio"] : FLOOR_WORKSHOP)
-            : lit
-              ? LIT_FILL[geometry.key]
-              : FLOOR_DARK;
+          // The beat's own room outranks every other state: it is the one thing happening now.
+          const fill = beat?.room === geometry.key
+            ? ACTIVE_FILL[geometry.key]
+            : workshop
+              ? (workshopWorking ? LIT_FILL["carousel-studio"] : FLOOR_WORKSHOP)
+              : lit
+                ? LIT_FILL[geometry.key]
+                : FLOOR_DARK;
           return (
             <rect
               fill={fill}
               height={geometry.height}
               key={geometry.key}
-              style={{ transition: "fill 900ms ease" }}
+              style={{
+                // The ambient crossfade is a slow hour changing. A beat is not: it rises in 260ms
+                // and falls in 420ms, which is what makes the step read as *now* inside a stride
+                // of under two seconds.
+                transition: `fill ${beat?.room === geometry.key ? 260 : mode === "replay" ? 420 : 900}ms ease`
+              }}
               width={geometry.width}
               x={geometry.x}
               y={geometry.y}
@@ -842,6 +881,30 @@ export function WorkflowsPlan({
                 {room.name}
               </Label>
             )}
+            {/*
+              The beat's tag (D3): `HH:00 · label`, beneath the room's name, in the registry's own
+              hour and the registry's own words. Drawn text — never a native `title`, because
+              nothing on this plan has ever carried one and the performance does not bend that.
+              19 units is the room-label size, which renders 10.1px at the 1024px wide-mode floor
+              and so clears the 9.5px minimum; below 1024px the tag leaves the drawing entirely and
+              the section prints it as an HTML line instead.
+
+              `pointer-events: none`, like every performance layer: a press anywhere on this room
+              is D9's teardown-and-open, and a tag must never swallow one.
+            */}
+            {beat?.room === geometry.key && !compact && focus?.room.key !== geometry.key ? (
+              <Label
+                fill="#f4f4f5"
+                size={19}
+                style={{ pointerEvents: "none", ...(animate ? entrance("wf-fade", 180, 80, E1) : {}) }}
+                tracking=".06em"
+                weight={500}
+                x={geometry.x + geometry.width / 2}
+                y={geometry.labelY + 30}
+              >
+                {beat.tag}
+              </Label>
+            ) : null}
             <FocusRing height={geometry.height} width={geometry.width} x={geometry.x} y={geometry.y} />
           </>
         );

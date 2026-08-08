@@ -710,10 +710,21 @@ this plan has ever carried one, and that rule does not bend for the
 performance. Where a hover explanation is genuinely needed anywhere in the
 section, the house tooltip component is the only mechanism.
 
-At the plan's smallest wide-mode width the scale factor is the section's box
-divided by 1920 viewBox units; at 1024px that is 0.53, so 19 units renders
-10.1px and clears the 9.5px floor. Below 1024px the tag leaves the drawing
-entirely (§11).
+**Measured at the type floor.** The plan's scale is its rendered width over the
+1920 viewBox units, so the tag's rendered size is 19 x that scale:
+
+| Viewport | Plan width | Scale | Tag renders |
+| --- | ---: | ---: | ---: |
+| 1024px — the smallest wide mode | 992px | 0.517 | **9.82px** |
+| 1280px | 1248px | 0.650 | 12.35px |
+| 1440px | 1408px | 0.733 | 13.93px |
+
+9.82px clears the 9.5px floor by a third of a pixel, and that is the whole
+margin there is. The room names are the same 19 units and have always sat on
+the same edge — so the tag is not a new risk, but neither has room to shrink.
+Anything that narrows the plan's box at 1024px, or any smaller wide-mode
+breakpoint, puts both under the floor together. Below 1024px the tag leaves the
+drawing entirely (§11).
 
 ### 6.5 The active room (D4)
 
@@ -1208,7 +1219,8 @@ Added by the 2026-08-08 decisions:
   explanation is genuinely needed, the house tooltip component is the only
   mechanism (D3).
 - **Every drawn glyph clears 9.5px** at the smallest wide-mode viewport. The
-  tag is 19 plan units, which renders 10.1px at 1024px (D3, §6.4).
+  tag is 19 plan units, which measures 9.82px at 1024px — a third of a pixel of
+  margin, shared with the room names at the same size (D3, §6.4).
 - **Every text/background pair the performance introduces is measured.** Eight
   tag-on-active-fill pairs in §6.5, worst 7.88:1 (D4).
 - **One envelope silhouette, and the fill says whose work it is.** Two stated

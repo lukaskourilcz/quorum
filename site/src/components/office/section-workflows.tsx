@@ -453,6 +453,7 @@ export function SectionWorkflows({
       <div ref={planRef} style={{ position: "relative", ...(compact ? {} : { flex: 1, minHeight: 0 }) }}>
         <WorkflowsPlan
           animate={animate}
+          beat={beat ? { room: beat.room, tag: beat.tag } : null}
           compact={compact}
           fill={!compact}
           focus={focus}
