@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { deterministicArticleImage } from "../src/images/article-image.js";
 import { repoRoot } from "../src/paths.js";
-import { imageSubjectQuery } from "../src/images/subject-query.js";
+import { imageSubjectQuery, pickedSubjectQuery } from "../src/images/subject-query.js";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { validateLicensedImageCandidate } from "../src/images/article-image.js";
@@ -168,6 +168,32 @@ describe("the subject query", () => {
   it("says nothing rather than guess when no tag has a visual meaning", () => {
     // primary-source and analysis describe how a story was sourced, not what it looks like.
     expect(imageSubjectQuery([["primary-source"], ["news"], ["analysis"]])).toBe("");
+  });
+
+  it("follows the story the editor picked, not the crowd it was picked out of", () => {
+    // A digest is eighty items of everything that moved that morning, and the eleven the editor
+    // did not commission outvote the one it did. Here the day is loud about data centres and the
+    // article is about a court ruling; the query used to describe the day.
+    const digest = [
+      ["cipy", "datacentra"],
+      ["ai-modely", "datacentra"],
+      ["ai-agenti"],
+      ["firmy", "startupy"],
+      ["pravo", "regulace"]
+    ];
+    expect(pickedSubjectQuery({ picked: [["pravo", "soudy"]], digest })).toBe("courtroom");
+    expect(imageSubjectQuery(digest)).toBe("data centre technology company office");
+  });
+
+  it("widens back to the digest when the picked story's tags say nothing visual", () => {
+    // A pick list tagged only with how it was sourced maps to no concept at all, and an empty
+    // phrase empties every archive. The day's crowd is a worse basis than the article and a
+    // better one than nothing.
+    expect(pickedSubjectQuery({
+      picked: [["primary-source"], ["analysis"]],
+      digest: [["kyberbezpecnost"], ["bezpecnost"]]
+    })).toBe("cybersecurity");
+    expect(pickedSubjectQuery({ picked: [], digest: [] })).toBe("");
   });
 });
 

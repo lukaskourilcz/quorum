@@ -31,6 +31,7 @@ import type {
 import type { LicensedPhotoCandidate } from "../images/licensed.js";
 import { materializeLicensedPhoto } from "../images/licensed.js";
 import { heroAltCs } from "../images/alt.js";
+import { pickedSubjectQuery } from "../images/subject-query.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
 import { BudgetError } from "../budget.js";
@@ -53,6 +54,16 @@ export interface EditionProductionInput {
   socialPackEnabled?: boolean;
   heroEnabled?: boolean;
   imageCandidates?: readonly LicensedPhotoCandidate[];
+  /**
+   * Candidate discovery, run after curation so it can search on the story the editor picked.
+   *
+   * It used to run in `live.ts` before this function was called, which is before anything had
+   * decided what the edition was about — the only basis available there is the whole digest.
+   * A resolver hands the decision back: the caller still owns the network and the keys, and the
+   * phrase it is given is the one the pick list resolves to. A throw here costs the photograph
+   * and never the edition.
+   */
+  resolveImageCandidates?: (subjectQuery: string) => Promise<readonly LicensedPhotoCandidate[]>;
   /** How a picked article's text is fetched. Injected by tests so none reaches the network. */
   readBody?: (url: string, at: Date) => Promise<string | null>;
   /** This week's rising AI topics, if a scout snapshot exists. A tiebreaker for curation only. */
@@ -235,6 +246,22 @@ export async function produceEdition(
   }
   reporter.addUsage(brief.usage);
 
+  // The picked story's tags, in the order the editor picked them. An item the pool no longer
+  // holds is skipped rather than guessed at, and an empty list falls through to the digest.
+  const pickedTags = brief.picks
+    .map((pick) => input.items.find((item) => item.externalId === pick.itemId)?.tags)
+    .filter((tags): tags is string[] => Boolean(tags));
+  const subjectQuery = pickedSubjectQuery({
+    picked: pickedTags,
+    digest: input.items.slice(0, 12).map((item) => item.tags)
+  });
+  const imageCandidates = input.resolveImageCandidates
+    ? await input.resolveImageCandidates(subjectQuery).catch((error: unknown) => {
+        reporter.warn(`image_search_failed:${error instanceof Error ? error.message : "unknown"}`);
+        return [] as readonly LicensedPhotoCandidate[];
+      })
+    : input.imageCandidates ?? [];
+
   let feedback: string[] = [];
   let lastQualityViolations: string[] = [];
   for (
@@ -245,7 +272,7 @@ export async function produceEdition(
     let english: CzechArticle;
     try {
       english = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
-        write(brief, input.items, input.config, input.gateway, feedback, input.imageCandidates, input.now, input.readBody)
+        write(brief, input.items, input.config, input.gateway, feedback, imageCandidates, input.now, input.readBody)
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {
@@ -376,7 +403,7 @@ export async function produceEdition(
       const editionPackage = await reporter.stage("assemble_package", async () => {
         const candidate = article.selectedImageCandidateIndex === undefined
           ? undefined
-          : input.imageCandidates?.[article.selectedImageCandidateIndex];
+          : imageCandidates[article.selectedImageCandidateIndex];
         let image;
         if (candidate) {
           try {
