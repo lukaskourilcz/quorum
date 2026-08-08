@@ -211,13 +211,23 @@ async function resolve(
 export async function illustrativeSportPhoto(input: {
   seed: string;
   fetchJson?: IllustrativeJsonFetcher;
+  /**
+   * Whether this file may run above this article. A refusal moves to the next in the rotation.
+   *
+   * Each of these was reviewed once, by a person, at 640px, and a Commons file can be
+   * relicensed, replaced or re-cropped after that. The rotation already skips a file it cannot
+   * fetch; a refused one is the same kind of answer.
+   */
+  accept?: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
 }): Promise<LicensedPhotoCandidate | null> {
   const fetchJson = input.fetchJson ?? defaultFetchJson;
   for (const photo of illustrativeRotation(input.seed)) {
     // One unreachable file must not cost the article its photograph, so a throw moves to the next
     // in the rotation rather than out of this function.
     const candidate = await resolve(photo, fetchJson).catch(() => null);
-    if (candidate) return candidate;
+    if (!candidate) continue;
+    if (input.accept && !(await input.accept(candidate))) continue;
+    return candidate;
   }
   return null;
 }

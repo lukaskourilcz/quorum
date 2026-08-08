@@ -5,6 +5,7 @@ import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
 import { atomicWriteText } from "../state.js";
 import { storeArticleCarouselSummary } from "../studio/carousel-summary-store.js";
 import { articleRef, hasValidArticlePackageHash } from "./hash.js";
+import { checkImageCorrection } from "./correction.js";
 import type { SocialRender } from "./frame.js";
 
 export class ArticleSlotConflictError extends Error {}
@@ -49,8 +50,21 @@ export async function storeArticlePackage(
     // A slot that holds a publishable package is immutable, and stays that way: rewriting a
     // published or draft article under the same date and slot is how a delivered piece gets
     // quietly swapped, which is exactly what this guard exists to stop.
+    //
+    // The one exception is a correction that carries its own proof, and it is not a relaxation
+    // of the rule so much as a second, stricter rule beside it: the replacement must name this
+    // exact package as the one it supersedes, and everything except the picture must be
+    // byte-identical, checked by comparing canonical bytes rather than by trusting the claim.
+    // Two articles shipped in the first week with photographs of the wrong thing and there was
+    // no way to fix either without either weakening this guard or editing the consumer
+    // repository by hand. This is the third way. The words a reader read cannot change here.
     if (existing.status !== "blocked" && existing.status !== "killed") {
-      throw new ArticleSlotConflictError(`Article slot ${prefix.slice(0, -1)} already contains a different package`);
+      const correction = checkImageCorrection({ current: existing, replacement: article });
+      if (!correction.ok) {
+        throw new ArticleSlotConflictError(
+          `Article slot ${prefix.slice(0, -1)} already contains a different package${correction.problems.includes("no-correction-block") ? "" : `: ${correction.problems.join(", ")}`}`
+        );
+      }
     }
     // A blocked or killed package is a rejected draft, not an artifact. Treating it as one
     // meant a single failed gate poisoned the slot for good: after the cause was fixed the

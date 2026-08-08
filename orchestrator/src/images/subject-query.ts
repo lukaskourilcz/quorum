@@ -135,3 +135,25 @@ export function imageSubjectQuery(tagLists: readonly (readonly string[])[]): str
     .map(([subject]) => subject)
     .join(" ");
 }
+
+/**
+ * The subject phrase for the story the editor picked, not for the day's whole crowd.
+ *
+ * The query used to be built from the top twelve digest items, and a digest is eighty items of
+ * everything that moved that morning. So the phrase described the day rather than the article:
+ * on 5 August the edition was about a chip export ruling and the twelve most frequent tags
+ * resolved to "data centre technology company office", which is what the archives were asked
+ * for and what ran above the piece. The tags of the three-to-eight items the editor actually
+ * commissioned describe the story it commissioned them for.
+ *
+ * The digest stays as the fallback, and it is reached more often than it looks: a pick list whose
+ * tags are all editorial — primary-source, analysis — maps to nothing, and a phrase built from
+ * nothing empties every archive's result set. A wider basis is a worse query than a narrow one
+ * and a better query than none.
+ */
+export function pickedSubjectQuery(input: {
+  picked: readonly (readonly string[])[];
+  digest: readonly (readonly string[])[];
+}): string {
+  return imageSubjectQuery(input.picked) || imageSubjectQuery(input.digest);
+}

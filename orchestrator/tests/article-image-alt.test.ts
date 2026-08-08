@@ -97,14 +97,20 @@ async function run(candidate: LicensedPhotoCandidate) {
       heroSpec: { template: "fighter-file", bindings: { headline: "Gustavo Lopez" } },
       evidenceText: "Fixture-only evidence packet."
     },
-    imageCandidates: [candidate],
+    // The ladder now runs after the write and hands back one candidate the gate approved. What
+    // this test is about is the line after that: which alt text the candidate ships with.
+    selectHero: async () => ({
+      candidate,
+      rung: "search" as const,
+      verdicts: [],
+      skippedProviders: []
+    }),
     gateway: {
       writeCzech: async () => ({
         title: "Profil zápasníka pro dnešní vydání",
         dek: "Redakční poznámka k dnešnímu profilu.",
         bodyMDX: "Karta zápasníka: [karta](/fighters/oktagon/gustavo-lopez)",
-        imageAlt: INVENTED_ALT,
-        imageCandidateIndex: 0
+        imageAlt: INVENTED_ALT
       })
     },
     stylebookRaw: await loadStylebook(repoRoot)

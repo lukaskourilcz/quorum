@@ -38,6 +38,14 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
   Náhradní hero obrázky také vznikají v kódu. Licencované fotografie se pouze stáhnou,
   zkontrolují, zmenší a uloží; chybějící Pexels/Pixabay klíč neblokuje náhradní grafiku.
+- Každý hero obrázek prochází od 9. srpna 2026 obrazovou kontrolou (rozhodnutí
+  `article-image-fit-2026-08-08`). Jedno volání posoudí celý užší výběr na malém modelu,
+  který už firma platí: strop je $0.02 na článek a $0.10 na den pro celou obrazovou
+  linku, což při plné kadenci vychází pod $1 měsíčně. Generovaná ilustrace stojí zhruba
+  $0.004 za kus a smí vzniknout nejvýše dvakrát denně, tedy asi $0.09 měsíčně na stropu;
+  běží jen s `FAL_KEY` a `ARTICLE_ILLUSTRATION_ENABLED`, majitel ji zapnul 8. srpna 2026 a
+  platí ji z předplaceného kreditu, ne z předplatného. Vyčerpaný strop nikdy nezastaví
+  vydání — obrázek klesne o příčku níž, v krajním případě na kreslenou desku za $0.
 - GoVIRAL čte trendová data přes Apify na **Free plánu**. Jeho měsíční kredit 5 dolarů
   *je* limit: aktory se zastaví, jakmile dojde, žádná karta v systému není a přečerpání
   není možné. Zapsaný recept stojí zhruba $1.03 týdně a $4.60 měsíčně; když měsíc běží

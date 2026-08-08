@@ -97,7 +97,11 @@ export const ImageLicenseSchema = openObject({
     "CC BY-SA",
     "Pexels License",
     "Pixabay Content License",
-    "BoardlessAI deterministic"
+    "BoardlessAI deterministic",
+    // The generated illustration rung. Its outputs are Apache-2.0 from the renderer, so the
+    // company owns what it publishes; the name says what the picture is rather than who took it,
+    // because nobody took it.
+    "BoardlessAI illustration"
   ]),
   author: z.string().trim().min(1).max(200),
   source_url: HttpsUrlSchema,
@@ -119,15 +123,37 @@ export const ArticleImageSchema = openObject({
   alt_en: z.string().trim().min(1).max(300).optional(),
   alt_cs: z.string().trim().min(1).max(300),
   license: ImageLicenseSchema,
-  origin: z.enum(["photo", "svg"]),
+  /**
+   * What the picture is, which is a promise to the reader before it is a field.
+   *
+   * `photo` — a licensed photograph somebody took. `svg` — the FRAME plate, drawn
+   * deterministically from the article's fingerprint, carrying no photograph and saying so.
+   * `illustration` — rendered by a machine, gated like everything else, and labelled as an
+   * illustration in its own alt text wherever a reader meets it. The three are not
+   * interchangeable and the refinement below is what stops them becoming so.
+   */
+  origin: z.enum(["photo", "svg", "illustration"]),
   hero_bytes_base64: z.base64().refine((value) => Buffer.byteLength(value, "base64") <= 800_000),
   thumb_bytes_base64: z.base64().refine((value) => Buffer.byteLength(value, "base64") <= 300_000)
 }).superRefine((image, context) => {
-  const deterministic = image.license.name === "BoardlessAI deterministic";
-  if ((image.origin === "svg") !== deterministic) {
+  // One licence per origin, in both directions. This used to be a single equivalence between
+  // `svg` and the deterministic licence, which was exact while there were two origins and would
+  // have quietly let a generated illustration ship under a photograph's licence the moment there
+  // were three. A reader who is told a picture is a photograph has to be right.
+  const expected: Record<string, string | null> = {
+    svg: "BoardlessAI deterministic",
+    illustration: "BoardlessAI illustration",
+    photo: null
+  };
+  const required = expected[image.origin];
+  const generated = ["BoardlessAI deterministic", "BoardlessAI illustration"];
+  const wrong = required
+    ? image.license.name !== required
+    : generated.includes(image.license.name);
+  if (wrong) {
     context.addIssue({
       code: "custom",
-      message: "SVG fallback must use the deterministic license and photos must use an allowed photo license",
+      message: "The SVG plate, the generated illustration and a licensed photograph each require their own license",
       path: ["license", "name"]
     });
   }

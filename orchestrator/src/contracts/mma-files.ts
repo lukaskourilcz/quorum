@@ -28,8 +28,35 @@ const FrameSpecSchema = openObject({
   bindings: z.record(z.string().min(1).max(80), z.union([z.string().max(1_000), z.number().finite(), z.boolean()]))
 });
 
+/**
+ * The one way a published article may be replaced, and the proof that has to travel with it.
+ *
+ * A delivered package is immutable by date and slot, on both sides of the wire: the store here
+ * refuses to overwrite a published slot and the consumer refuses any different bytes under one
+ * identity. That is the guard that stops a delivered piece being quietly swapped, and it stands.
+ *
+ * It also made an image correction impossible. Two articles shipped in the first week carrying
+ * photographs of the wrong thing — a government official above a bantamweight, a firearms range
+ * above a fighter's retirement — and the only ways to fix them were to weaken the guard or to
+ * edit the consumer repository by hand. This is the third way: a correction states which package
+ * it replaces and why, and both ends independently check that everything except the picture is
+ * byte-identical. The words a reader read cannot change through this door.
+ */
+export const ArticleImageCorrectionSchema = openObject({
+  schemaVersion: z.literal("article-image-correction/1"),
+  /** The delivered package this one replaces. Must be the hash the consumer currently holds. */
+  supersedesPackageHash: Sha256Schema,
+  reason: z.string().trim().min(1).max(300),
+  correctedAt: DateTimeSchema
+});
+
 export const ArticlePackageSchema = openObject({
   schemaVersion: z.literal("article/1"),
+  /**
+   * Present only on a package that replaces a delivered one, and only to change its picture.
+   * Absent on every first delivery, which is all but two packages on file.
+   */
+  correction: ArticleImageCorrectionSchema.optional(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   // Czech is the published locale. English is optional rather than removed: openObject is
   // z.looseObject, so the two sealed live packages keep their en key through a round-trip and

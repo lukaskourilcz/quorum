@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-08.
+Updated: 2026-08-09.
 
 ---
 
@@ -69,17 +69,24 @@ is the single thing standing between a proven path and a working one.
   the output is poor that is a prompt problem and the truth gates will catch the dishonest parts —
   but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
 
-- [ ] **Create a fal.ai account and arm the illustration rung** — the article-image programme
-  (`state/decisions/2026-08-08-article-image-fit.md`, on the branch recorded at the end of this
-  document) ships its generated-illustration rung dark. Create the account, add `FAL_KEY` to
-  Actions secrets, prepay the minimum credit (schnell renders cost about $0.003 each, capped at
-  two a day), then set `ARTICLE_ILLUSTRATION_ENABLED=true` when you want it live. Until then the
-  image ladder behaves exactly as before. [imp:3] [owner:me] [time:10m] [kind:setup]
+- [x] **Create a fal.ai account and arm the illustration rung** — done 2026-08-08: the owner
+  created the account, added `FAL_KEY`, prepaid the minimum credit and set
+  `ARTICLE_ILLUSTRATION_ENABLED=true`, all before the build ran. The rung therefore goes live
+  the moment IMG-10's code and `cycle.yml` mapping reach `main`, which they did on 2026-08-09 —
+  there is no separate arming step left. `cycle.yml` reads the flag from a secret or a repository
+  variable, whichever holds it. First proof is the first scheduled cycle after the merge: its run
+  report must show the rung armed; if it still reads dark, neither name matches where the values
+  were put. [imp:3] [owner:me] [time:10m] [kind:setup]
 
-- [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`** — free tier, and they widen the
-  licensed photo pool for both magazines at once. Not a blocker: Openverse, Wikimedia Commons, the
-  curated illustrative set and the deterministic FRAME plate remain available, and a photo is only
-  used when its own title, author or URL names the article's subject.
+- [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
+  is real operating spend under the $30 all-in cap, and only the owner records payments: add the
+  amount and date where LEDGER reconciles (`state/treasury/` / `state/FINANCE.md`) so the monthly
+  numbers include it. [imp:3] [owner:me] [time:5m] [kind:decision]
+
+- [x] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`** — done: the owner added both
+  Actions secrets on 2026-08-08, and `cycle.yml` already maps them into the run, so the wider
+  licensed photo pool is live for the article-image programme
+  (`state/decisions/2026-08-08-article-image-fit.md`).
   [imp:4] [owner:me] [time:5m] [kind:setup]
 
 - [ ] **Finish the Vercel half of the aifirst credential audit** — the retired `ANTHROPIC_API_KEY`
@@ -109,6 +116,45 @@ Judgement calls. Nothing is blocked on code for any of these.
   feeds the non-API half of the all-in total measured against the $30 cap (`allInNonApiSpentUsd` in
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
+
+- [ ] **Merge `claude/article-image-selection-61rs70` in the aifirst repository** — DNESKAi's
+  validator accepts only `photo` and `svg` as an image origin, so the first edition whose ladder
+  reaches the generated illustration would be refused at delivery with `schema_invalid`. The
+  branch adds the third value and its licence to the contract schema and the TypeScript
+  validator, and extends the byte check to cover it: an illustration that arrived as SVG is
+  still refused, and the plate arriving as WebP still is. Its own `vitest lib/delivery` is green
+  at 14, including a real WebP illustration reaching `written`. The illustration rung is armed
+  in Actions, so this is worth doing before the next edition that needs it.
+  [imp:3] [owner:me] [time:5m] [kind:deploy]
+
+- [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
+  wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
+  its `main`. A delivered article is immutable there by date and slot, which is what stops a
+  published piece being swapped; the branch adds the one narrow exception, an
+  `article-image-correction/1` block whose claim the consumer re-checks itself, and refuses
+  anything where more than the picture differs. Its own `npm test` is green at 27, including two
+  new cases. Once merged, the next two cycles deliver the corrections through the normal outbox
+  and the government official and the firearms range stop being live assets.
+  [imp:4] [owner:me] [time:5m] [kind:deploy]
+
+- [ ] **Replace three curated MMA photographs that no longer exist on Commons** — probed on
+  2026-08-09: `UFC Fight Night Belfast weigh-ins (29923390484).jpg`, `MMA gloves (Unsplash).jpg`
+  and `O2 arena Praha 2019.jpg` all return `missing`. The rotation in
+  `orchestrator/src/images/illustrative.ts` skips them, so nothing breaks and every article that
+  reaches that rung simply loses its first choice; six of the nine still resolve. Finding
+  replacements is the curated-set rule: open a candidate at 640px, check that no face in it is
+  recognisable, write the Czech scene line. The scene-proposal queue below is where candidates
+  now collect. [imp:2] [owner:me] [time:30m] [kind:content]
+
+- [ ] **Review the curated scene proposals both magazines are collecting** — when the vision gate
+  approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an
+  unchecked line to `state/ventures/caught-up/media/scene-proposals.md` or the mma-files file
+  beside it, with its provider, licence, source URL and a drafted Czech scene line. Each one
+  already ran above a published article. Ticking a line nominates it: a later session opens it at
+  640px, checks that no face in it is recognisable, and moves it into the curated set, which is
+  the rung with the most predictable covers and currently the smallest. The queue stops at twenty
+  open lines, so an unreviewed backlog quietly stops the flywheel rather than growing.
+  [imp:2] [owner:me] [time:20m] [kind:content]
 
 - [ ] **Write season 002 for Titty Tuesdays before 2026-10-30** — season 001 expires then and the
   marketing room works from the current season; with none it has a standing objective and no
@@ -502,6 +548,16 @@ marketingShark adds about 6c to a day.
 
 ## Recently finished
 
+- **The twelve-issue article-image programme ran and merged**, 2026-08-09. Every hero now passes
+  a vision gate before it is attached: one budgeted call looks at the actual thumbnails and the
+  verdict is stored beside the package, so the run report answers *why* a picture was chosen for
+  the first time. The desk that writes an article now briefs the picture desk, the search runs
+  after the write instead of before the story was even picked, retrieval fans every phrase out
+  across four providers, the curated files are re-checked for drift, high-scoring finds queue
+  themselves as curation proposals, and a generated illustration sits between the search and the
+  drawn plate. The two wrong MMA heroes are corrected on this side; delivering them needs the
+  mma-files merge above.
+
 - **The fourteen-issue site-improvements programme ran and merged**, 2026-08-08. The Workflows
   section became a performance of the standing day behind one *Play the day* toggle; the room view
   was repaired; every output now walks its full journey to a real address; Carousel Studio became
@@ -555,17 +611,19 @@ marketingShark adds about 6c to a day.
 
 ---
 
-## One branch is still open
+## Branches
 
-`claude/article-image-selection-61rs70` was **not** deleted in the branch prune, because it holds
-work that is not on `main`: a countersigned owner decision (`article-image-fit-2026-08-08` — every
-published article image passes a vision check before it ships) and the 419-line build contract for
-that programme. Two commits, `ee346ba` and `5f72fad`.
+Every branch this repository opened is merged and gone. `claude/article-image-selection-61rs70`
+held the countersigned image decision and its build contract; the twelve-issue programme ran on
+it and it merged into `main` on 2026-08-09, taking the contract with it — the decision file
+`state/decisions/2026-08-08-article-image-fit.md` is the permanent record. Before it,
+`claude/si-program` and `claude/website-improvements-brainstorm-sqe3c6` were both fully merged,
+and the stale `.claude/worktrees/workflows-map` worktree held nothing that was not already on
+`main`.
 
-It will conflict when it lands: both of its commits edit `NEEDED.md` and `NEEDS_YOUR_HELP_NOW.md`,
-which this document replaced. The resolution is to take its content and put it here — its one owner
-item, the fal.ai account above, has already been carried across so it is not waiting on that merge.
-
-Every other branch is gone: this programme's own `claude/si-program` and
-`claude/website-improvements-brainstorm-sqe3c6` were both fully merged, and the stale
-`.claude/worktrees/workflows-map` worktree held nothing that was not already on `main`.
+Two branches are open in the consumer repositories and are waiting on you, not on code. Both
+carry a validator this side already produces packages for, and both are in the list above:
+`lukaskourilcz/mma-files` `claude/article-image-selection-61rs70` (the image correction, plus the
+new origin value) and `lukaskourilcz/aifirst` `claude/article-image-selection-61rs70` (the new
+origin value). Merging the mma-files one is what lets the two corrected MMA heroes reach the
+magazine.

@@ -18,7 +18,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   other `tsx` entry points read `dist` and will otherwise use the last build.
 - `config/models.json` — model IDs per role. `.env.example` — required env.
 
-## Two things a session will trip over
+## Three things a session will trip over
 
 - **The home page is one client component.** `site/src/components/office/` holds the
   office walkthrough; `site/src/lib/office-walkthrough.ts` resolves everything it renders
@@ -30,6 +30,19 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   the plates off `will-change`, which exhausted the compositor and painted whole frames
   black; and mark real horizontal scrollers `data-horizontal-scroll` or the containment
   e2e guard reads them as overflow.
+- **No article image ships that nothing has looked at.** `orchestrator/src/images/ladder.ts`
+  walks one certainty ladder for both magazines, after the article exists and never before it:
+  the identity rung, the curated files, the licensed search on the desk's own brief, a rendered
+  illustration, then the FRAME plate. A budgeted vision model sees the actual thumbnails before
+  anything is attached, and its verdict — every candidate considered, its score, its vetoes —
+  is written to `state/ventures/<venture>/image-selections/` beside the package, recorded rather
+  than re-derived for the same reason the Design Lab summary is. Every failure spells the same
+  way as a veto: a cap, a timeout, an unreadable thumbnail and a malformed verdict all descend a
+  rung, and the plate at the bottom needs no model, no network and no money. So the gate can cost
+  a photograph and can never cost a publication. The illustration rung is the one paid step and
+  it runs only with both `FAL_KEY` and `ARTICLE_ILLUSTRATION_ENABLED`; it says it is an
+  illustration in its own alt text, and `ArticleImageSchema` ties each origin to one licence so
+  it cannot ship as photography.
 - **A delivered article also goes to the Design Lab.** `storeArticlePackage` and the
   edition outbox write both call `buildCarouselSummary` from `studio/src/summary.ts`, so a
   delivery cannot happen without a summary beside it. The site rebuilds the same summary

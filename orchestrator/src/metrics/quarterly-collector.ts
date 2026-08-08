@@ -8,6 +8,7 @@ import { IdeaLedgerEntrySchema } from "../contracts/idea-ledger.js";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
 import { BoutRecordSchema, EventCardSchema, FighterRecordSchema } from "../contracts/mma.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
+import { IMAGE_PROGRAM_PHASES } from "../images/budget.js";
 import { FixedCostRegistrySchema } from "../money/fixed-costs.js";
 import type { MonetizationMeasurements } from "../money/monetization.js";
 import type { KpiMeasurements } from "./quarterly.js";
@@ -671,8 +672,17 @@ export async function collectQuarterlyMeasurements(input: {
   // it costs, which is the question a per-unit target answers.
   const phaseSpend = (phases: readonly string[]) =>
     sum(periodBudget.filter((entry) => phases.includes(entry.phase)).map((entry) => entry.usd));
+  // The image programme bills under its own phases and serves both magazines, so its rows are
+  // attributed by ventureId rather than by phase. Leaving them out would have reported a unit as
+  // costing less than it does the moment the vision gate started running, which is the same
+  // under-reporting the article-production note below records.
+  const imageProgrammeSpend = (ventureId: string) =>
+    sum(periodBudget
+      .filter((entry) => IMAGE_PROGRAM_PHASES.includes(entry.phase as typeof IMAGE_PROGRAM_PHASES[number]))
+      .filter((entry) => entry.ventureId === ventureId)
+      .map((entry) => entry.usd));
   measurements["state/budget#caught_up_cost_per_edition_usd"] = deliveredEditions > 0
-    ? Number((phaseSpend(["cu-edition"]) / deliveredEditions).toFixed(8))
+    ? Number(((phaseSpend(["cu-edition"]) + imageProgrammeSpend("caught-up")) / deliveredEditions).toFixed(8))
     : null;
   measurements["state/budget#mma_files_cost_per_article_usd"] = articles.length > 0
     ? Number(
@@ -680,7 +690,8 @@ export async function collectQuarterlyMeasurements(input: {
         // "article-am"/"article-pm" are calendar slot names and have never appeared in the
         // ledger, so naming them here dropped 58% of the numerator and reported an article as
         // costing $0.0302 when it cost $0.0724.
-        (phaseSpend(["article-production", "mag-editorial", "mag-desk"]) / articles.length).toFixed(8)
+        ((phaseSpend(["article-production", "mag-editorial", "mag-desk"]) + imageProgrammeSpend("mma-files"))
+          / articles.length).toFixed(8)
       )
     : null;
 

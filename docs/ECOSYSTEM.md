@@ -88,8 +88,9 @@ become instructions. Numeric and factual claims must retain evidence references.
 Promise: one useful AI-news briefing in Czech, with a hero image and a clear reader
 destination. Inputs come from the allowed source registry. HERALD chooses the story,
 STET edits the Czech copy, HACEK owns the register it is written to, AUDIT can veto,
-FRAME supplies exactly one licensed image or deterministic fallback, and RELAY delivers
-a hash-checked edition package to `lukaskourilcz/aifirst`.
+FRAME supplies exactly one hero — a licensed photograph, a rendered illustration or the
+deterministic plate, whichever the certainty ladder reaches first with a vision gate's
+approval — and RELAY delivers a hash-checked edition package to `lukaskourilcz/aifirst`.
 
 The target repository runs its own CI and Vercel deployment. BoardlessAI then checks
 the target commit, the article route for every locale the package carries, content
@@ -418,7 +419,7 @@ prepare a proposal but never activate an earning method.
 | --- | --- |
 | D1 Agent-owned release | Caught Up/MMA agents release inside contracts; deterministic deploy proof replaces owner content approval |
 | D2 Phased social activation | per-project counters/credentials plus global kill switch; idempotent posting and verification |
-| D3 Licensed images | exactly one licensed hero or deterministic fallback per article |
+| D3 Licensed images | exactly one hero per article, from a gated certainty ladder: entity-linked photograph, curated file, licensed search, generated illustration, deterministic plate |
 | D4 Workplace-show skin | historical visual direction; D12 removes the skin while its model-packet barrier remains |
 | D5 Operating priorities | bounded priority queue, one morning commission and honest no-work state |
 | D6 Template founding | fenced content-project founding without new human-only surfaces |

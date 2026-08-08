@@ -2,6 +2,8 @@ import sharp from "sharp";
 import { ArticleImageSchema, type ArticleImage } from "../contracts/autonomy.js";
 import { safeFetch } from "../security/url.js";
 import { validateLicensedImageCandidate } from "./article-image.js";
+import { readPixabayCache, writePixabayCache } from "./pixabay-cache.js";
+import { stateRoot } from "../paths.js";
 
 export type LicensedImageProvider = "openverse" | "wikimedia" | "pexels" | "pixabay";
 
@@ -85,6 +87,15 @@ export interface LicensedImageSearchResult {
 type JsonFetcher = (url: string, options: { headers?: Record<string, string> }) => Promise<unknown>;
 
 const API_HOSTS = ["api.openverse.org", "commons.wikimedia.org", "api.pexels.com", "pixabay.com"];
+
+/**
+ * How many results each provider is asked for, per phrase.
+ *
+ * Modest on purpose. Three phrases across four providers is twelve requests, and the shortlist
+ * stops at twelve candidates however many come back — so a larger page buys nothing but a bigger
+ * share of a free tier's rate limit. Wikimedia in particular tightened anonymous limits in 2026.
+ */
+const PER_PROVIDER_PAGE = 8;
 // Openverse aggregates, so its images live on the original provider's CDN. Only hosts named
 // here are downloadable; a candidate served from anywhere else is dropped by candidateHosted.
 const DOWNLOAD_HOSTS = [
@@ -102,6 +113,31 @@ const DOWNLOAD_HOSTS = [
   "farm8.staticflickr.com",
   "farm9.staticflickr.com"
 ];
+
+/**
+ * Where the gate may fetch a thumbnail from. Separate from `DOWNLOAD_HOSTS`, and deliberately.
+ *
+ * A thumbnail is fetched to be looked at and thrown away; a download becomes the published hero.
+ * The two lists mostly coincide, and the one host that differs is the reason they are two lists:
+ * Openverse aggregates, so its full-size bytes live on the original provider's CDN — which is why
+ * `DOWNLOAD_HOSTS` does not name Openverse at all — while its thumbnails are served by Openverse
+ * itself. Adding `api.openverse.org` to the download allowlist to reach those thumbs would have
+ * let a search response nominate a publishable host, which is the exact hole the fixed download
+ * allowlist exists to close.
+ *
+ * Same review posture as the other list: a host is added here in a commit somebody reads, never
+ * from an API response.
+ */
+export const THUMBNAIL_HOSTS = [...DOWNLOAD_HOSTS, "api.openverse.org"];
+
+/** Whether the gate may fetch this candidate's thumbnail at all. */
+export function thumbnailHosted(candidate: { thumbnailUrl: string }): boolean {
+  try {
+    return THUMBNAIL_HOSTS.includes(new URL(candidate.thumbnailUrl).hostname);
+  } catch {
+    return false;
+  }
+}
 
 /** Whether a candidate's bytes sit on a host the downloader is allowed to reach. */
 export function candidateHosted(candidate: { downloadUrl: string }): boolean {
@@ -193,7 +229,7 @@ function safeCandidate(candidate: LicensedPhotoCandidate): LicensedPhotoCandidat
 async function searchOpenverse(query: string, fetchJson: JsonFetcher): Promise<LicensedPhotoCandidate[]> {
   const url = new URL("https://api.openverse.org/v1/images/");
   url.searchParams.set("q", query);
-  url.searchParams.set("page_size", "6");
+  url.searchParams.set("page_size", String(PER_PROVIDER_PAGE));
   url.searchParams.set("license", "cc0,by,by-sa,pdm");
   const payload = await fetchJson(url.toString(), {}) as { results?: unknown[] };
   return (payload.results ?? []).flatMap((raw) => {
@@ -235,7 +271,7 @@ async function searchWikimedia(query: string, fetchJson: JsonFetcher): Promise<L
     generator: "search",
     gsrsearch: `file:${query}`,
     gsrnamespace: "6",
-    gsrlimit: "6",
+    gsrlimit: String(PER_PROVIDER_PAGE),
     prop: "imageinfo",
     iiprop: "url|size|mime|extmetadata",
     iiurlwidth: "640"
@@ -270,7 +306,7 @@ async function searchPexels(query: string, key: string, fetchJson: JsonFetcher):
   const url = new URL("https://api.pexels.com/v1/search");
   url.searchParams.set("query", query);
   url.searchParams.set("orientation", "landscape");
-  url.searchParams.set("per_page", "5");
+  url.searchParams.set("per_page", String(PER_PROVIDER_PAGE));
   const payload = await fetchJson(url.toString(), { headers: { Authorization: key } }) as { photos?: unknown[] };
   return (payload.photos ?? []).flatMap((raw) => {
     const item = raw as Record<string, unknown>;
@@ -293,7 +329,12 @@ async function searchPexels(query: string, key: string, fetchJson: JsonFetcher):
   });
 }
 
-async function searchPixabay(query: string, key: string, fetchJson: JsonFetcher): Promise<LicensedPhotoCandidate[]> {
+async function searchPixabay(
+  query: string,
+  key: string,
+  fetchJson: JsonFetcher,
+  cache: { root: string; now: Date } | null
+): Promise<LicensedPhotoCandidate[]> {
   const url = new URL("https://pixabay.com/api/");
   url.searchParams.set("key", key);
   url.searchParams.set("q", query.slice(0, 100));
@@ -302,8 +343,15 @@ async function searchPixabay(query: string, key: string, fetchJson: JsonFetcher)
   url.searchParams.set("safesearch", "true");
   url.searchParams.set("min_width", "1600");
   url.searchParams.set("min_height", "900");
-  url.searchParams.set("per_page", "5");
-  const payload = await fetchJson(url.toString(), {}) as { hits?: unknown[] };
+  url.searchParams.set("per_page", String(PER_PROVIDER_PAGE));
+  // Pixabay's terms require a response to be cached for 24 hours instead of re-requested. The
+  // cache is consulted before the network, never after, so a re-run inside a day makes no call.
+  const cached = cache ? await readPixabayCache(cache.root, url.toString(), cache.now) : null;
+  const payload = (cached ?? await (async () => {
+    const fresh = await fetchJson(url.toString(), {});
+    if (cache) await writePixabayCache(cache.root, url.toString(), fresh, cache.now);
+    return fresh;
+  })()) as { hits?: unknown[] };
   return (payload.hits ?? []).flatMap((raw) => {
     const item = raw as Record<string, unknown>;
     const author = text(item.user);
@@ -342,7 +390,7 @@ async function searchPixabay(query: string, key: string, fetchJson: JsonFetcher)
  * being. Nothing matching is still a frequent and correct answer, covered by the FRAME hero.
  *
  * Keeping people away from this is the caller's job and it is done by ref shape, not by what is
- * on disk: `articleImageCandidates` reaches here only when every subject ref matches
+ * on disk: `selectArticleImage` reaches here only when every subject ref matches
  * `org:event:slug`. Anything else — a fighter, a killed slot's placeholder, a ref of no shape it
  * recognises — never arrives.
  */
@@ -391,39 +439,69 @@ export function captionResidual(title: string, subjectWords: readonly string[]):
   return remaining.length;
 }
 
+/**
+ * The shortlist a phrase — or two, or three — brings back from four archives.
+ *
+ * One query used to go to each provider and the first four survivors were the whole shortlist,
+ * which meant a single provider that answered quickly filled it and the other three contributed
+ * nothing. The desk now writes two or three phrases describing different aspects of the same
+ * picture, and each is asked of every provider; the results are interleaved by round, so the
+ * shortlist reads first-choice-from-each before it reads anybody's second.
+ *
+ * Deduplication is unchanged and still runs on both keys. A file republished under two source
+ * URLs is one photograph, and so is the same event photographed five times under one caption:
+ * offering it twelve times out of twelve wastes the whole shortlist and, more to the point,
+ * wastes the gate's one call on twelve views of the same frame.
+ */
 export async function discoverLicensedPhotos(input: {
-  query: string;
+  /** One phrase, for the callers that still have exactly one. */
+  query?: string;
+  /** The desk's phrases. Each is asked of every provider. */
+  queries?: readonly string[];
   pexelsKey?: string;
   pixabayKey?: string;
   fetchJson?: JsonFetcher;
   maximum?: number;
+  /** Where the Pixabay response cache lives, and the clock it ages against. */
+  cacheRoot?: string;
+  now?: Date;
 }): Promise<LicensedImageSearchResult> {
-  const query = input.query.trim().replace(/\s+/gu, " ").slice(0, 100);
-  if (!query) return { candidates: [], skippedProviders: [] };
+  const queries = [...(input.queries ?? []), ...(input.query ? [input.query] : [])]
+    .map((phrase) => phrase.trim().replace(/\s+/gu, " ").slice(0, 100))
+    .filter(Boolean)
+    // Three is the ceiling the desk is asked for, and the ceiling here too: a fourth phrase adds
+    // four more requests to a free tier for candidates the shortlist has no room for.
+    .slice(0, 3);
+  const unique = [...new Set(queries)];
+  if (unique.length === 0) return { candidates: [], skippedProviders: [] };
   const fetchJson = input.fetchJson ?? defaultJsonFetcher;
+  const cache = { root: input.cacheRoot ?? stateRoot, now: input.now ?? new Date() };
   const skippedProviders: LicensedImageSearchResult["skippedProviders"] = [];
   if (!input.pexelsKey) skippedProviders.push({ provider: "pexels", reason: "missing-key" });
   if (!input.pixabayKey) skippedProviders.push({ provider: "pixabay", reason: "missing-key" });
-  const jobs: Array<Promise<LicensedPhotoCandidate[]>> = [
-    searchOpenverse(query, fetchJson).catch(() => []),
-    searchWikimedia(query, fetchJson).catch(() => []),
-    ...(input.pexelsKey ? [searchPexels(query, input.pexelsKey, fetchJson).catch(() => [])] : []),
-    ...(input.pixabayKey ? [searchPixabay(query, input.pixabayKey, fetchJson).catch(() => [])] : [])
-  ];
-  const providerResults = await Promise.all(jobs);
-  const maximum = input.maximum ?? 4;
+
+  const jobs: Array<Promise<LicensedPhotoCandidate[]>> = [];
+  for (const query of unique) {
+    jobs.push(searchOpenverse(query, fetchJson).catch(() => []));
+    jobs.push(searchWikimedia(query, fetchJson).catch(() => []));
+    if (input.pexelsKey) jobs.push(searchPexels(query, input.pexelsKey, fetchJson).catch(() => []));
+    if (input.pixabayKey) jobs.push(searchPixabay(query, input.pixabayKey, fetchJson, cache).catch(() => []));
+  }
+  const lists = await Promise.all(jobs);
+
+  const maximum = input.maximum ?? 12;
   const candidates: LicensedPhotoCandidate[] = [];
-  for (const list of providerResults) {
-    for (const candidate of list) {
+  const depth = Math.max(0, ...lists.map((list) => list.length));
+  for (let round = 0; round < depth && candidates.length < maximum; round += 1) {
+    for (const list of lists) {
+      const candidate = list[round];
+      if (!candidate) continue;
       if (!candidateHosted(candidate)) continue;
       if (candidates.some((item) => item.sourceUrl === candidate.sourceUrl)) continue;
-      // The same event photographed five times is one picture as far as an editor is
-      // concerned; offering it four times out of four wastes the whole shortlist.
       if (candidates.some((item) => item.title === candidate.title)) continue;
       candidates.push(candidate);
       if (candidates.length >= maximum) break;
     }
-    if (candidates.length >= maximum) break;
   }
   return { candidates, skippedProviders };
 }
@@ -456,7 +534,7 @@ export function heroCropAnchor(candidate: Pick<LicensedPhotoCandidate, "identity
   return candidate.identityOf ? "top" : "attention";
 }
 
-async function webpVariant(
+export async function webpVariant(
   bytes: Uint8Array,
   width: number,
   height: number,

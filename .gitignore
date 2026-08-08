@@ -38,3 +38,7 @@ state/ventures/carousel-studio/hook-delivery.json
 
 # The cached release-gate verdict for one commit; see .github/workflows/cycle.yml
 .release-gate-verdict
+
+# Provider responses held for the twenty-four hours Pixabay's terms require. Cache, not state:
+# it keeps a re-run inside a day off the API, and it is worth nothing to anyone reading the repo.
+state/cache/

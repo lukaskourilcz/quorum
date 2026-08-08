@@ -16,7 +16,10 @@ export const BudgetLedgerEntrySchema = z.object({
   phase: z.string().min(1),
   ventureId: z.union([VentureIdSchema, z.literal("global")]).optional(),
   agent: z.string().min(1),
-  provider: z.enum(["openai", "anthropic"]),
+  // "fal" joined on 2026-08-09 with the generated-illustration rung, which is the first thing
+  // this company bills that is neither of the two text providers. A ledger row that named the
+  // wrong provider would misattribute the one kind of spend the owner most wants separated.
+  provider: z.enum(["openai", "anthropic", "fal"]),
   model: z.string().min(1),
   serviceTier: z.enum(["default", "batch", "flex", "priority"]),
   tokensIn: z.number().int().nonnegative(),

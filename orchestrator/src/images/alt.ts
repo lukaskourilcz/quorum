@@ -19,6 +19,19 @@ import type { LicensedPhotoCandidate } from "./licensed.js";
  * unreachable — there is no branch here that can return it — and the last resort is a sentence
  * that still claims nothing rather than the caller's subject-derived fallback.
  */
+/**
+ * The alt text of a generated illustration, and the sentence that keeps it honest.
+ *
+ * Same construction as the two illustrative constructors and for the same reason: there is no
+ * parameter for a name and there must never be one. What differs is the second sentence. An
+ * illustrative photograph is a photograph of something real that is not the subject; this is not
+ * a photograph at all, and a reader who is shown a picture above a news article assumes it is
+ * one unless they are told otherwise. So it says so, in the alt text, every time.
+ */
+export function illustrationAltCs(sceneCs: string): string {
+  return `Ilustrace k tématu: ${sceneCs}. Nejde o fotografii.`.slice(0, 300);
+}
+
 export function heroAltCs(
   candidate: Pick<LicensedPhotoCandidate, "altCs" | "illustrative">,
   writerAlt: string | undefined,

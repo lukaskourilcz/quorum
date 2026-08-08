@@ -8,6 +8,9 @@ const searchCalls: string[] = [];
 const identityCalls: string[] = [];
 const illustrativeSeeds: string[] = [];
 let identityPhoto: LicensedPhotoCandidate | null = null;
+const gateCalls: Array<{ mode: string; ids: string[] }> = [];
+/** Whether the gate approves what it is shown. Off by default: nothing is approved unseen. */
+let gateSelects = false;
 
 const ILLUSTRATIVE: LicensedPhotoCandidate = {
   id: "illustrative:39226871",
@@ -43,9 +46,36 @@ vi.mock("../src/images/licensed.js", async () => {
   const actual = await vi.importActual<typeof import("../src/images/licensed.js")>("../src/images/licensed.js");
   return {
     ...actual,
-    discoverLicensedPhotos: async ({ query }: { query: string }) => {
-      searchCalls.push(query);
+    discoverLicensedPhotos: async ({ queries, query }: { queries?: readonly string[]; query?: string }) => {
+      searchCalls.push(...(queries ?? []), ...(query ? [query] : []));
       return { candidates: [SEARCH_RESULT], skippedProviders: [] };
+    }
+  };
+});
+
+/** Records what the gate was asked and answers with whatever the test has armed. */
+vi.mock("../src/images/vision-gate.js", async () => {
+  const actual = await vi.importActual<typeof import("../src/images/vision-gate.js")>("../src/images/vision-gate.js");
+  return {
+    ...actual,
+    assessCandidates: async (input: {
+      candidates: LicensedPhotoCandidate[];
+      mode: string;
+    }) => {
+      gateCalls.push({ mode: input.mode, ids: input.candidates.map((candidate) => candidate.id) });
+      const selected = gateSelects ? input.candidates[0] ?? null : null;
+      return {
+        selected,
+        verdict: {
+          mode: input.mode,
+          considered: input.candidates.length,
+          selected: selected?.id ?? null,
+          reason: selected ? "Looks right." : "all-candidates-rejected",
+          candidates: [],
+          skipped: [],
+          costUsd: 0.003
+        }
+      };
     }
   };
 });
@@ -75,8 +105,26 @@ vi.mock("../src/images/illustrative.js", async () => {
   };
 });
 
-const { articleImageCandidates } = await import("../src/mma-files/live.js");
+const { selectArticleImage } = await import("../src/mma-files/live.js");
+const { ImageProgramBudget } = await import("../src/images/budget.js");
 const { repoRoot } = await import("../src/paths.js");
+
+/** The router under test, with the parts a caller owns filled in. */
+async function route(
+  root: string,
+  subjectRefs: readonly string[],
+  brief: { phrases: string[]; concept: string | null; negatives: string[] } | null = null
+) {
+  return selectArticleImage({
+    root,
+    subjectRefs,
+    stateRoot: root,
+    cycleId: "cycle-test",
+    budget: new ImageProgramBudget({ usd: 0, generatedImages: 0 }),
+    brief,
+    article: { titleCs: "Titulek", dekCs: "Perex." }
+  });
+}
 
 const roots: string[] = [];
 afterEach(async () => {
@@ -84,6 +132,8 @@ afterEach(async () => {
   identityCalls.length = 0;
   illustrativeSeeds.length = 0;
   identityPhoto = null;
+  gateCalls.length = 0;
+  gateSelects = false;
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
 });
 
@@ -102,13 +152,14 @@ describe("choosing how to find a picture for an article", () => {
     // The 4 August article did search on the name, and "678 - Gustavo Lopez.jpg" — an Argentinian
     // subsecretario de Presidencia — passed every caption filter there was and ranked first.
     const root = await plantGustavoLopez();
-    const candidates = await articleImageCandidates(root, ["oktagon:gustavo-lopez"]);
+    const chosen = await route(root, ["oktagon:gustavo-lopez"]);
     expect(identityCalls).toEqual(["Q104839627"]);
     expect(searchCalls).toEqual([]);
     // Q104839627 names no image, so rung one is empty and the ladder descends to rung two rather
     // than to the drawn plate — the owner's decision of 4 August. Nothing about him goes to
     // Commons: the seed picks a curated file and is never a query.
-    expect(candidates).toEqual([ILLUSTRATIVE]);
+    expect(chosen.candidate).toEqual(ILLUSTRATIVE);
+    expect(chosen.rung).toBe("curated");
     expect(illustrativeSeeds).toEqual(["oktagon:gustavo-lopez"]);
   });
 
@@ -130,30 +181,68 @@ describe("choosing how to find a picture for an article", () => {
       identityOf: "Q104839627"
     };
     const root = await plantGustavoLopez();
-    expect(await articleImageCandidates(root, ["oktagon:gustavo-lopez"])).toEqual([identityPhoto]);
+    const chosen = await route(root, ["oktagon:gustavo-lopez"]);
+    expect(chosen.candidate).toEqual(identityPhoto);
+    expect(chosen.rung).toBe("entity-linked");
     expect(illustrativeSeeds).toEqual([]);
   });
 
-  it("searches on the name for an event, which has no identity to confuse", async () => {
-    // A fight-week preview is assigned an event ref, and an event is a name: the worst a wrong
-    // match can do is show the wrong arena.
+  it("searches the desk's phrases for an event, and never the event's name", async () => {
+    // A fight-week preview is assigned an event ref, and an event has no identity to confuse. The
+    // phrases the desk wrote are what the archive is asked; the event's own name is forbidden in
+    // them, so `candidatesNaming` does not apply and the gate decides instead.
     const root = await plantGustavoLopez();
-    const candidates = await articleImageCandidates(root, ["ufc:event:ufc-330-makhachev-vs-machado-garry"]);
+    gateSelects = true;
+    const chosen = await route(root, ["ufc:event:ufc-330-makhachev-vs-machado-garry"], {
+      phrases: ["empty cage arena floor", "weigh in stage banner"],
+      concept: "mixed martial arts arena",
+      negatives: []
+    });
     expect(identityCalls).toEqual([]);
-    expect(searchCalls).toEqual(["ufc 330 makhachev vs machado garry"]);
-    // The recorded candidate does not name the event, so `candidatesNaming` drops it -- and the
-    // article now takes the curated illustrative rung rather than falling straight to the plate.
-    // A scene photograph carries no claim about anyone, so nothing about the subject travels:
-    // the seed only decides which curated file is tried first.
+    expect(searchCalls).toEqual(["empty cage arena floor", "weigh in stage banner"]);
+    expect(gateCalls).toEqual([{ mode: "search", ids: ["wikimedia:1"] }]);
+    expect(chosen.rung).toBe("search");
+    expect(chosen.candidate).toEqual(SEARCH_RESULT);
+    expect(chosen.verdicts).toHaveLength(1);
+  });
+
+  it("descends to the curated rung when the gate refuses everything the search found", async () => {
+    // The whole point of the gate. A candidate nobody has looked at used to become the hero; now
+    // a refused shortlist costs the search rung and the article takes a photograph of the sport.
+    const root = await plantGustavoLopez();
+    const chosen = await route(root, ["ufc:event:ufc-330-makhachev-vs-machado-garry"], {
+      phrases: ["empty cage arena floor", "weigh in stage banner"],
+      concept: "mixed martial arts arena",
+      negatives: []
+    });
+    expect(gateCalls).toHaveLength(1);
+    expect(chosen.rung).toBe("curated");
+    expect(chosen.candidate).toEqual(ILLUSTRATIVE);
+    expect(chosen.verdicts[0]?.reason).toBe("all-candidates-rejected");
     expect(illustrativeSeeds).toEqual(["ufc:event:ufc-330-makhachev-vs-machado-garry"]);
-    expect(candidates.map((candidate) => candidate.illustrative)).toEqual([true]);
+  });
+
+  it("falls back to the event's own name when the desk wrote no usable brief", async () => {
+    // The ref-derived query is the path IMG-01 left in place, and `candidatesNaming` still
+    // narrows it: a caption that does not carry the event's name is not a photograph of it.
+    const root = await plantGustavoLopez();
+    gateSelects = true;
+    const chosen = await route(root, ["ufc:event:ufc-330-makhachev-vs-machado-garry"]);
+    expect(searchCalls).toEqual(["ufc 330 makhachev vs machado garry"]);
+    // The recorded candidate does not name the event, so `candidatesNaming` drops it before the
+    // gate is asked, and the article takes the curated rung rather than the plate.
+    expect(gateCalls).toEqual([]);
+    expect(chosen.rung).toBe("curated");
+    expect(illustrativeSeeds).toEqual(["ufc:event:ufc-330-makhachev-vs-machado-garry"]);
   });
 
   it("searches nothing at all for a killed slot's placeholder ref", async () => {
     // `missing:2026-08-04:am` ends in the slot letter, so an unfiltered ref sent four HTTP
     // providers looking for photographs of "am".
     const root = await plantGustavoLopez();
-    expect(await articleImageCandidates(root, ["missing:2026-08-04:am"])).toEqual([]);
+    const chosen = await route(root, ["missing:2026-08-04:am"]);
+    expect(chosen.candidate).toBeNull();
+    expect(chosen.rung).toBe("plate");
     expect(identityCalls).toEqual([]);
     expect(searchCalls).toEqual([]);
     // Not even rung two. A killed slot has no subject, so it is not an MMA article that wants an
@@ -171,20 +260,20 @@ describe("choosing how to find a picture for an article", () => {
     // almost purely the name.
     const root = await plantGustavoLopez();
     // Rung one is impossible without a card, so the ladder skips it: no lookup is even attempted.
-    expect(await articleImageCandidates(root, ["oktagon:alexander-gladkov"])).toEqual([ILLUSTRATIVE]);
+    expect((await route(root, ["oktagon:alexander-gladkov"])).candidate).toEqual(ILLUSTRATIVE);
     expect(identityCalls).toEqual([]);
     expect(searchCalls).toEqual([]);
     expect(illustrativeSeeds).toEqual(["oktagon:alexander-gladkov"]);
   });
 
   it("gives a misspelt fighter ref an illustrative photograph too", async () => {
-    // A slate ref is a model-written string that reaches `articleImageCandidates` after a bare
-    // schema parse, and the schema types it as any string. `ufc:gustavo-lopez` is one character
-    // off the real card id `oktagon:gustavo-lopez`; under the old routing it missed the card and
-    // brought back the Argentinian subsecretario, which is the exact defect with a typo in front
-    // of it. The org prefix is wrong and the ref still denotes a person, so there is no photograph.
+    // A slate ref is a model-written string that reaches the router after a bare schema parse,
+    // and the schema types it as any string. `ufc:gustavo-lopez` is one character off the real
+    // card id `oktagon:gustavo-lopez`; under the old routing it missed the card and brought back
+    // the Argentinian subsecretario, which is the exact defect with a typo in front of it. The
+    // org prefix is wrong and the ref still denotes a person, so there is no photograph of them.
     const root = await plantGustavoLopez();
-    expect(await articleImageCandidates(root, ["ufc:gustavo-lopez"])).toEqual([ILLUSTRATIVE]);
+    expect((await route(root, ["ufc:gustavo-lopez"])).candidate).toEqual(ILLUSTRATIVE);
     expect(identityCalls).toEqual([]);
     expect(searchCalls).toEqual([]);
     expect(illustrativeSeeds).toEqual(["ufc:gustavo-lopez"]);
@@ -194,23 +283,25 @@ describe("choosing how to find a picture for an article", () => {
     // Neither `org:slug` nor `org:event:slug`. An unclassifiable ref is not evidence that the
     // subject is not a person, so it gets the FRAME cover rather than the benefit of the doubt —
     // and it is not evidence the article is about MMA either, so not the illustrative rung.
-    const root = await plantGustavoLopez();
-    expect(await articleImageCandidates(root, ["fresh-subject"])).toEqual([]);
+    const chosen = await route(await plantGustavoLopez(), ["fresh-subject"]);
+    expect(chosen.candidate).toBeNull();
+    expect(chosen.rung).toBe("plate");
     expect(identityCalls).toEqual([]);
     expect(searchCalls).toEqual([]);
     expect(illustrativeSeeds).toEqual([]);
   });
 
   it("routes a slot naming both an event and a fighter through the fighter", async () => {
-    // One person named anywhere in the slot puts an identity at stake, and the name search has no
-    // way to protect it. The event ref does not license a search over the pair.
+    // One person named anywhere in the slot puts an identity at stake, and no search protects it.
+    // The event ref does not license a search over the pair, brief or no brief.
     const root = await plantGustavoLopez();
-    const candidates = await articleImageCandidates(root, [
+    const chosen = await route(root, [
       "ufc:event:ufc-330-makhachev-vs-machado-garry",
       "oktagon:gustavo-lopez"
-    ]);
+    ], { phrases: ["empty cage arena floor", "weigh in stage banner"], concept: null, negatives: [] });
     expect(identityCalls).toEqual(["Q104839627"]);
     expect(searchCalls).toEqual([]);
-    expect(candidates).toEqual([ILLUSTRATIVE]);
+    expect(gateCalls).toEqual([]);
+    expect(chosen.candidate).toEqual(ILLUSTRATIVE);
   });
 });

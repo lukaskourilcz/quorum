@@ -6,13 +6,19 @@ import { buildSocialVariantPack } from "./social.js";
 import { loadStylebook, reviewArticle, stripSourceMarkers, stylebookPacket, validateStylebook, type CopyViolation } from "./style.js";
 import { storeArticleMedia, storeArticlePackage, storeSocialVariantPack } from "./store.js";
 import { deterministicArticleImage } from "../images/article-image.js";
-import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { materializeLicensedPhoto } from "../images/licensed.js";
+import { checkVisualBrief, type VisualBrief } from "../images/visual-brief.js";
+import type { HeroLadderResult } from "../images/ladder.js";
 import { composeMmaFilesSocialQueue } from "../social/venture-packs.js";
 
 // Czech is the locale that is always there, so it is the one the shape is taken from. Reading
 // it off "en" made the alias optional the moment English became optional.
 type Localization = ArticlePackage["localizations"]["cs"];
-type CzechDraft = Localization & { imageCandidateIndex?: number };
+type CzechDraft = Localization & {
+  imageSearchPhrases?: string[];
+  visualConcept?: string;
+  imageNegatives?: string[];
+};
 type ArticleSource = ArticlePackage["sources"][number];
 
 import { heroAltCs } from "../images/alt.js";
@@ -37,7 +43,6 @@ export interface MmaFilesEditorialGateway {
     slot: "am" | "pm";
     stylebook: string;
     evidence: ArticleEvidencePacket;
-    imageCandidates: readonly LicensedPhotoCandidate[];
   }): Promise<CzechDraft>;
 }
 
@@ -49,6 +54,10 @@ export interface ArticleProductionResult {
   mediaPaths: string[];
   idempotent: boolean;
   supersededHash?: string;
+  /** What the desk asked the picture desk for, once it survived validation. */
+  visualBrief?: VisualBrief;
+  /** The ladder's whole trace, for the caller to record beside the package. */
+  imageSelection?: HeroLadderResult;
 }
 
 export async function produceMmaFilesArticle(input: {
@@ -62,7 +71,19 @@ export async function produceMmaFilesArticle(input: {
   gateway: MmaFilesEditorialGateway;
   stylebookRaw?: string;
   socialProductionEnabled?: boolean;
-  imageCandidates?: readonly LicensedPhotoCandidate[];
+  /**
+   * The image ladder, walked after the article exists.
+   *
+   * It used to run before this function was called, and the candidates travelled into the
+   * writer's packet so the writer could pick one by index — from captions, having seen no
+   * pixels. Both halves of that are gone. The caller still owns the network, the fighter
+   * records and the money; what it is handed here is the desk's own brief and the article's
+   * own words for the gate to judge against.
+   */
+  selectHero?: (input: {
+    brief: VisualBrief | null;
+    article: { titleCs: string; dekCs: string };
+  }) => Promise<HeroLadderResult>;
   publicRepoRoot?: string;
   socialDestinationBaseUrl?: string;
 }): Promise<ArticleProductionResult> {
@@ -76,23 +97,36 @@ export async function produceMmaFilesArticle(input: {
   // publishes in Czech only, so the English draft was work paid for and thrown away: 51% of
   // the article cost by the ledger.
   //
-  // imageCandidates and imageCandidateIndex have to travel with this call. They only ever
-  // reached the English writer, and the Czech one's index was discarded — so a Czech writer
-  // that is not handed the candidates picks no photo, every article falls back to the
-  // deterministic SVG, image.origin flips to "svg", and that in turn short-circuits the
-  // attribution check in the release verifier to a pass. Nothing would error; the photos
-  // would just stop, quietly, and the proof would still be green.
+  // No candidates travel with this call any more. They used to, so the writer could name one by
+  // index from its caption; what it produced was a pick nobody had looked at and an alt text
+  // invented for a picture it had never seen. The writer now writes the article and briefs the
+  // picture desk, and the choosing happens below, after the words exist.
   const cs = await input.gateway.writeCzech({
     slate: input.slate,
     slot: input.slot,
     stylebook: stylebookPacket(stylebook, "cs"),
-    evidence: input.evidence,
-    imageCandidates: input.imageCandidates ?? []
+    evidence: input.evidence
   });
-  // The rest-destructure stays. openObject is z.looseObject, so a surviving imageCandidateIndex
-  // would be persisted into the localization and folded into the package hash, changing the
-  // shape of every future article away from the sealed { title, dek, bodyMDX }.
-  const { imageCandidateIndex, imageAlt: csImageAlt, ...csDraft } = cs;
+  // The rest-destructure stays, and the brief fields are what it now catches. openObject is
+  // z.looseObject, so a field left in would be persisted into the localization and folded into
+  // the package hash, changing the shape of every future article away from the sealed
+  // { title, dek, bodyMDX }. The brief is the picture desk's, not the reader's.
+  const {
+    imageAlt: csImageAlt,
+    imageSearchPhrases,
+    visualConcept,
+    imageNegatives,
+    ...csDraft
+  } = cs;
+  // Checked against the article's own subject, never trusted. A phrase carrying a fighter's name
+  // would turn the licensed search back into the name search that put a government official
+  // above an article about a bantamweight.
+  const visualBrief = checkVisualBrief({
+    phrases: imageSearchPhrases,
+    concept: visualConcept,
+    negatives: imageNegatives,
+    nameSources: [...input.evidence.fighterRefs, ...(input.evidence.eventRef ? [input.evidence.eventRef] : [])]
+  }).brief;
   // Markers come out here, before anything reads the copy, and out of all three fields a reader
   // sees rather than the body alone. Nothing asks the writer for one any more and no gate wants
   // to see one, so this is a normalizer against habit rather than a step the review depends on.
@@ -106,10 +140,14 @@ export async function produceMmaFilesArticle(input: {
     ...(csDraft.altHeadline ? { altHeadline: stripSourceMarkers(csDraft.altHeadline) } : {}),
     bodyMDX: stripSourceMarkers(csDraft.bodyMDX)
   };
-  const candidate = imageCandidateIndex === undefined
-    ? undefined
-    : input.imageCandidates?.[Math.min(imageCandidateIndex, (input.imageCandidates?.length ?? 1) - 1)];
-  let articleImage;
+  const chosen = await input.selectHero?.({
+    brief: visualBrief,
+    article: { titleCs: csLocalization.title, dekCs: csLocalization.dek }
+  }).catch(() => null) ?? null;
+  const candidate = chosen?.candidate ?? undefined;
+  // A rendered illustration arrives already in package shape: there is no archive to fetch it
+  // from and no licence to read, because the company made it and says so.
+  let articleImage = chosen?.illustration;
   if (candidate) {
     try {
       articleImage = await materializeLicensedPhoto({
@@ -165,5 +203,5 @@ export async function produceMmaFilesArticle(input: {
   const queuePaths = socialPack && input.publicRepoRoot && input.socialDestinationBaseUrl
     ? await composeMmaFilesSocialQueue({ stateRoot: input.root, repoRoot: input.publicRepoRoot, article, pack: socialPack, destinationBaseUrl: input.socialDestinationBaseUrl, now: input.publishAt })
     : [];
-  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent, ...(stored.supersededHash ? { supersededHash: stored.supersededHash } : {}) };
+  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent, ...(stored.supersededHash ? { supersededHash: stored.supersededHash } : {}), ...(visualBrief ? { visualBrief } : {}), ...(chosen ? { imageSelection: chosen } : {}) };
 }
