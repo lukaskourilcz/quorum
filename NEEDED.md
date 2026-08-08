@@ -169,11 +169,14 @@ walkthrough and Carousel Studio are waiting on specifically.
   page's TV shows published articles, publishing reliability, cost per article, spend against
   the $30 limit and ideas from meetings, all read from the record. Any figure the record
   cannot supply prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
-- [ ] **Run the two Workflows-section sessions, in order** — give
-  `docs/WORKFLOWS-CLAUDE-DESIGN-PROMPT.md` to a Claude Design session first (it writes
-  `docs/WORKFLOWS-MAP-DESIGN-SPEC.md`), then give `docs/WORKFLOWS-OPUS-BUILD-PROMPT.md` to an
-  Opus session with that spec present. Both prompts carry the same decision block; neither
-  needs this conversation. [imp:4] [owner:me] [time:15m] [kind:deploy]
+- [ ] **Look at the Workflows section and say whether the plan reads** — it is live on the
+  home page after Projects. The question the drawing has to answer without a legend is where a
+  decision goes when it leaves a room; if it does not answer it at a glance, that is a design
+  note rather than a bug. [imp:3] [owner:me] [time:10m] [kind:decision]
+- [ ] **Fix the `/calendar` legend guard, or decide it should stay red** — the e2e suite
+  expects seven `[data-project-legend]` entries and the board renders eight. Carousel Studio
+  joined the legend in `3e081c8` on 2 August and the assertion was never moved, so the check
+  has been failing on `main` since then. [imp:3] [owner:me] [time:10m] [kind:decision]
 - [ ] **Decide the two owner calls in the efficiency review** — whether the DNESKAi edition
   may arrive at 09:00 so the 05:00 rehearsal slot and the retry machinery go, and whether the
   three backstop sweeps shrink to one. Both in `docs/WORKFLOWS-EFFICIENCY-REVIEW.md`,
@@ -186,6 +189,12 @@ walkthrough and Carousel Studio are waiting on specifically.
 
 ## Recently finished
 
+- **The Workflows section is built and on `main`.** Both sessions have run: the design pass
+  wrote `docs/WORKFLOWS-MAP-DESIGN-SPEC.md`, and the build pass added the eighth home-page
+  section after Projects — a top-down floor plan with the plan at rest, a replay of the day
+  that never starts itself, and four places that open in place. Every figure on it resolves
+  from committed state, and the worked example threads the DNESKAi, workshop and courier
+  panels from a real delivered edition through to the published article.
 - **The Fable deliverables are written and on `main`.** Four documents under `docs/`: the
   Claude Design prompt and the Opus build prompt for the Workflows floor plan (one new
   home-page section, owner's top-down-plan direction, split so design and build cannot
