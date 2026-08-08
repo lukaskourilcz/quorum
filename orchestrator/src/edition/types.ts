@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SourceRefSchema } from "../contracts/article-frontmatter.js";
+import type { VisualBrief } from "../images/visual-brief.js";
 
 export const EvidenceClassSchema = z.enum([
   "confirmed_fact",
@@ -86,6 +87,8 @@ export interface WrittenArticle {
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   selectedImageCandidateIndex?: number;
+  /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
+  visualBrief?: VisualBrief;
   /** Czech is what the desk writes. English is optional and no longer produced. */
   byLocale: { en?: LocalizedContent; cs: LocalizedContent };
   usage: EditionUsage[];
@@ -101,6 +104,8 @@ export interface CzechArticle {
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   selectedImageCandidateIndex?: number;
+  /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
+  visualBrief?: VisualBrief;
   cs: LocalizedContent;
   usage: EditionUsage[];
 }

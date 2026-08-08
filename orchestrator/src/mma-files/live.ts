@@ -29,7 +29,14 @@ const LocalizationSchema = z.object({
   altHeadline: z.string().trim().min(1).max(90).optional(),
   bodyMDX: z.string().trim().min(1).max(40_000),
   imageAlt: z.string().trim().min(1).max(300),
-  imageCandidateIndex: z.number().int().min(0).max(3).optional()
+  imageCandidateIndex: z.number().int().min(0).max(3).optional(),
+  // The visual brief, asked for only when the subject is an event. A fighter profile never
+  // reaches a search — the ladder resolves a person through their own Wikidata item or drops to
+  // the curated set — so asking its writer for search phrases would be asking for a route the
+  // pipeline refuses to take. Optional throughout: a missing brief costs nothing.
+  imageSearchPhrases: z.array(z.string().trim().min(1)).max(3).optional(),
+  visualConcept: z.string().trim().min(1).optional(),
+  imageNegatives: z.array(z.string().trim().min(1)).max(5).optional()
 });
 
 type Localization = z.infer<typeof LocalizationSchema>;
@@ -320,6 +327,32 @@ export const MMA_FILES_WRITE_SYSTEM = [
   "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"altHeadline\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\",\"imageCandidateIndex\":0}."
 ].join(" ");
 
+/**
+ * The picture-desk brief, added to the writer's instruction for an event and never for a person.
+ *
+ * A fighter profile does not reach the licensed search at all: `articleImageCandidates` resolves
+ * a person through their own Wikidata item or falls to the curated sport photographs, and that is
+ * the structural rule the whole certainty ladder rests on. Asking a profile's writer for search
+ * phrases would be asking it to describe a route the pipeline refuses to take, and the first
+ * thing a writer asked to name a photographable subject for a fighter profile would write is the
+ * fighter.
+ */
+export const MMA_FILES_VISUAL_BRIEF_INSTRUCTION = [
+  "Also brief the picture desk in three fields a reader never sees.",
+  "imageSearchPhrases: two or three English phrases, each two to six concrete photographable nouns, describing what a photograph illustrating this event would contain — write \"empty cage arena floor\", not \"title fight tension\".",
+  "Never put a fighter's name, an event name or an organisation's name in a phrase: an archive answering a name returns whoever else carries it, which is how a government official once illustrated an article about a bantamweight.",
+  "Plain ASCII, no Czech, no diacritics.",
+  "visualConcept: \"mixed martial arts arena\".",
+  "imageNegatives: up to five short English phrases naming what must not be in the frame.",
+  "Add these three keys to the JSON object you return."
+].join(" ");
+
+/** Whether every surviving subject ref is an event, which is the only shape a search may run on. */
+export function subjectIsEventShaped(subjectRefs: readonly string[]): boolean {
+  const refs = subjectRefs.filter((reference) => !reference.startsWith("missing:"));
+  return refs.length > 0 && refs.every((reference) => EVENT_SUBJECT_REF.test(reference));
+}
+
 class GuardedMmaFilesGateway implements MmaFilesEditorialGateway {
   constructor(
     private readonly cycleId: string,
@@ -378,7 +411,11 @@ class GuardedMmaFilesGateway implements MmaFilesEditorialGateway {
    * that belongs to PEOPLE, not to a language migration.
    */
   writeCzech(input: Parameters<MmaFilesEditorialGateway["writeCzech"]>[0]): Promise<Localization> {
-    return this.call({ agent: "JAB", system: MMA_FILES_WRITE_SYSTEM, packet: input });
+    const refs = input.slate.slots.find((slot) => slot.slot === input.slot)?.subjectRefs ?? [];
+    const system = subjectIsEventShaped(refs)
+      ? `${MMA_FILES_WRITE_SYSTEM} ${MMA_FILES_VISUAL_BRIEF_INSTRUCTION}`
+      : MMA_FILES_WRITE_SYSTEM;
+    return this.call({ agent: "JAB", system, packet: input });
   }
 }
 

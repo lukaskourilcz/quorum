@@ -7,12 +7,18 @@ import { loadStylebook, reviewArticle, stripSourceMarkers, stylebookPacket, vali
 import { storeArticleMedia, storeArticlePackage, storeSocialVariantPack } from "./store.js";
 import { deterministicArticleImage } from "../images/article-image.js";
 import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
+import { checkVisualBrief, type VisualBrief } from "../images/visual-brief.js";
 import { composeMmaFilesSocialQueue } from "../social/venture-packs.js";
 
 // Czech is the locale that is always there, so it is the one the shape is taken from. Reading
 // it off "en" made the alias optional the moment English became optional.
 type Localization = ArticlePackage["localizations"]["cs"];
-type CzechDraft = Localization & { imageCandidateIndex?: number };
+type CzechDraft = Localization & {
+  imageCandidateIndex?: number;
+  imageSearchPhrases?: string[];
+  visualConcept?: string;
+  imageNegatives?: string[];
+};
 type ArticleSource = ArticlePackage["sources"][number];
 
 import { heroAltCs } from "../images/alt.js";
@@ -49,6 +55,8 @@ export interface ArticleProductionResult {
   mediaPaths: string[];
   idempotent: boolean;
   supersededHash?: string;
+  /** What the desk asked the picture desk for, once it survived validation. */
+  visualBrief?: VisualBrief;
 }
 
 export async function produceMmaFilesArticle(input: {
@@ -89,10 +97,28 @@ export async function produceMmaFilesArticle(input: {
     evidence: input.evidence,
     imageCandidates: input.imageCandidates ?? []
   });
-  // The rest-destructure stays. openObject is z.looseObject, so a surviving imageCandidateIndex
-  // would be persisted into the localization and folded into the package hash, changing the
-  // shape of every future article away from the sealed { title, dek, bodyMDX }.
-  const { imageCandidateIndex, imageAlt: csImageAlt, ...csDraft } = cs;
+  // The rest-destructure stays, and the brief fields join it. openObject is z.looseObject, so a
+  // surviving imageCandidateIndex would be persisted into the localization and folded into the
+  // package hash, changing the shape of every future article away from the sealed
+  // { title, dek, bodyMDX }. The three brief fields are the picture desk's, not the reader's,
+  // and would do the same.
+  const {
+    imageCandidateIndex,
+    imageAlt: csImageAlt,
+    imageSearchPhrases,
+    visualConcept,
+    imageNegatives,
+    ...csDraft
+  } = cs;
+  // Checked against the article's own subject, never trusted. A phrase carrying a fighter's name
+  // would turn the licensed search back into the name search that put a government official
+  // above an article about a bantamweight.
+  const visualBrief = checkVisualBrief({
+    phrases: imageSearchPhrases,
+    concept: visualConcept,
+    negatives: imageNegatives,
+    nameSources: [...input.evidence.fighterRefs, ...(input.evidence.eventRef ? [input.evidence.eventRef] : [])]
+  }).brief;
   // Markers come out here, before anything reads the copy, and out of all three fields a reader
   // sees rather than the body alone. Nothing asks the writer for one any more and no gate wants
   // to see one, so this is a normalizer against habit rather than a step the review depends on.
@@ -165,5 +191,5 @@ export async function produceMmaFilesArticle(input: {
   const queuePaths = socialPack && input.publicRepoRoot && input.socialDestinationBaseUrl
     ? await composeMmaFilesSocialQueue({ stateRoot: input.root, repoRoot: input.publicRepoRoot, article, pack: socialPack, destinationBaseUrl: input.socialDestinationBaseUrl, now: input.publishAt })
     : [];
-  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent, ...(stored.supersededHash ? { supersededHash: stored.supersededHash } : {}) };
+  return { article, violations, articlePath: stored.path, socialPath, mediaPaths: [...mediaPaths, ...queuePaths], idempotent: stored.idempotent, ...(stored.supersededHash ? { supersededHash: stored.supersededHash } : {}), ...(visualBrief ? { visualBrief } : {}) };
 }

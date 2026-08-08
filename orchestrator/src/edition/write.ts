@@ -16,6 +16,7 @@ import { CZECH_EDITORIAL_REGISTER } from "./registers.js";
 import { removeEmptyCzechAdverbs } from "./localize.js";
 import { InvalidModelOutputError } from "./models.js";
 import type { LicensedPhotoCandidate } from "../images/licensed.js";
+import { VISUAL_CONCEPTS, checkVisualBrief, type VisualBrief } from "../images/visual-brief.js";
 
 /** Lowercase ASCII words joined by single hyphens: every tag, and the slug's suffix. */
 const SLUG_SOURCE = "^[a-z0-9]+(?:-[a-z0-9]+)*$";
@@ -55,6 +56,12 @@ const ToolOutputSchema = z.object({
   // page where the reader is told why the desk led with this story.
   why_this_story: z.string().trim().min(1).max(280).optional(),
   image_candidate_index: z.number().int().min(0).max(3).optional(),
+  // The visual brief. Optional at the schema boundary because a missing brief is a working
+  // state — the tag-derived subject query is still there and still runs — and because a
+  // required field the model omits throws away a paid write call.
+  image_search_phrases: z.array(z.string().trim().min(1)).max(3).optional(),
+  visual_concept: z.string().trim().min(1).optional(),
+  image_negatives: z.array(z.string().trim().min(1)).max(5).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
   ...LocalizedOutputSchema.shape
 });
@@ -140,6 +147,9 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
     },
     why_this_story: { type: "string" },
     image_candidate_index: { type: "integer", minimum: 0, maximum: 3 },
+    image_search_phrases: { type: "array", minItems: 2, maxItems: 3, items: { type: "string" } },
+    visual_concept: { type: "string", enum: [...VISUAL_CONCEPTS] },
+    image_negatives: { type: "array", maxItems: 5, items: { type: "string" } },
     wire: {
       type: "array",
       minItems: 4,
@@ -199,6 +209,17 @@ Write why_this_story as one Czech sentence, at most 280 characters, saying why t
 story led today rather than another: what it changes, for whom. It is published to the
 reader under the heading "Proč právě tento příběh". Same register as the article, no
 hype, no restating the headline.
+
+You also brief the picture desk, in three fields it uses and a reader never sees.
+image_search_phrases: two or three English phrases, each two to six concrete
+photographable nouns, describing what a photograph illustrating this story would
+contain. Write "empty courtroom bench", not "legal uncertainty". Never write a person's
+name, a company's name or an event's name in a phrase: a photo archive answering a name
+returns whoever else has that name, which is how a government official once illustrated
+an article about a fighter. Plain ASCII, no Czech, no diacritics — the archives are
+indexed in English. visual_concept: one key from the enumerated list, whichever is
+closest. image_negatives: up to five short English phrases naming what must not be in
+the frame.
 
 ${CZECH_EDITORIAL_REGISTER}
 
@@ -751,7 +772,21 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
     ...(imageCandidates.length > 0
       ? { selectedImageCandidateIndex: Math.min(response.value.image_candidate_index ?? 0, imageCandidates.length - 1) }
       : {}),
+    // Checked, not trusted, and dropped whole if any part of it fails. The tags are in the name
+    // sources because a Czech tag is the shortest route a company or a person has into a phrase.
+    ...(visualBrief({
+      phrases: response.value.image_search_phrases,
+      concept: response.value.visual_concept,
+      negatives: response.value.image_negatives,
+      nameSources: [...response.value.tags, ...pickedItems.map((item) => item.title)]
+    }) ?? {}),
     cs: localized(response.value),
     usage: [response.usage]
   };
+}
+
+/** The brief, or nothing at all. Never a partial one; see `checkVisualBrief`. */
+function visualBrief(input: Parameters<typeof checkVisualBrief>[0]): { visualBrief: VisualBrief } | null {
+  const checked = checkVisualBrief(input);
+  return checked.brief ? { visualBrief: checked.brief } : null;
 }
