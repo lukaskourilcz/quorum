@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-a37db6b7ae257611",
+  "venture": "caught-up",
+  "packageHash": "01d8b4ddfab6b319bacafdcefe44cda2c1f5eae6c340eb4f88e9db8937122f7e",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "40cf9e346bdb748ce88277500c1ed893eb5c5d19",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 40cf9e346bdb748ce88277500c1ed893eb5c5d19 is readable",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-08-openai-astra-pozastaveni-kyberneticky-prach?boardless_verify=01d8b4ddfab6-1786158539861",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-08-openai-astra-pozastaveni-kyberneticky-prach match",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 01d8b4ddfab6b319bacafdcefe44cda2c1f5eae6c340eb4f88e9db8937122f7e",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-08-openai-astra-pozastaveni-kyberneticky-prach/hero.webp?boardless_verify=01d8b4ddfab6-1786158539861",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Florian Hirzinger - www.fh-ap.com · CC BY-SA",
+      "checkedAt": "2026-08-08T03:08:59.861Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-08T03:07:58.127Z",
+  "completedAt": "2026-08-08T03:09:00.480Z"
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-08",
+  "packageHash": "01d8b4ddfab6b319bacafdcefe44cda2c1f5eae6c340eb4f88e9db8937122f7e",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "40cf9e346bdb748ce88277500c1ed893eb5c5d19",
+  "deliveredAt": "2026-08-08T03:09:01.512Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-08-openai-astra-pozastaveni-kyberneticky-prach",
+  "tags": [
+    "umela-inteligence",
+    "kyberneticka-bezpecnost",
+    "openai",
+    "anthropic",
+    "autonomni-agenti",
+    "ai-bezpecnost"
+  ]
+}
