@@ -26,6 +26,10 @@ Read in this order before writing any code:
   workflow: push, merge to `main`, and leave no work stranded. (A session
   cannot delete a remote branch — the proxy answers 403 — so merging and
   leaving the branch for GitHub's auto-delete is the correct end state.)
+- **`main` moves daily under this branch.** Before starting, `git fetch
+  origin main && git merge origin/main`, run the gates once as a baseline,
+  and re-check §1.1 against the tree. Line references here were true when
+  this was written; where the tree has drifted, the tree wins.
 - **Commit small and often.** One task, one commit, in the order this document
   gives. A commit body names what changed and what was measured or verified,
   in plain prose — apply the `stop-slop` skill to every body. Never batch a
@@ -66,24 +70,36 @@ body and in `NEEDED.md` — never report a gate you did not run as passed.
 The home page is one server resolver and one client tree.
 `site/src/lib/office-walkthrough.ts` resolves committed state on the server and
 hands plain JSON across; that boundary also sanitises. The Workflows section is
-section 04 (`site/src/components/office/office-walkthrough.tsx:589-624`):
+the one with `id="facilities"`
+(`site/src/components/office/office-walkthrough.tsx:600-643`):
 
-- `site/src/components/office/section-workflows.tsx` — state, controls, panels.
-  Today it holds `replayHour`/`playing` state, advances one hour per 700 ms
-  tick (lines 126–139), and renders a full control strip below the plan
-  (lines 403–592): transport ❚❚/▶, step buttons, a scrubbable hour rail with
-  playhead, a `REPLAY HH:00` stamp, and a `NOW` button — plus a stepped-strip
-  variant for reduced motion and sub-1024 px.
+- `site/src/components/office/section-workflows.tsx` — state, controls, room
+  views, panels. It holds `replayHour`/`playing` state, advances one hour per
+  700 ms tick (lines 131–144), and renders a full control strip below the plan
+  (the block guarded by `(replaying || strip) && !room` at line 454):
+  transport ❚❚/▶, step buttons, a scrubbable hour rail with playhead, a
+  `REPLAY HH:00` stamp, and a `NOW` button — plus a stepped-strip variant for
+  reduced motion and sub-1024 px. Since the *rooms open as rooms* change on
+  `main`, pressing any room replaces the whole plan with `WorkflowsRoomView`
+  (`site/src/components/office/workflows-room.tsx`): the room at full
+  section size — who stands in it, when it sits, what it produces — with its
+  depth-3 panel folded in where one exists (`hasPanel`; the `PanelPlace`s
+  are caught-up, carousel-studio, dock, titty-tuesdays). The dock is not a
+  room and keeps its overlay panel. Two facts matter for D9: today the
+  replay state persists behind an open room (the strip merely hides), and
+  the `Play the day` button renders whenever the replay is off — including
+  while a room stands open.
 - `site/src/components/office/workflows-plan.tsx` — the floor plan, one inline
-  SVG in a 1760 × 940 viewBox with an 80-unit margin each side. Geometry is
-  transcribed from the design spec: `ROOMS` (lines 56–67), note anchors
-  (76–84), lit fills (87–96), the summary chase `M700 484 H1420` (line 491),
-  GoVIRAL's green dashed line into the two magazine spine stubs (501–508), the
-  roller-door ticks x 1345–1495 at y 446–462 (474), the bench with its one
-  package at 1084,590 (650–654), three courier bays x 1420 w 132 at
-  y 526/620/720 (645–648), and two east-wall courier exits `M1560 660 H1656`
-  and `M1560 760 H1656` with the DNESKAI and MMA FILES addresses at x 1666
-  (665–699).
+  SVG in a 1760 × 940 viewBox with an 80-unit margin each side. Every room is
+  pressable (`PlanPlace = OfficeProjectKey | "dock"`), and the plan is the
+  section: no card, no panel zoom — it fills the box the section gives it
+  (the `fill` prop). Geometry is transcribed from the design spec: `ROOMS`,
+  the note anchors, the lit fills, the summary chase `M700 484 H1420`,
+  GoVIRAL's green dashed line into the two magazine spine stubs, the
+  roller-door ticks x 1345–1495 at y 446–462, the bench with its one package
+  at 1084,590, three courier bays x 1420 w 132 at y 526/620/720, and two
+  east-wall courier exits `M1560 660 H1656` and `M1560 760 H1656` with the
+  DNESKAI and MMA FILES addresses at x 1666.
 - `site/src/lib/office-workflows-model.ts` — the pure model: `WorkflowsSlot`
   (kind, hour, label, room, color, status, note, sits), `litRoomForHour`,
   `notesThroughHour`, `doorNoteKind`, `REPLAY_FIRST_HOUR = 5`,
@@ -94,7 +110,9 @@ section 04 (`site/src/components/office/office-walkthrough.tsx:589-624`):
 - The section's backdrop is `<OfficePlate image="office-whiteboard"
   width="max(150vw, 264svh)">` — a photograph of an office wall with a large
   whiteboard — with the replay scrim layered above it
-  (`office-walkthrough.tsx:595-612`).
+  (`office-walkthrough.tsx:605-622`). The calendar section reuses the same
+  photograph at a different crop (`max(132vw, 232svh)`); D8 touches only the
+  facilities section's plate.
 
 ## 1.2 The owner's decisions
 
@@ -151,7 +169,19 @@ must read as the surface the floor plan is drawn on. Today the plate is so
 oversized (`max(150vw, 264svh)` against a 1376 × 768 image) that only the
 whiteboard's sides are in frame. Reframe the plate for this section so the
 whiteboard's top edge and bottom edge are both visible at common desktop
-viewports, with the plan board sitting on the whiteboard's face.
+viewports, with the plan sitting on the whiteboard's face.
+
+**D9 — opening a room stops the day.** Rooms open by replacing the plan, so a
+performance left running behind a room view would still be walking, unseen,
+when the reader came back. Pressing any room or the dock while the
+performance runs stops and resets it completely — the same teardown as
+pressing the toggle — so closing the room lands on the default ambient plan:
+no motion in progress, no scrim, the button reading `Play the day`. While a
+room view or the dock panel is open, the toggle is not offered; the
+performance starts only from the full floor plan. (Today's code has the
+opposite behaviour on both counts — the replay state persists behind an open
+room and the button renders over it — so this is a change to make, not a
+behaviour to preserve.)
 
 ## 1.3 The choreography
 
@@ -211,16 +241,21 @@ Rules the choreography must keep:
   (`office-plate.tsx:43-48`). New keyframes join the `wf-` family in
   `globals.css`.
 - **Every performance layer takes no clicks.** `pointer-events: none` on
-  travelers, tags, brightness overlays — the four openable places and the
-  header button must stay fully operable mid-performance.
+  travelers, tags, brightness overlays — every pressable room, the dock and
+  the header button must stay fully operable mid-performance. A press on a
+  room mid-performance is D9's teardown-and-open, never a dead click.
 - **Type floor.** Nothing drawn in the plan may render below 9.5 px. The
-  board is 1180 px wide against a 1920-unit viewBox (scale ≈ 0.615), so the
-  tag's mono type stays at ≥ 19 plan units, like the room names. Tag colour
-  pairs come from the spec's §12 ledger discipline: measure, then record.
+  plan now fills the section, so the rendered scale varies with the
+  viewport: keep the tag's mono type at ≥ 19 plan units, like the room
+  names, and verify the floor at the smallest wide-mode viewport (1024 px)
+  rather than assuming a fixed board width. Tag colour pairs come from the
+  spec's §12 ledger discipline: measure, then record.
 - **Cleanup.** Stopping mid-performance (D1) tears everything down: travelers
   unmount, floors transition back, scrim fades, notes return to today's full
   set. Remounting or keying the performance layer is an acceptable reset
-  mechanism. No traveler survives into ambient.
+  mechanism. No traveler survives into ambient. Opening any room or the dock
+  runs this exact teardown automatically (D9) — one code path for both
+  exits, so the two can never drift apart.
 - **Reduced motion.** Nothing translates. The button still works: beats
   advance as opacity-only steps — room brightens, tag appears, note hangs —
   at the same cadence, with no travelers and no marching dashes. The design
@@ -253,7 +288,7 @@ the crop the owner is pointing at.
 Do this empirically, not by arithmetic alone: shrink the section's `width`
 value (and add a `plateY` offset if the whiteboard sits off the photograph's
 vertical centre) until the whiteboard's top and bottom edges are both in
-frame at 1280 × 800, 1440 × 900 and 1920 × 1080, with the plan board sitting
+frame at 1280 × 800, 1440 × 900 and 1920 × 1080, with the plan sitting
 on the whiteboard's face; then screenshot 320 × 568, 768 × 1024 and
 2560 × 1440 to prove coverage held. Playwright is already in the site's
 toolchain — a throwaway script or the e2e runner's screenshot API both work;
@@ -276,7 +311,8 @@ and regenerating one is an owner decision, not a build task.
    paths reworked.
 4. Beats: lighting, brightness (D4), tags (D3).
 5. Travel legs, flow by flow, with the workshop occupancy rule.
-6. End-of-day dissolve (D6) and stop-teardown hardening.
+6. End-of-day dissolve (D6), stop-teardown hardening, and the room-open
+   interrupt (D9).
 7. The whiteboard reframe (D8) with its screenshot evidence.
 8. Full gate run.
 
@@ -389,4 +425,6 @@ wrong — stop and record the conflict instead of widening the scope.
 - Branch pushed and merged to `main` per `CLAUDE.md`, so Vercel redeploys.
 - The site runs: `pnpm -C site dev` (or the built output) shows the day
   performing — one button, the whole day, tags at the rooms, work walking
-  the building, whiteboard framed — and pressing the button again stops it.
+  the building, whiteboard framed — pressing the button again stops it, and
+  opening a room mid-performance resets it so the plan returns to ambient
+  (D9).

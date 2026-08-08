@@ -77,7 +77,10 @@ requirements, choreography and acceptance gates live in
   and titles. Pressing the same button again stops it. The bottom control
   strip — transport, step buttons, rail, playhead, stamp, `NOW` — goes
   entirely; the toggle is the only control, and the day dissolves back to
-  ambient by itself when the story ends.
+  ambient by itself when the story ends. Opening any room mid-performance
+  stops and resets it the same way — rooms now open as full-section views in
+  place of the plan, and a reader coming back must land on the default
+  drawing, never a half-run day.
 - **The active room says what is happening.** During its beat a room shows a
   drawn tag — `06:00 · Morning board`, the calendar's own hour and title — and
   its floor steps visibly brighter than the lit fill, so a viewer sees where
@@ -191,9 +194,9 @@ document rather than trailing off. The build session's instructions are
 `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`.
 
 1. **The Workflows section performs the day.** Whole-day playback behind one
-   toggle, no control strip, a tag and a brighter floor at the active room,
-   the work travelling the existing SVG, and the whiteboard reframed behind
-   the plan. The design spec is amended before any component changes, in the
+   toggle, no control strip, a tag and a brighter floor at the active room, a
+   room-press stopping and resetting the performance, the work travelling the
+   existing SVG, and the whiteboard reframed behind the plan. The design spec is amended before any component changes, in the
    same design-pass/build-pass rhythm as the section itself.
 2. **Python stays out of the runtime.** That is this review's standing
    recommendation; whether the offline calibration lab opens later, under the

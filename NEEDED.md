@@ -177,8 +177,9 @@ walkthrough and Carousel Studio are waiting on specifically.
 - [x] **Pick the Workflows motion direction** — decided 2026-08-08. The replay becomes a
   performance of the whole standing day behind the one *Play the day* toggle: no control
   strip at all, a drawn tag and a brighter floor at the active room with the calendar's own
-  hours and titles, the work travelling the existing SVG, and the whiteboard reframed so the
-  plan sits on its face. Recorded in `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2; the build
+  hours and titles, a room-press stopping and resetting the performance so a reader returns
+  to the default plan, the work travelling the existing SVG, and the whiteboard reframed so
+  the plan sits on its face. Recorded in `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2; the build
   instructions are `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`.
   [imp:3] [owner:me] [time:15m] [kind:decision]
 - [ ] **Start the Workflows build session** — paste the kickoff message into a Claude Code
