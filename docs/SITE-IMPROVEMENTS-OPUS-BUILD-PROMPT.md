@@ -30,16 +30,16 @@ Read in this order before writing any code:
   origin main && git merge origin/main`, run the gates once as a baseline,
   and re-check §1.1 against the tree. Line references here were true when
   this was written; where the tree has drifted, the tree wins.
-- **The work is cut into GitHub issues.** Twelve issues on this repository,
-  `SI-01` through `SI-12`. Work them strictly in title order, one at a time,
-  all on this one branch: read the issue, do the work, run the gates, commit
-  — frequent small commits throughout, and at least one commit closes each
-  issue — then close the issue with a short comment naming the closing
-  commit and what was verified in the running app. **`main` is touched
-  once:** after SI-12, merge the finished branch to `main`, so CI runs once
-  and Vercel redeploys once. This document is the contract the issues
-  reference; if an issue and this document ever disagree, the issue is
-  newer and wins.
+- **The work is cut into GitHub issues.** Thirteen issues on this
+  repository, `SI-01` through `SI-13`. Work them strictly in title order,
+  one at a time, all on this one branch: read the issue, do the work, run
+  the gates, commit — frequent small commits throughout, and at least one
+  commit closes each issue — then close the issue with a short comment
+  naming the closing commit and what was verified in the running app.
+  **`main` is touched once:** inside SI-13, after the documentation sweep,
+  merge the finished branch to `main`, so CI runs once and Vercel redeploys
+  once. This document is the contract the issues reference; if an issue and
+  this document ever disagree, the issue is newer and wins.
 - **Commit small and often.** One task, one commit, in the order this document
   gives. A commit body names what changed and what was measured or verified,
   in plain prose — apply the `stop-slop` skill to every body. Never batch a
@@ -497,15 +497,53 @@ run the full gates, and note the package and versions in the commit body. If
 the fix requires a major-version jump with real breakage, land the safest
 available remediation and record the remainder in `NEEDED.md`.
 
-**5.2 The full wiring review.** After everything above is merged: one
+**5.2 The full wiring review.** After everything above is committed: one
 sweep over the running app to confirm all parts are fully wired and nothing
 is dead. Click through every home-page section, every room view, every
 panel, the performance end to end (start, stop, room-press reset, reduced
 motion, compact), `/calendar`, `/results`, `/standups`, `/ventures`,
 `/company`, and the admin preview routes for every studio format including
 the new story. Run every gate one final time. Fix small breaks on the spot;
-anything larger gets a written `NEEDED.md` entry rather than a silent pass.
-The sweep's commit body lists what was walked and what was found.
+anything larger gets a written entry in the owner document rather than a
+silent pass. The sweep's commit body lists what was walked and what was
+found.
+
+**5.3 The documentation cleanup, and the one owner document.** The
+repository has accumulated markdown, and it bloats the codebase: executed
+build prompts, superseded reviews, one-off briefs, and several files that
+exist only to collect the owner's manual input. Sweep **every `.md` file in
+the repository** against one rule: *a document stays only if a reader needs
+it to operate or understand the system today*. Executed prompts and
+superseded ideas are deleted — git history keeps them — and every document
+that stays is brought fully current, containing only relevant, correct
+information; the `markdown-checkup` skill in `.claude/skills/` is this
+repository's own protocol for that pass. Three bounds on the sweep:
+`state/` is the council's record, not documentation — never a cleanup
+target; the vendored skills under `.claude/skills/` and their byte-identical
+`.agents/skills/` mirrors follow the re-vendor rule and the architecture
+test, edited both-or-neither and never "cleaned"; and
+`docs/WORKFLOWS-MAP-DESIGN-SPEC.md` and `docs/hooks/` are living references
+— they stay, and stay current.
+
+The owner's action items unify into **one document: `docs/NEEDED.md`**.
+Today that job is smeared across `NEEDED.md`, `NEEDS_YOUR_HELP_NOW.md` and
+`MANUAL STEPS.md`; merge them — deduplicated, done items marked, the shared
+marker format kept — move the result to `docs/NEEDED.md`, and delete the
+sources. Update every reference to the old paths: `CLAUDE.md`, the
+session-start/session-end skills, any code or workflow that reads them, and
+every doc that links them. Anything discovered during the program that
+needs the owner's hands — new keys, stale keys, open approvals — lands in
+that one document and nowhere else. Once the program completes, this
+contract and the review it came from fall under the same deletion rule:
+executed prompts are exactly the bloat this section removes, and the spec,
+`docs/NEEDED.md` and git history keep the decisions.
+
+The same hygiene applies to branches. After the final merge, delete local
+and remote branches that no longer carry value — this program's branch and
+the already-merged `claude/*` branches first. A branch holding unmerged
+work worth keeping is recorded in `docs/NEEDED.md` instead of silently
+deleted. This runs from the owner's machine, where branch deletion is
+permitted; the remote sessions' 403 on delete-ref does not apply.
 
 # Out of scope
 
@@ -521,9 +559,12 @@ the scope.
 
 # Definition of done
 
-- Issues `SI-01` through `SI-12` all closed, each with its gates green and
+- Issues `SI-01` through `SI-13` all closed, each with its gates green and
   its closing commit named in the closing comment; one final merge to
-  `main` after SI-12; commit history small and readable.
+  `main` inside SI-13; commit history small and readable.
+- One owner document remains — `docs/NEEDED.md`, current and deduplicated;
+  no executed prompt docs left in the tree; every surviving doc up to date;
+  stale local and remote branches deleted.
 - `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` amended ahead of the build commits.
 - `NEEDED.md` updated as issues close: tick the 2026-08-08 review items this
   work completes, and add any finding this contract told you to record.

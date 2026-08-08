@@ -114,11 +114,12 @@ requirements, choreography and acceptance gates live in
 Reduced motion renders the same story as opacity-only steps — nothing
 translates — and ambient stays exactly as built: the performance never starts
 itself, and only the reader's press sets the day in motion. The build runs as
-twelve GitHub issues, `SI-01` through `SI-12` (#41–#52), worked strictly in
+thirteen GitHub issues, `SI-01` through `SI-13` (#41–#53), worked strictly in
 order on one branch — each closing with its gates green and a named commit,
-and a single merge to `main` after the last of them, so CI runs once and the
-site redeploys once; the design-spec amendment is the second of them, ahead
-of every component change.
+and a single merge to `main` inside the last of them, which also sweeps the
+repository's markdown down to living documents, unifies the owner's runbooks
+into `docs/NEEDED.md`, and prunes the branches with no remaining value; the
+design-spec amendment is the second of them, ahead of every component change.
 
 ## 3. Python: not for the scrapers, yes for a lab
 
@@ -213,7 +214,7 @@ document rather than trailing off. The build session's instructions are
    GoVIRAL, and the whiteboard reframed behind the plan. The design spec is
    amended before any component changes, in the same design-pass/build-pass
    rhythm as the section itself, and the whole build runs as GitHub issues
-   `SI-01`–`SI-12` (#41–#52).
+   `SI-01`–`SI-13` (#41–#53).
 2. **Python stays out of the runtime.** That is this review's standing
    recommendation; whether the offline calibration lab opens later, under the
    JSON contract boundary in §3, remains an open owner decision in
@@ -225,4 +226,7 @@ document rather than trailing off. The build session's instructions are
    free-trending gate ordering (`portfolio/evidence.ts:595`), the dead
    `undici` dependency, the Cito retirement check, the stale section and
    project counts, and the high-severity Dependabot alert on the default
-   branch. The program closes with a full wiring review of the running app.
+   branch. The program closes with a full wiring review of the running app
+   and a documentation sweep that deletes executed prompts, brings every
+   surviving doc current, leaves one owner document — `docs/NEEDED.md` — and
+   prunes the stale branches.
