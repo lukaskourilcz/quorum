@@ -169,10 +169,25 @@ walkthrough and Carousel Studio are waiting on specifically.
   page's TV shows published articles, publishing reliability, cost per article, spend against
   the $30 limit and ideas from meetings, all read from the record. Any figure the record
   cannot supply prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
-- [ ] **Look at the Workflows section and say whether the plan reads** — it is live on the
-  home page after Projects. The question the drawing has to answer without a legend is where a
-  decision goes when it leaves a room; if it does not answer it at a glance, that is a design
-  note rather than a bug. [imp:3] [owner:me] [time:10m] [kind:decision]
+- [x] **Look at the Workflows section and say whether the plan reads** — answered 2026-08-08.
+  The drawing reads; the replay does not perform it. The owner's note is that the animation
+  does not show what actually happens, and the design note the item asked for is recorded in
+  `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2 with three build options. The follow-up decision
+  is the next item. [imp:3] [owner:me] [time:10m] [kind:decision]
+- [ ] **Pick the Workflows motion option** — §2 of `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` ends
+  in three: A animates the delivery on the existing SVG (recommended), B tilts the board, C is
+  the Three.js model office held as a v2. Choosing one unblocks a build session; A also needs
+  the two design calls in that section signed with it. [imp:3] [owner:me] [time:15m] [kind:decision]
+- [ ] **Decide whether Python enters the toolchain** — §3 of the same document names three
+  offline niches (FightAIQ calibration lab, wikitext parser, article extraction) and the
+  JSON-contract boundary any of them would run under. Nothing in the runtime moves either way.
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+- [ ] **Apply the small fixes from the 2026-08-08 site review** — run the free trending signals
+  ahead of the Apify gate (`orchestrator/src/portfolio/evidence.ts:595` sits after the verdict
+  return, so the keyless sources its docstring promises have never run), drop the unused
+  `undici` dependency, retire or explain Cito's always-empty `/bouts` call, and correct the two
+  "seven sections" references now that the walkthrough renders eight.
+  [imp:2] [owner:ai] [time:45m] [kind:deploy]
 - [ ] **Fix the `/calendar` legend guard, or decide it should stay red** — the e2e suite
   expects seven `[data-project-legend]` entries and the board renders eight. Carousel Studio
   joined the legend in `3e081c8` on 2 August and the assertion was never moved, so the check
