@@ -30,8 +30,15 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
       data-team-panel
     >
       <div className="flex items-center justify-between gap-6 border-b border-[#26262b] px-[22px] py-3.5">
+        {/*
+          The roster carries names and portraits, so this is the one place on the home page a
+          reader could take it for a staff list. The disclosure was on the home page before the
+          office walkthrough replaced it and was lost in that rewrite; the smoke test kept asking
+          for it, which is how it turned up. It belongs beside the faces rather than in a footer.
+        */}
         <p className="text-[13px] leading-[1.5] text-[#94949c]">
           The agent roster by reception. Four roles vote; the rest join when their field is needed.
+          They are software roles, not people.
         </p>
         <button
           aria-expanded={full}
