@@ -784,22 +784,29 @@ during GoVIRAL's own pulse.
 
 | Quantity | Value |
 | --- | --- |
-| Beat hold | 1.4s (floor 1.2s) |
+| Beat hold | 1.7s (contract range 1.4–1.7s, floor 1.2s) |
 | Beat rise / fall | 260ms / 420ms |
+| Beat stride — rise + hold, so the fall overlaps the next beat | 1.96s |
 | Tag in / out | 180ms / 220ms |
 | Note hangs | 220ms |
-| Travel leg, short (within a room, or a door to the spine) | 1.2s |
-| Travel leg, long (the chase, a corridor run, a courier exit) | 2.4s |
+| Travel leg, short (within a room, or a door to the spine) | 1.3s |
+| Travel leg, long (the chase, a corridor run, a courier exit) | 2.6s |
 | Gap between a beat closing and its first leg | 200ms |
+| Stagger between a room's two journeys | 600ms |
 | End-of-day hold | 1s |
 | Dissolve to ambient | 600ms |
 
-Thirteen beats at 1.4s plus their rises and falls is about 27s; the legs that
-overlap later beats carry the tail. **The whole performance lands between 30
-and 50 seconds** — that is the contract, and the numbers above are the way this
-spec reaches it. A build that finds the total outside that window changes the
-hold and the leg durations together, keeping the hold at or above its 1.2s
-floor, rather than dropping legs.
+**Measured against the registry's own thirteen slots: 13 beats, 48 legs, the
+last leg resting at 29.6s and the performance ending at 31.2s** — inside the
+30–50s the contract asks for.
+
+The first draft of this table used a 1.4s hold with 1.2 and 2.4s legs, and
+landed at 27s — under the window. The hold went to the top of the contract's
+range and the legs up by a twelfth, together, which is the adjustment this
+section prescribes: never drop a leg, and never take the hold below its 1.2s
+floor. The numbers live in `office-workflows-timeline.ts` as named constants
+and a unit test asserts the 30–50s window against the real registry, so a slot
+added or removed cannot quietly push the day outside it.
 
 ### 6.8 Ambient versus performing
 

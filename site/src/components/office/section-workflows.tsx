@@ -2,13 +2,16 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { litRoomForHour, type OfficeWorkflows } from "@/lib/office-workflows-model";
 import {
-  REPLAY_FIRST_HOUR,
-  REPLAY_LAST_HOUR,
-  litRoomForHour,
-  notesThroughHour,
-  type OfficeWorkflows
-} from "@/lib/office-workflows-model";
+  BEAT_STRIDE_MS,
+  DISSOLVE_MS,
+  END_HOLD_MS,
+  beatAt,
+  buildTimeline,
+  elapsedForBeat,
+  notesAt
+} from "@/lib/office-workflows-timeline";
 import { ROOMS, WorkflowsPlan, roomViewBox, type PlanPlace } from "@/components/office/workflows-plan";
 import {
   ExampleChip,
@@ -25,17 +28,18 @@ import type { OfficeProjectKey } from "@/lib/office-walkthrough";
  *
  * Three depths, all inside one locked screen. Depth 1 is the plan at rest, lit by the current
  * Prague hour — the only depth most readers will see, so it carries the argument on its own.
- * Depth 2 walks the day from 05:00 to 22:00 once, on request, and stops on the finished picture.
- * Depth 3 opens one of four places in place, as a panel over the plan rather than as a second
- * screen.
+ * Depth 2 performs the standing day once, on request, and stops on the finished picture. Depth 3
+ * opens a room in place, by reframing the plan onto that room's own rectangle; the dock is not a
+ * room and keeps its panel.
  *
  * Nothing on the plan carries a `title`, so nothing on it raises a tooltip. Hover and focus change
  * the drawing and nothing else.
  *
- * Now and the replay speak two visual languages on purpose. At rest the light is a soft halo that
- * breathes and the plate keeps its Prague wash. Recording, the halo is replaced by a hard contour
- * offset outside the room, the strip appears, and a flat scrim switches the real sky off. That
- * difference survives with the copy unread and the strip out of frame.
+ * Ambient and the performance speak two visual languages on purpose. At rest the light is a soft
+ * halo that breathes and the plate keeps its Prague wash. Performing, the halo is replaced by a
+ * hard contour offset outside the room and a flat scrim switches the real sky off. That difference
+ * survives with the copy unread — which matters more now than it did, because since D1 there is no
+ * chrome at all beyond one button.
  */
 
 const MONO = "var(--font-ibm-plex-mono), monospace";
@@ -59,17 +63,6 @@ const chip: CSSProperties = {
   letterSpacing: ".1em"
 };
 
-function pragueHourMinute(): { hour: number; minute: number } {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-    timeZone: "Europe/Prague"
-  }).formatToParts(new Date());
-  const value = (type: string) => Number(parts.find((part) => part.type === type)?.value ?? 0);
-  return { hour: value("hour"), minute: value("minute") };
-}
-
 /**
  * The smallest box an opened room's content is laid out in, whatever the room's own rect measures.
  *
@@ -81,8 +74,16 @@ const MIN_ROOM_CONTENT_WIDTH = 380;
 const MIN_ROOM_CONTENT_HEIGHT = 300;
 const TWO_COLUMN_MIN_WIDTH = 560;
 
-const clamp = (hour: number) => Math.max(REPLAY_FIRST_HOUR, Math.min(REPLAY_LAST_HOUR, hour));
-const railFraction = (hour: number) => (hour - REPLAY_FIRST_HOUR) / (REPLAY_LAST_HOUR - REPLAY_FIRST_HOUR);
+function pragueHourMinute(): { hour: number; minute: number } {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone: "Europe/Prague"
+  }).formatToParts(new Date());
+  const value = (type: string) => Number(parts.find((part) => part.type === type)?.value ?? 0);
+  return { hour: value("hour"), minute: value("minute") };
+}
 
 export function SectionWorkflows({
   data,
@@ -94,12 +95,10 @@ export function SectionWorkflows({
   /** True once the walk has reached this section, which is what starts the entrance. */
   active: boolean;
   reduceMotion: boolean;
-  /** The replay scrim lives beside the section's other decorative layers, so it is raised here. */
-  onReplayChange: (replaying: boolean) => void;
+  /** The performance scrim lives beside the section's other decorative layers, so it is raised here. */
+  onReplayChange: (performing: boolean) => void;
 }) {
   const [now, setNow] = useState<{ hour: number; minute: number } | null>(null);
-  const [replayHour, setReplayHour] = useState<number | null>(null);
-  const [playing, setPlaying] = useState(false);
   const [open, setOpen] = useState<PanelPlace | null>(null);
   const [expanded, setExpanded] = useState<PanelPlace | null>(null);
   /** The room standing open in place of the plan, if any. */
@@ -109,12 +108,23 @@ export function SectionWorkflows({
   const [shuttered, setShuttered] = useState(false);
 
   const titleRef = useRef<HTMLParagraphElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
   /** Which door the open panel came out of, so focus can go back to it. */
   const openerRef = useRef<PlanPlace | null>(null);
   const planRef = useRef<HTMLDivElement>(null);
 
-  const replaying = replayHour !== null;
+  /* ---- the performance --------------------------------------------------- */
+
+  const timeline = useMemo(() => buildTimeline(data.slots), [data.slots]);
+
+  /**
+   * How far into the performance we are, or `null` when the section is at rest.
+   *
+   * One number is the whole of the performance's state. Everything drawn — which room is live,
+   * which notes hang, what is in flight — is a pure read of the timeline at this elapsed time, so
+   * there is no second clock to keep in step and no way for the two to disagree.
+   */
+  const [elapsed, setElapsed] = useState<number | null>(null);
+  const performing = elapsed !== null;
 
   /** The Prague clock, read the same way the page header reads it. */
   useEffect(() => {
@@ -136,61 +146,85 @@ export function SectionWorkflows({
     return () => query.removeEventListener("change", apply);
   }, []);
 
-  useEffect(() => onReplayChange(replaying), [replaying, onReplayChange]);
+  useEffect(() => onReplayChange(performing), [performing, onReplayChange]);
 
-  /** One hour per 700ms, so a full day runs 11.9s. The walk runs once; it never starts itself. */
+  /*
+   * The clock that drives it.
+   *
+   * With motion, one interval steps the elapsed time and the CSS in the plan interpolates between
+   * those steps; the step is a quarter of a beat, which is fine-grained enough that a beat's rise
+   * and its close land on the frame they should and coarse enough to cost nothing. With reduced
+   * motion the same interval advances beat by beat instead — the story is identical, and nothing
+   * moves between the steps because there is nothing to interpolate.
+   */
   useEffect(() => {
-    if (!playing || replayHour === null || reduceMotion || replayHour >= REPLAY_LAST_HOUR) {
-      return undefined;
+    if (elapsed === null) return undefined;
+    if (reduceMotion) {
+      const index = timeline.beats.findIndex((beat) => elapsed <= beat.readableAt);
+      const next = index === -1 ? timeline.beats.length : index + 1;
+      if (next > timeline.beats.length) return undefined;
+      const timer = setTimeout(() => {
+        setElapsed(
+          next === timeline.beats.length ? timeline.duration : elapsedForBeat(timeline, next)
+        );
+      }, BEAT_STRIDE_MS);
+      return () => clearTimeout(timer);
     }
-    const timer = setTimeout(() => {
-      const next = replayHour + 1;
-      setReplayHour(next);
-      // The day is a walk, not a loop. It stops on 22:00 and holds the finished picture — every
-      // room closed and every note hung, which is the same thing depth 1 shows at that hour. A
-      // day that restarted itself would keep erasing the record it had just finished drawing.
-      if (next >= REPLAY_LAST_HOUR) setPlaying(false);
-    }, 700);
+    if (elapsed >= timeline.duration) return undefined;
+    const step = Math.round(BEAT_STRIDE_MS / 4);
+    const timer = setTimeout(() => setElapsed(Math.min(elapsed + step, timeline.duration)), step);
     return () => clearTimeout(timer);
-  }, [playing, replayHour, reduceMotion]);
+  }, [elapsed, reduceMotion, timeline]);
 
-  const startReplay = useCallback(() => {
-    setReplayHour(REPLAY_FIRST_HOUR);
-    setPlaying(!reduceMotion);
-  }, [reduceMotion]);
+  /**
+   * The day ends by itself (D6): the finished picture holds, then dissolves back to ambient.
+   *
+   * Written as a second effect rather than folded into the tick, because the last tick lands
+   * exactly on `duration` and the hold has to be measured from there whether the clock arrived by
+   * ticking or by the reduced-motion path skipping to it.
+   */
+  useEffect(() => {
+    if (elapsed === null || elapsed < timeline.duration) return undefined;
+    const timer = setTimeout(() => setElapsed(null), END_HOLD_MS + DISSOLVE_MS);
+    return () => clearTimeout(timer);
+  }, [elapsed, timeline.duration]);
 
-  /** Play from where the walk stopped, or from the top of the day once it has finished. */
-  const togglePlay = useCallback(() => {
-    if (!playing && replayHour !== null && replayHour >= REPLAY_LAST_HOUR) {
-      setReplayHour(REPLAY_FIRST_HOUR);
-    }
-    setPlaying((value) => !value);
-  }, [playing, replayHour]);
+  /**
+   * The one teardown.
+   *
+   * D1's stop and D9's room press are the same thing and share this line, so the two can never
+   * drift apart: no traveller survives into ambient, the scrim goes, the notes return to today's
+   * full set, and the button reads `Play the day` again.
+   */
+  const stopPerformance = useCallback(() => setElapsed(null), []);
 
-  const stopReplay = useCallback(() => {
-    setReplayHour(null);
-    setPlaying(false);
-  }, []);
-
-  /** Stepping pauses playback: a reader who steps is reading, not watching. */
-  const step = useCallback((delta: number) => {
-    setPlaying(false);
-    setReplayHour((hour) => (hour === null ? null : clamp(hour + delta)));
-  }, []);
-
-  const seek = useCallback((hour: number) => {
-    setPlaying(false);
-    setReplayHour(clamp(hour));
+  const togglePerformance = useCallback(() => {
+    setElapsed((current) => (current === null ? 0 : null));
   }, []);
 
   /* ---- what the plan draws right now ------------------------------------- */
 
-  const hour = replayHour ?? now?.hour ?? -1;
-  const litRoom = useMemo(() => litRoomForHour(hour, data.slots), [hour, data.slots]);
-  const notes = useMemo(
-    () => (replaying ? notesThroughHour(hour, data.slots) : data.slots.map((slot) => slot.note)),
-    [replaying, hour, data.slots]
+  const beat = useMemo(
+    () => (elapsed === null ? null : beatAt(timeline, elapsed)),
+    [timeline, elapsed]
   );
+
+  const hour = now?.hour ?? -1;
+  const ambientLitRoom = useMemo(() => litRoomForHour(hour, data.slots), [hour, data.slots]);
+  /**
+   * Which room the plan lights.
+   *
+   * Performing, it is the live beat's room — every slot's room, including GoVIRAL on the six days
+   * it does not sit, because the performance shows how the day *operates* (D2). Ambient keeps
+   * `litRoomForHour` and its gated-slot rule exactly as it was.
+   */
+  const litRoom = performing ? beat?.room ?? null : ambientLitRoom;
+
+  const notes = useMemo(
+    () => (elapsed === null ? data.slots.map((slot) => slot.note) : notesAt(timeline, data.slots, elapsed)),
+    [timeline, elapsed, data.slots]
+  );
+
   // A pack reaches the workshop on the hours something actually left a room. Nothing else
   // brightens it, and it never goes dark: its floor is lit at rest and its light never goes out.
   const workshopWorking = useMemo(
@@ -203,11 +237,12 @@ export function SectionWorkflows({
   /**
    * What pressing a place on the plan does.
    *
-   * A room opens as itself: the drawing is replaced by that room at the full size of the section,
-   * which is the whole reason the section has no card any more. The dock is not a room, so it
-   * keeps opening the courier panel it always did.
+   * A room opens as itself and the dock opens the courier panel — and either way the performance
+   * is torn down first (D9). The teardown is a state update in the same event as the open, so
+   * React commits both together and the plan never reframes with a traveller still on it.
    */
   const openPlace = useCallback((place: PlanPlace) => {
+    stopPerformance();
     if (place === "dock") {
       if (window.matchMedia("(max-width: 1023px)").matches) {
         setExpanded((current) => (current === "dock" ? null : "dock"));
@@ -217,7 +252,7 @@ export function SectionWorkflows({
       return;
     }
     setOpenRoom(place);
-  }, []);
+  }, [stopPerformance]);
 
   const closePanel = useCallback(() => setOpen(null), []);
 
@@ -229,10 +264,10 @@ export function SectionWorkflows({
   /*
    * The frame the plan uses while a room is open.
    *
-   * The room's rectangle is grown to the aspect of the box the drawing sits in, so it lands on an
-   * exactly known part of the frame and the overlay can be placed inside its walls without
-   * measuring the SVG. The box is watched rather than read once, because the section is a
-   * percentage of the viewport and every resize changes the aspect.
+   * The room's rectangle is centred and sized from itself, so it lands on an exactly known part of
+   * the frame and the overlay can be placed against it without measuring the SVG. The box is
+   * watched rather than read once, because the section is a percentage of the viewport and every
+   * resize changes the aspect.
    */
   const [planBox, setPlanBox] = useState<{ width: number; height: number } | null>(null);
   useLayoutEffect(() => {
@@ -264,10 +299,9 @@ export function SectionWorkflows({
    *
    * These are two different rectangles and used to be one, which is what made narrow rooms
    * unreadable. The frame is the room's own rect: it is where the walls land, and the content
-   * belongs inside it. But GoVIRAL is 170 plan units wide and FightAIQ 150, and at the scale that
-   * fits a room's height on a laptop those become a 264px and a 221px column — narrower than a
-   * line of this text needs, so the role rows spilled sideways out of the drawing entirely
-   * (measured: twelve nodes outside the stage at 1280 × 800).
+   * belongs inside it. But GoVIRAL and FightAIQ are narrow enough that at the scale which fits a
+   * room's height on a laptop they become a 264px and a 221px column — narrower than a line of
+   * this text needs, so the role rows spilled sideways out of the drawing entirely.
    *
    * So the content box starts at the room's rect and is then widened, about the same centre, until
    * it can hold a readable measure. On the rooms that are wide enough — most of them — the two
@@ -347,8 +381,6 @@ export function SectionWorkflows({
   }, [open]);
 
   const animate = active && !reduceMotion;
-  /** The stepped strip stands in for the replay wherever a walk would be wrong or unwanted. */
-  const strip = reduceMotion || compact;
 
   const panelProps = {
     animate,
@@ -360,14 +392,23 @@ export function SectionWorkflows({
     surface
   };
 
+  /**
+   * The toggle is not offered while a room or the dock stands open (D9).
+   *
+   * The performance starts only from the full floor plan. Rendering it over an open room invited
+   * a press that would have had to close the room to mean anything.
+   */
+  const offerToggle = !room && !(open && !compact);
+
   /*
    * No card. Owner decision: the plan is the section, so it takes the whole width of it rather
    * than sitting on a 1180px plate in the middle. That also drops the panel zoom the other
    * sections carry — this one has room to be read at its designed size and then some.
    *
-   * Above 1024px the board is a flex column filling the section: header and strip take what they
-   * need, the plan takes the rest. The plan then fits itself to that box (see `fill` below), so it
-   * is as large as the room allows — width-bound on a tall monitor, height-bound on a laptop.
+   * Above 1024px the board is a flex column filling the section: the header takes what it needs
+   * and the plan takes the rest. The plan then fits itself to that box, so it is as large as the
+   * room allows — width-bound on a tall monitor, height-bound on a laptop. Nothing sits under the
+   * drawing at any width since D1 removed the strip.
    */
   return (
     <div
@@ -388,9 +429,10 @@ export function SectionWorkflows({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginLeft: "auto" }}>
-          {!replaying ? (
+          {offerToggle ? (
             <button
-              onClick={startReplay}
+              aria-pressed={performing}
+              onClick={togglePerformance}
               style={{
                 ...chip,
                 border: "1px solid #3f3f46",
@@ -402,7 +444,7 @@ export function SectionWorkflows({
               }}
               type="button"
             >
-              Play the day
+              {performing ? "Stop the day" : "Play the day"}
             </button>
           ) : null}
         </div>
@@ -415,7 +457,7 @@ export function SectionWorkflows({
           fill={!compact}
           focus={focus}
           litRoom={litRoom}
-          mode={replaying ? "replay" : "ambient"}
+          mode={performing ? "replay" : "ambient"}
           notes={notes}
           onOpen={openPlace}
           rooms={data.rooms}
@@ -532,194 +574,25 @@ export function SectionWorkflows({
         ) : null}
       </div>
 
-      {/* ---- depth 2, or the stepped strip that stands in for it -------------- */}
+      {/*
+        ---- below 1024px, the beat leaves the drawing -------------------------
 
-      {(replaying || strip) && !room ? (
+        In-plan text is numerals-only at this width, so a tag drawn at 19 plan units would land
+        well under the 9.5px floor. The beat says the same thing as one HTML line instead.
+      */}
+      {compact && beat ? (
         <div
           style={{
+            ...chip,
             display: "flex",
-            alignItems: "center",
-            gap: "14px",
-            flexWrap: "wrap",
+            gap: "10px",
             borderTop: "1px solid #26262b",
-            padding: "12px 22px"
+            padding: "12px 16px",
+            color: "#f4f4f5"
           }}
         >
-          {strip ? (
-            <>
-              <div
-                data-horizontal-scroll
-                style={{ display: "flex", gap: "6px", overflowX: "auto", flex: "1 1 240px", minWidth: 0 }}
-              >
-                {data.slots.map((slot) => (
-                  <button
-                    key={`${slot.kind}-${slot.hour}`}
-                    onClick={() => seek(slot.hour)}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "4px",
-                      minWidth: "44px",
-                      minHeight: "44px",
-                      border: `1px solid ${replayHour === slot.hour ? "#a1a1aa" : "#3f3f46"}`,
-                      borderRadius: "9px",
-                      background: "#101013",
-                      color: "#d4d4d8",
-                      cursor: "pointer",
-                      flex: "0 0 auto"
-                    }}
-                    // `aria-label` rather than `title`: the button prints only an hour and a
-                    // coloured tick, so it needs a name — and a name is not a tooltip.
-                    aria-label={`${String(slot.hour).padStart(2, "0")}:00 · ${slot.label}`}
-                    type="button"
-                  >
-                    <span style={{ fontFamily: MONO, fontSize: "11px" }}>
-                      {String(slot.hour).padStart(2, "0")}
-                    </span>
-                    <span style={{ width: "3px", height: "14px", background: slot.color }} />
-                  </button>
-                ))}
-              </div>
-              <span
-                style={{
-                  ...chip,
-                  border: "1px solid #3f3f46",
-                  borderRadius: "8px",
-                  padding: "6px 10px",
-                  color: "#f4f4f5"
-                }}
-              >
-                {replayHour === null ? "Now" : `Replay ${String(replayHour).padStart(2, "0")}:00`}
-              </span>
-              {replaying ? (
-                <button onClick={stopReplay} style={{ ...chip, ...control, width: "auto", padding: "0 12px" }} type="button">
-                  Now
-                </button>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <button
-                aria-label={playing ? "Pause the replay" : "Play the replay"}
-                onClick={togglePlay}
-                style={control}
-                type="button"
-              >
-                {playing ? "❚❚" : "▶"}
-              </button>
-              <button aria-label="Step back an hour" onClick={() => step(-1)} style={{ ...control, fontFamily: MONO, fontSize: "13px" }} type="button">
-                ‹
-              </button>
-              <button aria-label="Step forward an hour" onClick={() => step(1)} style={{ ...control, fontFamily: MONO, fontSize: "13px" }} type="button">
-                ›
-              </button>
-
-              {/*
-                The rail. Thirteen marks, one per wake-up, each in its venture hue — and every mark
-                is a wake-up rather than a promise to spend, which is why nothing on this strip
-                animates a cost.
-              */}
-              <div
-                aria-label="Replay hour"
-                aria-valuemax={REPLAY_LAST_HOUR}
-                aria-valuemin={REPLAY_FIRST_HOUR}
-                aria-valuenow={replayHour ?? REPLAY_FIRST_HOUR}
-                onKeyDown={(event) => {
-                  if (event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
-                  else if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
-                  else if (event.key === "Home") { event.preventDefault(); seek(REPLAY_FIRST_HOUR); }
-                  else if (event.key === "End") { event.preventDefault(); seek(REPLAY_LAST_HOUR); }
-                  else if (event.key === " ") { event.preventDefault(); togglePlay(); }
-                }}
-                onPointerDown={(event) => {
-                  const bounds = railRef.current?.getBoundingClientRect();
-                  if (!bounds || bounds.width === 0) return;
-                  const fraction = (event.clientX - bounds.left) / bounds.width;
-                  seek(REPLAY_FIRST_HOUR + Math.round(fraction * (REPLAY_LAST_HOUR - REPLAY_FIRST_HOUR)));
-                }}
-                ref={railRef}
-                role="slider"
-                style={{ position: "relative", flex: 1, minWidth: "160px", height: "28px", cursor: "pointer" }}
-                tabIndex={0}
-              >
-                <span
-                  aria-hidden="true"
-                  style={{ position: "absolute", insetInline: 0, top: "50%", height: "1px", background: "#26262b" }}
-                />
-                {data.slots.map((slot) => (
-                  <span
-                    aria-hidden="true"
-                    key={`${slot.kind}-${slot.hour}`}
-                    style={{
-                      position: "absolute",
-                      top: "7px",
-                      left: `calc(${(railFraction(slot.hour) * 100).toFixed(2)}% - 1.5px)`,
-                      width: "3px",
-                      height: "14px",
-                      background: slot.color
-                    }}
-                  />
-                ))}
-                <span
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: `${(railFraction(replayHour ?? REPLAY_FIRST_HOUR) * 100).toFixed(2)}%`,
-                    width: "2px",
-                    background: "#f4f4f5",
-                    transition: reduceMotion ? "none" : "left 700ms linear"
-                  }}
-                >
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "-4px",
-                      left: "-3px",
-                      width: "8px",
-                      height: "8px",
-                      background: "#f4f4f5",
-                      transform: "rotate(45deg)"
-                    }}
-                  />
-                </span>
-              </div>
-
-              <span
-                style={{
-                  ...chip,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "7px",
-                  border: "1px solid #3f3f46",
-                  borderRadius: "8px",
-                  padding: "6px 10px",
-                  color: "#f4f4f5"
-                }}
-              >
-                <span aria-hidden="true" style={{ width: "7px", height: "7px", background: "#d4d4d8" }} />
-                {`Replay ${String(replayHour ?? REPLAY_FIRST_HOUR).padStart(2, "0")}:00`}
-              </span>
-              <button
-                onClick={stopReplay}
-                style={{
-                  ...chip,
-                  border: "1px solid #3f3f46",
-                  borderRadius: "9px",
-                  background: "#101013",
-                  padding: "7px 12px",
-                  color: "#d4d4d8",
-                  cursor: "pointer"
-                }}
-                type="button"
-              >
-                Now
-              </button>
-            </>
-          )}
+          <span aria-hidden="true" style={{ width: "3px", height: "14px", background: beat.color }} />
+          {beat.tag}
         </div>
       ) : null}
 

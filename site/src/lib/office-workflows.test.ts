@@ -9,7 +9,6 @@ import {
   WORKSHOP_ROOM,
   doorNoteKind,
   litRoomForHour,
-  notesThroughHour,
   type WorkflowsSlot
 } from "./office-workflows-model";
 import { resolveOfficeWorkflows } from "./office-workflows";
@@ -111,19 +110,6 @@ describe("which room the hour lights", () => {
   });
 });
 
-describe("notes accumulating through the replay", () => {
-  it("hangs a slot's note only once its hour has been reached", () => {
-    const slots = [
-      slot({ hour: 5, note: "sent" }),
-      slot({ hour: 13, note: "quiet" }),
-      slot({ hour: 20, note: "missed" })
-    ];
-    expect(notesThroughHour(REPLAY_FIRST_HOUR, slots)).toEqual(["sent", "none", "none"]);
-    expect(notesThroughHour(13, slots)).toEqual(["sent", "quiet", "none"]);
-    expect(notesThroughHour(REPLAY_LAST_HOUR, slots)).toEqual(["sent", "quiet", "missed"]);
-  });
-});
-
 describe("resolving against committed state", () => {
   it("crosses the boundary carrying no path, no repository and no full hash", async () => {
     const resolved = await resolveOfficeWorkflows(new Date("2026-08-06T09:00:00Z"));
@@ -211,7 +197,7 @@ describe("resolving against an empty state root", () => {
 });
 
 describe("the schedule the plan is drawn against", () => {
-  it("puts every registry slot inside the replay's own day", async () => {
+  it("puts every registry slot inside the working day the plan is drawn against", async () => {
     const definitions: readonly CalendarDefinition[] = await getPublicCalendarSchedule();
     for (const definition of definitions) {
       expect(definition.hour).toBeGreaterThanOrEqual(REPLAY_FIRST_HOUR);
