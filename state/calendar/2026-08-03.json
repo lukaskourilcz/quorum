@@ -567,7 +567,9 @@
       "at": "2026-08-08T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-08-mag-desk",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zastavuji další FightAIQ i PM práci: jediný povolený předmět je opakovaně publikovaná karta, zatímco PM je výslovně zabitý. AM lze pouze auditovat pro"
     },
     {
       "at": "2026-08-08T20:00:00.000Z",

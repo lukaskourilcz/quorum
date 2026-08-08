@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260808180102-mag-desk",
+  "date": "2026-08-08",
+  "phase": "mag-desk",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Decide today: Determine next bounded action to raise evidenced slot-fill and FightAIQ rendering for MMA Files given current 60% fill rate. Standing objective: Review the day's article, owner ratings, the social draft queue and the daily bridge; leave sourced provisional angles for tomorrow",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.021204,
+    "monthAllInUsd": 3.8009841,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zastavuji další FightAIQ i PM práci: jediný povolený předmět je opakovaně publikovaná karta, zatímco PM je výslovně zabitý. AM lze pouze auditovat proti novému zdroji.",
+    "evidenceRefs": [
+      "meeting:2026-08-06-mma-intake",
+      "meeting:2026-08-06-mag-editorial",
+      "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "60% fill rate reflects repeated subject coverage (Gamrot vs. Salkilld published three times in four days). Kill tomorrow's slot until intake identifies a fresh fighter file, event card or sourced angle outside the current cycle.",
+      "evidenceRefs": [
+        "meeting:2026-08-06-mma-intake",
+        "meeting:2026-08-06-mag-editorial",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    },
+    {
+      "agent": "PIVOT",
+      "summary": "MMA Files holds 60% fill (5 of 8 weekly slots). The 2026-08-08 AM published on schedule; PM slot killed per single-article cadence. Next bounded action: surface one sourced angle for 2026-08-09 AM to close the week at 75% and establish repeatable intake-to-desk flow.",
+      "evidenceRefs": [
+        "meeting:2026-08-06-mma-intake",
+        "meeting:2026-08-06-mag-editorial",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zastavuji další FightAIQ i PM práci: jediný povolený předmět je opakovaně publikovaná karta, zatímco PM je výslovně zabitý. AM lze pouze auditovat proti novému zdroji.",
+      "evidenceRefs": [
+        "meeting:2026-08-06-mma-intake",
+        "meeting:2026-08-06-mag-editorial",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "PIVOT",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260808180102-MAG-DESK-02",
+      "owner": "PIVOT",
+      "summary": "Route FightAIQ model findings on Gamrot vs. Salkilld (if current Stats entry exists) or identify one Czech fighter-file gap from intake queue. Assign 2026-08-09 AM slot by EOD 2026-08-08 with source and FightAIQ version if applicable.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "agendaRef": "meeting-agendas/queue.json#agenda-6aff203da97a2ed0",
+  "generatedAt": "2026-08-08T18:05:02.163Z",
+  "kind": "mag-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-08T18:01:02.163Z",
+    "closedAt": "2026-08-08T18:05:02.163Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-08T18:01:02.163Z",
+        "text": "Decide today: Determine next bounded action to raise evidenced slot-fill and FightAIQ rendering for MMA Files given current 60% fill rate. Standing objective: Review the day's article, owner ratings, the social draft queue and the daily bridge; leave sourced provisional angles for tomorrow"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "veto",
+        "sentAt": "2026-08-08T18:02:02.163Z",
+        "text": "60% fill rate reflects repeated subject coverage (Gamrot vs. Salkilld published three times in four days). Kill tomorrow's slot until intake identifies a fresh fighter file, event card or sourced angle outside the current cycle.",
+        "evidenceRefs": [
+          "meeting:2026-08-06-mma-intake",
+          "meeting:2026-08-06-mag-editorial",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "PIVOT",
+        "mode": "statement",
+        "sentAt": "2026-08-08T18:03:02.163Z",
+        "text": "MMA Files holds 60% fill (5 of 8 weekly slots). The 2026-08-08 AM published on schedule; PM slot killed per single-article cadence. Next bounded action: surface one sourced angle for 2026-08-09 AM to close the week at 75% and establish repeatable intake-to-desk flow.",
+        "evidenceRefs": [
+          "meeting:2026-08-06-mma-intake",
+          "meeting:2026-08-06-mag-editorial",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-08T18:04:02.163Z",
+        "text": "Zastavuji další FightAIQ i PM práci: jediný povolený předmět je opakovaně publikovaná karta, zatímco PM je výslovně zabitý. AM lze pouze auditovat proti novému zdroji.",
+        "evidenceRefs": [
+          "meeting:2026-08-06-mma-intake",
+          "meeting:2026-08-06-mag-editorial",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-08T18:05:02.163Z",
+        "text": "AUDIT vetoed the room output: Zastavuji další FightAIQ i PM práci: jediný povolený předmět je opakovaně publikovaná karta, zatímco PM je výslovně zabitý. AM lze pouze auditovat proti novému zdroji."
+      }
+    ]
+  }
+}
