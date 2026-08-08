@@ -172,12 +172,20 @@ walkthrough and Carousel Studio are waiting on specifically.
 - [x] **Look at the Workflows section and say whether the plan reads** — answered 2026-08-08.
   The drawing reads; the replay does not perform it. The owner's note is that the animation
   does not show what actually happens, and the design note the item asked for is recorded in
-  `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2 with three build options. The follow-up decision
-  is the next item. [imp:3] [owner:me] [time:10m] [kind:decision]
-- [ ] **Pick the Workflows motion option** — §2 of `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` ends
-  in three: A animates the delivery on the existing SVG (recommended), B tilts the board, C is
-  the Three.js model office held as a v2. Choosing one unblocks a build session; A also needs
-  the two design calls in that section signed with it. [imp:3] [owner:me] [time:15m] [kind:decision]
+  `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2. The follow-up decision is the next item.
+  [imp:3] [owner:me] [time:10m] [kind:decision]
+- [x] **Pick the Workflows motion direction** — decided 2026-08-08. The replay becomes a
+  performance of the whole standing day behind the one *Play the day* toggle: no control
+  strip at all, a drawn tag and a brighter floor at the active room with the calendar's own
+  hours and titles, the work travelling the existing SVG, and the whiteboard reframed so the
+  plan sits on its face. Recorded in `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2; the build
+  instructions are `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`.
+  [imp:3] [owner:me] [time:15m] [kind:decision]
+- [ ] **Start the Workflows build session** — paste the kickoff message into a Claude Code
+  session on the strongest available model; it checks out
+  `claude/website-improvements-brainstorm-sqe3c6`, reads
+  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`, and works Parts One–Three to done, merging
+  to `main` at the end. [imp:4] [owner:me] [time:5m] [kind:deploy]
 - [ ] **Decide whether Python enters the toolchain** — §3 of the same document names three
   offline niches (FightAIQ calibration lab, wikitext parser, article extraction) and the
   JSON-contract boundary any of them would run under. Nothing in the runtime moves either way.
@@ -185,8 +193,9 @@ walkthrough and Carousel Studio are waiting on specifically.
 - [ ] **Apply the small fixes from the 2026-08-08 site review** — run the free trending signals
   ahead of the Apify gate (`orchestrator/src/portfolio/evidence.ts:595` sits after the verdict
   return, so the keyless sources its docstring promises have never run), drop the unused
-  `undici` dependency, retire or explain Cito's always-empty `/bouts` call, and correct the two
-  "seven sections" references now that the walkthrough renders eight.
+  `undici` dependency, verify the Cito `/bouts` retirement left no stale reservation, and
+  correct the stale section and project counts. Folded into Part Two of
+  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`; the build session ticks this item.
   [imp:2] [owner:ai] [time:45m] [kind:deploy]
 - [ ] **Fix the `/calendar` legend guard, or decide it should stay red** — the e2e suite
   expects seven `[data-project-legend]` entries and the board renders eight. Carousel Studio

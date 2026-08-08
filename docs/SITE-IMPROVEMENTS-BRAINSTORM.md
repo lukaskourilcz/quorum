@@ -2,10 +2,12 @@
 
 Written 2026-08-08 against `main`, at the owner's request, as a review rather
 than a build: no product code changes ride with this document. It answers three
-questions. Could Python make the scrapers or anything else stronger. Could
-Three.js make the Workflows section show what actually happens. And what else
-does an all-TypeScript codebase leave on the table. Where this review measures,
-it names the file and line; where it estimates, it says so.
+questions. Could Python make the scrapers or anything else stronger. How should
+the Workflows section show what actually happens. And what else does an
+all-TypeScript codebase leave on the table. Where this review measures, it
+names the file and line; where it estimates, it says so. The owner has since
+read it and decided; §2 and §5 record the decisions, and
+`docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md` carries the build.
 
 One standing constraint frames all three answers. The efficiency review
 (`docs/WORKFLOWS-EFFICIENCY-REVIEW.md`) established that complexity, not cash,
@@ -42,8 +44,8 @@ Discipline worth preserving while changing anything:
 The development story is unusual and it shows in the output: a design pass
 wrote `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` down to coordinates and contrast
 ratios, a separate build pass transcribed it, and the owner amended both in
-writing. That workflow is an asset. A Three.js proposal that cannot be
-specified the same way should not ship.
+writing. That workflow is an asset, and the animation work below is specified
+the same way.
 
 ## 2. The Workflows section: the plan reads, the day does not move
 
@@ -63,99 +65,44 @@ contains everything a real performance needs: each slot's note kind, the
 delivery receipt with its package hash, and the worked example threading a
 published edition through three panels.
 
-Three build options, in ascending cost.
+### The decided direction
 
-### Option A — the work walks the building (recommended)
+Decided by the owner on 2026-08-08, after reading this review. The build
+requirements, choreography and acceptance gates live in
+`docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`; the decisions, in short:
 
-Keep the SVG. Add the missing choreography with CSS motion paths
-(`offset-path` on SVG groups; no new dependency) driven by the same
-`notes`/`slots` data the plan already receives:
+- **The replay becomes a performance of the whole standing day.** One press of
+  *Play the day* plays every scheduled sitting from the first meeting to the
+  last — the same complete story on every visit, with the registry's own hours
+  and titles. Pressing the same button again stops it. The bottom control
+  strip — transport, step buttons, rail, playhead, stamp, `NOW` — goes
+  entirely; the toggle is the only control, and the day dissolves back to
+  ambient by itself when the story ends.
+- **The active room says what is happening.** During its beat a room shows a
+  drawn tag — `06:00 · Morning board`, the calendar's own hour and title — and
+  its floor steps visibly brighter than the lit fill, so a viewer sees where
+  the day is. Today's real door notes still hang as each hour closes; the
+  performance shows the schedule, the notes keep showing the record.
+- **The work walks the building.** Summary squares travel the dashed chase
+  into the workshop while its dashes march; sealed boxes cross the roller door
+  onto the bench and leave through the east wall, fading at the magazine
+  addresses; GoVIRAL's green line pulses toward the two magazine rooms;
+  FightAIQ's records pass through the shared wall to the desk it serves; Titty
+  Tuesdays' box rests at the bay that faces no exit. All of it in CSS on the
+  existing SVG — zero dependencies, no `will-change`, transforms and opacity
+  only, honouring the compositor rules documented in `office-plate.tsx`.
+- **The whiteboard frames the plan.** The section's backdrop photograph shows
+  a large whiteboard whose top edge never makes the frame at the current plate
+  size (`max(150vw, 264svh)` against a 1376 × 768 image); the plate is
+  reframed so the whiteboard's top and bottom edges are both visible and the
+  plan board sits on the whiteboard's face, without a photograph edge entering
+  the frame at any viewport.
 
-- On a `sent` hour during the replay, a package glyph (the dock's sealed-box
-  mark at tag scale) leaves the room's door gap, drops into the spine, and
-  travels east along the corridor.
-- The summary chase (the dashed line at y 484) marches its dashes while the
-  packet is in transit, so the pipe reads as carrying rather than as plumbing.
-- The packet risers into the workshop at x 1420, the workshop brightens as it
-  already does, and a sealed box crosses the roller-door span onto the bench.
-- From the bench it moves to a courier bay and exits through the east-wall
-  opening along the existing courier arrow, fading at the magazine address.
-- On Mondays, GoVIRAL's green signal line pulses toward the two magazine rooms
-  at 13:00. On the six days it does not sit, the line stays still.
-
-Two design questions to settle before building, with a lean on each:
-
-1. **The journey outlives its hour.** At 700 ms per hour the walk from door to
-   address cannot fit inside one tick. Let it span the following ticks: the
-   05:00 edition really does deliver mid-morning, so a packet that is still in
-   the corridor at 07:00 tells the truth. All packets rest at their addresses
-   by 22:00, and the final frame still matches depth 1.
-2. **Ambient stays still.** The plan at rest keeps today's behaviour (notes
-   hung, bench holding the rule's one package). Motion belongs to the replay,
-   which the reader starts. This respects the spec's "never starts itself"
-   rule and keeps the honesty doctrine intact: only recorded events move, and
-   nothing animates a cost.
-
-Reduced motion already has its answer in the spec's table: render the end
-state. The packets simply do not appear; the notes and bench do, as now.
-Estimated size: one design-note amendment to the spec plus one build session;
-zero dependencies; no new GPU layers (two small transformed glyphs, no
-`will-change`, honouring the plate rule).
-
-### Option B — the drafting-table tilt
-
-A CSS `perspective` + `rotateX` on the board during replay would give the plan
-depth for free. Priced honestly: at the spec's 0.67 px-per-unit scale the
-in-plan type already sits at its 9.5 px floor, and foreshortening pushes the
-far rank below it; the contrast ledger was measured flat; and the plan's
-identity is a drafted artifact, which tilting reads against. Either keep the
-tilt under ~8° as garnish on Option A, or skip it. Not worth building alone.
-
-### Option C — the model office (Three.js)
-
-The full version: extrude the same geometry into a dollhouse office. Walls
-rise from the floor plan, each lit room casts its venture hue as an actual
-light with falloff through the door gap, packages are boxes that travel the
-corridor in three dimensions, the courier exit is a van leaving the dock
-apron, and `PLAY THE DAY` becomes a camera move as much as a clock.
-
-How it would have to be built here:
-
-- **Stack:** `three` + `@react-three/fiber` + a small `@react-three/drei`
-  subset. All TypeScript-native, which is the honest answer to "the app is
-  TypeScript, could we do more": R3F is idiomatic React and shares the
-  bundler, so the language boundary costs nothing. The bundle does: roughly
-  +200 KB gzipped (estimate), loaded with `next/dynamic({ ssr: false })` only
-  when the walkthrough reaches the section.
-- **One geometry source.** The `ROOMS` array in `workflows-plan.tsx` is
-  already data. The scene extrudes from those constants at build time, so the
-  2D plan and the 3D model cannot disagree, and the SVG remains the rendering
-  below 1024 px, under reduced motion, without WebGL, and for crawlers.
-- **Interaction stays in the DOM.** The canvas is `aria-hidden` decoration;
-  the four openable places, the replay strip, and every focus ring remain SVG
-  and HTML overlays. The axe and contrast e2e gates then keep passing without
-  exemptions, because no text and no control ever enters the canvas.
-- **GPU discipline.** This page has already painted black frames once. The
-  canvas mounts when the section becomes active and unmounts on exit, clamps
-  device-pixel-ratio to ~1.5, runs `frameloop="demand"` at rest and continuous
-  only while the replay plays, and the board drops its `backdrop-filter`
-  while the canvas is live. Test on the 13-inch viewport the owner just had
-  fixed.
-- **The spec workflow needs a new ledger.** §12's colour ledger cannot carry
-  into lit, tone-mapped 3D as measured pairs. A materials-and-lighting ledger
-  (albedo, emissive, light intensity per venture hue, tone-mapping fixed)
-  replaces it, or the design-pass/build-pass split breaks down.
-
-Priced in complexity: Option C is the only proposal in this document that adds
-a dependency family, a rendering paradigm, and a new spec vocabulary at once.
-The recommendation is to ship A first. A's choreography (what moves, when,
-along which path, and what the record permits) ports into C unchanged, so
-nothing built for A is thrown away if the section later earns the model
-office. C stands alone as a v2 with a real payoff; it is a poor v1.
-
-Elsewhere on the site, 3D does not pull its weight: the agents' signal field
-is already a working 2D canvas, the venture pages are content surfaces, and
-the photographic plates are the intro's identity. One place, done well.
+Reduced motion renders the same story as opacity-only steps — nothing
+translates — and ambient stays exactly as built: the performance never starts
+itself, and only the reader's press sets the day in motion. Estimated size:
+one design-note amendment to the spec plus one build session; zero
+dependencies; no new GPU layers.
 
 ## 3. Python: not for the scrapers, yes for a lab
 
@@ -237,19 +184,25 @@ next session on this topic should run `next build` and read the real
 first-load numbers before and after splitting, in the efficiency review's
 spirit of naming the constant it moves.
 
-## 5. What this review recommends, in one place
+## 5. What was decided, in one place
 
-1. Build **Option A**: the replay performs the delivery the record already
-   contains. Amend the design spec first (journey-spans-hours, ambient stays
-   still), in the same design-pass/build-pass rhythm as the section itself.
-2. Hold **Three.js** as the v2 of the same section, geometry-derived from the
-   same constants, behind the same data, with the SVG as the permanent
-   fallback. Do not spread 3D anywhere else on the site.
-3. Keep **Python out of the runtime**. Open it as an offline calibration lab
-   for FightAIQ when reconciled predictions justify it, under the JSON
-   contract boundary in §3.
-4. Take the **TypeScript wins** in §4 order: code-split first, studio
-   precompile second, both measured.
-5. Fix the two working-code findings on their own merits regardless of the
-   rest: the free-trending gate ordering (`portfolio/evidence.ts:595`) and the
-   dead `undici` dependency.
+The owner's decisions of 2026-08-08, recorded so this review closes as a
+document rather than trailing off. The build session's instructions are
+`docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`.
+
+1. **The Workflows section performs the day.** Whole-day playback behind one
+   toggle, no control strip, a tag and a brighter floor at the active room,
+   the work travelling the existing SVG, and the whiteboard reframed behind
+   the plan. The design spec is amended before any component changes, in the
+   same design-pass/build-pass rhythm as the section itself.
+2. **Python stays out of the runtime.** That is this review's standing
+   recommendation; whether the offline calibration lab opens later, under the
+   JSON contract boundary in §3, remains an open owner decision in
+   `NEEDED.md`.
+3. **The TypeScript wins proceed in §4 order** — code-split first, React
+   Compiler, then the studio precompile — each measured, the studio task
+   carrying an explicit revert-and-record escape hatch.
+4. **The working-code findings ship regardless of the rest**: the
+   free-trending gate ordering (`portfolio/evidence.ts:595`), the dead
+   `undici` dependency, the Cito retirement check, and the stale section and
+   project counts.
