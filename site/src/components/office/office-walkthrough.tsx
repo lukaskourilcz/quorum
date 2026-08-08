@@ -9,6 +9,7 @@ import { SectionMeetings } from "@/components/office/section-meetings";
 import { SectionProjects } from "@/components/office/section-projects";
 import { SectionResults } from "@/components/office/section-results";
 import { SectionTeam } from "@/components/office/section-team";
+import { SectionWorkflows } from "@/components/office/section-workflows";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeWalkthroughData } from "@/lib/office-walkthrough";
 import {
@@ -20,7 +21,7 @@ import {
 } from "@/components/office/wheel-gesture";
 
 /**
- * The office walkthrough: seven full-viewport rooms, one wheel gesture each.
+ * The office walkthrough: eight full-viewport rooms, one wheel gesture each.
  *
  * Everything interactive on the home page lives under this one client component, because the
  * behaviours are entangled — the wheel lock has to know whether the pointer is inside the
@@ -38,15 +39,18 @@ import {
  *   renders in full at once, which is the honest fallback: it is a transcript either way.
  */
 
-const SECTIONS = ["intro", "calendar", "meetings", "projects", "team", "results", "company"] as const;
+const SECTIONS = [
+  "intro", "calendar", "meetings", "projects", "workflows", "team", "results", "company"
+] as const;
 
 const NAV = [
   { index: 1, label: "Calendar" },
   { index: 2, label: "Meetings" },
   { index: 3, label: "Projects" },
-  { index: 4, label: "Team" },
-  { index: 5, label: "Results" },
-  { index: 6, label: "Company" }
+  { index: 4, label: "Workflows" },
+  { index: 5, label: "Team" },
+  { index: 6, label: "Results" },
+  { index: 7, label: "Company" }
 ] as const;
 
 /**
@@ -111,7 +115,10 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
   const [playDay, setPlayDay] = useState<string | null>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [meetingsSeen, setMeetingsSeen] = useState(false);
+  const [workflowsSeen, setWorkflowsSeen] = useState(false);
   const [resultsSeen, setResultsSeen] = useState(false);
+  /** The replay's scrim is a section-level decorative layer, so the section raises its state here. */
+  const [workflowsReplaying, setWorkflowsReplaying] = useState(false);
 
   const week = data.weeks[weekIndex] ?? data.weeks[data.currentWeek]!;
 
@@ -227,7 +234,8 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
         if (pendingIndexRef.current === index) pendingIndexRef.current = null;
         setActive(index);
         if (index >= 2) setMeetingsSeen(true);
-        if (index >= 5) setResultsSeen(true);
+        if (index >= 4) setWorkflowsSeen(true);
+        if (index >= 6) setResultsSeen(true);
       });
     };
     onScroll();
@@ -245,6 +253,9 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       const target = event.target;
       // The workspace window is exempt entirely, so its pane scrolls natively.
       if (workspaceRef.current && target instanceof Node && workspaceRef.current.contains(target)) return;
+      // So is an open Workflows panel: it is one screenful of a floor plan's depth, and a reader
+      // reading down it is not asking to leave the room.
+      if (target instanceof Element && target.closest("[data-wheel-exempt]")) return;
       event.preventDefault();
 
       const now = Date.now();
@@ -401,7 +412,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       </div>
 
       {/*
-        A real `main` landmark. The walkthrough is seven sections under one root, and shipping it
+        A real `main` landmark. The walkthrough is eight sections under one root, and shipping it
         as a bare `div` left the page with no main landmark at all — which a screen reader uses to
         skip the header, and which the responsive guard uses to know the page rendered.
       */}
@@ -561,7 +572,44 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
           </div>
         </section>
 
-        {/* 04 Team */}
+        {/* 04 Workflows */}
+        <section
+          className="relative h-auto min-h-[100svh] overflow-hidden bg-[#0b0b0d] lg:h-[100svh] lg:min-h-0"
+          data-sec
+          id="workflows"
+        >
+          <OfficePlate
+            alt="Empty office wall with a whiteboard"
+            filter="saturate(.32) brightness(.3) contrast(1.06)"
+            image="office-whiteboard"
+            width="max(150vw, 264svh)"
+          />
+          <OfficeMood />
+          {/*
+            The replay's scrim. It sits after the mood and switches the real Prague sky off, which
+            is half of what makes a recording read as a recording rather than as the building. Like
+            every decorative layer on this page it may never take a click — the panels and the plan
+            live underneath it.
+          */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 transition-opacity duration-[420ms] ease-out"
+            style={{ background: "#09090b", opacity: workflowsReplaying ? 0.42 : 0 }}
+          />
+          <div
+            className="relative flex min-h-[100svh] items-center justify-center px-4 pb-13 pt-21 lg:absolute lg:inset-0 lg:min-h-0 lg:px-10 lg:pb-11 lg:pt-23"
+            data-fg
+          >
+            <SectionWorkflows
+              active={workflowsSeen}
+              data={data.workflows}
+              onReplayChange={setWorkflowsReplaying}
+              reduceMotion={reduceMotion}
+            />
+          </div>
+        </section>
+
+        {/* 05 Team */}
         <section
           className="relative h-auto min-h-[100svh] overflow-hidden bg-[#0b0b0d] lg:h-[100svh] lg:min-h-0"
           data-sec
@@ -582,7 +630,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
           </div>
         </section>
 
-        {/* 05 Results — no heading; the screen carries its own. */}
+        {/* 06 Results — no heading; the screen carries its own. */}
         <section
           className="relative h-[100svh] overflow-hidden bg-[#0b0b0d]"
           data-sec
@@ -604,7 +652,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
           <OfficeMood />
         </section>
 
-        {/* 06 Company */}
+        {/* 07 Company */}
         <section className="relative min-h-[100svh] overflow-hidden bg-[#09090b]" data-sec id="company">
           <OfficePlate
             alt="The office in the evening, on the way to the door"
