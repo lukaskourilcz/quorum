@@ -3,7 +3,6 @@
 import type { CSSProperties } from "react";
 import type { CalendarStatus } from "@/lib/calendar-feed-model";
 import type { OfficeCell, OfficeWeek } from "@/lib/office-walkthrough";
-import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 
 /**
@@ -44,7 +43,7 @@ function cellStyle(cell: OfficeCell): CSSProperties {
     textAlign: "left",
     // Every slot is exactly the same size in every state, so the grid never shifts. Anything that
     // does not fit is truncated and the full sentence lives in `title`.
-    height: "48px",
+    height: "100%",
     overflow: "hidden",
     border: 0,
     borderRight: "1px solid #1d1d21",
@@ -74,9 +73,17 @@ export function SectionCalendar({
 }) {
   return (
     <div
-      className="w-full max-w-[1080px] rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px]"
+      className="w-full rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px] max-lg:max-w-[1080px] lg:h-[max(65vh,680px)] lg:w-[65vw]"
       data-cal-panel
-      style={{ ...WALKTHROUGH_PANEL_ZOOM, display: "flex", flexDirection: "column", maxHeight: "100%" }}
+      /*
+       * 65% of the viewport, but never shorter than the week itself.
+       *
+       * Thirteen rooms plus the day header and the week control need about 680px. On a
+       * large monitor 65vh clears that comfortably and the panel scales with the screen, which is
+       * the point; on a 13-inch laptop 65vh is 497px and the week would stop at the early
+       * afternoon again. `maxHeight` keeps the floor from ever pushing the panel past its section.
+       */
+      style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}
     >
       <div className="flex min-h-0 flex-1 overflow-x-auto [overscroll-behavior-x:contain]" data-cal-scroll data-horizontal-scroll>
         <div className="flex min-h-0 w-full min-w-[680px] flex-col lg:min-w-0">
@@ -112,11 +119,18 @@ export function SectionCalendar({
             wrong by that factor too, which is why the week stopped at the early afternoon. Every
             room is on screen when there is room for it, and only then does the block scroll.
           */}
-          <div className="flex-1 overflow-y-auto [overscroll-behavior:contain]" data-cal-rows>
+          <div
+            className="flex flex-1 flex-col overflow-y-auto [overscroll-behavior:contain]"
+            data-cal-rows
+          >
             {week.rows.map((row) => (
-              <div className="flex border-b border-[#1d1d21]" key={row.kind}>
+              <div
+                className="flex border-b border-[#1d1d21]"
+                key={row.kind}
+                style={{ flex: "1 0 40px", minHeight: "40px" }}
+              >
                 <div
-                  className="flex h-12 w-[148px] shrink-0 items-center gap-2.5 overflow-hidden border-r border-[#26262b] bg-[#0e0e11] px-[18px] py-1.5 md:w-[176px] lg:w-[232px]"
+                  className="flex w-[148px] shrink-0 items-center gap-2.5 overflow-hidden border-r border-[#26262b] bg-[#0e0e11] px-[18px] py-1.5 md:w-[176px] lg:w-[232px]"
                   data-cal-label
                 >
                   <span className="self-stretch rounded-sm" style={{ width: "3px", background: row.color }} />

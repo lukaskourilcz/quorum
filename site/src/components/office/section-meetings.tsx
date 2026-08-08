@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeChannel, OfficeMessage } from "@/lib/office-walkthrough";
-import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
  * The BoardlessAI Workspace: a player, not a chat.
@@ -193,11 +192,10 @@ export function SectionMeetings({
 
   return (
     <div
-      className="w-full max-w-[1280px] rounded-[16px] border-[10px] border-[#0d0d10] bg-[#08080a] shadow-[0_60px_140px_rgba(0,0,0,.72),0_0_0_1px_rgba(255,255,255,.05)]"
-      style={WALKTHROUGH_PANEL_ZOOM}
+      className="w-full rounded-[16px] border-[10px] border-[#0d0d10] bg-[#08080a] shadow-[0_60px_140px_rgba(0,0,0,.72),0_0_0_1px_rgba(255,255,255,.05)] max-lg:max-w-[1280px] lg:h-[65vh] lg:w-[65vw]"
     >
       <div
-        className="flex h-[76svh] flex-col overflow-hidden rounded-[7px] bg-[#0a0a0c] md:h-[574px] md:flex-row lg:h-[656px]"
+        className="flex h-[76svh] flex-col overflow-hidden rounded-[7px] bg-[#0a0a0c] md:h-[574px] md:flex-row lg:h-full"
         data-chat-window
       >
         <div

@@ -36,7 +36,8 @@ export const PLAN_HEIGHT = 940;
 const PLAN_MARGIN = 80;
 
 /** The four places that open. Everything else on the plan is drawn and not pressed. */
-export type PlanPlace = "caught-up" | "carousel-studio" | "dock" | "titty-tuesdays";
+/** The dock is not a room; every other place on the plan is one. */
+export type PlanPlace = OfficeProjectKey | "dock";
 
 interface RoomGeometry {
   key: OfficeProjectKey;
@@ -713,10 +714,8 @@ export function WorkflowsPlan({
         if (!room) return null;
         const lit = litRoom === geometry.key;
         const workshop = geometry.key === "carousel-studio";
-        const openable: PlanPlace | null =
-          geometry.key === "caught-up" || geometry.key === "carousel-studio" || geometry.key === "titty-tuesdays"
-            ? geometry.key
-            : null;
+        // Every room opens. Pressing one replaces the drawing with the room itself.
+        const openable: PlanPlace = geometry.key;
         const labelFill = lit ? "#f4f4f5" : workshop ? "#d4d4d8" : WALL_OUTER;
         const body = (
           <>
@@ -762,13 +761,9 @@ export function WorkflowsPlan({
         );
         return (
           <g key={geometry.key}>
-            {openable ? (
-              <g aria-label={`Open ${room.name}`} {...press(openable)}>
-                {body}
-              </g>
-            ) : (
-              <g>{body}</g>
-            )}
+            <g aria-label={`Open ${room.name}`} {...press(openable)}>
+              {body}
+            </g>
             {/* The dock's hit target, in reading order: after the workshop, before the shop. */}
             {geometry.key === "carousel-studio" ? (
               <g aria-label="Open the loading dock" {...press("dock")}>

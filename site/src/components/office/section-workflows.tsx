@@ -14,8 +14,12 @@ import {
   ExampleChip,
   PANEL_COPY,
   WorkflowsPanelBody,
-  carriesExample
+  carriesExample,
+  hasPanel,
+  type PanelPlace
 } from "@/components/office/workflows-panels";
+import { WorkflowsRoomView } from "@/components/office/workflows-room";
+import type { OfficeProjectKey } from "@/lib/office-walkthrough";
 
 /**
  * Workflows: the office from above, and how work leaves the building.
@@ -86,8 +90,10 @@ export function SectionWorkflows({
   const [now, setNow] = useState<{ hour: number; minute: number } | null>(null);
   const [replayHour, setReplayHour] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
-  const [open, setOpen] = useState<PlanPlace | null>(null);
-  const [expanded, setExpanded] = useState<PlanPlace | null>(null);
+  const [open, setOpen] = useState<PanelPlace | null>(null);
+  const [expanded, setExpanded] = useState<PanelPlace | null>(null);
+  /** The room standing open in place of the plan, if any. */
+  const [openRoom, setOpenRoom] = useState<OfficeProjectKey | null>(null);
   const [compact, setCompact] = useState(false);
   const [surface, setSurface] = useState<"quiz" | "news" | "mma">("quiz");
   const [shuttered, setShuttered] = useState(false);
@@ -183,15 +189,44 @@ export function SectionWorkflows({
 
   /* ---- panels ------------------------------------------------------------ */
 
-  const openPanel = useCallback((place: PlanPlace) => {
-    if (window.matchMedia("(max-width: 1023px)").matches) {
-      setExpanded((current) => (current === place ? null : place));
+  /**
+   * What pressing a place on the plan does.
+   *
+   * A room opens as itself: the drawing is replaced by that room at the full size of the section,
+   * which is the whole reason the section has no card any more. The dock is not a room, so it
+   * keeps opening the courier panel it always did.
+   */
+  const openPlace = useCallback((place: PlanPlace) => {
+    if (place === "dock") {
+      if (window.matchMedia("(max-width: 1023px)").matches) {
+        setExpanded((current) => (current === "dock" ? null : "dock"));
+        return;
+      }
+      setOpen("dock");
       return;
     }
-    setOpen(place);
+    setOpenRoom(place);
   }, []);
 
   const closePanel = useCallback(() => setOpen(null), []);
+
+  const room = useMemo(
+    () => (openRoom ? data.rooms.find((entry) => entry.key === openRoom) ?? null : null),
+    [openRoom, data.rooms]
+  );
+
+  /** Opening a room moves focus to its name; closing it returns focus to the door on the plan. */
+  useEffect(() => {
+    if (openRoom) {
+      document.getElementById("wf-room-title")?.focus();
+      const onKey = (event: KeyboardEvent) => {
+        if (event.key === "Escape") setOpenRoom(null);
+      };
+      window.addEventListener("keydown", onKey);
+      return () => window.removeEventListener("keydown", onKey);
+    }
+    return undefined;
+  }, [openRoom]);
 
   /**
    * Focus follows the panel in both directions.
@@ -290,18 +325,30 @@ export function SectionWorkflows({
       </div>
 
       <div style={{ position: "relative", ...(compact ? {} : { flex: 1, minHeight: 0 }) }}>
-        <WorkflowsPlan
-          fill={!compact}
-          animate={animate}
-          compact={compact}
-          litRoom={litRoom}
-          mode={replaying ? "replay" : "ambient"}
-          notes={notes}
-          onOpen={openPanel}
-          rooms={data.rooms}
-          slots={data.slots}
-          workshopWorking={workshopWorking}
-        />
+        {room ? (
+          <WorkflowsRoomView
+            compact={compact}
+            onBack={() => setOpenRoom(null)}
+            panel={hasPanel(room.key)
+              ? <WorkflowsPanelBody place={room.key} {...panelProps} compact />
+              : undefined}
+            panelTitle={hasPanel(room.key) ? PANEL_COPY[room.key].title : undefined}
+            room={room}
+          />
+        ) : (
+          <WorkflowsPlan
+            fill={!compact}
+            animate={animate}
+            compact={compact}
+            litRoom={litRoom}
+            mode={replaying ? "replay" : "ambient"}
+            notes={notes}
+            onOpen={openPlace}
+            rooms={data.rooms}
+            slots={data.slots}
+            workshopWorking={workshopWorking}
+          />
+        )}
 
         {open && !compact ? (
           <div
@@ -404,7 +451,7 @@ export function SectionWorkflows({
 
       {/* ---- depth 2, or the stepped strip that stands in for it -------------- */}
 
-      {replaying || strip ? (
+      {(replaying || strip) && !room ? (
         <div
           style={{
             display: "flex",
@@ -641,7 +688,7 @@ export function SectionWorkflows({
             ))}
           </div>
 
-          {(["caught-up", "carousel-studio", "dock", "titty-tuesdays"] as PlanPlace[]).map((place) => (
+          {(["caught-up", "carousel-studio", "dock", "titty-tuesdays"] as PanelPlace[]).map((place) => (
             <div key={place} style={{ borderTop: "1px solid #26262b" }}>
               <button
                 aria-expanded={expanded === place}

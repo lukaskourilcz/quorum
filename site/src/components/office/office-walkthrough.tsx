@@ -40,14 +40,14 @@ import {
  */
 
 const SECTIONS = [
-  "intro", "calendar", "meetings", "projects", "workflows", "team", "results", "company"
+  "intro", "calendar", "meetings", "projects", "facilities", "team", "results", "company"
 ] as const;
 
 const NAV = [
   { index: 1, label: "Calendar" },
   { index: 2, label: "Meetings" },
   { index: 3, label: "Projects" },
-  { index: 4, label: "Workflows" },
+  { index: 4, label: "Facilities" },
   { index: 5, label: "Team" },
   { index: 6, label: "Results" },
   { index: 7, label: "Company" }
@@ -595,11 +595,11 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
           </div>
         </section>
 
-        {/* 04 Workflows */}
+        {/* 04 Facilities */}
         <section
           className="relative h-auto min-h-[100svh] overflow-hidden bg-[#0b0b0d] lg:h-[100svh] lg:min-h-0"
           data-sec
-          id="workflows"
+          id="facilities"
         >
           <OfficePlate
             alt="Empty office wall with a whiteboard"
