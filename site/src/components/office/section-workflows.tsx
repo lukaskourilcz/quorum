@@ -70,6 +70,17 @@ function pragueHourMinute(): { hour: number; minute: number } {
   return { hour: value("hour"), minute: value("minute") };
 }
 
+/**
+ * The smallest box an opened room's content is laid out in, whatever the room's own rect measures.
+ *
+ * 380px holds about 34 characters of the 12.5px body text once the 18px padding either side is
+ * taken off, which is the shortest line this copy stays readable on. 560px is where the two-column
+ * grid starts fitting its own labels — below it the roles column truncated mid-word.
+ */
+const MIN_ROOM_CONTENT_WIDTH = 380;
+const MIN_ROOM_CONTENT_HEIGHT = 300;
+const TWO_COLUMN_MIN_WIDTH = 560;
+
 const clamp = (hour: number) => Math.max(REPLAY_FIRST_HOUR, Math.min(REPLAY_LAST_HOUR, hour));
 const railFraction = (hour: number) => (hour - REPLAY_FIRST_HOUR) / (REPLAY_LAST_HOUR - REPLAY_FIRST_HOUR);
 
@@ -248,12 +259,49 @@ export function SectionWorkflows({
     return () => window.removeEventListener("resize", measure);
   }, [openRoom, compact]);
 
+  /**
+   * The frame, and the box the room's content is laid out in.
+   *
+   * These are two different rectangles and used to be one, which is what made narrow rooms
+   * unreadable. The frame is the room's own rect: it is where the walls land, and the content
+   * belongs inside it. But GoVIRAL is 170 plan units wide and FightAIQ 150, and at the scale that
+   * fits a room's height on a laptop those become a 264px and a 221px column — narrower than a
+   * line of this text needs, so the role rows spilled sideways out of the drawing entirely
+   * (measured: twelve nodes outside the stage at 1280 × 800).
+   *
+   * So the content box starts at the room's rect and is then widened, about the same centre, until
+   * it can hold a readable measure. On the rooms that are wide enough — most of them — the two
+   * rectangles are the same and the content stands inside the walls exactly as before. On the
+   * narrow ones it reaches past them onto the floor the scrim has already darkened, which is the
+   * ground it needs, and reads instead of truncating mid-word.
+   */
   const focus = useMemo(() => {
     if (!openRoom || !planBox) return null;
     const geometry = ROOMS.find((entry) => entry.key === openRoom);
     if (!geometry) return null;
     const framed = roomViewBox(geometry, planBox.width / planBox.height);
-    return { room: geometry, viewBox: framed.viewBox, inset: framed.inset };
+
+    const fraction = (value: string) => Number.parseFloat(value) / 100;
+    const roomWidth = fraction(framed.inset.width) * planBox.width;
+    const roomHeight = fraction(framed.inset.height) * planBox.height;
+    const centreX = (fraction(framed.inset.left) + fraction(framed.inset.width) / 2) * planBox.width;
+    const centreY = (fraction(framed.inset.top) + fraction(framed.inset.height) / 2) * planBox.height;
+
+    const width = Math.min(Math.max(roomWidth, MIN_ROOM_CONTENT_WIDTH), planBox.width * 0.94);
+    const height = Math.min(Math.max(roomHeight, MIN_ROOM_CONTENT_HEIGHT), planBox.height * 0.94);
+    // Centred on the room, then pushed back inside the stage if that centre is close to an edge.
+    const left = Math.min(Math.max(centreX - width / 2, 0), planBox.width - width);
+    const top = Math.min(Math.max(centreY - height / 2, 0), planBox.height - height);
+
+    return {
+      room: geometry,
+      viewBox: framed.viewBox,
+      box: { left, top, width, height },
+      /** Wide enough for two columns, or one. Not the viewport's question — this box's. */
+      narrow: width < TWO_COLUMN_MIN_WIDTH,
+      /** True when the content had to reach past the walls, which is what earns it a ground. */
+      overspills: width > roomWidth + 1 || height > roomHeight + 1
+    };
   }, [openRoom, planBox]);
 
   /** Opening a room moves focus to its name; closing it returns focus to the door on the plan. */
@@ -376,9 +424,11 @@ export function SectionWorkflows({
         />
         {room && focus ? (
           <WorkflowsRoomView
+            box={focus.box}
             compact={compact}
-            inset={focus.inset}
+            narrow={focus.narrow}
             onBack={() => setOpenRoom(null)}
+            overspills={focus.overspills}
             room={room}
           />
         ) : null}

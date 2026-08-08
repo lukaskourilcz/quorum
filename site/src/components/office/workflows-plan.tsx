@@ -36,25 +36,45 @@ export const PLAN_FLOOR_MARGIN = 80;
  */
 const PLAN_MARGIN = PLAN_FLOOR_MARGIN;
 
-/** How much floor stays visible around a room once the plan frames it. */
-export const ROOM_FRAME_PAD = 26;
+/**
+ * How much of the frame the open room claims on whichever of its axes binds first.
+ *
+ * The remaining fifth is the breathing room, split evenly. A top-rank room framed this way carries
+ * its own north wall, its door and the notes hanging at that door, instead of ending half a unit
+ * past the wall with the notes cropped off the bottom edge — which is what 0.87, the fraction the
+ * old stretch happened to produce, did. Lower than this and the room stops being the subject: at
+ * 0.7 Board HQ's roster needed 220px of scroll on a laptop that had shown it whole.
+ */
+export const ROOM_FRAME_SPAN = 0.8;
 
 /**
  * The viewBox that frames one room inside a box of the given aspect.
  *
- * The room's own rect is grown to the container's aspect ratio about its centre, so the room lands
- * on an exactly known sub-rectangle of the frame and an HTML overlay can be placed inside its
- * walls without measuring anything. Without this the drawing would letterbox by an amount that
- * depends on the room, and no two rooms would put their text in the same place.
+ * The frame is *centred on the room and sized from it*. It still carries the container's aspect,
+ * because the drawing fills its box and a mismatched frame would letterbox — but the size comes
+ * from the room's own larger axis, so every room is framed to the same fraction of itself and
+ * lands on an exactly known sub-rectangle the overlay can be placed against without measuring the
+ * SVG.
+ *
+ * The earlier version grew the room's rect *to* the aspect: it padded by a flat 26 units and then
+ * stretched whichever axis was short. On a wide container that stretch decided the horizontal
+ * framing on its own — a room 270 units wide sat in a frame 766 wide, measured — so the opened
+ * room claimed 87% of the stage's height and a third of its width, and the neighbours around it
+ * filled the rest at four times their drawn scale. Sizing the frame from the room is the fix. The
+ * neighbours that stay in frame are pushed back by the scrim below rather than by the framing,
+ * because no framing can make a room 0.76 as wide as it is tall fill a stage twice as wide as it
+ * is tall — that geometry is why the two halves of this repair are separate.
  */
 export function roomViewBox(room: RoomGeometry, aspect: number): {
   viewBox: string;
   inset: { left: string; top: string; width: string; height: string };
 } {
-  let width = room.width + ROOM_FRAME_PAD * 2;
-  let height = room.height + ROOM_FRAME_PAD * 2;
-  if (width / height < aspect) width = height * aspect;
-  else height = width / aspect;
+  // Whichever axis binds — the room's width, or its height once the container's aspect is applied
+  // to it — is given exactly ROOM_FRAME_SPAN of the frame. The other axis then has more room than
+  // it needs, which is correct: a tall room in a wide box cannot fill the width, and pretending
+  // otherwise is what cropped it.
+  const width = Math.max(room.width, room.height * aspect) / ROOM_FRAME_SPAN;
+  const height = width / aspect;
   const cx = room.x + room.width / 2;
   const cy = room.y + room.height / 2;
   const minX = cx - width / 2;
@@ -772,7 +792,20 @@ export function WorkflowsPlan({
         const labelFill = lit ? "#f4f4f5" : workshop ? "#d4d4d8" : WALL_OUTER;
         const body = (
           <>
-            <rect fill="transparent" height={geometry.height} width={geometry.width} x={geometry.x} y={geometry.y} />
+            {/*
+              The room's own rectangle, and while this room is the open one, the mark that says
+              where it landed. The framing arithmetic is the thing that broke, and it is only
+              observable as a rendered rect — so the guard reads this rather than recomputing
+              the maths it is supposed to be checking.
+            */}
+            <rect
+              data-open-room={focus?.room.key === geometry.key ? "" : undefined}
+              fill="transparent"
+              height={geometry.height}
+              width={geometry.width}
+              x={geometry.x}
+              y={geometry.y}
+            />
             {lit ? (
               <rect
                 fill="none"
@@ -856,6 +889,42 @@ export function WorkflowsPlan({
           );
         });
       })}
+
+      {/*
+        ---- everything that is not the open room, pushed back --------------------
+
+        One element, painted last so it covers the notes and the off-plan addresses too, with the
+        open room punched out of it by the even-odd rule. The rest of the floor keeps its drawing
+        and loses its claim on the eye.
+
+        A scrim rather than an opacity on each layer, because the plan is grouped by *kind* —
+        floors together, walls together, furniture together — and no group is one room. Dimming
+        "the non-room layers" any other way would mean regrouping the whole drawing by room first,
+        for a result a reader could not tell apart.
+
+        This is also why the framing above does not have to do the impossible. A room drawn 0.76
+        as wide as it is tall cannot fill a stage twice as wide as it is tall, so its neighbours
+        are in frame whatever the viewBox says; held back to a tenth of their contrast they read
+        as the building around the room rather than as three more rooms competing with it.
+
+        It takes no clicks, so every room underneath stays pressable, and it carries no
+        `will-change` — the plates exhausted this page's compositor once already.
+      */}
+      {focus ? (
+        <path
+          d={`M${-PLAN_MARGIN} 0 H${PLAN_WIDTH + PLAN_MARGIN} V${PLAN_HEIGHT} H${-PLAN_MARGIN} Z`
+            + ` M${focus.room.x} ${focus.room.y} H${focus.room.x + focus.room.width}`
+            + ` V${focus.room.y + focus.room.height} H${focus.room.x} Z`}
+          data-wf-scrim
+          fill="#09090b"
+          fillOpacity={0.88}
+          fillRule="evenodd"
+          style={{
+            pointerEvents: "none",
+            ...(animate ? entrance("wf-fade", 240, 0, "linear") : {})
+          }}
+        />
+      ) : null}
     </svg>
   );
 }

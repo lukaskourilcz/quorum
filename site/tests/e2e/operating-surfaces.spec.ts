@@ -377,3 +377,104 @@ for (const [route, heading] of [
     await expect(page.locator("ol li").first()).toBeVisible();
   });
 }
+
+/*
+ * The opened room stands on the stage, whole and readable.
+ *
+ * This guard exists because the framing arithmetic once let the container's aspect decide the
+ * framing on its own: an opened room took a third of the stage's width and 87% of its height,
+ * its neighbours filled the rest at four times their drawn scale, and on the narrow rooms the
+ * content ran sideways out of the drawing entirely. Every assertion below is one of those
+ * symptoms, measured rather than eyeballed.
+ */
+const OPENABLE_ROOMS = [
+  "company",
+  "caught-up",
+  "mma-files",
+  "fightaiq",
+  "carousel-studio",
+  "marketingshark",
+  "goviral",
+  "titty-tuesdays"
+] as const;
+
+for (const size of [
+  { name: "1280x800", width: 1280, height: 800 },
+  { name: "1440x900", width: 1440, height: 900 }
+] as const) {
+  test(`every opened room is centred, complete and readable at ${size.name}`, async ({ page }) => {
+    await page.setViewportSize({ width: size.width, height: size.height });
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Facilities", exact: true }).click();
+    await expect(page.locator("[data-workflows-board]")).toBeVisible();
+
+    for (const room of OPENABLE_ROOMS) {
+      const back = page.locator('[data-room-view] button[aria-label="Back to the floor"]');
+      if (await back.count()) await back.click();
+      await page.locator(`[data-wf-place="${room}"]`).click();
+      await expect(page.locator("[data-room-view]")).toBeVisible();
+
+      const measured = await page.evaluate(() => {
+        const stage = document.querySelector("[data-workflows-board] svg")?.parentElement;
+        const view = document.querySelector("[data-room-view]");
+        if (!stage || !view) return null;
+        const sb = stage.getBoundingClientRect();
+        const vb = view.getBoundingClientRect();
+        // Anything sticking out sideways is real overflow: there is no horizontal scroller here.
+        // Vertically, content below the fold of the room's own scroller is scrolled, not clipped.
+        const spilling = Array.from(view.querySelectorAll("p, span, a")).filter((element) => {
+          const b = element.getBoundingClientRect();
+          if (b.width === 0 || b.height === 0) return false;
+          return b.left < vb.left - 1 || b.right > vb.right + 1;
+        }).length;
+        const scroller = view.querySelector("[data-wheel-exempt]");
+        // Where the open room's own rectangle landed on the stage. This is the framing itself,
+        // and it is what the repair changed: the arithmetic used to grow the room's rect to the
+        // container's aspect, which left the room's walls 6% from the stage edge with the plan's
+        // north wall and the notes at its door cropped off.
+        const rb = document.querySelector("[data-open-room]")?.getBoundingClientRect();
+        return {
+          insideStage:
+            vb.left >= sb.left - 1 &&
+            vb.right <= sb.right + 1 &&
+            vb.top >= sb.top - 1 &&
+            vb.bottom <= sb.bottom + 1,
+          fractionOfHeight: vb.height / sb.height,
+          width: vb.width,
+          spilling,
+          scrolls: scroller ? getComputedStyle(scroller).overflowY : null,
+          dimmed: Boolean(document.querySelector("[data-wf-scrim]")),
+          roomBindingSpan: rb ? Math.max(rb.width / sb.width, rb.height / sb.height) : null,
+          roomClearance: rb
+            ? Math.min(
+                rb.top - sb.top,
+                sb.bottom - rb.bottom,
+                rb.left - sb.left,
+                sb.right - rb.right
+              ) / Math.min(sb.width, sb.height)
+            : null
+        };
+      });
+
+      expect(measured, `${room} renders a room view`).not.toBeNull();
+      expect(measured!.insideStage, `${room} sits inside the stage`).toBe(true);
+      // The room owns the stage rather than sharing it with its neighbours.
+      expect(measured!.fractionOfHeight, `${room} claims the stage's height`).toBeGreaterThan(0.6);
+      // And it is wide enough to read: 34 characters of body text plus its padding.
+      expect(measured!.width, `${room} is wide enough to read`).toBeGreaterThanOrEqual(380);
+      expect(measured!.spilling, `${room} keeps its content inside itself`).toBe(0);
+      expect(measured!.scrolls, `${room} scrolls rather than overflowing`).toBe("auto");
+      expect(measured!.dimmed, `${room} pushes the rest of the plan back`).toBe(true);
+      // The framing itself: the room owns its binding axis, and its walls are not jammed against
+      // the stage edge. The old arithmetic gave 0.87 and 0.064 — it passes the first and fails
+      // the second, which is exactly the reported symptom of a room cropped at both ends.
+      expect(measured!.roomBindingSpan, `${room}'s rect owns its binding axis`).toBeGreaterThan(0.6);
+      expect(measured!.roomClearance, `${room}'s walls have breathing room`).toBeGreaterThan(0.08);
+    }
+
+    // Escape closes the room and the plan comes back whole, with nothing dimmed.
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-room-view]")).toHaveCount(0);
+    await expect(page.locator("[data-wf-scrim]")).toHaveCount(0);
+  });
+}
