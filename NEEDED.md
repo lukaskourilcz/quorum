@@ -169,9 +169,28 @@ walkthrough and Carousel Studio are waiting on specifically.
   page's TV shows published articles, publishing reliability, cost per article, spend against
   the $30 limit and ideas from meetings, all read from the record. Any figure the record
   cannot supply prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
+- [ ] **Run the two Workflows-section sessions, in order** — give
+  `docs/WORKFLOWS-CLAUDE-DESIGN-PROMPT.md` to a Claude Design session first (it writes
+  `docs/WORKFLOWS-MAP-DESIGN-SPEC.md`), then give `docs/WORKFLOWS-OPUS-BUILD-PROMPT.md` to an
+  Opus session with that spec present. Both prompts carry the same decision block; neither
+  needs this conversation. [imp:4] [owner:me] [time:15m] [kind:deploy]
+- [ ] **Decide the two owner calls in the efficiency review** — whether the DNESKAi edition
+  may arrive at 09:00 so the 05:00 rehearsal slot and the retry machinery go, and whether the
+  three backstop sweeps shrink to one. Both in `docs/WORKFLOWS-EFFICIENCY-REVIEW.md`,
+  findings 1 and 2. [imp:3] [owner:me] [time:15m] [kind:decision]
+- [ ] **Sign or decline the six visual-loop approvals** — the Titty Tuesdays image pipeline
+  in `docs/TITTY-TUESDAYS-VISUAL-LOOP.md` ends with six `HUMAN_APPROVAL` items (first image
+  spend at a $2.00 monthly ceiling, the model role, public addressability of proposal bytes,
+  the doctrine checklist, the batch shape, the contract). Nothing generates an image until
+  all six are signed. [imp:3] [owner:me] [time:20m] [kind:decision]
 
 ## Recently finished
 
+- **The Fable deliverables are written and on `main`.** Four documents under `docs/`: the
+  Claude Design prompt and the Opus build prompt for the Workflows floor plan (one new
+  home-page section, owner's top-down-plan direction, split so design and build cannot
+  disagree), the efficiency review measured against the ledger, and the Titty Tuesdays
+  visual-proposal loop design with its approval list.
 - **Hook copy became one library with one brain.** The Carousel Studio now assigns every
   hook: gates evaluated against the item's own metadata, a channel cooldown of
   `max(2 × cooldownDays, 14)` days, no repeat of the previous post's archetype, and a seeded
