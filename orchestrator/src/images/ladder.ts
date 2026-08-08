@@ -121,6 +121,86 @@ export async function gatedSearchRung(
 }
 
 /**
+ * How many curated files one article will pay to look at before it moves on.
+ *
+ * The rotation holds nine sport photographs and up to nine scenes, and each look is a gate call
+ * against a two-cent article cap. Spending all of it here would leave nothing for the search
+ * rung, which is the rung that needs the gate most: a curated file was reviewed by a person once
+ * and a search result has been reviewed by nobody. Three refusals is enough to establish that
+ * this rotation is not answering today.
+ */
+export const CURATED_GATE_ATTEMPTS = 3;
+
+/**
+ * The gate, wired for one curated file at a time, plus somewhere to keep what it said.
+ *
+ * A veto here is not a failure. It means a file somebody reviewed at 640px no longer shows what
+ * the note beside it says — relicensed, replaced, re-cropped — and the rotation's next entry is
+ * the right answer, exactly as it is for a file that will not fetch.
+ */
+function curatedAcceptor(
+  context: LadderContext,
+  dependencies: LadderDependencies,
+  verdicts: GateVerdict[]
+): (candidate: LicensedPhotoCandidate) => Promise<boolean> {
+  const gate = dependencies.gate ?? assessCandidates;
+  let looked = 0;
+  return async (candidate) => {
+    if (looked >= CURATED_GATE_ATTEMPTS) return false;
+    looked += 1;
+    const outcome = await gate({
+      venture: context.venture,
+      article: {
+        titleCs: context.article.titleCs,
+        dekCs: context.article.dekCs,
+        negatives: context.brief?.negatives ?? []
+      },
+      candidates: [candidate],
+      mode: "curated",
+      stateRoot: context.stateRoot,
+      cycleId: context.cycleId,
+      budget: context.budget,
+      ...(context.dry === undefined ? {} : { dry: context.dry })
+    });
+    verdicts.push(outcome.verdict);
+    return outcome.selected !== null;
+  };
+}
+
+/**
+ * The identity rung's verdict, written down and acted on by nobody.
+ *
+ * The honesty law: an entity-linked photograph is used or the ladder descends. It is never
+ * swapped for something that scored better, because "scored better" is a judgement about how a
+ * picture looks and the identity rung is a statement about who is in it. What advisory mode buys
+ * is a record — if the gate keeps flagging P18 files, that is worth knowing before it is worth
+ * acting on.
+ */
+async function advise(
+  context: LadderContext,
+  dependencies: LadderDependencies,
+  verdicts: GateVerdict[],
+  candidate: LicensedPhotoCandidate
+): Promise<void> {
+  const gate = dependencies.gate ?? assessCandidates;
+  const outcome = await gate({
+    venture: context.venture,
+    article: {
+      titleCs: context.article.titleCs,
+      dekCs: context.article.dekCs,
+      negatives: context.brief?.negatives ?? []
+    },
+    candidates: [candidate],
+    mode: "identity-advisory",
+    stateRoot: context.stateRoot,
+    cycleId: context.cycleId,
+    budget: context.budget,
+    ...(context.dry === undefined ? {} : { dry: context.dry })
+  }).catch(() => null);
+  if (outcome) verdicts.push(outcome.verdict);
+}
+
+/**
  * DNESKAi's ladder, walked after the article exists.
  *
  * Curated scene first, because a hand-reviewed photograph of the day's concept is more
@@ -136,7 +216,11 @@ export async function selectEditionHero(
   const scenePhoto = dependencies.scenePhoto ?? illustrativeScenePhoto;
   const conceptQuery = context.brief?.concept ?? context.subjectQuery;
   const scene = conceptQuery
-    ? await scenePhoto({ subjectQuery: conceptQuery, seed: context.seed }).catch(() => null)
+    ? await scenePhoto({
+        subjectQuery: conceptQuery,
+        seed: context.seed,
+        accept: curatedAcceptor(context, dependencies, verdicts)
+      }).catch(() => null)
     : null;
   if (scene) return { candidate: scene, rung: "curated", verdicts, skippedProviders: [] };
 
@@ -190,8 +274,14 @@ export async function selectArticleHero(
 
   if (input.personShaped) {
     const identity = await input.identityPhoto?.().catch(() => null) ?? null;
-    if (identity) return { candidate: identity, rung: "entity-linked", verdicts, skippedProviders: [] };
-    const curated = await sportPhoto({ seed }).catch(() => null);
+    if (identity) {
+      await advise(input, dependencies, verdicts, identity);
+      return { candidate: identity, rung: "entity-linked", verdicts, skippedProviders: [] };
+    }
+    const curated = await sportPhoto({
+      seed,
+      accept: curatedAcceptor(input, dependencies, verdicts)
+    }).catch(() => null);
     return curated
       ? { candidate: curated, rung: "curated", verdicts, skippedProviders: [] }
       : { candidate: null, rung: "plate", verdicts, skippedProviders: [] };
@@ -226,7 +316,10 @@ export async function selectArticleHero(
   // The licensed search found nothing that may run, so the curated sport photographs get their
   // turn. They are a scene rather than a person, so the risk that makes a name search unusable
   // for people does not arise: nothing about the subject is sent anywhere.
-  const curated = await sportPhoto({ seed }).catch(() => null);
+  const curated = await sportPhoto({
+    seed,
+    accept: curatedAcceptor(input, dependencies, verdicts)
+  }).catch(() => null);
   return curated
     ? { candidate: curated, rung: "curated", verdicts, skippedProviders: searched.skippedProviders }
     : { candidate: null, rung: "plate", verdicts, skippedProviders: searched.skippedProviders };

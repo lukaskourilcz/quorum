@@ -225,11 +225,21 @@ export async function illustrativeScenePhoto(input: {
   subjectQuery: string;
   seed: string;
   fetchJson?: SceneJsonFetcher;
+  /**
+   * Whether this file may run above this article. A refusal moves to the next in the rotation.
+   *
+   * A curated file was reviewed once, by a person, at 640px — and Commons files get relicensed,
+   * replaced and quietly re-cropped afterwards. The rotation already treats an unfetchable file
+   * as one to skip rather than as a failure; a refused one is the same kind of answer.
+   */
+  accept?: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
 }): Promise<LicensedPhotoCandidate | null> {
   const fetchJson = input.fetchJson ?? defaultFetchJson;
   for (const scene of sceneRotation(input.subjectQuery, input.seed)) {
     const candidate = await resolve(scene, fetchJson).catch(() => null);
-    if (candidate) return candidate;
+    if (!candidate) continue;
+    if (input.accept && !(await input.accept(candidate))) continue;
+    return candidate;
   }
   return null;
 }
