@@ -116,6 +116,16 @@ Judgement calls. Nothing is blocked on code for any of these.
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
 
+- [ ] **Review the curated scene proposals both magazines are collecting** — when the vision gate
+  approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an
+  unchecked line to `state/ventures/caught-up/media/scene-proposals.md` or the mma-files file
+  beside it, with its provider, licence, source URL and a drafted Czech scene line. Each one
+  already ran above a published article. Ticking a line nominates it: a later session opens it at
+  640px, checks that no face in it is recognisable, and moves it into the curated set, which is
+  the rung with the most predictable covers and currently the smallest. The queue stops at twenty
+  open lines, so an unreviewed backlog quietly stops the flywheel rather than growing.
+  [imp:2] [owner:me] [time:20m] [kind:content]
+
 - [ ] **Write season 002 for Titty Tuesdays before 2026-10-30** — season 001 expires then and the
   marketing room works from the current season; with none it has a standing objective and no
   material. The warning appears in the room's own daily brief as the date approaches.

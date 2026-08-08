@@ -7,6 +7,7 @@ import {
   type LicensedPhotoCandidate
 } from "./licensed.js";
 import { assessCandidates, type GateVerdict } from "./vision-gate.js";
+import { proposeCuratedScene } from "./scene-proposals.js";
 import type { ImageProgramBudget } from "./budget.js";
 import type { VisualBrief } from "./visual-brief.js";
 
@@ -113,6 +114,19 @@ export async function gatedSearchRung(
     budget: context.budget,
     ...(context.dry === undefined ? {} : { dry: context.dry })
   });
+  // A photograph that scored highly with no vetoes is worth keeping past the article it ran
+  // above. The proposal is a line in a file the owner reads; nothing promotes itself.
+  if (outcome.selected) {
+    const entry = outcome.verdict.candidates.find((item) => item.candidateId === outcome.selected?.id);
+    if (entry) {
+      await proposeCuratedScene({
+        root: context.stateRoot,
+        venture: context.venture,
+        candidate: outcome.selected,
+        verdict: entry
+      }).catch(() => false);
+    }
+  }
   return {
     candidate: outcome.selected,
     verdict: outcome.verdict,
