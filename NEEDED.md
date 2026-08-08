@@ -225,6 +225,20 @@ walkthrough and Carousel Studio are waiting on specifically.
   regression still fails every attempt. The proper fix is a fresh browser context for the
   heavy admin journeys, or sharding the suite, and neither belongs in a review-fix issue.
   [imp:2] [owner:ai] [time:45m] [kind:deploy]
+- [ ] **Scope the repo-root filesystem reads so Turbopack stops over-tracing** — about twenty
+  modules in `site/src/lib/` open with `process.env.BOARDLESSAI_REPO_ROOT ??
+  path.resolve(process.cwd(), "..")` and then read under it. Turbopack cannot statically scope
+  that, so it traces the whole repository into every function that can reach one. It
+  over-traces rather than under-traces, so nothing breaks — it costs bytes: 2,188 unique files
+  and 40.7 MB carried across the deployment against webpack's 2,017 and 37.7 MB, with the
+  largest single function at 52.3 MB against 34.9 MB. Vercel's limit is 250 MB, so this is
+  cold-start and deploy weight, not a failure. SI-10 fixed the one instance that mattered most
+  (the studio's hook-library read, which alone doubled the home page's payload) with a
+  `turbopackIgnore` and an explicit `outputFileTracingIncludes` entry; the same treatment
+  applied module by module would recover the rest. It is deliberately not batch-applied:
+  it trades inferred tracing for a hand-maintained list, and a wrong entry is a route that
+  500s in production, so each one wants checking against a real deployment.
+  [imp:2] [owner:ai] [time:2h] [kind:deploy]
 - [ ] **The React Compiler costs more than it saves here — one line to reverse** — SI-09 turned
   `reactCompiler` on in `site/next.config.ts` as the programme specified, and it behaves: the
   wheel lock, all four panels, every room view and the whole day performance were walked by hand
