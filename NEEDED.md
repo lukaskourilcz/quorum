@@ -208,6 +208,14 @@ walkthrough and Carousel Studio are waiting on specifically.
   board is right; the venture joined by decision) and aligns the label with the Design Lab
   rename. Veto before the program runs if you want the board changed instead of the number.
   [imp:3] [owner:me] [time:5m] [kind:decision]
+- [ ] **Two more gate flakes, found taking the SI programme's baseline** — neither is in the
+  Facilities handover and both are load-dependent rather than broken. `admin login explains
+  errors, starts a session and signs out` (`operating-surfaces.spec.ts`) failed the baseline
+  run with a Chromium protocol error — *session closed* mid-assertion, not a failed
+  expectation — which is the browser dying, not the app. And root `pnpm test` runs three
+  workspaces at once, under which `tests/studio-lifecycle.test.ts` exceeds its 30s timeout;
+  the same file passes in 4.1s run alone. SI-08 owns the e2e repairs and picks these up with
+  the rest. [imp:2] [owner:ai] [time:20m] [kind:deploy]
 - [ ] **Decide the Titty Tuesdays dock bay** — a bay is where a courier loads, and that
   venture *collects*: it pulls a feed and nothing is delivered to it. The bay lines up with
   no courier exit and a dashed lane in its own hue points back at the room, but the old
