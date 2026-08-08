@@ -45,9 +45,11 @@ stays inside `budget-2026-08e`: the gate is capped at $0.02 per article and
 the whole image program at $0.10 per day, with descent to the plate — never
 an overrun — when a cap is hit.
 
-The implementation contract is `docs/ARTICLE-IMAGES-OPUS-BUILD-PROMPT.md`.
-Where a task below and that document disagree, this decision wins, then the
-document.
+The implementation contract is `docs/ARTICLE-IMAGES-OPUS-BUILD-PROMPT.md`,
+and the work is tracked as GitHub issues `IMG-01` through `IMG-12`, one per
+task below, worked in title order. Where a task below and that document
+disagree, this decision wins, then the document, then — being newest — the
+issue.
 
 ## Tasks
 
@@ -62,7 +64,7 @@ document.
 - [ ] T9 — Recall of the two wrong MMA heroes through the delivery path (brief §T9)
 - [ ] T10 — Illustration rung, dark behind `FAL_KEY`, schema and consumers checked (brief §T10)
 - [ ] T11 — Documentation sweep: CLAUDE.md invariant, cost notes, NEEDED items (brief §T11)
-- [ ] T12 — Full gates green, dry-run evidence recorded, branch pushed for owner merge (brief §T12)
+- [ ] T12 — Full gates green, dry-run evidence recorded, contract retired, branch merged to main (brief §T12)
 
 ## Approval reference
 

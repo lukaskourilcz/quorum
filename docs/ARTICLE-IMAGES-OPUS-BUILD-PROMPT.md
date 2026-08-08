@@ -69,7 +69,7 @@ One new law: **no image ships that nothing has looked at.** The ladder becomes:
 
 The gate's verdict — candidates considered, scores, vetoes, the chosen id, the
 reason — is recorded in the run report and beside the delivered package, the
-same way carousel summaries are recorded: a recorded selection always wins
+same way Design Lab summaries are recorded: a recorded selection always wins
 over a re-derivation, so re-runs stay deterministic.
 
 ## Constraints that bind every task
@@ -99,13 +99,26 @@ over a re-derivation, so re-runs stay deterministic.
 - **No model names or ids** in commit messages, code comments, or
   reader-facing text. Config files (`config/models.json`, `.env.example`) and
   state records are the sanctioned homes for ids.
-- **Commit discipline:** one task, one commit, in T-order. Bodies in plain
-  prose — apply the `stop-slop` skill to every one. Run the tests the task
-  names before committing. Tick the task's checkbox in
-  `state/decisions/2026-08-08-article-image-fit.md` in the same commit.
+- **The work is cut into GitHub issues.** Twelve issues on this repository,
+  `IMG-01` through `IMG-12`, one per task below. Work them strictly in title
+  order, one at a time, all on this one branch: read the issue, do the work,
+  run its gates, commit — frequent small commits throughout, and at least one
+  commit closes each issue. The closing commit ticks the task's checkbox in
+  `state/decisions/2026-08-08-article-image-fit.md`; then close the issue
+  with a short comment naming the closing commit and what the gates showed.
+  If an issue and this document ever disagree, the issue is newer and wins.
+- **Commit discipline:** small and often — a task may take several commits,
+  never the reverse. Bodies in plain prose — apply the `stop-slop` skill to
+  every one. Run the tests the task names before committing.
 - **Branch:** work on `claude/article-image-selection-61rs70`. First act:
-  merge the tip of `origin/main` into it (main moves daily). Push as you go.
-  `main` is the owner's to merge — do not touch it.
+  merge the tip of `origin/main` into it — main moves several times a day
+  (cycles land at three slots), so merge again whenever you notice it moved,
+  and always inside IMG-12 before the final merge. Push as you go.
+- **`main` is touched once:** inside IMG-12, after every gate is green, merge
+  the finished branch into `main` and push it — CI runs once, Vercel
+  redeploys once. Then attempt to delete the remote program branch; the agent
+  proxy is known to refuse ref deletions with a 403 — if it does, record the
+  leftover branch in `docs/NEEDED.md` for the owner instead of retrying.
 - **Secrets:** never committed, never echoed into logs or run reports. The
   run report may record `pexels: present/absent`, never a value.
 
@@ -218,14 +231,17 @@ text-blindness this program removes.
   from the write schema, the packet, and `selectedImageCandidateIndex` in
   `production.ts`; the writer no longer sees candidates at all. Keep
   `licensedImageSearchEnabled` as the master switch, and keep the
-  skipped-provider NEEDS_YOUR_HELP bookkeeping.
+  skipped-provider bookkeeping (both live files now write it into
+  `docs/NEEDED.md` — main moved it there on 2026-08-08).
 - MMA: `articleImageCandidates` keeps its ref-shape routing (person → P18 →
   illustrative; event → search) but the event path becomes brief-driven and
   its result goes through the gate; `imageCandidateIndex` and the writer's
   pick are removed from `pipeline.ts`.
 - The attach step records the gate verdict beside the package the same way
-  `storeArticlePackage` records the carousel summary — and a delivery still
-  cannot happen without its summary; do not disturb that invariant.
+  `storeArticlePackage` records the Design Lab summary (`buildCarouselSummary`
+  — the reader-facing name changed on 2026-08-08, the function did not) — and
+  a delivery still cannot happen without its summary; do not disturb that
+  invariant.
 - Alt precedence is unchanged: candidate `altCs` (identity metadata or
   illustrative constructor) outranks everything; the gate never writes alt
   text for photographs of people.
@@ -344,10 +360,11 @@ body); `npm run test` green in mma-files if that repo is touched.
   branch name.
 - Config surface: `ARTICLE_ILLUSTRATION` role entry in `config/models.json`
   (provider `fal`, the schnell endpoint id), `FAL_KEY` +
-  `ARTICLE_ILLUSTRATION_ENABLED` in `.env.example` and `cycle.yml` env, and a
-  NEEDS_YOUR_HELP_NOW.md item for the owner: create the fal.ai account, add
-  `FAL_KEY` to Actions, prepay the minimum credit, flip the flag. Account
-  creation and payment are the owner's acts; the code ships dark.
+  `ARTICLE_ILLUSTRATION_ENABLED` in `.env.example` and `cycle.yml` env. The
+  owner item for arming the rung already exists in `docs/NEEDED.md` (the docs
+  sweep carried it over from this branch) — keep it accurate if any detail
+  changes. Account creation and payment are the owner's acts; the code ships
+  dark.
 
 Gate: unit tests with a fake renderer — cap enforcement, dark-without-key,
 veto-burns-attempt, origin/refinement round-trip through the schema; consumer
@@ -361,14 +378,15 @@ validators confirmed by test or by recorded check in the commit body.
   the package, and the illustration rung exists but is owner-gated.
 - `about-project.md` / `scaling.md`: one-line cost note (gate under $1/month
   at full cadence; illustration ~$0.09/month at the cap, dark until enabled).
-- `NEEDS_YOUR_HELP_NOW.md`: add the fal.ai item from T10. The Pexels/Pixabay
-  item was already ticked when the owner added the keys.
-- `NEEDED.md`: add the flywheel review item (T8) and tick anything this
-  program completed. The fal.ai `[owner:me]` item already exists from the
-  program setup commit.
+- `docs/NEEDED.md` — the one owner document since the 2026-08-08 sweep; the
+  root `NEEDED.md` and `NEEDS_YOUR_HELP_NOW.md` no longer exist. Add the
+  flywheel review item (T8), tick anything this programme completed, and keep
+  the fal.ai item (already present) accurate.
 
-### T12 — Full gates and handoff
+### T12 — Full gates, contract retirement, and the one merge to `main`
 
+- Merge the current tip of `origin/main` into the branch first; resolve
+  against the tree, not this document, wherever the two disagree.
 - `pnpm test` green at the repo root; mma-files `npm run test` green if
   touched; `pnpm -C site typecheck` if any site file was touched (the admin
   article preview renders images — check whether the new origin value
@@ -376,9 +394,18 @@ validators confirmed by test or by recorded check in the commit body.
 - One dry cycle (`pnpm cycle -- --phase morning --dry`) with the run report
   showing gate verdicts present, providers keyed, caps armed, illustration
   rung reported dark. Quote the relevant report lines in the commit body.
-- Every checkbox in the decision file ticked, `state/ROADMAP.md` updated if
-  it tracks this work, branch pushed. Do not merge to `main` and do not open
-  a pull request — the owner merges after review.
+- Every checkbox in the decision file ticked; `state/ROADMAP.md` updated if
+  it tracks this work; `docs/NEEDED.md` brought current, including the
+  stale-branch record it keeps at the end.
+- Retire this contract the way the site-improvements programme retired its
+  own: fold anything durable into `CLAUDE.md` or the docs it belongs in,
+  then delete `docs/ARTICLE-IMAGES-OPUS-BUILD-PROMPT.md` in the final
+  commits. The decision file stays forever — decisions are the record; the
+  contract was scaffolding.
+- Then the one merge: merge the finished branch into `main`, push `main`
+  (CI runs once, Vercel redeploys once), and attempt to delete the remote
+  program branch — on the proxy's 403, record it in `docs/NEEDED.md` and
+  stop. Do not open a pull request.
 
 ## Traps, from the diagnosis session
 
@@ -399,12 +426,19 @@ Known sharp edges you will meet; each cost real debugging time once already:
   download allowlist must not change for it.
 - **`contracts/autonomy.ts:127`** ties `origin === "svg"` to `deterministic`;
   extending origin without updating this refinement fails every package parse.
-- **A delivery cannot exist without its carousel summary** — the store and
+- **A delivery cannot exist without its Design Lab summary** — the store and
   outbox both build it; keep that path untouched when you move selection.
 - **mma-files `demoMode`** defaults true without `NEXT_PUBLIC_DEMO_MODE=false`;
   when verifying the T9 recall visually, remember what you are looking at.
-- **The site runs webpack, not Turbopack** (`next dev --webpack`) because
-  studio imports break under Turbopack — relevant only if you touch site code.
+- **The studio is consumed as built output now** (`dist/`, gitignored;
+  Turbopack everywhere since 2026-08-08). `pnpm install` and the gates
+  rebuild it, but the `tsx` entry points — `pnpm cycle`, `pnpm delivery` —
+  read the last build: after touching studio source, run
+  `pnpm -C studio build` or your dry cycle exercises stale code.
+- **`docs/ECOSYSTEM.md` carries a generated operating-truth block** asserted
+  by `orchestrator/tests/ecosystem-doc.test.ts`; if anything it states moves,
+  regenerate through `orchestrator/src/docs/ecosystem.ts` — never hand-edit
+  the block.
 - **Wikimedia rate limits tightened in 2026** (anonymous ~500 req/h): the
   existing User-Agent discipline in the images modules is part of staying
   inside them; keep it on every new fetch path.
