@@ -137,13 +137,6 @@ walkthrough and Carousel Studio are waiting on specifically.
   session had no model key reachable from it. One manual `cycle.yml` dispatch with phase
   `ms-daily` costs about $0.05 and turns a proven pipeline into a working one.
   [imp:4] [owner:me] [time:5m] [kind:deploy]
-- [ ] **Set `HOOK_DELIVERY_ENABLED=true`** — the delivery App was granted access to
-  `react-express-app` on 2026-08-08, so this is the last step before the quiz apps receive
-  their hook copy as a bounded `hook-library/1` delivery: 49 hooks plus the conformance vectors
-  that pin their selector to this repo's evaluator. The job runs on the `ms-daily` slot and is
-  a no-op on any day the library has not changed. Until it runs, the apps keep the 16-hook set
-  that still contains a hook promising a ten-second timer to a card that has no timer.
-  [imp:4] [owner:me] [time:1m] [kind:setup]
 - [x] **Approve or decline the devShark banner on DNESKAi** — approved 2026-08-07.
   `HUMAN_APPROVAL DEVSHARK-BANNER-001` is resolved. The payload is still staged and
   hashed under `state/ventures/marketingshark/banner/` with no receipt: the session
@@ -185,8 +178,8 @@ walkthrough and Carousel Studio are waiting on specifically.
   pick so a rebuild reaches the same slide 1 it reaches the same pixels. 49 hooks replace the
   16 that lived inline in `config/marketingshark.json` — that set had drifted far enough to
   still be shipping a fake timer, which the craft rules ban outright. `docs/hooks/` is the
-  canonical knowledge base for every repository in the family, `lint:hooks` runs in CI, and
-  the news and MMA libraries are deliberately unwritten: those packs take a logged `no-hook`
+  canonical knowledge base for hook and viral copy, `lint:hooks` runs in CI, and the news and
+  MMA libraries are deliberately unwritten: those packs take a logged `no-hook`
   fallback and the template's own headline renders.
 
 - **marketingShark was founded, and devShark came into the portfolio with it.** A seventh

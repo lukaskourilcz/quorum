@@ -125,18 +125,9 @@ The list below is those, in the order that unblocks the most.
    working one. If the output is poor, that is a prompt problem and the truth gates will catch
    the dishonest parts of it — but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
 
-8. [ ] **Set `HOOK_DELIVERY_ENABLED=true`.** The delivery App was granted access to
-   `react-express-app` on 2026-08-08, so this is the last step. The hook library the quiz apps
-   read is now owned centrally and ships to them as a bounded `hook-library/1` delivery — 49
-   hooks plus the conformance vectors that pin the app's own selector to this repo's evaluator,
-   written to `lib/hooks/` and nowhere else. The job runs on the `ms-daily` slot and is a no-op
-   on any day the library has not changed. It costs $0 and calls no model. Until the variable is
-   set the apps keep whatever hook copy they have, which is the 16-hook set with the fake-timer
-   line in it. [imp:4] [owner:me] [time:1m] [kind:setup]
-
 ## 2. Yours to decide
 
-9. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
+8. [ ] **Rename the DNESKAi Vercel project and decide on a domain.** DNESKAi is the wordmark in
    the navigation, the footer and print; the page title, the social cards, the structured data
    and the Atom feed still say "Caught Up", which was your call and is not a bug. The deployment
    is still at `caughtup-ai.vercel.app`, the
@@ -146,7 +137,7 @@ The list below is those, in the order that unblocks the most.
    record the article URL they published to, so changing the project name means the older
    receipts point at the old host. [imp:3] [owner:me] [time:20m] [kind:setup]
 
-10. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
+9. [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer.**
    `config/fixed-costs.json` now carries `confirmedNoFixedCosts: true`, which says "there are
    none" rather than "nobody has entered any". If that is right, this item is done and you can
    tick it. If you do pay for something, enter each subscription with its monthly USD amount,
@@ -155,12 +146,12 @@ The list below is those, in the order that unblocks the most.
    wrong answer makes the company look cheaper than it is. Do not enter example prices.
    [imp:3] [owner:me] [time:15m] [kind:setup]
 
-11. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
+10. [ ] **Write season 002 for Titty Tuesdays before 2026-10-30.** Season 001 expires then and
    the marketing room works from the current season; with none, it has a standing objective and
    no material. The warning appears in the room's own daily brief as the date approaches.
    [imp:2] [owner:me] [time:60m] [kind:content]
 
-12. [x] **GitHub Actions minutes — resolved 2026-08-07 by making all three repositories public.**
+11. [x] **GitHub Actions minutes — resolved 2026-08-07 by making all three repositories public.**
    Standard runners are unmetered on public repositories, so the exhausted free tier no longer
    gates anything. `docs/SECRETS-AUDIT-2026-08-06.md` had already swept the working tree and full
    history of all three and found no secret; an independent re-sweep before the flip agreed, and
@@ -170,7 +161,7 @@ The list below is those, in the order that unblocks the most.
 
 ## 3. Only before social posting
 
-13. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
+12. [ ] **Connect Instagram and Threads per brand.** Roughly a month out. Carousel Studio has no
    accounts.
 
     | Venture | Actions secrets | Repository variables |

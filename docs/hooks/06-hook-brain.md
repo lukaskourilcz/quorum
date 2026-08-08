@@ -39,15 +39,30 @@ When a social pack is built for any venture:
    template's default headline renders instead, logged as `no-hook`. A missing hook never
    blocks a pack.
 
-### 2. In-app (devShark / geoShark runtime)
-The quiz apps render hooks per user, per question, at request time. Per-user cooldown
-state can only live where the user is, so:
+### 2. In-app — designed, built, and deliberately not shipped
+This described a second consumption mode: the quiz apps rendering a hook per user per
+question at request time, receiving the library as a bounded `hook-library/1` delivery and
+implementing their own selector (gate filter → per-user per-hook cooldown → session-memory
+filter → random pick → LRU fallback).
 
-- The library is **delivered** to the app repo as bounded JSON (`hook-library/1`,
-  hash + receipt), re-delivered only after the central lint passes.
-- The app implements its own selector: gate filter → per-user per-hook cooldown →
-  session-memory filter → random pick → **LRU fallback** when everything is cooling.
-  Never empty, never a within-session repeat.
+It was built end to end against devShark in August 2026 and **withdrawn unmerged**. Two
+reasons, both worth keeping on the record because they generalise:
+
+- **The mechanism does not transfer.** A hook earns the *next* interaction. On a feed that is
+  the whole game — the reader has chosen nothing and one line has to stop a scroll. In a quiz
+  the reader has already opened the app, chosen a subject, chosen categories and pressed
+  start; the question is in front of them and there is no next interaction in doubt. The
+  design above assumes a swipe-card product, where each card must earn its swipe. devShark is
+  a form.
+- **The slot was already taken.** devShark carries a rotating advisory line under every
+  question (`RotatingTip` / `quiz.tip1`: "Stuck? Take your best guess, then read the
+  explanation.") — the same reassurance the pretesting hooks offer. Adding a hook put a second
+  rotating line on one card.
+
+So hooks front carousels only, and the quiz apps stay standalone with no copy delivered from
+here. If a swipe-card surface is ever built, the design above is the one to build against —
+and the selector, evaluator and conformance vectors it needs are recoverable from the closed
+PR (`lukaskourilcz/react-express-app#104`).
 
 ## Cooldown scopes (do not mix these up)
 

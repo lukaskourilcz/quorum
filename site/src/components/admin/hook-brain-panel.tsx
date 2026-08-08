@@ -26,8 +26,6 @@ const CELL = "px-3 py-2 text-left align-top";
 const HEAD = `${CELL} font-mono text-xs uppercase tracking-[0.1em] text-[var(--fog)]`;
 
 export function HookBrainAdminPanel({ snapshot }: { snapshot: HookBrainSnapshot }) {
-  const quiz = snapshot.surfaces.find((surface) => surface.surface === "quiz");
-
   return (
     <div className="mt-8 grid gap-6">
       <Callout>
@@ -181,27 +179,6 @@ export function HookBrainAdminPanel({ snapshot }: { snapshot: HookBrainSnapshot 
           )}
       </Section>
 
-      <Section
-        id="hook-delivery"
-        title="Delivery to the quiz apps"
-        subtitle="The apps receive the library and the conformance vectors as bounded data and implement their own per-user selector. Re-delivery happens only after lint:hooks passes."
-      >
-        {snapshot.delivery
-          ? (
-            <dl className="grid gap-3 text-sm sm:grid-cols-2">
-              <div><dt className="text-[var(--fog)]">Repository</dt><dd className="font-mono text-xs">{snapshot.delivery.targetRepository}</dd></div>
-              <div><dt className="text-[var(--fog)]">Hooks delivered</dt><dd>{snapshot.delivery.hookCount}</dd></div>
-              <div><dt className="text-[var(--fog)]">Delivered at</dt><dd className="font-mono text-xs">{snapshot.delivery.deliveredAt}</dd></div>
-              <div><dt className="text-[var(--fog)]">Target commit</dt><dd className="font-mono text-xs">{snapshot.delivery.targetCommit ?? "—"}</dd></div>
-            </dl>
-          )
-          : (
-            <p className="text-sm text-[var(--fog)]">
-              No delivery has been recorded. {quiz?.hooks ?? 0} quiz hooks are staged and will ship on
-              the next <code>ms-daily</code> slot.
-            </p>
-          )}
-      </Section>
     </div>
   );
 }
