@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "dataset-append/1",
+  "dataset": "ai-facts",
+  "targetRepo": "aifirst",
+  "targetPath": "data/ai-facts.json",
+  "packageHash": "94905da20385e1834e9fa83057493fd87546ce759a1a235c9c1eb5a2670222bb",
+  "appendedIds": [
+    "ai-001",
+    "ai-002",
+    "ai-003",
+    "ai-004",
+    "ai-005"
+  ],
+  "entryCountBefore": 0,
+  "entryCountAfter": 5,
+  "author": {
+    "kind": "agent",
+    "id": "SCRIBE"
+  },
+  "evidenceRefs": [
+    "AI-E-001",
+    "AI-E-002",
+    "AI-E-003",
+    "AI-E-004",
+    "AI-E-005"
+  ],
+  "recordedAt": "2026-08-08T01:27:57.694Z"
+}

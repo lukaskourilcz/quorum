@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { BoardlessDatasetSchema, type BoardlessDataset } from "../src/contracts/boardless-dataset.js";
 import { describeVerdict, verifyDatasetAppend } from "../src/datasets/verify.js";
+import { planAppend } from "../src/datasets/append.js";
 import { repoRoot } from "../src/paths.js";
 
 const FIXTURE = path.join(repoRoot, "contracts", "fixtures", "boardless-dataset.valid.json");
@@ -228,5 +229,59 @@ describe("the shipped datasets", () => {
       const verdict = verifyDatasetAppend({ current: parsed, proposed: parsed });
       expect(verdict.ok, file).toBe(true);
     }
+  });
+});
+
+describe("the first append to a dataset that does not exist downstream", () => {
+  const proposal = {
+    entry: {
+      id: "ai-900", slug: "bootstrap-check", category: "historie",
+      en: { short: "A short line", full: "A complete, checkable statement about something." },
+      cs: { short: "Krátká věta", full: "Úplné, ověřitelné tvrzení o něčem." },
+      verified: "2026-08-08", source: "Turing, Computing Machinery and Intelligence, 1950"
+    },
+    evidenceRef: "AI-E-001"
+  };
+
+  it("refuses without an envelope, because the default declares no categories", () => {
+    // This is why no dataset had ever received its first entry: the bootstrap hardcoded an
+    // empty `categories` record, so every proposal failed the category check and the delivery
+    // path could not be exercised end to end.
+    const outcome = planAppend({
+      dataset: "ai-facts", current: undefined, proposals: [proposal],
+      author: { kind: "agent", id: "SCRIBE" }
+    });
+    expect(outcome.ok).toBe(false);
+    if (outcome.ok) return;
+    expect(JSON.stringify(outcome.refusal.violations)).toContain("not declared in this file");
+  });
+
+  it("accepts one when the envelope is supplied", () => {
+    const outcome = planAppend({
+      dataset: "ai-facts", current: undefined, proposals: [proposal],
+      author: { kind: "agent", id: "SCRIBE" },
+      bootstrap: { anchor: "2026-08-10", categories: { historie: { en: "History", cs: "Historie" } } }
+    });
+    expect(outcome.ok).toBe(true);
+    if (!outcome.ok) return;
+    expect(outcome.plan.file.anchor).toBe("2026-08-10");
+    expect(outcome.plan.file.entries).toHaveLength(1);
+  });
+
+  it("never lets a later append move the anchor", () => {
+    const current = {
+      schemaVersion: "boardless-dataset/1", dataset: "ai-facts", anchor: "2026-08-10",
+      categories: { historie: { en: "History", cs: "Historie" } }, entries: [proposal.entry]
+    };
+    // The anchor is a reveal schedule: entries[0] is revealed on it and every later day resolves
+    // through a modulo. Moving it would reorder every day already published.
+    const outcome = planAppend({
+      dataset: "ai-facts", current, author: { kind: "agent", id: "SCRIBE" },
+      proposals: [{ ...proposal, entry: { ...proposal.entry, id: "ai-901", slug: "second" } }],
+      bootstrap: { anchor: "1999-01-01", categories: {} }
+    });
+    expect(outcome.ok).toBe(true);
+    if (!outcome.ok) return;
+    expect(outcome.plan.file.anchor).toBe("2026-08-10");
   });
 });

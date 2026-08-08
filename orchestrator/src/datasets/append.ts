@@ -78,6 +78,15 @@ export function planAppend(input: {
   current: unknown | undefined;
   proposals: ProposedEntry[];
   author: AppendAuthor;
+  /**
+   * The envelope a first append starts from, when no file exists downstream yet.
+   *
+   * Without it the bootstrap declared no categories at all, so every proposal failed the
+   * category check and no dataset could ever receive its first entry — which is why this path
+   * had never run end to end. A later append ignores this: the committed file's own anchor and
+   * categories win, because the anchor is a reveal schedule and moving it reorders history.
+   */
+  bootstrap?: { anchor: string; categories: Record<string, { en: string; cs: string }> };
 }): AppendOutcome {
   const violations: DatasetViolation[] = [];
 
@@ -125,8 +134,8 @@ export function planAppend(input: {
     ...(base ?? {
       schemaVersion: "boardless-dataset/1" as const,
       dataset: input.dataset,
-      anchor: "2026-07-01",
-      categories: {},
+      anchor: input.bootstrap?.anchor ?? "2026-07-01",
+      categories: input.bootstrap?.categories ?? {},
       entries: []
     }),
     entries: [...(base?.entries ?? []), ...input.proposals.map((proposal) => proposal.entry)]
