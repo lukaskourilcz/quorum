@@ -8,7 +8,7 @@ vi.mock("server-only", () => ({}));
 const poster = SEED_TEMPLATES.find((template) => template.id === "minimal-text-poster")!;
 
 describe("the hook brain snapshot", () => {
-  it("counts every surface, and says which libraries are not written yet", async () => {
+  it("counts every surface, all three now authored", async () => {
     const snapshot = await readHookBrain();
     expect(snapshot.surfaces.map((surface) => surface.surface)).toEqual(["quiz", "news", "mma"]);
 
@@ -17,10 +17,13 @@ describe("the hook brain snapshot", () => {
     expect(quiz.archetypes).toBeGreaterThan(10);
     expect(quiz.note).toBeNull();
 
+    // The magazines were the two standing no-hook surfaces. Their packs now carry a gated line,
+    // so nothing should still be reporting itself as unauthored.
     for (const surface of ["news", "mma"] as const) {
       const entry = snapshot.surfaces.find((candidate) => candidate.surface === surface)!;
-      expect(entry.hooks).toBe(0);
-      expect(entry.note).toMatch(/Not authored yet/u);
+      expect(entry.hooks).toBeGreaterThanOrEqual(12);
+      expect(entry.archetypes).toBeGreaterThanOrEqual(8);
+      expect(entry.note).toBeNull();
     }
   });
 

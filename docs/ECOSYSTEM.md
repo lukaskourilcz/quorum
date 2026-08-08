@@ -199,10 +199,10 @@ one line on slide 1 whose job is to earn the next interaction, and it is gated: 
 declares `truthRequires` predicates and may only render on content whose metadata makes
 them true. Gates license claims — that is the entire honesty model, and it is why the
 engine ports everywhere while the strings do not. The libraries live beside the engine in
-`studio/hooks/`; `quiz.hooks.json` ships 49 hooks for devShark and geoShark, and
-`news.hooks.json` and `mma.hooks.json` are not written yet, which is a valid state: those
-packs take a logged `no-hook` fallback and the template's own headline renders. A missing
-hook never blocks a pack.
+`studio/hooks/`: 50 hooks for devShark and geoShark, 12 for DNESKAi and 16 for MMA Files,
+each written against its own surface's confirmed vocabulary. The `no-hook` fallback remains
+the standing behaviour for any pack whose gates all fail — the template's own headline renders
+and the pack is logged rather than blocked.
 
 **`docs/hooks/` is the canonical knowledge base for hooks and short-form viral copy**, for
 this repository and for every consuming one — seven files covering mechanism catalogue and

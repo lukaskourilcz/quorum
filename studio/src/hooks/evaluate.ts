@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { Hook, Library, Predicate, QuizPredicate, Surface } from "./schema.js";
+import type { Hook, Library, MmaPredicate, NewsPredicate, Predicate, QuizPredicate, Surface } from "./schema.js";
 
 /**
  * What a quiz predicate is evaluated against.
@@ -31,6 +31,37 @@ export interface QuizSubject {
   readonly canonicalEnglishQuestion: string;
 }
 
+/**
+ * What a news gate is evaluated against, from `article-frontmatter.ts`.
+ *
+ * Three fields, not the six `05-surfaces.md` sketched — see that doc for what was dropped and
+ * why. `signalStrength` is the desk's own 0-100 score and is the only gate here that separates a
+ * heavy day from a quiet one; delivered editions score 78-85, so a threshold below 78 licenses
+ * nothing.
+ */
+export interface NewsSubject {
+  readonly sourceCount: number;
+  readonly primarySourceCount: number;
+  /** Absent on an item the desk did not score; a threshold gate then cannot hold. */
+  readonly signalStrength: number | null;
+  readonly tags: readonly string[];
+  readonly hasNumber: boolean;
+}
+
+/**
+ * What an MMA gate is evaluated against, from `mma-files.ts`.
+ *
+ * `format` is doing the work `resultKnown` was meant to do: `fight-week-preview` and
+ * `post-event-recap` make opposite promises, and gating them apart is what stops a hook teasing a
+ * fight that already happened.
+ */
+export interface MmaSubject {
+  readonly format: string;
+  readonly fighterCount: number;
+  readonly hasEvent: boolean;
+  readonly sourceCount: number;
+}
+
 /** List key → the categories it contains, as each brand declares them in `config/marketingshark.json`. */
 export type CategoryLists = Readonly<Record<string, readonly string[]>>;
 
@@ -38,6 +69,12 @@ export interface QuizContext {
   readonly subject: QuizSubject;
   readonly categoryLists: CategoryLists;
 }
+
+export interface NewsContext { readonly subject: NewsSubject; }
+export interface MmaContext { readonly subject: MmaSubject; }
+
+/** Whichever surface's subject is in play. Each evaluator only ever sees its own. */
+export type SurfaceContext = QuizContext | NewsContext | MmaContext;
 
 export function evaluateQuizPredicate(predicate: QuizPredicate, context: QuizContext): boolean {
   const { subject, categoryLists } = context;
@@ -65,6 +102,42 @@ export function evaluateQuizPredicate(predicate: QuizPredicate, context: QuizCon
   }
 }
 
+export function evaluateNewsPredicate(predicate: NewsPredicate, context: NewsContext): boolean {
+  const { subject } = context;
+  switch (predicate.kind) {
+    case "always":
+      return true;
+    case "hasNumber":
+      return subject.hasNumber;
+    case "sourceCount":
+      return subject.sourceCount >= predicate.count;
+    case "primarySources":
+      return subject.primarySourceCount >= predicate.count;
+    case "signalStrengthAtLeast":
+      // An unscored item fails the gate rather than defaulting past it. A weight claim on an
+      // item nobody scored is a claim nothing licensed.
+      return subject.signalStrength !== null && subject.signalStrength >= predicate.score;
+    case "topicIn":
+      return subject.tags.includes(predicate.topic);
+  }
+}
+
+export function evaluateMmaPredicate(predicate: MmaPredicate, context: MmaContext): boolean {
+  const { subject } = context;
+  switch (predicate.kind) {
+    case "always":
+      return true;
+    case "hasEvent":
+      return subject.hasEvent;
+    case "formatIs":
+      return subject.format === predicate.format;
+    case "fighterCount":
+      return subject.fighterCount >= predicate.count;
+    case "sourceCount":
+      return subject.sourceCount >= predicate.count;
+  }
+}
+
 /**
  * `truthRequires` is a conjunction: every predicate must hold.
  *
@@ -74,18 +147,17 @@ export function evaluateQuizPredicate(predicate: QuizPredicate, context: QuizCon
  * card. Start there." and there is usually no code. The unreachable-variant lint warns instead —
  * an honest silence beats a rendered falsehood.
  */
-export function hookIsEligible(hook: Hook, context: QuizContext): boolean {
-  return hook.truthRequires.every((predicate) =>
-    evaluateQuizPredicate(assertQuizPredicate(hook, predicate), context));
-}
-
-function assertQuizPredicate(hook: Hook, predicate: Predicate): QuizPredicate {
-  if (hook.surface !== "quiz") {
-    throw new Error(
-      `${hook.surface} hook "${hook.id}" reached the quiz evaluator; each surface evaluates its own vocabulary`
-    );
-  }
-  return predicate as QuizPredicate;
+export function hookIsEligible(hook: Hook, context: SurfaceContext): boolean {
+  return hook.truthRequires.every((predicate) => {
+    switch (hook.surface) {
+      case "quiz":
+        return evaluateQuizPredicate(predicate as QuizPredicate, context as QuizContext);
+      case "news":
+        return evaluateNewsPredicate(predicate as NewsPredicate, context as NewsContext);
+      case "mma":
+        return evaluateMmaPredicate(predicate as MmaPredicate, context as MmaContext);
+    }
+  });
 }
 
 export interface EligibleSet {
@@ -102,24 +174,16 @@ export interface EligibleSet {
  * reordering that changed the pick without changing the set would break reproducibility for a
  * reason no receipt records.
  */
-export function eligibleFor(library: Library, context?: QuizContext): EligibleSet {
-  if (library.surface !== "quiz") {
-    if (library.hooks.length === 0) {
-      // The honest empty case: the library has not been written, so nothing is eligible and the
-      // pack takes its `no-hook` fallback.
-      return { surface: library.surface, ids: [], hash: eligibleSetHash([]) };
-    }
-    throw new Error(
-      `The ${library.surface} evaluator is not implemented: its predicate vocabulary is a sketch in `
-      + `docs/hooks/05-surfaces.md, not a confirmed spec. Step one of the authoring issue is `
-      + `enumerating the metadata ${library.surface} items actually carry at render time.`
-    );
-  }
+export function eligibleFor(library: Library, context?: SurfaceContext): EligibleSet {
+  // An unwritten library is the honest empty case: nothing is eligible and the pack takes its
+  // `no-hook` fallback. It needs no subject, because there is nothing for a gate to hold against.
   if (library.hooks.length === 0) {
     return { surface: library.surface, ids: [], hash: eligibleSetHash([]) };
   }
   if (!context) {
-    throw new Error("The quiz evaluator needs a subject: a gate cannot hold or fail against nothing");
+    throw new Error(
+      `The ${library.surface} evaluator needs a subject: a gate cannot hold or fail against nothing`
+    );
   }
   const ids = library.hooks.filter((hook) => hookIsEligible(hook, context)).map((hook) => hook.id);
   return { surface: library.surface, ids, hash: eligibleSetHash(ids) };

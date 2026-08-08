@@ -110,11 +110,28 @@ describe("the shipped quiz library", () => {
     expect(identical).toEqual(["streak-cold", "streak-breaker"]);
   });
 
-  it("loads news and mma as empty libraries rather than as failures", async () => {
-    for (const surface of ["news", "mma"] as const) {
-      const library = await readLibrary(surface);
-      expect(library.hooks).toEqual([]);
+  it("loads all three surfaces, each against its own confirmed vocabulary", async () => {
+    const quiz = await readLibrary("quiz");
+    const news = await readLibrary("news");
+    const mma = await readLibrary("mma");
+    expect(quiz.hooks.length).toBe(50);
+    expect(news.hooks.length).toBeGreaterThanOrEqual(12);
+    expect(mma.hooks.length).toBeGreaterThanOrEqual(12);
+
+    // The magazines have one vertical, so their hooks carry a dev line and no geo line. An
+    // exhaustive variants record would have forced an invented geo line for a magazine with no
+    // geo vertical, which is how dead copy gets written.
+    for (const hook of [...news.hooks, ...mma.hooks]) {
+      expect(hook.variants.dev, hook.id).toBeDefined();
+      expect(hook.variants.geo, hook.id).toBeUndefined();
     }
+  });
+
+  it("keeps the surfaces' vocabularies apart", async () => {
+    // A quiz gate on a news hook, or the reverse, is a load-time error rather than a silent skip.
+    expect(() => parsePredicate("news", "n", "difficultyAtLeast:3")).toThrowError(HookLoadError);
+    expect(() => parsePredicate("mma", "m", "hasCode")).toThrowError(HookLoadError);
+    expect(() => parsePredicate("quiz", "q", "formatIs:post-event-recap")).toThrowError(HookLoadError);
   });
 });
 
@@ -331,10 +348,15 @@ describe("the evaluator", () => {
     expect(eligibleSetHash(["a"])).not.toBe(eligibleSetHash(["a", "b"]));
   });
 
-  it("refuses to evaluate a non-empty library on an unimplemented surface", () => {
+  it("refuses to evaluate a written library with no subject", () => {
     const library = loadLibrary({ surface: "mma", hooks: [hook({ truthRequires: ["hasEvent"] })], research: [research("fixture-hook")] });
-    expect(() => eligibleFor(library, { subject: SUBJECT, categoryLists: CATEGORY_LISTS }))
-      .toThrowError(/not implemented/u);
+    // A gate cannot hold or fail against nothing, and defaulting would license an unchecked claim.
+    expect(() => eligibleFor(library)).toThrowError(/needs a subject/u);
+  });
+
+  it("still returns an empty set for a library that has not been written", () => {
+    const unwritten = loadLibrary({ surface: "mma", hooks: [], research: [] });
+    expect(eligibleFor(unwritten).ids).toEqual([]);
   });
 });
 

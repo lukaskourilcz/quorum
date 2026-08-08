@@ -149,7 +149,15 @@ export const RawHookSchema = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   cooldownDays: z.number().int().min(1).max(30),
   truthRequires: z.array(z.string().min(1)).min(1),
-  variants: z.record(z.enum(VERTICALS), VariantTextSchema)
+  /**
+   * Partial, with a floor of one.
+   *
+   * The quiz surface has two verticals and every quiz hook carries both. News and MMA have one
+   * each, so an exhaustive record would demand a `geo` line for a magazine that has no geo
+   * vertical — and inventing one to satisfy a schema is how dead copy gets written.
+   */
+  variants: z.partialRecord(z.enum(VERTICALS), VariantTextSchema)
+    .refine((variants) => Object.keys(variants).length > 0, "A hook needs at least one vertical variant")
 });
 export type RawHook = z.infer<typeof RawHookSchema>;
 

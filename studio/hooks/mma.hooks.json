@@ -1,0 +1,18 @@
+[
+  {"id":"records-from-data","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"Records and rankings come from the data.","cs":"Rekordy a žebříčky jsou z dat."}}},
+  {"id":"sources-listed","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"Every claim here has a source under it.","cs":"Každé tvrzení má pod sebou zdroj."}}},
+  {"id":"read-not-scroll","cooldownDays":8,"truthRequires":["always"],"variants":{"dev":{"en":"Written to be read, not scrolled past.","cs":"Psané na čtení, ne na prolistování."}}},
+  {"id":"czech-mma","cooldownDays":12,"truthRequires":["always"],"variants":{"dev":{"en":"MMA in Czech, written not translated.","cs":"MMA česky. Psané, ne přeložené."}}},
+  {"id":"no-tipping","cooldownDays":12,"truthRequires":["always"],"variants":{"dev":{"en":"No tips, no picks. Just the fight.","cs":"Žádné tipy, žádné sázky. Jen zápas."}}},
+  {"id":"context-not-hype","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"The context the highlight reel leaves out.","cs":"Kontext, který sestřih vynechá."}}},
+  {"id":"one-sitting","cooldownDays":8,"truthRequires":["always"],"variants":{"dev":{"en":"One sitting. Then you know the story.","cs":"Jedno posezení a znáš celý příběh."}}},
+  {"id":"desk-not-feed","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"From a desk, not from a timeline.","cs":"Od redakce, ne z timeline."}}},
+  {"id":"before-the-bell","cooldownDays":10,"truthRequires":["formatIs:fight-week-preview"],"variants":{"dev":{"en":"Before the walk-outs. What to watch for.","cs":"Než se půjde do klece. Na co koukat."}}},
+  {"id":"week-shape","cooldownDays":12,"truthRequires":["formatIs:fight-week-preview"],"variants":{"dev":{"en":"Fight week, and what actually decides it.","cs":"Zápasový týden a co ho fakt rozhodne."}}},
+  {"id":"after-the-fact","cooldownDays":10,"truthRequires":["formatIs:post-event-recap"],"variants":{"dev":{"en":"It is over. Here is what happened.","cs":"Je po všem. Tady je, co se stalo."}}},
+  {"id":"what-it-changes","cooldownDays":12,"truthRequires":["formatIs:post-event-recap"],"variants":{"dev":{"en":"The result, and what it moves next.","cs":"Výsledek a co posouvá dál."}}},
+  {"id":"one-career","cooldownDays":12,"truthRequires":["formatIs:fighter-profile"],"variants":{"dev":{"en":"One career, from the record up.","cs":"Jedna kariéra, od záznamu nahoru."}}},
+  {"id":"the-numbers-say","cooldownDays":12,"truthRequires":["formatIs:data-story"],"variants":{"dev":{"en":"What the numbers say, and what they do not.","cs":"Co čísla říkají a co už ne."}}},
+  {"id":"two-styles","cooldownDays":10,"truthRequires":["fighterCount:2"],"variants":{"dev":{"en":"Two styles that do not fit together.","cs":"Dva styly, co k sobě nesedí."}}},
+  {"id":"both-sides","cooldownDays":10,"truthRequires":["fighterCount:2"],"variants":{"dev":{"en":"Both corners, not just the favourite.","cs":"Oba rohy, ne jen ten očekávaný."}}}
+]

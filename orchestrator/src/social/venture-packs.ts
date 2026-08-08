@@ -88,7 +88,17 @@ export async function composeMmaFilesSocialQueue(input: {
     date,
     itemId: input.article.slug,
     vertical: "dev",
-    languages: ["cs"]
+    languages: ["cs"],
+    subject: {
+      subject: {
+        // `format` is what keeps a preview hook off a recap and vice versa — the tense trap
+        // 05-surfaces.md warns about, gated by a field the desk fills on every article.
+        format: input.article.format,
+        fighterCount: input.article.fighterRefs.length,
+        hasEvent: input.article.eventRef !== undefined,
+        sourceCount: input.article.sources.length
+      }
+    }
   });
   paths.push(await writeHookChannels(
     input.stateRoot,

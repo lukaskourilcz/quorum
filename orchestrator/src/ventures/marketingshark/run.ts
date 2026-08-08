@@ -126,7 +126,7 @@ export async function planBrandDay(input: {
     itemId: question.id,
     vertical: input.brand.tone,
     languages: ["en", "cs"],
-    quiz: {
+    subject: {
       subject: {
         difficulty: subject.difficulty,
         hasCode: subject.hasCode,
