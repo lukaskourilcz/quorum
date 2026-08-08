@@ -232,7 +232,17 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
         // The jump has landed once the live position agrees with where it was going, and from
         // then on the live position is the truth again.
         if (pendingIndexRef.current === index) pendingIndexRef.current = null;
-        setActive(index);
+        /*
+         * While a jump is still travelling, the marker stays on the destination.
+         *
+         * A smooth scroll sweeps the live position through every room between here and there, and
+         * marking each one in turn is what made the nav dot flicker across the rail on the way. The
+         * destination is the honest answer for as long as the jump is in flight; the same TTL the
+         * wheel handler uses gives the live position back if the scroll never arrives.
+         */
+        const pending = pendingIndexRef.current;
+        const travelling = pending !== null && Date.now() - jumpAtRef.current <= PENDING_TTL_MS;
+        setActive(travelling ? pending! : index);
         if (index >= 2) setMeetingsSeen(true);
         if (index >= 4) setWorkflowsSeen(true);
         if (index >= 6) setResultsSeen(true);
@@ -363,7 +373,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       }}
     >
       <header className="fixed inset-x-0 top-0 z-[60] flex min-h-17 items-center border-b border-[#26262b] bg-[rgba(9,9,11,.72)] backdrop-blur-[18px]">
-        <div className="mx-auto flex w-full max-w-[1400px] items-center gap-4 px-4 md:gap-[26px] md:px-10">
+        <div className="mx-auto flex w-full max-w-[1400px] items-center gap-4 px-4 md:gap-12 md:px-10">
           <button
             className="flex shrink-0 items-center gap-2.5 text-[15px] font-semibold tracking-[-0.02em] text-[#f4f4f5]"
             onClick={() => goTo(0)}
@@ -381,7 +391,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
           */}
           <nav
             aria-label="Primary"
-            className="hide-scrollbar flex min-w-0 flex-1 items-center justify-center gap-1.5 overflow-x-auto md:gap-3"
+            className="hide-scrollbar flex min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto md:gap-2"
             data-horizontal-scroll
             data-nav
           >
@@ -610,8 +620,13 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             className="pointer-events-none absolute inset-0 transition-opacity duration-[420ms] ease-out"
             style={{ background: "#09090b", opacity: workflowsReplaying ? 0.42 : 0 }}
           />
+          {/*
+            Wider gutters than the other sections and a shallower bottom, because the plan has no
+            card of its own: the section's own edges are the drawing's frame, and every pixel of
+            width and height here is width and height the floor plan gets to use.
+          */}
           <div
-            className="relative flex min-h-[100svh] items-center justify-center px-4 pb-13 pt-21 lg:absolute lg:inset-0 lg:min-h-0 lg:px-10 lg:pb-11 lg:pt-23"
+            className="relative flex min-h-[100svh] items-stretch justify-center px-4 pb-13 pt-21 lg:absolute lg:inset-0 lg:min-h-0 lg:px-4 lg:pb-5 lg:pt-23"
             data-fg
           >
             <SectionWorkflows

@@ -253,6 +253,7 @@ export function WorkflowsPlan({
   mode,
   compact,
   animate,
+  fill,
   onOpen
 }: {
   rooms: readonly WorkflowsRoom[];
@@ -265,6 +266,8 @@ export function WorkflowsPlan({
   /** Below 1024px the labels leave the drawing and each place carries a numeral instead. */
   compact: boolean;
   animate: boolean;
+  /** Fit the drawing to its box rather than to its own height. Above 1024px only. */
+  fill: boolean;
   onOpen: (place: PlanPlace) => void;
 }) {
   const byKey = new Map(rooms.map((room) => [room.key, room]));
@@ -299,7 +302,10 @@ export function WorkflowsPlan({
     <svg
       aria-label="Floor plan of the BoardlessAI office"
       role="group"
-      style={{ display: "block", width: "100%", height: "auto" }}
+      preserveAspectRatio="xMidYMid meet"
+      style={fill
+        ? { display: "block", width: "100%", height: "100%" }
+        : { display: "block", width: "100%", height: "auto" }}
       viewBox={`${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >

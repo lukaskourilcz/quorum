@@ -264,7 +264,7 @@ export function SectionMeetings({
               <button
                 aria-expanded={dateMenu}
                 aria-haspopup="menu"
-                className="inline-flex items-center gap-1.5 rounded-md border border-[#3f3f46] bg-[#101013] px-1.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                className="inline-flex items-center gap-1 rounded border border-[#3f3f46] bg-[#101013] px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.05em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                 onClick={() => setDateMenu((open) => !open)}
                 type="button"
               >
@@ -389,7 +389,7 @@ export function SectionMeetings({
                             <div className="mt-[11px]">
                               <button
                                 aria-expanded={openJson === message.id}
-                                className="rounded-md border border-[#3f3f46] bg-[#0e0e11] px-1.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                                className="rounded border border-[#3f3f46] bg-[#0e0e11] px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.05em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                                 onClick={() => setOpenJson((open) => (open === message.id ? null : message.id))}
                                 type="button"
                               >

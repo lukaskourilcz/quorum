@@ -9,7 +9,6 @@ import {
   notesThroughHour,
   type OfficeWorkflows
 } from "@/lib/office-workflows-model";
-import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 import { WorkflowsPlan, type PlanPlace } from "@/components/office/workflows-plan";
 import {
   ExampleChip,
@@ -237,18 +236,20 @@ export function SectionWorkflows({
     surface
   };
 
+  /*
+   * No card. Owner decision: the plan is the section, so it takes the whole width of it rather
+   * than sitting on a 1180px plate in the middle. That also drops the panel zoom the other
+   * sections carry — this one has room to be read at its designed size and then some.
+   *
+   * Above 1024px the board is a flex column filling the section: header and strip take what they
+   * need, the plan takes the rest. The plan then fits itself to that box (see `fill` below), so it
+   * is as large as the room allows — width-bound on a tall monitor, height-bound on a laptop.
+   */
   return (
     <div
       style={{
         width: "100%",
-        maxWidth: "1180px",
-        border: "1px solid #3f3f46",
-        borderRadius: "14px",
-        background: "rgba(11,11,13,.9)",
-        boxShadow: "0 40px 120px rgba(0,0,0,.65)",
-        backdropFilter: "blur(16px)",
-        overflow: "hidden",
-        ...WALKTHROUGH_PANEL_ZOOM
+        ...(compact ? {} : { height: "100%", display: "flex", flexDirection: "column", minHeight: 0 })
       }}
       data-workflows-board
     >
@@ -288,8 +289,9 @@ export function SectionWorkflows({
         </div>
       </div>
 
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", ...(compact ? {} : { flex: 1, minHeight: 0 }) }}>
         <WorkflowsPlan
+          fill={!compact}
           animate={animate}
           compact={compact}
           litRoom={litRoom}
