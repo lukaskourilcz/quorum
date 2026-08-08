@@ -1,5 +1,12 @@
 {
   "schemaVersion": "carousel-deck-style-overrides/1",
-  "overrides": [],
-  "updatedAt": "2026-08-08T00:00:00.000Z"
+  "overrides": [
+    {
+      "venture": "mma-files",
+      "slug": "ufc-event-ufc-fight-night-gamrot-vs-salkilld",
+      "style": "aurora",
+      "changedAt": "2026-08-08T23:36:32.910Z"
+    }
+  ],
+  "updatedAt": "2026-08-08T23:36:32.910Z"
 }
