@@ -302,6 +302,20 @@ describe("the evaluator", () => {
     expect(czechOnly.ids).not.toContain("know-why");
   });
 
+  it("reads optionsExactly as an equality, not a stricter at-least", async () => {
+    const { hooks, research: entries } = await shippedQuiz();
+    const library = loadLibrary({ surface: "quiz", hooks, research: entries });
+    const at = (optionCount: number) =>
+      eligibleFor(library, { subject: { ...SUBJECT, optionCount }, categoryLists: CATEGORY_LISTS }).ids;
+
+    // The distinction the predicate exists for: "Four branches. One merges." is false on a
+    // five-option question, and optionsAtLeast:4 would serve it there.
+    expect(at(3)).not.toContain("four-doors");
+    expect(at(4)).toContain("four-doors");
+    expect(at(5)).not.toContain("four-doors");
+    expect(at(5)).toContain("eliminate-three");
+  });
+
   it("hashes an eligible set independently of its order", () => {
     expect(eligibleSetHash(["b", "a"])).toBe(eligibleSetHash(["a", "b"]));
     expect(eligibleSetHash(["a"])).not.toBe(eligibleSetHash(["a", "b"]));
@@ -334,6 +348,7 @@ describe("conformance vectors", () => {
       "always-only",
       "difficulty-below-gate", "difficulty-at-gate", "difficulty-above-gate",
       "options-below-gate", "options-at-gate", "options-above-gate",
+      "options-exactly-below", "options-exactly-at", "options-exactly-above",
       "category-in-list", "has-code", "no-code",
       "starts-with-why", "czech-why-english-what"
     ]) {
@@ -343,10 +358,17 @@ describe("conformance vectors", () => {
       .filter((vector: { name: string }) => vector.name.startsWith("difficulty-"))
       .map((vector: { subject: QuizSubject }) => vector.subject.difficulty);
     expect(difficulties).toEqual([3, 4, 5]);
-    const options = committed.vectors
-      .filter((vector: { name: string }) => vector.name.startsWith("options-"))
+    // The at-least boundary, named exactly: `options-exactly-*` is a different predicate with
+    // its own boundary below, and a prefix match would silently fold the two together.
+    const atLeast = committed.vectors
+      .filter((vector: { name: string }) => /^options-(below|at|above)-gate$/u.test(vector.name))
       .map((vector: { subject: QuizSubject }) => vector.subject.optionCount);
-    expect(options).toEqual([3, 4, 6]);
+    expect(atLeast).toEqual([3, 4, 6]);
+
+    const exactly = committed.vectors
+      .filter((vector: { name: string }) => /^options-exactly-(below|at|above)$/u.test(vector.name))
+      .map((vector: { subject: QuizSubject }) => vector.subject.optionCount);
+    expect(exactly).toEqual([3, 4, 5]);
   });
 });
 

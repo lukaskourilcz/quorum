@@ -13,7 +13,7 @@ describe("the hook brain snapshot", () => {
     expect(snapshot.surfaces.map((surface) => surface.surface)).toEqual(["quiz", "news", "mma"]);
 
     const quiz = snapshot.surfaces.find((surface) => surface.surface === "quiz")!;
-    expect(quiz.hooks).toBe(49);
+    expect(quiz.hooks).toBe(50);
     expect(quiz.archetypes).toBeGreaterThan(10);
     expect(quiz.note).toBeNull();
 

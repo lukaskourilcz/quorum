@@ -30,6 +30,7 @@ export type QuizPredicate =
   | { readonly kind: "always" }
   | { readonly kind: "hasCode" }
   | { readonly kind: "optionsAtLeast"; readonly count: number }
+  | { readonly kind: "optionsExactly"; readonly count: number }
   | { readonly kind: "difficultyAtLeast"; readonly level: number }
   | { readonly kind: "categoryIn"; readonly list: string }
   | { readonly kind: "questionStartsWith"; readonly prefix: string };
@@ -83,6 +84,7 @@ export const VOCABULARIES: Readonly<Record<Surface, Readonly<Record<string, Pred
     always: { arity: "none" },
     hasCode: { arity: "none" },
     optionsAtLeast: { arity: "number", field: "count" },
+    optionsExactly: { arity: "number", field: "count" },
     difficultyAtLeast: { arity: "number", field: "level" },
     categoryIn: { arity: "string", field: "list" },
     questionStartsWith: { arity: "string", field: "prefix" }
@@ -120,8 +122,7 @@ export const TIER_B_PREDICATES = [
   "accuracyAtLeast",
   "streakAtLeast",
   "missedTopicBefore",
-  "timerEnabled",
-  "optionsExactly"
+  "timerEnabled"
 ] as const;
 
 const VariantTextSchema = z.object({
