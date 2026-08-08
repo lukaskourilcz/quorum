@@ -286,16 +286,20 @@ export interface OfficeProject {
 }
 
 /**
- * The five projects on the wall.
+ * Every registered venture on the wall.
  *
  * Names, order and colours come from `config/ventures.json`; the sentence under each is site copy,
  * because the registry's own `growth_objective.label` is an internal objective rather than a
- * description a visitor can read. Carousel Studio is not here on purpose: it is a workshop the
- * other projects use, not a project with its own room on the wall, and it has its own admin
- * workspace instead.
+ * description a visitor can read.
  *
- * TODO(owner): FightAIQ, GoVIRAL and Titty Tuesdays have no public URL yet. The card renders
- * nothing in that slot until one is supplied — no "coming soon", no disabled link.
+ * marketingShark and Carousel Studio are here by owner decision. Carousel Studio in particular is
+ * not a venture with an audience — it is the workshop the others hand their work to, and the
+ * Workflows plan draws it as machinery rather than as a room. On the wall it is still one of the
+ * things this company runs, and leaving it off made the wall disagree with the registry.
+ *
+ * TODO(owner): FightAIQ, GoVIRAL, Titty Tuesdays, marketingShark and Carousel Studio have no
+ * public URL yet. The card renders nothing in that slot until one is supplied — no "coming soon",
+ * no disabled link.
  */
 const PROJECT_COPY: Record<string, { status: string; description: string; url: string | null; daily: boolean }> = {
   "caught-up": {
@@ -327,10 +331,24 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
     description: "Brand and season concepts. So far only an inventory of ideas: no prices, no stock, no availability.",
     url: null,
     daily: false
+  },
+  marketingshark: {
+    status: "Publishes daily",
+    description: "One quiz question a day, drawn as a Czech and an English carousel and left as a draft for review.",
+    url: null,
+    daily: true
+  },
+  "carousel-studio": {
+    status: "The workshop",
+    description: "The renderer every other project hands its work to. Same input, same bytes: it holds no meeting and decides nothing.",
+    url: null,
+    daily: false
   }
 };
 
-const PROJECT_ORDER = ["caught-up", "mma-files", "fightaiq", "goviral", "titty-tuesdays"];
+const PROJECT_ORDER = [
+  "caught-up", "mma-files", "fightaiq", "goviral", "titty-tuesdays", "marketingshark", "carousel-studio"
+];
 
 /* ------------------------------------------------------------------ team */
 

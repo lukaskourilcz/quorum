@@ -701,7 +701,7 @@ function EdgesBody({ data, animate, shuttered, onShuttered }: {
         {[
           "courier exit → DNESKAi magazine",
           "courier exit → MMA Files magazine",
-          "pickup window → the storefront collects",
+          "dock bay → the storefront collects its own feed",
           "corridor ← the question bank, imported once"
         ].map((edge) => (
           <span key={edge} style={caption}>

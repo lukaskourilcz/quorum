@@ -9,6 +9,7 @@ import {
   notesThroughHour,
   type OfficeWorkflows
 } from "@/lib/office-workflows-model";
+import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 import { WorkflowsPlan, type PlanPlace } from "@/components/office/workflows-plan";
 import {
   ExampleChip,
@@ -246,7 +247,8 @@ export function SectionWorkflows({
         background: "rgba(11,11,13,.9)",
         boxShadow: "0 40px 120px rgba(0,0,0,.65)",
         backdropFilter: "blur(16px)",
-        overflow: "hidden"
+        overflow: "hidden",
+        ...WALKTHROUGH_PANEL_ZOOM
       }}
       data-workflows-board
     >
@@ -266,22 +268,6 @@ export function SectionWorkflows({
           building.
         </p>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <span style={{ ...chip, color: "#94949c", display: "inline-flex", alignItems: "center", gap: "7px" }}>
-            <span
-              aria-hidden="true"
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                background: "var(--bai-accent)",
-                animation: "bai-pulse 1.8s ease-in-out infinite"
-              }}
-            />
-            Now · Prague
-            <span style={{ color: "#f4f4f5", fontVariantNumeric: "tabular-nums" }}>
-              {now ? `${String(now.hour).padStart(2, "0")}:${String(now.minute).padStart(2, "0")}` : "--:--"}
-            </span>
-          </span>
           {!replaying ? (
             <button
               onClick={startReplay}
@@ -642,7 +628,7 @@ export function SectionWorkflows({
             {[
               ["9", "DNESKAi magazine", "courier exit"],
               ["10", "MMA Files magazine", "courier exit"],
-              ["11", "The storefront", "pickup window · it collects"],
+              ["11", "The storefront", "dock bay · it collects its own feed"],
               ["12", "The question bank", "corridor · imported once, nothing goes back"]
             ].map(([numeral, name, edge]) => (
               <div key={numeral} style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>

@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import type { CalendarStatus } from "@/lib/calendar-feed-model";
 import type { OfficeCell, OfficeWeek } from "@/lib/office-walkthrough";
+import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 
 /**
@@ -15,7 +16,16 @@ import type { WorkspaceChannelId } from "@/lib/meeting-feed";
  */
 const CELL_SURFACE: Record<CalendarStatus, { background: string; color: string }> = {
   held: { background: "rgba(22,101,52,.26)", color: "#e4f3e8" },
-  ongoing: { background: "rgba(255,90,0,.24)", color: "#ffe6d6" },
+  /*
+   * Ember at 24% over the row's `#0e0e11`, composited here rather than left as an alpha layer.
+   *
+   * The pixel is identical either way. What changes is that the colour can be measured: the
+   * contrast gate reads a 24%-alpha layer as if it were opaque `rgb(255,90,0)` and reported this
+   * cell at 2.61:1, when the text really sits on near-black at about 11.8:1. It only ever fired
+   * in the quarter of an hour a slot reads "in progress", which is how it went unseen — the same
+   * reason the wallboard's controls and the venture tints are already blended rather than layered.
+   */
+  ongoing: { background: "#48200d", color: "#ffe6d6" },
   missed: { background: "rgba(133,77,14,.24)", color: "#f4e3c4" },
   skipped: { background: "rgba(133,77,14,.24)", color: "#f4e3c4" },
   "not-needed": { background: "#101013", color: "#5b5b63" },
@@ -68,6 +78,7 @@ export function SectionCalendar({
     <div
       className="w-full max-w-[1080px] rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px]"
       data-cal-panel
+      style={WALKTHROUGH_PANEL_ZOOM}
     >
       <div className="flex items-center justify-between gap-6 border-b border-[#26262b] px-[22px] py-3.5">
         <p className="text-[13px] leading-[1.5] text-[#94949c]">

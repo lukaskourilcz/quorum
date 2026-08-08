@@ -26,6 +26,15 @@ import type {
 export const PLAN_WIDTH = 1760;
 export const PLAN_HEIGHT = 940;
 
+/**
+ * How much empty plan sits either side of the drawing.
+ *
+ * The off-plan addresses run to within a few units of the drawing's own bounds, so at the board's
+ * width they touched its border and read as clipped. This is margin in plan units rather than
+ * padding on the card, which keeps the geometry below transcribable exactly as specified.
+ */
+const PLAN_MARGIN = 80;
+
 /** The four places that open. Everything else on the plan is drawn and not pressed. */
 export type PlanPlace = "caught-up" | "carousel-studio" | "dock" | "titty-tuesdays";
 
@@ -93,9 +102,6 @@ const WALL_OUTER = "#a1a1aa";
 const WALL_INNER = "#94949c";
 const FURNITURE = "#6c6c73";
 const MACHINE = "#9d9da1";
-
-/** The one place a venture hue appears in the wall layer: the pickup window's sill. */
-const SILL = "#fde68a";
 
 const MONO = "var(--font-ibm-plex-mono), monospace";
 
@@ -294,7 +300,7 @@ export function WorkflowsPlan({
       aria-label="Floor plan of the BoardlessAI office"
       role="group"
       style={{ display: "block", width: "100%", height: "auto" }}
-      viewBox={`0 0 ${PLAN_WIDTH} ${PLAN_HEIGHT}`}
+      viewBox={`${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
@@ -310,7 +316,7 @@ export function WorkflowsPlan({
           <stop offset="0.6" stopColor="currentColor" stopOpacity={0.16} />
           <stop offset="1" stopColor="currentColor" stopOpacity={0} />
         </radialGradient>
-        {["#d4d4d8", WALL_INNER, SILL].map((colour) => (
+        {["#d4d4d8", WALL_INNER].map((colour) => (
           <marker
             id={`wf-arrow-${colour.slice(1)}`}
             key={colour}
@@ -437,7 +443,7 @@ export function WorkflowsPlan({
           question bank came in through, which is the one opening that no longer carries anything.
         */}
         <path
-          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H815 M925 860 H1560"
+          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H1560"
           pathLength={1}
           strokeDasharray={1}
         />
@@ -631,7 +637,12 @@ export function WorkflowsPlan({
           <path d={`M1072 ${y} H1138`} key={y} strokeWidth={1.4} />
         ))}
         <rect height={40} width={240} x={1060} y={620} />
-        {[620, 720].map((y) => (
+        {/*
+          Three bays. The lower two sit opposite the two courier exits; the top one is Titty
+          Tuesdays', by owner decision, and lines up with no exit at all — which is the one thing
+          on the drawing that still says this edge is not a delivery.
+        */}
+        {[526, 620, 720].map((y) => (
           <rect height={80} key={y} strokeDasharray="8 7" strokeWidth={1.5} width={132} x={1420} y={y} />
         ))}
       </g>
@@ -646,9 +657,6 @@ export function WorkflowsPlan({
           <Label anchor="start" fill={WALL_OUTER} size={19} tracking=".1em" weight={600} x={1016} y={812}>
             LOADING DOCK
           </Label>
-          <Label anchor="start" fill={WALL_INNER} size={15} x={1016} y={834}>
-            ONE PACKAGE · ONE ADDRESS
-          </Label>
         </g>
       ) : null}
 
@@ -659,20 +667,6 @@ export function WorkflowsPlan({
         <path d="M1560 660 H1656" markerEnd="url(#wf-arrow-d4d4d8)" stroke="#d4d4d8" strokeWidth={2.2} />
         <path d="M1560 760 H1656" markerEnd="url(#wf-arrow-d4d4d8)" stroke="#d4d4d8" strokeWidth={2.2} />
         {/*
-          The storefront collects. Both legs begin and end outside the envelope: the dotted leg
-          reaches in to the sill and stops without a head, the solid leg leaves the sill and
-          carries the arrow away. Nobody inside walks to the window, and no courier arrow ever
-          touches this wall.
-        */}
-        <path d="M700 916 H900 V872" fill="none" stroke={WALL_INNER} strokeDasharray="3 6" strokeWidth={1.8} />
-        <path
-          d="M856 872 V898 H706"
-          fill="none"
-          markerEnd="url(#wf-arrow-fde68a)"
-          stroke={SILL}
-          strokeWidth={2.2}
-        />
-        {/*
           The corridor the question bank came in through.
           It is drawn at the plan's dormant weight and it never animates, because stillness on
           this edge is the honest state: the bank was handed over once, the app that sent it is
@@ -681,8 +675,6 @@ export function WorkflowsPlan({
         */}
         <path d="M104 692 H198" markerEnd="url(#wf-arrow-94949c)" stroke={WALL_INNER} strokeWidth={2.2} />
         <rect fill="none" height={60} stroke={WALL_INNER} strokeDasharray="7 6" strokeWidth={1.5} width={1} x={200} y={662} />
-        {/* The pickup-window sill: the only opening in the building that is not a door. */}
-        <rect fill="none" height={8} stroke={SILL} strokeWidth={1.8} width={110} x={815} y={852} />
       </g>
 
       {!compact ? (
@@ -698,15 +690,6 @@ export function WorkflowsPlan({
           </Label>
           <Label anchor="start" fill={WALL_INNER} size={15} tracking=".1em" weight={400} x={1666} y={772}>
             MAGAZINE
-          </Label>
-          <Label anchor="end" fill="#d4d4d8" size={15} weight={600} x={688} y={892}>
-            STOREFRONT
-          </Label>
-          <Label anchor="end" fill={WALL_INNER} size={15} tracking=".1em" weight={400} x={688} y={912}>
-            COLLECTS AT THE WINDOW
-          </Label>
-          <Label anchor="start" fill={SILL} size={15} tracking=".1em" x={940} y={886}>
-            PICKUP WINDOW
           </Label>
           <Label anchor="end" fill={WALL_INNER} size={15} weight={600} x={94} y={682}>
             QUESTION
@@ -791,21 +774,12 @@ export function WorkflowsPlan({
         );
       })}
 
-      {/* In-plan captions. Three of them, and none is an hour: hours are read on the replay rail
-          or in the key, never counted off the drawing. */}
-      {!compact ? (
-        <g style={animate ? entrance("wf-rise", 260, 560, E1) : undefined}>
-          <Label anchor="start" fill={WALL_INNER} size={15} x={905} y={364}>
-            DESK · 10
-          </Label>
-          <Label anchor="start" fill={WALL_INNER} size={15} x={1108} y={414}>
-            RECORDS
-          </Label>
-          <Label anchor="start" fill={WALL_INNER} size={15} x={1264} y={418}>
-            MACHINE ROOM · NO MEETINGS
-          </Label>
-        </g>
-      ) : null}
+      {/*
+        No in-plan captions. The furniture carries what they used to say: a desk with one seat and
+        no facing side is a desk, three shelving runs are a records room, and a room with rollers,
+        a plotter and no chair at all is machinery. A caption naming what the drawing already shows
+        is the drawing admitting it did not work.
+      */}
 
       {/* Carousel Studio hangs no note: it holds no session and has nothing to record. */}
       {rooms.map((room) => {
