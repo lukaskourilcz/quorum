@@ -69,12 +69,18 @@ is the single thing standing between a proven path and a working one.
   the output is poor that is a prompt problem and the truth gates will catch the dishonest parts —
   but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
 
-- [ ] **Create a fal.ai account and arm the illustration rung** — the article-image programme
-  (`state/decisions/2026-08-08-article-image-fit.md`, on the branch recorded at the end of this
-  document) ships its generated-illustration rung dark. Create the account, add `FAL_KEY` to
-  Actions secrets, prepay the minimum credit (schnell renders cost about $0.003 each, capped at
-  two a day), then set `ARTICLE_ILLUSTRATION_ENABLED=true` when you want it live. Until then the
-  image ladder behaves exactly as before. [imp:3] [owner:me] [time:10m] [kind:setup]
+- [x] **Create a fal.ai account and arm the illustration rung** — done 2026-08-08: the owner
+  created the account, added `FAL_KEY`, prepaid the minimum credit and set
+  `ARTICLE_ILLUSTRATION_ENABLED=true`, all before the build ran. The rung therefore goes live
+  the moment IMG-10's code and `cycle.yml` mapping reach `main` — there is no separate arming
+  step left. First proof is the first scheduled cycle after the merge: its run report must show
+  the rung armed; if it still reads dark, the env mapping name does not match where the values
+  were put. [imp:3] [owner:me] [time:10m] [kind:setup]
+
+- [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
+  is real operating spend under the $30 all-in cap, and only the owner records payments: add the
+  amount and date where LEDGER reconciles (`state/treasury/` / `state/FINANCE.md`) so the monthly
+  numbers include it. [imp:3] [owner:me] [time:5m] [kind:decision]
 
 - [x] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`** — done: the owner added both
   Actions secrets on 2026-08-08, and `cycle.yml` already maps them into the run, so the wider

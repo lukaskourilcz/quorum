@@ -62,7 +62,8 @@ One new law: **no image ships that nothing has looked at.** The ladder becomes:
 4. **Licensed search rung**: brief phrases fanned out across Openverse,
    Wikimedia, Pexels, Pixabay; up to 12 deduped candidates; the gate scores
    the actual thumbnails against the article and picks, or rejects all.
-5. **Illustration rung** (new, dark until `FAL_KEY` exists): FLUX.1-schnell
+5. **Illustration rung** (new; the owner armed production on 2026-08-08, so
+   it goes live the moment IMG-10 merges): FLUX.1-schnell
    via fal.ai renders an abstract on-brand illustration; the same gate must
    pass it; it is labelled an illustration everywhere.
 6. **FRAME plate**: unchanged, the honest last state.
@@ -318,7 +319,7 @@ one-line note in NEEDED.md and move on.
 Gate: consumer-side files verifiably replaced (hash-compare in the commit
 body); `npm run test` green in mma-files if that repo is touched.
 
-### T10 — The illustration rung, dark
+### T10 — The illustration rung (armed in production, dark everywhere else)
 
 - `orchestrator/src/images/illustration.ts`: render via fal.ai's
   FLUX.1-schnell endpoint (REST, `FAL_KEY` env), 16:9 at ~1MP, one image per
@@ -361,10 +362,17 @@ body); `npm run test` green in mma-files if that repo is touched.
 - Config surface: `ARTICLE_ILLUSTRATION` role entry in `config/models.json`
   (provider `fal`, the schnell endpoint id), `FAL_KEY` +
   `ARTICLE_ILLUSTRATION_ENABLED` in `.env.example` and `cycle.yml` env. The
-  owner item for arming the rung already exists in `docs/NEEDED.md` (the docs
-  sweep carried it over from this branch) — keep it accurate if any detail
-  changes. Account creation and payment are the owner's acts; the code ships
-  dark.
+  owner item for arming the rung in `docs/NEEDED.md` is ticked: the owner did
+  all four steps on 2026-08-08 — account, `FAL_KEY`, prepaid credit, and
+  `ARTICLE_ILLUSTRATION_ENABLED=true` — before the build ran. Two things
+  follow. First, map the flag defensively in `cycle.yml`
+  (`${{ secrets.ARTICLE_ILLUSTRATION_ENABLED || vars.ARTICLE_ILLUSTRATION_ENABLED }}`)
+  since it is not knowable from here whether it landed as a secret or a
+  variable. Second, the rung goes live on the merge itself: the first
+  fallback article after IMG-12 lands will render a real illustration and
+  ledger real cents — that is the owner's explicit instruction, not an
+  accident to prevent. The enablement check stays exactly as specified so
+  every keyless environment (this build session included) remains dark.
 
 Gate: unit tests with a fake renderer — cap enforcement, dark-without-key,
 veto-burns-attempt, origin/refinement round-trip through the schema; consumer
@@ -377,7 +385,8 @@ validators confirmed by test or by recorded check in the commit body.
   vision gate must pass or the ladder descends, verdicts are recorded beside
   the package, and the illustration rung exists but is owner-gated.
 - `about-project.md` / `scaling.md`: one-line cost note (gate under $1/month
-  at full cadence; illustration ~$0.09/month at the cap, dark until enabled).
+  at full cadence; illustration ~$0.09/month at the two-a-day cap, armed in
+  production since 2026-08-08).
 - `docs/NEEDED.md` — the one owner document since the 2026-08-08 sweep; the
   root `NEEDED.md` and `NEEDS_YOUR_HELP_NOW.md` no longer exist. Add the
   flywheel review item (T8), tick anything this programme completed, and keep
@@ -392,8 +401,14 @@ validators confirmed by test or by recorded check in the commit body.
   article preview renders images — check whether the new origin value
   reaches it).
 - One dry cycle (`pnpm cycle -- --phase morning --dry`) with the run report
-  showing gate verdicts present, providers keyed, caps armed, illustration
-  rung reported dark. Quote the relevant report lines in the commit body.
+  showing gate verdicts present, providers keyed, caps armed, and the
+  illustration rung reported honestly for the environment it ran in: dark
+  here (no `FAL_KEY` reaches this session), armed in Actions where the owner
+  installed the key and flag on 2026-08-08. Quote the relevant report lines
+  in the commit body. The first scheduled cycle after the merge is the
+  production proof — if its report still reads dark, the `cycle.yml` mapping
+  name does not match where the owner put the values; fix or record it in
+  `docs/NEEDED.md` before ending the session.
 - Every checkbox in the decision file ticked; `state/ROADMAP.md` updated if
   it tracks this work; `docs/NEEDED.md` brought current, including the
   stale-branch record it keeps at the end.
@@ -447,7 +462,7 @@ Known sharp edges you will meet; each cost real debugging time once already:
 
 All twelve tasks committed in order with green gates; the decision file's
 checklist fully ticked; no guard, test or contract weakened; total new
-steady-state spend under $1/month with the illustration rung dark; the two
+steady-state spend under $1/month plus illustration cents at the cap; the two
 wrong MMA heroes no longer live; and an owner who can read the run report of
 a dry cycle and see, for the first time, *why* every published image was
 chosen.
