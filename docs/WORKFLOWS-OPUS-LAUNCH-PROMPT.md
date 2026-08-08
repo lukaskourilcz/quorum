@@ -79,8 +79,10 @@ the engine session against the repository as of 2026-08-08.
    §2 geometry was drawn without it, so this is the one bounded visual gap you
    close yourself: mirror the spec's dock-exit lane grammar at the dormant
    treatment, label it with the spec's exit-label typography, and name this
-   spec gap in your final report. Do not build an outbound lane or any
-   hook-library delivery. The data contract row for
+   spec gap in your final report. Below 1024px the corridor joins the spec's
+   §11 key as a twelfth row with its edge type named in words, like the other
+   external edges. Do not build an outbound lane or any hook-library delivery.
+   The data contract row for
    `state/marketingshark/question-banks/devshark.json` stays live and resolves
    as written.
 2. **The fourth panel is the corridor, the window and the signal.** Decision 4's
@@ -123,7 +125,11 @@ the engine session against the repository as of 2026-08-08.
    the logged, ordinary outcome for an item whose metadata makes nothing in the
    rack true. If the spec's workshop panel draws an "empty rack" beat, replace
    it with the eligible-set greying the spec already draws, and name the
-   substitution in your final report.
+   substitution in your final report. The spec's rack is a fixed 7 × 7 grid of
+   49; size the grid from the resolved count instead, keeping the spec's card
+   dimensions and states (50 quiz hooks today fit 10 × 5 above 1024px, and the
+   spec's 4-column grid below 1024px simply gains rows), and let motion row
+   24's sweep cover however many cards render.
 
 ## What the spec is deliberately silent on
 
