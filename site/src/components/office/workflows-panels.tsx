@@ -366,17 +366,26 @@ function WorkshopBody({
                     <span key={index} style={{ height: "6px", borderRadius: "3px", background: index === 0 ? "#3f3f46" : "#1e1e22" }} />
                   ))}
                 </span>
+                {/*
+                  No source count here, by owner decision.
+
+                  The figure belongs to the summary rather than to the piece: an edition's summary
+                  is built from the package's own structured points and carries an empty `sources`
+                  list by construction, so any number printed beside a sourced article would be
+                  read as a claim about the article. The count still resolves — it is a row of the
+                  data contract — and the card simply does not show it.
+                */}
                 <span style={caption}>
-                  {`${example.passageCount} passages · ${example.sourceCount} sources${example.heroCredit ? ` · ${example.heroCredit}` : ""}`}
+                  {[`${example.passageCount} passages`, ...(example.heroCredit ? [example.heroCredit] : [])]
+                    .join(" · ")}
                 </span>
               </>
             ) : (
               <>
                 <span style={caption}>kicker · headline · standfirst</span>
                 <span style={body}>
-                  Three to eight passages in the article&rsquo;s own order, its sources as kinds
-                  rather than addresses, and the photograph&rsquo;s credit, which is mandatory
-                  whenever there is a photograph.
+                  Three to eight passages in the article&rsquo;s own order, and the
+                  photograph&rsquo;s credit, which is mandatory whenever there is a photograph.
                 </span>
                 <span style={caption}>NO EDITION ON RECORD YET</span>
               </>
