@@ -5,10 +5,10 @@ import { readOfficeWalkthrough } from "@/lib/office-walkthrough";
 /**
  * The home page is a walk through one office.
  *
- * Seven full-viewport rooms, in the order a visitor's questions arrive: what is on today, what was
- * said, what the company runs, who runs it, what came out, and what the company is. Each room
- * links on to the full page behind it — this is a walkthrough, not a replacement for `/calendar`,
- * `/standups`, `/ventures`, `/agents`, `/results` or `/company`.
+ * Eight full-viewport rooms, in the order a visitor's questions arrive: what is on today, what was
+ * said, what the company runs, where the work happens, who runs it, what came out, and what the
+ * company is. Each room links on to the full page behind it — this is a walkthrough, not a
+ * replacement for `/calendar`, `/standups`, `/ventures`, `/agents`, `/results` or `/company`.
  *
  * Every figure and every transcript is read on the server from this repository's own state files,
  * so the page needs no network at build time and carries no analytics. It revalidates rather than
