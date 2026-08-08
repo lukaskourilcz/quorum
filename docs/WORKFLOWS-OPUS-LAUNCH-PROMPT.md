@@ -9,12 +9,15 @@ and corrected two of them before committing this file. Amendment 1 claimed
 `react-express-app` had been removed; the repository still exists on GitHub, the
 question bank (`state/marketingshark/question-banks/devshark.json`, 3,633
 questions) and its import adapter are still on `main`, and commit `ef3f1b4`
-dropped only the outbound hook-library delivery. Amendments 1 and 2 below carry
-the corrected facts, and amendment 7 records a second repository change the
-design pass predates: commits `51ba541` and `ead9d57` grew the quiz library to
-50 hooks and wrote the news (12) and MMA (16) libraries that were unwritten when
-the build prompt and the spec were authored. Everything else is verbatim from
-the design pass.
+dropped only the outbound hook-library delivery. The owner then settled the
+edge's meaning on 2026-08-08: the app supplied its questions once, stays
+standalone, and no automation runs between the two repositories in either
+direction again, so amendments 1 and 2 below draw the corridor as the dormant
+record of a completed import. Amendment 7 records a second repository change
+the design pass predates: commits `51ba541` and `ead9d57` grew the quiz library
+to 50 hooks and wrote the news (12) and MMA (16) libraries that were unwritten
+when the build prompt and the spec were authored. Everything else is verbatim
+from the design pass.
 
 ---
 
@@ -61,24 +64,32 @@ prompt as written. They outrank the spec where they overlap it, and they outrank
 the build prompt's fallbacks. Amendments 1, 2 and 7 were corrected or added by
 the engine session against the repository as of 2026-08-08.
 
-1. **The corridor is one-way now: questions in, nothing out.** Decision 8 is
-   amended by the engine session, which authored it: `react-express-app` still
-   exists and still supplies the question bank as a pinned committed snapshot,
-   but commit `ef3f1b4` dropped the outbound hook-library delivery, so the
-   corridor carries traffic inward only. Draw the corridor on the west wall at
-   marketingShark as a single inbound lane. The spec's §2 geometry was drawn
-   without it, so this is the one bounded visual gap you close yourself: mirror
-   the spec's dock-exit lane grammar for the inbound direction, label it with
-   the spec's exit-label typography, and name this spec gap in your final
-   report. Do not build an outbound lane or any hook-library delivery. The data
-   contract row for `state/marketingshark/question-banks/devshark.json` stays
-   live and resolves as written.
+1. **The corridor records a completed import; nothing moves through it any
+   more.** Decision 8 is amended by the engine session, which authored it, on
+   the owner's direction of 2026-08-08: `react-express-app` supplied the
+   question bank once and the snapshot is pinned inside this repository (3,633
+   questions, imported 2026-08-07); the app is standalone, and no automation
+   runs between the two repositories in either direction again — commit
+   `ef3f1b4` had already dropped the outbound hook delivery. Draw the corridor
+   on the west wall at marketingShark as a single inbound lane in the plan's
+   dormant treatment, the same visual state the spec gives an unlit room,
+   labelled as the import: the reader should learn where the questions came
+   from and see that nothing crosses today. The lane never animates, including
+   during the replay — stillness on this edge is the honest state. The spec's
+   §2 geometry was drawn without it, so this is the one bounded visual gap you
+   close yourself: mirror the spec's dock-exit lane grammar at the dormant
+   treatment, label it with the spec's exit-label typography, and name this
+   spec gap in your final report. Do not build an outbound lane or any
+   hook-library delivery. The data contract row for
+   `state/marketingshark/question-banks/devshark.json` stays live and resolves
+   as written.
 2. **The fourth panel is the corridor, the window and the signal.** Decision 4's
    four openable places hold — the DNESKAi office, the workshop, the courier,
-   and this one. Use spec §7.5 as the base layout and add the inbound corridor
-   as a row alongside the storefront edge and GoVIRAL: the bank's question
-   count and import date on the corridor row, the fail-closed feed on the
-   window row, the signal line on GoVIRAL's.
+   and this one. Use spec §7.5 as the base layout and add the corridor as a row
+   alongside the storefront edge and GoVIRAL: on the corridor row, the bank's
+   question count and import date, stated as a completed hand-over from a
+   standalone app with nothing sent back; the fail-closed feed on the window
+   row; the signal line on GoVIRAL's.
 3. **The plate is decided; the fallback is dead.** Use the spec's §1 values
    verbatim: `filter: saturate(.32) brightness(.3) contrast(1.06)` and
    `width: max(150vw, 264svh)`. Ignore the build prompt's
