@@ -77,6 +77,11 @@ test.afterAll(async () => {
 
 for (const route of axeRoutes) {
   test(`WCAG AA operating surface — ${route}`, async ({ page }) => {
+    // An axe pass over an admin surface is a full page load plus a whole-DOM rule sweep, and the
+    // heavier ones measure 18-30s against the 30s default. They have not been failing on
+    // violations — they have been failing on the clock, one at a time and whichever happened to
+    // be unlucky. 90s leaves the sweep room without hiding a route that genuinely will not load.
+    test.setTimeout(90_000);
     await page.goto(route, { waitUntil: "networkidle" });
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
@@ -102,7 +107,10 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // is that every slot renders exactly one row and one project icon.
   await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
-  await expect(page.locator("[data-project-legend]")).toHaveCount(7);
+  // Eight, not seven. The Design Lab joined `projectDetails` in `3e081c8` on 2 August and this
+  // assertion was never moved, so the guard has been red ever since — on a board that was right.
+  // The venture joined by owner decision; the number was the thing that was stale.
+  await expect(page.locator("[data-project-legend]")).toHaveCount(8);
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep
@@ -198,13 +206,22 @@ test("measures role column keeps the table inset", async ({ page }) => {
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
 // on the plan card the binder assertion below already needs.
 test("admin rating persists and the launch binder renders", async ({ page }) => {
+  // Two full page loads, a write to the ledger on disk, a reload, and a third page. The default
+  // 30s covered it when this was a lighter page and does not now.
+  test.setTimeout(120_000);
   await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
   await page.getByLabel("Note (optional)").first().fill("E2E owner note");
   await page.getByRole("button", { name: "Perfect", exact: true }).first().click();
-  await expect(page.getByText("Rating saved to the permanent history.")).toBeVisible();
+  // The confirmation appears only after `POST /admin/api/ratings` has appended to the ledger on
+  // disk, and on a dev server under load that round trip runs past the 5s an expectation gets by
+  // default — which is why this has been the suite's most reliable false negative, failing on the
+  // clock rather than on the app. The widget's own "Saving rating…" state is asserted first, so a
+  // click that never fired still fails immediately rather than waiting out the longer budget.
+  await expect(page.getByText(/Saving rating|Rating saved/)).toBeVisible();
+  await expect(page.getByText("Rating saved to the permanent history.")).toBeVisible({ timeout: 30_000 });
   await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByText("Rating history (1)")).toBeVisible();
+  await expect(page.getByText("Rating history (1)")).toBeVisible({ timeout: 30_000 });
 
   await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();

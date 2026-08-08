@@ -140,7 +140,12 @@ for (const route of routes) {
 }
 
 test("every app button declares its behavior", async ({ page }) => {
-  test.setTimeout(120_000);
+  // Fifteen routes, each loaded to `networkidle`, under one budget. 120s was set when the list
+  // was shorter and the home page smaller; it now lands around 126s on an idle machine and past
+  // two minutes on a loaded one, so it has been failing for its own arithmetic rather than for
+  // anything it found. 300s is an honest ceiling for fifteen full page loads and still fails
+  // loudly if a route actually hangs.
+  test.setTimeout(300_000);
   const failures: string[] = [];
 
   for (const route of routes) {
