@@ -7,7 +7,7 @@ Next.js site.
 
 Current status: **operating, pre-revenue, VALIDATION**. The public site is
 <https://boardless-ai.vercel.app>. Seven project workspaces share this runtime:
-Caught Up, Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Carousel Studio
+Caught Up, Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Design Lab
 and MMA Files.
 The $30 operating limit plus the Caught Up, Titty Tuesdays and FightAIQ scope
 decisions are countersigned. Separate live switches, evidence checks and delivery
@@ -26,7 +26,7 @@ passes the existing owner, budget, evidence, security and release gates.
 | GoVIRAL | Weekly trend brief and marketing plays for the portfolio | Apify Free plan only — its $5 monthly credit is the budget guard; hands over at most one agenda |
 | marketingShark | One devShark quiz question a day, drafted as one Czech and one English five-slide carousel | Owns no social account and no publisher path; every package is written as a draft behind the approval queue |
 | FightAIQ | Sourced UFC/Oktagon fighter cards, bout discovery and deterministic analysis | D8 evidence gates; no bet placement, affiliate links or bookmaker automation |
-| Carousel Studio | Shared deterministic carousel templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
+| Design Lab | Shared deterministic templates and rendering | Internal engine and public showcase only; no accounts, marketing, analytics or image-model calls |
 | MMA Files | Public Czech MMA magazine and social draft archive | Content-only delivery; live articles require verified FightAIQ input and the MMA live switch |
 
 The common registry is `config/ventures.json`. It defines cadence, routing,
@@ -61,7 +61,7 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   probabilities, owner odds capture, immutable results and public performance view.
 - MMA Files source-first Czech production, a Czech style desk,
   licensed-photo-first heroes, public delivery, release proof and guarded social packs.
-- Carousel Studio's `carousel-template/1` DSL, eleven checked layouts, five brand
+- The Design Lab's `carousel-template/1` DSL, twelve checked layouts, five brand
   palettes, deterministic SVG/PNG renderer, lifecycle, admin preview controls and
   public showcase.
 - `boardless-dataset/1` and the append path behind the magazines' daily widgets.
@@ -81,7 +81,7 @@ summary remains in [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
   calendar, meetings, projects, team, results, company — with the meeting archive played
   back message by message in a read-only workspace window. One wheel gesture per room
   above 1024px and no scroll-jacking at all below it.
-- Every delivered DNESKAi edition and MMA Files article also reaches Carousel Studio as a
+- Every delivered DNESKAi edition and MMA Files article also reaches the Design Lab as a
   summary — headline, standfirst, the desk's own passages, sources — written beside the
   package by the same deterministic builder the site falls back to. Eleven templates
   render it live in the admin at both formats.
@@ -115,7 +115,7 @@ config/                     agents, ventures, routing, models, KPIs, costs and p
 contracts/                  exported JSON Schemas
 docs/PORTFOLIO.md           human portfolio operating model
 docs/ECOSYSTEM.md           canonical full-context brief plus generated operating truth
-studio/                     deterministic Carousel Studio package and seed templates
+studio/                     the Design Lab's deterministic package and seed templates
 docs/FIGHTAIQ.md            data, model and launch boundary
 docs/MMA-FILES.md           public magazine and content-delivery boundary
 orchestrator/
@@ -169,7 +169,7 @@ Useful commands:
 | `pnpm cycle -- --phase mma-analysis --dry` | Proves the D8 analysis path without a live provider call |
 | `pnpm cycle -- --phase mag-editorial --dry` | Accounts for both MMA Files article slots without inventing source packets |
 | `pnpm cycle -- --phase mag-desk --dry` | Reviews the Czech newsroom queue |
-| `pnpm cycle -- --phase studio --dry` | Proves the agenda-ready Carousel Studio room without a provider call |
+| `pnpm cycle -- --phase studio --dry` | Proves the agenda-ready Design Lab room without a provider call |
 | `pnpm proof:rooms` | Rebuilds fixture-labeled proof for all 13 room kinds |
 | `pnpm docs:refresh` | Rebuilds the `$0` operating-truth block in `docs/ECOSYSTEM.md` |
 | `pnpm fightaiq:backfill -- --input reviewed-history.json` | Imports cited owner-reviewed history and rebuilds ratings |
@@ -313,8 +313,8 @@ Rollback:
 - MMA Files is the only venture publishing. Caught Up has produced no edition; its
   per-edition cap is consumed by one pass, so its configured regenerations cannot run.
   FightAIQ holds fighters and historical bouts but no upcoming events, so its analysis
-  emits nothing. Titty Tuesdays and Carousel Studio have never produced their artifact:
-  both need an open priority item, and Carousel Studio also needs owner inspiration
+  emits nothing. Titty Tuesdays and the Design Lab have never produced their artifact:
+  both need an open priority item, and the Design Lab also needs owner inspiration
   links. marketingShark has only run dry — the session that built it reached no model
   key — so its 07:00 room has yet to draft a package the owner can approve. See
   `NEEDS_YOUR_HELP_NOW.md`.

@@ -21,7 +21,7 @@ import {
 } from "@/lib/carousel-templates";
 
 /**
- * Carousel Studio: every delivered article, in every template.
+ * The Design Lab: every delivered article, in every template.
  *
  * The point of the gallery is that it is the check. An agent picks a template and sends passages;
  * this is where the owner confirms, before that happens, that the template survives *this*

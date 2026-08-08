@@ -76,7 +76,7 @@ export interface WorkflowsCalendarInput {
 /**
  * The eight rooms, in the order the plan draws them.
  *
- * The workshop is on this list and holds no slots: `config/ventures.json` gives Carousel Studio
+ * The workshop is on this list and holds no slots: `config/ventures.json` gives `carousel-studio`
  * `"meetings": []`, so it never deliberates and has nothing to record. It is drawn as machinery
  * with a light that never goes out, which is what tells a reader it is a different kind of
  * building before they read its caption.

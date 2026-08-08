@@ -180,7 +180,7 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
       // Slide and layer, so two gradients on one deck cannot collide on an SVG id.
       uid: `${index}-${layerIndex}`
     })).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by Carousel Studio.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(brand, backgroundToken)}"/>${content}</svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by the Design Lab.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(brand, backgroundToken)}"/>${content}</svg>`;
     return {
       slideId: slide.id,
       index,

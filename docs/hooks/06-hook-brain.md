@@ -1,12 +1,12 @@
-# The Hook Brain — Carousel Studio as assignment authority
+# The Hook Brain — the Design Lab as assignment authority
 
-The Carousel Studio is the single brain behind all social content: it renders the images,
+The the Design Lab is the single brain behind all social content: it renders the images,
 renders the texts, and **assigns the hooks** from the central library. This doc defines how
 that works and where the seams are.
 
 ## Where things live
 
-Everything canonical sits in the quorum monorepo next to the Carousel Studio engine:
+Everything canonical sits in the quorum monorepo next to the Design Lab's engine:
 the hook libraries (`quiz`, `news`, `mma`), the research files, these docs, the lint, and
 the predicate evaluator. Consumer apps never orchestrate and never own hook copy — they
 receive bounded, hash-receipted data through the standard delivery channel, same as

@@ -5,12 +5,18 @@ import { readCarouselStudio, previewPayload } from "./carousel-studio";
 vi.mock("server-only", () => ({}));
 
 describe("Carousel Studio gallery and showcase", () => {
-  it("exposes eleven checked live seed templates across five brands and formats", async () => {
+  it("exposes twelve checked live seed templates across five brands and formats", async () => {
     const snapshot = await readCarouselStudio();
-    expect(snapshot.templates).toHaveLength(11);
+    expect(snapshot.templates).toHaveLength(12);
     expect(snapshot.templates.every((entry) => entry.template.status === "live" && entry.allChecksPass)).toBe(true);
     expect(snapshot.brands.map((brand) => brand.id)).toEqual(["caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark"]);
-    expect(snapshot.formats).toEqual(["instagram-square", "instagram-portrait", "threads"]);
+    // The gallery's picker is every canvas the studio renders. Which of them a template is
+    // offered is per-template: only a layout composed for 9:16 is offered the story.
+    expect(snapshot.formats).toEqual(["instagram-square", "instagram-portrait", "instagram-story", "threads"]);
+    const story = snapshot.templates.find((entry) => entry.template.id === "story-quote");
+    expect(story?.checks.some((entry) => entry.format === "instagram-story")).toBe(true);
+    const quote = snapshot.templates.find((entry) => entry.template.id === "quote-card");
+    expect(quote?.checks.some((entry) => entry.format === "instagram-story")).toBe(false);
   });
 
   it("renders a public showcase fixture to postable PNGs", async () => {

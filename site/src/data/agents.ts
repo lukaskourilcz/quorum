@@ -640,7 +640,7 @@ const profileCopy: Record<
   EASEL: {
     operatingPrinciple: "Write the layout as checked data before judging the preview.",
     output: "Versioned carousel-template/1 proposal",
-    currentFocus: "Original Carousel Studio layouts",
+    currentFocus: "Original Design Lab layouts",
     publicTrackRecord: null
   },
   MOTIF: {

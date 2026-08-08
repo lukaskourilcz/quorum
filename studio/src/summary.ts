@@ -1,5 +1,5 @@
 /**
- * The carousel summary: what an article sends to Carousel Studio.
+ * The carousel summary: what an article sends to the Design Lab.
  *
  * A delivered article is 1,000–1,200 Czech words. A carousel is a handful of frames. Sending the
  * whole article to the studio would mean the renderer decides what the piece is about, which is a
@@ -122,7 +122,7 @@ function choosePassages(input: CarouselSummaryInput): string[] {
 }
 
 /**
- * Build the summary an article sends to Carousel Studio.
+ * Build the summary an article sends to the Design Lab.
  *
  * A short article yields few passages and the summary says so rather than padding: a template
  * that needs four passage slides and is given two renders two, because inventing a third is how a

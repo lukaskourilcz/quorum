@@ -119,6 +119,6 @@ function TemplateGallery({ snapshot }: { snapshot: CarouselStudioSnapshot }) {
 
 export function CarouselStudioAdminPanel({ snapshot, tab }: { snapshot: CarouselStudioSnapshot; tab: "templates" | "inspiration" | "social-lab" }) {
   if (tab === "inspiration") return <InspirationPanel initialLinks={snapshot.inspirationLinks} />;
-  if (tab === "social-lab") return <div className="mt-8"><Callout>Social receipts will appear here after a live venture uses a Carousel Studio template. Posting remains separately locked.</Callout></div>;
+  if (tab === "social-lab") return <div className="mt-8"><Callout>Social receipts will appear here after a live venture uses a Design Lab template. Posting remains separately locked.</Callout></div>;
   return <TemplateGallery snapshot={snapshot} />;
 }

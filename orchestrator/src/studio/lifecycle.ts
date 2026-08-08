@@ -95,7 +95,7 @@ export async function processStudioContribution(input: {
   }
 
   const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) =>
-    previewFormats().map((format) => ({
+    previewFormats(candidate).map((format) => ({
       brand: brand.id,
       format,
       checks: validateTemplateForBrand(candidate, brand, format)
@@ -120,7 +120,7 @@ export async function processStudioContribution(input: {
 
   if (passes) {
     for (const brand of Object.values(CAROUSEL_BRANDS)) {
-      for (const format of previewFormats()) {
+      for (const format of previewFormats(template)) {
         const renders = await renderCarouselPng({
           template,
           payload: previewPayload(template, brand.id === "caught-up" ? "cs" : "en"),

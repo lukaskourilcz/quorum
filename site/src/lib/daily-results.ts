@@ -55,7 +55,7 @@ const VENTURE_LABELS: Record<string, string> = {
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",
   goviral: "GoVIRAL",
-  "carousel-studio": "Carousel Studio"
+  "carousel-studio": "Design Lab"
 };
 
 export function ventureLabel(ventureId: string): string {

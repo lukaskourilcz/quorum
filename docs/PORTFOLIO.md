@@ -13,8 +13,8 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
 | GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated marketing plays for every other project | Reads only the Apify Free plan, whose `$5` monthly credit is the guard; hands over at most one agenda |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
-| Carousel Studio | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
-| marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by Carousel Studio | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
+| Design Lab | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
+| marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by the Design Lab | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost

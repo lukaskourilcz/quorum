@@ -27,7 +27,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   the plates off `will-change`, which exhausted the compositor and painted whole frames
   black; and mark real horizontal scrollers `data-horizontal-scroll` or the containment
   e2e guard reads them as overflow.
-- **A delivered article also goes to Carousel Studio.** `storeArticlePackage` and the
+- **A delivered article also goes to the Design Lab.** `storeArticlePackage` and the
   edition outbox write both call `buildCarouselSummary` from `studio/src/summary.ts`, so a
   delivery cannot happen without a summary beside it. The site rebuilds the same summary
   from the package for anything published before that existed, using the same function —

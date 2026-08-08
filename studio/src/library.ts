@@ -8,10 +8,18 @@ import {
   type CarouselTemplate
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
+import { fitsSafeArea } from "./validation.js";
 
 const formats = {
   "instagram-square": { width: 1_080, height: 1_080, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
   "instagram-portrait": { width: 1_080, height: 1_350, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
+  /*
+   * The story, 9:16 (D14). Its safe area is the widest on the list and that is the format's
+   * own doing rather than caution: a story is overlaid by the platform's chrome — the profile
+   * row along the top and the reply bar along the bottom — so roughly a seventh of the canvas
+   * at each end is never reliably visible. Everything that has to be read lives between.
+   */
+  "instagram-story": { width: 1_080, height: 1_920, safeArea: { top: 0.14, right: 0.07, bottom: 0.16, left: 0.07 } },
   threads: { width: 1_200, height: 1_200, safeArea: { top: 0.07, right: 0.07, bottom: 0.09, left: 0.07 } }
 } as const;
 
@@ -258,6 +266,34 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
         text("quote", 0.1, 0.25, 0.76, 0.43, { fontToken: "headline", fontWeight: 800, minFontSize: 34, maxFontSize: 74, maxChars: 190, maxLines: 6 }),
         rule(0.1, 0.75, 0.18),
         text("attribution", 0.1, 0.8, 0.72, 0.08, { colorToken: "muted", fontWeight: 700, minFontSize: 20, maxFontSize: 30, maxChars: 80, maxLines: 2 })
+      ]
+    }]
+  }),
+  /*
+   * The story (D14). 9:16, and composed for it rather than adapted to it.
+   *
+   * Every other seed places its logo at y .07 and its closing line near y .80 — comfortable
+   * inside a 4:5 canvas's .06/.08 margins and squarely under a story's platform chrome, which
+   * covers roughly a seventh of the canvas at each end. So this one keeps everything between
+   * y .18 and y .78: the story's safe area is the platform's reality and a template that
+   * ignored it would put the attribution behind the reply bar.
+   *
+   * It validates at all four canvases, which is why it is a seed rather than a special case.
+   */
+  template({
+    id: "story-quote",
+    name: "Story quote",
+    description: "One sourced line composed for a nine-by-sixteen story, clear of the platform's own chrome.",
+    requiredSlots: ["quote", "attribution"],
+    slides: [{
+      id: "slide-story",
+      backgroundToken: "background",
+      variants: [{ id: "A" }, { id: "B", accentToken: "secondary" }],
+      layers: [
+        logo(0.18),
+        text("quote", 0.1, 0.3, 0.76, 0.3, { fontToken: "headline", fontWeight: 800, minFontSize: 34, maxFontSize: 74, maxChars: 190, maxLines: 6 }),
+        rule(0.1, 0.66, 0.18),
+        text("attribution", 0.1, 0.7, 0.72, 0.07, { colorToken: "muted", fontWeight: 700, minFontSize: 20, maxFontSize: 30, maxChars: 80, maxLines: 2 })
       ]
     }]
   }),
@@ -581,8 +617,9 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
 
 const fixtures: Record<string, Record<string, string>> = {
   "quote-card": { quote: "The strongest claim is the one the source can carry.", attribution: "AUDIT · fixture room" },
+  "story-quote": { quote: "The strongest claim is the one the source can carry.", attribution: "AUDIT · fixture room" },
   "listicle-steps": { "list-title": "Four checks before a story ships", "step-one": "Name the new fact.", "step-two": "Open the primary source.", "step-three": "State the uncertainty.", "step-four": "Link the full record." },
-  "stat-highlight": { stat: "10/10", "stat-label": "seed layouts passed the deterministic checks", source: "Carousel Studio fixture · 2026-08-02" },
+  "stat-highlight": { stat: "10/10", "stat-label": "seed layouts passed the deterministic checks", source: "Design Lab fixture · 2026-08-02" },
   "before-after": { "before-label": "Before", before: "Three renderers produced three visual languages.", "after-label": "After", after: "One template contract serves every brand skin." },
   "headline-three-bullets": { headline: "A carousel should earn every slide", "bullet-one": "One fact per frame", "bullet-two": "Readable at phone size", "bullet-three": "A source stays close" },
   timeline: { "timeline-title": "From observation to live template", "time-one": "09:10", "event-one": "MOTIF records a cited layout pattern.", "time-two": "10:25", "event-two": "EASEL writes an original DSL proposal.", "time-three": "13:00", "event-three": "Checks pass and the version goes live." },
@@ -621,6 +658,30 @@ export function fixturePayload(template: CarouselTemplate, locale: "en" | "cs" =
   };
 }
 
-export function previewFormats(): CarouselFormat[] {
-  return ["instagram-square", "instagram-portrait", "threads"];
+/** Every canvas the studio can render. The preview route's own enum, and nothing narrower. */
+const ALL_FORMATS: CarouselFormat[] = [
+  "instagram-square",
+  "instagram-portrait",
+  "instagram-story",
+  "threads"
+];
+
+/**
+ * The canvases a template should be offered in.
+ *
+ * Called with no template this is every canvas the studio renders — what the preview route
+ * accepts. Called with one it is the canvases that template is *composed for*, which is not the
+ * same thing: the 9:16 story reserves roughly a seventh of the canvas at each end for the
+ * platform's own chrome, and a layout designed for 4:5 places its logo and its closing line
+ * squarely inside those bands.
+ *
+ * That distinction is load-bearing rather than cosmetic. The lifecycle's checks run over these
+ * formats and `resolveLifecycleStatus` reads the result, so offering every template the story
+ * would have demoted every existing live template to draft the moment the format was added —
+ * a new canvas quietly retiring the gallery is exactly the kind of break the render contract's
+ * consumers are promised against.
+ */
+export function previewFormats(template?: CarouselTemplate): CarouselFormat[] {
+  if (!template) return [...ALL_FORMATS];
+  return ALL_FORMATS.filter((format) => format !== "instagram-story" || fitsSafeArea(template, format));
 }
