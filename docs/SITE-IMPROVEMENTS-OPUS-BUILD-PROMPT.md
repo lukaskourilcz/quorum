@@ -26,15 +26,15 @@ Read in this order before writing any code:
 
 ## How to work
 
-- **Branch:** work on `claude/website-improvements-brainstorm-sqe3c6`, the
-  branch this document lives on. At session end, follow `CLAUDE.md`'s git
-  workflow: push, merge to `main`, and leave no work stranded. (A session
-  cannot delete a remote branch — the proxy answers 403 — so merging and
-  leaving the branch for GitHub's auto-delete is the correct end state.)
-- **`main` moves daily under this branch.** Before starting, `git fetch
-  origin main && git merge origin/main`, run the gates once as a baseline,
-  and re-check §1.1 against the tree. Line references here were true when
-  this was written; where the tree has drifted, the tree wins.
+- **Branch:** this document lives on `main`. Create your own fresh program
+  branch from the tip of `main` — `claude/si-program` — and do all the
+  program's work there. Push the branch as you go so nothing is stranded;
+  `main` itself is touched only by SI-13's single merge at the end.
+- **`main` moves daily.** Branch from the current tip, and if `main` moves
+  while the program runs, merge `origin/main` into the program branch when
+  you notice and always inside SI-13 before the final merge. Re-check §1.1
+  against the tree as you start: line references here were true when this
+  was written, and where the tree has drifted, the tree wins.
 - **The work is cut into GitHub issues.** Fourteen issues on this
   repository: `SI-01`, the inserted `SI-01.5` (the room-view repair — the
   opened room on `main` is broken at desktop widths, and everything later
