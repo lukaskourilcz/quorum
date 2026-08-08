@@ -82,10 +82,12 @@ export function projectForKind(kind: string): OfficeProjectKey {
 export interface OfficeCell {
   /** `held` and `ongoing` are the two a visitor can open. */
   state: CalendarStatus;
-  /** What the cell prints: at most sixteen characters, so every cell is exactly one line. */
+  /** What the cell prints: short enough that every cell is exactly one line. */
   text: string;
-  /** The full sentence, for the tooltip, because the cell clamps to two lines. */
+  /** The tooltip's heading: hour, room and outcome. Empty for a slot whose hour has not come. */
   title: string;
+  /** The recorded sentence, under the heading. `null` when there is nothing recorded to show. */
+  detail: string | null;
   /** The channel a click opens, when there is a record to open. */
   channel: WorkspaceChannelId | null;
   date: string;
@@ -124,7 +126,7 @@ const STATUS_WORD: Record<CalendarStatus, string> = {
 };
 
 /**
- * What one cell says, in at most sixteen characters.
+ * What one cell says, in at most twenty characters.
  *
  * The cell used to print the recorded decision sentence, which wrapped to two lines, clamped, and
  * turned the week into a wall of prose nobody reads across. It says the outcome instead — two or
@@ -145,8 +147,8 @@ function cellText(status: CalendarStatus, kind: string, delivered: boolean): str
   }
   if (status === "ongoing") return "In progress";
   if (status === "late") return "Waiting on run";
-  if (status === "missed") return "No record";
-  if (status === "skipped") return article ? "No article" : "Gate closed";
+  if (status === "missed") return "No one showed up";
+  if (status === "skipped") return article ? "No article" : "Decided not to meet";
   if (status === "not-needed") return "Nothing needed";
   return "Scheduled";
 }
@@ -525,7 +527,9 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
            */
           title: slot.status === "scheduled"
             ? ""
-            : `${String(definition.hour).padStart(2, "0")}:00 ${publicKindLabel(definition.kind)} · ${STATUS_WORD[slot.status]}${recorded ? ` · ${recorded}` : ""}`,
+            : `${String(definition.hour).padStart(2, "0")}:00 ${publicKindLabel(definition.kind)} · ${STATUS_WORD[slot.status]}`,
+          /** The recorded sentence on its own, so the tooltip can set it apart from the heading. */
+          detail: slot.status === "scheduled" ? null : recorded ?? STATUS_WORD[slot.status],
           channel,
           date: day.date
         };

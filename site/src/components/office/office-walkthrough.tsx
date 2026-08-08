@@ -553,10 +553,9 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             className="pointer-events-none absolute inset-0"
             style={{ background: "radial-gradient(120% 70% at 50% -10%, rgba(255,255,255,.05), transparent 60%)" }}
           />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[54px] border-t border-[#303036] bg-[#16161a]" />
           <OfficeMood />
           <div
-            className="relative flex flex-col items-center px-4 pb-13 pt-21 lg:px-10 lg:pb-19 lg:pt-26"
+            className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 pb-13 pt-21 lg:px-10 lg:pb-11 lg:pt-23"
             data-fg
             ref={workspaceRef}
           >

@@ -54,8 +54,34 @@ const articleRunReasonCopy: Record<string, string> = {
   mma_files_gate_closed: "MMA Files live publishing is switched off, so this slot did not open."
 };
 
+/**
+ * What each article slot did, written out.
+ *
+ * The MMA Files story meeting records its outcome as `AM: assigned; PM: killed` — two slots and
+ * their states, in the desk's own shorthand. It is exact and it is unreadable: a visitor cannot
+ * tell whether "killed" is a failure, and nothing on the page says the two halves are the day's
+ * morning and evening article slots. The shorthand stays in the record; this is how it reads.
+ */
+const slotStateCopy: Record<string, string> = {
+  assigned: "got a subject",
+  killed: "was dropped",
+  published: "published its article",
+  skipped: "was skipped"
+};
+
+function readableSlateSummary(reason: string): string | undefined {
+  const match = /^AM:\s*([a-z_]+)\s*[;,]\s*PM:\s*([a-z_]+)\.?$/iu.exec(reason.trim());
+  if (!match) return undefined;
+  const morning = slotStateCopy[match[1]!.toLowerCase()];
+  const evening = slotStateCopy[match[2]!.toLowerCase()];
+  if (!morning || !evening) return undefined;
+  return morning === evening
+    ? `Both of the day's article slots ${morning}.`
+    : `The morning article slot ${morning}; the evening slot ${evening}.`;
+}
+
 /** The sentence a recorded slot reason reads as, or the reason itself when it is already prose. */
 export function readableSlotReason(reason: string | undefined): string | undefined {
   if (!reason) return reason;
-  return articleRunReasonCopy[reason] ?? reason;
+  return articleRunReasonCopy[reason] ?? readableSlateSummary(reason) ?? reason;
 }

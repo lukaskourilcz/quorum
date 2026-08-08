@@ -39,6 +39,23 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         </p>
       </div>
 
+      {/*
+        One scroller for the roster, not two.
+        At 65% of a laptop viewport the panel has about 300px for its body, and giving the
+        specialists their own window left them four rows tall while the council sat fixed above.
+        Council and specialists scroll together, so a short screen shortens the view rather than
+        squeezing one half of it.
+      */}
+      {/* `tabIndex` because it scrolls: a scrollable region with no focusable content inside it
+          cannot be reached from a keyboard, and axe fails the whole page for it. The rule moved
+          with the scroller when council and specialists were joined into one. */}
+      <div
+        aria-label="The roster"
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto [overscroll-behavior:contain]"
+        data-team-scroll
+        role="group"
+        tabIndex={0}
+      >
       <div className="shrink-0 px-[22px] pb-1.5 pt-[18px]">
         <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--bai-accent)]">
           Council · {team.council.length} votes
@@ -83,7 +100,7 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col px-[22px] pb-[18px] pt-4">
+      <div className="px-[22px] pb-[18px] pt-4">
         <p className="mb-3 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
           Specialists · no vote
         </p>
@@ -95,19 +112,8 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         {/* `tabIndex` because the list scrolls: a scrollable region with no focusable content
             inside it is unreachable by keyboard, and axe fails the whole page for it. */}
         <div
-          aria-label="Specialist roles"
           className="grid grid-cols-1 gap-x-[22px] gap-y-2.5 sm:grid-cols-2 xl:grid-cols-4"
           data-team-list
-          role="group"
-          tabIndex={0}
-          style={{
-            flex: 1,
-            minHeight: 0,
-            alignContent: "start",
-            overflowY: "auto",
-            overscrollBehavior: "contain",
-            paddingRight: "8px"
-          }}
         >
           {team.specialists.map((role) => (
             <div className="flex gap-2.5 border-t border-[#1e1e22] pt-2.5" key={role.id}>
@@ -118,6 +124,7 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );
