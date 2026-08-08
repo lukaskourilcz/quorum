@@ -182,11 +182,11 @@ walkthrough and Carousel Studio are waiting on specifically.
   the plan sits on its face. Recorded in `docs/SITE-IMPROVEMENTS-BRAINSTORM.md` §2; the build
   instructions are `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`.
   [imp:3] [owner:me] [time:15m] [kind:decision]
-- [ ] **Start the Workflows build session** — paste the kickoff message into a Claude Code
-  session on the strongest available model; it checks out
-  `claude/website-improvements-brainstorm-sqe3c6`, reads
-  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`, and works Parts One–Three to done, merging
-  to `main` at the end. [imp:4] [owner:me] [time:5m] [kind:deploy]
+- [ ] **Start the build session on the GitHub issues** — paste the kickoff message into a
+  Claude Code session on the strongest available model; it reads
+  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md` (the contract) and works GitHub issues
+  `SI-01`–`SI-12` (#41–#52) strictly in title order, each ending with the gates green and a
+  merge to `main` for redeploy. [imp:4] [owner:me] [time:5m] [kind:deploy]
 - [ ] **Decide whether Python enters the toolchain** — §3 of the same document names three
   offline niches (FightAIQ calibration lab, wikitext parser, article extraction) and the
   JSON-contract boundary any of them would run under. Nothing in the runtime moves either way.

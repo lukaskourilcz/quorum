@@ -86,14 +86,24 @@ requirements, choreography and acceptance gates live in
   its floor steps visibly brighter than the lit fill, so a viewer sees where
   the day is. Today's real door notes still hang as each hour closes; the
   performance shows the schedule, the notes keep showing the record.
-- **The work walks the building.** Summary squares travel the dashed chase
-  into the workshop while its dashes march; sealed boxes cross the roller door
-  onto the bench and leave through the east wall, fading at the magazine
-  addresses; GoVIRAL's green line pulses toward the two magazine rooms;
-  FightAIQ's records pass through the shared wall to the desk it serves; Titty
-  Tuesdays' box rests at the bay that faces no exit. All of it in CSS on the
-  existing SVG — zero dependencies, no `will-change`, transforms and opacity
-  only, honouring the compositor rules documented in `office-plate.tsx`.
+- **Outputs travel as envelopes, in their venture's hue — and articles travel
+  twice.** Every output walks every leg of its journey as an envelope filled
+  with the producing venture's colour. Article rooms send two: one through
+  the dashed chase and the Design Lab to the bench, out the east wall to its
+  magazine address — and one rendered into social content, passed on to
+  GoVIRAL, and launched toward the social platforms, which do not exist yet
+  and are drawn as designed. marketingShark's two daily text envelopes ride
+  the same pipeline; FightAIQ's records pass through the shared wall to the
+  desk they serve; Titty Tuesdays' envelope rests at the bay that faces no
+  exit; and GoVIRAL grows from its 170-unit sliver into a station with
+  subrooms — arrival, preparation, launch. All of it in CSS on the existing
+  SVG — zero dependencies, no `will-change`, transforms and opacity only,
+  honouring the compositor rules documented in `office-plate.tsx`.
+- **Carousel Studio becomes the Design Lab.** The reader-facing name changes
+  everywhere a reader sees it — internal identifiers stay put, on the
+  Caught Up → DNESKAi precedent — and the lab gains a 9:16 Instagram-story
+  format beside its carousels and posts, which is what makes the new name
+  true.
 - **The whiteboard frames the plan.** The section's backdrop photograph shows
   a large whiteboard whose top edge never makes the frame at the current plate
   size (`max(150vw, 264svh)` against a 1376 × 768 image); the plate is
@@ -103,9 +113,11 @@ requirements, choreography and acceptance gates live in
 
 Reduced motion renders the same story as opacity-only steps — nothing
 translates — and ambient stays exactly as built: the performance never starts
-itself, and only the reader's press sets the day in motion. Estimated size:
-one design-note amendment to the spec plus one build session; zero
-dependencies; no new GPU layers.
+itself, and only the reader's press sets the day in motion. The build runs as
+twelve GitHub issues, `SI-01` through `SI-12` (#41–#52), worked strictly in
+order, each ending with the gates green and a merge to `main` for redeploy;
+the design-spec amendment is the second of them, ahead of every component
+change.
 
 ## 3. Python: not for the scrapers, yes for a lab
 
@@ -195,9 +207,12 @@ document rather than trailing off. The build session's instructions are
 
 1. **The Workflows section performs the day.** Whole-day playback behind one
    toggle, no control strip, a tag and a brighter floor at the active room, a
-   room-press stopping and resetting the performance, the work travelling the
-   existing SVG, and the whiteboard reframed behind the plan. The design spec is amended before any component changes, in the
-   same design-pass/build-pass rhythm as the section itself.
+   room-press stopping and resetting the performance, venture-hued envelopes
+   walking the two-envelope pipeline through the Design Lab and a grown
+   GoVIRAL, and the whiteboard reframed behind the plan. The design spec is
+   amended before any component changes, in the same design-pass/build-pass
+   rhythm as the section itself, and the whole build runs as GitHub issues
+   `SI-01`–`SI-12` (#41–#52).
 2. **Python stays out of the runtime.** That is this review's standing
    recommendation; whether the offline calibration lab opens later, under the
    JSON contract boundary in §3, remains an open owner decision in
@@ -207,5 +222,6 @@ document rather than trailing off. The build session's instructions are
    carrying an explicit revert-and-record escape hatch.
 4. **The working-code findings ship regardless of the rest**: the
    free-trending gate ordering (`portfolio/evidence.ts:595`), the dead
-   `undici` dependency, the Cito retirement check, and the stale section and
-   project counts.
+   `undici` dependency, the Cito retirement check, the stale section and
+   project counts, and the high-severity Dependabot alert on the default
+   branch. The program closes with a full wiring review of the running app.

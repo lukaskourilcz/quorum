@@ -30,6 +30,15 @@ Read in this order before writing any code:
   origin main && git merge origin/main`, run the gates once as a baseline,
   and re-check §1.1 against the tree. Line references here were true when
   this was written; where the tree has drifted, the tree wins.
+- **The work is cut into GitHub issues.** Twelve issues on this repository,
+  `SI-01` through `SI-12`, each a scoped increment that ends with the gates
+  green and the work merged to `main` — Vercel redeploys from `main`, so
+  every closed issue is a live deploy. Work them strictly in title order,
+  one at a time: read the issue, do the work on a short-lived branch, run
+  the gates, merge, close the issue with a short comment naming what was
+  verified in the running app. This document is the contract the issues
+  reference; if an issue and this document ever disagree, the issue is
+  newer and wins.
 - **Commit small and often.** One task, one commit, in the order this document
   gives. A commit body names what changed and what was measured or verified,
   in plain prose — apply the `stop-slop` skill to every body. Never batch a
@@ -149,9 +158,9 @@ room falls back to the accumulated-day state, not to dark.
 
 **D5 — the work travels.** The point of the change: the day must visibly
 connect. Between and across beats, recorded kinds of work move along the
-geometry that already exists (see 1.3). Nothing else on the plan gains
-motion; the west question-bank corridor stays still forever, as documented in
-the plan source.
+plan's geometry (see 1.3). Nothing else on the plan gains motion; the west
+question-bank corridor stays still forever, as documented in the plan
+source.
 
 **D6 — the day ends by itself.** After the last beat's travel rests, hold the
 finished picture for about a second, then dissolve back to ambient. The
@@ -183,6 +192,53 @@ opposite behaviour on both counts — the replay state persists behind an open
 room and the button renders over it — so this is a change to make, not a
 behaviour to preserve.)
 
+**D10 — outputs travel as envelopes, in their venture's hue.** Whenever a
+room produces an output, the glyph that travels is an envelope, filled with
+the producing venture's colour (`room.color` / `slot.color`), at tag scale.
+One envelope silhouette for the whole plan; the fill is what says whose work
+it is. Two deliberate exceptions keep their own vocabulary: FightAIQ's
+record slip through the shared wall, and GoVIRAL's trend-signal pulse along
+the green line — a signal is not a package. And an envelope must pass
+through every phase of its journey correctly: each leg renders in order,
+the envelope visibly enters and leaves each station, and it never teleports,
+skips a leg, or arrives before the leg before it has finished.
+
+**D11 — the two-envelope pipeline.** Every room that produces articles sends
+two envelopes. One goes to the loading dock and ships to its magazine
+through the east wall, as the drawing always promised. The other goes to the
+Design Lab (the workshop — see D13), which renders the social-media
+content, then sends it on to GoVIRAL, which launches it toward the social
+platforms. The platforms do not exist yet, and that is accepted: the
+performance shows the designed pipeline, and the spec amendment decides how
+the platform edge is drawn. marketingShark's daily output is part of the
+same pipeline: two envelopes a day with text contents, both to the Design
+Lab, each rendered into a social post and passed to GoVIRAL for launch.
+
+**D12 — GoVIRAL grows, and gains subrooms.** The room is too small for its
+new station role (170 plan units wide today). Enlarge it and draw subrooms
+inside it — arrival from the Design Lab, preparation, launch toward the
+platforms — so an envelope visibly moves through the room rather than
+vanishing into it. This is a geometry change to the spec's §3: re-balance
+the bottom rank, re-transcribe the doors, note anchors and GoVIRAL's green
+line, and keep every rule of the drawing (one door per room onto the spine,
+gaps are openings, no captions restating geometry).
+
+**D13 — Carousel Studio becomes the Design Lab.** It no longer makes only
+carousels — it renders posts, and with D14, stories — so its reader-facing
+name changes to **Design Lab** everywhere a reader sees it: the plan label,
+the room view, the panel copy, the compact key, and any site page or public
+document that names it. Internal identifiers do not move: the
+`carousel-studio` venture key, the `@boardlessai/carousel-studio` package,
+config keys, state paths and workflow allowlists all stay, exactly as the
+Caught Up → DNESKAi rename kept the venture id while the readers' name
+changed. That precedent is the rule here.
+
+**D14 — the Design Lab renders stories.** Add an Instagram-story format to
+the studio: 9:16, 1080 × 1920, deterministic and seeded like every other
+render, brand-tokened, with at least one working template, served by the
+same preview route family and covered by the studio's tests. This is what
+makes the new name true — the lab renders carousels, posts and stories.
+
 ## 1.3 The choreography
 
 The performance is a sequence of **beats**, one per slot in `data.slots`, in
@@ -198,13 +254,13 @@ blindly, but the flows themselves are decided:
 
 | Beat's room | What leaves, and where it goes |
 | --- | --- |
-| Board HQ (three sittings) | A summary square leaves the door gap, drops into the spine, and fades east along the corridor — the board commissions, it does not ship. |
-| DNESKAi (edition, product) | A summary square exits the door, joins the chase at x 700, travels the dashed line to x 1420 while the chase dashes march, and enters the workshop. The workshop brightens and its disc goes to work. A sealed box (the bench's own glyph) then crosses the roller-door span onto the bench, moves to the lower-middle bay (y 620), and exits the east wall along the y 660 courier arrow, fading at the DNESKAI address. |
-| MMA Files (editorial, both article desks) | Same chase-to-workshop-to-bench journey, exiting through the y 760 courier arrow and fading at the MMA FILES address (bay y 720). |
-| FightAIQ (its slots) | A record glyph passes through the shared-wall door gap (the wall break at x 1090, y 240–300) into the MMA Files desk. It never touches the corridor — the room has no corridor door, and that asymmetry is the drawing's own argument. |
-| marketingShark (07:00) | Summary square to the workshop via the chase. The drafted carousels stay on the workshop's shelves — drafts are not deliveries, so nothing crosses the dock. |
-| GoVIRAL (13:00) | No package. Its green dashed line pulses toward the two magazine spine stubs — the signal travels, nothing is carried. |
-| Titty Tuesdays | A box reaches the top bay (y 526) and rests there. That bay lines up with no exit; the drawing already says this edge is not a delivery, and the performance repeats the claim. |
+| Board HQ (three sittings) | A summary envelope in the company hue leaves the door gap, drops into the spine, and fades east along the corridor — the board commissions, it does not ship. |
+| DNESKAi (edition, product) | Two envelopes in DNESKAi's hue (D11). The first joins the chase at x 700, rides the dashed line into the Design Lab while the chase dashes march, is worked (the room brightens, the disc turns), crosses the roller-door span onto the bench, moves to the lower-middle bay (y 620), and exits the east wall along the y 660 courier arrow, fading at the DNESKAI address. The second also enters the Design Lab, is rendered into social content, then travels on to GoVIRAL's arrival subroom and leaves through its launch edge toward the platforms. |
+| MMA Files (editorial, both article desks) | The same two-envelope pattern in the MMA hue: one through the Design Lab to the bench, out the y 760 courier arrow to the MMA FILES address (bay y 720); one through the Design Lab to GoVIRAL and out its launch edge. |
+| FightAIQ (its slots) | A record slip passes through the shared-wall door gap (the wall break at x 1090, y 240–300) into the MMA Files desk. It never touches the corridor — the room has no corridor door, and that asymmetry is the drawing's own argument. |
+| marketingShark (07:00) | Two envelopes with text contents in the shark hue (D11), both via the chase to the Design Lab; each is rendered into a social post and continues to GoVIRAL for launch. Nothing of marketingShark's crosses the dock. |
+| GoVIRAL (13:00) | Its own beat keeps the trend-signal pulse along the green dashed line toward the two magazine spine stubs — the signal travels, nothing is carried. Through the rest of the day GoVIRAL is a station (D12): envelopes arriving from the Design Lab move through its subrooms and leave through its launch edge toward the platforms. |
+| Titty Tuesdays | An envelope reaches the top bay (y 526) and rests there. That bay lines up with no exit; the drawing already says this edge is not a delivery, and the performance repeats the claim. |
 
 Rules the choreography must keep:
 
@@ -214,16 +270,18 @@ Rules the choreography must keep:
   still shows through the notes: the note that hangs as each beat closes is
   today's real note (`quiet`, `sent`, `missed`, the empty clip), unchanged.
   Ambient keeps `litRoomForHour` and its gated-slot rule exactly as is.
-- **The workshop brightens while occupied.** Derive its working state from
-  travelers being inside it during the performance rather than from the
-  current `note === "sent"` hour check; ambient keeps the existing behaviour.
+- **The Design Lab brightens while occupied.** Derive its working state from
+  envelopes being inside it during the performance rather than from the
+  current `note === "sent"` hour check; ambient keeps the existing
+  behaviour. GoVIRAL's subrooms light the same way while an envelope moves
+  through them.
 - **Pacing.** Tag hold ≥ 1.2 s (aim 1.4–1.7 s per beat); travel legs roughly
-  1.2–2.4 s each; the full performance lands between 30 and 45 seconds. The
-  spec amendment pins the numbers.
+  1.2–2.4 s each; second envelopes and downstream legs overlap later beats
+  the way the real day pipelines; the full performance lands between 30 and
+  50 seconds. The spec amendment pins the numbers.
 - **Nothing animates a cost, and nothing invents a record.** Travelers are
-  the drawing's own glyph vocabulary (summary square, sealed box, signal
-  pulse, record slip) at tag scale. No currency, no counts, no fabricated
-  hours.
+  envelopes in venture hues (D10), plus the two exceptions it names. No
+  currency, no counts, no fabricated hours.
 
 ## 1.4 Implementation constraints
 
@@ -301,19 +359,25 @@ and regenerating one is an owner decision, not a build task.
 ## 1.6 Order of work
 
 1. **Amend the design spec first** — `docs/WORKFLOWS-MAP-DESIGN-SPEC.md`:
-   rewrite §6 (the replay) around D1–D7, add the choreography table, the tag
-   and brightness specs with measured contrast pairs in §12, new §9 motion
-   rows, new §10 reduced-motion rows, and extend the §13 self-check. Cite the
-   decision numbers. One commit, before any component changes — this section
-   was built design-pass-then-build-pass, and stays that way.
+   rewrite §6 (the replay) around D1–D14: the choreography table, the tag
+   and brightness specs with measured contrast pairs in §12, the §3 geometry
+   re-transcription for GoVIRAL's growth and subrooms (D12), the envelope
+   glyph and the platform edge (D10, D11), the DESIGN LAB label (D13), new
+   §9 motion rows, new §10 reduced-motion rows, and an extended §13
+   self-check. Cite the decision numbers. One commit, before any component
+   changes — this section was built design-pass-then-build-pass, and stays
+   that way.
 2. Timeline model + unit tests (pure module).
 3. Strip removal + button toggle (D1), with the reduced-motion and compact
    paths reworked.
 4. Beats: lighting, brightness (D4), tags (D3).
-5. Travel legs, flow by flow, with the workshop occupancy rule.
-6. End-of-day dissolve (D6), stop-teardown hardening, and the room-open
+5. Geometry: GoVIRAL's growth and subrooms (D12), the DESIGN LAB label on
+   the plan (D13), and the whiteboard reframe (D8) with its screenshot
+   evidence.
+6. Envelopes: every flow in the table, venture hues, every-leg correctness
+   (D10, D11), and the Design Lab and GoVIRAL occupancy rules.
+7. End-of-day dissolve (D6), stop-teardown hardening, and the room-open
    interrupt (D9).
-7. The whiteboard reframe (D8) with its screenshot evidence.
 8. Full gate run.
 
 Each step is at least one commit. If a step reveals the previous one wrong,
@@ -405,26 +469,65 @@ session starts ahead.
 
 ---
 
+# Part Four — the Design Lab
+
+**4.1 The reader-facing rename (D13).** Sweep every surface a reader sees —
+the plan label, the room view, panel copy, the compact key, site pages,
+public docs — to **Design Lab**, and leave every internal identifier
+untouched: venture key, package name, config keys, state paths, workflow
+allowlists. Grep for the old name afterwards and account for every remaining
+hit in the commit body (internal identifiers are the expected survivors).
+
+**4.2 The story format (D14).** In `studio/`: a 9:16, 1080 × 1920
+Instagram-story format, deterministic and seeded like the existing renders,
+brand-tokened, at least one working template, served through the same
+preview route family the other formats use, covered by the studio's tests
+and `lint:hooks` if hook copy is involved. The render contract's consumers
+(site preview routes, admin decks, the outbox path) must keep passing their
+tests; extending a contract is fine, breaking its readers is not.
+
+# Part Five — the alert and the final sweep
+
+**5.1 The Dependabot alert.** The repository carries one high-severity
+Dependabot alert on the default branch
+(`https://github.com/lukaskourilcz/quorum/security/dependabot/10`). Read the
+alert, upgrade the affected dependency within the workspace's constraints,
+run the full gates, and note the package and versions in the commit body. If
+the fix requires a major-version jump with real breakage, land the safest
+available remediation and record the remainder in `NEEDED.md`.
+
+**5.2 The full wiring review.** After everything above is merged: one
+sweep over the running app to confirm all parts are fully wired and nothing
+is dead. Click through every home-page section, every room view, every
+panel, the performance end to end (start, stop, room-press reset, reduced
+motion, compact), `/calendar`, `/results`, `/standups`, `/ventures`,
+`/company`, and the admin preview routes for every studio format including
+the new story. Run every gate one final time. Fix small breaks on the spot;
+anything larger gets a written `NEEDED.md` entry rather than a silent pass.
+The sweep's commit body lists what was walked and what was found.
+
 # Out of scope
 
 Everything not named above. In particular: no new runtime dependency
 anywhere in Part One; no animation or rendering library of any kind; no
-Python or second-toolchain work; no new pages or sections; no orchestrator
-behaviour changes beyond 2.1–2.3; no brand-token or visual-system changes
-outside the Workflows section; no touching the magazines' datasets, the
-treasury, or any guard. If a task seems to require any of these, the task is
-wrong — stop and record the conflict instead of widening the scope.
+Python or second-toolchain work; no new pages; no orchestrator behaviour
+changes beyond 2.1–2.3; no brand-token or visual-system changes outside the
+Workflows section and the Design Lab rename's reader-facing surfaces; no
+renaming of internal identifiers anywhere; no touching the magazines'
+datasets, the treasury, or any guard. If a task seems to require any of
+these, the task is wrong — stop and record the conflict instead of widening
+the scope.
 
 # Definition of done
 
-- Parts One, Two and Three implemented; every gate green; commit history
-  small and readable.
+- Issues `SI-01` through `SI-12` all closed, each merged to `main` with its
+  gates green; commit history small and readable.
 - `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` amended ahead of the build commits.
-- `NEEDED.md` updated at session end: tick the 2026-08-08 review items this
-  session completes, and add any finding this prompt told you to record.
-- Branch pushed and merged to `main` per `CLAUDE.md`, so Vercel redeploys.
-- The site runs: `pnpm -C site dev` (or the built output) shows the day
-  performing — one button, the whole day, tags at the rooms, work walking
-  the building, whiteboard framed — pressing the button again stops it, and
+- `NEEDED.md` updated as issues close: tick the 2026-08-08 review items this
+  work completes, and add any finding this contract told you to record.
+- The site runs: the deployed `main` shows the day performing — one button,
+  the whole day, tags at the rooms, venture-hued envelopes walking every leg
+  of their journeys, the two-envelope pipeline through the Design Lab and
+  GoVIRAL, whiteboard framed — pressing the button again stops it, and
   opening a room mid-performance resets it so the plan returns to ambient
   (D9).
