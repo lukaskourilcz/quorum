@@ -74,7 +74,7 @@ describe("hook assignment through the brain", () => {
       itemId: "q-1",
       vertical: "dev",
       languages: ["en", "cs"],
-      quiz: QUIZ
+      subject: QUIZ
     });
 
     expect(result.assignment.hookId).not.toBeNull();
@@ -93,7 +93,7 @@ describe("hook assignment through the brain", () => {
       itemId: "q-1",
       vertical: "dev" as const,
       languages: ["en", "cs"] as const,
-      quiz: QUIZ
+      subject: QUIZ
     };
     const [first, second] = await Promise.all([assignPackHook(input), assignPackHook(input)]);
     expect(first.assignment).toEqual(second.assignment);
@@ -102,24 +102,45 @@ describe("hook assignment through the brain", () => {
     expect(other.assignment.seed).not.toBe(first.assignment.seed);
   });
 
-  it("falls back to no-hook for news and mma, and says which kind of empty it was", async () => {
-    for (const surface of ["news", "mma"] as const) {
-      const result = await assignPackHook({
-        stateRoot: await root(),
-        surface,
-        channel: `${surface}-carousel`,
-        date: "2026-08-08",
-        itemId: "item-1",
-        vertical: "dev",
-        languages: ["cs"]
-      });
-      expect(result.assignment.hookId).toBeNull();
-      expect(result.assignment.noHookReason).toBe("empty-library");
-      expect(result.assignment.eligibleIds).toEqual([]);
-      // A fallback is a logged outcome, not an absence: it still carries a reproducible seed.
-      expect(result.assignment.seed).toMatch(/^[a-f0-9]{64}$/u);
-      expect(channelRecordFor(result.assignment, null).fallback).toBe("empty-library");
-    }
+  it("assigns for news from the edition's own frontmatter", async () => {
+    const result = await assignPackHook({
+      stateRoot: await root(), surface: "news", channel: "caught-up-carousel",
+      date: "2026-08-08", itemId: "2026-08-08-item", vertical: "dev", languages: ["cs"],
+      subject: { subject: { sourceCount: 13, primarySourceCount: 0, signalStrength: 84, tags: ["ai"], hasNumber: true } }
+    });
+    expect(result.assignment.hookId).not.toBeNull();
+    expect(result.assignment.eligibleIds).toContain(result.assignment.hookId);
+    // 84 clears the weight gate and a figure is present, so both gated pools are open.
+    expect(result.assignment.eligibleIds).toContain("day-with-weight");
+    expect(result.assignment.eligibleIds).toContain("one-number");
+  });
+
+  it("fails a news weight gate on an item nobody scored", async () => {
+    const result = await assignPackHook({
+      stateRoot: await root(), surface: "news", channel: "caught-up-carousel",
+      date: "2026-08-08", itemId: "unscored", vertical: "dev", languages: ["cs"],
+      subject: { subject: { sourceCount: 13, primarySourceCount: 0, signalStrength: null, tags: [], hasNumber: false } }
+    });
+    // A weight claim on an unscored item licenses nothing, so the gate fails rather than
+    // defaulting past it — and the always pool still carries the pack.
+    expect(result.assignment.eligibleIds).not.toContain("day-with-weight");
+    expect(result.assignment.eligibleIds).not.toContain("one-number");
+    expect(result.assignment.hookId).not.toBeNull();
+  });
+
+  it("gates an MMA preview apart from a recap, which is the tense trap", async () => {
+    const at = async (format: string) => (await assignPackHook({
+      stateRoot: await root(), surface: "mma", channel: "mma-files-carousel",
+      date: "2026-08-08", itemId: format, vertical: "dev", languages: ["cs"],
+      subject: { subject: { format, fighterCount: 2, hasEvent: true, sourceCount: 3 } }
+    })).assignment.eligibleIds;
+
+    const preview = await at("fight-week-preview");
+    const recap = await at("post-event-recap");
+    expect(preview).toContain("before-the-bell");
+    expect(preview).not.toContain("after-the-fact");
+    expect(recap).toContain("after-the-fact");
+    expect(recap).not.toContain("before-the-bell");
   });
 });
 

@@ -1,0 +1,14 @@
+[
+  {"id":"whole-day","cooldownDays":8,"truthRequires":["always"],"variants":{"dev":{"en":"A whole day in tech, without the scroll.","cs":"Celý den v technologiích, bez scrollování."}}},
+  {"id":"what-changed","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"What changed. Not what anyone thinks about it.","cs":"Co se změnilo. Ne co si o tom kdo myslí."}}},
+  {"id":"sources-under-it","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"The sources sit under it. Check them.","cs":"Zdroje jsou přímo pod tím. Ověř si to."}}},
+  {"id":"matters-too","cooldownDays":8,"truthRequires":["always"],"variants":{"dev":{"en":"Not just what happened. Why it matters too.","cs":"Nejen co se stalo. Taky proč na tom záleží."}}},
+  {"id":"uncertainty-named","cooldownDays":12,"truthRequires":["always"],"variants":{"dev":{"en":"What is still uncertain is written down.","cs":"Co ještě není jisté, je tam napsané."}}},
+  {"id":"no-takes","cooldownDays":10,"truthRequires":["always"],"variants":{"dev":{"en":"No takes. The events and what they change.","cs":"Žádné komentáře. Události a co mění."}}},
+  {"id":"read-once","cooldownDays":8,"truthRequires":["always"],"variants":{"dev":{"en":"Read it once. Stay current for the day.","cs":"Přečti jednou. Celý den jsi v obraze."}}},
+  {"id":"czech-first","cooldownDays":12,"truthRequires":["always"],"variants":{"dev":{"en":"Written in Czech, not translated into it.","cs":"Psané česky. Ne přeložené do češtiny."}}},
+  {"id":"day-with-weight","cooldownDays":12,"truthRequires":["signalStrengthAtLeast:80"],"variants":{"dev":{"en":"A day with real weight, not filler.","cs":"Den, který má váhu. Žádná vata."}}},
+  {"id":"earns-the-minutes","cooldownDays":12,"truthRequires":["signalStrengthAtLeast:80"],"variants":{"dev":{"en":"Today earns the two minutes.","cs":"Dneska ty dvě minuty stojí za to."}}},
+  {"id":"one-number","cooldownDays":10,"truthRequires":["hasNumber"],"variants":{"dev":{"en":"One number here changes the picture.","cs":"Jedno číslo tady mění celý obrázek."}}},
+  {"id":"figure-not-vibe","cooldownDays":10,"truthRequires":["hasNumber"],"variants":{"dev":{"en":"There is a figure in this one, not a vibe.","cs":"Je v tom číslo, ne dojem."}}}
+]

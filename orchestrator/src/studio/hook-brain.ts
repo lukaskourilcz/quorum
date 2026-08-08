@@ -7,6 +7,8 @@ import {
   type Hook,
   type Language,
   type Library,
+  type MmaContext,
+  type NewsContext,
   type QuizContext,
   type Surface,
   type Vertical
@@ -23,8 +25,11 @@ export interface HookBrainInput {
   readonly itemId: string;
   readonly vertical: Vertical;
   readonly languages: readonly Language[];
-  /** The quiz surface's subject. Absent for surfaces whose libraries are not written yet. */
-  readonly quiz?: QuizContext;
+  /**
+   * The surface's own subject. Required once that surface has a library — a gate cannot hold or
+   * fail against nothing, and passing a default would license a claim nobody checked.
+   */
+  readonly subject?: QuizContext | NewsContext | MmaContext;
 }
 
 export interface HookBrainResult {
@@ -54,7 +59,7 @@ export async function assignPackHook(input: HookBrainInput): Promise<HookBrainRe
 
   const result = assignHook({
     library,
-    ...(input.quiz ? { context: input.quiz } : {}),
+    ...(input.subject ? { context: input.subject } : {}),
     identity,
     vertical: input.vertical,
     history: historyFor(channels, input.channel)

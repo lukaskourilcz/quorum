@@ -371,14 +371,28 @@ export async function composeEditionSocialPack(input: {
   // wiring it later is the point: the fallback is logged and countable now, so the KPI can read a
   // real number instead of an absence, and authoring news.hooks.json changes a data file rather
   // than this code path. See docs/hooks/05-surfaces.md.
+  const newsFrontmatter = (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter;
   const hookDecision = await assignPackHook({
     stateRoot: input.stateRoot,
     surface: "news",
     channel: "caught-up-carousel",
     date: input.editionPackage.date,
-    itemId: (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter.slug,
+    itemId: newsFrontmatter.slug,
     vertical: "dev",
-    languages: ["cs"]
+    languages: ["cs"],
+    subject: {
+      subject: {
+        sourceCount: newsFrontmatter.sources.length,
+        primarySourceCount: newsFrontmatter.sources.filter((source) => source.classification === "primary").length,
+        // Optional in the schema and unscored on some items. Null fails a threshold gate rather
+        // than defaulting past it: a weight claim on an item nobody scored licenses nothing.
+        signalStrength: newsFrontmatter.signal_strength ?? null,
+        tags: newsFrontmatter.tags,
+        // Read from the title and what_changed, which is where a figure the hook could point at
+        // would actually appear. A digit inside a slug or a URL is not a figure in the story.
+        hasNumber: /\d/u.test([newsFrontmatter.title, ...newsFrontmatter.what_changed].join(" "))
+      }
+    }
   });
   const hookChannelsPath = await writeHookChannels(
     input.stateRoot,

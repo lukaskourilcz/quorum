@@ -9,9 +9,11 @@ easy to get wrong because they cross a repository boundary.
 `docs/hooks/` is the canonical knowledge base for hooks and short-form viral copy across the
 whole repository family: the devShark and geoShark in-app hooks, marketingShark's carousel
 slide-1 lines, and social copy generally. The libraries sit beside the Carousel Studio engine in
-`studio/hooks/`. They front the carousels this repository posts; the quiz apps deliberately
-receive no hook copy (see `docs/hooks/06-hook-brain.md`). A venture that does grow a hook
-library writes it here, beside the engine, never in its own repo.
+`studio/hooks/`, one library per surface — quiz, news and mma. They front the carousels this
+repository posts; the quiz apps deliberately receive no hook copy (see
+`docs/hooks/06-hook-brain.md`). A new surface's library is written here, beside the engine,
+never in its own repo — and its first job is enumerating the metadata that surface's items
+actually carry, because a gate that cannot read a field licenses nothing.
 
 **Never copy a hook doc or a hook library into a venture repository.** A forked playbook drifts
 within weeks, and the two libraries that existed before this was written had already diverged:
