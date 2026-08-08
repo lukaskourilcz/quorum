@@ -59,6 +59,24 @@ export interface WorkflowsRole {
   department: string;
 }
 
+/**
+ * The most recent thing a room produced.
+ *
+ * For the two magazine rooms this is the article itself, with enough to draw the card a link
+ * preview would draw. `url` and `image` are only ever set from what the delivery receipt and the
+ * package actually record — an article nobody wrote down the address of gets a title and a date
+ * and no link, because a link this file invented would be a link to nowhere.
+ */
+export interface WorkflowsOutput {
+  /** What it is: `article` draws a link preview, `decision` draws a line of prose. */
+  kind: "article" | "decision";
+  title: string;
+  date: string;
+  url: string | null;
+  /** The published thumbnail, derived from the recorded address. `null` when there is none. */
+  image: string | null;
+}
+
 export interface WorkflowsRoom {
   key: OfficeProjectKey;
   name: string;
@@ -73,6 +91,8 @@ export interface WorkflowsRoom {
   operates: string;
   /** The active roles assigned to it, from `ventures` in the agent registry. */
   roles: WorkflowsRole[];
+  /** The most recent thing this room produced, or `null` when nothing is on record. */
+  latest: WorkflowsOutput | null;
 }
 
 /**

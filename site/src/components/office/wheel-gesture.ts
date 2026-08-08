@@ -37,6 +37,14 @@ export const GESTURE_GAP_MS = 140;
  */
 export const MOMENTUM_DECAY = 0.75;
 
+/**
+ * How much larger than the previous event a delta must be to count as a new push.
+ *
+ * Momentum only ever decays. Anything moving faster than the event before it has energy the
+ * previous gesture could not have given it, so the fingers are back on the pad.
+ */
+export const MOMENTUM_RISE = 1.15;
+
 export interface WheelGestureState {
   /** No event before this instant may act. */
   lockUntil: number;
@@ -44,10 +52,20 @@ export interface WheelGestureState {
   lastWheelAt: number;
   /** The fastest event of the gesture in progress, which later ones are measured against. */
   peakDelta: number;
+  /** The previous event's magnitude, so a rising one can be told from a decaying one. */
+  lastDelta: number;
+  /**
+   * Where the lock would end without the extensions momentum keeps adding to it.
+   *
+   * Coasting events push `lockUntil` forward a gesture-gap at a time, which is what stops a long
+   * tail from acting. That extension has to be droppable: a reader who pushes again mid-tail is
+   * otherwise held out for as long as the tail keeps arriving, and the push is lost.
+   */
+  actionLockUntil: number;
 }
 
 export function createWheelGestureState(): WheelGestureState {
-  return { lockUntil: 0, lastWheelAt: 0, peakDelta: 0 };
+  return { lockUntil: 0, lastWheelAt: 0, peakDelta: 0, lastDelta: 0, actionLockUntil: 0 };
 }
 
 /**
@@ -58,8 +76,26 @@ export function createWheelGestureState(): WheelGestureState {
  */
 export function shouldWheelAct(state: WheelGestureState, now: number, deltaY: number): boolean {
   const magnitude = Math.abs(deltaY);
-  if (now - state.lastWheelAt > GESTURE_GAP_MS) state.peakDelta = 0;
+  if (now - state.lastWheelAt > GESTURE_GAP_MS) {
+    state.peakDelta = 0;
+    state.lastDelta = 0;
+  }
+  /*
+   * A rising delta ends the gesture that was coasting, even though the events never stopped.
+   *
+   * Without this the peak of a hard flick outlived it: a reader who pushed again while the tail
+   * was still arriving pushed more gently than they had flicked, the event measured below three
+   * quarters of the old peak, and it was discarded as momentum. The page ignored the first scroll
+   * and moved on the second — which is exactly what it felt like.
+   */
+  if (state.lastDelta > 0 && magnitude > state.lastDelta * MOMENTUM_RISE) {
+    state.peakDelta = 0;
+    // Drop what the tail added, keep what the last action set. If the action's own lock has run
+    // out, this push is free to move the page; if it has not, the one-room-per-gesture rule holds.
+    state.lockUntil = state.actionLockUntil;
+  }
   state.lastWheelAt = now;
+  state.lastDelta = magnitude;
   state.peakDelta = Math.max(state.peakDelta, magnitude);
 
   if (now < state.lockUntil) {
@@ -86,4 +122,5 @@ export function shouldWheelAct(state: WheelGestureState, now: number, deltaY: nu
 /** Record that the caller acted, and for how long the wheel is now ignored. */
 export function armWheelGesture(state: WheelGestureState, now: number, lockMs: number): void {
   state.lockUntil = now + lockMs;
+  state.actionLockUntil = state.lockUntil;
 }

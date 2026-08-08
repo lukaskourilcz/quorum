@@ -307,6 +307,13 @@ img {
    No `will-change` anywhere here. The plates already exhausted the compositor
    once on this page; a permanently promoted 1760-unit SVG would do it again. */
 
+@keyframes bai-tip {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 3px) scale(0.97);
+  }
+}
+
 @keyframes wf-draw {
   from {
     stroke-dashoffset: 1;
