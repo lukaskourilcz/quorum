@@ -3,10 +3,16 @@
   "overrides": [
     {
       "venture": "mma-files",
+      "slug": "ufc-valentina-shevchenko",
+      "style": "editorial",
+      "changedAt": "2026-08-08T23:37:25.406Z"
+    },
+    {
+      "venture": "mma-files",
       "slug": "ufc-event-ufc-fight-night-gamrot-vs-salkilld",
-      "style": "mesh",
-      "changedAt": "2026-08-08T23:36:57.976Z"
+      "style": "aurora",
+      "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-08T23:36:57.976Z"
+  "updatedAt": "2026-08-08T23:37:25.406Z"
 }
