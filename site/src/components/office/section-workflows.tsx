@@ -10,6 +10,7 @@ import {
   beatAt,
   buildTimeline,
   elapsedForBeat,
+  legsAt,
   notesAt
 } from "@/lib/office-workflows-timeline";
 import { ROOMS, WorkflowsPlan, roomViewBox, type PlanPlace } from "@/components/office/workflows-plan";
@@ -219,6 +220,12 @@ export function SectionWorkflows({
    * `litRoomForHour` and its gated-slot rule exactly as it was.
    */
   const litRoom = performing ? beat?.room ?? null : ambientLitRoom;
+
+  /** Everything in flight right now. Empty at rest — ambient has no travellers (D5). */
+  const legs = useMemo(
+    () => (elapsed === null ? [] : legsAt(timeline, elapsed)),
+    [timeline, elapsed]
+  );
 
   const notes = useMemo(
     () => (elapsed === null ? data.slots.map((slot) => slot.note) : notesAt(timeline, data.slots, elapsed)),
@@ -455,6 +462,7 @@ export function SectionWorkflows({
           animate={animate}
           beat={beat ? { room: beat.room, tag: beat.tag } : null}
           compact={compact}
+          legs={reduceMotion ? [] : legs}
           fill={!compact}
           focus={focus}
           litRoom={litRoom}

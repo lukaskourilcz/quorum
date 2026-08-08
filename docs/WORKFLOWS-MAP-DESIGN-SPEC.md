@@ -709,9 +709,19 @@ example `06:00 · Morning board`.
 | --- | --- |
 | Type | mono 19 units, weight 500, tracking .06em |
 | Fill | `#f4f4f5` |
-| Position | `text-anchor: middle` at the room's centre x, at `labelY + 30` |
+| Plate | `#09090b` at `fill-opacity: .88`, r 4, 28 units tall, stroked 1 in the room's own hue at `stroke-opacity: .5` |
+| Width | `tag.length × 11.6 + 22` — mono advances predictably and there is no text metric at render time |
+| Position | `text-anchor: middle` on the room's centre x, plate at `labelY + 16`, baseline at `labelY + 36`; the centre is clamped so the plate never leaves the drawing |
 | Enter | opacity 0 → 1 over 180ms, ease-out |
 | Leave | opacity 1 → 0 over 220ms, ease-in |
+
+**The plate is not decoration.** `08:00 · Fight data check` is 24 characters,
+about 300 units at this size — twice FightAIQ's own 150. Every long label on a
+narrow room lay across two neighbours as bare text and read as belonging to
+none of them. With the plate the tag still centres on its room and still says
+exactly what the registry says, and where it overhangs it reads as a label
+sitting *on* the drawing rather than tangled in it. Its border is the room's
+hue, which is the second thing saying whose beat this is.
 
 19 units is the room-label size, and the floor beneath it is the room's own
 active fill, so the pair is measured in §12: the worst case is `#f4f4f5` on

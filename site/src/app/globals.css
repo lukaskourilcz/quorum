@@ -386,6 +386,31 @@ img {
   }
 }
 
+/* The travellers. Transforms and opacity only, and no `will-change` anywhere near them. */
+@keyframes wf-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* A dashed line marches by walking its own dash pattern, which costs no layout. */
+@keyframes wf-march {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+/* Titty Tuesdays collects: the lane brightens toward the room and carries nothing. */
+@keyframes wf-pull {
+  0%,
+  100% {
+    stroke-opacity: 0.55;
+  }
+  50% {
+    stroke-opacity: 1;
+  }
+}
+
 @keyframes wf-bounce {
   from {
     opacity: 0;
