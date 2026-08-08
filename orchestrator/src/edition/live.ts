@@ -23,8 +23,10 @@ import { loadSourceRegistry } from "../sources/registry.js";
 import type { SourceRegistry } from "../sources/types.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
-import { discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
-import { illustrativeScenePhoto } from "../images/illustrative-scenes.js";
+import { ImageProgramBudget, readImageProgramSpendToday } from "../images/budget.js";
+import { selectEditionHero, type HeroLadderResult } from "../images/ladder.js";
+import { recordSkippedProviders } from "../images/skipped-providers.js";
+import { storeImageSelection } from "../images/verdict-store.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
 
@@ -277,35 +279,28 @@ export async function runLiveEdition(input: {
     });
     report = reporter.build("no_edition", "no_edition");
   } else {
-    // Discovery runs inside production now, after curation, on the phrase the picked story
-    // resolves to. It used to run here, which is before HERALD has chosen anything: the only
-    // basis available at this point is the whole day's digest, so every archive was asked what
-    // the morning was about rather than what the article is about. The keys and the network
-    // stay here; only the moment of asking moved.
-    const resolveImageCandidates = async (subjectQuery: string): Promise<readonly LicensedPhotoCandidate[]> => {
-      // Rung one: a hand-reviewed scene photograph for the day's concept, resolved by file name.
-      // The MMA desk has run this design since launch and it is why its covers are predictable;
-      // this edition's photograph used to depend entirely on what a live search happened to rank
-      // first that morning, in an order nobody had looked at and which moves between runs.
-      const scene = await illustrativeScenePhoto({ subjectQuery, seed: input.date }).catch(() => null);
-      if (scene) return [scene];
-      // Rung two: the live search, exactly as before. Rung three is the FRAME plate.
-      const imageSearch = await discoverLicensedPhotos({
-        query: subjectQuery,
-        pexelsKey: process.env.PEXELS_API_KEY,
-        pixabayKey: process.env.PIXABAY_API_KEY
+    // The ladder is walked inside production now, after the article exists. It used to run
+    // here, which is before HERALD has chosen anything: the only basis available at this point
+    // is the whole day's digest, so every archive was asked what the morning was about rather
+    // than what the article is about, and the writer then picked from captions. The keys, the
+    // network and the money stay here; the moment of asking, and the look before attaching,
+    // moved to where the article is.
+    const imageBudget = new ImageProgramBudget(await readImageProgramSpendToday(root, input.now));
+    let imageSelection: { slug: string; result: HeroLadderResult } | null = null;
+    const selectHero: NonNullable<EditionProductionInput["selectHero"]> = async (request) => {
+      const result = await selectEditionHero({
+        venture: "caught-up",
+        stateRoot: root,
+        cycleId: input.cycleId,
+        budget: imageBudget,
+        article: request.article,
+        brief: request.brief,
+        seed: input.date,
+        subjectQuery: request.subjectQuery
       });
-      if (imageSearch.skippedProviders.length > 0) {
-        const relative = "docs/NEEDED.md";
-        const current = await readText(repoRoot, relative, "# Needs your help now\n");
-        const additions = imageSearch.skippedProviders
-          .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
-          .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
-        if (additions.length > 0) {
-          await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
-        }
-      }
-      return imageSearch.candidates;
+      imageSelection = { slug: request.slug, result };
+      await recordSkippedProviders(result.skippedProviders);
+      return result;
     };
     const gateway = new BudgetedEditionModelGateway(
       input.dependencies?.gateway ?? new AnthropicEditionModelGateway(),
@@ -337,7 +332,7 @@ export async function runLiveEdition(input: {
       gateway,
       reporter,
       socialPackEnabled: input.socialPackEnabled,
-      ...(input.licensedImageSearchEnabled ? { resolveImageCandidates } : {}),
+      ...(input.licensedImageSearchEnabled ? { selectHero } : {}),
       // A tiebreaker for the editor, and nothing more. Absent when no scout has run, which is
       // the normal state until the owner adds APIFY_TOKEN; the editor's gates are identical
       // either way.
@@ -369,6 +364,23 @@ export async function runLiveEdition(input: {
         ...(costUsd === undefined ? {} : { costUsd })
       });
       report = reporter.build("failed", editionPackage.status);
+    }
+    // Recorded whether or not a photograph won, and recorded even when production failed after
+    // the ladder ran. The interesting case for an owner is the one where nothing shipped: this
+    // is where the reasons live.
+    if (imageSelection) {
+      const selection: { slug: string; result: HeroLadderResult } = imageSelection;
+      await storeImageSelection(root, {
+        schemaVersion: "image-selection/1",
+        venture: "caught-up",
+        slug: selection.slug,
+        date: input.date,
+        rung: selection.result.rung,
+        selected: selection.result.candidate?.id ?? null,
+        verdicts: selection.result.verdicts,
+        skippedProviders: [...selection.result.skippedProviders],
+        recordedAt: input.now.toISOString()
+      }).catch(() => undefined);
     }
   }
   // Delivery validation rejects a package the site cannot serve, and rejecting it is right —

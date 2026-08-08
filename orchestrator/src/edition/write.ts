@@ -15,7 +15,6 @@ import { DispatchSchema, WireItemSchema } from "./types.js";
 import { CZECH_EDITORIAL_REGISTER } from "./registers.js";
 import { removeEmptyCzechAdverbs } from "./localize.js";
 import { InvalidModelOutputError } from "./models.js";
-import type { LicensedPhotoCandidate } from "../images/licensed.js";
 import { VISUAL_CONCEPTS, checkVisualBrief, type VisualBrief } from "../images/visual-brief.js";
 
 /** Lowercase ASCII words joined by single hyphens: every tag, and the slug's suffix. */
@@ -55,7 +54,6 @@ const ToolOutputSchema = z.object({
   // Czech heading "Proč právě tento příběh" on every live edition, in the one place on the
   // page where the reader is told why the desk led with this story.
   why_this_story: z.string().trim().min(1).max(280).optional(),
-  image_candidate_index: z.number().int().min(0).max(3).optional(),
   // The visual brief. Optional at the schema boundary because a missing brief is a working
   // state — the tag-derived subject query is still there and still runs — and because a
   // required field the model omits throws away a paid write call.
@@ -146,7 +144,6 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
       items: { type: "string", pattern: SLUG_SOURCE }
     },
     why_this_story: { type: "string" },
-    image_candidate_index: { type: "integer", minimum: 0, maximum: 3 },
     image_search_phrases: { type: "array", minItems: 2, maxItems: 3, items: { type: "string" } },
     visual_concept: { type: "string", enum: [...VISUAL_CONCEPTS] },
     image_negatives: { type: "array", maxItems: 5, items: { type: "string" } },
@@ -630,7 +627,6 @@ function sourcePacket(
   brief: CuratedBrief,
   pickedItems: readonly SourceItem[],
   runnerUpItems: readonly SourceItem[],
-  imageCandidates: readonly LicensedPhotoCandidate[],
   bodies: ReadonlyMap<string, string>
 ): string {
   const picked = pickedItems.map((item) => {
@@ -654,20 +650,9 @@ function sourcePacket(
     title: item.title,
     url: item.url
   }));
-  const images = imageCandidates.slice(0, 4).map((candidate, index) => ({
-    index,
-    provider: candidate.provider,
-    title: candidate.title,
-    thumbnail_url: candidate.thumbnailUrl,
-    width: candidate.width,
-    height: candidate.height,
-    license: candidate.license,
-    author: candidate.author,
-    source_url: candidate.sourceUrl
-  }));
   return wrapUntrustedData(
     "caught-up-writing-packet",
-    JSON.stringify({ brief, picked, runnerUps: runners, licensedImageCandidates: images })
+    JSON.stringify({ brief, picked, runnerUps: runners })
   );
 }
 
@@ -677,7 +662,6 @@ export async function write(
   config: EditionQualityConfig,
   gateway: EditionModelGateway,
   feedback: readonly string[] = [],
-  imageCandidates: readonly LicensedPhotoCandidate[] = [],
   now = new Date(),
   // Injectable so a test never reaches the network; production uses the keyless reader.
   read: (url: string, at: Date) => Promise<string | null> = defaultReadBody
@@ -713,12 +697,11 @@ Trusted output rules:
 - Return the Czech article fields at the tool object's top level; do not wrap or serialize them.
 - Every \`tags\` entry must be a slug: lowercase ASCII words joined by single hyphens, no spaces, capitals or diacritics. Write \`social-media\`, not \`Social Media\`.
 - Every Watchlist item must come from \`runnerUps\`, never from the selected lead-story sources.
-- If licensedImageCandidates is non-empty, set image_candidate_index to the best factual, non-misleading visual fit. Use only its numeric index; do not copy its URLs into article copy.
 
 Approved URLs (exact strings):
 ${[...suppliedUrls].map((url) => `- ${url}`).join("\n")}
 
-${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
+${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
     tool: {
       name: "emit_article",
       description: "Emit the Czech Caught Up feature and supplied-source watchlist.",
@@ -769,9 +752,6 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, imageCandidates, bodies)}`,
         ...(pick?.why ? { supports: [pick.why] } : {})
       };
     }),
-    ...(imageCandidates.length > 0
-      ? { selectedImageCandidateIndex: Math.min(response.value.image_candidate_index ?? 0, imageCandidates.length - 1) }
-      : {}),
     // Checked, not trusted, and dropped whole if any part of it fails. The tags are in the name
     // sources because a Czech tag is the shortest route a company or a person has into a phrase.
     ...(visualBrief({

@@ -28,10 +28,11 @@ import type {
   EditionModelGateway,
   WrittenArticle
 } from "./types.js";
-import type { LicensedPhotoCandidate } from "../images/licensed.js";
 import { materializeLicensedPhoto } from "../images/licensed.js";
 import { heroAltCs } from "../images/alt.js";
 import { pickedSubjectQuery } from "../images/subject-query.js";
+import type { HeroLadderResult } from "../images/ladder.js";
+import type { VisualBrief } from "../images/visual-brief.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
 import { BudgetError } from "../budget.js";
@@ -53,17 +54,20 @@ export interface EditionProductionInput {
   reporter?: EditionRunReporter;
   socialPackEnabled?: boolean;
   heroEnabled?: boolean;
-  imageCandidates?: readonly LicensedPhotoCandidate[];
   /**
-   * Candidate discovery, run after curation so it can search on the story the editor picked.
+   * The image ladder, walked after the article exists.
    *
-   * It used to run in `live.ts` before this function was called, which is before anything had
-   * decided what the edition was about — the only basis available there is the whole digest.
-   * A resolver hands the decision back: the caller still owns the network and the keys, and the
-   * phrase it is given is the one the pick list resolves to. A throw here costs the photograph
-   * and never the edition.
+   * A resolver rather than a list, because the caller owns the network, the keys and the money
+   * while this function owns the editorial flow. It is handed the phrase the picked story
+   * resolves to, the desk's own brief, and the article's own words for the gate to judge
+   * against. A throw costs the photograph and never the edition.
    */
-  resolveImageCandidates?: (subjectQuery: string) => Promise<readonly LicensedPhotoCandidate[]>;
+  selectHero?: (input: {
+    subjectQuery: string;
+    brief: VisualBrief | null;
+    slug: string;
+    article: { titleCs: string; dekCs: string };
+  }) => Promise<HeroLadderResult>;
   /** How a picked article's text is fetched. Injected by tests so none reaches the network. */
   readBody?: (url: string, at: Date) => Promise<string | null>;
   /** This week's rising AI topics, if a scout snapshot exists. A tiebreaker for curation only. */
@@ -73,6 +77,9 @@ export interface EditionProductionInput {
 export interface EditionProductionResult {
   package: EditionPackage;
   report: EditionRunReport;
+  /** The ladder's whole trace, for the caller to record beside the package. */
+  imageSelection?: HeroLadderResult;
+  imageSlug?: string;
 }
 
 /**
@@ -255,12 +262,6 @@ export async function produceEdition(
     picked: pickedTags,
     digest: input.items.slice(0, 12).map((item) => item.tags)
   });
-  const imageCandidates = input.resolveImageCandidates
-    ? await input.resolveImageCandidates(subjectQuery).catch((error: unknown) => {
-        reporter.warn(`image_search_failed:${error instanceof Error ? error.message : "unknown"}`);
-        return [] as readonly LicensedPhotoCandidate[];
-      })
-    : input.imageCandidates ?? [];
 
   let feedback: string[] = [];
   let lastQualityViolations: string[] = [];
@@ -272,7 +273,7 @@ export async function produceEdition(
     let english: CzechArticle;
     try {
       english = await reporter.stage(attempt === 0 ? "write" : `rewrite_${attempt}`, () =>
-        write(brief, input.items, input.config, input.gateway, feedback, imageCandidates, input.now, input.readBody)
+        write(brief, input.items, input.config, input.gateway, feedback, input.now, input.readBody)
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
     } catch (error) {
@@ -400,10 +401,33 @@ export async function produceEdition(
         reporter.unresolvedReview = unresolvedReview;
         reporter.warn(`shipped_with_unresolved_review:${unresolved.join(",")}`);
       }
+      let imageSelection: HeroLadderResult | null = null;
       const editionPackage = await reporter.stage("assemble_package", async () => {
-        const candidate = article.selectedImageCandidateIndex === undefined
-          ? undefined
-          : imageCandidates[article.selectedImageCandidateIndex];
+        // The picture is chosen here, after the article exists, and never before it.
+        //
+        // Search used to run in `live.ts` before curation had picked a story, because the writer
+        // needed candidates in its packet to choose one by index — from captions, having seen no
+        // pixels. Both halves of that are gone: the ladder walks after the write, on the desk's
+        // own brief, and a model looks at the actual thumbnails before anything is attached.
+        const chosen = input.selectHero
+          ? await input.selectHero({
+              subjectQuery,
+              brief: article.visualBrief ?? null,
+              slug: article.slug,
+              article: { titleCs: article.byLocale.cs.title, dekCs: article.byLocale.cs.dek }
+            }).catch((error: unknown) => {
+              reporter.warn(`image_ladder_failed:${error instanceof Error ? error.message : "unknown"}`);
+              return null;
+            })
+          : null;
+        if (chosen) {
+          imageSelection = chosen;
+          reporter.warn(`image_rung:${chosen.rung}`);
+          for (const verdict of chosen.verdicts) {
+            reporter.warn(`image_gate:${verdict.mode}:${verdict.selected ? "selected" : verdict.reason}`);
+          }
+        }
+        const candidate = chosen?.candidate ?? undefined;
         let image;
         if (candidate) {
           try {
@@ -442,7 +466,8 @@ export async function produceEdition(
       EditionPackageSchema.parse(editionPackage);
       return {
         package: editionPackage,
-        report: reporter.build("edition", editionPackage.status)
+        report: reporter.build("edition", editionPackage.status),
+        ...(imageSelection ? { imageSelection, imageSlug: article.slug } : {})
       };
     }
     lastQualityViolations = finalFindings.blocking;

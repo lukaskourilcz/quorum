@@ -367,7 +367,7 @@ async function searchPixabay(query: string, key: string, fetchJson: JsonFetcher)
  * being. Nothing matching is still a frequent and correct answer, covered by the FRAME hero.
  *
  * Keeping people away from this is the caller's job and it is done by ref shape, not by what is
- * on disk: `articleImageCandidates` reaches here only when every subject ref matches
+ * on disk: `selectArticleImage` reaches here only when every subject ref matches
  * `org:event:slug`. Anything else — a fighter, a killed slot's placeholder, a ref of no shape it
  * recognises — never arrives.
  */

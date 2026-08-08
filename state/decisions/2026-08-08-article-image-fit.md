@@ -57,7 +57,7 @@ issue.
 - [x] T2 — `IMAGE_GATE` model role, vision call plumbing, ledger and caps (brief §T2)
 - [x] T3 — `images/vision-gate.ts` with verdict schema, vetoes and tests (brief §T3)
 - [x] T4 — Visual brief fields on both desks, with name-safety validation (brief §T4)
-- [ ] T5 — Selection rewired: search after write, gate picks, writer index removed (brief §T5)
+- [x] T5 — Selection rewired: search after write, gate picks, writer index removed (brief §T5)
 - [ ] T6 — Retrieval widened: per-phrase fan-out, 12 candidates, Pixabay caching (brief §T6)
 - [ ] T7 — Gate covers curated rungs; advisory-only on the identity rung (brief §T7)
 - [ ] T8 — Scene-proposal flywheel files and promotion path (brief §T8)

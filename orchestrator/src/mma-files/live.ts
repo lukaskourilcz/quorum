@@ -12,9 +12,12 @@ import { spentSubjectRefs } from "./repeat-window.js";
 import { loadArticlePackages, regenerateArticleIndex } from "./store.js";
 import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
-import { candidatesNaming, discoverLicensedPhotos, type LicensedPhotoCandidate } from "../images/licensed.js";
 import { fighterIdentityPhoto } from "../images/fighter-photo.js";
-import { illustrativeSportPhoto } from "../images/illustrative.js";
+import { ImageProgramBudget, readImageProgramSpendToday } from "../images/budget.js";
+import { selectArticleHero, type HeroLadderResult } from "../images/ladder.js";
+import { recordSkippedProviders } from "../images/skipped-providers.js";
+import { storeImageSelection } from "../images/verdict-store.js";
+import type { VisualBrief } from "../images/visual-brief.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { socialChannelsEnabled, socialContentGenerationEnabled } from "../social/activation.js";
 import { loadRuntimeBudgetLimits, tightenedBy } from "../portfolio/limits.js";
@@ -29,7 +32,6 @@ const LocalizationSchema = z.object({
   altHeadline: z.string().trim().min(1).max(90).optional(),
   bodyMDX: z.string().trim().min(1).max(40_000),
   imageAlt: z.string().trim().min(1).max(300),
-  imageCandidateIndex: z.number().int().min(0).max(3).optional(),
   // The visual brief, asked for only when the subject is an event. A fighter profile never
   // reaches a search — the ladder resolves a person through their own Wikidata item or drops to
   // the curated set — so asking its writer for search phrases would be asking for a route the
@@ -321,16 +323,15 @@ export const MMA_FILES_WRITE_SYSTEM = [
   "Write no citations in the copy: no file paths, no [source:path] or [^source-N] markers, no footnotes, no URLs. The article records its sources separately.",
   "Link a fighter as [Name](/fighters/org/slug), taking org and slug from the packet's fighterRefs, which are written org:slug. Link every ref at least once and link no fighter that is not one of them.",
   "Do not add odds, probabilities, hype or facts.",
-  "If licensed image candidates exist, choose the most accurate fit by numeric imageCandidateIndex.",
-  "For imageAlt, describe only what a candidate's own caption states. You are shown captions, never pictures, so do not write a pose, a stance, a setting or an action that no caption gives you. If no candidate is supplied, say what the article is about instead of describing an image.",
+  "For imageAlt, say in one sentence what the article is about. You are not shown a photograph and there may not be one, so never write a pose, a stance, a setting or an action.",
   "For altHeadline write one short Czech line for the carousel cover: at most nine words, drawn from what the packet states, no invented claim, no question mark bait, no promise the article does not keep.",
-  "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"altHeadline\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\",\"imageCandidateIndex\":0}."
+  "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"altHeadline\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\"}."
 ].join(" ");
 
 /**
  * The picture-desk brief, added to the writer's instruction for an event and never for a person.
  *
- * A fighter profile does not reach the licensed search at all: `articleImageCandidates` resolves
+ * A fighter profile does not reach the licensed search at all: `selectArticleImage` resolves
  * a person through their own Wikidata item or falls to the curated sport photographs, and that is
  * the structural rule the whole certainty ladder rests on. Asking a profile's writer for search
  * phrases would be asking it to describe a route the pipeline refuses to take, and the first
@@ -645,7 +646,7 @@ const PERSON_SUBJECT_REF = /^(?:ufc|oktagon):[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const EVENT_SUBJECT_REF = /^(?:ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 
 /**
- * The photographs offered for an article, chosen by what the subject is.
+ * The photograph an article ships with, chosen by what the subject is.
  *
  * A subject ref is either a person or it is not, and the two cannot share a method. For a person
  * the question "is this a photograph of them?" is a question about identity, and no reading of a
@@ -676,74 +677,67 @@ const EVENT_SUBJECT_REF = /^(?:ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u;
  * back to the alt text the writer invented for a picture it never saw.
  *
  * A fight-week preview is assigned an event ref such as `ufc:event:ufc-330-...`, which is not a
- * person and has no identity to confuse. `candidatesNaming` is the method for those and only for
- * those: an event is named by its own poster and venue photographs, and a wrong match there is a
- * picture of the wrong arena rather than a picture of the wrong human being. Anything that is
- * neither shape — a killed slot's `missing:<date>:<slot>` placeholder, or whatever else a model
- * writes into a slate — gets no photograph at all. An unclassifiable ref is not evidence that the
- * subject is not a person, and guessing wrong there costs a human being their likeness.
+ * person and has no identity to confuse, so a search may run for it. It runs on the desk's own
+ * phrases now, which are forbidden from carrying the event's name, and the gate reads the
+ * pictures before any of them can be attached; `candidatesNaming` still narrows the fallback
+ * query, which is built from the ref itself. Anything that is neither shape — a killed slot's
+ * `missing:<date>:<slot>` placeholder, or whatever else a model writes into a slate — gets no
+ * photograph at all. An unclassifiable ref is not evidence that the subject is not a person, and
+ * guessing wrong there costs a human being their likeness.
  */
-export async function articleImageCandidates(
-  root: string,
-  subjectRefs: readonly string[]
-): Promise<LicensedPhotoCandidate[]> {
+export async function selectArticleImage(input: {
+  root: string;
+  subjectRefs: readonly string[];
+  stateRoot: string;
+  cycleId: string;
+  budget: ImageProgramBudget;
+  brief: VisualBrief | null;
+  article: { titleCs: string; dekCs: string };
+  dry?: boolean;
+}): Promise<HeroLadderResult> {
   // `missing:<date>:<slot>` is the placeholder a killed slot carries, not a subject. Its tail is
   // the slot letter, so letting it through fanned four HTTP providers out on the query "am". It
   // fails both shape tests below on its own; dropping it first keeps it out of the all-events
   // check, which a mixed list would otherwise fail for the wrong reason.
-  const refs = subjectRefs.filter((reference) => !reference.startsWith("missing:"));
-
-  if (refs.some((reference) => PERSON_SUBJECT_REF.test(reference))) {
-    const fighters = await loadFighterRecords(path.join(root, "mma", "fighters"));
-    const subject = fighters.find((fighter) => refs.includes(fighter.id));
-    // Rung one. No card, or a card naming no Wikidata item, means we cannot establish that any
-    // file depicts this person, so the rung is simply skipped — it is never a reason to go looking
-    // by name. A network failure is the same answer as an item with no P18, for the same reason:
-    // neither establishes anything, and the ladder descends on "not established", not on "absent".
-    const identityPhoto = subject?.identity.wikidataId
-      ? await fighterIdentityPhoto({
-          wikidataId: subject.identity.wikidataId,
-          fallbackName: subject.canonicalName
-        }).catch(() => null)
-      : null;
-    if (identityPhoto) return [identityPhoto];
-    // Rung two. Nothing about the subject travels into this call: the seed decides which of the
-    // curated files is tried first and is never sent to Commons. The ref is the seed rather than
-    // the fighter's name so that a card we hold and a ref we do not recognise behave alike.
-    const illustrative = await illustrativeSportPhoto({ seed: refs.join("|") }).catch(() => null);
-    // Rung three is the empty list: the caller draws the FRAME plate.
-    return illustrative ? [illustrative] : [];
-  }
-
-  // Every surviving ref has to be an event before a name search is allowed to run.
-  if (refs.length === 0 || !refs.every((reference) => EVENT_SUBJECT_REF.test(reference))) return [];
-  const query = refs
+  const refs = input.subjectRefs.filter((reference) => !reference.startsWith("missing:"));
+  const personShaped = refs.some((reference) => PERSON_SUBJECT_REF.test(reference));
+  const eventShaped = subjectIsEventShaped(refs);
+  const fallbackQuery = refs
     .map((reference) => reference.split(":").at(-1)?.replaceAll("-", " ") ?? "")
     .filter(Boolean)
-    .join(" ");
-  if (!query) return [];
-  const search = await discoverLicensedPhotos({
-    query: query.slice(0, 100),
-    pexelsKey: process.env.PEXELS_API_KEY,
-    pixabayKey: process.env.PIXABAY_API_KEY
+    .join(" ")
+    .slice(0, 100);
+
+  return selectArticleHero({
+    venture: "mma-files",
+    stateRoot: input.stateRoot,
+    cycleId: input.cycleId,
+    budget: input.budget,
+    article: input.article,
+    brief: input.brief,
+    // The seed decides which curated file is tried first and is never sent anywhere. The ref
+    // rather than the fighter's name, so a card we hold and a ref we do not recognise behave
+    // alike.
+    seed: refs.join("|"),
+    subjectRefs: refs,
+    personShaped,
+    eventShaped,
+    fallbackQuery,
+    ...(input.dry === undefined ? {} : { dry: input.dry }),
+    // Rung one for a person. No card, or a card naming no Wikidata item, means we cannot
+    // establish that any file depicts them, so the rung is skipped — never a reason to go
+    // looking by name. A network failure is the same answer as an item with no P18: neither
+    // establishes anything, and the ladder descends on "not established", not on "absent".
+    identityPhoto: async () => {
+      const fighters = await loadFighterRecords(path.join(input.root, "mma", "fighters"));
+      const subject = fighters.find((fighter) => refs.includes(fighter.id));
+      if (!subject?.identity.wikidataId) return null;
+      return fighterIdentityPhoto({
+        wikidataId: subject.identity.wikidataId,
+        fallbackName: subject.canonicalName
+      }).catch(() => null);
+    }
   });
-  if (search.skippedProviders.length > 0) {
-    const relative = "docs/NEEDED.md";
-    const current = await readText(repoRoot, relative, "# Needs your help now\n");
-    const additions = search.skippedProviders
-      .filter(({ provider }) => !current.includes(`${provider.toUpperCase()}_API_KEY`))
-      .map(({ provider }) => `- [ ] Add \`${provider.toUpperCase()}_API_KEY\` to GitHub Actions so the licensed-photo search can use ${provider}. Openverse and Wikimedia remain active without it.`);
-    if (additions.length > 0) await atomicWriteText(repoRoot, relative, `${current.trimEnd()}\n\n${additions.join("\n")}\n`);
-  }
-  const named = candidatesNaming(search.candidates, query);
-  if (named.length > 0) return named;
-  // The licensed search found nothing an event name vouches for, so the article fell straight to
-  // the drawn plate while the curated sport photographs sat unused. They are a scene, not a
-  // person, so the risk that made name search unusable for people does not arise here: nothing
-  // about the subject is sent anywhere, the seed only picks which curated file is tried first,
-  // and the alt claims nothing about who is in the frame.
-  const illustrative = await illustrativeSportPhoto({ seed: refs.join("|") }).catch(() => null);
-  return illustrative ? [illustrative] : [];
 }
 
 async function refreshArticleIndex(context: { cycleId: string; date: string; slot: "am" | "pm" }): Promise<string | null> {
@@ -827,7 +821,21 @@ export async function runLiveArticleProduction(input: {
       await atomicWriteJson(stateRoot, runPath, { schemaVersion: 1, cycleId: input.cycleId, date, slot: input.slot, status: "killed", reason, ...(derivedSlate ? { slateSource: "derived" } : {}), spentUsd: 0, generatedAt: input.now.toISOString() });
       return { status: "killed", artifacts: [runPath], estimatedWorstCaseUsd: 0 };
     }
-    const imageCandidates = await articleImageCandidates(stateRoot, assignment.subjectRefs);
+    const imageBudget = new ImageProgramBudget(await readImageProgramSpendToday(stateRoot, input.now));
+    const articleSlug = slugFor(assignment.subjectRefs, input.slot);
+    const selectHero = async (request: { brief: VisualBrief | null; article: { titleCs: string; dekCs: string } }) => {
+      const result = await selectArticleImage({
+        root: stateRoot,
+        subjectRefs: assignment.subjectRefs,
+        stateRoot,
+        cycleId: input.cycleId,
+        budget: imageBudget,
+        brief: request.brief,
+        article: request.article
+      });
+      await recordSkippedProviders(result.skippedProviders);
+      return result;
+    };
     // Composition needs both the venture's own gate and a channel for the result to reach. Every
     // committed SVG variant under state/ventures/mma-files/media/ was inventory nothing could
     // consume, deterministically re-buildable from the article package beside it.
@@ -837,11 +845,11 @@ export async function runLiveArticleProduction(input: {
       root: stateRoot,
       slate,
       slot: input.slot,
-      slug: slugFor(assignment.subjectRefs, input.slot),
+      slug: articleSlug,
       publishAt: input.now,
       mode: "live-analysis",
       evidence,
-      imageCandidates,
+      selectHero,
       publicRepoRoot: repoRoot,
       socialDestinationBaseUrl: process.env.MMA_FILES_SITE_URL,
       gateway: new GuardedMmaFilesGateway(input.cycleId, input.now),
@@ -868,11 +876,27 @@ export async function runLiveArticleProduction(input: {
       spentUsd: null,
       generatedAt: input.now.toISOString()
     });
+    // Why this picture, beside the article it ran above. The interesting case for an owner is
+    // the one where nothing shipped: this is where the reasons live.
+    const selection = result.imageSelection ?? null;
+    const selectionPath = selection
+      ? await storeImageSelection(stateRoot, {
+          schemaVersion: "image-selection/1",
+          venture: "mma-files",
+          slug: articleSlug,
+          date,
+          rung: selection.rung,
+          selected: selection.candidate?.id ?? null,
+          verdicts: selection.verdicts,
+          skippedProviders: [...selection.skippedProviders],
+          recordedAt: input.now.toISOString()
+        }).catch(() => null)
+      : null;
     // A package was stored, so the index rebuilt at the top of this function is stale again.
     const indexPath = await refreshArticleIndex({ cycleId: input.cycleId, date, slot: input.slot });
     return {
       status: result.article.status === "published" ? "published" : "blocked",
-      artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, ...(indexPath ? [indexPath] : []), "budget/ledger.json"],
+      artifacts: [runPath, result.articlePath, ...(result.socialPath ? [result.socialPath] : []), ...result.mediaPaths, ...(selectionPath ? [selectionPath] : []), ...(indexPath ? [indexPath] : []), "budget/ledger.json"],
       estimatedWorstCaseUsd: 0.16
     };
   } catch (error) {

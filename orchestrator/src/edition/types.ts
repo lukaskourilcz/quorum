@@ -86,7 +86,6 @@ export interface WrittenArticle {
   tags: string[];
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
-  selectedImageCandidateIndex?: number;
   /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
   visualBrief?: VisualBrief;
   /** Czech is what the desk writes. English is optional and no longer produced. */
@@ -103,7 +102,6 @@ export interface CzechArticle {
   whyThisStory?: string;
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
-  selectedImageCandidateIndex?: number;
   /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
   visualBrief?: VisualBrief;
   cs: LocalizedContent;
