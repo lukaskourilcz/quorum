@@ -219,9 +219,13 @@ item so a rebuild reaches the same slide 1 that a rebuild reaches the same pixel
 decision is recorded as `hook-assignment/1` in the pack. Marketing meetings may swap the
 proposed hook for another member of the recorded eligible set and for nothing else; the set
 is hashed, so widening it to smuggle a hook in stops the package validating. `lint:hooks`
-enforces the craft caps in CI, and `hook-library/1` delivers the library and its conformance
-vectors to the quiz apps through the same bounded channel articles use, only after that lint
-passes.
+enforces the craft caps in CI.
+
+Hooks front carousels and nothing else. A `hook-library/1` delivery to the quiz apps was built
+and then removed on 2026-08-08: devShark already carries a rotating advisory line under every
+question, and a hook's mechanism is to earn a *next* interaction, which is real on a feed and
+not in a quiz the reader has already opened and started. The apps stay standalone and receive
+no copy from here.
 
 The 13:00 room is agenda-gated and costs `$0` when idle. The protected admin renders
 all slides for all statuses, three brands and three formats, with checks, ratings,

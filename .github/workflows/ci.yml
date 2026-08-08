@@ -65,8 +65,7 @@ jobs:
 
       # Its own step rather than a line inside `pnpm lint`: the hook lint reports per-rule findings
       # and a run's warnings (the geo variants their gate makes unreachable) are meant to be read,
-      # not folded into an eslint summary. A red step here also blocks the `hook-library/1`
-      # delivery, which may only re-deliver after this passes.
+      # not folded into an eslint summary.
       - name: Lint hook libraries
         run: pnpm lint:hooks
 

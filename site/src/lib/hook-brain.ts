@@ -63,12 +63,6 @@ export interface HookBrainSnapshot {
   recent: HookAssignmentRow[];
   previews: HookPreviewRow[];
   fallbackCount: number;
-  delivery: {
-    deliveredAt: string;
-    hookCount: number;
-    targetRepository: string;
-    targetCommit: string | null;
-  } | null;
 }
 
 async function optionalJson<T>(file: string): Promise<T | null> {
@@ -168,16 +162,11 @@ export async function readHookBrain(
     };
   });
 
-  const receipt = await optionalJson<{
-    deliveredAt: string; hookCount: number; targetRepository: string; targetCommit: string | null;
-  }>(path.join(root, "state", "ventures", "carousel-studio", "hook-delivery-receipt.json"));
-
   return {
     surfaces,
     channels,
     recent,
     previews,
-    fallbackCount: recent.filter((row) => row.fallback !== null).length,
-    delivery: receipt
+    fallbackCount: recent.filter((row) => row.fallback !== null).length
   };
 }
