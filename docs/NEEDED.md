@@ -117,6 +117,16 @@ Judgement calls. Nothing is blocked on code for any of these.
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
 
+- [ ] **Merge `claude/article-image-selection-61rs70` in the aifirst repository** — DNESKAi's
+  validator accepts only `photo` and `svg` as an image origin, so the first edition whose ladder
+  reaches the generated illustration would be refused at delivery with `schema_invalid`. The
+  branch adds the third value and its licence to the contract schema and the TypeScript
+  validator, and extends the byte check to cover it: an illustration that arrived as SVG is
+  still refused, and the plate arriving as WebP still is. Its own `vitest lib/delivery` is green
+  at 14, including a real WebP illustration reaching `written`. The illustration rung is armed
+  in Actions, so this is worth doing before the next edition that needs it.
+  [imp:3] [owner:me] [time:5m] [kind:deploy]
+
 - [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
   wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
   its `main`. A delivered article is immutable there by date and slot, which is what stops a
@@ -601,17 +611,19 @@ marketingShark adds about 6c to a day.
 
 ---
 
-## One branch is still open
+## Branches
 
-`claude/article-image-selection-61rs70` was **not** deleted in the branch prune, because it holds
-work that is not on `main`: a countersigned owner decision (`article-image-fit-2026-08-08` — every
-published article image passes a vision check before it ships) and the 419-line build contract for
-that programme. Two commits, `ee346ba` and `5f72fad`.
+Every branch this repository opened is merged and gone. `claude/article-image-selection-61rs70`
+held the countersigned image decision and its build contract; the twelve-issue programme ran on
+it and it merged into `main` on 2026-08-09, taking the contract with it — the decision file
+`state/decisions/2026-08-08-article-image-fit.md` is the permanent record. Before it,
+`claude/si-program` and `claude/website-improvements-brainstorm-sqe3c6` were both fully merged,
+and the stale `.claude/worktrees/workflows-map` worktree held nothing that was not already on
+`main`.
 
-It will conflict when it lands: both of its commits edit `NEEDED.md` and `NEEDS_YOUR_HELP_NOW.md`,
-which this document replaced. The resolution is to take its content and put it here — its one owner
-item, the fal.ai account above, has already been carried across so it is not waiting on that merge.
-
-Every other branch is gone: this programme's own `claude/si-program` and
-`claude/website-improvements-brainstorm-sqe3c6` were both fully merged, and the stale
-`.claude/worktrees/workflows-map` worktree held nothing that was not already on `main`.
+Two branches are open in the consumer repositories and are waiting on you, not on code. Both
+carry a validator this side already produces packages for, and both are in the list above:
+`lukaskourilcz/mma-files` `claude/article-image-selection-61rs70` (the image correction, plus the
+new origin value) and `lukaskourilcz/aifirst` `claude/article-image-selection-61rs70` (the new
+origin value). Merging the mma-files one is what lets the two corrected MMA heroes reach the
+magazine.

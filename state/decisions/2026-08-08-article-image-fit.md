@@ -45,26 +45,28 @@ stays inside `budget-2026-08e`: the gate is capped at $0.02 per article and
 the whole image program at $0.10 per day, with descent to the plate — never
 an overrun — when a cap is hit.
 
-The implementation contract is `docs/ARTICLE-IMAGES-OPUS-BUILD-PROMPT.md`,
-and the work is tracked as GitHub issues `IMG-01` through `IMG-12`, one per
-task below, worked in title order. Where a task below and that document
-disagree, this decision wins, then the document, then — being newest — the
-issue.
+The work was tracked as GitHub issues `IMG-01` through `IMG-12`, one per task
+below, worked in title order and all closed on 2026-08-09. Its implementation
+contract, `docs/ARTICLE-IMAGES-OPUS-BUILD-PROMPT.md`, was scaffolding and was
+deleted when the programme finished; what it said that outlives it is in
+`CLAUDE.md` under the third thing a session trips over, in the cost notes in
+`scaling.md` and `about-project.md`, and in the comments of
+`orchestrator/src/images/`. This decision is the record.
 
 ## Tasks
 
-- [x] T1 — DNESKAi subject query reads the picked story, not the whole digest (brief §T1)
-- [x] T2 — `IMAGE_GATE` model role, vision call plumbing, ledger and caps (brief §T2)
-- [x] T3 — `images/vision-gate.ts` with verdict schema, vetoes and tests (brief §T3)
-- [x] T4 — Visual brief fields on both desks, with name-safety validation (brief §T4)
-- [x] T5 — Selection rewired: search after write, gate picks, writer index removed (brief §T5)
-- [x] T6 — Retrieval widened: per-phrase fan-out, 12 candidates, Pixabay caching (brief §T6)
-- [x] T7 — Gate covers curated rungs; advisory-only on the identity rung (brief §T7)
-- [x] T8 — Scene-proposal flywheel files and promotion path (brief §T8)
-- [x] T9 — Recall of the two wrong MMA heroes through the delivery path (brief §T9)
-- [x] T10 — Illustration rung, dark behind `FAL_KEY`, schema and consumers checked (brief §T10)
-- [x] T11 — Documentation sweep: CLAUDE.md invariant, cost notes, NEEDED items (brief §T11)
-- [ ] T12 — Full gates green, dry-run evidence recorded, contract retired, branch merged to main (brief §T12)
+- [x] T1 — DNESKAi subject query reads the picked story, not the whole digest (§T1)
+- [x] T2 — `IMAGE_GATE` model role, vision call plumbing, ledger and caps (§T2)
+- [x] T3 — `images/vision-gate.ts` with verdict schema, vetoes and tests (§T3)
+- [x] T4 — Visual brief fields on both desks, with name-safety validation (§T4)
+- [x] T5 — Selection rewired: search after write, gate picks, writer index removed (§T5)
+- [x] T6 — Retrieval widened: per-phrase fan-out, 12 candidates, Pixabay caching (§T6)
+- [x] T7 — Gate covers curated rungs; advisory-only on the identity rung (§T7)
+- [x] T8 — Scene-proposal flywheel files and promotion path (§T8)
+- [x] T9 — Recall of the two wrong MMA heroes through the delivery path (§T9)
+- [x] T10 — Illustration rung, dark behind `FAL_KEY`, schema and consumers checked (§T10)
+- [x] T11 — Documentation sweep: CLAUDE.md invariant, cost notes, NEEDED items (§T11)
+- [x] T12 — Full gates green, dry-run evidence recorded, contract retired, branch merged to main (§T12)
 
 ## Approval reference
 

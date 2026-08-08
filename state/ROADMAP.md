@@ -79,4 +79,12 @@ work. They require a fresh owner scope before implementation.
 - [x] Add `quiz-code-context`, the eleventh live seed layout, and brand token sets for
   devShark and geoShark. The layout exists because every other live template's widest
   monospace slot holds 100 characters over two lines — a source label, not a program.
+- [x] Put a vision gate in front of every published article image, on both magazines. One
+  certainty ladder for the two of them, walked after the article exists: the entity-linked
+  photograph, the curated files, a licensed search on the brief the desk itself wrote, a
+  generated illustration behind two owner switches, and the FRAME plate under all of it. One
+  budgeted call looks at the candidates' actual pixels, and its verdict is recorded beside the
+  package so a run report says why a picture was chosen. Every failure descends a rung rather
+  than blocking a publication. The two heroes that showed the wrong thing are corrected through
+  a schema-versioned image-only correction that both ends check independently.
 - [ ] Complete only the owner plumbing listed in `docs/NEEDED.md`.
