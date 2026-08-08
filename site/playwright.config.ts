@@ -15,6 +15,20 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: 1,
+  /*
+   * 30s was Playwright's default and it stopped matching the work.
+   *
+   * Most of this suite loads a page to `networkidle` against a dev server and then runs a
+   * whole-DOM axe sweep over it. Measured across four full runs of this programme, the heavier
+   * admin surfaces take 18-30s each and the home page has grown with the Facilities section — so
+   * routes were tipping over the default one at a time, whichever happened to be unlucky, and
+   * failing with "Test timeout exceeded" rather than with anything about the app. Every failure
+   * chased in this programme's e2e runs was one of those.
+   *
+   * 120s is sized to that measurement with room for a loaded machine, and it still fails loudly
+   * on a route that genuinely will not load — which is what a timeout is for.
+   */
+  timeout: 120_000,
   reporter: [["list"]],
   use: {
     baseURL: "http://localhost:3000",

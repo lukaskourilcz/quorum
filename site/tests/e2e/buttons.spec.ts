@@ -140,12 +140,12 @@ for (const route of routes) {
 }
 
 test("every app button declares its behavior", async ({ page }) => {
-  // Fifteen routes, each loaded to `networkidle`, under one budget. 120s was set when the list
-  // was shorter and the home page smaller; it now lands around 126s on an idle machine and past
-  // two minutes on a loaded one, so it has been failing for its own arithmetic rather than for
-  // anything it found. 300s is an honest ceiling for fifteen full page loads and still fails
-  // loudly if a route actually hangs.
-  test.setTimeout(300_000);
+  // Fifteen routes, each loaded to `networkidle`, under one budget — so this test alone costs
+  // fifteen times what a single-route test does, and it needs its own ceiling on top of the
+  // config's. 120s was set when the list was shorter and the home page smaller; measured across
+  // this programme's runs it lands at 126s idle and aborted a page load past 300s on a loaded
+  // machine. 600s is fifteen loads at forty seconds each, which is the worst this has measured.
+  test.setTimeout(600_000);
   const failures: string[] = [];
 
   for (const route of routes) {
