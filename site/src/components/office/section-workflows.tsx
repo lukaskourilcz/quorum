@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { litRoomForHour, type OfficeWorkflows } from "@/lib/office-workflows-model";
@@ -17,7 +18,6 @@ import { ROOMS, WorkflowsPlan, roomViewBox, type PlanPlace } from "@/components/
 import {
   ExampleChip,
   PANEL_COPY,
-  WorkflowsPanelBody,
   carriesExample,
   type PanelPlace
 } from "@/components/office/workflows-panels";
@@ -44,6 +44,44 @@ import type { OfficeProjectKey } from "@/lib/office-walkthrough";
  */
 
 const MONO = "var(--font-ibm-plex-mono), monospace";
+
+/**
+ * The four panel bodies, fetched when a reader asks for one.
+ *
+ * They are the heaviest interaction-gated weight on the home page, and a visitor who never opens
+ * the dock — most visitors — never needs a byte of them. `ssr: false` because a panel only ever
+ * opens under a press, so there is nothing to render on the server and nothing to hydrate.
+ *
+ * The chrome around a body — the header, the footer, the worked-example chip — stays statically
+ * imported above, because it is on screen the moment the section is. That separation is the whole
+ * reason `workflows-panels.tsx` was split in two: importing the bodies lazily out of a module that
+ * also held `PANEL_COPY` would have pulled them straight back into the first load through the
+ * static edge.
+ *
+ * The warm-up is the bare `import()` rather than a `preload()` on the component. Next 16's
+ * `dynamic()` is built on `React.lazy` and the returned component has no `preload` — calling one
+ * is a silent no-op that measured as 17.2 kB still being fetched at press time. Webpack hands the
+ * same promise to every caller of the same specifier, so calling the import early is exactly a
+ * preload: the same measurement now reads 17.2 kB on reaching the section and 0 kB on the press.
+ */
+const importPanelBodies = () => import("@/components/office/workflows-panel-bodies");
+
+const WorkflowsPanelBody = dynamic(
+  () => importPanelBodies().then((module) => module.WorkflowsPanelBody),
+  {
+    ssr: false,
+    /*
+     * The plate, and nothing on it.
+     *
+     * With the preload working this never renders — the chunk is there before the press. It is for
+     * the reader who presses faster than their connection: without it the panel's middle would be
+     * see-through onto the floor plan, so it paints the cell colour across every column and the
+     * content arrives into an opaque frame. Nothing spins and nothing says "loading", because at
+     * this length a message would leave the screen before it could be read.
+     */
+    loading: () => <div style={{ gridColumn: "1 / -1", background: "#0b0b0d" }} />
+  }
+);
 
 const control: CSSProperties = {
   display: "grid",
@@ -388,6 +426,19 @@ export function SectionWorkflows({
   }, [open]);
 
   const animate = active && !reduceMotion;
+
+  /**
+   * Fetch the panel bodies the moment the reader arrives at this section.
+   *
+   * A panel takes at least one deliberate press after arrival, so the chunk has the whole
+   * approach to land in. The split is then invisible: it costs the first load nothing and costs
+   * the press nothing either. Without this the first panel of a session would open on an empty
+   * frame while the chunk was still on the wire.
+   */
+  useEffect(() => {
+    if (!active) return;
+    void importPanelBodies();
+  }, [active]);
 
   const panelProps = {
     animate,
