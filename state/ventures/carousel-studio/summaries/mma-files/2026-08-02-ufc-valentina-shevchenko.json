@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-valentina-shevchenko",
+  "date": "2026-08-02",
+  "locale": "cs",
+  "kicker": "MMA Files · 2. srp",
+  "headline": "Valentina Shevchenko: tři zápasy s Grasso tvoří závěrečnou kapitolu kariéry",
+  "standfirst": "Shevchenko má bilanci 26-4-1 a jedno znovuzískání titulu. Trilogie začala prohrou na submisi a skončila výhrou na body.",
+  "passages": [
+    "Valentina Shevchenko má podle svého UFC profilu bilanci 26-4-1 v ženské muší váze. Tři poslední zápasy v záznamu mají společného jmenovatele: soupeřku Alexu Grasso.",
+    "Trilogie odstartovala na UFC 285 dne 4. března 2023. Grasso tehdy Shevchenko zastavila submisí, konkrétně pákou na obličej, ve čtvrtém kole v čase 1:14.",
+    "Tímto výsledkem skončila Shevchenko dlouhá vláda šampionky muší váhy. Odveta proběhla na UFC Fight Night: Grasso vs.",
+    "Shevchenko 2 dne 16. září 2023 a vyústila v remízu po pěti kolech rozděleným verdiktem rozhodčích. Za 25 minut se žádná z bojovnic neodtrhla a titul zůstal u Grasso.",
+    "Třetí duel rozhodl sérii na UFC 306 dne 14. září 2024. Shevchenko zvítězila jednomyslným rozhodnutím rozhodčích po pěti kolech a pás si vzala zpět.",
+    "Trilogie se odehrála přibližně za 18 měsíců a přinesla jeden zápas ukončený před limitem, jednu remízu a jedno rozhodnutí.",
+    "Grasso má bilanci 17-5-1, ovšem soubor upozorňuje na nesoulad: Wikipedia uvádí 17-5-1, zatímco přepočet z dochovaných zápasů dává 16-5-1. Rozdíl zatím nebyl vyřešen. Podobná poznámka se týká i Shevchenko.",
+    "Cito API uvádí celkovou kariérní bilanci 26-4-1, kdežto z tří zápasů zaznamenaných v archivu vychází 1-1-1. Soubor pokrývá pouze trilogii s Grasso; starší zápasy do systému zatím nebyly načteny."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "GMC-MMA · CC BY-SA · Wikimedia Commons"
+}

@@ -116,6 +116,25 @@ Judgement calls. Nothing is blocked on code for any of these.
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
 
+- [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
+  wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
+  its `main`. A delivered article is immutable there by date and slot, which is what stops a
+  published piece being swapped; the branch adds the one narrow exception, an
+  `article-image-correction/1` block whose claim the consumer re-checks itself, and refuses
+  anything where more than the picture differs. Its own `npm test` is green at 27, including two
+  new cases. Once merged, the next two cycles deliver the corrections through the normal outbox
+  and the government official and the firearms range stop being live assets.
+  [imp:4] [owner:me] [time:5m] [kind:deploy]
+
+- [ ] **Replace three curated MMA photographs that no longer exist on Commons** — probed on
+  2026-08-09: `UFC Fight Night Belfast weigh-ins (29923390484).jpg`, `MMA gloves (Unsplash).jpg`
+  and `O2 arena Praha 2019.jpg` all return `missing`. The rotation in
+  `orchestrator/src/images/illustrative.ts` skips them, so nothing breaks and every article that
+  reaches that rung simply loses its first choice; six of the nine still resolve. Finding
+  replacements is the curated-set rule: open a candidate at 640px, check that no face in it is
+  recognisable, write the Czech scene line. The scene-proposal queue below is where candidates
+  now collect. [imp:2] [owner:me] [time:30m] [kind:content]
+
 - [ ] **Review the curated scene proposals both magazines are collecting** — when the vision gate
   approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an
   unchecked line to `state/ventures/caught-up/media/scene-proposals.md` or the mma-files file
