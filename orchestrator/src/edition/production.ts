@@ -428,7 +428,9 @@ export async function produceEdition(
           }
         }
         const candidate = chosen?.candidate ?? undefined;
-        let image;
+        // A rendered illustration arrives already in package shape: there is no archive to fetch
+        // it from and no licence to read, because the company made it and says so.
+        let image = chosen?.illustration;
         if (candidate) {
           try {
             // The archive's own description of the photograph first, the writer's second.

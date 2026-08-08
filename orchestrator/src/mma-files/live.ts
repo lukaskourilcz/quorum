@@ -693,6 +693,7 @@ export async function selectArticleImage(input: {
   budget: ImageProgramBudget;
   brief: VisualBrief | null;
   article: { titleCs: string; dekCs: string };
+  illustrationSlug?: string;
   dry?: boolean;
 }): Promise<HeroLadderResult> {
   // `missing:<date>:<slot>` is the placeholder a killed slot carries, not a subject. Its tail is
@@ -719,6 +720,7 @@ export async function selectArticleImage(input: {
     // rather than the fighter's name, so a card we hold and a ref we do not recognise behave
     // alike.
     seed: refs.join("|"),
+    ...(input.illustrationSlug ? { illustrationSlug: input.illustrationSlug } : {}),
     subjectRefs: refs,
     personShaped,
     eventShaped,
@@ -831,7 +833,8 @@ export async function runLiveArticleProduction(input: {
         cycleId: input.cycleId,
         budget: imageBudget,
         brief: request.brief,
-        article: request.article
+        article: request.article,
+        illustrationSlug: articleSlug
       });
       await recordSkippedProviders(result.skippedProviders);
       return result;

@@ -145,7 +145,9 @@ export async function produceMmaFilesArticle(input: {
     article: { titleCs: csLocalization.title, dekCs: csLocalization.dek }
   }).catch(() => null) ?? null;
   const candidate = chosen?.candidate ?? undefined;
-  let articleImage;
+  // A rendered illustration arrives already in package shape: there is no archive to fetch it
+  // from and no licence to read, because the company made it and says so.
+  let articleImage = chosen?.illustration;
   if (candidate) {
     try {
       articleImage = await materializeLicensedPhoto({

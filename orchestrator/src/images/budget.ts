@@ -1,5 +1,5 @@
-import { readJson } from "../state.js";
-import type { BudgetLedgerEntry } from "../budget.js";
+import { atomicWriteJson, readJson } from "../state.js";
+import { BudgetLedgerEntrySchema, hasLedgerEntry, type BudgetLedgerEntry } from "../budget.js";
 
 /**
  * What the image programme may spend, and what happens when it cannot.
@@ -114,4 +114,53 @@ export class ImageProgramBudget {
     this.dayUsd = Number((this.dayUsd + usd).toFixed(8));
     if (kind === "generated-image") this.generatedToday += 1;
   }
+}
+
+/**
+ * A render, in the ledger, whether or not its picture is used.
+ *
+ * Written before the gate is asked, because the renderer has already billed by then: an
+ * illustration the gate refuses cost exactly what one it accepts cost, and a counter that only
+ * saw the accepted ones would let a bad day render far more than two.
+ *
+ * There is no usage to read back — the renderer bills per megapixel and returns no cost — so the
+ * ledger carries the fixed published rate rounded up. Token counts are zero because there are
+ * none; `kind: "image"` is what separates this row from the gate's.
+ */
+export async function recordIllustrationSpend(input: {
+  stateRoot: string;
+  cycleId: string;
+  ventureId: string;
+  model: string;
+  usd: number;
+  requestHash: string;
+  now: Date;
+}): Promise<void> {
+  const ledger = await readJson<{ entries: BudgetLedgerEntry[] }>(
+    input.stateRoot,
+    "budget/ledger.json",
+    { entries: [] }
+  );
+  if (hasLedgerEntry(ledger.entries, input.cycleId, input.requestHash)) return;
+  const entry = BudgetLedgerEntrySchema.parse({
+    ts: input.now.toISOString(),
+    cycleId: input.cycleId,
+    requestHash: input.requestHash,
+    phase: ARTICLE_ILLUSTRATION_PHASE,
+    ventureId: input.ventureId,
+    agent: "ARTICLE_ILLUSTRATION",
+    provider: "fal",
+    model: input.model,
+    serviceTier: "default",
+    tokensIn: 0,
+    cachedTokensIn: 0,
+    tokensOut: 0,
+    toolUses: 1,
+    usd: input.usd,
+    kind: "image"
+  });
+  await atomicWriteJson(input.stateRoot, "budget/ledger.json", {
+    schemaVersion: 1,
+    entries: [...ledger.entries, entry]
+  });
 }

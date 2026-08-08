@@ -131,8 +131,8 @@ export interface GateVerdict {
   costUsd: number;
 }
 
-export interface GateOutcome {
-  selected: LicensedPhotoCandidate | null;
+export interface GateOutcome<T extends GateCandidate = LicensedPhotoCandidate> {
+  selected: T | null;
   verdict: GateVerdict;
 }
 
@@ -142,10 +142,23 @@ export interface VisionGateway {
 
 export const defaultVisionGateway: VisionGateway = { assess: guardedVisionCall };
 
-export interface AssessCandidatesInput {
+/**
+ * The least a thing has to be for the gate to look at it.
+ *
+ * A licensed photograph satisfies this and so does a rendered illustration, which has an id and
+ * bytes and no archive behind it. The gate's question — may this run above this article — is the
+ * same either way, and nothing in here reads a licence or a caption.
+ */
+export interface GateCandidate {
+  id: string;
+  provider: string;
+  thumbnailUrl: string;
+}
+
+export interface AssessCandidatesInput<T extends GateCandidate = LicensedPhotoCandidate> {
   venture: "caught-up" | "mma-files";
   article: { titleCs: string; dekCs: string; negatives: readonly string[] };
-  candidates: readonly LicensedPhotoCandidate[];
+  candidates: readonly T[];
   mode: GateMode;
   stateRoot: string;
   cycleId: string;
@@ -168,7 +181,7 @@ const MAGAZINE = {
   "mma-files": "a Czech magazine about mixed martial arts"
 } as const;
 
-function systemPrompt(mode: GateMode, venture: AssessCandidatesInput["venture"]): string {
+function systemPrompt(mode: GateMode, venture: AssessCandidatesInput<GateCandidate>["venture"]): string {
   const generated = mode === "generated";
   return [
     `You are the picture desk of ${MAGAZINE[venture]}.`,
@@ -204,7 +217,7 @@ function systemPrompt(mode: GateMode, venture: AssessCandidatesInput["venture"])
   ].join("\n");
 }
 
-function userPrompt(input: AssessCandidatesInput, count: number): string {
+function userPrompt(input: AssessCandidatesInput<GateCandidate>, count: number): string {
   const title = sanitizeExternalContent(input.article.titleCs, 300).text;
   const dek = sanitizeExternalContent(input.article.dekCs, 600).text;
   const negatives = input.article.negatives
@@ -232,7 +245,7 @@ function userPrompt(input: AssessCandidatesInput, count: number): string {
  * formats the provider reads.
  */
 async function thumbnailBlock(
-  candidate: LicensedPhotoCandidate,
+  candidate: GateCandidate,
   fetchBytes: (url: string) => Promise<Uint8Array>,
   index: number
 ): Promise<VisionImageBlock> {
@@ -278,7 +291,7 @@ export async function imageGateModel(): Promise<string> {
   return model;
 }
 
-function descended(mode: GateMode, reason: string, costUsd = 0): GateOutcome {
+function descended<T extends GateCandidate>(mode: GateMode, reason: string, costUsd = 0): GateOutcome<T> {
   return {
     selected: null,
     verdict: { mode, considered: 0, selected: null, reason, candidates: [], skipped: [], costUsd }
@@ -291,13 +304,15 @@ function descended(mode: GateMode, reason: string, costUsd = 0): GateOutcome {
  * One model call for the whole shortlist, so the scores are comparative rather than a series of
  * unrelated yes/no answers, and so twelve candidates cost one call rather than twelve.
  */
-export async function assessCandidates(input: AssessCandidatesInput): Promise<GateOutcome> {
+export async function assessCandidates<T extends GateCandidate>(
+  input: AssessCandidatesInput<T>
+): Promise<GateOutcome<T>> {
   const shortlist = input.candidates.slice(0, GATE_MAX_CANDIDATES);
   if (shortlist.length === 0) return descended(input.mode, "no-candidates");
 
   const fetchBytes = input.fetchBytes ?? defaultFetchBytes;
   const images: VisionImageBlock[] = [];
-  const looked: LicensedPhotoCandidate[] = [];
+  const looked: T[] = [];
   const skipped: GateVerdict["skipped"] = [];
   for (const candidate of shortlist) {
     if (!input.fetchBytes && !thumbnailHosted(candidate)) {

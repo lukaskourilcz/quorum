@@ -226,29 +226,40 @@ describe("the cover's alt describes the cover", () => {
 });
 
 /**
- * Both magazines illustrate from keyless licensed archives, with a deterministic SVG plate as the
- * last rung. gpt-image-2 has never had a call site in an article pipeline and the budget ledger
- * has never carried an entry for one; this is what says so out loud, so a future image adapter
- * has to argue with a failing test rather than slip in beside the free ladder.
+ * The image roles an article pipeline may reach, and the two rules that bound them.
+ *
+ * This used to assert that no article pipeline had any image call site at all, and that the
+ * ledger had never carried one. `article-image-fit-2026-08-08` supersedes that: it sanctions
+ * exactly two roles and no more. What has not changed is the shape of the prohibition — a role
+ * nobody countersigned still has no way in, and the ladder still prefers a keyless archive to
+ * anything paid, which is why the illustration rung sits below the search rather than above it.
  */
-describe("paid image generation has no way into an article", () => {
-  it("has no IMAGE role for a pipeline to reach", async () => {
+describe("the image roles an article may reach", () => {
+  it("holds the two the decision sanctions, and no third", async () => {
     const models = JSON.parse(
       await readFile(path.join(repoRoot, "config", "models.json"), "utf8")
-    ) as { roles: Record<string, unknown> };
+    ) as { roles: Record<string, { provider?: string } | undefined> };
 
+    // The gate rides the Anthropic key the company already pays for.
+    expect(models.roles.IMAGE_GATE?.provider).toBe("anthropic");
+    // The one sanctioned renderer, dark unless both the key and the flag are set.
+    expect(models.roles.ARTICLE_ILLUSTRATION?.provider).toBe("fal");
+    // The blanket IMAGE role is still absent: a pipeline that wanted one would have to argue
+    // with the decision rather than add a config key.
     expect(models.roles.IMAGE).toBeUndefined();
-    // AVATAR_IMAGE stays: owner-triggered portrait repairs are the one place a generated image
-    // is wanted, and they are not an article pipeline.
+    // AVATAR_IMAGE stays: owner-triggered portrait repairs are not an article pipeline.
     expect(models.roles.AVATAR_IMAGE).toBeDefined();
   });
 
-  it("has never billed an image call from an article pipeline", async () => {
+  it("bills a generated image under its own phase, and never under an article's", async () => {
     const ledger = JSON.parse(
       await readFile(path.join(repoRoot, "state", "budget", "ledger.json"), "utf8")
     ) as { entries: Array<{ kind: string; phase: string }> };
 
-    const imageEntries = ledger.entries.filter((entry) => entry.kind === "image");
-    expect(imageEntries.map((entry) => `${entry.phase}:${entry.kind}`)).toEqual([]);
+    // Every image row belongs to the illustration rung. A `kind: "image"` row under
+    // `cu-edition` or `article-production` would mean something rendered a picture inside a
+    // pipeline that is not allowed to, which is the fault the old assertion was watching for.
+    const phases = new Set(ledger.entries.filter((entry) => entry.kind === "image").map((entry) => entry.phase));
+    expect([...phases].filter((phase) => phase !== "article_illustration")).toEqual([]);
   });
 });

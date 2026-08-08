@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { illustrativeScenePhoto } from "./illustrative-scenes.js";
 import { illustrativeSportPhoto } from "./illustrative.js";
 import {
@@ -6,8 +7,24 @@ import {
   type LicensedImageSearchResult,
   type LicensedPhotoCandidate
 } from "./licensed.js";
-import { assessCandidates, type GateVerdict } from "./vision-gate.js";
+import {
+  assessCandidates,
+  type AssessCandidatesInput,
+  type GateOutcome,
+  type GateVerdict
+} from "./vision-gate.js";
 import { proposeCuratedScene } from "./scene-proposals.js";
+import {
+  ILLUSTRATION_USD_PER_IMAGE,
+  defaultIllustrationRenderer,
+  illustrationEnabled,
+  illustrationImage,
+  illustrationModel,
+  illustrationPrompt,
+  type IllustrationRenderer
+} from "./illustration.js";
+import { recordIllustrationSpend } from "./budget.js";
+import type { ArticleImage } from "../contracts/autonomy.js";
 import type { ImageProgramBudget } from "./budget.js";
 import type { VisualBrief } from "./visual-brief.js";
 
@@ -26,10 +43,12 @@ import type { VisualBrief } from "./visual-brief.js";
  * costs a photograph and never a publication.
  */
 
-export type HeroRung = "entity-linked" | "curated" | "search" | "plate";
+export type HeroRung = "entity-linked" | "curated" | "search" | "illustration" | "plate";
 
 export interface HeroLadderResult {
   candidate: LicensedPhotoCandidate | null;
+  /** A rendered illustration, already in package shape. Set only on the illustration rung. */
+  illustration?: ArticleImage;
   /** The rung that answered. `plate` means the caller draws the deterministic cover. */
   rung: HeroRung;
   /** Every gate run in order, for the run report and for the record beside the package. */
@@ -46,6 +65,8 @@ export interface LadderContext {
   brief: VisualBrief | null;
   /** Decides which curated file is tried first. Never sent anywhere. */
   seed: string;
+  /** The article's slug, which is where a rendered illustration's asset paths come from. */
+  illustrationSlug?: string;
   dry?: boolean;
 }
 
@@ -53,7 +74,13 @@ export interface LadderDependencies {
   scenePhoto?: typeof illustrativeScenePhoto;
   sportPhoto?: typeof illustrativeSportPhoto;
   search?: (input: { phrases: readonly string[] }) => Promise<LicensedImageSearchResult>;
-  gate?: typeof assessCandidates;
+  /**
+   * The gate, narrowed to the candidates a ladder rung actually hands it. A fake in a test is
+   * one function; the real one is generic over anything with an id, a provider and a thumbnail.
+   */
+  gate?: (input: AssessCandidatesInput<LicensedPhotoCandidate>) => Promise<GateOutcome<LicensedPhotoCandidate>>;
+  render?: IllustrationRenderer;
+  illustrationEnabled?: () => boolean;
 }
 
 /**
@@ -215,6 +242,83 @@ async function advise(
 }
 
 /**
+ * The illustration rung: rendered, gated, labelled, and skipped in every keyless environment.
+ *
+ * It sits between the licensed search and the plate because it is less certain than a photograph
+ * of a real place and more useful than a panel of coloured bars. Nothing about it is presented as
+ * photography — see `illustration.ts`, where the alt text and the licence block are built.
+ *
+ * The render is billed the moment it happens, before the gate is asked. An illustration the gate
+ * refuses cost exactly what an accepted one cost, so the attempt burns: the day's two are two
+ * renders, not two successes.
+ */
+async function illustrationRung(
+  context: LadderContext,
+  dependencies: LadderDependencies
+): Promise<{ image: ArticleImage | null; verdict: GateVerdict | null }> {
+  const enabled = dependencies.illustrationEnabled ?? illustrationEnabled;
+  if (!enabled()) return { image: null, verdict: null };
+  const brief = context.brief;
+  if (!brief || brief.phrases.length === 0) return { image: null, verdict: null };
+  if (context.budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE)) {
+    return { image: null, verdict: null };
+  }
+  if (context.dry) return { image: null, verdict: null };
+
+  const model = await illustrationModel().catch(() => null);
+  if (!model) return { image: null, verdict: null };
+  const prompt = illustrationPrompt(context.venture, brief);
+  const render = dependencies.render ?? defaultIllustrationRenderer;
+  const rendered = await render({ prompt, model, apiKey: process.env.FAL_KEY ?? "" }).catch(() => null);
+  if (!rendered) return { image: null, verdict: null };
+
+  // Billed here, before anything is judged, because the renderer has already charged for it.
+  context.budget.record(ILLUSTRATION_USD_PER_IMAGE, "generated-image");
+  await recordIllustrationSpend({
+    stateRoot: context.stateRoot,
+    cycleId: context.cycleId,
+    ventureId: context.venture,
+    model,
+    usd: ILLUSTRATION_USD_PER_IMAGE,
+    requestHash: createHash("sha256").update(`${context.cycleId}|${context.seed}|${prompt}`).digest("hex"),
+    now: new Date()
+  }).catch(() => undefined);
+
+  const gate = dependencies.gate ?? assessCandidates;
+  const outcome = await gate({
+    venture: context.venture,
+    article: {
+      titleCs: context.article.titleCs,
+      dekCs: context.article.dekCs,
+      negatives: brief.negatives
+    },
+    // The gate reads bytes, not archives, so a rendered picture is handed to it the same way a
+    // fixture is in a test: through the injected reader, with a candidate that exists only to
+    // carry an id.
+    candidates: [{
+      id: `illustration:${context.seed}`,
+      provider: "boardlessai",
+      thumbnailUrl: `boardlessai:illustration/${context.seed}`
+    } as unknown as LicensedPhotoCandidate],
+    mode: "generated",
+    stateRoot: context.stateRoot,
+    cycleId: context.cycleId,
+    budget: context.budget,
+    fetchBytes: async () => rendered.bytes
+  }).catch(() => null);
+  if (!outcome?.selected) return { image: null, verdict: outcome?.verdict ?? null };
+
+  const sceneCs = outcome.verdict.candidates[0]?.sceneCs?.trim();
+  const image = await illustrationImage({
+    bytes: rendered.bytes,
+    venture: context.venture,
+    slug: context.illustrationSlug ?? context.seed,
+    sceneCs: sceneCs || brief.phrases[0] || "abstraktni ilustrace"
+  }).catch(() => null);
+  return { image, verdict: outcome.verdict };
+}
+
+/**
  * DNESKAi's ladder, walked after the article exists.
  *
  * Curated scene first, because a hand-reviewed photograph of the day's concept is more
@@ -248,6 +352,17 @@ export async function selectEditionHero(
     return {
       candidate: searched.candidate,
       rung: "search",
+      verdicts,
+      skippedProviders: searched.skippedProviders
+    };
+  }
+  const rendered = await illustrationRung(context, dependencies);
+  if (rendered.verdict) verdicts.push(rendered.verdict);
+  if (rendered.image) {
+    return {
+      candidate: null,
+      illustration: rendered.image,
+      rung: "illustration",
       verdicts,
       skippedProviders: searched.skippedProviders
     };
@@ -334,7 +449,19 @@ export async function selectArticleHero(
     seed,
     accept: curatedAcceptor(input, dependencies, verdicts)
   }).catch(() => null);
-  return curated
-    ? { candidate: curated, rung: "curated", verdicts, skippedProviders: searched.skippedProviders }
-    : { candidate: null, rung: "plate", verdicts, skippedProviders: searched.skippedProviders };
+  if (curated) {
+    return { candidate: curated, rung: "curated", verdicts, skippedProviders: searched.skippedProviders };
+  }
+  const rendered = await illustrationRung(input, dependencies);
+  if (rendered.verdict) verdicts.push(rendered.verdict);
+  if (rendered.image) {
+    return {
+      candidate: null,
+      illustration: rendered.image,
+      rung: "illustration",
+      verdicts,
+      skippedProviders: searched.skippedProviders
+    };
+  }
+  return { candidate: null, rung: "plate", verdicts, skippedProviders: searched.skippedProviders };
 }

@@ -53,7 +53,7 @@ export const ArticleFrontmatterV2Schema = openObject({
     alt: z.string().trim().min(1).max(300),
     width: z.number().int().min(640).max(4_000).optional(),
     height: z.number().int().min(360).max(3_000).optional(),
-    origin: z.enum(["photo", "svg"]).optional(),
+    origin: z.enum(["photo", "svg", "illustration"]).optional(),
     attribution: openObject({
       license: NonEmptyStringSchema,
       author: NonEmptyStringSchema,

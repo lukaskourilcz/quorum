@@ -534,7 +534,7 @@ export function heroCropAnchor(candidate: Pick<LicensedPhotoCandidate, "identity
   return candidate.identityOf ? "top" : "attention";
 }
 
-async function webpVariant(
+export async function webpVariant(
   bytes: Uint8Array,
   width: number,
   height: number,

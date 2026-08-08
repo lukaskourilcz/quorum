@@ -296,6 +296,7 @@ export async function runLiveEdition(input: {
         article: request.article,
         brief: request.brief,
         seed: input.date,
+        illustrationSlug: request.slug,
         subjectQuery: request.subjectQuery
       });
       imageSelection = { slug: request.slug, result };

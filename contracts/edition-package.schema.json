@@ -192,7 +192,8 @@
                           "type": "string",
                           "enum": [
                             "photo",
-                            "svg"
+                            "svg",
+                            "illustration"
                           ]
                         },
                         "attribution": {
@@ -671,7 +672,8 @@
                           "type": "string",
                           "enum": [
                             "photo",
-                            "svg"
+                            "svg",
+                            "illustration"
                           ]
                         },
                         "attribution": {
@@ -1059,7 +1061,8 @@
                     "CC BY-SA",
                     "Pexels License",
                     "Pixabay Content License",
-                    "BoardlessAI deterministic"
+                    "BoardlessAI deterministic",
+                    "BoardlessAI illustration"
                   ]
                 },
                 "author": {
@@ -1089,7 +1092,8 @@
               "type": "string",
               "enum": [
                 "photo",
-                "svg"
+                "svg",
+                "illustration"
               ]
             },
             "hero_bytes_base64": {
