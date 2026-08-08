@@ -57,24 +57,35 @@ const ventureSlugs = [
   "plain-language-policy-diff",
   "small-team-incident-brief"
 ];
+/**
+ * Pages that were folded into /company and /results and now answer with a permanent redirect.
+ *
+ * They are checked rather than dropped: a retired URL that starts 404ing is a broken inbound
+ * link, and a retired URL that silently stops redirecting is the same failure a release later.
+ * The destination is asserted too, so a redirect surviving while pointing somewhere wrong still
+ * fails. Source of truth for the pairs is `redirects()` in site/next.config.ts.
+ */
+const permanentRedirects = {
+  "/about": "/company#about",
+  "/boardroom": "/standups",
+  "/disclosure": "/company#disclosure",
+  "/governance": "/company#rules",
+  "/incubator": "/ventures",
+  "/metrics": "/results#measures",
+  "/money": "/results#money"
+};
+
 const expectedRoutes = [
   "/",
-  "/about",
   "/admin/login",
   "/agents",
   ...agentSlugs.map((slug) => `/agents/${slug}`),
-  "/boardroom",
   "/company",
-  "/disclosure",
   "/feed.json",
   "/feed.xml",
-  "/governance",
-  "/incubator",
   "/icon",
   "/log",
   "/manifest.webmanifest",
-  "/metrics",
-  "/money",
   "/privacy",
   "/robots.txt",
   "/sitemap.xml",
@@ -168,9 +179,10 @@ for (const { response, body } of results) {
 
 const linkedResults = await mapWithConcurrency([...linkedPaths].sort(), 8, request);
 for (const result of linkedResults) {
-  if (![200, 307, 401, 503].includes(result.response.status)) {
+  // 308 is a retired page redirecting on purpose; the pairs are asserted separately below.
+  if (![200, 307, 308, 401, 503].includes(result.response.status)) {
     failures.push(
-      `linked ${result.pathname}: expected 200/307/401/503, received ${result.response.status}`
+      `linked ${result.pathname}: expected 200/307/308/401/503, received ${result.response.status}`
     );
   }
 }
@@ -204,6 +216,18 @@ if (
   failures.push("/sitemap.xml: noindex fixture routes must be excluded");
 }
 
+for (const [source, destination] of Object.entries(permanentRedirects)) {
+  const { response } = await request(source);
+  if (response.status !== 308) {
+    failures.push(`${source}: expected a 308 permanent redirect, received ${response.status}`);
+    continue;
+  }
+  const location = response.headers.get("location");
+  if (!location || new URL(location, base).pathname + new URL(location, base).hash !== destination) {
+    failures.push(`${source}: expected a redirect to ${destination}, received ${location ?? "no Location header"}`);
+  }
+}
+
 const admin = await request("/admin");
 if (admin.response.status !== 307) {
   failures.push(`/admin: login redirect expected, received ${admin.response.status}`);
@@ -229,6 +253,7 @@ if (failures.length > 0) {
       {
         status: "passed",
         expectedRoutes: results.length,
+        permanentRedirects: Object.keys(permanentRedirects).length,
         internalLinks: linkedResults.length,
         adminStatus: admin.response.status,
         publishedFeedItems: jsonFeed
