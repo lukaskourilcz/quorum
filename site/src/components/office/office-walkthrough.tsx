@@ -600,11 +600,28 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
           data-sec
           id="facilities"
         >
+          {/*
+            D8: the whiteboard is the surface the plan is drawn on, so both its edges have to be
+            in frame. The whiteboard fills about 68% of the photograph's height, so at the old
+            `264svh` — a plate 147% of the viewport tall — it rendered at exactly 100% of the
+            viewport and both edges sat on the bezel. `150vw` was the other half of the problem:
+            on a wide, short viewport it won the `max()` and re-cropped what `svh` had fixed.
+
+            Coverage is the hard constraint, and below 1024px it is the binding one: the section
+            is auto-height there and stacks the plan, the key and four folded panels, so it runs
+            well past 100svh — 1166px at a 768 x 1024 viewport. 190svh framed the whiteboard
+            beautifully and let the photograph's own bottom edge into that frame, which is worse
+            than the crop it fixed. 200svh covers it with 57px to spare and still leaves the
+            whiteboard 45–101px of clearance at every desktop viewport, after the 1.07 scale and
+            the ±46/30px drift.
+
+            The calendar section reuses this photograph at its own crop and is untouched.
+          */}
           <OfficePlate
             alt="Empty office wall with a whiteboard"
             filter="saturate(.32) brightness(.3) contrast(1.06)"
             image="office-whiteboard"
-            width="max(150vw, 264svh)"
+            width="max(105vw, 200svh)"
           />
           <OfficeMood />
           {/*

@@ -118,7 +118,10 @@ const ROOM_ORDER: ReadonlyArray<{
   },
   {
     key: "carousel-studio",
-    name: "Carousel Studio",
+    // The reader-facing name only (D13). The `carousel-studio` key above does not move, and nor
+    // does the package, the config keys, the state paths or the workflow allowlists — the
+    // Caught Up → DNESKAi rename is the precedent and the rule.
+    name: "Design Lab",
     purpose: "The workshop. It renders every carousel and assigns the one line on every first slide.",
     connects: "The roller door onto the spine, and the summary chase that runs to it from both magazine rooms.",
     operates: "It holds no meeting and decides nothing. Same input, same bytes — and a hook may only appear on content its own metadata makes true."

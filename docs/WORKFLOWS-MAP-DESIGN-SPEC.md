@@ -120,7 +120,7 @@ enumerated underneath. A reader learns the marks by looking at the building.
 the BoardlessAI office*. One inline SVG; HTML overlays only for the panels.
 
 The 200-unit left and right margins and the 80-unit bottom margin are the
-off-plan zone: exit arrows, addresses and the storefront's approach live there.
+off-plan zone: exit arrows and addresses live there.
 
 ### 3.1 Envelope and ranks
 
@@ -196,14 +196,21 @@ Envelope (openings are gaps in the path, never lighter strokes):
 north  M200 100 H1560
 west   M200 100 V860
 east   M1560 100 V630   M1560 690 V730   M1560 790 V860
-south  M200 860 H655    M715 860 H915    M1025 860 H1560
+south  M200 860 H655    M715 860 H1560
 ```
 
 East openings 630–690 and 730–790 are the two courier exits. The south opening
-915–1025 is the pickup window, moved 100 east with Titty Tuesdays so that it
-stays in that room's own wall. The south opening 655–715 is new: GoVIRAL's
-launch edge (§3.8), aligned with its door and its two subroom openings so that
-an envelope crosses the room on one straight line. The west wall is unbroken.
+655–715 is GoVIRAL's launch edge (§3.8), aligned with its door and its two
+subroom openings so that an envelope crosses the room on one straight line. The
+west wall is unbroken.
+
+**The pickup window is not drawn, and this paragraph is the record of that.**
+The original decision 8 gave Titty Tuesdays a sill in the south wall with a
+storefront reaching in from outside; the launcher's amendment replaced it with
+a dock bay and a dashed collect lane pointing back at the room, and that is what
+the plan has drawn since. §3.6 and §5 are corrected to match. Whether the bay
+itself stays is an open owner decision, on record in the owner document — and
+either way the wall below Titty Tuesdays is solid.
 
 Partitions:
 
@@ -290,8 +297,8 @@ address. What GoVIRAL gained in D12 is an edge of its own, not a bay — §3.8.
 | --- | --- |
 | Courier → DNESKAi magazine | `M1560 660 H1656`, 2.2 `#d4d4d8`, arrowhead |
 | Courier → MMA Files magazine | `M1560 760 H1656`, 2.2 `#d4d4d8`, arrowhead |
-| Storefront reach leg | `M800 916 H1000 V872`, 1.8 `#94949c`, dash 3 6, no head |
-| Storefront return leg | `M956 872 V898 H806`, 2.2 `#fde68a`, arrowhead at the west end |
+| Question bank → the floor | `M104 692 H198`, 2.2 `#94949c`, arrowhead, plus the dormant 60-unit sill at x 200, y 662–722, dashed 7 6 |
+| Titty Tuesdays' bay → the room | `M1408 566 H1114`, 1.8 `#fde68a`, dash 6 5, arrowhead at the **west** end |
 | GoVIRAL → the platforms | `M685 862 V902`, 1.8 `#bbf7d0`, dash 6 5, arrowhead (§3.8) |
 
 Arrowhead marker: `markerWidth 9`, `markerHeight 8`, `refX 8`, `refY 4`,
@@ -302,20 +309,26 @@ Addresses, mono, `text-anchor: start` at x 1666:
 - `DNESKAI` at y 650 and `MAGAZINE` at y 672 (mono 15/400)
 - `MMA FILES` at y 750 and `MAGAZINE` at y 772
 
-The storefront's two legs are the whole of decision 8's surviving half. Both
-begin and end outside the envelope: the dotted leg reaches in to the sill and
-stops without a head, the solid leg leaves the sill and carries the arrow away.
-Nobody inside walks to the window, and no courier arrow ever touches this wall.
-Labels, `text-anchor: end` at x 788: `STOREFRONT` at y 892 (mono 15/600
-`#d4d4d8`, 12.85:1) and `COLLECTS AT THE WINDOW` at y 912 (mono 15 `#94949c`,
-6.31:1). `PICKUP WINDOW` sits at x 1040, y 886 in mono 15/500 `#fde68a`
-(13.7:1 on `#101012`).
+The three edges that leave the building say three different things, and the
+drawing's rule is one a reader learns once:
 
-**Shuttered state.** The sill's 915–1025 opening fills with a hatched shutter —
-the apron pattern at 8-unit pitch in `#94949c` at 1.2 — the reach leg stops at
-the shutter, the return leg is absent entirely, and `CONCEPT MODE` replaces
-`COLLECTS AT THE WINDOW` in mono 15 `#fde68a`. An unreachable engine can close
-the window; it can never open a courier exit.
+- **Solid grey means an address.** The two courier lanes carry a sealed package
+  to a magazine that exists, and only those two are solid.
+- **Dashed in a venture's own hue means an intention or a pull.** Titty
+  Tuesdays' lane points *inward* at the room, because the storefront collects
+  its own feed and nothing is delivered to it. GoVIRAL's launch edge points
+  outward at platforms that are not connected yet (§3.8).
+- **Dormant grey, drawn and never animated, means a completed import.** The
+  west corridor is where the question bank came in, once. It points inward,
+  has no outbound leg, and stillness on it is the honest state.
+
+Addresses, mono, `text-anchor: start` at x 1666 for the two magazines, and
+`text-anchor: middle` at x 685 for the platforms:
+
+- `DNESKAI` / `MAGAZINE` at y 650 and 672, `MMA FILES` / `MAGAZINE` at y 750
+  and 772 (mono 15, `#d4d4d8` then `#94949c`)
+- `QUESTION` / `BANK`, `text-anchor: end` at x 94, y 682 and 704
+- `SOCIAL PLATFORMS` at y 926, mono 15/500 `#bbf7d0` — 11.35:1 on `#101012`
 
 ### 3.7 The dock
 
@@ -462,7 +475,7 @@ in-plan size at 15 units (10.06px). Nothing on the plan is smaller.
 | Dock sub-caption | 15u | 500 | upper | .12em | `#94949c` | 10.1px |
 | Off-plan address, primary | 15u | 600 | upper | .12em | `#d4d4d8` | 10.1px |
 | Off-plan address, secondary | 15u | 400 | upper | .1em | `#94949c` | 10.1px |
-| `PICKUP WINDOW` | 15u | 500 | upper | .1em | `#fde68a` | 10.1px |
+| `SOCIAL PLATFORMS` | 15u | 500 | upper | .1em | `#bbf7d0` | 10.1px |
 
 No hour marks, no numerals and no legends live inside the plan (§3.2) — the one
 exception is a beat's tag, which is `HH:00 · label` in mono 19u while that beat
@@ -583,7 +596,7 @@ Depth 1 answers the question on its own. Every door opens onto one corridor;
 the corridor runs east into the roller door and the dock; the dock has two
 labelled exits and one package on its bench; two rooms never send anything that
 way and the drawing shows why — the records room's only door leads into the
-desk that uses it, and the storefront's line begins and ends outside the wall.
+desk that uses it, and Titty Tuesdays' lane whose arrow points back at the room.
 
 ### 5.5 Hover and focus
 

@@ -117,9 +117,13 @@ export const ROOMS: readonly RoomGeometry[] = [
   // and opens into the desk that uses its files. That asymmetry needs no caption.
   { key: "fightaiq", x: 1090, y: 100, width: 150, height: 354, labelY: 146, door: null, numeral: 4 },
   { key: "carousel-studio", x: 1240, y: 100, width: 320, height: 354, labelY: 146, door: null, numeral: 5 },
-  { key: "marketingshark", x: 200, y: 524, width: 360, height: 336, labelY: 570, door: { from: 410, to: 470, rank: "bottom" }, numeral: 6 },
-  { key: "goviral", x: 560, y: 524, width: 170, height: 336, labelY: 570, door: { from: 625, to: 685, rank: "bottom" }, numeral: 7 },
-  { key: "titty-tuesdays", x: 730, y: 524, width: 270, height: 336, labelY: 570, door: { from: 835, to: 895, rank: "bottom" }, numeral: 8 }
+  { key: "marketingshark", x: 200, y: 524, width: 340, height: 336, labelY: 570, door: { from: 340, to: 400, rank: "bottom" }, numeral: 6 },
+  // GoVIRAL is a station, not a room that meets once a week: envelopes arrive from the Design Lab,
+  // are prepared, and leave toward the platforms. At 170 units an envelope entering it vanished.
+  // The 120 it gained came from marketingShark's 20 and 100 off the dock apron's west end, which
+  // held nothing but hatch — the bays, the courier exits and the roller door did not move.
+  { key: "goviral", x: 540, y: 524, width: 290, height: 336, labelY: 570, door: { from: 655, to: 715, rank: "bottom" }, numeral: 7 },
+  { key: "titty-tuesdays", x: 830, y: 524, width: 270, height: 336, labelY: 570, door: { from: 935, to: 995, rank: "bottom" }, numeral: 8 }
 ];
 
 /**
@@ -134,9 +138,9 @@ const NOTE_ANCHORS: Record<string, { xs: number[]; y: number; stem: "down" | "up
   "caught-up": { xs: [733, 771], y: 458, stem: "down" },
   "mma-files": { xs: [998, 1036, 1074], y: 458, stem: "down" },
   fightaiq: { xs: [1017, 1055], y: 206, stem: "side" },
-  marketingshark: { xs: [478], y: 500, stem: "up" },
-  goviral: { xs: [693], y: 500, stem: "up" },
-  "titty-tuesdays": { xs: [903], y: 500, stem: "up" }
+  marketingshark: { xs: [370], y: 500, stem: "up" },
+  goviral: { xs: [685], y: 500, stem: "up" },
+  "titty-tuesdays": { xs: [965], y: 500, stem: "up" }
 };
 
 /** The venture hue at 14% over the room floor, given opaque so it can be measured. */
@@ -412,7 +416,7 @@ export function WorkflowsPlan({
           <stop offset="0.6" stopColor="currentColor" stopOpacity={0.16} />
           <stop offset="1" stopColor="currentColor" stopOpacity={0} />
         </radialGradient>
-        {["#d4d4d8", WALL_INNER, "#fde68a"].map((colour) => (
+        {["#d4d4d8", WALL_INNER, "#fde68a", "#bbf7d0"].map((colour) => (
           <marker
             id={`wf-arrow-${colour.slice(1)}`}
             key={colour}
@@ -459,7 +463,7 @@ export function WorkflowsPlan({
           );
         })}
         <path d="M200 454 H1560 V524 H200 Z" fill={FLOOR_CORRIDOR} />
-        <rect fill="url(#wf-apron)" height={336} width={560} x={1000} y={524} />
+        <rect fill="url(#wf-apron)" height={336} width={460} x={1100} y={524} />
       </g>
 
       {/*
@@ -547,7 +551,7 @@ export function WorkflowsPlan({
           question bank came in through, which is the one opening that no longer carries anything.
         */}
         <path
-          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H1560"
+          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H655 M715 860 H1560"
           pathLength={1}
           strokeDasharray={1}
         />
@@ -563,16 +567,33 @@ export function WorkflowsPlan({
         <path
           d="M560 100 V454 M830 100 V454 M1240 100 V454 M1090 100 V240 M1090 300 V454
              M200 454 H440 M500 454 H665 M725 454 H930 M990 454 H1330 M1510 454 H1560
-             M560 524 V860 M730 524 V860 M1000 524 V860
-             M200 524 H410 M470 524 H625 M685 524 H835 M895 524 H1000"
+             M540 524 V860 M830 524 V860 M1100 524 V860
+             M200 524 H340 M400 524 H655 M715 524 H935 M995 524 H1100"
           pathLength={1}
           strokeDasharray={1}
         />
       </g>
 
+      {/*
+        GoVIRAL's three bands (D12). Thinner than a partition between rooms at 1.6 against 2.5,
+        because these are not rooms — they are the stations one envelope passes through. Their
+        openings are gaps at x 655–715, exactly under the room's door and exactly over the gap in
+        the south wall, so an envelope crosses all three on one straight line at x 685 and never
+        turns.
+      */}
+      <g
+        fill="none"
+        stroke={WALL_INNER}
+        strokeLinecap="square"
+        strokeWidth={1.6}
+        style={animate ? entrance("wf-fade", 380, 240, E1) : undefined}
+      >
+        <path d="M540 636 H655 M715 636 H830 M540 748 H655 M715 748 H830" />
+      </g>
+
       <g fill="none" stroke={WALL_INNER} strokeLinecap="square" style={animate ? entrance("wf-fade", 380, 180, E1) : undefined}>
         {/* The dock kerb, dashed, so the apron reads as circulation rather than as a room. */}
-        <path d="M1000 524 H1040 M1110 524 H1330 M1510 524 H1560" strokeDasharray="7 6" strokeWidth={1.5} />
+        <path d="M1100 524 H1140 M1210 524 H1330 M1510 524 H1560" strokeDasharray="7 6" strokeWidth={1.5} />
         {/* A roller does not swing. Six ticks across the opening is how the workshop reads as
             machinery from the wall alone. */}
         {[1345, 1375, 1405, 1435, 1465, 1495].map((x) => (
@@ -603,7 +624,7 @@ export function WorkflowsPlan({
             exit, no dock bay and no address, and the drawing says so by never reaching a wall.
             Its gap at the walk-through is deliberate: a trend signal does not cross the dock. */}
         <path
-          d="M655 524 V494 H1000 M1040 494 H1180 M712 494 V454 M964 494 V454"
+          d="M685 524 V494 H1100 M1140 494 H1180 M712 494 V454 M964 494 V454"
           stroke="#bbf7d0"
           strokeDasharray="2 7"
           strokeLinecap="round"
@@ -662,24 +683,31 @@ export function WorkflowsPlan({
           <rect height={10} key={y} width={114} x={1108} y={y} />
         ))}
 
-        <rect height={64} rx={10} width={170} x={300} y={668} />
-        {[320, 426].map((x) => (
+        <rect height={64} rx={10} width={170} x={285} y={668} />
+        {[305, 411].map((x) => (
           <g key={x}>
             <rect height={16} width={24} x={x} y={644} />
             <rect height={16} width={24} x={x} y={740} />
           </g>
         ))}
 
-        <rect height={52} rx={8} width={96} x={597} y={674} />
-        {[609, 657].map((x) => (
-          <g key={x}>
-            <rect height={16} width={24} x={x} y={650} />
-            <rect height={16} width={24} x={x} y={734} />
-          </g>
+        {/*
+          GoVIRAL has no table. It had one, and D12 took it: a room that work passes *through* is
+          not a room that sits down. Its three bands carry station glyphs instead — the arrival
+          tray, the preparation top and the launch sill.
+        */}
+        <rect height={34} rx={4} width={130} x={600} y={588} />
+        {[599, 610].map((y) => (
+          <path d={`M600 ${y} H730`} key={y} />
+        ))}
+        <rect height={40} rx={4} width={130} x={600} y={672} />
+        <path d="M665 672 V712" />
+        {[830, 838].map((y) => (
+          <path d={`M600 ${y} H770`} key={y} />
         ))}
 
-        <rect height={62} rx={10} width={170} x={780} y={659} />
-        {[800, 906].map((x) => (
+        <rect height={62} rx={10} width={170} x={880} y={659} />
+        {[900, 1006].map((x) => (
           <g key={x}>
             <rect height={16} width={24} x={x} y={635} />
             <rect height={16} width={24} x={x} y={729} />
@@ -736,11 +764,13 @@ export function WorkflowsPlan({
         strokeWidth={1.6}
         style={animate ? entrance("wf-fade", 300, 480, "linear") : undefined}
       >
-        <rect height={54} width={90} x={1060} y={540} />
+        <rect height={54} width={90} x={1160} y={540} />
         {[556, 568, 580].map((y) => (
-          <path d={`M1072 ${y} H1138`} key={y} strokeWidth={1.4} />
+          <path d={`M1172 ${y} H1238`} key={y} strokeWidth={1.4} />
         ))}
-        <rect height={40} width={240} x={1060} y={620} />
+        {/* The bench ends at 1400 and the first bay begins at 1420: the clearance the drawing
+            has always implied, now that the apron's west edge has moved. */}
+        <rect height={40} width={240} x={1160} y={620} />
         {/*
           Three bays. The lower two sit opposite the two courier exits; the top one is Titty
           Tuesdays', and lines up with no exit at all — which is the one thing left on the drawing
@@ -752,13 +782,13 @@ export function WorkflowsPlan({
       </g>
       {/* One package on the bench, not two. It is the rule's cardinality, and the caption says so. */}
       <g style={animate ? entrance("wf-fade", 300, 480, "linear") : undefined}>
-        <rect fill="#16161b" height={30} stroke={WALL_OUTER} strokeWidth={1.6} width={30} x={1084} y={590} />
-        <path d="M1084 605 H1114" stroke={WALL_OUTER} strokeWidth={1.6} />
-        <circle cx={1099} cy={605} fill={WALL_OUTER} r={3.2} />
+        <rect fill="#16161b" height={30} stroke={WALL_OUTER} strokeWidth={1.6} width={30} x={1184} y={590} />
+        <path d="M1184 605 H1214" stroke={WALL_OUTER} strokeWidth={1.6} />
+        <circle cx={1199} cy={605} fill={WALL_OUTER} r={3.2} />
       </g>
       {!compact ? (
         <g style={animate ? entrance("wf-rise", 260, 560, E1) : undefined}>
-          <Label anchor="start" fill={WALL_OUTER} size={19} tracking=".1em" weight={600} x={1016} y={812}>
+          <Label anchor="start" fill={WALL_OUTER} size={19} tracking=".1em" weight={600} x={1116} y={812}>
             LOADING DOCK
           </Label>
         </g>
@@ -785,7 +815,7 @@ export function WorkflowsPlan({
           courier lanes should be mistaken for it.
         */}
         <path
-          d="M1408 566 H1014"
+          d="M1408 566 H1114"
           fill="none"
           markerEnd="url(#wf-arrow-fde68a)"
           stroke="#fde68a"
@@ -794,6 +824,22 @@ export function WorkflowsPlan({
         />
 
         <rect fill="none" height={60} stroke={WALL_INNER} strokeDasharray="7 6" strokeWidth={1.5} width={1} x={200} y={662} />
+        {/*
+          GoVIRAL's launch edge, out of the one gap in the south wall (D12).
+          Dashed and in GoVIRAL's own hue, which extends a rule the drawing already had: the two
+          courier lanes are solid grey because they carry a sealed package to a real address;
+          Titty Tuesdays' lane is dashed in its hue because it pulls rather than receives; this
+          one is dashed because the pipeline is built and the far end is not connected yet. When
+          the platforms exist it becomes solid and gains an address block like the magazines'.
+        */}
+        <path
+          d="M685 862 V902"
+          fill="none"
+          markerEnd="url(#wf-arrow-bbf7d0)"
+          stroke="#bbf7d0"
+          strokeDasharray="6 5"
+          strokeWidth={1.8}
+        />
       </g>
 
       {!compact ? (
@@ -815,6 +861,10 @@ export function WorkflowsPlan({
           </Label>
           <Label anchor="end" fill={WALL_INNER} size={15} tracking=".1em" weight={400} x={94} y={704}>
             BANK
+          </Label>
+          {/* The one address the drawing names that does not exist yet. The dashed lane says so. */}
+          <Label fill="#bbf7d0" size={15} tracking=".1em" weight={500} x={685} y={926}>
+            SOCIAL PLATFORMS
           </Label>
         </g>
       ) : null}
@@ -916,8 +966,8 @@ export function WorkflowsPlan({
             {/* The dock's hit target, in reading order: after the workshop, before the shop. */}
             {geometry.key === "carousel-studio" ? (
               <g aria-label="Open the loading dock" {...press("dock")}>
-                <rect fill="transparent" height={336} width={560} x={1000} y={524} />
-                <FocusRing height={336} width={560} x={1000} y={524} />
+                <rect fill="transparent" height={336} width={460} x={1100} y={524} />
+                <FocusRing height={336} width={460} x={1100} y={524} />
               </g>
             ) : null}
           </g>
