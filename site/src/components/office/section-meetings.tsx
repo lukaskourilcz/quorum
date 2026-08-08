@@ -100,6 +100,14 @@ export function SectionMeetings({
     [channels, channelId]
   );
   const activeDay = day ?? channel.days.at(-1)?.date ?? null;
+
+  /** Today in Prague, read the same way the page header reads its clock. */
+  const todayInPrague = useMemo(
+    () => new Intl.DateTimeFormat("en-CA", {
+      year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/Prague"
+    }).format(new Date()),
+    []
+  );
   const playing = useMemo(
     () => channel.days.find((entry) => entry.date === activeDay) ?? null,
     [channel, activeDay]
@@ -214,11 +222,18 @@ export function SectionMeetings({
           >
             {channels.map((entry) => {
               const active = entry.id === channel.id;
-              const unread = !active && entry.days.length > 0 && !opened.includes(entry.id);
+              /*
+               * Bold means "this room met today and left something to read", not "you have never
+               * clicked it". The old rule marked every channel bold on a first visit, which is
+               * every channel on every visit — a sidebar where everything is emphasised emphasises
+               * nothing. A day whose only record is why the room did not sit is not new messages.
+               */
+              const metToday = entry.days.some((day) => day.date === todayInPrague && !day.quiet);
+              const unread = !active && metToday && !opened.includes(entry.id);
               return (
                 <button
                   aria-current={active ? "true" : undefined}
-                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2.5 py-2 text-left font-mono text-[12.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
+                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2.5 py-1.5 text-left font-mono text-[11.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
                   key={entry.id}
                   onClick={() => {
                     setOpened((seen) => (seen.includes(entry.id) ? seen : [...seen, entry.id]));
@@ -227,8 +242,8 @@ export function SectionMeetings({
                   style={{
                     background: active ? "color-mix(in srgb, var(--bai-accent) 15%, transparent)" : "transparent",
                     borderLeftColor: active ? "var(--bai-accent)" : "transparent",
-                    color: active ? "#ffffff" : unread ? "#f4f4f5" : "#a1a1aa",
-                    fontWeight: active || unread ? 600 : 400
+                    color: active ? "#ffffff" : metToday ? "#f4f4f5" : "#a1a1aa",
+                    fontWeight: active || metToday ? 600 : 400
                   }}
                   type="button"
                 >

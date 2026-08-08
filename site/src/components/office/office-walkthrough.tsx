@@ -527,7 +527,6 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             <SectionCalendar
               canStepBack={weekIndex > 0}
               canStepForward={weekIndex < data.weeks.length - 1}
-              meetingCount={data.meetingCount}
               onOpen={openFromCalendar}
               onStepBack={() => setWeekIndex((index) => Math.max(0, index - 1))}
               onStepForward={() => setWeekIndex((index) => Math.min(data.weeks.length - 1, index + 1))}

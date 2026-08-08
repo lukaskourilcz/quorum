@@ -59,7 +59,6 @@ function cellStyle(cell: OfficeCell): CSSProperties {
 
 export function SectionCalendar({
   week,
-  meetingCount,
   canStepBack,
   canStepForward,
   onStepBack,
@@ -67,7 +66,6 @@ export function SectionCalendar({
   onOpen
 }: {
   week: OfficeWeek;
-  meetingCount: number;
   canStepBack: boolean;
   canStepForward: boolean;
   onStepBack: () => void;
@@ -78,40 +76,11 @@ export function SectionCalendar({
     <div
       className="w-full max-w-[1080px] rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px]"
       data-cal-panel
-      style={WALKTHROUGH_PANEL_ZOOM}
+      style={{ ...WALKTHROUGH_PANEL_ZOOM, display: "flex", flexDirection: "column", maxHeight: "100%" }}
     >
-      <div className="flex items-center justify-between gap-6 border-b border-[#26262b] px-[22px] py-3.5">
-        <p className="text-[13px] leading-[1.5] text-[#94949c]">
-          {meetingCount} meetings a day. Open one that happened and its record starts playing.
-        </p>
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#94949c]">
-            {week.label}
-          </span>
-          <button
-            aria-label="Previous week"
-            className="grid size-[30px] place-items-center rounded-[9px] border border-[#3f3f46] bg-[#101013] font-mono text-[13px] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5] disabled:cursor-not-allowed disabled:opacity-40"
-            disabled={!canStepBack}
-            onClick={onStepBack}
-            type="button"
-          >
-            ‹
-          </button>
-          <button
-            aria-label="Next week"
-            className="grid size-[30px] place-items-center rounded-[9px] border border-[#3f3f46] bg-[#101013] font-mono text-[13px] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5] disabled:cursor-not-allowed disabled:opacity-40"
-            disabled={!canStepForward}
-            onClick={onStepForward}
-            type="button"
-          >
-            ›
-          </button>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto [overscroll-behavior-x:contain]" data-cal-scroll data-horizontal-scroll>
-        <div className="min-w-[680px] lg:min-w-0">
-          <div className="flex border-b border-[#26262b] bg-[#101013]">
+      <div className="flex min-h-0 flex-1 overflow-x-auto [overscroll-behavior-x:contain]" data-cal-scroll data-horizontal-scroll>
+        <div className="flex min-h-0 w-full min-w-[680px] flex-col lg:min-w-0">
+          <div className="flex shrink-0 border-b border-[#26262b] bg-[#101013]">
             <div
               className="w-[148px] shrink-0 border-r border-[#26262b] px-[18px] py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#94949c] md:w-[176px] lg:w-[232px]"
               data-cal-label
@@ -138,12 +107,12 @@ export function SectionCalendar({
           </div>
 
           {/*
-            The row block scrolls inside itself when the viewport cannot hold every slot, rather
-            than the panel growing past the section. Twelve rooms at a fixed 48px need 576px, which
-            fits a 900px-tall screen and does not fit a 700px one; the inner scroll is what keeps
-            the section exactly one viewport tall either way.
+            The row block takes whatever height the panel has left rather than a fixed cap.
+            The cap was a guess at the viewport — and once the panel gained its zoom the guess was
+            wrong by that factor too, which is why the week stopped at the early afternoon. Every
+            room is on screen when there is room for it, and only then does the block scroll.
           */}
-          <div className="max-h-[min(576px,46svh)] overflow-y-auto [overscroll-behavior:contain] lg:max-h-[min(576px,52svh)]">
+          <div className="flex-1 overflow-y-auto [overscroll-behavior:contain]" data-cal-rows>
             {week.rows.map((row) => (
               <div className="flex border-b border-[#1d1d21]" key={row.kind}>
                 <div
@@ -161,20 +130,20 @@ export function SectionCalendar({
                 {row.cells.map((cell) => {
                   const openable = cell.channel !== null;
                   const content = (
-                    <span className="line-clamp-2 text-[11px] leading-[1.32]">{cell.text}</span>
+                    <span className="truncate text-[11px] leading-[1.32]">{cell.text}</span>
                   );
                   return openable ? (
                     <button
                       key={`${row.kind}-${cell.date}`}
                       onClick={() => onOpen(cell.channel!, cell.date)}
                       style={cellStyle(cell)}
-                      title={cell.title}
+                      title={cell.title || undefined}
                       type="button"
                     >
                       {content}
                     </button>
                   ) : (
-                    <div key={`${row.kind}-${cell.date}`} style={cellStyle(cell)} title={cell.title}>
+                    <div key={`${row.kind}-${cell.date}`} style={cellStyle(cell)} title={cell.title || undefined}>
                       {content}
                     </div>
                   );
@@ -185,20 +154,35 @@ export function SectionCalendar({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-[22px] gap-y-2 px-[26px] py-3.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#94949c]">
-        <span className="inline-flex items-center gap-[7px]">
-          <span className="size-[9px] rounded-sm bg-[rgba(22,101,52,.55)]" />
-          Happened
+      {/*
+        The week control, and nothing else. The legend went with the cells' prose: each cell now
+        prints its own outcome in words, so a key mapping three colours to three words was naming
+        what the cell already said.
+      */}
+      <div className="flex shrink-0 items-center gap-2 border-t border-[#26262b] px-[22px] py-2.5">
+        <span className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#94949c]">
+          {week.label}
         </span>
-        <span className="inline-flex items-center gap-[7px]">
-          <span className="size-[9px] rounded-sm border border-[#3f3f46] bg-[#1b1b1f]" />
-          Planned
+        <span className="ml-auto flex shrink-0 items-center gap-2">
+          <button
+            aria-label="Previous week"
+            className="grid size-[26px] place-items-center rounded-lg border border-[#3f3f46] bg-[#101013] font-mono text-[12px] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5] disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!canStepBack}
+            onClick={onStepBack}
+            type="button"
+          >
+            ‹
+          </button>
+          <button
+            aria-label="Next week"
+            className="grid size-[26px] place-items-center rounded-lg border border-[#3f3f46] bg-[#101013] font-mono text-[12px] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5] disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!canStepForward}
+            onClick={onStepForward}
+            type="button"
+          >
+            ›
+          </button>
         </span>
-        <span className="inline-flex items-center gap-[7px]">
-          <span className="size-[9px] rounded-sm bg-[rgba(133,77,14,.5)]" />
-          Did not happen
-        </span>
-        <span className="ml-auto">{week.label}</span>
       </div>
     </div>
   );
