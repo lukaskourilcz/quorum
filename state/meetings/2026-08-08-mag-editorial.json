@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260808070318-mag-editorial",
+  "date": "2026-08-08",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.022907000000000004,
+    "monthAllInUsd": 3.6973471000000004,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-06-mma-intake",
+      "meeting:2026-08-06-mag-editorial",
+      "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot nemá nový ověřený subjekt. UFC karta i hlavní zápas už byly publikovány 6. srpna, další fighter files ani výsledek v packetu nejsou.",
+      "evidenceRefs": [
+        "meeting:2026-08-06-mma-intake",
+        "meeting:2026-08-06-mag-editorial",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "AM i PM jsou podle mostu již rozhodnuté, ale index ukazuje opakované preview karty a žádný nový ověřený subjekt pro PM. Bez dalšího fighter souboru nebo schváleného eventního posunu slot nepřiděluji.",
+      "evidenceRefs": [
+        "meeting:2026-08-06-mma-intake",
+        "meeting:2026-08-06-mag-editorial",
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-08.json",
+  "generatedAt": "2026-08-08T07:06:18.858Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-08T07:03:18.858Z",
+    "closedAt": "2026-08-08T07:06:18.858Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-08T07:03:18.858Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-08T07:04:18.858Z",
+        "text": "Slot nemá nový ověřený subjekt. UFC karta i hlavní zápas už byly publikovány 6. srpna, další fighter files ani výsledek v packetu nejsou.",
+        "evidenceRefs": [
+          "meeting:2026-08-06-mma-intake",
+          "meeting:2026-08-06-mag-editorial",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-08T07:05:18.858Z",
+        "text": "AM i PM jsou podle mostu již rozhodnuté, ale index ukazuje opakované preview karty a žádný nový ověřený subjekt pro PM. Bez dalšího fighter souboru nebo schváleného eventního posunu slot nepřiděluji.",
+        "evidenceRefs": [
+          "meeting:2026-08-06-mma-intake",
+          "meeting:2026-08-06-mag-editorial",
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-08T07:06:18.858Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}

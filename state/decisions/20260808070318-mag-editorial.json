@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260808070318-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "PLAN",
+  "summary": "AM: assigned; PM: killed",
+  "evidenceRefs": [
+    "meeting:2026-08-06-mma-intake",
+    "meeting:2026-08-06-mag-editorial",
+    "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld"
+  ],
+  "generatedAt": "2026-08-08T07:06:18.858Z"
+}
