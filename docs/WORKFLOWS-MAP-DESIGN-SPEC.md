@@ -1028,9 +1028,15 @@ Two columns plus a footer band. This panel replaces "the two odd edges"
 following the owner amendment.
 
 **The window.** The sill drawn large, with the storefront outside pulling a
-sanitized feed through it: the same two legs as the plan, at panel scale,
-annotated with what crosses (*sanitized catalog feed*) and what cannot (*no
-price, no stock, no purchase path*). A toggle shows the shuttered state:
+sanitized feed through it — a reach in and a return leg — annotated with what
+crosses (*sanitized catalog feed*) and what cannot (*no price, no stock, no
+purchase path*). This is a panel-scale idiom and **not** a magnification of the
+plan: since the geometry pass the plan draws this edge as one dashed lane in
+the venture's own hue pointing inward at the room, with no outbound leg at all,
+because the feed is collected rather than delivered. The panel can afford two
+legs because it has room to say which direction each one carries; the plan
+cannot, and says the same thing with one arrow. A toggle shows the shuttered
+state:
 shutter hatch, the return leg gone, and `concept mode` with
 `commerceMode: precommerce` beneath. The annotation states the asymmetry in
 one line: *an unreachable engine can close the window and can never open it*.

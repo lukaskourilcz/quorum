@@ -195,19 +195,15 @@ walkthrough and Carousel Studio are waiting on specifically.
   offline niches (FightAIQ calibration lab, wikitext parser, article extraction) and the
   JSON-contract boundary any of them would run under. Nothing in the runtime moves either way.
   [imp:2] [owner:me] [time:15m] [kind:decision]
-- [ ] **Apply the small fixes from the 2026-08-08 site review** — run the free trending signals
-  ahead of the Apify gate (`orchestrator/src/portfolio/evidence.ts:595` sits after the verdict
-  return, so the keyless sources its docstring promises have never run), drop the unused
-  `undici` dependency, verify the Cito `/bouts` retirement left no stale reservation, and
-  correct the stale section and project counts. Folded into Part Two of
-  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md`; the build session ticks this item.
-  [imp:2] [owner:ai] [time:45m] [kind:deploy]
-- [ ] **The `/calendar` legend guard — delegated to SI-08 with a default** — the e2e suite
-  expects seven `[data-project-legend]` entries and the board renders eight since Carousel
-  Studio joined in `3e081c8`. The build program's SI-08 moves the assertion to eight (the
-  board is right; the venture joined by decision) and aligns the label with the Design Lab
-  rename. Veto before the program runs if you want the board changed instead of the number.
-  [imp:3] [owner:me] [time:5m] [kind:decision]
+- [x] **The small fixes from the 2026-08-08 site review — done in SI-08.** The trending gate
+  was the real one: `collectFreeTrendingSignals` sat after `if (!verdict.allowed) return`, so
+  the keyless sources its docstring promised had never run once; it is hoisted above the gate
+  and the free refs are computed before it. `undici` is gone. The Cito `/bouts` retirement was
+  a verified no-op in code with one stale sentence still rendering on the admin panel, which
+  is corrected. The stale section and project counts are corrected.
+- [x] **The `/calendar` legend guard — resolved in SI-08 on the stated default.** The board is
+  right and the number was stale: the assertion expects eight `[data-project-legend]` entries
+  and the label matches SI-07's Design Lab rename. No veto arrived before the programme ran.
 - [x] **The e2e suite's timing failures — fixed in SI-08, with one residue.** Every failure
   chased across the programme's runs was a budget that had stopped matching the work: the
   admin axe routes measure 18–30s against what was a 30s default, the home page no longer
@@ -225,6 +221,19 @@ walkthrough and Carousel Studio are waiting on specifically.
   regression still fails every attempt. The proper fix is a fresh browser context for the
   heavy admin journeys, or sharding the suite, and neither belongs in a review-fix issue.
   [imp:2] [owner:ai] [time:45m] [kind:deploy]
+- [x] **The `/ventures/carousel-studio` JSON error — explained, and not a fault in the app.**
+  Chased in SI-12 after it appeared in an SI-03 e2e log as `SyntaxError: Unexpected end of JSON
+  input`, server-side and again in the browser. The full run now logs the matching cause:
+  `[WebServer] ⨯ Error: The destination stream closed early.` A client that navigates away
+  mid-request leaves Next's RSC stream truncated, the server logs the aborted stream and the
+  browser's parser reports the half-payload as unterminated JSON — which is exactly the pair of
+  errors seen, and it is a test-teardown artefact rather than a read of anything empty. What was
+  checked: every JSON file under `state/` parses (0 unparseable); 32 requests to the route during
+  a live e2e run all answered 200; the route renders 568 words in the production sweep; and the
+  one unguarded parse in its path, `optionalJson` in `site/src/lib/carousel-studio.ts`, reads two
+  files that are both present and valid. That parse is deliberately left loud: it backs
+  `template-overrides.json`, and a malformed overrides file that degraded silently would show a
+  retired template as live, which is worse than a failed page.
 - [ ] **Scope the repo-root filesystem reads so Turbopack stops over-tracing** — about twenty
   modules in `site/src/lib/` open with `process.env.BOARDLESSAI_REPO_ROOT ??
   path.resolve(process.cwd(), "..")` and then read under it. Turbopack cannot statically scope
