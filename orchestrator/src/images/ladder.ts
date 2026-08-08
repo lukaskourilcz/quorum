@@ -69,7 +69,7 @@ export function searchPhrasesFor(brief: VisualBrief | null, fallbackQuery: strin
 
 async function defaultSearch(input: { phrases: readonly string[] }): Promise<LicensedImageSearchResult> {
   return discoverLicensedPhotos({
-    query: input.phrases[0] ?? "",
+    queries: input.phrases,
     pexelsKey: process.env.PEXELS_API_KEY,
     pixabayKey: process.env.PIXABAY_API_KEY,
     maximum: 12

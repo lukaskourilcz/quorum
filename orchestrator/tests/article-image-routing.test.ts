@@ -46,8 +46,8 @@ vi.mock("../src/images/licensed.js", async () => {
   const actual = await vi.importActual<typeof import("../src/images/licensed.js")>("../src/images/licensed.js");
   return {
     ...actual,
-    discoverLicensedPhotos: async ({ query }: { query: string }) => {
-      searchCalls.push(query);
+    discoverLicensedPhotos: async ({ queries, query }: { queries?: readonly string[]; query?: string }) => {
+      searchCalls.push(...(queries ?? []), ...(query ? [query] : []));
       return { candidates: [SEARCH_RESULT], skippedProviders: [] };
     }
   };
@@ -199,7 +199,7 @@ describe("choosing how to find a picture for an article", () => {
       negatives: []
     });
     expect(identityCalls).toEqual([]);
-    expect(searchCalls).toEqual(["empty cage arena floor"]);
+    expect(searchCalls).toEqual(["empty cage arena floor", "weigh in stage banner"]);
     expect(gateCalls).toEqual([{ mode: "search", ids: ["wikimedia:1"] }]);
     expect(chosen.rung).toBe("search");
     expect(chosen.candidate).toEqual(SEARCH_RESULT);
