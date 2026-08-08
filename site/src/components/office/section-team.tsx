@@ -1,33 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import type { OfficeTeam } from "@/lib/office-walkthrough";
-
-/** How many specialists the compact view shows before "Full team →" opens the rest. */
-const COMPACT_SPECIALISTS = 12;
+import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
  * The roster by reception.
  *
- * "Full team" expands in place: the panel keeps its position and grows, and the specialist list
- * takes an inner scroll rather than pushing the section past one viewport. Only the list scrolls —
- * `overscroll-behavior: contain` is what stops a wheel at its end from jumping to the next
- * section mid-read.
+ * The whole roster renders on arrival. It used to open twelve specialists and hide the rest behind
+ * a "Full team" control, which bought one row of names for a click and a second state to reason
+ * about — so the control is gone and the list takes an inner scroll instead. Only the list
+ * scrolls: `overscroll-behavior: contain` is what stops a wheel at its end from jumping to the
+ * next section mid-read.
  *
  * Portraits appear here and nowhere else in the walkthrough. At 38px inside a card they read as
  * identity; at 36px inside a dense message list they read as noise, which is why the workspace
  * uses initials tiles instead.
  */
 export function SectionTeam({ team }: { team: OfficeTeam }) {
-  const [full, setFull] = useState(false);
-  const specialists = full ? team.specialists : team.specialists.slice(0, COMPACT_SPECIALISTS);
-  const hidden = team.specialists.length - COMPACT_SPECIALISTS;
-
   return (
     <div
       className="w-full max-w-[1160px] rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px]"
       data-team-panel
+      style={WALKTHROUGH_PANEL_ZOOM}
     >
       <div className="flex items-center justify-between gap-6 border-b border-[#26262b] px-[22px] py-3.5">
         {/*
@@ -40,14 +35,9 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
           The agent roster by reception. Four roles vote; the rest join when their field is needed.
           They are software roles, not people.
         </p>
-        <button
-          aria-expanded={full}
-          className="shrink-0 rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-[7px] font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5]"
-          onClick={() => setFull((open) => !open)}
-          type="button"
-        >
-          {full ? "← Close" : "Full team →"}
-        </button>
+        <p className="shrink-0 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#94949c]">
+          {team.council.length + team.specialists.length} active roles
+        </p>
       </div>
 
       <div className="px-[22px] pb-1.5 pt-[18px]">
@@ -98,16 +88,27 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
           Specialists · no vote
         </p>
+        {/*
+          Every specialist renders, and the list scrolls inside itself rather than pushing the
+          panel past one viewport. `overscroll-behavior: contain` keeps a wheel that reaches the
+          end of the list from carrying the reader into the next section mid-read.
+        */}
+        {/* `tabIndex` because the list scrolls: a scrollable region with no focusable content
+            inside it is unreachable by keyboard, and axe fails the whole page for it. */}
         <div
+          aria-label="Specialist roles"
           className="grid grid-cols-1 gap-x-[22px] gap-y-2.5 sm:grid-cols-2 xl:grid-cols-4"
           data-team-list
-          style={
-            full
-              ? { maxHeight: "296px", overflowY: "auto", overscrollBehavior: "contain", paddingRight: "8px" }
-              : undefined
-          }
+          role="group"
+          tabIndex={0}
+          style={{
+            maxHeight: "min(300px, 34svh)",
+            overflowY: "auto",
+            overscrollBehavior: "contain",
+            paddingRight: "8px"
+          }}
         >
-          {specialists.map((role) => (
+          {team.specialists.map((role) => (
             <div className="flex gap-2.5 border-t border-[#1e1e22] pt-2.5" key={role.id}>
               <span className="w-[62px] shrink-0 font-mono text-[12px] font-semibold text-[#f4f4f5]">
                 {role.id}
@@ -116,11 +117,6 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
             </div>
           ))}
         </div>
-        <p className="mt-4 font-mono text-[10.5px] uppercase tracking-[0.1em] text-[#94949c]">
-          {full
-            ? `${team.council.length + team.specialists.length} active roles · ${team.standDownCount} stood down when the roster was cut`
-            : `+ ${hidden} more roles that open only for their own field`}
-        </p>
       </div>
     </div>
   );

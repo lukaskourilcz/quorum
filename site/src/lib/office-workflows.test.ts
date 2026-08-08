@@ -183,9 +183,9 @@ describe("resolving against committed state", () => {
     // Every slot lands in a room the plan actually draws.
     const drawn = new Set(resolved.rooms.map((room) => room.key));
     for (const entry of resolved.slots) expect(drawn.has(entry.room)).toBe(true);
-    // Every room carries one recorded sentence for its native `<title>`; nothing else on the
-    // plan gets one, so a title anywhere means there is something recorded to read.
-    for (const room of resolved.rooms) expect(room.title.length).toBeGreaterThan(0);
+    // Nothing on the plan raises a tooltip, so no room carries a sentence for one. The recorded
+    // reasons travel on the slots, where the replay rail's controls read them.
+    for (const room of resolved.rooms) expect(room).not.toHaveProperty("title");
   });
 });
 

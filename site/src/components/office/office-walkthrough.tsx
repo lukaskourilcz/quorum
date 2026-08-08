@@ -372,7 +372,19 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             <Mark />
             <span>BoardlessAI</span>
           </button>
-          <nav aria-label="Primary" className="hide-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto" data-horizontal-scroll data-nav>
+          {/*
+            The active dot is always in the markup and only changes colour.
+            Rendering it conditionally inserted 12px into the row the moment a section became
+            active, which pushed that button's label sideways and shoved every button after it
+            along — the rail appeared to twitch on every jump. Reserving the space costs nothing
+            and the labels never move.
+          */}
+          <nav
+            aria-label="Primary"
+            className="hide-scrollbar flex min-w-0 flex-1 items-center justify-center gap-1.5 overflow-x-auto md:gap-3"
+            data-horizontal-scroll
+            data-nav
+          >
             {NAV.map((entry) => (
               <button
                 aria-current={active === entry.index ? "true" : undefined}
@@ -381,9 +393,11 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
                 onClick={() => goTo(entry.index)}
                 type="button"
               >
-                {active === entry.index ? (
-                  <span aria-hidden="true" className="size-[5px] rounded-full bg-[var(--bai-accent)]" />
-                ) : null}
+                <span
+                  aria-hidden="true"
+                  className="size-[5px] shrink-0 rounded-full bg-[var(--bai-accent)]"
+                  style={{ opacity: active === entry.index ? 1 : 0 }}
+                />
                 {entry.label}
               </button>
             ))}

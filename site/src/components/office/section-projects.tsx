@@ -1,6 +1,7 @@
 "use client";
 
 import type { OfficeProject } from "@/lib/office-walkthrough";
+import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
  * Five frames on the meeting-room wall.
@@ -11,12 +12,14 @@ import type { OfficeProject } from "@/lib/office-walkthrough";
  */
 export function SectionProjects({ projects }: { projects: OfficeProject[] }) {
   return (
-    <div className="mx-auto w-full max-w-[1240px]">
+    <div className="mx-auto w-full max-w-[1240px]" style={WALKTHROUGH_PANEL_ZOOM}>
       <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.14em] text-[#a1a1aa]">
         {projects.length} projects on the wall. Each has its own room and its own rules.
       </p>
       <div
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-4"
+        // Four across, so seven cards land 4 + 3 rather than 5 + 2 and the second row does not
+        // read as an afterthought.
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4"
         data-proj-grid
       >
         {projects.map((project) => (

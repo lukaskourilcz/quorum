@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeChannel, OfficeMessage } from "@/lib/office-walkthrough";
+import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
  * The BoardlessAI Workspace: a player, not a chat.
@@ -183,7 +184,10 @@ export function SectionMeetings({
   }, [dateMenu]);
 
   return (
-    <div className="w-full max-w-[1280px] rounded-[16px] border-[10px] border-[#0d0d10] bg-[#08080a] shadow-[0_60px_140px_rgba(0,0,0,.72),0_0_0_1px_rgba(255,255,255,.05)]">
+    <div
+      className="w-full max-w-[1280px] rounded-[16px] border-[10px] border-[#0d0d10] bg-[#08080a] shadow-[0_60px_140px_rgba(0,0,0,.72),0_0_0_1px_rgba(255,255,255,.05)]"
+      style={WALKTHROUGH_PANEL_ZOOM}
+    >
       <div
         className="flex h-[76svh] flex-col overflow-hidden rounded-[7px] bg-[#0a0a0c] md:h-[574px] md:flex-row lg:h-[656px]"
         data-chat-window
@@ -260,7 +264,7 @@ export function SectionMeetings({
               <button
                 aria-expanded={dateMenu}
                 aria-haspopup="menu"
-                className="inline-flex items-center gap-2 rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                className="inline-flex items-center gap-1.5 rounded-md border border-[#3f3f46] bg-[#101013] px-1.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                 onClick={() => setDateMenu((open) => !open)}
                 type="button"
               >
@@ -385,7 +389,7 @@ export function SectionMeetings({
                             <div className="mt-[11px]">
                               <button
                                 aria-expanded={openJson === message.id}
-                                className="rounded-[9px] border border-[#3f3f46] bg-[#0e0e11] px-[13px] py-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                                className="rounded-md border border-[#3f3f46] bg-[#0e0e11] px-1.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                                 onClick={() => setOpenJson((open) => (open === message.id ? null : message.id))}
                                 type="button"
                               >

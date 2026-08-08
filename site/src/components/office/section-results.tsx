@@ -22,6 +22,14 @@ import type { OfficeMeasure, OfficeResults } from "@/lib/office-walkthrough";
  * stays, because it arrives at the true value rather than departing from it.
  */
 
+/**
+ * Everything inside the board is 15% smaller than it was drawn, and the board itself is not.
+ *
+ * The rect below is measured against the photograph, so the board cannot be zoomed the way the
+ * other panels are — shrinking it would slide it off the screen it is mapped to. Every size inside
+ * it is a `cqw` of that mapped rect instead, so scaling those and leaving the rect alone is what
+ * "15% smaller" means here: the same screen on the same wall, with less crowded type on it.
+ */
 const SCREEN_RECT = { left: "33.2%", top: "22%", width: "33.4%", height: "35.6%" } as const;
 
 const STATE_COLOR: Record<OfficeMeasure["state"], string> = {
@@ -92,7 +100,7 @@ function Figure({
       <p
         className="m-0 font-mono uppercase tracking-[0.12em] text-[#94949c]"
         data-k="label"
-        style={{ fontSize: "1.7cqw" }}
+        style={{ fontSize: "1.44cqw" }}
       >
         {label}
       </p>
@@ -100,7 +108,7 @@ function Figure({
         className="m-0 font-semibold leading-none tracking-[-0.05em] tabular-nums text-[#f4f4f5]"
         data-k="value"
         ref={ref}
-        style={{ fontSize: "5.4cqw", marginTop: "0.4%" }}
+        style={{ fontSize: "4.59cqw", marginTop: "0.4%" }}
       >
         {value === null ? "—" : format(value)}
       </p>
@@ -145,10 +153,10 @@ export function SectionResults({
    */
   const buttonStyle = {
     border: "1px solid #3f3f46",
-    borderRadius: "0.8cqw",
+    borderRadius: "0.68cqw",
     background: "#141418",
-    padding: "0.9cqw 1.5cqw",
-    fontSize: "1.4cqw",
+    padding: "0.77cqw 1.27cqw",
+    fontSize: "1.19cqw",
     letterSpacing: "0.1em",
     color: "#f4f4f5",
     cursor: "pointer"
@@ -158,7 +166,13 @@ export function SectionResults({
     <div
       className="absolute overflow-hidden bg-[#06060a] shadow-[inset_0_0_60px_rgba(0,0,0,.9)]"
       data-tv
-      style={{ ...SCREEN_RECT, containerType: "size" }}
+      /*
+       * `pointer-events: auto` is load-bearing. The board is drawn inside `OfficePlate`, whose
+       * wrapper carries `pointer-events: none` so the photograph never takes a click — and that
+       * inherits straight through to the controls on the screen. Without this the "Full KPIs"
+       * button looks live and does nothing.
+       */
+      style={{ ...SCREEN_RECT, containerType: "size", pointerEvents: "auto" }}
     >
       <div className="absolute inset-0 flex flex-col" style={{ padding: "3.4% 3.8%" }}>
         <div
@@ -168,18 +182,16 @@ export function SectionResults({
           <p
             className="m-0 font-mono font-semibold uppercase tracking-[0.14em] text-[var(--bai-accent)]"
             data-k="title"
-            style={{ fontSize: "2cqw" }}
+            style={{ fontSize: "1.7cqw" }}
           >
             {showProject ? project!.name : "Results · this month"}
           </p>
           <p
             className="m-0 font-mono uppercase tracking-[0.1em] text-[#94949c]"
             data-k="meta"
-            style={{ fontSize: "1.7cqw" }}
+            style={{ fontSize: "1.44cqw" }}
           >
-            {showProject
-              ? `${project!.stage} · project ${index + 1} / ${projects.length}`
-              : "Prague · from the record"}
+            {showProject ? `${project!.stage} · project ${index + 1} / ${projects.length}` : ""}
           </p>
         </div>
 
@@ -188,11 +200,11 @@ export function SectionResults({
             className="flex flex-1 flex-col justify-center"
             style={{ gap: "3.4%", padding: "1% 0 0" }}
           >
-            <p className="m-0 leading-[1.4] text-[#a1a1aa]" data-k="obj" style={{ fontSize: "1.75cqw" }}>
+            <p className="m-0 leading-[1.4] text-[#a1a1aa]" data-k="obj" style={{ fontSize: "1.49cqw" }}>
               {project!.objective}
             </p>
             {project!.measures.length === 0 ? (
-              <p className="m-0 text-[#94949c]" style={{ fontSize: "1.75cqw" }}>
+              <p className="m-0 text-[#94949c]" style={{ fontSize: "1.49cqw" }}>
                 No measure for this project has a reading in the current quarter yet.
               </p>
             ) : (
@@ -202,26 +214,26 @@ export function SectionResults({
                 style={{ gap: "4% 3%" }}
               >
                 {project!.measures.map((measure) => (
-                  <div className="flex flex-col" key={measure.label} style={{ gap: "0.5cqw" }}>
+                  <div className="flex flex-col" key={measure.label} style={{ gap: "0.42cqw" }}>
                     <p
                       className="m-0 truncate font-mono uppercase tracking-[0.12em] text-[#94949c]"
                       data-k="label"
-                      style={{ fontSize: "1.5cqw" }}
+                      style={{ fontSize: "1.27cqw" }}
                     >
                       {measure.label}
                     </p>
-                    <div className="flex items-baseline" style={{ gap: "1.3cqw" }}>
+                    <div className="flex items-baseline" style={{ gap: "1.1cqw" }}>
                       <p
                         className="m-0 font-semibold leading-none tracking-[-0.05em] tabular-nums text-[#f4f4f5]"
                         data-k="value"
-                        style={{ fontSize: "4.2cqw" }}
+                        style={{ fontSize: "3.57cqw" }}
                       >
                         {measure.value}
                       </p>
                       <span
                         className="font-mono uppercase tracking-[0.1em]"
                         data-k="state"
-                        style={{ fontSize: "1.35cqw", color: STATE_COLOR[measure.state] }}
+                        style={{ fontSize: "1.15cqw", color: STATE_COLOR[measure.state] }}
                       >
                         {measure.state}
                       </span>
@@ -233,7 +245,7 @@ export function SectionResults({
             <div
               className="flex items-center font-mono uppercase tracking-[0.1em] text-[#94949c]"
               data-k="standing"
-              style={{ gap: "1.6cqw", fontSize: "1.4cqw" }}
+              style={{ gap: "1.36cqw", fontSize: "1.19cqw" }}
             >
               <span>This quarter</span>
               <span style={{ color: STATE_COLOR["On track"] }}>{project!.standing.onTrack} on track</span>
@@ -279,7 +291,7 @@ export function SectionResults({
             >
               <span
                 className="overflow-hidden rounded-full bg-[#1e1e22]"
-                style={{ marginTop: "1.4%", height: "0.7cqw" }}
+                style={{ marginTop: "1.4%", height: "0.59cqw" }}
               >
                 <span
                   className="block h-full bg-[var(--bai-accent)] transition-[width] duration-[1200ms] ease-out"
@@ -299,7 +311,7 @@ export function SectionResults({
 
         <div
           className="flex items-center border-t border-[#26262b]"
-          style={{ gap: "1.1cqw", paddingTop: "1.4%" }}
+          style={{ gap: "0.94cqw", paddingTop: "1.4%" }}
         >
           {showProject ? (
             <>
@@ -318,10 +330,10 @@ export function SectionResults({
                     }}
                     style={{
                       border: `1px solid ${on ? "var(--bai-accent)" : "#3f3f46"}`,
-                      borderRadius: "0.8cqw",
+                      borderRadius: "0.68cqw",
                       background: on ? "color-mix(in srgb, var(--bai-accent) 15%, #06060a)" : "#0e0e12",
-                      padding: "0.9cqw 1.2cqw",
-                      fontSize: "1.3cqw",
+                      padding: "0.77cqw 1.02cqw",
+                      fontSize: "1.1cqw",
                       letterSpacing: "0.08em",
                       textTransform: "uppercase",
                       color: on ? "#ffffff" : "#d4d4d8",
@@ -362,7 +374,7 @@ export function SectionResults({
               </button>
               <span
                 className="ml-auto font-mono uppercase tracking-[0.1em] text-[#94949c]"
-                style={{ fontSize: "1.35cqw" }}
+                style={{ fontSize: "1.15cqw" }}
               >
                 {projects.length} projects on record
               </span>
