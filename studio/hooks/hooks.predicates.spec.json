@@ -757,6 +757,329 @@
       ]
     },
     {
+      "name": "options-exactly-below",
+      "asserts": "optionsExactly:4 excludes a three-option question",
+      "subject": {
+        "difficulty": 1,
+        "hasCode": false,
+        "category": "unlisted",
+        "optionCount": 3,
+        "canonicalEnglishQuestion": "What does this return?"
+      },
+      "categoryLists": {
+        "core": [
+          "internet",
+          "git",
+          "security",
+          "databases",
+          "testing"
+        ],
+        "commonUse": [
+          "javascript",
+          "typescript",
+          "git",
+          "css",
+          "html",
+          "react",
+          "nodejs"
+        ],
+        "interview": [
+          "dsa",
+          "algorithms",
+          "system-design",
+          "databases",
+          "javascript",
+          "typescript"
+        ]
+      },
+      "librarySlice": [
+        {
+          "id": "payoff-explainer",
+          "cooldownDays": 6,
+          "truthRequires": [
+            "always"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Miss it and the explanation still pays off.",
+              "cs": "I když netrefíš, vysvětlení stojí za to."
+            },
+            "geo": {
+              "en": "Miss it and you still leave with the story.",
+              "cs": "I když netrefíš, příběh ti zůstane."
+            }
+          }
+        },
+        {
+          "id": "four-doors",
+          "cooldownDays": 10,
+          "truthRequires": [
+            "optionsExactly:4"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Four branches. One merges.",
+              "cs": "Čtyři branche. Jedna se mergne."
+            },
+            "geo": {
+              "en": "Four roads. One gets you there.",
+              "cs": "Čtyři cesty. Jedna tam vede."
+            }
+          }
+        }
+      ],
+      "expectedEligibleIds": [
+        "payoff-explainer"
+      ]
+    },
+    {
+      "name": "options-exactly-at",
+      "asserts": "optionsExactly:4 includes a four-option question",
+      "subject": {
+        "difficulty": 1,
+        "hasCode": false,
+        "category": "unlisted",
+        "optionCount": 4,
+        "canonicalEnglishQuestion": "What does this return?"
+      },
+      "categoryLists": {
+        "core": [
+          "internet",
+          "git",
+          "security",
+          "databases",
+          "testing"
+        ],
+        "commonUse": [
+          "javascript",
+          "typescript",
+          "git",
+          "css",
+          "html",
+          "react",
+          "nodejs"
+        ],
+        "interview": [
+          "dsa",
+          "algorithms",
+          "system-design",
+          "databases",
+          "javascript",
+          "typescript"
+        ]
+      },
+      "librarySlice": [
+        {
+          "id": "payoff-explainer",
+          "cooldownDays": 6,
+          "truthRequires": [
+            "always"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Miss it and the explanation still pays off.",
+              "cs": "I když netrefíš, vysvětlení stojí za to."
+            },
+            "geo": {
+              "en": "Miss it and you still leave with the story.",
+              "cs": "I když netrefíš, příběh ti zůstane."
+            }
+          }
+        },
+        {
+          "id": "four-doors",
+          "cooldownDays": 10,
+          "truthRequires": [
+            "optionsExactly:4"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Four branches. One merges.",
+              "cs": "Čtyři branche. Jedna se mergne."
+            },
+            "geo": {
+              "en": "Four roads. One gets you there.",
+              "cs": "Čtyři cesty. Jedna tam vede."
+            }
+          }
+        }
+      ],
+      "expectedEligibleIds": [
+        "payoff-explainer",
+        "four-doors"
+      ]
+    },
+    {
+      "name": "options-exactly-above",
+      "asserts": "optionsExactly:4 EXCLUDES a five-option question — this is the whole difference from optionsAtLeast",
+      "subject": {
+        "difficulty": 1,
+        "hasCode": false,
+        "category": "unlisted",
+        "optionCount": 5,
+        "canonicalEnglishQuestion": "What does this return?"
+      },
+      "categoryLists": {
+        "core": [
+          "internet",
+          "git",
+          "security",
+          "databases",
+          "testing"
+        ],
+        "commonUse": [
+          "javascript",
+          "typescript",
+          "git",
+          "css",
+          "html",
+          "react",
+          "nodejs"
+        ],
+        "interview": [
+          "dsa",
+          "algorithms",
+          "system-design",
+          "databases",
+          "javascript",
+          "typescript"
+        ]
+      },
+      "librarySlice": [
+        {
+          "id": "payoff-explainer",
+          "cooldownDays": 6,
+          "truthRequires": [
+            "always"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Miss it and the explanation still pays off.",
+              "cs": "I když netrefíš, vysvětlení stojí za to."
+            },
+            "geo": {
+              "en": "Miss it and you still leave with the story.",
+              "cs": "I když netrefíš, příběh ti zůstane."
+            }
+          }
+        },
+        {
+          "id": "four-doors",
+          "cooldownDays": 10,
+          "truthRequires": [
+            "optionsExactly:4"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Four branches. One merges.",
+              "cs": "Čtyři branche. Jedna se mergne."
+            },
+            "geo": {
+              "en": "Four roads. One gets you there.",
+              "cs": "Čtyři cesty. Jedna tam vede."
+            }
+          }
+        }
+      ],
+      "expectedEligibleIds": [
+        "payoff-explainer"
+      ]
+    },
+    {
+      "name": "options-exactly-vs-at-least",
+      "asserts": "five options satisfy optionsAtLeast:4 and not optionsExactly:4, side by side",
+      "subject": {
+        "difficulty": 3,
+        "hasCode": false,
+        "category": "unlisted",
+        "optionCount": 5,
+        "canonicalEnglishQuestion": "What does this return?"
+      },
+      "categoryLists": {
+        "core": [
+          "internet",
+          "git",
+          "security",
+          "databases",
+          "testing"
+        ],
+        "commonUse": [
+          "javascript",
+          "typescript",
+          "git",
+          "css",
+          "html",
+          "react",
+          "nodejs"
+        ],
+        "interview": [
+          "dsa",
+          "algorithms",
+          "system-design",
+          "databases",
+          "javascript",
+          "typescript"
+        ]
+      },
+      "librarySlice": [
+        {
+          "id": "eliminate-three",
+          "cooldownDays": 10,
+          "truthRequires": [
+            "optionsAtLeast:4"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Killing three options beats picking one.",
+              "cs": "Shodit tři možnosti je snazší než vybrat jednu."
+            },
+            "geo": {
+              "en": "Crossing out three beats circling one.",
+              "cs": "Škrtnout tři je snazší než jednu zakroužkovat."
+            }
+          }
+        },
+        {
+          "id": "blind-odds",
+          "cooldownDays": 12,
+          "truthRequires": [
+            "optionsAtLeast:4"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Blind guessing tops out at 25% here.",
+              "cs": "Tipování naslepo tu končí na 25 %."
+            },
+            "geo": {
+              "en": "A blind dart tops out at 25% here.",
+              "cs": "Šipka naslepo tu trefí nejvýš 25 %."
+            }
+          }
+        },
+        {
+          "id": "four-doors",
+          "cooldownDays": 10,
+          "truthRequires": [
+            "optionsExactly:4"
+          ],
+          "variants": {
+            "dev": {
+              "en": "Four branches. One merges.",
+              "cs": "Čtyři branche. Jedna se mergne."
+            },
+            "geo": {
+              "en": "Four roads. One gets you there.",
+              "cs": "Čtyři cesty. Jedna tam vede."
+            }
+          }
+        }
+      ],
+      "expectedEligibleIds": [
+        "eliminate-three",
+        "blind-odds"
+      ]
+    },
+    {
       "name": "conjunction-partly-satisfied",
       "asserts": "truthRequires is a conjunction: four options are not enough for a hook that also needs d2",
       "subject": {

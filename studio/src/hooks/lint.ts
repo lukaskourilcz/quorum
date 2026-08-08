@@ -113,7 +113,12 @@ function implies(given: Predicate, required: Predicate): boolean {
     case "difficultyAtLeast":
       return (given as typeof required).level >= required.level;
     case "optionsAtLeast":
-      return (given as typeof required).count >= required.count;
+      // An exact count also satisfies an at-least gate of the same size or smaller.
+      return given.kind === "optionsExactly"
+        ? given.count >= required.count
+        : (given as typeof required).count >= required.count;
+    case "optionsExactly":
+      return given.kind === "optionsExactly" && given.count === required.count;
     case "categoryIn":
       return (given as typeof required).list === required.list;
     case "questionStartsWith":

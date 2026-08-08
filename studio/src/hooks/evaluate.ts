@@ -48,6 +48,11 @@ export function evaluateQuizPredicate(predicate: QuizPredicate, context: QuizCon
       return subject.hasCode;
     case "optionsAtLeast":
       return subject.optionCount >= predicate.count;
+    case "optionsExactly":
+      // Not a stricter `optionsAtLeast`: it licenses counted imagery, where the number is the
+      // line. "Four branches. One merges." is false on a five-option question, and
+      // `optionsAtLeast:4` would happily serve it there.
+      return subject.optionCount === predicate.count;
     case "difficultyAtLeast":
       return subject.difficulty >= predicate.level;
     case "categoryIn":
