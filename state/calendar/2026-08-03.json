@@ -530,8 +530,7 @@
       "at": "2026-08-08T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-08T11:00:00.000Z",
@@ -545,19 +544,24 @@
       "at": "2026-08-08T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-08-afternoon",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-08T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run behind this meeting failed before it finished."
     },
     {
       "at": "2026-08-08T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-08-mma-analysis",
+      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
     },
     {
       "at": "2026-08-08T18:00:00.000Z",
