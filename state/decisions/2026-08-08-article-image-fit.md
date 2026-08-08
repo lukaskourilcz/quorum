@@ -63,7 +63,7 @@ issue.
 - [x] T8 — Scene-proposal flywheel files and promotion path (brief §T8)
 - [x] T9 — Recall of the two wrong MMA heroes through the delivery path (brief §T9)
 - [x] T10 — Illustration rung, dark behind `FAL_KEY`, schema and consumers checked (brief §T10)
-- [ ] T11 — Documentation sweep: CLAUDE.md invariant, cost notes, NEEDED items (brief §T11)
+- [x] T11 — Documentation sweep: CLAUDE.md invariant, cost notes, NEEDED items (brief §T11)
 - [ ] T12 — Full gates green, dry-run evidence recorded, contract retired, branch merged to main (brief §T12)
 
 ## Approval reference

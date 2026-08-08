@@ -113,6 +113,19 @@ z toho 25 dolarů pro modely a API a denní tempo 1,00 dolaru. Nahrazuje starš�
 fáze si limit smí jen utáhnout, nikdy povolit. Systém si limit nesmí zvýšit sám a platby
 vždy provádí člověk.
 
+### Jak se vybírá obrázek k článku
+
+Obě redakce sdílejí jeden žebřík jistoty a procházejí ho až po napsání článku.
+U osoby platí fotografie, kterou uvádí její vlastní položka na Wikidatech, jinak nic;
+pak přijdou ručně prohlédnuté snímky, pak licencované vyhledávání podle zadání, které
+redakce k článku napsala, pak generovaná ilustrace a nakonec kreslená deska. Před
+připojením se na skutečné náhledy podívá model a jeho verdikt — kolik kandidátů viděl,
+jak je ohodnotil a co u kterého vetoval — se ukládá vedle balíčku do
+`state/ventures/<projekt>/image-selections/`. Selhání kontroly, vyčerpaný strop i
+nečitelný náhled znamenají totéž: obrázek klesne o příčku níž. Vydání to nikdy
+nezastaví. Generovaná ilustrace se v alternativním textu vždy označí za ilustraci, nikdy
+za fotografii.
+
 ## Data a soukromá správa
 
 Základní stav je ve složce `state/`. Veřejný web z něj čte jen znovu ověřené a

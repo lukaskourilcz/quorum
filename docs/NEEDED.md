@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-08.
+Updated: 2026-08-09.
 
 ---
 
@@ -72,9 +72,10 @@ is the single thing standing between a proven path and a working one.
 - [x] **Create a fal.ai account and arm the illustration rung** — done 2026-08-08: the owner
   created the account, added `FAL_KEY`, prepaid the minimum credit and set
   `ARTICLE_ILLUSTRATION_ENABLED=true`, all before the build ran. The rung therefore goes live
-  the moment IMG-10's code and `cycle.yml` mapping reach `main` — there is no separate arming
-  step left. First proof is the first scheduled cycle after the merge: its run report must show
-  the rung armed; if it still reads dark, the env mapping name does not match where the values
+  the moment IMG-10's code and `cycle.yml` mapping reach `main`, which they did on 2026-08-09 —
+  there is no separate arming step left. `cycle.yml` reads the flag from a secret or a repository
+  variable, whichever holds it. First proof is the first scheduled cycle after the merge: its run
+  report must show the rung armed; if it still reads dark, neither name matches where the values
   were put. [imp:3] [owner:me] [time:10m] [kind:setup]
 
 - [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
@@ -536,6 +537,16 @@ marketingShark adds about 6c to a day.
 ---
 
 ## Recently finished
+
+- **The twelve-issue article-image programme ran and merged**, 2026-08-09. Every hero now passes
+  a vision gate before it is attached: one budgeted call looks at the actual thumbnails and the
+  verdict is stored beside the package, so the run report answers *why* a picture was chosen for
+  the first time. The desk that writes an article now briefs the picture desk, the search runs
+  after the write instead of before the story was even picked, retrieval fans every phrase out
+  across four providers, the curated files are re-checked for drift, high-scoring finds queue
+  themselves as curation proposals, and a generated illustration sits between the search and the
+  drawn plate. The two wrong MMA heroes are corrected on this side; delivering them needs the
+  mma-files merge above.
 
 - **The fourteen-issue site-improvements programme ran and merged**, 2026-08-08. The Workflows
   section became a performance of the standing day behind one *Play the day* toggle; the room view
