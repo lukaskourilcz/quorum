@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeChannel, OfficeMessage } from "@/lib/office-walkthrough";
-import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
  * The BoardlessAI Workspace: a player, not a chat.
@@ -100,6 +99,14 @@ export function SectionMeetings({
     [channels, channelId]
   );
   const activeDay = day ?? channel.days.at(-1)?.date ?? null;
+
+  /** Today in Prague, read the same way the page header reads its clock. */
+  const todayInPrague = useMemo(
+    () => new Intl.DateTimeFormat("en-CA", {
+      year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/Prague"
+    }).format(new Date()),
+    []
+  );
   const playing = useMemo(
     () => channel.days.find((entry) => entry.date === activeDay) ?? null,
     [channel, activeDay]
@@ -185,11 +192,10 @@ export function SectionMeetings({
 
   return (
     <div
-      className="w-full max-w-[1280px] rounded-[16px] border-[10px] border-[#0d0d10] bg-[#08080a] shadow-[0_60px_140px_rgba(0,0,0,.72),0_0_0_1px_rgba(255,255,255,.05)]"
-      style={WALKTHROUGH_PANEL_ZOOM}
+      className="w-full rounded-[16px] border-[10px] border-[#0d0d10] bg-[#08080a] shadow-[0_60px_140px_rgba(0,0,0,.72),0_0_0_1px_rgba(255,255,255,.05)] max-lg:max-w-[1280px] lg:h-[65vh] lg:w-[65vw]"
     >
       <div
-        className="flex h-[76svh] flex-col overflow-hidden rounded-[7px] bg-[#0a0a0c] md:h-[574px] md:flex-row lg:h-[656px]"
+        className="flex h-[76svh] flex-col overflow-hidden rounded-[7px] bg-[#0a0a0c] md:h-[574px] md:flex-row lg:h-full"
         data-chat-window
       >
         <div
@@ -214,11 +220,18 @@ export function SectionMeetings({
           >
             {channels.map((entry) => {
               const active = entry.id === channel.id;
-              const unread = !active && entry.days.length > 0 && !opened.includes(entry.id);
+              /*
+               * Bold means "this room met today and left something to read", not "you have never
+               * clicked it". The old rule marked every channel bold on a first visit, which is
+               * every channel on every visit — a sidebar where everything is emphasised emphasises
+               * nothing. A day whose only record is why the room did not sit is not new messages.
+               */
+              const metToday = entry.days.some((day) => day.date === todayInPrague && !day.quiet);
+              const unread = !active && metToday && !opened.includes(entry.id);
               return (
                 <button
                   aria-current={active ? "true" : undefined}
-                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2.5 py-2 text-left font-mono text-[12.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
+                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2.5 py-1.5 text-left font-mono text-[11.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
                   key={entry.id}
                   onClick={() => {
                     setOpened((seen) => (seen.includes(entry.id) ? seen : [...seen, entry.id]));
@@ -227,8 +240,8 @@ export function SectionMeetings({
                   style={{
                     background: active ? "color-mix(in srgb, var(--bai-accent) 15%, transparent)" : "transparent",
                     borderLeftColor: active ? "var(--bai-accent)" : "transparent",
-                    color: active ? "#ffffff" : unread ? "#f4f4f5" : "#a1a1aa",
-                    fontWeight: active || unread ? 600 : 400
+                    color: active ? "#ffffff" : metToday ? "#f4f4f5" : "#a1a1aa",
+                    fontWeight: active || metToday ? 600 : 400
                   }}
                   type="button"
                 >
@@ -264,7 +277,7 @@ export function SectionMeetings({
               <button
                 aria-expanded={dateMenu}
                 aria-haspopup="menu"
-                className="inline-flex items-center gap-1.5 rounded-md border border-[#3f3f46] bg-[#101013] px-1.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                className="inline-flex items-center gap-1 rounded border border-[#3f3f46] bg-[#101013] px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.05em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                 onClick={() => setDateMenu((open) => !open)}
                 type="button"
               >
@@ -389,7 +402,7 @@ export function SectionMeetings({
                             <div className="mt-[11px]">
                               <button
                                 aria-expanded={openJson === message.id}
-                                className="rounded-md border border-[#3f3f46] bg-[#0e0e11] px-1.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                                className="rounded border border-[#3f3f46] bg-[#0e0e11] px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.05em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
                                 onClick={() => setOpenJson((open) => (open === message.id ? null : message.id))}
                                 type="button"
                               >

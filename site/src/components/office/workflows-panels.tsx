@@ -5,6 +5,19 @@ import type { OfficeWorkflows } from "@/lib/office-workflows-model";
 import type { PlanPlace } from "@/components/office/workflows-plan";
 
 /**
+ * The places that own a depth-3 panel.
+ *
+ * Every room on the plan opens now, but only these four have a mechanism worth drawing. The rest
+ * open to the room itself, which is what `PlanPlace` is wider than this for.
+ */
+export type PanelPlace = "caught-up" | "carousel-studio" | "dock" | "titty-tuesdays";
+
+export function hasPanel(place: PlanPlace): place is PanelPlace {
+  return place === "caught-up" || place === "carousel-studio" || place === "dock"
+    || place === "titty-tuesdays";
+}
+
+/**
  * Depth 3: the four places that open, each one panel and each one screenful.
  *
  * The bodies are exported separately from the frame because they are used twice. Above 1024px a
@@ -715,7 +728,7 @@ function EdgesBody({ data, animate, shuttered, onShuttered }: {
 
 /* ------------------------------------------------------------------- exports */
 
-export const PANEL_COPY: Record<PlanPlace, { eyebrow: string; title: string; footer: string; columns: string }> = {
+export const PANEL_COPY: Record<PanelPlace, { eyebrow: string; title: string; footer: string; columns: string }> = {
   "caught-up": {
     eyebrow: "THE DNESKAI OFFICE · DEPTH 3",
     title: "One story of the day, or nothing goes out",
@@ -752,7 +765,7 @@ export function WorkflowsPanelBody({
   shuttered,
   onShuttered
 }: {
-  place: PlanPlace;
+  place: PanelPlace;
   data: OfficeWorkflows;
   animate: boolean;
   compact: boolean;
@@ -778,6 +791,6 @@ export function WorkflowsPanelBody({
 }
 
 /** Whether this panel carries the worked example's chip in its header. */
-export function carriesExample(place: PlanPlace): boolean {
+export function carriesExample(place: PanelPlace): boolean {
   return place === "caught-up" || place === "carousel-studio" || place === "dock";
 }

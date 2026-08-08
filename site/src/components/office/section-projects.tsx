@@ -28,7 +28,7 @@ export function SectionProjects({ projects }: { projects: OfficeProject[] }) {
             data-proj-card
             key={project.id}
           >
-            <div className="flex flex-1 flex-col gap-3 border border-[#26262b] bg-[linear-gradient(180deg,#121216,#0a0a0c)] px-[18px] py-5 lg:min-h-[250px] xl:min-h-[318px]">
+            <div className="flex flex-1 flex-col gap-2.5 border border-[#26262b] bg-[linear-gradient(180deg,#121216,#0a0a0c)] px-[18px] py-4 lg:min-h-[212px] xl:min-h-[270px]">
               <span
                 className="font-mono text-[9.5px] uppercase tracking-[0.14em]"
                 style={{ color: project.daily ? "var(--bai-accent)" : "#94949c" }}

@@ -244,7 +244,7 @@ img {
   html[data-office-walkthrough] #intro,
   html[data-office-walkthrough] #calendar,
   html[data-office-walkthrough] #projects,
-  html[data-office-walkthrough] #workflows,
+  html[data-office-walkthrough] #facilities,
   html[data-office-walkthrough] #team,
   html[data-office-walkthrough] #results {
     scroll-snap-stop: always;
