@@ -3,6 +3,9 @@ import type { EditionPackage } from "../contracts/edition-package.js";
 import type { EditionUsage } from "./types.js";
 import type { QualityMetrics, QualityResult } from "./quality.js";
 import type { StetReview } from "./stet.js";
+import type { ImageProgramReadiness } from "../images/readiness.js";
+import type { HeroRung } from "../images/ladder.js";
+import type { GateVerdict } from "../images/vision-gate.js";
 
 export interface EditionStageReport {
   name: string;
@@ -40,6 +43,15 @@ export interface EditionRunReport {
    * went out, these are the findings it went out over. See edition/publication-gate.ts.
    */
   unresolvedReview?: { notice: string; findings: string[] };
+  /**
+   * What the image programme could do on this run, and what the gate said.
+   *
+   * The verdicts are the whole of the answer to "why this picture": every candidate that was
+   * looked at, its score, its vetoes and the sentence that decided it. The readiness beside them
+   * is the other half — a keyless provider and a spent cap used to look identical from outside,
+   * because both produced a drawn plate and said nothing.
+   */
+  imageProgram?: { readiness: ImageProgramReadiness; rung?: HeroRung; verdicts: GateVerdict[] };
   warnings: string[];
 }
 
@@ -55,6 +67,7 @@ export class EditionRunReporter {
   stet?: StetReview;
   hacek?: StetReview;
   unresolvedReview?: { notice: string; findings: string[] };
+  imageProgram?: EditionRunReport["imageProgram"];
 
   constructor(
     readonly date: string,
@@ -115,6 +128,7 @@ export class EditionRunReporter {
       ...(this.stet ? { stet: this.stet } : {}),
       ...(this.hacek ? { hacek: this.hacek } : {}),
       ...(this.unresolvedReview ? { unresolvedReview: this.unresolvedReview } : {}),
+      ...(this.imageProgram ? { imageProgram: this.imageProgram } : {}),
       ...(packageStatus ? { packageStatus } : {}),
       warnings: [...this.warnings]
     };

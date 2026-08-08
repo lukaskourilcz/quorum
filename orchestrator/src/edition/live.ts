@@ -25,7 +25,9 @@ import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.j
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
 import { ImageProgramBudget, readImageProgramSpendToday } from "../images/budget.js";
 import { selectEditionHero, type HeroLadderResult } from "../images/ladder.js";
+import type { VisualBrief } from "../images/visual-brief.js";
 import { recordSkippedProviders } from "../images/skipped-providers.js";
+import { imageProgramReadiness } from "../images/readiness.js";
 import { storeImageSelection } from "../images/verdict-store.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
@@ -49,6 +51,17 @@ export interface LiveEditionDependencies {
    * cannot reach them without a provider and a network read of the picked article.
    */
   produce?: (input: EditionProductionInput) => Promise<EditionProductionResult>;
+  /**
+   * The image ladder. Injected by tests so none of the four archives is reached, the same reason
+   * `produce` is: the ladder's own behaviour is covered where it lives, and what a run needs to
+   * prove here is that its verdict reaches the report and the record beside the package.
+   */
+  selectHero?: (input: {
+    subjectQuery: string;
+    brief: VisualBrief | null;
+    slug: string;
+    article: { titleCs: string; dekCs: string };
+  }) => Promise<HeroLadderResult>;
 }
 
 export interface LiveEditionResult {
@@ -285,10 +298,13 @@ export async function runLiveEdition(input: {
     // than what the article is about, and the writer then picked from captions. The keys, the
     // network and the money stay here; the moment of asking, and the look before attaching,
     // moved to where the article is.
+    const imageReadiness = await imageProgramReadiness({ stateRoot: root, now: input.now });
+    reporter.imageProgram = { readiness: imageReadiness, verdicts: [] };
     const imageBudget = new ImageProgramBudget(await readImageProgramSpendToday(root, input.now));
     let imageSelection: { slug: string; result: HeroLadderResult } | null = null;
+    const walkLadder = input.dependencies?.selectHero;
     const selectHero: NonNullable<EditionProductionInput["selectHero"]> = async (request) => {
-      const result = await selectEditionHero({
+      const result = walkLadder ? await walkLadder(request) : await selectEditionHero({
         venture: "caught-up",
         stateRoot: root,
         cycleId: input.cycleId,
@@ -300,6 +316,11 @@ export async function runLiveEdition(input: {
         subjectQuery: request.subjectQuery
       });
       imageSelection = { slug: request.slug, result };
+      reporter.imageProgram = {
+        readiness: imageReadiness,
+        rung: result.rung,
+        verdicts: result.verdicts
+      };
       await recordSkippedProviders(result.skippedProviders);
       return result;
     };

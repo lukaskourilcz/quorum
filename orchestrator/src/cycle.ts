@@ -117,6 +117,7 @@ import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
 import { loadRuntimeBudgetLimits } from "./portfolio/limits.js";
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
+import { imageProgramReadiness, type ImageProgramReadiness } from "./images/readiness.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -152,6 +153,16 @@ export interface CycleResult {
   selectedAgents: string[];
   skippedAgents: string[];
   artifacts: string[];
+  /**
+   * What the image programme could have done on this run.
+   *
+   * Reported on every dry cycle rather than only on the ones that produce an article, because a
+   * dry run is where the owner checks that the environment is what they think it is: which
+   * archives are reachable, what the caps are, how much of the day is already spent, and whether
+   * the generated rung is awake. A keyless environment and a spent cap used to look the same
+   * from outside — both produce a drawn plate and say nothing about why.
+   */
+  imageProgram?: ImageProgramReadiness;
   /** Set only on "already_recorded": the record that made this firing a no-op. */
   alreadyRecordedAt?: string;
 }
@@ -1927,7 +1938,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       artifacts: [
         ...artifacts.map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
         ...(ecosystemArtifact ? [ecosystemArtifact] : [])
-      ]
+      ],
+      // Read from the committed ledger and the live environment, so a dry run reports the same
+      // readiness a real one would meet. Nothing here is a key; presence only.
+      imageProgram: await imageProgramReadiness({ stateRoot, now })
     };
   };
   if (options.dry) {
