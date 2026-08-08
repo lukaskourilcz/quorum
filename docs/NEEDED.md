@@ -69,6 +69,13 @@ is the single thing standing between a proven path and a working one.
   the output is poor that is a prompt problem and the truth gates will catch the dishonest parts —
   but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
 
+- [ ] **Create a fal.ai account and arm the illustration rung** — the article-image programme
+  (`state/decisions/2026-08-08-article-image-fit.md`, on the branch recorded at the end of this
+  document) ships its generated-illustration rung dark. Create the account, add `FAL_KEY` to
+  Actions secrets, prepay the minimum credit (schnell renders cost about $0.003 each, capped at
+  two a day), then set `ARTICLE_ILLUSTRATION_ENABLED=true` when you want it live. Until then the
+  image ladder behaves exactly as before. [imp:3] [owner:me] [time:10m] [kind:setup]
+
 - [ ] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`** — free tier, and they widen the
   licensed photo pool for both magazines at once. Not a blocker: Openverse, Wikimedia Commons, the
   curated illustrative set and the deterministic FRAME plate remain available, and a photo is only
@@ -545,3 +552,20 @@ marketingShark adds about 6c to a day.
   doubled caps are back to `MAX_CYCLE_BUDGET_USD` 0.20, `CU_MEETING_BUDGET_USD` 0.08 and
   `DAILY_BUDGET_USD` 1.00, with the edition per-run cap at 0.50. `MONTHLY_BUDGET_USD` stays 25 and
   `MONTHLY_OPERATING_CAP_USD` stays 30.
+
+---
+
+## One branch is still open
+
+`claude/article-image-selection-61rs70` was **not** deleted in the branch prune, because it holds
+work that is not on `main`: a countersigned owner decision (`article-image-fit-2026-08-08` — every
+published article image passes a vision check before it ships) and the 419-line build contract for
+that programme. Two commits, `ee346ba` and `5f72fad`.
+
+It will conflict when it lands: both of its commits edit `NEEDED.md` and `NEEDS_YOUR_HELP_NOW.md`,
+which this document replaced. The resolution is to take its content and put it here — its one owner
+item, the fal.ai account above, has already been carried across so it is not waiting on that merge.
+
+Every other branch is gone: this programme's own `claude/si-program` and
+`claude/website-improvements-brainstorm-sqe3c6` were both fully merged, and the stale
+`.claude/worktrees/workflows-map` worktree held nothing that was not already on `main`.
