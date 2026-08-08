@@ -1,6 +1,6 @@
 {
   "schemaVersion": "monetization-readiness/1",
-  "generatedAt": "2026-08-06T04:01:37.352Z",
+  "generatedAt": "2026-08-08T04:00:37.541Z",
   "methods": [
     {
       "id": "caught-up-sponsorship",
@@ -63,21 +63,6 @@
       "note": "FightAIQ does not sell or promote an unvalidated model."
     },
     {
-      "id": "incubator-none",
-      "venture": "incubator",
-      "method": "Not monetized",
-      "status": "locked",
-      "activationKpi": "None. The Incubator is a research function.",
-      "readiness": {
-        "met": false,
-        "unavailable": false,
-        "detail": "No monetization is planned."
-      },
-      "proposal": null,
-      "ownerGateRequired": true,
-      "note": "The Incubator supports venture research and does not sell a product."
-    },
-    {
       "id": "carousel-studio-internal",
       "venture": "carousel-studio",
       "method": "Not monetized — internal engine",
@@ -91,6 +76,21 @@
       "proposal": null,
       "ownerGateRequired": true,
       "note": "The package stays self-contained so a future standalone product remains possible, but no extraction, sale or service is authorized."
+    },
+    {
+      "id": "marketingshark-internal",
+      "venture": "marketingshark",
+      "method": "Not monetized — internal agency",
+      "status": "locked",
+      "activationKpi": "Locked. marketingShark earns nothing directly; its value appears in the products it markets.",
+      "readiness": {
+        "met": false,
+        "unavailable": false,
+        "detail": "Internal service; recognized revenue is $0 and activation is owner-only."
+      },
+      "proposal": null,
+      "ownerGateRequired": true,
+      "note": "An internal service for the Shark family. devShark's own revenue, if any, sits outside BoardlessAI's accounts until the owner decides otherwise, and no marketingShark output may be sold, sponsored or placed for payment."
     }
   ]
 }

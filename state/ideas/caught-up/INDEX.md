@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-08-08-26fe9c94 | Reader Question Capture Card | proposed | VAULT variant: Both capture single bounded internal cards logging gaps/questions for future decisions. Material differe… |
 | idea-2026-08-06-c42b60b6 | MMA Files Slot Gap Review Card | proposed | VAULT variant: Proposes bounded internal review card for specific gaps (MMA Files slots + FightAIQ lag) with specialist… |
 | idea-2026-08-03-0e047a4b | Single-Gap Specialist Agenda Brief | proposed | VAULT novel: No candidate ideas provided for comparison. Proposal describes a documentation format for identifying sing… |
 
