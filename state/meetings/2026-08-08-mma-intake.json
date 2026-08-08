@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260808060141-mma-intake",
+  "date": "2026-08-08",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.020569,
+    "monthAllInUsd": 3.674440100000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+      "source:the-odds-api:2026-08-08",
+      "source:cito-ufc:2026-08-08",
+      "source:wikimedia:2026-08-08",
+      "source:wikipedia-schedule:2026-08-08",
+      "meeting:2026-08-06-mma-intake"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "UFC Fight Night: Gamrot vs. Salkilld (08-08) has 12 announced bouts. 50 fighter records on file; zero complete on critical fields. 38 fighters missing height, reach or stance. Source health normal. No model use until two-source agreement on incomplete rosters.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+        "source:the-odds-api:2026-08-08",
+        "source:cito-ufc:2026-08-08",
+        "source:wikimedia:2026-08-08",
+        "source:wikipedia-schedule:2026-08-08"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon roster resolves 12 pages, but no supplied Oktagon card, weigh-in, result, or field-level evidence is present. UFC also has no complete critical fighter file. Next: obtain two-source Oktagon card and field records.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-08",
+        "source:wikimedia:2026-08-08",
+        "meeting:2026-08-06-mma-intake"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+      "source:the-odds-api:2026-08-08",
+      "source:cito-ufc:2026-08-08",
+      "source:wikimedia:2026-08-08",
+      "source:wikipedia-schedule:2026-08-08",
+      "meeting:2026-08-06-mma-intake"
+    ]
+  },
+  "generatedAt": "2026-08-08T06:04:41.482Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-08T06:01:41.482Z",
+    "closedAt": "2026-08-08T06:04:41.482Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-08T06:01:41.482Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-08T06:02:41.482Z",
+        "text": "UFC Fight Night: Gamrot vs. Salkilld (08-08) has 12 announced bouts. 50 fighter records on file; zero complete on critical fields. 38 fighters missing height, reach or stance. Source health normal. No model use until two-source agreement on incomplete rosters.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+          "source:the-odds-api:2026-08-08",
+          "source:cito-ufc:2026-08-08",
+          "source:wikimedia:2026-08-08",
+          "source:wikipedia-schedule:2026-08-08"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-08T06:03:41.482Z",
+        "text": "Oktagon roster resolves 12 pages, but no supplied Oktagon card, weigh-in, result, or field-level evidence is present. UFC also has no complete critical fighter file. Next: obtain two-source Oktagon card and field records.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-08",
+          "source:wikimedia:2026-08-08",
+          "meeting:2026-08-06-mma-intake"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-08T06:04:41.482Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

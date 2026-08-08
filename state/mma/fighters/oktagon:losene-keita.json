@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Losene_Keita",
       "publisher": "Wikipedia",
       "title": "Losene Keita",
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q115821268",
         "source:wikipedia:78757319"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "verified",
       "corroborated": true
     },
@@ -59,7 +59,7 @@
       "sourceRefs": [
         "source:wikipedia:78757319"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -68,7 +68,7 @@
       "sourceRefs": [
         "source:wikipedia:78757319"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -77,7 +77,7 @@
       "sourceRefs": [
         "source:wikipedia:78757319"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -424,9 +424,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 2.786929,
-        "layoffDays": 138
+        "layoffDays": 140
       },
-      "updatedAt": "2026-08-06T06:00:43.585Z"
+      "updatedAt": "2026-08-08T06:01:41.482Z"
     }
   ],
   "rating": {
@@ -436,7 +436,7 @@
     "volatility": 0.0599968,
     "boutCount": 19,
     "asOfBoutRef": "oktagon:bout:history-c4ed2278e54c19e0db92",
-    "updatedAt": "2026-08-06T06:00:43.585Z"
+    "updatedAt": "2026-08-08T06:01:41.482Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -446,7 +446,7 @@
       "reachCm",
       "record-history-mismatch"
     ],
-    "lastReviewedAt": "2026-08-06T06:00:43.585Z"
+    "lastReviewedAt": "2026-08-08T06:01:41.482Z"
   },
   "changeLog": [
     {
@@ -2426,11 +2426,42 @@
         "source:wikipedia:81719858"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 18 historical fight rows."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78757319",
+        "source:wikipedia:81719858"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.625,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-06T06:00:43.585Z"
+  "updatedAt": "2026-08-08T06:01:41.482Z"
 }

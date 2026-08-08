@@ -9,7 +9,8 @@
     "wikidataId": "Q56000949",
     "wikipediaTitle": "Azamat Murzakanov",
     "externalIds": {
-      "wikipediaPageId": "56012507"
+      "wikipediaPageId": "56012507",
+      "cito": "ebb318d1-8e04-4cad-b5a9-40acb71d1a0b"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-08:fighter:ebb318d1-8e04-4cad-b5a9-40acb71d1a0b",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Azamat Murzakanov",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q56000949",
       "url": "https://www.wikidata.org/wiki/Q56000949",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Azamat_Murzakanov",
       "publisher": "Wikipedia",
       "title": "Azamat Murzakanov",
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,19 +64,78 @@
     "name": {
       "value": "Azamat Murzakanov",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:ebb318d1-8e04-4cad-b5a9-40acb71d1a0b",
         "source:wikidata:Q56000949",
         "source:wikipedia:56012507"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1989-04-12",
       "sourceRefs": [
-        "source:wikidata:Q56000949"
+        "source:wikidata:Q56000949",
+        "source:wikipedia:56012507"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "light-heavyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:ebb318d1-8e04-4cad-b5a9-40acb71d1a0b",
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "record": {
+      "value": "16-1-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:ebb318d1-8e04-4cad-b5a9-40acb71d1a0b",
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "stance": {
+      "value": "southpaw",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:ebb318d1-8e04-4cad-b5a9-40acb71d1a0b",
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "heightCm": {
+      "value": 180.34,
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "reachCm": {
+      "value": 180.34,
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "K-Dojo Warrior Tribe",
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ],
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -166,9 +233,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 2.44582,
-        "layoffDays": 285
+        "layoffDays": 287
       },
-      "updatedAt": "2026-08-06T06:00:43.585Z"
+      "updatedAt": "2026-08-08T06:01:41.482Z"
     }
   ],
   "rating": {
@@ -178,19 +245,14 @@
     "volatility": 0.05999735,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-bf99ff077221bfb5a5b6",
-    "updatedAt": "2026-08-06T06:00:43.585Z"
+    "updatedAt": "2026-08-08T06:01:41.482Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
-      "heightCm",
-      "reachCm",
-      "team"
+      "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-08T06:01:41.482Z"
   },
   "changeLog": [
     {
@@ -1417,11 +1479,60 @@
         "source:wikipedia:56012518"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:ebb318d1-8e04-4cad-b5a9-40acb71d1a0b"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012507"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 10 historical fight rows."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883",
+        "source:wikipedia:56012518"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.25,
-  "corroboration": 0.125,
-  "modelEligible": false,
+  "completeness": 1,
+  "corroboration": 0.625,
+  "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-06T06:00:43.585Z"
+  "updatedAt": "2026-08-08T06:01:41.482Z"
 }

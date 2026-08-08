@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260808060141-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "PLAN",
+  "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+  "evidenceRefs": [
+    "event:ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+    "source:the-odds-api:2026-08-08",
+    "source:cito-ufc:2026-08-08",
+    "source:wikimedia:2026-08-08",
+    "source:wikipedia-schedule:2026-08-08",
+    "meeting:2026-08-06-mma-intake"
+  ],
+  "generatedAt": "2026-08-08T06:04:41.482Z"
+}

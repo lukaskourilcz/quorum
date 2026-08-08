@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexander_Volkanovski",
       "publisher": "Wikipedia",
       "title": "Alexander Volkanovski",
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q30123133",
         "source:wikipedia:54197580"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "verified",
       "corroborated": true
     },
@@ -288,9 +288,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 1.914771,
-        "layoffDays": 901
+        "layoffDays": 903
       },
-      "updatedAt": "2026-08-06T06:00:43.585Z"
+      "updatedAt": "2026-08-08T06:01:41.482Z"
     }
   ],
   "rating": {
@@ -300,7 +300,7 @@
     "volatility": 0.06001188,
     "boutCount": 9,
     "asOfBoutRef": "ufc:bout:history-5b53427c761832ec518c",
-    "updatedAt": "2026-08-06T06:00:43.585Z"
+    "updatedAt": "2026-08-08T06:01:41.482Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1723,11 +1723,28 @@
         "source:wikipedia:66838633"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54197580",
+        "source:wikipedia:44264537",
+        "source:wikipedia:66838633"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-06T06:00:43.585Z"
+  "updatedAt": "2026-08-08T06:01:41.482Z"
 }

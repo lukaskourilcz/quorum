@@ -9,7 +9,8 @@
     "wikidataId": "Q124754561",
     "wikipediaTitle": "Azamat Bekoev",
     "externalIds": {
-      "wikipediaPageId": "79879282"
+      "wikipediaPageId": "79879282",
+      "cito": "0c653af1-cf97-4b67-88c5-c8d06a96e644"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-08:fighter:0c653af1-cf97-4b67-88c5-c8d06a96e644",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Azamat Bekoev",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q124754561",
       "url": "https://www.wikidata.org/wiki/Q124754561",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Azamat_Bekoev",
       "publisher": "Wikipedia",
       "title": "Azamat Bekoev",
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Azamat Bekoev",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:0c653af1-cf97-4b67-88c5-c8d06a96e644",
         "source:wikidata:Q124754561",
         "source:wikipedia:79879282"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "status": "verified",
       "corroborated": true
     },
@@ -94,11 +103,12 @@
     "stance": {
       "value": "orthodox",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:0c653af1-cf97-4b67-88c5-c8d06a96e644",
         "source:wikipedia:79879282"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
     },
     "team": {
       "value": "American Top Team",
@@ -112,11 +122,12 @@
     "record": {
       "value": "20-5-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:0c653af1-cf97-4b67-88c5-c8d06a96e644",
         "source:wikipedia:79879282"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 180,
@@ -133,7 +144,22 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "{{plainlist|",
+          "sourceRef": "source:wikipedia:79879282"
+        },
+        {
+          "value": "middleweight",
+          "sourceRef": "source:cito-ufc:2026-08-08:fighter:0c653af1-cf97-4b67-88c5-c8d06a96e644"
+        }
+      ],
+      "status": "open"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-8dc50fa2de13a66119f4",
@@ -506,9 +532,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 2.091446,
-        "layoffDays": 124
+        "layoffDays": 126
       },
-      "updatedAt": "2026-08-06T06:00:43.585Z"
+      "updatedAt": "2026-08-08T06:01:41.482Z"
     }
   ],
   "rating": {
@@ -518,7 +544,7 @@
     "volatility": 0.06000056,
     "boutCount": 23,
     "asOfBoutRef": "ufc:bout:history-afa3deeda91a90d9c115",
-    "updatedAt": "2026-08-06T06:00:43.585Z"
+    "updatedAt": "2026-08-08T06:01:41.482Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1890,11 +1916,39 @@
         "source:wikipedia:79879282"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:0c653af1-cf97-4b67-88c5-c8d06a96e644"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
-  "corroboration": 0.25,
+  "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-06T06:00:43.585Z"
+  "updatedAt": "2026-08-08T06:01:41.482Z"
 }

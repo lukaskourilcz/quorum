@@ -9,7 +9,8 @@
     "wikidataId": "Q131401054",
     "wikipediaTitle": "Ateba Gautier",
     "externalIds": {
-      "wikipediaPageId": "82864883"
+      "wikipediaPageId": "82864883",
+      "cito": "438ac965-794c-4e3a-b58c-cf9e66dceea9"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-08:fighter:438ac965-794c-4e3a-b58c-cf9e66dceea9",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Ateba Gautier",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q131401054",
       "url": "https://www.wikidata.org/wiki/Q131401054",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Ateba_Gautier",
       "publisher": "Wikipedia",
       "title": "Ateba Gautier",
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,11 +64,12 @@
     "name": {
       "value": "Ateba Gautier",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:438ac965-794c-4e3a-b58c-cf9e66dceea9",
         "source:wikipedia:82864883"
       ],
-      "retrievedAt": "2026-08-06T06:00:43.585Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
     },
     "reachCm": {
       "value": 205.74,
@@ -83,11 +92,12 @@
     "stance": {
       "value": "switch",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:438ac965-794c-4e3a-b58c-cf9e66dceea9",
         "source:wikipedia:82864883"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
     },
     "team": {
       "value": "Manchester Top Team",
@@ -101,11 +111,12 @@
     "record": {
       "value": "11-1-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:438ac965-794c-4e3a-b58c-cf9e66dceea9",
         "source:wikipedia:82864883"
       ],
-      "retrievedAt": "2026-08-02T15:43:59.798Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "status": "verified",
+      "corroborated": true
     },
     "dateOfBirth": {
       "value": "2002-04-10",
@@ -145,6 +156,20 @@
         }
       ],
       "status": "open"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Middleweight",
+          "sourceRef": "source:wikipedia:82864883"
+        },
+        {
+          "value": "middleweight",
+          "sourceRef": "source:cito-ufc:2026-08-08:fighter:438ac965-794c-4e3a-b58c-cf9e66dceea9"
+        }
+      ],
+      "status": "resolved"
     }
   ],
   "history": [
@@ -354,9 +379,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 2.20751,
-        "layoffDays": 89
+        "layoffDays": 91
       },
-      "updatedAt": "2026-08-06T06:00:43.585Z"
+      "updatedAt": "2026-08-08T06:01:41.482Z"
     }
   ],
   "rating": {
@@ -366,7 +391,7 @@
     "volatility": 0.05999384,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-709388b2a6d897739876",
-    "updatedAt": "2026-08-06T06:00:43.585Z"
+    "updatedAt": "2026-08-08T06:01:41.482Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1633,11 +1658,37 @@
         "source:wikipedia:82864883"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-08:fighter:438ac965-794c-4e3a-b58c-cf9e66dceea9"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-08T06:01:41.482Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:82864883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
-  "corroboration": 0,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-06T06:00:43.585Z"
+  "updatedAt": "2026-08-08T06:01:41.482Z"
 }

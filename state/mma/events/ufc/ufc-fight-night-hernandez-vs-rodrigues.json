@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+  "org": "ufc",
+  "name": "UFC Fight Night: Hernandez vs. Rodrigues",
+  "venue": "Golden 1 Center",
+  "startsAtLocal": "2026-08-22T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-08-22T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-08-08:List of UFC events"
+  ],
+  "bouts": [
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:anthony-hernandez-vs-gregory-rodrigues-1",
+      "red": "ufc:anthony-hernandez",
+      "blue": "ufc:gregory-rodrigues",
+      "division": "middleweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:serghei-spivac-vs-vitor-petrino-2",
+      "red": "ufc:serghei-spivac",
+      "blue": "ufc:vitor-petrino",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:reinier-de-ridder-vs-roman-dolidze-3",
+      "red": "ufc:reinier-de-ridder",
+      "blue": "ufc:roman-dolidze",
+      "division": "light-heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:carli-judice-vs-jeisla-chaves-4",
+      "red": "ufc:carli-judice",
+      "blue": "ufc:jeisla-chaves",
+      "division": "womens-flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:kennedy-nzechukwu-vs-shamil-gaziev-5",
+      "red": "ufc:kennedy-nzechukwu",
+      "blue": "ufc:shamil-gaziev",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:wesley-schultz-vs-jackson-mcvey-6",
+      "red": "ufc:wesley-schultz",
+      "blue": "ufc:jackson-mcvey",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:kody-steele-vs-gauge-young-7",
+      "red": "ufc:kody-steele",
+      "blue": "ufc:gauge-young",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:shanelle-dyer-vs-elise-reed-8",
+      "red": "ufc:shanelle-dyer",
+      "blue": "ufc:elise-reed",
+      "division": "womens-strawweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-08-08T06:01:41.482Z"
+}
