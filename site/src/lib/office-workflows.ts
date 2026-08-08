@@ -21,7 +21,6 @@ import { readStudioArticles } from "@/lib/carousel-summaries";
 import type { PublicMeetingRecord } from "@/lib/meeting-record-model";
 import { PROJECT_COLOR, projectForKind, type OfficeProjectKey } from "@/lib/office-walkthrough";
 import {
-  WORKSHOP_ROOM,
   doorNoteKind,
   type OfficeWorkflows,
   type WorkflowsBank,
@@ -209,18 +208,15 @@ export async function resolveOfficeWorkflows(
 
   /* ---- the rooms, in plan order ------------------------------------------ */
 
-  const rooms: WorkflowsRoom[] = ROOM_ORDER.map(({ key, name }) => {
-    const own = slots.filter((slot) => slot.room === key).sort((left, right) => left.hour - right.hour);
-    const hours = own.map((slot) => `${String(slot.hour).padStart(2, "0")}:00`).join(" · ");
-    // One recorded sentence per room, and the browser draws it. There is no readout and no
-    // tooltip anywhere on the plan, so a `title` is the only place a recorded reason can live —
-    // exactly what the calendar section already does with the full sentence behind each cell.
-    const recorded = own.find((slot) => slot.reason)?.reason;
-    const title = key === WORKSHOP_ROOM
-      ? `${name} — the workshop holds no session; its machinery runs whenever something is handed to it.`
-      : [name, hours || "no slot today"].join(" · ") + (recorded ? ` — ${recorded}` : "");
-    return { key, name, color: PROJECT_COLOR[key], slots: own, title };
-  });
+  // A room carries its name, its hue and its own slots. It used to carry a made-up sentence for a
+  // native `<title>` as well; the plan raises no tooltips now, so nothing read it and it is gone.
+  // The recorded reasons still travel on the slots, where the replay rail reads them.
+  const rooms: WorkflowsRoom[] = ROOM_ORDER.map(({ key, name }) => ({
+    key,
+    name,
+    color: PROJECT_COLOR[key],
+    slots: slots.filter((slot) => slot.room === key).sort((left, right) => left.hour - right.hour)
+  }));
 
   /* ---- the workshop's hook rack ------------------------------------------ */
 

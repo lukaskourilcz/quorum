@@ -22,8 +22,12 @@ import {
  *
  * Three depths, all inside one locked screen. Depth 1 is the plan at rest, lit by the current
  * Prague hour — the only depth most readers will see, so it carries the argument on its own.
- * Depth 2 walks the day from 05:00 to 22:00 and never starts itself. Depth 3 opens one of four
- * places in place, as a panel over the plan rather than as a second screen.
+ * Depth 2 walks the day from 05:00 to 22:00 once, on request, and stops on the finished picture.
+ * Depth 3 opens one of four places in place, as a panel over the plan rather than as a second
+ * screen.
+ *
+ * Nothing on the plan carries a `title`, so nothing on it raises a tooltip. Hover and focus change
+ * the drawing and nothing else.
  *
  * Now and the replay speak two visual languages on purpose. At rest the light is a soft halo that
  * breathes and the plate keeps its Prague wash. Recording, the halo is replaced by a hard contour
@@ -117,19 +121,34 @@ export function SectionWorkflows({
 
   useEffect(() => onReplayChange(replaying), [replaying, onReplayChange]);
 
-  /** One hour per 700ms, so a full day runs 11.9s. The walk loops; it never starts itself. */
+  /** One hour per 700ms, so a full day runs 11.9s. The walk runs once; it never starts itself. */
   useEffect(() => {
-    if (!playing || replayHour === null || reduceMotion) return;
-    const timer = setInterval(() => {
-      setReplayHour((hour) => (hour === null ? null : hour >= REPLAY_LAST_HOUR ? REPLAY_FIRST_HOUR : hour + 1));
+    if (!playing || replayHour === null || reduceMotion || replayHour >= REPLAY_LAST_HOUR) {
+      return undefined;
+    }
+    const timer = setTimeout(() => {
+      const next = replayHour + 1;
+      setReplayHour(next);
+      // The day is a walk, not a loop. It stops on 22:00 and holds the finished picture — every
+      // room closed and every note hung, which is the same thing depth 1 shows at that hour. A
+      // day that restarted itself would keep erasing the record it had just finished drawing.
+      if (next >= REPLAY_LAST_HOUR) setPlaying(false);
     }, 700);
-    return () => clearInterval(timer);
+    return () => clearTimeout(timer);
   }, [playing, replayHour, reduceMotion]);
 
   const startReplay = useCallback(() => {
     setReplayHour(REPLAY_FIRST_HOUR);
     setPlaying(!reduceMotion);
   }, [reduceMotion]);
+
+  /** Play from where the walk stopped, or from the top of the day once it has finished. */
+  const togglePlay = useCallback(() => {
+    if (!playing && replayHour !== null && replayHour >= REPLAY_LAST_HOUR) {
+      setReplayHour(REPLAY_FIRST_HOUR);
+    }
+    setPlaying((value) => !value);
+  }, [playing, replayHour]);
 
   const stopReplay = useCallback(() => {
     setReplayHour(null);
@@ -433,7 +452,9 @@ export function SectionWorkflows({
                       cursor: "pointer",
                       flex: "0 0 auto"
                     }}
-                    title={`${slot.label} — ${slot.reason ?? "Nothing recorded for this slot yet."}`}
+                    // `aria-label` rather than `title`: the button prints only an hour and a
+                    // coloured tick, so it needs a name — and a name is not a tooltip.
+                    aria-label={`${String(slot.hour).padStart(2, "0")}:00 · ${slot.label}`}
                     type="button"
                   >
                     <span style={{ fontFamily: MONO, fontSize: "11px" }}>
@@ -464,7 +485,7 @@ export function SectionWorkflows({
             <>
               <button
                 aria-label={playing ? "Pause the replay" : "Play the replay"}
-                onClick={() => setPlaying((value) => !value)}
+                onClick={togglePlay}
                 style={control}
                 type="button"
               >
@@ -492,7 +513,7 @@ export function SectionWorkflows({
                   else if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
                   else if (event.key === "Home") { event.preventDefault(); seek(REPLAY_FIRST_HOUR); }
                   else if (event.key === "End") { event.preventDefault(); seek(REPLAY_LAST_HOUR); }
-                  else if (event.key === " ") { event.preventDefault(); setPlaying((value) => !value); }
+                  else if (event.key === " ") { event.preventDefault(); togglePlay(); }
                 }}
                 onPointerDown={(event) => {
                   const bounds = railRef.current?.getBoundingClientRect();
@@ -593,7 +614,7 @@ export function SectionWorkflows({
               const hours = room.slots.map((slot) => `${String(slot.hour).padStart(2, "0")}:00`).join(" · ");
               const note = room.slots.find((slot) => slot.note !== "none");
               return (
-                <div key={room.key} style={{ display: "flex", alignItems: "baseline", gap: "10px" }} title={room.title}>
+                <div key={room.key} style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
                   <span style={{ ...chip, color: "#94949c", width: "18px", flex: "0 0 auto" }}>{index + 1}</span>
                   <span style={{ fontSize: "13px", color: "#f4f4f5" }}>{room.name}</span>
                   <span style={{ ...chip, color: "#94949c", marginLeft: "auto", textAlign: "right" }}>

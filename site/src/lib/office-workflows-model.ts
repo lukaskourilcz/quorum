@@ -58,8 +58,6 @@ export interface WorkflowsRoom {
   color: string;
   /** In hour order. Empty for the workshop, which holds no session. */
   slots: WorkflowsSlot[];
-  /** `<Room> · HH:00 · HH:00 — <recorded sentence>`, for the room's native `<title>`. */
-  title: string;
 }
 
 /**

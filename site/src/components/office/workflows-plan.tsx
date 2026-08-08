@@ -159,7 +159,6 @@ function DoorNote({
   y,
   stem,
   color,
-  title,
   animate,
   index
 }: {
@@ -168,7 +167,6 @@ function DoorNote({
   y: number;
   stem: "down" | "up" | "side";
   color: string;
-  title: string;
   animate: boolean;
   index: number;
 }) {
@@ -186,7 +184,6 @@ function DoorNote({
       : `M${left + 30} ${y + 10} H${left + 42}`;
   return (
     <g data-wf-note style={style}>
-      <title>{title}</title>
       <path
         d={stemPath}
         stroke={note === "missed" || note === "waiting" ? WALL_INNER : color}
@@ -300,8 +297,6 @@ export function WorkflowsPlan({
       viewBox={`0 0 ${PLAN_WIDTH} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>Floor plan of the BoardlessAI office</title>
-
       <defs>
         <pattern height={14} id="wf-apron" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width={14}>
           <rect fill="#0c0c0f" height={14} width={14} />
@@ -736,7 +731,6 @@ export function WorkflowsPlan({
         const labelFill = lit ? "#f4f4f5" : workshop ? "#d4d4d8" : WALL_OUTER;
         const body = (
           <>
-            <title>{room.title}</title>
             <rect fill="transparent" height={geometry.height} width={geometry.width} x={geometry.x} y={geometry.y} />
             {lit ? (
               <rect
@@ -779,14 +773,16 @@ export function WorkflowsPlan({
         );
         return (
           <g key={geometry.key}>
-            {openable ? <g {...press(openable)}>{body}</g> : <g>{body}</g>}
+            {openable ? (
+              <g aria-label={`Open ${room.name}`} {...press(openable)}>
+                {body}
+              </g>
+            ) : (
+              <g>{body}</g>
+            )}
             {/* The dock's hit target, in reading order: after the workshop, before the shop. */}
             {geometry.key === "carousel-studio" ? (
-              <g {...press("dock")}>
-                <title>
-                  The loading dock — one sealed package to one address, with a checklist of exactly
-                  which shelves it may be put on.
-                </title>
+              <g aria-label="Open the loading dock" {...press("dock")}>
                 <rect fill="transparent" height={336} width={560} x={1000} y={524} />
                 <FocusRing height={336} width={560} x={1000} y={524} />
               </g>
@@ -818,17 +814,14 @@ export function WorkflowsPlan({
         return room.slots.map((slot, index) => {
           const x = anchors.xs[index];
           if (x === undefined) return null;
-          const note = noteFor(slot);
-          const hour = `${String(slot.hour).padStart(2, "0")}:00`;
           return (
             <DoorNote
               animate={animate}
               color={slot.color}
               index={index}
               key={`${room.key}-${slot.kind}`}
-              note={note}
+              note={noteFor(slot)}
               stem={anchors.stem}
-              title={`${hour} ${slot.label} — ${slot.reason ?? "Nothing recorded for this slot yet."}`}
               x={x}
               y={anchors.y}
             />
