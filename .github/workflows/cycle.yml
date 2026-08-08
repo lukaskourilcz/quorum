@@ -726,7 +726,7 @@ jobs:
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
             state/scorecards state/decisions state/calendar state/edition state/ideas state/meeting-agendas state/priority-queue.json
             state/kpis state/money state/mma state/marketingshark state/notify state/social state/taste state/ventures state/INBOX.md
-            NEEDS_YOUR_HELP_NOW.md
+            docs/NEEDED.md
             docs/ECOSYSTEM.md
             site/public/social
           )

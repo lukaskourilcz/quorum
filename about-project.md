@@ -13,7 +13,7 @@ Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 MMA Files jeden článkový slot denně. Oba posílají hotový článek zároveň do Carousel
 Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
 karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
-`NEEDS_YOUR_HELP_NOW.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
+`docs/NEEDED.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
 jako koncepty ve frontě ke schválení a rozhoduje o nich majitel.
 
 ## Jak je systém poskládaný
@@ -140,7 +140,7 @@ pnpm build
 pnpm --filter @boardlessai/site test:e2e
 ```
 
-Zkušební porady zapisují jen do dočasných složek. Přehled kroků, které musí udělat
-majitel, je v `NEEDS_YOUR_HELP_NOW.md`; `NEEDED.md` k tomu drží referenční tabulky a
-postup, jak dohledat prázdný den. Doporučené pořadí je v `MANUAL STEPS.md`.
+Zkušební porady zapisují jen do dočasných složek. Všechno, co musí udělat majitel, je
+v jediném dokumentu `docs/NEEDED.md`: úkoly v pořadí, které odblokuje nejvíc, referenční
+tabulky, postup, jak dohledat prázdný den, a ověřovací kroky pro každou cestu.
 Úplný samostatný popis systému je v `docs/ECOSYSTEM.md`.

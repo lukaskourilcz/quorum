@@ -173,8 +173,8 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
   measurement out of state; SPLIT stays idle. REACH also stays disabled while the MMA
   social-content phase is locked; both roles already carry current output contracts.
 
-Missing variables deny the action. The exact owner checklist is `NEEDED.md`; the
-ordered setup path is `MANUAL STEPS.md`.
+Missing variables deny the action. The owner checklist and the ordered setup path are
+both in `docs/NEEDED.md`.
 
 The canonical, standalone description of all seven projects, 42 roles, D1–D12 and
 current generated state is `docs/ECOSYSTEM.md`.

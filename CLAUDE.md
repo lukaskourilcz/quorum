@@ -133,7 +133,7 @@ system already owns and quota-guards.
   an observation log so they can become skill improvements later. Its log lives
   outside the repo; `.claude/observations/` is git-ignored.
 - **`stop-slop`** — apply to every piece of prose that ships: documentation,
-  `NEEDED.md` entries, UI copy, commit bodies, and pull-request descriptions.
+  `docs/NEEDED.md` entries, UI copy, commit bodies, and pull-request descriptions.
 - **`ui-ux-pro-max`** — consult before visual or interaction decisions. Query
   the bundled database with
   `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain>`
@@ -150,15 +150,17 @@ system already owns and quota-guards.
 This repo follows a shared markdown contract (see the `session-start`,
 `session-end`, and `markdown-checkup` skills under `.claude/skills/`):
 
-- **`NEEDED.md`** — owner/agent action items. Each task:
+- **`docs/NEEDED.md`** — the one owner document: action items, the reference
+  tables, and the procedures for proving a path once its account exists. Nothing
+  the owner has to do lives anywhere else. Each task:
   `- [ ] **Title** — desc. [imp:1-5] [owner:me|ai] [time:30m] [kind:K]`, where
   `[kind:K]` is one of `setup` `deploy` `legal` `content` `decision`.
 - **`about-project.md`** — project summary + the tech stack.
 - **`scaling.md`** — cost & scaling only (renamed from `stack-and-scaling.md`).
 - **`monetization.md`** — how the project could earn (options table).
 
-At session start, check `NEEDED.md` for `[owner:ai]` tasks that can now be done;
-at session end, update `NEEDED.md` (finished + newly-needed owner items).
+At session start, check `docs/NEEDED.md` for `[owner:ai]` tasks that can now be
+done; at session end, update it (finished + newly-needed owner items).
 
 ## Git workflow (every session)
 

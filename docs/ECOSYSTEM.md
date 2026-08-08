@@ -1,7 +1,7 @@
 # BoardlessAI ecosystem — standing full-context brief
 
 Updated: 2026-08-02  
-Status: implementation complete; launch-ready after the owner-only setup in `NEEDS_YOUR_HELP_NOW.md`  
+Status: implementation complete; launch-ready after the owner-only setup in `docs/NEEDED.md`  
 Audience: owner, product partners and Fable brainstorming  
 Authority: current code, committed state and countersigned decisions D1–D12
 
@@ -438,9 +438,9 @@ supersede a setting without rewriting the earlier context.
 Code readiness means contracts, dry proofs, tests, delivery adapters, rendering,
 posting validation, gates, public/admin projections and rollback paths exist. It does
 not mean Codex can create accounts, know invoices or accept legal terms. The one
-deduplicated human checklist is `NEEDS_YOUR_HELP_NOW.md`; `NEEDED.md` and
-`MANUAL STEPS.md` explain the same items and verification order without inventing
-additional approval gates.
+deduplicated human checklist is `docs/NEEDED.md`, which carries the items, the reference
+tables and the verification order in one place without inventing additional approval
+gates.
 
 After those human inputs, a real workflow must report `dry=false` and `skip=false`.
 An honest `NO_EDITION`, killed article or `not-needed` agenda is a successful `$0`

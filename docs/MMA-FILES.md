@@ -67,4 +67,4 @@ routes belong only to MMA Files.
 The code, content bridge and automated proof are complete. The owner still needs to
 confirm MMA Files is in the delivery App installation, keep the public demo noindex,
 add social account credentials when wanted, choose the corrections inbox and clear
-the name/operator/privacy details before enabling indexing. See `NEEDED.md`.
+the name/operator/privacy details before enabling indexing. See `docs/NEEDED.md`.

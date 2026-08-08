@@ -79,4 +79,4 @@ work. They require a fresh owner scope before implementation.
 - [x] Add `quiz-code-context`, the eleventh live seed layout, and brand token sets for
   devShark and geoShark. The layout exists because every other live template's widest
   monospace slot holds 100 characters over two lines — a source label, not a program.
-- [ ] Complete only the owner plumbing listed in `NEEDS_YOUR_HELP_NOW.md`.
+- [ ] Complete only the owner plumbing listed in `docs/NEEDED.md`.

@@ -728,7 +728,7 @@ async function hasFightAiQModelRun(root: string): Promise<boolean> {
  *
  * season-001 ends on 2026-10-30 and nothing creates season-002. From 31 October the room would
  * ideate against an expired season forever and stamp its id onto every plan, with nothing on the
- * record saying so. `NEEDS_YOUR_HELP_NOW.md` carries the owner item; this is what the record says
+ * record saying so. `docs/NEEDED.md` carries the owner item; this is what the record says
  * in the meantime.
  */
 /**
