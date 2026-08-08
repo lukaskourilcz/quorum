@@ -103,6 +103,31 @@ const DOWNLOAD_HOSTS = [
   "farm9.staticflickr.com"
 ];
 
+/**
+ * Where the gate may fetch a thumbnail from. Separate from `DOWNLOAD_HOSTS`, and deliberately.
+ *
+ * A thumbnail is fetched to be looked at and thrown away; a download becomes the published hero.
+ * The two lists mostly coincide, and the one host that differs is the reason they are two lists:
+ * Openverse aggregates, so its full-size bytes live on the original provider's CDN — which is why
+ * `DOWNLOAD_HOSTS` does not name Openverse at all — while its thumbnails are served by Openverse
+ * itself. Adding `api.openverse.org` to the download allowlist to reach those thumbs would have
+ * let a search response nominate a publishable host, which is the exact hole the fixed download
+ * allowlist exists to close.
+ *
+ * Same review posture as the other list: a host is added here in a commit somebody reads, never
+ * from an API response.
+ */
+export const THUMBNAIL_HOSTS = [...DOWNLOAD_HOSTS, "api.openverse.org"];
+
+/** Whether the gate may fetch this candidate's thumbnail at all. */
+export function thumbnailHosted(candidate: { thumbnailUrl: string }): boolean {
+  try {
+    return THUMBNAIL_HOSTS.includes(new URL(candidate.thumbnailUrl).hostname);
+  } catch {
+    return false;
+  }
+}
+
 /** Whether a candidate's bytes sit on a host the downloader is allowed to reach. */
 export function candidateHosted(candidate: { downloadUrl: string }): boolean {
   try {
