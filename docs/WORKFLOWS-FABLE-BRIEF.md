@@ -23,7 +23,13 @@ not need, and where a determinstic check could replace a paid judgment call. Say
 which of the standing rooms earn their cadence and which should become
 event-triggered. Be specific about which gate, file or constant you would move.
 
-**0.2 — Write the build prompt for Opus that produces the `/workflows` section.**
+**0.2 — Write the build prompt for Opus that adds the Workflows map to the office
+walkthrough.**
+
+It is **not a sibling page**. The home page already is an office walkthrough, and the
+map belongs inside it as new section work — the reader walks through the building and
+one of the rooms they reach explains how the work moves. Part 13.1 covers what that
+constrains.
 
 This is the main deliverable, and it is a *prompt*, not a design document and not code.
 Opus will receive your prompt and build the section in one pass, without re-scouting the
@@ -1207,7 +1213,7 @@ Critical gaps: `company.monthly-all-in-usd`, `company.monthly-api-usd`,
 
 ---
 
-## Part 13 — The `/workflows` section: the office map
+## Part 13 — The Workflows map, inside the office walkthrough
 
 The brief for deliverable 0.2. Everything here goes into the prompt you write for Opus.
 
@@ -1290,16 +1296,46 @@ get it from the picture before they read a word.
    feed and fails closed to concept mode when it cannot reach it. Nobody delivers to it.
    Both asymmetries should be obvious without a caption.
 
-### 13.1 The home page is already an office walkthrough — this must match it
+### 13.1 This is a section of the office walkthrough, and that is a hard constraint
 
 **Read `site/src/components/office/` and `site/src/lib/office-walkthrough.ts` before
-designing anything.** The home page is a seven-section, scroll-locked walkthrough with
-photographic plates, parallax, a mood tint that tracks Prague wall time, and a wallboard.
-Its sections are `intro · calendar · meetings · projects · team · results · company`.
+designing anything.**
 
-`/workflows` is a sibling of that page, not a new visual world. It must feel like walking
-into the same building through a different door. Where the home page shows *who works
-here and what happened today*, `/workflows` shows *how the work moves*.
+The home page is a seven-section, scroll-locked walkthrough with photographic plates,
+parallax, a mood tint that tracks Prague wall time, and a wallboard. Its sections are
+`intro · calendar · meetings · projects · team · results · company`, declared in a single
+`SECTIONS` tuple in `office-walkthrough.tsx`, with a matching `NAV` array. Each section
+is a `<section data-sec>` holding an `OfficePlate`, an `OfficeMood`, and one content
+component in a `data-fg` wrapper.
+
+The Workflows map goes **in there**. Where the walkthrough currently shows *who works
+here and what happened today*, this adds *how the work moves*.
+
+**What that constrains, and it is the single most important thing in this brief:**
+
+Above 1024px each section is exactly one locked screen. A reader wheels from one to the
+next. Seven movements would make the walkthrough fourteen sections and destroy the
+page's rhythm — the thing that makes it work is that it is short enough to finish.
+
+So the map cannot be a seven-part story told by scrolling. It has to be **one section,
+or at most a short run of two or three**, with the depth reached by interaction *inside*
+the section rather than by adding more of them. The recommendation is one rich section;
+if you argue for more, say what each additional locked screen earns.
+
+Decide and state in the prompt:
+
+- **How many sections**, and **where they sit in the tuple.** After `projects` is the
+  natural home — the reader has just met the ventures, so showing how their work moves
+  is the next question. Say why if you choose otherwise.
+- **What the plate is.** There are five plate images for seven sections, so some are
+  already reused (`office-display`, `office-frames`, `office-reception`,
+  `office-whiteboard`, `office-window`, each AVIF + WebP). Either reuse one and say
+  which, or specify a new one as an owner asset — **do not have Opus generate a plate**,
+  because generated imagery as filler is banned by the design rules and every existing
+  plate is a real photograph.
+- **What the `NAV` label is**, in one word.
+- **What the section degrades to below 1024px**, where the page is an ordinary document
+  with auto-height sections and nothing intercepted.
 
 The office vocabulary already exists in code:
 
@@ -1325,7 +1361,9 @@ Opus must build on these rather than reinvent them. Name each one in the prompt:
 | `getPublicMeetingRecords`, `getPublicMeetingSkips` | `site/src/lib/` | what happened and why not |
 | `getPublicArticleSlots`, `readableSlotReason` | `site/src/lib/` | article outcomes in reader language |
 | `getPublicMoneySnapshot` | `site/src/lib/money-records.ts` | spend, honestly nullable |
-| `PageShell`, `SectionHeading`, `PageIntro`, `Stat` | `site/src/components/` | page furniture |
+| `OfficeMood`, the `data-sec` / `data-fg` / `data-plate-inner` markup | `office-walkthrough.tsx` | the parallax and active-section handlers key off these attributes |
+| `SectionResults`'s `active` + `reduceMotion` props | `site/src/components/office/section-results.tsx` | the existing pattern for "animate on arrival, hold still if asked" |
+| `Stat`, `SignalBars`, `LocalEventTime` | `site/src/components/` | figures, meters and Prague times |
 | `deliveredEditionPackage`, `deliveredArticlePackage` | `site/src/lib/delivered-packages.ts` | real delivered content for the worked example |
 
 **The server/client boundary is the sanitising boundary.** Follow
@@ -1333,51 +1371,54 @@ Opus must build on these rather than reinvent them. Name each one in the prompt:
 JSON, and let nothing carry a repository path, a raw package hash outside a disclosure,
 or a number the state files do not contain.
 
-### 13.3 The movements
+### 13.3 One screen, three depths
 
-Seven, matching the home page's rhythm. Each is one screen.
+The section is the map. Everything else is reached by interaction inside it, without
+leaving the screen and without a route change.
 
-**Movement 1 — The map at rest.** The whole picture from 13.0, at the current Prague
-hour, with the lit office highlighted and the rest dim. A reader who stops here should
-already understand the shape. Everything after this is the same map, zoomed.
+**Depth 1 — the map at rest.** The whole picture from 13.0 at the current Prague hour,
+lit office highlighted, the rest dim. **A reader who never touches it must still get the
+shape**: seven buildings, one workshop, couriers going out to published sites, two edges
+that behave differently. This is the only depth most readers will see, so it carries the
+argument on its own.
 
-**Movement 2 — A day passes.** Time runs from 05:00 to 22:00 and offices light in
-sequence. Show GoVIRAL staying dark on six days in seven. Show a light coming on and
-going off again with nothing leaving the building — the good empty outcome. This is the
-movement that teaches the reader the business is quiet on purpose.
+**Depth 2 — the day runs.** A scrub or an autoplay that walks 05:00 → 22:00 with offices
+lighting in sequence. This is where the honesty rules earn their place: GoVIRAL dark six
+days in seven, and a light that comes on and goes off with nothing leaving the building.
+The reader should come away understanding that the business is quiet on purpose.
 
-**Movement 3 — Inside one office.** Enter DNESKAi at 05:00. What arrives (the source
-scan), what the room reads, who is in it, what it decides. Show the two gates as doors
-that do not open: fewer than 10 sources responding, or fewer than 10 candidates, and the
-day ends here with a stated reason. Show the count falling — sources → 80 candidates →
-50 shown to the editor → 1 chosen.
+Whether this autoplays when the section becomes active or waits for a control is your
+call — `SectionResults` already takes an `active` prop and a `reduceMotion` prop, so the
+pattern for "animate when the reader arrives, hold still if they asked for stillness"
+exists. Follow it.
 
-**Movement 4 — The desk.** The write-and-check loop as a loop the reader can watch go
-round: write → quick check → editor's review → full check, with up to two returns. Show
-cost accumulating against the day's allowance, and show the quick check catching a
-problem *before* the expensive review is paid for. That reordering is one of the clearest
-pieces of engineering in the system and it should get its own beat.
+**Depth 3 — open one building.** Selecting a building expands it in place. Four have
+something worth opening, and each is one panel, not one screen:
 
-**Movement 5 — The courier.** Rule 5 from 13.0, animated. The sealed package, the key cut
-for one door, the checklist at the door with four files passing and everything else
-bouncing off, the walk round the front to check the thing is on display, the receipt.
-Show the three different checklists side by side and show a dataset append physically
-unable to touch an article.
+- **DNESKAi.** What arrives (the source scan), the two doors that do not open, the count
+  falling — sources → 80 candidates → 50 shown to the editor → 1 chosen. Then the desk
+  loop: write → quick check → editor's review → full check, up to two returns, cost
+  accumulating against the day's allowance. Show the quick check catching a problem
+  *before* the expensive review is paid for; that reordering is one of the clearest
+  pieces of engineering in the system.
+- **The workshop.** The article arriving as a *summary* — 1,100 words collapsing to a
+  headline, a standfirst and a handful of passages, because the desk already decided what
+  the piece was about. The same summary rendering twice, identically. Then the hook rack:
+  49 opening lines, most greyed out because they would not be true of *this* item, the
+  recently used ones removed, one picked. **The greying-out is the single most
+  interesting idea in the system** — a line is only allowed to appear when the content
+  makes it true. Show the empty-handed case too: DNESKAi and MMA Files have no library
+  written and take the plain headline. Ordinary, not broken.
+- **The courier.** Rule 5 animated: the sealed package, the key cut for one door, the
+  checklist with four files passing and everything else bouncing off, the walk round the
+  front to check it is on display, the receipt. Show the three checklists together and
+  show a dataset append physically unable to touch an article.
+- **The two odd edges.** react-express-app going both ways; titty-tuesdays collecting
+  rather than receiving, and failing closed when it cannot reach the feed.
 
-**Movement 6 — The workshop.** Carousel Studio. The article arriving as a *summary* —
-1,100 words collapsing to a headline, a standfirst and a handful of passages, because the
-desk already decided what the piece was about. Then the same summary rendering twice and
-producing identical output. Then the hook line being chosen: a rack of 49 opening lines,
-most of them greyed out because they would not be true of *this* item, then the recently
-used ones removed, then one picked. Show the greying-out clearly — that a line is only
-allowed to appear when the content makes it true is the single most interesting idea in
-the system.
-
-Show the empty-handed case too: DNESKAi and MMA Files have no hook library written, so
-they take the plain headline. Ordinary, not broken.
-
-**Movement 7 — The five repositories.** The full map again, now with every edge labelled
-with what actually crosses it, including the two asymmetric ones from rule 6.
+If you argue for a second locked section, the courier is the strongest candidate to
+promote — it is the most visual mechanism in the system and the one a still image serves
+worst. Say so explicitly if that is your recommendation.
 
 ### 13.4 The worked example
 
@@ -1426,19 +1467,29 @@ Each was a real bug on this page. None is obvious from reading the code.
 
 ### 13.7 Acceptance checks for the prompt to require
 
-`pnpm -C site typecheck` · `pnpm -C site build` · the containment e2e guard · no page
-horizontal overflow at 360, 430, 768, 1024, 1280 and 1600px · full legibility with
-reduced motion on · keyboard reachable in document order · every figure on screen
-traceable to a state file or rendered as an explicit unavailable state.
+`pnpm -C site typecheck` · `pnpm -C site build` · `pnpm -C site test` · the containment
+e2e guard · no page horizontal overflow at 360, 430, 768, 1024, 1280 and 1600px · the
+walkthrough still wheel-locks correctly with the new section in the tuple, and the `NAV`
+indices still point at the right sections · full legibility and a complete map with
+reduced motion on · keyboard reachable in document order, and every expandable building
+operable from the keyboard · every figure on screen traceable to a state file or rendered
+as an explicit unavailable state.
+
+**The regression risk is the tuple.** `SECTIONS` and `NAV` carry hardcoded indices, and
+`goTo(SECTIONS.length - 1)` is used for the jump to the last section. Inserting a section
+mid-tuple shifts every index after it. The prompt must tell Opus to check `NAV`, that
+call, and the existing walkthrough tests.
 
 ---
 
 ## Part 13A — Mechanism notes for the map
 
-The metaphor above is what the reader sees. This is what is underneath each part of it,
-in engineering terms, because the prompt Opus receives needs both.
+The metaphor above is what the reader sees. This is what sits underneath each part of
+it, in engineering terms, because the prompt Opus receives needs both. Written before
+the section collapsed from seven screens to one; the mechanism is unchanged, only where
+it surfaces.
 
-### Under the map and the passing day (movements 1–2)
+### Under the map and the passing day (depths 1–2)
 
 A 24-hour Prague dial with 13 marks. Each mark carries its phase, its venture colour and
 its envelope. Hovering a mark shows the room's cast.
@@ -1449,7 +1500,7 @@ workflow — the punctual Vercel line landing on the hour, the GitHub backstop l
 arriving visibly late and finding the work already done. Show the 5-hour grace window as
 a widening band behind each mark, and a slot moving `scheduled → late → held`.
 
-### Under the source scan (movement 3)
+### Under the source scan (depth 3, DNESKAi)
 
 32 source nodes fanning into a digest. Group them by adapter kind. Animate the count
 falling: *N sources responded → 80 candidates → 50 shown to the editor → 1 chosen*.
@@ -1458,7 +1509,7 @@ Show the two gates as physical stops: fewer than 10 successful sources, or fewer
 candidates, and the whole line stops with a labelled `no_edition`. **A stopped line is
 not a broken line** — that should be visually clear, not a red error.
 
-### Under the desk (movement 4)
+### Under the desk (depth 3, DNESKAi)
 
 The regeneration loop, drawn as a loop. Curate → write → draft gate → STET → final gate,
 with the two rewrite attempts as visible returns. Show cost accumulating against a $0.50
@@ -1466,13 +1517,13 @@ bar as each stage completes, and show the draft gate catching a violation *befor
 is paid — that reordering is one of the clearest efficiency wins in the system and it
 deserves a beat.
 
-### Under the hero image (movement 4)
+### Under the hero image (depth 3, DNESKAi)
 
 Three rungs, falling through: curated scene → licensed search across four providers →
 deterministic SVG plate. The plate should look like a finished thing, not a fallback,
 because it is a legitimate delivered state.
 
-### Under the courier (movement 5)
+### Under the courier (depth 3)
 
 The most visually interesting part. Show, in order: the bounded token minted and scoped
 to one repository · the target repo cloned · the consumer script running *inside the
@@ -1484,7 +1535,7 @@ The allowlist is the single best thing to animate in the whole system. Show the 
 allowlists side by side (edition, no-edition, dataset) and show a dataset append being
 physically unable to touch an article.
 
-### Under the workshop (movement 6)
+### Under the workshop (depth 3)
 
 The article arriving as a **summary**, not as an article: 1,100 words collapsing to
 kicker + headline + standfirst + 3–8 passages + sources. Then template + payload + brand
@@ -1499,7 +1550,7 @@ same hand*.
 Show `no-hook` too, for DNESKAi and MMA Files, as an ordinary outcome where the
 template's own headline renders.
 
-### Under the repository map (movement 7)
+### Under the two odd edges (depth 3)
 
 The full map. quorum at the centre; `aifirst` and `mma-files` receiving packages;
 `react-express-app` in a **two-way** relationship (3,633 questions in, hook library
@@ -1558,8 +1609,9 @@ improvise:
    five repositories, seven release checks and three allowlists is a lot of true detail.
    Say what gets cut from the first screen and what a reader has to scroll or click to
    reach. A map nobody finishes teaches nothing.
-6. **`/workflows` sits beside a home page that is already an office walkthrough.** Say
-   how a reader knows which one they are on, and what stops the two feeling redundant.
+6. **The walkthrough already has a `projects` section and a `calendar` section.** The
+   map risks restating both. Say what the Workflows section shows that neither does, and
+   what it should deliberately leave to them.
 
 ### 14.3 New capability: Titty Tuesdays visual proposals
 
