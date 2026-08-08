@@ -184,8 +184,9 @@ walkthrough and Carousel Studio are waiting on specifically.
   [imp:3] [owner:me] [time:15m] [kind:decision]
 - [ ] **Start the build session on the GitHub issues** — paste the kickoff message into a
   Claude Code session on the strongest available model; it reads
-  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md` (the contract) and works GitHub issues
-  `SI-01`–`SI-13` (#41–#53) strictly in title order on one branch, committing frequently —
+  `docs/SITE-IMPROVEMENTS-OPUS-BUILD-PROMPT.md` (the contract) and works the fourteen
+  SI-titled GitHub issues (#41–#53 and #55, `SI-01` → `SI-01.5` → `SI-02`–`SI-13`)
+  strictly in title order on one branch, committing frequently —
   at least one commit closes each issue — ending with the docs sweep that unifies the owner
   runbooks into `docs/NEEDED.md`, a single merge to `main` for one CI run and one redeploy,
   and the pruning of stale branches. [imp:4] [owner:me] [time:5m] [kind:deploy]

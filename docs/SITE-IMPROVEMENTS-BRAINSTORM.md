@@ -114,8 +114,10 @@ requirements, choreography and acceptance gates live in
 Reduced motion renders the same story as opacity-only steps — nothing
 translates — and ambient stays exactly as built: the performance never starts
 itself, and only the reader's press sets the day in motion. The build runs as
-thirteen GitHub issues, `SI-01` through `SI-13` (#41–#53), worked strictly in
-order on one branch — each closing with its gates green and a named commit,
+fourteen SI-titled GitHub issues (#41–#53 and #55: `SI-01`, an inserted
+`SI-01.5` repairing the broken room view, then `SI-02`–`SI-13`), worked
+strictly in title order on one branch — each closing with its gates green and
+a named commit,
 and a single merge to `main` inside the last of them, which also sweeps the
 repository's markdown down to living documents, unifies the owner's runbooks
 into `docs/NEEDED.md`, and prunes the branches with no remaining value; the
@@ -213,8 +215,8 @@ document rather than trailing off. The build session's instructions are
    walking the two-envelope pipeline through the Design Lab and a grown
    GoVIRAL, and the whiteboard reframed behind the plan. The design spec is
    amended before any component changes, in the same design-pass/build-pass
-   rhythm as the section itself, and the whole build runs as GitHub issues
-   `SI-01`–`SI-13` (#41–#53).
+   rhythm as the section itself, and the whole build runs as the fourteen
+   SI-titled GitHub issues (#41–#53, #55).
 2. **Python stays out of the runtime.** That is this review's standing
    recommendation; whether the offline calibration lab opens later, under the
    JSON contract boundary in §3, remains an open owner decision in

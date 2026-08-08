@@ -35,8 +35,11 @@ Read in this order before writing any code:
   origin main && git merge origin/main`, run the gates once as a baseline,
   and re-check §1.1 against the tree. Line references here were true when
   this was written; where the tree has drifted, the tree wins.
-- **The work is cut into GitHub issues.** Thirteen issues on this
-  repository, `SI-01` through `SI-13`. Work them strictly in title order,
+- **The work is cut into GitHub issues.** Fourteen issues on this
+  repository: `SI-01`, the inserted `SI-01.5` (the room-view repair — the
+  opened room on `main` is broken at desktop widths, and everything later
+  builds on rooms opening correctly), then `SI-02` through `SI-13`. Work
+  them strictly in title order,
   one at a time, all on this one branch: read the issue, do the work, run
   the gates, commit — frequent small commits throughout, and at least one
   commit closes each issue — then close the issue with a short comment
@@ -625,9 +628,10 @@ the scope.
 
 # Definition of done
 
-- Issues `SI-01` through `SI-13` all closed, each with its gates green and
-  its closing commit named in the closing comment; one final merge to
-  `main` inside SI-13; commit history small and readable.
+- The SI-titled issues (`SI-01`, `SI-01.5`, `SI-02`–`SI-13`) all closed,
+  each with its gates green and its closing commit named in the closing
+  comment; one final merge to `main` inside SI-13; commit history small and
+  readable.
 - One owner document remains — `docs/NEEDED.md`, current and deduplicated;
   no executed prompt docs left in the tree; every surviving doc up to date;
   stale local and remote branches deleted.
