@@ -46,20 +46,49 @@ its honesty comes from gates that describe a question. Neither holds elsewhere:
    `falsifiedIf`, cooldown rationale, gate justification. Run the lint.
 6. **Size it by the pool arithmetic** (`03`): items/day × cooldown days.
 
-## Proposed predicate vocabularies
+## Predicate vocabularies — confirmed 2026-08-08
 
-Sketches, not specs — confirm against the real JSON in each repo before building.
+The sketches below were checked against the real schemas, and most of them did not survive.
+This is what step one is for, and it is worth reading before writing a line: **seven of the
+eleven proposed predicates read fields that do not exist.**
 
-**DNESKAi / Caught Up (`news.hooks.json`)**
-`always` · `articleAgeHours:N` (freshness claims) · `sourceCount:N` (corroboration claims)
-· `topicIn:model-release|funding|policy|research|safety` · `hasNumber` (a figure appears in
-the item) · `isFirstReport` · `followsPriorStory` (continuity — the news analogue of
-`missedTopicBefore`, and probably the strongest hook here)
+**DNESKAi / Caught Up (`news.hooks.json`)** — from `orchestrator/src/contracts/article-frontmatter.ts`
 
-**MMA Files (`mma.hooks.json`)**
-`always` · `eventWithinDays:N` · `isTitleFight` · `fighterRanked:N` · `resultKnown`
-(post-fight vs preview — completely different tense and promise) · `hasStatEdge` (a real
-sourced number from the FightAIQ data)
+| Predicate | Reads |
+|---|---|
+| `always` | — |
+| `sourceCount:N` | `sources.length` |
+| `primarySources:N` | `sources` with `classification: "primary"` |
+| `signalStrengthAtLeast:N` | `signal_strength` (0–100, the desk's own score) |
+| `topicIn:X` | `tags` |
+| `hasNumber` | a figure in the title or `what_changed` |
+
+Dropped, and why: **`articleAgeHours`** — an edition is built for its own day, so there is no
+per-item age to compare against. **`isFirstReport`** and **`followsPriorStory`** — nothing in the
+frontmatter records either, and `followsPriorStory` would need a comparison against previous
+editions rather than a field. The two the sketch missed are the two best ones: the desk already
+scores every item, and it already marks which sources are primary.
+
+**MMA Files (`mma.hooks.json`)** — from `orchestrator/src/contracts/mma-files.ts`
+
+| Predicate | Reads |
+|---|---|
+| `always` | — |
+| `formatIs:X` | `format` — one of `fight-week-preview`, `post-event-recap`, `fighter-profile`, `data-story`, `weigh-in-report`, `desk-notes` |
+| `fighterCount:N` | `fighterRefs.length` — 1 is a profile, 2 is a matchup |
+| `hasEvent` | `eventRef` is present |
+| `sourceCount:N` | `sources.length` |
+
+Dropped, and why: **`eventWithinDays`** — `eventRef` is an id with no date attached.
+**`isTitleFight`**, **`fighterRanked`**, **`hasStatEdge`** — none is in the article package, and
+reading them would mean resolving other records at pack-build time and trusting the join.
+`hasStatEdge` is the one to be most careful about: it sits one careless line away from the
+betting claim this surface may never make.
+
+**`formatIs` replaces `resultKnown` and does the job better.** The tense trap this doc warns
+about is already encoded in a field the desk fills: `fight-week-preview` and `post-event-recap`
+are two of the six formats, so a preview hook and a recap hook are gated apart by something that
+exists rather than something that would have to be inferred.
 
 ## Extra honesty rules for news and MMA
 

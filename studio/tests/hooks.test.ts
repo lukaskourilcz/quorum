@@ -128,12 +128,22 @@ describe("predicate parsing", () => {
   });
 
   it("rejects a predicate outside the surface vocabulary, naming the hook and the surface", () => {
-    // `articleAgeHours` is real — on the news surface. On quiz it is a mistake, and the message
-    // has to say which surface it was read on or the fix is a guess.
-    expect(() => parsePredicate("quiz", "know-why", "articleAgeHours:6")).toThrowError(HookLoadError);
-    expect(() => parsePredicate("quiz", "know-why", "articleAgeHours:6"))
+    // `sourceCount` is real — on the news surface. On quiz it is a mistake, and the message has
+    // to say which surface it was read on or the fix is a guess.
+    expect(() => parsePredicate("quiz", "know-why", "sourceCount:2")).toThrowError(HookLoadError);
+    expect(() => parsePredicate("quiz", "know-why", "sourceCount:2"))
       .toThrowError(/quiz hook "know-why".*not in the quiz predicate vocabulary/su);
-    expect(() => parsePredicate("news", "n", "articleAgeHours:6")).not.toThrow();
+    expect(() => parsePredicate("news", "n", "sourceCount:2")).not.toThrow();
+
+    // And the reverse: the predicates 05-surfaces.md sketched but the real schemas do not carry
+    // are not in any vocabulary, so a library that names one fails to load rather than quietly
+    // gating on nothing.
+    for (const absent of ["articleAgeHours:6", "isFirstReport", "followsPriorStory"]) {
+      expect(() => parsePredicate("news", "n", absent), absent).toThrowError(HookLoadError);
+    }
+    for (const absent of ["isTitleFight", "fighterRanked:5", "hasStatEdge", "eventWithinDays:7"]) {
+      expect(() => parsePredicate("mma", "m", absent), absent).toThrowError(HookLoadError);
+    }
   });
 
   it("names a Tier B predicate as unbuilt rather than as unknown", () => {
@@ -322,7 +332,7 @@ describe("the evaluator", () => {
   });
 
   it("refuses to evaluate a non-empty library on an unimplemented surface", () => {
-    const library = loadLibrary({ surface: "mma", hooks: [hook({ truthRequires: ["isTitleFight"] })], research: [research("fixture-hook")] });
+    const library = loadLibrary({ surface: "mma", hooks: [hook({ truthRequires: ["hasEvent"] })], research: [research("fixture-hook")] });
     expect(() => eligibleFor(library, { subject: SUBJECT, categoryLists: CATEGORY_LISTS }))
       .toThrowError(/not implemented/u);
   });

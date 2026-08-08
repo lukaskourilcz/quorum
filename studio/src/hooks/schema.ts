@@ -36,30 +36,46 @@ export type QuizPredicate =
   | { readonly kind: "questionStartsWith"; readonly prefix: string };
 
 /**
- * Sketched from `docs/hooks/05-surfaces.md`, not confirmed against DNESKAi's item JSON.
+ * DNESKAi's vocabulary, confirmed against `article-frontmatter.ts` rather than sketched.
  *
- * Typed here so the vocabulary check has names to check against and a library author starts from
- * the agreed list rather than inventing one. No evaluator implements them yet — the news library is
- * empty and `evaluateEligible` refuses a non-empty one rather than guessing. Step one of the
- * authoring issue is enumerating the metadata the items actually carry at render time.
+ * `05-surfaces.md` proposed `articleAgeHours`, `isFirstReport` and `followsPriorStory`. None of
+ * the three survived the enumeration the authoring issue asked for first: an edition is built for
+ * its own day so there is no per-item age to compare, and nothing in the frontmatter records
+ * whether a story broke first or continues an earlier one. A gate that cannot read a field is a
+ * gate that licenses nothing, so they are not here.
+ *
+ * What is here is what the item actually carries. `signalStrengthAtLeast` and `primarySources`
+ * were not in the sketch and are the two most useful things in the schema: the desk already scores
+ * every item and already marks which sources are primary.
  */
 export type NewsPredicate =
   | { readonly kind: "always" }
   | { readonly kind: "hasNumber" }
-  | { readonly kind: "isFirstReport" }
-  | { readonly kind: "followsPriorStory" }
-  | { readonly kind: "articleAgeHours"; readonly hours: number }
   | { readonly kind: "sourceCount"; readonly count: number }
+  | { readonly kind: "primarySources"; readonly count: number }
+  | { readonly kind: "signalStrengthAtLeast"; readonly score: number }
   | { readonly kind: "topicIn"; readonly topic: string };
 
-/** Sketched from `docs/hooks/05-surfaces.md`. Same status as the news vocabulary above. */
+/**
+ * MMA Files' vocabulary, confirmed against `mma-files.ts` rather than sketched.
+ *
+ * `05-surfaces.md` proposed `eventWithinDays`, `isTitleFight`, `fighterRanked` and `hasStatEdge`.
+ * None is in the article package: `eventRef` is an id with no date attached, and nothing records a
+ * title fight, a ranking or a statistical edge. Reading them would mean resolving other records at
+ * pack-build time and trusting the join — and `hasStatEdge` in particular sits one careless line
+ * away from the betting claim this surface may never make.
+ *
+ * `formatIs` replaces `resultKnown` and does the same job better, because the tense trap the docs
+ * warn about is already encoded: `fight-week-preview` and `post-event-recap` are two of the six
+ * formats the desk actually writes, so a preview hook and a recap hook are gated apart by a field
+ * that exists.
+ */
 export type MmaPredicate =
   | { readonly kind: "always" }
-  | { readonly kind: "isTitleFight" }
-  | { readonly kind: "resultKnown" }
-  | { readonly kind: "hasStatEdge" }
-  | { readonly kind: "eventWithinDays"; readonly days: number }
-  | { readonly kind: "fighterRanked"; readonly rank: number };
+  | { readonly kind: "hasEvent" }
+  | { readonly kind: "formatIs"; readonly format: string }
+  | { readonly kind: "fighterCount"; readonly count: number }
+  | { readonly kind: "sourceCount"; readonly count: number };
 
 export type Predicate = QuizPredicate | NewsPredicate | MmaPredicate;
 
@@ -92,19 +108,17 @@ export const VOCABULARIES: Readonly<Record<Surface, Readonly<Record<string, Pred
   news: {
     always: { arity: "none" },
     hasNumber: { arity: "none" },
-    isFirstReport: { arity: "none" },
-    followsPriorStory: { arity: "none" },
-    articleAgeHours: { arity: "number", field: "hours" },
     sourceCount: { arity: "number", field: "count" },
+    primarySources: { arity: "number", field: "count" },
+    signalStrengthAtLeast: { arity: "number", field: "score" },
     topicIn: { arity: "string", field: "topic" }
   },
   mma: {
     always: { arity: "none" },
-    isTitleFight: { arity: "none" },
-    resultKnown: { arity: "none" },
-    hasStatEdge: { arity: "none" },
-    eventWithinDays: { arity: "number", field: "days" },
-    fighterRanked: { arity: "number", field: "rank" }
+    hasEvent: { arity: "none" },
+    formatIs: { arity: "string", field: "format" },
+    fighterCount: { arity: "number", field: "count" },
+    sourceCount: { arity: "number", field: "count" }
   }
 };
 
