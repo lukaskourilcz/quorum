@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "ops-report/1",
+  "period": "quarterly",
+  "periodKey": "week 32",
+  "generatedAt": "10. 8. 2026",
+  "meetings": {
+    "scheduled": -3,
+    "held": "twenty one",
+    "skipped": [{ "date": "yesterday", "phase": "", "reason": null }],
+    "missingDays": "2026-08-09"
+  },
+  "spend": {
+    "periodUsd": -2.4137,
+    "mtdUsd": null,
+    "capUsd": 0,
+    "byVenture": { "caught-up": "one dollar" }
+  },
+  "content": {
+    "published": [{ "ventureId": "", "count": 1.5 }],
+    "scores": { "avg": "high", "worst": 4 }
+  },
+  "quality": { "vetoRate": "eleven percent" },
+  "incidents": [{ "kind": "", "date": "2026-08-04" }],
+  "fixTasks": { "opened": 4 },
+  "perVenture": [{ "ventureId": "caught-up", "outputs": -5, "spendUsd": -1 }],
+  "narrative": 42
+}

@@ -15,6 +15,7 @@ import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
 import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
+import { OpsReportSchema } from "./ops-report.js";
 import {
   AdjustmentEntrySchema,
   BoutRecordSchema,
@@ -63,6 +64,7 @@ export const ContractSchemas = {
   "meeting-email": MeetingEmailSchema,
   "meeting-agenda": MeetingAgendaQueueSchema,
   "meeting-record": MeetingRecordSchema,
+  "ops-report": OpsReportSchema,
   "adjustment-entry": AdjustmentEntrySchema,
   "bet-type-catalog": BetTypeCatalogSchema,
   "bout-record": BoutRecordSchema,

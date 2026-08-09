@@ -126,6 +126,7 @@ import { loadEffectivePortfolioSchedule, loadRuntimeBudgetLimits } from "./portf
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 import { imageProgramReadiness, type ImageProgramReadiness } from "./images/readiness.js";
 import { contentGateEnabled, runContentGate } from "./quality/content-gate.js";
+import { writeMonthlyReportIfDue, writeWeeklyReportIfDue } from "./reports/writers.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -2053,6 +2054,25 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         }
       })).artifacts
       : [];
+    /*
+     * The weekly and monthly reports, written the night a period closes.
+     *
+     * Deterministic and free — every figure is read off a record the runtime already wrote, so
+     * this sits outside the model share exactly like the dataset appends. Monday writes the week
+     * that finished; the 1st writes the month before it. Any other night writes nothing.
+     */
+    const reportArtifacts: string[] = [];
+    if (!options.dry && venturePhase === "night") {
+      const today = pragueClockParts(now).date;
+      const ledger = await currentBudgetLedger(artifactRoot);
+      const capUsd = budgetLimitsFromEnvironment().monthlyOperatingUsd;
+      for (const due of [
+        await writeWeeklyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd }),
+        await writeMonthlyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd })
+      ]) {
+        if (due) reportArtifacts.push(due.path);
+      }
+    }
     if (options.explainBudget) {
       console.log(
         JSON.stringify(
@@ -2107,7 +2127,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         ? room.skippedParticipants.map(({ agent }) => agent)
         : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
       artifacts: [
-        ...artifacts.map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
+        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts]
+          .map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
         ...(ecosystemArtifact ? [ecosystemArtifact] : [])
       ],
       // Read from the committed ledger and the live environment, so a dry run reports the same
