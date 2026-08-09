@@ -14,6 +14,7 @@ import { configRoot } from "../src/paths.js";
 import { enrichWikimediaBackfill, parseWikipediaFighterPage } from "../src/fightaiq/wikimedia-backfill.js";
 import { loadBoutRecords, loadFighterRecords, saveBoutRecord, upcomingBoutRecords } from "../src/fightaiq/store.js";
 import { enrichWikidataProfiles } from "../src/fightaiq/wikidata.js";
+import { loadMmaSourceRegistry } from "../src/fightaiq/sources.js";
 import { atomicWriteJson } from "../src/state.js";
 
 describe("FightAIQ roster and history automation", () => {
@@ -299,9 +300,22 @@ describe("FightAIQ roster and history automation", () => {
   });
 
   it("contains no paid-only or retired FightAIQ source entry", async () => {
+    const registry = await loadMmaSourceRegistry();
     const raw = (await readFile(path.join(configRoot, "mma-sources.json"), "utf8")).toLowerCase();
-    expect(raw).not.toMatch(/oddspapi|tapology|sherdog|octagon-api/);
+    expect(raw).not.toMatch(/oddspapi|octagon-api/);
     expect(raw).toContain("free plan");
+
+    const actors = registry.sources.filter((source) => source.access === "apify");
+    expect(actors).toHaveLength(4);
+    expect(actors.every((source) => source.credentialEnv === "APIFY_TOKEN" && source.apify?.actorBuildId)).toBe(true);
+    expect(actors.every((source) => source.freeLimit.startsWith("$0 cash"))).toBe(true);
+    expect(actors.filter((source) => source.state === "wired")).toEqual([]);
+    expect(actors.filter((source) => source.termsVerdict === "allowed").map((source) => source.id)).toEqual(["apify-tapology-oktagon"]);
+    expect(actors.find((source) => source.id === "apify-sherdog-profiles")).toMatchObject({ state: "blocked", termsVerdict: "forbidden" });
+    expect(actors
+      .filter((source) => source.state === "wired" || source.state === "proposed")
+      .reduce((sum, source) => sum + (source.apify?.expectedMonthlyUsd ?? 0), 0))
+      .toBeLessThanOrEqual(3);
   });
 });
 
