@@ -10,10 +10,12 @@ import type { PlanPlace } from "@/components/office/workflows-plan";
  * Every room on the plan opens now, but only these four have a mechanism worth drawing. The rest
  * open to the room itself, which is what `PlanPlace` is wider than this for.
  */
-export type PanelPlace = "caught-up" | "carousel-studio" | "dock" | "titty-tuesdays";
+// The dock left this list when it became a dialog of plain facts: it is the one place on the
+// plan whose panel was a metaphor rather than a record.
+export type PanelPlace = "caught-up" | "carousel-studio" | "titty-tuesdays";
 
 export function hasPanel(place: PlanPlace): place is PanelPlace {
-  return place === "caught-up" || place === "carousel-studio" || place === "dock"
+  return place === "caught-up" || place === "carousel-studio"
     || place === "titty-tuesdays";
 }
 
@@ -88,12 +90,6 @@ export const PANEL_COPY: Record<PanelPlace, { eyebrow: string; title: string; fo
     footer: "Assignment is deterministic and costs nothing.",
     columns: "1fr"
   },
-  dock: {
-    eyebrow: "THE COURIER",
-    title: "One sealed package, one address",
-    footer: "The allowlist is the checklist at the shelf.",
-    columns: "1fr"
-  },
   "titty-tuesdays": {
     eyebrow: "THE WINDOW AND THE SIGNAL",
     title: "The edges that are not deliveries",
@@ -104,5 +100,5 @@ export const PANEL_COPY: Record<PanelPlace, { eyebrow: string; title: string; fo
 
 /** Whether this panel carries the worked example's chip in its header. */
 export function carriesExample(place: PanelPlace): boolean {
-  return place === "caught-up" || place === "carousel-studio" || place === "dock";
+  return place === "caught-up" || place === "carousel-studio";
 }

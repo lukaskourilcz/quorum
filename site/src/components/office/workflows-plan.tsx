@@ -46,50 +46,7 @@ const PLAN_MARGIN = PLAN_FLOOR_MARGIN;
  * old stretch happened to produce, did. Lower than this and the room stops being the subject: at
  * 0.7 Board HQ's roster needed 220px of scroll on a laptop that had shown it whole.
  */
-export const ROOM_FRAME_SPAN = 0.8;
 
-/**
- * The viewBox that frames one room inside a box of the given aspect.
- *
- * The frame is *centred on the room and sized from it*. It still carries the container's aspect,
- * because the drawing fills its box and a mismatched frame would letterbox — but the size comes
- * from the room's own larger axis, so every room is framed to the same fraction of itself and
- * lands on an exactly known sub-rectangle the overlay can be placed against without measuring the
- * SVG.
- *
- * The earlier version grew the room's rect *to* the aspect: it padded by a flat 26 units and then
- * stretched whichever axis was short. On a wide container that stretch decided the horizontal
- * framing on its own — a room 270 units wide sat in a frame 766 wide, measured — so the opened
- * room claimed 87% of the stage's height and a third of its width, and the neighbours around it
- * filled the rest at four times their drawn scale. Sizing the frame from the room is the fix. The
- * neighbours that stay in frame are pushed back by the scrim below rather than by the framing,
- * because no framing can make a room 0.76 as wide as it is tall fill a stage twice as wide as it
- * is tall — that geometry is why the two halves of this repair are separate.
- */
-export function roomViewBox(room: RoomGeometry, aspect: number): {
-  viewBox: string;
-  inset: { left: string; top: string; width: string; height: string };
-} {
-  // Whichever axis binds — the room's width, or its height once the container's aspect is applied
-  // to it — is given exactly ROOM_FRAME_SPAN of the frame. The other axis then has more room than
-  // it needs, which is correct: a tall room in a wide box cannot fill the width, and pretending
-  // otherwise is what cropped it.
-  const width = Math.max(room.width, room.height * aspect) / ROOM_FRAME_SPAN;
-  const height = width / aspect;
-  const cx = room.x + room.width / 2;
-  const cy = room.y + room.height / 2;
-  const minX = cx - width / 2;
-  const minY = cy - height / 2;
-  return {
-    viewBox: `${minX} ${minY} ${width} ${height}`,
-    inset: {
-      left: `${((room.x - minX) / width) * 100}%`,
-      top: `${((room.y - minY) / height) * 100}%`,
-      width: `${(room.width / width) * 100}%`,
-      height: `${(room.height / height) * 100}%`
-    }
-  };
-}
 
 /** The four places that open. Everything else on the plan is drawn and not pressed. */
 /** The dock is not a room; every other place on the plan is one. */
@@ -470,7 +427,6 @@ export function WorkflowsPlan({
   compact,
   animate,
   fill,
-  focus,
   onOpen
 }: {
   rooms: readonly WorkflowsRoom[];
@@ -495,7 +451,6 @@ export function WorkflowsPlan({
   /** Fit the drawing to its box rather than to its own height. Above 1024px only. */
   fill: boolean;
   /** The room the plan is framing, if any: the same walls, closer in. */
-  focus: { room: RoomGeometry; viewBox: string } | null;
   onOpen: (place: PlanPlace) => void;
 }) {
   const byKey = new Map(rooms.map((room) => [room.key, room]));
@@ -549,7 +504,7 @@ export function WorkflowsPlan({
       style={fill
         ? { display: "block", width: "100%", height: "100%" }
         : { display: "block", width: "100%", height: "auto" }}
-      viewBox={focus ? focus.viewBox : `${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
+      viewBox={`${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
@@ -1057,8 +1012,13 @@ export function WorkflowsPlan({
               observable as a rendered rect — so the guard reads this rather than recomputing
               the maths it is supposed to be checking.
             */}
+            {/*
+              The room's own hit area. Transparent, and the reason a click anywhere on the floor of
+              a room opens it rather than only the strokes of its furniture. It carried a
+              `data-open-room` marker for the reframe guard, which went with the reframe; the rect
+              is not decoration and stays.
+            */}
             <rect
-              data-open-room={focus?.room.key === geometry.key ? "" : undefined}
               fill="transparent"
               height={geometry.height}
               width={geometry.width}
@@ -1077,7 +1037,7 @@ export function WorkflowsPlan({
                 y={geometry.y}
               />
             ) : null}
-            {focus?.room.key === geometry.key ? null : compact ? (
+            {compact ? (
               <Label
                 fill="#f4f4f5"
                 size={44}
@@ -1112,7 +1072,7 @@ export function WorkflowsPlan({
               `pointer-events: none`, like every performance layer: a press anywhere on this room
               is D9's teardown-and-open, and a tag must never swallow one.
             */}
-            {beat?.room === geometry.key && !compact && focus?.room.key !== geometry.key ? (() => {
+            {beat?.room === geometry.key && !compact ? (() => {
               /*
                * The tag is a label on the room, and it needs a plate to stay one.
                *
@@ -1225,26 +1185,11 @@ export function WorkflowsPlan({
         ---- the travellers -----------------------------------------------------
 
         Painted after the drawing so an envelope rides over the floor it crosses, and before the
-        open-room scrim so a room framed mid-teardown could never show one — though D9 tears the
-        performance down before it reframes, so that case does not arise.
+        travellers are torn down before a room opens, and a room opening no longer reframes the
+        drawing at all — it opens a dialog over it.
       */}
       {legs.map((leg) => <Traveller key={leg.id} leg={leg} />)}
 
-      {focus ? (
-        <path
-          d={`M${-PLAN_MARGIN} 0 H${PLAN_WIDTH + PLAN_MARGIN} V${PLAN_HEIGHT} H${-PLAN_MARGIN} Z`
-            + ` M${focus.room.x} ${focus.room.y} H${focus.room.x + focus.room.width}`
-            + ` V${focus.room.y + focus.room.height} H${focus.room.x} Z`}
-          data-wf-scrim
-          fill="#09090b"
-          fillOpacity={0.88}
-          fillRule="evenodd"
-          style={{
-            pointerEvents: "none",
-            ...(animate ? entrance("wf-fade", 240, 0, "linear") : {})
-          }}
-        />
-      ) : null}
     </svg>
   );
 }

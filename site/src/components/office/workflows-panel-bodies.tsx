@@ -438,102 +438,6 @@ function WorkshopBody({
   );
 }
 
-/* ------------------------------------------------------------------ courier */
-
-const BEATS: ReadonlyArray<{ line: string; note: string }> = [
-  { line: "A key is cut for one door", note: "token scoped to one repository" },
-  { line: "The house does its own shelving", note: "the target repo's consumer script runs inside" },
-  { line: "The checklist at the shelf", note: "four files pass · a stray file bounces" },
-  { line: "Three checklists, side by side", note: "a dataset cannot reach the article shelf" },
-  { line: "Commit, push, the site rebuilds", note: "delivery bot · one rebase retry" },
-  { line: "Round the front, ticket against the page", note: "two halves of the content hash match" },
-  { line: "Seven ticks, receipt filed", note: "the package reference, on the commit" }
-];
-
-function BeatDrawing({ index, animate }: { index: number; animate: boolean }) {
-  if (index === 2) {
-    // A literal filter. The bounce is the whole point of the beat and it is drawn, not written.
-    return (
-      <svg aria-hidden="true" height={54} style={{ display: "block" }} viewBox="0 0 96 54" width="100%">
-        <path d="M8 8 H88 L60 30 V48 L44 42 V30 Z" fill="none" stroke="#94949c" strokeWidth={1.4} />
-        {[0, 1, 2, 3].map((file) => (
-          <rect fill="#3f3f46" height={4} key={file} rx={1} width={12} x={22 + file * 14} y={2} />
-        ))}
-        <rect
-          fill="none"
-          height={5}
-          rx={1}
-          stroke={DNESKAI}
-          strokeWidth={1.2}
-          style={animate ? { animation: "wf-bounce 480ms cubic-bezier(.2,.8,.3,1.2) 900ms backwards" } : undefined}
-          width={13}
-          x={44}
-          y={10}
-        />
-      </svg>
-    );
-  }
-  if (index === 3) {
-    // Nothing is greyed out. The route is absent, which is a different claim and the true one.
-    return (
-      <svg aria-hidden="true" height={54} style={{ display: "block" }} viewBox="0 0 96 54" width="100%">
-        {[0, 1, 2].map((lane) => (
-          <g key={lane}>
-            <rect fill="none" height={44} rx={2} stroke="#26262b" width={26} x={2 + lane * 32} y={4} />
-            {[12, 22, 32].map((y) => (
-              <path d={`M${8 + lane * 32} ${y} H${22 + lane * 32}`} key={y} stroke="#94949c" strokeWidth={1.2} />
-            ))}
-            {lane === 2 ? <path d={`M${68} 40 H${88}`} stroke="#94949c" strokeWidth={2.4} /> : null}
-          </g>
-        ))}
-      </svg>
-    );
-  }
-  if (index === 5) {
-    // Two torn halves that either fit or do not: a comparison of two strings, drawn as objects.
-    return (
-      <svg aria-hidden="true" height={54} style={{ display: "block" }} viewBox="0 0 96 54" width="100%">
-        <path d="M6 14 H44 L38 22 L44 30 L38 38 H6 Z" fill="none" stroke="#94949c" strokeWidth={1.4} />
-        <path d="M90 14 H46 L52 22 L46 30 L52 38 H90 Z" fill="none" stroke="#94949c" strokeWidth={1.4} />
-      </svg>
-    );
-  }
-  return null;
-}
-
-function CourierBody({ data, animate, compact }: { data: OfficeWorkflows; animate: boolean; compact: boolean }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: compact ? "1fr" : "repeat(7, minmax(0, 1fr))",
-        gap: "1px",
-        background: "#1e1e22"
-      }}
-    >
-      {BEATS.map((beat, index) => (
-        <div
-          key={beat.line}
-          style={{
-            background: "#0b0b0d",
-            padding: "16px 14px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "9px",
-            ...column(index, animate)
-          }}
-        >
-          <span style={{ ...caption, color: DNESKAI }}>{String(index + 1).padStart(2, "0")}</span>
-          <span style={body}>{beat.line}</span>
-          <BeatDrawing animate={animate} index={index} />
-          <span style={caption}>
-            {index === 6 && data.receipt ? data.receipt.packageRef : beat.note}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 /* --------------------------------------------------- the window and the signal */
 
@@ -710,6 +614,5 @@ export function WorkflowsPanelBody({
       />
     );
   }
-  if (place === "dock") return <CourierBody animate={animate} compact={compact} data={data} />;
   return <EdgesBody animate={animate} data={data} onShuttered={onShuttered} shuttered={shuttered} />;
 }

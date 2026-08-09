@@ -92,28 +92,28 @@ const ROOM_ORDER: ReadonlyArray<{
     key: "company",
     name: "Board HQ",
     purpose: "The council's three shifts: what the company spends its day on, decided three times a day.",
-    connects: "The corner room. Its door opens onto the spine, and what it decides commissions work in every other room on the floor.",
+    connects: "What the council decides here becomes work in every other room. Nothing else on this floor starts on its own.",
     operates: "Four roles vote and the audit seat holds a veto. Every other role joins only when its own field is on the agenda."
   },
   {
     key: "caught-up",
     name: "DNESKAi",
     purpose: "One story of the day for the DNESKAi magazine — or nothing goes out, and the reason is recorded.",
-    connects: "Its door opens onto the spine; its finished package leaves the building through the courier exit addressed to the DNESKAi magazine.",
+    connects: "Finished editions leave through the loading dock, addressed to the DNESKAi magazine.",
     operates: "A morning scan, two gates that can end the day on their own, then a desk loop of write, check, review and check again."
   },
   {
     key: "mma-files",
     name: "MMA Files",
     purpose: "The day's article slot, written only from fighter files that have already been verified.",
-    connects: "Takes FightAIQ's records through the door those two rooms share, and leaves by the courier exit addressed to the MMA Files magazine.",
+    connects: "Reads FightAIQ's verified fighter files next door, and sends finished articles out through the loading dock to the MMA Files magazine.",
     operates: "A story meeting chooses the subject, the desk writes it, and an evening review records what actually went out."
   },
   {
     key: "fightaiq",
     name: "FightAIQ",
     purpose: "Fighter cards and fight probabilities, built from two independent sources that have to agree.",
-    connects: "The one room with no door onto the corridor. Its only door opens into the MMA Files desk that uses its files.",
+    connects: "Nothing leaves the building from here. Its files are read by the MMA Files desk and by nobody else.",
     operates: "Two checks a day. A value standing on a single source is not a value, and the model publishes its version with every probability."
   },
   {
@@ -123,28 +123,28 @@ const ROOM_ORDER: ReadonlyArray<{
     // Caught Up → DNESKAi rename is the precedent and the rule.
     name: "Design Lab",
     purpose: "The workshop. It renders every carousel and assigns the one line on every first slide.",
-    connects: "The roller door onto the spine, and the summary chase that runs to it from both magazine rooms.",
+    connects: "Both magazines send it a summary of every article they finish; it sends back the rendered carousel.",
     operates: "It holds no meeting and decides nothing. Same input, same bytes — and a hook may only appear on content its own metadata makes true."
   },
   {
     key: "marketingshark",
     name: "marketingShark",
     purpose: "One quiz question a day, drawn as a Czech and an English carousel and left as a draft for review.",
-    connects: "Its door opens onto the spine. The corridor on the west wall records the question bank it was handed once.",
+    connects: "It draws from a fixed bank of questions handed over once. Nothing is sent back to the app that supplied them.",
     operates: "It draws from a pinned bank of questions. The app that supplied them is standalone, and nothing goes back the other way."
   },
   {
     key: "goviral",
     name: "GoVIRAL",
     purpose: "What is rising this week, and at most one trend handed to another desk as a tiebreaker.",
-    connects: "Its signal ends inside the two magazine rooms and reaches no wall. It owns no exit, no dock bay and no address of its own.",
+    connects: "What it finds goes to the two magazine desks and no further. It publishes nothing itself.",
     operates: "Lit one day in seven. The other six firings cost nothing and do nothing, and that is the intended state."
   },
   {
     key: "titty-tuesdays",
     name: "Titty Tuesdays",
     purpose: "Brand and season concepts for a shop that does not exist yet.",
-    connects: "Its door opens onto the spine, and a bay in the dock stands for the storefront collecting its own feed.",
+    connects: "It publishes nothing. A shop that does not exist yet would collect its own feed from the dock.",
     operates: "Ideas only: no prices, no stock, no availability. Nothing is delivered to it — it pulls, and fails closed when it cannot reach the feed."
   }
 ];

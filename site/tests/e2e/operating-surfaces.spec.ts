@@ -444,80 +444,77 @@ for (const size of [
   { name: "1280x800", width: 1280, height: 800 },
   { name: "1440x900", width: 1440, height: 900 }
 ] as const) {
-  test(`every opened room is centred, complete and readable at ${size.name}`, async ({ page }) => {
+  /*
+   * Every room's dialog, complete and unscrolled.
+   *
+   * This used to measure the reframed room view — the overlay laid out inside the room's own
+   * rectangle after the plan zoomed into it. There is no reframe now, so the question changed
+   * with it: a dialog has to hold the whole room at the two viewports the contract names, without
+   * its body scrolling and without the page behind it moving.
+   */
+  test(`every opened room fits its dialog at ${size.name}`, async ({ page }) => {
     await page.setViewportSize({ width: size.width, height: size.height });
     await page.goto("/", { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Facilities", exact: true }).click();
     await expect(page.locator("[data-workflows-board]")).toBeVisible();
 
+    /*
+     * The scroll position once it has stopped moving.
+     *
+     * Navigating to a section scrolls the page, and that scroll is animated — reading `scrollY`
+     * the instant the board appears reads the start of the journey, not the end. The question
+     * here is whether opening a dialog moves the page, so the baseline has to be a page that has
+     * already finished moving.
+     */
+    const settled = async (): Promise<number> => {
+      let previous = -1;
+      for (let attempt = 0; attempt < 40; attempt += 1) {
+        const now = await page.evaluate(() => window.scrollY);
+        if (now === previous) return now;
+        previous = now;
+        await page.waitForTimeout(100);
+      }
+      return previous;
+    };
+
     for (const room of OPENABLE_ROOMS) {
-      const back = page.locator('[data-room-view] button[aria-label="Back to the floor"]');
-      if (await back.count()) await back.click();
-      await page.locator(`[data-wf-place="${room}"]`).click();
-      await expect(page.locator("[data-room-view]")).toBeVisible();
+      const scrollBefore = await settled();
+      await page.locator(`[data-wf-place="${room}"]`).click({ force: true });
+      const surface = page.locator("[data-dialog-surface]");
+      await expect(surface, room).toBeVisible();
 
       const measured = await page.evaluate(() => {
-        const stage = document.querySelector("[data-workflows-board] svg")?.parentElement;
-        const view = document.querySelector("[data-room-view]");
-        if (!stage || !view) return null;
-        const sb = stage.getBoundingClientRect();
-        const vb = view.getBoundingClientRect();
-        // Anything sticking out sideways is real overflow: there is no horizontal scroller here.
-        // Vertically, content below the fold of the room's own scroller is scrolled, not clipped.
-        const spilling = Array.from(view.querySelectorAll("p, span, a")).filter((element) => {
-          const b = element.getBoundingClientRect();
-          if (b.width === 0 || b.height === 0) return false;
-          return b.left < vb.left - 1 || b.right > vb.right + 1;
-        }).length;
-        const scroller = view.querySelector("[data-wheel-exempt]");
-        // Where the open room's own rectangle landed on the stage. This is the framing itself,
-        // and it is what the repair changed: the arithmetic used to grow the room's rect to the
-        // container's aspect, which left the room's walls 6% from the stage edge with the plan's
-        // north wall and the notes at its door cropped off.
-        const rb = document.querySelector("[data-open-room]")?.getBoundingClientRect();
+        const body = document.querySelector("[data-dialog-body]");
+        const shell = document.querySelector("[data-dialog-surface]");
+        if (!body || !shell) return null;
+        const box = shell.getBoundingClientRect();
         return {
-          insideStage:
-            vb.left >= sb.left - 1 &&
-            vb.right <= sb.right + 1 &&
-            vb.top >= sb.top - 1 &&
-            vb.bottom <= sb.bottom + 1,
-          fractionOfHeight: vb.height / sb.height,
-          width: vb.width,
-          spilling,
-          scrolls: scroller ? getComputedStyle(scroller).overflowY : null,
-          dimmed: Boolean(document.querySelector("[data-wf-scrim]")),
-          roomBindingSpan: rb ? Math.max(rb.width / sb.width, rb.height / sb.height) : null,
-          roomClearance: rb
-            ? Math.min(
-                rb.top - sb.top,
-                sb.bottom - rb.bottom,
-                rb.left - sb.left,
-                sb.right - rb.right
-              ) / Math.min(sb.width, sb.height)
-            : null
+          // Fits without scrolling: the body's content is no taller than its box.
+          scrolled: body.scrollHeight - body.clientHeight,
+          insideViewport: box.top >= 0 && box.bottom <= window.innerHeight
+            && box.left >= 0 && box.right <= window.innerWidth,
+          // Nothing spills sideways out of the dialog.
+          spilling: [...body.querySelectorAll("p, span, a, li")].filter((element) => {
+            const rect = element.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return false;
+            return rect.left < box.left - 1 || rect.right > box.right + 1;
+          }).length,
+          named: shell.getAttribute("aria-labelledby") !== null,
+          modal: shell.getAttribute("aria-modal") === "true"
         };
       });
+      expect(measured, room).not.toBeNull();
+      expect(measured!.scrolled, `${room} dialog scrolls at ${size.name}`).toBeLessThanOrEqual(1);
+      expect(measured!.insideViewport, `${room} dialog leaves the viewport`).toBe(true);
+      expect(measured!.spilling, `${room} dialog spills sideways`).toBe(0);
+      expect(measured!.named).toBe(true);
+      expect(measured!.modal).toBe(true);
 
-      expect(measured, `${room} renders a room view`).not.toBeNull();
-      expect(measured!.insideStage, `${room} sits inside the stage`).toBe(true);
-      // The room owns the stage rather than sharing it with its neighbours.
-      expect(measured!.fractionOfHeight, `${room} claims the stage's height`).toBeGreaterThan(0.6);
-      // And it is wide enough to read: 34 characters of body text plus its padding.
-      expect(measured!.width, `${room} is wide enough to read`).toBeGreaterThanOrEqual(380);
-      expect(measured!.spilling, `${room} keeps its content inside itself`).toBe(0);
-      expect(measured!.scrolls, `${room} scrolls rather than overflowing`).toBe("auto");
-      expect(measured!.dimmed, `${room} pushes the rest of the plan back`).toBe(true);
-      // The framing itself: the room owns its binding axis, and its walls are not jammed against
-      // the stage edge. The old arithmetic gave 0.87 and 0.064 — it passes the first and fails
-      // the second, which is exactly the reported symptom of a room cropped at both ends.
-      expect(measured!.roomBindingSpan, `${room}'s rect owns its binding axis`).toBeGreaterThan(0.6);
-      expect(measured!.roomClearance, `${room}'s walls have breathing room`).toBeGreaterThan(0.08);
+      await page.keyboard.press("Escape");
+      await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
+      // The page behind a modal does not move.
+      expect(await page.evaluate(() => window.scrollY), room).toBe(scrollBefore);
     }
-
-    // Escape closes the room and the plan comes back whole, with nothing dimmed.
-    await page.keyboard.press("Escape");
-    await expect(page.locator("[data-room-view]")).toHaveCount(0);
-    await expect(page.locator("[data-wf-scrim]")).toHaveCount(0);
   });
 }
 
@@ -718,4 +715,82 @@ test("the meeting room's controls and the admin sign-out are one small family", 
   });
   // The same change, reaching admin: the three used to render identically at the browser default.
   expect(signOut).toBe(home.jump);
+});
+
+/**
+ * Rooms and the dock, as dialogs.
+ *
+ * Clicking a room used to reframe the whole floor plan around it — a zoom, not a dialog, and one
+ * that took the reader's place on the floor away to show them a rectangle. The dock opened a
+ * seven-panel animation of a courier's morning that the owner could not read as anything. Both
+ * are dialogs now, and a dialog has a list of obligations: focus moves in, Tab cannot leave,
+ * Escape closes, the backdrop closes, focus returns to what opened it, and the page behind does
+ * not scroll.
+ */
+test.describe("the facilities plan opens dialogs", () => {
+  test("a room opens and closes by mouse, and returns focus", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const plan = page.locator("[data-wf-place]").first();
+    await plan.scrollIntoViewIfNeeded();
+    const scrollBefore = await page.evaluate(() => window.scrollY);
+
+    // Forced: the room's own furniture sits over its group, and a click on a child still opens
+    // the room — which is the behaviour, not a bug for the test to route around politely.
+    await plan.click({ force: true });
+    const dialog = page.locator("[role=dialog][data-dialog-surface]");
+    await expect(dialog).toBeVisible();
+    // The plan behind it is whole: no reframed viewBox, no zoom.
+    expect(await page.evaluate(() => window.scrollY)).toBe(scrollBefore);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).toBe("hidden");
+    await expect(page.locator("[data-room-fragment]")).toBeVisible();
+
+    await page.locator("[data-dialog-backdrop]").click({ position: { x: 5, y: 5 } });
+    await expect(dialog).toHaveCount(0);
+    // Focus is back on the door it came out of, not on the body.
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-wf-place") !== null)).toBe(true);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe("hidden");
+  });
+
+  test("a room opens and closes by keyboard alone", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const plan = page.locator("[data-wf-place]").first();
+    await plan.scrollIntoViewIfNeeded();
+    await plan.focus();
+    await page.keyboard.press("Enter");
+    const dialog = page.locator("[role=dialog][data-dialog-surface]");
+    await expect(dialog).toBeVisible();
+
+    // Tab cannot leave: every stop stays inside the dialog.
+    for (let step = 0; step < 8; step += 1) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => Boolean(document.activeElement?.closest("[data-dialog-surface]")))).toBe(true);
+    }
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+  });
+
+  test("the dock says what it is in plain words", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const dock = page.locator('[data-wf-place="dock"]').first();
+    await dock.scrollIntoViewIfNeeded();
+    await dock.click({ force: true });
+    const dialog = page.locator("[role=dialog][data-dialog-surface]");
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText("the only way out of the building");
+    await expect(page.locator("[data-dock-latest]")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+  });
+
+  test("no room reframes the drawing any more", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const plan = page.locator("[data-wf-place]").first();
+    await plan.scrollIntoViewIfNeeded();
+    const svg = page.locator("svg[aria-label='Floor plan of the BoardlessAI office']").first();
+    const before = await svg.getAttribute("viewBox");
+    await plan.click({ force: true });
+    await expect(page.locator("[role=dialog][data-dialog-surface]")).toBeVisible();
+    expect(await svg.getAttribute("viewBox")).toBe(before);
+    await page.keyboard.press("Escape");
+  });
 });
