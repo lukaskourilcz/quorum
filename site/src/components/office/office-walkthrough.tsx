@@ -683,12 +683,13 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             style={{ background: "#09090b", opacity: workflowsReplaying ? 0.42 : 0 }}
           />
           {/*
-            Wider gutters than the other sections and a shallower bottom, because the plan has no
-            card of its own: the section's own edges are the drawing's frame, and every pixel of
-            width and height here is width and height the floor plan gets to use.
+            Wider, balanced gutters than the other sections because the plan has no card of its
+            own: the section's own edges are the drawing's frame, and every pixel of width and
+            height here is width and height the floor plan gets to use. Keeping each vertical
+            pair equal preserves that usable area while centring the drawing in its frame.
           */}
           <div
-            className="relative flex min-h-[100svh] items-stretch justify-center px-4 pb-13 pt-21 lg:absolute lg:inset-0 lg:min-h-0 lg:px-4 lg:pb-5 lg:pt-23"
+            className="relative flex min-h-[100svh] items-stretch justify-center px-4 py-17 lg:absolute lg:inset-0 lg:min-h-0 lg:px-4 lg:py-14"
             data-fg
           >
             <SectionWorkflows
