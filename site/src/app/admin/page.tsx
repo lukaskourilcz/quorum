@@ -273,10 +273,11 @@ export default async function AdminPage({
     ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
     : selectedVenture?.unreadableFiles ?? [];
 
-  const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual">> = {
+  const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
     ideas: "idea",
     plans: "plan",
-    visuals: "visual"
+    visuals: "visual",
+    packages: "social-variant"
   };
   const visibleCards = selectedVenture && selectedTab && cardKindByTab[selectedTab]
     ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])

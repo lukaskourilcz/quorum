@@ -35,6 +35,7 @@ const axeRoutes = [
 
 const repositoryRoot = path.resolve(process.cwd(), "..");
 const e2ePlanPath = path.join(repositoryRoot, "state", "ventures", "titty-tuesdays", "plans", "e2e-launch-plan.json");
+const e2eMarketingPackagePath = path.join(repositoryRoot, "state", "ventures", "marketingshark", "packages", "2026-08-09", "e2e-fixture", "package.json");
 const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "titty-tuesdays", "ledger.jsonl");
 let originalRatingLedger: string | null = null;
 /*
@@ -61,6 +62,7 @@ test.beforeAll(async () => {
   }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
+    mkdir(path.dirname(e2eMarketingPackagePath), { recursive: true }),
     mkdir(path.dirname(ratingLedgerPath), { recursive: true })
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
@@ -83,10 +85,20 @@ test.beforeAll(async () => {
     status: "approved",
     originMeetingRef: "meetings/2026-08-01-tt-marketing"
   }));
+  await writeFile(e2eMarketingPackagePath, JSON.stringify({
+    status: "draft",
+    question: { id: "e2e-question", category: "proof" },
+    hooks: {
+      a: { patternId: "fact-first", en: "Show the package card." },
+      b: { patternId: "question-led", en: "Ask before publishing." }
+    },
+    render: { summaryPaths: ["staged/e2e-package.json"] }
+  }));
 });
 
 test.afterAll(async () => {
   await rm(e2ePlanPath, { force: true });
+  await rm(e2eMarketingPackagePath, { force: true });
   if (originalRatingLedger === null) await rm(ratingLedgerPath, { force: true });
   else await writeFile(ratingLedgerPath, originalRatingLedger);
   await rm(presetsPath, { force: true });
@@ -230,6 +242,12 @@ test("MMA Files article heroes load from the package-backed archive", async ({ p
       .poll(() => heroes.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth))
       .toBeGreaterThan(0);
   }
+});
+
+test("marketingShark packages tab shows stored package cards", async ({ page }) => {
+  await page.goto("/admin?venture=marketingshark&tab=packages", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "e2e-fixture · 2026-08-09" })).toBeVisible();
+  await expect(page.getByText("staged/e2e-package.json")).toBeVisible();
 });
 
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
