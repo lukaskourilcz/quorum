@@ -1,14 +1,22 @@
 # FightAIQ end-to-end review
 
-Reviewed 2026-08-09 against the last persisted intake and delivery from 2026-08-08. This is a diagnosis, not a source or guard change; Q3, M9 and Q4 own the fixes in that order. The delivered package is hash `4c8075…529a29`, and its receipt records a successful delivery to `lukaskourilcz/mma-files` at target commit `1b458898…9805bf`. [Evidence: `state/ventures/fightaiq/deliveries/4c8075f6796f9a836e0cf5bbb770ae143c119f1dd5d41563e30473eb1a529a29.json:1-8`]
+Reviewed 2026-08-09 against the last persisted intake and delivery from 2026-08-08. The original diagnosis below remains the evidence record; Q3, M9 and Q4 have since shipped without weakening the two-source or delivery guards. The delivered package is hash `4c8075…529a29`, and its receipt records a successful delivery to `lukaskourilcz/mma-files` at target commit `1b458898…9805bf`. [Evidence: `state/ventures/fightaiq/deliveries/4c8075f6796f9a836e0cf5bbb770ae143c119f1dd5d41563e30473eb1a529a29.json:1-8`]
 
-## Finding
+## Relaunch resolution
+
+- **Q3 (`d9f05bf..28b0434`)** repaired the source/store path: the Cito quota stayed bounded, Oktagon card fixtures now traverse the full persistence path, observed fighters can grow only inside the roster policy, and reader divisions/names are normalized without changing source identifiers.
+- **M9 (`2bd96de..ee6b890`)** made delivered events authoritative, restored completed historical cards, retained legacy-division normalization at the consumer, and emits surface-specific static files instead of making reader pages import the 6.5 MB delivery store.
+- **Q4 (`28b0434..f81fe57`)** pinned actor builds and charge caps, classified three candidates as disabled or blocked, left only the Tapology reference step approval-gated, and made missing approval or token a tested $0 no-op. Odds matching gained deterministic normalization and tests while the provider-count gate stayed intact.
+
+The truthful product state is therefore improved but not embellished: 92 fighters, three UFC events, 1,085 bouts and zero prediction entries remain the last persisted delivery. Results and known cards render; prediction rows say `Model zatím neběžel`. A second current provider, confirmed eligible bouts and an actual versioned model run still depend on owner-approved source access and new evidence.
+
+## Original finding
 
 The empty boards are not one broken switch. The persisted store has 92 fighters, three UFC events, 1,085 bouts and no prediction entries; all 45 upcoming bouts are `announced`, while all 1,040 completed bouts are historical records. There is no Oktagon event, odds snapshot, model run or stats file in `state/mma/`. [Evidence: `state/mma/fighters/`, `state/mma/events/`, `state/mma/bouts/`, absent `state/mma/odds/`, absent `state/mma/model-runs/`, absent `state/mma/stats/`; reproduction commands in “State audit”]
 
 The upstream blocker is source diversity. Every persisted bout reference belongs to the Wikipedia provider. The contract treats repeated Wikipedia pages as one provider and requires two independent providers before an upcoming bout may be `confirmed`; the delivery consumer repeats that guard. [Evidence: `orchestrator/src/contracts/mma.ts:13-24`, `orchestrator/src/contracts/mma.ts:197-204`, `../mma-files/scripts/consume-boardless-package.mjs:61-69`, `../mma-files/scripts/consume-boardless-package.mjs:212-226`; reproduction commands in “State audit”]
 
-The site adds a separate failure. It discards every `:event:history-` bout before deriving events, prefers that reduced bout list over the delivered `events[]` whenever even one current bout exists, and therefore cannot render the completed history or use the three delivered cards as authoritative input. [Evidence: `../mma-files/src/lib/boardless.ts:401-464`]
+The site also had a separate failure: it discarded every `:event:history-` bout before deriving events, preferred that reduced bout list over the delivered `events[]` whenever even one current bout existed, and therefore could not render the completed history or use the three delivered cards as authoritative input. M9 removed that behavior and added target-side coverage for the delivered history. [Original evidence: pre-M9 `../mma-files/src/lib/boardless.ts:401-464`]
 
 ## Data flow
 
@@ -34,7 +42,7 @@ flowchart LR
 5. The delivery composer reads fighters, events, bouts and stats, converts the first three to public mirrors, excludes private odds and model-run artifacts, calculates one canonical package hash, and stages the package under `tmp/mma-files-delivery/`. [Evidence: `orchestrator/src/mma-files/publish.ts:38-86`, `orchestrator/src/mma-files/publish.ts:117-130`; private-field rejection: `../mma-files/scripts/consume-boardless-package.mjs:151-167`]
 6. `cycle.yml` selects a FightAIQ package after MMA intake or analysis, mints a repository-scoped token, runs the target consumer, rejects any path beyond `data/boardless/fightaiq.json`, and requires the target tests, typecheck and production build before it may push. [Evidence: `.github/workflows/cycle.yml:1093-1113`, `.github/workflows/cycle.yml:1126-1188`, `.github/workflows/cycle.yml:1190-1246`]
 7. The target consumer revalidates schemas, evidence and the package hash, rejects an older snapshot, and atomically writes only `data/boardless/fightaiq.json`. [Evidence: `../mma-files/scripts/consume-boardless-package.mjs:160-257`, `../mma-files/scripts/consume-boardless-package.mjs:469-480`]
-8. The site currently imports the whole snapshot at build time. Its adapter maps delivered fighters, events, bouts and stats to site records; the repository then divides them into upcoming and completed cards for the prediction and results components. [Evidence: `../mma-files/src/lib/boardless.ts:1-17`, `../mma-files/src/lib/boardless.ts:216-222`, `../mma-files/src/lib/boardless.ts:291-337`, `../mma-files/src/lib/boardless.ts:351-464`, `../mma-files/src/lib/repository.ts:196-231`]
+8. The target build now emits separate predictions, results and fighters JSON files from the delivery snapshot. Its adapter keeps delivered events authoritative and divides known bouts into upcoming and completed reader surfaces without inventing missing data. [Evidence: `../mma-files/scripts/emit-fightaiq-chunks.mjs`, `../mma-files/src/lib/boardless.ts`, `../mma-files/src/lib/repository.ts`]
 
 ## Source health and cost
 
@@ -54,7 +62,7 @@ The “2026 in Oktagon MMA parse yields nothing” diagnosis needs a narrower wo
 
 The current loss happens at the intake boundary: event gathering keeps only scheduled events within 14 days, then materializes only cards whose event page yields at least one bout. The 2026-08-08 raw schedule result contains two UFC cards and no Oktagon card, and the canonical store consequently contains only `state/mma/events/ufc/`. [Evidence: `orchestrator/src/portfolio/evidence.ts:94-121`, `orchestrator/src/portfolio/evidence.ts:265-286`, `orchestrator/src/fightaiq/wikipedia-events.ts:403-444`, `state/ventures/fightaiq/source-snapshots/2026-08-08.json:3122-3142`, `state/mma/events/ufc/`, absent `state/mma/events/oktagon/`]
 
-A read-only reproduction with `now=2026-08-09T12:00:00Z` returned Oktagon rows from `fetchScheduledEvents`, but none was inside the 14-day intake window. Q3 should therefore test the full `fetchScheduledCards → scheduledEventCard → state/mma/events/oktagon` path instead of weakening the parser or claiming the page is unreadable. [Evidence: parser entry point `orchestrator/src/fightaiq/wikipedia-events.ts:366-396`; horizon filter `orchestrator/src/fightaiq/wikipedia-events.ts:420-430`; intake horizon `orchestrator/src/portfolio/evidence.ts:94-121`; persistence `orchestrator/src/fightaiq/intake.ts:491-499`]
+A read-only reproduction with `now=2026-08-09T12:00:00Z` returned Oktagon rows from `fetchScheduledEvents`, but none was inside the 14-day intake window. Q3 consequently added a full `fetchScheduledCards → scheduledEventCard → state/mma/events/oktagon` fixture path without weakening the parser or claiming the page was unreadable. [Evidence: parser entry point `orchestrator/src/fightaiq/wikipedia-events.ts`; intake horizon `orchestrator/src/portfolio/evidence.ts`; persistence `orchestrator/src/fightaiq/intake.ts`; acceptance in `orchestrator/tests/fightaiq-wikipedia-events.test.ts`]
 
 ### Oktagon roster
 
@@ -62,7 +70,7 @@ The reviewed Oktagon allowlist is capped at 12 and contains exactly 12 names. Tw
 
 All 12 materialized records remain roster-status `unknown`, none is model eligible, and their completed history is derived from Wikipedia pages rather than a current promotion roster. [Evidence: `state/mma/roster/status.json:3-19`, `state/mma/fighters/`; reproduction commands in “State audit”]
 
-Q3 should grow the policy from fighters observed on delivered event cards, preserve the policy cap and allowlist behavior, and clean reader names without changing Wikipedia lookup titles. [Evidence: current policy enforcement `orchestrator/src/fightaiq/intake.ts:438-478`; current configured titles `config/mma-roster.json:493-570`]
+Q3 now grows the policy only from fighters observed on delivered event cards, preserves the cap and allowlist behavior, and cleans reader names without changing Wikipedia lookup titles. [Evidence: policy enforcement `orchestrator/src/fightaiq/intake.ts`; configured titles `config/mma-roster.json`; acceptance in the FightAIQ intake tests]
 
 ## Corroboration deadlock
 
@@ -111,13 +119,13 @@ The mag desk vetoed more FightAIQ and PM work because the only allowed subject w
 
 The root-cause link to data scarcity is an inference, but a direct one: the store offers only three UFC cards, 45 unconfirmed upcoming bouts, no Oktagon event and no prediction entry, so the desk cannot form a materially new sourced angle without another source or card. [Evidence: `state/mma/events/ufc/`, absent `state/mma/events/oktagon/`, `state/mma/bouts/`, absent `state/mma/stats/`; reproduction commands in “State audit”]
 
-## Ranked improvements
+## Resolution record
 
-1. **Q3 — repair the canonical source/store layer (high impact, 1–2 engineering days).** Verify and preserve the already-retired Cito bout follow-ups and two-call ledger; make an Oktagon card pass the full schedule-to-store path; grow the Oktagon roster from that card under the existing policy; normalize MediaWiki division artifacts at intake. Acceptance should prove a dry fixture writes `state/mma/events/oktagon/<event>.json`, clean divisions and unchanged quota caps. [Evidence: `orchestrator/src/fightaiq/sources.ts:365-387`, `orchestrator/src/portfolio/evidence.ts:102-121`, `orchestrator/src/fightaiq/wikipedia-events.ts:411-444`, `orchestrator/src/fightaiq/intake.ts:23-45`, `orchestrator/src/fightaiq/intake.ts:438-499`, `config/mma-roster.json:493-570`]
-2. **M9 — make the target render the evidence it already has (high impact, 1–2 engineering days; can ship while approvals wait).** Make delivered `events[]` authoritative, derive recent completed cards from result-carrying historical bouts, normalize legacy divisions in the consumer, prefer Q1’s explicit article organization, and split the 6.5 MB FightAIQ payload into surface-specific static JSON. Keep the two-source delivery guard unchanged. [Evidence: `../mma-files/src/lib/boardless.ts:152-155`, `../mma-files/src/lib/boardless.ts:247-255`, `../mma-files/src/lib/boardless.ts:401-464`, `../mma-files/scripts/consume-boardless-package.mjs:212-257`, `../mma-files/data/boardless/fightaiq.json:1-4`, `../mma-files/data/boardless/fightaiq.json:234749-234750`]
-3. **Q4 — add independent evidence and make Odds corroboration effective (highest model impact, 2–4 engineering days after owner approval).** Pin terms-reviewed UFCStats-, ESPN-, Tapology- and Sherdog-class actors; make missing approvals/token a one-sentence $0 no-op; add the $3/month MMA ledger beneath the shared $5 cap; and test actual Odds name/date matching so an offer can add exactly one independent provider and legitimately promote a bout. No source may require cash. [Evidence: `state/INBOX.md:63-82`, `orchestrator/src/sources/apify.ts:9-18`, `orchestrator/src/sources/apify.ts:128-169`, `orchestrator/src/fightaiq/intake.ts:353-435`, `orchestrator/src/contracts/mma.ts:13-24`]
+1. **Q3 — completed.** Canonical events and identities are tested through persistence, roster growth remains bounded, and quota limits are unchanged.
+2. **M9 — completed.** The target renders the evidence it already has, including historical results, through slim surface files.
+3. **Q4 — code completed; source access pending.** Terms, builds, caps, matching and the $0 no-op are implemented. `APIFY-ACCOUNT-001` and `APIFY-MMA-SOURCES-001` remain owner decisions, and no actor runs before both are resolved.
 
-This ordering keeps the invariant intact: Q3 first makes canonical events and identities trustworthy; M9 exposes existing truthful data immediately; Q4 then adds a second provider and unlocks confirmation and model analysis only when approvals and evidence exist. [Evidence: persistence path `orchestrator/src/fightaiq/intake.ts:491-499`; target path `../mma-files/src/lib/boardless.ts:401-464`; confirmation path `orchestrator/src/fightaiq/intake.ts:414-435`]
+This preserves the ordering invariant: trustworthy canonical records first, truthful rendering second, and independent corroboration only after approval and evidence. No release guard was loosened to make a board look full.
 
 ## State audit
 

@@ -9,14 +9,14 @@ glyphs and not composed accents.
 | Brand | Headline | Weights | Body | Weights | Mono | Weights |
 |---|---|---|---|---|---|---|
 | **DNESKAi** `caught-up` | Archivo | 600 · 700 · 800 · 900 | IBM Plex Sans | 400 | IBM Plex Mono | 400 |
-| **MMA Files** `mma-files` | Barlow Condensed | 600 · 700 · 800 · 900 | Barlow | 400 | IBM Plex Mono | 400 |
+| **MMA Files** `mma-files` | Anton | 400 | Archivo | 600 · 700 · 800 · 900 | IBM Plex Mono | 400 |
 | **Titty Tuesdays** `titty-tuesdays` | Petrona | 600 · 700 · 800 · 900 | Karla | 400 | IBM Plex Mono | 400 |
 | **devShark** `devshark` | Figtree | 600 · 700 · 800 · 900 | Public Sans | 400 | IBM Plex Mono | 400 |
 | **geoShark** `geoshark` | Outfit | 600 · 700 · 800 · 900 | Public Sans | 400 | IBM Plex Mono | 400 |
 
 **DNESKAi — Archivo + IBM Plex Sans.** A grotesque with a wide, flat-sided lowercase that holds up at 44 px and at 160 px. Czech diacritics sit tight to the x-height rather than floating, which matters on a five-line headline.
 
-**MMA Files — Barlow Condensed + Barlow.** Condensed and loud, as asked. Barlow Condensed fits “NEJNEOBHOSPODAŘOVÁVATELNĚJŠÍ” on one line at 4:5 where Archivo needs two; Barlow is the same superfamily, so body and headline share skeletons.
+**MMA Files — Anton + Archivo.** The owner amendment keeps the same compact poster face as the public magazine. Anton has one real weight; hierarchy comes from scale, and requested heavier weights resolve to the committed 400 face without synthetic bold.
 
 **Titty Tuesdays — Petrona + Karla.** Warmth without prettiness: a text serif with a slight flare, set against a grotesque body. Petrona carries a full Czech set including ů and ř at every weight.
 
@@ -26,18 +26,20 @@ glyphs and not composed accents.
 
 ### Weights this set actually uses
 
-Counted from the ten families, not guessed: **headline 600, 700, 800, 900**; **body 400**; **mono
-400**. The `logo` layer hard-codes `font-weight="800"` in `studio/src/renderer.ts`, so every
-headline face must carry an 800 whether or not a template names one. No family sets a mono logo,
-which is why mono needs only its regular.
+Across the set, templates request **headline 600, 700, 800, 900**, **body 400**, and **mono
+400**. Anton is the deliberate exception: it ships only at 400 and the resolver maps every MMA
+Files headline request to that real face. The `logo` layer still asks for 800, but the font map
+prevents synthetic weight from entering the deterministic render.
 
 ### Files the repository has to carry
 
-Twenty-five static font files:
+Thirty-one static font files:
 
-- Headline, 4 weights each: Archivo, Barlow Condensed, Petrona, Figtree, Outfit — 20 files
-- Body, regular only: IBM Plex Sans, Barlow, Karla, Public Sans (shared by both sharks) — 4 files
-- Mono, regular only: IBM Plex Mono — 1 file
+- Anton regular for MMA Files — 1 file
+- Archivo, Petrona, Figtree and Outfit headline families — 16 files
+- The retained generic Barlow family fixtures — 6 files
+- IBM Plex Sans, Karla and Public Sans body faces — 6 files
+- IBM Plex Mono regular and bold — 2 files
 
 **Static instances, not variable fonts.** The renderer hands `font-family` and a numeric
 `font-weight` to librsvg through sharp, and librsvg resolves faces through fontconfig. Fontconfig

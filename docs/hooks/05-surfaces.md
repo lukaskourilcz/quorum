@@ -12,7 +12,7 @@ against the content it sits on, and different ventures have different content.
 | geoShark app | `quiz.hooks.json` (geo variants) | same | same |
 | devShark/geoShark carousels | `quiz.hooks.json` | slide 1 hook, slide 2 question, 3–4 reveal | same — the question is picked from the stack, so all metadata is known at render |
 | DNESKAi / Caught Up | `news.hooks.json` *(to write)* | daily AI briefing item | recency, source count, topic, numbers present |
-| MMA Files | `mma.hooks.json` *(to write)* | magazine article, 2/day EN+CS | event proximity, title fight, ranking, result known |
+| MMA Files | `mma.hooks.json` *(to write)* | sourced Czech magazine article | format, fighter count, event reference, source count |
 
 Every library uses the same schema, the same craft rules (`02`), the same honesty
 discipline, the same lint. Only `truthRequires` vocabulary and the strings differ.

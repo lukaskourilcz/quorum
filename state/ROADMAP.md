@@ -53,7 +53,7 @@ work. They require a fresh owner scope before implementation.
 - [x] Resolve the collision-free 07:00, 11:00 and 21:00 Prague slots.
 - [x] Replace per-meeting email with one idempotent daily portfolio digest.
 - [x] Add FightAIQ contracts, source controls, two-source fighter records, deterministic Glicko-2 analysis, captured prices and private review.
-- [x] Connect MMA Files as the public bilingual newsroom, with automatic article and FightAIQ data delivery, two daily evidence-first slots and no reader metrics.
+- [x] Connect MMA Files as the public Czech newsroom, with guarded article and FightAIQ data delivery, evidence-first slots and no reader metrics.
 - [x] Retire the duplicate BoardlessAI fighter/event pages so MMA Files is the single public owner.
 - [x] Keep Titty Tuesdays pre-commerce, store detailed campaign plans and prepare
   Tuesday-only typographic social assets behind its health and safety gates.

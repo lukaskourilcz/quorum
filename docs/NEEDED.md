@@ -46,12 +46,12 @@ is the single thing standing between a proven path and a working one.
   cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
   [imp:4] [owner:me] [time:10m] [kind:setup]
 
-- [ ] **Approve the MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
-  `state/INBOX.md` widens what the Free-plan token may fetch: UFCStats, ESPN MMA, Tapology and
-  Sherdog fight-card and result pages, the second independent source FightAIQ needs before UFC
-  and Oktagon boards on MMA Files can fill. $0 cash; an estimated $1.50–$3.00 of the $5 monthly
-  credit, capped at $3.00 in its own ledger. Read the item's warning before approving both this
-  and GoVIRAL: the two programs cannot both run at full cadence under one $5 credit.
+- [ ] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
+  `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
+  UFCStats and ESPN remain disabled and Sherdog remains blocked; approval does not turn them on.
+  The current runnable plan is $0 cash and at most $0.20/month of Free-plan credit, beneath a
+  separate $3 hard cap. Without both this approval and `APIFY_TOKEN`, the path is a logged $0
+  no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
   [imp:4] [owner:me] [time:5m] [kind:decision]
 
 - [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief: your
@@ -108,14 +108,12 @@ is the single thing standing between a proven path and a working one.
 
 Judgement calls. Nothing is blocked on code for any of these.
 
-- [ ] **Run the MMA Files relaunch prompt sequence** — the full redesign package sits in the
-  mma-files repo at `docs/redesign/` on branch `claude/mma-files-redesign-2sacl9`: `BRAINSTORM.md`
-  is the plan (including why the UFC/OKTAGON boards render empty and what the data fix costs),
-  `PROMPT-CLAUDE-DESIGN.md` goes to Claude Design first, and `PROMPT-CODEX.md` runs with the
-  design handoff attached and rebuilds the site, the article category tags, the FightAIQ data
-  layer, this repo's MMA admin panel (banner upload/crop included) and the cleanup sweep. Two
-  Vercel switches ride along: `NEXT_PUBLIC_DEMO_MODE=false` on mma-files production, indexing
-  later. [imp:4] [owner:me] [time:30m] [kind:decision]
+- [x] **Run the MMA Files relaunch prompt sequence** — completed 2026-08-09 across the tracker’s
+  twelve MMA Files issues and six quorum issues. The site redesign, Czech-only reader contract,
+  FightAIQ repairs, banner delivery and admin surface, release checks, documentation sweep, and
+  production-build rehearsal all landed on `claude/mma-files-redesign-2sacl9`. The remaining
+  Vercel and indexing decisions are tracked under “Verify once, then leave alone.”
+  [imp:4] [owner:me] [time:30m] [kind:decision]
 
 - [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
   wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and
@@ -580,9 +578,9 @@ marketingShark adds about 6c to a day.
 
 ## Recently finished
 
-- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty static
+- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty-one static
   faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
-  Plex Sans for DNESKAi, Barlow Condensed and Barlow for MMA Files, Petrona and Karla for Titty
+  Plex Sans for DNESKAi, Anton and Archivo for MMA Files, Petrona and Karla for Titty
   Tuesdays, Figtree and Outfit over Public Sans for the two sharks, IBM Plex Mono everywhere. The
   brands used to name system font stacks and no font file existed, so the render server drew in
   whatever it found. Nothing here needs an account, a licence purchase or a decision from you —
@@ -654,13 +652,10 @@ marketingShark adds about 6c to a day.
 
 ## Branches
 
-Every branch this repository opened is merged and gone. `claude/article-image-selection-61rs70`
-held the countersigned image decision and its build contract; the twelve-issue programme ran on
-it and it merged into `main` on 2026-08-09, taking the contract with it — the decision file
-`state/decisions/2026-08-08-article-image-fit.md` is the permanent record. Before it,
-`claude/si-program` and `claude/website-improvements-brainstorm-sqe3c6` were both fully merged,
-and the stale `.claude/worktrees/workflows-map` worktree held nothing that was not already on
-`main`.
+Session branches in this repository are temporary and are removed after their verified merge.
+The completed article-image programme is recorded permanently in
+`state/decisions/2026-08-08-article-image-fit.md`; its quorum branch and the older SI and website
+improvement branches were merged and removed.
 
 Two branches are open in the consumer repositories and are waiting on you, not on code. Both
 carry a validator this side already produces packages for, and both are in the list above:

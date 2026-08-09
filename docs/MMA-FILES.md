@@ -3,8 +3,8 @@
 MMA Files is the public Czech magazine at <https://mma-files.vercel.app> and the
 sole reader-facing home for BoardlessAI's MMA articles and FightAIQ data. BoardlessAI
 owns planning, evidence checks and production; `lukaskourilcz/mma-files` owns the
-reader application. Delivery can change only the two bounded data files agreed by the
-repositories.
+reader application. Delivery can change only the bounded article, FightAIQ, and banner
+stores agreed by the repositories.
 
 ## Daily path
 
@@ -40,8 +40,9 @@ and committed into the consumer repository with localized alt text and attributi
 The orchestrator hashes the bounded payload, writes a delivery receipt and uses the
 narrow GitHub App to update `data/boardless/articles.json` in the MMA Files repository.
 FightAIQ uses the same guarded path for
-`data/boardless/fightaiq.json`. MMA Files validates those files in CI and deploys from
-`main`; it receives no model, source, admin or App private-key secrets.
+`data/boardless/fightaiq.json`; approved banner packages use
+`data/boardless/ads.json`. MMA Files validates those files in CI and deploys from `main`;
+it receives no model, source, admin or App private-key secrets.
 
 After every content delivery, a `$0` verifier checks the target commit and CI, then
 polls the article route for every locale the package carries, which is Czech alone,
@@ -59,8 +60,8 @@ rotate and are recorded, but views, clicks, reactions and other reader data are 
 collected. SPLIT stays idle while `METRICS_INGESTION_ENABLED=false`.
 
 The BoardlessAI admin is the operating newsroom: it exposes short summaries, full
-records, agent switches, articles, calendars, source data and ratings. The public
-routes belong only to MMA Files.
+records, publishing controls, articles, calendars, source data, ratings, banner health,
+exact-ratio cropping and staged delivery. The public routes belong only to MMA Files.
 
 ## Account and launch settings still owned by a person
 
