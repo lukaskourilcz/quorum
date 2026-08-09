@@ -30,6 +30,8 @@ import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
 import { getPublicStandups } from "@/lib/standup-records";
 import { VENTURE_BRAND } from "@/lib/venture-brand";
 import { getPublicCalendarSchedule } from "@/lib/venture-registry";
+import { readFooterFacts } from "@/lib/footer-facts";
+import type { FooterFacts } from "@/components/footer-dialogs";
 
 /**
  * Everything the office walkthrough renders, resolved on the server.
@@ -426,6 +428,8 @@ export interface OfficeWalkthroughData {
   results: OfficeResults;
   workflows: OfficeWorkflows;
   meetingCount: number;
+  /** The handful of numbers the footer's dialogs state, resolved here rather than in a component. */
+  footerFacts: FooterFacts;
 }
 
 const KPI_STATE: Record<string, OfficeMeasure["state"]> = {
@@ -756,6 +760,7 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     team,
     results,
     workflows,
-    meetingCount: definitions.length
+    meetingCount: definitions.length,
+    footerFacts: await readFooterFacts()
   };
 }

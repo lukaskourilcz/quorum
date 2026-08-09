@@ -850,3 +850,68 @@ test.describe("the roster lists every agent", () => {
     expect(spilling).toBe(0);
   });
 });
+
+/**
+ * The footers open their content where the reader is.
+ *
+ * Every one of these links used to navigate away to a page built in the previous design, so
+ * following "Privacy" from halfway down the office walkthrough lost the walkthrough. The pages are
+ * not deleted — they are the canonical addresses, they are in the sitemap, and a deep link still
+ * resolves — which is why the old routes are asserted alongside the dialogs.
+ */
+test.describe("footer links open dialogs", () => {
+  const topics = ["about", "rules", "money", "privacy", "disclosure", "updates"] as const;
+
+  test("every content link opens its own dialog", async ({ page }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    for (const topic of topics) {
+      await page.locator(`[data-footer-dialog="${topic}"]`).first().click();
+      const surface = page.locator("[data-dialog-surface]");
+      await expect(surface, topic).toBeVisible();
+      // Real content, not an empty shell with a title on it.
+      expect((await surface.innerText()).length, topic).toBeGreaterThan(200);
+      await expect(surface).toContainText("Open the full page");
+      await page.keyboard.press("Escape");
+      await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
+    }
+  });
+
+  test("the feeds stay files", async ({ page, request }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    for (const feed of ["/feed.xml", "/decisions.xml", "/feed.json"]) {
+      await expect(page.locator(`footer a[href="${feed}"]`)).toHaveCount(1);
+      expect((await request.get(feed)).status(), feed).toBe(200);
+    }
+  });
+
+  test("the old routes still resolve", async ({ request }) => {
+    for (const route of ["/company", "/privacy", "/disclosure", "/log", "/results", "/about", "/money"]) {
+      // /about and /money are permanent redirects to sections of the pages that replaced them,
+      // which is still a working deep link and not a 404.
+      expect((await request.get(route)).status(), route).toBe(200);
+    }
+  });
+
+  test("one full keyboard pass over a footer dialog", async ({ page }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    const opener = page.locator('[data-footer-dialog="disclosure"]').first();
+    await opener.focus();
+    await page.keyboard.press("Enter");
+    const surface = page.locator("[data-dialog-surface]");
+    await expect(surface).toBeVisible();
+    await expect(surface).toHaveAttribute("aria-modal", "true");
+    expect(await surface.getAttribute("aria-labelledby")).not.toBeNull();
+
+    for (let step = 0; step < 6; step += 1) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => Boolean(document.activeElement?.closest("[data-dialog-surface]")))).toBe(true);
+    }
+    await page.keyboard.press("Shift+Tab");
+    expect(await page.evaluate(() => Boolean(document.activeElement?.closest("[data-dialog-surface]")))).toBe(true);
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
+    // Focus is back on the link that opened it.
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-footer-dialog"))).toBe("disclosure");
+  });
+});

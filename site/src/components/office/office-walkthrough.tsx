@@ -12,6 +12,7 @@ import { SectionTeam } from "@/components/office/section-team";
 import { SectionWorkflows } from "@/components/office/section-workflows";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeWalkthroughData } from "@/lib/office-walkthrough";
+import { FooterDialogLinks } from "@/components/footer-dialogs";
 import {
   INNER_LOCK_MS,
   LOCK_MS,
@@ -80,13 +81,24 @@ function pragueParts(): { hour: number; minute: number } {
   return { hour: value("hour"), minute: value("minute") };
 }
 
-const COMPANY_LINKS = [
-  { href: "/company#rules", label: "Rules" },
-  { href: "/company", label: "About" },
-  { href: "/results#money", label: "Money" },
-  { href: "/privacy", label: "Privacy" },
-  { href: "/disclosure", label: "Disclosure" },
-  { href: "/log", label: "Updates" },
+/**
+ * The walkthrough's own link row.
+ *
+ * Following one of these used to leave the walkthrough for a page built in the previous design,
+ * which is a strange thing to happen to a reader halfway down a guided tour of an office. The
+ * content opens where they are; the pages still exist and still resolve.
+ */
+const COMPANY_DIALOGS = [
+  { topic: "rules" as const, label: "Rules" },
+  { topic: "about" as const, label: "About" },
+  { topic: "money" as const, label: "Money" },
+  { topic: "privacy" as const, label: "Privacy" },
+  { topic: "disclosure" as const, label: "Disclosure" },
+  { topic: "updates" as const, label: "Updates" }
+];
+
+/** Files, not pages. A feed opened in a dialog is a feed nothing can subscribe to. */
+const COMPANY_FEEDS = [
   { href: "/feed.xml", label: "RSS" },
   { href: "/decisions.xml", label: "Decisions RSS" }
 ];
@@ -730,16 +742,22 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
                     questions. We do not measure visitors.
                   </p>
                 </div>
-                <div className="grid grid-cols-2 content-start gap-x-6 gap-y-2.5 pt-1.5">
-                  {COMPANY_LINKS.map((link) => (
-                    <Link
-                      className="text-[13.5px] text-[#d4d4d8] transition-colors hover:text-white"
-                      href={link.href}
-                      key={link.href}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                <div className="grid content-start gap-2.5 pt-1.5">
+                  <FooterDialogLinks
+                    className="grid grid-cols-2 gap-x-6 gap-y-2.5"
+                    facts={data.footerFacts}
+                    linkClassName="text-left text-[13.5px] text-[#d4d4d8] transition-colors hover:text-white"
+                    links={COMPANY_DIALOGS}
+                  />
+                  <ul className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+                    {COMPANY_FEEDS.map((link) => (
+                      <li key={link.href}>
+                        <Link className="text-[13.5px] text-[#d4d4d8] transition-colors hover:text-white" href={link.href}>
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
               <div className="flex items-center justify-between gap-6 border-t border-[#1e1e22] pb-6.5 pt-4.5">
