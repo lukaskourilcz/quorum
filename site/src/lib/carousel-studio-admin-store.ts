@@ -2,7 +2,14 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { MAX_SLIDE_WORDS, TemplateLifecycleOverrideSchema, type CarouselTemplate } from "@boardlessai/carousel-studio";
+import {
+  CarouselPresetFileSchema,
+  CarouselPresetSchema,
+  MAX_SLIDE_WORDS,
+  TemplateLifecycleOverrideSchema,
+  type CarouselPreset,
+  type CarouselTemplate
+} from "@boardlessai/carousel-studio";
 import { readCarouselStudio, type CarouselInspirationLink } from "./carousel-studio";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -425,4 +432,76 @@ export async function setRecipeOverride(
     root
   );
   return { overrides, commit: write.commit };
+}
+
+const presetsPath = "state/ventures/carousel-studio/presets.json";
+
+/**
+ * The saved designs, from a file that will not exist the first time it is written.
+ *
+ * That is the whole reason DL-01's create path had to exist: the deck-style overrides had to be
+ * hand-seeded onto main before the switcher worked, and doing that again for every new state
+ * document is not a system, it is a chore with a deploy in it.
+ */
+export async function readCarouselPresets(root = repositoryRoot): Promise<CarouselPreset[]> {
+  try {
+    const parsed = CarouselPresetFileSchema.safeParse(await readJson(presetsPath, root));
+    return parsed.success ? parsed.data.presets : [];
+  } catch (error) {
+    if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return [];
+    throw error;
+  }
+}
+
+export async function saveCarouselPreset(
+  input: {
+    id?: string;
+    name: string;
+    ventureScope: Array<"caught-up" | "mma-files">;
+    formats: CarouselPreset["formats"];
+    family: string;
+    variant: "A" | "B";
+    accentSwap: boolean;
+    treatment: "none" | "mono" | "duotone";
+    typeScale: number;
+    /** A preset goes live only by the owner saying so, the same as a template's lifecycle. */
+    status: "draft" | "live";
+    now?: Date;
+  },
+  root = repositoryRoot
+): Promise<{ presets: CarouselPreset[]; commit: string | null }> {
+  const name = input.name.trim();
+  if (!name || name.length > 80) throw new CarouselStudioPersistenceError("CONFLICT", "Add a preset name of 2–80 characters.");
+  const id = (input.id ?? name)
+    .normalize("NFD")
+    .replaceAll(/[̀-ͯ]/gu, "")
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/gu, "-")
+    .replaceAll(/^-+|-+$/gu, "")
+    .slice(0, 60);
+  if (!id) throw new CarouselStudioPersistenceError("CONFLICT", "That preset name has no letters in it.");
+  const changedAt = (input.now ?? new Date()).toISOString();
+  const candidate = CarouselPresetSchema.safeParse({
+    id,
+    name,
+    ventureScope: input.ventureScope,
+    formats: input.formats,
+    family: input.family,
+    variant: input.variant,
+    accentSwap: input.accentSwap,
+    treatment: input.treatment,
+    typeScale: input.typeScale,
+    status: input.status,
+    changedAt,
+    changedBy: "owner"
+  });
+  if (!candidate.success) throw new CarouselStudioPersistenceError("CONFLICT", "That preset is not a valid design.");
+  const presets = [candidate.data, ...(await readCarouselPresets(root)).filter((preset) => preset.id !== id)].slice(0, 60);
+  const write = await persist(
+    presetsPath,
+    CarouselPresetFileSchema.parse({ schemaVersion: "carousel-preset/1", presets, updatedAt: changedAt }),
+    `admin: save the ${input.status} Design Lab preset ${id}`,
+    root
+  );
+  return { presets, commit: write.commit };
 }

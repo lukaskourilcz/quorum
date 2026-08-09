@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   CAROUSEL_BRANDS,
+  CarouselPresetFileSchema,
+  CarouselPresetSchema,
   DECK_FAMILIES,
   MAX_RESOLVABLE_SLIDES,
   MIN_SLIDES,
@@ -10,6 +12,8 @@ import {
   familyDeckTemplates,
   familyTemplateId,
   fitsSafeArea,
+  deriveRecipe,
+  livePresetsFor,
   liveTemplates,
   mayGoLive,
   previewFormats,
@@ -184,5 +188,92 @@ describe("nine by sixteen", () => {
         }
       }
     }
+  });
+});
+
+/**
+ * Presets: designs the owner saved, and the line between saving one and shipping it.
+ */
+describe("presets", () => {
+  const preset = {
+    id: "mma-loud",
+    name: "MMA loud",
+    ventureScope: ["mma-files" as const],
+    formats: ["instagram-portrait" as const],
+    family: "slab" as const,
+    variant: "B" as const,
+    accentSwap: true,
+    treatment: "mono" as const,
+    typeScale: 1.1 as const,
+    status: "live" as const,
+    changedAt: "2026-08-09T00:00:00.000Z",
+    changedBy: "owner" as const
+  };
+
+  it("round-trips through its schema", () => {
+    expect(CarouselPresetSchema.parse(preset)).toEqual(preset);
+    expect(CarouselPresetSchema.safeParse({ ...preset, family: "chartreuse" }).success).toBe(false);
+    expect(CarouselPresetSchema.safeParse({ ...preset, status: "live-ish" }).success).toBe(false);
+    expect(CarouselPresetFileSchema.safeParse({
+      schemaVersion: "carousel-preset/1",
+      presets: [preset],
+      updatedAt: preset.changedAt
+    }).success).toBe(true);
+  });
+
+  it("offers a live preset to the ventures in its scope and to nobody else", () => {
+    expect(livePresetsFor([preset], "mma-files")).toHaveLength(1);
+    expect(livePresetsFor([preset], "caught-up")).toHaveLength(0);
+    expect(livePresetsFor([{ ...preset, ventureScope: [] }], "caught-up")).toHaveLength(1);
+  });
+
+  it("never offers a draft, because a draft is a design nobody has approved", () => {
+    expect(livePresetsFor([{ ...preset, status: "draft" }], "mma-files")).toHaveLength(0);
+  });
+
+  it("draws the whole design from the pool, and keeps the engine's own rhythm rotation", () => {
+    const drawn = deriveRecipe({
+      venture: "mma-files",
+      slug: "gamrot",
+      date: "2026-08-06",
+      pool: [{ family: preset.family, variant: preset.variant, accentSwap: preset.accentSwap, treatment: preset.treatment, typeScale: preset.typeScale }]
+    });
+    expect(drawn.family).toBe("slab");
+    expect(drawn.treatment).toBe("mono");
+    expect(drawn.typeScale).toBe(1.1);
+    // Two articles in one preset still open on different beats.
+    const other = deriveRecipe({
+      venture: "mma-files",
+      slug: "another",
+      date: "2026-08-06",
+      pool: [{ family: preset.family, variant: preset.variant, accentSwap: preset.accentSwap, treatment: preset.treatment, typeScale: preset.typeScale }]
+    });
+    expect(drawn.phaseSeed === other.phaseSeed && drawn.slug === other.slug).toBe(false);
+  });
+
+  it("keeps the anti-repeat inside the pool", () => {
+    const pool = ["slab", "tower", "dossier"].map((family) => ({
+      family: family as typeof preset.family,
+      variant: "A" as const,
+      accentSwap: false,
+      treatment: "none" as const,
+      typeScale: 1 as const
+    }));
+    const drawn = deriveRecipe(
+      { venture: "mma-files", slug: "gamrot", date: "2026-08-06", pool },
+      [{ date: "2026-08-05", family: "slab" }, { date: "2026-08-04", family: "tower" }]
+    );
+    expect(drawn.family).toBe("dossier");
+  });
+
+  it("refuses a treatment on an article with no photograph, pool or no pool", () => {
+    const drawn = deriveRecipe({
+      venture: "mma-files",
+      slug: "gamrot",
+      date: "2026-08-06",
+      hasHero: false,
+      pool: [{ family: preset.family, variant: "A", accentSwap: false, treatment: "duotone", typeScale: 1 }]
+    });
+    expect(drawn.treatment).toBe("none");
   });
 });

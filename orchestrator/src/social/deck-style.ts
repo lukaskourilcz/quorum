@@ -1,12 +1,15 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import {
+  CarouselPresetFileSchema,
   CarouselRecipeSchema,
   DECK_DESIGNS,
   DECK_STYLES,
   deriveRecipe,
   isDeckStyle,
+  livePresetsFor,
   type CarouselRecipe,
+  type PresetDraw,
   type DeckStyle,
   type RecipeHistoryEntry
 } from "@boardlessai/carousel-studio";
@@ -112,6 +115,29 @@ async function readRecordedRecipe(root: string, venture: string, slug: string, d
   }
 }
 
+/**
+ * The venture's live presets, when the owner has saved any.
+ *
+ * Live only, and read from disk rather than derived: a draft is a design the owner is still
+ * looking at, and an engine that quietly started shipping drafts would make the word mean nothing.
+ */
+async function readLivePresets(root: string, venture: "caught-up" | "mma-files"): Promise<PresetDraw[]> {
+  try {
+    const raw = JSON.parse(await readFile(path.join(root, "ventures/carousel-studio/presets.json"), "utf8"));
+    const parsed = CarouselPresetFileSchema.safeParse(raw);
+    if (!parsed.success) return [];
+    return livePresetsFor(parsed.data.presets, venture).map((preset) => ({
+      family: preset.family,
+      variant: preset.variant,
+      accentSwap: preset.accentSwap,
+      treatment: preset.treatment,
+      typeScale: preset.typeScale
+    }));
+  } catch {
+    return [];
+  }
+}
+
 async function readOverrides(root: string): Promise<unknown[]> {
   try {
     const raw = JSON.parse(await readFile(path.join(root, OVERRIDES_PATH), "utf8")) as { overrides?: unknown };
@@ -135,13 +161,20 @@ export async function effectiveRecipe(input: {
   date: string;
   hasHero?: boolean;
 }): Promise<CarouselRecipe> {
-  const [overrides, history, recorded] = await Promise.all([
+  const [overrides, history, recorded, pool] = await Promise.all([
     readOverrides(input.root),
     readRecipeHistory(input.root, input.venture),
-    readRecordedRecipe(input.root, input.venture, input.slug, input.date)
+    readRecordedRecipe(input.root, input.venture, input.slug, input.date),
+    readLivePresets(input.root, input.venture)
   ]);
   const derived = recorded ?? deriveRecipe(
-    { venture: input.venture, slug: input.slug, date: input.date, ...(input.hasHero === undefined ? {} : { hasHero: input.hasHero }) },
+    {
+      venture: input.venture,
+      slug: input.slug,
+      date: input.date,
+      ...(input.hasHero === undefined ? {} : { hasHero: input.hasHero }),
+      ...(pool.length > 0 ? { pool } : {})
+    },
     history
   );
   const pinned = matchRecipeOverride(overrides, input.venture, input.slug, input.date);

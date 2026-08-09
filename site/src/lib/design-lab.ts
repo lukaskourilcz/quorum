@@ -16,7 +16,24 @@ import {
   type SocialCopyPack
 } from "@boardlessai/carousel-studio";
 import { readStudioArticles, type StudioArticle } from "@/lib/carousel-summaries";
-import { readDeckStyleOverrides, readSlideTextOverrides, slideTextFor } from "@/lib/carousel-studio-admin-store";
+import {
+  readCarouselPresets,
+  readDeckStyleOverrides,
+  readSlideTextOverrides,
+  slideTextFor
+} from "@/lib/carousel-studio-admin-store";
+import type { CarouselPreset } from "@boardlessai/carousel-studio";
+
+/** A saved design, as the picker shows it. */
+export type LabPreset = Pick<CarouselPreset, "id" | "name" | "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "status">;
+
+export async function readDesignLabPresets(venture?: "caught-up" | "mma-files"): Promise<LabPreset[]> {
+  const presets = await readCarouselPresets();
+  return presets
+    .filter((preset) => !venture || preset.ventureScope.length === 0 || preset.ventureScope.includes(venture))
+    .map(({ id, name, family, variant, accentSwap, treatment, typeScale, status }) =>
+      ({ id, name, family, variant, accentSwap, treatment, typeScale, status }));
+}
 
 /**
  * Everything the Design Lab workspace needs about one article, resolved on the server.

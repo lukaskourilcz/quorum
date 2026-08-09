@@ -2,6 +2,7 @@ import { DECK_DESIGNS } from "@boardlessai/carousel-studio";
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
 import {
   CarouselStudioPersistenceError,
+  saveCarouselPreset,
   setRecipeOverride,
   setSlideTextOverride,
   type CarouselStudioPersistenceCode
@@ -55,6 +56,8 @@ export async function POST(request: Request): Promise<Response> {
     typeScale?: unknown;
     slide?: unknown;
     text?: unknown;
+    presetName?: unknown;
+    presetStatus?: unknown;
   };
   if (
     !value || typeof value !== "object"
@@ -81,6 +84,28 @@ export async function POST(request: Request): Promise<Response> {
 
   if (typeof body.family !== "string") {
     return Response.json({ error: "Design Lab request is incomplete.", cause: "rejected" }, { status: 422 });
+  }
+
+  // A preset is the current design saved for reuse. It goes live only by the owner saying so —
+  // the same explicit action a template's lifecycle takes, and for the same reason: the pipeline
+  // will apply it unattended to work nobody has looked at yet.
+  if (typeof body.presetName === "string") {
+    try {
+      const { presets, commit } = await saveCarouselPreset({
+        name: body.presetName,
+        ventureScope: [article.venture],
+        formats: ["instagram-portrait", "instagram-square", "instagram-story", "threads"],
+        family: body.family,
+        variant: body.variant === "B" ? "B" : "A",
+        accentSwap: body.accentSwap === true,
+        treatment: body.treatment === "mono" || body.treatment === "duotone" ? body.treatment : "none",
+        typeScale: body.typeScale === 0.9 || body.typeScale === 1.1 ? body.typeScale : 1,
+        status: body.presetStatus === "live" ? "live" : "draft"
+      });
+      return Response.json({ ok: true, commit, presets }, { status: 200, headers: { "Cache-Control": "no-store, private" } });
+    } catch (error) {
+      return failure(error);
+    }
   }
   try {
     const { commit } = await setRecipeOverride({

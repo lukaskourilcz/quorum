@@ -90,8 +90,23 @@ export interface RecipeInputs {
   date: string;
   /** Whether the article carries a photograph. A treatment on nothing is not a design choice. */
   hasHero?: boolean;
-  /** Families the engine may draw from, when the venture has live presets. Empty means all ten. */
-  pool?: readonly DeckFamily[];
+  /**
+   * The venture's live presets, when it has any.
+   *
+   * With a pool the engine draws whole designs the owner has approved rather than dealing its own
+   * axes; the pick is still seeded by the article's identity and still refuses the last two
+   * families, so a pool changes what the variety is drawn from and not that there is variety.
+   */
+  pool?: readonly PresetDraw[];
+}
+
+/** The part of a preset a derivation uses. */
+export interface PresetDraw {
+  family: DeckDesign;
+  variant: "A" | "B";
+  accentSwap: boolean;
+  treatment: "none" | "mono" | "duotone";
+  typeScale: TypeScale;
 }
 
 /**
@@ -99,22 +114,39 @@ export interface RecipeInputs {
  */
 export function deriveRecipe(inputs: RecipeInputs, history: readonly RecipeHistoryEntry[] = []): CarouselRecipe {
   const seed = recipeSeed(inputs);
-  const pool = inputs.pool && inputs.pool.length > 0 ? inputs.pool : undefined;
-  const family = pool
-    ? pool[seededIndex(seed, 0, pool.length)]!
-    : chooseFamily(seed, history);
   const treatments = inputs.hasHero === false ? (["none"] as const) : (["none", "none", "mono", "duotone"] as const);
-  return CarouselRecipeSchema.parse({
-    schemaVersion: "carousel-recipe/1",
+  const base = {
+    schemaVersion: "carousel-recipe/1" as const,
     venture: inputs.venture,
     slug: inputs.slug,
     date: inputs.date,
-    family,
+    // The rhythm rotation is the engine's own, always: a preset says what a deck looks like, and
+    // two articles in one preset still have to open on different beats.
+    phaseSeed: seededIndex(seed, 32, 4)
+  };
+  const pool = inputs.pool?.filter((preset) => preset.family) ?? [];
+  if (pool.length > 0) {
+    // Anti-repeat still applies, over the pool: the last two families the venture shipped are out
+    // unless the pool has nothing else to offer.
+    const recent = new Set(history.slice(0, 2).map((entry) => entry.family));
+    const eligible = pool.filter((preset) => !recent.has(preset.family));
+    const drawn = (eligible.length > 0 ? eligible : pool)[seededIndex(seed, 0, (eligible.length > 0 ? eligible : pool).length)]!;
+    return CarouselRecipeSchema.parse({
+      ...base,
+      family: drawn.family,
+      variant: drawn.variant,
+      accentSwap: drawn.accentSwap,
+      treatment: inputs.hasHero === false ? "none" : drawn.treatment,
+      typeScale: drawn.typeScale
+    });
+  }
+  return CarouselRecipeSchema.parse({
+    ...base,
+    family: chooseFamily(seed, history),
     variant: "A",
     accentSwap: seededIndex(seed, 8, 2) === 1,
     treatment: treatments[seededIndex(seed, 16, treatments.length)]!,
-    typeScale: TYPE_SCALES[seededIndex(seed, 24, TYPE_SCALES.length)]!,
-    phaseSeed: seededIndex(seed, 32, 4)
+    typeScale: TYPE_SCALES[seededIndex(seed, 24, TYPE_SCALES.length)]!
   });
 }
 
@@ -208,4 +240,51 @@ export function recipeLine(recipe: Pick<CarouselRecipe, "family" | "variant" | "
     `${recipe.typeScale}×`,
     `fáze ${recipe.phaseSeed}`
   ].join(" · ");
+}
+
+/**
+ * A design the owner saved and wants used again.
+ *
+ * A recipe answers "what does *this* article look like". A preset answers "what should this
+ * venture look like", which is the question the engine has been answering out of its own built-in
+ * axes. Presets go live through the same explicit owner action as a template's lifecycle, and for
+ * the same reason: something the pipeline will apply unattended, to work nobody has seen yet,
+ * should be turned on deliberately rather than by having been typed.
+ */
+export const CarouselPresetSchema = z.object({
+  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60),
+  name: z.string().trim().min(2).max(80),
+  /** Which ventures may draw from it. Empty means both. */
+  ventureScope: z.array(z.enum(["caught-up", "mma-files"])).max(2),
+  formats: z.array(z.enum(["instagram-square", "instagram-portrait", "instagram-story", "threads"])).min(1).max(4),
+  family: z.enum(DECK_DESIGNS),
+  variant: z.enum(["A", "B"]),
+  accentSwap: z.boolean(),
+  treatment: z.enum(["none", "mono", "duotone"]),
+  typeScale: z.union([z.literal(0.9), z.literal(1), z.literal(1.1)]),
+  status: z.enum(["draft", "live"]),
+  changedAt: z.string().min(1),
+  changedBy: z.literal("owner")
+});
+
+export type CarouselPreset = z.infer<typeof CarouselPresetSchema>;
+
+export const CarouselPresetFileSchema = z.object({
+  schemaVersion: z.literal("carousel-preset/1"),
+  presets: z.array(CarouselPresetSchema).max(60),
+  updatedAt: z.string().min(1)
+});
+
+export type CarouselPresetFile = z.infer<typeof CarouselPresetFileSchema>;
+
+/**
+ * The presets a venture's derivation may draw from.
+ *
+ * Live only. A draft is a design the owner is still looking at, and a tool that quietly started
+ * shipping it would make "draft" mean nothing — the same reason a draft template cannot be
+ * referenced by a pack.
+ */
+export function livePresetsFor(presets: readonly CarouselPreset[], venture: "caught-up" | "mma-files"): CarouselPreset[] {
+  return presets.filter((preset) =>
+    preset.status === "live" && (preset.ventureScope.length === 0 || preset.ventureScope.includes(venture)));
 }

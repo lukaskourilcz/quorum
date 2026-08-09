@@ -74,7 +74,7 @@ this decision wins, then the document, then — being newest — the issue.
 - [x] DL-09 — Recipes and copy recorded at delivery as inventory (contract §DL-09)
 - [x] DL-10 — One studio workspace: rail, canvas, controls, output (contract §DL-10)
 - [x] DL-11 — Export: per-slide PNG and whole-deck ZIP with captions (contract §DL-11)
-- [ ] DL-12 — Presets with owner lifecycle; engine draws from live pool (contract §DL-12)
+- [x] DL-12 — Presets with owner lifecycle; engine draws from live pool (contract §DL-12)
 - [ ] DL-13 — design-lab alias, stale-truth sweep, owner items (contract §DL-13)
 - [ ] DL-14 — Calendar tooltips clear the header row (contract §DL-14)
 - [ ] DL-15 — Meetings room type sizes; channels label removed (contract §DL-15)

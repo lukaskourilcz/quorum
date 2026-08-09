@@ -37,10 +37,25 @@ const repositoryRoot = path.resolve(process.cwd(), "..");
 const e2ePlanPath = path.join(repositoryRoot, "state", "ventures", "titty-tuesdays", "plans", "e2e-launch-plan.json");
 const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "titty-tuesdays", "ledger.jsonl");
 let originalRatingLedger: string | null = null;
+/*
+ * The Design Lab's controls write real state.
+ *
+ * Clicking a family chip is a save, by design — the whole point of DL-01 is that viewing and
+ * keeping stopped being the same action, and the keeping half persists. So the suite snapshots
+ * the two files it can touch and puts them back, the same as it does for the rating ledger.
+ */
+const deckOverridesPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "deck-style-overrides.json");
+const presetsPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "presets.json");
+let originalDeckOverrides: string | null = null;
 
 test.beforeAll(async () => {
   try {
     originalRatingLedger = await readFile(ratingLedgerPath, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+  try {
+    originalDeckOverrides = await readFile(deckOverridesPath, "utf8");
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
@@ -73,6 +88,9 @@ test.afterAll(async () => {
   await rm(e2ePlanPath, { force: true });
   if (originalRatingLedger === null) await rm(ratingLedgerPath, { force: true });
   else await writeFile(ratingLedgerPath, originalRatingLedger);
+  await rm(presetsPath, { force: true });
+  if (originalDeckOverrides === null) await rm(deckOverridesPath, { force: true });
+  else await writeFile(deckOverridesPath, originalDeckOverrides);
 });
 
 for (const route of axeRoutes) {
@@ -554,4 +572,40 @@ test.describe("the Design Lab workspace", () => {
     await expect(copy).toHaveAttribute("aria-live", "polite");
     await expect(page.locator("[data-caption]").first()).toBeVisible();
   });
+});
+
+/**
+ * Presets: a design saved, listed and applied.
+ *
+ * The round trip is the point. A saved preset that the picker cannot show is a file, not a tool,
+ * and the file did not exist before this — which is why the store's create path had to be built
+ * first rather than the preset list being hand-seeded onto main.
+ */
+test("a preset saves, reloads into the picker and applies", async ({ page }) => {
+  await rm(presetsPath, { force: true });
+  try {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "dossier", exact: true }).first().click();
+    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+
+    await page.getByLabel("Název presetu").first().fill("E2E tichý záznam");
+    const save = page.locator("[data-save-preset]").first();
+    await expect(save).toBeEnabled();
+    await save.click();
+    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved");
+
+    // Reload: the preset is read back out of the file the save created.
+    await page.reload({ waitUntil: "networkidle" });
+    const chip = page.locator("[data-presets] button", { hasText: "E2E tichý záznam" }).first();
+    await expect(chip).toBeVisible();
+    // Saved as a draft, and it says so — a draft is never drawn from autonomously.
+    await expect(chip).toContainText("koncept");
+
+    await page.getByRole("button", { name: "tower", exact: true }).first().click();
+    await expect(page.locator("[data-recipe-line]").first()).toContainText("tower");
+    await chip.click();
+    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+  } finally {
+    await rm(presetsPath, { force: true });
+  }
 });

@@ -17,7 +17,7 @@ import { Callout } from "@/components/ui/callout";
 import { CURRENT_MONTHLY_API_LIMIT_USD, CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
-import { readDesignLab } from "@/lib/design-lab";
+import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
@@ -146,6 +146,7 @@ export default async function AdminPage({
     hookBrain,
     studioArticles,
     labArticles,
+    labPresets,
     agentControls,
     autonomy,
     fixedCosts,
@@ -162,6 +163,7 @@ export default async function AdminPage({
     readHookBrain(),
     readStudioArticles(),
     readDesignLab(),
+    readDesignLabPresets(),
     readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
@@ -391,7 +393,7 @@ export default async function AdminPage({
             {selectedVenture.id === "carousel-studio" && selectedTab === "hooks" ? (
               <HookBrainAdminPanel snapshot={hookBrain} />
             ) : selectedVenture.id === "carousel-studio" && selectedTab === "studio" ? (
-              <DesignLabWorkspace articles={labArticles} />
+              <DesignLabWorkspace articles={labArticles} presets={labPresets} />
             ) : selectedVenture.id === "carousel-studio" && selectedTab ? (
               <CarouselStudioAdminPanel
                 snapshot={carouselStudio}

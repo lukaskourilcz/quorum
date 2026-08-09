@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { DeckSaveBadge, warningFor, type SaveState } from "@/components/admin/deck-save-badge";
-import type { LabArticle } from "@/lib/design-lab";
+import type { LabArticle, LabPreset } from "@/lib/design-lab";
 
 /**
  * One workspace where two tabs used to be.
@@ -113,13 +113,14 @@ function SlideImage({ src, alt, ratio }: { src: string; alt: string; ratio: numb
   );
 }
 
-function Workspace({ article }: { article: LabArticle }) {
+function Workspace({ article, presets }: { article: LabArticle; presets: LabPreset[] }) {
   const [recipe, setRecipe] = useState<Recipe>(article.recipe);
   const [format, setFormat] = useState<FormatId>("instagram-portrait");
   const [safeArea, setSafeArea] = useState(false);
   const [slide, setSlide] = useState(0);
   const [texts, setTexts] = useState<string[]>(article.slides.map((entry) => entry.text));
   const [save, setSave] = useState<SaveState>({ kind: "rest", style: article.recipe.family });
+  const [presetName, setPresetName] = useState("");
 
   const canvas = FORMATS.find((entry) => entry.id === format)!;
   const current = texts[slide] ?? "";
@@ -296,6 +297,42 @@ function Workspace({ article }: { article: LabArticle }) {
               </button>
               <DeckSaveBadge save={save} />
             </div>
+            <div className="flex min-w-0 flex-wrap items-center gap-2" data-presets>
+              {presets.map((preset) => (
+                <button
+                  className={chipClass(false)}
+                  key={preset.id}
+                  onClick={() => change({
+                    family: preset.family,
+                    variant: preset.variant,
+                    accentSwap: preset.accentSwap,
+                    treatment: preset.treatment,
+                    typeScale: preset.typeScale
+                  })}
+                  type="button"
+                >
+                  {preset.name}{preset.status === "draft" ? " · koncept" : ""}
+                </button>
+              ))}
+              <label className="sr-only" htmlFor={`preset-${article.id}`}>Název presetu</label>
+              <input
+                className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--background)] px-3 py-1 text-xs text-[var(--foreground)]"
+                id={`preset-${article.id}`}
+                onChange={(event) => setPresetName(event.target.value)}
+                placeholder="Uložit jako preset"
+                value={presetName}
+              />
+              <Button
+                data-save-preset
+                disabled={presetName.trim().length < 2}
+                onClick={() => { void post({ ...recipe, presetName, presetStatus: "draft" }, presetName); }}
+                size="small"
+                type="button"
+                variant="secondary"
+              >
+                Uložit preset
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -337,7 +374,7 @@ function Workspace({ article }: { article: LabArticle }) {
   );
 }
 
-export function DesignLabWorkspace({ articles }: { articles: LabArticle[] }) {
+export function DesignLabWorkspace({ articles, presets }: { articles: LabArticle[]; presets: LabPreset[] }) {
   const [selected, setSelected] = useState<string | null>(articles[0]?.id ?? null);
   const article = useMemo(() => articles.find((entry) => entry.id === selected) ?? articles[0], [articles, selected]);
 
@@ -380,7 +417,7 @@ export function DesignLabWorkspace({ articles }: { articles: LabArticle[] }) {
         </ol>
       </div>
 
-      {article ? <Workspace article={article} key={article.id} /> : null}
+      {article ? <Workspace article={article} key={article.id} presets={presets} /> : null}
     </div>
   );
 }
