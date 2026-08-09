@@ -72,6 +72,13 @@ export interface LocalizedContent {
   title: string;
   dek: string;
   alternativeHeadlines: string[];
+  /** The words that travel with the deck, when the desk wrote them. */
+  socialCopy?: {
+    igCaption: string;
+    hashtags: string[];
+    threadsText: string;
+    storyLine: string;
+  };
   bodyMdx: string;
   illustrationAlt: string;
   dispatches: z.infer<typeof DispatchSchema>[];

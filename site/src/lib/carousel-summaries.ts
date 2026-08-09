@@ -28,7 +28,7 @@ function repositoryRoot(): string {
 }
 
 export interface StudioArticle {
-  /** `<venture>:<slug>`, which is how the studio addresses one. */
+  /** `<venture>:<slug>:<date>`, which is how the studio addresses one. */
   id: string;
   venture: CarouselSummaryVenture;
   ventureLabel: string;
@@ -102,7 +102,7 @@ async function recordedSummaries(root: string): Promise<Map<string, CarouselSumm
       const summary = value as Partial<CarouselSummary>;
       if (summary?.schemaVersion !== "carousel-summary/1") continue;
       if (typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
-      recorded.set(`${venture}:${summary.slug}`, summary as CarouselSummary);
+      recorded.set(`${venture}:${summary.slug}:${summary.date}`, summary as CarouselSummary);
     }
   }
   return recorded;
@@ -198,7 +198,9 @@ export async function readStudioArticles(root = repositoryRoot()): Promise<Studi
   ]);
   const byId = new Map<string, StudioArticle>();
   const add = (summary: CarouselSummary, origin: StudioArticle["origin"]) => {
-    const id = `${summary.venture}:${summary.slug}`;
+    // Venture, slug *and* date. Three MMA packages redeliver one event and share a slug, so a
+    // slug-keyed map collapsed them into one article and the Lab could only ever show the first.
+    const id = `${summary.venture}:${summary.slug}:${summary.date}`;
     if (byId.has(id) && origin === "derived") return;
     byId.set(id, {
       id,

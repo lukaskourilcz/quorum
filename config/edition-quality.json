@@ -22,7 +22,7 @@
     "targetWords": 1100,
     "briefsMaximum": 4,
     "watchlistMaximum": 6,
-    "maximumOutputTokens": 6500,
+    "maximumOutputTokens": 7100,
     "maximumCurationCandidates": 50
   },
   "models": {

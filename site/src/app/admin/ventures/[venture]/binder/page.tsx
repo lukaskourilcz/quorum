@@ -21,7 +21,10 @@ export default async function LaunchBinderPage({
 }: {
   params: Promise<{ venture: string }>;
 }) {
-  const { venture: ventureId } = await params;
+  const { venture: requested } = await params;
+  // The same alias the admin page keeps: `design-lab` is the name and `carousel-studio` is the id,
+  // and a deep link typed from the name should not land on a missing binder.
+  const ventureId = requested === "design-lab" ? "carousel-studio" : requested === "dneskai" ? "caught-up" : requested;
   const binder = await readAdminLaunchBinder(ventureId);
   if (!binder) notFound();
   const groups = binder.plans.reduce((grouped, plan) => {

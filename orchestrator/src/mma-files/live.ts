@@ -30,6 +30,18 @@ const LocalizationSchema = z.object({
   // passes the same style review as the rest of the article. Optional because every article
   // written before this field existed still has to load.
   altHeadline: z.string().trim().min(1).max(90).optional(),
+  /*
+   * The words that travel with the deck, written by the desk that wrote the article.
+   *
+   * The `altHeadline` precedent, and `state/ventures/mma-files/social/ASSIGNMENT.md:5-8` names
+   * this exact pattern for captions: the copy rides the article's own call, so no new paid call
+   * site exists and nothing new touches the ledger. All four are optional, because every article
+   * written before them still has to load.
+   */
+  igCaption: z.string().trim().min(1).max(500).optional(),
+  hashtags: z.array(z.string().trim().min(2).max(30)).max(10).optional(),
+  threadsText: z.string().trim().min(1).max(480).optional(),
+  storyLine: z.string().trim().min(1).max(66).optional(),
   bodyMDX: z.string().trim().min(1).max(40_000),
   imageAlt: z.string().trim().min(1).max(300),
   // The visual brief, asked for only when the subject is an event. A fighter profile never
@@ -325,7 +337,11 @@ export const MMA_FILES_WRITE_SYSTEM = [
   "Do not add odds, probabilities, hype or facts.",
   "For imageAlt, say in one sentence what the article is about. You are not shown a photograph and there may not be one, so never write a pose, a stance, a setting or an action.",
   "For altHeadline write one short Czech line for the carousel cover: at most nine words, drawn from what the packet states, no invented claim, no question mark bait, no promise the article does not keep.",
-  "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"altHeadline\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\"}."
+  "For igCaption write the Instagram caption in Czech, at most 500 characters, drawn from the packet and from nothing else. Do not write a photo credit; the pipeline appends it.",
+  "For hashtags give five to ten lowercase tags with no diacritics and no punctuation, taken from the article's own terms.",
+  "For threadsText write a standalone Czech post of at most 480 characters that makes sense to someone who never opens the link. No hashtag stuffing.",
+  "For storyLine write one Czech line of at most 66 characters for a story frame.",
+  "Return JSON only: {\"title\":\"...\",\"dek\":\"...\",\"altHeadline\":\"...\",\"igCaption\":\"...\",\"hashtags\":[\"...\"],\"threadsText\":\"...\",\"storyLine\":\"...\",\"bodyMDX\":\"...\",\"imageAlt\":\"...\"}."
 ].join(" ");
 
 /**
@@ -376,7 +392,7 @@ class GuardedMmaFilesGateway implements MmaFilesEditorialGateway {
       model: "claude-sonnet-4-6",
       system: input.system,
       input: wrapUntrustedData("verified-fightaiq-article-packet", JSON.stringify(input.packet)),
-      maxOutputTokens: 1_700,
+      maxOutputTokens: 2_100,
       budgetContext: {
         now: this.now,
         cycleId: this.cycleId,

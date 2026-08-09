@@ -30,6 +30,18 @@ export const LocalizedOutputSchema = z.object({
   why_it_matters: z.array(z.string().trim().min(1)).min(2).max(3),
   what_changed: z.array(z.string().trim().min(1)).min(1).max(4),
   uncertainty: z.array(z.string().trim().min(1)).min(1).max(3),
+  /*
+   * The words that travel with the deck, written in the same call that writes the edition.
+   *
+   * The `alternative_headlines` precedent: social copy is editorial copy and belongs to the desk
+   * that wrote the piece, so no new paid call site exists. Optional throughout — every edition
+   * already on disk parses unchanged, and a draft that omits them falls back to the pipeline's
+   * own deterministic concatenation.
+   */
+  ig_caption: z.string().trim().min(1).max(500).optional(),
+  hashtags: z.array(z.string().trim().min(2).max(30)).max(10).optional(),
+  threads_text: z.string().trim().min(1).max(480).optional(),
+  story_line: z.string().trim().min(1).max(66).optional(),
   dispatches: z.array(DispatchSchema).min(2).max(4)
 });
 
@@ -98,6 +110,10 @@ export const localeSchema = {
       maxItems: 3,
       items: { type: "string" }
     },
+    ig_caption: { type: "string" },
+    hashtags: { type: "array", maxItems: 10, items: { type: "string" } },
+    threads_text: { type: "string" },
+    story_line: { type: "string" },
     dispatches: {
       type: "array",
       minItems: 2,
@@ -201,6 +217,15 @@ The slug must be plain ASCII with no diacritics. Tags are Czech, written as ASCI
 fold the diacritics away and join lowercase words with single hyphens, so "umělá
 inteligence" becomes "umela-inteligence". Never emit an English tag; the reader browses
 these on the magazine, and a week of English tags splits the same topic in two.
+
+You also write the words that travel with the carousel, in the same register as the
+article. ig_caption is the Instagram caption in Czech, at most 500 characters, drawn
+from the edition and from nothing else — never write a photo credit, the pipeline
+appends it. hashtags is five to ten lowercase tags with no diacritics and no
+punctuation, taken from the edition's own terms. threads_text is a standalone Czech post
+of at most 480 characters that makes sense to someone who never opens the link, with no
+hashtag stuffing. story_line is one Czech line of at most 66 characters for a story
+frame.
 
 Write why_this_story as one Czech sentence, at most 280 characters, saying why this
 story led today rather than another: what it changes, for whom. It is published to the
@@ -463,6 +488,18 @@ export function localized(value: z.infer<typeof LocalizedOutputSchema>): Localiz
     title: removeEmptyCzechAdverbs(value.title),
     dek: removeEmptyCzechAdverbs(value.dek),
     alternativeHeadlines: value.alternative_headlines.map(removeEmptyCzechAdverbs),
+    // Only when the desk wrote all four. A caption with no Threads text beside it is half a copy
+    // pack, and half a copy pack read as a whole one is how a channel ships an empty post.
+    ...(value.ig_caption && value.threads_text && value.story_line
+      ? {
+          socialCopy: {
+            igCaption: removeEmptyCzechAdverbs(value.ig_caption),
+            hashtags: value.hashtags ?? [],
+            threadsText: removeEmptyCzechAdverbs(value.threads_text),
+            storyLine: removeEmptyCzechAdverbs(value.story_line)
+          }
+        }
+      : {}),
     bodyMdx: removeEmptyCzechAdverbs(value.body_mdx),
     illustrationAlt: removeEmptyCzechAdverbs(value.illustration_alt),
     whyItMatters: value.why_it_matters.map(removeEmptyCzechAdverbs),

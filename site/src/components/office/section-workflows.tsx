@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { litRoomForHour, type OfficeWorkflows } from "@/lib/office-workflows-model";
 import {
@@ -14,14 +14,15 @@ import {
   legsAt,
   notesAt
 } from "@/lib/office-workflows-timeline";
-import { ROOMS, WorkflowsPlan, roomViewBox, type PlanPlace } from "@/components/office/workflows-plan";
+import { WorkflowsPlan, type PlanPlace } from "@/components/office/workflows-plan";
 import {
   ExampleChip,
   PANEL_COPY,
   carriesExample,
   type PanelPlace
 } from "@/components/office/workflows-panels";
-import { WorkflowsRoomView } from "@/components/office/workflows-room";
+import { WorkflowsDockDialog } from "@/components/office/workflows-dock-dialog";
+import { WorkflowsRoomDialog } from "@/components/office/workflows-room-dialog";
 import type { OfficeProjectKey } from "@/lib/office-walkthrough";
 
 /**
@@ -102,17 +103,6 @@ const chip: CSSProperties = {
   letterSpacing: ".1em"
 };
 
-/**
- * The smallest box an opened room's content is laid out in, whatever the room's own rect measures.
- *
- * 380px holds about 34 characters of the 12.5px body text once the 18px padding either side is
- * taken off, which is the shortest line this copy stays readable on. 560px is where the two-column
- * grid starts fitting its own labels — below it the roles column truncated mid-word.
- */
-const MIN_ROOM_CONTENT_WIDTH = 380;
-const MIN_ROOM_CONTENT_HEIGHT = 300;
-const TWO_COLUMN_MIN_WIDTH = 560;
-
 function pragueHourMinute(): { hour: number; minute: number } {
   const parts = new Intl.DateTimeFormat("en-GB", {
     hour: "2-digit",
@@ -142,6 +132,7 @@ export function SectionWorkflows({
   const [expanded, setExpanded] = useState<PanelPlace | null>(null);
   /** The room standing open in place of the plan, if any. */
   const [openRoom, setOpenRoom] = useState<OfficeProjectKey | null>(null);
+  const [dock, setDock] = useState(false);
   const [compact, setCompact] = useState(false);
   const [surface, setSurface] = useState<"quiz" | "news" | "mma">("quiz");
   const [shuttered, setShuttered] = useState(false);
@@ -289,11 +280,9 @@ export function SectionWorkflows({
   const openPlace = useCallback((place: PlanPlace) => {
     stopPerformance();
     if (place === "dock") {
-      if (window.matchMedia("(max-width: 1023px)").matches) {
-        setExpanded((current) => (current === "dock" ? null : "dock"));
-        return;
-      }
-      setOpen("dock");
+      // A dialog at every width. The compact path used to expand a strip below the plan instead,
+      // which is a second thing to keep true for no reason once the dialog scrolls on its own.
+      setDock(true);
       return;
     }
     setOpenRoom(place);
@@ -305,96 +294,6 @@ export function SectionWorkflows({
     () => (openRoom ? data.rooms.find((entry) => entry.key === openRoom) ?? null : null),
     [openRoom, data.rooms]
   );
-
-  /*
-   * The frame the plan uses while a room is open.
-   *
-   * The room's rectangle is centred and sized from itself, so it lands on an exactly known part of
-   * the frame and the overlay can be placed against it without measuring the SVG. The box is
-   * watched rather than read once, because the section is a percentage of the viewport and every
-   * resize changes the aspect.
-   */
-  const [planBox, setPlanBox] = useState<{ width: number; height: number } | null>(null);
-  useLayoutEffect(() => {
-    /*
-     * Measured directly, not through a ResizeObserver.
-     *
-     * The observer was the obvious mechanism and the wrong one to depend on: its callback is
-     * driven by the rendering lifecycle, so in a background or throttled tab it can go unfired
-     * indefinitely — and with no box measured, no room would open at all. Reading the rect is
-     * synchronous and always answers. The measurement is retaken whenever a room opens and on
-     * resize, which is every moment the aspect can have changed.
-     */
-    const measure = () => {
-      const rect = planRef.current?.getBoundingClientRect();
-      if (rect && rect.width > 0 && rect.height > 0) {
-        setPlanBox((current) =>
-          current && Math.abs(current.width - rect.width) < 1 && Math.abs(current.height - rect.height) < 1
-            ? current
-            : { width: rect.width, height: rect.height });
-      }
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [openRoom, compact]);
-
-  /**
-   * The frame, and the box the room's content is laid out in.
-   *
-   * These are two different rectangles and used to be one, which is what made narrow rooms
-   * unreadable. The frame is the room's own rect: it is where the walls land, and the content
-   * belongs inside it. But GoVIRAL and FightAIQ are narrow enough that at the scale which fits a
-   * room's height on a laptop they become a 264px and a 221px column — narrower than a line of
-   * this text needs, so the role rows spilled sideways out of the drawing entirely.
-   *
-   * So the content box starts at the room's rect and is then widened, about the same centre, until
-   * it can hold a readable measure. On the rooms that are wide enough — most of them — the two
-   * rectangles are the same and the content stands inside the walls exactly as before. On the
-   * narrow ones it reaches past them onto the floor the scrim has already darkened, which is the
-   * ground it needs, and reads instead of truncating mid-word.
-   */
-  const focus = useMemo(() => {
-    if (!openRoom || !planBox) return null;
-    const geometry = ROOMS.find((entry) => entry.key === openRoom);
-    if (!geometry) return null;
-    const framed = roomViewBox(geometry, planBox.width / planBox.height);
-
-    const fraction = (value: string) => Number.parseFloat(value) / 100;
-    const roomWidth = fraction(framed.inset.width) * planBox.width;
-    const roomHeight = fraction(framed.inset.height) * planBox.height;
-    const centreX = (fraction(framed.inset.left) + fraction(framed.inset.width) / 2) * planBox.width;
-    const centreY = (fraction(framed.inset.top) + fraction(framed.inset.height) / 2) * planBox.height;
-
-    const width = Math.min(Math.max(roomWidth, MIN_ROOM_CONTENT_WIDTH), planBox.width * 0.94);
-    const height = Math.min(Math.max(roomHeight, MIN_ROOM_CONTENT_HEIGHT), planBox.height * 0.94);
-    // Centred on the room, then pushed back inside the stage if that centre is close to an edge.
-    const left = Math.min(Math.max(centreX - width / 2, 0), planBox.width - width);
-    const top = Math.min(Math.max(centreY - height / 2, 0), planBox.height - height);
-
-    return {
-      room: geometry,
-      viewBox: framed.viewBox,
-      box: { left, top, width, height },
-      /** Wide enough for two columns, or one. Not the viewport's question — this box's. */
-      narrow: width < TWO_COLUMN_MIN_WIDTH,
-      /** True when the content had to reach past the walls, which is what earns it a ground. */
-      overspills: width > roomWidth + 1 || height > roomHeight + 1
-    };
-  }, [openRoom, planBox]);
-
-  /** Opening a room moves focus to its name; closing it returns focus to the door on the plan. */
-  useEffect(() => {
-    if (openRoom) {
-      document.getElementById("wf-room-title")?.focus();
-      const onKey = (event: KeyboardEvent) => {
-        if (event.key === "Escape") setOpenRoom(null);
-      };
-      window.addEventListener("keydown", onKey);
-      return () => window.removeEventListener("keydown", onKey);
-    }
-    return undefined;
-  }, [openRoom]);
 
   /**
    * Focus follows the panel in both directions.
@@ -508,14 +407,27 @@ export function SectionWorkflows({
         </div>
       </div>
 
-      <div ref={planRef} style={{ position: "relative", ...(compact ? {} : { flex: 1, minHeight: 0 }) }}>
+      {/*
+        Centred. The plan used to fill its section corner to corner because the click-to-reframe
+        needed every pixel it could take; without the zoom it is a drawing, and a drawing sits in
+        the middle of the space it is given.
+      */}
+      <div
+        ref={planRef}
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          ...(compact ? {} : { flex: 1, minHeight: 0 })
+        }}
+      >
         <WorkflowsPlan
           animate={animate}
           beat={beat ? { room: beat.room, tag: beat.tag } : null}
           compact={compact}
           legs={reduceMotion ? [] : legs}
           fill={!compact}
-          focus={focus}
           litRoom={litRoom}
           mode={performing ? "replay" : "ambient"}
           notes={notes}
@@ -524,16 +436,8 @@ export function SectionWorkflows({
           slots={data.slots}
           workshopWorking={workshopWorking}
         />
-        {room && focus ? (
-          <WorkflowsRoomView
-            box={focus.box}
-            compact={compact}
-            narrow={focus.narrow}
-            onBack={() => setOpenRoom(null)}
-            overspills={focus.overspills}
-            room={room}
-          />
-        ) : null}
+        <WorkflowsRoomDialog onClose={() => setOpenRoom(null)} room={room} />
+        <WorkflowsDockDialog data={data} onClose={() => setDock(false)} open={dock} />
 
         {open && !compact ? (
           <div
@@ -619,7 +523,7 @@ export function SectionWorkflows({
               }}
             >
               <span>{PANEL_COPY[open].footer}</span>
-              {open === "dock" && data.example ? (
+              {carriesExample(open) && data.example ? (
                 <a
                   href={data.example.articleUrl}
                   rel="noreferrer"
@@ -704,7 +608,9 @@ export function SectionWorkflows({
             ))}
           </div>
 
-          {(["caught-up", "carousel-studio", "dock", "titty-tuesdays"] as PanelPlace[]).map((place) => (
+          {/* The dock left this list with its panel: it opens the plain-facts dialog at every
+              width now, so a compact accordion for it would be a second thing to keep true. */}
+          {(["caught-up", "carousel-studio", "titty-tuesdays"] as PanelPlace[]).map((place) => (
             <div key={place} style={{ borderTop: "1px solid #26262b" }}>
               <button
                 aria-expanded={expanded === place}
@@ -739,7 +645,7 @@ export function SectionWorkflows({
                   <WorkflowsPanelBody place={place} {...panelProps} compact />
                   <div style={{ ...chip, background: "#0b0b0d", padding: "12px 16px", letterSpacing: ".12em", color: "#94949c" }}>
                     {PANEL_COPY[place].footer}
-                    {place === "dock" && data.example ? (
+                    {carriesExample(place) && data.example ? (
                       <>
                         {" "}
                         <a href={data.example.articleUrl} rel="noreferrer" style={{ color: "#d4d4d8" }} target="_blank">

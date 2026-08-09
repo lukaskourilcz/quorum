@@ -8,6 +8,7 @@ import {
   articleDeckTemplates,
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
+  familyDeckTemplates,
   liveTemplates,
   SEED_TEMPLATES,
   articleDeckTemplate,
@@ -46,7 +47,7 @@ describe("carousel-template/1", () => {
     // cannot pad it — while still resolving like any other live template.
     // Five designs at six lengths each.
     expect(articleDeckTemplates()).toHaveLength(30);
-    expect(liveTemplates()).toHaveLength(SEED_TEMPLATES.length + articleDeckTemplates().length);
+    expect(liveTemplates()).toHaveLength(SEED_TEMPLATES.length + articleDeckTemplates().length + familyDeckTemplates().length);
     expect(articleDeckTemplates().every((template) => template.status === "live")).toBe(true);
   });
 
@@ -72,7 +73,9 @@ describe("carousel-template/1", () => {
       minFontSize: 24,
       maxFontSize: 58,
       maxLines: 4,
-      maxChars: 58
+      maxChars: 58,
+      fontFamily: "Barlow Condensed",
+      fontWeight: 800
     });
     expect(fitted.lines.join(" ")).toContain("ě");
     expect(fitted.lines.length).toBeLessThanOrEqual(4);
@@ -113,8 +116,11 @@ describe("carousel-template/1", () => {
     expect(previewFormats()).toHaveLength(4);
   });
 
+  // Every template a reference can resolve to, not only the ten authored seeds. The deck
+  // generators were outside this loop, which is how thirty of them went unchecked against four
+  // of the five brands for as long as they existed.
   it("checks safe areas, contrast, token bindings and overflow for every brand and format", () => {
-    for (const template of SEED_TEMPLATES) {
+    for (const template of liveTemplates()) {
       for (const brand of Object.values(CAROUSEL_BRANDS)) {
         for (const format of previewFormats(template)) {
           const checks = validateTemplateForBrand(template, brand, format);

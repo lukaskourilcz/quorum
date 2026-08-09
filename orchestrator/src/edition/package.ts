@@ -72,6 +72,7 @@ function frontmatter(
     lang: locale,
     dek: localized.dek,
     alternative_headlines: localized.alternativeHeadlines,
+    ...(localized.socialCopy ? { social_copy: localized.socialCopy } : {}),
     tags: article.tags,
     sources: article.sources,
     illustration: {

@@ -70,6 +70,9 @@ const VentureDefinitionSchema = openObject({
     "articles",
     "calendar",
     "social-lab",
+    // `templates` and `decks` were two halves of one question and are one `studio` tab now. Both
+    // stay listed so a bookmarked tab parameter still resolves instead of failing the registry.
+    "studio",
     "templates",
     "inspiration",
     "decks",

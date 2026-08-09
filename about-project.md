@@ -71,14 +71,16 @@ modelům ani do podkladů porad.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Analýzy smí spustit jen pro ověřené zápasy a karty: neumí sázet, otevírat sázkové
   účty ani slibovat výhru.
-- **Design Lab** spravuje znovupoužitelná rozložení a bez modelu z nich vykresluje
-  všechny sociální karusely. V administraci má galerii **11 šablon**, ve které se každý
-  doručený článek zobrazí ve všech šablonách, v obou formátech a proti své nejkratší,
-  střední i nejdelší pasáži. Jedenáctou šablonu `quiz-code-context` si vyžádal
-  marketingShark: nejširší monospace pole ve všech ostatních živých šablonách pojme
-  100 znaků na dva řádky, což je popisek zdroje, ne program. Barevné sady drží pro pět
+- **Design Lab** je pracovní nástroj na sociální obsah, ne galerie šablon. Jedna
+  záložka `studio` v administraci ukazuje každý doručený článek obou magazínů, vykreslí
+  jeho karusel skutečným enginem ve všech čtyřech formátech a nechá majitele přepnout
+  rodinu, variantu, úpravu fotky, velikost písma a fázi rytmu — a to všechno je jeden
+  zapsaný recept, který si pipeline sama odvodí při doručení. Deset rodin šablon
+  (masthead, gutter, bevel, porthole, slab, terrace, figure, pull, tower, dossier)
+  nahradilo pět tapet, které byly ve třech případech tentýž rozmazaný gradient. Písma
+  jsou od 9. srpna 2026 v repozitáři: třicet statických řezů pod licencí SIL OFL, takže
+  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro pět
   značek, devShark a geoShark přibyly s marketingSharkem. Nemá vlastní sociální účet,
-  marketing ani měření návštěvnosti.
 - **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
   rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
   nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe

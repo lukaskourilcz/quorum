@@ -7,11 +7,11 @@ import {
   toRenderablePng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
-import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
+import { articleSlideSlot, recipeTemplateId, recipeVariant } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import { writeDeckReceipt } from "./deck-receipt.js";
-import { effectiveDeckStyle } from "./deck-style.js";
-import { buildArticleDeck, deckStyleFor, reviewDeck } from "@boardlessai/carousel-studio";
+import { effectiveRecipe } from "./deck-style.js";
+import { buildArticleDeck, reviewDeck } from "@boardlessai/carousel-studio";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";
@@ -60,7 +60,13 @@ function boundedCopy(body: string, suffix: string, maximum: number): string {
 }
 
 function queueAltText(pack: SocialPack, locale: SocialLocale, channel: "instagram" | "threads"): string {
-  return pack.byLocale[locale]![channel].frames
+  const frames = pack.byLocale[locale]![channel].frames;
+  // A Threads item carries no frames at all, so it has nothing to describe. The schema still
+  // wants a sentence; the honest one says the post is words.
+  if (frames.length === 0) {
+    return locale === "cs" ? "Textový příspěvek bez obrázku." : "A text post with no image.";
+  }
+  return frames
     .map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`)
     .join(" ")
     .slice(0, 1_000);
@@ -172,12 +178,15 @@ export async function composeEditionSocialPack(input: {
    * Never the body. An eleven-hundred-word edition would be thirty-seven slides, and the
    * frontmatter arrays are already the editor's own summary of the same text.
    */
-  // Fixed by the edition date, so a replay renders identical bytes.
-  const deckStyle = await effectiveDeckStyle({
+  // The recorded recipe: family, variant, treatment, type scale and rhythm rotation, derived from
+  // the edition's own identity and the venture's recent receipts, so a replay renders the bytes it
+  // rendered the first time.
+  const recipe = await effectiveRecipe({
     root: input.stateRoot,
     venture: "caught-up",
     slug: (editionPackage.article?.cs ?? editionPackage.article?.en)?.frontmatter.slug ?? editionPackage.date,
-    seed: editionPackage.date
+    date: editionPackage.date,
+    hasHero: Boolean(editionPackage.image?.hero_bytes_base64)
   });
   const visualReference = (locale: SocialLocale): TemplateReference | null => {
     const article = editionPackage.article?.[locale]?.frontmatter;
@@ -195,10 +204,13 @@ export async function composeEditionSocialPack(input: {
     });
     if (!reviewDeck(slides).publishable) return null;
     return {
-      template_id: `deck-${deckStyle}-${slides.length}`,
+      template_id: recipeTemplateId(recipe, slides.length),
       version: "1.0.0",
       content: {
         locale,
+        // The recipe's own rendering, so the queued frames are the design that was recorded
+        // rather than whichever one the renderer defaults to.
+        ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {}),
         strings: Object.fromEntries(slides.map((slide, index) => [articleSlideSlot(index), slide.text]))
       }
     };
@@ -250,8 +262,18 @@ export async function composeEditionSocialPack(input: {
     if (!reference) continue;
     framePaths[locale] = { instagram: [], threads: [] };
     const template = resolveLiveCarouselTemplate(reference.template_id, reference.version);
-    for (const channel of ["instagram", "threads"] as const) {
-      const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
+    /*
+     * Instagram only.
+     *
+     * The Threads frames were rendered, hashed, written into `site/public/social` and then
+     * discarded: the queue item forces `assetPaths: []` because the guarded connector is
+     * text-only and `assertQueueItemPublishable` throws the whole publisher run out over a
+     * Threads item carrying an asset. So every edition rasterised a second full deck nothing
+     * could ever send, and committed it. Not rendering it is both cheaper and more honest about
+     * what the channel is; the Lab still renders a Threads cover on request for manual use.
+     */
+    for (const channel of ["instagram"] as const) {
+      const format = "instagram-portrait" as const;
       const rendered = await renderCarouselPng({
         template,
         payload: reference.content,
@@ -405,7 +427,8 @@ export async function composeEditionSocialPack(input: {
     date: input.editionPackage.date,
     slug: (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter.slug,
     templateId: csVisual.template_id,
-    style: deckStyle,
+    style: recipe.family,
+    recipe,
     slideCount: Object.keys(csVisual.content.strings).length,
     hashes: Object.values(frameHashes)
   });

@@ -10,6 +10,7 @@ import {
   type CarouselTemplate
 } from "./schema.js";
 import { fitText } from "./text.js";
+import { fontFiles, measureEm, resolveFace } from "./fonts.js";
 import { validateTemplateForBrand } from "./validation.js";
 
 function escapeXml(value: string): string {
@@ -24,6 +25,15 @@ function escapeXml(value: string): string {
 function px(value: number, total: number): number {
   return Math.round(value * total * 1_000) / 1_000;
 }
+
+/** Three decimal places, so the same arithmetic writes the same string on every machine. */
+function round(value: number): number {
+  return Math.round(value * 1_000) / 1_000;
+}
+
+/** The wordmark's weight and letter-spacing. Fixed, because a wordmark is not a design axis. */
+const LOGO_WEIGHT = 800;
+const LOGO_TRACKING = 0.03;
 
 function token(brand: BrandTokens, name: string): string {
   const value = brand.colors[name];
@@ -42,6 +52,8 @@ function layerSvg(input: {
   truncatedSlots?: string[];
   /** Decoded PNG bytes per image slot. Absent means the slide draws without a photograph. */
   images?: Readonly<Record<string, Buffer>>;
+  /** Drawn text height per slot on this slide, so a `padText` panel can hug it. */
+  hugged?: Readonly<Record<string, number>>;
   /** Unique per layer, so two gradients on one slide cannot share an SVG id. */
   uid: string;
 }): string {
@@ -54,15 +66,54 @@ function layerSvg(input: {
   if (layer.type === "shape") {
     const fill = layer.fillToken === "accent" && input.accentToken ? input.accentToken : layer.fillToken;
     const stroke = layer.strokeToken ? ` stroke="${token(brand, layer.strokeToken)}" stroke-width="${layer.strokeWidth}"` : "";
-    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${px(layer.radius, Math.min(w, h))}" fill="${token(brand, fill)}"${stroke}/>`;
+    // A panel that hugs its text is the declared frame trimmed to what the text actually needs.
+    // The frame stays the maximum — it is what the contrast check measured — and the drawn
+    // rectangle is never larger than it.
+    const hug = layer.padText === undefined ? null : input.hugged?.[layer.padText];
+    const padding = px(layer.padding, Math.min(width, height));
+    const panelHeight = hug === undefined || hug === null ? h : Math.min(h, hug + padding * 2);
+    return `<rect x="${x}" y="${y}" width="${w}" height="${panelHeight}" rx="${px(layer.radius, Math.min(w, panelHeight))}" fill="${token(brand, fill)}"${stroke}/>`;
   }
   if (layer.type === "rule") {
-    return `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(layer.thickness, h)}" fill="${color(layer.colorToken)}"/>`;
+    const thickness = Math.max(layer.thickness, h);
+    if (!layer.dash) {
+      return `<rect x="${x}" y="${y}" width="${w}" height="${thickness}" fill="${color(layer.colorToken)}"/>`;
+    }
+    // Derived from the thickness so the dash scales with the rule rather than with the canvas.
+    const on = Math.round(thickness * 3);
+    const off = Math.round(thickness * 2);
+    const centre = y + thickness / 2;
+    return `<line x1="${x}" y1="${centre}" x2="${x + w}" y2="${centre}" stroke="${color(layer.colorToken)}"`
+      + ` stroke-width="${thickness}" stroke-dasharray="${on} ${off}" stroke-linecap="butt"/>`;
+  }
+  if (layer.type === "linear-gradient") {
+    const id = `grad-${input.uid}`;
+    // The angle is clockwise from the top of the canvas, which is how a designer reads it; SVG
+    // wants two points, so it becomes a unit vector across the layer's own box.
+    const radians = (layer.angle - 90) * (Math.PI / 180);
+    const dx = Math.cos(radians) / 2;
+    const dy = Math.sin(radians) / 2;
+    const round = (value: number) => Math.round(value * 10_000) / 10_000;
+    const stops = layer.stops.map((stop) =>
+      `<stop offset="${round(stop.offset)}" stop-color="${color(stop.colorToken)}"/>`
+    ).join("");
+    return `<defs><linearGradient id="${id}" x1="${round(0.5 - dx)}" y1="${round(0.5 - dy)}" x2="${round(0.5 + dx)}" y2="${round(0.5 + dy)}">${stops}</linearGradient></defs>`
+      + `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>`;
   }
   if (layer.type === "logo") {
-    const font = brand.fonts[layer.fontToken];
-    const size = Math.max(18, Math.min(h * 0.72, w / Math.max(4, brand.logoText.length) * 1.45));
-    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(font)}" font-size="${size}" font-weight="800" letter-spacing="1.5">${escapeXml(brand.logoText)}</text>`;
+    /*
+     * Sized to the frame and to the mark, and now to the face as well.
+     *
+     * The old arithmetic guessed a wordmark's width from its character count, which is what a
+     * renderer does when it has no metrics: `MMA FILES` and `TITTY TUESDAYS` were charged the
+     * same per character in a condensed face and in a black one. The measured width is the
+     * honest constraint, so the mark fills its frame in every family instead of in one.
+     */
+    const face = resolveFace(brand.fonts[layer.fontToken], LOGO_WEIGHT);
+    const tracked = (size: number) => (measureEm(face, brand.logoText) + LOGO_TRACKING * [...brand.logoText].length) * size;
+    const byHeight = h * 0.72;
+    const size = Math.max(18, Math.min(byHeight, tracked(byHeight) > w ? (w / tracked(1)) : byHeight));
+    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${round(size)}" font-weight="${LOGO_WEIGHT}" letter-spacing="${round(LOGO_TRACKING * size)}">${escapeXml(brand.logoText)}</text>`;
   }
   if (layer.type === "mesh") {
     // Several wide, blurred colour fields that overlap into a mesh. Built from radial gradients
@@ -90,25 +141,21 @@ function layerSvg(input: {
     // librsvg does not decode WebP inside a data URI — it silently draws nothing — so callers
     // hand over PNG. Verified by rendering all three: only PNG and JPEG appear.
     const href = `data:image/png;base64,${bytes.toString("base64")}`;
+    // The window the photograph is seen through. A circle takes the frame's inscribed disc; a
+    // polygon's points are fractions of the frame, so the same shape holds at every canvas.
+    const window = layer.clip === undefined
+      ? `<rect x="${x}" y="${y}" width="${w}" height="${h}"/>`
+      : layer.clip === "circle"
+        ? `<circle cx="${x + w / 2}" cy="${y + h / 2}" r="${Math.min(w, h) / 2}"/>`
+        : `<polygon points="${layer.clip.map(([px_, py]) => `${x + px_ * w},${y + py * h}`).join(" ")}"/>`;
     const scrim = layer.scrim === "none" ? "" : layer.scrim === "full"
       ? `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${token(brand, "background")}" opacity="0.55"/>`
       : `<defs><linearGradient id="${id}-scrim" x1="0" y1="0" x2="0" y2="1"><stop offset="55%" stop-color="${token(brand, "background")}" stop-opacity="0"/><stop offset="100%" stop-color="${token(brand, "background")}" stop-opacity="0.96"/></linearGradient></defs><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id}-scrim)"/>`;
-    return `<defs><clipPath id="${id}-clip"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath></defs>`
+    return `<defs><clipPath id="${id}-clip">${window}</clipPath></defs>`
       + `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="${layer.fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"}" clip-path="url(#${id}-clip)"/>`
       + scrim;
   }
-  const raw = payload.strings[layer.slot] ?? "";
-  const value = layer.uppercase ? raw.toLocaleUpperCase(payload.locale) : raw;
-  const fitted = fitText({
-    value,
-    locale: payload.locale,
-    widthPx: w,
-    heightPx: h,
-    minFontSize: layer.minFontSize * (width / 1_080),
-    maxFontSize: layer.maxFontSize * (width / 1_080),
-    maxLines: layer.maxLines,
-    maxChars: layer.maxChars
-  });
+  const fitted = fitTextLayer(layer, payload, brand, width, height);
   if (fitted.truncated) input.truncatedSlots?.push(layer.slot);
   const anchor = layer.align === "start" ? "start" : layer.align;
   const textX = layer.align === "start" ? x : layer.align === "middle" ? x + w / 2 : x + w;
@@ -116,7 +163,42 @@ function layerSvg(input: {
   const tspans = fitted.lines.map((line, index) =>
     `<tspan x="${textX}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
   ).join("");
-  return `<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(brand.fonts[layer.fontToken])}" font-size="${fitted.fontSize}" font-weight="${layer.fontWeight}">${tspans}</text>`;
+  // Both optional and both default to off, so a v1 layer renders the string it always did.
+  const tracking = layer.tracking === 0 ? "" : ` letter-spacing="${Math.round(layer.tracking * fitted.fontSize * 1_000) / 1_000}"`;
+  const glowId = `glow-${input.uid}`;
+  const glow = layer.glow
+    ? `<defs><filter id="${glowId}" x="-25%" y="-25%" width="150%" height="150%">`
+      + `<feDropShadow dx="0" dy="0" stdDeviation="${Math.round(fitted.fontSize * 0.18 * 100) / 100}"`
+      + ` flood-color="${color("accent")}" flood-opacity="0.55"/></filter></defs>`
+    : "";
+  const filter = layer.glow ? ` filter="url(#${glowId})"` : "";
+  const face = resolveFace(brand.fonts[layer.fontToken], layer.fontWeight);
+  return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
+}
+
+/** One text layer, fitted for one canvas. Shared so a hugging panel measures what the text does. */
+function fitTextLayer(
+  layer: Extract<CarouselLayer, { type: "text" }>,
+  payload: CarouselPayload,
+  brand: BrandTokens,
+  width: number,
+  height: number
+) {
+  const raw = payload.strings[layer.slot] ?? "";
+  const value = layer.uppercase ? raw.toLocaleUpperCase(payload.locale) : raw;
+  return fitText({
+    value,
+    locale: payload.locale,
+    widthPx: px(layer.width, width),
+    heightPx: px(layer.height, height),
+    minFontSize: layer.minFontSize * (width / 1_080),
+    maxFontSize: layer.maxFontSize * (width / 1_080),
+    maxLines: layer.maxLines,
+    maxChars: layer.maxChars,
+    tracking: layer.tracking,
+    fontFamily: brand.fonts[layer.fontToken],
+    fontWeight: layer.fontWeight
+  });
 }
 
 export interface RenderedSlide {
@@ -168,6 +250,13 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
     // answer, so an over-long slide clipped to an ellipsis and nothing said so. A word limit
     // that the renderer silently enforces by cutting is not a limit, it is a surprise.
     const truncatedSlots: string[] = [];
+    // Measured before anything is drawn, because a panel is drawn under the text it hugs and so
+    // has to know the text's height before the text exists in the output.
+    const hugged = Object.fromEntries(slide.layers.flatMap((layer) => {
+      if (layer.type !== "text") return [];
+      const fitted = fitTextLayer(layer, payload, brand, canvas.width, canvas.height);
+      return [[layer.slot, fitted.lines.length * fitted.fontSize * 1.12] as const];
+    }));
     const content = slide.layers.map((layer, layerIndex) => layerSvg({
       layer,
       payload,
@@ -177,6 +266,7 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
       accentToken: variant?.accentToken,
       truncatedSlots,
       images: input.images,
+      hugged,
       // Slide and layer, so two gradients on one deck cannot collide on an SVG id.
       uid: `${index}-${layerIndex}`
     })).join("");
@@ -208,22 +298,89 @@ export function renderCarouselSlideSvg(input: CarouselRenderInput & { index: num
   return renderSlides(input, input.index)[0] ?? null;
 }
 
+/**
+ * The photograph, as the template asked for it.
+ *
+ * Done with sharp before the bytes reach the SVG, never as an SVG filter: librsvg's filter
+ * support is the same quiet-failure surface as its WebP handling, and a treatment that silently
+ * does nothing is worse than one that is not offered. `duotone` multiplies the greyscale by the
+ * slide's accent, which is what makes it read as the venture's own colour rather than as a filter.
+ *
+ * Returns the input untouched when nothing asks for a treatment, so a v1 template's bytes — and
+ * therefore its hashes — are exactly what they were.
+ */
+export async function treatImage(
+  bytes: Buffer,
+  treatment: "none" | "mono" | "duotone",
+  accentHex: string
+): Promise<Buffer> {
+  if (treatment === "none") return bytes;
+  const { default: sharp } = await import("sharp");
+  const grey = sharp(bytes).greyscale();
+  if (treatment === "mono") return grey.png().toBuffer();
+  const [red, green, blue] = [1, 3, 5].map((offset) => Number.parseInt(accentHex.slice(offset, offset + 2), 16));
+  return grey
+    .toColourspace("srgb")
+    .linear([red! / 255, green! / 255, blue! / 255], [0, 0, 0])
+    .png()
+    .toBuffer();
+}
+
+async function treatedImages(input: CarouselRenderInput): Promise<CarouselRenderInput["images"]> {
+  const images = input.images;
+  if (!images) return images;
+  const wanted = new Map<string, "mono" | "duotone">();
+  for (const slide of input.template.slides) {
+    const variant = input.payload.variant
+      ? slide.variants.find((candidate) => candidate.id === input.payload.variant)
+      : undefined;
+    for (const layer of slide.layers) {
+      if (layer.type !== "image" || layer.treatment === "none") continue;
+      // One slot may appear twice — a reprise — and both appearances share the treated bytes.
+      wanted.set(`${layer.slot}\0${variant?.accentToken ?? "accent"}`, layer.treatment);
+    }
+  }
+  if (wanted.size === 0) return images;
+  const treated: Record<string, Buffer> = { ...images };
+  for (const [key, treatment] of wanted) {
+    const [slot, accentToken] = key.split("\0") as [string, string];
+    const source = images[slot];
+    if (!source) continue;
+    treated[slot] = await treatImage(source, treatment, token(input.brand, accentToken));
+  }
+  return treated;
+}
+
+/*
+ * Rasterised by resvg with the repository's own fonts, and with the operating system's shut out.
+ *
+ * The alternative was to keep sharp's librsvg and bundle a fontconfig file for it. Both were
+ * evaluated in place. librsvg resolves faces through fontconfig, which means the answer depends
+ * on an environment variable, on the fontconfig build inside a prebuilt sharp binary, and on
+ * whichever system fonts happen to sit alongside ours — and when it cannot find a face it
+ * substitutes one without saying so, which is the exact failure this task exists to end. resvg
+ * takes the font files as an explicit list and `loadSystemFonts: false` removes the machine from
+ * the question entirely: the only faces in the database are the thirty committed here. That is
+ * what makes the CI run a real second machine rather than a second guess.
+ *
+ * sharp stays for what it is good at — decoding a WebP hero and applying a photo treatment before
+ * the bytes reach the SVG.
+ */
 async function rasterise(
   slides: readonly RenderedSlide[]
 ): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
-  const { default: sharp } = await import("sharp");
-  return Promise.all(slides.map(async (slide) => {
-    const png = await sharp(Buffer.from(slide.svg))
-      .png({ compressionLevel: 9, effort: 10, palette: true })
-      .toBuffer();
+  const { Resvg } = await import("@resvg/resvg-js");
+  const font = { loadSystemFonts: false, fontFiles: fontFiles(), defaultFontFamily: "IBM Plex Sans" };
+  return slides.map((slide) => {
+    const png = Buffer.from(new Resvg(slide.svg, { font }).render().asPng());
     return { ...slide, png, pngHash: createHash("sha256").update(png).digest("hex") };
-  }));
+  });
 }
 
 export async function renderCarouselPng(
   input: CarouselRenderInput
 ): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
-  return rasterise(renderSlides(input));
+  return rasterise(renderSlides({ ...input, images: await treatedImages(input) }));
 }
 
 /**
@@ -236,7 +393,7 @@ export async function renderCarouselPng(
 export async function renderCarouselSlidePng(
   input: CarouselRenderInput & { index: number }
 ): Promise<(RenderedSlide & { png: Buffer; pngHash: string }) | null> {
-  const [rendered] = await rasterise(renderSlides(input, input.index));
+  const [rendered] = await rasterise(renderSlides({ ...input, images: await treatedImages(input) }, input.index));
   return rendered ?? null;
 }
 

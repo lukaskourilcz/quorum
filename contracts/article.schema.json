@@ -61,6 +61,30 @@
               "minLength": 1,
               "maxLength": 90
             },
+            "igCaption": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "hashtags": {
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 30
+              }
+            },
+            "threadsText": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 480
+            },
+            "storyLine": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 66
+            },
             "bodyMDX": {
               "type": "string",
               "minLength": 1,
@@ -96,6 +120,30 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 90
+            },
+            "igCaption": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "hashtags": {
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 30
+              }
+            },
+            "threadsText": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 480
+            },
+            "storyLine": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 66
             },
             "bodyMDX": {
               "type": "string",

@@ -3,9 +3,8 @@ import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AgentSwitches } from "@/components/admin/agent-switches";
-import { ArticleDecksPanel } from "@/components/admin/article-decks-panel";
+import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
-import { CarouselArticleStudio } from "@/components/admin/carousel-article-studio";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
@@ -18,7 +17,7 @@ import { Callout } from "@/components/ui/callout";
 import { CURRENT_MONTHLY_API_LIMIT_USD, CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
-import { readAdminDecks } from "@/lib/admin-decks";
+import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
@@ -52,8 +51,15 @@ export const metadata: Metadata = {
 const UNWRAP =
   "[&>section]:mx-0 [&>section]:mt-0 [&>section]:max-w-none [&>section]:px-0 [&>section]:pb-0";
 
+/** URLs an owner would guess from a display name, pointed at the id that name belongs to. */
+const VENTURE_ALIASES: Readonly<Record<string, string>> = {
+  "design-lab": "carousel-studio",
+  dneskai: "caught-up"
+};
+
 function tabLabel(tab: AdminVentureTab): string {
   if (tab === "visuals") return "images";
+  if (tab === "studio") return "studio";
   if (tab === "social-lab") return "social drafts";
   if (tab === "slates") return "fight reports";
   return tab;
@@ -145,7 +151,8 @@ export default async function AdminPage({
     carouselStudio,
     hookBrain,
     studioArticles,
-    decks,
+    labArticles,
+    labPresets,
     agentControls,
     autonomy,
     fixedCosts,
@@ -161,7 +168,8 @@ export default async function AdminPage({
     readCarouselStudio(),
     readHookBrain(),
     readStudioArticles(),
-    readAdminDecks(),
+    readDesignLab(),
+    readDesignLabPresets(),
     readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
@@ -169,7 +177,16 @@ export default async function AdminPage({
     getDailyResults()
   ]);
 
-  const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
+  /*
+   * `design-lab` is the name; `carousel-studio` is the id.
+   *
+   * The id is load-bearing — it addresses state directories, config entries, API paths and a room
+   * on the floorplan — so it does not change (decision D13: identifiers stay, surfaces speak). The
+   * display name already reads Design Lab everywhere a human looks, and the URL an owner would
+   * guess from that name now resolves to the same record instead of to an empty page.
+   */
+  const requestedVentureId = (requestedVenture ? VENTURE_ALIASES[requestedVenture] : undefined) ?? requestedVenture;
+  const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVentureId) ?? null;
   const selectedTab = selectedVenture
     ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
       ? (requestedTab as AdminVentureTab)
@@ -390,10 +407,8 @@ export default async function AdminPage({
           <div className={`min-w-0 ${UNWRAP}`}>
             {selectedVenture.id === "carousel-studio" && selectedTab === "hooks" ? (
               <HookBrainAdminPanel snapshot={hookBrain} />
-            ) : selectedVenture.id === "carousel-studio" && selectedTab === "templates" ? (
-              <CarouselArticleStudio articles={studioArticles} brand={brand} />
-            ) : selectedVenture.id === "carousel-studio" && selectedTab === "decks" ? (
-              <ArticleDecksPanel decks={decks} />
+            ) : selectedVenture.id === "carousel-studio" && selectedTab === "studio" ? (
+              <DesignLabWorkspace articles={labArticles} presets={labPresets} />
             ) : selectedVenture.id === "carousel-studio" && selectedTab ? (
               <CarouselStudioAdminPanel
                 snapshot={carouselStudio}

@@ -29,7 +29,17 @@ const ThreadsSchema = openObject({
     B: z.string().trim().min(1).max(500)
   }),
   hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).max(2),
-  frames: z.array(FramePathSchema).min(1).max(10),
+  /*
+   * None, and that is the point.
+   *
+   * The guarded Threads connector is text-only and `assertQueueItemPublishable` throws the whole
+   * publisher run out over a Threads item carrying an asset, so the composer forced
+   * `assetPaths: []` while still rendering, hashing, writing and committing a second full deck
+   * for the channel. A minimum of one frame here was the contract insisting on an artifact
+   * nothing could ever send. The Lab still renders a Threads cover on request for manual use;
+   * the pack no longer pretends the channel takes one.
+   */
+  frames: z.array(FramePathSchema).max(10),
   visual: LiveTemplateReferenceSchema
 });
 
@@ -56,7 +66,7 @@ export const SocialPackSchema = openObject({
   threads: openObject({
     text: z.string().trim().min(1).max(500),
     hashtags: z.array(z.string().regex(/^[a-z0-9_]+$/)).max(2),
-    frames: z.array(FramePathSchema).min(1).max(10),
+    frames: z.array(FramePathSchema).max(10),
     visual: LiveTemplateReferenceSchema
   }),
   quoteCard: openObject({

@@ -1,12 +1,16 @@
 import {
+  CarouselRecipeSchema,
   buildCarouselSummary,
   reviewCarouselSummary,
+  type CarouselRecipe,
   type CarouselSummary,
   type CarouselSummarySource,
   type CarouselSummaryVenture
 } from "@boardlessai/carousel-studio";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { ArticlePackage } from "../contracts/mma-files.js";
+import { effectiveRecipe } from "../social/deck-style.js";
+import { articleCopyPack, editionCopyPack, socialCopyPath, storeSocialCopyPack } from "./social-copy-store.js";
 import { atomicWriteJson } from "../state.js";
 
 /**
@@ -29,6 +33,44 @@ import { atomicWriteJson } from "../state.js";
 
 function summaryPath(summary: CarouselSummary): string {
   return `ventures/carousel-studio/summaries/${summary.venture}/${summary.date}-${summary.slug}.json`;
+}
+
+export function recipePath(recipe: Pick<CarouselRecipe, "venture" | "slug" | "date">): string {
+  return `ventures/carousel-studio/recipes/${recipe.venture}/${recipe.date}-${recipe.slug}.json`;
+}
+
+/**
+ * The design and the words, recorded beside the summary at delivery.
+ *
+ * Inventory, not composition. It needs no channel to be enabled, it posts nothing, it costs
+ * nothing, and it leaves the triple-lock, the kill switch and `social-2026-08a`'s ten-article
+ * threshold exactly where they are. What it buys is that "what does this article's social set
+ * look like" has one recorded answer — for the Lab now, and for the composer when channels open,
+ * which then consumes the recipe instead of deriving a style of its own at the last moment.
+ */
+async function storeRecipeAndCopy(
+  root: string,
+  summary: CarouselSummary,
+  copyPack: ReturnType<typeof articleCopyPack>
+): Promise<{ recipe: CarouselRecipe; recipePath: string; copyPath: string | null }> {
+  const recipe = await effectiveRecipe({
+    root,
+    venture: summary.venture,
+    slug: summary.slug,
+    date: summary.date,
+    hasHero: summary.hasHero
+  });
+  const relative = recipePath(recipe);
+  const copyPath = copyPack ? socialCopyPath(copyPack) : null;
+  await atomicWriteJson(root, relative, {
+    ...CarouselRecipeSchema.parse(recipe),
+    // A reference rather than a copy: the words live in one file, and two copies of a caption is
+    // two captions the moment one of them is corrected.
+    summaryRef: summaryPath(summary),
+    copyRef: copyPath
+  });
+  if (copyPack) await storeSocialCopyPack(root, copyPack);
+  return { recipe, recipePath: relative, copyPath };
 }
 
 /**
@@ -67,6 +109,10 @@ export interface StoredCarouselSummary {
   summary: CarouselSummary;
   /** Why this summary cannot be rendered as it stands, from `reviewCarouselSummary`. */
   problems: string[];
+  /** The design recorded beside it, and where the two other files went. */
+  recipe: CarouselRecipe;
+  recipePath: string;
+  copyPath: string | null;
 }
 
 /**
@@ -87,6 +133,7 @@ export async function storeArticleCarouselSummary(
     slug: article.slug,
     date: article.publishAt.slice(0, 10),
     title: cs.title,
+    coverLine: cs.altHeadline,
     dek: cs.dek,
     bodyMdx: cs.bodyMDX,
     sources: publicSources(article.sources),
@@ -95,7 +142,8 @@ export async function storeArticleCarouselSummary(
   });
   const path = summaryPath(summary);
   await atomicWriteJson(root, path, summary);
-  return { path, summary, problems: reviewCarouselSummary(summary).problems };
+  const recorded = await storeRecipeAndCopy(root, summary, articleCopyPack(article));
+  return { path, summary, problems: reviewCarouselSummary(summary).problems, ...recorded };
 }
 
 /**
@@ -113,6 +161,7 @@ export async function storeEditionCarouselSummary(
   const frontmatter = editionPackage.article.cs.frontmatter as {
     slug?: string;
     title?: string;
+    alternative_headlines?: string[];
     dek?: string;
     what_changed?: string[];
     why_it_matters?: string[];
@@ -124,6 +173,7 @@ export async function storeEditionCarouselSummary(
     slug: frontmatter.slug,
     date: editionPackage.date,
     title: frontmatter.title,
+    coverLine: frontmatter.alternative_headlines?.[0],
     dek: frontmatter.dek,
     // The editor's own structure is the argument, in the order they made it.
     points: [
@@ -136,5 +186,6 @@ export async function storeEditionCarouselSummary(
   });
   const path = summaryPath(summary);
   await atomicWriteJson(root, path, summary);
-  return { path, summary, problems: reviewCarouselSummary(summary).problems };
+  const recorded = await storeRecipeAndCopy(root, summary, editionCopyPack(editionPackage));
+  return { path, summary, problems: reviewCarouselSummary(summary).problems, ...recorded };
 }

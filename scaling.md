@@ -36,6 +36,13 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 - Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
 - Sociální obrázky vykresluje jediný engine Design Labu z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
+  Celá cesta Design Labu stojí $0: rodiny šablon, deset rodin místo pěti tapet, se
+  vykreslují v kódu, písma leží v repozitáři a rasterizér nechodí na síť. Popisky,
+  hashtagy, text pro Threads a řádek do story píše stejné volání, které píše článek —
+  žádné nové placené volání nevzniklo, jen se dvěma stávajícím zvedl strop výstupu
+  (článek MMA Files 1 700 → 2 100, vydání DNESKAi 6 500 → 7 100 tokenů). Recept a
+  balíček textů se zapisují při doručení; zápis do repozitáře nestojí nic a
+  nepotřebuje zapnutý kanál.
   Náhradní hero obrázky také vznikají v kódu. Licencované fotografie se pouze stáhnou,
   zkontrolují, zmenší a uloží; chybějící Pexels/Pixabay klíč neblokuje náhradní grafiku.
 - Každý hero obrázek prochází od 9. srpna 2026 obrazovou kontrolou (rozhodnutí

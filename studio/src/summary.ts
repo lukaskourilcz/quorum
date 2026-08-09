@@ -49,6 +49,15 @@ export interface CarouselSummary {
   /** The small mono line every template prints above the headline. */
   kicker: string;
   headline: string;
+  /**
+   * The line the desk wrote for the carousel cover.
+   *
+   * The summary path dropped `altHeadline`, so the templates tab showed a slide 1 built from the
+   * article title while the ship path used the desk's cover line — two different first slides for
+   * one article, from one engine. Optional, because every summary recorded before this field
+   * existed still has to parse.
+   */
+  coverLine?: string;
   standfirst: string;
   /** The body of the carousel, in the order the article makes its argument. */
   passages: string[];
@@ -64,6 +73,8 @@ export interface CarouselSummaryInput {
   slug: string;
   date: string;
   title: string;
+  /** The desk's line for the carousel cover, when it wrote one. */
+  coverLine?: string | undefined;
   dek: string;
   /** A Caught Up edition arrives already structured; those points are the passages. */
   points?: readonly string[];
@@ -138,6 +149,7 @@ export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSumma
     locale: "cs",
     kicker: summaryKicker(input.venture, input.date),
     headline: oneLine(input.title),
+    ...(input.coverLine ? { coverLine: oneLine(input.coverLine) } : {}),
     standfirst: oneLine(input.dek),
     passages: choosePassages(input),
     closing: CLOSING[input.venture],

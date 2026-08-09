@@ -45,6 +45,10 @@ describe("Caught Up social pack composer", () => {
     });
     expect(result).not.toBeNull();
     const pack = SocialPackSchema.parse(result!.pack);
+    // Threads carries none. The composer used to render, hash, write and commit a full second
+    // deck for a channel whose queue item forces `assetPaths: []`, then throw it away.
+    expect(pack.threads.frames).toEqual([]);
+    expect(pack.byLocale.cs.threads.frames).toEqual([]);
     expect(pack.instagram.frames).not.toEqual(pack.threads.frames);
     expect(pack.instagram).toEqual(pack.byLocale.en!.instagram);
     expect(pack.threads).toEqual(pack.byLocale.en!.threads);
@@ -52,9 +56,7 @@ describe("Caught Up social pack composer", () => {
     // so it is bounded rather than restated.
     for (const frames of [
       pack.byLocale.en!.instagram.frames,
-      pack.byLocale.cs.instagram.frames,
-      pack.byLocale.en!.threads.frames,
-      pack.byLocale.cs.threads.frames
+      pack.byLocale.cs.instagram.frames
     ]) {
       expect(frames.length).toBeGreaterThanOrEqual(5);
       expect(frames.length).toBeLessThanOrEqual(10);
@@ -69,8 +71,6 @@ describe("Caught Up social pack composer", () => {
     const frameTotal = new Set([
       ...pack.byLocale.en!.instagram.frames,
       ...pack.byLocale.cs.instagram.frames,
-      ...pack.byLocale.en!.threads.frames,
-      ...pack.byLocale.cs.threads.frames,
       pack.quoteCard.frame
     ]).size;
     expect(Object.keys(pack.altTexts)).toHaveLength(frameTotal);
@@ -79,16 +79,15 @@ describe("Caught Up social pack composer", () => {
     for (const frame of [
       ...pack.byLocale.en!.instagram.frames,
       ...pack.byLocale.cs.instagram.frames,
-      ...pack.byLocale.en!.threads.frames,
-      ...pack.byLocale.cs.threads.frames,
       pack.quoteCard.frame
     ]) {
       const metadata = await sharp(await readFile(path.join(root, "site", "public", frame.slice(1)))).metadata();
       expect(metadata.format).toBe("png");
-      if (frame.includes("/threads/")) expect(metadata).toMatchObject({ width: 1200, height: 1200 });
-      else expect(metadata).toMatchObject({ width: 1080, height: 1350 });
+      expect(metadata).toMatchObject({ width: 1080, height: 1350 });
       expect(pack.altTexts[frame]).toBeTruthy();
     }
+    // Nothing was written for a channel that takes nothing.
+    expect(Object.keys(pack.altTexts).some((frame) => frame.includes("/threads/"))).toBe(false);
     expect(result!.queueItems).toHaveLength(4);
     expect(new Set(result!.queueItems.map((item) => item.id)).size).toBe(4);
     expect(new Set(result!.queueItems.map((item) => item.destination))).toEqual(new Set([

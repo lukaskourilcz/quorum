@@ -226,8 +226,7 @@
         ]
       },
       "adminTabs": [
-        "templates",
-        "decks",
+        "studio",
         "inspiration",
         "hooks"
       ],

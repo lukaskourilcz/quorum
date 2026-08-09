@@ -3,14 +3,18 @@ import {
   CarouselTemplateSchema,
   type BrandTokens,
   type CarouselFormat,
-  type CarouselLayer,
+  type CarouselLayerInput,
   type CarouselPayload,
-  type CarouselTemplate
+  type CarouselTemplate,
+  type CarouselTemplateInput
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 import { fitsSafeArea } from "./validation.js";
+import { familyDeckTemplate, familyDeckTemplates } from "./families.js";
+import { DECK_STYLES, isDeckStyle, type DeckStyle } from "./designs.js";
+import { parseRecipeTemplateId } from "./recipe.js";
 
-const formats = {
+export const deckFormats = {
   "instagram-square": { width: 1_080, height: 1_080, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
   "instagram-portrait": { width: 1_080, height: 1_350, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
   /*
@@ -29,8 +33,8 @@ const text = (
   y: number,
   width: number,
   height: number,
-  options: Partial<Extract<CarouselLayer, { type: "text" }>> = {}
-): CarouselLayer => ({
+  options: Partial<Extract<CarouselLayerInput, { type: "text" }>> = {}
+): CarouselLayerInput => ({
   type: "text",
   slot,
   x,
@@ -49,7 +53,28 @@ const text = (
   ...options
 });
 
-const logo = (y = 0.07, colorToken = "accent"): CarouselLayer => ({
+/*
+ * The safe band every canvas shares.
+ *
+ * A story is overlaid by the platform's own chrome — the profile row along the top and the reply
+ * bar along the bottom — which is about a seventh of the canvas at each end and the widest safe
+ * area of the four. Chrome placed inside it is not merely tight, it is covered up. These are the
+ * bounds that make one composition honest at 1:1, 4:5, 9:16 and Threads at once, rather than
+ * honest at 4:5 and quietly wrong at 9:16.
+ */
+export const SAFE_TOP = 0.145;
+export const SAFE_BOTTOM = 0.835;
+
+/**
+ * The wordmark.
+ *
+ * Its default `y` of 0.07 was the single line that failed every deck template for the story
+ * canvas: comfortably inside a 4:5 margin, squarely under a story's profile row. The default is
+ * now the shared safe top, so a caller that does not care about placement gets a placement that
+ * works everywhere; a caller that does — a cover dropping the mark below its photograph — still
+ * passes its own.
+ */
+const logo = (y = SAFE_TOP, colorToken = "accent"): CarouselLayerInput => ({
   type: "logo",
   x: 0.08,
   y,
@@ -59,7 +84,7 @@ const logo = (y = 0.07, colorToken = "accent"): CarouselLayer => ({
   fontToken: "headline"
 });
 
-const rule = (x: number, y: number, width: number, colorToken = "accent"): CarouselLayer => ({
+const rule = (x: number, y: number, width: number, colorToken = "accent"): CarouselLayerInput => ({
   type: "rule",
   x,
   y,
@@ -76,7 +101,7 @@ const shape = (
   height: number,
   fillToken = "surface",
   radius = 0.08
-): CarouselLayer => ({
+): CarouselLayerInput => ({
   type: "shape",
   x,
   y,
@@ -87,13 +112,13 @@ const shape = (
   radius
 });
 
-const template = (input: Omit<CarouselTemplate, "schemaVersion" | "version" | "status" | "formats" | "citedObservationRefs"> & {
+const template = (input: Omit<CarouselTemplateInput, "schemaVersion" | "version" | "status" | "formats" | "citedObservationRefs"> & {
   citedObservationRefs?: string[];
 }): CarouselTemplate => CarouselTemplateSchema.parse({
   schemaVersion: "carousel-template/1",
   version: "1.0.0",
   status: "live",
-  formats,
+  formats: deckFormats,
   citedObservationRefs: input.citedObservationRefs ?? [],
   ...input
 });
@@ -108,20 +133,11 @@ export function articleSlideSlot(index: number): string {
 /** The slot the article's own hero occupies on the opening slide. */
 export const ARTICLE_HERO_SLOT = "image";
 
-/**
- * The five deck designs.
- *
- * They differ in composition and in how the gradient behaves, not in palette. Every colour is a
- * brand token, so the same design reads as Caught Up's magenta or MMA Files' orange without a
- * template inventing anything — which is what BRAND.md locks and what brandTokenCheck enforces.
- */
-export const DECK_STYLES = ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const;
-export type DeckStyle = (typeof DECK_STYLES)[number];
 
 const mesh = (
   blobs: Array<{ colorToken: string; cx: number; cy: number; radius: number; opacity: number }>,
   softness = 0.09
-): CarouselLayer => ({
+): CarouselLayerInput => ({
   type: "mesh",
   x: 0,
   y: 0,
@@ -131,7 +147,7 @@ const mesh = (
   softness
 });
 
-const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full"): CarouselLayer => ({
+const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full"): CarouselLayerInput => ({
   type: "image",
   slot: ARTICLE_HERO_SLOT,
   optional: true,
@@ -144,7 +160,7 @@ const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full")
 });
 
 /** Per-style background art. `phase` walks 0..1 across the deck so a gradient can travel. */
-function styleBackdrop(style: DeckStyle, phase: number, cover: boolean): CarouselLayer[] {
+function styleBackdrop(style: DeckStyle, phase: number, cover: boolean): CarouselLayerInput[] {
   // Clamped to the schema's own bounds. A blob may sit a little off-canvas — that is how a
   // gradient reads as continuing past the edge — but not so far it is invisible, and the schema
   // is where that judgement lives rather than here.
@@ -205,7 +221,7 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
       const heroTop = style === "contrast" ? 0.06 : 0;
       const heroHeight = style === "contrast" ? 0.34 : style === "editorial" ? 0.46 : 0.52;
       const heroBottom = cover ? heroTop + heroHeight : 0;
-      const heroLayers: CarouselLayer[] = !cover
+      const heroLayers: CarouselLayerInput[] = !cover
         ? []
         : [heroImage(heroTop, heroHeight, style === "contrast" ? "none" : "bottom")];
       return {
@@ -223,7 +239,7 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
           // is a gradient you cannot see. Foreground clears it at every opacity the design uses,
           // so the gradient keeps its strength and the mark stays readable. The accent is still
           // there, in the rule and the progress indicator.
-          logo(cover ? heroBottom + 0.03 : 0.07, "foreground"),
+          logo(cover ? heroBottom + 0.03 : SAFE_TOP, "foreground"),
           // On a cover the headline sits between the wordmark and the rule, so its height is
           // whatever is left rather than a constant — a fixed block ran the last line straight
           // through the accent rule on the taller heroes.
@@ -232,7 +248,7 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
             style === "contrast" ? 0.13 : 0.1,
             cover ? heroBottom + 0.12 : textTop,
             0.76,
-            cover ? Math.max(0.14, 0.84 - (heroBottom + 0.12)) : 0.42,
+            cover ? Math.max(0.12, 0.775 - (heroBottom + 0.12)) : 0.42,
             {
               fontToken: "headline",
               fontWeight: cover ? 900 : 800,
@@ -243,8 +259,10 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
               align: last ? "middle" : "start"
             }
           ),
-          shape(0.76, 0.9, 0.04 + phase * 0.16, 0.02, "muted", 0.5),
-          rule(style === "contrast" ? 0.13 : 0.1, 0.86, last ? 0.6 : 0.24)
+          // Both were below the story's reply bar, which is to say invisible on a canvas the
+          // template claimed to serve. Inside the shared safe band they are seen everywhere.
+          shape(0.76, SAFE_BOTTOM - 0.04, 0.04 + phase * 0.16, 0.02, "muted", 0.5),
+          rule(style === "contrast" ? 0.13 : 0.1, SAFE_BOTTOM - 0.01, last ? 0.6 : 0.24)
         ]
       };
     })
@@ -525,7 +543,7 @@ export function articleDeckTemplates(): readonly CarouselTemplate[] {
 
 /** Everything a reference may resolve to. */
 export function liveTemplates(): readonly CarouselTemplate[] {
-  return [...SEED_TEMPLATES, ...articleDeckTemplates()];
+  return [...SEED_TEMPLATES, ...articleDeckTemplates(), ...familyDeckTemplates()];
 }
 
 export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> = {
@@ -543,7 +561,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#fe45e2",
       secondary: "#ff5a00"
     },
-    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Archivo", body: "IBM Plex Sans", mono: "IBM Plex Mono" }
   }),
   "mma-files": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -559,7 +577,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#ef6c35",
       secondary: "#f2b84b"
     },
-    fonts: { headline: "Arial Narrow, Arial, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Barlow Condensed", body: "Barlow", mono: "IBM Plex Mono" }
   }),
   "titty-tuesdays": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -575,7 +593,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#ff6fae",
       secondary: "#ffc45e"
     },
-    fonts: { headline: "Arial Black, Arial, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Petrona", body: "Karla", mono: "IBM Plex Mono" }
   }),
   // The two shark brands take their palettes from the product's own Deep End ocean-ink tokens
   // (client/src/styles/astryx-theme.css) and their accents from its subject registry: webdev's
@@ -595,7 +613,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#4caf50",
       secondary: "#67e8f9"
     },
-    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
   }),
   geoshark: BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -611,7 +629,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#fb923c",
       secondary: "#67e8f9"
     },
-    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Outfit", body: "Public Sans", mono: "IBM Plex Mono" }
   })
 };
 
@@ -638,7 +656,20 @@ const czechFixtureOverrides: Partial<Record<string, Record<string, string>>> = {
 };
 
 export function templateByReference(templateId: string, version: string): CarouselTemplate | null {
-  return liveTemplates().find((template) => template.id === templateId && template.version === version) ?? null;
+  const eager = liveTemplates().find((template) => template.id === templateId && template.version === version);
+  if (eager) return eager;
+  /*
+   * A recipe's non-canonical rendering, rebuilt from its own id.
+   *
+   * Type scale and rhythm rotation multiply out to seven hundred templates per version, which is
+   * not a library — it is a lookup table nobody could read. The id carries both axes, so the
+   * reference still names exactly one byte stream and the template is built when it is asked for.
+   */
+  if (version !== "1.0.0") return null;
+  const parsed = parseRecipeTemplateId(templateId);
+  if (!parsed || parsed.slideCount < MIN_SLIDES || parsed.slideCount > MAX_RESOLVABLE_SLIDES) return null;
+  if (isDeckStyle(parsed.design)) return articleDeckTemplate(parsed.slideCount, parsed.design);
+  return familyDeckTemplate(parsed.design, parsed.slideCount, { typeScale: parsed.typeScale, phaseSeed: parsed.phaseSeed });
 }
 
 export function liveTemplateByReference(templateId: string, version: string): CarouselTemplate {

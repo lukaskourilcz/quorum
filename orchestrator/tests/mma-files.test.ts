@@ -218,10 +218,10 @@ describe("MMA Files article production", () => {
       ...Array.from({ length: count }, (_, index) => `A-cs-${String(index + 1).padStart(2, "0")}`),
       ...Array.from({ length: count }, (_, index) => `B-cs-${String(index + 1).padStart(2, "0")}`)
     ]);
-    // A and B render the same deck: the deck is the article, and there is no second way to
-    // slice it. What the two variants differ in is the caption, which is where the experiment
-    // actually lives.
-    expect(new Set(first.map((render) => render.sha256)).size).toBe(count);
+    // A and B are two designs, not two filenames. They used to render the same bytes — every
+    // deck slide declared `variants: []`, so the `variant` field the pack set was ignored — and
+    // the queue shipped one byte stream twice as if it were an experiment.
+    expect(new Set(first.map((render) => render.sha256)).size).toBe(count * 2);
     expect(pack.variants[0]!.captions.cs!.instagram).not.toBe(pack.variants[1]!.captions.cs!.instagram);
     expect(renderArticleHero(article)).toBe(renderArticleHero(article));
     expect(`${renderArticleHero(article)}${first.map((render) => render.svg).join("")}`).not.toMatch(/<image|generated human/iu);

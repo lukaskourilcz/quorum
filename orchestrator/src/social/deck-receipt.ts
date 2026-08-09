@@ -14,6 +14,14 @@ export async function writeDeckReceipt(input: {
   slug: string;
   templateId: string;
   style: string;
+  /**
+   * The complete design this render used.
+   *
+   * The receipt is also the venture's memory: `deriveRecipe` reads the last families shipped so a
+   * week of articles never repeats one back to back. A style string alone could not answer that
+   * once a design became five fields.
+   */
+  recipe?: unknown;
   slideCount: number;
   hashes: readonly string[];
 }): Promise<string> {
@@ -25,6 +33,7 @@ export async function writeDeckReceipt(input: {
     slug: input.slug,
     templateId: input.templateId,
     style: input.style,
+    ...(input.recipe === undefined ? {} : { recipe: input.recipe }),
     slideCount: input.slideCount,
     hashes: [...input.hashes]
   });

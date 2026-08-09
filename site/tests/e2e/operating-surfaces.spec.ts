@@ -24,7 +24,7 @@ const axeRoutes = [
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",
   "/admin?venture=mma-files&tab=social-lab",
-  "/admin?venture=carousel-studio&tab=templates",
+  "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=carousel-studio&tab=inspiration",
   "/meetings/2026-08-01-mma-intake",
   "/meetings/2026-08-01-mma-analysis",
@@ -37,10 +37,25 @@ const repositoryRoot = path.resolve(process.cwd(), "..");
 const e2ePlanPath = path.join(repositoryRoot, "state", "ventures", "titty-tuesdays", "plans", "e2e-launch-plan.json");
 const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "titty-tuesdays", "ledger.jsonl");
 let originalRatingLedger: string | null = null;
+/*
+ * The Design Lab's controls write real state.
+ *
+ * Clicking a family chip is a save, by design — the whole point of DL-01 is that viewing and
+ * keeping stopped being the same action, and the keeping half persists. So the suite snapshots
+ * the two files it can touch and puts them back, the same as it does for the rating ledger.
+ */
+const deckOverridesPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "deck-style-overrides.json");
+const presetsPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "presets.json");
+let originalDeckOverrides: string | null = null;
 
 test.beforeAll(async () => {
   try {
     originalRatingLedger = await readFile(ratingLedgerPath, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+  try {
+    originalDeckOverrides = await readFile(deckOverridesPath, "utf8");
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
@@ -73,6 +88,9 @@ test.afterAll(async () => {
   await rm(e2ePlanPath, { force: true });
   if (originalRatingLedger === null) await rm(ratingLedgerPath, { force: true });
   else await writeFile(ratingLedgerPath, originalRatingLedger);
+  await rm(presetsPath, { force: true });
+  if (originalDeckOverrides === null) await rm(deckOverridesPath, { force: true });
+  else await writeFile(deckOverridesPath, originalDeckOverrides);
 });
 
 for (const route of axeRoutes) {
@@ -277,7 +295,7 @@ test.describe("admin journeys that write", () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=templates"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -426,79 +444,551 @@ for (const size of [
   { name: "1280x800", width: 1280, height: 800 },
   { name: "1440x900", width: 1440, height: 900 }
 ] as const) {
-  test(`every opened room is centred, complete and readable at ${size.name}`, async ({ page }) => {
+  /*
+   * Every room's dialog, complete and unscrolled.
+   *
+   * This used to measure the reframed room view — the overlay laid out inside the room's own
+   * rectangle after the plan zoomed into it. There is no reframe now, so the question changed
+   * with it: a dialog has to hold the whole room at the two viewports the contract names, without
+   * its body scrolling and without the page behind it moving.
+   */
+  test(`every opened room fits its dialog at ${size.name}`, async ({ page }) => {
     await page.setViewportSize({ width: size.width, height: size.height });
     await page.goto("/", { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Facilities", exact: true }).click();
     await expect(page.locator("[data-workflows-board]")).toBeVisible();
 
+    /*
+     * The scroll position once it has stopped moving.
+     *
+     * Navigating to a section scrolls the page, and that scroll is animated — reading `scrollY`
+     * the instant the board appears reads the start of the journey, not the end. The question
+     * here is whether opening a dialog moves the page, so the baseline has to be a page that has
+     * already finished moving.
+     */
+    const settled = async (): Promise<number> => {
+      let previous = -1;
+      for (let attempt = 0; attempt < 40; attempt += 1) {
+        const now = await page.evaluate(() => window.scrollY);
+        if (now === previous) return now;
+        previous = now;
+        await page.waitForTimeout(100);
+      }
+      return previous;
+    };
+
     for (const room of OPENABLE_ROOMS) {
-      const back = page.locator('[data-room-view] button[aria-label="Back to the floor"]');
-      if (await back.count()) await back.click();
-      await page.locator(`[data-wf-place="${room}"]`).click();
-      await expect(page.locator("[data-room-view]")).toBeVisible();
+      const scrollBefore = await settled();
+      await page.locator(`[data-wf-place="${room}"]`).click({ force: true });
+      const surface = page.locator("[data-dialog-surface]");
+      await expect(surface, room).toBeVisible();
 
       const measured = await page.evaluate(() => {
-        const stage = document.querySelector("[data-workflows-board] svg")?.parentElement;
-        const view = document.querySelector("[data-room-view]");
-        if (!stage || !view) return null;
-        const sb = stage.getBoundingClientRect();
-        const vb = view.getBoundingClientRect();
-        // Anything sticking out sideways is real overflow: there is no horizontal scroller here.
-        // Vertically, content below the fold of the room's own scroller is scrolled, not clipped.
-        const spilling = Array.from(view.querySelectorAll("p, span, a")).filter((element) => {
-          const b = element.getBoundingClientRect();
-          if (b.width === 0 || b.height === 0) return false;
-          return b.left < vb.left - 1 || b.right > vb.right + 1;
-        }).length;
-        const scroller = view.querySelector("[data-wheel-exempt]");
-        // Where the open room's own rectangle landed on the stage. This is the framing itself,
-        // and it is what the repair changed: the arithmetic used to grow the room's rect to the
-        // container's aspect, which left the room's walls 6% from the stage edge with the plan's
-        // north wall and the notes at its door cropped off.
-        const rb = document.querySelector("[data-open-room]")?.getBoundingClientRect();
+        const body = document.querySelector("[data-dialog-body]");
+        const shell = document.querySelector("[data-dialog-surface]");
+        if (!body || !shell) return null;
+        const box = shell.getBoundingClientRect();
         return {
-          insideStage:
-            vb.left >= sb.left - 1 &&
-            vb.right <= sb.right + 1 &&
-            vb.top >= sb.top - 1 &&
-            vb.bottom <= sb.bottom + 1,
-          fractionOfHeight: vb.height / sb.height,
-          width: vb.width,
-          spilling,
-          scrolls: scroller ? getComputedStyle(scroller).overflowY : null,
-          dimmed: Boolean(document.querySelector("[data-wf-scrim]")),
-          roomBindingSpan: rb ? Math.max(rb.width / sb.width, rb.height / sb.height) : null,
-          roomClearance: rb
-            ? Math.min(
-                rb.top - sb.top,
-                sb.bottom - rb.bottom,
-                rb.left - sb.left,
-                sb.right - rb.right
-              ) / Math.min(sb.width, sb.height)
-            : null
+          // Fits without scrolling: the body's content is no taller than its box.
+          scrolled: body.scrollHeight - body.clientHeight,
+          insideViewport: box.top >= 0 && box.bottom <= window.innerHeight
+            && box.left >= 0 && box.right <= window.innerWidth,
+          // Nothing spills sideways out of the dialog.
+          spilling: [...body.querySelectorAll("p, span, a, li")].filter((element) => {
+            const rect = element.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return false;
+            return rect.left < box.left - 1 || rect.right > box.right + 1;
+          }).length,
+          named: shell.getAttribute("aria-labelledby") !== null,
+          modal: shell.getAttribute("aria-modal") === "true"
         };
       });
+      expect(measured, room).not.toBeNull();
+      expect(measured!.scrolled, `${room} dialog scrolls at ${size.name}`).toBeLessThanOrEqual(1);
+      expect(measured!.insideViewport, `${room} dialog leaves the viewport`).toBe(true);
+      expect(measured!.spilling, `${room} dialog spills sideways`).toBe(0);
+      expect(measured!.named).toBe(true);
+      expect(measured!.modal).toBe(true);
 
-      expect(measured, `${room} renders a room view`).not.toBeNull();
-      expect(measured!.insideStage, `${room} sits inside the stage`).toBe(true);
-      // The room owns the stage rather than sharing it with its neighbours.
-      expect(measured!.fractionOfHeight, `${room} claims the stage's height`).toBeGreaterThan(0.6);
-      // And it is wide enough to read: 34 characters of body text plus its padding.
-      expect(measured!.width, `${room} is wide enough to read`).toBeGreaterThanOrEqual(380);
-      expect(measured!.spilling, `${room} keeps its content inside itself`).toBe(0);
-      expect(measured!.scrolls, `${room} scrolls rather than overflowing`).toBe("auto");
-      expect(measured!.dimmed, `${room} pushes the rest of the plan back`).toBe(true);
-      // The framing itself: the room owns its binding axis, and its walls are not jammed against
-      // the stage edge. The old arithmetic gave 0.87 and 0.064 — it passes the first and fails
-      // the second, which is exactly the reported symptom of a room cropped at both ends.
-      expect(measured!.roomBindingSpan, `${room}'s rect owns its binding axis`).toBeGreaterThan(0.6);
-      expect(measured!.roomClearance, `${room}'s walls have breathing room`).toBeGreaterThan(0.08);
+      await page.keyboard.press("Escape");
+      await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
+      // The page behind a modal does not move.
+      expect(await page.evaluate(() => window.scrollY), room).toBe(scrollBefore);
     }
-
-    // Escape closes the room and the plan comes back whole, with nothing dimmed.
-    await page.keyboard.press("Escape");
-    await expect(page.locator("[data-room-view]")).toHaveCount(0);
-    await expect(page.locator("[data-wf-scrim]")).toHaveCount(0);
   });
 }
+
+/**
+ * The Design Lab workspace.
+ *
+ * Two tabs became one because each held half the answer to the only question the owner has of
+ * this venture: what does this article's carousel look like, and can I change it. These cover the
+ * four parts of that — the rail, the canvas, the controls and the words — and the one rule the
+ * editor is not allowed to break, which is the engine's own thirty-word slide limit.
+ */
+test.describe("the Design Lab workspace", () => {
+  test("renders the rail, the canvas and the recipe as one surface", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+
+    const rail = page.locator("[data-article-rail] button");
+    expect(await rail.count()).toBeGreaterThan(0);
+    await expect(page.locator("[data-recipe-line]").first()).toBeVisible();
+    await expect(page.locator("[data-slide-canvas]").first()).toBeVisible();
+    // An old bookmark still resolves rather than 404ing; an unknown tab falls to the first.
+    const legacy = await page.goto("/admin?venture=carousel-studio&tab=decks", { waitUntil: "networkidle" });
+    expect(legacy?.status()).toBe(200);
+  });
+
+  test("switching format changes the canvas ratio", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const canvas = page.locator("[data-slide-canvas]").first();
+    const portrait = await canvas.evaluate((node) => getComputedStyle(node).aspectRatio);
+    await page.getByRole("button", { name: "9:16", exact: true }).first().click();
+    await expect.poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio)).not.toBe(portrait);
+    // The safe-area overlay is offered only where a platform actually covers the canvas.
+    await page.getByRole("button", { name: "bezpečná zóna" }).first().click();
+    await expect(page.locator("[data-safe-area]").first()).toBeAttached();
+  });
+
+  test("a slide past thirty words cannot be saved", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const editor = page.locator("textarea[id^='slide-']").first();
+    const save = page.locator("[data-save-slide]").first();
+    await editor.fill(Array.from({ length: 12 }, (_, index) => `slovo${index}`).join(" "));
+    await expect(save).toBeEnabled();
+    await editor.fill(Array.from({ length: 31 }, (_, index) => `slovo${index}`).join(" "));
+    await expect(page.locator("[data-word-count]").first()).toContainText("31/30");
+    await expect(save).toBeDisabled();
+    // The engine's own sentence, not a paraphrase of it.
+    await expect(page.getByText(/přes limit 30 slov/u).first()).toBeVisible();
+  });
+
+  test("the caption carries its credit and the copy buttons announce", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const copy = page.getByRole("button", { name: /Copy/u }).first();
+    await expect(copy).toHaveAttribute("aria-live", "polite");
+    await expect(page.locator("[data-caption]").first()).toBeVisible();
+  });
+});
+
+/**
+ * Presets: a design saved, listed and applied.
+ *
+ * The round trip is the point. A saved preset that the picker cannot show is a file, not a tool,
+ * and the file did not exist before this — which is why the store's create path had to be built
+ * first rather than the preset list being hand-seeded onto main.
+ */
+test("a preset saves, reloads into the picker and applies", async ({ page }) => {
+  await rm(presetsPath, { force: true });
+  try {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "dossier", exact: true }).first().click();
+    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+
+    await page.getByLabel("Název presetu").first().fill("E2E tichý záznam");
+    const save = page.locator("[data-save-preset]").first();
+    await expect(save).toBeEnabled();
+    await save.click();
+    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved");
+
+    // Reload: the preset is read back out of the file the save created.
+    await page.reload({ waitUntil: "networkidle" });
+    const chip = page.locator("[data-presets] button", { hasText: "E2E tichý záznam" }).first();
+    await expect(chip).toBeVisible();
+    // Saved as a draft, and it says so — a draft is never drawn from autonomously.
+    await expect(chip).toContainText("koncept");
+
+    await page.getByRole("button", { name: "tower", exact: true }).first().click();
+    await expect(page.locator("[data-recipe-line]").first()).toContainText("tower");
+    await chip.click();
+    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+  } finally {
+    await rm(presetsPath, { force: true });
+  }
+});
+
+/**
+ * The name resolves, and the id does not move.
+ *
+ * `carousel-studio` addresses state directories, config entries, API paths and a room on the
+ * floorplan, so it stays (decision D13: identifiers stay, surfaces speak). What changes is that
+ * the URL an owner would guess from the display name lands on the same record instead of an empty
+ * page.
+ */
+test("design-lab is an alias for the same venture record", async ({ page }) => {
+  await page.goto("/admin?venture=design-lab&tab=studio", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-recipe-line]").first()).toBeVisible();
+  const aliased = await page.locator("[data-article-rail] button").count();
+
+  await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+  expect(await page.locator("[data-article-rail] button").count()).toBe(aliased);
+});
+
+/**
+ * Calendar tooltips, which the owner reported hiding behind the row of days and dates.
+ *
+ * Two causes in one place. The row block scrolls, so a bubble pointing up from the first rows was
+ * clipped at its top edge; and the header row sits above it in the same stacking context, so
+ * whatever survived the clip went behind the dates. A z-index fixes neither — an ancestor's
+ * overflow is not a stacking question — so the bubble is a portal now, and it flips below the
+ * trigger when there is no room above.
+ */
+test.describe("calendar tooltips clear the header row", () => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 800 }]) {
+    test(`fully visible on the first two rows at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.locator("[data-cal-rows]").first().scrollIntoViewIfNeeded();
+
+      const rows = page.locator("[data-cal-rows] > div");
+      for (const index of [0, 1]) {
+        const cell = rows.nth(index).locator("[data-tooltip-anchor]").first();
+        await cell.hover();
+        const tip = page.locator("[role=tooltip]").first();
+        await expect(tip).toBeVisible();
+
+        const box = (await tip.boundingBox())!;
+        // Inside the viewport on every edge: a bubble half off the top is the reported bug.
+        expect(box.y, `row ${index} tooltip is clipped above the viewport`).toBeGreaterThanOrEqual(0);
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+        expect(box.y + box.height).toBeLessThanOrEqual(viewport.height);
+
+        // Rendered into the body, so no ancestor's overflow can clip it. The bubble itself is
+        // pointer-events: none by design, which is why this is asserted structurally rather than
+        // by hit-testing a point.
+        expect(await tip.evaluate((node) => node.parentElement === document.body)).toBe(true);
+
+        // And clear of the row of days and dates, which is what the owner saw it disappear behind.
+        const header = (await page.locator("[data-cal-header]").first().boundingBox())!;
+        const overlaps = box.y < header.y + header.height && box.y + box.height > header.y
+          && box.x < header.x + header.width && box.x + box.width > header.x;
+        expect(overlaps, `row ${index} tooltip overlaps the header row`).toBe(false);
+
+        await page.mouse.move(0, 0);
+        await expect(page.locator("[role=tooltip]")).toHaveCount(0);
+      }
+    });
+  }
+
+  test("a tooltip further down the week still points upward", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.locator("[data-cal-rows]").first().scrollIntoViewIfNeeded();
+    const rows = page.locator("[data-cal-rows] > div");
+    const last = (await rows.count()) - 1;
+    await rows.nth(last).locator("[data-tooltip-anchor]").first().hover();
+    const tip = page.locator("[role=tooltip]").first();
+    await expect(tip).toBeVisible();
+    await expect(tip).toHaveAttribute("data-tooltip-side", "top");
+  });
+});
+
+/**
+ * The small controls, at the size they were written to be.
+ *
+ * The owner reported three of them reading as "one oversized family", and they were: an unlayered
+ * `font: inherit` reset on form controls beat every size utility on every button on the site, so
+ * a button declaring 7.5px and a button declaring 10px both rendered at the inherited 16px. The
+ * reset lives in `@layer base` now and the three share one style, so this asserts the rendered
+ * size rather than the class list — the class list was never the thing that was wrong.
+ */
+test("the meeting room's controls and the admin sign-out are one small family", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const home = await page.evaluate(() => {
+    const jump = [...document.querySelectorAll("button")].find((node) => node.textContent?.includes("Jump to date"));
+    const label = document.querySelector("[data-chat-list] button");
+    return {
+      jump: jump ? Number.parseFloat(getComputedStyle(jump).fontSize) : null,
+      label: label ? Number.parseFloat(getComputedStyle(label).fontSize) : null,
+      channelsLine: document.body.innerText.includes("read-only record")
+    };
+  });
+  expect(home.jump).toBeLessThanOrEqual(11);
+  expect(home.label).toBeLessThanOrEqual(12);
+  // The line the owner asked to be gone, gone from the build rather than hidden.
+  expect(home.channelsLine).toBe(false);
+
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const signOut = await page.evaluate(() => {
+    const node = [...document.querySelectorAll("button")].find((entry) => entry.textContent?.trim() === "Sign out");
+    return node ? Number.parseFloat(getComputedStyle(node).fontSize) : null;
+  });
+  // The same change, reaching admin: the three used to render identically at the browser default.
+  expect(signOut).toBe(home.jump);
+});
+
+/**
+ * Rooms and the dock, as dialogs.
+ *
+ * Clicking a room used to reframe the whole floor plan around it — a zoom, not a dialog, and one
+ * that took the reader's place on the floor away to show them a rectangle. The dock opened a
+ * seven-panel animation of a courier's morning that the owner could not read as anything. Both
+ * are dialogs now, and a dialog has a list of obligations: focus moves in, Tab cannot leave,
+ * Escape closes, the backdrop closes, focus returns to what opened it, and the page behind does
+ * not scroll.
+ */
+test.describe("the facilities plan opens dialogs", () => {
+  test("a room opens and closes by mouse, and returns focus", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const plan = page.locator("[data-wf-place]").first();
+    await plan.scrollIntoViewIfNeeded();
+    const scrollBefore = await page.evaluate(() => window.scrollY);
+
+    // Forced: the room's own furniture sits over its group, and a click on a child still opens
+    // the room — which is the behaviour, not a bug for the test to route around politely.
+    await plan.click({ force: true });
+    const dialog = page.locator("[role=dialog][data-dialog-surface]");
+    await expect(dialog).toBeVisible();
+    // The plan behind it is whole: no reframed viewBox, no zoom.
+    expect(await page.evaluate(() => window.scrollY)).toBe(scrollBefore);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).toBe("hidden");
+    await expect(page.locator("[data-room-fragment]")).toBeVisible();
+
+    await page.locator("[data-dialog-backdrop]").click({ position: { x: 5, y: 5 } });
+    await expect(dialog).toHaveCount(0);
+    // Focus is back on the door it came out of, not on the body.
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-wf-place") !== null)).toBe(true);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe("hidden");
+  });
+
+  test("a room opens and closes by keyboard alone", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const plan = page.locator("[data-wf-place]").first();
+    await plan.scrollIntoViewIfNeeded();
+    await plan.focus();
+    await page.keyboard.press("Enter");
+    const dialog = page.locator("[role=dialog][data-dialog-surface]");
+    await expect(dialog).toBeVisible();
+
+    // Tab cannot leave: every stop stays inside the dialog.
+    for (let step = 0; step < 8; step += 1) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => Boolean(document.activeElement?.closest("[data-dialog-surface]")))).toBe(true);
+    }
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+  });
+
+  test("the dock says what it is in plain words", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const dock = page.locator('[data-wf-place="dock"]').first();
+    await dock.scrollIntoViewIfNeeded();
+    await dock.click({ force: true });
+    const dialog = page.locator("[role=dialog][data-dialog-surface]");
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText("the only way out of the building");
+    await expect(page.locator("[data-dock-latest]")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+  });
+
+  test("no room reframes the drawing any more", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const plan = page.locator("[data-wf-place]").first();
+    await plan.scrollIntoViewIfNeeded();
+    const svg = page.locator("svg[aria-label='Floor plan of the BoardlessAI office']").first();
+    const before = await svg.getAttribute("viewBox");
+    await plan.click({ force: true });
+    await expect(page.locator("[role=dialog][data-dialog-surface]")).toBeVisible();
+    expect(await svg.getAttribute("viewBox")).toBe(before);
+    await page.keyboard.press("Escape");
+  });
+});
+
+/**
+ * The roster shows every role, counted rather than eyeballed.
+ *
+ * It used to show the council plus whichever specialists were active and put the rest behind a
+ * "stood down" count with no way to reach them — a footnote saying nine roles exist that you may
+ * not read. The count comes from `config/agents.json` here, so the assertion cannot drift with the
+ * registry: adding a role to the company adds it to this test's expectation on the same commit.
+ */
+test.describe("the roster lists every agent", () => {
+  test("renders one entry per registry agent, with paused and retired labelled", async ({ page }) => {
+    const registry = JSON.parse(await readFile(path.join(repositoryRoot, "config", "agents.json"), "utf8")) as
+      { agents?: Array<{ id: string; status: string }> } | Array<{ id: string; status: string }>;
+    const agents = Array.isArray(registry) ? registry : registry.agents ?? [];
+    expect(agents.length).toBeGreaterThan(0);
+
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Team", exact: true }).click();
+    await expect(page.locator("[data-team-panel]")).toBeVisible();
+
+    const rendered = await page.evaluate(() => ({
+      council: document.querySelectorAll("[data-team-council] > div").length,
+      others: document.querySelectorAll("[data-team-role]").length,
+      paused: document.querySelectorAll('[data-team-status="paused"]').length,
+      retired: document.querySelectorAll('[data-team-status="retired"]').length,
+      count: document.querySelector("[data-team-count]")?.textContent ?? ""
+    }));
+
+    expect(rendered.council + rendered.others, "one card per agent in config/agents.json").toBe(agents.length);
+    expect(rendered.paused).toBe(agents.filter((agent) => agent.status === "paused").length);
+    expect(rendered.retired).toBe(agents.filter((agent) => agent.status === "retired").length);
+    expect(rendered.count).toContain(`${agents.length} roles`);
+    expect(rendered.count).toContain(`${agents.filter((agent) => agent.status === "active").length} active`);
+  });
+
+  test("holds at 360px without clipping a name", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto("/", { waitUntil: "networkidle" });
+    // At 360px the sections stack rather than being navigated between, so the panel is scrolled
+    // to rather than clicked to.
+    const panel = page.locator("[data-team-panel]");
+    await panel.scrollIntoViewIfNeeded();
+    await expect(panel).toBeVisible();
+
+    const spilling = await page.evaluate(() => {
+      const box = document.querySelector("[data-team-panel]")!.getBoundingClientRect();
+      return [...document.querySelectorAll("[data-team-role] span, [data-team-role] p, [data-team-council] p")]
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          if (rect.width === 0) return false;
+          return rect.left < box.left - 1 || rect.right > box.right + 1;
+        }).length;
+    });
+    expect(spilling).toBe(0);
+  });
+});
+
+/**
+ * The footers open their content where the reader is.
+ *
+ * Every one of these links used to navigate away to a page built in the previous design, so
+ * following "Privacy" from halfway down the office walkthrough lost the walkthrough. The pages are
+ * not deleted — they are the canonical addresses, they are in the sitemap, and a deep link still
+ * resolves — which is why the old routes are asserted alongside the dialogs.
+ */
+test.describe("footer links open dialogs", () => {
+  const topics = ["about", "rules", "money", "privacy", "disclosure", "updates"] as const;
+
+  test("every content link opens its own dialog", async ({ page }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    for (const topic of topics) {
+      await page.locator(`[data-footer-dialog="${topic}"]`).first().click();
+      const surface = page.locator("[data-dialog-surface]");
+      await expect(surface, topic).toBeVisible();
+      // Real content, not an empty shell with a title on it.
+      expect((await surface.innerText()).length, topic).toBeGreaterThan(200);
+      await expect(surface).toContainText("Open the full page");
+      await page.keyboard.press("Escape");
+      await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
+    }
+  });
+
+  test("the feeds stay files", async ({ page, request }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    for (const feed of ["/feed.xml", "/decisions.xml", "/feed.json"]) {
+      await expect(page.locator(`footer a[href="${feed}"]`)).toHaveCount(1);
+      expect((await request.get(feed)).status(), feed).toBe(200);
+    }
+  });
+
+  test("the old routes still resolve", async ({ request }) => {
+    for (const route of ["/company", "/privacy", "/disclosure", "/log", "/results", "/about", "/money"]) {
+      // /about and /money are permanent redirects to sections of the pages that replaced them,
+      // which is still a working deep link and not a 404.
+      expect((await request.get(route)).status(), route).toBe(200);
+    }
+  });
+
+  test("one full keyboard pass over a footer dialog", async ({ page }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    const opener = page.locator('[data-footer-dialog="disclosure"]').first();
+    await opener.focus();
+    await page.keyboard.press("Enter");
+    const surface = page.locator("[data-dialog-surface]");
+    await expect(surface).toBeVisible();
+    await expect(surface).toHaveAttribute("aria-modal", "true");
+    expect(await surface.getAttribute("aria-labelledby")).not.toBeNull();
+
+    for (let step = 0; step < 6; step += 1) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => Boolean(document.activeElement?.closest("[data-dialog-surface]")))).toBe(true);
+    }
+    await page.keyboard.press("Shift+Tab");
+    expect(await page.evaluate(() => Boolean(document.activeElement?.closest("[data-dialog-surface]")))).toBe(true);
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
+    // Focus is back on the link that opened it.
+    expect(await page.evaluate(() => document.activeElement?.getAttribute("data-footer-dialog"))).toBe("disclosure");
+  });
+});
+
+/**
+ * Navigation that does not move under a pointer.
+ *
+ * Every label in the walkthrough's rail carried twelve pixels of permanent empty gap for an
+ * indicator dot that was only painted on the active one — the reserved space was itself the bug
+ * the owner reported. The dot is out of the flow now, and the right-hand rail's buttons are a
+ * fixed slot rather than 7px or 10px depending on which section you are in. These measure boxes
+ * rather than trusting the class list.
+ */
+test.describe("navigation reserves no space it does not paint", () => {
+  test("hovering a walkthrough nav item moves nothing", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const items = page.locator("[data-nav-item]");
+    const count = await items.count();
+    expect(count).toBeGreaterThan(3);
+
+    const boxes = async () => page.evaluate(() =>
+      [...document.querySelectorAll("[data-nav-item]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return [Math.round(rect.x), Math.round(rect.y), Math.round(rect.width), Math.round(rect.height)].join(",");
+      }));
+
+    const before = await boxes();
+    for (let index = 0; index < count; index += 1) {
+      await items.nth(index).hover();
+      expect(await boxes(), `hovering item ${index} moved the rail`).toEqual(before);
+    }
+    await page.mouse.move(0, 0);
+    expect(await boxes()).toEqual(before);
+  });
+
+  test("the section rail's buttons are one fixed size in every state", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const sizes = await page.evaluate(() =>
+      [...document.querySelectorAll("[data-dot]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return `${Math.round(rect.width)}x${Math.round(rect.height)}`;
+      }));
+    expect(sizes.length).toBeGreaterThan(3);
+    expect(new Set(sizes).size, "the rail's buttons are not all one size").toBe(1);
+
+    // Move to another section: the active mark changes and no button's box does.
+    const before = sizes;
+    await page.locator("[data-dot]").nth(2).click();
+    await expect.poll(async () => page.evaluate(() =>
+      [...document.querySelectorAll("[data-dot]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return `${Math.round(rect.width)}x${Math.round(rect.height)}`;
+      }))).toEqual(before);
+  });
+
+  test("the top navigation shifts colour and nothing else", async ({ page }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    const links = page.locator("header nav a");
+    const count = await links.count();
+    const boxes = async () => page.evaluate(() =>
+      [...document.querySelectorAll("header nav a")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return [Math.round(rect.x), Math.round(rect.width), Math.round(rect.height)].join(",");
+      }));
+    const before = await boxes();
+    for (let index = 0; index < count; index += 1) {
+      await links.nth(index).hover();
+      expect(await boxes(), `hovering link ${index} moved the header`).toEqual(before);
+    }
+  });
+
+  test("reduced motion keeps the same geometry", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/", { waitUntil: "networkidle" });
+    const item = page.locator("[data-nav-item]").first();
+    const before = await item.boundingBox();
+    await item.hover();
+    expect(await item.boundingBox()).toEqual(before);
+  });
+});
