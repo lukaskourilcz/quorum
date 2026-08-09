@@ -267,7 +267,8 @@ export default async function AdminPage({
       label: "Unreadable files",
       value:
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
-        mmaFiles.unreadable.length
+        mmaFiles.unreadable.length +
+        fightaiq.unreadable.length
     }
   ];
 
@@ -277,6 +278,8 @@ export default async function AdminPage({
 
   const ventureUnreadable = selectedVenture?.id === "mma-files"
     ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
+    : selectedVenture?.id === "fightaiq"
+      ? [...selectedVenture.unreadableFiles, ...fightaiq.unreadable]
     : selectedVenture?.unreadableFiles ?? [];
 
   const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
