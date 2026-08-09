@@ -20,11 +20,17 @@ function timestamp(value: string | null): string {
   return value.includes("T") ? formatDateTime(value) : formatDate(value);
 }
 
+export function isAdminImageAsset(source: string): boolean {
+  return /^\/.+\.(?:png|jpe?g|webp|svg)$/iu.test(source);
+}
+
 export function PortfolioCard({ card, originHref }: { card: AdminCard; originHref: string | null }) {
   const detailHref = card.detailPath
     ? `/admin/files/${card.detailPath.split("/").map(encodeURIComponent).join("/")}`
     : null;
   const currentRating = card.ratings[0] ?? null;
+  const imageAssets = card.media.filter(isAdminImageAsset);
+  const otherAssets = card.media.filter((source) => !isAdminImageAsset(source));
   return (
     <Card className="min-w-0">
       <CardContent className="grid h-full gap-5">
@@ -44,9 +50,9 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
           ) : null}
         </div>
 
-        {card.media.length ? (
+        {imageAssets.length ? (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {card.media.slice(0, 4).map((source, index) => (
+            {imageAssets.slice(0, 4).map((source, index) => (
               <a
                 className="overflow-hidden rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)]"
                 href={source}
@@ -54,9 +60,18 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
                 rel="noreferrer"
                 target="_blank"
               >
-                <Image alt={`Open ${card.title} asset ${index + 1}`} height={320} src={source} width={320} />
+                <Image alt={`Open ${card.title} asset ${index + 1}`} height={320} src={source} unoptimized width={320} />
               </a>
             ))}
+          </div>
+        ) : null}
+
+        {otherAssets.length ? (
+          <div className="border-y border-[var(--border)] py-4">
+            <p className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">Attached assets</p>
+            <ul className="mt-2 grid gap-1 break-all text-sm text-[var(--mist)]">
+              {otherAssets.map((source) => <li key={source}>{source}</li>)}
+            </ul>
           </div>
         ) : null}
 

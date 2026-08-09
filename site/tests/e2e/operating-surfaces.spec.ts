@@ -79,6 +79,7 @@ test.beforeAll(async () => {
     calendar: [{ week: 1, focus: "Owner review." }],
     audienceRefs: [],
     kpis: ["owner review complete"],
+    assets: ["staged/e2e-launch.json"],
     status: "approved",
     originMeetingRef: "meetings/2026-08-01-tt-marketing"
   }));
@@ -255,6 +256,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   test("admin rating persists and the launch binder renders", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
+    await expect(page.getByText("staged/e2e-launch.json")).toBeVisible();
     await page.getByLabel("Note (optional)").first().fill("E2E owner note");
     await page.getByRole("button", { name: "Perfect", exact: true }).first().click();
     // The confirmation appears only after `POST /admin/api/ratings` has appended to the ledger on
