@@ -72,6 +72,9 @@ describe("MMA Files repository delivery", () => {
     expect(await nextBannerDelivery(root, workspace)).toBeNull();
     expect(JSON.parse(await readFile(path.join(root, "ventures", "mma-files", "banners", "contract.json"), "utf8")))
       .toMatchObject({ status: "delivered", receiptRef: receiptPath });
+    const delivered = JSON.parse(await readFile(path.join(root, "ventures", "mma-files", "banners", "delivered.json"), "utf8"));
+    expect(delivered).toMatchObject({ schemaVersion: "mma-ads/1", slots: { "infeed-rectangle": { enabled: false, image: null } } });
+    expect(JSON.stringify(delivered)).not.toContain("bytes_base64");
   });
 
   it("refuses a banner package edited after selection", async () => {

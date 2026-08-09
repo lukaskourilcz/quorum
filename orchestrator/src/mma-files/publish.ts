@@ -178,6 +178,7 @@ export async function recordMmaDelivery(input: {
   const root = input.root ?? stateRoot;
   if (!/^[a-f0-9]{64}$/u.test(input.packageHash)) throw new Error("Invalid MMA Files package hash");
   let articleUrl: string | null = null;
+  let bannerManifest: ReturnType<typeof MmaAdsDeliverySchema.parse> | null = null;
   if (input.kind === "article") {
     const article = JSON.parse(await readFile(input.packagePath, "utf8")) as ArticlePackage;
     if (article.packageHash !== input.packageHash) throw new Error("Article receipt hash differs from package");
@@ -191,6 +192,7 @@ export async function recordMmaDelivery(input: {
     }
   } else {
     const banner = MmaAdsDeliverySchema.parse(JSON.parse(await readFile(input.packagePath, "utf8")));
+    bannerManifest = banner;
     const composed = await composeMmaBanner(root);
     if (
       mmaAdsPackageHash(banner) !== input.packageHash
@@ -223,6 +225,17 @@ export async function recordMmaDelivery(input: {
       ...contract,
       status: "delivered",
       receiptRef: relative
+    });
+    await atomicWriteJson(root, "ventures/mma-files/banners/delivered.json", {
+      schemaVersion: bannerManifest!.schemaVersion,
+      updatedAt: bannerManifest!.updatedAt,
+      slots: Object.fromEntries(Object.entries(bannerManifest!.slots).map(([slotId, slot]) => [
+        slotId,
+        {
+          ...slot,
+          image: slot.image ? (({ bytes_base64: _bytes, ...image }) => image)(slot.image) : null
+        }
+      ]))
     });
   }
   return relative;

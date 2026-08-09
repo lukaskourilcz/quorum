@@ -68,6 +68,8 @@ const VentureDefinitionSchema = openObject({
     "slates",
     "sources",
     "articles",
+    "predictions",
+    "banners",
     "calendar",
     "social-lab",
     // `templates` and `decks` were two halves of one question and are one `studio` tab now. Both

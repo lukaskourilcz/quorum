@@ -126,7 +126,7 @@ describe("automation policy", () => {
     // state/INBOX.md is on both receipt lists. The shared fail-closed writer appends an owner
     // line for either venture, and the MMA step used to leave it unstaged, so a reverted
     // article's inbox item died with the runner.
-    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
+    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/mma-files/banners/delivered.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
     for (const list of cycle.match(/receipt_paths=\([^)]*\)/gu) ?? []) {
       expect(list, "every fail-closed receipt list stages the inbox").toContain("state/INBOX.md");
     }

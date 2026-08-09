@@ -1334,7 +1334,7 @@ jobs:
           if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
           if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
           pnpm mma:delivery -- "${args[@]}"
-          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)
+          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/mma-files/banners/delivered.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)
           for receipt_path in "${receipt_paths[@]}"; do
             if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
               git add -A -- "$receipt_path"
