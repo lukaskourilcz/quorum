@@ -362,8 +362,8 @@ export default async function AdminPage({
     return {
       node: (
         <Callout>
-          No {selectedTab ? tabLabel(selectedTab) : "saved"} items are stored for{" "}
-          {selectedVenture.name} yet. The admin does not add fake examples.
+          Nothing is stored under {selectedTab ? tabLabel(selectedTab) : "this tab"} for{" "}
+          {ventureName(id, selectedVenture.name)} yet. The admin does not add fake examples.
         </Callout>
       ),
       count: 0
@@ -373,7 +373,9 @@ export default async function AdminPage({
   return (
     <AdminShell
       action={
-        selectedVenture?.tabs.includes("plans") ? (
+        // Declaring a plans tab is not the same as having a plan. Caught Up and GoVIRAL both
+        // declare one and store none, and the button opened an empty binder.
+        selectedVenture?.cards.some((card) => card.kind === "plan") ? (
           <Link
             className="shrink-0 rounded-[9px] border border-[#3f3f46] bg-[#101013] px-[13px] py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5]"
             href={`/admin/ventures/${selectedVenture.id}/binder`}
@@ -438,14 +440,19 @@ export default async function AdminPage({
             </Panel>
           </div>
 
-          <Panel note="Fail closed" title="Switches and priorities">
+          {/* The panel used to be titled "Switches and priorities" and hold no switch: quality
+              tiles, the social-readiness grid and the priority form. The actual per-project
+              switches live inside each venture's workspace, so the title says what is here and
+              the note says where the other thing is. */}
+          <Panel note="Nothing here spends money" title="Company health and priorities">
             <AutonomyPanel
               initial={autonomy}
               ventures={portfolio.ventures.map(({ id, name }) => ({ id, name }))}
             />
             <p className="mt-4 text-[12px] leading-[1.55] text-[#94949c]">
-              A switch that is off blocks the work. Nothing here approves spend, credentials or a
-              new scope — that stays with the owner&rsquo;s signature.
+              The switches that decide what a project may do next are on that project&rsquo;s own
+              page — open a project in the list on the left. Nothing on this page approves spending,
+              logins or a new permission; those still need your signature.
             </p>
           </Panel>
 
