@@ -122,9 +122,10 @@ import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/sign
 import { ensurePriorityItem, livePriorityItems, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
-import { loadRuntimeBudgetLimits } from "./portfolio/limits.js";
+import { loadEffectivePortfolioSchedule, loadRuntimeBudgetLimits } from "./portfolio/limits.js";
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 import { imageProgramReadiness, type ImageProgramReadiness } from "./images/readiness.js";
+import { contentGateEnabled, runContentGate } from "./quality/content-gate.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -2024,6 +2025,34 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const ecosystemArtifact = !options.dry && venturePhase === "night"
       ? (await refreshEcosystemOperatingTruth({ repoRoot })).path
       : null;
+    /*
+     * The night scores what the day published.
+     *
+     * Behind `CONTENT_GATE_ENABLED`, which is off by default and silent when off. It runs after
+     * every artifact above is written, so a gate that fails cannot take a delivery record with it,
+     * and it swallows its own failures — the worst it can do is record a day as unscored.
+     */
+    const contentGateArtifacts = !options.dry && venturePhase === "night" && contentGateEnabled()
+      && (await loadEffectivePortfolioSchedule(
+        ledgerSpend(await currentBudgetLedger(artifactRoot), (entry) => entry.ts.slice(0, 7) === now.toISOString().slice(0, 7))
+      )).contentGateAffordable
+      ? (await runContentGate({
+        stateRoot: artifactRoot,
+        cycleId,
+        now,
+        budgetContext: {
+          now,
+          cycleId,
+          stage: stages.current,
+          ledger: await currentBudgetLedger(artifactRoot),
+          allInNonApiSpentUsd: await loadFixedMonthlyUsd(configRoot, now),
+          allInCommittedUsd: 0,
+          knownMonthlyForecastUsd: 0,
+          remainingScheduledCycles: remainingScheduledCycles(now),
+          limits: budgetLimitsFromEnvironment()
+        }
+      })).artifacts
+      : [];
     if (options.explainBudget) {
       console.log(
         JSON.stringify(
