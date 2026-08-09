@@ -8,6 +8,12 @@ import {
 const adminUser = "e2e-owner";
 const adminPassword = "e2e-password";
 const sessionStartedAt = Date.now();
+const e2ePort = process.env.E2E_PORT ?? "3107";
+const e2eBaseUrl = `http://localhost:${e2ePort}`;
+const desktopChrome = {
+  ...devices["Desktop Chrome"],
+  viewport: { width: 1440, height: 900 }
+};
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -31,7 +37,7 @@ export default defineConfig({
   timeout: 120_000,
   reporter: [["list"]],
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: e2eBaseUrl,
     storageState: {
       cookies: [
         {
@@ -58,18 +64,25 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }
+      grepInvert: /@write-journey/,
+      use: desktopChrome
+    },
+    {
+      name: "chromium-write-journeys",
+      grep: /@write-journey/,
+      testMatch: /operating-surfaces\.spec\.ts/,
+      use: desktopChrome
     }
   ],
   webServer: {
-    command: "pnpm dev",
+    command: `pnpm dev --port ${e2ePort}`,
     env: {
       ADMIN_USER: adminUser,
       ADMIN_PASSWORD: adminPassword,
       BOARDLESSAI_REPO_ROOT: process.cwd().replace(/\/site$/, "")
     },
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    url: e2eBaseUrl,
+    reuseExistingServer: false,
     timeout: 60_000
   }
 });

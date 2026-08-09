@@ -107,7 +107,9 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
   // generated weeks, which only /calendar has.
-  await page.goto("/calendar", { waitUntil: "networkidle" });
+  // Start with the saved operating week. Its five-day window carries completed and future slots;
+  // the previous generated week carries the missed state this test also verifies.
+  await page.goto("/calendar/2026-08-03", { waitUntil: "networkidle" });
   await expect(page.locator("html")).toHaveAttribute(
     "data-scroll-behavior",
     "smooth"
@@ -129,8 +131,11 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // was young; there are none now, and requiring one would be requiring the company to keep
   // sample data in a public week.
   await expect(weekBoard.locator('[data-calendar-state="held"]')).not.toHaveCount(0);
-  await expect(weekBoard.locator('[data-calendar-state="missed"]')).not.toHaveCount(0);
   await expect(weekBoard.locator('[data-calendar-state="scheduled"]')).not.toHaveCount(0);
+  const previous = page.getByRole("link", { name: "Previous calendar week" });
+  await expect(previous).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
+  await previous.click();
+  await expect(weekBoard.locator('[data-calendar-state="missed"]')).not.toHaveCount(0);
   const next = page.getByRole("link", { name: "Next calendar week" });
   await expect(next).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
   await next.click();
@@ -219,20 +224,11 @@ test("measures role column keeps the table inset", async ({ page }) => {
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
 // on the plan card the binder assertion below already needs.
 /*
- * The two heaviest admin journeys, and the only two tests in this suite that get a retry.
- *
- * They sit at 117 and 118 of 168 in a single-worker run that lasts twenty minutes, and they are
- * the two that drive a real write and a real session change rather than reading a page. Measured
- * across this programme's runs they fail together and late, and the second reports
- * `Received string: ""` for the page URL — an empty URL is a dead page, not a failed assertion,
- * which is the browser giving out after twenty minutes of continuous use rather than the app
- * doing anything wrong. In isolation the rating journey passes in about 35 seconds.
- *
- * A retry is the honest instrument for that. It hides nothing: a real regression fails both
- * attempts, and these are the only tests in the file that get one.
+ * These journeys run in their own Playwright project. They get a separate browser process from
+ * the long read-only audit, while Playwright's page fixture gives each test a fresh context.
+ * A failed write or cleared cookie cannot leak into the next journey, and no retry masks a fault.
  */
-test.describe("admin journeys that write", () => {
-  test.describe.configure({ retries: 2 });
+test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
   test("admin rating persists and the launch binder renders", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
