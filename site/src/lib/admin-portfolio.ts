@@ -382,9 +382,11 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
   if (ventureId !== "caught-up") return [];
   const archive = await readAdminSocialArchive(root);
   return archive.packs.flatMap((pack) =>
-    (["en", "cs"] as const).flatMap((locale) =>
-      (["instagram", "threads"] as const).map((channel): AdminCard => {
-        const item = pack.byLocale[locale][channel];
+    (Object.keys(pack.byLocale) as Array<"en" | "cs">).flatMap((locale) => {
+      const localized = pack.byLocale[locale];
+      if (!localized) return [];
+      return (["instagram", "threads"] as const).map((channel): AdminCard => {
+        const item = localized[channel];
         const queue = pack.queue.find((entry) => entry.locale === locale && entry.channel === channel);
         const id = `caught-up-${pack.date}-${locale}-${channel}`;
         return {
@@ -404,7 +406,7 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
           graduation: null
         };
       })
-    )
+    })
   );
 }
 

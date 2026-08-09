@@ -45,7 +45,8 @@ export interface AdminSocialQueueItem {
 export interface AdminSocialPack {
   date: string;
   editionRef: string;
-  byLocale: Record<SocialLocale, AdminSocialLocale>;
+  /** A pack may be Czech-only while the English publishing route is off. */
+  byLocale: Partial<Record<SocialLocale, AdminSocialLocale>>;
   quoteCard: {
     frame: string;
     sourceTurnRef: string;
@@ -80,7 +81,7 @@ function safeHttpsUrl(value: unknown): string | null {
 }
 
 function safeFramePath(value: unknown): string | null {
-  return typeof value === "string" && /^\/social\/[a-zA-Z0-9/_-]+\.webp$/.test(value)
+  return typeof value === "string" && /^\/social\/[a-zA-Z0-9/_-]+\.(?:png|webp)$/.test(value)
     ? value
     : null;
 }
@@ -116,16 +117,22 @@ function parsePack(value: unknown, expectedDate: string): Omit<AdminSocialPack, 
     ? value.editionRef
     : null;
   const locales = isRecord(value.byLocale) ? value.byLocale : null;
-  const en = parseLocale(locales?.en);
-  const cs = parseLocale(locales?.cs);
+  const byLocale: Partial<Record<SocialLocale, AdminSocialLocale>> = {};
+  for (const locale of ["en", "cs"] as const) {
+    const value = locales?.[locale];
+    if (value === undefined) continue;
+    const parsed = parseLocale(value);
+    if (!parsed) return null;
+    byLocale[locale] = parsed;
+  }
   const quote = isRecord(value.quoteCard) ? value.quoteCard : null;
   const frame = safeFramePath(quote?.frame);
   const sourceTurnRef = safeString(quote?.sourceTurnRef, 240);
-  if (!editionRef || !en || !cs || !frame || !sourceTurnRef) return null;
+  if (!editionRef || Object.keys(byLocale).length === 0 || !frame || !sourceTurnRef) return null;
   return {
     date: expectedDate,
     editionRef,
-    byLocale: { en, cs },
+    byLocale,
     quoteCard: { frame, sourceTurnRef }
   };
 }
@@ -189,7 +196,7 @@ export async function readAdminSocialArchive(root = repositoryRoot): Promise<Adm
         continue;
       }
       const queue = await Promise.all(
-        (["en", "cs"] as const).flatMap((locale) =>
+        (Object.keys(parsed.byLocale) as SocialLocale[]).flatMap((locale) =>
           (["instagram", "threads"] as const).map((channel) =>
             readQueueItem(root, date, locale, channel)
           )

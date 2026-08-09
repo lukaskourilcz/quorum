@@ -250,6 +250,14 @@ test("marketingShark packages tab shows stored package cards", async ({ page }) 
   await expect(page.getByText("staged/e2e-package.json")).toBeVisible();
 });
 
+test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const archive = page.locator("#social-archive");
+  await expect(archive.getByRole("heading", { name: "CS social posts" })).toHaveCount(2);
+  await expect(archive.getByText("English edition")).toHaveCount(0);
+  await expect(archive.getByText(/social post files cannot be read/)).toHaveCount(0);
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs

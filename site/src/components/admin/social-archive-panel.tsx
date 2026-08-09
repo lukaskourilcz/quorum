@@ -47,8 +47,7 @@ function SocialCopy({ label, text }: { label: string; text: string }) {
   );
 }
 
-function SocialLocalePanel({ pack, locale }: { pack: AdminSocialPack; locale: "en" | "cs" }) {
-  const localized = pack.byLocale[locale];
+function SocialLocalePanel({ pack, locale, localized }: { pack: AdminSocialPack; locale: "en" | "cs"; localized: NonNullable<AdminSocialPack["byLocale"]["en"]> }) {
   const queue = pack.queue.filter((item) => item.locale === locale);
   return (
     <section aria-labelledby={`${pack.date}-${locale}`} className="min-w-0">
@@ -139,8 +138,10 @@ export function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPa
                   </div>
                 </div>
                 <div className="grid gap-10 2xl:grid-cols-2">
-                  <SocialLocalePanel locale="en" pack={pack} />
-                  <SocialLocalePanel locale="cs" pack={pack} />
+                  {(["en", "cs"] as const).flatMap((locale) => {
+                    const localized = pack.byLocale[locale];
+                    return localized ? [<SocialLocalePanel key={locale} locale={locale} localized={localized} pack={pack} />] : [];
+                  })}
                 </div>
               </CardContent>
             </Card>
