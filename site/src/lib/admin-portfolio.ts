@@ -507,8 +507,22 @@ export async function readAdminLaunchBinder(
   const venture = (await ventureConfigs(root)).find((candidate) => candidate.id === ventureId);
   if (!venture) return null;
   const ratingState = await readRatings(root, venture.id);
+  /*
+   * A Perfect rating makes a plan ready whatever its file still says.
+   *
+   * The filter used to also require `status === "owner_rated"`, and nothing ever sets that: rating
+   * a plan appends to `state/ratings/<venture>/ledger.jsonl` and does not touch the plan file. So
+   * two Perfect-rated Titty Tuesdays plans sat at `"status": "draft"` and the binder reported zero
+   * ready plans beside them.
+   *
+   * The alternative was to have the rating route write the plan file too. That would put a second
+   * writer on `state/ventures/<id>/plans/` for a fact the append-only ledger already records — the
+   * ledger is the owner's verdict, the file's `status` is the plan's own lifecycle, and reading the
+   * two together is cheaper and truer than keeping them in sync. `archived` still wins over a
+   * rating: a plan the owner retired is not ready, however well it once scored.
+   */
   const ready = (await planRecords(root, venture.id, ratingState.ratings)).details
-    .filter((plan) => plan.status === "approved" || (plan.status === "owner_rated" && plan.rating?.rating === "perfect"))
+    .filter((plan) => plan.status !== "archived" && (plan.status === "approved" || plan.rating?.rating === "perfect"))
     .sort((left, right) => (left.seasonId ?? "unassigned").localeCompare(right.seasonId ?? "unassigned") || left.title.localeCompare(right.title));
   const plans = await Promise.all(ready.map(async (plan) => ({
     ...plan,
