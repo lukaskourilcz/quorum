@@ -915,3 +915,80 @@ test.describe("footer links open dialogs", () => {
     expect(await page.evaluate(() => document.activeElement?.getAttribute("data-footer-dialog"))).toBe("disclosure");
   });
 });
+
+/**
+ * Navigation that does not move under a pointer.
+ *
+ * Every label in the walkthrough's rail carried twelve pixels of permanent empty gap for an
+ * indicator dot that was only painted on the active one — the reserved space was itself the bug
+ * the owner reported. The dot is out of the flow now, and the right-hand rail's buttons are a
+ * fixed slot rather than 7px or 10px depending on which section you are in. These measure boxes
+ * rather than trusting the class list.
+ */
+test.describe("navigation reserves no space it does not paint", () => {
+  test("hovering a walkthrough nav item moves nothing", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const items = page.locator("[data-nav-item]");
+    const count = await items.count();
+    expect(count).toBeGreaterThan(3);
+
+    const boxes = async () => page.evaluate(() =>
+      [...document.querySelectorAll("[data-nav-item]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return [Math.round(rect.x), Math.round(rect.y), Math.round(rect.width), Math.round(rect.height)].join(",");
+      }));
+
+    const before = await boxes();
+    for (let index = 0; index < count; index += 1) {
+      await items.nth(index).hover();
+      expect(await boxes(), `hovering item ${index} moved the rail`).toEqual(before);
+    }
+    await page.mouse.move(0, 0);
+    expect(await boxes()).toEqual(before);
+  });
+
+  test("the section rail's buttons are one fixed size in every state", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const sizes = await page.evaluate(() =>
+      [...document.querySelectorAll("[data-dot]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return `${Math.round(rect.width)}x${Math.round(rect.height)}`;
+      }));
+    expect(sizes.length).toBeGreaterThan(3);
+    expect(new Set(sizes).size, "the rail's buttons are not all one size").toBe(1);
+
+    // Move to another section: the active mark changes and no button's box does.
+    const before = sizes;
+    await page.locator("[data-dot]").nth(2).click();
+    await expect.poll(async () => page.evaluate(() =>
+      [...document.querySelectorAll("[data-dot]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return `${Math.round(rect.width)}x${Math.round(rect.height)}`;
+      }))).toEqual(before);
+  });
+
+  test("the top navigation shifts colour and nothing else", async ({ page }) => {
+    await page.goto("/company", { waitUntil: "networkidle" });
+    const links = page.locator("header nav a");
+    const count = await links.count();
+    const boxes = async () => page.evaluate(() =>
+      [...document.querySelectorAll("header nav a")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return [Math.round(rect.x), Math.round(rect.width), Math.round(rect.height)].join(",");
+      }));
+    const before = await boxes();
+    for (let index = 0; index < count; index += 1) {
+      await links.nth(index).hover();
+      expect(await boxes(), `hovering link ${index} moved the header`).toEqual(before);
+    }
+  });
+
+  test("reduced motion keeps the same geometry", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/", { waitUntil: "networkidle" });
+    const item = page.locator("[data-nav-item]").first();
+    const before = await item.boundingBox();
+    await item.hover();
+    expect(await item.boundingBox()).toEqual(before);
+  });
+});

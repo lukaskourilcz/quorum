@@ -359,15 +359,35 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
     [goTo]
   );
 
+  /**
+   * A fixed slot, always painted, whatever the active section is.
+   *
+   * The dot used to be 7px when inactive and 10px when active, so every scroll resized two of the
+   * eight and shifted the column between them. The button's box is now constant and only what is
+   * drawn inside it changes — which is what "the indicator never changes a box" means when the
+   * indicator is the whole control.
+   */
   const dotStyle = useMemo(
+    () => () => ({
+      width: "10px",
+      height: "10px",
+      display: "grid",
+      placeItems: "center",
+      padding: 0,
+      border: 0,
+      background: "transparent",
+      cursor: "pointer"
+    }),
+    []
+  );
+
+  const dotMarkStyle = useMemo(
     () => (index: number) => ({
       width: index === active ? "10px" : "7px",
       height: index === active ? "10px" : "7px",
-      padding: 0,
       borderRadius: "50%",
       border: `1px solid ${index === active ? "var(--bai-accent)" : "#3f3f46"}`,
-      background: index === active ? "var(--bai-accent)" : "transparent",
-      cursor: "pointer"
+      background: index === active ? "var(--bai-accent)" : "transparent"
     }),
     [active]
   );
@@ -395,11 +415,12 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             <span>BoardlessAI</span>
           </button>
           {/*
-            The active dot is always in the markup and only changes colour.
-            Rendering it conditionally inserted 12px into the row the moment a section became
-            active, which pushed that button's label sideways and shoved every button after it
-            along — the rail appeared to twitch on every jump. Reserving the space costs nothing
-            and the labels never move.
+            The active mark takes no layout space at all.
+            It used to be an inline dot rendered at zero opacity when inactive, which stopped the
+            rail twitching by making every label carry twelve pixels of permanent empty gap for a
+            dot that was not there — the owner's report was the gap, not the twitch. Absolutely
+            positioned under the label it is out of the flow entirely: nothing reserves room for
+            it, nothing moves when it appears, and the row measures the same in both states.
           */}
           <nav
             aria-label="Primary"
@@ -410,17 +431,18 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             {NAV.map((entry) => (
               <button
                 aria-current={active === entry.index ? "true" : undefined}
-                className="inline-flex shrink-0 items-center gap-[7px] whitespace-nowrap rounded-lg px-2.5 py-2 text-[12px] font-medium text-[#d4d4d8] transition-colors hover:bg-[#202024] hover:text-white md:px-3 md:text-[13px]"
+                className="relative inline-flex shrink-0 items-center whitespace-nowrap rounded-lg px-2.5 py-2 text-[12px] font-medium text-[#d4d4d8] transition-colors hover:bg-[#202024] hover:text-white md:px-3 md:text-[13px]"
+                data-nav-item
                 key={entry.label}
                 onClick={() => goTo(entry.index)}
                 type="button"
               >
+                {entry.label}
                 <span
                   aria-hidden="true"
-                  className="size-[5px] shrink-0 rounded-full bg-[var(--bai-accent)]"
+                  className="pointer-events-none absolute bottom-[3px] left-1/2 size-[5px] -translate-x-1/2 rounded-full bg-[var(--bai-accent)] transition-opacity"
                   style={{ opacity: active === entry.index ? 1 : 0 }}
                 />
-                {entry.label}
               </button>
             ))}
           </nav>
@@ -443,7 +465,9 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
         data-dots
       >
         {SECTIONS.map((id, index) => (
-          <button key={id} onClick={() => goTo(index)} style={dotStyle(index)} title={id} type="button" />
+          <button data-dot key={id} onClick={() => goTo(index)} style={dotStyle()} title={id} type="button">
+            <span aria-hidden="true" style={dotMarkStyle(index)} />
+          </button>
         ))}
       </div>
 

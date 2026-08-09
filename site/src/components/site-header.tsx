@@ -49,7 +49,9 @@ export function SiteHeader() {
                   : undefined
               }
               className={cn(
-                "whitespace-nowrap rounded-lg px-3 py-2 text-[0.8125rem] font-medium text-[var(--fog)] transition-colors hover:bg-[var(--secondary)] hover:text-[var(--foreground)]",
+                // Colour only. No border appearing on hover, no weight change, no padding change:
+                // every one of those moves the item's box and shifts the whole row with it.
+                "whitespace-nowrap rounded-lg px-3 py-2 text-[0.8125rem] font-medium text-[var(--fog)] transition-colors duration-150 hover:bg-[var(--secondary)] hover:text-[var(--foreground)] motion-reduce:transition-none",
                 (pathname === link.href ||
                   pathname.startsWith(`${link.href}/`)) &&
                   "bg-[var(--secondary)] text-[var(--foreground)]"
