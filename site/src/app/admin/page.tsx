@@ -283,6 +283,88 @@ export default async function AdminPage({
     : [];
   const selectedAgentControls = agentControls.find((control) => control.ventureId === selectedVenture?.id);
 
+  /**
+   * The tab body and the number printed above it, resolved together.
+   *
+   * They used to be two independent expressions: the chip printed a whole-workspace total from
+   * `savedItemCount` while the body below it was tab-filtered, so "5 saved items" sat above an
+   * empty plans tab and "11 saved items" above five articles. Returning one `{ node, count }` from
+   * one branch is what keeps them honest — a new tab cannot add a body without also declaring what
+   * it counts. The workspace-wide total still exists, in the rail, where it is true.
+   */
+  const tabView = ((): { node: React.ReactNode; count: number } => {
+    if (!selectedVenture) return { node: null, count: 0 };
+    const id = selectedVenture.id;
+    if (id === "carousel-studio" && selectedTab === "hooks") {
+      return {
+        node: <HookBrainAdminPanel snapshot={hookBrain} />,
+        count: hookBrain.surfaces.length + hookBrain.channels.length + hookBrain.recent.length
+      };
+    }
+    if (id === "carousel-studio" && selectedTab === "studio") {
+      return {
+        node: <DesignLabWorkspace articles={labArticles} presets={labPresets} />,
+        count: labArticles.length
+      };
+    }
+    if (id === "carousel-studio" && selectedTab === "inspiration") {
+      return {
+        node: <CarouselStudioAdminPanel snapshot={carouselStudio} tab="inspiration" />,
+        count: carouselStudio.inspirationLinks.length
+      };
+    }
+    if (id === "caught-up" && selectedTab === "events") {
+      return {
+        node: (
+          <CaughtUpEventsPanel
+            engine={caughtUp.engine}
+            events={caughtUp.events}
+            today={caughtUp.today}
+          />
+        ),
+        count: caughtUp.events.length
+      };
+    }
+    if (id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab)) {
+      const tab = selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources";
+      return { node: <FightAiQAdminPanel snapshot={fightaiq} tab={tab} />, count: fightaiq[tab].length };
+    }
+    if (id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab)) {
+      const tab = selectedTab as "articles" | "calendar" | "social-lab";
+      return {
+        node: <MmaFilesAdminPanel snapshot={mmaFiles} tab={tab} />,
+        count: tab === "articles"
+          ? mmaFiles.articles.length
+          : tab === "calendar" ? mmaFiles.calendar.length : mmaFiles.socialPacks.length
+      };
+    }
+    if (visibleCards.length) {
+      return {
+        node: (
+          <div className="grid gap-4 xl:grid-cols-2">
+            {visibleCards.map((card) => (
+              <PortfolioCard
+                card={card}
+                key={`${card.kind}-${card.id}`}
+                originHref={card.originMeetingRef ? publicMeetingHref(card.originMeetingRef, standups) : null}
+              />
+            ))}
+          </div>
+        ),
+        count: visibleCards.length
+      };
+    }
+    return {
+      node: (
+        <Callout>
+          No {selectedTab ? tabLabel(selectedTab) : "saved"} items are stored for{" "}
+          {selectedVenture.name} yet. The admin does not add fake examples.
+        </Callout>
+      ),
+      count: 0
+    };
+  })();
+
   return (
     <AdminShell
       action={
@@ -396,7 +478,7 @@ export default async function AdminPage({
               );
             })}
             <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c]">
-              {savedItemCount(selectedVenture.id, selectedVenture.cards.length)} saved items
+              {tabView.count} on this tab
             </span>
           </div>
 
@@ -408,49 +490,7 @@ export default async function AdminPage({
             </Callout>
           ) : null}
 
-          <div className={`min-w-0 ${UNWRAP}`}>
-            {selectedVenture.id === "carousel-studio" && selectedTab === "hooks" ? (
-              <HookBrainAdminPanel snapshot={hookBrain} />
-            ) : selectedVenture.id === "carousel-studio" && selectedTab === "studio" ? (
-              <DesignLabWorkspace articles={labArticles} presets={labPresets} />
-            ) : selectedVenture.id === "carousel-studio" && selectedTab ? (
-              <CarouselStudioAdminPanel
-                snapshot={carouselStudio}
-                tab={selectedTab as "templates" | "inspiration" | "social-lab"}
-              />
-            ) : selectedVenture.id === "caught-up" && selectedTab === "events" ? (
-              <CaughtUpEventsPanel
-                engine={caughtUp.engine}
-                events={caughtUp.events}
-                today={caughtUp.today}
-              />
-            ) : selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab) ? (
-              <FightAiQAdminPanel
-                snapshot={fightaiq}
-                tab={selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources"}
-              />
-            ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab) ? (
-              <MmaFilesAdminPanel
-                snapshot={mmaFiles}
-                tab={selectedTab as "articles" | "calendar" | "social-lab"}
-              />
-            ) : visibleCards.length ? (
-              <div className="grid gap-4 xl:grid-cols-2">
-                {visibleCards.map((card) => (
-                  <PortfolioCard
-                    card={card}
-                    key={`${card.kind}-${card.id}`}
-                    originHref={card.originMeetingRef ? publicMeetingHref(card.originMeetingRef, standups) : null}
-                  />
-                ))}
-              </div>
-            ) : (
-              <Callout>
-                No {selectedTab ? tabLabel(selectedTab) : "saved"} items are stored for{" "}
-                {selectedVenture.name} yet. The admin does not add fake examples.
-              </Callout>
-            )}
-          </div>
+          <div className={`min-w-0 ${UNWRAP}`}>{tabView.node}</div>
 
           {selectedAgentControls ? (
             <div className={`min-w-0 ${UNWRAP}`}>
