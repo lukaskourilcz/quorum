@@ -9,13 +9,6 @@
       "autoPort": true
     },
     {
-      "name": "dneskai",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-C", "../aifirst", "dev"],
-      "port": 3100,
-      "autoPort": true
-    },
-    {
       "name": "site-prod",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["-C", "site", "start"],

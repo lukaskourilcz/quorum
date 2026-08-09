@@ -583,6 +583,17 @@ marketingShark adds about 6c to a day.
 
 ## Recently finished
 
+- **The engine grew the DNESKAi launch redesign**, 2026-08-09. The writing desk can file an
+  edition under a section under a rule strict enough that uncategorised stays the common case,
+  and the same call plus the Czech editor prompt now enforce Czech typography and an outright
+  em-dash ban. Two contracts carry the magazine's new sections: `boardless-stream/1` for the
+  external links and podcast episodes, `boardless-events/1` for the events the owner types in a
+  new admin tab whose past entries cannot be edited without saying it is a correction. The
+  fetcher calls no model, reaches only hosts the registry names and the allowlist permits, and
+  turns a dead feed into a receipt line rather than a failed run. Both deliveries are their own
+  kind with their own allowlist inside the existing daily cycle, so no new job, cron or phase
+  appeared and nothing was drawn from the model share. Switched off until
+  `CAUGHT_UP_STREAMS_ENABLED` is set.
 - **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty static
   faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
   Plex Sans for DNESKAi, Barlow Condensed and Barlow for MMA Files, Petrona and Karla for Titty
@@ -657,7 +668,9 @@ marketingShark adds about 6c to a day.
 
 ## Branches
 
-Every branch this repository opened is merged and gone. `claude/article-image-selection-61rs70`
+Every branch this repository opened is merged and gone.
+`claude/dneskai-magazine-redesign-yw9bv1` carried the engine half of the DNESKAi launch redesign
+and merged into `main` on 2026-08-09. `claude/article-image-selection-61rs70`
 held the countersigned image decision and its build contract; the twelve-issue programme ran on
 it and it merged into `main` on 2026-08-09, taking the contract with it — the decision file
 `state/decisions/2026-08-08-article-image-fit.md` is the permanent record. Before it,
