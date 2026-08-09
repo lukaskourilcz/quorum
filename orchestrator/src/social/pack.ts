@@ -7,11 +7,11 @@ import {
   toRenderablePng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
-import { DECK_STYLES, articleSlideSlot } from "@boardlessai/carousel-studio";
+import { articleSlideSlot, recipeTemplateId, recipeVariant } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import { writeDeckReceipt } from "./deck-receipt.js";
-import { effectiveDeckStyle } from "./deck-style.js";
-import { buildArticleDeck, deckStyleFor, reviewDeck } from "@boardlessai/carousel-studio";
+import { effectiveRecipe } from "./deck-style.js";
+import { buildArticleDeck, reviewDeck } from "@boardlessai/carousel-studio";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";
@@ -178,13 +178,15 @@ export async function composeEditionSocialPack(input: {
    * Never the body. An eleven-hundred-word edition would be thirty-seven slides, and the
    * frontmatter arrays are already the editor's own summary of the same text.
    */
-  // Fixed by the edition date, so a replay renders identical bytes.
-  const deckStyle = await effectiveDeckStyle({
+  // The recorded recipe: family, variant, treatment, type scale and rhythm rotation, derived from
+  // the edition's own identity and the venture's recent receipts, so a replay renders the bytes it
+  // rendered the first time.
+  const recipe = await effectiveRecipe({
     root: input.stateRoot,
     venture: "caught-up",
     slug: (editionPackage.article?.cs ?? editionPackage.article?.en)?.frontmatter.slug ?? editionPackage.date,
     date: editionPackage.date,
-    seed: editionPackage.date
+    hasHero: Boolean(editionPackage.image?.hero_bytes_base64)
   });
   const visualReference = (locale: SocialLocale): TemplateReference | null => {
     const article = editionPackage.article?.[locale]?.frontmatter;
@@ -202,10 +204,13 @@ export async function composeEditionSocialPack(input: {
     });
     if (!reviewDeck(slides).publishable) return null;
     return {
-      template_id: `deck-${deckStyle}-${slides.length}`,
+      template_id: recipeTemplateId(recipe, slides.length),
       version: "1.0.0",
       content: {
         locale,
+        // The recipe's own rendering, so the queued frames are the design that was recorded
+        // rather than whichever one the renderer defaults to.
+        ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {}),
         strings: Object.fromEntries(slides.map((slide, index) => [articleSlideSlot(index), slide.text]))
       }
     };
@@ -422,7 +427,8 @@ export async function composeEditionSocialPack(input: {
     date: input.editionPackage.date,
     slug: (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter.slug,
     templateId: csVisual.template_id,
-    style: deckStyle,
+    style: recipe.family,
+    recipe,
     slideCount: Object.keys(csVisual.content.strings).length,
     hashes: Object.values(frameHashes)
   });

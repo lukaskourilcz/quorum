@@ -6,6 +6,7 @@ import {
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 import { ARTICLE_HERO_SLOT, articleSlideSlot, deckFormats } from "./library.js";
+import { DECK_FAMILIES, type DeckFamily } from "./designs.js";
 
 /**
  * Ten template families, from `docs/design-lab/SPEC.md`.
@@ -46,20 +47,6 @@ const LEFT = 0.075;
 const RIGHT = 0.925;
 const MEASURE = RIGHT - LEFT;
 
-export const DECK_FAMILIES = [
-  "masthead",
-  "gutter",
-  "bevel",
-  "porthole",
-  "slab",
-  "terrace",
-  "figure",
-  "pull",
-  "tower",
-  "dossier"
-] as const;
-
-export type DeckFamily = (typeof DECK_FAMILIES)[number];
 
 /** What a family does with the article's photograph, which is how the Lab groups them. */
 export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-only" | "quiet">> = {
@@ -555,18 +542,50 @@ export function familyTemplateId(family: DeckFamily, slideCount: number): string
 }
 
 /**
+ * The axes a recipe turns, over and above which family it picked.
+ *
+ * `typeScale` moves every ceiling and floor in the family together, so a deck can be set louder
+ * or quieter without a second composition. `phaseSeed` rotates the rhythm, so two articles in the
+ * same family do not open on the same beat. `treatment` rides along on the image layers, which is
+ * where the renderer reads it.
+ */
+export interface FamilyOptions {
+  typeScale?: number;
+  phaseSeed?: number;
+  treatment?: "none" | "mono" | "duotone";
+}
+
+function scaled(layers: CarouselLayerInput[], options: FamilyOptions): CarouselLayerInput[] {
+  const scale = options.typeScale ?? 1;
+  const treatment = options.treatment ?? "none";
+  if (scale === 1 && treatment === "none") return layers;
+  return layers.map((layer) => {
+    if (layer.type === "image" && treatment !== "none") return { ...layer, treatment };
+    if (layer.type !== "text" || scale === 1) return layer;
+    // Bounded by the schema's own limits, so a scaled ceiling cannot leave the contract.
+    const clamp = (value: number) => Math.max(16, Math.min(160, Math.round(value * scale)));
+    return { ...layer, minFontSize: clamp(layer.minFontSize), maxFontSize: clamp(layer.maxFontSize) };
+  });
+}
+
+/**
  * One family, sized to the article.
  *
  * Cover, body beats, closing slide — the same arc `articleDeckTemplate` builds, with the family's
  * own composition and its rhythm walking the body. The slots are `slide-01`… as everywhere else,
  * so a payload built for one family renders in any of them.
  */
-export function familyDeckTemplate(family: DeckFamily, slideCount: number): CarouselTemplate {
+export function familyDeckTemplate(family: DeckFamily, slideCount: number, options: FamilyOptions = {}): CarouselTemplate {
   const specification = families[family];
   const slots = Array.from({ length: slideCount }, (_, index) => articleSlideSlot(index));
+  const scale = options.typeScale ?? 1;
+  const rotation = options.phaseSeed ?? 0;
+  const canonical = scale === 1 && rotation === 0;
   const input: CarouselTemplateInput = {
     schemaVersion: "carousel-template/1",
-    id: familyTemplateId(family, slideCount),
+    id: canonical
+      ? familyTemplateId(family, slideCount)
+      : `${familyTemplateId(family, slideCount)}-s${Math.round(scale * 10)}p${rotation}`,
     name: `${family[0]!.toUpperCase()}${family.slice(1)} · ${slideCount} slides`,
     version: "1.0.0",
     status: "live",
@@ -577,14 +596,14 @@ export function familyDeckTemplate(family: DeckFamily, slideCount: number): Caro
     slides: slots.map((slot, index) => {
       const role: Role = index === 0 ? "cover" : index === slideCount - 1 ? "outro" : "body";
       // The beat walks the body only, so the cover and the closing slide are always themselves.
-      const beat = RHYTHM[(index - 1 + RHYTHM.length) % RHYTHM.length]!;
+      const beat = RHYTHM[(index - 1 + rotation + RHYTHM.length * 2) % RHYTHM.length]!;
       const phase = slideCount === 1 ? 0 : index / (slideCount - 1);
       const ground = role === "cover" ? "background" : role === "outro" ? "surface" : beat.ground;
       return {
         id: `slide-${family}-${String(index + 1).padStart(2, "0")}`,
         backgroundToken: ground,
         variants: variantsFor({ ...beat, ground }),
-        layers: specification.compose({ slot, index, slideCount, role, beat, phase })
+        layers: scaled(specification.compose({ slot, index, slideCount, role, beat, phase }), options)
       };
     })
   };

@@ -10,7 +10,9 @@ import {
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 import { fitsSafeArea } from "./validation.js";
-import { familyDeckTemplates } from "./families.js";
+import { familyDeckTemplate, familyDeckTemplates } from "./families.js";
+import { DECK_STYLES, isDeckStyle, type DeckStyle } from "./designs.js";
+import { parseRecipeTemplateId } from "./recipe.js";
 
 export const deckFormats = {
   "instagram-square": { width: 1_080, height: 1_080, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
@@ -131,15 +133,6 @@ export function articleSlideSlot(index: number): string {
 /** The slot the article's own hero occupies on the opening slide. */
 export const ARTICLE_HERO_SLOT = "image";
 
-/**
- * The five deck designs.
- *
- * They differ in composition and in how the gradient behaves, not in palette. Every colour is a
- * brand token, so the same design reads as Caught Up's magenta or MMA Files' orange without a
- * template inventing anything — which is what BRAND.md locks and what brandTokenCheck enforces.
- */
-export const DECK_STYLES = ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const;
-export type DeckStyle = (typeof DECK_STYLES)[number];
 
 const mesh = (
   blobs: Array<{ colorToken: string; cx: number; cy: number; radius: number; opacity: number }>,
@@ -663,7 +656,20 @@ const czechFixtureOverrides: Partial<Record<string, Record<string, string>>> = {
 };
 
 export function templateByReference(templateId: string, version: string): CarouselTemplate | null {
-  return liveTemplates().find((template) => template.id === templateId && template.version === version) ?? null;
+  const eager = liveTemplates().find((template) => template.id === templateId && template.version === version);
+  if (eager) return eager;
+  /*
+   * A recipe's non-canonical rendering, rebuilt from its own id.
+   *
+   * Type scale and rhythm rotation multiply out to seven hundred templates per version, which is
+   * not a library — it is a lookup table nobody could read. The id carries both axes, so the
+   * reference still names exactly one byte stream and the template is built when it is asked for.
+   */
+  if (version !== "1.0.0") return null;
+  const parsed = parseRecipeTemplateId(templateId);
+  if (!parsed || parsed.slideCount < MIN_SLIDES || parsed.slideCount > MAX_RESOLVABLE_SLIDES) return null;
+  if (isDeckStyle(parsed.design)) return articleDeckTemplate(parsed.slideCount, parsed.design);
+  return familyDeckTemplate(parsed.design, parsed.slideCount, { typeScale: parsed.typeScale, phaseSeed: parsed.phaseSeed });
 }
 
 export function liveTemplateByReference(templateId: string, version: string): CarouselTemplate {

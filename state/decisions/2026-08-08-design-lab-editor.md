@@ -69,7 +69,7 @@ this decision wins, then the document, then — being newest — the issue.
 - [x] DL-04 — Committed fonts, real metrics, machine-independent PNG hashes (contract §DL-04)
 - [x] DL-05 — The family library replaces five wallpapers; CSS gallery retired (contract §DL-05)
 - [x] DL-06 — Stories, squares and Threads covers; no render-and-discard (contract §DL-06)
-- [ ] DL-07 — Recipe variety engine with receipt-based anti-repeat (contract §DL-07)
+- [x] DL-07 — Recipe variety engine with receipt-based anti-repeat (contract §DL-07)
 - [ ] DL-08 — Copy pack in the existing desk calls; credit appended by code (contract §DL-08)
 - [ ] DL-09 — Recipes and copy recorded at delivery as inventory (contract §DL-09)
 - [ ] DL-10 — One studio workspace: rail, canvas, controls, output (contract §DL-10)

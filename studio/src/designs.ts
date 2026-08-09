@@ -1,0 +1,47 @@
+/**
+ * The names of every deck design, and nothing else.
+ *
+ * A leaf module on purpose. The library builds templates from families, the recipe names families
+ * and styles, and the library resolves a recipe's id — three files that need the same handful of
+ * constants and would otherwise import each other in a ring. A ring of `export const` arrays is
+ * not a design problem, it is a module-initialisation crash: whichever file loses the race reads
+ * an uninitialised binding.
+ */
+
+/**
+ * The five original deck designs.
+ *
+ * Kept, and kept resolvable: stored packs name `deck-mesh-5` through `deck-spotlight-10`, and an
+ * owner override recorded before the families existed names one of these. They are one design in
+ * five coats — `mesh`, `aurora` and `spotlight` are the same blurred-radial-blob primitive — which
+ * is why nothing new derives them, but a recorded choice still binds.
+ */
+export const DECK_STYLES = ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const;
+export type DeckStyle = (typeof DECK_STYLES)[number];
+
+/** The ten families of `docs/design-lab/SPEC.md`, which is what the engine draws from now. */
+export const DECK_FAMILIES = [
+  "masthead",
+  "gutter",
+  "bevel",
+  "porthole",
+  "slab",
+  "terrace",
+  "figure",
+  "pull",
+  "tower",
+  "dossier"
+] as const;
+export type DeckFamily = (typeof DECK_FAMILIES)[number];
+
+/** Everything a recipe's `family` field may name. */
+export const DECK_DESIGNS = [...DECK_FAMILIES, ...DECK_STYLES] as const;
+export type DeckDesign = (typeof DECK_DESIGNS)[number];
+
+export function isDeckFamily(value: string): value is DeckFamily {
+  return (DECK_FAMILIES as readonly string[]).includes(value);
+}
+
+export function isDeckStyle(value: string): value is DeckStyle {
+  return (DECK_STYLES as readonly string[]).includes(value);
+}
