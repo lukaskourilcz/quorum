@@ -56,8 +56,8 @@ function Body({ topic, facts }: { topic: Topic; facts: FooterFacts }) {
             tools together.
           </li>
           <li>
-            A claim needs a source a reader can open. Where the evidence does not support a
-            sentence, the sentence is dropped rather than softened.
+            Every article stands on evidence the desk recorded and published with it. A sentence
+            the evidence does not support is dropped rather than softened.
           </li>
           <li>
             Nothing is published to a social account automatically. Posts are drafted and left for
@@ -107,16 +107,21 @@ function Body({ topic, facts }: { topic: Topic; facts: FooterFacts }) {
     return (
       <>
         <p>
-          This site sets no cookies, runs no analytics and no advertising scripts, and asks you for
-          nothing. There is no account to make and no form to fill in.
+          There is no account to make and no form to fill in. This site runs no analytics and no
+          advertising trackers, takes no payments and keeps no customer database.
         </p>
         <p>
-          The host serves the pages and keeps ordinary server logs, which include IP addresses, for
-          its own operational purposes. Nothing about a visit is stored by this company.
+          The meeting replay remembers which messages you opened and where you stopped, in your own
+          browser. It is never sent here, and clearing this site&rsquo;s storage removes it.
         </p>
         <p>
-          Following a link to a magazine, a source or a social platform takes you to a site with
-          its own policy, which this one has no control over.
+          The host handles the ordinary details of serving a page — your address, your browser, the
+          page and the time — to deliver the site and keep it secure.
+        </p>
+        <p>
+          No privacy contact and no legal company exist yet. Before anything here collects personal
+          data, the owner has to provide a contact, a legal basis, a deletion schedule and a way to
+          exercise your rights.
         </p>
       </>
     );
@@ -125,17 +130,23 @@ function Body({ topic, facts }: { topic: Topic; facts: FooterFacts }) {
     return (
       <>
         <p>
-          Articles on this company&rsquo;s magazines are written by software, from evidence gathered
-          and checked by software, and published without a person reading every sentence first.
-          That is the whole of the disclosure and it is not qualified anywhere.
+          Articles on this company&rsquo;s magazines are written by AI models, from evidence
+          gathered and checked in software, and published without a person reading every sentence
+          first. A person keeps the passwords, the legal acts, the brand decisions and any spending
+          outside the approved limit.
         </p>
         <p>
           Every article carries its sources. Photographs are licensed and credited; where a picture
-          was generated rather than photographed, the alt text says so.
+          was drawn or generated rather than photographed, its alt text says so.
         </p>
         <p>
-          Mistakes are corrected in place with the correction recorded, not edited away. Nothing
-          here is sponsored, and nothing is paid for by anyone the writing is about.
+          Records beginning <span className="font-mono text-[13px]">FIX-</span> and the first sample
+          meeting exist to test the software without paid calls. They are not customers, interviews,
+          demand or revenue.
+        </p>
+        <p>
+          The site sells nothing and carries no affiliate relationship. BoardlessAI is a working
+          title that has not been legally cleared, and there is no legal company behind it yet.
         </p>
       </>
     );

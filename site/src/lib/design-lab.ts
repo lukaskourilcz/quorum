@@ -10,6 +10,7 @@ import {
   derivedCopyPack,
   deriveRecipe,
   encodeRecipe,
+  renderCaption,
   reviewDeck,
   wordCount,
   type CarouselRecipe,
@@ -200,19 +201,13 @@ export async function readDesignLab(limit = 40): Promise<LabArticle[]> {
       recipe,
       recipePinned: Boolean(override),
       copy,
-      // The credit is appended here, by code, and the workspace shows it as part of the caption
-      // it cannot remove. A carousel reaching a feed without it is a licence breach.
-      caption: renderCaptionSafely(copy)
+      // The credit is appended here, by the same function the ship path uses, and the workspace
+      // shows it as part of a caption it cannot edit out. A carousel reaching a feed without it is
+      // a licence breach.
+      caption: renderCaption(copy.copy.igCaption, copy.heroCredit)
     });
   }
   return lab;
-}
-
-/** The caption with its credit. A pack whose credit is blank is shown without one, not refused. */
-function renderCaptionSafely(pack: SocialCopyPack): string {
-  const credit = pack.heroCredit?.trim();
-  if (!credit) return pack.copy.igCaption;
-  return pack.copy.igCaption.includes(credit) ? pack.copy.igCaption : `${pack.copy.igCaption}\n\n${credit}`;
 }
 
 export { MAX_SLIDE_WORDS, encodeRecipe };
