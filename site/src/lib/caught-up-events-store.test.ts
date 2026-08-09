@@ -139,7 +139,6 @@ describe("applying a save", () => {
     for (const [id, starts] of [["c", "2026-12-01"], ["a", "2026-09-01"], ["b", "2026-10-01"]] as const) {
       current = applyEvent(current, event({ id, starts }), { today: TODAY }).file;
     }
-    expect(current.file?.events ?? current.events).toBeDefined();
     expect(current.events.map((e) => e.id)).toEqual(["a", "b", "c"]);
   });
 
