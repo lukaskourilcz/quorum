@@ -17,6 +17,7 @@ import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { IdeasPanel, MonetizationPanel, type FutureIdeaRow } from "@/components/admin/future-panels";
 import { Panel, Tile } from "@/components/admin/panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
+import { RenderedDeskPanel } from "@/components/admin/rendered-desk-panel";
 import { SocialArchive } from "@/components/admin/social-archive-panel";
 import { Callout } from "@/components/ui/callout";
 import {
@@ -38,6 +39,7 @@ import { readGoViralProfile } from "@/lib/goviral-profile";
 import { readHookBrain } from "@/lib/hook-brain";
 import { readMonetizationOptions } from "@/lib/monetization-options";
 import { readOwnerAttention } from "@/lib/owner-attention";
+import { readRenderedDesk } from "@/lib/rendered-desk";
 import { readStudioArticles } from "@/lib/carousel-summaries";
 import { getDailyResults } from "@/lib/daily-results";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
@@ -140,7 +142,8 @@ export default async function AdminPage({
     money,
     dailyResults,
     ownerAttention,
-    monetization
+    monetization,
+    renderedDesk
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -161,7 +164,8 @@ export default async function AdminPage({
     getPublicMoneySnapshot(),
     getDailyResults(),
     readOwnerAttention(),
-    readMonetizationOptions()
+    readMonetizationOptions(),
+    readRenderedDesk()
   ]);
 
   /*
@@ -540,6 +544,10 @@ export default async function AdminPage({
               page — open a project in the list on the left. Nothing on this page approves spending,
               logins or a new permission; those still need your signature.
             </p>
+          </Panel>
+
+          <Panel note="The last three days" title="What shipped">
+            <RenderedDeskPanel desk={renderedDesk} />
           </Panel>
 
           <AdminFileBrowser files={files} />
