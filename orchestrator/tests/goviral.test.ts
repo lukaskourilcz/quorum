@@ -2,11 +2,18 @@ import { describe, expect, it } from "vitest";
 import {
   APIFY_MONTHLY_CREDIT_USD,
   APIFY_RUN_RESERVATION_USD,
+  MMA_APIFY_MONTHLY_SHARE_USD,
+  MMA_APIFY_RUN_RESERVATION_USD,
   currentMonthQuota,
+  currentMmaApifyQuota,
   emptyApifyQuota,
+  emptyMmaApifyQuota,
   estimateActorUsd,
   loadGoViralSourceRegistry,
   mayRunApify,
+  mayRunMmaApify,
+  parseMmaApifyApprovals,
+  recordMmaActorUsage,
   recordActorUsage,
   type GoViralActor
 } from "../src/sources/apify.js";
@@ -119,6 +126,59 @@ describe("the Apify quota guard", () => {
     expect(thin.length).toBeLessThan(full.length);
     expect(thin.map((entry) => entry.step.step)).toEqual([...thin.map((entry) => entry.step.step)].sort((a, b) => a - b));
     expect(plannedRecipeSteps({ registry, remainingUsd: 0, isFirstScoutOfMonth: false })).toEqual([]);
+  });
+});
+
+describe("the approval-gated MMA Apify share", () => {
+  const approvals = { account: true, sources: true };
+  const actor = {
+    actorSlug: "fixture/mma-source",
+    actorBuildId: "Abcdefghijk123456",
+    purpose: "espn-mma" as const,
+    targetHosts: ["example.test"],
+    pricing: { model: "pay-per-result" as const, pricePerResultUsd: 0.003, maxRunUsd: 0.09 },
+    maxResults: 30,
+    expectedMonthlyUsd: 0.36,
+    cadence: "weekly" as const,
+    input: { maxResults: 30 }
+  };
+
+  it("requires both owner approvals and the token before any spend path", () => {
+    const quota = emptyMmaApifyQuota("2026-08", now);
+    const pending = mayRunMmaApify({ quota, approvals: { account: false, sources: false }, token: "token", sharedAccountUsedUsd: 0 });
+    expect(pending).toEqual({
+      allowed: false,
+      reason: "MMA Apify sources are waiting for APIFY-ACCOUNT-001 and APIFY-MMA-SOURCES-001; no actor ran and nothing was spent."
+    });
+    expect(mayRunMmaApify({ quota, approvals, token: undefined, sharedAccountUsedUsd: 0 }).allowed).toBe(false);
+    expect(mayRunMmaApify({ quota, approvals, token: "token", sharedAccountUsedUsd: 0 }).allowed).toBe(true);
+  });
+
+  it("keeps both the $3 MMA share and the shared $5 account ceiling", () => {
+    const quota = emptyMmaApifyQuota("2026-08", now);
+    expect(mayRunMmaApify({
+      quota: { ...quota, estimatedUsedUsd: MMA_APIFY_MONTHLY_SHARE_USD - MMA_APIFY_RUN_RESERVATION_USD + 0.01 },
+      approvals,
+      token: "token",
+      sharedAccountUsedUsd: 0
+    }).allowed).toBe(false);
+    expect(mayRunMmaApify({
+      quota,
+      approvals,
+      token: "token",
+      sharedAccountUsedUsd: APIFY_MONTHLY_CREDIT_USD - MMA_APIFY_RUN_RESERVATION_USD + 0.01
+    }).allowed).toBe(false);
+  });
+
+  it("records bounded actor usage and rolls the MMA ledger monthly", () => {
+    const quota = recordMmaActorUsage(emptyMmaApifyQuota("2026-08", now), "espn-mma", actor, 20, now, 1.2);
+    expect(quota).toMatchObject({ shareCapUsd: 3, estimatedUsedUsd: 0.06, sharedAccountUsedUsd: 1.2 });
+    expect(quota.perActorCounts["espn-mma"]).toEqual({ runs: 1, items: 20, estimatedUsd: 0.06 });
+    expect(currentMmaApifyQuota(quota, "2026-09", new Date("2026-09-01T00:00:00.000Z"))).toMatchObject({ month: "2026-09", estimatedUsedUsd: 0 });
+  });
+
+  it("parses only checked approval lines", () => {
+    expect(parseMmaApifyApprovals("- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001")).toEqual({ account: true, sources: false });
   });
 });
 
