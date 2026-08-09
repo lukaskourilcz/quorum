@@ -1090,6 +1090,138 @@ jobs:
         if: ${{ steps.target.outputs.status == 'needs_reconciliation' || steps.cu-proof.outputs.status == 'failed' }}
         run: exit 1
 
+      # Streams and events are jobs inside the existing daily cycle, not a new
+      # phase and not a new cron. They spend no model budget: nothing on this
+      # path calls a model, so they sit outside the model share entirely.
+      - name: Mint bounded aifirst token for the stream and event sync
+        id: sync-token
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.phase == 'cu-edition' && vars.CAUGHT_UP_STREAMS_ENABLED == 'true' }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
+        with:
+          client-id: ${{ secrets.DELIVERY_APP_ID }}
+          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
+          owner: lukaskourilcz
+          repositories: aifirst
+
+      - name: Deliver caught-up streams
+        id: stream-sync
+        if: ${{ steps.sync-token.outcome == 'success' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.sync-token.outputs.token }}
+          PODCASTINDEX_API_KEY: ${{ secrets.PODCASTINDEX_API_KEY }}
+          PODCASTINDEX_API_SECRET: ${{ secrets.PODCASTINDEX_API_SECRET }}
+        run: |
+          set -euo pipefail
+          sync_date="$(date -u +%F)"
+          clone_root="$RUNNER_TEMP/aifirst-streams"
+          rm -rf "$clone_root"
+          git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/aifirst.git" "$clone_root"
+
+          # Fetch against the files that are live right now, so the merge dedupes
+          # and prunes against real history rather than starting from empty.
+          for stream in talked-about podcasts; do
+            pnpm streams:fetch -- \
+              --stream "$stream" \
+              --date "$sync_date" \
+              --current "$clone_root/data/$stream.json" \
+              --out "$clone_root/data/$stream.json"
+          done
+
+          # The reader's own gates decide whether what we wrote is publishable.
+          ( cd "$clone_root" && pnpm install --frozen-lockfile && pnpm verify )
+
+          allowed='^data/(talked-about|podcasts)\.json$'
+          unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
+          if test -n "$unexpected"; then
+            echo "Stream sync touched unauthorized paths:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+          git -C "$clone_root" add data/talked-about.json data/podcasts.json
+          # No change is a quiet success: most days a feed has nothing new, and a
+          # commit per day with an identical body would be noise, not history.
+          if git -C "$clone_root" diff --cached --quiet; then
+            echo "created_commit=false" >> "$GITHUB_OUTPUT"
+            echo "No stream changes today."
+            exit 0
+          fi
+          sync_hash="$(git -C "$clone_root" diff --cached | shasum -a 256 | cut -c1-12)"
+          git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
+          git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+          git -C "$clone_root" commit -m "stream(${sync_date}): talked-about+podcasts [sync:${sync_hash}]"
+          echo "created_commit=true" >> "$GITHUB_OUTPUT"
+          for attempt in 1 2; do
+            if git -C "$clone_root" push origin HEAD:main; then exit 0; fi
+            git -C "$clone_root" fetch --depth 1 origin main
+            if ! git -C "$clone_root" rebase --autostash origin/main; then
+              git -C "$clone_root" rebase --abort || true
+              break
+            fi
+          done
+          echo "Stream push was rejected after one refetch and retry." >&2
+          exit 1
+
+      - name: Deliver caught-up events
+        id: event-sync
+        if: ${{ steps.sync-token.outcome == 'success' }}
+        env:
+          DELIVERY_TOKEN: ${{ steps.sync-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          sync_date="$(date -u +%F)"
+          store="state/ventures/caught-up/events/events.json"
+          if ! test -f "$store"; then
+            echo "No events store yet; nothing to deliver."
+            exit 0
+          fi
+          clone_root="$RUNNER_TEMP/aifirst-events"
+          rm -rf "$clone_root"
+          git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/aifirst.git" "$clone_root"
+
+          # The store is already the reader envelope; only `updated` moves.
+          node -e '
+            const fs = require("node:fs");
+            const store = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+            if (store.schemaVersion !== "boardless-events/1") {
+              console.error("events store is not boardless-events/1");
+              process.exit(1);
+            }
+            fs.writeFileSync(process.argv[2], `${JSON.stringify({ ...store, updated: process.argv[3] }, null, 2)}\n`);
+          ' "$store" "$clone_root/data/events.json" "$sync_date"
+
+          ( cd "$clone_root" && pnpm install --frozen-lockfile && pnpm verify )
+
+          allowed='^data/events\.json$'
+          unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
+          if test -n "$unexpected"; then
+            echo "Event sync touched unauthorized paths:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+          git -C "$clone_root" add data/events.json
+          if git -C "$clone_root" diff --cached --quiet; then
+            echo "created_commit=false" >> "$GITHUB_OUTPUT"
+            echo "No event changes today."
+            exit 0
+          fi
+          sync_hash="$(git -C "$clone_root" diff --cached | shasum -a 256 | cut -c1-12)"
+          git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
+          git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
+          git -C "$clone_root" commit -m "events(${sync_date}): sync [${sync_hash}]"
+          echo "created_commit=true" >> "$GITHUB_OUTPUT"
+          for attempt in 1 2; do
+            if git -C "$clone_root" push origin HEAD:main; then exit 0; fi
+            git -C "$clone_root" fetch --depth 1 origin main
+            if ! git -C "$clone_root" rebase --autostash origin/main; then
+              git -C "$clone_root" rebase --abort || true
+              break
+            fi
+          done
+          echo "Event push was rejected after one refetch and retry." >&2
+          exit 1
+
       - name: Select pending MMA Files delivery
         id: mma-delivery
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
