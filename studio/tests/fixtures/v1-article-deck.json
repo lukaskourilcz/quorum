@@ -1,0 +1,486 @@
+{
+  "schemaVersion": "carousel-template/1",
+  "id": "deck-mesh-5",
+  "name": "Article deck · mesh · 5 slides",
+  "version": "1.0.0",
+  "status": "live",
+  "description": "A cover carrying the article's own image, the article's points one per slide, and a closing line.",
+  "citedObservationRefs": [],
+  "formats": {
+    "instagram-square": {
+      "width": 1080,
+      "height": 1080,
+      "safeArea": {
+        "top": 0.06,
+        "right": 0.06,
+        "bottom": 0.08,
+        "left": 0.06
+      }
+    },
+    "instagram-portrait": {
+      "width": 1080,
+      "height": 1350,
+      "safeArea": {
+        "top": 0.06,
+        "right": 0.06,
+        "bottom": 0.08,
+        "left": 0.06
+      }
+    },
+    "instagram-story": {
+      "width": 1080,
+      "height": 1920,
+      "safeArea": {
+        "top": 0.14,
+        "right": 0.07,
+        "bottom": 0.16,
+        "left": 0.07
+      }
+    },
+    "threads": {
+      "width": 1200,
+      "height": 1200,
+      "safeArea": {
+        "top": 0.07,
+        "right": 0.07,
+        "bottom": 0.09,
+        "left": 0.07
+      }
+    }
+  },
+  "requiredSlots": [
+    "slide-01",
+    "slide-02",
+    "slide-03",
+    "slide-04",
+    "slide-05"
+  ],
+  "slides": [
+    {
+      "id": "slide-deck-01",
+      "backgroundToken": "surface",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "type": "mesh",
+          "blobs": [
+            {
+              "colorToken": "accent",
+              "cx": -0.07,
+              "cy": 0.22,
+              "radius": 0.62,
+              "opacity": 0.5
+            },
+            {
+              "colorToken": "secondary",
+              "cx": 1.1099999999999999,
+              "cy": 0.74,
+              "radius": 0.58,
+              "opacity": 0.42
+            },
+            {
+              "colorToken": "surface-strong",
+              "cx": 0.5,
+              "cy": 0.35,
+              "radius": 0.7,
+              "opacity": 0.5
+            }
+          ],
+          "softness": 0.09
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 0.52,
+          "type": "image",
+          "slot": "image",
+          "optional": true,
+          "fit": "cover",
+          "scrim": "bottom"
+        },
+        {
+          "x": 0.08,
+          "y": 0.55,
+          "width": 0.44,
+          "height": 0.06,
+          "type": "logo",
+          "colorToken": "foreground",
+          "fontToken": "headline"
+        },
+        {
+          "x": 0.1,
+          "y": 0.64,
+          "width": 0.76,
+          "height": 0.19999999999999996,
+          "type": "text",
+          "slot": "slide-01",
+          "colorToken": "foreground",
+          "fontToken": "headline",
+          "fontWeight": 900,
+          "minFontSize": 30,
+          "maxFontSize": 72,
+          "maxChars": 260,
+          "maxLines": 8,
+          "align": "start",
+          "uppercase": false
+        },
+        {
+          "x": 0.76,
+          "y": 0.9,
+          "width": 0.04,
+          "height": 0.02,
+          "type": "shape",
+          "fillToken": "muted",
+          "strokeWidth": 0,
+          "radius": 0.5
+        },
+        {
+          "x": 0.1,
+          "y": 0.86,
+          "width": 0.24,
+          "height": 0.006,
+          "type": "rule",
+          "colorToken": "accent",
+          "thickness": 4
+        }
+      ],
+      "variants": []
+    },
+    {
+      "id": "slide-deck-02",
+      "backgroundToken": "background",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "type": "mesh",
+          "blobs": [
+            {
+              "colorToken": "accent",
+              "cx": 0.05499999999999999,
+              "cy": 0.22,
+              "radius": 0.62,
+              "opacity": 0.34
+            },
+            {
+              "colorToken": "secondary",
+              "cx": 0.985,
+              "cy": 0.74,
+              "radius": 0.58,
+              "opacity": 0.28
+            },
+            {
+              "colorToken": "surface-strong",
+              "cx": 0.5,
+              "cy": 0.425,
+              "radius": 0.7,
+              "opacity": 0.5
+            }
+          ],
+          "softness": 0.09
+        },
+        {
+          "x": 0.08,
+          "y": 0.07,
+          "width": 0.44,
+          "height": 0.06,
+          "type": "logo",
+          "colorToken": "foreground",
+          "fontToken": "headline"
+        },
+        {
+          "x": 0.1,
+          "y": 0.3,
+          "width": 0.76,
+          "height": 0.42,
+          "type": "text",
+          "slot": "slide-02",
+          "colorToken": "foreground",
+          "fontToken": "headline",
+          "fontWeight": 800,
+          "minFontSize": 30,
+          "maxFontSize": 60,
+          "maxChars": 260,
+          "maxLines": 8,
+          "align": "start",
+          "uppercase": false
+        },
+        {
+          "x": 0.76,
+          "y": 0.9,
+          "width": 0.08,
+          "height": 0.02,
+          "type": "shape",
+          "fillToken": "muted",
+          "strokeWidth": 0,
+          "radius": 0.5
+        },
+        {
+          "x": 0.1,
+          "y": 0.86,
+          "width": 0.24,
+          "height": 0.006,
+          "type": "rule",
+          "colorToken": "accent",
+          "thickness": 4
+        }
+      ],
+      "variants": []
+    },
+    {
+      "id": "slide-deck-03",
+      "backgroundToken": "background",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "type": "mesh",
+          "blobs": [
+            {
+              "colorToken": "accent",
+              "cx": 0.18,
+              "cy": 0.22,
+              "radius": 0.62,
+              "opacity": 0.34
+            },
+            {
+              "colorToken": "secondary",
+              "cx": 0.86,
+              "cy": 0.74,
+              "radius": 0.58,
+              "opacity": 0.28
+            },
+            {
+              "colorToken": "surface-strong",
+              "cx": 0.5,
+              "cy": 0.5,
+              "radius": 0.7,
+              "opacity": 0.5
+            }
+          ],
+          "softness": 0.09
+        },
+        {
+          "x": 0.08,
+          "y": 0.07,
+          "width": 0.44,
+          "height": 0.06,
+          "type": "logo",
+          "colorToken": "foreground",
+          "fontToken": "headline"
+        },
+        {
+          "x": 0.1,
+          "y": 0.3,
+          "width": 0.76,
+          "height": 0.42,
+          "type": "text",
+          "slot": "slide-03",
+          "colorToken": "foreground",
+          "fontToken": "headline",
+          "fontWeight": 800,
+          "minFontSize": 30,
+          "maxFontSize": 60,
+          "maxChars": 260,
+          "maxLines": 8,
+          "align": "start",
+          "uppercase": false
+        },
+        {
+          "x": 0.76,
+          "y": 0.9,
+          "width": 0.12,
+          "height": 0.02,
+          "type": "shape",
+          "fillToken": "muted",
+          "strokeWidth": 0,
+          "radius": 0.5
+        },
+        {
+          "x": 0.1,
+          "y": 0.86,
+          "width": 0.24,
+          "height": 0.006,
+          "type": "rule",
+          "colorToken": "accent",
+          "thickness": 4
+        }
+      ],
+      "variants": []
+    },
+    {
+      "id": "slide-deck-04",
+      "backgroundToken": "background",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "type": "mesh",
+          "blobs": [
+            {
+              "colorToken": "accent",
+              "cx": 0.305,
+              "cy": 0.22,
+              "radius": 0.62,
+              "opacity": 0.34
+            },
+            {
+              "colorToken": "secondary",
+              "cx": 0.735,
+              "cy": 0.74,
+              "radius": 0.58,
+              "opacity": 0.28
+            },
+            {
+              "colorToken": "surface-strong",
+              "cx": 0.5,
+              "cy": 0.575,
+              "radius": 0.7,
+              "opacity": 0.5
+            }
+          ],
+          "softness": 0.09
+        },
+        {
+          "x": 0.08,
+          "y": 0.07,
+          "width": 0.44,
+          "height": 0.06,
+          "type": "logo",
+          "colorToken": "foreground",
+          "fontToken": "headline"
+        },
+        {
+          "x": 0.1,
+          "y": 0.3,
+          "width": 0.76,
+          "height": 0.42,
+          "type": "text",
+          "slot": "slide-04",
+          "colorToken": "foreground",
+          "fontToken": "headline",
+          "fontWeight": 800,
+          "minFontSize": 30,
+          "maxFontSize": 60,
+          "maxChars": 260,
+          "maxLines": 8,
+          "align": "start",
+          "uppercase": false
+        },
+        {
+          "x": 0.76,
+          "y": 0.9,
+          "width": 0.16,
+          "height": 0.02,
+          "type": "shape",
+          "fillToken": "muted",
+          "strokeWidth": 0,
+          "radius": 0.5
+        },
+        {
+          "x": 0.1,
+          "y": 0.86,
+          "width": 0.24,
+          "height": 0.006,
+          "type": "rule",
+          "colorToken": "accent",
+          "thickness": 4
+        }
+      ],
+      "variants": []
+    },
+    {
+      "id": "slide-deck-05",
+      "backgroundToken": "surface",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "type": "mesh",
+          "blobs": [
+            {
+              "colorToken": "accent",
+              "cx": 0.43,
+              "cy": 0.22,
+              "radius": 0.62,
+              "opacity": 0.34
+            },
+            {
+              "colorToken": "secondary",
+              "cx": 0.61,
+              "cy": 0.74,
+              "radius": 0.58,
+              "opacity": 0.28
+            },
+            {
+              "colorToken": "surface-strong",
+              "cx": 0.5,
+              "cy": 0.65,
+              "radius": 0.7,
+              "opacity": 0.5
+            }
+          ],
+          "softness": 0.09
+        },
+        {
+          "x": 0.08,
+          "y": 0.07,
+          "width": 0.44,
+          "height": 0.06,
+          "type": "logo",
+          "colorToken": "foreground",
+          "fontToken": "headline"
+        },
+        {
+          "x": 0.1,
+          "y": 0.3,
+          "width": 0.76,
+          "height": 0.42,
+          "type": "text",
+          "slot": "slide-05",
+          "colorToken": "foreground",
+          "fontToken": "headline",
+          "fontWeight": 800,
+          "minFontSize": 30,
+          "maxFontSize": 60,
+          "maxChars": 260,
+          "maxLines": 8,
+          "align": "middle",
+          "uppercase": false
+        },
+        {
+          "x": 0.76,
+          "y": 0.9,
+          "width": 0.2,
+          "height": 0.02,
+          "type": "shape",
+          "fillToken": "muted",
+          "strokeWidth": 0,
+          "radius": 0.5
+        },
+        {
+          "x": 0.1,
+          "y": 0.86,
+          "width": 0.6,
+          "height": 0.006,
+          "type": "rule",
+          "colorToken": "accent",
+          "thickness": 4
+        }
+      ],
+      "variants": []
+    }
+  ]
+}

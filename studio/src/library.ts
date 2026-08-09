@@ -3,9 +3,10 @@ import {
   CarouselTemplateSchema,
   type BrandTokens,
   type CarouselFormat,
-  type CarouselLayer,
+  type CarouselLayerInput,
   type CarouselPayload,
-  type CarouselTemplate
+  type CarouselTemplate,
+  type CarouselTemplateInput
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 import { fitsSafeArea } from "./validation.js";
@@ -29,8 +30,8 @@ const text = (
   y: number,
   width: number,
   height: number,
-  options: Partial<Extract<CarouselLayer, { type: "text" }>> = {}
-): CarouselLayer => ({
+  options: Partial<Extract<CarouselLayerInput, { type: "text" }>> = {}
+): CarouselLayerInput => ({
   type: "text",
   slot,
   x,
@@ -49,7 +50,7 @@ const text = (
   ...options
 });
 
-const logo = (y = 0.07, colorToken = "accent"): CarouselLayer => ({
+const logo = (y = 0.07, colorToken = "accent"): CarouselLayerInput => ({
   type: "logo",
   x: 0.08,
   y,
@@ -59,7 +60,7 @@ const logo = (y = 0.07, colorToken = "accent"): CarouselLayer => ({
   fontToken: "headline"
 });
 
-const rule = (x: number, y: number, width: number, colorToken = "accent"): CarouselLayer => ({
+const rule = (x: number, y: number, width: number, colorToken = "accent"): CarouselLayerInput => ({
   type: "rule",
   x,
   y,
@@ -76,7 +77,7 @@ const shape = (
   height: number,
   fillToken = "surface",
   radius = 0.08
-): CarouselLayer => ({
+): CarouselLayerInput => ({
   type: "shape",
   x,
   y,
@@ -87,7 +88,7 @@ const shape = (
   radius
 });
 
-const template = (input: Omit<CarouselTemplate, "schemaVersion" | "version" | "status" | "formats" | "citedObservationRefs"> & {
+const template = (input: Omit<CarouselTemplateInput, "schemaVersion" | "version" | "status" | "formats" | "citedObservationRefs"> & {
   citedObservationRefs?: string[];
 }): CarouselTemplate => CarouselTemplateSchema.parse({
   schemaVersion: "carousel-template/1",
@@ -121,7 +122,7 @@ export type DeckStyle = (typeof DECK_STYLES)[number];
 const mesh = (
   blobs: Array<{ colorToken: string; cx: number; cy: number; radius: number; opacity: number }>,
   softness = 0.09
-): CarouselLayer => ({
+): CarouselLayerInput => ({
   type: "mesh",
   x: 0,
   y: 0,
@@ -131,7 +132,7 @@ const mesh = (
   softness
 });
 
-const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full"): CarouselLayer => ({
+const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full"): CarouselLayerInput => ({
   type: "image",
   slot: ARTICLE_HERO_SLOT,
   optional: true,
@@ -144,7 +145,7 @@ const heroImage = (y: number, height: number, scrim: "none" | "bottom" | "full")
 });
 
 /** Per-style background art. `phase` walks 0..1 across the deck so a gradient can travel. */
-function styleBackdrop(style: DeckStyle, phase: number, cover: boolean): CarouselLayer[] {
+function styleBackdrop(style: DeckStyle, phase: number, cover: boolean): CarouselLayerInput[] {
   // Clamped to the schema's own bounds. A blob may sit a little off-canvas — that is how a
   // gradient reads as continuing past the edge — but not so far it is invisible, and the schema
   // is where that judgement lives rather than here.
@@ -205,7 +206,7 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
       const heroTop = style === "contrast" ? 0.06 : 0;
       const heroHeight = style === "contrast" ? 0.34 : style === "editorial" ? 0.46 : 0.52;
       const heroBottom = cover ? heroTop + heroHeight : 0;
-      const heroLayers: CarouselLayer[] = !cover
+      const heroLayers: CarouselLayerInput[] = !cover
         ? []
         : [heroImage(heroTop, heroHeight, style === "contrast" ? "none" : "bottom")];
       return {

@@ -24,6 +24,15 @@ const FrameSchema = z.object({
   }
 });
 
+/*
+ * Every field below this line is optional with a default that reproduces the old behaviour.
+ *
+ * That is the contract's "additive schema evolution" in practice, and it is not a nicety: stored
+ * proposals, stored packs and the deck references inside them (`deck-spotlight-10` in
+ * state/social/packs/2026-08-06.json) are parsed with safeParse and silently dropped when they
+ * fail. A required field would not have surfaced an error, it would have made those documents
+ * vanish. So a v1 document parses, and renders to the byte-identical SVG it always did.
+ */
 const TextLayerSchema = FrameSchema.extend({
   type: z.literal("text"),
   slot: SlotNameSchema,
@@ -35,7 +44,17 @@ const TextLayerSchema = FrameSchema.extend({
   maxChars: z.number().int().min(1).max(1_000),
   maxLines: z.number().int().min(1).max(12),
   align: z.enum(["start", "middle", "end"]).default("start"),
-  uppercase: z.boolean().default(false)
+  uppercase: z.boolean().default(false),
+  /**
+   * Letter-spacing, in em.
+   *
+   * Uppercase Czech mono at 20 px with no tracking is a smear at thumbnail size, and a kicker is
+   * read at thumbnail size or not at all. The fitter is told about it too — tracked text is wider
+   * per character, and measuring it untracked is how a label runs off the canvas.
+   */
+  tracking: z.number().finite().min(-0.05).max(0.4).default(0),
+  /** A soft shadow in the slide's accent, for text that has to hold over busy ground. */
+  glow: z.boolean().default(false)
 }).superRefine((layer, context) => {
   if (layer.minFontSize > layer.maxFontSize) {
     context.addIssue({ code: "custom", message: "minFontSize cannot exceed maxFontSize" });
@@ -47,13 +66,44 @@ const ShapeLayerSchema = FrameSchema.extend({
   fillToken: TokenNameSchema,
   strokeToken: TokenNameSchema.optional(),
   strokeWidth: z.number().finite().min(0).max(12).default(0),
-  radius: z.number().finite().min(0).max(0.5).default(0)
+  radius: z.number().finite().min(0).max(0.5).default(0),
+  /**
+   * A panel that hugs a named text slot instead of standing at a fixed height.
+   *
+   * The engine top-anchors text, so a 24-character passage in a frame sized for 240 leaves the
+   * panel two-thirds empty — the shape says "this much text" and the text says otherwise. With
+   * `padText` the frame is the panel's maximum and the drawn rectangle is the fitted text plus
+   * `padding`. The declared frame still has to contain the text, because that is what the
+   * contrast check measures against.
+   */
+  padText: SlotNameSchema.optional(),
+  padding: z.number().finite().min(0).max(0.1).default(0.02)
 });
 
 const RuleLayerSchema = FrameSchema.extend({
   type: z.literal("rule"),
   colorToken: TokenNameSchema,
-  thickness: z.number().finite().min(1).max(20)
+  thickness: z.number().finite().min(1).max(20),
+  /** A dashed rule. The dash pattern is derived from the thickness, so it scales with the rule. */
+  dash: z.boolean().default(false)
+});
+
+/**
+ * Two token stops and an angle.
+ *
+ * Two rather than many, because a gradient is a transition and a list of colours is a palette;
+ * and because every stop is a colour behind the text above it, so each one has to clear the
+ * contrast floor. Both stops at the same offset give a hard edge — which is how a family cuts a
+ * diagonal across the frame without a bitmap.
+ */
+const GradientLayerSchema = FrameSchema.extend({
+  type: z.literal("linear-gradient"),
+  /** Degrees clockwise from the top of the canvas. */
+  angle: z.number().finite().min(0).max(360),
+  stops: z.tuple([
+    z.object({ colorToken: TokenNameSchema, offset: UnitSchema }),
+    z.object({ colorToken: TokenNameSchema, offset: UnitSchema })
+  ])
 });
 
 const LogoLayerSchema = FrameSchema.extend({
@@ -68,7 +118,27 @@ const ImageLayerSchema = FrameSchema.extend({
   optional: z.literal(true),
   fit: z.enum(["cover", "contain"]),
   /** A soft fade to the slide background, so text over the lower edge stays legible. */
-  scrim: z.enum(["none", "bottom", "full"]).default("none")
+  scrim: z.enum(["none", "bottom", "full"]).default("none"),
+  /** A circular window, or a polygon in frame fractions. */
+  clip: z.union([
+    z.literal("circle"),
+    z.array(z.tuple([UnitSchema, UnitSchema])).min(3).max(12)
+  ]).optional(),
+  /**
+   * What is done to the photograph before it is embedded.
+   *
+   * Applied to the hero bytes with sharp, never as an SVG filter, so librsvg only ever sees a
+   * finished PNG — the same reason a WebP hero is transcoded rather than handed over. `duotone`
+   * multiplies the greyscale by the slide's accent.
+   */
+  treatment: z.enum(["none", "mono", "duotone"]).default("none"),
+  /**
+   * A second appearance of the same photograph, small, later in the deck.
+   *
+   * One slot used twice rather than a second picture, which is why the template check counts
+   * distinct image slots and not image layers.
+   */
+  reprise: z.boolean().default(false)
 });
 
 /**
@@ -98,7 +168,8 @@ export const CarouselLayerSchema = z.discriminatedUnion("type", [
   RuleLayerSchema,
   LogoLayerSchema,
   ImageLayerSchema,
-  MeshLayerSchema
+  MeshLayerSchema,
+  GradientLayerSchema
 ]);
 
 const SlideVariantSchema = z.object({
@@ -161,11 +232,14 @@ export const CarouselTemplateSchema = z.object({
   }
   const slots = new Set(template.requiredSlots);
   const referencedSlots = new Set<string>();
-  let imageSlots = 0;
+  // Distinct slots, not layers. A photograph returning small on the outro is the same picture
+  // used twice — one slot, two layers — and counting layers made that impossible to express.
+  const imageSlots = new Set<string>();
   template.slides.forEach((slide, slideIndex) => {
+    const textSlotsHere = new Set(slide.layers.flatMap((layer) => layer.type === "text" ? [layer.slot] : []));
     slide.layers.forEach((layer, layerIndex) => {
       if (layer.type === "text") referencedSlots.add(layer.slot);
-      if (layer.type === "image") imageSlots += 1;
+      if (layer.type === "image") imageSlots.add(layer.slot);
       if (layer.type === "text" && !slots.has(layer.slot)) {
         context.addIssue({
           code: "custom",
@@ -173,9 +247,18 @@ export const CarouselTemplateSchema = z.object({
           path: ["slides", slideIndex, "layers", layerIndex, "slot"]
         });
       }
+      // A panel that hugs a slot that is not on this slide has nothing to hug, and would draw at
+      // its declared frame instead — a silently wrong panel rather than a rejected template.
+      if (layer.type === "shape" && layer.padText !== undefined && !textSlotsHere.has(layer.padText)) {
+        context.addIssue({
+          code: "custom",
+          message: `Panel hugs text slot ${layer.padText}, which this slide does not carry`,
+          path: ["slides", slideIndex, "layers", layerIndex, "padText"]
+        });
+      }
     });
   });
-  if (imageSlots > 1) {
+  if (imageSlots.size > 1) {
     context.addIssue({ code: "custom", message: "A template may contain at most one optional image slot", path: ["slides"] });
   }
   for (const slot of slots) {
@@ -212,7 +295,17 @@ export const TemplateReferenceSchema = z.object({
 
 export type CarouselFormat = z.infer<typeof CarouselFormatSchema>;
 export type CarouselLayer = z.infer<typeof CarouselLayerSchema>;
+/**
+ * A layer as an author writes one, before defaults are filled in.
+ *
+ * Every capability added to this schema is optional with a default, so the parsed type gains a
+ * required field for each. Generators build the *input* shape and let the parse complete it,
+ * which is what keeps adding a capability from being a rewrite of every template in the library.
+ */
+export type CarouselLayerInput = z.input<typeof CarouselLayerSchema>;
 export type CarouselTemplate = z.infer<typeof CarouselTemplateSchema>;
+/** A template as an author writes one: every defaulted capability may be left out. */
+export type CarouselTemplateInput = z.input<typeof CarouselTemplateSchema>;
 export type BrandTokens = z.infer<typeof BrandTokensSchema>;
 export type CarouselPayload = z.infer<typeof CarouselPayloadSchema>;
 export type TemplateReference = z.infer<typeof TemplateReferenceSchema>;

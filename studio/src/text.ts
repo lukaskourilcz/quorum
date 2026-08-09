@@ -55,6 +55,19 @@ function wrapAt(value: string, maximum: number, maxLines: number, locale: string
   return { lines, truncated };
 }
 
+/**
+ * The nominal width of one character, in em.
+ *
+ * A rough constant, and knowingly so until per-font metrics land. What it must not do is ignore
+ * letter-spacing: a kicker tracked at 0.14 em is 25% wider per character than the same string
+ * untracked, and measuring it untracked is exactly how a label that "fits" runs off the canvas.
+ */
+export const NOMINAL_ADVANCE = 0.56;
+
+export function charactersPerLine(widthPx: number, fontSize: number, tracking = 0): number {
+  return Math.max(1, Math.floor(widthPx / (fontSize * (NOMINAL_ADVANCE + tracking))));
+}
+
 export function fitText(input: {
   value: string;
   locale: "en" | "cs";
@@ -64,20 +77,23 @@ export function fitText(input: {
   maxFontSize: number;
   maxLines: number;
   maxChars: number;
+  /** Letter-spacing in em, which widens every character and so narrows every line. */
+  tracking?: number;
 }): FittedText {
+  const tracking = input.tracking ?? 0;
   const normalized = graphemes(input.value.normalize("NFC").trim(), input.locale)
     .slice(0, input.maxChars)
     .join("");
   const clippedByContract = graphemes(input.value.normalize("NFC").trim(), input.locale).length > input.maxChars;
   for (let fontSize = input.maxFontSize; fontSize >= input.minFontSize; fontSize -= 1) {
-    const maximum = Math.max(1, Math.floor(input.widthPx / (fontSize * 0.56)));
+    const maximum = charactersPerLine(input.widthPx, fontSize, tracking);
     const wrapped = wrapAt(normalized, maximum, input.maxLines, input.locale);
     const fitsHeight = wrapped.lines.length * fontSize * 1.12 <= input.heightPx;
     if (fitsHeight && !wrapped.truncated) {
       return { lines: wrapped.lines, fontSize, truncated: clippedByContract, normalized };
     }
   }
-  const maximum = Math.max(1, Math.floor(input.widthPx / (input.minFontSize * 0.56)));
+  const maximum = charactersPerLine(input.widthPx, input.minFontSize, tracking);
   const wrapped = wrapAt(normalized, maximum, input.maxLines, input.locale);
   return {
     lines: wrapped.lines,
