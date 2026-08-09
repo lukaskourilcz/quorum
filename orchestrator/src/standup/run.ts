@@ -22,6 +22,8 @@ export function createOfflineStandup(input: {
   now: Date;
   evidenceRefs?: string[];
   caughtUpIdea?: IdeaScreeningResult;
+  /** Which venture ledger the morning idea landed in; the rotation makes this vary by day. */
+  morningIdeaNamespace?: string;
   agentsParticipated?: boolean;
   autonomy?: AutonomySnapshot;
   quarterlyKpis?: QuarterlyKpiPacketSummary;
@@ -166,6 +168,9 @@ export function createOfflineStandup(input: {
         ? "Night shift reconciled the record; remain in DISCOVERY."
         : null,
     ...(input.caughtUpIdea ? { caughtUpIdeaRef: input.caughtUpIdea.entry.id } : {}),
+    ...(input.caughtUpIdea && input.morningIdeaNamespace
+      ? { morningIdeaNamespace: input.morningIdeaNamespace }
+      : {}),
     roomTranscript: {
       openedAt,
       closedAt,

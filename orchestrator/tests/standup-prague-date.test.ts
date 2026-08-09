@@ -77,6 +77,7 @@ function liveStandup() {
       },
       positions: positions(),
       droppedSeats: [],
+      droppedRequests: [],
       scope: "Internal only.",
       actualCycleUsd: 0.0123,
       monthCapUsd: 30,

@@ -21,7 +21,7 @@ import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-file
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
-import { configRoot, repoRoot, stateRoot } from "../paths.js";
+import { configRoot, promptRoot, repoRoot, stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { trendEvidenceRefs } from "../sources/goviral-trends.js";
@@ -1267,7 +1267,7 @@ export async function runPortfolioCycle(input: {
     contributions = selected.map((agent) => ({ agent, stance: agent === dryChair ? "plan" : "pass", summary: agent === dryChair ? "Dry room complete. No provider call, external action or unsupported artifact is represented." : `${agent} records no live contribution in a deterministic dry run.`, evidenceRefs: [], task: null, editorialSlate: null, marketingPlan: null, inspirationObservations: [], idea: null, followUpRequest: null }));
   } else {
     const promptName = input.phase === "gv-brief" ? "goviral.md" : input.phase.startsWith("mma-") ? "mma.md" : input.phase.startsWith("mag-") ? "magazine.md" : "pulse.md";
-    const roomPrompt = await readFile(path.join(repoRoot, "orchestrator", "prompts", promptName), "utf8");
+    const roomPrompt = await readFile(path.join(promptRoot, promptName), "utf8");
     // The season's concepts, rotated one per day. Read from the same season file the room is
     // shown, so the focus line and the packet can never name different concepts.
     const dailyFocus = input.phase === "tt-marketing"
@@ -1279,7 +1279,7 @@ export async function runPortfolioCycle(input: {
     const personas = new Map<string, string>();
     for (const agent of selected) {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
-      personas.set(agent, (await readFile(path.join(repoRoot, "orchestrator", "prompts", `${profile.slug}.md`), "utf8")).trim());
+      personas.set(agent, (await readFile(path.join(promptRoot, `${profile.slug}.md`), "utf8")).trim());
     }
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;

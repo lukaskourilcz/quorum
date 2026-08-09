@@ -48,6 +48,7 @@ import {
 } from "./meetings/record.js";
 import { appendEditionUsage, runLiveEdition } from "./edition/live.js";
 import {
+  GuardedVaultAdjudicator,
   PRODUCT_ROOM_RESERVE_USD,
   decideLiveProductRoom,
   prepareMorningIdea,
@@ -63,8 +64,13 @@ import {
   ideaLedgerPath,
   readIdeaLedger,
   readIdeaIndexSlice,
-  regenerateIdeaIndex
+  regenerateIdeaIndex,
+  screenAndRecordIdea,
+  screeningWord
 } from "./ideas/ledger.js";
+import { buildOperationsPacket } from "./operations/packet.js";
+import { resolveOperationsReview, writeOperationsDecision } from "./operations/review.js";
+import { resolveRotationTarget } from "./operations/rotation.js";
 import { MeetingRecordSchema } from "./contracts/meeting-record.js";
 import {
   composeEditionSocialPack,
@@ -90,6 +96,7 @@ import {
   getVentureMeetingDefinition,
   loadVentureRegistry,
   parseCadenceHour,
+  ventureNamespace,
   type VentureMeetingDefinition
 } from "./ventures/registry.js";
 import type { VentureRegistry } from "./contracts/venture-registry.js";
@@ -591,7 +598,12 @@ async function runCaughtUpDryCycle(
   if (options.phase === "cu-product") {
     const morningRaw = await readText(artifactRoot, `standups/${pragueClockParts(now).date}-morning.json`);
     const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
-    if (morning?.caughtUpIdeaRef) {
+    // Only an idea raised for Caught Up. The morning's ideation rotates across the portfolio now,
+    // so most days the idea belongs to another venture and this room has nothing to pick up —
+    // which is a normal day, not a missing record. A standup written before the namespace was
+    // recorded has no field, and on those days the idea was always Caught Up's.
+    const morningNamespace = morning?.morningIdeaNamespace ?? CAUGHT_UP_IDEA_NAMESPACE;
+    if (morning?.caughtUpIdeaRef && morningNamespace === CAUGHT_UP_IDEA_NAMESPACE) {
       await ensureIdeaInNamespace(
         artifactRoot,
         CAUGHT_UP_IDEA_NAMESPACE,
@@ -1549,12 +1561,39 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           };
         })()
       : null;
+    /**
+     * Yesterday, in Prague terms, and the morning before this one.
+     *
+     * The review is about the day that finished, not the one starting: at 06:00 today's slots have
+     * not run. `since` bounds the rating window to exactly the gap between the two boards, so a
+     * rating is counted once and by the meeting that could first have seen it.
+     */
+    const operationsPacket = venturePhase === "morning"
+      ? await (async () => {
+          const local = pragueClockParts(now);
+          const yesterday = new Date(`${local.date}T12:00:00Z`);
+          yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+          const reviewDate = yesterday.toISOString().slice(0, 10);
+          const limits = budgetLimitsFromEnvironment();
+          return buildOperationsPacket({
+            repoRoot,
+            stateRoot: artifactRoot,
+            reviewDate,
+            since: reviewDate,
+            autonomy: morningContext?.autonomy ?? null,
+            ledger: (await currentBudgetLedger(artifactRoot)),
+            dayCapUsd: limits.dailyUsd,
+            monthCapUsd: limits.monthlyOperatingUsd
+          });
+        })()
+      : null;
     const liveCouncil = !options.dry && venturePhase === "morning"
       ? await collectLiveCouncil({
           cycleId,
           phase: venturePhase,
           stage: stages.current,
           now,
+          ...(operationsPacket ? { operations: { packet: operationsPacket } } : {}),
           businessContext: {
             autonomy: morningContext!.autonomy,
             openPriorities: morningContext!.openPriorities,
@@ -1574,11 +1613,17 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           })
         })
       : null;
-    const caughtUpIdea = venturePhase === "morning"
+    // Which venture gets today's idea. Caught Up used to get every one of them because the
+    // namespace was hardcoded here; the rotation is deterministic on the date, so a re-run of the
+    // same morning proposes into the same ledger.
+    const rotation = venturePhase === "morning"
+      ? await resolveRotationTarget({ stateRoot: artifactRoot, now })
+      : null;
+    const morningIdea = venturePhase === "morning"
       ? await prepareMorningIdea({
           context: {
             root: artifactRoot,
-            ideaNamespace: CAUGHT_UP_IDEA_NAMESPACE,
+            ideaNamespace: rotation?.ledgerNamespace ?? CAUGHT_UP_IDEA_NAMESPACE,
             cycleId,
             stage: stages.current,
             now,
@@ -1587,11 +1632,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             fixedMonthlyUsd: morningContext!.moneyAndKpis.fixedMonthlyUsd
           },
           dry: options.dry,
+          rotation,
           councilSummary: liveCouncil
             ? liveCouncil.positions.map((position) => position.publicSummary).join(" ")
             : "Deterministic dry morning fixture; no live council position was called."
         })
       : undefined;
+    const ideaNamespace = rotation?.ledgerNamespace ?? CAUGHT_UP_IDEA_NAMESPACE;
+    const caughtUpIdea = morningIdea;
     let measuredCouncil = liveCouncil;
     if (liveCouncil && caughtUpIdea) {
       const ledger = await currentBudgetLedger(artifactRoot);
@@ -1768,6 +1816,94 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         priorityStateChanged = true;
       }
     }
+    /*
+     * The operations review, resolved from the seats and written down.
+     *
+     * The verdicts and the fix tasks are a record of what the board said. The growth ideas are the
+     * one part that also writes somewhere else, so they go through `screenAndRecordIdea` — the
+     * same VAULT dedup every other idea passes — and each one records what became of it. An idea
+     * the ledger already holds is a duplicate, not a failure, and says so.
+     */
+    let operationsReview: Standup["operationsReview"] | undefined;
+    let operationsDecisionRef: string | null = null;
+    const growthIdeaArtifacts: string[] = [];
+    if (measuredCouncil && operationsPacket && venturePhase === "morning") {
+      const resolved = resolveOperationsReview(measuredCouncil.positions);
+      const local = pragueClockParts(now);
+      const recordedIdeas: NonNullable<Standup["operationsReview"]>["growthIdeas"] = [];
+
+      for (const idea of resolved.growthIdeas) {
+        const namespace = ventureNamespace(await loadVentureRegistry(), idea.ventureId);
+        if (!namespace) {
+          recordedIdeas.push({
+            ...idea,
+            outcome: "refused",
+            ideaId: null,
+            reason: `No idea ledger belongs to ${idea.ventureId}.`
+          });
+          continue;
+        }
+        const screened = await screenAndRecordIdea({
+          root: artifactRoot,
+          namespace,
+          proposal: {
+            title: idea.title,
+            summary: idea.summary,
+            origin: { agent: "SPARK", meetingRef: `standups/${local.date}-morning` },
+            proposedAt: now.toISOString()
+          },
+          evidence: parseEvidenceJsonl(await readFile(path.join(artifactRoot, "EVIDENCE.jsonl"), "utf8").catch(() => "")),
+          adjudicator: options.dry
+            ? { async adjudicate() { return { verdict: "novel" as const, reason: "Dry run: no adjudicator was called." }; } }
+            : new GuardedVaultAdjudicator({
+              root: artifactRoot,
+              ideaNamespace: namespace,
+              cycleId,
+              stage: stages.current,
+              now,
+              limits: budgetLimitsFromEnvironment(),
+              remainingScheduledCycles: remainingScheduledCycles(now),
+              fixedMonthlyUsd: morningContext!.moneyAndKpis.fixedMonthlyUsd
+            })
+        });
+        growthIdeaArtifacts.push(ideaLedgerPath(namespace), ideaIndexPath(namespace));
+        recordedIdeas.push({
+          ...idea,
+          outcome: screened.entry.status === "vetoed" ? "duplicate" : "recorded",
+          ideaId: screened.entry.id,
+          reason: screeningWord(screened.verdict)
+        });
+      }
+
+      operationsDecisionRef = options.dry
+        ? null
+        : await writeOperationsDecision({
+          stateRoot: artifactRoot,
+          date: local.date,
+          review: resolved,
+          packet: operationsPacket
+        });
+
+      operationsReview = {
+        reviewDate: operationsPacket.reviewDate,
+        perVentureVerdicts: resolved.perVentureVerdicts,
+        fixTasks: resolved.fixTasks,
+        growthIdeas: recordedIdeas,
+        meetings: {
+          scheduled: operationsPacket.meetings.scheduled,
+          held: operationsPacket.meetings.held,
+          skipped: operationsPacket.meetings.skipped.map((skip) => ({
+            phase: skip.phase,
+            reason: skip.reason.slice(0, 280)
+          })),
+          unaccounted: operationsPacket.meetings.unaccounted.map((slot) => slot.kind)
+        },
+        decisionFileRef: operationsDecisionRef
+      };
+      for (const entry of resolved.dropped) {
+        measuredCouncil.droppedRequests.push({ agent: entry.agent, field: "operations", reason: entry.reason });
+      }
+    }
     const agentsParticipated = Boolean(measuredCouncil) || (options.dry && !deterministicCheckpoint);
     const standup = measuredCouncil
       ? createLiveStandup({
@@ -1780,8 +1916,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           council: measuredCouncil,
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
-          ...(caughtUpIdea ? { caughtUpIdea } : {}),
-          ...(priorityProposalRecord ? { priorityProposal: priorityProposalRecord } : {})
+          ...(caughtUpIdea ? { caughtUpIdea, morningIdeaNamespace: ideaNamespace } : {}),
+          ...(priorityProposalRecord ? { priorityProposal: priorityProposalRecord } : {}),
+          ...(operationsReview ? { operationsReview } : {}),
+          // Absent on a meeting that lost nothing: a clean council records no ceremony.
+          ...(measuredCouncil.droppedSeats.length ? { droppedSeats: measuredCouncil.droppedSeats } : {}),
+          ...(measuredCouncil.droppedRequests.length ? { droppedRequests: measuredCouncil.droppedRequests } : {})
         })
       : createOfflineStandup({
           cycleId,
@@ -1797,7 +1937,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           ledger: await monthToDateLedger(artifactRoot, now),
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
-          ...(caughtUpIdea ? { caughtUpIdea } : {})
+          ...(caughtUpIdea ? { caughtUpIdea, morningIdeaNamespace: ideaNamespace } : {})
         });
     const recordedStandup = morningContext
       ? StandupSchema.parse({
@@ -1826,8 +1966,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       `scorecards/${cycleId}.json`,
       `decisions/${cycleId}.json`,
       ...(caughtUpIdea
-        ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
+        ? [ideaLedgerPath(ideaNamespace), ideaIndexPath(ideaNamespace)]
         : []),
+      ...(operationsDecisionRef ? [operationsDecisionRef] : []),
+      ...growthIdeaArtifacts,
       ...(meetingAgendaStateChanged ? [MEETING_AGENDA_PATH] : []),
       ...(morningContext ? [AUTONOMY_SNAPSHOT_PATH] : []),
       ...(morningContext ? morningContext.moneyAndKpis.artifacts : []),

@@ -91,6 +91,7 @@ const expectedPrompts = [
   "mako.md",
   "mma.md",
   "motif.md",
+  "operations.md",
   "palate.md",
   "people.md",
   "pivot.md",

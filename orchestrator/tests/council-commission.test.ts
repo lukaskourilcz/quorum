@@ -197,6 +197,57 @@ describe("parsing one council position", () => {
     expect(parsed.droppedMeetingRequest).toBeNull();
   });
 
+  it("keeps the vote when an operations field is unusable, and says what it lost", () => {
+    const parsed = parseCouncilPosition({
+      agent: "VIZE",
+      text: reply({
+        ventureVerdicts: [
+          { ventureId: "caught-up", verdict: "on-track", evidence: "Delivered on 2026-08-06." },
+          { ventureId: "not-a-venture", verdict: "stalled", evidence: "Nothing shipped." }
+        ],
+        fixTask: { title: "Fix it" },
+        growthIdea: { ventureId: "caught-up", title: "Wider mix", summary: "Add two feeds." }
+      }),
+      openPriorities: [priority()],
+      proposableVentures,
+      knownVentures: ["caught-up", "titty-tuesdays"]
+    });
+
+    expect(parsed.position.recommendation).toBe("approve");
+    expect(parsed.position.ventureVerdicts).toEqual([
+      { ventureId: "caught-up", verdict: "on-track", evidence: "Delivered on 2026-08-06." }
+    ]);
+    // The malformed fix task costs the task, never the seat.
+    expect(parsed.position.fixTask).toBeNull();
+    expect(parsed.position.growthIdea).toEqual({ ventureId: "caught-up", title: "Wider mix", summary: "Add two feeds." });
+    expect(parsed.droppedOperations).toHaveLength(2);
+    expect(parsed.droppedOperations.join(" ")).toContain("not-a-venture");
+  });
+
+  it("discards AUDIT's operations fields by role, because AUDIT proposes no work", () => {
+    const parsed = parseCouncilPosition({
+      agent: "AUDIT",
+      text: JSON.stringify({
+        agent: "AUDIT",
+        publicSummary: "AUDIT recorded a bounded public position.",
+        recommendation: "approve",
+        risk: "Records match the day.",
+        ventureVerdicts: [{ ventureId: "caught-up", verdict: "stalled", evidence: "Nothing shipped." }],
+        fixTask: { title: "Fix it", scope: "orchestrator/src", expectedProof: "A passing gate." },
+        growthIdea: { ventureId: "caught-up", title: "Wider mix", summary: "Add two feeds." }
+      }),
+      openPriorities: [],
+      proposableVentures,
+      knownVentures: ["caught-up"]
+    });
+
+    expect(parsed.position.recommendation).toBe("approve");
+    expect(parsed.position.ventureVerdicts).toEqual([]);
+    expect(parsed.position.fixTask).toBeNull();
+    expect(parsed.position.growthIdea).toBeNull();
+    expect(parsed.droppedOperations.join(" ")).toContain("AUDIT holds the veto");
+  });
+
   it("still rejects a reply signed by another agent or missing its vote", () => {
     expect(() => parseCouncilPosition({
       agent: "FORGE",

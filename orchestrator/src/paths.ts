@@ -6,6 +6,8 @@ const moduleDirectory = path.dirname(fileURLToPath(import.meta.url));
 export const repoRoot = path.resolve(moduleDirectory, "../..");
 export const stateRoot = path.join(repoRoot, "state");
 export const configRoot = path.join(repoRoot, "config");
+/** Room contracts and personas, read at runtime so a prompt change needs no code change. */
+export const promptRoot = path.join(repoRoot, "orchestrator", "prompts");
 
 export function withinRoot(root: string, candidate: string): boolean {
   const relative = path.relative(root, candidate);
