@@ -1,4 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { describe, expect, it, vi } from "vitest";
 import {
   APIFY_MONTHLY_CREDIT_USD,
   APIFY_RUN_RESERVATION_USD,
@@ -15,6 +18,7 @@ import {
   parseMmaApifyApprovals,
   recordMmaActorUsage,
   recordActorUsage,
+  runMmaApifySources,
   type GoViralActor
 } from "../src/sources/apify.js";
 import {
@@ -180,6 +184,63 @@ describe("the approval-gated MMA Apify share", () => {
 
   it("parses only checked approval lines", () => {
     expect(parseMmaApifyApprovals("- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001")).toEqual({ account: true, sources: false });
+  });
+
+  it("is a one-sentence $0 no-op while approvals are pending", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-apify-pending-"));
+    const runner = vi.fn();
+    try {
+      const result = await runMmaApifySources({
+        root,
+        date: "2026-08-09",
+        now,
+        inbox: "- [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001",
+        token: "token-that-must-not-be-used",
+        sources: [{ id: "espn-mma", state: "proposed", termsVerdict: "allowed", apify: actor }],
+        actorRunner: runner
+      });
+      expect(result).toEqual({
+        results: [{
+          sourceId: "apify-mma",
+          status: "skipped",
+          reason: "MMA Apify sources are waiting for APIFY-ACCOUNT-001 and APIFY-MMA-SOURCES-001; no actor ran and nothing was spent.",
+          items: []
+        }],
+        artifactPaths: []
+      });
+      expect(runner).not.toHaveBeenCalled();
+      await expect(readFile(path.join(root, "mma/source-quota/apify.json"))).rejects.toThrow();
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("writes the $3 ledger only after approvals, token and shared-credit checks pass", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-apify-approved-"));
+    const runner = vi.fn(async () => [{ id: "row-1" }, { id: "row-2" }]);
+    try {
+      const result = await runMmaApifySources({
+        root,
+        date: "2026-08-09",
+        now,
+        inbox: "- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [x] HUMAN_APPROVAL APIFY-MMA-SOURCES-001",
+        token: "fixture-token",
+        sources: [{ id: "espn-mma", state: "proposed", termsVerdict: "allowed", apify: actor }],
+        usageFetcher: async () => 1.2,
+        actorRunner: runner
+      });
+      expect(result.artifactPaths).toEqual(["mma/source-quota/apify.json"]);
+      expect(result.results[0]).toMatchObject({ sourceId: "espn-mma", status: "success", items: [{ id: "row-1" }, { id: "row-2" }] });
+      expect(runner).toHaveBeenCalledWith(expect.objectContaining({ maxTotalChargeUsd: 0.09 }));
+      expect(JSON.parse(await readFile(path.join(root, "mma/source-quota/apify.json"), "utf8"))).toMatchObject({
+        schemaVersion: "mma-apify-quota/1",
+        shareCapUsd: 3,
+        sharedAccountUsedUsd: 1.2,
+        estimatedUsedUsd: 0.006
+      });
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
 

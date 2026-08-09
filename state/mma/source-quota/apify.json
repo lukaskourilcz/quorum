@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-apify-quota/1",
+  "month": "2026-08",
+  "shareCapUsd": 3,
+  "estimatedUsedUsd": 0,
+  "sharedAccountUsedUsd": null,
+  "reservedPerRun": 0.75,
+  "updatedAt": "2026-08-09T00:00:00.000Z",
+  "perActorCounts": {}
+}

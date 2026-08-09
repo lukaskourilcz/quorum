@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { readText } from "../state.js";
+import { atomicWriteJson, readJson, readText } from "../state.js";
 import { repoRoot } from "../paths.js";
 import { safeFetch } from "../security/url.js";
 
@@ -160,6 +160,91 @@ export function recordMmaActorUsage(
       }
     }
   });
+}
+
+export interface MmaApifySourceEntry {
+  id: string;
+  state: "wired" | "proposed" | "disabled" | "blocked";
+  termsVerdict: "allowed-with-account" | "allowed" | "unclear" | "forbidden";
+  apify?: MmaApifyActorConfig;
+}
+
+export interface MmaApifyRunResult {
+  sourceId: string;
+  status: "success" | "skipped" | "failed";
+  reason: string | null;
+  items: ApifyDatasetItem[];
+}
+
+/**
+ * Approval-gated MMA actor sweep.
+ *
+ * The preliminary verdict happens before the platform usage request, so a pending approval or
+ * missing token is a literal $0 path. The provider's account-wide usage then guards the shared
+ * $5 credit, the local ledger guards FightAIQ's $3 share, and every actor request carries its own
+ * max charge. No one layer substitutes for another.
+ */
+export async function runMmaApifySources(input: {
+  root: string;
+  date: string;
+  now: Date;
+  inbox: string;
+  token: string | undefined;
+  sources: readonly MmaApifySourceEntry[];
+  usageFetcher?: (token: string) => Promise<number | null>;
+  actorRunner?: typeof runApifyActor;
+}): Promise<{ results: MmaApifyRunResult[]; artifactPaths: string[] }> {
+  const quotaPath = "mma/source-quota/apify.json";
+  const month = input.date.slice(0, 7);
+  const quota = currentMmaApifyQuota(await readJson<unknown>(input.root, quotaPath, {}), month, input.now);
+  const approvals = parseMmaApifyApprovals(input.inbox);
+  const preliminary = mayRunMmaApify({ quota, approvals, token: input.token, sharedAccountUsedUsd: null });
+  if (!preliminary.allowed) {
+    return { results: [{ sourceId: "apify-mma", status: "skipped", reason: preliminary.reason, items: [] }], artifactPaths: [] };
+  }
+
+  const actors = input.sources.filter((source) =>
+    (source.state === "wired" || source.state === "proposed")
+    && (source.termsVerdict === "allowed" || source.termsVerdict === "allowed-with-account")
+    && source.apify);
+  if (actors.length === 0) {
+    return { results: [{ sourceId: "apify-mma", status: "skipped", reason: "No terms-approved MMA actor is enabled; no actor ran and nothing was spent.", items: [] }], artifactPaths: [] };
+  }
+
+  const goViral = await readJson<{ estimatedUsedUsd?: number }>(input.root, "goviral/source-quota/apify.json", {});
+  const fetchUsage = input.usageFetcher ?? ((token: string) => fetchApifyMonthlyUsageUsd({ token }));
+  const reported = await fetchUsage(input.token as string);
+  const sharedUsed = reported ?? Number(((goViral.estimatedUsedUsd ?? 0) + quota.estimatedUsedUsd).toFixed(6));
+  const verdict = mayRunMmaApify({ quota, approvals, token: input.token, sharedAccountUsedUsd: sharedUsed });
+  if (!verdict.allowed) {
+    return { results: [{ sourceId: "apify-mma", status: "skipped", reason: verdict.reason, items: [] }], artifactPaths: [] };
+  }
+
+  const runner = input.actorRunner ?? runApifyActor;
+  let nextQuota: MmaApifyQuota = { ...quota, sharedAccountUsedUsd: sharedUsed };
+  const results: MmaApifyRunResult[] = [];
+  for (const source of actors) {
+    const actor = source.apify!;
+    try {
+      const items = await runner({
+        actor,
+        token: input.token as string,
+        payload: actor.input,
+        maxTotalChargeUsd: actor.pricing.maxRunUsd
+      });
+      nextQuota = recordMmaActorUsage(nextQuota, source.id, actor, items.length, input.now, sharedUsed);
+      results.push({
+        sourceId: source.id,
+        status: items.length > 0 ? "success" : "skipped",
+        reason: items.length > 0 ? null : "The approved actor returned no rows.",
+        items: items.slice(0, actor.maxResults)
+      });
+    } catch {
+      results.push({ sourceId: source.id, status: "failed", reason: "The approved actor failed before producing a reviewed dataset.", items: [] });
+    }
+  }
+  await atomicWriteJson(input.root, quotaPath, nextQuota);
+  return { results, artifactPaths: [quotaPath] };
 }
 
 export const ApifyQuotaSchema = z.object({
