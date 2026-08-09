@@ -1095,10 +1095,17 @@ jobs:
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
+          DELIVERY_ONLY: ${{ steps.mode.outputs.delivery_only }}
         run: |
           package_kind=article
           if test "$PHASE" = "mma-intake" || test "$PHASE" = "mma-analysis"; then
             package_kind=fightaiq
+          fi
+          # Banner placement is an owner action from the admin, never a side effect of a
+          # scheduled editorial room. Q6 dispatches mag-desk with delivery_only=true after
+          # upload, crop and stage have produced the contract this path verifies.
+          if test "$PHASE" = "mag-desk" && test "$DELIVERY_ONLY" = "true"; then
+            package_kind=banner
           fi
           pnpm mma:delivery -- next --kind "$package_kind" --github-output "$GITHUB_OUTPUT"
 
@@ -1179,6 +1186,9 @@ jobs:
           if test "$PACKAGE_KIND" = "dataset"; then
             allowed='^src/data/mma-facts\.json$'
           fi
+          if test "$PACKAGE_KIND" = "banner"; then
+            allowed='^((data/boardless/ads\.json)|(public/ads/[a-z0-9-]+-\d+x\d+\.webp))$'
+          fi
           unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
           if test -n "$unexpected"; then
             printf '%s\n%s\n' "Consumer touched unauthorized paths:" "$unexpected" > "$RUNNER_TEMP/mma-delivery-error.log"
@@ -1213,6 +1223,11 @@ jobs:
             git -C "$clone_root" add data/boardless/articles.json "$IMAGE_HERO_PATH" "$IMAGE_THUMB_PATH"
           elif test "$PACKAGE_KIND" = "dataset"; then
             git -C "$clone_root" add src/data/mma-facts.json
+          elif test "$PACKAGE_KIND" = "banner"; then
+            git -C "$clone_root" add data/boardless/ads.json
+            if test -d "$clone_root/public/ads"; then
+              git -C "$clone_root" add -A -- public/ads
+            fi
           else
             git -C "$clone_root" add data/boardless/fightaiq.json
           fi
@@ -1319,7 +1334,7 @@ jobs:
           if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
           if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
           pnpm mma:delivery -- "${args[@]}"
-          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)
+          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)
           for receipt_path in "${receipt_paths[@]}"; do
             if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
               git add -A -- "$receipt_path"

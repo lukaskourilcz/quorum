@@ -16,7 +16,7 @@ function required(args: string[], name: string): string {
 
 function kind(args: string[]): MmaDeliveryKind {
   const value = required(args, "--kind");
-  if (value !== "article" && value !== "fightaiq") throw new Error("--kind must be article or fightaiq");
+  if (value !== "article" && value !== "fightaiq" && value !== "banner") throw new Error("--kind must be article, fightaiq or banner");
   return value;
 }
 

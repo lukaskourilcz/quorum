@@ -90,6 +90,8 @@ describe("automation policy", () => {
     expect(cycle).toContain("pnpm mma:delivery");
     expect(cycle).toContain("data/boardless/articles.json");
     expect(cycle).toContain("data/boardless/fightaiq.json");
+    expect(cycle).toContain("package_kind=banner");
+    expect(cycle).toContain("^((data/boardless/ads\\.json)|(public/ads/[a-z0-9-]+-\\d+x\\d+\\.webp))$");
     // Every gate that forces dry mode goes through force_dry, which on a schedule also raises
     // skip so the reason is recorded. A scheduled dry run writes only to tmp/dry-run/state and
     // is never committed, so a gate that only set dry=true ended the job green having left
@@ -124,7 +126,7 @@ describe("automation policy", () => {
     // state/INBOX.md is on both receipt lists. The shared fail-closed writer appends an owner
     // line for either venture, and the MMA step used to leave it unstaged, so a reverted
     // article's inbox item died with the runner.
-    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
+    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
     for (const list of cycle.match(/receipt_paths=\([^)]*\)/gu) ?? []) {
       expect(list, "every fail-closed receipt list stages the inbox").toContain("state/INBOX.md");
     }
