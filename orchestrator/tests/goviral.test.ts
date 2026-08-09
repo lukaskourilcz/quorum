@@ -140,6 +140,7 @@ describe("the approval-gated MMA Apify share", () => {
     maxResults: 30,
     expectedMonthlyUsd: 0.36,
     cadence: "weekly" as const,
+    pricingEvidenceUrl: "https://apify.com/fixture/mma-source",
     input: { maxResults: 30 }
   };
 

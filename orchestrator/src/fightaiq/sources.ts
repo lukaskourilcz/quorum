@@ -5,6 +5,7 @@ import { configRoot } from "../paths.js";
 import { fetchJson } from "../sources/adapters/util.js";
 import type { SourceFetchContext } from "../sources/types.js";
 import { safeFetch, type SafeFetchOptions } from "../security/url.js";
+import { MmaApifyActorConfigSchema } from "../sources/apify.js";
 
 const MmaSourceSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
@@ -12,13 +13,14 @@ const MmaSourceSchema = z.object({
   tier: z.enum(["A", "B", "C", "D"]),
   host: z.string().min(1),
   coverage: z.array(z.string().min(1)).min(1),
-  access: z.enum(["api", "html", "rss", "dataset"]),
+  access: z.enum(["api", "html", "rss", "dataset", "apify"]),
   state: z.enum(["wired", "proposed", "disabled", "blocked"]),
   credentialEnv: z.string().regex(/^[A-Z][A-Z0-9_]+$/).optional(),
   freeLimit: z.string().min(1),
   termsVerdict: z.enum(["allowed-with-account", "allowed", "unclear", "forbidden"]),
   termsNote: z.string().min(1),
-  evidenceUrl: z.string().url()
+  evidenceUrl: z.string().url(),
+  apify: MmaApifyActorConfigSchema.optional()
 });
 
 const MmaSourceRegistrySchema = z.object({
@@ -32,6 +34,12 @@ const MmaSourceRegistrySchema = z.object({
     }
     if (source.state === "blocked" && source.termsVerdict !== "forbidden") {
       context.addIssue({ code: "custom", message: "Blocked sources require a forbidden verdict", path: ["sources", source.id] });
+    }
+    if ((source.access === "apify") !== Boolean(source.apify)) {
+      context.addIssue({ code: "custom", message: "Apify access and actor configuration must be declared together", path: ["sources", source.id] });
+    }
+    if (source.access === "apify" && source.credentialEnv !== "APIFY_TOKEN") {
+      context.addIssue({ code: "custom", message: "MMA actors use the approval-gated APIFY_TOKEN", path: ["sources", source.id, "credentialEnv"] });
     }
   }
 });

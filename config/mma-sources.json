@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-sources/1",
-  "verifiedAt": "2026-08-02",
+  "verifiedAt": "2026-08-09",
   "sources": [
     {
       "id": "wikimedia",
@@ -55,6 +55,115 @@
       "termsVerdict": "allowed",
       "termsNote": "Every row needs source references and owner review. The importer rejects malformed rows and writes the canonical bout history once.",
       "evidenceUrl": "https://boardless-ai.vercel.app/admin?venture=fightaiq"
+    },
+    {
+      "id": "apify-ufcstats",
+      "name": "Pinned UFCStats actor",
+      "tier": "B",
+      "host": "ufcstats.com",
+      "coverage": ["ufc", "fighters", "stats", "results"],
+      "access": "apify",
+      "state": "disabled",
+      "credentialEnv": "APIFY_TOKEN",
+      "freeLimit": "$0 cash; at most 10 Free-tier results per run inside the $3 MMA Apify share",
+      "termsVerdict": "unclear",
+      "termsNote": "The actor is logged-out and public-data-only, but UFC terms prohibit automated page scraping and ufcstats.com publishes no separate permission reviewed by the desk. Keep disabled unless written permission resolves the conflict.",
+      "evidenceUrl": "https://www.ufc.com/terms",
+      "apify": {
+        "actorSlug": "parseforge/ufc-stats-scraper",
+        "actorBuildId": "ZylLcaS4oLYgWYyuE",
+        "purpose": "ufc-stats",
+        "targetHosts": ["ufcstats.com"],
+        "pricing": { "model": "pay-per-result", "pricePerResultUsd": 0.021, "maxRunUsd": 0.21 },
+        "maxResults": 10,
+        "expectedMonthlyUsd": 0.42,
+        "cadence": "twice-monthly",
+        "pricingEvidenceUrl": "https://apify.com/parseforge/ufc-stats-scraper",
+        "input": { "scrapeAllLetters": false, "startChar": "A", "maxItems": 10 }
+      }
+    },
+    {
+      "id": "apify-espn-mma",
+      "name": "Pinned ESPN MMA actor",
+      "tier": "B",
+      "host": "site.api.espn.com",
+      "coverage": ["ufc", "events", "bouts", "results"],
+      "access": "apify",
+      "state": "disabled",
+      "credentialEnv": "APIFY_TOKEN",
+      "freeLimit": "$0 cash; 30 game rows per run inside the $3 MMA Apify share",
+      "termsVerdict": "unclear",
+      "termsNote": "The actor reads ESPN public JSON without a login, but the desk found no official API license authorizing commercial automated reuse. Keep disabled pending written permission or a licensed endpoint.",
+      "evidenceUrl": "https://www.espn.com/sitetools/s/terms2.html",
+      "apify": {
+        "actorSlug": "scrapesage/espn-sports-scraper",
+        "actorBuildId": "pwb8idlTe8EZJjCL4",
+        "purpose": "espn-mma",
+        "targetHosts": ["site.api.espn.com"],
+        "pricing": { "model": "pay-per-result", "pricePerResultUsd": 0.003, "maxRunUsd": 0.09 },
+        "maxResults": 30,
+        "expectedMonthlyUsd": 0.36,
+        "cadence": "weekly",
+        "pricingEvidenceUrl": "https://apify.com/scrapesage/espn-sports-scraper",
+        "input": { "mode": "scoreboard", "leagues": ["ufc"], "dates": "today", "maxResults": 30, "enrichGameDetails": false }
+      }
+    },
+    {
+      "id": "apify-tapology-oktagon",
+      "name": "Pinned Tapology Oktagon promotion reader",
+      "tier": "B",
+      "host": "www.tapology.com",
+      "coverage": ["oktagon", "events", "bouts", "results"],
+      "access": "apify",
+      "state": "proposed",
+      "credentialEnv": "APIFY_TOKEN",
+      "freeLimit": "$0 cash; one promotion page per run with a $0.05 actor charge ceiling",
+      "termsVerdict": "allowed",
+      "termsNote": "Restricted to the public Oktagon promotion and event facts, excludes Tapology rankings, login and training use, and follows the site's 2026 Content-Signal use=reference permission. Only short factual fields and source URLs may enter FightAIQ.",
+      "evidenceUrl": "https://www.tapology.com/terms_of_use",
+      "apify": {
+        "actorSlug": "apify/cheerio-scraper",
+        "actorBuildId": "gTZUgxTMzuh0BBr4b",
+        "purpose": "oktagon-cards",
+        "targetHosts": ["www.tapology.com"],
+        "pricing": { "model": "platform-usage", "maxRunUsd": 0.05 },
+        "maxResults": 1,
+        "expectedMonthlyUsd": 0.2,
+        "cadence": "weekly",
+        "pricingEvidenceUrl": "https://apify.com/apify/cheerio-scraper",
+        "input": {
+          "startUrls": [{ "url": "https://www.tapology.com/fightcenter/promotions/1964-okatgon-mma-okmma" }],
+          "maxRequestsPerCrawl": 1,
+          "proxyConfiguration": { "useApifyProxy": false },
+          "pageFunction": "async function pageFunction({ $, request }) { return { sourceUrl: request.url, title: $('h2').first().text().trim(), text: $('main').text().replace(/\\s+/g, ' ').trim().slice(0, 50000) }; }"
+        }
+      }
+    },
+    {
+      "id": "apify-sherdog-profiles",
+      "name": "Pinned Sherdog profile actor",
+      "tier": "C",
+      "host": "www.sherdog.com",
+      "coverage": ["ufc", "oktagon", "fighters", "rosters"],
+      "access": "apify",
+      "state": "blocked",
+      "credentialEnv": "APIFY_TOKEN",
+      "freeLimit": "$0 cash; blocked before every run",
+      "termsVerdict": "forbidden",
+      "termsNote": "Sherdog terms bar collating service content elsewhere and restrict automated request volume. FightAIQ would collate profile facts, so this actor remains pinned for auditability but cannot run.",
+      "evidenceUrl": "https://www.sherdog.com/app-terms/terms-of-use/all/all",
+      "apify": {
+        "actorSlug": "richard.biros/sherdog-profile-scraper",
+        "actorBuildId": "ApIt4NFasPSVvEhk6",
+        "purpose": "roster-profiles",
+        "targetHosts": ["www.sherdog.com"],
+        "pricing": { "model": "pay-per-result", "pricePerResultUsd": 0.001, "maxRunUsd": 0.02 },
+        "maxResults": 20,
+        "expectedMonthlyUsd": 0,
+        "cadence": "owner-only",
+        "pricingEvidenceUrl": "https://apify.com/richard.biros/sherdog-profile-scraper",
+        "input": { "startUrls": [], "maxItems": 20 }
+      }
     },
     {
       "id": "official-organization-pages",

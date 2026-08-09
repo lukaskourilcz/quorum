@@ -44,13 +44,14 @@ export const MmaApifyActorConfigSchema = z.object({
   maxResults: z.number().int().positive().max(100),
   expectedMonthlyUsd: z.number().finite().nonnegative().max(MMA_APIFY_MONTHLY_SHARE_USD),
   cadence: z.enum(["weekly", "twice-monthly", "monthly", "owner-only"]),
+  pricingEvidenceUrl: z.string().url(),
   input: z.record(z.string(), z.unknown())
 }).superRefine((actor, context) => {
   const projected = (actor.pricing.pricePerResultUsd ?? 0) * actor.maxResults;
   if (actor.pricing.model === "pay-per-result" && actor.pricing.pricePerResultUsd === undefined) {
     context.addIssue({ code: "custom", message: "Pay-per-result actors need a result price", path: ["pricing", "pricePerResultUsd"] });
   }
-  if (projected > actor.pricing.maxRunUsd) {
+  if (projected - actor.pricing.maxRunUsd > 0.000001) {
     context.addIssue({ code: "custom", message: "Actor result cap exceeds its per-run cost ceiling", path: ["maxResults"] });
   }
 });
