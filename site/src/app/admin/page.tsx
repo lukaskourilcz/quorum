@@ -14,6 +14,8 @@ import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
+import { IdeasPanel, MonetizationPanel, type FutureIdeaRow } from "@/components/admin/future-panels";
+import { Panel, Tile } from "@/components/admin/panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { SocialArchive } from "@/components/admin/social-archive-panel";
 import { Callout } from "@/components/ui/callout";
@@ -34,6 +36,7 @@ import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
 import { readHookBrain } from "@/lib/hook-brain";
+import { readMonetizationOptions } from "@/lib/monetization-options";
 import { readOwnerAttention } from "@/lib/owner-attention";
 import { readStudioArticles } from "@/lib/carousel-summaries";
 import { getDailyResults } from "@/lib/daily-results";
@@ -112,56 +115,6 @@ function tileUsd(value: number): string {
   }).format(value);
 }
 
-function Tile({
-  label,
-  value,
-  foot,
-  percent,
-  brand
-}: {
-  label: string;
-  value: string;
-  foot: string;
-  percent: number;
-  brand: string;
-}) {
-  return (
-    <div className="bg-[#0e0e11] px-[18px] py-4">
-      <p className="m-0 font-mono text-[9.5px] uppercase tracking-[0.14em] text-[#94949c]">{label}</p>
-      <p className="m-0 mt-2.5 text-[26px] font-semibold tracking-[-0.04em] tabular-nums">{value}</p>
-      <span className="mt-2.5 block h-[3px] overflow-hidden rounded-sm bg-[#26262b]">
-        <span
-          className="block h-full"
-          style={{ width: `${Math.max(0, Math.min(100, percent)).toFixed(0)}%`, background: brand }}
-        />
-      </span>
-      <p className="m-0 mt-2 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#94949c]">{foot}</p>
-    </div>
-  );
-}
-
-function Panel({
-  title,
-  note,
-  children
-}: {
-  title: string;
-  note?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="min-w-0 rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
-      <div className="flex items-center justify-between gap-3 border-b border-[#1e1e22] px-[18px] py-3.5">
-        <p className="m-0 text-[14px] font-semibold">{title}</p>
-        {note ? (
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">{note}</span>
-        ) : null}
-      </div>
-      <div className={`p-[18px] ${UNWRAP}`}>{children}</div>
-    </div>
-  );
-}
-
 export default async function AdminPage({
   searchParams
 }: {
@@ -186,7 +139,8 @@ export default async function AdminPage({
     fixedCosts,
     money,
     dailyResults,
-    ownerAttention
+    ownerAttention,
+    monetization
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -206,7 +160,8 @@ export default async function AdminPage({
     readAdminFixedCosts(),
     getPublicMoneySnapshot(),
     getDailyResults(),
-    readOwnerAttention()
+    readOwnerAttention(),
+    readMonetizationOptions()
   ]);
 
   /*
@@ -302,8 +257,34 @@ export default async function AdminPage({
       href: "/admin?view=manual-tasks",
       active: selectedView === "manual-tasks",
       count: ownerAttention.state === "present" ? ownerAttention.manualTasks.length : null
+    },
+    {
+      id: "future",
+      name: "Future",
+      href: "/admin?view=future",
+      active: selectedView === "future",
+      count: monetization.state === "present" ? monetization.total : null
     }
   ];
+
+  /*
+   * Every idea from every project, newest first.
+   *
+   * The venture workspaces each show their own; nothing showed them together, so an idea raised
+   * for FightAIQ on a Tuesday was invisible to anyone thinking about the portfolio. Built from the
+   * same `ideaCards` machinery the workspaces use, so a card cannot read one way here and another
+   * way there.
+   */
+  const futureIdeas: FutureIdeaRow[] = portfolio.ventures
+    .flatMap((venture) => venture.cards
+      .filter((card) => card.kind === "idea")
+      .map((card): FutureIdeaRow => ({
+        ventureId: venture.id,
+        ventureName: ventureName(venture.id, venture.name),
+        card,
+        originHref: card.originMeetingRef ? publicMeetingHref(card.originMeetingRef, standups) : null
+      })))
+    .sort((left, right) => (right.card.updatedAt ?? "").localeCompare(left.card.updatedAt ?? ""));
 
   /*
    * Every count here is read, not estimated.
@@ -479,7 +460,20 @@ export default async function AdminPage({
       }
       workspaces={workspaces}
     >
-      {selectedView ? (
+      {selectedView === "future" ? (
+        <div className="grid min-w-0 gap-4">
+          <Panel note="Read-only" title="Ways this could earn">
+            <MonetizationPanel catalog={monetization} />
+          </Panel>
+          <Panel note="Every project" title="Ideas from the meetings">
+            <IdeasPanel
+              rows={futureIdeas}
+              unreadable={portfolio.ventures.flatMap((venture) =>
+                venture.unreadableFiles.filter((file) => file.startsWith("ideas/")))}
+            />
+          </Panel>
+        </div>
+      ) : selectedView ? (
         <div className="grid min-w-0 gap-4">
           <Panel title={SECTION_TITLES[selectedView]}>
             {selectedView === "approvals" || selectedView === "manual-tasks" ? (
