@@ -22,4 +22,14 @@ describe("zero-model operating signals", () => {
     expect(snapshot.metricsIngestionEnabled).toBe(false);
     expect(JSON.stringify(snapshot)).not.toMatch(/visitor|reader|views|likes|engagement/i);
   });
+
+  it("records what every rate was divided by", async () => {
+    // `ratio()` has to return 0 for an empty denominator, and that 0 is indistinguishable from a
+    // measured one — the admin read "Releases that passed 0%" on a week with no releases at all.
+    // Writing the denominator is what lets a reader tell a failure from an absence.
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-denominators-"));
+    const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-01T04:00:00.000Z") });
+    expect(snapshot.quality.denominators).toEqual({ meetings: 0, proofs: 0, fighterFields: 0 });
+    expect(snapshot.quality.verifierPassRate).toBe(0);
+  });
 });

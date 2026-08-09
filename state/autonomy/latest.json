@@ -63,9 +63,9 @@
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0.3721,
+          "value": 0.3875,
           "unit": "ratio",
-          "detail": "211 of 567 fighter fields are corroborated."
+          "detail": "224 of 578 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -83,9 +83,9 @@
         {
           "id": "live-template-library",
           "label": "Live carousel templates",
-          "value": 11,
+          "value": 12,
           "unit": "count",
-          "detail": "11 templates passed every brand and format check."
+          "detail": "12 templates passed every brand and format check."
         }
       ]
     },
@@ -109,9 +109,9 @@
         {
           "id": "slot-fill",
           "label": "Evidenced slot fill",
-          "value": 0.6667,
+          "value": 0.7143,
           "unit": "ratio",
-          "detail": "4 published articles for 6 assigned slots."
+          "detail": "5 published articles for 7 assigned slots."
         },
         {
           "id": "rendered-fightaiq-coverage",
@@ -125,12 +125,18 @@
   ],
   "quality": {
     "killedSlotReasons": {
-      "evidence": 4
+      "evidence": 4,
+      "other": 1
     },
-    "vetoRate": 0.1087,
+    "vetoRate": 0.1154,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0.3721,
-    "verifierPassRate": 0
+    "sourceAgreementRate": 0.3875,
+    "verifierPassRate": 0,
+    "denominators": {
+      "meetings": 52,
+      "proofs": 0,
+      "fighterFields": 578
+    }
   }
 }

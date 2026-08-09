@@ -52,12 +52,19 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
     });
   }
 
-  const quality = [
-    ["Releases that passed", percent(initial.quality.verifierPassRate)],
-    ["Passed first time", percent(initial.quality.firstPassRate)],
-    ["Needed a retry", percent(initial.quality.retryRate)],
-    ["Sources agreed", percent(initial.quality.sourceAgreementRate)],
-    ["Work stopped by checks", percent(initial.quality.vetoRate)]
+  /*
+   * A rate nothing was measured over reads "no runs yet", not "0%".
+   *
+   * Zero attempts and zero successes are the same number and opposite news: "Releases that passed
+   * 0%" announced a catastrophe on a week when nothing had been released. The snapshot now carries
+   * what each rate was divided by, so an absence can say it is one.
+   */
+  const quality: Array<[string, string, string | null]> = [
+    ["Releases that passed", "no releases yet", initial.quality.verifierPassRate === null ? null : percent(initial.quality.verifierPassRate)],
+    ["Passed first time", "no releases yet", initial.quality.firstPassRate === null ? null : percent(initial.quality.firstPassRate)],
+    ["Needed a retry", "no releases yet", initial.quality.retryRate === null ? null : percent(initial.quality.retryRate)],
+    ["Sources agreed", "no fighter files checked yet", initial.quality.sourceAgreementRate === null ? null : percent(initial.quality.sourceAgreementRate)],
+    ["Work stopped by checks", "no meetings yet", initial.quality.vetoRate === null ? null : percent(initial.quality.vetoRate)]
   ];
   const socialStatus = (status: string) => status === "enabled" ? "Ready" : status === "paused" ? "Paused" : "Waiting";
   const priorityStatus = (status: string) => status === "selected" ? "Chosen" : status === "why-not" ? "Skipped" : status === "archived" ? "Archived" : "Open";
@@ -73,7 +80,13 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
       </div>
 
       <div className="grid gap-4 md:grid-cols-5">
-        {quality.map(([label, value]) => <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4" key={label}><p className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">{label}</p><p className="mt-2 text-2xl font-semibold">{value}</p></div>)}
+        {quality.map(([label, absent, value]) => (
+          <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4" key={label}>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">{label}</p>
+            <p className="mt-2 text-2xl font-semibold">{value ?? "—"}</p>
+            {value === null ? <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{absent}</p> : null}
+          </div>
+        ))}
       </div>
 
       <div className="mt-5 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">

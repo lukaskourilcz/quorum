@@ -37,3 +37,59 @@ describe("a question a seat proposed", () => {
     expect(snapshot.priorities.map((entry) => entry.question)).toEqual(["Which of this week's rising topics belongs to a magazine desk?"]);
   });
 });
+
+describe("quality rates with nothing behind them", () => {
+  async function snapshotRoot(quality: unknown): Promise<string> {
+    const root = await mkdtemp(path.join(os.tmpdir(), "admin-autonomy-rates-"));
+    await mkdir(path.join(root, "state", "autonomy"), { recursive: true });
+    await writeFile(
+      path.join(root, "state", "autonomy", "latest.json"),
+      JSON.stringify({ schemaVersion: "autonomy-snapshot/1", generatedAt: "2026-08-08T04:00:00.000Z", growth: [], quality })
+    );
+    return root;
+  }
+
+  it("reads a rate measured over nothing as no-data, not as zero", async () => {
+    const { quality } = await readAdminAutonomy(await snapshotRoot({
+      killedSlotReasons: {},
+      vetoRate: 0.1087,
+      firstPassRate: 0,
+      retryRate: 0,
+      sourceAgreementRate: 0.3721,
+      verifierPassRate: 0,
+      denominators: { meetings: 46, proofs: 0, fighterFields: 121 }
+    }));
+    expect(quality.vetoRate).toBe(0.1087);
+    expect(quality.sourceAgreementRate).toBe(0.3721);
+    // Nothing was released, so "0% passed" would be a claim about releases that never happened.
+    expect(quality.verifierPassRate).toBeNull();
+    expect(quality.firstPassRate).toBeNull();
+    expect(quality.retryRate).toBeNull();
+  });
+
+  it("keeps a real zero when something was measured", async () => {
+    const { quality } = await readAdminAutonomy(await snapshotRoot({
+      killedSlotReasons: {},
+      vetoRate: 0,
+      firstPassRate: 0,
+      retryRate: 0,
+      sourceAgreementRate: 0,
+      verifierPassRate: 0,
+      denominators: { meetings: 12, proofs: 8, fighterFields: 40 }
+    }));
+    expect(quality.verifierPassRate).toBe(0);
+    expect(quality.vetoRate).toBe(0);
+  });
+
+  it("refuses to read a snapshot written before the denominators existed", async () => {
+    const { quality } = await readAdminAutonomy(await snapshotRoot({
+      killedSlotReasons: {},
+      vetoRate: 0.1087,
+      firstPassRate: 0,
+      retryRate: 0,
+      sourceAgreementRate: 0.3721,
+      verifierPassRate: 0
+    }));
+    expect(Object.values(quality).filter((value) => typeof value === "number")).toEqual([]);
+  });
+});
