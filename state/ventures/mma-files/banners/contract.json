@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "mma-files-banner/1",
+  "targetRepo": "lukaskourilcz/mma-files",
+  "files": [
+    {
+      "path": "data/boardless/ads.json",
+      "sha256": "33b509de913d2fada69c1ab7b0bd00cb9608ca0a38a40a8ab075449ed5ba8388",
+      "bytes": 599
+    }
+  ],
+  "payloadHash": "ab33b4c94b3601135304bb23c5b6d6a598a39f69d37e80a4874dcfa69b1080fb",
+  "preparedAt": "2026-08-09T00:00:00.000Z",
+  "status": "staged",
+  "receiptRef": null
+}
