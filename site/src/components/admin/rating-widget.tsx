@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import { formatDateTime } from "@/lib/utils";
 import type {
   RatingObjectKind,
@@ -37,6 +38,7 @@ export function RatingWidget({
   contentHash,
   initialHistory
 }: RatingWidgetProps) {
+  const writesEnabled = useAdminWritesEnabled();
   const noteId = `rating-note-${ventureId}-${contentHash.replace(":", "-")}`;
   const [history, setHistory] = useState(initialHistory);
   const [active, setActive] = useState<RatingValue | null>(initialHistory[0]?.rating ?? null);
@@ -46,6 +48,7 @@ export function RatingWidget({
   const [error, setError] = useState("");
 
   async function rate(value: RatingValue): Promise<void> {
+    if (!writesEnabled) return;
     const previous = active;
     const ratedAt = new Date().toISOString();
     const record: RatingRecord = {
@@ -101,7 +104,7 @@ export function RatingWidget({
                   : "border-[var(--accent)] bg-[var(--accent)] text-[var(--obsidian)]"
                 : "px-3"
               }
-              disabled={pending}
+              disabled={pending || !writesEnabled}
               key={choice.value}
               onClick={() => rate(choice.value)}
               type="button"
@@ -118,7 +121,7 @@ export function RatingWidget({
         </span>
         <textarea
           className="mt-2 min-h-24 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] p-3 text-base leading-6 text-[var(--foreground)] placeholder:text-[var(--fog)] disabled:opacity-50"
-          disabled={pending}
+          disabled={pending || !writesEnabled}
           id={noteId}
           maxLength={500}
           onChange={(event) => setNote(event.target.value)}

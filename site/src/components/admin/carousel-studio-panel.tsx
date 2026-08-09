@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle2, ExternalLink, Link2, ShieldCheck, TriangleAlert } from "lucide-react";
 import { RatingWidget } from "@/components/admin/rating-widget";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
@@ -19,6 +20,7 @@ function previewUrl(input: { templateId: string; version: string; brand: string;
 }
 
 function InspirationPanel({ initialLinks }: { initialLinks: CarouselStudioSnapshot["inspirationLinks"] }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [links, setLinks] = useState(initialLinks);
   const [url, setUrl] = useState("");
   const [label, setLabel] = useState("");
@@ -28,6 +30,7 @@ function InspirationPanel({ initialLinks }: { initialLinks: CarouselStudioSnapsh
 
   async function submit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
+    if (!writesEnabled) return;
     setPending(true);
     setError("");
     setMessage("Saving link…");
@@ -54,7 +57,7 @@ function InspirationPanel({ initialLinks }: { initialLinks: CarouselStudioSnapsh
 
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-      <form className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-6" onSubmit={submit}>
+      <form className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-6" onSubmit={submit}><fieldset disabled={!writesEnabled}>
         <Badge tone="accent">Owner dropbox</Badge>
         <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">Add one inspiration link</h3>
         <p className="mt-3 text-sm leading-6 text-[var(--fog)]">Use a direct article or post. The meeting stores text observations and provenance only—never the external image bytes.</p>
@@ -66,9 +69,9 @@ function InspirationPanel({ initialLinks }: { initialLinks: CarouselStudioSnapsh
           <span className="text-sm font-semibold">What should MOTIF inspect?</span>
           <input className="mt-2 min-h-12 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-4 text-base" id="studio-inspiration-label" maxLength={120} onChange={(event) => setLabel(event.target.value)} placeholder="Editorial pacing and title hierarchy" required value={label} />
         </label>
-        <Button className="mt-5 w-full" disabled={pending} type="submit" variant="accent"><Link2 aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Save individual link"}</Button>
+        <Button className="mt-5 w-full" disabled={pending || !writesEnabled} type="submit" variant="accent"><Link2 aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Save individual link"}</Button>
         <div aria-live="polite" className="mt-3 min-h-6 text-sm" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}</div>
-      </form>
+      </fieldset></form>
       <section aria-labelledby="saved-inspiration-heading" className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-6">
         <div className="flex items-center justify-between gap-4"><h3 className="text-xl font-semibold" id="saved-inspiration-heading">Saved links</h3><Badge>{links.length}</Badge></div>
         {links.length ? <ol className="mt-5 grid gap-3">{links.map((link) => <li className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={link.url}><a className="inline-flex min-h-11 items-center gap-2 break-all font-semibold text-[var(--accent)] underline underline-offset-4" href={link.url} rel="noreferrer" target="_blank">{link.label}<ExternalLink aria-hidden="true" className="size-4 shrink-0" /></a><p className="mt-2 font-mono text-xs text-[var(--fog)]">Added {formatDateTime(link.addedAt)}</p></li>)}</ol> : <Callout className="mt-5">No links yet. The 13:00 room will stay asleep and cost $0 until a bounded agenda exists.</Callout>}
@@ -78,10 +81,12 @@ function InspirationPanel({ initialLinks }: { initialLinks: CarouselStudioSnapsh
 }
 
 function TemplateStatusControl({ templateId, version, status, checksPass }: { templateId: string; version: string; status: "draft" | "live" | "deprecated"; checksPass: boolean }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   async function update(next: "draft" | "live" | "deprecated"): Promise<void> {
+    if (!writesEnabled) return;
     const reason = window.prompt(`Why should ${templateId}@${version} become ${next}?`);
     if (!reason) return;
     setPending(true); setError(""); setMessage("Saving status…");
@@ -92,7 +97,7 @@ function TemplateStatusControl({ templateId, version, status, checksPass }: { te
       setMessage(`Saved as ${next}. Reload to see the canonical view.`);
     } catch (caught) { setMessage(""); setError(caught instanceof Error ? caught.message : "The status could not be saved."); } finally { setPending(false); }
   }
-  return <div className="mt-4"><div className="flex flex-wrap gap-2"><Button disabled={pending || status === "draft"} onClick={() => update("draft")} size="small" type="button" variant="secondary">Move to draft</Button><Button disabled={pending || status === "live" || !checksPass} onClick={() => update("live")} size="small" type="button" variant="secondary">Make live</Button><Button className="border-[var(--destructive-soft)] text-[var(--destructive-soft)]" disabled={pending || status === "deprecated"} onClick={() => update("deprecated")} size="small" type="button" variant="secondary">Deprecate</Button></div><div aria-live="polite" className="mt-2 min-h-5 text-xs" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}</div></div>;
+  return <div className="mt-4"><div className="flex flex-wrap gap-2"><Button disabled={!writesEnabled || pending || status === "draft"} onClick={() => update("draft")} size="small" type="button" variant="secondary">Move to draft</Button><Button disabled={!writesEnabled || pending || status === "live" || !checksPass} onClick={() => update("live")} size="small" type="button" variant="secondary">Make live</Button><Button className="border-[var(--destructive-soft)] text-[var(--destructive-soft)]" disabled={!writesEnabled || pending || status === "deprecated"} onClick={() => update("deprecated")} size="small" type="button" variant="secondary">Deprecate</Button></div><div aria-live="polite" className="mt-2 min-h-5 text-xs" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}</div></div>;
 }
 
 function TemplateGallery({ snapshot }: { snapshot: CarouselStudioSnapshot }) {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
+import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { AgentSwitches } from "@/components/admin/agent-switches";
 import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
@@ -17,6 +18,7 @@ import { SocialArchive } from "@/components/admin/social-archive-panel";
 import { Callout } from "@/components/ui/callout";
 import { CURRENT_MONTHLY_API_LIMIT_USD, CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
+import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
@@ -282,6 +284,7 @@ export default async function AdminPage({
     ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])
     : [];
   const selectedAgentControls = agentControls.find((control) => control.ventureId === selectedVenture?.id);
+  const writesEnabled = adminWritesEnabled();
 
   return (
     <AdminShell
@@ -306,6 +309,8 @@ export default async function AdminPage({
       title={selectedVenture ? ventureName(selectedVenture.id, selectedVenture.name) : "Project desk"}
       workspaces={workspaces}
     >
+      <AdminWriteProvider enabled={writesEnabled}>
+      {!writesEnabled ? <Callout tone="warning">Read-only deployment — saving needs the GitHub token, see NEEDED.md. Existing records remain available to review.</Callout> : null}
       {!selectedVenture ? (
         <div className="grid min-w-0 gap-4">
           <div
@@ -462,6 +467,7 @@ export default async function AdminPage({
           ) : null}
         </div>
       )}
+      </AdminWriteProvider>
     </AdminShell>
   );
 }

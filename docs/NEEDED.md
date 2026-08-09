@@ -52,7 +52,8 @@ is the single thing standing between a proven path and a working one.
   design switcher. It needs `ADMIN_USER`, `ADMIN_PASSWORD` and a fine-grained
   `BOARDLESSAI_GITHUB_TOKEN` with Contents read/write on this repository, plus
   `BOARDLESSAI_GITHUB_REPOSITORY` and `BOARDLESSAI_GITHUB_BRANCH` if you are not using the
-  defaults. [imp:5] [owner:me] [time:10m] [kind:setup]
+  defaults. Until that token is provisioned, production deliberately stays read-only rather than
+  accepting a save that cannot become canonical. [imp:5] [owner:me] [time:10m] [kind:setup]
 
 - [ ] **Create an Apify account on the Free plan and add `APIFY_TOKEN` to Actions secrets** — the
   single unblock for GoVIRAL's trend scouting. Free plan only: no card, and its $5 of monthly

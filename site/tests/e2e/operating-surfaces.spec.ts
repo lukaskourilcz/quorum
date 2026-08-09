@@ -269,6 +269,21 @@ test("FightAIQ hides reports until an analysis run produces them", async ({ page
   await expect(page.getByText("No ten-fight report is stored.")).toHaveCount(0);
 });
 
+test("admin makes its deployment write capability explicit", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const readOnly = Boolean(process.env.VERCEL) && !process.env.BOARDLESSAI_GITHUB_TOKEN;
+  const warning = page.getByText("Read-only deployment — saving needs the GitHub token, see NEEDED.md.");
+  const addCost = page.getByRole("button", { name: "Add cost" });
+
+  if (readOnly) {
+    await expect(warning).toBeVisible();
+    await expect(addCost).toBeDisabled();
+  } else {
+    await expect(warning).toHaveCount(0);
+    await expect(addCost).toBeEnabled();
+  }
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs

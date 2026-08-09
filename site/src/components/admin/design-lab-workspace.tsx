@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { DeckSaveBadge, warningFor, type SaveState } from "@/components/admin/deck-save-badge";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type { LabArticle, LabPreset } from "@/lib/design-lab";
 
 /**
@@ -114,6 +115,7 @@ function SlideImage({ src, alt, ratio }: { src: string; alt: string; ratio: numb
 }
 
 function Workspace({ article, presets }: { article: LabArticle; presets: LabPreset[] }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [recipe, setRecipe] = useState<Recipe>(article.recipe);
   const [format, setFormat] = useState<FormatId>("instagram-portrait");
   const [safeArea, setSafeArea] = useState(false);
@@ -128,6 +130,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   const changed = current.trim() !== (article.slides[slide]?.text ?? "").trim();
 
   async function post(body: Record<string, unknown>, label: string): Promise<void> {
+    if (!writesEnabled) return;
     setSave({ kind: "saving", style: label });
     try {
       const response = await fetch("/admin/api/carousel-studio/recipe", {
@@ -152,7 +155,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   function change(next: Partial<Recipe>): void {
     const merged = { ...recipe, ...next };
     setRecipe(merged);
-    void post(
+    if (writesEnabled) void post(
       {
         family: merged.family,
         variant: merged.variant,
@@ -236,6 +239,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
             </label>
             <textarea
               className="min-h-24 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--background)] p-3 text-sm text-[var(--foreground)]"
+              disabled={!writesEnabled}
               id={`slide-${article.id}`}
               onChange={(event) => {
                 const next = [...texts];
@@ -250,7 +254,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
               </span>
               <Button
                 data-save-slide
-                disabled={overLimit || !changed}
+                disabled={!writesEnabled || overLimit || !changed}
                 onClick={() => { void post({ slide, text: current }, `slide ${slide + 1}`); }}
                 size="small"
                 type="button"
@@ -317,6 +321,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
               <label className="sr-only" htmlFor={`preset-${article.id}`}>Název presetu</label>
               <input
                 className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--background)] px-3 py-1 text-xs text-[var(--foreground)]"
+                disabled={!writesEnabled}
                 id={`preset-${article.id}`}
                 onChange={(event) => setPresetName(event.target.value)}
                 placeholder="Uložit jako preset"
@@ -324,7 +329,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
               />
               <Button
                 data-save-preset
-                disabled={presetName.trim().length < 2}
+                disabled={!writesEnabled || presetName.trim().length < 2}
                 onClick={() => { void post({ ...recipe, presetName, presetStatus: "draft" }, presetName); }}
                 size="small"
                 type="button"

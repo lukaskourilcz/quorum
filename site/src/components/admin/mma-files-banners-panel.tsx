@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type { AdminMmaBannerSlot, AdminMmaBanners, AdminMmaBannerSize } from "@/lib/admin-mma-files";
 
 export interface CropWindow { sx: number; sy: number; sw: number; sh: number }
@@ -44,6 +45,7 @@ function sizes(slot: AdminMmaBannerSlot): AdminMmaBannerSize[] {
 function sizeKey(size: AdminMmaBannerSize): string { return `${size.width}x${size.height}`; }
 
 function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
+  const writesEnabled = useAdminWritesEnabled();
   const router = useRouter();
   const choices = useMemo(() => sizes(slot), [slot]);
   const initialSize = slot.image ?? choices[0]!;
@@ -74,6 +76,7 @@ function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
   }, [file, focusX, focusY, target.height, target.width]);
 
   async function stage() {
+    if (!writesEnabled) return;
     if (!cropped || !file) { setMessage("Nejdřív vyber obrázek a zkontroluj ořez."); return; }
     setBusy(true); setMessage(null);
     const form = new FormData();
@@ -91,6 +94,7 @@ function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
   }
 
   async function toggle() {
+    if (!writesEnabled) return;
     setBusy(true); setMessage(null);
     try {
       const response = await fetch("/admin/api/mma-files/banners", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slotId: slot.id, enabled: !slot.enabled }) });
@@ -107,24 +111,26 @@ function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
     <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]">{slot.pages.join(" · ")}</p><h3 className="mt-2 text-xl font-semibold">{slot.id}</h3></div><div className="flex gap-2"><Badge tone={slot.enabled ? "success" : "neutral"}>{slot.enabled ? "zapnuto" : "vypnuto"}</Badge>{slot.stagedChanged ? <Badge tone="warning">čeká změna</Badge> : null}</div></div>
     {currentSrc && slot.image ? <Image alt={slot.alt} className="mt-5 h-auto max-h-64 w-full rounded-[var(--radius-button)] border border-[var(--border)] object-contain" height={slot.image.height} src={currentSrc} unoptimized width={slot.image.width} /> : <div className="mt-5 grid min-h-32 place-items-center rounded-[var(--radius-button)] border border-dashed border-[var(--border)] text-sm text-[var(--fog)]">Žádná kreativa</div>}
     <div className="mt-5 grid gap-4">
-      <label className="grid gap-1 text-sm font-semibold">Rozměr<select className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" onChange={(event) => setSelected(event.target.value)} value={selected}>{choices.map((size) => <option key={sizeKey(size)} value={sizeKey(size)}>{size.width}×{size.height}</option>)}</select></label>
-      <label className="grid gap-1 text-sm font-semibold">Obrázek<input accept="image/jpeg,image/png,image/webp" className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] p-2" onChange={(event) => setFile(event.target.files?.[0] ?? null)} type="file" /></label>
+      <label className="grid gap-1 text-sm font-semibold">Rozměr<select className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" disabled={!writesEnabled} onChange={(event) => setSelected(event.target.value)} value={selected}>{choices.map((size) => <option key={sizeKey(size)} value={sizeKey(size)}>{size.width}×{size.height}</option>)}</select></label>
+      <label className="grid gap-1 text-sm font-semibold">Obrázek<input accept="image/jpeg,image/png,image/webp" className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] p-2" disabled={!writesEnabled} onChange={(event) => setFile(event.target.files?.[0] ?? null)} type="file" /></label>
       {preview ? <Image alt="Náhled přesného ořezu" className="h-auto w-full rounded-[var(--radius-button)] border border-[var(--accent)] object-contain" height={target.height} src={preview} unoptimized width={target.width} /> : null}
-      <label className="grid gap-1 text-sm font-semibold">Vodorovné těžiště ořezu<input aria-label="Vodorovné těžiště ořezu" max="100" min="0" onChange={(event) => setFocusX(Number(event.target.value))} type="range" value={focusX} /></label>
-      <label className="grid gap-1 text-sm font-semibold">Svislé těžiště ořezu<input aria-label="Svislé těžiště ořezu" max="100" min="0" onChange={(event) => setFocusY(Number(event.target.value))} type="range" value={focusY} /></label>
-      <label className="grid gap-1 text-sm font-semibold">Alternativní text<input className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" maxLength={300} onChange={(event) => setAlt(event.target.value)} value={alt} /></label>
-      <label className="grid gap-1 text-sm font-semibold">Cílový odkaz (HTTPS, nepovinný)<input className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" onChange={(event) => setHref(event.target.value)} type="url" value={href} /></label>
-      <label className="flex min-h-11 items-center gap-2 text-sm font-semibold"><input checked={enabled} onChange={(event) => setEnabled(event.target.checked)} type="checkbox" /> Po doručení zapnout</label>
-      <div className="flex flex-wrap gap-3"><Button disabled={busy || !cropped} onClick={stage}>{busy ? "Ukládám…" : "Připravit přesný ořez"}</Button><Button disabled={busy || (!slot.image && !slot.enabled)} onClick={toggle} variant="secondary">{slot.enabled ? "Připravit vypnutí" : "Připravit zapnutí"}</Button></div>
+      <label className="grid gap-1 text-sm font-semibold">Vodorovné těžiště ořezu<input aria-label="Vodorovné těžiště ořezu" disabled={!writesEnabled} max="100" min="0" onChange={(event) => setFocusX(Number(event.target.value))} type="range" value={focusX} /></label>
+      <label className="grid gap-1 text-sm font-semibold">Svislé těžiště ořezu<input aria-label="Svislé těžiště ořezu" disabled={!writesEnabled} max="100" min="0" onChange={(event) => setFocusY(Number(event.target.value))} type="range" value={focusY} /></label>
+      <label className="grid gap-1 text-sm font-semibold">Alternativní text<input className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" disabled={!writesEnabled} maxLength={300} onChange={(event) => setAlt(event.target.value)} value={alt} /></label>
+      <label className="grid gap-1 text-sm font-semibold">Cílový odkaz (HTTPS, nepovinný)<input className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" disabled={!writesEnabled} onChange={(event) => setHref(event.target.value)} type="url" value={href} /></label>
+      <label className="flex min-h-11 items-center gap-2 text-sm font-semibold"><input checked={enabled} disabled={!writesEnabled} onChange={(event) => setEnabled(event.target.checked)} type="checkbox" /> Po doručení zapnout</label>
+      <div className="flex flex-wrap gap-3"><Button disabled={!writesEnabled || busy || !cropped} onClick={stage}>{busy ? "Ukládám…" : "Připravit přesný ořez"}</Button><Button disabled={!writesEnabled || busy || (!slot.image && !slot.enabled)} onClick={toggle} variant="secondary">{slot.enabled ? "Připravit vypnutí" : "Připravit zapnutí"}</Button></div>
       {message ? <p aria-live="polite" className="text-sm text-[var(--fog)]">{message}</p> : null}
     </div>
   </CardContent></Card>;
 }
 
 export function MmaFilesBannersPanel({ banners }: { banners: AdminMmaBanners }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   async function deliver() {
+    if (!writesEnabled) return;
     setBusy(true); setMessage(null);
     try {
       const response = await fetch("/admin/api/mma-files/banners/deliver", { method: "POST" });
@@ -136,7 +142,7 @@ export function MmaFilesBannersPanel({ banners }: { banners: AdminMmaBanners }) 
   }
   return <div className="mt-8 grid gap-5">
     <Callout tone={banners.status === "staged" ? "warning" : "neutral"}>Stav kontraktu: {banners.status}. {banners.status === "staged" ? "Změny jsou jen ve stagingu a na magazínu ještě nejsou." : banners.receiptRef ?? "Zatím neexistuje doručenka."}</Callout>
-    <div className="flex flex-wrap items-center gap-3"><Button disabled={busy || banners.status !== "staged"} onClick={deliver}>{busy ? "Spouštím…" : "Doručit"}</Button><p className="text-sm text-[var(--fog)]">Akce spustí pouze ruční delivery-only cestu; nevyrábí nový obsah.</p></div>
+    <div className="flex flex-wrap items-center gap-3"><Button disabled={!writesEnabled || busy || banners.status !== "staged"} onClick={deliver}>{busy ? "Spouštím…" : "Doručit"}</Button><p className="text-sm text-[var(--fog)]">Akce spustí pouze ruční delivery-only cestu; nevyrábí nový obsah.</p></div>
     {message ? <p aria-live="polite" className="text-sm text-[var(--fog)]">{message}</p> : null}
     <div className="grid gap-5 lg:grid-cols-2">{banners.slots.map((slot) => <BannerEditor key={slot.id} slot={slot} />)}</div>
   </div>;
