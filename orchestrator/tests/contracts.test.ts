@@ -84,17 +84,43 @@ describe("portfolio contract boundaries", () => {
 });
 
 describe("Czech is the required locale and English is optional", () => {
-  it("keeps the en key on a sealed bilingual package so its hash still matches", async () => {
+  it("keeps the three sealed packages byte-for-byte shaped and hash-valid", async () => {
     // The worst failure mode available here: if making en optional had switched these to a
     // stripping object, loading the one live article would drop its English half, the
     // recomputed hash would not match, and store.ts would throw on every future cycle —
     // wedging MMA delivery permanently. openObject is z.looseObject precisely to prevent that.
-    const stored = JSON.parse(
-      await readFile(path.join(repoRoot, "state/ventures/mma-files/articles/2026-08-02-am-ufc-valentina-shevchenko.json"), "utf8")
-    ) as unknown;
-    const parsed = ArticlePackageSchema.parse(stored);
-    expect(parsed.localizations.en, "the sealed package keeps its English half").toBeDefined();
-    expect(hasValidArticlePackageHash(parsed), "and still hashes to its stored value").toBe(true);
+    const sealed = [
+      "2026-08-02-am-ufc-valentina-shevchenko.json",
+      "2026-08-04-am-oktagon-gustavo-lopez.json",
+      "2026-08-05-am-ufc-event-ufc-fight-night-gamrot-vs-salkilld.json"
+    ];
+    for (const filename of sealed) {
+      const stored = JSON.parse(
+        await readFile(path.join(repoRoot, "state/ventures/mma-files/articles", filename), "utf8")
+      ) as unknown;
+      const parsed = ArticlePackageSchema.parse(stored);
+      expect(parsed, `${filename} retains every stored field`).toEqual(stored);
+      if ((stored as { localizations?: { en?: unknown } }).localizations?.en) {
+        expect(parsed.localizations.en, `${filename} keeps its English half`).toBeDefined();
+      }
+      expect(parsed.organization, `${filename} predates the additive field`).toBeUndefined();
+      expect(hasValidArticlePackageHash(parsed), `${filename} still hashes to its stored value`).toBe(true);
+    }
+  });
+
+  it("round-trips article packages with and without organization and rejects a contradiction", async () => {
+    const valid = await fixture("article", "valid") as Record<string, unknown>;
+    expect(ArticlePackageSchema.parse(valid).organization).toBe("ufc");
+
+    const historical = structuredClone(valid);
+    delete historical.organization;
+    expect(ArticlePackageSchema.parse(historical)).toEqual(historical);
+
+    const contradiction = { ...valid, organization: "oktagon" };
+    const parsed = ArticlePackageSchema.safeParse(contradiction);
+    expect(parsed.success).toBe(false);
+    expect(parsed.success ? [] : parsed.error.issues.map((issue) => issue.path.join(".")))
+      .toContain("organization");
   });
 
   it("accepts an article with no English at all", async () => {
