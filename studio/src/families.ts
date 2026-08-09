@@ -275,8 +275,8 @@ const families: Readonly<Record<DeckFamily, { description: string; compose: Comp
         return [
           hero(columnX, 0, columnWidth, 1, { scrim: "none" }),
           shape(columnWidth, 0, 1 - columnWidth, 1, { fillToken: "background" }),
+          rule(textX, TOP, 0.12, { thickness: 10 }),
           text(slot, textX, TOP + 0.04, textWidth, 0.4, { fontWeight: 800, maxFontSize: 72, minFontSize: 30, maxChars: 150, maxLines: 6 }),
-          rule(textX, TOP - 0.03, 0.12, { thickness: 10 }),
           wordmark(),
           progress(phase)
         ];
@@ -289,7 +289,7 @@ const families: Readonly<Record<DeckFamily, { description: string; compose: Comp
           maxChars: 210,
           maxLines: 8
         }),
-        rule(textX, TOP - 0.02, 0.1, { thickness: 8 }),
+        rule(textX, TOP, 0.1, { thickness: 8 }),
         wordmark(),
         progress(phase)
       ];
@@ -324,7 +324,7 @@ const families: Readonly<Record<DeckFamily, { description: string; compose: Comp
           angle,
           stops: [{ colorToken: "surface-strong", offset: 0.42 }, { colorToken: "background", offset: 0.42 }]
         },
-        rule(LEFT, role === "outro" ? TOP - 0.02 : TOP + 0.3, role === "outro" ? 0.24 : 0.1, { thickness: 8 }),
+        rule(LEFT, role === "outro" ? TOP : TOP + 0.3, role === "outro" ? 0.24 : 0.1, { thickness: 8 }),
         text(slot, LEFT, role === "outro" ? TOP + 0.05 : TOP + 0.37, MEASURE, role === "outro" ? 0.3 : 0.32, {
           maxFontSize: role === "outro" ? 60 : 56,
           minFontSize: 28,
@@ -476,7 +476,7 @@ const families: Readonly<Record<DeckFamily, { description: string; compose: Comp
       const panelled = beat.step === 1 || role === "outro";
       return [
         ...(panelled
-          ? [shape(LEFT - 0.02, TOP - 0.01, MEASURE + 0.04, 0.5, { fillToken: "surface", radius: 0.03, padText: slot, padding: 0.035 })]
+          ? [shape(LEFT - 0.02, TOP, MEASURE + 0.04, 0.5, { fillToken: "surface", radius: 0.03, padText: slot, padding: 0.035 })]
           : [shape(LEFT, TOP, 0.014, 0.42, { fillToken: "accent" })]),
         text(slot, panelled ? LEFT + 0.02 : LEFT + 0.05, TOP + 0.025, MEASURE - (panelled ? 0.04 : 0.05), 0.42, {
           maxFontSize: 62,
@@ -531,9 +531,9 @@ const families: Readonly<Record<DeckFamily, { description: string; compose: Comp
   dossier: {
     description: "A record rather than a poster: hairlines, reading-size type and a dashed middle beat.",
     compose: ({ slot, role, beat, phase }) => [
-      rule(LEFT, TOP - 0.02, MEASURE, { thickness: 2, colorToken: "muted", dash: beat.step === 1 && role === "body" }),
+      rule(LEFT, TOP, MEASURE, { thickness: 2, colorToken: "muted", dash: beat.step === 1 && role === "body" }),
       rule(LEFT, BOTTOM - 0.055, MEASURE, { thickness: 2, colorToken: "muted" }),
-      shape(LEFT, TOP - 0.02, 0.08, 0.006, { fillToken: "accent" }),
+      shape(LEFT, TOP, 0.08, 0.006, { fillToken: "accent" }),
       text(slot, LEFT, TOP + 0.04, MEASURE, 0.44, {
         fontToken: role === "cover" ? "headline" : "body",
         fontWeight: role === "cover" ? 700 : 400,

@@ -169,7 +169,6 @@
                   }
                 },
                 "frames": {
-                  "minItems": 1,
                   "maxItems": 10,
                   "type": "array",
                   "items": {
@@ -397,7 +396,6 @@
                   }
                 },
                 "frames": {
-                  "minItems": 1,
                   "maxItems": 10,
                   "type": "array",
                   "items": {
@@ -583,7 +581,6 @@
           }
         },
         "frames": {
-          "minItems": 1,
           "maxItems": 10,
           "type": "array",
           "items": {

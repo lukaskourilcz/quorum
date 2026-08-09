@@ -60,7 +60,13 @@ function boundedCopy(body: string, suffix: string, maximum: number): string {
 }
 
 function queueAltText(pack: SocialPack, locale: SocialLocale, channel: "instagram" | "threads"): string {
-  return pack.byLocale[locale]![channel].frames
+  const frames = pack.byLocale[locale]![channel].frames;
+  // A Threads item carries no frames at all, so it has nothing to describe. The schema still
+  // wants a sentence; the honest one says the post is words.
+  if (frames.length === 0) {
+    return locale === "cs" ? "Textový příspěvek bez obrázku." : "A text post with no image.";
+  }
+  return frames
     .map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`)
     .join(" ")
     .slice(0, 1_000);
@@ -251,8 +257,18 @@ export async function composeEditionSocialPack(input: {
     if (!reference) continue;
     framePaths[locale] = { instagram: [], threads: [] };
     const template = resolveLiveCarouselTemplate(reference.template_id, reference.version);
-    for (const channel of ["instagram", "threads"] as const) {
-      const format = channel === "instagram" ? "instagram-portrait" as const : "threads" as const;
+    /*
+     * Instagram only.
+     *
+     * The Threads frames were rendered, hashed, written into `site/public/social` and then
+     * discarded: the queue item forces `assetPaths: []` because the guarded connector is
+     * text-only and `assertQueueItemPublishable` throws the whole publisher run out over a
+     * Threads item carrying an asset. So every edition rasterised a second full deck nothing
+     * could ever send, and committed it. Not rendering it is both cheaper and more honest about
+     * what the channel is; the Lab still renders a Threads cover on request for manual use.
+     */
+    for (const channel of ["instagram"] as const) {
+      const format = "instagram-portrait" as const;
       const rendered = await renderCarouselPng({
         template,
         payload: reference.content,

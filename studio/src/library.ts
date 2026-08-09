@@ -51,7 +51,28 @@ const text = (
   ...options
 });
 
-const logo = (y = 0.07, colorToken = "accent"): CarouselLayerInput => ({
+/*
+ * The safe band every canvas shares.
+ *
+ * A story is overlaid by the platform's own chrome — the profile row along the top and the reply
+ * bar along the bottom — which is about a seventh of the canvas at each end and the widest safe
+ * area of the four. Chrome placed inside it is not merely tight, it is covered up. These are the
+ * bounds that make one composition honest at 1:1, 4:5, 9:16 and Threads at once, rather than
+ * honest at 4:5 and quietly wrong at 9:16.
+ */
+export const SAFE_TOP = 0.145;
+export const SAFE_BOTTOM = 0.835;
+
+/**
+ * The wordmark.
+ *
+ * Its default `y` of 0.07 was the single line that failed every deck template for the story
+ * canvas: comfortably inside a 4:5 margin, squarely under a story's profile row. The default is
+ * now the shared safe top, so a caller that does not care about placement gets a placement that
+ * works everywhere; a caller that does — a cover dropping the mark below its photograph — still
+ * passes its own.
+ */
+const logo = (y = SAFE_TOP, colorToken = "accent"): CarouselLayerInput => ({
   type: "logo",
   x: 0.08,
   y,
@@ -225,7 +246,7 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
           // is a gradient you cannot see. Foreground clears it at every opacity the design uses,
           // so the gradient keeps its strength and the mark stays readable. The accent is still
           // there, in the rule and the progress indicator.
-          logo(cover ? heroBottom + 0.03 : 0.07, "foreground"),
+          logo(cover ? heroBottom + 0.03 : SAFE_TOP, "foreground"),
           // On a cover the headline sits between the wordmark and the rule, so its height is
           // whatever is left rather than a constant — a fixed block ran the last line straight
           // through the accent rule on the taller heroes.
@@ -234,7 +255,7 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
             style === "contrast" ? 0.13 : 0.1,
             cover ? heroBottom + 0.12 : textTop,
             0.76,
-            cover ? Math.max(0.14, 0.84 - (heroBottom + 0.12)) : 0.42,
+            cover ? Math.max(0.12, 0.775 - (heroBottom + 0.12)) : 0.42,
             {
               fontToken: "headline",
               fontWeight: cover ? 900 : 800,
@@ -245,8 +266,10 @@ export function articleDeckTemplate(slideCount: number, style: DeckStyle = "mesh
               align: last ? "middle" : "start"
             }
           ),
-          shape(0.76, 0.9, 0.04 + phase * 0.16, 0.02, "muted", 0.5),
-          rule(style === "contrast" ? 0.13 : 0.1, 0.86, last ? 0.6 : 0.24)
+          // Both were below the story's reply bar, which is to say invisible on a canvas the
+          // template claimed to serve. Inside the shared safe band they are seen everywhere.
+          shape(0.76, SAFE_BOTTOM - 0.04, 0.04 + phase * 0.16, 0.02, "muted", 0.5),
+          rule(style === "contrast" ? 0.13 : 0.1, SAFE_BOTTOM - 0.01, last ? 0.6 : 0.24)
         ]
       };
     })

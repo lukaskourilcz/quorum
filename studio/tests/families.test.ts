@@ -4,10 +4,12 @@ import {
   DECK_FAMILIES,
   MAX_RESOLVABLE_SLIDES,
   MIN_SLIDES,
+  articleDeckTemplates,
   articleSlideSlot,
   familyDeckTemplate,
   familyDeckTemplates,
   familyTemplateId,
+  fitsSafeArea,
   liveTemplates,
   mayGoLive,
   previewFormats,
@@ -132,6 +134,54 @@ describe("the family library", () => {
     for (const family of DECK_FAMILIES) {
       for (const slide of familyDeckTemplate(family, 6).slides) {
         expect(slide.variants.map((variant) => variant.id), `${family}/${slide.id}`).toEqual(["A", "B"]);
+      }
+    }
+  });
+});
+
+/**
+ * The story canvas, and the one line that kept every deck out of it.
+ *
+ * Every deck template failed `fitsSafeArea` for 9:16 for a single reason: `logo()` defaulted to
+ * `y = 0.07`, comfortably inside a 4:5 margin and squarely under the story's profile row. The
+ * check only reads text and logo frames, so the closing rule and the progress mark could sit
+ * under the reply bar and still report clean — which is why this asserts the geometry rather than
+ * the check's verdict.
+ */
+describe("nine by sixteen", () => {
+  const CHROME_TOP = 0.14;
+  const CHROME_BOTTOM = 0.16;
+
+  it("offers the story to every family and every deck style", () => {
+    for (const template of [...familyDeckTemplates(), ...articleDeckTemplates()]) {
+      expect(fitsSafeArea(template, "instagram-story"), template.id).toBe(true);
+      expect(previewFormats(template), template.id).toContain("instagram-story");
+    }
+  });
+
+  it("puts nothing a reader has to see inside the platform's own bands", () => {
+    for (const template of [...familyDeckTemplates(), ...articleDeckTemplates()]) {
+      for (const slide of template.slides) {
+        for (const layer of slide.layers) {
+          // Backgrounds, photographs and full-bleed art may run under the chrome; anything that
+          // carries meaning may not.
+          if (layer.type !== "text" && layer.type !== "logo" && layer.type !== "rule") continue;
+          const where = `${template.id}/${slide.id}/${layer.type}`;
+          expect(layer.y, where).toBeGreaterThanOrEqual(CHROME_TOP);
+          expect(layer.y + layer.height, where).toBeLessThanOrEqual(1 - CHROME_BOTTOM);
+        }
+      }
+    }
+  });
+
+  it("clears the overflow and contrast checks at every canvas, not only at 4:5", () => {
+    for (const family of DECK_FAMILIES) {
+      const template = familyDeckTemplate(family, 9);
+      for (const format of previewFormats(template)) {
+        for (const brand of brands) {
+          const checks = validateTemplateForBrand(template, brand, format);
+          expect(checks.filter((check) => check.status === "fail"), `${family}/${brand.id}/${format}`).toEqual([]);
+        }
       }
     }
   });
