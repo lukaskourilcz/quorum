@@ -108,13 +108,12 @@ Judgement calls. Nothing is blocked on code for any of these.
   still say. It is a naming call, not an engineering one, which is why nothing here decided it.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Confirm one deck design save in production once this deploys** — the Design Lab's whole
-  persistence path was rebuilt on 9 August 2026: a save can now create a state file that does not
-  exist yet, and a failure names which of the two token problems it is. Your token already has
-  Contents read/write, so nothing is expected to be wrong; open
-  `/admin?venture=design-lab&tab=studio`, click a family chip and check the badge shows a commit
-  reference rather than a warning. If it warns, the banner says whether the token is missing or
-  refused, and that sentence is what to act on. [imp:3] [owner:me] [time:5m] [kind:setup]
+- [x] **Confirm one deck design save in production** — done 2026-08-09, and by the owner rather
+  than by a check: `admin: set the caught-up deck design for 2026-08-08 …` on main at 08:03 UTC
+  carries a full recipe — family `masthead`, duotone, 0.9× — written from the deployed admin
+  through the rebuilt persistence path. That commit is the proof for all of it: the write reached
+  GitHub, the article's date is part of what was recorded, and the recipe controls saved what they
+  showed. [imp:3] [owner:me] [time:5m] [kind:setup]
 
 - [ ] **Rename the DNESKAi Vercel project and decide on a domain** — DNESKAi is the wordmark in the
   navigation, the footer and print; the page title, the social cards, the structured data and the
