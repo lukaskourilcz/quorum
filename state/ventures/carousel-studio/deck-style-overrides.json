@@ -5,13 +5,13 @@
       "venture": "caught-up",
       "slug": "2026-08-08-openai-astra-pozastaveni-kyberneticky-prach",
       "date": "2026-08-08",
-      "style": "porthole",
-      "family": "porthole",
+      "style": "slab",
+      "family": "slab",
       "variant": "A",
       "accentSwap": false,
       "treatment": "duotone",
       "typeScale": 0.9,
-      "changedAt": "2026-08-09T08:03:20.200Z"
+      "changedAt": "2026-08-09T08:03:22.765Z"
     },
     {
       "venture": "mma-files",
@@ -26,5 +26,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-09T08:03:20.200Z"
+  "updatedAt": "2026-08-09T08:03:22.765Z"
 }
