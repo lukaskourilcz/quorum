@@ -99,7 +99,9 @@ function cleanFailure(error: unknown): string {
  * start early enough that a critical field can be corroborated before the card, not on the
  * morning of it.
  */
-const INTAKE_HORIZON_DAYS = 14;
+// Six weeks reaches Oktagon's less frequent calendar while the schedule reader still caps card
+// requests at six. The old fourteen-day window repeatedly contained UFC only.
+export const INTAKE_HORIZON_DAYS = 42;
 
 /**
  * Cito's free tier, as named in the owner checklist: 500 calls a month and 200 a day.

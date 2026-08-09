@@ -41,6 +41,28 @@ export interface ScheduledEvent {
   pageTitle: string | null;
 }
 
+function regexLiteral(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}
+
+/**
+ * One numbered event on a promotion year page.
+ *
+ * Oktagon event titles redirect to the year page. Passing that whole page to the card reader
+ * attaches every fight of the season to the next event, so scope it to the matching top-level
+ * heading first. The number is the stable part: the schedule label and section heading have
+ * disagreed on punctuation and even the spelling of a subtitle.
+ */
+export function eventSection(wikitext: string, eventName: string): string | null {
+  const numbered = /^(Oktagon\s+\d+)\b/iu.exec(eventName)?.[1];
+  if (!numbered) return null;
+  const heading = new RegExp(`^==\\s*${regexLiteral(numbered)}(?:\\s*:.*?)?\\s*==\\s*$`, "imu").exec(wikitext);
+  if (!heading) return null;
+  const after = wikitext.slice(heading.index + heading[0].length);
+  const next = after.search(/^==\s*[^=].*?==\s*$/mu);
+  return `${heading[0]}${next < 0 ? after : after.slice(0, next)}`;
+}
+
 /** `{{dts|2026|Oct|24}}` and `{{dts|2026|10|24}}` both appear on these pages. */
 export function parseDtsDate(cell: string): string | null {
   const match = /\{\{\s*dts\s*\|(?:[^|}]*\|)*?(\d{4})\|([A-Za-z]+|\d{1,2})\|(\d{1,2})/u.exec(cell);
@@ -178,7 +200,7 @@ async function eventWikitext(input: {
       ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
       ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
     });
-    if (wikitext.trim().length > 0) return wikitext;
+    if (wikitext.trim().length > 0) return eventSection(wikitext, input.event.name) ?? wikitext;
   }
   return "";
 }
@@ -401,6 +423,33 @@ export interface ScheduledCard extends ScheduledEvent {
 }
 
 /**
+ * Keep the request bound while guaranteeing that a busy UFC calendar cannot starve Oktagon.
+ * The nearest card from each promotion is selected first, then the remaining places go to the
+ * earliest cards overall. The returned order is still chronological.
+ */
+export function selectScheduledEvents(input: {
+  events: readonly ScheduledEvent[];
+  now: Date;
+  withinDays: number;
+  maxEvents: number;
+}): ScheduledEvent[] {
+  const horizon = input.now.getTime() + input.withinDays * 86_400_000;
+  const eligible = input.events
+    .filter((event) => Date.parse(event.startsAtUtc) <= horizon)
+    .sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc));
+  const selected: ScheduledEvent[] = [];
+  for (const org of ["ufc", "oktagon"] as const) {
+    const nearest = eligible.find((event) => event.org === org);
+    if (nearest && selected.length < input.maxEvents) selected.push(nearest);
+  }
+  for (const event of eligible) {
+    if (selected.length >= input.maxEvents) break;
+    if (!selected.includes(event)) selected.push(event);
+  }
+  return selected.sort((left, right) => left.startsAtUtc.localeCompare(right.startsAtUtc));
+}
+
+/**
  * The schedule, and the card for each event close enough to matter.
  *
  * Two page reads for the schedule plus one per event inside the horizon — on 3 August that is two
@@ -424,10 +473,12 @@ export async function fetchScheduledCards(input: {
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
     ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
   });
-  const horizon = input.now.getTime() + input.withinDays * 86_400_000;
-  const due = scheduled
-    .filter((event) => Date.parse(event.startsAtUtc) <= horizon)
-    .slice(0, input.maxEvents ?? 6);
+  const due = selectScheduledEvents({
+    events: scheduled,
+    now: input.now,
+    withinDays: input.withinDays,
+    maxEvents: input.maxEvents ?? 6
+  });
   const cards: ScheduledCard[] = [];
   for (const event of due) {
     try {
