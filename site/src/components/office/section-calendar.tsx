@@ -88,7 +88,7 @@ export function SectionCalendar({
     >
       <div className="flex min-h-0 flex-1 overflow-x-auto [overscroll-behavior-x:contain]" data-cal-scroll data-horizontal-scroll>
         <div className="flex min-h-0 w-full min-w-[680px] flex-col lg:min-w-0">
-          <div className="flex shrink-0 border-b border-[#26262b] bg-[#101013]">
+          <div className="flex shrink-0 border-b border-[#26262b] bg-[#101013]" data-cal-header>
             <div
               className="w-[148px] shrink-0 border-r border-[#26262b] px-[18px] py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#94949c] md:w-[176px] lg:w-[232px]"
               data-cal-label

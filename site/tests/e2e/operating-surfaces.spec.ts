@@ -626,3 +626,62 @@ test("design-lab is an alias for the same venture record", async ({ page }) => {
   await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
   expect(await page.locator("[data-article-rail] button").count()).toBe(aliased);
 });
+
+/**
+ * Calendar tooltips, which the owner reported hiding behind the row of days and dates.
+ *
+ * Two causes in one place. The row block scrolls, so a bubble pointing up from the first rows was
+ * clipped at its top edge; and the header row sits above it in the same stacking context, so
+ * whatever survived the clip went behind the dates. A z-index fixes neither — an ancestor's
+ * overflow is not a stacking question — so the bubble is a portal now, and it flips below the
+ * trigger when there is no room above.
+ */
+test.describe("calendar tooltips clear the header row", () => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 800 }]) {
+    test(`fully visible on the first two rows at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.locator("[data-cal-rows]").first().scrollIntoViewIfNeeded();
+
+      const rows = page.locator("[data-cal-rows] > div");
+      for (const index of [0, 1]) {
+        const cell = rows.nth(index).locator("[data-tooltip-anchor]").first();
+        await cell.hover();
+        const tip = page.locator("[role=tooltip]").first();
+        await expect(tip).toBeVisible();
+
+        const box = (await tip.boundingBox())!;
+        // Inside the viewport on every edge: a bubble half off the top is the reported bug.
+        expect(box.y, `row ${index} tooltip is clipped above the viewport`).toBeGreaterThanOrEqual(0);
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+        expect(box.y + box.height).toBeLessThanOrEqual(viewport.height);
+
+        // Rendered into the body, so no ancestor's overflow can clip it. The bubble itself is
+        // pointer-events: none by design, which is why this is asserted structurally rather than
+        // by hit-testing a point.
+        expect(await tip.evaluate((node) => node.parentElement === document.body)).toBe(true);
+
+        // And clear of the row of days and dates, which is what the owner saw it disappear behind.
+        const header = (await page.locator("[data-cal-header]").first().boundingBox())!;
+        const overlaps = box.y < header.y + header.height && box.y + box.height > header.y
+          && box.x < header.x + header.width && box.x + box.width > header.x;
+        expect(overlaps, `row ${index} tooltip overlaps the header row`).toBe(false);
+
+        await page.mouse.move(0, 0);
+        await expect(page.locator("[role=tooltip]")).toHaveCount(0);
+      }
+    });
+  }
+
+  test("a tooltip further down the week still points upward", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.locator("[data-cal-rows]").first().scrollIntoViewIfNeeded();
+    const rows = page.locator("[data-cal-rows] > div");
+    const last = (await rows.count()) - 1;
+    await rows.nth(last).locator("[data-tooltip-anchor]").first().hover();
+    const tip = page.locator("[role=tooltip]").first();
+    await expect(tip).toBeVisible();
+    await expect(tip).toHaveAttribute("data-tooltip-side", "top");
+  });
+});
