@@ -219,6 +219,18 @@ test("measures role column keeps the table inset", async ({ page }) => {
   expect(Math.abs((headBox?.x ?? 0) - (cellBox?.x ?? 0))).toBeLessThanOrEqual(1);
 });
 
+test("MMA Files article heroes load from the package-backed archive", async ({ page }) => {
+  await page.goto("/admin?venture=mma-files&tab=articles", { waitUntil: "networkidle" });
+  const heroes = page.locator("main figure img");
+  await expect(heroes).toHaveCount(5);
+  for (let index = 0; index < await heroes.count(); index += 1) {
+    await heroes.nth(index).scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => heroes.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth))
+      .toBeGreaterThan(0);
+  }
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs

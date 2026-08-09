@@ -148,9 +148,15 @@ describe("an article's hero in the admin projection", () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-hero-"));
     roots.push(root);
     await mkdir(path.join(root, "state/ventures/mma-files/articles"), { recursive: true });
+    await mkdir(path.join(root, "state/ventures/mma-files/media/2026-08-01-am-fixture-preview"), { recursive: true });
+    const packageValue = article(image);
+    const heroPath = String((packageValue.image as Record<string, unknown>).hero_path);
+    const extension = /\.(webp|png|svg)$/u.exec(heroPath)?.[1];
+    if (!extension) throw new Error("Fixture hero extension is invalid");
+    await writeFile(path.join(root, `state/ventures/mma-files/media/2026-08-01-am-fixture-preview/hero.${extension}`), "hero");
     await writeFile(
       path.join(root, "state/ventures/mma-files/articles/2026-08-01-am-fixture-preview.json"),
-      JSON.stringify(article(image))
+      JSON.stringify(packageValue)
     );
     return readAdminMmaFiles(root);
   }
@@ -193,6 +199,18 @@ describe("an article's hero in the admin projection", () => {
     });
     // The article still reads; only the unattributable image is withheld.
     expect(snapshot.articles[0]?.slug).toBe("fixture-preview");
+    expect(snapshot.articles[0]?.hero).toBeNull();
+  });
+
+  it("drops a claimed hero whose stored media file is absent", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-hero-missing-"));
+    roots.push(root);
+    await mkdir(path.join(root, "state/ventures/mma-files/articles"), { recursive: true });
+    await writeFile(
+      path.join(root, "state/ventures/mma-files/articles/2026-08-01-am-fixture-preview.json"),
+      JSON.stringify(article())
+    );
+    const snapshot = await readAdminMmaFiles(root);
     expect(snapshot.articles[0]?.hero).toBeNull();
   });
 });

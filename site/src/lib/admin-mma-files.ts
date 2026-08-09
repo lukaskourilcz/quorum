@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
@@ -240,7 +240,7 @@ function mediaUrl(relative: string): string {
  * unattributed CC BY photograph on screen is the licence problem, so an unreadable credit
  * removes the picture instead of the credit.
  */
-function hero(value: unknown, mediaBase: string): AdminMmaHero | null {
+async function hero(value: unknown, mediaBase: string, root: string): Promise<AdminMmaHero | null> {
   const image = record(value);
   const license = record(image?.license);
   const heroPath = text(image?.hero_path, 300);
@@ -254,6 +254,12 @@ function hero(value: unknown, mediaBase: string): AdminMmaHero | null {
   const credit = attribution?.replaceAll(/<[^>]+>/gu, " ").replaceAll(/\s+/gu, " ").trim();
   const extension = heroPath ? /\.(webp|png|svg)$/u.exec(heroPath)?.[1] : undefined;
   if (!extension || !altCs || !name || !credit || !sourceUrl?.startsWith("https://")) return null;
+  try {
+    if (!(await stat(path.join(root, "state", mediaBase, `hero.${extension}`))).isFile()) return null;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
   return {
     url: mediaUrl(`${mediaBase}/hero.${extension}`),
     alt: { cs: altCs, en: altEn ?? altCs },
@@ -263,7 +269,7 @@ function hero(value: unknown, mediaBase: string): AdminMmaHero | null {
   };
 }
 
-function parseArticle(raw: string, ratingRecords: readonly RatingRecord[]): AdminMmaArticle | null {
+async function parseArticle(raw: string, ratingRecords: readonly RatingRecord[], root: string): Promise<AdminMmaArticle | null> {
   let input: Record<string, unknown> | null = null;
   try { input = record(JSON.parse(raw)); } catch { return null; }
   const slug = text(input?.slug, 160);
@@ -296,7 +302,7 @@ function parseArticle(raw: string, ratingRecords: readonly RatingRecord[]): Admi
     modelVersion,
     packageHash: packageHashValue,
     contentHash: `sha256:${packageHashValue.slice(0, 12)}`,
-    hero: hero(input.image, mediaBase),
+    hero: await hero(input.image, mediaBase, root),
     ratings: history(ratingRecords, id)
   };
 }
@@ -528,7 +534,7 @@ export async function readAdminMmaFiles(root = repositoryRoot, now = new Date())
   const articles: AdminMmaArticle[] = [];
   const unreadable: string[] = ratingState.malformed ? ["ratings/mma-files/ledger.jsonl"] : [];
   for (const filename of await files(articleRoot)) {
-    const parsed = parseArticle(await readFile(path.join(articleRoot, filename), "utf8"), ratingState.records);
+    const parsed = await parseArticle(await readFile(path.join(articleRoot, filename), "utf8"), ratingState.records, root);
     if (parsed) articles.push(parsed); else unreadable.push(`articles/${filename}`);
   }
   const socialPacks: AdminMmaSocialPack[] = [];
