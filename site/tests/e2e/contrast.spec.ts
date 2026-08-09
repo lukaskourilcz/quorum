@@ -22,7 +22,6 @@ const routes = [
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
   "/admin?venture=fightaiq&tab=events",
-  "/admin?venture=fightaiq&tab=slates",
   "/admin?venture=fightaiq&tab=sources",
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",

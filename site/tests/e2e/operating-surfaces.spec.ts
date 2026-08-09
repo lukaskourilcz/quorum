@@ -19,7 +19,6 @@ const axeRoutes = [
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
   "/admin?venture=fightaiq&tab=events",
-  "/admin?venture=fightaiq&tab=slates",
   "/admin?venture=fightaiq&tab=sources",
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",
@@ -262,6 +261,12 @@ test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => 
     await frames.nth(index).scrollIntoViewIfNeeded();
     await expect.poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth)).toBeGreaterThan(0);
   }
+});
+
+test("FightAIQ hides reports until an analysis run produces them", async ({ page }) => {
+  await page.goto("/admin?venture=fightaiq", { waitUntil: "networkidle" });
+  await expect(page.getByRole("link", { name: "fight reports" })).toHaveCount(0);
+  await expect(page.getByText("No ten-fight report is stored.")).toHaveCount(0);
 });
 
 // The rated object used to be a niche proposal, and the assertion after the reload used to be

@@ -63,7 +63,6 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "visuals") return "images";
   if (tab === "studio") return "studio";
   if (tab === "social-lab") return "social drafts";
-  if (tab === "slates") return "fight reports";
   return tab;
 }
 
@@ -212,7 +211,7 @@ export default async function AdminPage({
       : ventureId === "carousel-studio"
         ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
         : ventureId === "fightaiq"
-          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.slates.length + fightaiq.sources.length
+          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
           : fallback;
 
   const files = [
@@ -425,10 +424,10 @@ export default async function AdminPage({
                 events={caughtUp.events}
                 today={caughtUp.today}
               />
-            ) : selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab) ? (
+            ) : selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "sources"].includes(selectedTab) ? (
               <FightAiQAdminPanel
                 snapshot={fightaiq}
-                tab={selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources"}
+                tab={selectedTab as "fighters" | "bouts" | "events" | "sources"}
               />
             ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "predictions", "banners", "calendar", "social-lab"].includes(selectedTab) ? (
               <MmaFilesAdminPanel
