@@ -14,6 +14,18 @@ const LocalizationSchema = openObject({
   dek: z.string().trim().min(1).max(320),
   /** The carousel cover line the desk wrote. Absent on every article written before it existed. */
   altHeadline: z.string().trim().min(1).max(90).optional(),
+  /*
+   * The words that travel with the deck, written by the desk that wrote the article.
+   *
+   * The `altHeadline` precedent, and `state/ventures/mma-files/social/ASSIGNMENT.md:5-8` names
+   * this exact pattern for captions: the copy rides the article's own call, so no new paid call
+   * site exists and nothing new touches the ledger. All four are optional, because every article
+   * written before them still has to load.
+   */
+  igCaption: z.string().trim().min(1).max(500).optional(),
+  hashtags: z.array(z.string().trim().min(2).max(30)).max(10).optional(),
+  threadsText: z.string().trim().min(1).max(480).optional(),
+  storyLine: z.string().trim().min(1).max(66).optional(),
   bodyMDX: z.string().trim().min(1).max(40_000),
   imageAlt: z.string().trim().min(1).max(300).optional()
 });

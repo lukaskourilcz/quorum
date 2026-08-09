@@ -10,5 +10,6 @@ export * from "./library.js";
 export * from "./families.js";
 export * from "./recipe.js";
 export * from "./slides.js";
+export * from "./copy.js";
 export * from "./summary.js";
 export * from "./hooks/index.js";

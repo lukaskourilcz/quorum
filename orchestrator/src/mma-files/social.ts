@@ -7,7 +7,9 @@ import {
   recipeTemplate,
   recipeTemplateId,
   reviewDeck,
-  type CarouselRecipe
+  renderCaption,
+  type CarouselRecipe,
+  type SocialCopyPack
 } from "@boardlessai/carousel-studio";
 import { articleRef } from "./hash.js";
 
@@ -27,7 +29,9 @@ function axesFor(recipe: CarouselRecipe, id: "A" | "B") {
 export function buildSocialVariantPack(
   article: ArticlePackage,
   /** The complete design for this article: derived, then whatever the owner pinned. */
-  recorded?: CarouselRecipe
+  recorded?: CarouselRecipe,
+  /** The desk's own words, when they were recorded. Absent falls back to the old concatenation. */
+  copyPack?: SocialCopyPack
 ): SocialVariantPack | null {
   const recipe = recorded ?? deriveRecipe({
     venture: "mma-files",
@@ -100,8 +104,12 @@ export function buildSocialVariantPack(
         carousel: perLocale((locale) => carousel(locale, "A")),
         captions: perLocale((locale) => locale === "cs"
           ? {
-              instagram: `${article.localizations.cs.dek}\n\nPřečtěte si ozdrojovaný text v MMA Files.`,
-              threads: `${article.localizations.cs.dek}\n\nCelý text najdete v MMA Files.`
+              // The credit is appended here, by code. A caption for an article with a photograph
+              // and no credit is a licence breach, so it is unbuildable rather than discouraged.
+              instagram: copyPack
+                ? renderCaption(copyPack.copy.igCaption, copyPack.heroCredit)
+                : `${article.localizations.cs.dek}\n\nPřečtěte si ozdrojovaný text v MMA Files.`,
+              threads: copyPack?.copy.threadsText ?? `${article.localizations.cs.dek}\n\nCelý text najdete v MMA Files.`
             }
           : {
               instagram: `${english!.dek}\n\nRead the sourced story in MMA Files.`,

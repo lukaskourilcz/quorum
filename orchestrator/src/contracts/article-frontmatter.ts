@@ -41,6 +41,19 @@ export const ArticleFrontmatterV2Schema = openObject({
   lang: z.enum(["en", "cs"]),
   dek: NonEmptyStringSchema,
   alternative_headlines: z.array(NonEmptyStringSchema).min(1).max(3).optional(),
+  /**
+   * The words that travel with the carousel, written by the desk that wrote the edition.
+   *
+   * Additive and optional: the magazine's own loaders ignore unknown frontmatter, and every
+   * edition already on disk parses unchanged. The photograph's credit is deliberately not here —
+   * code appends it to the rendered caption, so a caption without it cannot be built.
+   */
+  social_copy: openObject({
+    igCaption: z.string().trim().min(1).max(500),
+    hashtags: z.array(z.string().trim().min(2).max(30)).max(10),
+    threadsText: z.string().trim().min(1).max(480),
+    storyLine: z.string().trim().min(1).max(66)
+  }).optional(),
   tags: z.array(NonEmptyStringSchema).min(1),
   sources: z.array(SourceRefSchema),
   illustration: openObject({
