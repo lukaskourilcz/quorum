@@ -386,6 +386,9 @@ export default async function AdminPage({
           <div className="flex flex-wrap items-center gap-2">
             {selectedVenture.tabs.map((tab) => {
               const on = selectedTab === tab;
+              const label = selectedVenture.id === "fightaiq" && tab === "fighters"
+                ? `${tabLabel(tab)} · ${fightaiq.fighters.reduce((count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length, 0)} unresolved`
+                : tabLabel(tab);
               return (
                 <Link
                   aria-current={on ? "page" : undefined}
@@ -404,7 +407,7 @@ export default async function AdminPage({
                     color: on ? "#ffffff" : "#a1a1aa"
                   }}
                 >
-                  {tabLabel(tab)}
+                  {label}
                 </Link>
               );
             })}
