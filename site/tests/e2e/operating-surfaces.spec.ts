@@ -256,6 +256,12 @@ test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => 
   await expect(archive.getByRole("heading", { name: "CS social posts" })).toHaveCount(2);
   await expect(archive.getByText("English edition")).toHaveCount(0);
   await expect(archive.getByText(/social post files cannot be read/)).toHaveCount(0);
+  const frames = archive.locator("img");
+  await expect(frames).toHaveCount(20);
+  for (const index of [0, 10]) {
+    await frames.nth(index).scrollIntoViewIfNeeded();
+    await expect.poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth)).toBeGreaterThan(0);
+  }
 });
 
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
