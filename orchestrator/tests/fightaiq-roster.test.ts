@@ -9,7 +9,7 @@ import { BoutRecordSchema, FighterCardSchema } from "../src/contracts/mma.js";
 import { reconcilePredictionResults } from "../src/fightaiq/analysis.js";
 import { rebuildDerivedFighterData } from "../src/fightaiq/derived.js";
 import { buildBackfillQueue, fighterSlug, materializeWikimediaRoster, projectWikimediaCategory, reconcileRosterStatuses, sanitizeSourceText } from "../src/fightaiq/roster.js";
-import { loadRosterPolicy } from "../src/fightaiq/roster-policy.js";
+import { loadRosterPolicy, rosterPolicyTitles } from "../src/fightaiq/roster-policy.js";
 import { configRoot } from "../src/paths.js";
 import { enrichWikimediaBackfill, parseWikipediaFighterPage } from "../src/fightaiq/wikimedia-backfill.js";
 import { loadBoutRecords, loadFighterRecords, saveBoutRecord, upcomingBoutRecords } from "../src/fightaiq/store.js";
@@ -28,14 +28,14 @@ describe("FightAIQ roster and history automation", () => {
 
   it("writes the same Wikimedia card once for a repeated source payload", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "mma-roster-"));
-    const entry = { org: "ufc" as const, name: "Alex Example", slug: "alex-example", wikipediaTitle: "Alex Example", wikipediaUrl: "https://en.wikipedia.org/wiki/Alex_Example", pageId: 10 };
+    const entry = { org: "ufc" as const, name: "Alex Example (fighter)", slug: "alex-example", wikipediaTitle: "Alex Example (fighter)", wikipediaUrl: "https://en.wikipedia.org/wiki/Alex_Example_(fighter)", pageId: 10 };
     const now = new Date("2026-08-02T08:00:00.000Z");
     await materializeWikimediaRoster({ root, entries: [entry], retrievedAt: now });
     const target = path.join(root, "mma", "fighters", "ufc:alex-example.json");
     const first = await readFile(target, "utf8");
     await materializeWikimediaRoster({ root, entries: [entry], retrievedAt: now });
     expect(await readFile(target, "utf8")).toBe(first);
-    expect(FighterCardSchema.parse(JSON.parse(first))).toMatchObject({ schemaVersion: "fighter-card/1", quality: { evidenceTier: "secondary" } });
+    expect(FighterCardSchema.parse(JSON.parse(first))).toMatchObject({ schemaVersion: "fighter-card/1", canonicalName: "Alex Example", quality: { evidenceTier: "secondary" } });
   });
 
   it("parses a bounded Wikipedia profile and provisional fight-history row", () => {
@@ -330,6 +330,17 @@ describe("the curated roster contains only people", () => {
         .map((fighter) => `${fighter.id} != ${org}:${fighterSlug(fighter.name)}`)
     );
     expect(mismatched).toEqual([]);
+  });
+
+  it("tracks every fighter on the next Oktagon card without inventing profile pages", async () => {
+    const policy = await loadRosterPolicy(configRoot);
+    const nextCard = policy.organizations.oktagon.fighters.filter((fighter) => fighter.eventRef === "oktagon:event:oktagon-93-rousal-vs-magard");
+    expect(policy.organizations.oktagon.cap).toBe(30);
+    expect(policy.organizations.oktagon.fighters).toHaveLength(30);
+    expect(nextCard).toHaveLength(18);
+    expect(nextCard.map((fighter) => fighter.id)).toContain("oktagon:niamh-kinehan");
+    expect(rosterPolicyTitles(policy, "oktagon")).toContain("Niamh Kinehan");
+    expect(rosterPolicyTitles(policy, "oktagon")).not.toContain("Robert Lau");
   });
 });
 

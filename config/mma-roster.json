@@ -1,8 +1,8 @@
 {
   "schemaVersion": "mma-roster-policy/1",
-  "note": "Curated FightAIQ roster. Only fighters listed here get cards. Every entry must be a person: Wikipedia pages for promotions, weight classes and lists are rejected by orchestrator/tests/fightaiq-roster.test.ts. Edit this file to change who the venture tracks, then run pnpm fightaiq:roster-prune -- --apply.",
-  "selectedAt": "2026-08-02",
-  "source": "en.wikipedia.org: List of current <org> fighters, intersected with the org's fighter categories; champions ordered first.",
+  "note": "Curated FightAIQ roster. Only fighters listed here get cards. Every entry must be a person confirmed by a reviewed profile or delivered event card; promotion, weight-class and list pages are rejected by orchestrator/tests/fightaiq-roster.test.ts. Edit this file to change who the venture tracks, then run pnpm fightaiq:roster-prune -- --apply.",
+  "selectedAt": "2026-08-09",
+  "source": "Reviewed Wikipedia roster titles plus fighters listed on the next delivered UFC or Oktagon event card; champions ordered first.",
   "organizations": {
     "ufc": {
       "cap": 80,
@@ -491,18 +491,18 @@
       ]
     },
     "oktagon": {
-      "cap": 12,
+      "cap": 30,
       "category": "Oktagon MMA",
       "fighters": [
         {
           "id": "oktagon:felipe-lima",
-          "name": "Felipe Lima (fighter)",
+          "name": "Felipe Lima",
           "wikipediaTitle": "Felipe Lima (fighter)",
           "tier": "champion"
         },
         {
           "id": "oktagon:gustavo-lopez",
-          "name": "Gustavo Lopez (fighter)",
+          "name": "Gustavo Lopez",
           "wikipediaTitle": "Gustavo Lopez (fighter)",
           "tier": "champion"
         },
@@ -565,6 +565,115 @@
           "name": "Zhalgas Zhumagulov",
           "wikipediaTitle": "Zhalgas Zhumagulov",
           "tier": "champion"
+        },
+        {
+          "id": "oktagon:radek-rousal",
+          "name": "Radek Roušal",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:jonas-magard",
+          "name": "Jonas Mågård",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:andrej-kalasnik",
+          "name": "Andrej Kalašnik",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:kennedy-rayomba",
+          "name": "Kennedy Rayomba",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:vladimir-lengal",
+          "name": "Vladimír Lengál",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:maurice-adorf",
+          "name": "Maurice Adorf",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:josef-hala",
+          "name": "Josef Hála",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:radovan-uskrt",
+          "name": "Radovan Úškrt",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:jakub-dohnal",
+          "name": "Jakub Dohnal",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:vojto-barborik",
+          "name": "Vojto Barborík",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:tomas-ciganik",
+          "name": "Tomáš Cigánik",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:murat-tuysuz",
+          "name": "Murat Tüysüz",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:niamh-kinehan",
+          "name": "Niamh Kinehan",
+          "wikipediaTitle": "Niamh Kinehan",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:alana-cook",
+          "name": "Alana Cook",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:simon-bruknar",
+          "name": "Šimon Bruknar",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:nathan-haywood",
+          "name": "Nathan Haywood",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:vojtech-garba",
+          "name": "Vojtech Garba",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
+        },
+        {
+          "id": "oktagon:robert-lau",
+          "name": "Robert Lau",
+          "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "tier": "current-roster"
         }
       ]
     }

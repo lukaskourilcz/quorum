@@ -17,8 +17,11 @@ import { readJson } from "../state.js";
 export const RosterPolicyFighterSchema = z.object({
   id: z.string().regex(/^(ufc|oktagon):[a-z0-9-]+$/u),
   name: z.string().min(1).max(160),
-  wikipediaTitle: z.string().min(1).max(160),
+  wikipediaTitle: z.string().min(1).max(160).optional(),
+  eventRef: z.string().regex(/^(ufc|oktagon):event:[a-z0-9]+(?:-[a-z0-9]+)*$/u).optional(),
   tier: z.enum(["champion", "current-roster"])
+}).refine((fighter) => fighter.wikipediaTitle || fighter.eventRef, {
+  message: "A roster fighter needs a reviewed Wikipedia title or event reference"
 });
 
 export const RosterPolicyOrganizationSchema = z.object({
@@ -53,6 +56,8 @@ export async function loadRosterPolicy(configRootPath: string): Promise<RosterPo
     if (new Set(ids).size !== ids.length) throw new Error(`Roster policy repeats a fighter id in ${org}`);
     const foreign = ids.filter((id) => !id.startsWith(`${org}:`));
     if (foreign.length > 0) throw new Error(`Roster policy lists ${foreign[0]} under ${org}`);
+    const foreignEvent = entry.fighters.find((fighter) => fighter.eventRef && !fighter.eventRef.startsWith(`${org}:event:`));
+    if (foreignEvent) throw new Error(`Roster policy lists ${foreignEvent.eventRef} under ${org}`);
   }
   return policy;
 }
@@ -66,7 +71,7 @@ export function rosterPolicyIds(policy: RosterPolicy): Set<string> {
 
 /** The Wikipedia titles to resolve, so a sync asks for named pages instead of crawling a category. */
 export function rosterPolicyTitles(policy: RosterPolicy, org: "ufc" | "oktagon"): string[] {
-  return policy.organizations[org].fighters.map((fighter) => fighter.wikipediaTitle);
+  return policy.organizations[org].fighters.flatMap((fighter) => fighter.wikipediaTitle ? [fighter.wikipediaTitle] : []);
 }
 
 export function isRosterMember(policy: RosterPolicy, fighterId: string): boolean {
