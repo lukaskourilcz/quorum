@@ -10,8 +10,9 @@ import {
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 import { fitsSafeArea } from "./validation.js";
+import { familyDeckTemplates } from "./families.js";
 
-const formats = {
+export const deckFormats = {
   "instagram-square": { width: 1_080, height: 1_080, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
   "instagram-portrait": { width: 1_080, height: 1_350, safeArea: { top: 0.06, right: 0.06, bottom: 0.08, left: 0.06 } },
   /*
@@ -94,7 +95,7 @@ const template = (input: Omit<CarouselTemplateInput, "schemaVersion" | "version"
   schemaVersion: "carousel-template/1",
   version: "1.0.0",
   status: "live",
-  formats,
+  formats: deckFormats,
   citedObservationRefs: input.citedObservationRefs ?? [],
   ...input
 });
@@ -526,7 +527,7 @@ export function articleDeckTemplates(): readonly CarouselTemplate[] {
 
 /** Everything a reference may resolve to. */
 export function liveTemplates(): readonly CarouselTemplate[] {
-  return [...SEED_TEMPLATES, ...articleDeckTemplates()];
+  return [...SEED_TEMPLATES, ...articleDeckTemplates(), ...familyDeckTemplates()];
 }
 
 export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> = {

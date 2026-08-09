@@ -5,7 +5,6 @@ import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell"
 import { AgentSwitches } from "@/components/admin/agent-switches";
 import { ArticleDecksPanel } from "@/components/admin/article-decks-panel";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
-import { CarouselArticleStudio } from "@/components/admin/carousel-article-studio";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
@@ -390,9 +389,7 @@ export default async function AdminPage({
           <div className={`min-w-0 ${UNWRAP}`}>
             {selectedVenture.id === "carousel-studio" && selectedTab === "hooks" ? (
               <HookBrainAdminPanel snapshot={hookBrain} />
-            ) : selectedVenture.id === "carousel-studio" && selectedTab === "templates" ? (
-              <CarouselArticleStudio articles={studioArticles} brand={brand} />
-            ) : selectedVenture.id === "carousel-studio" && selectedTab === "decks" ? (
+            ) : selectedVenture.id === "carousel-studio" && (selectedTab === "templates" || selectedTab === "decks") ? (
               <ArticleDecksPanel decks={decks} />
             ) : selectedVenture.id === "carousel-studio" && selectedTab ? (
               <CarouselStudioAdminPanel
