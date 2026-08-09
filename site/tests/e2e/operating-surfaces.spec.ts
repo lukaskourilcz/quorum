@@ -685,3 +685,37 @@ test.describe("calendar tooltips clear the header row", () => {
     await expect(tip).toHaveAttribute("data-tooltip-side", "top");
   });
 });
+
+/**
+ * The small controls, at the size they were written to be.
+ *
+ * The owner reported three of them reading as "one oversized family", and they were: an unlayered
+ * `font: inherit` reset on form controls beat every size utility on every button on the site, so
+ * a button declaring 7.5px and a button declaring 10px both rendered at the inherited 16px. The
+ * reset lives in `@layer base` now and the three share one style, so this asserts the rendered
+ * size rather than the class list — the class list was never the thing that was wrong.
+ */
+test("the meeting room's controls and the admin sign-out are one small family", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const home = await page.evaluate(() => {
+    const jump = [...document.querySelectorAll("button")].find((node) => node.textContent?.includes("Jump to date"));
+    const label = document.querySelector("[data-chat-list] button");
+    return {
+      jump: jump ? Number.parseFloat(getComputedStyle(jump).fontSize) : null,
+      label: label ? Number.parseFloat(getComputedStyle(label).fontSize) : null,
+      channelsLine: document.body.innerText.includes("read-only record")
+    };
+  });
+  expect(home.jump).toBeLessThanOrEqual(11);
+  expect(home.label).toBeLessThanOrEqual(12);
+  // The line the owner asked to be gone, gone from the build rather than hidden.
+  expect(home.channelsLine).toBe(false);
+
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const signOut = await page.evaluate(() => {
+    const node = [...document.querySelectorAll("button")].find((entry) => entry.textContent?.trim() === "Sign out");
+    return node ? Number.parseFloat(getComputedStyle(node).fontSize) : null;
+  });
+  // The same change, reaching admin: the three used to render identically at the browser default.
+  expect(signOut).toBe(home.jump);
+});

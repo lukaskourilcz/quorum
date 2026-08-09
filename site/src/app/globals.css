@@ -45,11 +45,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
+@layer base {
+  /*
+   * Form controls take the page's type rather than the browser's, and lose to a utility.
+   *
+   * This was unlayered, and an unlayered rule beats every cascade layer no matter how specific
+   * the layered one is — so `font: inherit` overrode every `text-[…]` on every button on the
+   * site. Three controls the owner reported as "one oversized family" were the visible half of
+   * that: the meetings room's two buttons declared 7.5px, the channel labels 9.5px and the admin
+   * Sign out 10px, and all three rendered at the inherited 16px. Inside `base` the reset still
+   * does its job — no Chrome UI font on a button — and a utility written next to the element
+   * wins, which is what a utility is for.
+   */
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
 }
 
 img {

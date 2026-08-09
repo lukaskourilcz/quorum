@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { WorkspaceChannelId } from "@/lib/meeting-feed";
 import type { OfficeChannel, OfficeMessage } from "@/lib/office-walkthrough";
+import { MICRO_CONTROL } from "@/components/ui/micro-control";
 
 /**
  * The BoardlessAI Workspace: a player, not a chat.
@@ -206,9 +207,6 @@ export function SectionMeetings({
             <p className="text-[14px] font-semibold tracking-[-0.01em] text-[#f4f4f5]">
               BoardlessAI Workspace <span className="text-[11px] text-[#94949c]">▾</span>
             </p>
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c]">
-              {channels.length} channels · read-only record
-            </p>
           </div>
           <p className="hidden px-[18px] pb-2 pt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c] md:block" data-chat-label>
             ▾ Channels
@@ -231,7 +229,7 @@ export function SectionMeetings({
               return (
                 <button
                   aria-current={active ? "true" : undefined}
-                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2 py-1 text-left font-mono text-[9.5px] transition-colors md:mb-0.5 md:w-full md:shrink"
+                  className="mb-0 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2 py-1 text-left font-mono text-[11px] leading-[1.5] transition-colors md:mb-0.5 md:w-full md:shrink"
                   key={entry.id}
                   onClick={() => {
                     setOpened((seen) => (seen.includes(entry.id) ? seen : [...seen, entry.id]));
@@ -277,7 +275,7 @@ export function SectionMeetings({
               <button
                 aria-expanded={dateMenu}
                 aria-haspopup="menu"
-                className="inline-flex items-center gap-1 rounded-sm border border-[#3f3f46] bg-[#101013] px-1 py-px font-mono text-[7.5px] uppercase tracking-[0.04em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                className={`${MICRO_CONTROL} bg-[#101013]`}
                 onClick={() => setDateMenu((open) => !open)}
                 type="button"
               >
@@ -402,7 +400,7 @@ export function SectionMeetings({
                             <div className="mt-[11px]">
                               <button
                                 aria-expanded={openJson === message.id}
-                                className="rounded-sm border border-[#3f3f46] bg-[#0e0e11] px-1 py-px font-mono text-[7.5px] uppercase tracking-[0.04em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa]"
+                                className={`${MICRO_CONTROL} bg-[#0e0e11]`}
                                 onClick={() => setOpenJson((open) => (open === message.id ? null : message.id))}
                                 type="button"
                               >

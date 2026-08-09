@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Mark } from "@/components/brand/mark";
 import { ventureBrand } from "@/lib/venture-brand";
+import { MICRO_CONTROL } from "@/components/ui/micro-control";
 
 /**
  * One protected desk: a sticky rail of workspaces, a compact top bar, and a body.
@@ -141,7 +142,7 @@ export function AdminShell({
           </span>
           <form action="/admin/logout" className="ml-auto" method="post">
             <button
-              className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-[7px] font-mono text-[10px] uppercase tracking-[0.12em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5]"
+              className={`${MICRO_CONTROL} bg-[#101013] px-3 py-[7px]`}
               type="submit"
             >
               Sign out
