@@ -46,6 +46,14 @@ is the single thing standing between a proven path and a working one.
   cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
   [imp:4] [owner:me] [time:10m] [kind:setup]
 
+- [ ] **Approve the MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
+  `state/INBOX.md` widens what the Free-plan token may fetch: UFCStats, ESPN MMA, Tapology and
+  Sherdog fight-card and result pages, the second independent source FightAIQ needs before UFC
+  and Oktagon boards on MMA Files can fill. $0 cash; an estimated $1.50–$3.00 of the $5 monthly
+  credit, capped at $3.00 in its own ledger. Read the item's warning before approving both this
+  and GoVIRAL: the two programs cannot both run at full cadence under one $5 credit.
+  [imp:4] [owner:me] [time:5m] [kind:decision]
+
 - [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief: your
   niches, your voice, your audiences, and what you never write about. Nothing in it is generated
   and nothing should be; until you fill it in the room leans on the two magazine niches and says so
@@ -99,6 +107,15 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [ ] **Run the MMA Files relaunch prompt sequence** — the full redesign package sits in the
+  mma-files repo at `docs/redesign/` on branch `claude/mma-files-redesign-2sacl9`: `BRAINSTORM.md`
+  is the plan (including why the UFC/OKTAGON boards render empty and what the data fix costs),
+  `PROMPT-CLAUDE-DESIGN.md` goes to Claude Design first, and `PROMPT-CODEX.md` runs with the
+  design handoff attached and rebuilds the site, the article category tags, the FightAIQ data
+  layer, this repo's MMA admin panel (banner upload/crop included) and the cleanup sweep. Two
+  Vercel switches ride along: `NEXT_PUBLIC_DEMO_MODE=false` on mma-files production, indexing
+  later. [imp:4] [owner:me] [time:30m] [kind:decision]
 
 - [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
   wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and
