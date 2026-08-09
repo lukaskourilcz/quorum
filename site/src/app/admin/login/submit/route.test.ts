@@ -8,7 +8,8 @@ afterEach(() => {
 function request(
   username: string,
   password: string,
-  ip: string
+  ip: string,
+  returnTo?: string
 ): Request {
   return new Request("https://boardless.example/admin/login/submit", {
     method: "POST",
@@ -17,7 +18,7 @@ function request(
       Origin: "https://boardless.example",
       "x-forwarded-for": ip
     },
-    body: new URLSearchParams({ username, password })
+    body: new URLSearchParams({ username, password, ...(returnTo ? { returnTo } : {}) })
   });
 }
 
@@ -65,5 +66,31 @@ describe("admin login submission", () => {
       new Request(forged, { headers: { ...Object.fromEntries(forged.headers), Origin: "https://attacker.example" } })
     );
     expect(response.status).toBe(403);
+  });
+
+  it("returns the owner to the page the session expired on", async () => {
+    configure();
+    const response = await POST(
+      request("owner", "correct-password", "203.0.113.80", "/admin?venture=fightaiq&tab=slates")
+    );
+    expect(response.headers.get("location"))
+      .toBe("https://boardless.example/admin?venture=fightaiq&tab=slates");
+  });
+
+  it("keeps the destination across a failed attempt", async () => {
+    configure();
+    const response = await POST(request("owner", "wrong", "203.0.113.81", "/admin?venture=goviral"));
+    const location = new URL(response.headers.get("location")!);
+    expect(location.pathname).toBe("/admin/login");
+    expect(location.searchParams.get("error")).toBe("invalid");
+    expect(location.searchParams.get("returnTo")).toBe("/admin?venture=goviral");
+  });
+
+  it("ignores a destination that would leave the site", async () => {
+    configure();
+    const response = await POST(
+      request("owner", "correct-password", "203.0.113.82", "https://attacker.example/steal")
+    );
+    expect(response.headers.get("location")).toBe("https://boardless.example/admin");
   });
 });
