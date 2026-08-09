@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SourceRefSchema } from "../contracts/article-frontmatter.js";
+import type { ArticleCategory } from "../contracts/article-frontmatter.js";
 import type { VisualBrief } from "../images/visual-brief.js";
 
 export const EvidenceClassSchema = z.enum([
@@ -91,6 +92,8 @@ export interface WrittenArticle {
   slug: string;
   date: string;
   tags: string[];
+  /** Section keys, English by contract. Absent is the normal state. */
+  categories?: ArticleCategory[];
   wire: z.infer<typeof WireItemSchema>[];
   sources: z.infer<typeof SourceRefSchema>[];
   /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
@@ -105,6 +108,7 @@ export interface CzechArticle {
   slug: string;
   date: string;
   tags: string[];
+  categories?: ArticleCategory[];
   /** The Czech "why this story" sentence, when the write call returned one. */
   whyThisStory?: string;
   wire: z.infer<typeof WireItemSchema>[];

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "boardless-stream/1",
+  "stream": "talked-about",
+  "updated": "9. 8. 2026",
+  "windowDays": 0,
+  "items": [
+    {
+      "id": "not-a-sha1",
+      "title": "",
+      "url": "http://insecure.example.com/post",
+      "source": { "kind": "carrier-pigeon", "name": "" },
+      "published": "8. 8. 2026",
+      "durationSec": -1
+    }
+  ]
+}

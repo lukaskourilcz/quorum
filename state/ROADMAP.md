@@ -98,4 +98,15 @@ work. They require a fresh owner scope before implementation.
   rail, a canvas at four formats, recipe controls, slide editing inside the engine's own limits,
   export and presets. Six owner-directed corrections to the public office site rode the same
   branch.
+- [x] Extend the engine for the DNESKAi launch redesign. The writing desk can file an edition
+  under a section, under a rule strict enough that an uncategorised article stays the common
+  case, and the same call now enforces Czech typography and an outright em-dash ban that the
+  Czech editor prompt checks again. Two new contracts carry what the magazine's new sections
+  read: `boardless-stream/1` for the external links and podcast episodes, `boardless-events/1`
+  for the events the owner types in a new admin tab. Neither is a dataset, because a dataset is
+  an append-only reveal schedule and these are replaced wholesale; sharing the contract would
+  have made the append guard meaningless. The fetcher calls no model, contacts only hosts the
+  registry names and the allowlist permits, and treats a dead feed as a line in a receipt rather
+  than a failed run. Both deliveries are their own kind with their own allowlist inside the
+  existing daily cycle: no new job, no new cron, no new phase, nothing drawn from the model share.
 - [ ] Complete only the owner plumbing listed in `docs/NEEDED.md`.

@@ -40,7 +40,8 @@
     "typecheck": "pnpm -r typecheck",
     "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune",
     "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck",
-    "datasets:append": "pnpm --filter @boardlessai/orchestrator datasets:append"
+    "datasets:append": "pnpm --filter @boardlessai/orchestrator datasets:append",
+    "streams:fetch": "pnpm --filter @boardlessai/orchestrator streams:fetch"
   },
   "pnpm": {
     "overrides": {

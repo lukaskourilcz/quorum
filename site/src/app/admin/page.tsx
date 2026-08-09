@@ -8,6 +8,7 @@ import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
+import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
@@ -19,6 +20,7 @@ import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
+import { readAdminCaughtUp } from "@/lib/admin-caught-up";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
@@ -147,6 +149,7 @@ export default async function AdminPage({
     portfolio,
     standups,
     fightaiq,
+    caughtUp,
     mmaFiles,
     carouselStudio,
     hookBrain,
@@ -164,6 +167,7 @@ export default async function AdminPage({
     readAdminPortfolio(),
     getPublicStandups(),
     readAdminFightAiQ(),
+    readAdminCaughtUp(),
     readAdminMmaFiles(),
     readCarouselStudio(),
     readHookBrain(),
@@ -413,6 +417,12 @@ export default async function AdminPage({
               <CarouselStudioAdminPanel
                 snapshot={carouselStudio}
                 tab={selectedTab as "templates" | "inspiration" | "social-lab"}
+              />
+            ) : selectedVenture.id === "caught-up" && selectedTab === "events" ? (
+              <CaughtUpEventsPanel
+                engine={caughtUp.engine}
+                events={caughtUp.events}
+                today={caughtUp.today}
               />
             ) : selectedVenture.id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab) ? (
               <FightAiQAdminPanel

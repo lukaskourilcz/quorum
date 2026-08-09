@@ -34,7 +34,8 @@
     "typecheck": "tsc --noEmit",
     "fightaiq:roster-prune": "tsx src/fightaiq/roster-prune-cli.ts",
     "social:deck": "tsx src/social/deck-cli.ts",
-    "datasets:append": "tsx src/datasets/append-cli.ts"
+    "datasets:append": "tsx src/datasets/append-cli.ts",
+    "streams:fetch": "tsx src/streams/fetch-cli.ts"
   },
   "dependencies": {
     "@boardlessai/carousel-studio": "workspace:*",
