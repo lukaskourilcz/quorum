@@ -577,7 +577,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#ef6c35",
       secondary: "#f2b84b"
     },
-    fonts: { headline: "Barlow Condensed", body: "Barlow", mono: "IBM Plex Mono" }
+    fonts: { headline: "Anton", body: "Archivo", mono: "IBM Plex Mono" }
   }),
   "titty-tuesdays": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",

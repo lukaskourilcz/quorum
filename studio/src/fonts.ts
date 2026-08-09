@@ -28,6 +28,7 @@ export function fontFiles(): string[] {
 }
 
 const familySlugs: Readonly<Record<string, string>> = {
+  Anton: "anton",
   Archivo: "archivo",
   "Barlow Condensed": "barlow-condensed",
   Barlow: "barlow",
