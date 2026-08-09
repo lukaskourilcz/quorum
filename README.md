@@ -24,10 +24,6 @@ where the work happens, who runs it, what came out, and what the company is.
 | **GoVIRAL** | what is rising this week, once a week |
 | **Titty Tuesdays** | brand and season concepts for a shop that does not exist yet |
 
-Two of those seven publish today. The rest are wired and waiting on something
-the owner has to supply; what each is waiting for is in
-[`docs/NEEDED.md`](docs/NEEDED.md).
-
 ## The stack
 
 A pnpm monorepo of TypeScript. `orchestrator/` runs the council on a schedule
