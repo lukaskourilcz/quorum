@@ -122,11 +122,12 @@ import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/sign
 import { ensurePriorityItem, livePriorityItems, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
-import { loadEffectivePortfolioSchedule, loadRuntimeBudgetLimits } from "./portfolio/limits.js";
+import { loadEffectivePortfolioSchedule, loadRuntimeBudgetLimits, tightenedBy } from "./portfolio/limits.js";
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 import { imageProgramReadiness, type ImageProgramReadiness } from "./images/readiness.js";
 import { contentGateEnabled, runContentGate } from "./quality/content-gate.js";
 import { writeMonthlyReportIfDue, writeWeeklyReportIfDue } from "./reports/writers.js";
+import { RETRO_ENVELOPE_USD, runWeeklyRetro, weeklyRetroEnabled } from "./reports/retro.js";
 import { collectOwnerAttention } from "./org/owner-attention.js";
 
 export interface CycleOptions {
@@ -2077,11 +2078,33 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       const today = pragueClockParts(now).date;
       const ledger = await currentBudgetLedger(artifactRoot);
       const capUsd = budgetLimitsFromEnvironment().monthlyOperatingUsd;
-      for (const due of [
-        await writeWeeklyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd }),
-        await writeMonthlyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd })
-      ]) {
+      const weekly = await writeWeeklyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd });
+      const monthly = await writeMonthlyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd });
+      for (const due of [weekly, monthly]) {
         if (due) reportArtifacts.push(due.path);
+      }
+      // The retro is the judgement layer over the week the writer just measured, so it runs after
+      // it and only when there is a report to complete. Off by default; a budget refusal writes a
+      // skip record and the night continues.
+      if (weekly && weeklyRetroEnabled()) {
+        reportArtifacts.push(...(await runWeeklyRetro({
+          stateRoot: artifactRoot,
+          cycleId,
+          today,
+          report: weekly.report,
+          now,
+          budgetContext: {
+            now,
+            cycleId,
+            stage: stages.current,
+            ledger,
+            allInNonApiSpentUsd: await loadFixedMonthlyUsd(configRoot, now),
+            allInCommittedUsd: 0,
+            knownMonthlyForecastUsd: 0,
+            remainingScheduledCycles: remainingScheduledCycles(now),
+            limits: tightenedBy(budgetLimitsFromEnvironment(), { maxCycleUsd: RETRO_ENVELOPE_USD })
+          }
+        })).artifacts);
       }
     }
     if (options.explainBudget) {
