@@ -46,12 +46,3 @@ pnpm cycle -- --phase morning --dry   # one council cycle, no model calls, $0
 
 Node 22 or newer. Nothing above needs a key: a dry cycle runs on fixtures and
 the site reads committed state.
-
-## Where to look next
-
-- [`CLAUDE.md`](CLAUDE.md) — the rules any session works under
-- [`docs/NEEDED.md`](docs/NEEDED.md) — what the owner still has to do
-- [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) — the standing operating model
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`GOVERNANCE.md`](GOVERNANCE.md)
-
-MIT.
