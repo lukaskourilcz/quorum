@@ -17,6 +17,26 @@ Updated: 2026-08-09.
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
+- [ ] **Switch the DNESKAi streams on** — set the Actions variable
+  `CAUGHT_UP_STREAMS_ENABLED=true`. Until then `/o-cem-se-mluvi` and `/podcasty` render their
+  honest empty states, which is the correct state and costs nothing. The delivery steps live
+  inside the existing daily cycle, call no model and spend nothing from the model share; the
+  only thing switching them on changes is that two committed JSON files start moving.
+  [imp:3] [owner:me] [time:5m] [kind:setup]
+
+- [ ] **Create the free Podcast Index key pair** — register at api.podcastindex.org and add
+  `PODCASTINDEX_API_KEY` and `PODCASTINDEX_API_SECRET` to the quorum Actions secrets. It is free
+  and it is only used for shows with no workable RSS or YouTube surface, so its absence degrades
+  a few shows rather than the podcast stream. A live dry run without it already returns nine
+  episodes. [imp:2] [owner:me] [time:15m] [kind:setup]
+
+- [ ] **Confirm the curated source registry** — `config/caught-up-streams.json` seeds three Medium
+  tags, nine Substacks and eight podcast shows. Eight shows ship `enabled: false` with a note
+  because their channel id could not be resolved without guessing, and two empty slots wait for
+  the Czech AI shows you pick. Approve, edit or fill; every entry must carry its exact hostname,
+  and a test fails if an enabled host is missing from `config/network-allowlist.json`.
+  [imp:3] [owner:me] [time:30m] [kind:decision]
+
 - [ ] **Add `THE_ODDS_API_KEY` to Actions secrets** (and optionally `CITO_API_KEY`) — the single
   unblock for every FightAIQ output. Without a price source the evening model check has nothing to
   compare a model estimate against, so it records no calibration and the readiness dossiers stay
