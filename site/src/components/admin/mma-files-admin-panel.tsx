@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { CopySocialText } from "./copy-social-text";
 import { MmaFilesArticlePreview } from "./mma-files-article-preview";
+import { MmaFilesBannersPanel } from "./mma-files-banners-panel";
 import { RatingWidget } from "./rating-widget";
 import { Badge } from "@/components/ui/badge";
 import { Callout } from "@/components/ui/callout";
@@ -40,10 +41,7 @@ export function MmaFilesAdminPanel({ snapshot, tab }: { snapshot: AdminMmaFilesS
     <div className="grid gap-4 lg:grid-cols-2">{snapshot.predictions.sources.map((source) => <Card key={source.id}><CardContent><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]">{source.id}</p><h3 className="mt-2 text-xl font-semibold">{source.name}</h3></div><Badge tone={source.state === "wired" ? "success" : source.state === "blocked" ? "danger" : "warning"}>{source.state}</Badge></div><p className="mt-4 text-sm">{source.quota}</p><p className="mt-2 text-sm text-[var(--fog)]">{source.lastRetrievedAt ? `${source.lastStatus} · ${source.freshnessHours?.toFixed(1)} h old` : "No recorded run"}</p></CardContent></Card>)}</div>
   </div>;
 
-  if (tab === "banners") return <div className="mt-8 grid gap-5">
-    <Callout tone={snapshot.banners.status === "staged" ? "warning" : "neutral"}>Contract: {snapshot.banners.status}. {snapshot.banners.status === "staged" ? "Changes are staged only; nothing reaches the magazine until delivery is requested." : snapshot.banners.receiptRef ?? "No banner delivery has been recorded."}</Callout>
-    <div className="grid gap-4 lg:grid-cols-2">{snapshot.banners.slots.map((slot) => <Card key={slot.id}><CardContent><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]">{slot.pages.join(" · ")}</p><h3 className="mt-2 text-xl font-semibold">{slot.id}</h3></div><Badge tone={slot.enabled ? "success" : "neutral"}>{slot.enabled ? "enabled" : "disabled"}</Badge></div><p className="mt-4 text-sm text-[var(--fog)]">{slot.desktop.width}×{slot.desktop.height} desktop{slot.mobile ? ` · ${slot.mobile.width}×${slot.mobile.height} mobile` : ""}</p><p className="mt-2 text-sm">{slot.image ? slot.image.src : "No creative staged"}</p>{slot.stagedChanged ? <Badge tone="warning">staged change</Badge> : null}</CardContent></Card>)}</div>
-  </div>;
+  if (tab === "banners") return <MmaFilesBannersPanel banners={snapshot.banners} />;
 
   if (tab === "calendar") return <div className="mt-8 grid gap-5">
     {snapshot.calendar.length ? snapshot.calendar.map((day) => <Card key={day.date}><CardContent><h3 className="text-2xl font-semibold"><time dateTime={day.date}>{formatDate(day.date)}</time></h3><div className="mt-5 grid gap-4 md:grid-cols-2">{day.slots.map((slot) => { const state = slot.articleStatus ?? slot.status; return <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-5" key={slot.slot}><div className="flex items-center justify-between gap-3"><strong className="uppercase">{slot.slot}</strong><Badge tone={statusTone(state)}>{statusLabel(state === "killed" ? "killed" : slot.articleStatus ?? "not run")}</Badge></div><p className="mt-3 font-semibold">{slot.format.replaceAll("-", " ")}</p><p className="mt-2 text-sm leading-6 text-[var(--fog)]">{slot.killedReason ?? slot.rationale}</p></div>; })}</div></CardContent></Card>) : <Callout>No daily article plan is stored yet. A missed slot will appear here as missed, not as an empty article.</Callout>}
