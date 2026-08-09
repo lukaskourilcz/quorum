@@ -16,7 +16,7 @@ export interface EventsPanelProps {
   /** The publishing day, passed in so upcoming and past never depend on a clock. */
   today: string;
   engine: {
-    lastEdition?: { date: string; slug: string } | null;
+    lastEdition?: { date: string; slug: string | null } | null;
     lastStreamSync?: { date: string; stream: string; added: number } | null;
     lastDatasetAppend?: { date: string; dataset: string } | null;
   };
@@ -159,27 +159,37 @@ export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps)
     <div className="grid gap-5">
       <section className="grid gap-2">
         <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">DNESKAi engine</h3>
+        {/* Each empty row names the thing that has not happened yet. "None on record" read the
+            same whether a step had never run or had run and found nothing. */}
         <dl className="grid gap-1 font-mono text-[11px] text-[#d4d4d8] sm:grid-cols-2">
           <div className="flex justify-between gap-3">
             <dt className="text-[#71717a]">Last edition</dt>
-            <dd>{engine.lastEdition ? `${engine.lastEdition.date} · ${engine.lastEdition.slug}` : "none on record"}</dd>
+            <dd>
+              {engine.lastEdition
+                ? `${engine.lastEdition.date}${engine.lastEdition.slug ? ` · ${engine.lastEdition.slug}` : ""}`
+                : "no edition published yet"}
+            </dd>
           </div>
           <div className="flex justify-between gap-3">
             <dt className="text-[#71717a]">Last stream sync</dt>
             <dd>
               {engine.lastStreamSync
                 ? `${engine.lastStreamSync.date} · ${engine.lastStreamSync.stream} (+${engine.lastStreamSync.added})`
-                : "none on record"}
+                : "no sync has run yet"}
             </dd>
           </div>
           <div className="flex justify-between gap-3">
             <dt className="text-[#71717a]">Last dataset append</dt>
-            <dd>{engine.lastDatasetAppend ? `${engine.lastDatasetAppend.date} · ${engine.lastDatasetAppend.dataset}` : "none on record"}</dd>
+            <dd>
+              {engine.lastDatasetAppend
+                ? `${engine.lastDatasetAppend.date} · ${engine.lastDatasetAppend.dataset}`
+                : "nothing appended yet"}
+            </dd>
           </div>
           <div className="flex justify-between gap-3">
             <dt className="text-[#71717a]">Upcoming events</dt>
             <dd>
-              cz {events.filter((e) => e.scope === "cz" && !isPast(e, today)).length} · svět{" "}
+              Czech {events.filter((e) => e.scope === "cz" && !isPast(e, today)).length} · world{" "}
               {events.filter((e) => e.scope === "global" && !isPast(e, today)).length}
             </dd>
           </div>
