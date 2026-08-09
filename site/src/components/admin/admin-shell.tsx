@@ -30,8 +30,25 @@ export interface AdminAttention {
   value: number;
 }
 
+/**
+ * A company-level view that is not a venture workspace.
+ *
+ * The rail listed ventures and nothing else, so anything belonging to the company as a whole had
+ * no home. These are server-rendered links exactly like the workspaces, for the same reason: each
+ * one is a real URL the owner can bookmark.
+ */
+export interface AdminSection {
+  id: string;
+  name: string;
+  href: string;
+  active: boolean;
+  /** Shown on the right of the row when there is something to count. */
+  count?: number | null;
+}
+
 export function AdminShell({
   workspaces,
+  sections = [],
   attention,
   title,
   lead,
@@ -41,6 +58,7 @@ export function AdminShell({
   children
 }: {
   workspaces: readonly AdminWorkspace[];
+  sections?: readonly AdminSection[];
   attention: readonly AdminAttention[];
   title: string;
   lead: string;
@@ -101,6 +119,41 @@ export function AdminShell({
             })}
           </div>
         </div>
+
+        {sections.length ? (
+          <div>
+            <p className="mx-1.5 mb-2 font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#94949c]">
+              Company
+            </p>
+            <div className="hide-scrollbar flex gap-1.5 overflow-x-auto lg:block lg:overflow-visible" data-horizontal-scroll>
+              {sections.map((section) => (
+                <Link
+                  aria-current={section.active ? "page" : undefined}
+                  className="mb-0.5 flex w-auto shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l-2 px-2.5 py-2 text-[13px] transition-colors lg:w-full lg:shrink"
+                  href={section.href}
+                  key={section.id}
+                  scroll={false}
+                  style={{
+                    borderLeftColor: section.active ? brand : "transparent",
+                    background: section.active ? brand : "transparent",
+                    color: section.active ? "#09090b" : "#a1a1aa",
+                    fontWeight: section.active ? 600 : 400
+                  }}
+                >
+                  <span className="min-w-0 truncate">{section.name}</span>
+                  {typeof section.count === "number" ? (
+                    <span
+                      className="ml-auto font-mono text-[10px]"
+                      style={{ color: section.active ? "#09090b" : "#94949c" }}
+                    >
+                      {section.count}
+                    </span>
+                  ) : null}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         <div className="mt-auto hidden flex-col gap-2.5 lg:flex" data-adm-rail-foot>
           <div className="rounded-[10px] border border-[#26262b] bg-[#0e0e11] p-3">

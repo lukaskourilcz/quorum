@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
-import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
+import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AgentSwitches } from "@/components/admin/agent-switches";
 import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
@@ -9,6 +9,7 @@ import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-pan
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
+import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
@@ -33,6 +34,7 @@ import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
 import { readHookBrain } from "@/lib/hook-brain";
+import { readOwnerAttention } from "@/lib/owner-attention";
 import { readStudioArticles } from "@/lib/carousel-summaries";
 import { getDailyResults } from "@/lib/daily-results";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
@@ -76,6 +78,22 @@ function tabLabel(tab: AdminVentureTab): string {
 function ventureName(id: string, name: string): string {
   return id === "caught-up" ? "DNESKAi" : name;
 }
+
+/** Company-level views: their heading and the one sentence that says what the page is for. */
+const COMPANY_VIEWS = ["approvals", "manual-tasks", "future"] as const;
+type CompanyView = (typeof COMPANY_VIEWS)[number];
+
+const SECTION_TITLES: Readonly<Record<CompanyView, string>> = {
+  approvals: "Approvals",
+  "manual-tasks": "Only you can do",
+  future: "Future"
+};
+
+const SECTION_LEADS: Readonly<Record<CompanyView, string>> = {
+  approvals: "Everything waiting for your signature, with what each one approves and what it costs.",
+  "manual-tasks": "Keys, accounts and switches. These are the jobs the system cannot do for you.",
+  future: "Ways this company could earn, and every idea the meetings have produced so far."
+};
 
 /**
  * Money at headline size, always to the cent.
@@ -147,10 +165,10 @@ function Panel({
 export default async function AdminPage({
   searchParams
 }: {
-  searchParams: Promise<{ venture?: string; tab?: string }>;
+  searchParams: Promise<{ venture?: string; tab?: string; view?: string }>;
 }) {
   const [
-    { venture: requestedVenture, tab: requestedTab },
+    { venture: requestedVenture, tab: requestedTab, view: requestedView },
     state,
     portfolio,
     standups,
@@ -167,7 +185,8 @@ export default async function AdminPage({
     autonomy,
     fixedCosts,
     money,
-    dailyResults
+    dailyResults,
+    ownerAttention
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -186,7 +205,8 @@ export default async function AdminPage({
     readAdminAutonomy(),
     readAdminFixedCosts(),
     getPublicMoneySnapshot(),
-    getDailyResults()
+    getDailyResults(),
+    readOwnerAttention()
   ]);
 
   /*
@@ -198,6 +218,17 @@ export default async function AdminPage({
    * guess from that name now resolves to the same record instead of to an empty page.
    */
   const requestedVentureId = (requestedVenture ? VENTURE_ALIASES[requestedVenture] : undefined) ?? requestedVenture;
+  /*
+   * Company-level views, addressed by `?view=` rather than `?venture=`.
+   *
+   * A venture always wins: `?venture=fightaiq&view=approvals` is a workspace request with a stale
+   * parameter on it, not an ambiguous one. An unknown view falls through to Company files, the
+   * same way an unknown tab falls through to a venture's first.
+   */
+  const selectedView: CompanyView | null =
+    !requestedVentureId && COMPANY_VIEWS.includes(requestedView as CompanyView)
+      ? requestedView as CompanyView
+      : null;
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVentureId) ?? null;
   const selectedTab = selectedVenture
     ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
@@ -246,7 +277,7 @@ export default async function AdminPage({
       name: "Company files",
       count: files.length,
       href: "/admin?venture=global",
-      active: !selectedVenture
+      active: !selectedVenture && !selectedView
     },
     ...portfolio.ventures.map((venture) => ({
       id: venture.id,
@@ -257,19 +288,47 @@ export default async function AdminPage({
     }))
   ];
 
-  // Every count here is read, not estimated. An approval is a HUMAN_APPROVAL line the runtime
-  // wrote into the inbox; an open priority is one the autonomy snapshot still lists as open; an
-  // unreadable file is one a loader could not parse. There is no "items to rate" row, because
-  // nothing in the state files answers that question, and a number invented for a dashboard is
-  // exactly the kind of claim this admin exists to avoid.
+  const sections: AdminSection[] = [
+    {
+      id: "approvals",
+      name: "Approvals",
+      href: "/admin?view=approvals",
+      active: selectedView === "approvals",
+      count: ownerAttention.state === "present" ? ownerAttention.approvals.length : null
+    },
+    {
+      id: "manual-tasks",
+      name: "Only you can do",
+      href: "/admin?view=manual-tasks",
+      active: selectedView === "manual-tasks",
+      count: ownerAttention.state === "present" ? ownerAttention.manualTasks.length : null
+    }
+  ];
+
+  /*
+   * Every count here is read, not estimated.
+   *
+   * The first two used to be counted two different ways from two different files — an inbox regex
+   * that matched countersigned entries as well as pending ones, and the priority queue. Both now
+   * come off `state/owner-attention.json`, which is the file the two panels render, so the rail
+   * and the panel cannot disagree about how much is waiting. Before the collector has ever run
+   * there is nothing to count, and the row says so rather than reporting a confident zero.
+   */
   const attention = [
-    { label: "Approvals waiting", value: (state.inbox.match(/HUMAN_APPROVAL/gu) ?? []).length },
-    { label: "Open priorities", value: autonomy.priorities.filter((item) => item.status === "open").length },
+    {
+      label: "Approvals waiting",
+      value: ownerAttention.approvals.length
+    },
+    {
+      label: "Only you can do",
+      value: ownerAttention.manualTasks.length
+    },
     {
       label: "Unreadable files",
       value:
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
-        mmaFiles.unreadable.length
+        mmaFiles.unreadable.length +
+        ownerAttention.unreadable
     }
   ];
 
@@ -396,16 +455,39 @@ export default async function AdminPage({
       }
       attention={attention}
       brandId={brandId}
-      breadcrumb={selectedVenture ? ventureName(selectedVenture.id, selectedVenture.name) : "Company files"}
+      breadcrumb={
+        selectedVenture
+          ? ventureName(selectedVenture.id, selectedVenture.name)
+          : selectedView
+            ? SECTION_TITLES[selectedView]
+            : "Company files"
+      }
       lead={
         selectedVenture
           ? `Everything ${ventureName(selectedVenture.id, selectedVenture.name)} has saved, and the switches that decide what it may do next.`
-          : "Everything the owner alone can decide, in one protected view: what the company spends, which switches are open, the files the runtime writes, and every social draft waiting for a signature."
+          : selectedView
+            ? SECTION_LEADS[selectedView]
+            : "Everything the owner alone can decide, in one protected view: what the company spends, which switches are open, the files the runtime writes, and every social draft waiting for a signature."
       }
-      title={selectedVenture ? ventureName(selectedVenture.id, selectedVenture.name) : "Project desk"}
+      sections={sections}
+      title={
+        selectedVenture
+          ? ventureName(selectedVenture.id, selectedVenture.name)
+          : selectedView
+            ? SECTION_TITLES[selectedView]
+            : "Project desk"
+      }
       workspaces={workspaces}
     >
-      {!selectedVenture ? (
+      {selectedView ? (
+        <div className="grid min-w-0 gap-4">
+          <Panel title={SECTION_TITLES[selectedView]}>
+            {selectedView === "approvals" || selectedView === "manual-tasks" ? (
+              <OwnerAttentionPanel kind={selectedView} snapshot={ownerAttention} />
+            ) : null}
+          </Panel>
+        </div>
+      ) : !selectedVenture ? (
         <div className="grid min-w-0 gap-4">
           <div
             className="grid grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[#26262b] bg-[#26262b] lg:grid-cols-4"

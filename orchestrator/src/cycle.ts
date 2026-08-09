@@ -127,6 +127,7 @@ import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 import { imageProgramReadiness, type ImageProgramReadiness } from "./images/readiness.js";
 import { contentGateEnabled, runContentGate } from "./quality/content-gate.js";
 import { writeMonthlyReportIfDue, writeWeeklyReportIfDue } from "./reports/writers.js";
+import { collectOwnerAttention } from "./org/owner-attention.js";
 
 export interface CycleOptions {
   phase: RunnablePhase;
@@ -2061,6 +2062,16 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
      * this sits outside the model share exactly like the dataset appends. Monday writes the week
      * that finished; the 1st writes the month before it. Any other night writes nothing.
      */
+    /*
+     * What is waiting on the owner, rebuilt every cycle.
+     *
+     * Deterministic and free. It runs on every phase rather than one, because an approval that
+     * appears at 09:00 should not wait for the night to become visible, and rebuilding it costs
+     * two file reads.
+     */
+    const ownerAttentionArtifacts = options.dry
+      ? []
+      : [(await collectOwnerAttention({ repoRoot, stateRoot: artifactRoot, now })).path];
     const reportArtifacts: string[] = [];
     if (!options.dry && venturePhase === "night") {
       const today = pragueClockParts(now).date;
@@ -2127,7 +2138,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         ? room.skippedParticipants.map(({ agent }) => agent)
         : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
       artifacts: [
-        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts]
+        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts, ...ownerAttentionArtifacts]
           .map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
         ...(ecosystemArtifact ? [ecosystemArtifact] : [])
       ],

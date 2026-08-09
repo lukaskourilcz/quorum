@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "owner-attention/1",
+  "generatedAt": "2026-08-10T04:00:00.000Z",
+  "approvals": [
+    {
+      "id": "APIFY-ACCOUNT-001",
+      "title": "Create an Apify account on the Free plan and add APIFY_TOKEN to the repository's Actions secrets",
+      "plain": "GoVIRAL's Monday meeting has no trend data until an Apify account exists on the free plan.",
+      "source": { "kind": "inbox", "ref": "state/INBOX.md#APIFY-ACCOUNT-001" },
+      "since": "2026-08-04",
+      "urgency": "blocking"
+    },
+    {
+      "id": "STREAMS-HOST-002",
+      "title": "Approve two additional stream hosts",
+      "plain": "Approve two additional stream hosts",
+      "source": { "kind": "inbox", "ref": "state/INBOX.md#STREAMS-HOST-002" },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    }
+  ],
+  "manualTasks": [
+    {
+      "id": "ADMIN_USER",
+      "title": "Admin username is not set in production",
+      "plain": "The admin door will not open in production until a username and password are set.",
+      "steps": [
+        "Open the quorum-site project in Vercel",
+        "Add ADMIN_USER and ADMIN_PASSWORD to Production",
+        "Redeploy"
+      ],
+      "source": { "kind": "runtime", "ref": "ADMIN_USER" },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "fill-in-the-goviral-writing-profile",
+      "title": "Fill in the GoVIRAL writing profile",
+      "plain": "the writer half of the weekly brief: your niches, voice, audiences and veto list.",
+      "steps": [],
+      "source": { "kind": "needed", "ref": "docs/NEEDED.md" },
+      "since": null,
+      "urgency": "soon"
+    }
+  ]
+}
