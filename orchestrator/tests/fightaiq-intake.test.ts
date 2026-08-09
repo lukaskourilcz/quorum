@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { materializeFightAiQSources, scheduledEventCard } from "../src/fightaiq/intake.js";
-import { BoutRecordSchema, FighterRecordSchema, OddsSnapshotSchema } from "../src/contracts/mma.js";
+import { BoutRecordSchema, FighterRecordSchema, OddsSnapshotSchema, independentMmaSourceCount } from "../src/contracts/mma.js";
 import { atomicWriteJson } from "../src/state.js";
 import fighterCard from "../../contracts/fixtures/fighter-record.valid.json" with { type: "json" };
 
@@ -39,6 +39,18 @@ const events = [{
 }];
 
 describe("FightAIQ intake normalization", () => {
+  it("counts one Odds API provider even when several offer ids list the bout", () => {
+    expect(independentMmaSourceCount([
+      "source:the-odds-api:offer-one",
+      "source:the-odds-api:offer-two"
+    ])).toBe(1);
+    expect(independentMmaSourceCount([
+      "source:wikipedia:2026-08-09:UFC 330",
+      "source:the-odds-api:offer-one",
+      "source:the-odds-api:offer-two"
+    ])).toBe(2);
+  });
+
   it("writes an Oktagon card with canonical divisions and no MediaWiki fragments", async () => {
     const root = await fixtureRoot();
     const card = scheduledEventCard({

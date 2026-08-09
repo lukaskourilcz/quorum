@@ -59,7 +59,7 @@ async function citoResult(root: string, date: string) {
   return { refreshed, cito: raw.sources?.find((entry) => entry.sourceId === "cito-ufc") ?? null };
 }
 
-const KEYS = ["CITO_API_KEY", "THE_ODDS_API_KEY"] as const;
+const KEYS = ["CITO_API_KEY", "THE_ODDS_API_KEY", "APIFY_TOKEN"] as const;
 const saved: Partial<Record<(typeof KEYS)[number], string | undefined>> = {};
 
 beforeEach(() => {
@@ -67,6 +67,7 @@ beforeEach(() => {
   // A key must be present or the guard is never reached: the "unavailable" branch answers first.
   process.env.CITO_API_KEY = "fixture-key";
   delete process.env.THE_ODDS_API_KEY;
+  delete process.env.APIFY_TOKEN;
 });
 
 afterEach(async () => {
