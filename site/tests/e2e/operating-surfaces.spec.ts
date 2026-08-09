@@ -284,6 +284,14 @@ test("admin makes its deployment write capability explicit", async ({ page }) =>
   }
 });
 
+test("admin separates pending approvals from approved deliveries still waiting", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const attention = page.locator("[data-adm-rail-foot]");
+  await expect(attention).toContainText("Approvals waiting");
+  await expect(attention).toContainText("Approved deliveries waiting");
+  await expect(attention).toContainText("1");
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs

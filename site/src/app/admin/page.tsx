@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import path from "node:path";
 import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
@@ -18,6 +19,7 @@ import { SocialArchive } from "@/components/admin/social-archive-panel";
 import { Callout } from "@/components/ui/callout";
 import { CURRENT_MONTHLY_API_LIMIT_USD, CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
+import { pendingApprovalCount, readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
@@ -161,7 +163,8 @@ export default async function AdminPage({
     autonomy,
     fixedCosts,
     money,
-    dailyResults
+    dailyResults,
+    approvedUndelivered
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -179,7 +182,8 @@ export default async function AdminPage({
     readAdminAutonomy(),
     readAdminFixedCosts(),
     getPublicMoneySnapshot(),
-    getDailyResults()
+    getDailyResults(),
+    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."))
   ]);
 
   /*
@@ -250,13 +254,14 @@ export default async function AdminPage({
     }))
   ];
 
-  // Every count here is read, not estimated. An approval is a HUMAN_APPROVAL line the runtime
-  // wrote into the inbox; an open priority is one the autonomy snapshot still lists as open; an
-  // unreadable file is one a loader could not parse. There is no "items to rate" row, because
-  // nothing in the state files answers that question, and a number invented for a dashboard is
-  // exactly the kind of claim this admin exists to avoid.
+  // Every count here is read, not estimated. An approval is an unchecked HUMAN_APPROVAL line;
+  // staged delivery remains its own signal after that approval is granted. An open priority is
+  // one the autonomy snapshot still lists as open; an unreadable file is one a loader could not
+  // parse. There is no "items to rate" row, because nothing in the state files answers that
+  // question, and a number invented for a dashboard is exactly what this admin must not do.
   const attention = [
-    { label: "Approvals waiting", value: (state.inbox.match(/HUMAN_APPROVAL/gu) ?? []).length },
+    { label: "Approvals waiting", value: pendingApprovalCount(state.inbox) },
+    { label: "Approved deliveries waiting", value: approvedUndelivered.length },
     { label: "Open priorities", value: autonomy.priorities.filter((item) => item.status === "open").length },
     {
       label: "Unreadable files",
