@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@boardlessai/carousel-studio": "workspace:*",
+    "@resvg/resvg-js": "^2.6.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "lucide-react": "1.26.0",

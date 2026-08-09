@@ -66,7 +66,7 @@ this decision wins, then the document, then — being newest — the issue.
 - [x] DL-01 — Persistence tells the truth: create path, visible save states (contract §DL-01)
 - [x] DL-02 — Deck identity is venture+slug+date everywhere (contract §DL-02)
 - [x] DL-03 — Schema v2 capabilities, additive, fully validated (contract §DL-03)
-- [ ] DL-04 — Committed fonts, real metrics, machine-independent PNG hashes (contract §DL-04)
+- [x] DL-04 — Committed fonts, real metrics, machine-independent PNG hashes (contract §DL-04)
 - [ ] DL-05 — The family library replaces five wallpapers; CSS gallery retired (contract §DL-05)
 - [ ] DL-06 — Stories, squares and Threads covers; no render-and-discard (contract §DL-06)
 - [ ] DL-07 — Recipe variety engine with receipt-based anti-repeat (contract §DL-07)

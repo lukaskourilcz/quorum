@@ -6,25 +6,24 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 
 /**
- * Every sharp() construction, tagged by what the caller handed it.
+ * Every rasterisation one page load causes.
  *
- * The point of the whole exercise is how many of these one page load causes, so the test counts
- * them rather than timing them: a wall clock reading is a property of the machine, a rasterisation
- * count is a property of the code.
+ * The point of the whole exercise is how many of these there are, so the test counts them rather
+ * than timing them: a wall clock reading is a property of the machine, a rasterisation count is a
+ * property of the code. Counted at resvg, which is what turns an SVG into PNG bytes since the
+ * fonts landed; sharp still runs, but only to decode a hero and treat it.
  */
 const rasterCalls: string[] = [];
 
-vi.mock("sharp", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("sharp")>();
-  const real = actual.default;
-  const counted = ((...args: Parameters<typeof real>) => {
-    const first = args[0];
-    const svg = Buffer.isBuffer(first) && first.subarray(0, 4).toString("utf8") === "<svg";
-    rasterCalls.push(svg ? "svg->png" : "hero-decode");
-    return real(...args);
-  }) as typeof real;
-  Object.assign(counted, real);
-  return { ...actual, default: counted };
+vi.mock("@resvg/resvg-js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@resvg/resvg-js")>();
+  class Counted extends actual.Resvg {
+    constructor(...args: ConstructorParameters<typeof actual.Resvg>) {
+      rasterCalls.push("svg->png");
+      super(...args);
+    }
+  }
+  return { ...actual, Resvg: Counted };
 });
 
 /** A one-pixel WebP: a RIFF container, so the hero decode is a real decode. */

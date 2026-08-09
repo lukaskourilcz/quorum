@@ -72,7 +72,9 @@ describe("carousel-template/1", () => {
       minFontSize: 24,
       maxFontSize: 58,
       maxLines: 4,
-      maxChars: 58
+      maxChars: 58,
+      fontFamily: "Barlow Condensed",
+      fontWeight: 800
     });
     expect(fitted.lines.join(" ")).toContain("ě");
     expect(fitted.lines.length).toBeLessThanOrEqual(4);

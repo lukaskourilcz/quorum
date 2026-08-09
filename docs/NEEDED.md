@@ -548,6 +548,15 @@ marketingShark adds about 6c to a day.
 
 ## Recently finished
 
+- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty static
+  faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
+  Plex Sans for DNESKAi, Barlow Condensed and Barlow for MMA Files, Petrona and Karla for Titty
+  Tuesdays, Figtree and Outfit over Public Sans for the two sharks, IBM Plex Mono everywhere. The
+  brands used to name system font stacks and no font file existed, so the render server drew in
+  whatever it found. Nothing here needs an account, a licence purchase or a decision from you —
+  it is recorded because the choice of typeface is the kind of thing an owner should be able to
+  read off a list rather than off a diff. Costs nothing: the files ship with the repository.
+
 - **The twelve-issue article-image programme ran and merged**, 2026-08-09. Every hero now passes
   a vision gate before it is attached: one budgeted call looks at the actual thumbnails and the
   verdict is stored beside the package, so the run report answers *why* a picture was chosen for

@@ -198,12 +198,19 @@ function contrastCheck(template: CarouselTemplate, brand: BrandTokens): Template
     : { id: "contrast", status: "pass", detail: "Text contrast meets 4.5:1 against each slide background" };
 }
 
-function overflowCheck(template: CarouselTemplate): TemplateCheck {
+function overflowCheck(template: CarouselTemplate, brand: BrandTokens): TemplateCheck {
   const failures = template.slides.flatMap((slide) => slide.layers.flatMap((layer) => {
     if (layer.type !== "text") return [];
-    // Tracking widens every character, so a tracked slot holds fewer of them. Measuring capacity
-    // untracked is how a kicker passes the check and then runs off the canvas.
-    const minimumCapacity = charactersPerLine(layer.width * 1_080, layer.minFontSize, layer.tracking) * layer.maxLines;
+    // Measured in the face the layer will actually be drawn in, and with its tracking. A flat
+    // per-character estimate charged a condensed headline what a grotesque costs and charged a
+    // tracked kicker nothing for its tracking — so a slot passed the check and ran off the canvas.
+    const minimumCapacity = charactersPerLine(
+      layer.width * 1_080,
+      layer.minFontSize,
+      brand.fonts[layer.fontToken],
+      layer.fontWeight,
+      layer.tracking
+    ) * layer.maxLines;
     return minimumCapacity < layer.maxChars ? [`${slide.id}:${layer.slot}`] : [];
   }));
   return failures.length
@@ -221,7 +228,7 @@ export function validateTemplateForBrand(
     safeAreaCheck(template, format),
     contrastCheck(template, brand),
     brandTokenCheck(template, brand),
-    overflowCheck(template),
+    overflowCheck(template, brand),
     { id: "originality", status: "pass", detail: "Template data contains no external image bytes" }
   ];
 }

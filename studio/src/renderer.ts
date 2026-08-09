@@ -10,6 +10,7 @@ import {
   type CarouselTemplate
 } from "./schema.js";
 import { fitText } from "./text.js";
+import { fontFiles, measureEm, resolveFace } from "./fonts.js";
 import { validateTemplateForBrand } from "./validation.js";
 
 function escapeXml(value: string): string {
@@ -24,6 +25,15 @@ function escapeXml(value: string): string {
 function px(value: number, total: number): number {
   return Math.round(value * total * 1_000) / 1_000;
 }
+
+/** Three decimal places, so the same arithmetic writes the same string on every machine. */
+function round(value: number): number {
+  return Math.round(value * 1_000) / 1_000;
+}
+
+/** The wordmark's weight and letter-spacing. Fixed, because a wordmark is not a design axis. */
+const LOGO_WEIGHT = 800;
+const LOGO_TRACKING = 0.03;
 
 function token(brand: BrandTokens, name: string): string {
   const value = brand.colors[name];
@@ -91,9 +101,19 @@ function layerSvg(input: {
       + `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>`;
   }
   if (layer.type === "logo") {
-    const font = brand.fonts[layer.fontToken];
-    const size = Math.max(18, Math.min(h * 0.72, w / Math.max(4, brand.logoText.length) * 1.45));
-    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(font)}" font-size="${size}" font-weight="800" letter-spacing="1.5">${escapeXml(brand.logoText)}</text>`;
+    /*
+     * Sized to the frame and to the mark, and now to the face as well.
+     *
+     * The old arithmetic guessed a wordmark's width from its character count, which is what a
+     * renderer does when it has no metrics: `MMA FILES` and `TITTY TUESDAYS` were charged the
+     * same per character in a condensed face and in a black one. The measured width is the
+     * honest constraint, so the mark fills its frame in every family instead of in one.
+     */
+    const face = resolveFace(brand.fonts[layer.fontToken], LOGO_WEIGHT);
+    const tracked = (size: number) => (measureEm(face, brand.logoText) + LOGO_TRACKING * [...brand.logoText].length) * size;
+    const byHeight = h * 0.72;
+    const size = Math.max(18, Math.min(byHeight, tracked(byHeight) > w ? (w / tracked(1)) : byHeight));
+    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${round(size)}" font-weight="${LOGO_WEIGHT}" letter-spacing="${round(LOGO_TRACKING * size)}">${escapeXml(brand.logoText)}</text>`;
   }
   if (layer.type === "mesh") {
     // Several wide, blurred colour fields that overlap into a mesh. Built from radial gradients
@@ -152,14 +172,15 @@ function layerSvg(input: {
       + ` flood-color="${color("accent")}" flood-opacity="0.55"/></filter></defs>`
     : "";
   const filter = layer.glow ? ` filter="url(#${glowId})"` : "";
-  return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(brand.fonts[layer.fontToken])}" font-size="${fitted.fontSize}" font-weight="${layer.fontWeight}"${tracking}${filter}>${tspans}</text>`;
+  const face = resolveFace(brand.fonts[layer.fontToken], layer.fontWeight);
+  return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
 }
 
 /** One text layer, fitted for one canvas. Shared so a hugging panel measures what the text does. */
 function fitTextLayer(
   layer: Extract<CarouselLayer, { type: "text" }>,
   payload: CarouselPayload,
-  _brand: BrandTokens,
+  brand: BrandTokens,
   width: number,
   height: number
 ) {
@@ -174,7 +195,9 @@ function fitTextLayer(
     maxFontSize: layer.maxFontSize * (width / 1_080),
     maxLines: layer.maxLines,
     maxChars: layer.maxChars,
-    tracking: layer.tracking
+    tracking: layer.tracking,
+    fontFamily: brand.fonts[layer.fontToken],
+    fontWeight: layer.fontWeight
   });
 }
 
@@ -328,16 +351,30 @@ async function treatedImages(input: CarouselRenderInput): Promise<CarouselRender
   return treated;
 }
 
+/*
+ * Rasterised by resvg with the repository's own fonts, and with the operating system's shut out.
+ *
+ * The alternative was to keep sharp's librsvg and bundle a fontconfig file for it. Both were
+ * evaluated in place. librsvg resolves faces through fontconfig, which means the answer depends
+ * on an environment variable, on the fontconfig build inside a prebuilt sharp binary, and on
+ * whichever system fonts happen to sit alongside ours — and when it cannot find a face it
+ * substitutes one without saying so, which is the exact failure this task exists to end. resvg
+ * takes the font files as an explicit list and `loadSystemFonts: false` removes the machine from
+ * the question entirely: the only faces in the database are the thirty committed here. That is
+ * what makes the CI run a real second machine rather than a second guess.
+ *
+ * sharp stays for what it is good at — decoding a WebP hero and applying a photo treatment before
+ * the bytes reach the SVG.
+ */
 async function rasterise(
   slides: readonly RenderedSlide[]
 ): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
-  const { default: sharp } = await import("sharp");
-  return Promise.all(slides.map(async (slide) => {
-    const png = await sharp(Buffer.from(slide.svg))
-      .png({ compressionLevel: 9, effort: 10, palette: true })
-      .toBuffer();
+  const { Resvg } = await import("@resvg/resvg-js");
+  const font = { loadSystemFonts: false, fontFiles: fontFiles(), defaultFontFamily: "IBM Plex Sans" };
+  return slides.map((slide) => {
+    const png = Buffer.from(new Resvg(slide.svg, { font }).render().asPng());
     return { ...slide, png, pngHash: createHash("sha256").update(png).digest("hex") };
-  }));
+  });
 }
 
 export async function renderCarouselPng(

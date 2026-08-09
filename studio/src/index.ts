@@ -1,4 +1,6 @@
 export * from "./schema.js";
+export * from "./fonts.js";
+export * from "./font-metrics.generated.js";
 export * from "./text.js";
 export * from "./validation.js";
 export * from "./renderer.js";

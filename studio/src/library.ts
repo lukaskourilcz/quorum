@@ -544,7 +544,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#fe45e2",
       secondary: "#ff5a00"
     },
-    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Archivo", body: "IBM Plex Sans", mono: "IBM Plex Mono" }
   }),
   "mma-files": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -560,7 +560,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#ef6c35",
       secondary: "#f2b84b"
     },
-    fonts: { headline: "Arial Narrow, Arial, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Barlow Condensed", body: "Barlow", mono: "IBM Plex Mono" }
   }),
   "titty-tuesdays": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -576,7 +576,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#ff6fae",
       secondary: "#ffc45e"
     },
-    fonts: { headline: "Arial Black, Arial, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Petrona", body: "Karla", mono: "IBM Plex Mono" }
   }),
   // The two shark brands take their palettes from the product's own Deep End ocean-ink tokens
   // (client/src/styles/astryx-theme.css) and their accents from its subject registry: webdev's
@@ -596,7 +596,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#4caf50",
       secondary: "#67e8f9"
     },
-    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
   }),
   geoshark: BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -612,7 +612,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#fb923c",
       secondary: "#67e8f9"
     },
-    fonts: { headline: "Arial, Helvetica, sans-serif", body: "Arial, Helvetica, sans-serif", mono: "Courier New, monospace" }
+    fonts: { headline: "Outfit", body: "Public Sans", mono: "IBM Plex Mono" }
   })
 };
 

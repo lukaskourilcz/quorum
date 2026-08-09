@@ -13,14 +13,24 @@ import path from "node:path";
  */
 const hookLibraryFiles = ["../studio/hooks/**/*"];
 
-const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFiles];
+/**
+ * The typefaces, traced into every function that rasterises.
+ *
+ * They are read from `studio/fonts` at render time through a path derived from the module's own
+ * URL, which no bundler can follow. Untraced, the deployed rasteriser would find no fonts at all
+ * — and with system fonts deliberately switched off it would draw no text, silently, which is the
+ * failure mode committing the files was meant to end.
+ */
+const fontFiles = ["../studio/fonts/**/*.ttf"];
+
+const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFiles, ...fontFiles];
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,
-    "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": hookLibraryFiles,
+    "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": [...hookLibraryFiles, ...fontFiles],
     "/money": ["../state/money/public.json"],
     "/results": ["../state/notify/digest/**/*"],
     // The cron route reads the venture registry at request time to learn which Prague hour each
@@ -96,7 +106,12 @@ const nextConfig: NextConfig = {
   // which is what makes the trace pick up the platform binaries. It is also declared in this
   // package's dependencies, because a function resolves `sharp` from `site/node_modules` and
   // pnpm only links it there for the package that asks for it.
-  serverExternalPackages: ["sharp"]
+  // resvg is the second native module and needs the same treatment for the same reason: its
+  // binding is loaded through a platform-suffixed specifier no bundler can resolve statically,
+  // and a bundled copy would ship a rasteriser that cannot start. It is what turns a deck's SVG
+  // into PNG bytes, so without this every admin deck slide answers 500 in production and nothing
+  // on a development machine ever reproduces it.
+  serverExternalPackages: ["sharp", "@resvg/resvg-js"]
 };
 
 export default nextConfig;

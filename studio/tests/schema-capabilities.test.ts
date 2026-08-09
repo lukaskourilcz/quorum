@@ -73,16 +73,23 @@ describe("every new capability round-trips through the schema", () => {
   });
 
   it("refuses a gradient with one stop, or three", () => {
-    for (const stops of [[{ colorToken: "surface", offset: 0 }], [{ colorToken: "surface", offset: 0 }, { colorToken: "background", offset: 0.5 }, { colorToken: "accent", offset: 1 }]]) {
-      expect(CarouselTemplateSchema.safeParse(templateWith([
-        { type: "linear-gradient", x: 0, y: 0, width: 1, height: 1, angle: 90, stops },
-        line
-      ])).success).toBe(false);
+    const oneStop = [{ colorToken: "surface", offset: 0 }];
+    const threeStops = [...oneStop, { colorToken: "background", offset: 0.5 }, { colorToken: "accent", offset: 1 }];
+    for (const stops of [oneStop, threeStops]) {
+      expect(CarouselTemplateSchema.safeParse({
+        ...templateWith([line]),
+        slides: [{
+          id: "slide-one",
+          backgroundToken: "background",
+          layers: [{ type: "linear-gradient", x: 0, y: 0, width: 1, height: 1, angle: 90, stops }, line]
+        }]
+      }).success).toBe(false);
     }
   });
 
   it("carries a circular and a polygon image window", () => {
-    for (const clip of ["circle", [[0, 0], [1, 0], [1, 0.82], [0, 1]]] as const) {
+    const clips: Array<"circle" | Array<[number, number]>> = ["circle", [[0, 0], [1, 0], [1, 0.82], [0, 1]]];
+    for (const clip of clips) {
       const parsed = CarouselTemplateSchema.parse(templateWith([
         { type: "image", slot: "image", optional: true, fit: "cover", x: 0, y: 0, width: 1, height: 0.5, clip },
         line
@@ -160,10 +167,11 @@ describe("a document written before any of this parses and renders unchanged", (
 
   /*
    * Pinned, not recomputed. A test that renders the fixture twice proves the renderer is a
-   * function; only a committed hash proves this release renders what the last one did, which is
-   * the promise `carousel-template/1` makes to the packs already in state/social.
+   * function; only a committed hash proves this release renders what the last deliberate
+   * re-baseline did, which is the promise `carousel-template/1` makes to the packs already in
+   * state/social. Re-baselined once, by DL-04, when the fonts and the real metrics landed.
    */
-  it("renders to the same SVG it rendered before the capabilities existed", () => {
+  it("renders to the SVG pinned at the last deliberate re-baseline", () => {
     const parsed = CarouselTemplateSchema.parse(stored);
     const strings = Object.fromEntries(parsed.requiredSlots.map((slot, index) =>
       [slot, `Řádek ${index + 1}: nejneobhospodařovávatelnější věta, kterou deska napsala.`]));
@@ -174,7 +182,7 @@ describe("a document written before any of this parses and renders unchanged", (
       format: "instagram-portrait"
     });
     const combined = createHash("sha256").update(slides.map((slide) => slide.svgHash).join("")).digest("hex");
-    expect(combined).toBe("0d9e56f69d065ecd3ff9ca23647af0cd386d0b73b205997297bda3ff25815bb0");
+    expect(combined).toBe("1664aaea6d118edbaeb5e64507389f5fa5af1f3945623daecf88c328c83840a0");
   });
 });
 
