@@ -608,7 +608,9 @@ export function SectionWorkflows({
             ))}
           </div>
 
-          {(["caught-up", "carousel-studio", "dock", "titty-tuesdays"] as PanelPlace[]).map((place) => (
+          {/* The dock left this list with its panel: it opens the plain-facts dialog at every
+              width now, so a compact accordion for it would be a second thing to keep true. */}
+          {(["caught-up", "carousel-studio", "titty-tuesdays"] as PanelPlace[]).map((place) => (
             <div key={place} style={{ borderTop: "1px solid #26262b" }}>
               <button
                 aria-expanded={expanded === place}

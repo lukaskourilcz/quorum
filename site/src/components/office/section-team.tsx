@@ -6,16 +6,35 @@ import type { OfficeTeam } from "@/lib/office-walkthrough";
 /**
  * The roster by reception.
  *
- * The whole roster renders on arrival. It used to open twelve specialists and hide the rest behind
- * a "Full team" control, which bought one row of names for a click and a second state to reason
- * about — so the control is gone and the list takes an inner scroll instead. Only the list
- * scrolls: `overscroll-behavior: contain` is what stops a wheel at its end from jumping to the
- * next section mid-read.
+ * Every role in the registry, and every one of them labelled. It used to show the council plus
+ * whichever specialists were active and put the rest behind a "stood down" count with no way to
+ * reach them — a footnote saying nine roles exist that you may not read. A paused role is a real
+ * part of how the company is arranged and so is a retired one, so both appear with the word on
+ * them. Only the list scrolls: `overscroll-behavior: contain` is what stops a wheel at its end
+ * from jumping to the next section mid-read.
  *
  * Portraits appear here and nowhere else in the walkthrough. At 38px inside a card they read as
  * identity; at 36px inside a dense message list they read as noise, which is why the workspace
  * uses initials tiles instead.
  */
+/**
+ * Paused and retired, said rather than implied by absence.
+ *
+ * An active role carries no tag: labelling the normal case is noise, and a roster where most
+ * entries wear a badge reads as a roster of exceptions.
+ */
+function StatusTag({ status }: { status: OfficeTeam["council"][number]["status"] }) {
+  if (status === "active") return null;
+  return (
+    <span
+      className="rounded-full border border-[#3f3f46] px-1.5 py-px font-mono text-[9.5px] uppercase tracking-[0.08em] text-[#94949c]"
+      data-team-status={status}
+    >
+      {status}
+    </span>
+  );
+}
+
 export function SectionTeam({ team }: { team: OfficeTeam }) {
   return (
     <div
@@ -34,8 +53,8 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
           The agent roster by reception. Four roles vote; the rest join when their field is needed.
           They are software roles, not people.
         </p>
-        <p className="shrink-0 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#94949c]">
-          {team.council.length + team.specialists.length} active roles
+        <p className="shrink-0 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#94949c]" data-team-count>
+          {team.council.length + team.specialists.length} roles · {team.activeCount} active
         </p>
       </div>
 
@@ -91,7 +110,10 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
                   </span>
                 )}
                 <div className="min-w-0">
-                  <p className="font-mono text-[12.5px] font-semibold text-[#f4f4f5]">{role.id}</p>
+                  <p className="flex flex-wrap items-baseline gap-1.5 font-mono text-[12.5px] font-semibold text-[#f4f4f5]">
+                    {role.id}
+                    <StatusTag status={role.status} />
+                  </p>
                   <p className="mt-1 text-[12px] leading-[1.45] text-[#94949c]">{role.line}</p>
                 </div>
               </div>
@@ -102,7 +124,7 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
 
       <div className="px-[22px] pb-[18px] pt-4">
         <p className="mb-3 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
-          Specialists · no vote
+          Specialists and venture roles · no vote
         </p>
         {/*
           Every specialist renders, and the list scrolls inside itself rather than pushing the
@@ -116,11 +138,17 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
           data-team-list
         >
           {team.specialists.map((role) => (
-            <div className="flex gap-2.5 border-t border-[#1e1e22] pt-2.5" key={role.id}>
+            <div className="flex min-w-0 gap-2.5 border-t border-[#1e1e22] pt-2.5" data-team-role key={role.id}>
               <span className="w-[62px] shrink-0 font-mono text-[12px] font-semibold text-[#f4f4f5]">
                 {role.id}
               </span>
-              <p className="text-[12px] leading-[1.45] text-[#94949c]">{role.line}</p>
+              <div className="min-w-0">
+                <p className="flex flex-wrap items-baseline gap-1.5 text-[12px] leading-[1.45] text-[#d4d4d8]">
+                  {role.title}
+                  <StatusTag status={role.status} />
+                </p>
+                <p className="text-[12px] leading-[1.45] text-[#94949c]">{role.line}</p>
+              </div>
             </div>
           ))}
         </div>

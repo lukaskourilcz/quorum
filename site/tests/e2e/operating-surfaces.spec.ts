@@ -794,3 +794,59 @@ test.describe("the facilities plan opens dialogs", () => {
     await page.keyboard.press("Escape");
   });
 });
+
+/**
+ * The roster shows every role, counted rather than eyeballed.
+ *
+ * It used to show the council plus whichever specialists were active and put the rest behind a
+ * "stood down" count with no way to reach them — a footnote saying nine roles exist that you may
+ * not read. The count comes from `config/agents.json` here, so the assertion cannot drift with the
+ * registry: adding a role to the company adds it to this test's expectation on the same commit.
+ */
+test.describe("the roster lists every agent", () => {
+  test("renders one entry per registry agent, with paused and retired labelled", async ({ page }) => {
+    const registry = JSON.parse(await readFile(path.join(repositoryRoot, "config", "agents.json"), "utf8")) as
+      { agents?: Array<{ id: string; status: string }> } | Array<{ id: string; status: string }>;
+    const agents = Array.isArray(registry) ? registry : registry.agents ?? [];
+    expect(agents.length).toBeGreaterThan(0);
+
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Team", exact: true }).click();
+    await expect(page.locator("[data-team-panel]")).toBeVisible();
+
+    const rendered = await page.evaluate(() => ({
+      council: document.querySelectorAll("[data-team-council] > div").length,
+      others: document.querySelectorAll("[data-team-role]").length,
+      paused: document.querySelectorAll('[data-team-status="paused"]').length,
+      retired: document.querySelectorAll('[data-team-status="retired"]').length,
+      count: document.querySelector("[data-team-count]")?.textContent ?? ""
+    }));
+
+    expect(rendered.council + rendered.others, "one card per agent in config/agents.json").toBe(agents.length);
+    expect(rendered.paused).toBe(agents.filter((agent) => agent.status === "paused").length);
+    expect(rendered.retired).toBe(agents.filter((agent) => agent.status === "retired").length);
+    expect(rendered.count).toContain(`${agents.length} roles`);
+    expect(rendered.count).toContain(`${agents.filter((agent) => agent.status === "active").length} active`);
+  });
+
+  test("holds at 360px without clipping a name", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto("/", { waitUntil: "networkidle" });
+    // At 360px the sections stack rather than being navigated between, so the panel is scrolled
+    // to rather than clicked to.
+    const panel = page.locator("[data-team-panel]");
+    await panel.scrollIntoViewIfNeeded();
+    await expect(panel).toBeVisible();
+
+    const spilling = await page.evaluate(() => {
+      const box = document.querySelector("[data-team-panel]")!.getBoundingClientRect();
+      return [...document.querySelectorAll("[data-team-role] span, [data-team-role] p, [data-team-council] p")]
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          if (rect.width === 0) return false;
+          return rect.left < box.left - 1 || rect.right > box.right + 1;
+        }).length;
+    });
+    expect(spilling).toBe(0);
+  });
+});

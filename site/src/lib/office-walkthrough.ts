@@ -375,13 +375,17 @@ export interface OfficeRole {
   line: string;
   portrait: string | null;
   portraitAlt: string;
+  /** What the role's title is, which the roster prints beside the name. */
+  title: string;
+  /** As the registry records it. A paused or retired role is labelled, never hidden. */
+  status: "active" | "paused" | "retired";
 }
 
 export interface OfficeTeam {
   council: OfficeRole[];
   specialists: OfficeRole[];
-  /** How many roles were stood down when the roster was cut, for the expanded footnote. */
-  standDownCount: number;
+  /** How many of the roster are active, of a roster that now shows all of it. */
+  activeCount: number;
 }
 
 /* ------------------------------------------------------------------ results */
@@ -643,7 +647,6 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
 
   /* ---- 04 Team ---------------------------------------------------------- */
 
-  const working = agents.filter((agent) => agent.status === "active");
   /**
    * The roster line is the curated mandate, not the operating principle.
    *
@@ -658,12 +661,23 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     id: agent.id,
     line: publicAgentMandate(agent),
     portrait: agent.visual.avatar,
-    portraitAlt: agent.visual.avatarAlt
+    portraitAlt: agent.visual.avatarAlt,
+    title: agent.title,
+    status: agent.status === "paused" || agent.status === "retired" ? agent.status : "active"
   });
+  /*
+   * Every role in the registry, and every one of them labelled.
+   *
+   * The roster used to show the council plus whichever specialists were active and put the rest
+   * behind a "stood down" count with no way to see them — a footnote saying nine roles exist that
+   * you may not read. A paused role is a real part of how the company is arranged and so is a
+   * retired one; hiding them made the roster smaller than the company. Council first, then the
+   * rest in registry order, with the ones that are not working saying so.
+   */
   const team: OfficeTeam = {
-    council: working.filter((agent) => agent.group === "Council").map(toRole),
-    specialists: working.filter((agent) => agent.group !== "Council").map(toRole),
-    standDownCount: agents.length - working.length
+    council: agents.filter((agent) => agent.group === "Council").map(toRole),
+    specialists: agents.filter((agent) => agent.group !== "Council").map(toRole),
+    activeCount: agents.filter((agent) => agent.status === "active").length
   };
 
   /* ---- 05 Results ------------------------------------------------------- */

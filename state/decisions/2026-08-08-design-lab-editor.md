@@ -79,7 +79,7 @@ this decision wins, then the document, then — being newest — the issue.
 - [x] DL-14 — Calendar tooltips clear the header row (contract §DL-14)
 - [x] DL-15 — Meetings room type sizes; channels label removed (contract §DL-15)
 - [x] DL-16 — Rooms open as dialogs, zoom removed, dock in plain words (contract §DL-16)
-- [ ] DL-17 — The roster lists every agent with status (contract §DL-17)
+- [x] DL-17 — The roster lists every agent with status (contract §DL-17)
 - [ ] DL-18 — Footer links open simplified content in dialogs (contract §DL-18)
 - [ ] DL-19 — Navigation hover reserves no space for an invisible dot (contract §DL-19)
 - [ ] DL-20 — Full gates, self-review, merge, contract retired (contract §DL-20)
