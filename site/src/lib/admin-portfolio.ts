@@ -19,7 +19,7 @@ const adminTabs = [
   // `templates` and `decks` were two halves of one question and are now one `studio` tab. They
   // stay in the list because a bookmarked `?tab=templates` must still resolve rather than 404 —
   // an unknown tab falls through to the venture's first, which is what the selector already does.
-  "articles", "calendar", "social-lab", "studio", "templates", "inspiration", "decks", "hooks",
+  "articles", "predictions", "banners", "calendar", "social-lab", "studio", "templates", "inspiration", "decks", "hooks",
   "packages"
 ] as const;
 

@@ -20,6 +20,9 @@ function storedArticle(bodyMDX: string): AdminMmaArticle {
     format: "fighter-profile",
     status: "published",
     localizations: { en: copy, cs: copy },
+    organization: "ufc",
+    placements: ["Nejnovější", "UFC"],
+    weekStart: "2026-07-27",
     sources: [{ kind: "internal", ref: "state/mma/fighters/ufc:valentina-shevchenko.json" }],
     fighterRefs: ["ufc:valentina-shevchenko"],
     eventRef: null,
@@ -49,8 +52,8 @@ describe("the admin article preview shows no repository paths", () => {
 
   it("cleans the headline and the standfirst, not only the body", () => {
     const article = storedArticle("Bez značky.");
-    article.localizations.en.title = "Trilogie [source:state/mma/bouts/ufc/history-0fb7c82c.json]";
-    article.localizations.en.dek = "Tři zápasy [^source-1], tři výsledky.";
+    article.localizations.cs.title = "Trilogie [source:state/mma/bouts/ufc/history-0fb7c82c.json]";
+    article.localizations.cs.dek = "Tři zápasy [^source-1], tři výsledky.";
     const html = renderToStaticMarkup(<MmaFilesArticlePreview article={article} />);
     expect(html).not.toContain("[source:");
     expect(html).not.toContain("[^source-");
@@ -63,7 +66,7 @@ describe("the admin article preview shows no repository paths", () => {
     const html = renderToStaticMarkup(<MmaFilesArticlePreview article={article} />);
     // The package's own alt text, not a sentence about a typographic plate that stopped being
     // what these heroes are.
-    expect(html).toContain('alt="Valentina Shevchenko at a training simulator"');
+    expect(html).toContain('alt="Valentina Shevchenko v UFC kleci"');
     expect(html).toContain("hero.webp");
     // Attribution travels with the picture. CC BY and CC BY-SA require it, and a preview that
     // drops it is the place where the habit of dropping it starts.

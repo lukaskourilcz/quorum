@@ -5,21 +5,44 @@ import { RatingWidget } from "./rating-widget";
 import { Badge } from "@/components/ui/badge";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
-import type { AdminMmaFilesSnapshot } from "@/lib/admin-mma-files";
+import type { AdminMmaArticle, AdminMmaFilesSnapshot } from "@/lib/admin-mma-files";
 import { formatDate } from "@/lib/utils";
 
-type Tab = "articles" | "calendar" | "social-lab";
+type Tab = "articles" | "predictions" | "banners" | "calendar" | "social-lab";
 const statusTone = (status: string): "neutral" | "success" | "warning" | "danger" => status === "published" ? "success" : status === "blocked" || status === "killed" ? "danger" : "neutral";
 const statusLabel = (status: string) => ({ assigned: "chosen", published: "finished", killed: "rejected", blocked: "blocked" }[status] ?? status.replaceAll("_", " "));
 
+function articleWeeks(articles: AdminMmaArticle[]): Array<[string, AdminMmaArticle[]]> {
+  const groups = new Map<string, AdminMmaArticle[]>();
+  for (const article of articles) groups.set(article.weekStart, [...(groups.get(article.weekStart) ?? []), article]);
+  return [...groups.entries()].sort(([left], [right]) => right.localeCompare(left));
+}
+
 export function MmaFilesAdminPanel({ snapshot, tab }: { snapshot: AdminMmaFilesSnapshot; tab: Tab }) {
   if (tab === "articles") return <div className="mt-8 grid gap-7">
-    {snapshot.articles.length ? snapshot.articles.map((article) => <Card key={article.id}><CardContent>
-      <div className="mb-5 flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]"><time dateTime={article.date}>{formatDate(article.date)}</time> · {article.slot.toUpperCase()}</p><p className="mt-1 text-sm text-[var(--fog)]">Both languages come from one tamper-checked saved article.</p></div><Badge tone={statusTone(article.status)}>{statusLabel(article.status)}</Badge></div>
-      <MmaFilesArticlePreview article={article} />
-      <footer className="mt-8 border-t border-[var(--border)] pt-6"><h4 className="font-mono text-xs font-bold uppercase tracking-[0.12em]">Sources behind this article</h4><ul className="mt-3 grid gap-2 text-sm text-[var(--fog)]">{article.sources.map((source, index) => <li className="break-all" key={`${source.kind}-${index}`}>{source.kind === "internal" ? source.ref : <a className="text-[var(--accent)] underline" href={source.url} rel="noreferrer" target="_blank">{source.url}</a>}</li>)}</ul>{article.modelVersion ? <p className="mt-3 text-sm">Calculation rules: <code>{article.modelVersion}</code></p> : null}</footer>
-      <RatingWidget contentHash={article.contentHash} initialHistory={article.ratings} objectId={article.id} objectKind="article" ventureId="mma-files" />
-    </CardContent></Card>) : <Callout>No finished articles are stored yet. Test examples stay outside this view, and a failed live slot is never disguised as a finished article.</Callout>}
+    {snapshot.articles.length ? articleWeeks(snapshot.articles).map(([week, articles]) => <section className="grid gap-5" key={week}>
+      <h3 className="font-mono text-sm font-bold uppercase tracking-[0.12em]">Week from <time dateTime={week}>{formatDate(week)}</time></h3>
+      {articles.map((article) => <Card key={article.id}><CardContent>
+        <div className="mb-5 flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]"><time dateTime={article.date}>{formatDate(article.date)}</time> · {article.slot.toUpperCase()}</p><div className="mt-2 flex flex-wrap gap-2">{article.placements.map((placement) => <Badge key={placement}>{placement}</Badge>)}{article.organization ? <Badge tone="success">{article.organization.toUpperCase()}</Badge> : <Badge tone="warning">Missing organization</Badge>}</div></div><Badge tone={statusTone(article.status)}>{statusLabel(article.status)}</Badge></div>
+        <MmaFilesArticlePreview article={article} />
+        <footer className="mt-8 border-t border-[var(--border)] pt-6"><h4 className="font-mono text-xs font-bold uppercase tracking-[0.12em]">Sources behind this article</h4><ul className="mt-3 grid gap-2 text-sm text-[var(--fog)]">{article.sources.map((source, index) => <li className="break-all" key={`${source.kind}-${index}`}>{source.kind === "internal" ? source.ref : <a className="text-[var(--accent)] underline" href={source.url} rel="noreferrer" target="_blank">{source.url}</a>}</li>)}</ul>{article.modelVersion ? <p className="mt-3 text-sm">Calculation rules: <code>{article.modelVersion}</code></p> : null}</footer>
+        <RatingWidget contentHash={article.contentHash} initialHistory={article.ratings} objectId={article.id} objectKind="article" ventureId="mma-files" />
+      </CardContent></Card>)}
+    </section>) : <Callout>No finished articles are stored yet. Test examples stay outside this view, and a failed live slot is never disguised as a finished article.</Callout>}
+  </div>;
+
+  if (tab === "predictions") return <div className="mt-8 grid gap-6">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {(["ufc", "oktagon"] as const).map((org) => { const counts = snapshot.predictions.organizations[org]; return <Card key={org}><CardContent><p className="font-mono text-xs uppercase text-[var(--fog)]">{org}</p><h3 className="mt-2 text-3xl font-semibold">{counts.events} events</h3><p className="mt-2 text-sm text-[var(--fog)]">{counts.bouts} bouts · {counts.confirmed} confirmed · {counts.completed} completed</p></CardContent></Card>; })}
+      <Card><CardContent><p className="font-mono text-xs uppercase text-[var(--fog)]">Corroboration</p><h3 className="mt-2 text-3xl font-semibold">{snapshot.predictions.corroboration.multipleProviders}</h3><p className="mt-2 text-sm text-[var(--fog)]">multiple providers · {snapshot.predictions.corroboration.oneProvider} single-provider</p></CardContent></Card>
+      <Card><CardContent><p className="font-mono text-xs uppercase text-[var(--fog)]">Latest snapshot</p><h3 className="mt-2 text-3xl font-semibold">{snapshot.predictions.lastSnapshotAgeHours === null ? "—" : `${snapshot.predictions.lastSnapshotAgeHours.toFixed(1)} h`}</h3><p className="mt-2 text-sm text-[var(--fog)]">{snapshot.predictions.lastSnapshotAt ? formatDate(snapshot.predictions.lastSnapshotAt) : "No source snapshot"}</p></CardContent></Card>
+    </div>
+    <div className="grid gap-4 lg:grid-cols-2">{snapshot.predictions.sources.map((source) => <Card key={source.id}><CardContent><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]">{source.id}</p><h3 className="mt-2 text-xl font-semibold">{source.name}</h3></div><Badge tone={source.state === "wired" ? "success" : source.state === "blocked" ? "danger" : "warning"}>{source.state}</Badge></div><p className="mt-4 text-sm">{source.quota}</p><p className="mt-2 text-sm text-[var(--fog)]">{source.lastRetrievedAt ? `${source.lastStatus} · ${source.freshnessHours?.toFixed(1)} h old` : "No recorded run"}</p></CardContent></Card>)}</div>
+  </div>;
+
+  if (tab === "banners") return <div className="mt-8 grid gap-5">
+    <Callout tone={snapshot.banners.status === "staged" ? "warning" : "neutral"}>Contract: {snapshot.banners.status}. {snapshot.banners.status === "staged" ? "Changes are staged only; nothing reaches the magazine until delivery is requested." : snapshot.banners.receiptRef ?? "No banner delivery has been recorded."}</Callout>
+    <div className="grid gap-4 lg:grid-cols-2">{snapshot.banners.slots.map((slot) => <Card key={slot.id}><CardContent><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]">{slot.pages.join(" · ")}</p><h3 className="mt-2 text-xl font-semibold">{slot.id}</h3></div><Badge tone={slot.enabled ? "success" : "neutral"}>{slot.enabled ? "enabled" : "disabled"}</Badge></div><p className="mt-4 text-sm text-[var(--fog)]">{slot.desktop.width}×{slot.desktop.height} desktop{slot.mobile ? ` · ${slot.mobile.width}×${slot.mobile.height} mobile` : ""}</p><p className="mt-2 text-sm">{slot.image ? slot.image.src : "No creative staged"}</p>{slot.stagedChanged ? <Badge tone="warning">staged change</Badge> : null}</CardContent></Card>)}</div>
   </div>;
 
   if (tab === "calendar") return <div className="mt-8 grid gap-5">

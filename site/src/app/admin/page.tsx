@@ -419,10 +419,10 @@ export default async function AdminPage({
                 snapshot={fightaiq}
                 tab={selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources"}
               />
-            ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab) ? (
+            ) : selectedVenture.id === "mma-files" && selectedTab && ["articles", "predictions", "banners", "calendar", "social-lab"].includes(selectedTab) ? (
               <MmaFilesAdminPanel
                 snapshot={mmaFiles}
-                tab={selectedTab as "articles" | "calendar" | "social-lab"}
+                tab={selectedTab as "articles" | "predictions" | "banners" | "calendar" | "social-lab"}
               />
             ) : visibleCards.length ? (
               <div className="grid gap-4 xl:grid-cols-2">

@@ -287,6 +287,8 @@
       },
       "adminTabs": [
         "articles",
+        "predictions",
+        "banners",
         "calendar",
         "social-lab"
       ],
