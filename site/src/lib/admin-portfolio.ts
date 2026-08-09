@@ -13,13 +13,18 @@ import {
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/**
+ * Every tab a venture may declare. A tab no venture declares is dead, and a dead tab hides a
+ * surface: `templates` fell out of the list and took the whole template gallery with it, leaving
+ * a component nothing could route to. `decks` outlived the question it answered.
+ *
+ * This is the registry's validator, not the URL's — page.tsx already resolves an unknown
+ * `?tab=` to the venture's first tab, so a stale bookmark lands somewhere rather than nowhere.
+ */
 const adminTabs = [
   "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
-  // `templates` and `decks` were two halves of one question and are now one `studio` tab. They
-  // stay in the list because a bookmarked `?tab=templates` must still resolve rather than 404 —
-  // an unknown tab falls through to the venture's first, which is what the selector already does.
-  "articles", "calendar", "social-lab", "studio", "templates", "inspiration", "decks", "hooks",
+  "articles", "calendar", "social-lab", "studio", "templates", "inspiration", "hooks",
   "packages"
 ] as const;
 

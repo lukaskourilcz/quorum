@@ -67,8 +67,16 @@ export function HookBrainAdminPanel({ snapshot }: { snapshot: HookBrainSnapshot 
         title="Channel cooldown occupancy"
         subtitle="Every follower sees every post, so a channel cools a hook for max(2 × cooldownDays, 14) days — twice the in-app rule, because there is no per-user dilution to average a repeat away."
       >
+        {/* Both tables below are driven by `state/ventures/carousel-studio/hook-channels.json`,
+            which the first posting day creates. Until then an empty table is not a result, so
+            the copy says which day fills it rather than rendering headers over nothing. */}
         {snapshot.channels.length === 0
-          ? <p className="text-sm text-[var(--fog)]">No channel has posted yet.</p>
+          ? (
+            <p className="text-sm text-[var(--fog)]">
+              No hook has been posted yet, so no channel is cooling anything. This table fills on
+              the first posting day and shows one row per channel from then on.
+            </p>
+          )
           : (
             <Scroller>
               <table className="w-full min-w-[40rem] border-collapse text-sm">
@@ -140,7 +148,12 @@ export function HookBrainAdminPanel({ snapshot }: { snapshot: HookBrainSnapshot 
         subtitle="What actually posted, with the size of the set each hook was chosen from. A logged fallback counts as a pass — an unlogged missing assignment does not."
       >
         {snapshot.recent.length === 0
-          ? <p className="text-sm text-[var(--fog)]">Nothing has been assigned yet.</p>
+          ? (
+            <p className="text-sm text-[var(--fog)]">
+              Nothing has posted yet, so there is no assignment history to show. Every pack that
+              goes out lands here, including the ones that took the no-hook fallback.
+            </p>
+          )
           : (
             <>
               <div className="mb-4 flex flex-wrap items-center gap-2">

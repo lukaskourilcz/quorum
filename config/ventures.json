@@ -229,6 +229,7 @@
       },
       "adminTabs": [
         "studio",
+        "templates",
         "inspiration",
         "hooks"
       ],

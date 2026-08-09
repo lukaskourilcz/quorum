@@ -311,6 +311,12 @@ export default async function AdminPage({
         count: labArticles.length
       };
     }
+    if (id === "carousel-studio" && selectedTab === "templates") {
+      return {
+        node: <CarouselStudioAdminPanel snapshot={carouselStudio} tab="templates" />,
+        count: carouselStudio.templates.length
+      };
+    }
     if (id === "carousel-studio" && selectedTab === "inspiration") {
       return {
         node: <CarouselStudioAdminPanel snapshot={carouselStudio} tab="inspiration" />,
