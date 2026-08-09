@@ -23,8 +23,8 @@ const slate = EditorialSlateSchema.parse({
   schemaVersion: "editorial-slate/1",
   date: "2026-08-01",
   slots: [
-    { slot: "am", format: "fight-week-preview", subjectRefs: ["ufc:event:fixture-prague"], rationale: "The verified card is close enough for a sourced preview.", assignedWriter: "JAB", status: "assigned" },
-    { slot: "pm", format: "fighter-profile", subjectRefs: ["oktagon:eva-example"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "QUILL", status: "assigned" }
+    { slot: "am", organization: "ufc", format: "fight-week-preview", subjectRefs: ["ufc:event:fixture-prague"], rationale: "The verified card is close enough for a sourced preview.", assignedWriter: "JAB", status: "assigned" },
+    { slot: "pm", organization: "oktagon", format: "fighter-profile", subjectRefs: ["oktagon:eva-example"], rationale: "The sourced file is complete enough for a useful profile.", assignedWriter: "QUILL", status: "assigned" }
   ],
   vaultVerdicts: [
     // Not a repository path. These two subjects are synthetic, so no file on disk backs them,
@@ -93,6 +93,40 @@ async function production(root: string, selectedGateway = gateway) {
 }
 
 describe("MMA Files article production", () => {
+  it("writes the assigned organization into a newly composed package", async () => {
+    const root = await tempRoot("mma-files-organization-");
+    const result = await production(root);
+    expect(result.article.organization).toBe("ufc");
+    expect(hasValidArticlePackageHash(result.article)).toBe(true);
+  });
+
+  it("derives organization from the event or first fighter for a historical slate", async () => {
+    const root = await tempRoot("mma-files-organization-fallback-");
+    const historicalSlate = EditorialSlateSchema.parse({
+      ...slate,
+      slots: slate.slots.map(({ organization: _organization, ...slot }) => slot)
+    });
+    const result = await produceMmaFilesArticle({
+      root,
+      slate: historicalSlate,
+      slot: "am",
+      slug: "fallback-organization",
+      publishAt: new Date("2026-08-01T08:00:00.000Z"),
+      mode: "data-only",
+      evidence: {
+        sources: [{ kind: "internal", ref: "state/ventures/fightaiq/fighters/ufc/alex-example.json" }],
+        fighterRefs: ["ufc:alex-example", "ufc:sam-example"],
+        eventRef: "ufc:event:fixture-prague",
+        heroSpec: { template: "tale-of-the-tape", bindings: { headline: "Alex Example vs Sam Example" } },
+        evidenceText: "Fixture-only evidence packet."
+      },
+      gateway,
+      stylebookRaw: await loadStylebook(repoRoot),
+      socialProductionEnabled: false
+    });
+    expect(result.article.organization).toBe("ufc");
+  });
+
   it("replays a dry article slot idempotently throughout the same Prague day", async () => {
     const root = await tempRoot("mma-files-dry-replay-");
     const first = await runDryArticleProduction({
