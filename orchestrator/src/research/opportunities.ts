@@ -95,11 +95,30 @@ export function evaluateOpportunity(
   };
 }
 
+/** The one line a dormant gate publishes, in place of a daily list of reasons about fixtures. */
+export const OPPORTUNITY_GATE_DORMANT =
+  "Opportunity gate dormant — no live opportunity on file.";
+
+/**
+ * Whether anything on file could pass the gate at all.
+ *
+ * A fixture is refused by `evaluateOpportunity` on its first rule, so a file holding only fixtures
+ * produces the same seven-reason rejection every single day — fifteen board shifts of identical
+ * boilerplate about candidates nobody proposed. The gate is a decision, and a decision with no
+ * live candidate is not a rejection: it is a question that was not asked.
+ *
+ * Nothing about the threshold, the stage discipline or the evidence rules changes. The moment a
+ * non-fixture record appears the gate runs exactly as it always has.
+ */
+export function opportunityGateIsLive(candidates: readonly Opportunity[]): boolean {
+  return candidates.some((candidate) => !candidate.fixture);
+}
+
 export function selectOpportunity(
   candidates: readonly Opportunity[],
   evidence: readonly Evidence[]
 ): OpportunityGate {
-  if (candidates.length === 0) {
+  if (!opportunityGateIsLive(candidates)) {
     return {
       opportunityId: "NONE",
       outcome: "INSUFFICIENT_EVIDENCE",
@@ -108,7 +127,7 @@ export function selectOpportunity(
       independentEvidenceCount: 0,
       directEvidenceCount: 0,
       passed: false,
-      reasons: ["No opportunity candidates were supplied."],
+      reasons: [OPPORTUNITY_GATE_DORMANT],
       evidenceRefs: []
     };
   }
