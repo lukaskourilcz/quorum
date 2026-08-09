@@ -378,8 +378,8 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
   }
 }
 
-async function visualCards(root: string, ventureId: string, ratings: readonly RatingRecord[]) {
-  if (ventureId !== "caught-up") return [];
+/** DNESKAi's social archive is the only current implementation of the `visuals` tab. */
+async function caughtUpVisualCards(root: string, ratings: readonly RatingRecord[]) {
   const archive = await readAdminSocialArchive(root);
   return archive.packs.flatMap((pack) =>
     (Object.keys(pack.byLocale) as Array<"en" | "cs">).flatMap((locale) => {
@@ -391,7 +391,7 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
         const id = `caught-up-${pack.date}-${locale}-${channel}`;
         return {
           id,
-          ventureId,
+          ventureId: "caught-up",
           kind: "visual",
           title: `${locale.toUpperCase()} ${channel} package`,
           summary: item.text,
@@ -496,11 +496,16 @@ export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPo
     readAdminSocialArchive(root)
   ]);
   const ventures = await Promise.all(configs.map(async (venture): Promise<AdminVenture> => {
+    if (venture.adminTabs.includes("visuals") && venture.id !== "caught-up") {
+      throw new Error(`Admin has no visuals reader for venture ${venture.id}.`);
+    }
     const ratingState = await readRatings(root, venture.id);
     const [ideas, plans, visuals, packages] = await Promise.all([
       ideaCards(root, venture.id, venture.ledgerNamespace, ratingState.ratings),
       planRecords(root, venture.id, ratingState.ratings),
-      visualCards(root, venture.id, ratingState.ratings),
+      venture.id === "caught-up" && venture.adminTabs.includes("visuals")
+        ? caughtUpVisualCards(root, ratingState.ratings)
+        : Promise.resolve([]),
       packageCards(root, venture.id, ratingState.ratings)
     ]);
     return {

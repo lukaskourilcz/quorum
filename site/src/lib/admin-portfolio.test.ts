@@ -106,4 +106,18 @@ describe("admin portfolio projection", () => {
       ventures: [{ cards: [{ id: idea.id, ratings: [{ rating: "perfect" }], graduation: "Rated perfect — graduated" }] }]
     });
   });
+
+  it("refuses a visuals tab until that venture supplies an explicit reader", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-admin-portfolio-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{
+        id: "future-venture", name: "Future venture", status: "exploration",
+        ledgerNamespace: "future-venture", adminTabs: ["visuals"]
+      }]
+    }));
+
+    await expect(readAdminPortfolio(root)).rejects.toThrow("Admin has no visuals reader for venture future-venture.");
+  });
 });
