@@ -22,26 +22,39 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ venture: string; slug: string; style: string; slide: string }> }
+  { params }: { params: Promise<{ venture: string; slug: string; date: string; style: string; slide: string }> }
 ): Promise<Response> {
   // Behind the admin session. These are articles that have not been published yet — the
   // edition outbox holds tomorrow's — and the public template preview next door is
   // deliberately open because it renders fixture copy, not the desk's unpublished work.
   const authorization = verifyAdminRequest(request);
   if (authorization !== "ok") return adminAuthorizationError(authorization);
-  const { venture, slug, style, slide } = await params;
+  const { venture, slug, date, style, slide } = await params;
   const slideIndex = Number(slide) - 1;
   const brand = CAROUSEL_BRANDS[venture as keyof typeof CAROUSEL_BRANDS];
-  if (!brand || !DECK_STYLES.includes(style as DeckStyle) || !Number.isInteger(slideIndex) || slideIndex < 0) {
+  if (
+    !brand || !DECK_STYLES.includes(style as DeckStyle)
+    || !/^\d{4}-\d{2}-\d{2}$/.test(date)
+    || !Number.isInteger(slideIndex) || slideIndex < 0
+  ) {
     return Response.json({ error: "Slide not found." }, { status: 404 });
   }
 
-  const deck = (await readAdminDecks(40)).find((entry) => entry.venture === venture && entry.slug === slug);
+  /*
+   * Resolved by the whole identity, not the first slug that matches.
+   *
+   * Three redeliveries of one MMA event share a slug, so `find` by slug handed all three cards
+   * the same deck: same slides, same photograph, same bytes. An article is a venture, a slug and
+   * a date, and every one of the three has to be able to render as itself.
+   */
+  const deck = (await readAdminDecks(40)).find(
+    (entry) => entry.venture === venture && entry.slug === slug && entry.date === date
+  );
   if (!deck) return Response.json({ error: "Slide not found." }, { status: 404 });
 
   const template = articleDeckTemplate(deck.slides.length, style as DeckStyle);
   const strings = Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text]));
-  const hero = await readArticleHeroPng(deck.venture, deck.slug);
+  const hero = await readArticleHeroPng(deck.venture, deck.slug, deck.date);
 
   try {
     // This slide, not the deck it belongs to. The whole-deck renderer next door rasterises every
@@ -70,7 +83,7 @@ export async function GET(
     // Said out loud, because the silent version of this line is why a deployed renderer that
     // could not load its image library went unexplained: every slide answered 500 and the only
     // record anywhere was the status code.
-    console.error(`Carousel slide render failed for ${venture}/${slug}/${style}/${slide}:`, error);
+    console.error(`Carousel slide render failed for ${venture}/${slug}/${date}/${style}/${slide}:`, error);
     return Response.json({ error: "Slide could not be rendered." }, { status: 500 });
   }
 }

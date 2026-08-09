@@ -12,11 +12,17 @@ const OVERRIDES_PATH = "ventures/carousel-studio/deck-style-overrides.json";
  * — so an owner choosing a design changed a picture on a screen and no bytes anywhere. An entry
  * in the override file wins; everything else is unchanged, and the deck carries the same text
  * and the same photograph either way.
+ *
+ * An article is identified by venture, slug *and* date: three redeliveries of one MMA event
+ * share a slug, and the owner picking a design for one of them must not silently repaint the
+ * other two. An exact `venture+slug+date` record wins; a record written before dates existed
+ * still answers for every redelivery of its slug, so nothing already chosen comes unbound.
  */
 export async function effectiveDeckStyle(input: {
   root: string;
   venture: "caught-up" | "mma-files";
   slug: string;
+  date: string;
   seed: string;
 }): Promise<DeckStyle> {
   const derived = deckStyleFor(input.seed, DECK_STYLES) as DeckStyle;
@@ -28,10 +34,12 @@ export async function effectiveDeckStyle(input: {
   }
   const overrides = (raw as { overrides?: unknown }).overrides;
   if (!Array.isArray(overrides)) return derived;
-  const match = overrides.find((entry) => {
+  const forArticle = overrides.filter((entry) => {
     const override = entry as { venture?: unknown; slug?: unknown };
     return override?.venture === input.venture && override.slug === input.slug;
-  }) as { style?: unknown } | undefined;
+  }) as Array<{ date?: unknown; style?: unknown }>;
+  const match = forArticle.find((entry) => entry.date === input.date)
+    ?? forArticle.find((entry) => entry.date === undefined);
   return typeof match?.style === "string" && (DECK_STYLES as readonly string[]).includes(match.style)
     ? match.style as DeckStyle
     : derived;

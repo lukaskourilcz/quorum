@@ -1,5 +1,5 @@
 import "server-only";
-import { readDeckStyleOverrides } from "@/lib/carousel-studio-admin-store";
+import { matchDeckStyleOverride, readDeckStyleOverrides } from "@/lib/carousel-studio-admin-store";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -101,8 +101,8 @@ async function readJsonFiles(directory: string): Promise<unknown[]> {
 
 export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
   const overrides = await readDeckStyleOverrides();
-  const overrideFor = (venture: "caught-up" | "mma-files", slug: string) =>
-    overrides.find((entry) => entry.venture === venture && entry.slug === slug)?.style;
+  const overrideFor = (venture: "caught-up" | "mma-files", slug: string, date: string) =>
+    matchDeckStyleOverride(overrides, venture, slug, date)?.style;
   const articles = await readJsonFiles(path.join(repositoryRoot, "state/ventures/mma-files/articles"));
   const decks: AdminDeck[] = [];
 
@@ -116,13 +116,14 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
     };
     const cs = article.localizations?.cs;
     if (!article.slug || !cs?.title || !cs.dek || !cs.bodyMDX) continue;
+    const date = (article.publishAt ?? "").slice(0, 10);
     decks.push(reviewed({
       venture: "mma-files",
       slug: article.slug,
       title: cs.title,
-      date: (article.publishAt ?? "").slice(0, 10),
+      date,
       seed: article.slug,
-      overrideStyle: overrideFor("mma-files", article.slug ?? ""),
+      overrideStyle: overrideFor("mma-files", article.slug, date),
       hasHero: Boolean(article.image?.hero_bytes_base64),
       heroCredit: creditOf(article.image),
       slides: buildArticleDeck({
@@ -146,13 +147,14 @@ export async function readAdminDecks(limit = 12): Promise<AdminDeck[]> {
       | { slug?: string; title?: string; alternative_headlines?: string[]; dek?: string; what_changed?: string[]; why_it_matters?: string[]; uncertainty?: string[] }
       | undefined;
     if (pkg.status !== "edition" || !frontmatter?.slug || !frontmatter.title || !frontmatter.dek) continue;
+    const date = pkg.date ?? "";
     decks.push(reviewed({
       venture: "caught-up",
       slug: frontmatter.slug,
       title: frontmatter.title,
-      date: pkg.date ?? "",
+      date,
       seed: pkg.date ?? frontmatter.slug,
-      overrideStyle: overrideFor("caught-up", frontmatter.slug ?? ""),
+      overrideStyle: overrideFor("caught-up", frontmatter.slug, date),
       hasHero: Boolean(pkg.image?.hero_bytes_base64),
       heroCredit: creditOf(pkg.image),
       slides: buildArticleDeck({

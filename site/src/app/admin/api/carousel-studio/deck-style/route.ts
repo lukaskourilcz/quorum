@@ -39,19 +39,21 @@ export async function POST(request: Request): Promise<Response> {
   }
   let value: unknown;
   try { value = await request.json(); } catch { return Response.json({ error: "Request must be valid JSON." }, { status: 400 }); }
-  const candidate = value as { venture?: unknown; slug?: unknown; style?: unknown };
+  const candidate = value as { venture?: unknown; slug?: unknown; date?: unknown; style?: unknown };
   if (
     !value || typeof value !== "object" ||
     (candidate.venture !== "caught-up" && candidate.venture !== "mma-files") ||
     typeof candidate.slug !== "string" ||
+    typeof candidate.date !== "string" ||
     typeof candidate.style !== "string"
   ) {
-    return Response.json({ error: "Deck design request is incomplete." }, { status: 422 });
+    return Response.json({ error: "Deck design request is incomplete.", cause: "rejected" }, { status: 422 });
   }
   try {
     const { overrides, commit } = await setDeckStyleOverride({
       venture: candidate.venture,
       slug: candidate.slug,
+      date: candidate.date,
       style: candidate.style,
       styles: DECK_STYLES
     });

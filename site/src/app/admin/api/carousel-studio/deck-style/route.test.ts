@@ -21,7 +21,7 @@ function request(style = "editorial"): Request {
       Origin: "https://boardless.example",
       cookie: `${ADMIN_SESSION_COOKIE}=${createAdminSessionToken("owner", "correct-password")}`
     },
-    body: JSON.stringify({ venture: "mma-files", slug: "ufc-fight-night-gamrot-vs-salkilld", style })
+    body: JSON.stringify({ venture: "mma-files", slug: "ufc-fight-night-gamrot-vs-salkilld", date: "2026-08-06", style })
   });
 }
 

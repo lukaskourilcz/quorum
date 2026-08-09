@@ -189,8 +189,29 @@ const deckStyleOverridesPath = "state/ventures/carousel-studio/deck-style-overri
 export interface DeckStyleOverride {
   venture: "caught-up" | "mma-files";
   slug: string;
+  /**
+   * The article's publication date, which is the other half of its identity.
+   *
+   * Optional, and that is the migration rather than laxity: three overrides recorded before this
+   * field existed name only a slug, and they must keep binding to the article the owner was
+   * looking at when they clicked. Matching prefers an exact `venture+slug+date` and falls back to
+   * the slug alone, so an old record still applies to every redelivery of its event until the
+   * owner picks a design for one of them specifically.
+   */
+  date?: string;
   style: string;
   changedAt: string;
+}
+
+/** The recorded choice for one article, exact date first and slug-only as the fallback. */
+export function matchDeckStyleOverride(
+  overrides: readonly DeckStyleOverride[],
+  venture: DeckStyleOverride["venture"],
+  slug: string,
+  date: string
+): DeckStyleOverride | undefined {
+  const forArticle = overrides.filter((entry) => entry.venture === venture && entry.slug === slug);
+  return forArticle.find((entry) => entry.date === date) ?? forArticle.find((entry) => entry.date === undefined);
 }
 
 /**
@@ -216,32 +237,44 @@ function isDeckStyleOverride(value: unknown): value is DeckStyleOverride {
   const entry = value as Partial<DeckStyleOverride>;
   return (entry.venture === "caught-up" || entry.venture === "mma-files")
     && typeof entry.slug === "string"
+    && (entry.date === undefined || typeof entry.date === "string")
     && typeof entry.style === "string"
     && typeof entry.changedAt === "string";
 }
 
 export async function setDeckStyleOverride(
-  input: { venture: DeckStyleOverride["venture"]; slug: string; style: string; styles: readonly string[]; now?: Date },
+  input: { venture: DeckStyleOverride["venture"]; slug: string; date: string; style: string; styles: readonly string[]; now?: Date },
   root = repositoryRoot
 ): Promise<{ overrides: DeckStyleOverride[]; commit: string | null }> {
   const slug = input.slug.trim();
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
     throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article slug.");
   }
+  const date = input.date.trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article date.");
+  }
   if (!input.styles.includes(input.style)) {
     throw new CarouselStudioPersistenceError("CONFLICT", "That deck design does not exist.");
   }
   const changedAt = (input.now ?? new Date()).toISOString();
+  /*
+   * Replaces the record for this exact article and nothing else.
+   *
+   * Three redeliveries of one event share a slug, so a record written before dates existed
+   * answers for all three. Picking a design for one of them must not silently un-pick the other
+   * two: the dated record wins for its own date, the undated one keeps answering for the rest.
+   */
   const overrides = [
-    { venture: input.venture, slug, style: input.style, changedAt },
+    { venture: input.venture, slug, date, style: input.style, changedAt },
     ...(await readDeckStyleOverrides(root)).filter(
-      (override) => override.venture !== input.venture || override.slug !== slug
+      (override) => override.venture !== input.venture || override.slug !== slug || override.date !== date
     )
   ].slice(0, 200);
   const write = await persist(
     deckStyleOverridesPath,
     { schemaVersion: "carousel-deck-style-overrides/1", overrides, updatedAt: changedAt },
-    `admin: set the ${input.venture} deck design for ${slug}`,
+    `admin: set the ${input.venture} deck design for ${date} ${slug}`,
     root
   );
   return { overrides, commit: write.commit };

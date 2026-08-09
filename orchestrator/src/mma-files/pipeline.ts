@@ -192,7 +192,13 @@ export async function produceMmaFilesArticle(input: {
   const article = ArticlePackageSchema.parse({ ...finalContent, packageHash: articlePackageHash(finalContent) });
   const stored = await storeArticlePackage(input.root, article);
   const socialPack = article.status === "published" && input.socialProductionEnabled !== false
-    ? buildSocialVariantPack(article, await effectiveDeckStyle({ root: input.root, venture: "mma-files", slug: article.slug, seed: article.slug }))
+    ? buildSocialVariantPack(article, await effectiveDeckStyle({
+        root: input.root,
+        venture: "mma-files",
+        slug: article.slug,
+        date: article.publishAt.slice(0, 10),
+        seed: article.slug
+      }))
     : null;
   const socialPath = socialPack ? await storeSocialVariantPack(input.root, socialPack) : null;
   const mediaPaths = await storeArticleMedia(

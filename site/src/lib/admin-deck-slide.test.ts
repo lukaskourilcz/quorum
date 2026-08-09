@@ -50,24 +50,53 @@ describe("one deck's worth of slide requests", () => {
     vi.resetModules();
   });
 
+  function storedArticle(date: string, title: string, hero: string | null): string {
+    return JSON.stringify({
+      slug: "fixture-article",
+      publishAt: `${date}T06:00:00Z`,
+      status: "published",
+      ...(hero ? { image: { hero_bytes_base64: hero, license: { attribution_html: "<a href='#'>Autor</a>, CC BY 4.0" } } } : {}),
+      localizations: {
+        cs: {
+          title,
+          dek: "Perex testovacího článku, který popisuje, co se stalo a proč to má význam.",
+          bodyMDX: BODY
+        }
+      }
+    });
+  }
+
   async function fixture(): Promise<string> {
     const root = await mkdtemp(path.join(os.tmpdir(), "deck-slide-"));
     roots.push(root);
     const directory = path.join(root, "state/ventures/mma-files/articles");
     await mkdir(directory, { recursive: true });
-    await writeFile(path.join(directory, "2026-08-04-am-fixture.json"), JSON.stringify({
-      slug: "fixture-article",
-      publishAt: "2026-08-04T06:00:00Z",
-      status: "published",
-      image: { hero_bytes_base64: HERO_WEBP, license: { attribution_html: "<a href='#'>Autor</a>, CC BY 4.0" } },
-      localizations: {
-        cs: {
-          title: "Titulek testovacího článku o zápase",
-          dek: "Perex testovacího článku, který popisuje, co se stalo a proč to má význam.",
-          bodyMDX: BODY
-        }
-      }
-    }));
+    await writeFile(
+      path.join(directory, "2026-08-04-am-fixture.json"),
+      storedArticle("2026-08-04", "Titulek testovacího článku o zápase", HERO_WEBP)
+    );
+    return root;
+  }
+
+  /**
+   * Two redeliveries of one event: one slug, two dates, two different articles.
+   *
+   * This is the shape of the real bug — three MMA packages share
+   * `ufc-event-ufc-fight-night-gamrot-vs-salkilld` and the panel showed one deck three times.
+   */
+  async function redeliveries(): Promise<string> {
+    const root = await mkdtemp(path.join(os.tmpdir(), "deck-slide-"));
+    roots.push(root);
+    const directory = path.join(root, "state/ventures/mma-files/articles");
+    await mkdir(directory, { recursive: true });
+    await writeFile(
+      path.join(directory, "2026-08-05-am-fixture.json"),
+      storedArticle("2026-08-05", "První doručení testovacího zápasového článku", HERO_WEBP)
+    );
+    await writeFile(
+      path.join(directory, "2026-08-06-am-fixture.json"),
+      storedArticle("2026-08-06", "Druhé doručení téhož zápasu s jiným titulkem", null)
+    );
     return root;
   }
 
@@ -81,7 +110,7 @@ describe("one deck's worth of slide requests", () => {
     const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
     const { readAdminDecks } = await import("./admin-decks");
     const { readArticleHeroPng } = await import("./admin-deck-hero");
-    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[style]/[slide]/route");
+    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[style]/[slide]/route");
     const {
       ARTICLE_HERO_SLOT,
       CAROUSEL_BRANDS,
@@ -97,7 +126,7 @@ describe("one deck's worth of slide requests", () => {
     const style = "editorial";
 
     // What the pipeline would ship: the whole deck, rendered the way every publisher renders it.
-    const hero = await readArticleHeroPng(deck!.venture, deck!.slug);
+    const hero = await readArticleHeroPng(deck!.venture, deck!.slug, deck!.date);
     const shipped = await renderCarouselPng({
       template: articleDeckTemplate(deck!.slides.length, style),
       payload: {
@@ -116,7 +145,7 @@ describe("one deck's worth of slide requests", () => {
     for (let slide = 1; slide <= deck!.slides.length; slide += 1) {
       const response = await GET(
         new Request("https://example.test/x", { headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` } }),
-        { params: Promise.resolve({ venture: deck!.venture, slug: deck!.slug, style, slide: String(slide) }) }
+        { params: Promise.resolve({ venture: deck!.venture, slug: deck!.slug, date: deck!.date, style, slide: String(slide) }) }
       );
       expect(response.status).toBe(200);
       expect(response.headers.get("content-type")).toBe("image/png");
@@ -133,6 +162,40 @@ describe("one deck's worth of slide requests", () => {
     });
   }, 120_000);
 
+  it("gives two redeliveries of one event two decks, not one deck twice", async () => {
+    const root = await redeliveries();
+    vi.resetModules();
+    vi.stubEnv("BOARDLESSAI_REPO_ROOT", root);
+    vi.stubEnv("ADMIN_USER", "owner");
+    vi.stubEnv("ADMIN_PASSWORD", "secret");
+
+    const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
+    const { readAdminDecks } = await import("./admin-decks");
+    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[style]/[slide]/route");
+
+    const decks = await readAdminDecks(40);
+    expect(decks).toHaveLength(2);
+    // One slug, two identities. Keying on the slug alone collapsed them into one card, and the
+    // React list keyed on the same thing and warned about it.
+    expect(new Set(decks.map((deck) => deck.slug)).size).toBe(1);
+    expect(new Set(decks.map((deck) => `${deck.venture}/${deck.slug}/${deck.date}`)).size).toBe(2);
+    expect(decks[0]!.hasHero).not.toBe(decks[1]!.hasHero);
+
+    const token = createAdminSessionToken("owner", "secret");
+    const cover = async (date: string) => {
+      const response = await GET(
+        new Request("https://example.test/x", { headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` } }),
+        { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date, style: "editorial", slide: "1" }) }
+      );
+      expect(response.status).toBe(200);
+      return Buffer.from(await response.arrayBuffer());
+    };
+
+    // Different headline, different photograph — so different bytes. The route resolving by
+    // first-slug-match served the same cover for both dates.
+    expect((await cover("2026-08-05")).equals(await cover("2026-08-06"))).toBe(false);
+  }, 120_000);
+
   it("answers 404 for a slide past the end of the deck without rasterising anything", async () => {
     const root = await fixture();
     vi.resetModules();
@@ -140,13 +203,13 @@ describe("one deck's worth of slide requests", () => {
     vi.stubEnv("ADMIN_USER", "owner");
     vi.stubEnv("ADMIN_PASSWORD", "secret");
     const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
-    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[style]/[slide]/route");
+    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[style]/[slide]/route");
     const token = createAdminSessionToken("owner", "secret");
 
     rasterCalls.length = 0;
     const response = await GET(
       new Request("https://example.test/x", { headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` } }),
-      { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", style: "editorial", slide: "11" }) }
+      { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date: "2026-08-04", style: "editorial", slide: "11" }) }
     );
     expect(response.status).toBe(404);
     expect(rasterCalls.filter((call) => call === "svg->png")).toHaveLength(0);

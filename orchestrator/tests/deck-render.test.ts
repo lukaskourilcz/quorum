@@ -45,14 +45,15 @@ describe("the deck cover", () => {
 describe("the deck design the owner picked", () => {
   it("derives a style when nothing is recorded", async () => {
     const root = await stateRoot();
-    expect(await effectiveDeckStyle({ root, venture: "mma-files", slug: "oktagon-lopez", seed: "oktagon-lopez" }))
-      .toBe(await effectiveDeckStyle({ root, venture: "mma-files", slug: "oktagon-lopez", seed: "oktagon-lopez" }));
+    const article = { root, venture: "mma-files" as const, slug: "oktagon-lopez", date: "2026-08-04", seed: "oktagon-lopez" };
+    expect(await effectiveDeckStyle(article)).toBe(await effectiveDeckStyle(article));
   });
 
   it("takes the recorded choice over the derived one", async () => {
     const root = await stateRoot();
     await mkdir(path.join(root, "ventures", "carousel-studio"), { recursive: true });
-    const derived = await effectiveDeckStyle({ root, venture: "caught-up", slug: "tri-laboratore", seed: "2026-08-06" });
+    const article = { root, venture: "caught-up" as const, slug: "tri-laboratore", date: "2026-08-06", seed: "2026-08-06" };
+    const derived = await effectiveDeckStyle(article);
     // Any real style but the derived one. "grid" was here and is not in DECK_STYLES, so the
     // override would have been rejected and the assertion passed for the wrong reason.
     const chosen = DECK_STYLES.find((style) => style !== derived)!;
@@ -61,15 +62,65 @@ describe("the deck design the owner picked", () => {
       path.join(root, "ventures", "carousel-studio", "deck-style-overrides.json"),
       JSON.stringify({
         schemaVersion: "carousel-deck-style-overrides/1",
-        overrides: [{ venture: "caught-up", slug: "tri-laboratore", style: chosen, changedAt: "2026-08-06T10:00:00.000Z" }],
+        overrides: [{ venture: "caught-up", slug: "tri-laboratore", date: "2026-08-06", style: chosen, changedAt: "2026-08-06T10:00:00.000Z" }],
         updatedAt: "2026-08-06T10:00:00.000Z"
       }),
       "utf8"
     );
 
-    expect(await effectiveDeckStyle({ root, venture: "caught-up", slug: "tri-laboratore", seed: "2026-08-06" })).toBe(chosen);
+    expect(await effectiveDeckStyle(article)).toBe(chosen);
     // Another article on the same day is untouched: an override names one article.
-    expect(await effectiveDeckStyle({ root, venture: "caught-up", slug: "something-else", seed: "2026-08-06" })).toBe(derived);
+    expect(await effectiveDeckStyle({ ...article, slug: "something-else" })).toBe(derived);
+  });
+
+  /*
+   * Three redeliveries of one MMA event share a slug. Before dates were part of the identity the
+   * owner's choice for one of them was the choice for all three, and the panel showed one deck
+   * three times — the same bug at both ends of the pipe.
+   */
+  it("binds one redelivery without binding the others", async () => {
+    const root = await stateRoot();
+    await mkdir(path.join(root, "ventures", "carousel-studio"), { recursive: true });
+    const slug = "ufc-event-ufc-fight-night-gamrot-vs-salkilld";
+    const article = { root, venture: "mma-files" as const, slug, date: "2026-08-06", seed: slug };
+    const derived = await effectiveDeckStyle(article);
+    const chosen = DECK_STYLES.find((style) => style !== derived)!;
+    await writeFile(
+      path.join(root, "ventures", "carousel-studio", "deck-style-overrides.json"),
+      JSON.stringify({
+        schemaVersion: "carousel-deck-style-overrides/1",
+        overrides: [{ venture: "mma-files", slug, date: "2026-08-06", style: chosen, changedAt: "2026-08-08T10:00:00.000Z" }],
+        updatedAt: "2026-08-08T10:00:00.000Z"
+      }),
+      "utf8"
+    );
+
+    expect(await effectiveDeckStyle(article)).toBe(chosen);
+    expect(await effectiveDeckStyle({ ...article, date: "2026-08-05" })).toBe(derived);
+    expect(await effectiveDeckStyle({ ...article, date: "2026-08-08" })).toBe(derived);
+  });
+
+  /** The three records already on main name no date, and must go on binding. */
+  it("keeps honouring an override recorded before dates existed", async () => {
+    const root = await stateRoot();
+    await mkdir(path.join(root, "ventures", "carousel-studio"), { recursive: true });
+    const slug = "ufc-valentina-shevchenko";
+    const article = { root, venture: "mma-files" as const, slug, date: "2026-08-02", seed: slug };
+    const derived = await effectiveDeckStyle(article);
+    const chosen = DECK_STYLES.find((style) => style !== derived)!;
+    await writeFile(
+      path.join(root, "ventures", "carousel-studio", "deck-style-overrides.json"),
+      JSON.stringify({
+        schemaVersion: "carousel-deck-style-overrides/1",
+        overrides: [{ venture: "mma-files", slug, style: chosen, changedAt: "2026-08-08T23:37:25.406Z" }],
+        updatedAt: "2026-08-08T23:37:25.406Z"
+      }),
+      "utf8"
+    );
+
+    expect(await effectiveDeckStyle(article)).toBe(chosen);
+    // And it answers for any date, because a record with no date names no one date.
+    expect(await effectiveDeckStyle({ ...article, date: "2026-08-09" })).toBe(chosen);
   });
 });
 

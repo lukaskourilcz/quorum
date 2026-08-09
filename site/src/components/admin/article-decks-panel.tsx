@@ -8,7 +8,12 @@ import type { AdminDeck } from "@/lib/admin-decks";
 const STYLES = ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const;
 
 function slideUrl(deck: AdminDeck, style: string, slide: number): string {
-  return `/admin/api/carousel-studio/deck/${deck.venture}/${encodeURIComponent(deck.slug)}/${style}/${slide}`;
+  return `/admin/api/carousel-studio/deck/${deck.venture}/${encodeURIComponent(deck.slug)}/${deck.date}/${style}/${slide}`;
+}
+
+/** A venture, a slug and a date. Three redeliveries of one event are three of these. */
+export function deckKey(deck: Pick<AdminDeck, "venture" | "slug" | "date">): string {
+  return `${deck.venture}/${deck.slug}/${deck.date}`;
 }
 
 /**
@@ -77,7 +82,7 @@ function Deck({ deck }: { deck: AdminDeck }) {
       const response = await fetch("/admin/api/carousel-studio/deck-style", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ venture: deck.venture, slug: deck.slug, style: candidate })
+        body: JSON.stringify({ venture: deck.venture, slug: deck.slug, date: deck.date, style: candidate })
       });
       const body = await response.json().catch(() => ({})) as { error?: string; cause?: string; commit?: string | null };
       if (!response.ok) {
@@ -149,7 +154,7 @@ function Deck({ deck }: { deck: AdminDeck }) {
       <div className="w-full overflow-x-auto px-5 py-4" data-horizontal-scroll>
         <ol className="flex gap-3">
           {deck.slides.map((slide, index) => (
-            <li key={`${style}-${index}`} className="shrink-0">
+            <li key={`${deckKey(deck)}/${style}/${index}`} className="shrink-0">
               {/* Rendered by the pipeline's own renderer, so this is the bytes that would ship. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -193,7 +198,7 @@ export function ArticleDecksPanel({ decks }: { decks: AdminDeck[] }) {
         Karusely se skládají ke každému článku a nikam se neposílají. Publikování je zavřené
         rozhodnutím social-2026-08a, dokud každý magazín nevydá deset článků.
       </Callout>
-      {decks.map((deck) => <Deck key={`${deck.venture}-${deck.slug}`} deck={deck} />)}
+      {decks.map((deck) => <Deck key={deckKey(deck)} deck={deck} />)}
     </div>
   );
 }

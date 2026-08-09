@@ -177,6 +177,7 @@ export async function composeEditionSocialPack(input: {
     root: input.stateRoot,
     venture: "caught-up",
     slug: (editionPackage.article?.cs ?? editionPackage.article?.en)?.frontmatter.slug ?? editionPackage.date,
+    date: editionPackage.date,
     seed: editionPackage.date
   });
   const visualReference = (locale: SocialLocale): TemplateReference | null => {

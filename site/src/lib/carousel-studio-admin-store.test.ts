@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CarouselStudioPersistenceError, setDeckStyleOverride } from "./carousel-studio-admin-store";
+import {
+  CarouselStudioPersistenceError,
+  matchDeckStyleOverride,
+  setDeckStyleOverride,
+  type DeckStyleOverride
+} from "./carousel-studio-admin-store";
 
 /**
  * The GitHub write path, exercised through the one caller that reaches it.
@@ -42,6 +47,7 @@ function githubFetch(reads: Array<{ status: number; sha?: string }>, writes: Arr
 const request = {
   venture: "mma-files" as const,
   slug: "ufc-fight-night-gamrot-vs-salkilld",
+  date: "2026-08-06",
   style: "editorial",
   styles: ["mesh", "editorial", "spotlight", "contrast", "aurora"],
   now: new Date("2026-08-09T09:00:00.000Z")
@@ -124,5 +130,49 @@ describe("the Studio's GitHub writer", () => {
     const error = await setDeckStyleOverride(request).catch((cause: unknown) => cause);
     expect((error as CarouselStudioPersistenceError).code).toBe("UNCONFIGURED");
     expect((error as Error).message).toContain("BOARDLESSAI_GITHUB_TOKEN");
+  });
+
+  it("records the date, and replaces only the record for that one article", async () => {
+    const { fetcher } = githubFetch([{ status: 404 }], [{ status: 201, commit: "aaaaaaa1" }]);
+    globalThis.fetch = fetcher as unknown as typeof fetch;
+
+    const { overrides } = await setDeckStyleOverride(request);
+    expect(overrides[0]).toMatchObject({ slug: request.slug, date: "2026-08-06", style: "editorial" });
+  });
+
+  it("refuses a save that does not say which article it is for", async () => {
+    const error = await setDeckStyleOverride({ ...request, date: "not-a-date" }).catch((cause: unknown) => cause);
+    expect((error as CarouselStudioPersistenceError).code).toBe("CONFLICT");
+  });
+});
+
+/**
+ * Three MMA redeliveries of one event share a slug, so a slug is not an identity.
+ *
+ * The records already on main carry no date and have to go on binding, which is why the exact
+ * match is preferred and the undated one is the fallback rather than the other way round.
+ */
+describe("matching an owner's recorded design to an article", () => {
+  const dated: DeckStyleOverride = {
+    venture: "mma-files", slug: "gamrot", date: "2026-08-06", style: "contrast", changedAt: "2026-08-08T00:00:00.000Z"
+  };
+  const undated: DeckStyleOverride = {
+    venture: "mma-files", slug: "gamrot", style: "aurora", changedAt: "2026-08-07T00:00:00.000Z"
+  };
+
+  it("prefers the record written for that exact date", () => {
+    expect(matchDeckStyleOverride([undated, dated], "mma-files", "gamrot", "2026-08-06")?.style).toBe("contrast");
+  });
+
+  it("falls back to an undated record for the other redeliveries", () => {
+    expect(matchDeckStyleOverride([undated, dated], "mma-files", "gamrot", "2026-08-05")?.style).toBe("aurora");
+  });
+
+  it("binds nothing when only another date is recorded", () => {
+    expect(matchDeckStyleOverride([dated], "mma-files", "gamrot", "2026-08-05")).toBeUndefined();
+  });
+
+  it("never crosses ventures", () => {
+    expect(matchDeckStyleOverride([undated], "caught-up", "gamrot", "2026-08-06")).toBeUndefined();
   });
 });
