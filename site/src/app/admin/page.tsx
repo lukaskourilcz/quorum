@@ -262,7 +262,7 @@ export default async function AdminPage({
   const attention = [
     { label: "Approvals waiting", value: pendingApprovalCount(state.inbox) },
     { label: "Approved deliveries waiting", value: approvedUndelivered.length },
-    { label: "Open priorities", value: autonomy.priorities.filter((item) => item.status === "open").length },
+    { label: "Priorities awaiting a board slot", value: autonomy.priorities.filter((item) => item.status === "open" || item.status === "selected").length },
     {
       label: "Unreadable files",
       value:

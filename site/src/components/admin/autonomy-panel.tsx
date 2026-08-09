@@ -13,6 +13,10 @@ function percent(value: number): string {
   return `${Math.round(value * 100)}%`;
 }
 
+export function priorityExpired(expires: string, now: string): boolean {
+  return expires < now;
+}
+
 export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySnapshot; ventures: Array<{ id: string; name: string }> }) {
   const writesEnabled = useAdminWritesEnabled();
   const [priorities, setPriorities] = useState(initial.priorities);
@@ -64,6 +68,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
   ];
   const socialStatus = (status: string) => status === "enabled" ? "Ready" : status === "paused" ? "Paused" : "Waiting";
   const priorityStatus = (status: string) => status === "selected" ? "Chosen" : status === "why-not" ? "Skipped" : status === "archived" ? "Archived" : "Open";
+  const now = new Date().toISOString();
 
   return (
     <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8" aria-labelledby="autonomy-heading">
@@ -122,7 +127,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
           <div className="mt-5 grid gap-3">
             {priorities.length ? priorities.map((item) => (
               <article className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={item.id}>
-                <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Badge tone={item.status === "selected" ? "success" : item.status === "why-not" ? "warning" : "neutral"}>{priorityStatus(item.status)}</Badge><Badge>{item.venture}</Badge></div>{item.status === "open" ? <Button disabled={pending || !writesEnabled} onClick={() => save({ action: "archive", itemId: item.id })} size="small" type="button" variant="ghost"><Archive aria-hidden="true" className="size-4" />Archive</Button> : null}</div>
+                <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Badge tone={item.status === "selected" ? "success" : item.status === "why-not" ? "warning" : "neutral"}>{priorityStatus(item.status)}</Badge>{priorityExpired(item.expires, now) ? <Badge tone="danger">Expired</Badge> : null}<Badge>{item.venture}</Badge></div>{item.status === "open" ? <Button disabled={pending || !writesEnabled} onClick={() => save({ action: "archive", itemId: item.id })} size="small" type="button" variant="ghost"><Archive aria-hidden="true" className="size-4" />Archive</Button> : null}</div>
                 <h4 className="mt-3 text-base font-semibold">{item.question}</h4>
                 <p className="mt-2 text-sm leading-6"><span className="text-[var(--fog)]">Decision:</span> {item.decisionAtStake}</p>
                 {item.whyNotReason ? <p className="mt-2 text-sm leading-6 text-[var(--fog)]">Why not: {item.whyNotReason}</p> : null}
