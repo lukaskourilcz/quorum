@@ -15,6 +15,7 @@
         ]
       },
       "adminTabs": [
+        "ideas",
         "plans",
         "visuals",
         "events"

@@ -75,3 +75,30 @@ describe("admin portfolio projection", () => {
     });
   });
 });
+
+/**
+ * Cards a workspace holds but no tab can show.
+ *
+ * DNESKAi carried five live ideas behind `adminTabs: ["plans","visuals","events"]`: the rail counted
+ * them, every tab body filtered them out. Counting cards against declared tabs catches the next one
+ * the same way, whichever venture and whichever kind it is.
+ */
+describe("declared tabs against stored cards", () => {
+  const tabForKind: Readonly<Record<string, string>> = {
+    idea: "ideas",
+    plan: "plans",
+    visual: "visuals",
+    "social-variant": "packages"
+  };
+
+  it("gives every stored card kind a tab in the real registry", async () => {
+    const portfolio = await readAdminPortfolio();
+    const orphaned = portfolio.ventures.flatMap((venture) => {
+      const kinds = [...new Set(venture.cards.map((card) => card.kind))];
+      return kinds
+        .filter((kind) => !venture.tabs.includes(tabForKind[kind] as never))
+        .map((kind) => `${venture.id}/${kind}`);
+    });
+    expect(orphaned).toEqual([]);
+  });
+});
