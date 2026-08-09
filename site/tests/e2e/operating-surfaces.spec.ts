@@ -24,7 +24,7 @@ const axeRoutes = [
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",
   "/admin?venture=mma-files&tab=social-lab",
-  "/admin?venture=carousel-studio&tab=templates",
+  "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=carousel-studio&tab=inspiration",
   "/meetings/2026-08-01-mma-intake",
   "/meetings/2026-08-01-mma-analysis",
@@ -277,7 +277,7 @@ test.describe("admin journeys that write", () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=templates"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -502,3 +502,56 @@ for (const size of [
     await expect(page.locator("[data-wf-scrim]")).toHaveCount(0);
   });
 }
+
+/**
+ * The Design Lab workspace.
+ *
+ * Two tabs became one because each held half the answer to the only question the owner has of
+ * this venture: what does this article's carousel look like, and can I change it. These cover the
+ * four parts of that — the rail, the canvas, the controls and the words — and the one rule the
+ * editor is not allowed to break, which is the engine's own thirty-word slide limit.
+ */
+test.describe("the Design Lab workspace", () => {
+  test("renders the rail, the canvas and the recipe as one surface", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+
+    const rail = page.locator("[data-article-rail] button");
+    expect(await rail.count()).toBeGreaterThan(0);
+    await expect(page.locator("[data-recipe-line]").first()).toBeVisible();
+    await expect(page.locator("[data-slide-canvas]").first()).toBeVisible();
+    // An old bookmark still resolves rather than 404ing; an unknown tab falls to the first.
+    const legacy = await page.goto("/admin?venture=carousel-studio&tab=decks", { waitUntil: "networkidle" });
+    expect(legacy?.status()).toBe(200);
+  });
+
+  test("switching format changes the canvas ratio", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const canvas = page.locator("[data-slide-canvas]").first();
+    const portrait = await canvas.evaluate((node) => getComputedStyle(node).aspectRatio);
+    await page.getByRole("button", { name: "9:16", exact: true }).first().click();
+    await expect.poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio)).not.toBe(portrait);
+    // The safe-area overlay is offered only where a platform actually covers the canvas.
+    await page.getByRole("button", { name: "bezpečná zóna" }).first().click();
+    await expect(page.locator("[data-safe-area]").first()).toBeAttached();
+  });
+
+  test("a slide past thirty words cannot be saved", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const editor = page.locator("textarea[id^='slide-']").first();
+    const save = page.locator("[data-save-slide]").first();
+    await editor.fill(Array.from({ length: 12 }, (_, index) => `slovo${index}`).join(" "));
+    await expect(save).toBeEnabled();
+    await editor.fill(Array.from({ length: 31 }, (_, index) => `slovo${index}`).join(" "));
+    await expect(page.locator("[data-word-count]").first()).toContainText("31/30");
+    await expect(save).toBeDisabled();
+    // The engine's own sentence, not a paraphrase of it.
+    await expect(page.getByText(/přes limit 30 slov/u).first()).toBeVisible();
+  });
+
+  test("the caption carries its credit and the copy buttons announce", async ({ page }) => {
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const copy = page.getByRole("button", { name: /Copy/u }).first();
+    await expect(copy).toHaveAttribute("aria-live", "polite");
+    await expect(page.locator("[data-caption]").first()).toBeVisible();
+  });
+});

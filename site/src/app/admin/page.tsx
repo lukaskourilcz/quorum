@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AgentSwitches } from "@/components/admin/agent-switches";
-import { ArticleDecksPanel } from "@/components/admin/article-decks-panel";
+import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
@@ -17,7 +17,7 @@ import { Callout } from "@/components/ui/callout";
 import { CURRENT_MONTHLY_API_LIMIT_USD, CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
-import { readAdminDecks } from "@/lib/admin-decks";
+import { readDesignLab } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
@@ -53,6 +53,7 @@ const UNWRAP =
 
 function tabLabel(tab: AdminVentureTab): string {
   if (tab === "visuals") return "images";
+  if (tab === "studio") return "studio";
   if (tab === "social-lab") return "social drafts";
   if (tab === "slates") return "fight reports";
   return tab;
@@ -144,7 +145,7 @@ export default async function AdminPage({
     carouselStudio,
     hookBrain,
     studioArticles,
-    decks,
+    labArticles,
     agentControls,
     autonomy,
     fixedCosts,
@@ -160,7 +161,7 @@ export default async function AdminPage({
     readCarouselStudio(),
     readHookBrain(),
     readStudioArticles(),
-    readAdminDecks(),
+    readDesignLab(),
     readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
@@ -389,8 +390,8 @@ export default async function AdminPage({
           <div className={`min-w-0 ${UNWRAP}`}>
             {selectedVenture.id === "carousel-studio" && selectedTab === "hooks" ? (
               <HookBrainAdminPanel snapshot={hookBrain} />
-            ) : selectedVenture.id === "carousel-studio" && (selectedTab === "templates" || selectedTab === "decks") ? (
-              <ArticleDecksPanel decks={decks} />
+            ) : selectedVenture.id === "carousel-studio" && selectedTab === "studio" ? (
+              <DesignLabWorkspace articles={labArticles} />
             ) : selectedVenture.id === "carousel-studio" && selectedTab ? (
               <CarouselStudioAdminPanel
                 snapshot={carouselStudio}

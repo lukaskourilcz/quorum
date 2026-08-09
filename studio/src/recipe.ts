@@ -164,3 +164,48 @@ export function recipeVariant(recipe: Pick<CarouselRecipe, "family" | "variant" 
   if (isDeckStyle(recipe.family)) return undefined;
   return recipe.accentSwap ? "B" : recipe.variant;
 }
+
+/**
+ * A recipe as one URL segment.
+ *
+ * The deck route used to take a bare style name, which is all a design was. A design is now six
+ * fields, and a preview that shows anything less than the whole of it is showing the owner a
+ * picture the pipeline would not ship. Compact and lowercase, because it is a path segment.
+ */
+export function encodeRecipe(recipe: Pick<CarouselRecipe, "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "phaseSeed">): string {
+  const variant = recipe.accentSwap ? "b" : recipe.variant.toLowerCase();
+  return `${recipe.family}~${variant}~${recipe.treatment}~${Math.round(recipe.typeScale * 10)}~${recipe.phaseSeed}`;
+}
+
+export function decodeRecipe(token: string): Pick<CarouselRecipe, "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "phaseSeed"> | null {
+  const parts = token.split("~");
+  if (parts.length !== 5) return null;
+  const [family, variant, treatment, scale, phase] = parts as [string, string, string, string, string];
+  if (!(DECK_DESIGNS as readonly string[]).includes(family)) return null;
+  if (variant !== "a" && variant !== "b") return null;
+  if (treatment !== "none" && treatment !== "mono" && treatment !== "duotone") return null;
+  const typeScale = Number(scale) / 10;
+  if (!(TYPE_SCALES as readonly number[]).includes(typeScale)) return null;
+  const phaseSeed = Number(phase);
+  if (!Number.isInteger(phaseSeed) || phaseSeed < 0 || phaseSeed > 3) return null;
+  return {
+    family: family as DeckDesign,
+    variant: variant === "b" ? "B" : "A",
+    accentSwap: variant === "b",
+    treatment,
+    typeScale: typeScale as TypeScale,
+    phaseSeed
+  };
+}
+
+/** The one line the workspace shows above the controls, in the owner's own language. */
+export function recipeLine(recipe: Pick<CarouselRecipe, "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "phaseSeed">): string {
+  const treatment = { none: "bez úpravy", mono: "černobíle", duotone: "duotón" }[recipe.treatment];
+  return [
+    recipe.family,
+    recipe.accentSwap ? "B" : recipe.variant,
+    treatment,
+    `${recipe.typeScale}×`,
+    `fáze ${recipe.phaseSeed}`
+  ].join(" · ");
+}

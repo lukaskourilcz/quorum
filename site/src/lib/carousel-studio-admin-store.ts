@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { TemplateLifecycleOverrideSchema, type CarouselTemplate } from "@boardlessai/carousel-studio";
+import { MAX_SLIDE_WORDS, TemplateLifecycleOverrideSchema, type CarouselTemplate } from "@boardlessai/carousel-studio";
 import { readCarouselStudio, type CarouselInspirationLink } from "./carousel-studio";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -275,6 +275,153 @@ export async function setDeckStyleOverride(
     deckStyleOverridesPath,
     { schemaVersion: "carousel-deck-style-overrides/1", overrides, updatedAt: changedAt },
     `admin: set the ${input.venture} deck design for ${date} ${slug}`,
+    root
+  );
+  return { overrides, commit: write.commit };
+}
+
+const slideOverridesPath = "state/ventures/carousel-studio/slide-overrides.json";
+
+/**
+ * One slide's words, as the owner edited them.
+ *
+ * Kept apart from the article. A package is what the desk delivered and its hash covers its body;
+ * a carousel slide is a rendering of that article, and shortening a line to fit a square is a
+ * design decision rather than a correction to the piece. So the edit lives here, keyed by the
+ * article's full identity and the slide's index, and the render route reads it server-side — so
+ * the preview, the export and anything the pipeline later composes all show the edited deck.
+ */
+export interface SlideTextOverride {
+  venture: "caught-up" | "mma-files";
+  slug: string;
+  date: string;
+  slide: number;
+  text: string;
+  changedAt: string;
+}
+
+function isSlideOverride(value: unknown): value is SlideTextOverride {
+  if (!value || typeof value !== "object") return false;
+  const entry = value as Partial<SlideTextOverride>;
+  return (entry.venture === "caught-up" || entry.venture === "mma-files")
+    && typeof entry.slug === "string"
+    && typeof entry.date === "string"
+    && typeof entry.slide === "number"
+    && typeof entry.text === "string"
+    && typeof entry.changedAt === "string";
+}
+
+export async function readSlideTextOverrides(root = repositoryRoot): Promise<SlideTextOverride[]> {
+  try {
+    const raw = await readJson(slideOverridesPath, root) as { overrides?: unknown };
+    return Array.isArray(raw.overrides) ? raw.overrides.filter(isSlideOverride) : [];
+  } catch (error) {
+    if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return [];
+    throw error;
+  }
+}
+
+/** The edited slides for one article, by index. */
+export function slideTextFor(
+  overrides: readonly SlideTextOverride[],
+  venture: SlideTextOverride["venture"],
+  slug: string,
+  date: string
+): Map<number, string> {
+  return new Map(
+    overrides
+      .filter((entry) => entry.venture === venture && entry.slug === slug && entry.date === date)
+      .map((entry) => [entry.slide, entry.text] as const)
+  );
+}
+
+export async function setSlideTextOverride(
+  input: {
+    venture: SlideTextOverride["venture"];
+    slug: string;
+    date: string;
+    slide: number;
+    /** An empty string clears the edit and the deck falls back to the article's own words. */
+    text: string;
+    now?: Date;
+  },
+  root = repositoryRoot
+): Promise<{ overrides: SlideTextOverride[]; commit: string | null }> {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug)) throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article slug.");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date)) throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article date.");
+  if (!Number.isInteger(input.slide) || input.slide < 0 || input.slide > 9) {
+    throw new CarouselStudioPersistenceError("CONFLICT", "That slide is not part of a deck.");
+  }
+  const text = input.text.trim();
+  // The engine's own limit, enforced here as well as in the editor: a save that reaches this far
+  // with thirty-one words would render a slide the review refuses, which is worse than a refusal.
+  if (text.split(/\s+/u).filter(Boolean).length > MAX_SLIDE_WORDS) {
+    throw new CarouselStudioPersistenceError("CONFLICT", `Slide je delší než ${MAX_SLIDE_WORDS} slov.`);
+  }
+  const changedAt = (input.now ?? new Date()).toISOString();
+  const kept = (await readSlideTextOverrides(root)).filter(
+    (entry) => entry.venture !== input.venture || entry.slug !== input.slug || entry.date !== input.date || entry.slide !== input.slide
+  );
+  const overrides = (text ? [{ ...input, text, changedAt }, ...kept] : kept).slice(0, 400);
+  const write = await persist(
+    slideOverridesPath,
+    { schemaVersion: "carousel-slide-overrides/1", overrides, updatedAt: changedAt },
+    `admin: edit ${input.venture} slide ${input.slide + 1} for ${input.date} ${input.slug}`,
+    root
+  );
+  return { overrides, commit: write.commit };
+}
+
+const recipeOverridesPath = deckStyleOverridesPath;
+
+/**
+ * The owner's recipe for one article: any subset of the fields, the rest still derived.
+ *
+ * The same file the deck-style switcher has always written, because a bare `style` is a family
+ * and the two records already on main have to keep binding. Writing a fuller record beside them
+ * is additive; nothing that reads the old shape stops working.
+ */
+export async function setRecipeOverride(
+  input: {
+    venture: DeckStyleOverride["venture"];
+    slug: string;
+    date: string;
+    family: string;
+    variant?: "A" | "B";
+    accentSwap?: boolean;
+    treatment?: "none" | "mono" | "duotone";
+    typeScale?: number;
+    designs: readonly string[];
+    now?: Date;
+  },
+  root = repositoryRoot
+): Promise<{ overrides: unknown[]; commit: string | null }> {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug)) throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article slug.");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date)) throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article date.");
+  if (!input.designs.includes(input.family)) throw new CarouselStudioPersistenceError("CONFLICT", "That deck design does not exist.");
+  const changedAt = (input.now ?? new Date()).toISOString();
+  const record = {
+    venture: input.venture,
+    slug: input.slug,
+    date: input.date,
+    // `style` is written as well as `family` so a reader of the old shape — and the panel that
+    // still speaks it — keeps working against a record written by the new one.
+    style: input.family,
+    family: input.family,
+    ...(input.variant ? { variant: input.variant } : {}),
+    ...(input.accentSwap === undefined ? {} : { accentSwap: input.accentSwap }),
+    ...(input.treatment ? { treatment: input.treatment } : {}),
+    ...(input.typeScale === undefined ? {} : { typeScale: input.typeScale }),
+    changedAt
+  };
+  const kept = (await readDeckStyleOverrides(root)).filter(
+    (entry) => entry.venture !== input.venture || entry.slug !== input.slug || entry.date !== input.date
+  );
+  const overrides = [record, ...kept].slice(0, 200);
+  const write = await persist(
+    recipeOverridesPath,
+    { schemaVersion: "carousel-deck-style-overrides/1", overrides, updatedAt: changedAt },
+    `admin: set the ${input.venture} deck design for ${input.date} ${input.slug}`,
     root
   );
   return { overrides, commit: write.commit };

@@ -107,27 +107,28 @@ describe("one deck's worth of slide requests", () => {
     vi.stubEnv("ADMIN_PASSWORD", "secret");
 
     const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
-    const { readAdminDecks } = await import("./admin-decks");
+    const { readDesignLab } = await import("./design-lab");
     const { readArticleHeroPng } = await import("./admin-deck-hero");
-    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[style]/[slide]/route");
+    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[recipe]/[slide]/route");
     const {
       ARTICLE_HERO_SLOT,
       CAROUSEL_BRANDS,
-      articleDeckTemplate,
       articleSlideSlot,
+      decodeRecipe,
+      recipeTemplate,
       renderCarouselPng
     } = await import("@boardlessai/carousel-studio");
 
-    const [deck] = await readAdminDecks(40);
+    const [deck] = await readDesignLab(40);
     // Eight, since the owner capped a deck there: ten swipes to reach a point that fits in six.
     expect(deck!.slides).toHaveLength(8);
     expect(deck!.hasHero).toBe(true);
-    const style = "editorial";
+    const recipe = "masthead~a~none~10~0";
 
     // What the pipeline would ship: the whole deck, rendered the way every publisher renders it.
     const hero = await readArticleHeroPng(deck!.venture, deck!.slug, deck!.date);
     const shipped = await renderCarouselPng({
-      template: articleDeckTemplate(deck!.slides.length, style),
+      template: recipeTemplate(decodeRecipe(recipe)!, deck!.slides.length),
       payload: {
         locale: "cs",
         strings: Object.fromEntries(deck!.slides.map((entry, index) => [articleSlideSlot(index), entry.text]))
@@ -144,7 +145,7 @@ describe("one deck's worth of slide requests", () => {
     for (let slide = 1; slide <= deck!.slides.length; slide += 1) {
       const response = await GET(
         new Request("https://example.test/x", { headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` } }),
-        { params: Promise.resolve({ venture: deck!.venture, slug: deck!.slug, date: deck!.date, style, slide: String(slide) }) }
+        { params: Promise.resolve({ venture: deck!.venture, slug: deck!.slug, date: deck!.date, recipe, slide: String(slide) }) }
       );
       expect(response.status).toBe(200);
       expect(response.headers.get("content-type")).toBe("image/png");
@@ -169,10 +170,10 @@ describe("one deck's worth of slide requests", () => {
     vi.stubEnv("ADMIN_PASSWORD", "secret");
 
     const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
-    const { readAdminDecks } = await import("./admin-decks");
-    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[style]/[slide]/route");
+    const { readDesignLab } = await import("./design-lab");
+    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[recipe]/[slide]/route");
 
-    const decks = await readAdminDecks(40);
+    const decks = await readDesignLab(40);
     expect(decks).toHaveLength(2);
     // One slug, two identities. Keying on the slug alone collapsed them into one card, and the
     // React list keyed on the same thing and warned about it.
@@ -184,7 +185,7 @@ describe("one deck's worth of slide requests", () => {
     const cover = async (date: string) => {
       const response = await GET(
         new Request("https://example.test/x", { headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` } }),
-        { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date, style: "editorial", slide: "1" }) }
+        { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date, recipe: "masthead~a~none~10~0", slide: "1" }) }
       );
       expect(response.status).toBe(200);
       return Buffer.from(await response.arrayBuffer());
@@ -202,13 +203,13 @@ describe("one deck's worth of slide requests", () => {
     vi.stubEnv("ADMIN_USER", "owner");
     vi.stubEnv("ADMIN_PASSWORD", "secret");
     const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
-    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[style]/[slide]/route");
+    const { GET } = await import("@/app/admin/api/carousel-studio/deck/[venture]/[slug]/[date]/[recipe]/[slide]/route");
     const token = createAdminSessionToken("owner", "secret");
 
     rasterCalls.length = 0;
     const response = await GET(
       new Request("https://example.test/x", { headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` } }),
-      { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date: "2026-08-04", style: "editorial", slide: "11" }) }
+      { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date: "2026-08-04", recipe: "masthead~a~none~10~0", slide: "11" }) }
     );
     expect(response.status).toBe(404);
     expect(rasterCalls.filter((call) => call === "svg->png")).toHaveLength(0);

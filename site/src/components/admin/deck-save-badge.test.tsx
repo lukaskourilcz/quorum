@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { DeckSaveBadge, warningFor } from "./article-decks-panel";
+import { DeckSaveBadge, warningFor } from "./deck-save-badge";
 
 /**
  * The three things a save can be saying, and the one thing it must never do.
