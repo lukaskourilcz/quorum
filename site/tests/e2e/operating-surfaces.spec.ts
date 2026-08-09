@@ -609,3 +609,20 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     await rm(presetsPath, { force: true });
   }
 });
+
+/**
+ * The name resolves, and the id does not move.
+ *
+ * `carousel-studio` addresses state directories, config entries, API paths and a room on the
+ * floorplan, so it stays (decision D13: identifiers stay, surfaces speak). What changes is that
+ * the URL an owner would guess from the display name lands on the same record instead of an empty
+ * page.
+ */
+test("design-lab is an alias for the same venture record", async ({ page }) => {
+  await page.goto("/admin?venture=design-lab&tab=studio", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-recipe-line]").first()).toBeVisible();
+  const aliased = await page.locator("[data-article-rail] button").count();
+
+  await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+  expect(await page.locator("[data-article-rail] button").count()).toBe(aliased);
+});

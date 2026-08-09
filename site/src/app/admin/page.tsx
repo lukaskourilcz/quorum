@@ -51,6 +51,12 @@ export const metadata: Metadata = {
 const UNWRAP =
   "[&>section]:mx-0 [&>section]:mt-0 [&>section]:max-w-none [&>section]:px-0 [&>section]:pb-0";
 
+/** URLs an owner would guess from a display name, pointed at the id that name belongs to. */
+const VENTURE_ALIASES: Readonly<Record<string, string>> = {
+  "design-lab": "carousel-studio",
+  dneskai: "caught-up"
+};
+
 function tabLabel(tab: AdminVentureTab): string {
   if (tab === "visuals") return "images";
   if (tab === "studio") return "studio";
@@ -171,7 +177,16 @@ export default async function AdminPage({
     getDailyResults()
   ]);
 
-  const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVenture) ?? null;
+  /*
+   * `design-lab` is the name; `carousel-studio` is the id.
+   *
+   * The id is load-bearing — it addresses state directories, config entries, API paths and a room
+   * on the floorplan — so it does not change (decision D13: identifiers stay, surfaces speak). The
+   * display name already reads Design Lab everywhere a human looks, and the URL an owner would
+   * guess from that name now resolves to the same record instead of to an empty page.
+   */
+  const requestedVentureId = (requestedVenture ? VENTURE_ALIASES[requestedVenture] : undefined) ?? requestedVenture;
+  const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVentureId) ?? null;
   const selectedTab = selectedVenture
     ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
       ? (requestedTab as AdminVentureTab)

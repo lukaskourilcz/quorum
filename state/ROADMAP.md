@@ -87,4 +87,15 @@ work. They require a fresh owner scope before implementation.
   package so a run report says why a picture was chosen. Every failure descends a rung rather
   than blocking a publication. The two heroes that showed the wrong thing are corrected through
   a schema-versioned image-only correction that both ends check independently.
+- [x] Turn the Design Lab into the working social design tool. Ten template families replace
+  five wallpapers that were three copies of one blurred gradient; thirty committed SIL OFL
+  faces and an explicit rasteriser make the same deck the same bytes on any machine; one
+  recorded recipe — family, variant, treatment, type scale, rhythm — is derived from the
+  article's identity and the venture's own receipts, so a week of decks varies without a clock
+  or a die and replays byte-identical. The desk writes the caption, the hashtags, the Threads
+  text and the story line in the call that writes the article, and code appends the licence
+  credit so a caption without it cannot be built. Two admin tabs became one workspace with a
+  rail, a canvas at four formats, recipe controls, slide editing inside the engine's own limits,
+  export and presets. Six owner-directed corrections to the public office site rode the same
+  branch.
 - [ ] Complete only the owner plumbing listed in `docs/NEEDED.md`.

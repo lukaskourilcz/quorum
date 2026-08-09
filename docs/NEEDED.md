@@ -100,6 +100,22 @@ is the single thing standing between a proven path and a working one.
 
 Judgement calls. Nothing is blocked on code for any of these.
 
+- [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
+  wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and
+  the kicker is the magazine's public name. On a slide a reader sees both at once and they
+  disagree. Changing the wordmark to DNESKAi is one line in `CAROUSEL_BRANDS`; leaving it is a
+  defensible answer too, since Caught Up is what the feed, the structured data and the deployment
+  still say. It is a naming call, not an engineering one, which is why nothing here decided it.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Confirm one deck design save in production once this deploys** — the Design Lab's whole
+  persistence path was rebuilt on 9 August 2026: a save can now create a state file that does not
+  exist yet, and a failure names which of the two token problems it is. Your token already has
+  Contents read/write, so nothing is expected to be wrong; open
+  `/admin?venture=design-lab&tab=studio`, click a family chip and check the badge shows a commit
+  reference rather than a warning. If it warns, the banner says whether the token is missing or
+  refused, and that sentence is what to act on. [imp:3] [owner:me] [time:5m] [kind:setup]
+
 - [ ] **Rename the DNESKAi Vercel project and decide on a domain** — DNESKAi is the wordmark in the
   navigation, the footer and print; the page title, the social cards, the structured data and the
   Atom feed still say "Caught Up", which was your call and is not a bug. The deployment is still at
