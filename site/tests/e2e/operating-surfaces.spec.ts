@@ -230,6 +230,16 @@ test("measures role column keeps the table inset", async ({ page }) => {
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
+  test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
+    await page.goto("/admin?venture=titty-tuesdays&tab=ideas", { waitUntil: "networkidle" });
+    const card = page.getByRole("heading", { name: "Night Shift — One Good Day" }).locator("..");
+    await expect(card.getByText("Rated perfect — graduated")).toBeVisible();
+    await expect(card.getByText("Saved rating: perfect")).toBeVisible();
+    await page.reload({ waitUntil: "networkidle" });
+    await expect(card.getByText("Rated perfect — graduated")).toBeVisible();
+    await expect(card.getByText("Saved rating: perfect")).toBeVisible();
+  });
+
   test("admin rating persists and the launch binder renders", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
