@@ -326,6 +326,9 @@ describe("the site quotes the caps the runtime enforces", () => {
       const limits = await loadRuntimeBudgetLimits();
       expect(constant("CURRENT_MONTHLY_OPERATING_LIMIT_USD")).toBe(limits.monthlyOperatingUsd);
       expect(constant("CURRENT_MONTHLY_API_LIMIT_USD")).toBe(limits.monthlyApiUsd);
+      // The admin scales its day tile against this one, so a drift here mislabels a bar rather
+      // than a headline — which is the harder kind to notice.
+      expect(constant("CURRENT_DAILY_OPERATING_PACE_USD")).toBe(limits.dailyUsd);
     } finally {
       Object.assign(process.env, previous);
     }

@@ -15,7 +15,11 @@ import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { SocialArchive } from "@/components/admin/social-archive-panel";
 import { Callout } from "@/components/ui/callout";
-import { CURRENT_MONTHLY_API_LIMIT_USD, CURRENT_MONTHLY_OPERATING_LIMIT_USD } from "@/data/operating-policy";
+import {
+  CURRENT_DAILY_OPERATING_PACE_USD,
+  CURRENT_MONTHLY_API_LIMIT_USD,
+  CURRENT_MONTHLY_OPERATING_LIMIT_USD
+} from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
@@ -404,9 +408,9 @@ export default async function AdminPage({
             />
             <Tile
               brand={brand}
-              foot={latestDay ? `recorded ${latestDay.date}` : "no day on record yet"}
+              foot={latestDay ? `${latestDay.date} · of ${formatUsd(CURRENT_DAILY_OPERATING_PACE_USD)}` : "no day on record yet"}
               label="Latest recorded day"
-              percent={latestDay ? Math.min(100, latestDay.totalCostUsd * 100) : 0}
+              percent={latestDay ? (latestDay.totalCostUsd / CURRENT_DAILY_OPERATING_PACE_USD) * 100 : 0}
               value={latestDay ? tileUsd(latestDay.totalCostUsd) : "—"}
             />
             <Tile
