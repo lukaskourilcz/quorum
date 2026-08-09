@@ -22,7 +22,8 @@ export interface CaughtUpAdminSnapshot {
 }
 
 function stateDir(...parts: string[]): string {
-  return path.join(process.cwd(), "..", "state", ...parts);
+  const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
+  return path.join(repositoryRoot, "state", ...parts);
 }
 
 async function newestJson(dir: string): Promise<{ name: string; value: unknown } | null> {
