@@ -138,6 +138,27 @@ describe("taste memory", () => {
       .not.toContain(first.id);
   });
 
+  it("writes non-empty taste sections when ratings arrive after the watermark", async () => {
+    const first = rating({ suffix: "0010", objectId: "idea-one", value: "perfect" });
+    const second = rating({ suffix: "0011", objectId: "idea-two", value: "bad", ratedAt: "2026-08-02T08:00:00.000Z" });
+    const root = await fixtureRoot([first, second]);
+    const result = await runPalatePass({
+      repoRoot: root,
+      ventureId,
+      now,
+      distiller: new FixtureDistiller([{
+        ...emptyOutput,
+        pursue: [{ instruction: "Keep the product first.", ratingIds: [first.id] }],
+        avoid: [{ instruction: "Avoid the rejected direction.", ratingIds: [second.id] }]
+      }])
+    });
+    expect(result.taste.watermark).toBe(second.id);
+    expect(result.taste.pursue).not.toHaveLength(0);
+    expect(result.taste.avoid).not.toHaveLength(0);
+    await expect(readFile(path.join(root, "state", "taste", ventureId, "TASTE.md"), "utf8"))
+      .resolves.toContain(second.id);
+  });
+
   it("quarantines hostile notes during distillation but quotes them in packet data", async () => {
     const hostile = rating({
       suffix: "0003",

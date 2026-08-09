@@ -39,6 +39,8 @@ export interface AdminCard {
   contentHash: string;
   media: string[];
   ratings: RatingRecord[];
+  /** The owner-facing next state derived from the latest saved idea rating. */
+  graduation: string | null;
 }
 
 export interface AdminVenture {
@@ -170,6 +172,18 @@ function ratingsFor(ratings: readonly RatingRecord[], objectId: string): RatingR
     .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id));
 }
 
+/**
+ * The site cannot import the orchestrator package at runtime, but the words and branches here
+ * deliberately mirror taste/graduation.ts. The raw ledger status remains available to code;
+ * this is the status an owner needs while deciding whether to request the next board step.
+ */
+function ideaGraduation(rating: RatingRecord | null): string | null {
+  if (!rating) return null;
+  if (rating.rating === "perfect") return "Rated perfect — graduated";
+  if (rating.rating === "good") return "Rated good — awaiting board approval";
+  return "Rated bad — archived";
+}
+
 function parsePlan(
   raw: string,
   ventureId: string,
@@ -245,7 +259,8 @@ function parsePlan(
       updatedAt,
       contentHash: contentHash(raw),
       media: textArray(plan.assets) ?? [],
-      ratings: history
+      ratings: history,
+      graduation: null
     },
     detail: {
       id,
@@ -336,7 +351,9 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
     const ideas = parsePublicIdeaLedger(raw, ventureId);
     if (!ideas) return { cards: [], unreadable: [`ideas/${ledgerNamespace}/ledger.jsonl`] };
     return {
-      cards: ideas.map((idea): AdminCard => ({
+      cards: ideas.map((idea): AdminCard => {
+        const history = ratingsFor(ratings, idea.id);
+        return {
         id: idea.id,
         ventureId,
         kind: "idea",
@@ -349,8 +366,10 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
         updatedAt: idea.statusHistory.at(-1)?.at ?? null,
         contentHash: contentHash(JSON.stringify(idea)),
         media: [],
-        ratings: ratingsFor(ratings, idea.id)
-      })),
+        ratings: history,
+        graduation: ideaGraduation(currentRating(history, idea.id))
+      };
+      }),
       unreadable: []
     };
   } catch (error) {
@@ -381,7 +400,8 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
           updatedAt: pack.date,
           contentHash: contentHash(JSON.stringify(item)),
           media: item.frames,
-          ratings: ratingsFor(ratings, id)
+          ratings: ratingsFor(ratings, id),
+          graduation: null
         };
       })
     )
@@ -429,7 +449,8 @@ async function packageCards(root: string, ventureId: string, ratings: readonly R
         updatedAt: date,
         contentHash: contentHash(JSON.stringify(parsed)),
         media: Array.isArray(render?.summaryPaths) ? render.summaryPaths.filter((entry): entry is string => typeof entry === "string") : [],
-        ratings: ratingsFor(ratings, id)
+        ratings: ratingsFor(ratings, id),
+        graduation: null
       });
     }
   }

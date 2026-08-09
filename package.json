@@ -32,6 +32,7 @@
     "marketingshark:stage-banner": "pnpm --filter @boardlessai/orchestrator exec tsx ../scripts/marketingshark-stage-banner.ts",
     "marketingshark:import-bank": "pnpm --filter @boardlessai/orchestrator exec tsx ../scripts/marketingshark-import-bank.ts",
     "org:maintain": "pnpm --filter @boardlessai/orchestrator org:maintain",
+    "palate": "pnpm --filter @boardlessai/orchestrator palate",
     "proof:rooms": "pnpm --filter @boardlessai/orchestrator proof:rooms",
     "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",
     "sources:shadow": "pnpm --filter @boardlessai/orchestrator sources:shadow",

@@ -24,16 +24,24 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
   const detailHref = card.detailPath
     ? `/admin/files/${card.detailPath.split("/").map(encodeURIComponent).join("/")}`
     : null;
+  const currentRating = card.ratings[0] ?? null;
   return (
     <Card className="min-w-0">
       <CardContent className="grid h-full gap-5">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Badge>{card.kind.replaceAll("-", " ")}</Badge>
-            <Badge tone={statusTone(card.status)}>{card.status.replaceAll("_", " ")}</Badge>
+            <Badge tone={card.graduation ? statusTone(currentRating?.rating ?? card.status) : statusTone(card.status)}>
+              {card.graduation ?? card.status.replaceAll("_", " ")}
+            </Badge>
           </div>
           <h3 className="mt-5 text-2xl font-semibold leading-tight tracking-[-0.04em]">{card.title}</h3>
           <p className="mt-3 line-clamp-5 text-sm leading-6 text-[var(--fog)]">{card.summary}</p>
+          {currentRating ? (
+            <p className="mt-3 text-sm font-medium text-[var(--mist)]">
+              Saved rating: <span className="capitalize">{currentRating.rating}</span>
+            </p>
+          ) : null}
         </div>
 
         {card.media.length ? (
