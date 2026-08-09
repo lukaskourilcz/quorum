@@ -1,3 +1,4 @@
+import { ARTICLE_CATEGORIES } from "../contracts/article-frontmatter.js";
 import { z } from "zod";
 import { wrapUntrustedData } from "../security/content.js";
 import { fetchReadable } from "../sources/adapters/reader.js";
@@ -61,6 +62,10 @@ export class InvalidArticleError extends Error {
 const ToolOutputSchema = z.object({
   slug: z.string().trim().min(1),
   tags: z.array(z.string().regex(SLUG)).min(1).max(6),
+  // Optional, and deliberately easy to omit: an uncategorised edition is
+  // correct far more often than a miscategorised one, so nothing here pushes
+  // the desk to pick a section.
+  categories: z.array(z.enum(ARTICLE_CATEGORIES)).max(2).optional(),
   // Optional so a model that omits it costs nothing: production falls back to a Czech
   // template. What it replaces is an English template sentence that was rendered under the
   // Czech heading "Proč právě tento příběh" on every live edition, in the one place on the
@@ -159,6 +164,11 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
       // pattern here so the shape is asked for rather than only checked afterwards.
       items: { type: "string", pattern: SLUG_SOURCE }
     },
+    categories: {
+      type: "array",
+      maxItems: 2,
+      items: { type: "string", enum: [...ARTICLE_CATEGORIES] }
+    },
     why_this_story: { type: "string" },
     image_search_phrases: { type: "array", minItems: 2, maxItems: 3, items: { type: "string" } },
     visual_concept: { type: "string", enum: [...VISUAL_CONCEPTS] },
@@ -217,6 +227,24 @@ The slug must be plain ASCII with no diacritics. Tags are Czech, written as ASCI
 fold the diacritics away and join lowercase words with single hyphens, so "umělá
 inteligence" becomes "umela-inteligence". Never emit an English tag; the reader browses
 these on the magazine, and a week of English tags splits the same topic in two.
+
+Assign \`categories: ["ai-models"]\` ONLY when the edition's primary subject is a
+specific AI model or model family: an official release or upgrade announcement, a
+benchmark/eval/deep-dive centered on one model, an official model behavior/safety
+report, or an analysis whose main argument is about a specific model. Do NOT assign
+it because a model is mentioned or used in the story, nor for company, funding,
+regulation, chips or industry stories that reference models in passing. When unsure,
+omit the field — an uncategorized article is correct more often than a miscategorized
+one. Categories are machine keys in English; they are separate from \`tags\`, which
+stay Czech.
+
+Write Czech a Czech editor would recognise as their own. Never use an em-dash (—).
+Where a dash is genuinely needed the Czech convention is the en-dash (–), spaced as a
+clause pause and set per norm in ranges ("28.–30. 9.", "28. 7. – 3. 8. 2026"); prefer
+splitting the sentence instead. Use Czech quotation marks („lower-upper"), a
+non-breaking space after one-letter prepositions and conjunctions (k, s, v, z, o, u, a,
+i), and Czech number and date spacing (10 %, 28. 9.). Do not write symmetrical triads,
+"v dnešní době" openers, filler transitions or emoji.
 
 You also write the words that travel with the carousel, in the same register as the
 article. ig_caption is the Instagram caption in Czech, at most 500 characters, drawn
@@ -294,7 +322,8 @@ export interface ContractRepair {
     | "json_string_parsed"
     | "tag_slugified"
     | "tag_unslugifiable_dropped"
-    | "tag_duplicate_dropped";
+    | "tag_duplicate_dropped"
+    | "category_unknown_dropped";
 }
 
 /**
@@ -474,8 +503,55 @@ export function repairToolOutput(value: unknown, repairs: ContractRepair[]): unk
     }
   }
   const unwrapped = unwrapJsonStrings(compatible, WRITE_TOOL_INPUT_SCHEMA, "", repairs);
-  if (!isRecord(unwrapped) || !("tags" in unwrapped)) return unwrapped;
-  return { ...unwrapped, tags: repairedTags(unwrapped.tags, repairs) };
+  if (!isRecord(unwrapped)) return unwrapped;
+  let withCategories: Record<string, unknown> = unwrapped;
+  if ("categories" in unwrapped) {
+    // Drop the key rather than merging over it: an empty array is not a state
+    // the reader has, and `{...x, ...{}}` would leave the bad value in place.
+    const { categories: _raw, ...rest } = unwrapped;
+    withCategories = { ...rest, ...repairedCategories(_raw, repairs) };
+  }
+  if (!("tags" in withCategories)) return withCategories;
+  return { ...withCategories, tags: repairedTags(withCategories.tags, repairs) };
+}
+
+/**
+ * Keep the categories the reader can route and drop the rest.
+ *
+ * A category the reader does not know is a section that goes quietly missing,
+ * and a whole failed write call is a far worse outcome than an uncategorised
+ * edition, so an unknown value is dropped rather than thrown. Dropping every
+ * value removes the field, because an empty array is not a state the reader has.
+ */
+function repairedCategories(
+  value: unknown,
+  repairs: ContractRepair[],
+): { categories?: readonly string[] } {
+  const sample = (input: unknown): string => JSON.stringify(input) ?? String(input);
+  if (!Array.isArray(value)) {
+    if (value !== undefined) {
+      repairs.push({
+        field: "categories",
+        received: sample(value).slice(0, REPAIR_SAMPLE_CHARS),
+        reason: "category_unknown_dropped",
+      });
+    }
+    return {};
+  }
+  const known = value.filter(
+    (entry): entry is string =>
+      typeof entry === "string" && (ARTICLE_CATEGORIES as readonly string[]).includes(entry),
+  );
+  const unique = [...new Set(known)].slice(0, 2);
+  if (unique.length !== value.length) {
+    repairs.push({
+      field: "categories",
+      received: sample(value).slice(0, REPAIR_SAMPLE_CHARS),
+      became: sample(unique),
+      reason: "category_unknown_dropped",
+    });
+  }
+  return unique.length > 0 ? { categories: unique } : {};
 }
 
 function recordRepairs(usage: EditionUsage, repairs: readonly ContractRepair[]): void {
@@ -773,6 +849,7 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
     slug,
     date: brief.date,
     tags: response.value.tags,
+    ...(response.value.categories?.length ? { categories: [...response.value.categories] } : {}),
     ...(response.value.why_this_story ? { whyThisStory: response.value.why_this_story } : {}),
     wire,
     sources: pickedItems.map((item) => {

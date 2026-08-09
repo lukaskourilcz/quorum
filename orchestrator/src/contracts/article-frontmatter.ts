@@ -3,6 +3,10 @@ import { DateSchema, DateTimeSchema, HttpsUrlSchema, openObject } from "./common
 
 const NonEmptyStringSchema = z.string().trim().min(1);
 
+/** The section keys an edition may be filed under. */
+export const ARTICLE_CATEGORIES = ["ai-models"] as const;
+export type ArticleCategory = (typeof ARTICLE_CATEGORIES)[number];
+
 export const SourceRefSchema = openObject({
   id: NonEmptyStringSchema,
   url: z.string().url().refine((value) => ["http:", "https:"].includes(new URL(value).protocol)),
@@ -55,6 +59,13 @@ export const ArticleFrontmatterV2Schema = openObject({
     storyLine: z.string().trim().min(1).max(66)
   }).optional(),
   tags: z.array(NonEmptyStringSchema).min(1),
+  /**
+   * Section keys the reader routes on. English by contract and separate from
+   * `tags`, which stay Czech: tags are a browsing taxonomy, a category is a
+   * section the edition belongs to. Optional because an uncategorised edition
+   * is correct far more often than a miscategorised one.
+   */
+  categories: z.array(z.enum(ARTICLE_CATEGORIES)).max(2).optional(),
   sources: z.array(SourceRefSchema),
   illustration: openObject({
     path: z.string().regex(/^\/(?:images\/[a-z0-9][a-z0-9/_-]*\.(?:webp|png|svg)|illustrations\/[a-zA-Z0-9/_-]+\.webp)$/).optional(),

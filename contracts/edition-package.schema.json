@@ -137,6 +137,16 @@
                         "minLength": 1
                       }
                     },
+                    "categories": {
+                      "maxItems": 2,
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "ai-models"
+                        ]
+                      }
+                    },
                     "sources": {
                       "type": "array",
                       "items": {
@@ -651,6 +661,16 @@
                       "items": {
                         "type": "string",
                         "minLength": 1
+                      }
+                    },
+                    "categories": {
+                      "maxItems": 2,
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "ai-models"
+                        ]
                       }
                     },
                     "sources": {

@@ -74,6 +74,7 @@ function frontmatter(
     alternative_headlines: localized.alternativeHeadlines,
     ...(localized.socialCopy ? { social_copy: localized.socialCopy } : {}),
     tags: article.tags,
+    ...(article.categories?.length ? { categories: article.categories } : {}),
     sources: article.sources,
     illustration: {
       path: image.hero_path.replace(/^public/u, ""),
