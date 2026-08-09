@@ -95,6 +95,23 @@ export function matchRecipeOverride(
   };
 }
 
+/**
+ * The recipe recorded at delivery, if delivery recorded one.
+ *
+ * Composition reads what inventory wrote rather than deriving a design of its own hours later.
+ * Both derivations are pure and would agree — but only while the receipts they read are the same,
+ * and the composer runs after the delivery has added one. Reading the record removes the question.
+ */
+async function readRecordedRecipe(root: string, venture: string, slug: string, date: string): Promise<CarouselRecipe | null> {
+  try {
+    const raw = JSON.parse(await readFile(path.join(root, `ventures/carousel-studio/recipes/${venture}/${date}-${slug}.json`), "utf8"));
+    const parsed = CarouselRecipeSchema.safeParse(raw);
+    return parsed.success ? parsed.data : null;
+  } catch {
+    return null;
+  }
+}
+
 async function readOverrides(root: string): Promise<unknown[]> {
   try {
     const raw = JSON.parse(await readFile(path.join(root, OVERRIDES_PATH), "utf8")) as { overrides?: unknown };
@@ -118,11 +135,12 @@ export async function effectiveRecipe(input: {
   date: string;
   hasHero?: boolean;
 }): Promise<CarouselRecipe> {
-  const [overrides, history] = await Promise.all([
+  const [overrides, history, recorded] = await Promise.all([
     readOverrides(input.root),
-    readRecipeHistory(input.root, input.venture)
+    readRecipeHistory(input.root, input.venture),
+    readRecordedRecipe(input.root, input.venture, input.slug, input.date)
   ]);
-  const derived = deriveRecipe(
+  const derived = recorded ?? deriveRecipe(
     { venture: input.venture, slug: input.slug, date: input.date, ...(input.hasHero === undefined ? {} : { hasHero: input.hasHero }) },
     history
   );

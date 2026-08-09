@@ -12,6 +12,9 @@ import {
   renderCaptionFile
 } from "@boardlessai/carousel-studio";
 import { articleCopyPack, socialCopyPath, storeSocialCopyPack } from "../src/studio/social-copy-store.js";
+import { storeArticleCarouselSummary } from "../src/studio/carousel-summary-store.js";
+import { effectiveRecipe } from "../src/social/deck-style.js";
+import { writeDeckReceipt } from "../src/social/deck-receipt.js";
 import type { ArticlePackage } from "../src/contracts/mma-files.js";
 
 /**
@@ -164,5 +167,69 @@ describe("an article's copy pack", () => {
       schemaVersion: "social-copy/1",
       venture: "mma-files"
     });
+  });
+});
+
+/**
+ * Delivery records inventory: a summary, a recipe and a copy pack, side by side.
+ *
+ * None of it needs a channel to be enabled and none of it posts. What it buys is that "what does
+ * this article's social set look like" has one recorded answer, so the Lab reads it now and the
+ * composer consumes it when channels open rather than deriving a design of its own hours later.
+ */
+describe("what a delivery records beside the package", () => {
+  it("writes the summary, the recipe and the copy in one pass", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "delivery-inventory-"));
+    const stored = (await storeArticleCarouselSummary(root, article({
+      bodyMDX: Array.from({ length: 8 }, (_, index) => `Věta číslo ${index + 1} ${"slovo ".repeat(23)}konec.`).join(" ")
+    })))!;
+
+    expect(stored.path).toContain("summaries/mma-files/");
+    expect(stored.recipePath).toBe("ventures/carousel-studio/recipes/mma-files/2026-08-02-ufc-valentina-shevchenko.json");
+    expect(stored.copyPath).toBe("ventures/carousel-studio/social-copy/mma-files/2026-08-02-ufc-valentina-shevchenko.json");
+    for (const relative of [stored.path, stored.recipePath, stored.copyPath!]) {
+      expect(JSON.parse(await readFile(path.join(root, relative), "utf8"))).toBeTruthy();
+    }
+    const recorded = JSON.parse(await readFile(path.join(root, stored.recipePath), "utf8")) as Record<string, unknown>;
+    expect(recorded.schemaVersion).toBe("carousel-recipe/1");
+    // A reference, not a second copy: two copies of a caption become two captions the moment one
+    // of them is corrected.
+    expect(recorded.copyRef).toBe(stored.copyPath);
+    expect(recorded.summaryRef).toBe(stored.path);
+  });
+
+  it("hands the composer the recorded recipe rather than a freshly derived one", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "delivery-inventory-"));
+    const stored = (await storeArticleCarouselSummary(root, article({
+      bodyMDX: Array.from({ length: 8 }, (_, index) => `Věta číslo ${index + 1} ${"slovo ".repeat(23)}konec.`).join(" ")
+    })))!;
+    // A receipt added after delivery moves what a fresh derivation would choose; the record does
+    // not move, which is the whole reason composition reads it.
+    await writeDeckReceipt({
+      root,
+      venture: "mma-files",
+      date: "2026-08-03",
+      slug: "later",
+      templateId: "deck-tower-7",
+      style: "tower",
+      recipe: { family: "tower" },
+      slideCount: 7,
+      hashes: ["a"]
+    });
+    const composed = await effectiveRecipe({
+      root,
+      venture: "mma-files",
+      slug: "ufc-valentina-shevchenko",
+      date: "2026-08-02"
+    });
+    expect(composed).toEqual(stored.recipe);
+  });
+
+  it("replays a delivery to the same recipe", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "delivery-inventory-"));
+    const body = Array.from({ length: 8 }, (_, index) => `Věta číslo ${index + 1} ${"slovo ".repeat(23)}konec.`).join(" ");
+    const first = (await storeArticleCarouselSummary(root, article({ bodyMDX: body })))!;
+    const second = (await storeArticleCarouselSummary(root, article({ bodyMDX: body })))!;
+    expect(second.recipe).toEqual(first.recipe);
   });
 });
