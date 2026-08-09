@@ -82,7 +82,7 @@ this decision wins, then the document, then — being newest — the issue.
 - [x] DL-17 — The roster lists every agent with status (contract §DL-17)
 - [x] DL-18 — Footer links open simplified content in dialogs (contract §DL-18)
 - [x] DL-19 — Navigation hover reserves no space for an invisible dot (contract §DL-19)
-- [ ] DL-20 — Full gates, self-review, merge, contract retired (contract §DL-20)
+- [x] DL-20 — Full gates, self-review, merge, contract retired (contract §DL-20)
 
 ## Approval reference
 
