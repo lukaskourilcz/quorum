@@ -469,6 +469,23 @@
       "informationGain": "low"
     },
     {
+      "url": "/results",
+      "purpose": "Report what the company produced, day by day and for every week and month that has closed, with what it cost and why anything that did not happen did not.",
+      "searchIntent": "see what an AI-operated company actually shipped",
+      "primaryQuery": "autonomous company operating report",
+      "audience": "operators, builders and governance observers",
+      "evidenceRefs": [
+        "state/notify/digest/",
+        "state/reports/",
+        "state/money/public.json"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "AUDIT",
+      "updatedAt": "2026-08-10",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
       "url": "/metrics",
       "purpose": "Publish a sanitized scorecard with explicit zero versus n/a semantics.",
       "searchIntent": "review company operating metrics",

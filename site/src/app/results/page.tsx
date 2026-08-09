@@ -4,6 +4,7 @@ import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { MeasuresSection } from "@/components/sections/metrics-section";
 import { MoneySection } from "@/components/sections/money-section";
+import { PeriodReportsSection } from "@/components/sections/period-reports-section";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 import {
   getDailyResults,
@@ -11,12 +12,30 @@ import {
   withMissingDays,
   type DailyResultRow
 } from "@/lib/daily-results";
+import { readOperationsReports } from "@/lib/operations-reports";
 import { formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description:
-    "What each BoardlessAI project produced on each day, what it cost, and why anything that failed did.",
-  title: "Results"
+    "What each BoardlessAI project produced, day by day, week by week and month by month — what it cost, and why anything that failed did.",
+  title: "Reports"
+};
+
+/**
+ * Three views of the same question, on one page.
+ *
+ * The navigation is capped at six entries, and /results was already the daily operating report in
+ * everything but name — so it becomes Reports rather than a seventh entry. The view lives in a
+ * query parameter, which keeps each one a real URL somebody can link to, and an unknown value
+ * falls through to Daily rather than to an error page.
+ */
+const VIEWS = ["daily", "weekly", "monthly"] as const;
+type ReportView = (typeof VIEWS)[number];
+
+const VIEW_LABEL: Readonly<Record<ReportView, string>> = {
+  daily: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly"
 };
 
 const STATUS_LABEL: Record<DailyResultRow["status"], string> = {
@@ -45,10 +64,21 @@ const STATUS_TONE: Record<DailyResultRow["status"], string> = {
   "not-held": "text-[var(--fog)]"
 };
 
-export default async function ResultsPage() {
-  const recorded = await getDailyResults();
+export default async function ResultsPage({
+  searchParams
+}: {
+  searchParams: Promise<{ view?: string }>;
+}) {
+  const [{ view: requestedView }, recorded, kpiStatuses, periodReports] = await Promise.all([
+    searchParams,
+    getDailyResults(),
+    getVentureKpiStatuses(),
+    readOperationsReports()
+  ]);
+  const view: ReportView = VIEWS.includes(requestedView as ReportView)
+    ? requestedView as ReportView
+    : "daily";
   const days = withMissingDays(recorded);
-  const kpiStatuses = await getVentureKpiStatuses();
   const totalCost = recorded.reduce((sum, day) => sum + day.totalCostUsd, 0);
 
   return (
@@ -65,11 +95,53 @@ export default async function ResultsPage() {
             </p>
           </div>
         }
-        description="One table per day, one row per project. A day with no output is a normal result: the evidence gates stop work that cannot be supported, and stopping costs nothing."
-        eyebrow="Daily results"
+        description="One table per day, one row per project, and the weekly and monthly records the council writes when a period closes. A day with no output is a normal result: the evidence gates stop work that cannot be supported, and stopping costs nothing."
+        eyebrow="Operating reports"
         title="What the company produced"
       />
 
+      <nav
+        aria-label="Report period"
+        className="mx-auto flex max-w-[var(--container)] flex-wrap gap-2 px-5 md:px-10"
+      >
+        {VIEWS.map((candidate) => (
+          <Link
+            aria-current={candidate === view ? "page" : undefined}
+            className={`min-h-11 rounded-[var(--radius-button)] border px-4 py-2.5 font-mono text-xs uppercase tracking-[0.1em] transition-colors ${
+              candidate === view
+                ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]"
+                : "border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--accent)]"
+            }`}
+            href={candidate === "daily" ? "/results" : `/results?view=${candidate}`}
+            key={candidate}
+          >
+            {VIEW_LABEL[candidate]}
+          </Link>
+        ))}
+      </nav>
+
+      {view !== "daily" ? (
+        <section className="mx-auto max-w-[var(--container)] px-5 py-16 md:px-10 md:py-20">
+          <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
+            {view === "weekly" ? "Every finished week" : "Every finished month"}
+          </h2>
+          <p className="mt-2 max-w-3xl text-[var(--muted-foreground)]">
+            Written once, the night the period closed, from the records the runtime had already
+            made. Anything that could not be measured is shown as missing rather than as zero.
+          </p>
+          <div className="mt-8">
+            <PeriodReportsSection
+              period={view}
+              reports={view === "weekly" ? periodReports.weekly : periodReports.monthly}
+            />
+          </div>
+          {periodReports.unreadable > 0 ? (
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.1em] text-[var(--fog)]">
+              {periodReports.unreadable} report {periodReports.unreadable === 1 ? "file" : "files"} could not be read
+            </p>
+          ) : null}
+        </section>
+      ) : (
       <section className="mx-auto max-w-[var(--container)] px-5 py-20 md:px-10 md:py-24">
         {kpiStatuses.length > 0 ? (
           <div className="mb-16">
@@ -192,6 +264,7 @@ export default async function ResultsPage() {
           </div>
         )}
       </section>
+      )}
 
       {/* Money and the measures used to be two more entries in an eleven-item navigation bar.
           They answer the same question this page does — what came of the work — so they are

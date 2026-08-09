@@ -18,7 +18,7 @@ const links = [
   { href: "/standups", label: "Meetings" },
   { href: "/ventures", label: "Projects" },
   { href: "/agents", label: "Team" },
-  { href: "/results", label: "Results" },
+  { href: "/results", label: "Reports" },
   { href: "/company", label: "Company" }
 ];
 
