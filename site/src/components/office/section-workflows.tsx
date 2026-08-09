@@ -436,7 +436,7 @@ export function SectionWorkflows({
           slots={data.slots}
           workshopWorking={workshopWorking}
         />
-        <WorkflowsRoomDialog onClose={() => setOpenRoom(null)} room={room} />
+        <WorkflowsRoomDialog data={data} onClose={() => setOpenRoom(null)} room={room} />
         <WorkflowsDockDialog data={data} onClose={() => setDock(false)} open={dock} />
 
         {open && !compact ? (

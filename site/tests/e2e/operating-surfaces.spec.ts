@@ -728,6 +728,59 @@ test("the meeting room's controls and the admin sign-out are one small family", 
  * not scroll.
  */
 test.describe("the facilities plan opens dialogs", () => {
+  /*
+   * The drawing in the dialog is the plan, cropped — not a second picture of a room.
+   *
+   * A separate illustration is a second thing that can disagree with the first. This asserts that
+   * it is the same component under a viewBox of the room's own rectangle, and that the crop
+   * carries none of the plan's pressable places into the modal.
+   */
+  test("the dialog shows the floor plan cropped to that room", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Facilities", exact: true }).click();
+    const whole = await page.locator("svg[aria-label='Floor plan of the BoardlessAI office']").first().getAttribute("viewBox");
+
+    for (const room of ["company", "fightaiq", "titty-tuesdays"]) {
+      await page.locator(`[data-wf-place="${room}"]`).click({ force: true });
+      const fragment = page.locator("[data-room-fragment] svg");
+      await expect(fragment, room).toBeVisible();
+      const cropped = await fragment.getAttribute("viewBox");
+      expect(cropped, `${room} is not cropped`).not.toBe(whole);
+      // The crop is the room's own rectangle plus a margin of wall, so it is far smaller than the
+      // whole floor on both axes.
+      const [, , width, height] = (cropped ?? "").split(" ").map(Number);
+      const [, , wholeWidth] = (whole ?? "").split(" ").map(Number);
+      expect(width!).toBeLessThan(wholeWidth! * 0.6);
+      expect(height!).toBeGreaterThan(0);
+      // Nothing pressable came with it: a modal containing four more buttons to the same rooms
+      // would be nested interactive content and a second way to open a dialog from inside one.
+      expect(await page.locator("[data-room-fragment] [data-wf-place]").count(), room).toBe(0);
+      await page.keyboard.press("Escape");
+    }
+  });
+
+  /*
+   * The magazine rooms show the card a reader gets when the article is shared.
+   *
+   * "Latest output" was a line of prose. For a room whose output is a published article the
+   * honest form of it is the share card itself — the picture, the headline and where it went.
+   */
+  test("a magazine room shows the share card, picture included", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Facilities", exact: true }).click();
+    await page.locator('[data-wf-place="caught-up"]').click({ force: true });
+
+    const card = page.locator("[data-latest-card]");
+    await expect(card).toBeVisible();
+    const image = page.locator("[data-latest-image]");
+    await expect(image).toBeVisible();
+    // A real image, decoded, not a broken one: the share card's whole point is the picture.
+    await expect
+      .poll(async () => image.evaluate((node: HTMLImageElement) => node.naturalWidth))
+      .toBeGreaterThan(0);
+    await page.keyboard.press("Escape");
+  });
+
   test("a room opens and closes by mouse, and returns focus", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     const plan = page.locator("[data-wf-place]").first();
@@ -829,6 +882,36 @@ test.describe("the roster lists every agent", () => {
     expect(rendered.count).toContain(`${agents.filter((agent) => agent.status === "active").length} active`);
   });
 
+  /*
+   * In the panel, not merely in the document.
+   *
+   * The first version of this rendered all forty-two and left twenty-two of them below the fold of
+   * an inner scroller, so a reader counted the roster at twenty and was right about what they
+   * could see. Being in the DOM is not the same as being shown.
+   */
+  for (const size of [{ width: 1280, height: 800 }, { width: 1440, height: 900 }]) {
+    test(`shows the whole roster without scrolling at ${size.width}x${size.height}`, async ({ page }) => {
+      await page.setViewportSize(size);
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.getByRole("button", { name: "Team", exact: true }).click();
+      await expect(page.locator("[data-team-panel]")).toBeVisible();
+
+      const measured = await page.evaluate(() => {
+        const scroller = document.querySelector("[data-team-scroll]")!;
+        const rows = [...document.querySelectorAll("[data-team-role], [data-team-council] > div")];
+        const box = scroller.getBoundingClientRect();
+        return {
+          total: rows.length,
+          visible: rows.filter((row) => {
+            const rect = row.getBoundingClientRect();
+            return rect.top >= box.top - 2 && rect.bottom <= box.bottom + 2;
+          }).length
+        };
+      });
+      expect(measured.visible, `${measured.visible} of ${measured.total} roles are on screen`).toBe(measured.total);
+    });
+  }
+
   test("holds at 360px without clipping a name", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await page.goto("/", { waitUntil: "networkidle" });
@@ -869,8 +952,10 @@ test.describe("footer links open dialogs", () => {
       const surface = page.locator("[data-dialog-surface]");
       await expect(surface, topic).toBeVisible();
       // Real content, not an empty shell with a title on it.
-      expect((await surface.innerText()).length, topic).toBeGreaterThan(200);
-      await expect(surface).toContainText("Open the full page");
+      expect((await surface.innerText()).length, topic).toBeGreaterThan(600);
+      // And no way out to a page built in the previous design. The dialog carries the answer or
+      // it does not answer.
+      expect(await surface.locator("a").count(), `${topic} links away`).toBe(0);
       await page.keyboard.press("Escape");
       await expect(page.locator("[data-dialog-surface]")).toHaveCount(0);
     }
@@ -990,5 +1075,66 @@ test.describe("navigation reserves no space it does not paint", () => {
     const before = await item.boundingBox();
     await item.hover();
     expect(await item.boundingBox()).toEqual(before);
+  });
+});
+
+/**
+ * A list scrolls before the page jumps.
+ *
+ * The walkthrough claims the wheel for the whole page and turns a gesture into a jump between
+ * sections. Over anything that scrolls inside a section — the meetings room's message pane, the
+ * calendar's rows — that was wrong twice over: the list could not be scrolled, and the reader was
+ * moved somewhere they had not asked to go. The browser would have chained the scroll to the inner
+ * element and only reached the page at its end, which is the behaviour restored here.
+ */
+test.describe("scrolling a list does not jump the section", () => {
+  test("the wheel scrolls the calendar's rows and leaves the section alone", async ({ page }) => {
+    // Short enough that the day does not fit, which is the state the bug lived in: a reader on a
+    // laptop trying to reach the evening rooms and being thrown into the next section instead.
+    await page.setViewportSize({ width: 1280, height: 700 });
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Calendar", exact: true }).click();
+    const rows = page.locator("[data-cal-rows]");
+    await expect(rows).toBeVisible();
+
+    // Only meaningful if the list actually overflows at this viewport.
+    const overflow = await rows.evaluate((node) => node.scrollHeight - node.clientHeight);
+    test.skip(overflow < 20, "the calendar fits without scrolling at this size");
+
+    const settled = async (): Promise<number> => {
+      let previous = -1;
+      for (let attempt = 0; attempt < 40; attempt += 1) {
+        const now = await page.evaluate(() => window.scrollY);
+        if (now === previous) return now;
+        previous = now;
+        await page.waitForTimeout(100);
+      }
+      return previous;
+    };
+    const pageBefore = await settled();
+
+    const box = (await rows.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(0, 200);
+    await expect.poll(async () => rows.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+    // And the page stayed where it was: the gesture went to the list, not to the walk.
+    expect(await page.evaluate(() => window.scrollY)).toBe(pageBefore);
+  });
+
+  test("the wheel hands back to the walk at the end of a list", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 700 });
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Calendar", exact: true }).click();
+    const rows = page.locator("[data-cal-rows]");
+    await expect(rows).toBeVisible();
+    // Park the list at its end, which is where the reader who has finished reading it is.
+    await rows.evaluate((node) => { node.scrollTop = node.scrollHeight; });
+
+    const before = await page.evaluate(() => window.scrollY);
+    const box = (await rows.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(0, 260);
+    // An exempt subtree would trap the reader here forever; travel-aware chaining moves the walk.
+    await expect.poll(async () => page.evaluate(() => window.scrollY), { timeout: 8_000 }).not.toBe(before);
   });
 });

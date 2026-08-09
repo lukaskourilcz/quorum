@@ -1,9 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   GESTURE_GAP_MS,
   LOCK_MS,
   armWheelGesture,
   createWheelGestureState,
+  scrollableAncestor,
   shouldWheelAct
 } from "./wheel-gesture";
 
@@ -133,5 +134,100 @@ describe("shouldWheelAct", () => {
     for (let at = 1_010; at < 1_000 + LOCK_MS; at += 10) {
       expect(shouldWheelAct(state, at, 120)).toBe(false);
     }
+  });
+});
+
+/**
+ * Handing the wheel to a list before claiming it for the page.
+ *
+ * The walkthrough calls `preventDefault` on every wheel event and turns the gesture into a jump.
+ * Over the roster, the calendar's rows or a room's message list that is the wrong answer twice
+ * over: the list cannot be scrolled at all, and the reader is moved to a section they did not ask
+ * for. The browser would have scrolled the inner element first and only chained to the page at its
+ * end, which is exactly the rule below.
+ */
+describe("scrollableAncestor", () => {
+  /*
+   * A DOM node reduced to the four properties the rule reads.
+   *
+   * The suite runs in node, where there is no `Element` and no `getComputedStyle`. Both are
+   * stubbed rather than pulled in with a DOM implementation: the rule is arithmetic over four
+   * numbers and a string, and a whole DOM would be a slower way to assert the same thing.
+   */
+  class FakeElement {
+    scrollHeight = 0;
+    clientHeight = 0;
+    scrollTop = 0;
+    parentElement: FakeElement | null = null;
+  }
+
+  const styles = new Map<object, string>();
+  const originalStyle = globalThis.getComputedStyle;
+  const originalElement = globalThis.Element;
+
+  function element(options: {
+    overflowY: string;
+    scrollHeight: number;
+    clientHeight: number;
+    scrollTop: number;
+    parent?: FakeElement | null;
+  }): FakeElement {
+    const node = new FakeElement();
+    node.scrollHeight = options.scrollHeight;
+    node.clientHeight = options.clientHeight;
+    node.scrollTop = options.scrollTop;
+    node.parentElement = options.parent ?? null;
+    styles.set(node, options.overflowY);
+    return node;
+  }
+
+  beforeEach(() => {
+    globalThis.Element = FakeElement as unknown as typeof Element;
+    globalThis.getComputedStyle = ((node: object) =>
+      ({ overflowY: styles.get(node) ?? "visible" })) as unknown as typeof getComputedStyle;
+  });
+
+  afterEach(() => {
+    globalThis.getComputedStyle = originalStyle;
+    globalThis.Element = originalElement;
+    styles.clear();
+  });
+
+  const check = (node: FakeElement, deltaY: number, root: FakeElement | null = null) =>
+    scrollableAncestor(node as unknown as Element, deltaY, root as unknown as Element | null);
+
+  it("claims the wheel for a list with room left below", () => {
+    const list = element({ overflowY: "auto", scrollHeight: 900, clientHeight: 300, scrollTop: 0 });
+    expect(check(list, 120)).toBe(list);
+  });
+
+  it("hands it back at the end of the list, so the reader can leave the section", () => {
+    const list = element({ overflowY: "auto", scrollHeight: 900, clientHeight: 300, scrollTop: 600 });
+    expect(check(list, 120)).toBeNull();
+    // And still takes it going the other way, because there is travel above.
+    expect(check(list, -120)).toBe(list);
+  });
+
+  it("ignores an element that does not overflow, however it is styled", () => {
+    const list = element({ overflowY: "auto", scrollHeight: 300, clientHeight: 300, scrollTop: 0 });
+    expect(check(list, 120)).toBeNull();
+  });
+
+  it("ignores one that overflows but does not scroll", () => {
+    const clipped = element({ overflowY: "hidden", scrollHeight: 900, clientHeight: 300, scrollTop: 0 });
+    expect(check(clipped, 120)).toBeNull();
+  });
+
+  it("finds a scroller a few levels up from the pointer's target", () => {
+    const list = element({ overflowY: "auto", scrollHeight: 900, clientHeight: 300, scrollTop: 0 });
+    const row = element({ overflowY: "visible", scrollHeight: 40, clientHeight: 40, scrollTop: 0, parent: list });
+    const label = element({ overflowY: "visible", scrollHeight: 20, clientHeight: 20, scrollTop: 0, parent: row });
+    expect(check(label, 120)).toBe(list);
+  });
+
+  it("stops at the walkthrough's own root rather than reaching the document", () => {
+    const root = element({ overflowY: "auto", scrollHeight: 9000, clientHeight: 800, scrollTop: 0 });
+    const inner = element({ overflowY: "visible", scrollHeight: 40, clientHeight: 40, scrollTop: 0, parent: root });
+    expect(check(inner, 120, root)).toBeNull();
   });
 });

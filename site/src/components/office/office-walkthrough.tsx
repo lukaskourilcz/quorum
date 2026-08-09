@@ -18,6 +18,7 @@ import {
   LOCK_MS,
   armWheelGesture,
   createWheelGestureState,
+  scrollableAncestor,
   shouldWheelAct
 } from "@/components/office/wheel-gesture";
 
@@ -278,6 +279,16 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
       // So is an open Workflows panel: it is one screenful of a floor plan's depth, and a reader
       // reading down it is not asking to leave the room.
       if (target instanceof Element && target.closest("[data-wheel-exempt]")) return;
+      /*
+       * A list that can still scroll gets the wheel before the page does.
+       *
+       * Marking every scroller `data-wheel-exempt` was the alternative and it is the wrong shape:
+       * an exempt subtree never hands the wheel back, so a reader who reaches the end of the
+       * roster can no longer leave the section. Asking the element whether it has travel left in
+       * this direction gives both — the list scrolls to its end, and the gesture after that moves
+       * the walk, which is what the browser would have done natively.
+       */
+      if (scrollableAncestor(target, event.deltaY, rootRef.current)) return;
       event.preventDefault();
 
       const now = Date.now();

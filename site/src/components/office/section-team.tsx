@@ -38,7 +38,7 @@ function StatusTag({ status }: { status: OfficeTeam["council"][number]["status"]
 export function SectionTeam({ team }: { team: OfficeTeam }) {
   return (
     <div
-      className="w-full rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px] max-lg:max-w-[1160px] lg:h-[65vh] lg:w-[65vw]"
+      className="w-full rounded-[14px] border border-[#3f3f46] bg-[rgba(11,11,13,.9)] shadow-[0_40px_120px_rgba(0,0,0,.65)] backdrop-blur-[16px] max-lg:max-w-[1160px] lg:max-h-[78vh] lg:w-[74vw]"
       data-team-panel
       style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}
     >
@@ -75,17 +75,17 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         role="group"
         tabIndex={0}
       >
-      <div className="shrink-0 px-[22px] pb-1.5 pt-[18px]">
-        <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--bai-accent)]">
+      <div className="shrink-0 px-[22px] pb-1 pt-3.5">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--bai-accent)]">
           Council · {team.council.length} votes
         </p>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4" data-team-council>
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4" data-team-council>
           {team.council.map((role) => {
             // AUDIT holds the veto, and the card says so with a border rather than a badge.
             const veto = role.id === "AUDIT";
             return (
               <div
-                className="flex gap-3 rounded-[10px] p-3.5"
+                className="flex gap-3 rounded-[10px] p-3"
                 key={role.id}
                 style={{
                   border: `1px solid ${veto ? "var(--bai-accent)" : "#2e2e34"}`,
@@ -122,8 +122,8 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         </div>
       </div>
 
-      <div className="px-[22px] pb-[18px] pt-4">
-        <p className="mb-3 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
+      <div className="px-[22px] pb-3.5 pt-3">
+        <p className="mb-2 shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[#94949c]">
           Specialists and venture roles · no vote
         </p>
         {/*
@@ -133,22 +133,35 @@ export function SectionTeam({ team }: { team: OfficeTeam }) {
         */}
         {/* `tabIndex` because the list scrolls: a scrollable region with no focusable content
             inside it is unreachable by keyboard, and axe fails the whole page for it. */}
+        {/*
+          Three columns at laptop width and four above it. Two columns put twenty-two of the
+          thirty-eight below the fold of the panel's own scroller, and a roster most of which is
+          reached by scrolling a window inside a window is a roster the reader will assume is
+          twenty long — which is what happened.
+        */}
         <div
-          className="grid grid-cols-1 gap-x-[22px] gap-y-2.5 sm:grid-cols-2 xl:grid-cols-4"
+          className="grid grid-cols-1 gap-x-[18px] gap-y-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           data-team-list
         >
           {team.specialists.map((role) => (
-            <div className="flex min-w-0 gap-2.5 border-t border-[#1e1e22] pt-2.5" data-team-role key={role.id}>
-              <span className="w-[62px] shrink-0 font-mono text-[12px] font-semibold text-[#f4f4f5]">
+            /*
+              One line per role, and that is the whole design decision.
+              Thirty-eight roles at two or three lines each is four hundred pixels below the fold
+              of a panel that is two thirds of a laptop screen, which is why a reader counted this
+              roster at twenty. A name and a title fit on one line; the mandate is a title
+              attribute here and prose on the agent's own page, where there is room to read it.
+            */
+            <div
+              className="flex min-w-0 items-baseline gap-2 border-t border-[#1e1e22] pt-1"
+              data-team-role
+              key={role.id}
+              title={role.line}
+            >
+              <span className="w-[58px] shrink-0 font-mono text-[11.5px] font-semibold leading-[1.6] text-[#f4f4f5]">
                 {role.id}
               </span>
-              <div className="min-w-0">
-                <p className="flex flex-wrap items-baseline gap-1.5 text-[12px] leading-[1.45] text-[#d4d4d8]">
-                  {role.title}
-                  <StatusTag status={role.status} />
-                </p>
-                <p className="text-[12px] leading-[1.45] text-[#94949c]">{role.line}</p>
-              </div>
+              <span className="truncate text-[11.5px] leading-[1.6] text-[#94949c]">{role.title}</span>
+              <StatusTag status={role.status} />
             </div>
           ))}
         </div>

@@ -119,6 +119,38 @@ export function shouldWheelAct(state: WheelGestureState, now: number, deltaY: nu
   return true;
 }
 
+/**
+ * The nearest ancestor that can still scroll the way this wheel is pushing.
+ *
+ * The walkthrough claims the wheel for the whole page: it calls `preventDefault` and turns the
+ * gesture into a jump between sections. That is right over a section's background and wrong over
+ * anything inside it that scrolls — the roster, the calendar's rows, a room's message list. The
+ * browser would have chained the scroll to the inner element first and only reached the page when
+ * the element hit its end; preventing the default removed that step, so those lists could not be
+ * scrolled at all and every attempt jumped the reader somewhere they had not asked to go.
+ *
+ * This restores the step. An element counts when it actually overflows, when its computed
+ * `overflow-y` scrolls, and when there is travel left in the direction pushed — the last of those
+ * is what hands the wheel back to the page at the end of a list instead of trapping the reader in
+ * it. The one-pixel tolerance is for fractional scroll positions, which are ordinary at non-integer
+ * device pixel ratios.
+ */
+export function scrollableAncestor(target: EventTarget | null, deltaY: number, root: Element | null): Element | null {
+  let node = target instanceof Element ? target : null;
+  while (node && node !== root) {
+    const style = getComputedStyle(node);
+    const scrolls = style.overflowY === "auto" || style.overflowY === "scroll";
+    if (scrolls && node.scrollHeight > node.clientHeight + 1) {
+      const room = deltaY > 0
+        ? node.scrollHeight - node.clientHeight - node.scrollTop
+        : node.scrollTop;
+      if (room > 1) return node;
+    }
+    node = node.parentElement;
+  }
+  return null;
+}
+
 /** Record that the caller acted, and for how long the wheel is now ignored. */
 export function armWheelGesture(state: WheelGestureState, now: number, lockMs: number): void {
   state.lockUntil = now + lockMs;

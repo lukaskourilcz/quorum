@@ -20,19 +20,25 @@ export async function readFooterFacts(): Promise<FooterFacts> {
     getPublicMoneySnapshot().catch(() => null),
     getPublicStandups().catch(() => [])
   ]);
-  const updates = standups
-    .filter((standup) => !standup.fixture)
+  // Fixtures are excluded: they exist to exercise the software without paid calls, and a list of
+  // "recent events" that included them would be reporting tests as company activity.
+  const real = standups.filter((standup) => !standup.fixture);
+  const updates = real
     .map((standup) => ({
       at: standup.generatedAt ?? standup.roomTranscript.closedAt,
       title: `${standup.phase} meeting`,
-      detail: standup.decision.summary
+      detail: standup.decision.summary,
+      costUsd: standup.ledger.actual
     }))
     .sort((left, right) => right.at.localeCompare(left.at))
-    .slice(0, 5);
+    .slice(0, 6);
   return {
     capUsd: ALL_IN_CAP_USD,
     month: money?.costs.api.month ?? new Date().toISOString().slice(0, 7),
     monthlyUsd: money?.costs.api.monthlyUsd ?? 0,
+    cumulativeUsd: money?.costs.api.cumulativeUsd ?? 0,
+    fixedMonthlyUsd: money?.costs.fixed.monthlyUsd ?? 0,
+    meetingCount: real.length,
     updates
   };
 }

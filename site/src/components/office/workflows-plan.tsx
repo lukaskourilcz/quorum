@@ -427,13 +427,19 @@ export function WorkflowsPlan({
   compact,
   animate,
   fill,
-  onOpen
+  onOpen,
+  viewBox,
+  inert = false
 }: {
   rooms: readonly WorkflowsRoom[];
   slots: readonly WorkflowsSlot[];
   /** One note kind per slot, index-aligned with `slots`. The replay hands a shorter day. */
   notes: readonly WorkflowsNoteKind[];
   litRoom: OfficeProjectKey | null;
+  /** Crop the drawing to a rectangle of the plan's own coordinates. Whole floor when absent. */
+  viewBox?: string;
+  /** Draw it as a picture: no pressable places, no accessible name, out of the tab order. */
+  inert?: boolean;
   /**
    * The beat that is live, while the day performs (D3, D4).
    *
@@ -471,7 +477,14 @@ export function WorkflowsPlan({
   const collectBusy = legs.some((leg) => leg.station === "collect-lane");
   const bandBusy = (station: TravelStation) => occupied.has(station);
 
-  const press = (place: PlanPlace) => ({
+  /*
+   * The attributes that make a place pressable, or nothing at all.
+   *
+   * `inert` draws the same plan as a picture. The room dialog shows a crop of this drawing, and a
+   * crop with four operable places inside it would put buttons behind a modal's own controls,
+   * duplicate every `data-wf-place` in the document, and fail axe on nested interactive content.
+   */
+  const press = (place: PlanPlace) => inert ? {} : ({
     "data-wf-target": true,
     // The panel returns focus to the door it came out of, and this is how it finds it again.
     "data-wf-place": place,
@@ -498,13 +511,14 @@ export function WorkflowsPlan({
    */
   return (
     <svg
-      aria-label="Floor plan of the BoardlessAI office"
-      role="group"
+      aria-hidden={inert ? true : undefined}
+      aria-label={inert ? undefined : "Floor plan of the BoardlessAI office"}
+      role={inert ? "presentation" : "group"}
       preserveAspectRatio="xMidYMid meet"
       style={fill
         ? { display: "block", width: "100%", height: "100%" }
         : { display: "block", width: "100%", height: "auto" }}
-      viewBox={`${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
+      viewBox={viewBox ?? `${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
