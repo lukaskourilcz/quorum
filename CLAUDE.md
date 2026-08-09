@@ -150,6 +150,13 @@ Use the `builder` subagent on unchecked tasks in the newest decision file, one
 task per commit, tick checkboxes, update `state/ROADMAP.md`.
 
 
+## Engineering rules
+
+`docs/ENGINEERING.md` is the clean-code contract, and it is the same file in every repository this
+owner runs. It is mirrored byte-for-byte at `.agents/ENGINEERING.md` for Codex sessions and
+`orchestrator/tests/architecture.test.ts` fails on any drift between the two. Do not restate its
+rules here — a rule written in two places is two rules that will disagree.
+
 ## Shared skills
 
 Four skills in `.claude/skills/` are vendored verbatim from upstream and kept

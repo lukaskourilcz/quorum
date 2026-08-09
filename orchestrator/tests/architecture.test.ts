@@ -127,6 +127,21 @@ async function directoryNames(directory: string): Promise<string[]> {
 }
 
 describe("agent architecture", () => {
+  it("keeps the engineering contract byte-identical in both trees", async () => {
+    // The same file in every repository this owner runs, and in both of this one's agent trees.
+    // A rule that drifts between copies is two rules, and the copy a session happens to read
+    // decides which one it follows.
+    const canonical = await readFile(path.join(repoRoot, "docs", "ENGINEERING.md"));
+    const mirror = await readFile(path.join(repoRoot, ".agents", "ENGINEERING.md"));
+    expect(mirror.equals(canonical), ".agents/ENGINEERING.md differs from docs/ENGINEERING.md").toBe(true);
+
+    // And the three files that are supposed to point at it rather than restate it.
+    for (const pointer of ["CLAUDE.md", "AGENTS.md", "CONTRIBUTING.md"]) {
+      const body = await readFile(path.join(repoRoot, pointer), "utf8");
+      expect(body, `${pointer} does not point at the engineering contract`).toContain("ENGINEERING.md");
+    }
+  });
+
   it("keeps every mirrored Claude and Codex skill byte-identical", async () => {
     const claudeRoot = path.join(repoRoot, ".claude", "skills");
     const codexRoot = path.join(repoRoot, ".agents", "skills");
