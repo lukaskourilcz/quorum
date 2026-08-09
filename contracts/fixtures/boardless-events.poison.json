@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "boardless-events/1",
+  "updated": "2026-08-09",
+  "events": [
+    {
+      "id": "Bad Id With Spaces",
+      "scope": "moon",
+      "title": "",
+      "starts": "2026-10-14",
+      "ends": "2026-10-13",
+      "online": "no",
+      "url": "http://insecure.example.com"
+    },
+    {
+      "id": "duplicate",
+      "scope": "cz",
+      "title": "A",
+      "starts": "2026-10-14",
+      "online": false,
+      "url": "https://example.com"
+    },
+    {
+      "id": "duplicate",
+      "scope": "cz",
+      "title": "B",
+      "starts": "2026-10-15",
+      "online": false,
+      "url": "https://example.com"
+    }
+  ]
+}
