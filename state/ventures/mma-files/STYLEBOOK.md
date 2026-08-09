@@ -26,6 +26,7 @@ against it. Its ten sources stay in this file's git history.
 
 - Výsledkový text jde po kartě a uvádí kolo i způsob ukončení.
 - Pozvánka nejdřív ukáže hlavní zápas, místo a čas; potom skládá příběh karty.
+- Každý článek pojmenuje organizaci. Text o obou promotérech patří pod toho, kterým začíná.
 - Čísla zapadnou do věty. Větší přehled patří do tabulky nebo krátkého seznamu.
 - Nepřekládej anglické obraty doslova. Piš, jak se o zápasech mluví česky.
 
