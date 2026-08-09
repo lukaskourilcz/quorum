@@ -65,7 +65,7 @@ describe("FightAIQ roster and history automation", () => {
 |4:31
 |Prague
 |}`);
-    expect(parsed.fields).toMatchObject({ name: "Alex Example", dateOfBirth: "1994-05-02", heightCm: 180, reachCm: 187.96, division: "Lightweight", stance: "southpaw", record: "12-2-1" });
+    expect(parsed.fields).toMatchObject({ name: "Alex Example", dateOfBirth: "1994-05-02", heightCm: 180, reachCm: 187.96, division: "lightweight", stance: "southpaw", record: "12-2-1" });
     expect(parsed.fights).toEqual([expect.objectContaining({ result: "win", opponent: "Sam Example", event: "UFC Example", round: 2, elapsedSeconds: 571 })]);
   });
 

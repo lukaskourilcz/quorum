@@ -44,12 +44,24 @@ export function namesAgree(left: string, right: string): boolean {
  * because they are two different divisions with two different champions.
  */
 export function normalizeDivision(value: string): string {
-  return value
+  const readable = value
+    .replace(/<br\s*\/?>|<be>/giu, " ")
+    .replace(/\{\{\s*(?:plainlist|hlist)\s*\|/giu, " ")
+    .replace(/\}\}/gu, " ")
+    .replace(/\[\[(?:[^\]|]+\|)?([^\]]+)\]\]/gu, "$1")
+    .replace(/[*•]/gu, " ")
+    .replace(/[-_]+/gu, " ")
+    .replace(/\s+/gu, " ")
+    .trim();
+  const known = [...readable.matchAll(/\bwomen['’]?s\s*(?:atomweight|strawweight|flyweight|bantamweight|featherweight|lightweight)\b|\blight\s*heavyweight\b|\bsuper\s*heavyweight\b|\bsuper\s*welterweight\b|\b(?:atomweight|strawweight|flyweight|bantamweight|featherweight|lightweight|welterweight|middleweight|heavyweight|catchweight|openweight)\b/giu)];
+  const selected = known.at(-1)?.[0] ?? readable;
+  const normalized = selected
     .trim()
     .toLocaleLowerCase("en")
     .replace(/\bwomen'?s\b/gu, "womens")
     .replace(/[^a-z0-9]+/gu, "-")
     .replace(/^-+|-+$/gu, "");
+  return normalized === "plainlist" || normalized === "hlist" ? "" : normalized;
 }
 
 /** Body measurements survive a round trip through inches, so they agree within a centimetre. */

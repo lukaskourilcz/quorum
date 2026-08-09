@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { materializeFightAiQSources } from "../src/fightaiq/intake.js";
+import { materializeFightAiQSources, scheduledEventCard } from "../src/fightaiq/intake.js";
 import { BoutRecordSchema, FighterRecordSchema, OddsSnapshotSchema } from "../src/contracts/mma.js";
 import { atomicWriteJson } from "../src/state.js";
 import fighterCard from "../../contracts/fixtures/fighter-record.valid.json" with { type: "json" };
@@ -39,6 +39,37 @@ const events = [{
 }];
 
 describe("FightAIQ intake normalization", () => {
+  it("writes an Oktagon card with canonical divisions and no MediaWiki fragments", async () => {
+    const root = await fixtureRoot();
+    const card = scheduledEventCard({
+      org: "oktagon",
+      name: "Oktagon 93: Roušal vs. Mågård",
+      startsAtUtc: "2026-09-12T00:00:00.000Z",
+      venue: "Winning Group Arena",
+      sourceTitle: "2026 in Oktagon MMA",
+      retrievedAt: "2026-08-09T12:00:00.000Z",
+      bouts: [
+        { division: "* Featherweight", red: "Radek Roušal", blue: "Jonas Mågård", scheduledRounds: 5 },
+        { division: "Middleweight <be> Light Heavyweight", red: "Vojtech Garba", blue: "Robert Lau", scheduledRounds: 3 },
+        { division: "{{plainlist|", red: "Bad Red", blue: "Bad Blue", scheduledRounds: 3 }
+      ]
+    });
+    expect(card).toBeTruthy();
+    expect(card?.bouts.map((bout) => bout.division)).toEqual(["featherweight", "light-heavyweight"]);
+
+    const paths = await materializeFightAiQSources({
+      root,
+      retrievedAt: new Date("2026-08-09T12:00:00.000Z"),
+      citoFighters: [],
+      citoEvents: [],
+      odds: [],
+      scheduledCards: card ? [card] : []
+    });
+    expect(paths).toContain("mma/events/oktagon/oktagon-93-rousal-vs-magard.json");
+    const stored = await readFile(path.join(root, "mma/events/oktagon/oktagon-93-rousal-vs-magard.json"), "utf8");
+    expect(stored).not.toMatch(/plainlist|<be>|\*/iu);
+  });
+
   it("keeps one-source fighters provisional and publishes only exactly matched odds", async () => {
     const root = await fixtureRoot();
     const paths = await materializeFightAiQSources({

@@ -40,6 +40,10 @@ describe("when two readings are the same fact", () => {
     // Not the same division: they have different champions.
     expect(fieldValuesAgree("division", "womens-flyweight", "Flyweight")).toBe(false);
     expect(normalizeDivision("Women's Bantamweight")).toBe("womens-bantamweight");
+    expect(normalizeDivision("{{plainlist|\n* [[Middleweight (MMA)|Middleweight]] (2015–present)\n}}")).toBe("middleweight");
+    expect(normalizeDivision("* Light Heavyweight")).toBe("light-heavyweight");
+    expect(normalizeDivision("Middleweight <be> Light Heavyweight")).toBe("light-heavyweight");
+    expect(normalizeDivision("{{plainlist|")).toBe("");
   });
 
   it("lets a height survive a round trip through inches", () => {
@@ -69,11 +73,13 @@ describe("the infobox, read as it is written", () => {
   it("takes the weight class the fighter competes in now", () => {
     // Taking the first line filed the lightweight champion as a bantamweight.
     expect(currentDivision("[[Bantamweight (MMA)|Bantamweight]] (2018)<br />[[Featherweight (MMA)|Featherweight]] (2020–2025)<br />[[Lightweight (MMA)|Lightweight]] (2025–present)"))
-      .toBe("Lightweight");
+      .toBe("lightweight");
     // <br> without the slash is just as common.
     expect(currentDivision("[[Lightweight (MMA)|Lightweight]] (2010–2025)<br>[[Welterweight (MMA)|Welterweight]] (2025–present)"))
-      .toBe("Welterweight");
-    expect(currentDivision("[[Middleweight (MMA)|Middleweight]]")).toBe("Middleweight");
+      .toBe("welterweight");
+    expect(currentDivision("[[Middleweight (MMA)|Middleweight]]")).toBe("middleweight");
+    expect(currentDivision("[[Middleweight (MMA)|Middleweight]]<be>[[Light Heavyweight (MMA)|Light Heavyweight]]"))
+      .toBe("light-heavyweight");
   });
 
   it("reads a value that continues onto the next lines", () => {
@@ -88,7 +94,7 @@ describe("the infobox, read as it is written", () => {
       "}}"
     ].join("\n");
     const fields = parseWikipediaFighterPage(wikitext).fields;
-    expect(fields.division).toBe("Flyweight");
+    expect(fields.division).toBe("flyweight");
     expect(fields.heightCm).toBe(165.1);
   });
 

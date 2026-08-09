@@ -4,7 +4,7 @@ import type { SourceFetchContext } from "../sources/types.js";
 import { safeFetch, type SafeFetchOptions } from "../security/url.js";
 import { atomicWriteJson } from "../state.js";
 import { sha256 } from "./engine.js";
-import { computeModelEligibility, fieldValuesAgree, supersedesSameProvider } from "./field-agreement.js";
+import { computeModelEligibility, fieldValuesAgree, normalizeDivision, supersedesSameProvider } from "./field-agreement.js";
 import { fighterSlug, sanitizeSourceText, type BackfillQueueItem } from "./roster.js";
 import { loadFighterRecords, saveBoutRecord } from "./store.js";
 
@@ -157,12 +157,12 @@ function parseClock(value: string, round: number | null): number | null {
  * failing that, the last, because the list runs oldest to newest.
  */
 export function currentDivision(raw: string): string | null {
-  const lines = raw.split(/<br\s*\/?>|\n/iu).map((line) => line.trim()).filter(Boolean);
+  const lines = raw.split(/<br\s*\/?>|<be>|\n/iu).map((line) => line.trim()).filter(Boolean);
   if (lines.length === 0) return null;
   const present = lines.find((line) => /\b(?:present|current)\b/iu.test(line));
   const chosen = present ?? lines[lines.length - 1]!;
   const text = wikiText(chosen).split(/\s{2,}|\(|\//u)[0]!.trim();
-  return text.length > 0 ? text : null;
+  return normalizeDivision(text) || null;
 }
 
 export function parseWikipediaFighterPage(wikitext: string): ParsedWikiProfile {
