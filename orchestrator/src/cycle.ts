@@ -199,10 +199,18 @@ export function manualEditionOverride(env: NodeJS.ProcessEnv = process.env): boo
  */
 const PUBLISHED_REASON_LIMIT = 280;
 
+/**
+ * Trim to the last whole word, not to the 279th character.
+ *
+ * These sentences are read on the admin's priority history, where a hard slice produced lines
+ * ending mid-word — "the gate needs AUDIT plus three appro…". Backing up to the last space costs
+ * a few characters and stops the record looking corrupted.
+ */
 function publishableReason(reason: string): string {
-  return reason.length <= PUBLISHED_REASON_LIMIT
-    ? reason
-    : `${reason.slice(0, PUBLISHED_REASON_LIMIT - 1)}…`;
+  if (reason.length <= PUBLISHED_REASON_LIMIT) return reason;
+  const cut = reason.slice(0, PUBLISHED_REASON_LIMIT - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > PUBLISHED_REASON_LIMIT / 2 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`;
 }
 
 export type MorningCommission =
@@ -244,10 +252,19 @@ export function councilVoteGate(positions: readonly RecordedPosition[]): {
     passed: auditApproved && approvals.length >= 3,
     approvals: approvals.length,
     auditApproved,
+    /*
+     * This sentence is read by a person, on the admin's priority history.
+     *
+     * It said "2 of 4 seats returned a position; 0 approved; AUDIT did not approve" — three
+     * pieces of internal vocabulary in one line, about a meeting the owner did not attend. It
+     * says the same three facts in words somebody who has never read this repository can follow.
+     */
     summary: [
-      `${positions.length} of ${COUNCIL_SEATS} seats returned a position`,
-      `${approvals.length} approved`,
-      auditApproved ? "AUDIT approved" : "AUDIT did not approve"
+      `${positions.length} of ${COUNCIL_SEATS} board members gave an opinion`,
+      approvals.length === 1 ? "1 said yes" : `${approvals.length} said yes`,
+      auditApproved
+        ? "the member who checks the records agreed"
+        : "the member who checks the records did not agree"
     ].join("; ")
   };
 }
@@ -276,7 +293,7 @@ export function resolveMorningCommission(input: {
       reason: publishableReason([
         gate.summary,
         request ? "a room was requested" : "no seat requested a room"
-      ].join("; ") + ". The gate needs AUDIT plus three approvals.")
+      ].join("; ") + ". A meeting opens only when three of the four agree and the member who checks the records is one of them.")
     };
   }
   if (!mayRequestMeeting(input.policy, input.sourcePhase, request.phase)) {
@@ -393,7 +410,7 @@ export function resolvePriorityProposal(input: {
       kind: "refuse",
       proposedBy: first.agent,
       request: first.priorityProposal,
-      reason: publishableReason(`${gate.summary}. A new question is only added when the meeting itself carries: the gate needs AUDIT plus three approvals.`)
+      reason: publishableReason(`${gate.summary}. A new question is only added when the meeting itself carries, which needs three of the four to agree including the member who checks the records.`)
     };
   }
   return {

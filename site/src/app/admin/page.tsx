@@ -504,7 +504,7 @@ export default async function AdminPage({
             <Tile
               brand={brand}
               foot={`of ${formatUsd(CURRENT_MONTHLY_API_LIMIT_USD)}`}
-              label="Model share"
+              label="AI usage"
               percent={(monthApi / CURRENT_MONTHLY_API_LIMIT_USD) * 100}
               value={tileUsd(monthApi)}
             />
@@ -518,10 +518,10 @@ export default async function AdminPage({
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_5fr]" data-adm-cols>
-            <Panel note="Owner writes · signed" title="Fixed costs">
+            <Panel note="You are the only one who can change these" title="Fixed costs">
               <FixedCostsEditor initialCosts={fixedCosts.costs} />
             </Panel>
-            <Panel note="This quarter" title="Money">
+            <Panel note="This quarter" title="What could bring money in">
               <AdminMoneyPanel snapshot={money} />
             </Panel>
           </div>
@@ -544,7 +544,7 @@ export default async function AdminPage({
 
           <AdminFileBrowser files={files} />
 
-          <Panel note="Nothing posts until the switch and health gate pass" title="Social drafts · DNESKAi">
+          <Panel note="Nothing here posts by itself" title="Social drafts · DNESKAi">
             <SocialArchive {...state.socialArchive} />
           </Panel>
         </div>

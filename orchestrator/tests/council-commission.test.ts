@@ -318,8 +318,11 @@ describe("morning commission gate", () => {
 
     expect(outcome.commission).toBe(false);
     if (outcome.commission) throw new Error("expected no commission");
-    expect(outcome.reason).toContain("AUDIT did not approve");
-    expect(outcome.reason).toContain("4 seats");
+    // The sentence is read on the admin's priority history, so it says these things in words
+    // rather than in the seat names and gate vocabulary it used to.
+    expect(outcome.reason).toContain("the member who checks the records did not agree");
+    expect(outcome.reason).toContain("of 4 board members");
+    expect(outcome.reason).not.toContain("AUDIT");
   });
 
   it("never returns an empty or placeholder reason for any way of declining", () => {
@@ -504,8 +507,8 @@ describe("proposing a new priority question", () => {
 
     expect(decision.kind).toBe("refuse");
     if (decision.kind !== "refuse") throw new Error("expected a refusal");
-    expect(decision.reason).toContain("AUDIT did not approve");
-    expect(decision.reason).toContain("AUDIT plus three approvals");
+    expect(decision.reason).toContain("the member who checks the records did not agree");
+    expect(decision.reason).toContain("three of the four to agree");
     // Refused, but still attributed: a board that proposed and lost the vote is on the record.
     expect(decision.proposedBy).toBe("VIZE");
   });
@@ -624,7 +627,7 @@ describe("how many rooms one morning opens", () => {
     });
 
     expect(resolved.commissions).toEqual([]);
-    expect(resolved.blockedReason).toContain("AUDIT did not approve");
+    expect(resolved.blockedReason).toContain("the member who checks the records did not agree");
   });
 
   it("names a reason a venture can be told even when no seat asked for anything", () => {

@@ -393,6 +393,43 @@ for (const size of [
   });
 }
 
+/**
+ * Company files is the page the owner reads first, and the one they understood least.
+ *
+ * "There are many things that I don't even understand what they mean." These are the words that
+ * were on it: contract tokens the runtime uses internally, the agents' codenames, and engineering
+ * vocabulary for gates and rates. None of them belong on a page whose job is to answer four
+ * questions — what did it cost, what needs me, what shipped, what is waiting.
+ */
+test("Company files speaks plainly", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const body = await page.locator("main").innerText();
+
+  const jargon = [
+    "NO_EDITION",
+    "Fail closed",
+    "activation threshold",
+    "health gate",
+    "Model share",
+    "Owner writes · signed",
+    "seats returned a position",
+    "verifierPassRate",
+    "METRICS_INGESTION_ENABLED"
+  ];
+  for (const phrase of jargon) {
+    expect(body, `Company files still says "${phrase}"`).not.toContain(phrase);
+  }
+
+  // Agent codenames are how the runtime addresses itself, not how a person reads a page.
+  for (const codename of ["THREADS", "INSTAGRAM", "FRAME", "SCRIBE", "HERALD"]) {
+    expect(body, `Company files still shows the codename ${codename}`).not.toContain(codename);
+  }
+
+  // And the venture ids, which the rest of the admin already renders as display names.
+  expect(body).not.toContain("caught up");
+  expect(body).not.toMatch(/\bcarousel-studio\b/);
+});
+
 test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
 

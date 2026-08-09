@@ -13,13 +13,57 @@ import { useState } from "react";
  * Read-only, and not by convention — nothing here posts anywhere. These are the runtime's own
  * records and the admin is where they are inspected, not where they are edited.
  */
+/**
+ * The last few lines of a ledger, in words, above the JSON they came from.
+ *
+ * Four of these files are append-only ledgers and the owner's question about each is the same:
+ * what happened recently and what did it cost. That question was answerable only by reading raw
+ * JSON. This reads the tail and says it in a sentence; the file itself stays below, unchanged,
+ * because the summary is a convenience and the record is the record.
+ *
+ * Deliberately forgiving: a file that does not parse, or parses into a shape this does not know,
+ * simply gets no summary. It must never be able to stop the file being shown.
+ */
+function ledgerSummary(name: string, content: string): string[] | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(content);
+  } catch {
+    return null;
+  }
+  const entries = (parsed as { entries?: unknown })?.entries;
+  if (!Array.isArray(entries) || entries.length === 0) return null;
+
+  const line = (entry: unknown): string | null => {
+    const row = entry as Record<string, unknown>;
+    const when = [row.ts, row.at, row.date, row.recordedAt, row.decidedAt]
+      .find((value) => typeof value === "string") as string | undefined;
+    const amount = [row.usd, row.amountUsd, row.totalUsd]
+      .find((value) => typeof value === "number") as number | undefined;
+    const what = [row.note, row.description, row.phase, row.kind, row.agent, row.item]
+      .find((value) => typeof value === "string") as string | undefined;
+    if (!when && amount === undefined && !what) return null;
+    return [
+      when ? when.slice(0, 10) : null,
+      amount === undefined ? null : `$${amount.toFixed(4)}`,
+      what ?? null
+    ].filter(Boolean).join(" · ");
+  };
+
+  const recent = entries.slice(-5).reverse().map(line).filter((entry): entry is string => entry !== null);
+  if (recent.length === 0) return null;
+  return [`${entries.length} entries in total. The most recent:`, ...recent];
+}
+
 export function AdminFileBrowser({
   files
 }: {
   files: ReadonlyArray<{ name: string; size: string; content: string }>;
 }) {
   const [index, setIndex] = useState(0);
+  const [showRaw, setShowRaw] = useState(false);
   const selected = files[Math.min(index, files.length - 1)];
+  const summary = selected ? ledgerSummary(selected.name, selected.content) : null;
 
   if (!selected) {
     return (
@@ -64,13 +108,32 @@ export function AdminFileBrowser({
             {selected.size} · read only
           </span>
         </div>
-        <pre
-          aria-label={`${selected.name} file content`}
-          className="m-0 max-h-[340px] flex-1 overflow-auto whitespace-pre-wrap break-words px-[18px] py-4 font-mono text-[11.5px] leading-[1.6] text-[#d4d4d8]"
-          tabIndex={0}
-        >
-          {selected.content}
-        </pre>
+        {summary ? (
+          <div className="grid gap-1.5 border-b border-[#1e1e22] px-[18px] py-4">
+            <p className="m-0 text-[13px] leading-[1.6] text-[#d4d4d8]">{summary[0]}</p>
+            <ul className="m-0 grid list-none gap-1 p-0">
+              {summary.slice(1).map((entry) => (
+                <li className="font-mono text-[11.5px] text-[#a1a1aa]" key={entry}>{entry}</li>
+              ))}
+            </ul>
+            <button
+              className="justify-self-start font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c] underline"
+              onClick={() => setShowRaw((open) => !open)}
+              type="button"
+            >
+              {showRaw ? "Hide the file" : "Show the file"}
+            </button>
+          </div>
+        ) : null}
+        {summary && !showRaw ? null : (
+          <pre
+            aria-label={`${selected.name} file content`}
+            className="m-0 max-h-[340px] flex-1 overflow-auto whitespace-pre-wrap break-words px-[18px] py-4 font-mono text-[11.5px] leading-[1.6] text-[#d4d4d8]"
+            tabIndex={0}
+          >
+            {selected.content}
+          </pre>
+        )}
       </div>
     </div>
   );
