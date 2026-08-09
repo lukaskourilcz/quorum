@@ -13,6 +13,7 @@ import {
 } from "@/lib/calendar-feed-model";
 import { getDailyResults, getVentureKpiStatuses } from "@/lib/daily-results";
 import { getPublicIdeas } from "@/lib/idea-ledger";
+import { readOperationsReports } from "@/lib/operations-reports";
 import {
   WORKSPACE_CHANNELS,
   buildMeetingFeed,
@@ -418,6 +419,32 @@ export interface OfficeResults {
   projects: OfficeProjectScreen[];
 }
 
+/**
+ * The compact operating summary the TV can show instead of the wallboard.
+ *
+ * Every figure is `number | null` for the same reason the wallboard's are: this screen prints an
+ * em dash where a record is missing, and a zero here would be a claim the ledger does not make.
+ * It crosses to the client as plain JSON, like everything else in this file — that boundary is
+ * where the sanitising happens, so nothing below it reads a file.
+ */
+export interface OfficeReports {
+  daily: {
+    date: string | null;
+    roomsHeld: number | null;
+    roomsMissed: number | null;
+    spendUsd: number | null;
+    monthToDateUsd: number | null;
+    /** One incident, in plain words. Null when the day recorded none. */
+    incident: string | null;
+  };
+  weekly: {
+    periodKey: string | null;
+    verdict: string | null;
+    published: number | null;
+    averageScore: number | null;
+  };
+}
+
 export interface OfficeWalkthroughData {
   weeks: OfficeWeek[];
   /** Index into `weeks` of the current Prague week. */
@@ -426,6 +453,7 @@ export interface OfficeWalkthroughData {
   projects: OfficeProject[];
   team: OfficeTeam;
   results: OfficeResults;
+  reports: OfficeReports;
   workflows: OfficeWorkflows;
   meetingCount: number;
   /** The handful of numbers the footer's dialogs state, resolved here rather than in a component. */
@@ -467,7 +495,8 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     money,
     dailyResults,
     kpiStanding,
-    ideas
+    ideas,
+    periodReports
   ] = await Promise.all([
     getPublicStandups(),
     getPublicMeetingRecords(),
@@ -477,7 +506,8 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     getPublicMoneySnapshot(),
     getDailyResults(),
     getVentureKpiStatuses(),
-    getPublicIdeas()
+    getPublicIdeas(),
+    readOperationsReports()
   ]);
 
   const today = pragueCalendarDate(now);
@@ -752,6 +782,40 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     projects: projectScreens
   };
 
+  /*
+   * The TV's second screen: yesterday in one line and the last finished week in another.
+   *
+   * Both come from records already read above or from `state/reports/**`. A day the digest never
+   * summarised and a week that has not closed both arrive here as nulls, and the screen renders
+   * them as dashes rather than inventing a quiet day.
+   */
+  const latestDay = dailyResults.at(-1) ?? null;
+  const latestWeek = periodReports.weekly[0] ?? null;
+  const reports: OfficeReports = {
+    daily: {
+      date: latestDay?.date ?? null,
+      roomsHeld: latestDay ? latestDay.rows.filter((row) => row.status === "produced").length : null,
+      roomsMissed: latestDay
+        ? latestDay.rows.filter((row) => row.status === "failed" || row.status === "not-held").length
+        : null,
+      spendUsd: latestDay?.totalCostUsd ?? null,
+      monthToDateUsd: monthlySpend,
+      incident: latestDay?.rows.find((row) => row.failureReason)?.failureReason ?? null
+    },
+    weekly: {
+      periodKey: latestWeek?.periodKey ?? null,
+      verdict: latestWeek
+        ? `${latestWeek.meetings.held} of ${latestWeek.meetings.scheduled} meetings held`
+        : null,
+      // Null when nothing was recorded, not zero. An empty `published` list means the week's
+      // output was never counted; printing 0 would tell the wall the company shipped nothing.
+      published: latestWeek && latestWeek.published.length > 0
+        ? latestWeek.published.reduce((sum, entry) => sum + entry.count, 0)
+        : null,
+      averageScore: latestWeek?.scores?.avg ?? null
+    }
+  };
+
   return {
     weeks,
     currentWeek: weekStarts.indexOf(currentWeekOf),
@@ -759,6 +823,7 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     projects,
     team,
     results,
+    reports,
     workflows,
     meetingCount: definitions.length,
     footerFacts: await readFooterFacts()
