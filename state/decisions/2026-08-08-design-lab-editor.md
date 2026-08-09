@@ -63,7 +63,7 @@ this decision wins, then the document, then — being newest — the issue.
 
 ## Tasks
 
-- [ ] DL-01 — Persistence tells the truth: create path, visible save states (contract §DL-01)
+- [x] DL-01 — Persistence tells the truth: create path, visible save states (contract §DL-01)
 - [ ] DL-02 — Deck identity is venture+slug+date everywhere (contract §DL-02)
 - [ ] DL-03 — Schema v2 capabilities, additive, fully validated (contract §DL-03)
 - [ ] DL-04 — Committed fonts, real metrics, machine-independent PNG hashes (contract §DL-04)

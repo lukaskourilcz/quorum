@@ -11,36 +11,88 @@ function slideUrl(deck: AdminDeck, style: string, slide: number): string {
   return `/admin/api/carousel-studio/deck/${deck.venture}/${encodeURIComponent(deck.slug)}/${style}/${slide}`;
 }
 
+/**
+ * What the save badge is saying, which is never what the preview is showing.
+ *
+ * Looking and keeping used to be the same action: a failed POST reset the chip, so the owner
+ * clicked a design, watched it appear, and watched it disappear again a second later with no
+ * explanation. Viewing a design costs nothing and cannot fail — it is a render. Only the badge
+ * moves when a save does.
+ */
+export type SaveState =
+  | { kind: "rest"; style: string }
+  | { kind: "saving"; style: string }
+  | { kind: "saved"; style: string; commit: string | null }
+  | { kind: "warning"; style: string; message: string; cause: string };
+
+/**
+ * The two ways writing can be unavailable, told apart.
+ *
+ * A missing token and a token GitHub has stopped accepting produce the same non-save. The
+ * second one arrives without warning — fine-grained tokens expire — so the banner has to name
+ * which it is, or the next occurrence costs another afternoon of reading deployment logs.
+ */
+const WARNINGS: Record<string, string> = {
+  "no-token": "Jen náhled — nevydrží obnovení stránky. Na tomhle nasazení chybí BOARDLESSAI_GITHUB_TOKEN.",
+  "token-refused": "Jen náhled — nevydrží obnovení stránky. BOARDLESSAI_GITHUB_TOKEN existuje, ale GitHub ho odmítl: vypršel, nebo už nemá Contents read/write."
+};
+
+export function warningFor(cause: string, fallback?: string): string {
+  return WARNINGS[cause] ?? fallback ?? "Design se neuložil.";
+}
+
+/** The one line the badge shows. Separated from the chip so a failed save can never move a chip. */
+export function DeckSaveBadge({ save }: { save: SaveState }) {
+  const text = save.kind === "saving" ? "ukládám…"
+    : save.kind === "saved" ? `uloženo ${save.style}${save.commit ? ` · ${save.commit}` : ""}`
+    : save.kind === "warning" ? "neuloženo"
+    : `vychází ${save.style}`;
+  return (
+    <span
+      data-save-state={save.kind}
+      aria-live="polite"
+      className={`self-center font-mono text-[0.65625rem] uppercase tracking-[0.12em] ${
+        save.kind === "warning" ? "text-[var(--warning)]" : "text-[var(--fog)]"
+      }`}
+    >
+      {text}
+    </span>
+  );
+}
+
 function Deck({ deck }: { deck: AdminDeck }) {
   // The engine picks a style from the date or the slug so a replay renders the same bytes.
   // Picking one here saves it, and the render path reads what is saved — the preview and the
   // shipped deck are the same design. Looking without choosing changes nothing.
   const [style, setStyle] = useState<string>(deck.style);
-  const [saved, setSaved] = useState<string>(deck.style);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [save, setSave] = useState<SaveState>({ kind: "rest", style: deck.style });
 
   async function choose(candidate: string): Promise<void> {
+    // Unconditional, and first. The preview is a render of a template the engine already has;
+    // nothing about showing it depends on a network call succeeding.
     setStyle(candidate);
-    if (candidate === saved) return;
-    setSaving(true);
-    setError(null);
+    if (save.kind !== "warning" && candidate === save.style) return;
+    setSave({ kind: "saving", style: candidate });
     try {
       const response = await fetch("/admin/api/carousel-studio/deck-style", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ venture: deck.venture, slug: deck.slug, style: candidate })
       });
+      const body = await response.json().catch(() => ({})) as { error?: string; cause?: string; commit?: string | null };
       if (!response.ok) {
-        const body = await response.json().catch(() => ({})) as { error?: string };
-        throw new Error(body.error ?? "Design se neuložil.");
+        const cause = body.cause ?? "unknown";
+        setSave({ kind: "warning", style: candidate, cause, message: warningFor(cause, body.error) });
+        return;
       }
-      setSaved(candidate);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Design se neuložil.");
-      setStyle(saved);
-    } finally {
-      setSaving(false);
+      setSave({ kind: "saved", style: candidate, commit: body.commit ?? null });
+    } catch {
+      setSave({
+        kind: "warning",
+        style: candidate,
+        cause: "network",
+        message: "jen náhled — nevydrží obnovení stránky. Server neodpověděl."
+      });
     }
   }
 
@@ -76,7 +128,6 @@ function Deck({ deck }: { deck: AdminDeck }) {
             type="button"
             onClick={() => { void choose(candidate); }}
             aria-pressed={style === candidate}
-            disabled={saving}
             className={`rounded-full border px-3 py-1 font-mono text-[0.65625rem] uppercase tracking-[0.12em] transition ${
               style === candidate
                 ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]"
@@ -84,13 +135,16 @@ function Deck({ deck }: { deck: AdminDeck }) {
             }`}
           >
             {candidate}
-            {candidate === saved ? " ·" : ""}
           </button>
         ))}
-        <span className="self-center font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-          {saving ? "ukládám…" : error ? error : `vychází ${saved}`}
-        </span>
+        <DeckSaveBadge save={save} />
       </div>
+
+      {save.kind === "warning" ? (
+        <div className="px-5 pt-3">
+          <Callout tone="warning">{save.message}</Callout>
+        </div>
+      ) : null}
 
       <div className="w-full overflow-x-auto px-5 py-4" data-horizontal-scroll>
         <ol className="flex gap-3">

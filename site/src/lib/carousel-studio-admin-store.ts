@@ -9,11 +9,35 @@ const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process
 const linksPath = "state/ventures/carousel-studio/inspiration/owner-links.json";
 const overridesPath = "state/ventures/carousel-studio/template-overrides.json";
 
+/**
+ * Why a Studio write did not happen, in the terms the owner needs to act on.
+ *
+ * `UNCONFIGURED` and `REFUSED` are split apart deliberately. Both used to be one silent failure
+ * — the panel said "Design se neuložil" and the owner had no way to tell a missing token from a
+ * token GitHub had stopped accepting. Fine-grained tokens expire, so the next occurrence of this
+ * bug is a year away and looks identical to the first. Naming the two cases separately is what
+ * makes it diagnosable at a glance instead of by reading Vercel logs.
+ */
+export type CarouselStudioPersistenceCode =
+  | "UNAVAILABLE"
+  | "CONFLICT"
+  | "CORRUPT"
+  | "REMOTE"
+  | "UNCONFIGURED"
+  | "REFUSED";
+
 export class CarouselStudioPersistenceError extends Error {
-  constructor(readonly code: "UNAVAILABLE" | "CONFLICT" | "CORRUPT" | "REMOTE", message: string) {
+  constructor(readonly code: CarouselStudioPersistenceCode, message: string) {
     super(message);
   }
 }
+
+/** What a completed write can say about itself. `commit` is null for a local write. */
+export interface CarouselStudioWrite {
+  commit: string | null;
+}
+
+export const GITHUB_TOKEN_ENV = "BOARDLESSAI_GITHUB_TOKEN";
 
 async function readJson(relative: string, root = repositoryRoot): Promise<unknown> {
   try {
@@ -24,7 +48,7 @@ async function readJson(relative: string, root = repositoryRoot): Promise<unknow
   }
 }
 
-async function writeLocal(relative: string, value: unknown, root = repositoryRoot): Promise<void> {
+async function writeLocal(relative: string, value: unknown, root = repositoryRoot): Promise<CarouselStudioWrite> {
   const target = path.join(root, relative);
   const boundary = path.relative(root, target);
   if (boundary.startsWith("..") || path.isAbsolute(boundary)) throw new CarouselStudioPersistenceError("CONFLICT", "Studio path escaped the repository.");
@@ -36,34 +60,71 @@ async function writeLocal(relative: string, value: unknown, root = repositoryRoo
   } finally {
     await rm(temporary, { force: true });
   }
+  return { commit: null };
 }
 
-async function writeGitHub(relative: string, value: unknown, message: string, token: string): Promise<void> {
+/** A GitHub status turned into the failure the owner can act on. */
+function githubFailure(status: number, what: string): CarouselStudioPersistenceError {
+  if (status === 401 || status === 403) {
+    return new CarouselStudioPersistenceError(
+      "REFUSED",
+      `GitHub refused the ${what} with ${status}. ${GITHUB_TOKEN_ENV} exists but is expired or no longer carries Contents read and write.`
+    );
+  }
+  return new CarouselStudioPersistenceError("REMOTE", `GitHub Studio ${what} failed with ${status}.`);
+}
+
+async function writeGitHub(relative: string, value: unknown, message: string, token: string): Promise<CarouselStudioWrite> {
   const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
   const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
   const endpoint = `https://api.github.com/repos/${repository}/contents/${relative.split("/").map(encodeURIComponent).join("/")}`;
   const headers = { Accept: "application/vnd.github+json", Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2026-03-10" };
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const response = await fetch(`${endpoint}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
-    if (!response.ok) throw new CarouselStudioPersistenceError("REMOTE", `GitHub Studio read failed with ${response.status}.`);
-    const current = await response.json() as { sha?: string };
-    if (!current.sha) throw new CarouselStudioPersistenceError("REMOTE", "GitHub returned an invalid Studio file.");
+    /*
+     * A 404 read is a file that does not exist yet, and creating it is the same PUT one field
+     * lighter. Without this branch the store could only ever update, so every new state document
+     * — the first deck-style override, the preset list — had to be seeded into main by hand
+     * before the admin could touch it. Any other read failure is still a failure: a 403 must not
+     * be mistaken for "no such file" and answered by overwriting whatever is really there.
+     */
+    let sha: string | undefined;
+    if (response.status !== 404) {
+      if (!response.ok) throw githubFailure(response.status, "read");
+      const current = await response.json() as { sha?: string };
+      if (!current.sha) throw new CarouselStudioPersistenceError("REMOTE", "GitHub returned an invalid Studio file.");
+      sha = current.sha;
+    }
     const update = await fetch(endpoint, {
       method: "PUT",
       headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify({ message, content: Buffer.from(`${JSON.stringify(value, null, 2)}\n`).toString("base64"), branch, sha: current.sha })
+      body: JSON.stringify({
+        message,
+        content: Buffer.from(`${JSON.stringify(value, null, 2)}\n`).toString("base64"),
+        branch,
+        ...(sha ? { sha } : {})
+      })
     });
-    if (update.ok) return;
-    if (update.status !== 409) throw new CarouselStudioPersistenceError("REMOTE", `GitHub Studio write failed with ${update.status}.`);
+    if (update.ok) {
+      const body = await update.json().catch(() => ({})) as { commit?: { sha?: unknown } };
+      const commit = typeof body.commit?.sha === "string" ? body.commit.sha.slice(0, 7) : null;
+      return { commit };
+    }
+    // 409 is the file moving under a read. On a create, 422 is the same race told differently:
+    // the file appeared between our 404 and our PUT. Both deserve the retry; nothing else does.
+    if (update.status !== 409 && !(update.status === 422 && sha === undefined)) throw githubFailure(update.status, "write");
   }
   throw new CarouselStudioPersistenceError("CONFLICT", "Studio state changed during every save attempt.");
 }
 
-async function persist(relative: string, value: unknown, message: string, root = repositoryRoot): Promise<void> {
-  const token = process.env.BOARDLESSAI_GITHUB_TOKEN;
+async function persist(relative: string, value: unknown, message: string, root = repositoryRoot): Promise<CarouselStudioWrite> {
+  const token = process.env[GITHUB_TOKEN_ENV];
   if (token) return writeGitHub(relative, value, message, token);
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
-    throw new CarouselStudioPersistenceError("UNAVAILABLE", "GitHub writing is not configured for this admin.");
+    throw new CarouselStudioPersistenceError(
+      "UNCONFIGURED",
+      `${GITHUB_TOKEN_ENV} is not set on this deployment, so nothing the admin changes can be written down.`
+    );
   }
   return writeLocal(relative, value, root);
 }
@@ -162,7 +223,7 @@ function isDeckStyleOverride(value: unknown): value is DeckStyleOverride {
 export async function setDeckStyleOverride(
   input: { venture: DeckStyleOverride["venture"]; slug: string; style: string; styles: readonly string[]; now?: Date },
   root = repositoryRoot
-): Promise<DeckStyleOverride[]> {
+): Promise<{ overrides: DeckStyleOverride[]; commit: string | null }> {
   const slug = input.slug.trim();
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
     throw new CarouselStudioPersistenceError("CONFLICT", "That is not an article slug.");
@@ -177,11 +238,11 @@ export async function setDeckStyleOverride(
       (override) => override.venture !== input.venture || override.slug !== slug
     )
   ].slice(0, 200);
-  await persist(
+  const write = await persist(
     deckStyleOverridesPath,
     { schemaVersion: "carousel-deck-style-overrides/1", overrides, updatedAt: changedAt },
     `admin: set the ${input.venture} deck design for ${slug}`,
     root
   );
-  return overrides;
+  return { overrides, commit: write.commit };
 }

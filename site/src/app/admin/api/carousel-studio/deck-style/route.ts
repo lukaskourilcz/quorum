@@ -1,8 +1,29 @@
 import { DECK_STYLES } from "@boardlessai/carousel-studio";
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
-import { CarouselStudioPersistenceError, setDeckStyleOverride } from "@/lib/carousel-studio-admin-store";
+import {
+  CarouselStudioPersistenceError,
+  setDeckStyleOverride,
+  type CarouselStudioPersistenceCode
+} from "@/lib/carousel-studio-admin-store";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * The machine-readable half of a failed save.
+ *
+ * The panel shows the message; it decides *which* warning to show from this. A save that failed
+ * because the deployment has no token and a save that failed because GitHub stopped accepting
+ * the token are the same sentence to a reader and completely different problems to fix, so the
+ * body has to carry the difference rather than leaving the panel to parse prose.
+ */
+const CAUSES: Record<CarouselStudioPersistenceCode, string> = {
+  UNCONFIGURED: "no-token",
+  REFUSED: "token-refused",
+  REMOTE: "github",
+  CONFLICT: "rejected",
+  CORRUPT: "corrupt",
+  UNAVAILABLE: "missing"
+};
 
 /**
  * Bind the deck design the owner picked to one article.
@@ -28,15 +49,21 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: "Deck design request is incomplete." }, { status: 422 });
   }
   try {
-    const overrides = await setDeckStyleOverride({
+    const { overrides, commit } = await setDeckStyleOverride({
       venture: candidate.venture,
       slug: candidate.slug,
       style: candidate.style,
       styles: DECK_STYLES
     });
-    return Response.json({ ok: true, overrides }, { status: 200, headers: { "Cache-Control": "no-store, private" } });
+    return Response.json({ ok: true, overrides, commit }, { status: 200, headers: { "Cache-Control": "no-store, private" } });
   } catch (error) {
-    const message = error instanceof CarouselStudioPersistenceError ? error.message : "The deck design was not saved.";
-    return Response.json({ error: message }, { status: error instanceof CarouselStudioPersistenceError && error.code === "CONFLICT" ? 422 : 503 });
+    if (!(error instanceof CarouselStudioPersistenceError)) {
+      console.error("Deck design save failed:", error);
+      return Response.json({ error: "The deck design was not saved.", cause: "unknown" }, { status: 503 });
+    }
+    return Response.json(
+      { error: error.message, cause: CAUSES[error.code] },
+      { status: error.code === "CONFLICT" ? 422 : 503 }
+    );
   }
 }
