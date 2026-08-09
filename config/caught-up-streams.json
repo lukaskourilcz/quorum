@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "caught-up-streams/1",
+  "apify": false,
+  "sources": [
+    { "id": "medium-artificial-intelligence", "stream": "talked-about", "kind": "medium", "name": "Medium · Artificial Intelligence", "feed": "https://medium.com/feed/tag/artificial-intelligence", "host": "medium.com" },
+    { "id": "medium-machine-learning", "stream": "talked-about", "kind": "medium", "name": "Medium · Machine Learning", "feed": "https://medium.com/feed/tag/machine-learning", "host": "medium.com" },
+    { "id": "medium-llm", "stream": "talked-about", "kind": "medium", "name": "Medium · LLM", "feed": "https://medium.com/feed/tag/llm", "host": "medium.com" },
+
+    { "id": "import-ai", "stream": "talked-about", "kind": "substack", "name": "Import AI", "feed": "https://importai.substack.com/feed", "host": "importai.substack.com" },
+    { "id": "one-useful-thing", "stream": "talked-about", "kind": "substack", "name": "One Useful Thing", "feed": "https://www.oneusefulthing.org/feed", "host": "www.oneusefulthing.org" },
+    { "id": "algorithmic-bridge", "stream": "talked-about", "kind": "substack", "name": "The Algorithmic Bridge", "feed": "https://www.thealgorithmicbridge.com/feed", "host": "www.thealgorithmicbridge.com" },
+    { "id": "interconnects", "stream": "talked-about", "kind": "substack", "name": "Interconnects", "feed": "https://www.interconnects.ai/feed", "host": "www.interconnects.ai" },
+    { "id": "chinai", "stream": "talked-about", "kind": "substack", "name": "ChinAI", "feed": "https://chinai.substack.com/feed", "host": "chinai.substack.com" },
+    { "id": "ai-supremacy", "stream": "talked-about", "kind": "substack", "name": "AI Supremacy", "feed": "https://www.ai-supremacy.com/feed", "host": "www.ai-supremacy.com" },
+    { "id": "latent-space", "stream": "talked-about", "kind": "substack", "name": "Latent Space", "feed": "https://www.latent.space/feed", "host": "www.latent.space" },
+    { "id": "dont-worry-about-the-vase", "stream": "talked-about", "kind": "substack", "name": "Don't Worry About the Vase", "feed": "https://thezvi.substack.com/feed", "host": "thezvi.substack.com" },
+    { "id": "semianalysis", "stream": "talked-about", "kind": "substack", "name": "SemiAnalysis", "feed": "https://semianalysis.com/feed", "host": "semianalysis.com" },
+
+    { "id": "lex-fridman", "stream": "podcasts", "kind": "youtube", "name": "Lex Fridman Podcast", "host": "www.youtube.com", "enabled": false, "note": "Channel id not resolved at implementation time. A feed that fails resolution ships disabled rather than guessed." },
+    { "id": "dwarkesh", "stream": "podcasts", "kind": "youtube", "name": "Dwarkesh Podcast", "host": "www.youtube.com", "enabled": false, "note": "Channel id not resolved at implementation time." },
+    { "id": "no-priors", "stream": "podcasts", "kind": "youtube", "name": "No Priors", "host": "www.youtube.com", "enabled": false, "note": "Channel id not resolved at implementation time." },
+    { "id": "latent-space-pod", "stream": "podcasts", "kind": "rss", "name": "Latent Space", "feed": "https://api.substack.com/feed/podcast/1084089.rss", "host": "api.substack.com" },
+    { "id": "practical-ai", "stream": "podcasts", "kind": "rss", "name": "Practical AI", "feed": "https://changelog.com/practicalai/feed", "host": "changelog.com", "note": "Redirects to feeds.transistor.fm, which is allowlisted alongside it." },
+    { "id": "mlst", "stream": "podcasts", "kind": "youtube", "name": "Machine Learning Street Talk", "host": "www.youtube.com", "enabled": false, "note": "Channel id not resolved at implementation time." },
+    { "id": "cognitive-revolution", "stream": "podcasts", "kind": "youtube", "name": "The Cognitive Revolution", "host": "www.youtube.com", "enabled": false, "note": "Channel id not resolved at implementation time." },
+    { "id": "hard-fork", "stream": "podcasts", "kind": "rss", "name": "Hard Fork", "feed": "https://feeds.simplecast.com/l2i9YnTd", "host": "feeds.simplecast.com" },
+
+    { "id": "czech-slot-1", "stream": "podcasts", "kind": "rss", "name": "Czech AI show (slot)", "host": "example.invalid", "enabled": false, "note": "Reserved for a Czech AI show the owner picks. Disabled and inert until a real feed is filled in." },
+    { "id": "czech-slot-2", "stream": "podcasts", "kind": "rss", "name": "Czech AI show (slot)", "host": "example.invalid", "enabled": false, "note": "Reserved for a Czech AI show the owner picks." }
+  ]
+}

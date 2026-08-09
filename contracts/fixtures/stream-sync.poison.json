@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "stream-sync/1",
+  "stream": "not-a-stream",
+  "date": "9. 8. 2026",
+  "before": -1,
+  "after": "many",
+  "added": "one",
+  "pruned": null,
+  "sourceErrors": [{ "source": 42 }]
+}

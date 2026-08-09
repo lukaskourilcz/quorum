@@ -17,6 +17,26 @@ Updated: 2026-08-09.
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
+- [ ] **Switch the DNESKAi streams on** — set the Actions variable
+  `CAUGHT_UP_STREAMS_ENABLED=true`. Until then `/o-cem-se-mluvi` and `/podcasty` render their
+  honest empty states, which is the correct state and costs nothing. The delivery steps live
+  inside the existing daily cycle, call no model and spend nothing from the model share; the
+  only thing switching them on changes is that two committed JSON files start moving.
+  [imp:3] [owner:me] [time:5m] [kind:setup]
+
+- [ ] **Create the free Podcast Index key pair** — register at api.podcastindex.org and add
+  `PODCASTINDEX_API_KEY` and `PODCASTINDEX_API_SECRET` to the quorum Actions secrets. It is free
+  and it is only used for shows with no workable RSS or YouTube surface, so its absence degrades
+  a few shows rather than the podcast stream. A live dry run without it already returns nine
+  episodes. [imp:2] [owner:me] [time:15m] [kind:setup]
+
+- [ ] **Confirm the curated source registry** — `config/caught-up-streams.json` seeds three Medium
+  tags, nine Substacks and eight podcast shows. Eight shows ship `enabled: false` with a note
+  because their channel id could not be resolved without guessing, and two empty slots wait for
+  the Czech AI shows you pick. Approve, edit or fill; every entry must carry its exact hostname,
+  and a test fails if an enabled host is missing from `config/network-allowlist.json`.
+  [imp:3] [owner:me] [time:30m] [kind:decision]
+
 - [ ] **Add `THE_ODDS_API_KEY` to Actions secrets** (and optionally `CITO_API_KEY`) — the single
   unblock for every FightAIQ output. Without a price source the evening model check has nothing to
   compare a model estimate against, so it records no calibration and the readiness dossiers stay
@@ -563,6 +583,17 @@ marketingShark adds about 6c to a day.
 
 ## Recently finished
 
+- **The engine grew the DNESKAi launch redesign**, 2026-08-09. The writing desk can file an
+  edition under a section under a rule strict enough that uncategorised stays the common case,
+  and the same call plus the Czech editor prompt now enforce Czech typography and an outright
+  em-dash ban. Two contracts carry the magazine's new sections: `boardless-stream/1` for the
+  external links and podcast episodes, `boardless-events/1` for the events the owner types in a
+  new admin tab whose past entries cannot be edited without saying it is a correction. The
+  fetcher calls no model, reaches only hosts the registry names and the allowlist permits, and
+  turns a dead feed into a receipt line rather than a failed run. Both deliveries are their own
+  kind with their own allowlist inside the existing daily cycle, so no new job, cron or phase
+  appeared and nothing was drawn from the model share. Switched off until
+  `CAUGHT_UP_STREAMS_ENABLED` is set.
 - **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty static
   faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
   Plex Sans for DNESKAi, Barlow Condensed and Barlow for MMA Files, Petrona and Karla for Titty
@@ -637,7 +668,9 @@ marketingShark adds about 6c to a day.
 
 ## Branches
 
-Every branch this repository opened is merged and gone. `claude/article-image-selection-61rs70`
+Every branch this repository opened is merged and gone.
+`claude/dneskai-magazine-redesign-yw9bv1` carried the engine half of the DNESKAi launch redesign
+and merged into `main` on 2026-08-09. `claude/article-image-selection-61rs70`
 held the countersigned image decision and its build contract; the twelve-issue programme ran on
 it and it merged into `main` on 2026-08-09, taking the contract with it — the decision file
 `state/decisions/2026-08-08-article-image-fit.md` is the permanent record. Before it,

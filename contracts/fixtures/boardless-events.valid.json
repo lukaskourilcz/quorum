@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "boardless-events/1",
+  "updated": "2026-08-09",
+  "events": [
+    {
+      "id": "ml-prague-2026",
+      "scope": "cz",
+      "title": "Machine Learning Prague 2026",
+      "description": "Třídenní konference o strojovém učení a jeho nasazení v praxi.",
+      "starts": "2026-10-14",
+      "ends": "2026-10-16",
+      "city": "Praha",
+      "venue": "Fórum Karlín",
+      "online": false,
+      "url": "https://mlprague.com",
+      "price": "od 4 900 Kč",
+      "organizer": "ML Prague",
+      "added": "2026-08-09"
+    },
+    {
+      "id": "neurips-2026",
+      "scope": "global",
+      "title": "NeurIPS 2026",
+      "starts": "2026-12-07",
+      "online": false,
+      "url": "https://neurips.cc"
+    }
+  ]
+}

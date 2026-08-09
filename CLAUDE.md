@@ -108,6 +108,42 @@ append path.
   model share entirely. Drafting entries with a model would draw on that cap and
   needs a ledger line before it runs.
 
+## Streams and events
+
+DNESKAi also carries three files that are **not** datasets, and the difference
+is the whole reason they have their own contracts. A dataset is an append-only
+reveal schedule where array order is meaning and a published entry is immutable.
+A stream is replaced wholesale on every sync, pruned by a rolling window, and
+the reader has no memory of the previous copy. Sharing one contract would make
+`verifyDatasetAppend` meaningless for one of them.
+
+| Reader file | Contract | Written by |
+| --- | --- | --- |
+| `data/talked-about.json`, `data/podcasts.json` | `boardless-stream/1` | `orchestrator/src/streams/` |
+| `data/events.json` | `boardless-events/1` | the owner, through the admin Akce tab |
+
+- **Two more delivery kinds, two more allowlists.** `^data/(talked-about|podcasts)\.json$`
+  and `^data/events\.json$` in `.github/workflows/cycle.yml`, beside the edition
+  and dataset ones and never merged with them. Both steps run inside the existing
+  daily cycle: no new job, no new cron, no new council phase.
+- **The switch.** `CAUGHT_UP_STREAMS_ENABLED` gates both steps. Off is the
+  default and off is silent.
+- **Cost.** Zero model calls anywhere in the stream path, so it sits outside the
+  model share exactly like the dataset appends. The only permitted paid
+  dependency is the already-quota-guarded Apify client, and the registry keeps it
+  `"apify": false`. The Podcast Index key pair is free.
+- **The registry is the list of hosts we will contact.** `config/caught-up-streams.json`
+  carries the exact hostname of every source, and a test fails if an enabled host
+  is missing from `config/network-allowlist.json`. A feed whose id cannot be
+  resolved ships `enabled: false` with a note, never a guessed URL.
+- **Failure posture.** A malformed entry costs one item, a failing source costs a
+  section and a line in the receipt under
+  `state/ventures/caught-up/streams/<date>-<stream>.json`, and neither may cost
+  the run. A day with nothing new is a quiet success with no commit.
+- **Events are the manual category.** Past events are immutable in the store
+  unless the save explicitly says it is a correction, which stamps `corrected`.
+  That flag is the difference between fixing a record and rewriting history.
+
 ## When asked to "do the tasks"
 
 Use the `builder` subagent on unchecked tasks in the newest decision file, one

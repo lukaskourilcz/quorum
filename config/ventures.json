@@ -16,7 +16,8 @@
       },
       "adminTabs": [
         "plans",
-        "visuals"
+        "visuals",
+        "events"
       ],
       "meetings": [
         {
