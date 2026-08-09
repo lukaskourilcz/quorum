@@ -77,5 +77,22 @@ describe("DNESKAi engine strip", () => {
     const snapshot = await readAdminCaughtUp("2026-08-09");
     expect(snapshot.engine).toEqual({ lastEdition: null, lastStreamSync: null, lastDatasetAppend: null });
     expect(snapshot.events).toEqual([]);
+    expect(snapshot.eventStore).toBe("unreadable");
+  });
+});
+
+describe("the events store on a first run", () => {
+  it("tells a never-written file apart from an emptied one", async () => {
+    await root({});
+    expect((await readAdminCaughtUp("2026-08-09")).eventStore).toBe("missing");
+
+    await root({
+      "ventures/caught-up/events/events.json": {
+        schemaVersion: "boardless-events/1",
+        updated: "2026-08-09",
+        events: []
+      }
+    });
+    expect((await readAdminCaughtUp("2026-08-09")).eventStore).toBe("present");
   });
 });

@@ -319,6 +319,7 @@ export default async function AdminPage({
           <CaughtUpEventsPanel
             engine={caughtUp.engine}
             events={caughtUp.events}
+            eventStore={caughtUp.eventStore}
             today={caughtUp.today}
           />
         ),

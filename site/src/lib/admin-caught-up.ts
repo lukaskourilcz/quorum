@@ -27,6 +27,14 @@ export interface CaughtUpAdminSnapshot {
   today: string;
   events: MagazineEvent[];
   engine: CaughtUpEngineSnapshot;
+  /**
+   * Whether the events file exists at all.
+   *
+   * "Upcoming (0) / Past (0)" reads identically whether the owner has never added an event or has
+   * archived every one they added. Only the first of those is worth a sentence explaining what
+   * this panel is for, so the two states have to be told apart before the panel can say so.
+   */
+  eventStore: "missing" | "unreadable" | "present";
 }
 
 function stateDir(...parts: string[]): string {
@@ -141,6 +149,7 @@ export async function readAdminCaughtUp(today = new Date().toISOString().slice(0
   return {
     today,
     events: parsed?.events ?? [],
+    eventStore: eventsRaw === null ? "missing" : parsed === null ? "unreadable" : "present",
     engine: {
       lastEdition: lastEdition(deliveries),
       lastStreamSync: lastStreamSync(streams),

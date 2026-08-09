@@ -31,7 +31,7 @@ describe("public idea ledger boundary", () => {
 });
 
 describe("meeting references on a card", () => {
-  const standups = [{ id: "s-1", date: "2026-07-31", phase: "morning" }];
+  const standups = [{ id: "s-1", date: "2026-07-31", phase: "morning" as const }];
 
   it("resolves the three shapes a record can carry", () => {
     expect(publicMeetingHref("meetings/2026-08-05-tt-marketing")).toBe("/meetings/2026-08-05-tt-marketing");

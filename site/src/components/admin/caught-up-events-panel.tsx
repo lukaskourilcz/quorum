@@ -15,6 +15,8 @@ export interface EventsPanelProps {
   events: MagazineEvent[];
   /** The publishing day, passed in so upcoming and past never depend on a clock. */
   today: string;
+  /** `missing` is the first run: the store file has never been written. */
+  eventStore?: "missing" | "unreadable" | "present";
   engine: {
     lastEdition?: { date: string; slug: string | null } | null;
     lastStreamSync?: { date: string; stream: string; added: number } | null;
@@ -56,7 +58,7 @@ function isPast(event: MagazineEvent, today: string): boolean {
   return (event.ends ?? event.starts) < today;
 }
 
-export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps) {
+export function CaughtUpEventsPanel({ events, today, engine, eventStore = "present" }: EventsPanelProps) {
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [scopeFilter, setScopeFilter] = useState<"all" | "cz" | "global">("all");
   const [status, setStatus] = useState<string | null>(null);
@@ -101,7 +103,7 @@ export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps)
     }
   };
 
-  const field = (key: keyof Draft, label: string, type = "text") => (
+  const field = (key: keyof Draft, label: string, hint?: string, type = "text") => (
     <label className="grid gap-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
       {label}
       <input
@@ -110,6 +112,9 @@ export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps)
         type={type}
         value={String(draft[key] ?? "")}
       />
+      {hint ? (
+        <span className="font-sans text-[11px] normal-case tracking-normal text-[#71717a]">{hint}</span>
+      ) : null}
     </label>
   );
 
@@ -121,7 +126,7 @@ export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps)
       <span className="flex items-baseline gap-2">
         <span className="font-mono text-[10.5px] tabular-nums">{event.starts}</span>
         <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#71717a]">
-          {event.scope === "cz" ? "Česko" : "Svět"}
+          {event.scope === "cz" ? "Czech" : "World"}
         </span>
         <span className="text-[13px]">{event.title}</span>
         {event.corrected ? (
@@ -198,17 +203,36 @@ export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps)
 
       <section className="grid gap-3">
         <div className="flex items-center gap-3">
-          <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">Akce</h3>
+          <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">Events</h3>
           <select
             className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8]"
             onChange={(e) => setScopeFilter(e.target.value as "all" | "cz" | "global")}
             value={scopeFilter}
           >
             <option value="all">all</option>
-            <option value="cz">česko</option>
-            <option value="global">svět</option>
+            <option value="cz">czech</option>
+            <option value="global">world</option>
           </select>
         </div>
+
+        {/* The first run has no file at all, which is not the same as a file that has been
+            emptied. Only the first is worth explaining, and it is the only moment the owner
+            needs to be told what this panel is for. */}
+        {eventStore === "missing" ? (
+          <p className="rounded-[9px] border border-[#3f3f46] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#d4d4d8]">
+            No event has ever been entered. This is where you add the first one — events are the
+            one part of the magazine nothing fetches, so the list stays empty until you type one
+            in. Saving below creates <code className="font-mono text-[11px] text-[#a1a1aa]">state/ventures/caught-up/events/events.json</code>,
+            and the magazine reads that file from then on.
+          </p>
+        ) : null}
+        {eventStore === "unreadable" ? (
+          <p className="rounded-[9px] border border-[#f5a524] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#f5a524]">
+            The saved events file cannot be read, so nothing is listed below. The file is
+            <code className="font-mono text-[11px]"> state/ventures/caught-up/events/events.json</code>.
+            Saving from this form would replace it.
+          </p>
+        ) : null}
 
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
@@ -227,30 +251,30 @@ export function CaughtUpEventsPanel({ events, today, engine }: EventsPanelProps)
       <section className="grid gap-3">
         <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">Add or edit</h3>
         <div className="grid gap-2 sm:grid-cols-2">
-          {field("id", "id (slug)")}
+          {field("id", "short name", "Lowercase letters, numbers and hyphens. It identifies this event and never changes.")}
           <label className="grid gap-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
-            scope
+            where it counts
             <select
               className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1.5 font-sans text-[13px] normal-case tracking-normal text-[#f4f4f5]"
               onChange={(e) => setDraft({ ...draft, scope: e.target.value as Draft["scope"] })}
               value={draft.scope}
             >
-              <option value="cz">cz</option>
-              <option value="global">global</option>
+              <option value="cz">Czech</option>
+              <option value="global">World</option>
             </select>
           </label>
-          {field("title", "title (czech)")}
-          {field("url", "url (https)")}
-          {field("starts", "starts", "date")}
-          {field("ends", "ends (optional)", "date")}
+          {field("title", "title", "Written in Czech — this is what the reader sees.")}
+          {field("url", "link", "Must start with https://")}
+          {field("starts", "first day", undefined, "date")}
+          {field("ends", "last day", "Leave empty for a one-day event.", "date")}
           {field("city", "city")}
           {field("venue", "venue")}
           {field("price", "price")}
-          {field("organizer", "organizer")}
-          {field("description", "description (max 280)")}
+          {field("organizer", "organiser")}
+          {field("description", "description", "At most 280 characters.")}
           <label className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
             <input checked={draft.online} onChange={(e) => setDraft({ ...draft, online: e.target.checked })} type="checkbox" />
-            online
+            happens online
           </label>
         </div>
 
