@@ -8,6 +8,7 @@ import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
+import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
@@ -30,6 +31,7 @@ import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio } from "@/lib/carousel-studio";
+import { readGoViralProfile } from "@/lib/goviral-profile";
 import { readHookBrain } from "@/lib/hook-brain";
 import { readStudioArticles } from "@/lib/carousel-summaries";
 import { getDailyResults } from "@/lib/daily-results";
@@ -157,6 +159,7 @@ export default async function AdminPage({
     mmaFiles,
     carouselStudio,
     hookBrain,
+    goviralProfile,
     studioArticles,
     labArticles,
     labPresets,
@@ -175,6 +178,7 @@ export default async function AdminPage({
     readAdminMmaFiles(),
     readCarouselStudio(),
     readHookBrain(),
+    readGoViralProfile(),
     readStudioArticles(),
     readDesignLab(),
     readDesignLabPresets(),
@@ -507,6 +511,11 @@ export default async function AdminPage({
               {ventureUnreadable.join(", ")}.
             </Callout>
           ) : null}
+
+          {/* GoVIRAL owns exactly one artefact and it is not a card, so the workspace leads with
+              it. Both tabs below say "nothing is stored", which is true and was the only thing
+              the venture had to say for itself. */}
+          {selectedVenture.id === "goviral" ? <GoViralProfilePanel profile={goviralProfile} /> : null}
 
           <div className={`min-w-0 ${UNWRAP}`}>{tabView.node}</div>
 
