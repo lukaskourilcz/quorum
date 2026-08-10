@@ -13,6 +13,15 @@ export interface EffectivePortfolioSchedule {
   dailyBudgetUsd: 0.7 | 1;
   monthlyOperatingUsd: 20 | 30;
   ttTranscriptMode: "full" | "minimal" | "paused";
+  /**
+   * Whether the night may pay to score what the day published.
+   *
+   * It sits on this ladder rather than beside it, above GoVIRAL: scoring is the most droppable
+   * thing the system does, because a day that goes unscored still published, and the daily $1.00
+   * pace already carries around $1.74 of reservations. Its own switch still has to be on — this
+   * only says whether the budget could afford it if it were.
+   */
+  contentGateAffordable: boolean;
   activePhases: ScheduledPhase[];
   envelopeByPhase: Partial<Record<ScheduledPhase, number>>;
 }
@@ -87,8 +96,11 @@ export function resolveEffectivePortfolioSchedule(input: {
     envelopeByPhase["mma-intake"] = 0.05;
   }
   let ttTranscriptMode: EffectivePortfolioSchedule["ttTranscriptMode"] = "full";
-  // GoVIRAL takes the rungs the incubator vacated, and takes them first on purpose: it is the
-  // newest room, it meets once a week, and a missed Monday costs a brief rather than a
+  // The content gate goes first of everything, because it is the only rung whose loss costs
+  // nothing that was promised to anybody: an unscored day still published its article.
+  const contentGateAffordable = input.monthlyApiHeadroomUsd >= 3;
+  // GoVIRAL takes the rungs the incubator vacated, and takes them first among the rooms: it is
+  // the newest, it meets once a week, and a missed Monday costs a brief rather than a
   // publication. Everything below it on this ladder is either a reader-facing promise or the
   // company's own decision room.
   if (input.monthlyApiHeadroomUsd < 2) {
@@ -109,6 +121,7 @@ export function resolveEffectivePortfolioSchedule(input: {
     dailyBudgetUsd: fullScheduleShape ? 1 : shape === "A" ? 1 : 0.7,
     monthlyOperatingUsd: fullScheduleShape ? COUNTERSIGNED_MONTHLY_OPERATING_USD : 20,
     ttTranscriptMode,
+    contentGateAffordable,
     activePhases: (fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
       .map((slot) => slot.phase)
       .filter((phase) => active.has(phase)),

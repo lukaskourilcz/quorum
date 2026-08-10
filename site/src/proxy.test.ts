@@ -23,13 +23,16 @@ function authenticated(pathname = "/admin"): NextRequest {
 }
 
 describe("admin session proxy", () => {
-  it("redirects logged-out page requests to the login screen", () => {
+  it("redirects logged-out page requests to the login screen, keeping the destination", () => {
     configure();
-    const response = proxy(new NextRequest("https://boardless.example/admin"));
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe(
-      "https://boardless.example/admin/login?error=expired"
+    const response = proxy(
+      new NextRequest("https://boardless.example/admin?venture=fightaiq&tab=slates")
     );
+    expect(response.status).toBe(307);
+    const location = new URL(response.headers.get("location")!);
+    expect(location.pathname).toBe("/admin/login");
+    expect(location.searchParams.get("error")).toBe("expired");
+    expect(location.searchParams.get("returnTo")).toBe("/admin?venture=fightaiq&tab=slates");
   });
 
   it("lets a signed session open protected pages", () => {
@@ -53,9 +56,9 @@ describe("admin session proxy", () => {
       proxy(new NextRequest("https://boardless.example/admin/login")).status
     ).toBe(200);
     const response = proxy(new NextRequest("https://boardless.example/admin"));
-    expect(response.headers.get("location")).toBe(
-      "https://boardless.example/admin/login?error=config"
-    );
+    const location = new URL(response.headers.get("location")!);
+    expect(location.pathname).toBe("/admin/login");
+    expect(location.searchParams.get("error")).toBe("config");
   });
 
   it("redirects an authenticated owner away from the login screen", () => {
@@ -65,5 +68,21 @@ describe("admin session proxy", () => {
     expect(response.headers.get("location")).toBe(
       "https://boardless.example/admin"
     );
+  });
+
+  it("sends a live session on to where it was headed", () => {
+    configure();
+    const response = proxy(authenticated("/admin/login?returnTo=%2Fadmin%3Fventure%3Dgoviral"));
+    expect(response.headers.get("location")).toBe(
+      "https://boardless.example/admin?venture=goviral"
+    );
+  });
+
+  it("ignores a destination pointing off-site", () => {
+    configure();
+    const response = proxy(
+      authenticated("/admin/login?returnTo=https%3A%2F%2Fattacker.example%2Fsteal")
+    );
+    expect(response.headers.get("location")).toBe("https://boardless.example/admin");
   });
 });

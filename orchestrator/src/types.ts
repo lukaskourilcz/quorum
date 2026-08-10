@@ -84,7 +84,10 @@ export const PhaseSchema = z.enum([
   "mag-desk",
   "article-am",
   "article-pm",
-  "studio"
+  "studio",
+  // The Monday retro. It has no cron of its own — the night shift runs it after the weekly
+  // report is written — but it needs a name of its own for the ledger and the skip record.
+  "weekly-retro"
 ]);
 export type Phase = z.infer<typeof PhaseSchema>;
 

@@ -156,6 +156,16 @@ export function parsePublicIdeaLedger(
   );
 }
 
+/**
+ * A bare `YYYY-MM-DD-<kind>` reference, which is how the named rooms write theirs.
+ *
+ * Every Titty Tuesdays plan and idea stores `2026-08-05-tt-marketing`, not
+ * `meetings/2026-08-05-tt-marketing`, so all eleven cards reported "source meeting unavailable"
+ * beside records that were sitting in `state/meetings/` the whole time. The prefix is what the
+ * route wants; the kind segment is what tells a meeting reference apart from anything else.
+ */
+const bareMeetingRef = /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export function publicMeetingHref(
   reference: string,
   standups: readonly Pick<PublicStandup, "id" | "date" | "phase">[] = []
@@ -168,5 +178,6 @@ export function publicMeetingHref(
     const record = standups.find((standup) => standup.date === date && standup.phase === phase);
     return record ? `/standups/${record.id}/room` : null;
   }
+  if (bareMeetingRef.test(reference)) return `/meetings/${reference}`;
   return null;
 }

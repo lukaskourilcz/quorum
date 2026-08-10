@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "owner-attention/1",
+  "generatedAt": "10 August 2026",
+  "approvals": [
+    {
+      "id": "",
+      "title": "",
+      "plain": null,
+      "source": { "kind": "needed", "ref": "state/INBOX.md" },
+      "since": "last week",
+      "urgency": "urgent"
+    }
+  ],
+  "manualTasks": [
+    {
+      "id": "ADMIN_USER",
+      "title": "Admin username is not set",
+      "plain": "Set it.",
+      "steps": ["one", "two", "three", "four"],
+      "source": { "kind": "env", "ref": "ADMIN_USER" },
+      "since": null,
+      "urgency": "blocking",
+      "needsPlainCopy": "yes"
+    }
+  ]
+}

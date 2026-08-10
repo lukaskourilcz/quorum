@@ -1,0 +1,303 @@
+{
+  "schemaVersion": "monetization-option/1",
+  "updatedAt": "2026-08-09",
+  "options": [
+    {
+      "id": "display-ads",
+      "name": "Display / programmatic ads",
+      "category": "ads",
+      "description": "An ad network auctions banner slots on your pages and pays per impression. AdSense has no traffic minimum; Mediavine's Journey tier starts around 1,000 monthly sessions; Raptive from ~25,000 pageviews with mostly tier-1 traffic. Premium networks typically pay $15-35 RPM.",
+      "fitFor": [
+        "caught-up",
+        "mma-files"
+      ],
+      "effort": "low",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Traffic is unmeasured (METRICS_INGESTION_ENABLED=false)",
+        "Ad account creation = HUMAN_APPROVAL"
+      ],
+      "status": "blocked"
+    },
+    {
+      "id": "direct-banner-sales",
+      "name": "Direct banner sales",
+      "category": "ads",
+      "description": "Selling a fixed banner slot straight to one sponsor for a flat monthly fee - no network cut, full control of the creative. The marketingShark devShark banner infrastructure is the in-house precursor.",
+      "fitFor": [
+        "caught-up",
+        "mma-files",
+        "marketingshark"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Needs an audience number to price against"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "newsletter-sponsorship",
+      "name": "Newsletter / edition sponsorship",
+      "category": "ads",
+      "description": "A sponsor pays a flat fee for a labelled slot in the daily edition. The trend is toward integrated, trust-based placements over one-off generic ads; newsletter ad networks (e.g. beehiiv's) pay out over $1M/month to publishers, or you sell direct.",
+      "fitFor": [
+        "caught-up",
+        "mma-files"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Needs audience numbers",
+        "Sponsor outreach = owner contact"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "affiliate-saas",
+      "name": "Affiliate links (AI tools / SaaS)",
+      "category": "affiliate",
+      "description": "You recommend a product with a tracked link; when a reader buys or subscribes through it, the merchant pays a commission - SaaS programs often pay 20-30% recurring. Natural fit for an AI magazine that already covers tools.",
+      "fitFor": [
+        "caught-up"
+      ],
+      "effort": "low",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Affiliate account creation = HUMAN_APPROVAL",
+        "Disclosure labels required"
+      ],
+      "status": "ready"
+    },
+    {
+      "id": "affiliate-gear",
+      "name": "Affiliate links (gear / Amazon)",
+      "category": "affiliate",
+      "description": "The same model pointed at physical goods - MMA gloves, apparel, books - through Amazon Associates or brand programs. Low rates (1-10%) but near-zero effort once links live in article templates.",
+      "fitFor": [
+        "mma-files"
+      ],
+      "effort": "low",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Amazon Associates account = HUMAN_APPROVAL"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "betting-affiliate",
+      "name": "Betting affiliate (CPA / RevShare)",
+      "category": "affiliate",
+      "description": "Sportsbooks pay per referred depositor (CPA), a share of their revenue (RevShare), or a hybrid. The highest-paying niche open to MMA and fight-prediction content - and the most regulated: Czech rules require the Ministry of Finance addiction warning, 18+ labelling and gambling-ad compliance; Meta requires special authorisation for betting ads.",
+      "fitFor": [
+        "fightaiq",
+        "mma-files"
+      ],
+      "effort": "high",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Legal review (CZ gambling advertising law)",
+        "HUMAN_APPROVAL",
+        "Brand-risk decision"
+      ],
+      "status": "blocked"
+    },
+    {
+      "id": "print-on-demand",
+      "name": "Print-on-demand merch",
+      "category": "commerce",
+      "description": "A POD partner (Printful, Printify, Gelato) holds blank garments; when a customer orders your design they print and ship a single unit. No inventory, no upfront cost - you keep the markup over the base price. Gelato fulfils locally in 32 countries, strong for the EU. This is exactly the Titty Tuesdays model.",
+      "fitFor": [
+        "titty-tuesdays"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Shop + POD account = HUMAN_APPROVAL",
+        "Payment processing = owner-only"
+      ],
+      "status": "ready"
+    },
+    {
+      "id": "dropshipping",
+      "name": "Dropshipping",
+      "category": "commerce",
+      "description": "You list a third-party supplier's generic product in your store; when someone buys, the supplier ships it directly and you keep the price difference. Unlike POD the product is not your design - thin margins, no differentiation, quality risk. POD is the better fit for a design-led brand.",
+      "fitFor": [
+        "titty-tuesdays"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Same commerce approvals as POD"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "paid-newsletter",
+      "name": "Paid newsletter tier",
+      "category": "subscription",
+      "description": "A premium edition readers pay monthly for while the daily stays free. Paid newsletter subscriptions have roughly tripled since 2021; on beehiiv, subscription revenue grew 138% in a year and about 30% of revenue-generating creators earn through paid tiers.",
+      "fitFor": [
+        "caught-up"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Payment processing = owner-only",
+        "Needs a subscriber base first"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "premium-picks",
+      "name": "Premium picks subscription",
+      "category": "subscription",
+      "description": "Selling FightAIQ's model output (picks, probabilities, closing-line analysis) as a paid subscription. Needs a public, verifiable track record first - the backtest receipts are what makes this credible.",
+      "fitFor": [
+        "fightaiq"
+      ],
+      "effort": "high",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "THE_ODDS_API_KEY (model not running yet)",
+        "Track record must accumulate publicly",
+        "Legal framing (informational, not advice)"
+      ],
+      "status": "blocked"
+    },
+    {
+      "id": "membership",
+      "name": "Membership / supporter tier",
+      "category": "subscription",
+      "description": "Recurring supporter payments (community access, early access, name in credits) via Ko-fi, Buy Me a Coffee memberships or Memberful. Lighter than a paid newsletter - perks, not paywalled content.",
+      "fitFor": [
+        "caught-up",
+        "mma-files"
+      ],
+      "effort": "low",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Account creation + payments = HUMAN_APPROVAL"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "digital-templates",
+      "name": "Digital products: template packs",
+      "category": "products",
+      "description": "Selling the carousel/IG/FB/Threads template packs the system already produces - on Gumroad (about 10% + processing, 15-minute setup), Etsy (94M buyers, discovery) or Creative Market. Multi-product template sellers average around 5x the revenue of single-product sellers, and the Design Lab generates the portfolio naturally.",
+      "fitFor": [
+        "marketingshark",
+        "goviral",
+        "carousel-studio"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Marketplace account = HUMAN_APPROVAL",
+        "Payments = owner-only"
+      ],
+      "status": "ready"
+    },
+    {
+      "id": "productized-service",
+      "name": "Productized service",
+      "category": "services",
+      "description": "A fixed-scope, fixed-price service: e.g. a branded 8-slide carousel in 48 hours powered by the Design Lab, or a GoVIRAL content brief for a client's account. Sells the system's output as a service without custom scoping.",
+      "fitFor": [
+        "carousel-studio",
+        "goviral",
+        "marketingshark"
+      ],
+      "effort": "medium",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "No verified demand yet",
+        "Order intake + payments = owner-only"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "data-licensing",
+      "name": "Data / API licensing",
+      "category": "licensing",
+      "description": "Licensing structured data the system already maintains - fight datasets, model probabilities - as a paid API or bulk-export subscription for other sites and researchers.",
+      "fitFor": [
+        "fightaiq",
+        "mma-files"
+      ],
+      "effort": "high",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Model must run first",
+        "Licence terms need a legal look"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "syndication",
+      "name": "Content syndication / licensing",
+      "category": "licensing",
+      "description": "Other outlets pay to republish articles or the daily briefing (including AI-training licensing for a clean, well-structured archive). Value grows with archive size and the citation discipline the truth gates already enforce.",
+      "fitFor": [
+        "caught-up",
+        "mma-files"
+      ],
+      "effort": "high",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Needs scale and inbound interest"
+      ],
+      "status": "idea"
+    },
+    {
+      "id": "donations",
+      "name": "Donations / tip jar",
+      "category": "support",
+      "description": "A Ko-fi or Buy Me a Coffee link on the site. Zero setup cost, small but immediate; the honest baseline while everything else waits on audience size.",
+      "fitFor": [
+        "caught-up",
+        "mma-files"
+      ],
+      "effort": "low",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Account creation = HUMAN_APPROVAL"
+      ],
+      "status": "ready"
+    },
+    {
+      "id": "job-board",
+      "name": "Niche job board",
+      "category": "products",
+      "description": "Companies pay to list roles in front of a niche audience - the classic AI-newsletter adjacency: an AI-jobs board beside the daily briefing. Needs steady traffic to be worth a listing fee.",
+      "fitFor": [
+        "caught-up"
+      ],
+      "effort": "high",
+      "upfrontCostUsd": 0,
+      "recurringCostUsd": 0,
+      "blockers": [
+        "Needs a measurable audience first"
+      ],
+      "status": "idea"
+    }
+  ]
+}

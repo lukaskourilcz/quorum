@@ -33,6 +33,19 @@ export interface InternalQualitySnapshot {
   retryRate: number;
   sourceAgreementRate: number;
   verifierPassRate: number;
+  /**
+   * What each rate above was divided by.
+   *
+   * `ratio()` returns 0 for an empty denominator, which is the only sane number to store but is
+   * indistinguishable from a real zero once written down: the admin printed "Releases that passed
+   * 0%" on a day when nothing had been released at all. A reader needs the denominator to tell a
+   * failure from an absence, so the snapshot records it rather than leaving it to be guessed.
+   */
+  denominators: {
+    meetings: number;
+    proofs: number;
+    fighterFields: number;
+  };
 }
 
 export interface AutonomySnapshot {
@@ -209,7 +222,12 @@ export async function computeAutonomySnapshot(input: {
       firstPassRate: ratio(successfulProofs - retryProofs, proofs.length),
       retryRate: ratio(retryProofs, proofs.length),
       sourceAgreementRate: ratio(corroboratedFields, allFighterFields),
-      verifierPassRate: ratio(successfulProofs, proofs.length)
+      verifierPassRate: ratio(successfulProofs, proofs.length),
+      denominators: {
+        meetings: meetings.length,
+        proofs: proofs.length,
+        fighterFields: allFighterFields
+      }
     }
   };
 }

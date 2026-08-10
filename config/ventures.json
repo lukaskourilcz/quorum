@@ -15,6 +15,7 @@
         ]
       },
       "adminTabs": [
+        "ideas",
         "plans",
         "visuals",
         "events"
@@ -77,7 +78,8 @@
       },
       "adminTabs": [
         "plans",
-        "ideas"
+        "ideas",
+        "visuals"
       ],
       "meetings": [
         {
@@ -227,6 +229,7 @@
       },
       "adminTabs": [
         "studio",
+        "templates",
         "inspiration",
         "hooks"
       ],

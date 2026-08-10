@@ -3,7 +3,7 @@ import path from "node:path";
 import { DEFAULT_BUDGET_LIMITS, type BudgetLimits } from "../budget.js";
 import { stateRoot } from "../paths.js";
 import { loadVentureRegistry } from "../ventures/registry.js";
-import { resolveEffectivePortfolioSchedule } from "./schedule.js";
+import { resolveEffectivePortfolioSchedule, type EffectivePortfolioSchedule } from "./schedule.js";
 
 /**
  * The caps the runtime actually enforces, from the countersigned decision and the workflow env.
@@ -58,6 +58,35 @@ export async function loadRuntimeBudgetLimits(): Promise<BudgetLimits> {
     fightAiQFoundingRaw,
     monthlyApiHeadroomUsd: 0
   }));
+}
+
+/**
+ * The effective schedule, with real headroom, for a caller outside the portfolio runner.
+ *
+ * The ladder's rungs are amounts of remaining model-API budget, so it is meaningless without the
+ * month's spend — and the enforced cap has to be read first, at any headroom, because a schedule's
+ * amounts depend only on its shape flags. Feeding the ladder a provisional cap is what once put
+ * every rung out of reach; this reads the enforced one.
+ */
+export async function loadEffectivePortfolioSchedule(
+  monthApiSpentUsd: number
+): Promise<EffectivePortfolioSchedule> {
+  const decision = (name: string) => readFile(path.join(stateRoot, "decisions", name), "utf8");
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw] = await Promise.all([
+    loadVentureRegistry(),
+    decision("2026-08-01-budget-raise.md"),
+    decision("2026-08-02-budget-mma.md"),
+    decision("2026-08-04-budget-fifty.md"),
+    decision("2026-08-02-fightaiq-founding.md")
+  ]);
+  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw };
+  const enforcedMonthlyApiUsd = environmentBudgetLimits(
+    resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
+  ).monthlyApiUsd;
+  return resolveEffectivePortfolioSchedule({
+    ...shapeInput,
+    monthlyApiHeadroomUsd: Math.max(0, enforcedMonthlyApiUsd - monthApiSpentUsd)
+  });
 }
 
 /** Tighten resolved caps for a phase. A phase may lower a cap; it may never raise one. */

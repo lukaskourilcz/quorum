@@ -28,11 +28,19 @@ export interface AdminAutonomySnapshot {
   }>;
   quality: {
     killedSlotReasons: Record<string, number>;
-    vetoRate: number;
-    firstPassRate: number;
-    retryRate: number;
-    sourceAgreementRate: number;
-    verifierPassRate: number;
+    /**
+     * Each rate is null when nothing was attempted.
+     *
+     * `ratio()` writes 0 for an empty denominator, so "Releases that passed 0%" meant zero releases
+     * rather than zero passes. The snapshot records what each rate was divided by; anything the
+     * runtime never attempted arrives here as null and the panel says so in words. Same `null != 0`
+     * doctrine the public site runs on.
+     */
+    vetoRate: number | null;
+    firstPassRate: number | null;
+    retryRate: number | null;
+    sourceAgreementRate: number | null;
+    verifierPassRate: number | null;
   };
   priorities: AdminPriorityItem[];
   social: Array<{
@@ -142,7 +150,22 @@ export async function readAdminAutonomy(root = repositoryRoot): Promise<AdminAut
   }
   const growth = Array.isArray(autonomy?.growth) ? autonomy.growth as AdminAutonomySnapshot["growth"] : [];
   const quality = record(autonomy?.quality);
-  const number = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? value : 0;
+  const denominators = record(quality?.denominators);
+  const count = (key: string) => {
+    const value = denominators?.[key];
+    return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;
+  };
+  /**
+   * A rate the runtime actually measured, or null.
+   *
+   * A snapshot written before `denominators` existed has no counts at all, and there is no way to
+   * tell its zeroes apart from real ones — so every rate in it reads as no-data until the next
+   * 06:00 run rewrites the file. Guessing the other way would print the same lie this fixes.
+   */
+  const rate = (key: string, over: string) =>
+    count(over) > 0 && typeof quality?.[key] === "number" && Number.isFinite(quality[key])
+      ? quality[key] as number
+      : null;
   let social: AdminAutonomySnapshot["social"] = [];
   try {
     const activation = record(JSON.parse(await readFile(path.join(root, "state/social/activation.json"), "utf8")));
@@ -162,11 +185,11 @@ export async function readAdminAutonomy(root = repositoryRoot): Promise<AdminAut
     growth,
     quality: {
       killedSlotReasons: record(quality?.killedSlotReasons) as Record<string, number> ?? {},
-      vetoRate: number(quality?.vetoRate),
-      firstPassRate: number(quality?.firstPassRate),
-      retryRate: number(quality?.retryRate),
-      sourceAgreementRate: number(quality?.sourceAgreementRate),
-      verifierPassRate: number(quality?.verifierPassRate)
+      vetoRate: rate("vetoRate", "meetings"),
+      firstPassRate: rate("firstPassRate", "proofs"),
+      retryRate: rate("retryRate", "proofs"),
+      sourceAgreementRate: rate("sourceAgreementRate", "fighterFields"),
+      verifierPassRate: rate("verifierPassRate", "proofs")
     },
     priorities: publicPriorities(queue),
     social

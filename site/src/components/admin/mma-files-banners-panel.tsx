@@ -62,10 +62,26 @@ function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
   const [message, setMessage] = useState<string | null>(null);
   const target = choices.find((size) => sizeKey(size) === selected) ?? choices[0]!;
 
+  /*
+   * The clear runs in a microtask, not in the effect body.
+   *
+   * Setting state synchronously while an effect is running makes React re-render before it has
+   * finished committing, which the lint rule flags as a cascading render — and it made
+   * `pnpm -C site lint` fail. Deferring it puts the clear on the same footing as the crop result
+   * below, which has always arrived asynchronously, and `live` already guards both against a
+   * file that changed while the work was in flight.
+   */
   useEffect(() => {
     let live = true;
     let objectUrl: string | null = null;
-    if (!file) { setCropped(null); setPreview(null); return; }
+    if (!file) {
+      queueMicrotask(() => {
+        if (!live) return;
+        setCropped(null);
+        setPreview(null);
+      });
+      return () => { live = false; };
+    }
     cropFile(file, target, focusX, focusY).then((blob) => {
       if (!live) return;
       objectUrl = URL.createObjectURL(blob);
@@ -73,6 +89,10 @@ function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
       setPreview(objectUrl);
     }).catch(() => { if (live) setMessage("Náhled ořezu se nepodařilo vytvořit."); });
     return () => { live = false; if (objectUrl) URL.revokeObjectURL(objectUrl); };
+    // `target` is derived from `selected` and `choices`; its two dimensions are what the crop
+    // actually depends on, so listing them keeps a new object identity from re-cropping on every
+    // render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, focusX, focusY, target.height, target.width]);
 
   async function stage() {

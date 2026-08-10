@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "design-proposal/1",
+  "ventureId": "caught-up",
+  "date": "10 August 2026",
+  "promptTemplateVersion": "",
+  "concept": {
+    "conceptId": "",
+    "title": "Ember wash",
+    "colorway": "washed ember",
+    "palette": ["a", "b", "c", "d", "e", "f", "g"],
+    "sceneTexture": "matte paper",
+    "axis": "worn-by-model"
+  },
+  "variants": [
+    {
+      "variantId": "v1",
+      "provider": "midjourney",
+      "model": "",
+      "prompt": "",
+      "altText": "A photo.",
+      "imagePath": "../../../etc/passwd",
+      "contentHash": "not-a-hash",
+      "bytes": 0,
+      "usd": -1,
+      "createdAt": "yesterday",
+      "status": "approved",
+      "rejectedAt": null,
+      "reason": null
+    }
+  ],
+  "failures": [{ "provider": "openai" }],
+  "generatedAt": "2026-08-10T11:04:40.000Z"
+}

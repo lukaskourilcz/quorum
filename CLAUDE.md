@@ -25,7 +25,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   on the server and hands it across as plain JSON, which is also the sanitising boundary.
   Its layout invariants are load-bearing and were each a real bug: centre an oversized
   backdrop plate with `left/top:50%` plus `translate(-50%,-50%)` and never with grid
-  centring; give every decorative layer `pointer-events: none`, because section 05's mood
+  centring; give every decorative layer `pointer-events: none`, because section 06's mood
   tint sits after the content and otherwise swallows every click on the wallboard; keep
   the plates off `will-change`, which exhausted the compositor and painted whole frames
   black; and mark real horizontal scrollers `data-horizontal-scroll` or the containment
@@ -149,6 +149,13 @@ the reader has no memory of the previous copy. Sharing one contract would make
 Use the `builder` subagent on unchecked tasks in the newest decision file, one
 task per commit, tick checkboxes, update `state/ROADMAP.md`.
 
+
+## Engineering rules
+
+`docs/ENGINEERING.md` is the clean-code contract, and it is the same file in every repository this
+owner runs. It is mirrored byte-for-byte at `.agents/ENGINEERING.md` for Codex sessions and
+`orchestrator/tests/architecture.test.ts` fails on any drift between the two. Do not restate its
+rules here — a rule written in two places is two rules that will disagree.
 
 ## Shared skills
 

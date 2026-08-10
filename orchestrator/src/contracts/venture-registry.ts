@@ -72,12 +72,12 @@ const VentureDefinitionSchema = openObject({
     "banners",
     "calendar",
     "social-lab",
-    // `templates` and `decks` were two halves of one question and are one `studio` tab now. Both
-    // stay listed so a bookmarked tab parameter still resolves instead of failing the registry.
+    // `studio` builds a carousel for one article; `templates` browses the template library and
+    // rates it. Two jobs, two tabs — collapsing them left the gallery with no route to it.
+    // `decks` was retired with the question it answered and is not accepted any more.
     "studio",
     "templates",
     "inspiration",
-    "decks",
     "hooks",
     "packages"
   ])),

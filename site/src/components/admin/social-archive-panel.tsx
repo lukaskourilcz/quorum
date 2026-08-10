@@ -128,7 +128,7 @@ export function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPa
 
       {packs.length === 0 ? (
         <Callout>
-          No social posts are stored. They stay off until you turn THREADS, INSTAGRAM and FRAME on for DNESKAi. Article delivery and the hero image continue without them.
+          No social posts are stored. They stay off until you switch on all three of Threads, Instagram and image posts for DNESKAi. The daily article and its picture carry on without them.
         </Callout>
       ) : (
         <div className="grid gap-6">

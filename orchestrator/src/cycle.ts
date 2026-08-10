@@ -48,6 +48,7 @@ import {
 } from "./meetings/record.js";
 import { appendEditionUsage, runLiveEdition } from "./edition/live.js";
 import {
+  GuardedVaultAdjudicator,
   PRODUCT_ROOM_RESERVE_USD,
   decideLiveProductRoom,
   prepareMorningIdea,
@@ -63,8 +64,13 @@ import {
   ideaLedgerPath,
   readIdeaLedger,
   readIdeaIndexSlice,
-  regenerateIdeaIndex
+  regenerateIdeaIndex,
+  screenAndRecordIdea,
+  screeningWord
 } from "./ideas/ledger.js";
+import { buildOperationsPacket } from "./operations/packet.js";
+import { resolveOperationsReview, writeOperationsDecision } from "./operations/review.js";
+import { resolveRotationTarget } from "./operations/rotation.js";
 import { MeetingRecordSchema } from "./contracts/meeting-record.js";
 import {
   composeEditionSocialPack,
@@ -90,6 +96,7 @@ import {
   getVentureMeetingDefinition,
   loadVentureRegistry,
   parseCadenceHour,
+  ventureNamespace,
   type VentureMeetingDefinition
 } from "./ventures/registry.js";
 import type { VentureRegistry } from "./contracts/venture-registry.js";
@@ -115,1000 +122,66 @@ import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/sign
 import { ensurePriorityItem, livePriorityItems, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
 import { loadFixedMonthlyUsd } from "./money/fixed-costs.js";
-import { loadRuntimeBudgetLimits } from "./portfolio/limits.js";
+import { loadEffectivePortfolioSchedule, loadRuntimeBudgetLimits, tightenedBy } from "./portfolio/limits.js";
 import { refreshEcosystemOperatingTruth } from "./docs/ecosystem.js";
 import { imageProgramReadiness, type ImageProgramReadiness } from "./images/readiness.js";
+import { contentGateEnabled, runContentGate } from "./quality/content-gate.js";
+import { writeMonthlyReportIfDue, writeWeeklyReportIfDue } from "./reports/writers.js";
+import { RETRO_ENVELOPE_USD, runWeeklyRetro, weeklyRetroEnabled } from "./reports/retro.js";
+import { collectOwnerAttention } from "./org/owner-attention.js";
 
-export interface CycleOptions {
-  phase: RunnablePhase;
-  dry: boolean;
-  explainBudget: boolean;
-  explainRouting: boolean;
-  now?: Date;
-}
 
-export interface CycleResult {
-  cycleId: string;
-  phase: RunnablePhase;
-  dry: boolean;
-  status:
-    | "dry_complete"
-    | "paused"
-    | "live_complete"
-    | "preflight_complete"
-    /** This slot already had a record for today, so nothing was called and nothing was written. */
-    | "already_recorded";
-  decision:
-    | "INSUFFICIENT_EVIDENCE"
-    | "NO_ACTION"
-    | "NO_EDITION"
-    | "EDITION"
-    | "ACCEPT"
-    | "VETO"
-    | "SUPERSEDE"
-    | "DEFER"
-    | "PLAN"
-    | "PAUSED";
-  estimatedWorstCaseUsd: number;
-  selectedAgents: string[];
-  skippedAgents: string[];
-  artifacts: string[];
-  /**
-   * What the image programme could have done on this run.
-   *
-   * Reported on every dry cycle rather than only on the ones that produce an article, because a
-   * dry run is where the owner checks that the environment is what they think it is: which
-   * archives are reachable, what the caps are, how much of the day is already spent, and whether
-   * the generated rung is awake. A keyless environment and a spent cap used to look the same
-   * from outside — both produce a drawn plate and say nothing about why.
-   */
-  imageProgram?: ImageProgramReadiness;
-  /** Set only on "already_recorded": the record that made this firing a no-op. */
-  alreadyRecordedAt?: string;
-}
 
-/** A completed article is final for its date; a no-edition board status is provisional. */
-/**
- * Whether a second edition today is the owner asking for one rather than a cron repeating itself.
+/*
+ * The commission gate lives in `cycle/commissions.ts` now.
  *
- * The once-a-day guard is there because eighteen crons resolve to a phase and a re-run must not
- * publish the same day twice. It also stops a manual dispatch, which is the owner standing at the
- * keyboard asking for a new article — and there was no way to say so. The workflow sets this only
- * for a `workflow_dispatch` with dry disabled, so a schedule can never take this branch.
+ * Re-exported from here because `runCycle`'s callers and the tests import these names from this
+ * module, and the extraction was a move rather than a redesign — changing every import path would
+ * have made a pure move look like a rewrite.
  */
-export function manualEditionOverride(env: NodeJS.ProcessEnv = process.env): boolean {
-  return env.CYCLE_FORCE_NEW_EDITION?.trim().toLowerCase() === "true";
-}
+export {
+  hasDeliveredPublishedEdition,
+  type CycleOptions,
+  type CycleResult
+} from "./cycle/types.js";
+import { hasDeliveredPublishedEdition } from "./cycle/types.js";
+import type { CycleOptions, CycleResult } from "./cycle/types.js";
+import {
+  runCaughtUpDryCycle,
+  runCaughtUpLiveEditionCycle,
+  runCaughtUpLiveProductCycle
+} from "./cycle/caught-up.js";
+import {
+  budgetLimitsFromEnvironment,
+  currentBudgetLedger,
+  exists,
+  ledgerSpend,
+  monthToDateLedger,
+  previousPragueDate,
+  remainingScheduledCycles,
+  yesterdayEditionOutcome
+} from "./cycle/ledger.js";
+import {
+  manualEditionOverride,
+  publishableReason,
+  resolveMorningCommissions,
+  resolvePriorityProposal,
+  schedulerBlockedReason
+} from "./cycle/commissions.js";
 
-/**
- * StandupSchema caps a starvation-review reason at 280 characters, and that is where every
- * reason below is published. An over-long one would not be truncated, it would fail the parse
- * and take the whole cycle down — so a scheduler message or a long transition list is cut here
- * rather than allowed to decide whether the morning gets written at all.
- */
-const PUBLISHED_REASON_LIMIT = 280;
+export {
+  councilVoteGate,
+  manualEditionOverride,
+  publishableReason,
+  resolveMorningCommission,
+  resolveMorningCommissions,
+  resolvePriorityProposal,
+  schedulerBlockedReason,
+  type MorningCommission
+} from "./cycle/commissions.js";
 
-function publishableReason(reason: string): string {
-  return reason.length <= PUBLISHED_REASON_LIMIT
-    ? reason
-    : `${reason.slice(0, PUBLISHED_REASON_LIMIT - 1)}…`;
-}
 
-export type MorningCommission =
-  | {
-      commission: true;
-      requestedBy: RecordedPosition["agent"];
-      request: NonNullable<RecordedPosition["meetingRequest"]>;
-      target: { ventureId: string; meeting: VentureMeetingDefinition };
-      priority: PriorityItem;
-    }
-  | { commission: false; reason: string };
 
-/**
- * Decide whether the morning board commissions one specialist room, and say why when it does not.
- *
- * Pure, because the reason is published: the standup's starvation review prints it to every
- * venture that did not get the day's single commission. Refusing a room the board may not open
- * used to write no reason at all, so the standup fell back to the caller's default — "the council
- * did not reach the commission gate" — which is the wrong sentence for a council that reached it
- * and then named the wrong room. Every return below carries its own.
- */
-/**
- * The vote half of the commission gate: AUDIT plus three approvals, and nothing about rooms.
- *
- * Extracted so a priority proposal passes the identical test rather than a second one written to
- * look like it. Two hand-written copies of "AUDIT plus three" would drift the first time either
- * moved, and the drift would be silent in the direction that matters — a board that can add work
- * to its own queue on a weaker majority than it needs to spend a meeting.
- */
-export function councilVoteGate(positions: readonly RecordedPosition[]): {
-  passed: boolean;
-  approvals: number;
-  auditApproved: boolean;
-  summary: string;
-} {
-  const approvals = positions.filter((position) => position.recommendation === "approve");
-  const auditApproved = approvals.some((position) => position.agent === "AUDIT");
-  return {
-    passed: auditApproved && approvals.length >= 3,
-    approvals: approvals.length,
-    auditApproved,
-    summary: [
-      `${positions.length} of ${COUNCIL_SEATS} seats returned a position`,
-      `${approvals.length} approved`,
-      auditApproved ? "AUDIT approved" : "AUDIT did not approve"
-    ].join("; ")
-  };
-}
-
-export function resolveMorningCommission(input: {
-  positions: readonly RecordedPosition[];
-  openPriorities: readonly PriorityItem[];
-  policy: MeetingPolicy;
-  registry: VentureRegistry;
-  sourcePhase: string;
-  /**
-   * Which requesting seat to resolve. Defaults to the first non-AUDIT seat carrying a request,
-   * which is what a single-commission morning meant and what every existing caller expects.
-   */
-  requestIndex?: number;
-}): MorningCommission {
-  const gate = councilVoteGate(input.positions);
-  const requesters = input.positions.filter((position) =>
-    position.agent !== "AUDIT" && position.meetingRequest !== null
-  );
-  const requester = requesters[input.requestIndex ?? 0];
-  const request = requester?.meetingRequest ?? null;
-  if (!gate.passed || !request || !requester) {
-    return {
-      commission: false,
-      reason: publishableReason([
-        gate.summary,
-        request ? "a room was requested" : "no seat requested a room"
-      ].join("; ") + ". The gate needs AUDIT plus three approvals.")
-    };
-  }
-  if (!mayRequestMeeting(input.policy, input.sourcePhase, request.phase)) {
-    const allowed = (input.policy.transitions[input.sourcePhase] ?? []).join(", ");
-    return {
-      commission: false,
-      reason: publishableReason(`${requester.agent} asked for the ${request.phase} room, which the ${input.sourcePhase} board may not commission. It may commission ${allowed.length > 0 ? allowed : "no room at all"}.`)
-    };
-  }
-  const target = getVentureMeetingDefinition(input.registry, request.phase);
-  const priority = input.openPriorities.find((item) => item.id === request.priorityItemId);
-  if (!priority || priority.venture !== target.ventureId) {
-    return {
-      commission: false,
-      reason: publishableReason(`${requester.agent} asked for the ${request.phase} room, which belongs to ${target.ventureId}, against ${priority ? `an open ${priority.venture} priority item` : "a priority item that is not open"}. A room is only commissioned for its own venture's item.`)
-    };
-  }
-  return { commission: true, requestedBy: requester.agent, request, target, priority };
-}
-
-/**
- * Every room this morning commissions, at most one per venture.
- *
- * The morning used to take the first seat's request and stop, so the board could open one room a
- * day across the whole portfolio while four rooms needed an agenda every day to open at all.
- * Thirteen of August's forty-four meeting records are $0 pauses reading "no bounded agenda was
- * due": the rooms were not declining to meet, they were never given anything to meet about. The
- * gate is unchanged and still applies to the meeting rather than to each request — a board that
- * cannot reach AUDIT plus three approvals commissions nothing at all — and the queue's own
- * pending caps still have the last word on each write.
- *
- * One per venture, because two rooms for the same venture on the same morning is the same job
- * commissioned twice, and because the per-venture cap in the agenda queue is the thing that would
- * otherwise absorb it silently. `maxRequestsPerMeeting` bounds the total.
- */
-export function resolveMorningCommissions(input: {
-  positions: readonly RecordedPosition[];
-  openPriorities: readonly PriorityItem[];
-  policy: MeetingPolicy;
-  registry: VentureRegistry;
-  sourcePhase: string;
-}): { commissions: Extract<MorningCommission, { commission: true }>[]; blockedReason: string } {
-  const requesterCount = input.positions.filter((position) =>
-    position.agent !== "AUDIT" && position.meetingRequest !== null
-  ).length;
-  const commissions: Extract<MorningCommission, { commission: true }>[] = [];
-  const ventures = new Set<string>();
-  // The reason published when nothing was commissioned is the first refusal, which on a morning
-  // where no seat asked at all is the same sentence the single-commission gate wrote. Later seats
-  // only ever add rooms, so a morning that commissioned something never publishes one of these.
-  let blockedReason = "";
-  for (let index = 0; index < Math.max(requesterCount, 1); index += 1) {
-    if (commissions.length >= input.policy.maxRequestsPerMeeting) break;
-    const outcome = resolveMorningCommission({ ...input, requestIndex: index });
-    if (!outcome.commission) {
-      if (!blockedReason) blockedReason = outcome.reason;
-      continue;
-    }
-    if (ventures.has(outcome.target.ventureId)) continue;
-    ventures.add(outcome.target.ventureId);
-    commissions.push(outcome);
-  }
-  return {
-    commissions,
-    blockedReason: blockedReason || "Every room this board asked for was commissioned."
-  };
-}
-
-export type PriorityProposalDecision =
-  | { kind: "none" }
-  | {
-      kind: "take";
-      proposedBy: RecordedPosition["agent"];
-      request: NonNullable<RecordedPosition["priorityProposal"]>;
-      alsoProposed: number;
-    }
-  | {
-      kind: "refuse";
-      proposedBy: RecordedPosition["agent"];
-      request: NonNullable<RecordedPosition["priorityProposal"]>;
-      reason: string;
-    };
-
-/**
- * Decide whether the room agreed to put a seat's new question on the priority queue.
- *
- * Pure and separate from the queue write, so the decision can be tested without a filesystem and
- * so the write stays a write. Three rules live here and nowhere else:
- *
- * One proposal per meeting. Seats are read in council order and the first non-AUDIT seat carrying
- * a proposal is the one taken; any others are counted and published, not queued. Counting rather
- * than refusing the whole thing matters — two seats proposing is agreement, and punishing the
- * board for it would teach it to stay quiet.
- *
- * AUDIT does not propose. It is the seat that has to be able to say no to work, and a seat that
- * authors work cannot audit it. This mirrors the existing rule that AUDIT never requests a room.
- *
- * The vote gate decides. A proposal from a meeting that could not reach AUDIT plus three
- * approvals is refused, and the refusal is recorded against the seat that made it rather than
- * dropped, because "the board proposed something and did not have the votes" is a fact about the
- * board that the record should keep.
- */
-export function resolvePriorityProposal(input: {
-  positions: readonly RecordedPosition[];
-}): PriorityProposalDecision {
-  const proposers = input.positions.filter((position) =>
-    position.agent !== "AUDIT" && position.priorityProposal !== null
-  );
-  const first = proposers[0];
-  if (!first?.priorityProposal) return { kind: "none" };
-  const gate = councilVoteGate(input.positions);
-  if (!gate.passed) {
-    return {
-      kind: "refuse",
-      proposedBy: first.agent,
-      request: first.priorityProposal,
-      reason: publishableReason(`${gate.summary}. A new question is only added when the meeting itself carries: the gate needs AUDIT plus three approvals.`)
-    };
-  }
-  return {
-    kind: "take",
-    proposedBy: first.agent,
-    request: first.priorityProposal,
-    alsoProposed: proposers.length - 1
-  };
-}
-
-/**
- * Why a commission that passed every gate still did not reach the agenda queue.
- *
- * requestMeetingAgenda enforces the queue-wide and per-venture pending caps and re-parses the
- * agenda contract, so it can refuse work the gate above has already approved. That refusal used
- * to be a console line only, and the standup published the default reason as if the council had
- * never agreed on anything.
- */
-export function schedulerBlockedReason(phase: string, error: unknown): string {
-  return publishableReason(`The council commissioned the ${phase} room but the agenda queue refused it: ${
-    error instanceof Error ? error.message : "unknown scheduler error"
-  }`);
-}
-
-export async function hasDeliveredPublishedEdition(
-  date: string,
-  root = stateRoot
-): Promise<boolean> {
-  if (manualEditionOverride()) return false;
-  const receipt = await readJson<{
-    status?: unknown;
-    editionStatus?: unknown;
-    tags?: unknown;
-  } | null>(root, `edition/deliveries/${date}.json`, null);
-  if (receipt?.status !== "delivered") return false;
-  if (receipt.editionStatus === "edition") return true;
-  return Array.isArray(receipt.tags) && receipt.tags.length > 0;
-}
-
-async function exists(filePath: string): Promise<boolean> {
-  try {
-    await access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function envNumber(name: string, fallback: number): number {
-  const value = process.env[name];
-  if (value === undefined || value.trim() === "") return fallback;
-  const parsed = Number(value);
-  if (!Number.isFinite(parsed) || parsed <= 0) {
-    throw new Error(`${name} must be a positive number`);
-  }
-  return parsed;
-}
-
-function budgetLimitsFromEnvironment(): BudgetLimits {
-  return {
-    ...DEFAULT_BUDGET_LIMITS,
-    maxCycleUsd: envNumber(
-      "MAX_CYCLE_BUDGET_USD",
-      DEFAULT_BUDGET_LIMITS.maxCycleUsd
-    ),
-    caughtUpMeetingUsd: envNumber(
-      "CU_MEETING_BUDGET_USD",
-      DEFAULT_BUDGET_LIMITS.caughtUpMeetingUsd
-    ),
-    editionProductionUsd: envNumber(
-      "EDITION_PRODUCTION_BUDGET_USD",
-      DEFAULT_BUDGET_LIMITS.editionProductionUsd
-    ),
-    dailyUsd: envNumber("DAILY_BUDGET_USD", DEFAULT_BUDGET_LIMITS.dailyUsd),
-    monthlyApiUsd: envNumber(
-      "MONTHLY_BUDGET_USD",
-      DEFAULT_BUDGET_LIMITS.monthlyApiUsd
-    ),
-    monthlyOperatingUsd: envNumber(
-      "MONTHLY_OPERATING_CAP_USD",
-      DEFAULT_BUDGET_LIMITS.monthlyOperatingUsd
-    )
-  };
-}
-
-function remainingScheduledCycles(now: Date): number {
-  const endOfMonth = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
-  return Math.max(1, Math.ceil((endOfMonth - now.getTime()) / (8 * 60 * 60 * 1_000)));
-}
-
-function ledgerSpend(
-  entries: readonly BudgetLedgerEntry[],
-  predicate: (entry: BudgetLedgerEntry) => boolean
-): number {
-  return Number(entries.filter(predicate).reduce((sum, entry) => sum + entry.usd, 0).toFixed(8));
-}
-
-/**
- * Month-to-date all-in spend and the cap in force, for a record that has no council to ask.
- *
- * The deterministic afternoon and night shifts write the newest standup of any day, and the
- * site reads the newest standup for its headline running cost. A literal here is therefore
- * published as fact: the site showed "$0.00 of $50" on a day the ledger held $1.18 against a
- * countersigned $30 cap.
- */
-async function monthToDateLedger(root: string, now: Date): Promise<{ monthAllInUsd: number; monthCapUsd: number }> {
-  const [entries, limits, fixedMonthlyUsd] = await Promise.all([
-    currentBudgetLedger(root),
-    loadRuntimeBudgetLimits(),
-    loadFixedMonthlyUsd(configRoot, now)
-  ]);
-  const month = pragueClockParts(now).date.slice(0, 7);
-  const apiUsd = Number(entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0).toFixed(8));
-  return {
-    monthAllInUsd: Number((apiUsd + fixedMonthlyUsd).toFixed(8)),
-    monthCapUsd: limits.monthlyOperatingUsd
-  };
-}
-
-async function currentBudgetLedger(root: string): Promise<BudgetLedgerEntry[]> {
-  return (await readJson<{ entries: BudgetLedgerEntry[] }>(
-    root,
-    "budget/ledger.json",
-    { entries: [] }
-  )).entries;
-}
-
-function previousPragueDate(date: string): string {
-  return new Date(Date.parse(`${date}T12:00:00.000Z`) - 86_400_000).toISOString().slice(0, 10);
-}
-
-async function yesterdayEditionOutcome(root: string, date: string): Promise<string> {
-  const yesterday = previousPragueDate(date);
-  const delivery = await readJson<{
-    status?: string;
-    packageHash?: string;
-  } | null>(root, `edition/deliveries/${yesterday}.json`, null);
-  if (delivery?.status === "delivered") {
-    return "Yesterday's edition has a reconciled delivery receipt; no sentinel flag is recorded in Quorum state.";
-  }
-  const meeting = await readJson<{ status?: string; decision?: { outcome?: string } } | null>(
-    root,
-    `meetings/${yesterday}-cu-edition.json`,
-    null
-  );
-  if (meeting?.status === "NEEDS_RECONCILIATION") {
-    return "Yesterday's edition needs delivery reconciliation; no sentinel flag is recorded in Quorum state.";
-  }
-  if (meeting?.decision?.outcome === "NO_EDITION") {
-    return "Yesterday closed as an honest no-edition outcome; no sentinel flag is recorded in Quorum state.";
-  }
-  return "Yesterday's delivery outcome is unavailable in committed Quorum state; no sentinel flag is recorded here.";
-}
-
-async function runCaughtUpDryCycle(
-  options: CycleOptions,
-  cycleId: string,
-  now: Date
-): Promise<CycleResult> {
-  if (!isCaughtUpPhase(options.phase)) {
-    throw new Error(`Not a Caught Up phase: ${options.phase}`);
-  }
-  if (!options.dry) {
-    throw new Error("Caught Up scheduled phases remain dry until the Phase 9 cutover");
-  }
-  const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
-    loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
-    readFile(path.join(configRoot, "stages.json"), "utf8").then(
-      (raw) => JSON.parse(raw) as { current: Stage }
-    ),
-    loadVentureRegistry(),
-    loadVentureAgentControls()
-  ]);
-  const definition = composeMeetingRouteDefinition(
-    ventureRegistry,
-    options.phase,
-    "dry"
-  );
-  const meetingCap = Math.min(
-    definition.envelopeUsd,
-    budgetLimitsFromEnvironment().caughtUpMeetingUsd
-  );
-  const estimatedWorstCaseUsd = options.phase === "cu-product"
-    ? PRODUCT_ROOM_RESERVE_USD
-    : meetingCap;
-  if (estimatedWorstCaseUsd > meetingCap) {
-    throw new Error(`Caught Up ${options.phase} reserve exceeds the meeting cap`);
-  }
-  const room = routeBoardroom(routing, {
-    roomId: `ROOM-${cycleId.toUpperCase()}`,
-    topicType: definition.topicType,
-    objective: definition.objective,
-    evidenceRefs: [],
-    decisionNeeded: definition.decisionNeeded,
-    riskTags: [],
-    budgetImpactUsd: estimatedWorstCaseUsd,
-    ventureId: definition.ventureId,
-    preset: definition.preset,
-    requiredParticipants: definition.requiredParticipants,
-    disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
-    now
-  });
-  const artifactRoot = path.join(repoRoot, "tmp", "dry-run", "state");
-  let fixtureIdea = null;
-  let fixtureVerdict: "veto" | "defer" = "defer";
-  if (options.phase === "cu-product") {
-    const morningRaw = await readText(artifactRoot, `standups/${pragueClockParts(now).date}-morning.json`);
-    const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
-    if (morning?.caughtUpIdeaRef) {
-      await ensureIdeaInNamespace(
-        artifactRoot,
-        CAUGHT_UP_IDEA_NAMESPACE,
-        morning.caughtUpIdeaRef
-      );
-      const current = currentIdeaEntries(
-        await readIdeaLedger(artifactRoot, CAUGHT_UP_IDEA_NAMESPACE)
-      );
-      const morningIdea = current.find((candidate) => candidate.id === morning.caughtUpIdeaRef);
-      if (!morningIdea) throw new Error(`Dry morning handoff references unknown idea ${morning.caughtUpIdeaRef}`);
-      fixtureVerdict = morningIdea.status === "vetoed" || morningIdea.status === "killed" ? "veto" : "defer";
-      fixtureIdea = await applyIdeaRoomVerdict({
-        root: artifactRoot,
-        namespace: CAUGHT_UP_IDEA_NAMESPACE,
-        ideaId: morningIdea.id,
-        verdict: fixtureVerdict === "veto"
-          ? { verdict: "veto", reason: "VAULT hard-stopped the fixture duplicate before deliberation." }
-          : {
-              verdict: "defer",
-              reason: "Dry product rooms cannot authorize product action.",
-              deferred: { condition: "A live bounded product room reviews the idea." }
-            },
-        meetingRef: meetingRef(morning.date, "cu-product"),
-        at: now.toISOString()
-      });
-    }
-  }
-  const record = await createOfflineCaughtUpMeeting({
-    cycleId,
-    phase: options.phase,
-    stage: stages.current,
-    room,
-    now,
-    estimatedCycleUsd: estimatedWorstCaseUsd,
-    ...(fixtureIdea ? { idea: fixtureIdea, verdict: fixtureVerdict } : {})
-  });
-  const meetingPath = `meetings/${record.date}-${options.phase}.json`;
-  const decisionPath = `decisions/${cycleId}.json`;
-  const scorecardPath = `scorecards/${cycleId}.json`;
-  const priorRecords = await loadMeetingRecords(artifactRoot);
-  const calendar = buildCalendarFeed({
-    weekOf: mondayOfWeek(record.date),
-    records: [...priorRecords, record],
-    skips: await loadMeetingSkips(artifactRoot),
-    articleSlots: await loadArticleSlotOutcomes(artifactRoot),
-    now
-  });
-  const calendarPath = await writeCalendarFeed(artifactRoot, calendar);
-  await Promise.all([
-    atomicWriteJson(artifactRoot, meetingPath, record),
-    atomicWriteJson(artifactRoot, decisionPath, {
-      schemaVersion: 1,
-      fixture: true,
-      cycleId,
-      phase: options.phase,
-      outcome: record.decision.outcome,
-      summary: record.decision.summary,
-      evidenceRefs: record.decision.evidenceRefs,
-      generatedAt: record.generatedAt
-    }),
-    atomicWriteJson(artifactRoot, scorecardPath, {
-      schemaVersion: 1,
-      fixture: true,
-      cycleId,
-      phase: options.phase,
-      estimatedWorstCaseUsd,
-      actualUsd: record.ledger.actualCycleUsd,
-      participants: room.selectedParticipants.map((participant) => participant.agent),
-      ...(fixtureIdea ? { ideaId: fixtureIdea.id, vaultScreening: fixtureIdea.statusHistory[0]?.reason } : {}),
-      generatedAt: record.generatedAt
-    })
-  ]);
-  if (options.explainBudget) {
-    console.log(JSON.stringify({ cycleId, callGraph: [], estimatedWorstCaseUsd }, null, 2));
-  }
-  if (options.explainRouting) {
-    console.log(JSON.stringify({
-      selected: room.selectedParticipants,
-      skipped: room.skippedParticipants,
-      caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
-    }, null, 2));
-  }
-  const artifacts = [
-    meetingPath,
-    decisionPath,
-    scorecardPath,
-    calendarPath,
-    ...(fixtureIdea
-      ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
-      : [])
-  ];
-  return {
-    cycleId,
-    phase: options.phase,
-    dry: true,
-    status: "dry_complete",
-    decision: options.phase === "cu-edition"
-      ? "NO_EDITION"
-      : fixtureVerdict === "veto"
-        ? "VETO"
-        : "DEFER",
-    estimatedWorstCaseUsd,
-    selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
-    skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
-    artifacts: artifacts.map((artifact) =>
-      path.relative(repoRoot, path.join(artifactRoot, artifact))
-    )
-  };
-}
-
-async function runCaughtUpLiveEditionCycle(
-  options: CycleOptions,
-  cycleId: string,
-  now: Date
-): Promise<CycleResult> {
-  if (options.phase !== "cu-edition" || options.dry) {
-    throw new Error("Live Caught Up edition runner requires a non-dry cu-edition phase");
-  }
-  const [routing, stages, ventureRegistry, agentControls] = await Promise.all([
-    loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
-    readFile(path.join(configRoot, "stages.json"), "utf8").then(
-      (raw) => JSON.parse(raw) as { current: Stage }
-    ),
-    loadVentureRegistry(),
-    loadVentureAgentControls()
-  ]);
-  const definition = composeMeetingRouteDefinition(
-    ventureRegistry,
-    "cu-edition",
-    "live"
-  );
-  const meetingBudgetUsd = Math.min(
-    definition.envelopeUsd,
-    budgetLimitsFromEnvironment().caughtUpMeetingUsd
-  );
-  const productionBudgetUsd = budgetLimitsFromEnvironment().editionProductionUsd;
-  const estimatedWorstCaseUsd = Number((meetingBudgetUsd + productionBudgetUsd).toFixed(8));
-  const date = pragueClockParts(now).date;
-  if (await hasDeliveredPublishedEdition(date)) {
-    return {
-      cycleId,
-      phase: "cu-edition",
-      dry: false,
-      status: "preflight_complete",
-      decision: "NO_ACTION",
-      estimatedWorstCaseUsd,
-      selectedAgents: [],
-      skippedAgents: [],
-      artifacts: [`state/edition/deliveries/${date}.json`]
-    };
-  }
-  const reference = meetingRef(date, "cu-edition");
-  const baseUrl = (process.env.PUBLIC_SITE_URL || "https://boardless-ai.vercel.app").replace(/\/$/, "");
-  const room = routeBoardroom(routing, {
-    roomId: `ROOM-${cycleId.toUpperCase()}`,
-    topicType: definition.topicType,
-    objective: definition.objective,
-    evidenceRefs: [],
-    decisionNeeded: definition.decisionNeeded,
-    riskTags: [],
-    budgetImpactUsd: estimatedWorstCaseUsd,
-    ventureId: definition.ventureId,
-    preset: definition.preset,
-    requiredParticipants: definition.requiredParticipants,
-    disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
-    now
-  });
-  const socialContentEnabled = caughtUpSocialProductionEnabled(agentControls) &&
-    await socialContentGenerationEnabled(stateRoot, "caught-up") &&
-    // And somewhere for it to go. Composing frames no channel can consume filled
-    // site/public/social/ with megabytes of committed inventory that the admin decks tab
-    // re-renders on request anyway.
-    await socialChannelsEnabled(configRoot);
-  const produced = await runLiveEdition({
-    cycleId,
-    date,
-    now,
-    meetingRef: reference,
-    roomUrl: `${baseUrl}/${reference}`,
-    socialPackEnabled: socialContentEnabled,
-    licensedImageSearchEnabled: true
-  });
-  const monthAllInUsd = await appendEditionUsage(stateRoot, cycleId, now, produced.report);
-  const evidenceRefs = produced.package.status === "edition"
-    ? produced.package.article.cs.frontmatter.sources.map(
-        (source) => `source:${source.source_id ?? source.id}`
-      )
-    : produced.sourceRun.sources
-        .filter((source) => source.status === "success")
-        .map((source) => `source:${source.sourceId}`)
-        .slice(0, 12);
-  const record = await createLiveEditionMeeting({
-    cycleId,
-    stage: stages.current,
-    room,
-    now,
-    estimatedCycleUsd: estimatedWorstCaseUsd,
-    monthAllInUsd,
-    editionPackage: produced.package,
-    evidenceRefs,
-    report: produced.report
-  });
-  const meetingPath = `meetings/${date}-cu-edition.json`;
-  const decisionPath = `decisions/${cycleId}.json`;
-  const scorecardPath = `scorecards/${cycleId}.json`;
-  const priorRecords = await loadMeetingRecords(stateRoot);
-  const calendar = buildCalendarFeed({
-    weekOf: mondayOfWeek(date),
-    records: [...priorRecords, record],
-    skips: await loadMeetingSkips(stateRoot),
-    articleSlots: await loadArticleSlotOutcomes(stateRoot),
-    now
-  });
-  const calendarPath = await writeCalendarFeed(stateRoot, calendar);
-  await Promise.all([
-    atomicWriteJson(stateRoot, meetingPath, record),
-    atomicWriteJson(stateRoot, decisionPath, {
-      schemaVersion: 1,
-      fixture: false,
-      cycleId,
-      phase: "cu-edition",
-      outcome: record.decision.outcome,
-      summary: record.decision.summary,
-      evidenceRefs: record.decision.evidenceRefs,
-      editionRef: produced.package.idempotencyKey,
-      generatedAt: record.generatedAt
-    }),
-    atomicWriteJson(stateRoot, scorecardPath, {
-      schemaVersion: 1,
-      fixture: false,
-      cycleId,
-      phase: "cu-edition",
-      estimatedWorstCaseUsd,
-      actualUsd: produced.report.measuredCostUsd ?? 0,
-      participants: room.selectedParticipants.map((participant) => participant.agent),
-      sourceResults: produced.sourceRun.sources,
-      editionStatus: produced.package.status,
-      packageHash: produced.package.idempotencyKey,
-      generatedAt: record.generatedAt
-    })
-  ]);
-  const socialArtifacts: string[] = [];
-  if (produced.package.status === "edition" && socialContentEnabled) {
-    const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
-    if (!caughtUpBaseUrl) {
-      await recordMissingSocialPackConfiguration(stateRoot);
-      console.warn("Caught Up social pack skipped: CAUGHT_UP_SITE_URL is not configured");
-    } else {
-      try {
-        const slug = produced.package.article.cs.frontmatter.slug;
-        // Czech is served at the site root now, and /cs 308s there. A queue item carries its
-        // destination to the platform and cannot be edited afterwards, so it points at the
-        // final URL rather than at a redirect.
-        const destinations = {
-          cs: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString()
-        };
-        const social = await composeEditionSocialPack({
-          editionPackage: produced.package,
-          meeting: record,
-          destinations,
-          repoRoot,
-          stateRoot,
-          now
-        });
-        if (social) socialArtifacts.push(...social.artifactPaths);
-      } catch (error) {
-        const detail = error instanceof Error ? error.message : "unknown composer failure";
-        console.warn(`Caught Up social pack failed: ${detail}`);
-        await recordSocialPackFailure(stateRoot, detail);
-      }
-    }
-  }
-  if (options.explainBudget) {
-    console.log(JSON.stringify({
-      cycleId,
-      callGraph: produced.report.usage.map((usage) => ({
-        stage: usage.stage,
-        model: usage.model,
-        measuredUsd: usage.costUsd
-      })),
-      estimatedWorstCaseUsd,
-      measuredUsd: produced.report.measuredCostUsd ?? null
-    }, null, 2));
-  }
-  if (options.explainRouting) {
-    console.log(JSON.stringify({
-      selected: room.selectedParticipants,
-      skipped: room.skippedParticipants,
-      caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
-    }, null, 2));
-  }
-  const artifacts = [
-    meetingPath,
-    decisionPath,
-    scorecardPath,
-    calendarPath,
-    ...(produced.outboxPath ? [produced.outboxPath] : []),
-    produced.reportPath,
-    "budget/ledger.json",
-    ...socialArtifacts
-  ];
-  return {
-    cycleId,
-    phase: "cu-edition",
-    dry: false,
-    status: "live_complete",
-    decision: produced.package.status === "edition" ? "EDITION" : "NO_EDITION",
-    estimatedWorstCaseUsd,
-    selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
-    skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
-    artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
-  };
-}
-
-async function runCaughtUpLiveProductCycle(
-  options: CycleOptions,
-  cycleId: string,
-  now: Date
-): Promise<CycleResult> {
-  if (options.phase !== "cu-product" || options.dry) {
-    throw new Error("Live Caught Up product runner requires a non-dry cu-product phase");
-  }
-  const [routing, stages, ventureRegistry, agentControls, fixedMonthlyUsd] = await Promise.all([
-    loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
-    readFile(path.join(configRoot, "stages.json"), "utf8").then(
-      (raw) => JSON.parse(raw) as { current: Stage }
-    ),
-    loadVentureRegistry(),
-    loadVentureAgentControls(),
-    loadFixedMonthlyUsd(configRoot, now)
-  ]);
-  const definition = composeMeetingRouteDefinition(
-    ventureRegistry,
-    "cu-product",
-    "live"
-  );
-  const limits = budgetLimitsFromEnvironment();
-  const meetingCap = Math.min(definition.envelopeUsd, limits.caughtUpMeetingUsd);
-  if (PRODUCT_ROOM_RESERVE_USD > meetingCap) {
-    throw new Error(
-      `Product-room reserve ${PRODUCT_ROOM_RESERVE_USD} exceeds Caught Up meeting cap ${meetingCap}`
-    );
-  }
-  const date = pragueClockParts(now).date;
-  const reference = meetingRef(date, "cu-product");
-  const room = routeBoardroom(routing, {
-    roomId: `ROOM-${cycleId.toUpperCase()}`,
-    topicType: definition.topicType,
-    objective: definition.objective,
-    evidenceRefs: [],
-    decisionNeeded: definition.decisionNeeded,
-    riskTags: [],
-    budgetImpactUsd: PRODUCT_ROOM_RESERVE_USD,
-    ventureId: definition.ventureId,
-    preset: definition.preset,
-    requiredParticipants: definition.requiredParticipants,
-    disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
-    now
-  });
-  const [index, globalIndex] = await Promise.all([
-    regenerateIdeaIndex(stateRoot, CAUGHT_UP_IDEA_NAMESPACE),
-    readIdeaIndexSlice(stateRoot, GLOBAL_IDEA_NAMESPACE)
-  ]);
-  const morningRaw = await readText(stateRoot, `standups/${date}-morning.json`);
-  const morning = morningRaw ? StandupSchema.parse(JSON.parse(morningRaw)) : null;
-  if (morning?.caughtUpIdeaRef) {
-    await ensureIdeaInNamespace(
-      stateRoot,
-      CAUGHT_UP_IDEA_NAMESPACE,
-      morning.caughtUpIdeaRef
-    );
-  }
-  const ideas = currentIdeaEntries(
-    await readIdeaLedger(stateRoot, CAUGHT_UP_IDEA_NAMESPACE)
-  );
-  const idea = morning?.caughtUpIdeaRef
-    ? ideas.find((candidate) => candidate.id === morning.caughtUpIdeaRef) ?? null
-    : null;
-  if (morning?.caughtUpIdeaRef && !idea) {
-    throw new Error(`Morning handoff references unknown idea ${morning.caughtUpIdeaRef}`);
-  }
-  const previousOutcome = await yesterdayEditionOutcome(stateRoot, date);
-  const response = idea
-    ? await decideLiveProductRoom({
-        context: {
-          root: stateRoot,
-          ideaNamespace: CAUGHT_UP_IDEA_NAMESPACE,
-          cycleId,
-          stage: stages.current,
-          now,
-          limits,
-          remainingScheduledCycles: remainingScheduledCycles(now),
-          fixedMonthlyUsd
-        },
-        idea,
-        index,
-        globalIndex,
-        yesterdayOutcome: previousOutcome
-      })
-    : null;
-  const recordedIdea = idea && response
-    ? await applyIdeaRoomVerdict({
-        root: stateRoot,
-        namespace: CAUGHT_UP_IDEA_NAMESPACE,
-        ideaId: idea.id,
-        verdict: toIdeaRoomVerdict(response),
-        meetingRef: reference,
-        at: now.toISOString()
-      })
-    : null;
-  const budgetLedger = await currentBudgetLedger(stateRoot);
-  const actualCycleUsd = ledgerSpend(
-    budgetLedger,
-    (entry) => entry.cycleId === cycleId
-  );
-  const month = now.toISOString().slice(0, 7);
-  const monthAllInUsd = ledgerSpend(
-    budgetLedger,
-    (entry) => entry.ts.slice(0, 7) === month
-  );
-  const record = await createLiveProductMeeting({
-    cycleId,
-    stage: stages.current,
-    room,
-    now,
-    estimatedCycleUsd: PRODUCT_ROOM_RESERVE_USD,
-    actualCycleUsd,
-    monthAllInUsd,
-    idea: recordedIdea,
-    response,
-    yesterdayOutcome: previousOutcome
-  });
-  const meetingPath = `meetings/${date}-cu-product.json`;
-  const decisionPath = `decisions/${cycleId}.json`;
-  const scorecardPath = `scorecards/${cycleId}.json`;
-  const priorRecords = await loadMeetingRecords(stateRoot);
-  const calendar = buildCalendarFeed({
-    weekOf: mondayOfWeek(date),
-    records: [...priorRecords, record],
-    skips: await loadMeetingSkips(stateRoot),
-    articleSlots: await loadArticleSlotOutcomes(stateRoot),
-    now
-  });
-  const calendarPath = await writeCalendarFeed(stateRoot, calendar);
-  await Promise.all([
-    atomicWriteJson(stateRoot, meetingPath, record),
-    atomicWriteJson(stateRoot, decisionPath, {
-      schemaVersion: 1,
-      fixture: false,
-      cycleId,
-      phase: "cu-product",
-      outcome: record.decision.outcome,
-      summary: record.decision.summary,
-      evidenceRefs: record.decision.evidenceRefs,
-      ...(record.caughtUpIdeaRef ? { caughtUpIdeaRef: record.caughtUpIdeaRef } : {}),
-      generatedAt: record.generatedAt
-    }),
-    atomicWriteJson(stateRoot, scorecardPath, {
-      schemaVersion: 1,
-      fixture: false,
-      cycleId,
-      phase: "cu-product",
-      estimatedWorstCaseUsd: PRODUCT_ROOM_RESERVE_USD,
-      actualUsd: actualCycleUsd,
-      participants: room.selectedParticipants.map((participant) => participant.agent),
-      ideaId: recordedIdea?.id ?? null,
-      vaultScreening: recordedIdea?.statusHistory[0]?.reason ?? "missing_morning_handoff",
-      growthIdeaNovelty: recordedIdea?.statusHistory[0]?.reason.includes("hard stop") ? 0 : recordedIdea ? 1 : null,
-      yesterdayOutcome: previousOutcome,
-      generatedAt: record.generatedAt
-    })
-  ]);
-  if (options.explainBudget) {
-    console.log(JSON.stringify({
-      cycleId,
-      callGraph: budgetLedger
-        .filter((entry) => entry.cycleId === cycleId)
-        .map((entry) => ({ agent: entry.agent, model: entry.model, measuredUsd: entry.usd })),
-      estimatedWorstCaseUsd: PRODUCT_ROOM_RESERVE_USD,
-      measuredUsd: actualCycleUsd
-    }, null, 2));
-  }
-  if (options.explainRouting) {
-    console.log(JSON.stringify({
-      selected: room.selectedParticipants,
-      skipped: room.skippedParticipants,
-      caps: { rounds: room.maxRounds, turns: room.maxTurns, tokens: room.maxTotalTokens }
-    }, null, 2));
-  }
-  const decision = response?.verdict === "accept"
-    ? "ACCEPT"
-    : response?.verdict === "veto"
-      ? "VETO"
-      : response?.verdict === "supersede"
-        ? "SUPERSEDE"
-        : "DEFER";
-  const artifacts = [
-    meetingPath,
-    decisionPath,
-    scorecardPath,
-    calendarPath,
-    ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE),
-    ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE),
-    "budget/ledger.json"
-  ];
-  return {
-    cycleId,
-    phase: "cu-product",
-    dry: false,
-    status: "live_complete",
-    decision,
-    estimatedWorstCaseUsd: PRODUCT_ROOM_RESERVE_USD,
-    selectedAgents: room.selectedParticipants.map((participant) => participant.agent),
-    skippedAgents: room.skippedParticipants.map((participant) => participant.agent),
-    artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
-  };
-}
 
 /**
  * Run one live phase and, if a cap refuses it, end the day quietly instead of exiting 1.
@@ -1549,12 +622,39 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           };
         })()
       : null;
+    /**
+     * Yesterday, in Prague terms, and the morning before this one.
+     *
+     * The review is about the day that finished, not the one starting: at 06:00 today's slots have
+     * not run. `since` bounds the rating window to exactly the gap between the two boards, so a
+     * rating is counted once and by the meeting that could first have seen it.
+     */
+    const operationsPacket = venturePhase === "morning"
+      ? await (async () => {
+          const local = pragueClockParts(now);
+          const yesterday = new Date(`${local.date}T12:00:00Z`);
+          yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+          const reviewDate = yesterday.toISOString().slice(0, 10);
+          const limits = budgetLimitsFromEnvironment();
+          return buildOperationsPacket({
+            repoRoot,
+            stateRoot: artifactRoot,
+            reviewDate,
+            since: reviewDate,
+            autonomy: morningContext?.autonomy ?? null,
+            ledger: (await currentBudgetLedger(artifactRoot)),
+            dayCapUsd: limits.dailyUsd,
+            monthCapUsd: limits.monthlyOperatingUsd
+          });
+        })()
+      : null;
     const liveCouncil = !options.dry && venturePhase === "morning"
       ? await collectLiveCouncil({
           cycleId,
           phase: venturePhase,
           stage: stages.current,
           now,
+          ...(operationsPacket ? { operations: { packet: operationsPacket } } : {}),
           businessContext: {
             autonomy: morningContext!.autonomy,
             openPriorities: morningContext!.openPriorities,
@@ -1574,11 +674,17 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           })
         })
       : null;
-    const caughtUpIdea = venturePhase === "morning"
+    // Which venture gets today's idea. Caught Up used to get every one of them because the
+    // namespace was hardcoded here; the rotation is deterministic on the date, so a re-run of the
+    // same morning proposes into the same ledger.
+    const rotation = venturePhase === "morning"
+      ? await resolveRotationTarget({ stateRoot: artifactRoot, now })
+      : null;
+    const morningIdea = venturePhase === "morning"
       ? await prepareMorningIdea({
           context: {
             root: artifactRoot,
-            ideaNamespace: CAUGHT_UP_IDEA_NAMESPACE,
+            ideaNamespace: rotation?.ledgerNamespace ?? CAUGHT_UP_IDEA_NAMESPACE,
             cycleId,
             stage: stages.current,
             now,
@@ -1587,11 +693,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
             fixedMonthlyUsd: morningContext!.moneyAndKpis.fixedMonthlyUsd
           },
           dry: options.dry,
+          rotation,
           councilSummary: liveCouncil
             ? liveCouncil.positions.map((position) => position.publicSummary).join(" ")
             : "Deterministic dry morning fixture; no live council position was called."
         })
       : undefined;
+    const ideaNamespace = rotation?.ledgerNamespace ?? CAUGHT_UP_IDEA_NAMESPACE;
+    const caughtUpIdea = morningIdea;
     let measuredCouncil = liveCouncil;
     if (liveCouncil && caughtUpIdea) {
       const ledger = await currentBudgetLedger(artifactRoot);
@@ -1768,6 +877,94 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         priorityStateChanged = true;
       }
     }
+    /*
+     * The operations review, resolved from the seats and written down.
+     *
+     * The verdicts and the fix tasks are a record of what the board said. The growth ideas are the
+     * one part that also writes somewhere else, so they go through `screenAndRecordIdea` — the
+     * same VAULT dedup every other idea passes — and each one records what became of it. An idea
+     * the ledger already holds is a duplicate, not a failure, and says so.
+     */
+    let operationsReview: Standup["operationsReview"] | undefined;
+    let operationsDecisionRef: string | null = null;
+    const growthIdeaArtifacts: string[] = [];
+    if (measuredCouncil && operationsPacket && venturePhase === "morning") {
+      const resolved = resolveOperationsReview(measuredCouncil.positions);
+      const local = pragueClockParts(now);
+      const recordedIdeas: NonNullable<Standup["operationsReview"]>["growthIdeas"] = [];
+
+      for (const idea of resolved.growthIdeas) {
+        const namespace = ventureNamespace(await loadVentureRegistry(), idea.ventureId);
+        if (!namespace) {
+          recordedIdeas.push({
+            ...idea,
+            outcome: "refused",
+            ideaId: null,
+            reason: `No idea ledger belongs to ${idea.ventureId}.`
+          });
+          continue;
+        }
+        const screened = await screenAndRecordIdea({
+          root: artifactRoot,
+          namespace,
+          proposal: {
+            title: idea.title,
+            summary: idea.summary,
+            origin: { agent: "SPARK", meetingRef: `standups/${local.date}-morning` },
+            proposedAt: now.toISOString()
+          },
+          evidence: parseEvidenceJsonl(await readFile(path.join(artifactRoot, "EVIDENCE.jsonl"), "utf8").catch(() => "")),
+          adjudicator: options.dry
+            ? { async adjudicate() { return { verdict: "novel" as const, reason: "Dry run: no adjudicator was called." }; } }
+            : new GuardedVaultAdjudicator({
+              root: artifactRoot,
+              ideaNamespace: namespace,
+              cycleId,
+              stage: stages.current,
+              now,
+              limits: budgetLimitsFromEnvironment(),
+              remainingScheduledCycles: remainingScheduledCycles(now),
+              fixedMonthlyUsd: morningContext!.moneyAndKpis.fixedMonthlyUsd
+            })
+        });
+        growthIdeaArtifacts.push(ideaLedgerPath(namespace), ideaIndexPath(namespace));
+        recordedIdeas.push({
+          ...idea,
+          outcome: screened.entry.status === "vetoed" ? "duplicate" : "recorded",
+          ideaId: screened.entry.id,
+          reason: screeningWord(screened.verdict)
+        });
+      }
+
+      operationsDecisionRef = options.dry
+        ? null
+        : await writeOperationsDecision({
+          stateRoot: artifactRoot,
+          date: local.date,
+          review: resolved,
+          packet: operationsPacket
+        });
+
+      operationsReview = {
+        reviewDate: operationsPacket.reviewDate,
+        perVentureVerdicts: resolved.perVentureVerdicts,
+        fixTasks: resolved.fixTasks,
+        growthIdeas: recordedIdeas,
+        meetings: {
+          scheduled: operationsPacket.meetings.scheduled,
+          held: operationsPacket.meetings.held,
+          skipped: operationsPacket.meetings.skipped.map((skip) => ({
+            phase: skip.phase,
+            reason: skip.reason.slice(0, 280)
+          })),
+          unaccounted: operationsPacket.meetings.unaccounted.map((slot) => slot.kind)
+        },
+        decisionFileRef: operationsDecisionRef
+      };
+      for (const entry of resolved.dropped) {
+        measuredCouncil.droppedRequests.push({ agent: entry.agent, field: "operations", reason: entry.reason });
+      }
+    }
     const agentsParticipated = Boolean(measuredCouncil) || (options.dry && !deterministicCheckpoint);
     const standup = measuredCouncil
       ? createLiveStandup({
@@ -1780,8 +977,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           council: measuredCouncil,
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
-          ...(caughtUpIdea ? { caughtUpIdea } : {}),
-          ...(priorityProposalRecord ? { priorityProposal: priorityProposalRecord } : {})
+          ...(caughtUpIdea ? { caughtUpIdea, morningIdeaNamespace: ideaNamespace } : {}),
+          ...(priorityProposalRecord ? { priorityProposal: priorityProposalRecord } : {}),
+          ...(operationsReview ? { operationsReview } : {}),
+          // Absent on a meeting that lost nothing: a clean council records no ceremony.
+          ...(measuredCouncil.droppedSeats.length ? { droppedSeats: measuredCouncil.droppedSeats } : {}),
+          ...(measuredCouncil.droppedRequests.length ? { droppedRequests: measuredCouncil.droppedRequests } : {})
         })
       : createOfflineStandup({
           cycleId,
@@ -1797,7 +998,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
           ledger: await monthToDateLedger(artifactRoot, now),
           ...(morningContext ? { autonomy: morningContext.autonomy } : {}),
           ...(morningContext ? { quarterlyKpis: morningContext.moneyAndKpis.summary } : {}),
-          ...(caughtUpIdea ? { caughtUpIdea } : {})
+          ...(caughtUpIdea ? { caughtUpIdea, morningIdeaNamespace: ideaNamespace } : {})
         });
     const recordedStandup = morningContext
       ? StandupSchema.parse({
@@ -1826,8 +1027,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       `scorecards/${cycleId}.json`,
       `decisions/${cycleId}.json`,
       ...(caughtUpIdea
-        ? [ideaLedgerPath(CAUGHT_UP_IDEA_NAMESPACE), ideaIndexPath(CAUGHT_UP_IDEA_NAMESPACE)]
+        ? [ideaLedgerPath(ideaNamespace), ideaIndexPath(ideaNamespace)]
         : []),
+      ...(operationsDecisionRef ? [operationsDecisionRef] : []),
+      ...growthIdeaArtifacts,
       ...(meetingAgendaStateChanged ? [MEETING_AGENDA_PATH] : []),
       ...(morningContext ? [AUTONOMY_SNAPSHOT_PATH] : []),
       ...(morningContext ? morningContext.moneyAndKpis.artifacts : []),
@@ -1882,6 +1085,85 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const ecosystemArtifact = !options.dry && venturePhase === "night"
       ? (await refreshEcosystemOperatingTruth({ repoRoot })).path
       : null;
+    /*
+     * The night scores what the day published.
+     *
+     * Behind `CONTENT_GATE_ENABLED`, which is off by default and silent when off. It runs after
+     * every artifact above is written, so a gate that fails cannot take a delivery record with it,
+     * and it swallows its own failures — the worst it can do is record a day as unscored.
+     */
+    const contentGateArtifacts = !options.dry && venturePhase === "night" && contentGateEnabled()
+      && (await loadEffectivePortfolioSchedule(
+        ledgerSpend(await currentBudgetLedger(artifactRoot), (entry) => entry.ts.slice(0, 7) === now.toISOString().slice(0, 7))
+      )).contentGateAffordable
+      ? (await runContentGate({
+        stateRoot: artifactRoot,
+        cycleId,
+        now,
+        budgetContext: {
+          now,
+          cycleId,
+          stage: stages.current,
+          ledger: await currentBudgetLedger(artifactRoot),
+          allInNonApiSpentUsd: await loadFixedMonthlyUsd(configRoot, now),
+          allInCommittedUsd: 0,
+          knownMonthlyForecastUsd: 0,
+          remainingScheduledCycles: remainingScheduledCycles(now),
+          limits: budgetLimitsFromEnvironment()
+        }
+      })).artifacts
+      : [];
+    /*
+     * The weekly and monthly reports, written the night a period closes.
+     *
+     * Deterministic and free — every figure is read off a record the runtime already wrote, so
+     * this sits outside the model share exactly like the dataset appends. Monday writes the week
+     * that finished; the 1st writes the month before it. Any other night writes nothing.
+     */
+    /*
+     * What is waiting on the owner, rebuilt every cycle.
+     *
+     * Deterministic and free. It runs on every phase rather than one, because an approval that
+     * appears at 09:00 should not wait for the night to become visible, and rebuilding it costs
+     * two file reads.
+     */
+    const ownerAttentionArtifacts = options.dry
+      ? []
+      : [(await collectOwnerAttention({ repoRoot, stateRoot: artifactRoot, now })).path];
+    const reportArtifacts: string[] = [];
+    if (!options.dry && venturePhase === "night") {
+      const today = pragueClockParts(now).date;
+      const ledger = await currentBudgetLedger(artifactRoot);
+      const capUsd = budgetLimitsFromEnvironment().monthlyOperatingUsd;
+      const weekly = await writeWeeklyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd });
+      const monthly = await writeMonthlyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd });
+      for (const due of [weekly, monthly]) {
+        if (due) reportArtifacts.push(due.path);
+      }
+      // The retro is the judgement layer over the week the writer just measured, so it runs after
+      // it and only when there is a report to complete. Off by default; a budget refusal writes a
+      // skip record and the night continues.
+      if (weekly && weeklyRetroEnabled()) {
+        reportArtifacts.push(...(await runWeeklyRetro({
+          stateRoot: artifactRoot,
+          cycleId,
+          today,
+          report: weekly.report,
+          now,
+          budgetContext: {
+            now,
+            cycleId,
+            stage: stages.current,
+            ledger,
+            allInNonApiSpentUsd: await loadFixedMonthlyUsd(configRoot, now),
+            allInCommittedUsd: 0,
+            knownMonthlyForecastUsd: 0,
+            remainingScheduledCycles: remainingScheduledCycles(now),
+            limits: tightenedBy(budgetLimitsFromEnvironment(), { maxCycleUsd: RETRO_ENVELOPE_USD })
+          }
+        })).artifacts);
+      }
+    }
     if (options.explainBudget) {
       console.log(
         JSON.stringify(
@@ -1936,7 +1218,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         ? room.skippedParticipants.map(({ agent }) => agent)
         : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
       artifacts: [
-        ...artifacts.map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
+        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts, ...ownerAttentionArtifacts]
+          .map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
         ...(ecosystemArtifact ? [ecosystemArtifact] : [])
       ],
       // Read from the committed ledger and the live environment, so a dry run reports the same

@@ -26,3 +26,5 @@ Same repo rules as CLAUDE.md (read it). Summary of hard limits:
   dependency, unallowlisted fetch/env access or self-approved release.
 - Council personas PULSE and AUDIT are defined in `orchestrator/prompts/` and
   run via API — this file governs interactive CLI sessions only.
+- The clean-code contract is `docs/ENGINEERING.md`, mirrored at `.agents/ENGINEERING.md`.
+  Read it before changing structure; edit both copies in the same commit.

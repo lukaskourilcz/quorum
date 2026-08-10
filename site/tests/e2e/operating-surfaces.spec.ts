@@ -409,6 +409,107 @@ for (const mode of [
   }
 }
 
+/**
+ * The wallboard and the reports view share one measured rect on the photograph.
+ *
+ * The rect is mapped to the dark screen of the office picture, so the reports view cannot grow the
+ * screen to fit — it has to fit the screen. Checked at the three widths the design is drawn for,
+ * and the no-scrollbar assertion is the one that matters: a screen on a wall that scrolls is a
+ * browser window.
+ */
+for (const size of [
+  { name: "desktop", width: 1280, height: 800 },
+  { name: "tablet", width: 768, height: 1024 },
+  { name: "mobile", width: 375, height: 812 }
+]) {
+  test(`the office TV swaps to reports inside its own frame at ${size.name}`, async ({ page }) => {
+    await page.setViewportSize({ width: size.width, height: size.height });
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    // The walkthrough snaps between sections, so the way to reach the TV is its own nav — the
+    // same way a reader does it. `scrollIntoViewIfNeeded` lands beside the section, not on it.
+    await page.getByRole("button", { name: "Reports", exact: true }).click();
+    const screen = page.locator("[data-tv]");
+    await expect(screen).toContainText("Results · this month", { timeout: 15_000 });
+
+    /*
+     * Dispatched, not driven.
+     *
+     * The screen is drawn inside a parallaxed plate under scroll-snap. Playwright reports
+     * intersection ratio 0 for controls on it and refuses to click even with `force`, while
+     * `getBoundingClientRect` puts the same button at top 574 in an 800px viewport — so the
+     * refusal is about the harness's model of the plate, not about reachability. What has to be
+     * true is that the handler runs and the result fits the frame, and both are checked directly.
+     */
+    await screen.locator("[data-tv-reports]").evaluate((element: HTMLElement) => element.click());
+    await expect(screen).toContainText("Latest day");
+    await expect(screen).not.toContainText("Results · this month");
+
+    // Nothing inside the screen scrolls, nothing spills out of it, and the controls sit on it.
+    const fit = await screen.evaluate((element) => {
+      const body = element.firstElementChild as HTMLElement;
+      const outer = element.getBoundingClientRect();
+      const inner = body.getBoundingClientRect();
+      const back = element.querySelector("[data-k=\"btn\"]")!.getBoundingClientRect();
+      return {
+        overflowY: body.scrollHeight - body.clientHeight,
+        overflowX: body.scrollWidth - body.clientWidth,
+        spillsBottom: Math.round(inner.bottom - outer.bottom),
+        spillsRight: Math.round(inner.right - outer.right),
+        controlInsideScreen: back.bottom <= outer.bottom + 1 && back.right <= outer.right + 1,
+        screenHasArea: outer.width > 0 && outer.height > 0
+      };
+    });
+    expect(fit.screenHasArea).toBe(true);
+    expect(fit.overflowY, "the reports view scrolls vertically inside the screen").toBeLessThanOrEqual(1);
+    expect(fit.overflowX, "the reports view scrolls horizontally inside the screen").toBeLessThanOrEqual(1);
+    expect(fit.spillsBottom).toBeLessThanOrEqual(1);
+    expect(fit.spillsRight).toBeLessThanOrEqual(1);
+    expect(fit.controlInsideScreen, "a control sits outside the TV frame").toBe(true);
+
+    // The only control the reports view has is the way back, so it is the first button on the bar.
+    await screen.locator("[data-k=\"btn\"]").first().evaluate((element: HTMLElement) => element.click());
+    await expect(screen).toContainText("Results · this month");
+  });
+}
+
+/**
+ * Company files is the page the owner reads first, and the one they understood least.
+ *
+ * "There are many things that I don't even understand what they mean." These are the words that
+ * were on it: contract tokens the runtime uses internally, the agents' codenames, and engineering
+ * vocabulary for gates and rates. None of them belong on a page whose job is to answer four
+ * questions — what did it cost, what needs me, what shipped, what is waiting.
+ */
+test("Company files speaks plainly", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const body = await page.locator("main").innerText();
+
+  const jargon = [
+    "NO_EDITION",
+    "Fail closed",
+    "activation threshold",
+    "health gate",
+    "Model share",
+    "Owner writes · signed",
+    "seats returned a position",
+    "verifierPassRate",
+    "METRICS_INGESTION_ENABLED"
+  ];
+  for (const phrase of jargon) {
+    expect(body, `Company files still says "${phrase}"`).not.toContain(phrase);
+  }
+
+  // Agent codenames are how the runtime addresses itself, not how a person reads a page.
+  for (const codename of ["THREADS", "INSTAGRAM", "FRAME", "SCRIBE", "HERALD"]) {
+    expect(body, `Company files still shows the codename ${codename}`).not.toContain(codename);
+  }
+
+  // And the venture ids, which the rest of the admin already renders as display names.
+  expect(body).not.toContain("caught up");
+  expect(body).not.toMatch(/\bcarousel-studio\b/);
+});
+
 test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
 

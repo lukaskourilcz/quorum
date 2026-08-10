@@ -30,6 +30,69 @@ items in place. Lack of response never authorizes an action. -->
   **Never upgrade the plan without a new approval.** Starter is $29/month, which
   alone would consume the entire $30 all-in operating cap from `budget-2026-08e`.
 
+- [ ] HUMAN_APPROVAL TT-VISUALS-SPEND-001 — Allow the first routine image spend:
+  two Titty Tuesdays garment renders a day, one per provider, inside the existing
+  $25 model share.
+  What this approves, exactly:
+  - **What it costs:** about $0.057 a day — $0.053 for the OpenAI render at
+    medium quality and $0.004 for the fal one. That is roughly $1.70 a month.
+  - **The ceiling:** $2.00 a month, read back from `state/budget/ledger.json`
+    before every single call, so a retry cannot spend past it. When the month is
+    spent the step stops and records why.
+  - **What it does not approve:** any cash purchase. This is API usage on keys
+    the company already holds, so it belongs in the budget ledger and not the
+    treasury.
+
+- [ ] HUMAN_APPROVAL TT-VISUALS-ROLE-002 — Add `TT_VISUAL_IMAGE` and
+  `TT_VISUAL_IMAGE_FAL` to `config/models.json`, and rewrite `_comment_IMAGE` to
+  name four sanctioned image call sites instead of two.
+  What this approves, exactly:
+  - **The two routes:** OpenAI `gpt-image-2` at medium quality, 1024×1024, and
+    fal `fal-ai/flux/schnell` at the same size. Medium, not high, because the
+    wordmark has to render as legible type and high costs four times as much
+    before anyone has seen medium fail at it.
+  - **What stays forbidden:** an unsanctioned image call site inside an article
+    pipeline. That rule is unchanged.
+
+- [ ] HUMAN_APPROVAL TT-VISUALS-STORAGE-003 — Keep proposal images under
+  `state/ventures/titty-tuesdays/design-proposals/media/`, served through the
+  authenticated admin route, rather than under `site/public/`.
+  What this approves, exactly:
+  - **Why it diverges from the design doc:** anything under `site/public/` is
+    world-readable once deployed, so a rejected garment concept would become a
+    publicly addressable file at a guessable path. Pre-launch designs should not
+    be enumerable by anyone who guesses a date.
+  - **What it costs:** one authenticated media route, which already exists in
+    the same shape for MMA Files.
+
+- [ ] HUMAN_APPROVAL TT-VISUALS-DOCTRINE-004 — Approve the doctrine checklist
+  wording and the two kinds of no.
+  What this approves, exactly:
+  - **The checklist:** every render arrives unreviewed beside three lines — no
+    human imagery, wordmark correct, on-brand. The automatic checks cannot judge
+    any of the three, and the panel says so instead of implying otherwise.
+  - **Bad versus Doctrine:** `bad` is a taste rating and the image stays on file,
+    because a rejected design is what the taste loop learns from. `Doctrine`
+    means the image should not exist: its bytes are deleted and the record keeps
+    the hash, the prompt and the reason.
+
+- [ ] HUMAN_APPROVAL TT-VISUALS-BATCH-005 — Approve the batch shape: one concept
+  a day, two images, one per provider, re-encoded to WebP.
+  What this approves, exactly:
+  - **The cadence:** daily rather than the Tuesdays-only weekly batch of six in
+    the design doc, and two providers rather than one, so each day compares two
+    renderers on the same concept.
+  - **The cap:** two images a day, enforced by the code and by the presence of
+    the day's record on disk, so a re-run cannot render a second pair.
+
+- [ ] HUMAN_APPROVAL TT-VISUALS-CONTRACT-006 — Approve the `design-proposal/1`
+  contract itself.
+  What this approves, exactly:
+  - **What every image carries:** the provider, the model, the exact prompt that
+    was sent, its content hash, its size, its cost and its timestamp. An image
+    with no recorded prompt cannot be reproduced or defended.
+  - **Where it lives:** `state/ventures/titty-tuesdays/design-proposals/<date>.json`.
+
 - [ ] HUMAN_APPROVAL DISPATCH-TOKEN-001 — Store a GitHub dispatch token and a
   cron secret on the `quorum-site` Vercel project, so the council's meetings
   start on their own hour instead of whenever GitHub's queue gets to them.

@@ -92,7 +92,7 @@ export function AgentSwitches({
       </div>
       {ventureId === "caught-up" ? (
         <p className="mt-2 text-xs leading-5 text-[var(--fog)]">
-          DNESKAi social drafts run only when THREADS, INSTAGRAM and FRAME are all on. Article writing, Czech editing, the hero image and delivery stay separate.
+          DNESKAi social drafts run only when Threads, Instagram and image posts are all switched on. Writing the article, editing the Czech, making its picture and delivering it are separate and keep going either way.
         </p>
       ) : null}
     </section>

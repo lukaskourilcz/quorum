@@ -51,7 +51,9 @@ const NAV = [
   { index: 3, label: "Projects" },
   { index: 4, label: "Facilities" },
   { index: 5, label: "Team" },
-  { index: 6, label: "Results" },
+  // The page these numbers now live on is called Reports, and the office nav is the reader's
+  // map of it — a section labelled Results pointing at a page titled Reports is a wrong map.
+  { index: 6, label: "Reports" },
   { index: 7, label: "Company" }
 ] as const;
 
@@ -735,7 +737,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             plateY="10.2%"
             width="max(160vw, 286svh)"
           >
-            <SectionResults active={resultsSeen} reduceMotion={reduceMotion} results={data.results} />
+            <SectionResults active={resultsSeen} reduceMotion={reduceMotion} reports={data.reports} results={data.results} />
           </OfficePlate>
           {/*
             The tint sits after the content, which is what dims the room around the lit screen.

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sanitizeAdminReturnTo } from "./lib/admin-return-to";
 import {
   ADMIN_SESSION_COOKIE,
   verifyAdminSessionToken
@@ -28,6 +29,13 @@ function securityHeaders(response: NextResponse, admin: boolean): NextResponse {
 function loginUrl(request: NextRequest, error?: "config" | "expired"): URL {
   const url = new URL("/admin/login", request.url);
   if (error) url.searchParams.set("error", error);
+  // Carry the page the session expired on, so signing in again lands back on the workspace and
+  // tab the owner was reading rather than at the top of /admin.
+  const returnTo = sanitizeAdminReturnTo(
+    `${request.nextUrl.pathname}${request.nextUrl.search}`,
+    request.url
+  );
+  if (returnTo) url.searchParams.set("returnTo", returnTo);
   return url;
 }
 
@@ -47,8 +55,11 @@ export function proxy(request: NextRequest) {
 
   if (publicLoginRoute) {
     if (loginPage && authorization === "ok") {
+      // A live session that lands on the login page goes where it was headed, if it said.
+      const destination =
+        sanitizeAdminReturnTo(request.nextUrl.searchParams.get("returnTo"), request.url) ?? "/admin";
       return securityHeaders(
-        NextResponse.redirect(new URL("/admin", request.url)),
+        NextResponse.redirect(new URL(destination, request.url)),
         true
       );
     }

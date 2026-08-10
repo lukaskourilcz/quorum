@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
     "/admin/**": adminRuntimeFiles,
     "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": [...hookLibraryFiles, ...fontFiles],
     "/money": ["../state/money/public.json"],
-    "/results": ["../state/notify/digest/**/*"],
+    "/results": ["../state/notify/digest/**/*", "../state/reports/**/*"],
     // The cron route reads the venture registry at request time to learn which Prague hour each
     // phase belongs to. Every other reader of that file is a page Next renders at build time, on
     // a machine that has the whole repository; this one is a function running months later with
@@ -61,6 +61,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/boardroom", destination: "/standups", permanent: true },
+      // The page is called Reports now and the nav is capped at six entries, so the name a
+      // visitor would guess resolves rather than 404s.
+      { source: "/reports", destination: "/results", permanent: true },
       { source: "/incubator", destination: "/ventures", permanent: true },
       { source: "/money", destination: "/results#money", permanent: true },
       { source: "/metrics", destination: "/results#measures", permanent: true },

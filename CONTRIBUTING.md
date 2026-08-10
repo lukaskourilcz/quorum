@@ -4,6 +4,13 @@ Working rules for this repository live in `CLAUDE.md` (and its mirror `AGENTS.md
 the golden rules, the commands and the git workflow. This file covers the conventions that are
 easy to get wrong because they cross a repository boundary.
 
+## The engineering contract
+
+`docs/ENGINEERING.md` holds the architecture, module and process rules — schema-first boundaries,
+recorded-not-re-derived, one writer per state path, one resolver per config concern, and the rest.
+It is shared across repositories and mirrored at `.agents/ENGINEERING.md`; a drift test fails if
+the two disagree. Everything below is this repository's own, and does not repeat it.
+
 ## Hook and viral-copy knowledge lives here, and only here
 
 `docs/hooks/` is the canonical knowledge base for hooks and short-form viral copy across the

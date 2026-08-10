@@ -24,6 +24,27 @@ is the single thing standing between a proven path and a working one.
   only thing switching them on changes is that two committed JSON files start moving.
   [imp:3] [owner:me] [time:5m] [kind:setup]
 
+- [ ] **Decide on the nightly content scoring** — set the Actions variable
+  `CONTENT_GATE_ENABLED=true` to have one comparative model call score each day's published
+  articles and dataset appends, recorded to `state/ventures/<venture>/content-scores/`. It is
+  capped at $0.05 a call and is the first rung the budget ladder drops, so a tight month loses the
+  scoring before it loses a room. Off is the default and off writes nothing.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Decide on the Monday retro meeting** — set `WEEKLY_RETRO_ENABLED=true` to have two seats
+  read the weekly report the night writes and add a short summary plus up to three fix tasks.
+  Capped at $0.05 a week. With it off, the weekly report still gets written and simply carries no
+  written summary, which is a complete report rather than a gap.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Sign the six Titty Tuesdays image approvals, or decide not to** — `TT-VISUALS-SPEND-001`
+  through `TT-VISUALS-CONTRACT-006` in `state/INBOX.md`, all-or-nothing. They cover about $0.057 a
+  day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside
+  `state/` rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the
+  daily two-image shape, and the `design-proposal/1` contract. Nothing renders until all six are
+  ticked and `TT_VISUALS_ENABLED=true` with both `OPENAI_API_KEY` and `FAL_KEY` present.
+  [imp:3] [owner:me] [time:20m] [kind:decision]
+
 - [ ] **Create the free Podcast Index key pair** — register at api.podcastindex.org and add
   `PODCASTINDEX_API_KEY` and `PODCASTINDEX_API_SECRET` to the quorum Actions secrets. It is free
   and it is only used for shows with no workable RSS or YouTube surface, so its absence degrades
@@ -324,7 +345,8 @@ Judgement calls. Nothing is blocked on code for any of these.
   target can only move if you move it. [imp:2] [owner:me] [time:15m] [kind:decision]
 
 - [ ] **Add the first opportunity record to `state/OPPORTUNITIES.json`** — the file still holds only
-  fixtures, so the opportunity gate scores every shift `INSUFFICIENT_EVIDENCE`. The task allowlist
+  fixtures, so the opportunity gate stays dormant and publishes one line rather than a daily
+  rejection. The task allowlist
   deliberately does not let any agent write this file; the narrow write scope is a guard, so do not
   widen it. Needs a score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence
   refs in `state/EVIDENCE.jsonl`. This is not what holds the stage: `config/stages.json` reads
@@ -376,6 +398,12 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
 ## Waiting on an agent, not on you
 
 Nothing here needs your hands. It is recorded so it is not lost.
+
+- [ ] **Finish the decomposition started in issue 47** — `orchestrator/src/cycle.ts` came down from
+  2,194 lines to 1,234 as pure moves; what is left is `runCycle` itself, which cannot be split
+  without deciding on a context object, and `orchestrator/src/portfolio/run.ts` at 1,722 lines,
+  which was not started. `docs/HANDOFF-147-DECOMPOSITION.md` names every seam and says why each was
+  left. [imp:2] [owner:ai] [time:3h] [kind:deploy]
 
 - [ ] **Two admin journeys retry, and it would be better if they did not** — `admin rating
   persists` and `admin login explains errors` sit at 117 and 118 of 168 in a single-worker run, and

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parsePublicIdeaLedger } from "./idea-ledger-model";
+import { parsePublicIdeaLedger, publicMeetingHref } from "./idea-ledger-model";
 
 const entry = {
   schemaVersion: "idea-ledger/1",
@@ -27,5 +27,21 @@ describe("public idea ledger boundary", () => {
 
   it("fails closed on a poisoned line", () => {
     expect(parsePublicIdeaLedger(`${JSON.stringify(entry)}\n{"system prompt":"leak"}\n`)).toBeNull();
+  });
+});
+
+describe("meeting references on a card", () => {
+  const standups = [{ id: "s-1", date: "2026-07-31", phase: "morning" as const }];
+
+  it("resolves the three shapes a record can carry", () => {
+    expect(publicMeetingHref("meetings/2026-08-05-tt-marketing")).toBe("/meetings/2026-08-05-tt-marketing");
+    expect(publicMeetingHref("2026-08-05-tt-marketing")).toBe("/meetings/2026-08-05-tt-marketing");
+    expect(publicMeetingHref("standups/2026-07-31-morning", standups)).toBe("/standups/s-1/room");
+  });
+
+  it("refuses anything that is not a reference", () => {
+    for (const candidate of ["", "tt-marketing", "2026-08-05", "../../etc/passwd", "2026-08-05-TT", "meetings"]) {
+      expect(publicMeetingHref(candidate)).toBeNull();
+    }
   });
 });

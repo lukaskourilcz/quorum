@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { OfficeMeasure, OfficeResults } from "@/lib/office-walkthrough";
+import type { OfficeMeasure, OfficeReports, OfficeResults } from "@/lib/office-walkthrough";
 
 /**
  * The wallboard, drawn inside the plate and mapped onto the dark screen of the photograph.
@@ -117,22 +117,54 @@ function Figure({
   );
 }
 
+/** One reports line: a label, a figure, and an em dash where the record is missing. */
+function ReportLine({ label, value }: { label: string; value: string | null }) {
+  return (
+    <div className="flex items-baseline justify-between" style={{ gap: "1.36cqw" }}>
+      <span
+        className="font-mono uppercase tracking-[0.12em] text-[#94949c]"
+        style={{ fontSize: "1.27cqw" }}
+      >
+        {label}
+      </span>
+      <span
+        className="font-semibold tabular-nums text-[#f4f4f5]"
+        style={{ fontSize: "1.7cqw" }}
+      >
+        {value ?? "—"}
+      </span>
+    </div>
+  );
+}
+
 export function SectionResults({
   results,
+  reports,
   active,
   reduceMotion
 }: {
   results: OfficeResults;
+  reports: OfficeReports;
   /** True once the section is ≥35% on screen, which is what starts the count-up. */
   active: boolean;
   reduceMotion: boolean;
 }) {
-  const [view, setView] = useState<"overview" | "project">("overview");
+  /*
+   * Three screens on one TV, not three pages.
+   *
+   * The wallboard cannot fit the report numbers and the report numbers must stay inside the
+   * photograph's frame, so they swap into the same measured rect instead of growing it. Nothing
+   * scrolls here — a screen on a wall that scrolls is a browser window — so the reports view is
+   * five lines and a headline, sized in `cqw` like everything else on this screen.
+   */
+  const [view, setView] = useState<"overview" | "project" | "reports">("overview");
   const [index, setIndex] = useState(0);
 
   const projects = results.projects;
   const project = projects[index] ?? projects[0] ?? null;
   const showProject = view === "project" && project !== null;
+  const showReports = view === "reports";
+  const usd = (value: number | null) => value === null ? null : `$${value.toFixed(2)}`;
   const spendPercent = results.monthlySpend === null
     ? 0
     : Math.min(100, (results.monthlySpend / results.limit) * 100);
@@ -184,18 +216,72 @@ export function SectionResults({
             data-k="title"
             style={{ fontSize: "1.7cqw" }}
           >
-            {showProject ? project!.name : "Results · this month"}
+            {showProject ? project!.name : showReports ? "Reports" : "Results · this month"}
           </p>
           <p
             className="m-0 font-mono uppercase tracking-[0.1em] text-[#94949c]"
             data-k="meta"
             style={{ fontSize: "1.44cqw" }}
           >
-            {showProject ? `${project!.stage} · project ${index + 1} / ${projects.length}` : ""}
+            {showProject
+              ? `${project!.stage} · project ${index + 1} / ${projects.length}`
+              : showReports
+                ? reports.daily.date ?? "no day on record"
+                : ""}
           </p>
         </div>
 
-        {showProject ? (
+        {showReports ? (
+          <div
+            className="flex flex-1 flex-col justify-center"
+            style={{ gap: "3.4%", padding: "1% 0 0" }}
+          >
+            <div className="flex flex-col" style={{ gap: "1.2%" }}>
+              <p
+                className="m-0 font-mono uppercase tracking-[0.14em] text-[var(--bai-accent)]"
+                style={{ fontSize: "1.19cqw" }}
+              >
+                Latest day
+              </p>
+              <ReportLine
+                label="Rooms held / missed"
+                value={reports.daily.roomsHeld === null
+                  ? null
+                  : `${reports.daily.roomsHeld} / ${reports.daily.roomsMissed ?? 0}`}
+              />
+              <ReportLine label="Spent that day" value={usd(reports.daily.spendUsd)} />
+              <ReportLine label="Month to date" value={usd(reports.daily.monthToDateUsd)} />
+            </div>
+
+            <div className="flex flex-col" style={{ gap: "1.2%" }}>
+              <p
+                className="m-0 font-mono uppercase tracking-[0.14em] text-[var(--bai-accent)]"
+                style={{ fontSize: "1.19cqw" }}
+              >
+                {reports.weekly.periodKey ?? "No week has closed yet"}
+              </p>
+              <ReportLine label="Meetings" value={reports.weekly.verdict} />
+              <ReportLine
+                label="Published"
+                value={reports.weekly.published === null ? null : String(reports.weekly.published)}
+              />
+              <ReportLine
+                label="Average score"
+                value={reports.weekly.averageScore === null ? null : reports.weekly.averageScore.toFixed(2)}
+              />
+            </div>
+
+            {reports.daily.incident ? (
+              <p
+                className="m-0 truncate leading-[1.4] text-[#a1a1aa]"
+                style={{ fontSize: "1.27cqw" }}
+                title={reports.daily.incident}
+              >
+                {reports.daily.incident}
+              </p>
+            ) : null}
+          </div>
+        ) : showProject ? (
           <div
             className="flex flex-1 flex-col justify-center"
             style={{ gap: "3.4%", padding: "1% 0 0" }}
@@ -313,7 +399,29 @@ export function SectionResults({
           className="flex items-center border-t border-[#26262b]"
           style={{ gap: "0.94cqw", paddingTop: "1.4%" }}
         >
-          {showProject ? (
+          {/* The toggle sits inside the screen, at the end of the control bar the wallboard
+              already has, so it inherits that bar's `pointer-events: auto` and cannot be
+              swallowed by a decorative layer above it. */}
+          {showReports ? (
+            <>
+              <button
+                data-k="btn"
+                onClick={() => setView("overview")}
+                style={buttonStyle}
+                type="button"
+              >
+                ‹ Wallboard
+              </button>
+              <span
+                className="ml-auto font-mono uppercase tracking-[0.1em] text-[#94949c]"
+                style={{ fontSize: "1.15cqw" }}
+              >
+                {reports.weekly.periodKey
+                  ? "Daily and weekly record"
+                  : "No week has closed yet"}
+              </span>
+            </>
+          ) : showProject ? (
             <>
               <button aria-label="Previous project" data-k="btn" onClick={() => step(-1)} style={buttonStyle} type="button">
                 ‹
@@ -372,8 +480,17 @@ export function SectionResults({
               >
                 Full KPIs ›
               </button>
+              <button
+                data-k="btn"
+                data-tv-reports
+                onClick={() => setView("reports")}
+                style={buttonStyle}
+                type="button"
+              >
+                Reports ›
+              </button>
               <span
-                className="ml-auto font-mono uppercase tracking-[0.1em] text-[#94949c]"
+                className="ml-auto truncate font-mono uppercase tracking-[0.1em] text-[#94949c]"
                 style={{ fontSize: "1.15cqw" }}
               >
                 {projects.length} projects on record

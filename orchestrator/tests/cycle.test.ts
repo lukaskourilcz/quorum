@@ -222,7 +222,63 @@ describe("cycle preflight", () => {
     }
   });
 
+  // 2026-08-07 is a Caught Up day in the ideation rotation, which is what makes the handoff below
+  // happen at all. The rotation is a modulo over the date across the active ventures, so a date is
+  // the only thing that decides it and the same date always picks the same venture.
   it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
+    const morning = await runCycle({
+      phase: "morning",
+      dry: true,
+      explainBudget: false,
+      explainRouting: false,
+      now: new Date("2026-08-07T04:00:00.000Z")
+    });
+    expect(morning.artifacts).toEqual(expect.arrayContaining([
+      "tmp/dry-run/state/ideas/caught-up/ledger.jsonl",
+      "tmp/dry-run/state/ideas/caught-up/INDEX.md"
+    ]));
+    const standup = JSON.parse(await readFile(
+      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-07-morning.json"),
+      "utf8"
+    )) as { caughtUpIdeaRef?: string; morningIdeaNamespace?: string };
+    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-07-/);
+    expect(standup.morningIdeaNamespace).toBe("caught-up");
+
+    const product = await runCycle({
+      phase: "cu-product",
+      dry: true,
+      explainBudget: false,
+      explainRouting: false,
+      now: new Date("2026-08-07T15:00:00.000Z")
+    });
+    const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
+      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-07-cu-product.json"),
+      "utf8"
+    )));
+    expect(record.caughtUpIdeaRef).toBe(standup.caughtUpIdeaRef);
+
+    // The verdict follows the idea's own screening result rather than a fixed expectation. This
+    // used to assert VETO, which held only because an earlier test in this file had already run
+    // the same morning and left a duplicate in the shared dry ledger — and `tmp/dry-run/state` is
+    // written by every test file in parallel, so that was luck rather than a rule. The rule is:
+    // an idea VAULT hard-stopped is vetoed, anything else is deferred.
+    const ledger = (await readFile(
+      path.join(repoRoot, "tmp/dry-run/state/ideas/caught-up/ledger.jsonl"),
+      "utf8"
+    )).split("\n").filter(Boolean).map((line) => JSON.parse(line) as { id: string; status: string });
+    const screened = ledger.filter((entry) => entry.id === standup.caughtUpIdeaRef).at(-1);
+    const expected = screened?.status === "vetoed" || screened?.status === "killed" ? "veto" : "defer";
+
+    expect(product.decision).toBe(expected.toUpperCase());
+    expect(record.ideaVerdicts).toEqual([
+      expect.objectContaining({ ideaId: standup.caughtUpIdeaRef, verdict: expected })
+    ]);
+  });
+
+  it("rotates the morning idea across the portfolio and leaves the Caught Up room alone", async () => {
+    // Caught Up used to receive every morning idea because the namespace was a constant at the
+    // call site. On a day the rotation names another venture, the idea lands in that venture's
+    // ledger and the Caught Up product room has nothing to adopt — a normal day, not a gap.
     const morning = await runCycle({
       phase: "morning",
       dry: true,
@@ -231,30 +287,31 @@ describe("cycle preflight", () => {
       now: new Date("2026-08-04T04:00:00.000Z")
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
-      "tmp/dry-run/state/ideas/caught-up/ledger.jsonl",
-      "tmp/dry-run/state/ideas/caught-up/INDEX.md"
+      "tmp/dry-run/state/ideas/mma-files/ledger.jsonl"
     ]));
+    expect(morning.artifacts).not.toContain("tmp/dry-run/state/ideas/caught-up/ledger.jsonl");
+
     const standup = JSON.parse(await readFile(
       path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-04-morning.json"),
       "utf8"
-    )) as { caughtUpIdeaRef?: string };
-    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-04-/);
+    )) as { morningIdeaNamespace?: string; caughtUpIdeaRef?: string };
+    expect(standup.morningIdeaNamespace).toBe("mma-files");
 
-    const product = await runCycle({
+    await runCycle({
       phase: "cu-product",
       dry: true,
       explainBudget: false,
       explainRouting: false,
       now: new Date("2026-08-04T15:00:00.000Z")
     });
-    expect(product.decision).toBe("VETO");
     const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
       path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-04-cu-product.json"),
       "utf8"
     )));
-    expect(record.caughtUpIdeaRef).toBe(standup.caughtUpIdeaRef);
-    expect(record.ideaVerdicts).toEqual([
-      expect.objectContaining({ ideaId: standup.caughtUpIdeaRef, verdict: "veto" })
-    ]);
+    // The room still records its own dry placeholder; what it must not do is adopt the idea
+    // raised that morning for another venture.
+    expect(record.caughtUpIdeaRef).not.toBe(standup.caughtUpIdeaRef);
+    expect((record.ideaVerdicts ?? []).map((entry) => entry.ideaId))
+      .not.toContain(standup.caughtUpIdeaRef);
   });
 });

@@ -3,6 +3,10 @@
 Currency: USD  
 Effective countersigned monthly all-in cap: $30.00 under `budget-2026-08e`
 
+> The block below is written by a generator and is only as current as its own stamp. The
+> canonical figures are always `state/budget/ledger.json`; if the date under this line is not
+> today, read the ledger and re-run the generator rather than trusting the table.
+
 <!-- BEGIN GENERATED: read from state/budget/ledger.json. Do not edit by hand. -->
 
 As of 2026-08-06 09:02 UTC.

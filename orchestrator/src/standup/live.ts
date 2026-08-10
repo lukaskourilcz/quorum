@@ -6,7 +6,8 @@ import type { RoomPacket } from "../boardroom/room.js";
 import { AgendaPhaseSchema, type AgendaPhase } from "../contracts/meeting-agenda.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import type { VentureRegistry } from "../contracts/venture-registry.js";
-import { configRoot, stateRoot } from "../paths.js";
+import { configRoot, promptRoot, stateRoot } from "../paths.js";
+import type { OperationsPacket } from "../operations/packet.js";
 import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
 import { getShiftDefinition, type ShiftDefinition } from "../shifts.js";
 import { guardedJsonCall , ModelOutputParseError, ModelResponseTruncatedError } from "../llm/call.js";
@@ -93,13 +94,51 @@ const PriorityProposalRequestSchema = z.object({
 
 export type PriorityProposalRequest = z.infer<typeof PriorityProposalRequestSchema>;
 
+/**
+ * The operations review's own output, spread across the seats rather than asked of every one.
+ *
+ * One seat's reply has 700 output tokens. Asking all four for per-venture verdicts, fix tasks and
+ * growth ideas would overrun that, and an overrun is a truncation, and a truncation drops the
+ * seat — the failure that killed the 5 August morning. So each field belongs to the lens that
+ * owns it: VIZE reads the portfolio and returns the verdicts, VIZE/FORGE/PULSE may each return
+ * one fix task, VIZE and PULSE may each return one growth idea, and AUDIT returns none of them
+ * and keeps the veto. Three seats × one task is the issue's cap of three; two seats × one idea is
+ * its cap of two, enforced by who may speak rather than by trimming a list afterwards.
+ */
+const VentureVerdictSchema = z.object({
+  ventureId: z.string().trim().min(1).max(80),
+  verdict: z.enum(["on-track", "needs-attention", "stalled"]),
+  /** Must name a record in the packet. Unverifiable prose is what this whole review replaces. */
+  evidence: z.string().trim().min(1).max(240)
+});
+
+const FixTaskSchema = z.object({
+  title: z.string().trim().min(1).max(160),
+  /** A repository path. A task with no scope is a wish. */
+  scope: z.string().trim().min(1).max(200),
+  expectedProof: z.string().trim().min(1).max(240)
+});
+
+const GrowthIdeaSchema = z.object({
+  ventureId: z.string().trim().min(1).max(80),
+  title: z.string().trim().min(1).max(80),
+  summary: z.string().trim().min(1).max(280)
+});
+
+export type VentureVerdict = z.infer<typeof VentureVerdictSchema>;
+export type FixTask = z.infer<typeof FixTaskSchema>;
+export type GrowthIdea = z.infer<typeof GrowthIdeaSchema>;
+
 const PositionSchema = z.object({
   agent: CouncilAgentSchema,
   publicSummary: z.string().min(1).max(420),
   recommendation: z.enum(["approve", "hold"]),
   risk: z.string().min(1).max(220),
   meetingRequest: MeetingRequestSchema.nullable().default(null),
-  priorityProposal: PriorityProposalRequestSchema.nullable().default(null)
+  priorityProposal: PriorityProposalRequestSchema.nullable().default(null),
+  ventureVerdicts: z.array(VentureVerdictSchema).max(12).default([]),
+  fixTask: FixTaskSchema.nullable().default(null),
+  growthIdea: GrowthIdeaSchema.nullable().default(null)
 });
 
 /**
@@ -111,11 +150,23 @@ const PositionSchema = z.object({
  */
 const PositionCoreSchema = PositionSchema.omit({
   meetingRequest: true,
-  priorityProposal: true
+  priorityProposal: true,
+  ventureVerdicts: true,
+  fixTask: true,
+  growthIdea: true
 });
 
-export interface RecordedPosition extends z.infer<typeof PositionSchema> {
+/**
+ * The operations fields are optional on a recorded position because only one shift produces them.
+ * The afternoon and night shifts call no model at all, and a morning that is not running the
+ * review returns a position with nothing to say about the portfolio — absent, not empty.
+ */
+export interface RecordedPosition
+  extends Omit<z.infer<typeof PositionSchema>, "ventureVerdicts" | "fixTask" | "growthIdea"> {
   sentAt: string;
+  ventureVerdicts?: VentureVerdict[];
+  fixTask?: FixTask | null;
+  growthIdea?: GrowthIdea | null;
 }
 
 export interface CommissionableRoom {
@@ -184,10 +235,14 @@ export function parseCouncilPosition(input: {
    * queue fills with questions nobody can take.
    */
   proposableVentures: readonly string[];
+  /** Every venture in the registry. A verdict or idea about anything else is not about us. */
+  knownVentures?: readonly string[];
 }): {
   position: z.infer<typeof PositionSchema>;
   droppedMeetingRequest: string | null;
   droppedPriorityProposal: string | null;
+  /** Operations fields the seat sent that could not be used, so a review can say what it lost. */
+  droppedOperations: string[];
 } {
   const raw: unknown = JSON.parse(input.text);
   const core = PositionCoreSchema.parse(raw);
@@ -232,10 +287,69 @@ export function parseCouncilPosition(input: {
     }
   }
 
+  // The operations fields get the same treatment for the same reason: a malformed verdict list
+  // must cost the verdicts, not the seat's vote. A seat is dropped only when its core is
+  // unreadable, because the commission gate needs three of four seats to reach any decision.
+  const droppedOperations: string[] = [];
+  const known = input.knownVentures;
+
+  const verdicts = VentureVerdictSchema.array().max(12).safeParse(fields.ventureVerdicts ?? []);
+  let ventureVerdicts: VentureVerdict[] = [];
+  if (!verdicts.success) {
+    droppedOperations.push(`ventureVerdicts does not match the contract: ${verdicts.error.issues[0]?.message ?? "invalid"}`.slice(0, 240));
+  } else {
+    for (const verdict of verdicts.data) {
+      if (known && !known.includes(verdict.ventureId)) {
+        droppedOperations.push(`verdict named unknown venture ${verdict.ventureId}`.slice(0, 240));
+        continue;
+      }
+      ventureVerdicts.push(verdict);
+    }
+    // One verdict per venture per seat; a repeat is the same seat voting twice.
+    const seen = new Set<string>();
+    ventureVerdicts = ventureVerdicts.filter((verdict) => {
+      if (seen.has(verdict.ventureId)) return false;
+      seen.add(verdict.ventureId);
+      return true;
+    });
+  }
+
+  let fixTask: FixTask | null = null;
+  if (fields.fixTask !== null && fields.fixTask !== undefined) {
+    const parsed = FixTaskSchema.safeParse(fields.fixTask);
+    if (parsed.success) fixTask = parsed.data;
+    else droppedOperations.push(`fixTask does not match the contract: ${parsed.error.issues[0]?.message ?? "invalid"}`.slice(0, 240));
+  }
+
+  let growthIdea: GrowthIdea | null = null;
+  if (fields.growthIdea !== null && fields.growthIdea !== undefined) {
+    const parsed = GrowthIdeaSchema.safeParse(fields.growthIdea);
+    if (!parsed.success) {
+      droppedOperations.push(`growthIdea does not match the contract: ${parsed.error.issues[0]?.message ?? "invalid"}`.slice(0, 240));
+    } else if (known && !known.includes(parsed.data.ventureId)) {
+      // The whole point of the redesign: ideas are for ventures that already exist.
+      droppedOperations.push(`growthIdea named unknown venture ${parsed.data.ventureId}`.slice(0, 240));
+    } else {
+      growthIdea = parsed.data;
+    }
+  }
+
+  // AUDIT holds the veto and proposes nothing, so anything it sends here is discarded by role
+  // rather than by contract — the seat that judges the work does not also commission it.
+  if (input.agent === "AUDIT") {
+    if (ventureVerdicts.length || fixTask || growthIdea) {
+      droppedOperations.push("AUDIT holds the veto and proposes no work, so its operations fields were discarded");
+    }
+    ventureVerdicts = [];
+    fixTask = null;
+    growthIdea = null;
+  }
+
   return {
-    position: { ...core, meetingRequest, priorityProposal },
+    position: { ...core, meetingRequest, priorityProposal, ventureVerdicts, fixTask, growthIdea },
     droppedMeetingRequest,
-    droppedPriorityProposal
+    droppedPriorityProposal,
+    droppedOperations
   };
 }
 
@@ -274,16 +388,47 @@ export async function loadShiftWorkItem(phase: RunnablePhase) {
 export function roleSystem(
   agent: CouncilAgent,
   rooms: readonly CommissionableRoom[],
-  maxCommissions = 1
+  maxCommissions = 1,
+  /**
+   * The operations room contract, read from `prompts/operations.md` at runtime, and the ventures
+   * the board may return verdicts and ideas about. Absent on any shift that is not the morning
+   * operations review, which leaves the seat exactly the prompt it had before.
+   */
+  operations?: { contract: string; ventureIds: readonly string[] }
 ): string {
-  const role = {
-    VIZE: "You own strategic clarity and keep the project inside its stated operating scope.",
-    FORGE: "You own shippability and surface concrete, bounded implementation risks.",
-    PULSE: "You own audience and publishing restraint; do not manufacture activity or promotion.",
-    AUDIT: "You own truthful records, safety boundaries and evidence integrity."
-  }[agent];
+  const role = operations
+    ? {
+      VIZE: "You own portfolio direction: which ventures continue, which need attention and which have stalled.",
+      FORGE: "You own system health: failed gates, skipped rooms, silent slots and the engineering debt that is costing runs.",
+      PULSE: "You own content and distribution: what published, what the owner rated, what the scores say.",
+      AUDIT: "You own truth and guardrails: whether the records say what happened and whether spend stayed inside its caps."
+    }[agent]
+    : {
+      VIZE: "You own strategic clarity and keep the project inside its stated operating scope.",
+      FORGE: "You own shippability and surface concrete, bounded implementation risks.",
+      PULSE: "You own audience and publishing restraint; do not manufacture activity or promotion.",
+      AUDIT: "You own truthful records, safety boundaries and evidence integrity."
+    }[agent];
 
-  return `${role}
+  const operationsFields = operations
+    ? `
+
+${operations.contract}
+
+The ventures you may name are exactly these: ${operations.ventureIds.join(", ")}. A verdict or idea about anything else is discarded.
+
+${agent === "VIZE"
+      ? `You return "ventureVerdicts": one entry per venture, each {"ventureId","verdict":"on-track|needs-attention|stalled","evidence"}. The evidence must name something in the packet — a skip reason, a delivery, a rating, a spend figure. Other seats return [].`
+      : `You return "ventureVerdicts": []. VIZE reads the portfolio.`}
+${agent === "AUDIT"
+      ? `You return "fixTask": null and "growthIdea": null. You hold the veto and propose no work.`
+      : `You may return one "fixTask": {"title","scope","expectedProof"} — scope is a repository path, expectedProof is what would show the fix worked — or null when nothing needs fixing. A day with nothing wrong is a day with no fix task, and inventing one is the failure this review exists to catch.`}
+${agent === "VIZE" || agent === "PULSE"
+      ? `You may return one "growthIdea": {"ventureId","title","summary"} that makes an existing venture bigger or better, or null. Not a new business.`
+      : `You return "growthIdea": null.`}`
+    : "";
+
+  return `${role}${operationsFields}
 
 You are taking part in a live BoardlessAI shift council. The project operates pre-revenue with Caught Up as Venture 001 by owner decision. Assess only the supplied operating item and cited evidence. You may request evidence collection through approved, allowlisted source adapters. You cannot authorize payments, accept money, enable external publishing, change accounts or credentials, alter the business stage, or modify code.
 
@@ -304,7 +449,9 @@ ${rooms.length === 0
   : `The priority list is not fixed. If the work this project needs is not on it, VIZE, FORGE or PULSE may propose one new question in priorityProposal: venture (one of ${[...new Set(rooms.map((room) => room.ventureId))].join(", ")}), question, decisionAtStake, evidenceNeeded. AUDIT never proposes. A meeting adds at most one question, so propose only when the list genuinely lacks it; the first proposal is taken and later ones are refused. decisionAtStake must name the decision the answer would settle — a question with no decision behind it is a topic, not work, and is refused. A question the queue already holds in other words is refused as a duplicate, so select it instead. A proposal is added only if this meeting approves, and it is answerable from a later meeting, not this one.`}
 
 Return ONLY this valid JSON object:
-{"agent":"${agent}","publicSummary":"at most 70 words","recommendation":"approve|hold","risk":"at most 35 words","meetingRequest":null|{"priorityItemId":"priority-...","phase":"allowed phase","summary":"the decision that room must take","evidenceRefs":[]},"priorityProposal":null|{"venture":"venture id","question":"at most 40 words","decisionAtStake":"the decision it settles","evidenceNeeded":[]}}`;
+{"agent":"${agent}","publicSummary":"at most 70 words","recommendation":"approve|hold","risk":"at most 35 words","meetingRequest":null|{"priorityItemId":"priority-...","phase":"allowed phase","summary":"the decision that room must take","evidenceRefs":[]},"priorityProposal":null|{"venture":"venture id","question":"at most 40 words","decisionAtStake":"the decision it settles","evidenceNeeded":[]}${operations
+    ? `,"ventureVerdicts":[{"ventureId":"venture id","verdict":"on-track|needs-attention|stalled","evidence":"at most 30 words naming a record"}],"fixTask":null|{"title":"at most 20 words","scope":"repository path","expectedProof":"at most 25 words"},"growthIdea":null|{"ventureId":"venture id","title":"at most 10 words","summary":"at most 40 words"}`
+    : ""}}`;
 }
 
 function positionInput(input: {
@@ -320,6 +467,7 @@ function positionInput(input: {
     starvation: StarvationEntry[];
     quarterlyKpis: QuarterlyKpiPacketSummary;
   };
+  operations?: OperationsPacket;
 }) {
   return JSON.stringify({
     cycleId: input.cycleId,
@@ -333,7 +481,10 @@ function positionInput(input: {
     approvedWorkItem: input.item,
     queueScope: input.scope,
     businessContext: input.businessContext,
-    instruction: `${input.agent}: assess only this work item. Recommend hold if it exceeds the scope. Do not claim the item has already happened.`
+    ...(input.operations ? { operationsPacket: input.operations } : {}),
+    instruction: input.operations
+      ? `${input.agent}: review yesterday's operations from the packet. Every claim must point at a record in it. A green day is NO_ACTION with no fix task — do not invent work.`
+      : `${input.agent}: assess only this work item. Recommend hold if it exceeds the scope. Do not claim the item has already happened.`
   });
 }
 
@@ -359,11 +510,18 @@ export async function collectLiveCouncil(input: {
     starvation: StarvationEntry[];
     quarterlyKpis: QuarterlyKpiPacketSummary;
   };
+  /** Present on the morning operations review only; every other shift keeps its old prompt. */
+  operations?: { packet: OperationsPacket };
 }): Promise<{
   item: z.infer<typeof QueueItemSchema>;
   positions: RecordedPosition[];
   /** Seats asked twice and still unreadable. Empty on a full council. */
-  droppedSeats: Array<{ agent: string; reason: string }>;
+  droppedSeats: Array<{ agent: CouncilAgent; reason: string }>;
+  /**
+   * Optional fields a seated position sent that could not be used. Recorded rather than logged,
+   * because a board that lost a request or a verdict has to be able to say so afterwards.
+   */
+  droppedRequests: Array<{ agent: CouncilAgent; field: "meetingRequest" | "priorityProposal" | "operations"; reason: string }>;
   scope: string;
   actualCycleUsd: number;
   monthAllInUsd: number;
@@ -388,7 +546,23 @@ export async function collectLiveCouncil(input: {
   const shift = getShiftDefinition(input.phase);
   const positions: RecordedPosition[] = [];
   /** Seats that could not be seated, so the standup can say so instead of a console line. */
-  const dropped: Array<{ agent: string; reason: string }> = [];
+  const dropped: Array<{ agent: CouncilAgent; reason: string }> = [];
+  /** Optional fields a seated position lost, for the same reason. */
+  const droppedRequests: Array<{
+    agent: CouncilAgent;
+    field: "meetingRequest" | "priorityProposal" | "operations";
+    reason: string;
+  }> = [];
+
+  const knownVentures = ventureRegistry.ventures.map((venture) => venture.id);
+  // Read once for the whole council rather than per seat: it is the same contract for all four,
+  // and reading it four times would make a missing file fail differently depending on the seat.
+  const operationsContract = input.operations
+    ? await readFile(path.join(promptRoot, "operations.md"), "utf8")
+    : null;
+  const operationsPrompt = operationsContract
+    ? { contract: operationsContract.trim(), ventureIds: knownVentures }
+    : undefined;
 
   for (const agent of COUNCIL) {
     const model = modelConfig.roles[agent];
@@ -405,7 +579,7 @@ export async function collectLiveCouncil(input: {
       agent,
       provider: model.provider,
       model: model.model,
-      system: roleSystem(agent, rooms, meetingPolicy.maxRequestsPerMeeting),
+      system: roleSystem(agent, rooms, meetingPolicy.maxRequestsPerMeeting, operationsPrompt),
       input: positionInput({
         agent,
         cycleId: input.cycleId,
@@ -413,7 +587,8 @@ export async function collectLiveCouncil(input: {
         stage: input.stage,
         item: work.item,
         scope: work.scope,
-        businessContext: input.businessContext
+        businessContext: input.businessContext,
+        ...(input.operations ? { operations: input.operations.packet } : {})
       }),
       maxOutputTokens: Math.min(model.maxOutputTokens, COUNCIL_MAX_OUTPUT_TOKENS),
       budgetContext: input.budgetContext(ledger.entries),
@@ -422,26 +597,26 @@ export async function collectLiveCouncil(input: {
           agent,
           text,
           openPriorities: input.businessContext.openPriorities,
-          proposableVentures
+          proposableVentures,
+          knownVentures
         });
-        if (parsed.droppedMeetingRequest !== null) {
-          // The seat still votes: an optional field must not be able to take a position's vote
-          // down with it. The reason goes to the log so the next bad request can be read rather
-          // than guessed at — nothing downstream reads it yet.
+        // The seat still votes: an optional field must not be able to take a position's vote down
+        // with it. Every loss is recorded as well as logged — a council that dropped a request or
+        // a verdict has to be able to say so afterwards, which a console line never let it do.
+        for (const [field, reason] of [
+          ["meetingRequest", parsed.droppedMeetingRequest],
+          ["priorityProposal", parsed.droppedPriorityProposal],
+          ...parsed.droppedOperations.map((entry) => ["operations", entry] as const)
+        ] as const) {
+          if (reason === null || reason === undefined) continue;
           console.warn(JSON.stringify({
-            event: "council_meeting_request_dropped",
+            event: "council_request_dropped",
             agent,
+            field,
             phase: input.phase,
-            reason: parsed.droppedMeetingRequest
+            reason
           }));
-        }
-        if (parsed.droppedPriorityProposal !== null) {
-          console.warn(JSON.stringify({
-            event: "council_priority_proposal_dropped",
-            agent,
-            phase: input.phase,
-            reason: parsed.droppedPriorityProposal
-          }));
+          droppedRequests.push({ agent, field, reason });
         }
         return parsed.position;
       }
@@ -483,9 +658,8 @@ export async function collectLiveCouncil(input: {
         throw error;
       });
       if (seated !== null && "parseFailure" in seated) {
-        // Both in the record the cycle can publish and in the log, because a seat lost twice is
-        // the difference between a council that can pass its own commission gate and one that
-        // cannot — and nothing downstream reads droppedSeats yet.
+        // Both in the record the cycle publishes and in the log, because a seat lost twice is the
+        // difference between a council that can pass its own commission gate and one that cannot.
         console.warn(JSON.stringify({
           event: "council_seat_lost",
           agent,
@@ -524,6 +698,7 @@ export async function collectLiveCouncil(input: {
     item: work.item,
     positions,
     droppedSeats: dropped,
+    droppedRequests,
     scope: work.scope,
     actualCycleUsd,
     monthAllInUsd: Number((
@@ -548,6 +723,10 @@ export function createLiveStandup(input: {
   autonomy?: AutonomySnapshot;
   quarterlyKpis?: QuarterlyKpiPacketSummary;
   priorityProposal?: NonNullable<Standup["priorityProposal"]>;
+  operationsReview?: NonNullable<Standup["operationsReview"]>;
+  droppedSeats?: NonNullable<Standup["droppedSeats"]>;
+  droppedRequests?: NonNullable<Standup["droppedRequests"]>;
+  morningIdeaNamespace?: string;
 }): Standup {
   const shift = getShiftDefinition(input.phase);
   // The Prague wall-clock day, matching createOfflineStandup and every other record. Both
@@ -665,11 +844,17 @@ export function createLiveStandup(input: {
     } : {}),
     ...(input.quarterlyKpis ? { quarterlyKpis: input.quarterlyKpis } : {}),
     ...(input.priorityProposal ? { priorityProposal: input.priorityProposal } : {}),
+    ...(input.operationsReview ? { operationsReview: input.operationsReview } : {}),
+    ...(input.droppedSeats?.length ? { droppedSeats: input.droppedSeats } : {}),
+    ...(input.droppedRequests?.length ? { droppedRequests: input.droppedRequests } : {}),
     eveningOutcome:
       input.phase === "night"
         ? `${approved ? "Approved" : "Held"} internal work item recorded for the next Morning shift.`
         : null,
     ...(input.caughtUpIdea ? { caughtUpIdeaRef: input.caughtUpIdea.entry.id } : {}),
+    ...(input.caughtUpIdea && input.morningIdeaNamespace
+      ? { morningIdeaNamespace: input.morningIdeaNamespace }
+      : {}),
     roomTranscript: {
       openedAt: gavelAt,
       closedAt: closingAt,

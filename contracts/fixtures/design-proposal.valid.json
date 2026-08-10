@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "design-proposal/1",
+  "ventureId": "titty-tuesdays",
+  "date": "2026-08-10",
+  "promptTemplateVersion": "tt-garment-prompt/1",
+  "concept": {
+    "conceptId": "dc-2026-08-10-ember",
+    "title": "Ember wash",
+    "colorway": "washed ember orange on bone",
+    "palette": ["ember", "bone", "ash"],
+    "sceneTexture": "matte paper backdrop, soft shadow",
+    "axis": "flat-lay"
+  },
+  "variants": [
+    {
+      "variantId": "dc-2026-08-10-ember-openai",
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "prompt": "Product photography of a single garment and nothing else. No person, no model, no mannequin, no mannequin body, no torso, no body part, no skin is visible anywhere in the frame. The garment is a women's crop top. Its printed wordmark reads exactly TITTY TUESDAYS.",
+      "altText": "AI-generated product render of a Titty Tuesdays crop top, washed ember orange on bone, laid flat. No person is pictured.",
+      "imagePath": "ventures/titty-tuesdays/design-proposals/media/2026-08-10/dc-2026-08-10-ember-openai.webp",
+      "contentHash": "sha256:5f2b1c8e4a9d3f7061b2c4d5e6f708192a3b4c5d6e7f80912a3b4c5d6e7f8091",
+      "bytes": 214532,
+      "usd": 0.0533,
+      "createdAt": "2026-08-10T11:04:12.108Z",
+      "status": "proposed",
+      "rejectedAt": null,
+      "reason": null
+    },
+    {
+      "variantId": "dc-2026-08-10-ember-fal",
+      "provider": "fal",
+      "model": "fal-ai/flux/schnell",
+      "prompt": "Product photography of a single garment and nothing else. No person, no model, no mannequin, no mannequin body, no torso, no body part, no skin is visible anywhere in the frame. The garment is a women's crop top. Its printed wordmark reads exactly TITTY TUESDAYS.",
+      "altText": "AI-generated product render of a Titty Tuesdays crop top, washed ember orange on bone, laid flat. No person is pictured.",
+      "imagePath": null,
+      "contentHash": "sha256:a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "bytes": 187004,
+      "usd": 0.004,
+      "createdAt": "2026-08-10T11:04:38.771Z",
+      "status": "doctrine-rejected",
+      "rejectedAt": "2026-08-10T18:20:00.000Z",
+      "reason": "A torso appeared behind the garment."
+    }
+  ],
+  "failures": [],
+  "generatedAt": "2026-08-10T11:04:40.000Z"
+}

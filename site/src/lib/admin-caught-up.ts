@@ -8,9 +8,17 @@ import { parseEventsFile, type MagazineEvent } from "./caught-up-events-store";
  * Everything here is a record the runtime already wrote. Nothing in this file
  * computes a number or reaches the network, so the panel can only ever show
  * what actually happened.
+ *
+ * Each row reads its own contract, and they do not agree with each other: an
+ * edition delivery stamps `date` and names the article by `articleUrl`, a
+ * dataset receipt stamps `recordedAt` and has no `date` at all, a stream
+ * receipt stamps `date`. Asking every one of them for `{date, slug}` is what
+ * made the strip report "none on record" for an edition and two appends that
+ * were sitting on disk.
  */
 export interface CaughtUpEngineSnapshot {
-  lastEdition: { date: string; slug: string } | null;
+  /** `slug` is null for the editions delivered before the URL was recorded. */
+  lastEdition: { date: string; slug: string | null } | null;
   lastStreamSync: { date: string; stream: string; added: number } | null;
   lastDatasetAppend: { date: string; dataset: string } | null;
 }
@@ -19,6 +27,14 @@ export interface CaughtUpAdminSnapshot {
   today: string;
   events: MagazineEvent[];
   engine: CaughtUpEngineSnapshot;
+  /**
+   * Whether the events file exists at all.
+   *
+   * "Upcoming (0) / Past (0)" reads identically whether the owner has never added an event or has
+   * archived every one they added. Only the first of those is worth a sentence explaining what
+   * this panel is for, so the two states have to be told apart before the panel can say so.
+   */
+  eventStore: "missing" | "unreadable" | "present";
 }
 
 function stateDir(...parts: string[]): string {
@@ -26,47 +42,118 @@ function stateDir(...parts: string[]): string {
   return path.join(repositoryRoot, "state", ...parts);
 }
 
-async function newestJson(dir: string): Promise<{ name: string; value: unknown } | null> {
+function record(value: unknown): Record<string, unknown> | null {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : null;
+}
+
+function text(value: unknown, maximum = 400): string | null {
+  return typeof value === "string" && value.trim().length > 0 && value.length <= maximum
+    ? value.trim()
+    : null;
+}
+
+/** An ISO day, from either a `YYYY-MM-DD` field or the front of a timestamp. */
+function day(value: unknown): string | null {
+  const candidate = text(value, 40);
+  const front = candidate?.slice(0, 10);
+  return front && /^\d{4}-\d{2}-\d{2}$/.test(front) ? front : null;
+}
+
+/** Every readable JSON file in a directory, newest filename first. Missing is empty. */
+async function jsonFiles(dir: string): Promise<unknown[]> {
+  let names: string[];
   try {
-    const names = (await readdir(dir)).filter((name) => name.endsWith(".json")).sort();
-    const newest = names.at(-1);
-    if (!newest) return null;
-    return { name: newest, value: JSON.parse(await readFile(path.join(dir, newest), "utf8")) };
+    names = (await readdir(dir)).filter((name) => name.endsWith(".json")).sort().reverse();
+  } catch {
+    return [];
+  }
+  const parsed = await Promise.all(names.map(async (name) => {
+    try {
+      return JSON.parse(await readFile(path.join(dir, name), "utf8")) as unknown;
+    } catch {
+      return null;
+    }
+  }));
+  return parsed.filter((value) => value !== null);
+}
+
+/**
+ * The article slug, from the URL the delivery recorded.
+ *
+ * The delivery record has no `slug` field and never had one — the loader asked for one anyway and
+ * fell through to null on every edition ever delivered.
+ */
+function slugFromArticleUrl(value: unknown): string | null {
+  const url = text(value, 2_000);
+  if (!url) return null;
+  try {
+    const segment = new URL(url).pathname.split("/").filter(Boolean).at(-1);
+    return segment && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(segment) ? segment : null;
   } catch {
     return null;
   }
 }
 
+function lastEdition(deliveries: readonly unknown[]): CaughtUpEngineSnapshot["lastEdition"] {
+  for (const value of deliveries) {
+    const delivery = record(value);
+    const date = day(delivery?.date);
+    // A recorded NO_EDITION day is a real record of a decision, but it is not an edition.
+    if (!date || delivery?.editionStatus === "no_edition") continue;
+    return { date, slug: slugFromArticleUrl(delivery?.articleUrl) };
+  }
+  return null;
+}
+
+function lastDatasetAppend(receipts: readonly unknown[]): CaughtUpEngineSnapshot["lastDatasetAppend"] {
+  const appends = receipts
+    .map((value) => {
+      const receipt = record(value);
+      const date = day(receipt?.recordedAt) ?? day(receipt?.date);
+      const dataset = text(receipt?.dataset, 80);
+      return date && dataset ? { date, dataset } : null;
+    })
+    .filter((entry): entry is { date: string; dataset: string } => entry !== null)
+    .sort((left, right) => right.date.localeCompare(left.date) || right.dataset.localeCompare(left.dataset));
+  return appends[0] ?? null;
+}
+
+function lastStreamSync(receipts: readonly unknown[]): CaughtUpEngineSnapshot["lastStreamSync"] {
+  for (const value of receipts) {
+    const receipt = record(value);
+    const date = day(receipt?.date);
+    const stream = text(receipt?.stream, 80);
+    if (!date || !stream) continue;
+    return { date, stream, added: Array.isArray(receipt?.added) ? receipt.added.length : 0 };
+  }
+  return null;
+}
+
 export async function readAdminCaughtUp(today = new Date().toISOString().slice(0, 10)): Promise<CaughtUpAdminSnapshot> {
-  const [eventsRaw, delivery, stream, dataset] = await Promise.all([
+  const [eventsRaw, deliveries, streams, datasets] = await Promise.all([
     readFile(stateDir("ventures", "caught-up", "events", "events.json"), "utf8").catch(() => null),
-    newestJson(stateDir("edition", "deliveries")),
-    newestJson(stateDir("ventures", "caught-up", "streams")),
-    newestJson(stateDir("ventures", "caught-up", "datasets")),
+    jsonFiles(stateDir("edition", "deliveries")),
+    jsonFiles(stateDir("ventures", "caught-up", "streams")),
+    jsonFiles(stateDir("ventures", "caught-up", "datasets")),
   ]);
 
-  const parsed = eventsRaw ? parseEventsFile(JSON.parse(eventsRaw)) : null;
-
-  const editionRecord = delivery?.value as { date?: string; slug?: string } | undefined;
-  const streamRecord = stream?.value as { date?: string; stream?: string; added?: string[] } | undefined;
-  const datasetRecord = dataset?.value as { date?: string; dataset?: string } | undefined;
+  let parsed: ReturnType<typeof parseEventsFile> = null;
+  try {
+    parsed = eventsRaw ? parseEventsFile(JSON.parse(eventsRaw)) : null;
+  } catch {
+    parsed = null;
+  }
 
   return {
     today,
     events: parsed?.events ?? [],
+    eventStore: eventsRaw === null ? "missing" : parsed === null ? "unreadable" : "present",
     engine: {
-      lastEdition:
-        editionRecord?.date && editionRecord.slug
-          ? { date: editionRecord.date, slug: editionRecord.slug }
-          : null,
-      lastStreamSync:
-        streamRecord?.date && streamRecord.stream
-          ? { date: streamRecord.date, stream: streamRecord.stream, added: streamRecord.added?.length ?? 0 }
-          : null,
-      lastDatasetAppend:
-        datasetRecord?.date && datasetRecord.dataset
-          ? { date: datasetRecord.date, dataset: datasetRecord.dataset }
-          : null,
+      lastEdition: lastEdition(deliveries),
+      lastStreamSync: lastStreamSync(streams),
+      lastDatasetAppend: lastDatasetAppend(datasets),
     },
   };
 }

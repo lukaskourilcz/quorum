@@ -31,7 +31,7 @@ function SubmitButton() {
   );
 }
 
-export function AdminLoginForm({ error }: { error?: LoginError }) {
+export function AdminLoginForm({ error, returnTo }: { error?: LoginError; returnTo?: string | null }) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -44,6 +44,9 @@ export function AdminLoginForm({ error }: { error?: LoginError }) {
       ) : null}
 
       <form action="/admin/login/submit" className="grid gap-5" method="post">
+        {/* Already validated on the server; the submit route validates it again on arrival,
+            because a form field is whatever the browser sends. */}
+        {returnTo ? <input name="returnTo" type="hidden" value={returnTo} /> : null}
         <div>
           <label className="mb-2 block text-sm font-semibold" htmlFor="username">
             Username

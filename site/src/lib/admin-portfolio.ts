@@ -13,13 +13,18 @@ import {
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/**
+ * Every tab a venture may declare. A tab no venture declares is dead, and a dead tab hides a
+ * surface: `templates` fell out of the list and took the whole template gallery with it, leaving
+ * a component nothing could route to. `decks` outlived the question it answered.
+ *
+ * This is the registry's validator, not the URL's — page.tsx already resolves an unknown
+ * `?tab=` to the venture's first tab, so a stale bookmark lands somewhere rather than nowhere.
+ */
 const adminTabs = [
   "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
-  // `templates` and `decks` were two halves of one question and are now one `studio` tab. They
-  // stay in the list because a bookmarked `?tab=templates` must still resolve rather than 404 —
-  // an unknown tab falls through to the venture's first, which is what the selector already does.
-  "articles", "predictions", "banners", "calendar", "social-lab", "studio", "templates", "inspiration", "decks", "hooks",
+  "articles", "predictions", "banners", "calendar", "social-lab", "studio", "templates", "inspiration", "hooks",
   "packages"
 ] as const;
 
@@ -490,13 +495,25 @@ async function ventureConfigs(root: string): Promise<VentureConfig[]> {
   });
 }
 
+/** The ventures whose `visuals` tab has a reader behind it. */
+const VISUALS_READERS = ["caught-up", "titty-tuesdays"];
+
 export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPortfolio> {
   const [configs, social] = await Promise.all([
     ventureConfigs(root),
     readAdminSocialArchive(root)
   ]);
   const ventures = await Promise.all(configs.map(async (venture): Promise<AdminVenture> => {
-    if (venture.adminTabs.includes("visuals") && venture.id !== "caught-up") {
+    /*
+     * A `visuals` tab needs somebody to fill it.
+     *
+     * `caughtUpVisualCards` reads DNESKAi's social packs and nothing else, so a third venture
+     * declaring the tab would have rendered an empty grid forever. Titty Tuesdays is the
+     * exception because it brought its own reader: the garment proposals have their own loader
+     * and their own panel, rendered straight from `readTittyTuesdaysProposals` rather than
+     * through the card store. Any other venture still has to bring one before it may declare it.
+     */
+    if (venture.adminTabs.includes("visuals") && !VISUALS_READERS.includes(venture.id)) {
       throw new Error(`Admin has no visuals reader for venture ${venture.id}.`);
     }
     const ratingState = await readRatings(root, venture.id);
@@ -535,8 +552,22 @@ export async function readAdminLaunchBinder(
   const venture = (await ventureConfigs(root)).find((candidate) => candidate.id === ventureId);
   if (!venture) return null;
   const ratingState = await readRatings(root, venture.id);
+  /*
+   * A Perfect rating makes a plan ready whatever its file still says.
+   *
+   * The filter used to also require `status === "owner_rated"`, and nothing ever sets that: rating
+   * a plan appends to `state/ratings/<venture>/ledger.jsonl` and does not touch the plan file. So
+   * two Perfect-rated Titty Tuesdays plans sat at `"status": "draft"` and the binder reported zero
+   * ready plans beside them.
+   *
+   * The alternative was to have the rating route write the plan file too. That would put a second
+   * writer on `state/ventures/<id>/plans/` for a fact the append-only ledger already records — the
+   * ledger is the owner's verdict, the file's `status` is the plan's own lifecycle, and reading the
+   * two together is cheaper and truer than keeping them in sync. `archived` still wins over a
+   * rating: a plan the owner retired is not ready, however well it once scored.
+   */
   const ready = (await planRecords(root, venture.id, ratingState.ratings)).details
-    .filter((plan) => plan.status === "approved" || (plan.status === "owner_rated" && plan.rating?.rating === "perfect"))
+    .filter((plan) => plan.status !== "archived" && (plan.status === "approved" || plan.rating?.rating === "perfect"))
     .sort((left, right) => (left.seasonId ?? "unassigned").localeCompare(right.seasonId ?? "unassigned") || left.title.localeCompare(right.title));
   const plans = await Promise.all(ready.map(async (plan) => ({
     ...plan,

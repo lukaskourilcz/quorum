@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 import { AdminLoginForm } from "@/components/admin/admin-login-form";
+import { sanitizeAdminReturnTo } from "@/lib/admin-return-to";
 import { Mark } from "@/components/brand/mark";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -27,19 +28,24 @@ const errors: Record<string, { title: string; message: string }> = {
     title: "Those details did not match",
     message: "Check the username and password stored in Vercel, then try again."
   },
+  // The attempt counter is per running instance, not shared across the fleet, so this cannot
+  // promise a lockout — it says what it actually does: slows this connection down for a while.
   locked: {
     title: "Too many attempts",
-    message: "Wait 15 minutes before trying again. This protects the private project desk."
+    message: "Sign-in is paused for about 15 minutes. Wait, then try again."
   }
 };
 
 export default async function AdminLoginPage({
   searchParams
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; returnTo?: string }>;
 }) {
-  const errorKey = (await searchParams).error ?? "";
+  const { error: errorKey = "", returnTo } = await searchParams;
   const error = errors[errorKey];
+  // Validated here as well as at the proxy and the submit route: this is the value that reaches
+  // the browser as a form field, and each hop treats the last one's output as untrusted.
+  const destination = sanitizeAdminReturnTo(returnTo, "https://boardless.invalid");
 
   return (
     <main className="editorial-grid flex min-h-dvh items-center px-5 py-10 md:px-8">
@@ -87,7 +93,7 @@ export default async function AdminLoginPage({
               </div>
             </div>
 
-            <AdminLoginForm error={error} />
+            <AdminLoginForm error={error} returnTo={destination} />
 
             <div className="mt-6 border-t border-[var(--border)] pt-5">
               <Link className={buttonVariants({ variant: "ghost", size: "small" })} href="/">

@@ -121,3 +121,86 @@ describe("admin portfolio projection", () => {
     await expect(readAdminPortfolio(root)).rejects.toThrow("Admin has no visuals reader for venture future-venture.");
   });
 });
+
+describe("launch binder readiness", () => {
+  async function binderRoot(statuses: readonly string[]): Promise<string> {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-binder-"));
+    await Promise.all(["config", "state/ratings/titty-tuesdays", "state/ventures/titty-tuesdays/plans"]
+      .map((directory) => mkdir(path.join(root, directory), { recursive: true })));
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{
+        id: "titty-tuesdays",
+        name: "Titty Tuesdays",
+        status: "operating",
+        ledgerNamespace: "titty-tuesdays",
+        adminTabs: ["plans", "ideas"]
+      }]
+    }));
+    const ratings: string[] = [];
+    await Promise.all(statuses.map(async (status, index) => {
+      const id = `plan-00${index}`;
+      await writeFile(path.join(root, "state", "ventures", "titty-tuesdays", "plans", `${id}.json`), JSON.stringify({
+        schemaVersion: "marketing-plan/1",
+        id,
+        ventureId: "titty-tuesdays",
+        title: `Season ${index}`,
+        objective: "Sell the crop top.",
+        tactics: [{ type: "social", description: "Post it.", assetsNeeded: [], platformPolicyNote: "Garment only." }],
+        calendar: [{ week: 1, focus: "Launch." }],
+        audienceRefs: [],
+        kpis: ["saves"],
+        status,
+        originMeetingRef: "2026-08-05-tt-marketing"
+      }));
+      ratings.push(JSON.stringify({
+        schemaVersion: "rating/1",
+        id: `r-2026-08-07-000${index}`,
+        ventureId: "titty-tuesdays",
+        objectKind: "plan",
+        objectRef: { id, contentHash: "sha256:abcdef123456" },
+        rating: "perfect",
+        ratedAt: `2026-08-07T12:0${index}:00.000Z`
+      }));
+    }));
+    await writeFile(path.join(root, "state", "ratings", "titty-tuesdays", "ledger.jsonl"), `${ratings.join("\n")}\n`);
+    return root;
+  }
+
+  it("counts a Perfect-rated plan whose file still says draft", async () => {
+    const binder = await readAdminLaunchBinder("titty-tuesdays", await binderRoot(["draft", "draft"]));
+    expect(binder?.plans.map((plan) => plan.id)).toEqual(["plan-000", "plan-001"]);
+  });
+
+  it("still refuses an archived plan however it was rated", async () => {
+    const binder = await readAdminLaunchBinder("titty-tuesdays", await binderRoot(["archived"]));
+    expect(binder?.plans).toEqual([]);
+  });
+});
+
+/**
+ * Cards a workspace holds but no tab can show.
+ *
+ * DNESKAi carried five live ideas behind `adminTabs: ["plans","visuals","events"]`: the rail counted
+ * them, every tab body filtered them out. Counting cards against declared tabs catches the next one
+ * the same way, whichever venture and whichever kind it is.
+ */
+describe("declared tabs against stored cards", () => {
+  const tabForKind: Readonly<Record<string, string>> = {
+    idea: "ideas",
+    plan: "plans",
+    visual: "visuals",
+    "social-variant": "packages"
+  };
+
+  it("gives every stored card kind a tab in the real registry", async () => {
+    const portfolio = await readAdminPortfolio();
+    const orphaned = portfolio.ventures.flatMap((venture) => {
+      const kinds = [...new Set(venture.cards.map((card) => card.kind))];
+      return kinds
+        .filter((kind) => !venture.tabs.includes(tabForKind[kind] as never))
+        .map((kind) => `${venture.id}/${kind}`);
+    });
+    expect(orphaned).toEqual([]);
+  });
+});

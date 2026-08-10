@@ -7,6 +7,7 @@ import { CalendarFeedSchema } from "./calendar.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
 import { DailyDigestSchema } from "./daily-digest.js";
+import { DesignProposalSchema } from "./design-proposal.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
@@ -15,6 +16,8 @@ import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
 import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
+import { OpsReportSchema } from "./ops-report.js";
+import { OwnerAttentionSchema } from "./owner-attention.js";
 import {
   AdjustmentEntrySchema,
   BoutRecordSchema,
@@ -55,6 +58,7 @@ export const ContractSchemas = {
   "campaign-brief": CampaignBriefSchema,
   "carousel-template": CarouselTemplateSchema,
   "daily-digest": DailyDigestSchema,
+  "design-proposal": DesignProposalSchema,
   "edition-package": EditionPackageSchema,
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
@@ -63,6 +67,8 @@ export const ContractSchemas = {
   "meeting-email": MeetingEmailSchema,
   "meeting-agenda": MeetingAgendaQueueSchema,
   "meeting-record": MeetingRecordSchema,
+  "ops-report": OpsReportSchema,
+  "owner-attention": OwnerAttentionSchema,
   "adjustment-entry": AdjustmentEntrySchema,
   "bet-type-catalog": BetTypeCatalogSchema,
   "bout-record": BoutRecordSchema,

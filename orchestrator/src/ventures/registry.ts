@@ -94,6 +94,16 @@ export function resolveScheduledClock(registry: VentureRegistry): ResolvedMeetin
   return [...resolveMeetingClock(registry), ...resolveProductionClock(registry)].sort((left, right) => left.hour - right.hour);
 }
 
+/**
+ * The idea ledger a venture writes into, or null when the id belongs to no venture.
+ *
+ * Null rather than a throw: the caller is recording what a model named, and a model naming a
+ * venture that does not exist is a refused proposal, not a broken run.
+ */
+export function ventureNamespace(registry: VentureRegistry, ventureId: string): string | null {
+  return registry.ventures.find((venture) => venture.id === ventureId)?.ledgerNamespace ?? null;
+}
+
 export function getVentureMeetingDefinition(
   registry: VentureRegistry,
   kind: string
