@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-09.
+Updated: 2026-08-10.
 
 ---
 
@@ -149,6 +149,13 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [ ] **Run the Design Lab template expansion in an Opus session** — the build contract is
+  `docs/DESIGN-LAB-TEMPLATES-OPUS-PROMPT.md`: thirteen trend-derived template family concepts
+  (plus two reserves), at least ten to ship as fully-editable Design Lab families. Paste
+  "Execute docs/DESIGN-LAB-TEMPLATES-OPUS-PROMPT.md, tasks TPL-00 through TPL-15 in order" into
+  an Opus session on this repository. $0 — nothing in the renderer or the build calls a model.
+  The contract deletes itself in its closing commit. [imp:3] [owner:me] [time:10m] [kind:deploy]
 
 - [x] **Run the MMA Files relaunch prompt sequence** — completed 2026-08-09 across the tracker’s
   twelve MMA Files issues and six quorum issues. The site redesign, Czech-only reader contract,
