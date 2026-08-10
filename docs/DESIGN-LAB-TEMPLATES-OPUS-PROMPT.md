@@ -209,7 +209,7 @@ Work in order, one commit per task, phase-commit style. Tick the box in this fil
 - [x] TPL-10 — `counterweight`
 - [x] TPL-11 — `throughline`
 - [x] TPL-12 — `quiet`
-- [ ] TPL-13 — `offset` (or a §2b reserve, with the reason recorded)
+- [x] TPL-13 — `offset` (or a §2b reserve, with the reason recorded)
 - [ ] TPL-14 — Chip row, recipe-pool posture, README/SPEC/specimen sweep, e2e adjustments
 - [ ] TPL-15 — Full gates green; update `docs/NEEDED.md`; delete this file in the closing commit
 

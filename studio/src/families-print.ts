@@ -38,7 +38,7 @@ const dateline = (y: number, colorToken = "muted"): CarouselLayerInput => ({
   fontToken: "mono"
 });
 
-export const PRINT_FAMILIES: Readonly<Record<Extract<DeckFamily, "broadsheet" | "marginalia" | "memo">, FamilySpec>> = {
+export const PRINT_FAMILIES: Readonly<Record<Extract<DeckFamily, "broadsheet" | "marginalia" | "memo" | "offset">, FamilySpec>> = {
   /*
    * The inside page, not the front one.
    *
@@ -178,6 +178,59 @@ export const PRINT_FAMILIES: Readonly<Record<Extract<DeckFamily, "broadsheet" | 
         // lower half reads as a passage that stopped rather than as page left deliberately empty.
         shape(LEFT, 0.735, 0.016, 0.014, { fillToken: "accent" }),
         rule(LEFT + 0.03, 0.7405, 0.1 + beat.step * 0.04, { thickness: 2, colorToken: "muted" }),
+        progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * A plate a hair out of true.
+   *
+   * Misregistration is the imperfection the 2026 reports keep naming, and it is one of the few
+   * that can be built honestly here: the slot is set twice, once in the accent and once in the
+   * foreground over it, with the accent pass moved a few thousandths. The schema allows two text
+   * layers naming one slot — `requiredSlots` is checked as a set — and both are measured by the
+   * overflow check and both by the contrast check, so the echo is a rendering the engine knows
+   * about rather than a trick played on it.
+   *
+   * Both passes carry identical metrics. The fitter chooses a size from the frame and the string,
+   * so a wider echo frame would fit at a different size and the two plates would not be the same
+   * words at the same scale — they would be two settings, which is a mistake and not a
+   * misregistration.
+   *
+   * The offset is inset from the safe band rather than hanging over it. A text layer outside the
+   * band fails the safe-area check at 9:16, and an echo is meaningful content: it is the same
+   * sentence.
+   */
+  offset: {
+    description: "The passage printed twice, the accent plate a few thousandths out of true under the foreground one.",
+    compose: ({ slot, role, beat, phase }) => {
+      // Inset far enough that the widest shift still lands inside the union safe band.
+      const inset = 0.01;
+      const left = LEFT + inset;
+      const measure = MEASURE - 2 * inset;
+      const slip = (beat.side === "left" ? 1 : -1) * (role === "cover" ? 0.009 : 0.005 + beat.step * 0.002);
+      const drop = role === "cover" ? 0.006 : 0.003 + beat.step * 0.001;
+      const top = role === "cover" ? TOP + 0.06 : bodyTop(0.15 + beat.step * 0.05);
+      const height = BOTTOM - 0.095 - top;
+      const metrics = {
+        fontWeight: role === "cover" ? 900 : 800,
+        maxFontSize: role === "cover" ? 96 : 60,
+        minFontSize: 26,
+        maxChars: role === "cover" ? 150 : 210,
+        maxLines: role === "cover" ? 5 : 7,
+        uppercase: role === "cover"
+      } as const;
+      return [
+        text(slot, left + slip, top + drop, measure, height, { ...metrics, colorToken: "accent" }),
+        text(slot, left, top, measure, height, { ...metrics, colorToken: "foreground" }),
+        // The rule is printed twice as well, on the same two plates and by the same slip.
+        rule(left + slip, BOTTOM - 0.075 + drop, role === "outro" ? measure : 0.16 + beat.step * 0.08, { thickness: 9 }),
+        rule(left, BOTTOM - 0.075, role === "outro" ? measure : 0.16 + beat.step * 0.08, {
+          thickness: 9,
+          colorToken: "muted"
+        }),
+        wordmark(),
         progress(phase)
       ];
     }

@@ -49,7 +49,8 @@ export const DECK_FAMILIES = [
   "tally",
   "counterweight",
   "throughline",
-  "quiet"
+  "quiet",
+  "offset"
 ] as const;
 export type DeckFamily = (typeof DECK_FAMILIES)[number];
 
