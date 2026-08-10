@@ -119,7 +119,7 @@ async function recipeHistory(venture: string): Promise<Array<{ date: string; fam
   }
 }
 
-/** Everything a recorded override may name: the ten families and the five original styles. */
+/** Everything a recorded override may name: every family, and the five original styles. */
 const DESIGNS: readonly string[] = [...DECK_FAMILIES, "mesh", "editorial", "spotlight", "contrast", "aurora"];
 
 const CLOSING: Record<"caught-up" | "mma-files", string> = {

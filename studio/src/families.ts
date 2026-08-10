@@ -7,7 +7,7 @@ import {
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
 import { articleSlideSlot, deckFormats } from "./library.js";
 import { DECK_FAMILIES, type DeckFamily } from "./designs.js";
-import { RHYTHM, variantsFor, type Beat, type FamilySpec, type Role } from "./family-kit.js";
+import { RHYTHM, variantsFor, type FamilySpec, type Role } from "./family-kit.js";
 import { FOUNDING_FAMILIES } from "./families-founding.js";
 import { POSTER_FAMILIES } from "./families-poster.js";
 import { SYSTEM_FAMILIES } from "./families-system.js";

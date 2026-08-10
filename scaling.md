@@ -36,7 +36,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 - Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
 - Sociální obrázky vykresluje jediný engine Design Labu z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
-  Celá cesta Design Labu stojí $0: rodiny šablon, deset rodin místo pěti tapet, se
+  Celá cesta Design Labu stojí $0: rodiny šablon, dvacet tři rodin místo pěti tapet, se
   vykreslují v kódu, písma leží v repozitáři a rasterizér nechodí na síť. Popisky,
   hashtagy, text pro Threads a řádek do story píše stejné volání, které píše článek —
   žádné nové placené volání nevzniklo, jen se dvěma stávajícím zvedl strop výstupu
