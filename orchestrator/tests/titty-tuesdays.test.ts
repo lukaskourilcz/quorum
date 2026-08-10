@@ -29,8 +29,10 @@ describe("Titty Tuesdays bootstrap", () => {
       status: "operating",
       taste: true,
       ledgerNamespace: "titty-tuesdays",
-      // No "visuals": visualCards() hardcodes caught-up, so the tab was permanently empty.
-      adminTabs: ["plans", "ideas"],
+      // "visuals" is real now. It used to be excluded because `visualCards()` hardcodes
+      // caught-up, so the tab would have been permanently empty; the garment proposals give it
+      // its own loader and its own panel.
+      adminTabs: ["plans", "ideas", "visuals"],
       meetings: [expect.objectContaining({ kind: "tt-marketing", cadence: "daily@11:00", envelopeUsd: 0.08 })]
     });
     expect(venture?.meetings[0]?.packet.objectives.live).toContain("Generate and record concrete marketing ideas");

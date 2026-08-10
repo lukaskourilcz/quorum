@@ -18,6 +18,7 @@ import { IdeasPanel, MonetizationPanel, type FutureIdeaRow } from "@/components/
 import { Panel, Tile } from "@/components/admin/panel";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { RenderedDeskPanel } from "@/components/admin/rendered-desk-panel";
+import { TittyTuesdaysProposalsPanel } from "@/components/admin/titty-tuesdays-proposals-panel";
 import { SocialArchive } from "@/components/admin/social-archive-panel";
 import { Callout } from "@/components/ui/callout";
 import {
@@ -40,6 +41,7 @@ import { readHookBrain } from "@/lib/hook-brain";
 import { readMonetizationOptions } from "@/lib/monetization-options";
 import { readOwnerAttention } from "@/lib/owner-attention";
 import { readRenderedDesk } from "@/lib/rendered-desk";
+import { readTittyTuesdaysProposals } from "@/lib/titty-tuesdays-proposals";
 import { readStudioArticles } from "@/lib/carousel-summaries";
 import { getDailyResults } from "@/lib/daily-results";
 import { publicMeetingHref } from "@/lib/idea-ledger-model";
@@ -143,7 +145,8 @@ export default async function AdminPage({
     dailyResults,
     ownerAttention,
     monetization,
-    renderedDesk
+    renderedDesk,
+    ttProposals
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -165,7 +168,8 @@ export default async function AdminPage({
     getDailyResults(),
     readOwnerAttention(),
     readMonetizationOptions(),
-    readRenderedDesk()
+    readRenderedDesk(),
+    readTittyTuesdaysProposals()
   ]);
 
   /*
@@ -369,6 +373,12 @@ export default async function AdminPage({
       return {
         node: <CarouselStudioAdminPanel snapshot={carouselStudio} tab="inspiration" />,
         count: carouselStudio.inspirationLinks.length
+      };
+    }
+    if (id === "titty-tuesdays" && selectedTab === "visuals") {
+      return {
+        node: <TittyTuesdaysProposalsPanel snapshot={ttProposals} />,
+        count: ttProposals.days.reduce((sum, day) => sum + day.variants.length, 0)
       };
     }
     if (id === "caught-up" && selectedTab === "events") {
