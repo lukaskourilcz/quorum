@@ -27,6 +27,7 @@ import {
   type Role
 } from "./family-kit.js";
 import { POSTER_FAMILIES } from "./families-poster.js";
+import { SYSTEM_FAMILIES } from "./families-system.js";
 import { PRINT_FAMILIES } from "./families-print.js";
 
 /**
@@ -83,7 +84,8 @@ export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-
   dossier: "quiet",
   billboard: "type-only",
   broadsheet: "type-only",
-  zurich: "type-only"
+  zurich: "type-only",
+  concrete: "type-only"
 };
 
 /** The ten families of the founding delivery. The expansion's thirteen are assembled below. */
@@ -431,7 +433,8 @@ const ORIGINAL_FAMILIES: Readonly<Record<Extract<DeckFamily,
 const families: Readonly<Record<DeckFamily, FamilySpec>> = {
   ...ORIGINAL_FAMILIES,
   ...POSTER_FAMILIES,
-  ...PRINT_FAMILIES
+  ...PRINT_FAMILIES,
+  ...SYSTEM_FAMILIES
 };
 
 /** The reference a stored recipe or pack names for one family at one length. */

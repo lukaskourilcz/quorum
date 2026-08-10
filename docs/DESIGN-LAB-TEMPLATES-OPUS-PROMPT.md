@@ -200,7 +200,7 @@ Work in order, one commit per task, phase-commit style. Tick the box in this fil
 - [x] TPL-01 — `billboard`
 - [x] TPL-02 — `broadsheet`
 - [x] TPL-03 — `zurich`
-- [ ] TPL-04 — `concrete`
+- [x] TPL-04 — `concrete`
 - [ ] TPL-05 — `terminal`
 - [ ] TPL-06 — `marginalia`
 - [ ] TPL-07 — `memo`
