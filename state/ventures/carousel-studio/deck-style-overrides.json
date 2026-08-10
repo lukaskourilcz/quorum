@@ -9,9 +9,9 @@
       "family": "zurich",
       "variant": "A",
       "accentSwap": true,
-      "treatment": "none",
+      "treatment": "duotone",
       "typeScale": 0.9,
-      "changedAt": "2026-08-10T19:37:20.651Z"
+      "changedAt": "2026-08-10T19:37:22.917Z"
     },
     {
       "venture": "mma-files",
@@ -26,5 +26,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-10T19:37:20.651Z"
+  "updatedAt": "2026-08-10T19:37:22.917Z"
 }
