@@ -42,7 +42,7 @@ const bracket = (x: number, y: number, facing: "left" | "right"): CarouselLayerI
  * and a family that cannot compose without one narrows the pool exactly when the pool is needed.
  */
 
-export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal">, FamilySpec>> = {
+export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal" | "versus">, FamilySpec>> = {
   /*
    * Neo-brutalism with the volume down.
    *
@@ -143,6 +143,50 @@ export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "
           colorToken: role === "outro" ? "accent" : "muted"
         }),
         progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * Two fields, and the contrast is legible before a word is read.
+   *
+   * The canvas is cut in two at a hard seam and both halves are filled — one loud, one quiet — so
+   * the split is a composition rather than a panel floating on a ground. Which half is loud flips
+   * with the beat and the seam itself walks, so swiping the deck flips the whole frame: words on
+   * colour, then words on quiet, then words on colour.
+   *
+   * The passage always sits in the upper field. That is not timidity about the lower one — it is
+   * TOKENS.md's rule that a body passage starts between 0.14 and 0.26 of the safe height in, which
+   * a passage anchored below a mid-canvas seam cannot do. What alternates is the ground under the
+   * words, which is the whole of what "versus" was ever about.
+   *
+   * Distinct from `gutter`, which splits vertically around a photograph, and from `slab`, which
+   * inverts a whole slide and lays a band over it.
+   */
+  versus: {
+    description: "The canvas cut in two at a hard seam, with the loud half and the quiet one trading places on the beat.",
+    compose: ({ slot, role, beat, phase }) => {
+      const loud = role === "cover" || (role === "body" && beat.step !== 1);
+      const split = role === "cover" ? 0.62 : role === "outro" ? 0.52 : 0.56 + beat.step * 0.04;
+      const top = role === "cover" ? TOP + 0.06 : role === "outro" ? TOP + 0.07 : bodyTop(0.14 + beat.step * 0.05);
+      return [
+        shape(0, 0, 1, split, { fillToken: loud ? "accent" : "surface" }),
+        shape(0, split, 1, 1 - split, { fillToken: loud ? "surface" : "accent" }),
+        // The seam, drawn in the ground colour so the two fields read as cut apart rather than
+        // stacked. A rule is not measured by the contrast check, so it can be the one mark on the
+        // slide that is neither ink nor field.
+        rule(0, split - 0.005, 1, { thickness: 10, colorToken: "background" }),
+        text(slot, LEFT, top, MEASURE, split - top - 0.04, {
+          colorToken: loud ? "background" : "foreground",
+          fontWeight: role === "cover" ? 800 : 700,
+          maxFontSize: role === "cover" ? 82 : 58,
+          minFontSize: 26,
+          maxChars: role === "cover" ? 150 : 220,
+          maxLines: role === "cover" ? 5 : 7
+        }),
+        // Both sit in the lower field, so both take their colour from whatever it is filled with.
+        wordmark(loud ? "muted" : "background"),
+        progress(phase, loud ? "muted" : "background")
       ];
     }
   }
