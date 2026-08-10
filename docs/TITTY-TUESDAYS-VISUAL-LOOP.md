@@ -1,5 +1,22 @@
 # Titty Tuesdays visual proposals: the design
 
+> **What actually shipped, 2026-08-10.** The owner amended this design before it was built, and
+> `orchestrator/src/titty-tuesdays/visuals.ts` implements the amended version. Three differences,
+> each deliberate:
+>
+> - **Cadence.** Daily, two images, one per provider — not a Tuesdays-only batch of six through
+>   one. A day now compares two renderers on the same concept.
+> - **Providers.** OpenAI `gpt-image-2` at medium quality and fal `fal-ai/flux/schnell`, declared
+>   as `TT_VISUAL_IMAGE` and `TT_VISUAL_IMAGE_FAL`. Gemini stays deferred.
+> - **Storage.** Bytes live under `state/ventures/titty-tuesdays/design-proposals/media/`, served
+>   through an authenticated admin route — not under `site/public/`. The §8 approval about public
+>   addressability was answered with the admin-only alternative, because a rejected pre-launch
+>   design should not be a world-readable file at a guessable path.
+>
+> Everything else below still describes the system: the prompt frame and its doctrine clauses, the
+> checker's stated limits, the two kinds of no, and the six approvals. The approvals are filed in
+> `state/INBOX.md` as `TT-VISUALS-*` and nothing renders until all six are countersigned.
+
 Design for the capability in `docs/WORKFLOWS-FABLE-BRIEF.md` Part 14.3. The room
 invents a garment concept, code rewrites it into an image prompt, the OpenAI image
 API returns raster variants, a deterministic checker takes what it can, and the

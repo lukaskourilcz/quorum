@@ -25,7 +25,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   on the server and hands it across as plain JSON, which is also the sanitising boundary.
   Its layout invariants are load-bearing and were each a real bug: centre an oversized
   backdrop plate with `left/top:50%` plus `translate(-50%,-50%)` and never with grid
-  centring; give every decorative layer `pointer-events: none`, because section 05's mood
+  centring; give every decorative layer `pointer-events: none`, because section 06's mood
   tint sits after the content and otherwise swallows every click on the wallboard; keep
   the plates off `will-change`, which exhausted the compositor and painted whole frames
   black; and mark real horizontal scrollers `data-horizontal-scroll` or the containment

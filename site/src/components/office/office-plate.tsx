@@ -8,7 +8,7 @@ import type { CSSProperties, ReactNode } from "react";
  * The plate is centred with `left/top: 50%` plus `translate(-50%, -50%)` and never with grid
  * centring: an oversized grid item is start-aligned in Chrome, so `place-items: center` put the
  * left edge of a 2.4×-viewport image at the left edge of the screen and the room was never in
- * frame. And every decorative layer carries `pointer-events: none`, because in section 05 the
+ * frame. And every decorative layer carries `pointer-events: none`, because in section 06 the
  * mood tint sits *after* the content in DOM order — that is what dims the room light around the
  * lit screen — and without the rule it swallowed every click on the wallboard. The "Full KPIs"
  * button looked live and did nothing.

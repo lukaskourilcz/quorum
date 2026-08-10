@@ -123,7 +123,8 @@ pak přijdou ručně prohlédnuté snímky, pak licencované vyhledávání podl
 redakce k článku napsala, pak generovaná ilustrace a nakonec kreslená deska. Před
 připojením se na skutečné náhledy podívá model a jeho verdikt — kolik kandidátů viděl,
 jak je ohodnotil a co u kterého vetoval — se ukládá vedle balíčku do
-`state/ventures/<projekt>/image-selections/`. Selhání kontroly, vyčerpaný strop i
+`state/ventures/<projekt>/image-selections/` — složka vznikne s prvním článkem, který
+tudy projde, takže dokud tam nic není, ještě žádný běh se k ní nedostal. Selhání kontroly, vyčerpaný strop i
 nečitelný náhled znamenají totéž: obrázek klesne o příčku níž. Vydání to nikdy
 nezastaví. Generovaná ilustrace se v alternativním textu vždy označí za ilustraci, nikdy
 za fotografii.
