@@ -46,7 +46,8 @@ export const DECK_FAMILIES = [
   "marginalia",
   "memo",
   "versus",
-  "tally"
+  "tally",
+  "counterweight"
 ] as const;
 export type DeckFamily = (typeof DECK_FAMILIES)[number];
 

@@ -72,7 +72,7 @@ function numeral(position: number, x: number, y: number, width: number, height: 
  * ventures. What is portable is scale, weight, case, tracking and where the block sits.
  */
 
-export const POSTER_FAMILIES: Readonly<Record<Extract<DeckFamily, "billboard" | "zurich" | "tally">, FamilySpec>> = {
+export const POSTER_FAMILIES: Readonly<Record<Extract<DeckFamily, "billboard" | "zurich" | "tally" | "counterweight">, FamilySpec>> = {
   /*
    * Scale is the composition, and nothing else is.
    *
@@ -218,6 +218,49 @@ export const POSTER_FAMILIES: Readonly<Record<Extract<DeckFamily, "billboard" | 
           maxLines: 5
         }),
         rule(LEFT, BOTTOM - 0.075, role === "outro" ? MEASURE : 0.3, { thickness: 6, colorToken: "muted" }),
+        wordmark(role === "outro" ? "accent" : "muted"),
+        progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * Weight against weight, at one size.
+   *
+   * The trend is the variable-font lockup: ultra-bold set against light, the sizes near equal, the
+   * weight doing all the work. One slot holds one string and one text layer sets it at one weight,
+   * so the lockup cannot happen inside a passage — it happens across the deck. Heavy beat, light
+   * beat, heavy beat, at the same ceiling, so what changes as a reader swipes is the weight and
+   * nothing else.
+   *
+   * The mass in the corner is the counterweight and it trades with the type: a 900 passage gets a
+   * small block, a 400 passage gets a wide one, so every slide balances at the same total. The
+   * word-rule cutting into the block moves with the beat, which is the only other thing on the
+   * slide that moves.
+   */
+  counterweight: {
+    description: "Ultra-bold against light at one size, with a block in the corner that trades weight with the type.",
+    compose: ({ slot, role, beat, phase }) => {
+      const heavy = role === "cover" || (role === "body" && beat.step !== 1);
+      const top = role === "cover" ? TOP + 0.085 : bodyTop(0.15 + beat.step * 0.05);
+      return [
+        shape(RIGHT - (heavy ? 0.07 : 0.28), TOP + 0.01, heavy ? 0.07 : 0.28, heavy ? 0.03 : 0.058, {
+          fillToken: "accent"
+        }),
+        rule(LEFT + (role === "body" ? beat.step * 0.2 : 0), top - 0.034, 0.1, { thickness: 9 }),
+        text(slot, LEFT, top, MEASURE, BOTTOM - 0.1 - top, {
+          fontToken: heavy ? "headline" : "body",
+          fontWeight: heavy ? 900 : 400,
+          // Tracking is the second half of the contrast. On MMA Files the headline face has one
+          // real weight and the body face starts at 600, so weight alone separates the beats less
+          // there than anywhere else; tight against open separates them in every palette.
+          tracking: heavy ? -0.015 : 0.02,
+          maxFontSize: role === "cover" ? 76 : 58,
+          minFontSize: 26,
+          maxChars: role === "cover" ? 160 : 220,
+          maxLines: role === "cover" ? 6 : 8
+        }),
+        rule(LEFT, BOTTOM - 0.075, MEASURE, { thickness: 2, colorToken: "muted" }),
         wordmark(role === "outro" ? "accent" : "muted"),
         progress(phase)
       ];
