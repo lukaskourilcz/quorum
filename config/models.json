@@ -77,7 +77,7 @@
       "maxInputTokens": 8000,
       "maxOutputTokens": 1200
     },
-    "_comment_IMAGE": "Superseded on 2026-08-08 by article-image-fit-2026-08-08. The old note here forbade every image call site in an article pipeline; that decision sanctions exactly two and no more. IMAGE_GATE above looks at candidate thumbnails before any of them can become a hero, on the Anthropic key the company already pays for, capped at $0.02 an article and $0.10 a day for the whole image programme. ARTICLE_ILLUSTRATION renders an abstract illustration between the licensed search and the FRAME plate; it is labelled as an illustration wherever a reader meets it, never as photography, and it runs only when both FAL_KEY and ARTICLE_ILLUSTRATION_ENABLED are set. Everything else stands: an unsanctioned image call site in an article pipeline is still forbidden, and the ladder still prefers a keyless licensed archive to anything paid.",
+    "_comment_IMAGE": "Superseded on 2026-08-08 by article-image-fit-2026-08-08 and extended on 2026-08-10 by the Titty Tuesdays visual loop. The system now has exactly four sanctioned image call sites and no more. IMAGE_GATE looks at candidate thumbnails before any of them can become a hero, on the Anthropic key the company already pays for, capped at $0.02 an article and $0.10 a day for the whole image programme. ARTICLE_ILLUSTRATION renders an abstract illustration between the licensed search and the FRAME plate; it is labelled as an illustration wherever a reader meets it, never as photography, and it runs only when both FAL_KEY and ARTICLE_ILLUSTRATION_ENABLED are set. AVATAR_IMAGE is owner-triggered portrait repair, which is not an article pipeline. TT_VISUAL_IMAGE and TT_VISUAL_IMAGE_FAL render two Titty Tuesdays garment proposals a day, one per provider, capped at $2.00 a month read back from the ledger, behind TT_VISUALS_ENABLED, both keys and six countersigned approvals; the garment is a product render the owner rates and it never becomes a product. Everything else stands: an unsanctioned image call site in an article pipeline is still forbidden, and the ladder still prefers a keyless licensed archive to anything paid.",
     "ARTICLE_ILLUSTRATION": {
       "provider": "fal",
       "model": "fal-ai/flux/schnell",
@@ -87,6 +87,17 @@
       "provider": "openai",
       "model": "gpt-image-2",
       "quality": "high",
+      "size": "1024x1024"
+    },
+    "TT_VISUAL_IMAGE": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "quality": "medium",
+      "size": "1024x1024"
+    },
+    "TT_VISUAL_IMAGE_FAL": {
+      "provider": "fal",
+      "model": "fal-ai/flux/schnell",
       "size": "1024x1024"
     }
   }

@@ -249,6 +249,14 @@ describe("the image roles an article may reach", () => {
     expect(models.roles.IMAGE).toBeUndefined();
     // AVATAR_IMAGE stays: owner-triggered portrait repairs are not an article pipeline.
     expect(models.roles.AVATAR_IMAGE).toBeDefined();
+    // The Titty Tuesdays garment renderers are the third and fourth sanctioned sites, and they
+    // are not article pipelines either — the output is a proposal the owner rates.
+    expect(models.roles.TT_VISUAL_IMAGE?.provider).toBe("openai");
+    expect(models.roles.TT_VISUAL_IMAGE_FAL?.provider).toBe("fal");
+    // The comment is the decision record for all of them, so it has to name them.
+    for (const role of ["IMAGE_GATE", "ARTICLE_ILLUSTRATION", "AVATAR_IMAGE", "TT_VISUAL_IMAGE"]) {
+      expect(models.roles._comment_IMAGE, `_comment_IMAGE does not name ${role}`).toContain(role);
+    }
   });
 
   it("bills a generated image under its own phase, and never under an article's", async () => {
