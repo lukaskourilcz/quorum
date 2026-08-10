@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-09.
+Updated: 2026-08-10.
 
 ---
 
@@ -156,6 +156,16 @@ Judgement calls. Nothing is blocked on code for any of these.
   production-build rehearsal all landed on `claude/mma-files-redesign-2sacl9`. The remaining
   Vercel and indexing decisions are tracked under “Verify once, then leave alone.”
   [imp:4] [owner:me] [time:30m] [kind:decision]
+
+- [ ] **Walk the thirteen new template families and say which ones you want in rotation** — open
+  `/admin?venture=design-lab&tab=studio`, pick a delivered article and click through the chips.
+  Thirteen of the twenty-three are new: billboard, broadsheet, zurich, concrete, terminal,
+  marginalia, memo, versus, tally, counterweight, throughline, quiet, offset. All of them are in
+  the pool already, because the engine deals from every registered family — so if one of them is
+  not something you want going out unattended, the way to take it out is to save presets for the
+  ones you do want and set them live, which narrows the pool to your list. Nothing here needs a
+  key, an account or a payment; the renderer calls no model and this whole expansion cost $0.
+  [imp:3] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
   wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and
@@ -638,6 +648,17 @@ marketingShark adds about 6c to a day.
   kind with their own allowlist inside the existing daily cycle, so no new job, cron or phase
   appeared and nothing was drawn from the model share. Switched off until
   `CAUGHT_UP_STREAMS_ENABLED` is set.
+- **The template library went from ten families to twenty-three**, 2026-08-10. Thirteen new
+  compositions drawn from that year's typography-led design trends: a poster family whose scale is
+  the whole design, an inside newspaper page, a Swiss grid, a soft neo-brutalist card, a monospace
+  terminal, a highlighter-and-annotation family, a typed note, a contrast diptych, an oversized
+  index numeral, a weight-contrast lockup, a line that runs continuously across every slide, a
+  calm minimal one, and a misregistered two-plate print. Each rides the controls you already have
+  — A/B, type scale, phase — and none of them added a colour, a typeface, a schema field or a
+  paid call site. Nothing to approve and nothing to switch on; it is recorded because what the
+  company's decks can look like is the kind of thing an owner should read off a list rather than
+  off a diff. Cost: $0. The renderer cannot call a model, by decision D11.
+
 - **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty-one static
   faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
   Plex Sans for DNESKAi, Anton and Archivo for MMA Files, Petrona and Karla for Titty

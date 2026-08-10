@@ -88,8 +88,10 @@ values to keep honest for two brands that do not publish yet.
 
 ### Contrast receipts
 
-Every text and logo pair used anywhere in the ten families, at its worst across the five palettes.
-The engine refuses below 4.5:1.
+Every text and logo pair used anywhere in the library, at its worst across the five palettes. The
+engine refuses below 4.5:1, and it refuses on the *rendering*, not the token pair: a variant may
+swap the accent for the secondary and invert the ground, so a pair that clears the floor in A and
+not in B is a template that fails.
 
 | Foreground | Ground | Worst | In | Best |
 |---|---|---|---|---|
@@ -100,6 +102,19 @@ The engine refuses below 4.5:1.
 | `muted` | `surface` | 7.92:1 | devshark | 12.29:1 |
 | `background` | `accent` | 6.17:1 | mma-files | 8.21:1 |
 | `accent` | `surface` | 5.49:1 | mma-files | 7.65:1 |
+| `accent` | `surface-strong` | 4.73:1 | mma-files | 7.01:1 |
+| `secondary` | `background` | 6.36:1 | caught-up | 12.82:1 |
+| `secondary` | `surface` | 5.66:1 | caught-up | 11.94:1 |
+| `secondary` | `surface-strong` | 4.76:1 | caught-up | 10.94:1 |
+| `background` | `secondary` | 6.36:1 | caught-up | 12.82:1 |
+| `foreground` | `surface-strong` | 12.83:1 | mma-files | 14.02:1 |
+| `muted` | `surface-strong` | 7.25:1 | devshark | 10.37:1 |
+
+The four rows below `accent` on `surface` were added by the 2026-08-10 expansion, and the reason
+they were needed is the reason to read this table as renderings rather than pairs. Variant B swaps
+`accent` for `secondary`, so every accent pair has a secondary twin that ships just as often; and a
+family that sets words on its own field — `versus`, `marginalia`, `concrete` — puts a ground token
+behind the type that the founding ten never did.
 
 ## What the engine still needs
 

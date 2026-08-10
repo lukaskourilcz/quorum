@@ -1,10 +1,38 @@
-# SPEC — ten template families
+# SPEC — the template language, and the founding ten families
 
-The binding artifact. Every number here is what the engine will draw; the specimen pages in
-`families/` are rendered from these exact objects through a port of `studio/src/renderer.ts` and
-`studio/src/text.ts`. If a specimen and this file disagree, this file wins.
+The binding artifact **for the template language**: what a layer is, what each field means, what
+the checks are, and the ten compositions the library was founded on.
 
-## How these ship
+## What this file is no longer the authority on
+
+Written as a delivery for an engineering agent to build from, before the engine existed. The
+engine exists, so three of its claims have to be read with that in mind, and are corrected here
+rather than silently left standing:
+
+- **A composition's authority is its composer.** `studio/src/families.ts` and the three sibling
+  modules beside it are what renders. Where a description below and a composer disagree, the
+  composer ships and this file is stale. `figure` is the standing example: it draws the reader's
+  position as blocks, because a deck payload carries the article's sentences and no figures, and
+  the alternative was a family that invented a statistic.
+- **The specimen pages are generated, not ported.** `pnpm -C studio specimens` inlines the SVG
+  `renderCarouselSvg` produced. A page cannot disagree with the engine because it *is* the
+  engine's output — which is the opposite of the arrangement this file assumed.
+- **The library is twenty-three families, not ten.** The founding ten are specified below.
+  Thirteen more landed on 2026-08-10 from that year's typography-led trends — `billboard`,
+  `broadsheet`, `zurich`, `concrete`, `terminal`, `marginalia`, `memo`, `versus`, `tally`,
+  `counterweight`, `throughline`, `quiet`, `offset` — and are specified by their composers and
+  documented by their specimen pages. They introduced no schema field, no colour token, no font
+  and no new check; they are compositions in the language this file defines, which is the strongest
+  statement available that the language was enough.
+
+Two engine gaps this file writes against as unfixed are fixed. **E1**: `contrastCheck` now walks
+the layer list and measures a text layer against the topmost opaque `shape`, gradient or duotone
+image whose frame contains it, so an inverted panel is a legible design rather than a refused one
+— half the expansion's families depend on it. **E4**: the fitter measures against committed
+per-face advance widths and refuses a size at which the longest word would be chopped. The size
+tables below were stated against both fixes and hold.
+
+## How the founding ten were specified to ship
 
 `carousel-template/1` holds **one** `slides` array and applies it to all four canvases. A family
 composed for the story's 14%/16% bands cannot be the same layer list as one composed for 4:5, so
@@ -22,7 +50,8 @@ follow: `slide-body-open` becomes `slide-body-open-1`, `-2`.
 
 ## Checks
 
-All ten families pass, in all four formats and all five palettes:
+All twenty-three families pass, in all four formats and all five palettes, at every type scale and
+every phase seed:
 
 - **safe area** — every `text` and `logo` frame inside the format's safe box (`fitsSafeArea`)
 - **overflow** — `floor(width × 1080 ÷ (minFontSize × 0.56)) × maxLines ≥ maxChars` for every slot
@@ -31,17 +60,16 @@ All ten families pass, in all four formats and all five palettes:
 - **frames** — every layer inside the canvas, no slide over 24 layers, one `image` layer per
   template except where marked
 
-Contrast has one inherited limit: `contrastCheck` measures a text layer against the slide's
-`backgroundToken` and any mesh over it — it cannot see an opaque `shape` beneath the text. No
-family here relies on that, which is why Tower's chapter bar carries no text and Slab inverts the
-whole slide rather than a panel. Fixing it (**E1** in `TOKENS.md`) would unlock a beat this set
-deliberately avoids.
+Contrast reads what is actually behind the words: the slide's ground, any mesh over it, and the
+topmost opaque `shape`, gradient or duotone image whose frame contains the text. Containment is
+the operative word and it is a composition rule, not a technicality — a panel that only half
+covers its passage is measured against the ground, so it passes the check while the reader sees
+illegible type on colour. Every family that sets words on a field draws that field so it contains
+the frame.
 
-**Sizes assume E4.** The specimens measure text with an advance derived from the string — 0.56 em
-for Czech sentence case, rising to 0.72 for all-caps — and refuse a size at which the longest word
-would be chopped. The shipped fitter uses a flat 0.56 and accepts the chop, which is why
-“NEJNEOBHOSPODAŘOVÁVATELNĚJŠÍ” currently renders as two fragments running off the canvas. E4 in
-`TOKENS.md` is the fix; it is nine lines, and every size table in this file is stated against it.
+One limit is real and stated rather than papered over: an untreated photograph cannot be checked,
+because its pixels are the article's and not the template's. A slide carrying one relies on the
+scrim its image layer draws.
 
 ## v2 fields used
 

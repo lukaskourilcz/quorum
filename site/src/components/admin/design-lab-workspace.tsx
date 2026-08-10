@@ -28,9 +28,20 @@ const FORMATS = [
 
 type FormatId = (typeof FORMATS)[number]["id"];
 
+/**
+ * The families, in the order `DECK_FAMILIES` declares them.
+ *
+ * Hard-coded rather than imported, because this is a client component and the studio package is
+ * the render engine — pulling it across the boundary to read one array would ship the renderer to
+ * the browser. A studio test holds the two lists to the same length; the order is the founding ten
+ * followed by the 2026-08-10 expansion.
+ */
 const FAMILIES = [
   "masthead", "gutter", "bevel", "porthole", "slab",
-  "terrace", "figure", "pull", "tower", "dossier"
+  "terrace", "figure", "pull", "tower", "dossier",
+  "billboard", "broadsheet", "zurich", "concrete", "terminal",
+  "marginalia", "memo", "versus", "tally", "counterweight",
+  "throughline", "quiet", "offset"
 ] as const;
 
 const TREATMENTS = [
@@ -274,8 +285,15 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
             <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]" data-recipe-line>
               {line(recipe)}{article.recipePinned ? " · vybráno" : " · odvozeno"}
             </p>
+            {/*
+              * Twenty-three chips wrap; ten fitted one row. A single non-wrapping row of
+              * twenty-three would put two thirds of the library behind a horizontal scroll the
+              * owner has no reason to expect, so the row becomes a block. The scroller stays
+              * marked for the containment guard, which reads an unmarked overflowing element as a
+              * layout bug rather than a scroller.
+              */}
             <div className="w-full overflow-x-auto" data-horizontal-scroll>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {FAMILIES.map((family) => (
                   <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} key={family} onClick={() => change({ family })} type="button">
                     {family}
