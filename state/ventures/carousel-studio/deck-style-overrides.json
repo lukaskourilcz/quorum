@@ -5,13 +5,13 @@
       "venture": "caught-up",
       "slug": "2026-08-08-openai-astra-pozastaveni-kyberneticky-prach",
       "date": "2026-08-08",
-      "style": "counterweight",
-      "family": "counterweight",
+      "style": "billboard",
+      "family": "billboard",
       "variant": "A",
       "accentSwap": true,
       "treatment": "mono",
       "typeScale": 0.9,
-      "changedAt": "2026-08-10T19:37:06.463Z"
+      "changedAt": "2026-08-10T19:37:08.611Z"
     },
     {
       "venture": "mma-files",
@@ -26,5 +26,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-10T19:37:06.463Z"
+  "updatedAt": "2026-08-10T19:37:08.611Z"
 }
