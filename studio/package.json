@@ -20,7 +20,8 @@
     "prepare": "pnpm build",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
-    "fonts:metrics": "tsx scripts/generate-font-metrics.ts"
+    "fonts:metrics": "tsx scripts/generate-font-metrics.ts",
+    "specimens": "tsx scripts/specimens.ts"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",

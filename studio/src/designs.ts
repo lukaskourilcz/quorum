@@ -19,7 +19,14 @@
 export const DECK_STYLES = ["mesh", "editorial", "spotlight", "contrast", "aurora"] as const;
 export type DeckStyle = (typeof DECK_STYLES)[number];
 
-/** The ten families of `docs/design-lab/SPEC.md`, which is what the engine draws from now. */
+/**
+ * The template families, which is what the engine draws from now.
+ *
+ * The founding ten of `docs/design-lab/SPEC.md` first, then the 2026-08-10 expansion in the order
+ * its concepts were built. Order is not cosmetic: `chooseFamily` ranks the pool by how long each
+ * name has gone unused and breaks ties on the name, and the chip row in the Lab reads top to
+ * bottom off this array. Appending is safe; reordering re-deals every unpinned recipe.
+ */
 export const DECK_FAMILIES = [
   "masthead",
   "gutter",
@@ -30,7 +37,8 @@ export const DECK_FAMILIES = [
   "figure",
   "pull",
   "tower",
-  "dossier"
+  "dossier",
+  "billboard"
 ] as const;
 export type DeckFamily = (typeof DECK_FAMILIES)[number];
 

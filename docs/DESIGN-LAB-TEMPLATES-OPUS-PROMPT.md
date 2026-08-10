@@ -197,7 +197,7 @@ chip across formats, treatments, scales and phases with a real delivered article
 Work in order, one commit per task, phase-commit style. Tick the box in this file as each lands.
 
 - [x] TPL-00 — Read §1; confirm the module split for new composers against the 400-line cap
-- [ ] TPL-01 — `billboard`
+- [x] TPL-01 — `billboard`
 - [ ] TPL-02 — `broadsheet`
 - [ ] TPL-03 — `zurich`
 - [ ] TPL-04 — `concrete`

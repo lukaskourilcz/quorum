@@ -35,6 +35,15 @@ import {
 
 const brands = Object.values(CAROUSEL_BRANDS);
 
+/**
+ * How many families the library ships, written down rather than read off `DECK_FAMILIES`.
+ *
+ * A count derived from the array under test proves nothing — it would pass on an empty library.
+ * This number moves in the commit that adds a family, which is the point at which somebody has to
+ * notice that it did.
+ */
+const FAMILY_COUNT = 11;
+
 function payload(slideCount: number, variant?: string): CarouselPayload {
   return {
     locale: "cs",
@@ -58,9 +67,9 @@ function render(templateId: string, slideCount: number, format: CarouselFormat, 
 }
 
 describe("the family library", () => {
-  it("offers ten families at every deck length the splitter produces", () => {
-    expect(DECK_FAMILIES).toHaveLength(10);
-    expect(familyDeckTemplates()).toHaveLength(10 * (MAX_RESOLVABLE_SLIDES - MIN_SLIDES + 1));
+  it("offers every family at every deck length the splitter produces", () => {
+    expect(DECK_FAMILIES).toHaveLength(FAMILY_COUNT);
+    expect(familyDeckTemplates()).toHaveLength(FAMILY_COUNT * (MAX_RESOLVABLE_SLIDES - MIN_SLIDES + 1));
   });
 
   it("passes all six checks for every family, brand and offered format", () => {
@@ -92,7 +101,7 @@ describe("the family library", () => {
       expect(clash, `${family} renders the same bytes as ${clash?.[0]}`).toBeUndefined();
       seen.set(family, signature);
     }
-    expect(seen.size).toBe(10);
+    expect(seen.size).toBe(FAMILY_COUNT);
   });
 
   /*
