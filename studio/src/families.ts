@@ -87,7 +87,8 @@ export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-
   zurich: "type-only",
   concrete: "type-only",
   terminal: "type-only",
-  marginalia: "type-only"
+  marginalia: "type-only",
+  memo: "type-only"
 };
 
 /** The ten families of the founding delivery. The expansion's thirteen are assembled below. */

@@ -38,7 +38,7 @@ const dateline = (y: number, colorToken = "muted"): CarouselLayerInput => ({
   fontToken: "mono"
 });
 
-export const PRINT_FAMILIES: Readonly<Record<Extract<DeckFamily, "broadsheet" | "marginalia">, FamilySpec>> = {
+export const PRINT_FAMILIES: Readonly<Record<Extract<DeckFamily, "broadsheet" | "marginalia" | "memo">, FamilySpec>> = {
   /*
    * The inside page, not the front one.
    *
@@ -129,6 +129,55 @@ export const PRINT_FAMILIES: Readonly<Record<Extract<DeckFamily, "broadsheet" | 
           maxLines: role === "cover" ? 5 : 8
         }),
         wordmark(role === "outro" ? "accent" : "muted"),
+        progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * A note somebody typed.
+   *
+   * The notes-app aesthetic without the notes app: fake interface chrome is banned outright, and a
+   * drawn status bar would be a lie about where the words came from. What survives the ban is what
+   * the trend was actually reaching for — radical plainness. Body face at reading weight, a
+   * measure short enough to leave a ragged right, a mono letterhead, and one accent mark at the
+   * foot where a footnote would be.
+   *
+   * The sheet is defined by its edge rather than its fill. Three palettes put `surface` within 3%
+   * of `background`, and the A/B inversion swaps the ground under it, so a sheet trusting its fill
+   * to be seen would appear on some renderings and vanish on others; a hairline is legible on all
+   * of them.
+   *
+   * Distinct from `dossier`, which is a filed record — hairlines across the full measure, no sheet
+   * at all — and from `concrete`, whose card is a 900-weight lockup behind a thick stroke.
+   */
+  memo: {
+    description: "A typed note on a bordered sheet: reading-weight body type, a short ragged measure, a mono letterhead.",
+    compose: ({ slot, role, beat, phase }) => {
+      const top = role === "cover" ? TOP + 0.09 : bodyTop(0.15 + beat.step * 0.05);
+      // The measure is short on purpose and moves a little, the way a typed page does when it is
+      // typed rather than set.
+      const measure = 0.56 + beat.step * 0.04;
+      return [
+        shape(LEFT - 0.025, TOP - 0.02, MEASURE + 0.05, 0.635, {
+          fillToken: "surface",
+          strokeToken: role === "outro" ? "accent" : "muted",
+          strokeWidth: 2
+        }),
+        dateline(TOP + 0.005, role === "outro" ? "accent" : "muted"),
+        rule(LEFT, TOP + 0.042, 0.09 + beat.step * 0.03, { thickness: 2, colorToken: "muted" }),
+        text(slot, LEFT, top, role === "cover" ? MEASURE - 0.06 : measure, 0.72 - top, {
+          fontToken: "body",
+          fontWeight: 400,
+          maxFontSize: role === "cover" ? 64 : 44,
+          minFontSize: 24,
+          maxChars: role === "cover" ? 160 : 230,
+          maxLines: role === "cover" ? 6 : 9
+        }),
+        // The foot of the page: a footnote mark and the rule beside it. Without them the sheet's
+        // lower half reads as a passage that stopped rather than as page left deliberately empty.
+        shape(LEFT, 0.735, 0.016, 0.014, { fillToken: "accent" }),
+        rule(LEFT + 0.03, 0.7405, 0.1 + beat.step * 0.04, { thickness: 2, colorToken: "muted" }),
         progress(phase)
       ];
     }
